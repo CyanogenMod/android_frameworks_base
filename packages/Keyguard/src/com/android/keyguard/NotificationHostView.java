@@ -76,7 +76,6 @@ public class NotificationHostView extends FrameLayout {
     private HashMap<String, NotificationView> mNotifications = new HashMap<String, NotificationView>();
     private INotificationManager mNotificationManager;
     private WindowManager mWindowManager;
-    private IStatusBarService mStatusBar;
     private int mNotificationMinHeight, mNotificationMinRowHeight;
     private int mDisplayWidth, mDisplayHeight;
     private int mShownNotifications = 0;
@@ -285,8 +284,6 @@ public class NotificationHostView extends FrameLayout {
         mNotificationManager = INotificationManager.Stub.asInterface(
                 ServiceManager.getService(Context.NOTIFICATION_SERVICE));
         mDynamicWidth = getResources().getDisplayMetrics().density >= DisplayMetrics.DENSITY_XXHIGH;
-        mStatusBar = IStatusBarService.Stub.asInterface(
-                ServiceManager.getService(Context.STATUS_BAR_SERVICE));
     }
 
     @Override
@@ -580,15 +577,19 @@ public class NotificationHostView extends FrameLayout {
     }
 
     private void setButtonDrawable() {
-        try {
-            if (mNotifications.size() == 0) {
-                mStatusBar.setButtonDrawable(0, 0);
-            } else if (mShownNotifications == mNotifications.size()) {
-                mStatusBar.setButtonDrawable(0, 2);
-            } else {
-                mStatusBar.setButtonDrawable(0, 1);
-            }
-        } catch (RemoteException ex) {}
+        IStatusBarService statusBar = IStatusBarService.Stub.asInterface(
+                ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+        if (statusBar != null) {
+            try {
+                if (mNotifications.size() == 0) {
+                    statusBar.setButtonDrawable(0, 0);
+                } else if (mShownNotifications == mNotifications.size()) {
+                    statusBar.setButtonDrawable(0, 2);
+                } else {
+                    statusBar.setButtonDrawable(0, 1);
+                }
+            } catch (RemoteException ex) {}
+        }
     }
 
     private void animateBackgroundColor(final int targetColor) {

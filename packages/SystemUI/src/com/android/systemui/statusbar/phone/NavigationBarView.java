@@ -113,6 +113,7 @@ public class NavigationBarView extends LinearLayout {
 
     private Drawable mBackIcon, mBackAltIcon;
 
+    boolean mWasNotifsButtonVisible = false;
     protected DelegateViewHelper mDelegateHelper;
     private DeadZone mDeadZone;
     private final NavigationBarTransitions mBarTransitions;
@@ -688,7 +689,8 @@ public class NavigationBarView extends LinearLayout {
         mHandler.post(new Runnable() {
             public void run() {
                 if (iconId == 1) iv.setImageResource(R.drawable.search_light_land);
-                setVisibleOrGone(getNotifsButton(), iconId != 0);
+                mWasNotifsButtonVisible = iconId != 0 && ((mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0);
+                setVisibleOrGone(getNotifsButton(), mWasNotifsButtonVisible);
             }
         });
     }
@@ -766,7 +768,7 @@ public class NavigationBarView extends LinearLayout {
                     Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, 0) == 0;
         final View notifsButton = getNotifsButton();
         if (notifsButton != null) {
-            setVisibleOrGone(notifsButton, showNotifs);
+            setVisibleOrGone(notifsButton, showNotifs && mWasNotifsButtonVisible);
         }
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
