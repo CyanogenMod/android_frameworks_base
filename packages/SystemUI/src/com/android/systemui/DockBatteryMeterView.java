@@ -128,6 +128,15 @@ public class DockBatteryMeterView extends BatteryMeterView {
     }
 
     @Override
+    public void onDetachedFromWindow() {
+        // We already unregistered the listener once when we decided
+        // support was absent. Don't do it again.
+        if (mSupported) {
+            super.onDetachedFromWindow();
+        }
+    }
+
+    @Override
     public void setMode(BatteryMeterMode mode) {
         super.setMode(mode);
         int visibility = getVisibility();
