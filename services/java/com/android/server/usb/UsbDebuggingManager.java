@@ -16,7 +16,9 @@
 
 package com.android.server.usb;
 
+import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.LocalSocket;
@@ -26,7 +28,9 @@ import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Slog;
 import android.util.Base64;
 import com.android.server.FgThread;
@@ -210,10 +214,35 @@ public class UsbDebuggingManager implements Runnable {
                     break;
 
                 case MESSAGE_ADB_CONFIRM: {
-                    String key = (String)msg.obj;
-                    mFingerprints = getFingerprints(key);
-                    showConfirmationDialog(key, mFingerprints);
-                    break;
+                    int adb_paranoid = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.ADB_PARANOID, 0);
+                    if (adb_paranoid == 0)
+                    {
+                        String key = (String)msg.obj;
+                        mFingerprints = getFingerprints(key);
+                        showConfirmationDialog(key, mFingerprints);
+                        break;
+                    }
+                    else
+                    {
+                        Slog.w(TAG, "Unknown key detected, device is in paranoid mode");
+                        KeyguardManager kgMgr =
+                            (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+                        boolean lockscreenShowing = kgMgr.inKeyguardRestrictedInputMode();
+                        if (lockscreenShowing)
+                        {
+                            Slog.w(TAG, "Unknown key detected, device is locked, rebooting!");
+                            PowerManager pm = (PowerManager) mContext.getSystemService(
+                                          Context.POWER_SERVICE);
+                            pm.reboot(null);
+                        }
+                        else
+                        {
+                            String key = (String)msg.obj;
+                            mFingerprints = getFingerprints(key);
+                            showConfirmationDialog(key, mFingerprints);
+                            break;
+                        }
+                    }
                 }
 
                 case MESSAGE_ADB_CLEAR:
