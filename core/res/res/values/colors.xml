@@ -145,8 +145,8 @@
     <color name="dim_foreground_inverse_holo_light">#bebebe</color>
     <color name="dim_foreground_inverse_disabled_holo_light">#80bebebe</color>
     <color name="hint_foreground_holo_light">#808080</color>
-    <color name="highlighted_text_holo_dark">#6633b5e5</color>
-    <color name="highlighted_text_holo_light">#6633b5e5</color>
+    <color name="highlighted_text_holo_dark">#66ffffff</color>
+    <color name="highlighted_text_holo_light">#66000000</color>
     <color name="link_text_holo_dark">#5c5cff</color>
     <color name="link_text_holo_light">#0000ee</color>
     <color name="default_dialog_text_holo_dark">@android:color/background_holo_light</color>
@@ -207,4 +207,3 @@
 
     <color name="accessibility_focus_highlight">#80ffff00</color>
 </resources>
-
