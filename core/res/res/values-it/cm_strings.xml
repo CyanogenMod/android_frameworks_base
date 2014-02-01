@@ -42,7 +42,6 @@
     <string name="reboot_confirm" product="default">Il telefono verrà riavviato.</string>
     <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
     <string name="permdesc_preventpower">Consente a un\'applicazione di cambiare il comportamento del tasto di spegnimento</string>
-    <string name="lockscreen_discharging">In uso, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="app_killed_message">Applicazione terminata</string>
     <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_choose_profile">Profilo</string>
@@ -71,4 +70,5 @@
     <string name="transient_navigation_confirmation_long">Scorri dal bordo dello schermo per mostrare la barra di stato</string>
     <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
     <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare i dati di utilizzo della batteria a basso livello.</string>
+    <string name="immersive_mode_confirmation_bottom">Scorrere dal basso verso l\'alto per uscire dalla modalità schermo intero.</string>
 </resources>

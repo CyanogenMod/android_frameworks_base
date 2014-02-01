@@ -18,6 +18,7 @@ package com.android.systemui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -59,10 +60,9 @@ public class DockBatteryMeterView extends BatteryMeterView {
                     voltage = intent.getIntExtra(BatteryManager.EXTRA_DOCK_VOLTAGE, 0);
                     temperature = intent.getIntExtra(BatteryManager.EXTRA_DOCK_TEMPERATURE, 0);
 
-                    if (present) {
-                        setContentDescription(
-                                context.getString(R.string.accessibility_dock_battery_level, level));
-
+                    if (present && mMeterMode != BatteryMeterMode.BATTERY_METER_GONE) {
+                        setContentDescription(context.getString(
+                                R.string.accessibility_dock_battery_level, level));
                         invalidateIfVisible();
                         setVisibility(View.VISIBLE);
                     } else {
@@ -123,7 +123,17 @@ public class DockBatteryMeterView extends BatteryMeterView {
     public DockBatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mBatteryService = ((BatteryManager) context.getSystemService(Context.BATTERY_SERVICE));
+        mDemoTracker = new DockBatteryTracker();
         mTracker = new DockBatteryTracker();
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        // We already unregistered the listener once when we decided
+        // support was absent. Don't do it again.
+        if (mSupported) {
+            super.onDetachedFromWindow();
+        }
     }
 
     @Override
@@ -137,22 +147,26 @@ public class DockBatteryMeterView extends BatteryMeterView {
 
     @Override
     protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
+        Resources res = mContext.getResources();
         switch (mode) {
             case BATTERY_METER_CIRCLE:
-                return new DockCircleBatteryMeterDrawable(mContext);
+                return new DockCircleBatteryMeterDrawable(res);
+
+            case BATTERY_METER_TEXT:
+                return new DockTextBatteryMeterDrawable(res);
 
             case BATTERY_METER_ICON_LANDSCAPE:
-                return new DockNormalBatteryMeterDrawable(mContext, true);
+                return new DockNormalBatteryMeterDrawable(res, true);
 
             default:
-                return new DockNormalBatteryMeterDrawable(mContext, false);
+                return new DockNormalBatteryMeterDrawable(res, false);
         }
     }
 
     protected class DockNormalBatteryMeterDrawable extends NormalBatteryMeterDrawable {
 
-        public DockNormalBatteryMeterDrawable(Context ctx, boolean inverted) {
-            super(ctx, inverted);
+        public DockNormalBatteryMeterDrawable(Resources res, boolean horizontal) {
+            super(res, horizontal);
         }
 
         @Override
@@ -164,13 +178,19 @@ public class DockBatteryMeterView extends BatteryMeterView {
     }
 
     protected class DockCircleBatteryMeterDrawable extends CircleBatteryMeterDrawable {
-        public DockCircleBatteryMeterDrawable(Context ctx) {
-            super(ctx);
+        public DockCircleBatteryMeterDrawable(Resources res) {
+            super(res);
         }
 
         @Override
         protected int getBoltPointsArrayResource() {
             return R.array.dockbatterymeter_bold_points;
+        }
+    }
+
+    protected class DockTextBatteryMeterDrawable extends TextBatteryMeterDrawable {
+        public DockTextBatteryMeterDrawable(Resources res) {
+            super(res);
         }
     }
 }

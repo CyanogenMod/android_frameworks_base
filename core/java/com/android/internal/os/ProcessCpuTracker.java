@@ -586,6 +586,10 @@ public class ProcessCpuTracker {
                 String token = st.nextToken();
                 try {
                     long val = Long.parseLong(token);
+                    //skip the iteration if the index is out of bounds
+                    if(speed >= tempSpeeds.length) {
+                        break;
+                    }
                     tempSpeeds[speed] = val;
                     token = st.nextToken();
                     val = Long.parseLong(token);
@@ -600,6 +604,8 @@ public class ProcessCpuTracker {
                     Slog.i(TAG, "Unable to parse time_in_state");
                 }
             }
+        } else {
+            if(DEBUG) Slog.i(TAG, "time_in_state file does not exist");
         }
         if (out == null) {
             out = new long[speed];

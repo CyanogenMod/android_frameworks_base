@@ -42,7 +42,6 @@
     <string name="reboot_confirm" product="default">Seu telefone irá reiniciar.</string>
     <string name="permlab_preventpower">substituir tecla de energia</string>
     <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
-    <string name="lockscreen_discharging">Descarregando, <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%%</xliff:g></string>
     <string name="app_killed_message">Aplicativo terminado</string>
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Perfil</string>
@@ -124,4 +123,5 @@
     <string name="permdesc_interceptSmsSent">Permitir o aplicativo a interceptar um SMS enviado. Aplicativos maliciosos podem usar isto para previnir o envio de mensagens SMS.</string>
     <string name="permlab_resetBatteryStats">redefinir estatísticas da bateria</string>
     <string name="permdesc_resetBatteryStats">Permite uma aplicação redefinir o nível baixo atual dos dados de uso da bateria.</string>
+    <string name="immersive_mode_confirmation_bottom">Deslize para cima a partir de baixo para sair da tela cheia.</string>
 </resources>

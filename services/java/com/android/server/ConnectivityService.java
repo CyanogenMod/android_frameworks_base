@@ -32,6 +32,7 @@ import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_METERED;
 
 import android.app.AlarmManager;
+import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -114,6 +115,7 @@ import com.android.internal.telephony.DctConstants;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.server.AlarmManagerService;
 import com.android.internal.util.XmlUtils;
 import com.android.server.am.BatteryStatsService;
 import com.android.server.connectivity.DataConnectionStats;
@@ -123,6 +125,7 @@ import com.android.server.connectivity.Tethering;
 import com.android.server.connectivity.Vpn;
 import com.android.server.net.BaseNetworkObserver;
 import com.android.server.net.LockdownVpnTracker;
+import com.android.server.power.PowerManagerService;
 import com.google.android.collect.Lists;
 import com.google.android.collect.Sets;
 
@@ -1814,9 +1817,16 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     /**
      * @see ConnectivityManager#setMobileDataEnabled(boolean)
      */
-    public void setMobileDataEnabled(boolean enabled) {
+    public void setMobileDataEnabled(String callingPackage, boolean enabled) {
         enforceChangePermission();
         if (DBG) log("setMobileDataEnabled(" + enabled + ")");
+
+        AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
+        int callingUid = Binder.getCallingUid();
+        if (appOps.noteOp(AppOpsManager.OP_DATA_CONNECT_CHANGE, callingUid, callingPackage) !=
+                AppOpsManager.MODE_ALLOWED) {
+            return;
+        }
 
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
                 (enabled ? ENABLED : DISABLED), 0));
@@ -3920,6 +3930,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
         }
         return ConnectivityManager.TYPE_NONE;
+    }
+
+    protected void updateBlockedUids(int uid, boolean isBlocked) {
+        try {
+            AlarmManagerService mAlarmMgrSvc =
+                (AlarmManagerService)ServiceManager.getService(Context.ALARM_SERVICE);
+            mAlarmMgrSvc.updateBlockedUids(uid,isBlocked);
+        } catch (NullPointerException e) {
+            Slog.w(TAG, "Could Not Update blocked Uids with alarmManager" + e);
+        }
+        try {
+            PowerManagerService mPowerMgrSvc =
+                (PowerManagerService)ServiceManager.getService(Context.POWER_SERVICE);
+            mPowerMgrSvc.updateBlockedUids(uid,isBlocked);
+        } catch (NullPointerException e) {
+            Slog.w(TAG, "Could Not Update blocked Uids with powerManager" + e);
+        }
     }
 
     /**

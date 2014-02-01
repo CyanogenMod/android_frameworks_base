@@ -19,6 +19,8 @@ package com.android.keyguard;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -36,6 +38,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.android.internal.widget.LockPatternUtils;
 
 public class KeyguardWidgetFrame extends FrameLayout {
     private final static PorterDuffXfermode sAddBlendMode =
@@ -82,6 +86,12 @@ public class KeyguardWidgetFrame extends FrameLayout {
 
     private boolean mIsHoveringOverDeleteDropTarget;
 
+    // Even though we know already that this is a widget
+    // which the user only can add when widgets are enabled
+    // we need to cover the case that the system clock widget
+    // was overwritten via overlays with a normal widget.
+    private boolean mWidgetsDisabled;
+
     // Multiple callers may try and adjust the alpha of the frame. When a caller shows
     // the outlines, we give that caller control, and nobody else can fade them out.
     // This prevents animation conflicts.
@@ -100,6 +110,8 @@ public class KeyguardWidgetFrame extends FrameLayout {
 
         mLongPressHelper = new CheckLongPressHelper(this);
 
+        mWidgetsDisabled = widgetsDisabled(context);
+
         Resources res = context.getResources();
         // TODO: this padding should really correspond to the padding embedded in the background
         // drawable (ie. outlines).
@@ -116,6 +128,29 @@ public class KeyguardWidgetFrame extends FrameLayout {
         mBackgroundDrawable = res.getDrawable(R.drawable.kg_widget_bg_padded);
         mGradientColor = res.getColor(R.color.kg_widget_pager_gradient);
         mGradientPaint.setXfermode(sAddBlendMode);
+    }
+
+    private boolean widgetsDisabled(Context context) {
+        int disabledFeatures = 0;
+        LockPatternUtils lockPatternUtils = new LockPatternUtils(context);
+        DevicePolicyManager dpm =
+                (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        if (dpm != null) {
+            disabledFeatures = getDisabledFeatures(dpm, lockPatternUtils);
+        }
+        boolean disabledByDpm =
+                (disabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_WIDGETS_ALL) != 0;
+        boolean disabledByUser = !lockPatternUtils.getWidgetsEnabled();
+        return disabledByDpm || disabledByUser;
+    }
+
+    private int getDisabledFeatures(DevicePolicyManager dpm, LockPatternUtils lockPatternUtils) {
+        int disabledFeatures = DevicePolicyManager.KEYGUARD_DISABLE_FEATURES_NONE;
+        if (dpm != null) {
+            final int currentUser = lockPatternUtils.getCurrentUser();
+            disabledFeatures = dpm.getKeyguardDisabledFeatures(null, currentUser);
+        }
+        return disabledFeatures;
     }
 
     @Override
@@ -158,6 +193,13 @@ public class KeyguardWidgetFrame extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        // Widgets are disabled. This widget is a system one
+        // do not check for longpress events and let the
+        // touch events fall through to the children
+        if (mWidgetsDisabled) {
+            return false;
+        }
+
         // Watch for longpress events at this level to make sure
         // users can always pick up this widget
         switch (ev.getAction()) {
@@ -180,6 +222,11 @@ public class KeyguardWidgetFrame extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        // Widgets are disabled. This widget is a system one
+        // do not check for longpress events
+        if (mWidgetsDisabled) {
+            return true;
+        }
         // Watch for longpress events at this level to make sure
         // users can always pick up this widget
         switch (ev.getAction()) {

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package com.android.server;
 import android.app.Activity;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
+import android.app.AppOpsManager;
 import android.app.IAlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -27,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
@@ -61,6 +64,7 @@ import static android.app.AlarmManager.RTC_WAKEUP;
 import static android.app.AlarmManager.RTC;
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.app.AlarmManager.ELAPSED_REALTIME;
+import static android.app.AlarmManager.RTC_POWEROFF_WAKEUP;
 
 import com.android.internal.util.LocalLog;
 
@@ -73,6 +77,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private static final int RTC_MASK = 1 << RTC;
     private static final int ELAPSED_REALTIME_WAKEUP_MASK = 1 << ELAPSED_REALTIME_WAKEUP; 
     private static final int ELAPSED_REALTIME_MASK = 1 << ELAPSED_REALTIME;
+    private static final int RTC_POWEROFF_WAKEUP_MASK = 1 << RTC_POWEROFF_WAKEUP;
     private static final int TIME_CHANGED_MASK = 1 << 16;
     private static final int IS_WAKEUP_MASK = RTC_WAKEUP_MASK|ELAPSED_REALTIME_WAKEUP_MASK;
 
@@ -99,8 +104,12 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
     private Object mLock = new Object();
 
+    private final ArrayList<Integer> mTriggeredUids = new ArrayList<Integer>();
+    private final ArrayList<Integer> mBlockedUids = new ArrayList<Integer>();
+
     private int mDescriptor;
     private long mNextWakeup;
+    private long mNextRtcWakeup;
     private long mNextNonWakeup;
     private int mBroadcastRefCount = 0;
     private PowerManager.WakeLock mWakeLock;
@@ -112,6 +121,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final ResultReceiver mResultReceiver = new ResultReceiver();
     private final PendingIntent mTimeTickSender;
     private final PendingIntent mDateChangeSender;
+
+    private final AppOpsManager mAppOps;
 
     class WakeupEvent {
         public long when;
@@ -152,6 +163,15 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
         Alarm get(int index) {
             return alarms.get(index);
+        }
+
+        long getWhenByElapsedTime(long whenElapsed) {
+            for(int i=0;i< alarms.size();i++) {
+                if(alarms.get(i).whenElapsed == whenElapsed)
+                    return alarms.get(i).when;
+            }
+
+            return 0;
         }
 
         boolean canHold(long whenElapsed, long maxWhen) {
@@ -287,6 +307,18 @@ class AlarmManagerService extends IAlarmManager.Stub {
             return false;
         }
 
+        boolean isRtcPowerOffWakeup() {
+            final int N = alarms.size();
+            for (int i = 0; i < N; i++) {
+                Alarm a = alarms.get(i);
+                // non-wakeup alarms are types 1 and 3, i.e. have the low bit set
+                if (a.type == RTC_POWEROFF_WAKEUP) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         @Override
         public String toString() {
             StringBuilder b = new StringBuilder(40);
@@ -322,7 +354,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final ArrayList<Batch> mAlarmBatches = new ArrayList<Batch>();
 
     static long convertToElapsed(long when, int type) {
-        final boolean isRtc = (type == RTC || type == RTC_WAKEUP);
+        final boolean isRtc = (type == RTC || type == RTC_WAKEUP || type == RTC_POWEROFF_WAKEUP);
         if (isRtc) {
             when -= System.currentTimeMillis() - SystemClock.elapsedRealtime();
         }
@@ -398,7 +430,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                             : maxTriggerTime(nowElapsed, whenElapsed, a.repeatInterval);
                 }
                 setImplLocked(a.type, a.when, whenElapsed, a.windowLength, maxElapsed,
-                        a.repeatInterval, a.operation, batch.standalone, doValidate, a.workSource);
+                        a.repeatInterval, a.operation, batch.standalone, doValidate, a.workSource, false);
             }
         }
     }
@@ -409,8 +441,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
         final Pair<String, ComponentName> mTarget;
         final BroadcastStats mBroadcastStats;
         final FilterStats mFilterStats;
+        final int mUid;
 
-        InFlight(AlarmManagerService service, PendingIntent pendingIntent, WorkSource workSource) {
+        InFlight(AlarmManagerService service, PendingIntent pendingIntent,
+                      WorkSource workSource, int uid) {
             mPendingIntent = pendingIntent;
             mWorkSource = workSource;
             Intent intent = pendingIntent.getIntent();
@@ -424,6 +458,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 mBroadcastStats.filterStats.put(mTarget, fs);
             }
             mFilterStats = fs;
+            mUid = uid;
         }
     }
 
@@ -465,7 +500,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     public AlarmManagerService(Context context) {
         mContext = context;
         mDescriptor = init();
-        mNextWakeup = mNextNonWakeup = 0;
+        mNextWakeup = mNextRtcWakeup = mNextNonWakeup = 0;
 
         // We have to set current TimeZone info to kernel
         // because kernel doesn't keep this after reboot
@@ -498,6 +533,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         } else {
             Slog.w(TAG, "Failed to open alarm driver. Falling back to a handler.");
         }
+
+        mAppOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
     }
     
     protected void finalize() throws Throwable {
@@ -535,7 +572,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
             windowLength = AlarmManager.INTERVAL_HOUR;
         }
 
-        if (type < RTC_WAKEUP || type > ELAPSED_REALTIME) {
+        if (type < RTC_WAKEUP || type > RTC_POWEROFF_WAKEUP) {
             throw new IllegalArgumentException("Invalid alarm type " + type);
         }
 
@@ -558,6 +595,23 @@ class AlarmManagerService extends IAlarmManager.Stub {
             maxElapsed = triggerElapsed + windowLength;
         }
 
+        boolean wakeupFiltered = false;
+        if ((type == AlarmManager.RTC_WAKEUP
+                        || type == AlarmManager.ELAPSED_REALTIME_WAKEUP)
+                && mAppOps.checkOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
+                        operation.getCreatorUid(),
+                        operation.getCreatorPackage())
+                != AppOpsManager.MODE_ALLOWED) {
+
+            if (type == AlarmManager.RTC_WAKEUP) {
+                type = AlarmManager.RTC;
+            } else {
+                type = AlarmManager.ELAPSED_REALTIME;
+            }
+
+            wakeupFiltered = true;
+        }
+
         synchronized (mLock) {
             if (DEBUG_BATCH) {
                 Slog.v(TAG, "set(" + operation + ") : type=" + type
@@ -566,16 +620,26 @@ class AlarmManagerService extends IAlarmManager.Stub {
                         + " interval=" + interval + " standalone=" + isStandalone);
             }
             setImplLocked(type, triggerAtTime, triggerElapsed, windowLength, maxElapsed,
-                    interval, operation, isStandalone, true, workSource);
+                    interval, operation, isStandalone, true, workSource, wakeupFiltered);
         }
-    }
+   }
 
     private void setImplLocked(int type, long when, long whenElapsed, long windowLength,
             long maxWhen, long interval, PendingIntent operation, boolean isStandalone,
-            boolean doValidate, WorkSource workSource) {
+            boolean doValidate, WorkSource workSource, boolean wakeupFiltered) {
         Alarm a = new Alarm(type, when, whenElapsed, windowLength, maxWhen, interval,
                 operation, workSource);
-        removeLocked(operation);
+
+        // Remove this alarm if already scheduled.
+        final boolean foundExistingWakeup = removeWithReportLocked(operation);
+
+        // note AppOp for accounting purposes
+        // skip if the alarm already existed
+        if (!foundExistingWakeup && wakeupFiltered) {
+            mAppOps.noteOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
+                    operation.getCreatorUid(),
+                    operation.getCreatorPackage());
+        }
 
         int whichBatch = (isStandalone) ? -1 : attemptCoalesceLocked(whenElapsed, maxWhen);
         if (whichBatch < 0) {
@@ -651,6 +715,17 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
         return null;
     }
+    private Batch findFirstRtcWakeupBatchLocked() {
+        final int N = mAlarmBatches.size();
+        for (int i = 0; i < N; i++) {
+            Batch b = mAlarmBatches.get(i);
+            if (b.isRtcPowerOffWakeup()) {
+                return b;
+            }
+        }
+        return null;
+    }
+
 
     private void rescheduleKernelAlarmsLocked() {
         // Schedule the next upcoming wakeup alarm.  If there is a deliverable batch
@@ -658,6 +733,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         if (mAlarmBatches.size() > 0) {
             final Batch firstWakeup = findFirstWakeupBatchLocked();
             final Batch firstBatch = mAlarmBatches.get(0);
+            final Batch firstRtcWakeup = findFirstRtcWakeupBatchLocked();
             if (firstWakeup != null && mNextWakeup != firstWakeup.start) {
                 mNextWakeup = firstWakeup.start;
                 setLocked(ELAPSED_REALTIME_WAKEUP, firstWakeup.start);
@@ -666,6 +742,14 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 mNextNonWakeup = firstBatch.start;
                 setLocked(ELAPSED_REALTIME, firstBatch.start);
             }
+            if (firstRtcWakeup != null && mNextRtcWakeup != firstRtcWakeup.start) {
+                mNextRtcWakeup = firstRtcWakeup.start;
+                long when = firstRtcWakeup.getWhenByElapsedTime(mNextRtcWakeup);
+                if (when != 0) {
+                    setLocked(RTC_POWEROFF_WAKEUP, when);
+                }
+            }
+
         }
     }
 
@@ -726,11 +810,74 @@ class AlarmManagerService extends IAlarmManager.Stub {
             removeLocked(operation);
         }
     }
-    
+
+    /* updates the blocked uids, so if a wake lock is acquired to only fire
+     * alarm for it, it can be released.
+     */
+    void updateBlockedUids(int uid, boolean isBlocked) {
+        if (localLOGV) Slog.v(TAG, "UpdateBlockedUids: uid = "+uid +"isBlocked = "+isBlocked);
+        synchronized(mLock) {
+            if(isBlocked) {
+                for( int i=0; i < mTriggeredUids.size(); i++) {
+                    if(mTriggeredUids.contains(new Integer(uid))) {
+                        if (localLOGV) {
+                            Slog.v(TAG,"TriggeredUids has this uid, mBroadcastRefCount="
+                                +mBroadcastRefCount);
+                        }
+                        mTriggeredUids.remove(new Integer(uid));
+                        mBlockedUids.add(new Integer(uid));
+                        if(mBroadcastRefCount > 0){
+                            mBroadcastRefCount--;
+                            if (mBroadcastRefCount == 0) {
+                                /* all the uids for which the alarms are triggered
+                                 * are either blocked or have called onSendFinished.
+                                */
+                                mWakeLock.release();
+                                if (localLOGV) Slog.v(TAG, "AM WakeLock Released Internally");
+                            }
+                        } else {
+                            if (localLOGV) {
+                                Slog.v(TAG, "Trying to decrement mBroadcastRefCount past zero");
+                            }
+                        }
+                    } else {
+                        //no more matching uids break from the for loop
+                        break;
+                    }
+                }
+            } else {
+                for(int i =0; i < mBlockedUids.size(); i++) {
+                    if(!mBlockedUids.remove(new Integer(uid))) {
+                        //no more matching uids break from the for loop
+                        break;
+                     }
+                }
+            }
+        }
+    }
+
     public void removeLocked(PendingIntent operation) {
+        removeWithReportLocked(operation);
+    }
+
+    private boolean removeWithReportLocked(PendingIntent operation) {
         boolean didRemove = false;
         for (int i = mAlarmBatches.size() - 1; i >= 0; i--) {
             Batch b = mAlarmBatches.get(i);
+            ArrayList<Alarm> alarmList = b.alarms;
+            Alarm alarm = null;
+            for (int j = alarmList.size() - 1; j >= 0; j--) {
+                alarm = alarmList.get(j);
+                if (alarm.type == RTC_POWEROFF_WAKEUP && alarm.operation.equals(operation)) {
+                    long alarmSeconds, alarmNanoseconds;
+                    alarmSeconds = alarm.when / 1000;
+                    alarmNanoseconds = (alarm.when % 1000) * 1000 * 1000;
+                    Slog.w(TAG,"Clear alarm type=" + alarm.type + ",alarmSeconds=" +
+                       alarmSeconds);
+                    clear(mDescriptor, alarm.type, alarmSeconds, alarmNanoseconds);
+                    mNextRtcWakeup = 0;
+                }
+            }
             didRemove |= b.remove(operation);
             if (b.size() == 0) {
                 mAlarmBatches.remove(i);
@@ -744,6 +891,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
             rebatchAllAlarmsLocked(true);
             rescheduleKernelAlarmsLocked();
         }
+
+        return didRemove;
     }
 
     public void removeLocked(String packageName) {
@@ -996,6 +1145,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         case RTC_WAKEUP : return "RTC_WAKEUP";
         case ELAPSED_REALTIME : return "ELAPSED";
         case ELAPSED_REALTIME_WAKEUP: return "ELAPSED_WAKEUP";
+        case RTC_POWEROFF_WAKEUP : return "RTC_POWEROFF_WAKEUP";
         default:
             break;
         }
@@ -1017,6 +1167,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private native int init();
     private native void close(int fd);
     private native void set(int fd, int type, long seconds, long nanoseconds);
+    private native void clear(int fd, int type, long seconds, long nanoseconds);
     private native int waitForAlarm(int fd);
     private native int setKernelTimezone(int fd, int minuteswest);
 
@@ -1054,7 +1205,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     setImplLocked(alarm.type, alarm.when + delta, nextElapsed, alarm.windowLength,
                             maxTriggerTime(nowELAPSED, nextElapsed, alarm.repeatInterval),
                             alarm.repeatInterval, alarm.operation, batch.standalone, true,
-                            alarm.workSource);
+                            alarm.workSource, false);
                 }
 
             }
@@ -1088,7 +1239,9 @@ class AlarmManagerService extends IAlarmManager.Stub {
         public long repeatInterval;
         public PendingIntent operation;
         public WorkSource workSource;
-        
+        public int uid;
+        public int pid;
+       
         public Alarm(int _type, long _when, long _whenElapsed, long _windowLength, long _maxWhen,
                 long _interval, PendingIntent _op, WorkSource _ws) {
             type = _type;
@@ -1099,6 +1252,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
             repeatInterval = _interval;
             operation = _op;
             workSource = _ws;
+            uid = Binder.getCallingUid();
+            pid = Binder.getCallingPid();
         }
 
         @Override
@@ -1197,7 +1352,6 @@ class AlarmManagerService extends IAlarmManager.Stub {
                             recordWakeupAlarms(mAlarmBatches, nowELAPSED, nowRTC);
                         }
                     }
-
                     triggerAlarmsLocked(triggerList, nowELAPSED, nowRTC);
                     rescheduleKernelAlarmsLocked();
 
@@ -1217,10 +1371,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
                                 mWakeLock.acquire();
                             }
                             final InFlight inflight = new InFlight(AlarmManagerService.this,
-                                    alarm.operation, alarm.workSource);
+                                    alarm.operation, alarm.workSource, alarm.uid);
                             mInFlight.add(inflight);
                             mBroadcastRefCount++;
-
+                            mTriggeredUids.add(new Integer(alarm.uid));
                             final BroadcastStats bs = inflight.mBroadcastStats;
                             bs.count++;
                             if (bs.nesting == 0) {
@@ -1238,11 +1392,16 @@ class AlarmManagerService extends IAlarmManager.Stub {
                                 fs.nesting++;
                             }
                             if (alarm.type == ELAPSED_REALTIME_WAKEUP
-                                    || alarm.type == RTC_WAKEUP) {
+                                    || alarm.type == RTC_WAKEUP
+                                    || alarm.type == RTC_POWEROFF_WAKEUP) {
                                 bs.numWakeup++;
                                 fs.numWakeup++;
                                 ActivityManagerNative.noteWakeupAlarm(
                                         alarm.operation);
+                                // AppOps accounting
+                                mAppOps.noteOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
+                                        alarm.operation.getCreatorUid(),
+                                        alarm.operation.getCreatorPackage());
                             }
                         } catch (PendingIntent.CanceledException e) {
                             if (alarm.repeatInterval > 0) {
@@ -1277,11 +1436,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 mWakeLock.setWorkSource(new WorkSource(uid));
                 return;
             }
+            // Something went wrong; fall back to attributing the lock to the OS
+            mWakeLock.setWorkSource(null);
         } catch (Exception e) {
         }
-
-        // Something went wrong; fall back to attributing the lock to the OS
-        mWakeLock.setWorkSource(null);
     }
 
     private class AlarmHandler extends Handler {
@@ -1446,9 +1604,11 @@ class AlarmManagerService extends IAlarmManager.Stub {
         public void onSendFinished(PendingIntent pi, Intent intent, int resultCode,
                 String resultData, Bundle resultExtras) {
             synchronized (mLock) {
+                int uid = 0;
                 InFlight inflight = null;
                 for (int i=0; i<mInFlight.size(); i++) {
                     if (mInFlight.get(i).mPendingIntent == pi) {
+                        uid = mInFlight.get(i).mUid;
                         inflight = mInFlight.remove(i);
                         break;
                     }
@@ -1470,26 +1630,42 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 } else {
                     mLog.w("No in-flight alarm for " + pi + " " + intent);
                 }
-                mBroadcastRefCount--;
-                if (mBroadcastRefCount == 0) {
-                    mWakeLock.release();
-                    if (mInFlight.size() > 0) {
-                        mLog.w("Finished all broadcasts with " + mInFlight.size()
-                                + " remaining inflights");
-                        for (int i=0; i<mInFlight.size(); i++) {
-                            mLog.w("  Remaining #" + i + ": " + mInFlight.get(i));
-                        }
-                        mInFlight.clear();
-                    }
+                mTriggeredUids.remove(new Integer(uid));
+                if(mBlockedUids.contains(new Integer(uid))) {
+                    mBlockedUids.remove(new Integer(uid));
                 } else {
+                    if(mBroadcastRefCount > 0){
+                        mBroadcastRefCount--;
+                        if (mBroadcastRefCount == 0) {
+                            mWakeLock.release();
+                            if (mInFlight.size() > 0) {
+                                mLog.w("Finished all broadcasts with " + mInFlight.size()
+                                    + " remaining inflights");
+                                for (int i=0; i<mInFlight.size(); i++) {
+                                    mLog.w("  Remaining #" + i + ": " + mInFlight.get(i));
+                                }
+                                mInFlight.clear();
+                            }
+                        }
+                    } else {
+                        if(localLOGV) {
+                            Slog.e(TAG,"Trying to decrement mBroadcastRefCnt past zero");
+                        }
+                    }
+                }
+                if (mBroadcastRefCount != 0) {
                     // the next of our alarms is now in flight.  reattribute the wakelock.
                     if (mInFlight.size() > 0) {
                         InFlight inFlight = mInFlight.get(0);
                         setWakelockWorkSource(inFlight.mPendingIntent, inFlight.mWorkSource);
                     } else {
                         // should never happen
+                        try {
                         mLog.w("Alarm wakelock still held but sent queue empty");
                         mWakeLock.setWorkSource(null);
+                        } catch (IllegalArgumentException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }

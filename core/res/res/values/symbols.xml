@@ -1794,6 +1794,7 @@
 
   <!-- Hardware Key ReMapping -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
+  <java-symbol type="bool" name="config_singleStageCameraKey" />
 
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
@@ -1854,7 +1855,7 @@
   <!-- Gesture Sensor -->
   <java-symbol type="bool" name="config_enableGestureService" />
 
-  <!-- Electron Beam -->
+  <!-- Screen off animation -->
   <java-symbol type="bool" name="config_screenOffAnimation" />
 
   <!-- Privacy Guard -->

@@ -153,6 +153,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     ArrayList<SignalCluster> mSignalClusters = new ArrayList<SignalCluster>();
     ArrayList<NetworkSignalChangedCallback> mSignalsChangedCallbacks =
             new ArrayList<NetworkSignalChangedCallback>();
+    ArrayList<SignalStrengthChangedCallback> mSignalStrengthChangedCallbacks =
+            new ArrayList<SignalStrengthChangedCallback>();
     int mLastPhoneSignalIconId = -1;
     int mLastDataDirectionIconId = -1;
     int mLastDataDirectionOverlayIconId = -1;
@@ -165,6 +167,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     private boolean mHasMobileDataFeature;
 
     boolean mDataAndWifiStacked = false;
+
+    private UpdateUIListener mUpdateUIListener = null;
 
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
@@ -183,6 +187,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 boolean activityIn, boolean activityOut,
                 String dataTypeContentDescriptionId, String description);
         void onAirplaneModeChanged(boolean enabled);
+    }
+
+    public interface SignalStrengthChangedCallback {
+        void onPhoneSignalStrengthChanged(int dbm);
     }
 
     /**
@@ -324,6 +332,15 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         mSignalsChangedCallbacks.remove(cb);
     }
 
+    public void addSignalStrengthChangedCallback(SignalStrengthChangedCallback cb) {
+        mSignalStrengthChangedCallbacks.add(cb);
+        notifySignalStrengthChangedCallbacks(cb);
+    }
+
+    public void removeSignalStrengthChangedCallback(SignalStrengthChangedCallback cb) {
+        mSignalStrengthChangedCallbacks.remove(cb);
+    }
+
     public void refreshSignalCluster(SignalCluster cluster) {
         if (mDemoMode) return;
         cluster.setWifiIndicators(
@@ -391,6 +408,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
         }
         cb.onAirplaneModeChanged(mAirplaneMode);
+    }
+
+    private void notifySignalStrengthChangedCallbacks(SignalStrengthChangedCallback cb) {
+        int dbm = mSignalStrength != null ? mSignalStrength.getDbm() : 0;
+        cb.onPhoneSignalStrengthChanged(dbm);
     }
 
     public void setStackedMode(boolean stacked) {
@@ -1229,6 +1251,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             notifySignalsChangedCallbacks(cb);
         }
 
+        for (SignalStrengthChangedCallback cb : mSignalStrengthChangedCallbacks) {
+            notifySignalStrengthChangedCallbacks(cb);
+        }
+
         if (mLastPhoneSignalIconId          != mPhoneSignalIconId
          || mLastDataDirectionOverlayIconId != combinedActivityIconId
          || mLastWifiIconId                 != mWifiIconId
@@ -1399,6 +1425,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 v.setText(mobileLabel); // comes from the telephony stack
                 v.setVisibility(View.VISIBLE);
             }
+        }
+
+        // Update the dependency UI
+        if (mUpdateUIListener != null) {
+            mUpdateUIListener.onUpdateUI();
         }
     }
 
@@ -1630,5 +1661,16 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 }
             }
         }
+    }
+
+    /**
+     * Let others listen for UI updates in NetworkController.
+     */
+    public static interface UpdateUIListener {
+        void onUpdateUI();
+    }
+
+    public void setListener(UpdateUIListener listener) {
+        mUpdateUIListener = listener;
     }
 }
