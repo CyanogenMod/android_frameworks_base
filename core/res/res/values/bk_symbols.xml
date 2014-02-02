@@ -61,4 +61,9 @@
     <java-symbol type="id" name="current_value" />
     <java-symbol type="id" name="max_value" />
     <java-symbol type="id" name="textsize_seekbar" />
+
+    <!-- WiFi turn off notification -->
+    <java-symbol type="string" name="notify_turn_wifi_off_title" />
+
+
 </resources>
