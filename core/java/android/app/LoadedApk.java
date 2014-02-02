@@ -493,7 +493,7 @@ public final class LoadedApk {
     public Resources getResources(ActivityThread mainThread) {
         if (mResources == null) {
             mResources = mainThread.getTopLevelResources(mResDir, mOverlayDirs,
-                    Display.DEFAULT_DISPLAY, null, this);
+                    Display.DEFAULT_DISPLAY, null, this, mainThread.getSystemContext());
         }
         return mResources;
     }

@@ -16,7 +16,6 @@
 
 package com.android.server;
 
-import com.android.internal.app.ThemeUtils;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,6 +26,7 @@ import android.content.Intent;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
+import android.content.pm.ThemeUtils;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.FileObserver;
@@ -322,7 +322,7 @@ public class DeviceStorageMonitorService extends Binder {
 
         ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
             @Override
-            public void onReceive(Context content, Intent intent) {
+            public void onReceive(Context context, Intent intent) {
                 mUiContext = null;
             }
         });
@@ -504,6 +504,7 @@ public class DeviceStorageMonitorService extends Binder {
         if (mUiContext == null) {
             mUiContext = ThemeUtils.createUiContext(mContext);
         }
+
         return mUiContext != null ? mUiContext : mContext;
     }
 }
