@@ -1945,8 +1945,12 @@ public class NotificationManagerService extends INotificationManager.Stub
 
                         ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
                         if (group != null) {
-                            // FIXME: local variable notification is accessed from within inner class; needs to be declared final
-                            //notification = group.processNotification(notification);
+                            ProfileGroup.NotificationOverrides overrides =
+                                    group.processNotification(notification);
+                            notification.defaults = overrides.defaults;
+                            notification.flags = overrides.flags;
+                            notification.sound = overrides.sound;
+                            notification.vibrate = overrides.vibrate;
                         }
                     } catch(Throwable th) {
                         Log.e(TAG, "An error occurred profiling the notification.", th);

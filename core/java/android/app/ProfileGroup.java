@@ -187,7 +187,15 @@ public final class ProfileGroup implements Parcelable {
     // TODO : add support for LEDs / screen etc.
 
     /** @hide */
-    public Notification processNotification(Notification notification) {
+    public class NotificationOverrides {
+         public int defaults;
+         public int flags;
+         public Uri sound;
+         public long[] vibrate;
+    }
+
+    /** @hide */
+    public NotificationOverrides processNotification(Notification notification) {
 
         switch (mSoundMode) {
             case OVERRIDE:
@@ -216,7 +224,13 @@ public final class ProfileGroup implements Parcelable {
                 break;
             case DEFAULT:
         }
-        return notification;
+
+        final NotificationOverrides overrides = new NotificationOverrides();
+        overrides.defaults = notification.defaults;
+        overrides.flags = notification.flags;
+        overrides.sound = notification.sound;
+        overrides.vibrate = notification.vibrate;
+        return overrides;
     }
 
     private boolean validateOverrideUri(Context context, Uri uri) {
