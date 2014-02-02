@@ -88,9 +88,10 @@ const char* AssetManager::OVERLAY_DIR = "/vendor/overlay";
 const char* AssetManager::TARGET_PACKAGE_NAME = "android";
 const char* AssetManager::TARGET_APK_PATH = "/system/framework/framework-res.apk";
 const char* AssetManager::IDMAP_DIR = "/data/resource-cache";
+const char* AssetManager::RESOURCES_EXTENSION = ".arsc";
 
 namespace {
-    String8 idmapPathForPackagePath(const String8& pkgPath)
+    String8 idmapPathForPackagePath(const String8& pkgPath, const String8& targetPkgPath)
     {
         const char* root = getenv("ANDROID_DATA");
         LOG_ALWAYS_FATAL_IF(root == NULL, "ANDROID_DATA not set");
@@ -98,7 +99,7 @@ namespace {
         path.appendPath(kResourceCache);
 
         char buf[256]; // 256 chars should be enough for anyone...
-        strncpy(buf, pkgPath.string(), 255);
+        strncpy(buf, targetPkgPath.string(), 255);
         buf[255] = '\0';
         char* filename = buf;
         while (*filename && *filename == '/') {
@@ -112,6 +113,22 @@ namespace {
             ++p;
         }
         path.appendPath(filename);
+        path.append("@");
+
+        strncpy(buf, pkgPath.string(), 255);
+        buf[255] = '\0';
+        filename = buf;
+        while (*filename && *filename == '/') {
+            ++filename;
+        }
+        p = filename;
+        while (*p) {
+            if (*p == '/') {
+                *p = '@';
+            }
+            ++p;
+        }
+        path.append(filename);
         path.append("@idmap");
 
         return path;
@@ -133,6 +150,13 @@ namespace {
         memcpy(newStr, str, len+1);
 
         return newStr;
+    }
+
+    static String8 flatten_path(const char *path)
+    {
+        String16 tmp(path);
+        tmp.replaceAll('/', '@');
+        return String8(tmp);
     }
 }
 
@@ -224,11 +248,84 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie)
     return true;
 }
 
-bool AssetManager::addOverlayPath(const String8& packagePath, void** cookie)
-{
-    const String8 idmapPath = idmapPathForPackagePath(packagePath);
 
+/*
+ * packagePath: Path to the APK that contains our icon assets
+ * cookie: Set by this method. The caller can use this cookie to refer to the asset path that has been added.
+ * resArscPath: Path to the overlay's cached resources table. If it is NULL it is assumed they are in the overlay APK"
+ * resApkPath: Path to the overlay's processed and cached resources.
+ * prefixPath: This is the base path internal to the icon APK. For example, if we have theme "com.redtheme.apk"
+ *  assets/
+ *    icons/
+ *        res/
+ *          drawable/
+ *              foo.png
+ * Our resources.arsc will reference foo.png's path as "res/drawable/foo.png"
+ * so we need "assets/icons/" as a prefix
+*/
+bool AssetManager::addIconPath(const String8& packagePath, void** cookie, const String8& resArscPath,
+        const String8& resApkPath, const String8& prefixPath)
+{
     AutoMutex _l(mLock);
+
+    ALOGV("package path: %s, resArscPath %s, resApkPath %s, prefixPath %s",
+            packagePath.string(), resArscPath.string(),
+            resApkPath.string(), prefixPath.string());
+
+    // Skip if we have it already.
+    for (size_t i=0; i < mAssetPaths.size(); i++) {
+        if (mAssetPaths[i].path == packagePath && mAssetPaths[i].resfilePath == resArscPath) {
+            if (cookie) {
+                *cookie = (void*)(i+1);
+            }
+            return true;
+        }
+    }
+
+    asset_path oap;
+    oap.path = packagePath;
+    oap.type = ::getFileType(packagePath.string());
+    oap.resfilePath = resArscPath;
+    oap.resApkPath = resApkPath;
+    oap.prefixPath = prefixPath;
+    mAssetPaths.add(oap);
+    *cookie = (void*)mAssetPaths.size();
+
+   ResTable* rt = mResources;
+   if (rt != NULL) {
+       return updateResTableFromAssetPath(rt, oap, *cookie);
+   }
+
+   return true;
+}
+
+
+/*
+ * packagePath: Path to the APK that contains our overlay
+ * cookie: Set by this method. The caller can use this cookie to refer to the asset path that has been added.
+ * resArscPath: Path to the overlay's cached resources table. If it is NULL it is assumed they are in the overlay APK"
+ * resApkPath: Path to the overlay's processed and cached resources.
+ * targetPkgPath: Path to the APK we are trying to overlay
+ * prefixPath: This is the base path internal to the overlay APK. For example, if we have theme "com.redtheme.apk"
+ * with a launcher overlay then this theme will have a structure like this:
+ *  assets/
+ *    com.android.launcher/
+ *        res/
+ *          drawable/
+ *              foo.png
+ * Our resources.arsc will reference foo.png's path as "res/drawable/foo.png"
+ * so we need "assets/com.android.launcher/" as a prefix
+*/
+bool AssetManager::addOverlayPath(const String8& packagePath, void** cookie, const String8& resArscPath,
+        const String8& resApkPath, const String8& targetPkgPath, const String8& prefixPath)
+{
+    const String8 idmapPath = idmapPathForPackagePath(packagePath, targetPkgPath);
+    AutoMutex _l(mLock);
+
+    ALOGV("package path: %s, idmap Path: %s, resArscPath %s, resApkPath %s, targetPkgPath: %s",
+            packagePath.string(), idmapPath.string(),
+            resArscPath.string(), resApkPath.string?(),
+            targetPkgPath.string());
 
     for (size_t i = 0; i < mAssetPaths.size(); ++i) {
         if (mAssetPaths[i].idmap == idmapPath) {
@@ -253,11 +350,6 @@ bool AssetManager::addOverlayPath(const String8& packagePath, void** cookie)
     }
     delete idmap;
 
-    if (overlayPath != packagePath) {
-        ALOGW("idmap file %s inconcistent: expected path %s does not match actual path %s\n",
-                idmapPath.string(), packagePath.string(), overlayPath.string());
-        return false;
-    }
     if (access(targetPath.string(), R_OK) != 0) {
         ALOGW("failed to access file %s: %s\n", targetPath.string(), strerror(errno));
         return false;
@@ -275,28 +367,105 @@ bool AssetManager::addOverlayPath(const String8& packagePath, void** cookie)
     oap.path = overlayPath;
     oap.type = ::getFileType(overlayPath.string());
     oap.idmap = idmapPath;
+    oap.resfilePath = resArscPath;
+    oap.resApkPath = resApkPath;
 #if 0
     ALOGD("Overlay added: targetPath=%s overlayPath=%s idmapPath=%s\n",
             targetPath.string(), overlayPath.string(), idmapPath.string());
 #endif
+    oap.prefixPath = prefixPath; //ex: assets/com.foo.bar
     mAssetPaths.add(oap);
     *cookie = (void*)mAssetPaths.size();
 
-    return true;
- }
+   ResTable* rt = mResources;
+   if (rt != NULL) {
+       return updateResTableFromAssetPath(rt, oap, *cookie);
+   }
+
+   return true;
+}
+
+
+String8 AssetManager::getPkgName(const char *apkPath) {
+        String8 pkgName;
+
+        asset_path ap;
+        ap.type = kFileTypeRegular;
+        ap.path = String8(apkPath);
+
+        ResXMLTree tree;
+
+        Asset* manifestAsset = openNonAssetInPathLocked("AndroidManifest.xml", Asset::ACCESS_BUFFER, ap);
+        tree.setTo(manifestAsset->getBuffer(true),
+                       manifestAsset->getLength());
+        tree.restart();
+
+        int depth = 0;
+        size_t len;
+        ResXMLTree::event_code_t code;
+        while ((code=tree.next()) != ResXMLTree::END_DOCUMENT && code != ResXMLTree::BAD_DOCUMENT) {
+            if (code != ResXMLTree::START_TAG) {
+                    continue;
+            }
+            String8 tag(tree.getElementName(&len));
+            if (tag != "manifest") break; //Manifest does not start with <manifest>
+            Res_value value;
+            size_t len;
+            ssize_t idx = tree.indexOfAttribute(NULL, "package");
+            const uint16_t* str = tree.getAttributeStringValue(idx, &len);
+            pkgName = (str ? String8(str, len) : String8());
+
+        }
+
+        manifestAsset->close();
+        return pkgName;
+    }
+
+String8 AssetManager::getOverlayResPath(const char* targetApkPath, const char* overlayApkPath)
+{
+    //Remove leading '/'
+    if (strlen(overlayApkPath) >= 2 && *overlayApkPath == '/') {
+        overlayApkPath++;
+    }
+    String8 overlayApkPathFlat = flatten_path(overlayApkPath);
+    String8 targetPkgName = getPkgName(targetApkPath);
+
+    String8 resPath(AssetManager::IDMAP_DIR);
+    resPath.appendPath(overlayApkPathFlat);
+    resPath.append("@");
+    resPath.append(targetPkgName);
+    resPath.append("/");
+    resPath.append("resources");
+    resPath.append(AssetManager::RESOURCES_EXTENSION);
+
+    return resPath;
+}
 
 bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApkPath,
-        uint32_t targetCrc, uint32_t overlayCrc, uint32_t** outData, uint32_t* outSize)
+        uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime, time_t overlayMtime,
+        Vector<String8>& targets, Vector<String8>& overlays,
+        uint32_t** outData, size_t* outSize)
 {
     AutoMutex _l(mLock);
     const String8 paths[2] = { String8(targetApkPath), String8(overlayApkPath) };
     ResTable tables[2];
 
+    //Our overlay APK might use an external restable
+    String8 resPath = getOverlayResPath(targetApkPath, overlayApkPath);
+
     for (int i = 0; i < 2; ++i) {
         asset_path ap;
         ap.type = kFileTypeRegular;
         ap.path = paths[i];
-        Asset* ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
+        Asset* ass;
+        if (i == 1 && access(resPath.string(), R_OK) != -1) {
+            // Overlay res table will be external to its APK
+            ass = const_cast<AssetManager*>(this)->
+                  openAssetFromFileLocked(resPath, Asset::ACCESS_BUFFER);
+        } else {
+            ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
+        }
         if (ass == NULL) {
             ALOGW("failed to find resources.arsc in %s\n", ap.path.string());
             return false;
@@ -304,8 +473,8 @@ bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApk
         tables[i].add(ass, (void*)1, false);
     }
 
-    return tables[0].createIdmap(tables[1], targetCrc, overlayCrc,
-            targetApkPath, overlayApkPath, (void**)outData, outSize) == NO_ERROR;
+    return tables[0].createIdmap(tables[1], targetCrc, overlayCrc, targetMtime, overlayMtime,
+            targetApkPath, overlayApkPath, targets, overlays, (void**)outData, outSize) == NO_ERROR;
 }
 
 bool AssetManager::addDefaultAssets()
@@ -456,6 +625,10 @@ Asset* AssetManager::open(const char* fileName, AccessMode mode)
         i--;
         ALOGV("Looking for asset '%s' in '%s'\n",
                 assetName.string(), mAssetPaths.itemAt(i).path.string());
+
+        //Skip theme/icon attached assets
+        if (mAssetPaths.itemAt(i).prefixPath.length() > 0) continue;
+
         Asset* pAsset = openNonAssetInPathLocked(assetName.string(), mode, mAssetPaths.itemAt(i));
         if (pAsset != NULL) {
             return pAsset != kExcludedAsset ? pAsset : NULL;
@@ -489,6 +662,10 @@ Asset* AssetManager::openNonAsset(const char* fileName, AccessMode mode)
     while (i > 0) {
         i--;
         ALOGV("Looking for non-asset '%s' in '%s'\n", fileName, mAssetPaths.itemAt(i).path.string());
+
+        //Skip theme/icon attached assets
+        if (mAssetPaths.itemAt(i).prefixPath.length() > 0) continue;
+
         Asset* pAsset = openNonAssetInPathLocked(
             fileName, mode, mAssetPaths.itemAt(i));
         if (pAsset != NULL) {
@@ -514,6 +691,8 @@ Asset* AssetManager::openNonAsset(void* cookie, const char* fileName, AccessMode
     if (which < mAssetPaths.size()) {
         ALOGV("Looking for non-asset '%s' in '%s'\n", fileName,
                 mAssetPaths.itemAt(which).path.string());
+        asset_path ap = mAssetPaths.itemAt(which);
+
         Asset* pAsset = openNonAssetInPathLocked(
             fileName, mode, mAssetPaths.itemAt(which));
         if (pAsset != NULL) {
@@ -578,8 +757,13 @@ const ResTable* AssetManager::getResTable(bool required) const
         const asset_path& ap = mAssetPaths.itemAt(i);
         MY_TRACE_BEGIN(ap.path.string());
         Asset* idmap = openIdmapLocked(ap);
-        ALOGV("Looking for resource asset in '%s'\n", ap.path.string());
-        if (ap.type != kFileTypeDirectory) {
+        ALOGV("Looking for resource asset in '%s : %s'\n", ap.path.string(), ap.resfilePath.string());
+
+       if (!ap.resfilePath.isEmpty()) {
+           //Res table is external to APK
+           ass = const_cast<AssetManager*>(this)->
+                   openAssetFromFileLocked(ap.resfilePath, Asset::ACCESS_BUFFER);
+       } else if (ap.type != kFileTypeDirectory) {
             if (i == 0) {
                 // The first item is typically the framework resources,
                 // which we want to avoid parsing every time.
@@ -592,7 +776,17 @@ const ResTable* AssetManager::getResTable(bool required) const
             }
             if (sharedRes == NULL) {
                 ass = const_cast<AssetManager*>(this)->
+                    mZipSet.getZipResourceTableAsset(ap.path);
+                if (ass == NULL) {
+                    ALOGV("loading resource table %s\n", ap.path.string());
                     ass = const_cast<AssetManager*>(this)->
+                        openNonAssetInPathLocked("resources.arsc",
+                                                 Asset::ACCESS_BUFFER,
+                                                 ap);
+                    if (ass != NULL && ass != kExcludedAsset) {
+                        ass = const_cast<AssetManager*>(this)->
+                            mZipSet.setZipResourceTableAsset(ap.path, ass);
+                    }
                 }
                 
                 if (i == 0 && ass != NULL) {
@@ -615,9 +809,42 @@ const ResTable* AssetManager::getResTable(bool required) const
                 }
             }
         } else {
+            ALOGV("loading resource table %s\n", ap.path.string());
+            Asset* ass = const_cast<AssetManager*>(this)->
+                openNonAssetInPathLocked("resources.arsc",
+                                         Asset::ACCESS_BUFFER,
+                                         ap);
+            shared = false;
         }
+        if ((ass != NULL || sharedRes != NULL) && ass != kExcludedAsset) {
+            if (rt == NULL) {
+                mResources = rt = new ResTable();
+                updateResourceParamsLocked();
+            }
+            ALOGV("Installing resource asset %p in to table %p\n", ass, mResources);
+            if (sharedRes != NULL) {
+                ALOGV("Copying existing resources for %s", ap.path.string());
+                rt->add(sharedRes);
+            } else {
+                ALOGV("Parsing resources for %s", ap.path.string());
+                rt->add(ass, (void*)(i+1), !shared, idmap);
+            }
+
+            if (!shared) {
+                delete ass;
+            }
         }
+        if (idmap != NULL) {
+            delete idmap;
+        }
+        MY_TRACE_END();
     }
+
+    if (required && !rt) ALOGW("Unable to find resources file resources.arsc");
+    if (!rt) {
+        mResources = rt = new ResTable();
+    }
+    return rt;
 }
 
 void AssetManager::updateResourceParamsLocked() const
@@ -700,6 +927,76 @@ void AssetManager::addSystemOverlays(const char* pathOverlaysList,
     fclose(fin);
 }
 
+/*
+* Update existing ResTable "rt" with resources found in Asset Path "ap".
+* Cookie is a unique identifier for the newly added resources.
+* This is TMO contribution modified for new CM Theme Engine
+*/
+bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& ap, void* cookie) const
+{
+    Asset* ass = NULL;
+    size_t cookiePos = (size_t)cookie;
+
+    assert(dirName != NULL);
+    assert(ap != NULL);
+    assert(cookPos != 0); // Restable should exist already
+    assert(cookPos != 1); // Do not use this func for frameworks-res
+
+    if (!ap.resfilePath.isEmpty()) {
+        // Res file is outside APK
+        ass = const_cast<AssetManager*>(this)->
+              openAssetFromFileLocked(ap.resfilePath, Asset::ACCESS_BUFFER);
+    } else if (ap.type != kFileTypeDirectory) {
+        ass = const_cast<AssetManager*>(this)->
+            mZipSet.getZipResourceTableAsset(ap.path);
+        if (ass == NULL) {
+            ass = const_cast<AssetManager*>(this)->
+                openNonAssetInPathLocked("resources.arsc",
+                    Asset::ACCESS_BUFFER,
+                    ap);
+            if (ass != NULL && ass != kExcludedAsset) {
+                ass = const_cast<AssetManager*>(this)->
+                    mZipSet.setZipResourceTableAsset(ap.path, ass);
+            }
+        }
+     }
+
+     //Add the resources to the collection of ResTables
+     status_t error = NO_ERROR;
+     if (ass != NULL) {
+         Asset* oidmap = openIdmapLocked(ap);
+         error = rt->add(ass, cookie, false, oidmap);
+     } else {
+       ALOGW("Unable to load asset %s, ResTable not updated", ap.path.string());
+     }
+
+     return (error == NO_ERROR);
+}
+
+bool AssetManager::removeOverlayPath(const String8& packageName, void* cookie)
+{
+    AutoMutex _l(mLock);
+
+    const size_t which = ((size_t)cookie)-1;
+    if (which >= mAssetPaths.size()) {
+        ALOGE("cookie was larger than paths size");
+        return false;
+    }
+
+    mAssetPaths.removeAt(which);
+
+    ResTable* rt = mResources;
+    if (rt == NULL) {
+        ALOGE("Unable to remove overlayPath, ResTable must not be NULL");
+        return false;
+    }
+
+    rt->removeAssetsByCookie(packageName, cookie);
+
+    return true;
+}
+
+
 const ResTable& AssetManager::getResources(bool required) const
 {
     const ResTable* rt = getResTable(required);
@@ -732,10 +1029,19 @@ Asset* AssetManager::openNonAssetInPathLocked(const char* fileName, AccessMode m
 {
     Asset* pAsset = NULL;
 
+    //We need to append the prefix to fileName
+    const char* fileNameFinal = fileName;
+    String8 fileNameWithPrefix;
+    if (ap.prefixPath.length() > 0) {
+      fileNameWithPrefix.append(ap.prefixPath);
+      fileNameWithPrefix.append(fileName);
+      fileNameFinal = fileNameWithPrefix.string();
+    }
+
     /* look at the filesystem on disk */
     if (ap.type == kFileTypeDirectory) {
         String8 path(ap.path);
-        path.appendPath(fileName);
+        path.appendPath(fileNameFinal);
 
         pAsset = openAssetFromFileLocked(path, mode);
 
@@ -753,26 +1059,44 @@ Asset* AssetManager::openNonAssetInPathLocked(const char* fileName, AccessMode m
     /* look inside the zip file */
     } else {
         String8 path(fileName);
+        const char* zipPath;
 
         /* check the appropriate Zip file */
         ZipFileRO* pZip;
         ZipEntryRO entry;
 
-        pZip = getZipFileLocked(ap);
-        if (pZip != NULL) {
-            //printf("GOT zip, checking NA '%s'\n", (const char*) path);
-            entry = pZip->findEntryByName(path.string());
-            if (entry != NULL) {
-                //printf("FOUND NA in Zip file for %s\n", appName ? appName : kAppCommon);
-                pAsset = openAssetFromZipLocked(pZip, entry, mode, path);
+        if (!ap.resApkPath.isEmpty()) {
+            pZip = getZipFileLocked(ap.resApkPath);
+            if (pZip != NULL) {
+                //printf("GOT zip, checking NA '%s'\n", (const char*) path);
+                entry = pZip->findEntryByName(path.string());
+                if (entry != NULL) {
+                    //printf("FOUND NA in Zip file for %s\n", appName ? appName : kAppCommon);
+                    pAsset = openAssetFromZipLocked(pZip, entry, mode, path);
+                    zipPath = ap.resApkPath.string();
+                }
+            }
+        }
+
+        if (pAsset == NULL) {
+            path.setTo(fileNameFinal);
+            pZip = getZipFileLocked(ap.path);
+            if (pZip != NULL) {
+                //printf("GOT zip, checking NA '%s'\n", (const char*) path);
+                entry = pZip->findEntryByName(path.string());
+                if (entry != NULL) {
+                    //printf("FOUND NA in Zip file for %s\n", appName ? appName : kAppCommon);
+                    pAsset = openAssetFromZipLocked(pZip, entry, mode, path);
+                    zipPath = ap.path.string();
+                }
             }
         }
 
         if (pAsset != NULL) {
             /* create a "source" name, for debug/display */
             pAsset->setAssetSource(
-                    createZipSourceNameLocked(ZipSet::getPathName(ap.path.string()), String8(""),
-                                                String8(fileName)));
+                    createZipSourceNameLocked(ZipSet::getPathName(zipPath), String8(""),
+                                                String8(path.string())));
         }
     }
 
@@ -912,7 +1236,7 @@ Asset* AssetManager::openInLocaleVendorLocked(const char* fileName, AccessMode m
         ZipFileRO* pZip;
         ZipEntryRO entry;
 
-        pZip = getZipFileLocked(ap);
+        pZip = getZipFileLocked(ap.path);
         if (pZip != NULL) {
             //printf("GOT zip, checking '%s'\n", (const char*) path);
             entry = pZip->findEntryByName(path.string());
@@ -984,11 +1308,11 @@ String8 AssetManager::createPathNameLocked(const asset_path& ap, const char* roo
  * Pass in NULL values for "appName", "locale", and "vendor" if the
  * generics should be used.
  */
-ZipFileRO* AssetManager::getZipFileLocked(const asset_path& ap)
+ZipFileRO* AssetManager::getZipFileLocked(const String8& path)
 {
     ALOGV("getZipFileLocked() in %p\n", this);
 
-    return mZipSet.getZip(ap.path);
+    return mZipSet.getZip(path);
 }
 
 /*
@@ -1112,6 +1436,10 @@ AssetDir* AssetManager::openDir(const char* dirName)
     while (i > 0) {
         i--;
         const asset_path& ap = mAssetPaths.itemAt(i);
+
+        //Skip theme/icon attached assets
+        if (ap.prefixPath.length() > 0) continue;
+
         if (ap.type == kFileTypeRegular) {
             ALOGV("Adding directory %s from zip %s", dirName, ap.path.string());
             scanAndMergeZipLocked(pMergedInfo, ap, kAssetsRoot, dirName);
@@ -1646,6 +1974,8 @@ void AssetManager::fncScanLocked(SortedVector<AssetDir::FileInfo>* pMergedInfo,
     while (i > 0) {
         i--;
         const asset_path& ap = mAssetPaths.itemAt(i);
+        //Skip theme/icon attached assets
+        if (ap.prefixPath.length() > 0) continue;
         fncScanAndMergeDirLocked(pMergedInfo, ap, NULL, NULL, dirName);
         if (mLocale != NULL)
             fncScanAndMergeDirLocked(pMergedInfo, ap, mLocale, NULL, dirName);
