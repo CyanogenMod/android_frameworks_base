@@ -104,6 +104,11 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="end|bottom"
                 />
+            <com.android.systemui.statusbar.policy.SignalText
+                    android:id="@+id/signal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="8dp"/>
         </FrameLayout>
     </FrameLayout>
     <ImageView

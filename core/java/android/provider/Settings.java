@@ -3168,6 +3168,13 @@ public final class Settings {
         public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
 
         /**
+         * Hide Singal Bars
+         *
+         * @hide
+         */
+        public static final String STATUSBAR_HIDE_SIGNAL_BARS = "statusbar_hide_signal_bars";
+
+        /**
          * Whether to show the IME switcher in the status bar
          * @hide
          */
@@ -3228,6 +3235,20 @@ public final class Settings {
          * @hide
          */
          public static final String LISTVIEW_INTERPOLATOR = "listview_interpolator";
+
+        /**
+         * Whether to show statusbar signal text
+         *
+         * @hide
+         */
+        public static final String STATUSBAR_SIGNAL_TEXT = "statusbar_signal_text";
+
+        /**
+         * statusbar signal text color
+         *
+         * @hide
+         */
+        public static final String STATUSBAR_SIGNAL_TEXT_COLOR = "statusbar_signal_text_color";
 
         /**
          * Boolean value whether to link ringtone and notification volumes
