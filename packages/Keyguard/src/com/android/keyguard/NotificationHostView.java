@@ -577,8 +577,15 @@ public class NotificationHostView extends FrameLayout {
     }
 
     private void setButtonDrawable() {
-        IStatusBarService statusBar = IStatusBarService.Stub.asInterface(
+        IStatusBarService statusBar = null;
+        try {
+            statusBar = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+        } catch (Exception ex) {
+            Log.w(TAG, "Failed to get statusbar service!");
+            return;
+        }
+
         if (statusBar != null) {
             try {
                 if (mNotifications.size() == 0) {
@@ -588,7 +595,9 @@ public class NotificationHostView extends FrameLayout {
                 } else {
                     statusBar.setButtonDrawable(0, 1);
                 }
-            } catch (RemoteException ex) {}
+            } catch (Exception ex) {
+                Log.e(TAG, "Failed to set button drawable!");
+            }
         }
     }
 
