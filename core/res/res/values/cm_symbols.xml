@@ -26,4 +26,8 @@
     -->
     <!-- External CM specific core services -->
     <java-symbol type="array" name="config_externalCMServices" />
+
+    <!-- Theme install failure notification -->
+    <java-symbol type="string" name="theme_install_error_title" />
+    <java-symbol type="string" name="theme_install_error_message" />
 </resources>
