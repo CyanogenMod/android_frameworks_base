@@ -178,7 +178,7 @@ bool isValidResourceType(const String8& type)
         || type == "color" || type == "menu" || type == "mipmap";
 }
 
-static sp<AaptFile> getResourceFile(const sp<AaptAssets>& assets, bool makeIfNecessary=true)
+sp<AaptFile> getResourceFile(const sp<AaptAssets>& assets, bool makeIfNecessary)
 {
     sp<AaptGroup> group = assets->getFiles().valueFor(String8("resources.arsc"));
     sp<AaptFile> file;

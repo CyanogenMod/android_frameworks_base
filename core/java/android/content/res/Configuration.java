@@ -422,12 +422,22 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     /**
      * @hide
      */
-    public static final String THEME_ID_PERSISTENCE_PROPERTY = "persist.sys.themeId";
+    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
 
     /**
      * @hide
      */
-    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
+    public static final String THEME_SYSTEMUI_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themeSysUiPkgName";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_ICONPACK_PACKAGE_NAME_PERSISTENCE_PROPERTY = "themeIconPackPkgName";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_FONT_PACKAGE_NAME_PERSISTENCE_PROPERTY = "themeFontPackPkgName";
 
     /**
      * Overall orientation of the screen.  May be one of

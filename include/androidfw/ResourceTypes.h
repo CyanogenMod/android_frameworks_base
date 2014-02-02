@@ -1379,7 +1379,7 @@ public:
     void lock() const;
 
     ssize_t getBagLocked(uint32_t resID, const bag_entry** outBag,
-            uint32_t* outTypeSpecFlags=NULL) const;
+            uint32_t* outTypeSpecFlags=NULL, bool performMapping=true) const;
 
     void unlock() const;
 
@@ -1558,11 +1558,13 @@ public:
     // NO_ERROR; the caller should not free outData.
     status_t createIdmap(const ResTable& overlay,
             uint32_t targetCrc, uint32_t overlayCrc,
+            time_t targetMtime, time_t overlayMtime,
             const char* targetPath, const char* overlayPath,
-            void** outData, uint32_t* outSize) const;
+            Vector<String8>& targets, Vector<String8>& overlays,
+            void** outData, size_t* outSize) const;
 
     enum {
-        IDMAP_HEADER_SIZE_BYTES = 3 * sizeof(uint32_t) + 2 * 256,
+        IDMAP_HEADER_SIZE_BYTES = 5 * sizeof(uint32_t) + 2 * 256,
     };
     // Retrieve idmap meta-data.
     //
@@ -1595,6 +1597,8 @@ private:
         const Type** outTypeClass) const;
     status_t parsePackage(
         const ResTable_package* const pkg, const Header* const header, uint32_t idmap_id);
+
+    bool isResTypeAllowed(const char* type) const;
 
     void print_value(const Package* pkg, const Res_value& value) const;
     

@@ -3226,4 +3226,10 @@ public abstract class PackageManager {
         return Environment.getDataDirectory().toString() + "/user/" + userId
                 + "/" + packageName;
     }
+
+    /**
+     * Updates the theme icon res id for the new theme
+     * @hide
+     */
+    public abstract void updateIconMaps(String pkgName);
 }

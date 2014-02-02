@@ -33,6 +33,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ThemeUtils;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.graphics.drawable.BitmapDrawable;

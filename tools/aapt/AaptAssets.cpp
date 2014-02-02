@@ -2199,8 +2199,13 @@ ssize_t AaptAssets::slurpFromArgs(Bundle* bundle)
                     goto bail;
                 }
                 totalCount += count;
-            }
-            else {
+            } else if (type == kFileTypeRegular) {
+                count = current->slurpResourceZip(bundle, String8(res));
+                if (count < 0) {
+                    totalCount = count;
+                    goto bail;
+                }
+            } else {
                 fprintf(stderr, "ERROR: '%s' is not a directory\n", res);
                 return UNKNOWN_ERROR;
             }
@@ -2385,67 +2390,57 @@ AaptAssets::slurpResourceZip(Bundle* bundle, const char* filename)
             continue;
         }
 
-        String8 entryName(entry->getFileName());
+        if (bundle->getInternalZipPath()) {
+            bool prefixed = (strncmp(entry->getFileName(), bundle->getInternalZipPath(), strlen(bundle->getInternalZipPath())) == 0);
+            if (!prefixed) {
+                continue;
+            }
+        }
 
-        String8 dirName = entryName.getPathDir();
-        sp<AaptDir> dir = dirName == "" ? this : makeDir(dirName);
+        String8 entryName(entry->getFileName()); //ex: /res/drawable/foo.png
+        String8 entryLeaf = entryName.getPathLeaf(); //ex: foo.png
+        String8 entryDirFull = entryName.getPathDir(); //ex: res/drawable
+        String8 entryDir = entryDirFull.getPathLeaf(); //ex: drawable
 
+        //Do not process directories
+        if (entryLeaf.size() == 0) {
+            continue;
+        }
+
+        AaptGroupEntry group;
         String8 resType;
-        AaptGroupEntry kind;
-
-        String8 remain;
-        if (entryName.walkPath(&remain) == kResourceDir) {
-            // these are the resources, pull their type out of the directory name
-            kind.initFromDirName(remain.walkPath().string(), &resType);
-        } else {
-            // these are untyped and don't have an AaptGroupEntry
-        }
-        if (entries.indexOf(kind) < 0) {
-            entries.add(kind);
-            mGroupEntries.add(kind);
+        bool b = group.initFromDirName(entryDir, &resType);
+        if (!b) {
+            fprintf(stderr, "invalid resource directory name: %s\n", entryDir.string());
+            err = -1;
+            continue;
         }
 
-        // use the one from the zip file if they both exist.
-        dir->removeFile(entryName.getPathLeaf());
-
-        sp<AaptFile> file = new AaptFile(entryName, kind, resType);
-        status_t err = dir->addLeafFile(entryName.getPathLeaf(), file);
-        if (err != NO_ERROR) {
-            fprintf(stderr, "err=%s entryName=%s\n", strerror(err), entryName.string());
-            count = err;
-            goto bail;
-        }
+        //This will do a cached lookup as well
+        sp<AaptDir> dir = makeDir(resType); //Does lookup as well on mdirs
+        sp<AaptFile> file = new AaptFile(entryName, group, resType, String8(filename));
         file->setCompressionMethod(entry->getCompressionMethod());
 
-#if 0
-        if (entryName == "AndroidManifest.xml") {
-            printf("AndroidManifest.xml\n");
+        // need to inflate nine patch images for processing
+        if (endsWith(entryLeaf.string(), ".png")) {
+            size_t len = entry->getUncompressedLen();
+            void* data = zip->uncompress(entry);
+            void* buf = file->editData(len);
+            memcpy(buf, data, len);
+            free(data);
         }
-        printf("\n\nfile: %s\n", entryName.string());
-#endif
 
-        size_t len = entry->getUncompressedLen();
-        void* data = zip->uncompress(entry);
-        void* buf = file->editData(len);
-        memcpy(buf, data, len);
+        dir->addLeafFile(entryLeaf, file);
 
-#if 0
-        const int OFF = 0;
-        const unsigned char* p = (unsigned char*)data;
-        const unsigned char* end = p+len;
-        p += OFF;
-        for (int i=0; i<32 && p < end; i++) {
-            printf("0x%03x ", i*0x10 + OFF);
-            for (int j=0; j<0x10 && p < end; j++) {
-                printf(" %02x", *p);
-                p++;
-            }
-            printf("\n");
+        if (entries.indexOf(group) < 0) {
+            entries.add(group);
+            mGroupEntries.add(group);
         }
-#endif
 
-        free(data);
-
+        sp<AaptDir> rdir = resDir(resType);
+        if (rdir == NULL) {
+            mResDirs.add(dir);
+        }
         count++;
     }
 

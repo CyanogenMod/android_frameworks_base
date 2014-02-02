@@ -1877,6 +1877,16 @@ public class ActivityManager {
             return null;
         }
     }
+    /**
+     * @hide
+     */
+    public Configuration getConfiguration() {
+        try {
+            return ActivityManagerNative.getDefault().getConfiguration();
+        } catch (RemoteException e) {
+            return null;
+        }
+    }
 
     /**
      * Returns a list of application processes that are running on the device.
@@ -2328,6 +2338,19 @@ public class ActivityManager {
             }
             pw.println("Failure dumping service:");
             e.printStackTrace(pw);
+        }
+    }
+
+    /**
+     * @throws SecurityException Throws SecurityException if the caller does
+     * not hold the {@link android.Manifest.permission#CHANGE_CONFIGURATION} permission.
+     *
+     * @hide
+     */
+    public void updateConfiguration(Configuration values) throws SecurityException {
+        try {
+            ActivityManagerNative.getDefault().updateConfiguration(values);
+        } catch (RemoteException e) {
         }
     }
 }

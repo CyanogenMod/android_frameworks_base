@@ -75,6 +75,7 @@ public:
     static const char* TARGET_PACKAGE_NAME;
     static const char* TARGET_APK_PATH;
     static const char* IDMAP_DIR;
+    static const char* RESOURCES_EXTENSION;
 
     typedef enum CacheMode {
         CACHE_UNKNOWN = 0,
@@ -100,9 +101,13 @@ public:
      * newly-added asset source.
      */
     bool addAssetPath(const String8& path, void** cookie);
-    bool addOverlayPath(const String8& path, void** cookie);
+    bool addOverlayPath(const String8& path, void** cookie, const String8& resArscPath,
+                 const String8& resApkPath, const String8& targetPkgPath, const String8& prefixPath);
+    bool addIconPath(const String8& path, void** cookie, const String8& resArscPath,
+                 const String8& resApkPath, const String8& prefixPath);
+    bool removeOverlayPath(const String8& path, void* cookie);
 
-    /*                                                                       
+    /*
      * Convenience for adding the standard system assets.  Uses the
      * ANDROID_ROOT environment variable to find them.
      */
@@ -231,7 +236,10 @@ public:
      * corresponding overlay package.
      */
     bool createIdmap(const char* targetApkPath, const char* overlayApkPath,
-        uint32_t targetCrc, uint32_t overlayCrc, uint32_t** outData, uint32_t* outSize);
+        uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime, time_t overlayMtime,
+        Vector<String8>& targets, Vector<String8>& overlays,
+        uint32_t** outData, size_t* outSize);
 
 private:
     struct asset_path
@@ -239,6 +247,9 @@ private:
         String8 path;
         FileType type;
         String8 idmap;
+        String8 prefixPath;
+        String8 resfilePath;
+        String8 resApkPath;
     };
 
     bool updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
@@ -254,7 +265,7 @@ private:
     String8 createZipSourceNameLocked(const String8& zipFileName,
         const String8& dirName, const String8& fileName);
 
-    ZipFileRO* getZipFileLocked(const asset_path& path);
+    ZipFileRO* getZipFileLocked(const String8& path);
     Asset* openAssetFromFileLocked(const String8& fileName, AccessMode mode);
     Asset* openAssetFromZipLocked(const ZipFileRO* pZipFile,
         const ZipEntryRO entry, AccessMode mode, const String8& entryName);
@@ -284,6 +295,10 @@ private:
 
     void addSystemOverlays(const char* pathOverlaysList, const String8& targetPackagePath,
             ResTable* sharedRes, size_t offset) const;
+
+    String8 getPkgName(const char *apkPath);
+
+    String8 getOverlayResPath(const char* targetApkPath, const char* overlayApkPath);
 
     class SharedZip : public RefBase {
     public:

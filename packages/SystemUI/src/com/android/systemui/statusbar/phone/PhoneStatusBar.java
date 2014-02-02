@@ -4213,6 +4213,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (mQS != null) {
                 mQS.updateResources();
             }
+            if (mNavigationBarView != null)  {
+                mNavigationBarView.updateResources();
+                updateSearchPanel();
+            }
         }
 
     }
