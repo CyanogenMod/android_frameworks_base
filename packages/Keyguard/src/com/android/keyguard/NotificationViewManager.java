@@ -192,12 +192,11 @@ public class NotificationViewManager {
                 return;
             }
             boolean screenOffAndNotCovered = !mIsScreenOn && mTimeCovered == 0;
-            boolean ongoingAndReposted = sbn.isOngoing() && mHostView.containsNotification(sbn);
-            if (ongoingAndReposted) {
-                return;
-            }
-            if (mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn),
-                        config.forceExpandedView) && screenOffAndNotCovered) {
+
+            boolean showNotification = !mHostView.containsNotification(sbn) || mHostView.getNotification(sbn).when != sbn.getNotification().when;
+            if (mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn) && showNotification,
+                        config.forceExpandedView) && screenOffAndNotCovered
+                        && showNotification && mTimeCovered == 0) {
                 wakeDevice();
             }
         }

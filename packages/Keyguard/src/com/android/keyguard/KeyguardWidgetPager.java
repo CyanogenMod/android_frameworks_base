@@ -959,6 +959,7 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     }
 
     public void handleExternalCameraEvent(MotionEvent event) {
+        Slog.e(TAG, "External camera event!");
         beginCameraEvent();
         int cameraPage = getPageCount() - 1;
         boolean endWarp = false;

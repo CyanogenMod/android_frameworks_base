@@ -45,6 +45,7 @@ interface IKeyguardService {
     oneway void showAssistant();
     oneway void showCustomIntent(inout Intent intent);
     oneway void dispatch(in MotionEvent event);
+    oneway void dispatchButtonClick(int buttonId);
     oneway void launchCamera();
     oneway void onBootCompleted();
     oneway void setBackgroundBitmap(in Bitmap bmp);

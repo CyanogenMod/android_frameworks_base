@@ -204,10 +204,10 @@ public class NavigationBarView extends LinearLayout {
 
     private final OnTouchListener mCameraTouchListener = new OnTouchListener() {
         @Override
-        public boolean onTouch(View cameraButtonView, MotionEvent event) {
+        public boolean onTouch(View view, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    // disable search gesture while interacting with camera
+                    // disable search gesture while interacting with additional navbar button
                     mDelegateHelper.setDisabled(true);
                     mBarTransitions.setContentVisible(false);
                     break;
@@ -218,6 +218,13 @@ public class NavigationBarView extends LinearLayout {
                     break;
             }
             return KeyguardTouchDelegate.getInstance(getContext()).dispatch(event);
+        }
+    };
+
+    private final OnClickListener mNavBarClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            KeyguardTouchDelegate.getInstance(getContext()).dispatchButtonClick(0);
         }
     };
 
@@ -353,6 +360,11 @@ public class NavigationBarView extends LinearLayout {
     // shown when keyguard is visible and camera is available
     public View getCameraButton() {
         return mCurrentView.findViewById(R.id.camera_button);
+    }
+
+    // used for lockscreen notifications
+    public View getNotifsButton() {
+        return mCurrentView.findViewById(R.id.show_notifs);
     }
 
     @Override
@@ -734,6 +746,17 @@ public class NavigationBarView extends LinearLayout {
                     && !mCameraDisabledByUser);
         }
 
+        final boolean showSearch = disableHome && !disableSearch;
+        final boolean showNotifs = showSearch &&
+            Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_NOTIFICATIONS, 1) == 1
+            && Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, 0) == 0;
+        final View notifsButton = getNotifsButton();
+        if (notifsButton != null) {
+            setVisibleOrGone(notifsButton, showNotifs);
+        }
+
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
 
         setMenuVisibility(mShowMenu, true);
@@ -882,6 +905,7 @@ public class NavigationBarView extends LinearLayout {
         boolean hasCamera = false;
         for (int i = 0; i < mRotatedViews.length; i++) {
             final View cameraButton = mRotatedViews[i].findViewById(R.id.camera_button);
+            final View notifsButton = mRotatedViews[i].findViewById(R.id.show_notifs);
             final View searchLight = mRotatedViews[i].findViewById(R.id.search_light);
             if (cameraButton != null) {
                 hasCamera = true;
@@ -890,6 +914,9 @@ public class NavigationBarView extends LinearLayout {
             }
             if (searchLight != null) {
                 searchLight.setOnClickListener(onClickListener);
+            }
+            if (notifsButton != null) {
+                notifsButton.setOnClickListener(mNavBarClickListener);
             }
         }
         if (hasCamera) {
