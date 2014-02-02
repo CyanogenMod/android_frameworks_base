@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
     <string name="profileNameHome">Hjem</string>
     <string name="profileNameSilent">Lydløs</string>
     <string name="profileNameNight">Nat</string>
+    <string name="profileNameAutomobile">Bil</string>
     <string name="profileGroupPhone">Telefon</string>
     <string name="profileGroupCalendar">Kalender</string>
     <string name="profileGroupGmail">Gmail</string>
@@ -46,6 +47,8 @@
     <string name="permdesc_fm_radio_receiver">Tillader app\'en at kontrollere FM-modtageren.</string>
     <string name="permlab_fm_radio_transmitter">kontrollér FM-modtager</string>
     <string name="permdesc_fm_radio_transmitter">Tillader app\'en at kontrollere FM-senderen.</string>
+    <string name="permlab_sendMockSms">Send imiterede SMS-beskeder</string>
+    <string name="permdesc_sendMockSms">Tillader app\'en at sende imiterede SMS-beskeder. Dette tillader betroede apps at sende SMS-beskeder. Ondsindede apps kan sende beskeder uafbrudt, som blokerer enhedens underretningssystem og forstyrrer brugeren.</string>
     <string name="storage_sd_dock_card">Dock SD-kort</string>
     <string name="app_killed_message">App lukket</string>
     <string name="global_action_reboot">Genstart</string>
@@ -112,6 +115,16 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> vil ikke kunne tilgå personlige data</string>
     <string name="profile_picker_title">Profiler</string>
     <string name="profile_none">Ingen</string>
+    <string name="perf_profile_pwrsv">Strømbesparelse</string>
+    <string name="perf_profile_bal">Balanceret</string>
+    <string name="perf_profile_perf">Ydeevne</string>
+    <string name="permlab_interceptSmsSent">blokér udgående SMS\'er</string>
+    <string name="permdesc_interceptSmsSent">Tillader app\'en at blokere en udgående SMS. Ondsindede apps kan bruge dette til at forhindre udgående SMS-beskeder.</string>
+    <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
+    <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
+    <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
     <string name="permlab_cancelNotifications">annuller app-underretninger</string>
     <string name="permdesc_cancelNotifications">Tillader app\'en at annullere underretninger, oprettet af andre apps.</string>
+    <string name="transient_navigation_confirmation_long">Stryg fra kanten af skærmen for at vise systemlinjen</string>
+    <string name="progress_nomediapresent" product="default">Ingen flytbare medier til stede\u2026</string>
 </resources>

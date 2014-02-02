@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_quick_settings_ringer">Lyd <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="dessert_case_settings_cm_title">Vis CyanogenMods maskotter</string>
+    <string name="dessert_case_settings_cm_summary">Vis CyanogenMods maskotter sammen med Androids desserter i drømmen</string>
+    <string name="quick_settings_profile_label">Profil</string>
+    <string name="powerwidget_screen_timeout_toast">Skærm-timeout sat til: %1$d %2$s</string>
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS fra</string>
+    <string name="quick_settings_screen_sleep">Gå i dvale</string>
+    <string name="quick_settings_ringer_on">Lyd til</string>
+    <string name="quick_settings_ringer_off">Lyd fra</string>
+    <string name="quick_settings_vibration_on">Vibration til</string>
+    <string name="quick_settings_vibration_off">Vibration fra</string>
+    <string name="quick_settings_label_enabled">Til</string>
+    <string name="quick_settings_label_disabled">Fra</string>
+    <string name="quick_settings_ringer_normal">Lyd</string>
+    <string name="quick_settings_lockscreen">Skærmlås</string>
+    <string name="quick_settings_network_type">Netværkstilstand</string>
+    <string name="quick_settings_report_bug">Rapportér fejl</string>
+    <string name="quick_settings_sync">Synkr.</string>
+    <string name="quick_settings_sync_off">Synkr. fra</string>
+    <string name="quick_settings_torch">Lommelygte</string>
+    <string name="quick_settings_torch_off">Lommelygte fra</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC fra</string>
+    <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_usb_tether_off_label">Afbrudt</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering fra</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP fra</string>
+    <string name="quick_settings_quiethours">Stille timer</string>
+    <string name="quick_settings_quiethours_off">Stille timer fra</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE fra</string>
+    <string name="quick_settings_volume">Lydstyrke</string>
+    <string name="quick_settings_camera_label">Kamera</string>
+    <string name="quick_settings_network_adb_disabled_label">Deaktiveret</string>
+    <string name="quick_settings_network_adb_enabled_label">Aktiveret</string>
+    <string name="quick_settings_expanded_desktop">Udvidet</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_camera_error_connect">Kan ikke forbinde til kameraet</string>
+    <string name="navbar_dialog_title">Vælg handling at tildele</string>
+    <string name="navbar_home_button">Startknap</string>
+    <string name="navbar_recent_button">Seneste-knap</string>
+    <string name="navbar_search_button">Søgeknap</string>
+    <string name="navbar_back_button">Tilbageknap</string>
+    <string name="navbar_empty_button">Tom knap</string>
+    <string name="navbar_menu_conditional_button">Menuknap (auto-skjul)</string>
+    <string name="navbar_menu_always_button">Menuknap (vis altid)</string>
+    <string name="navbar_menu_big_button">Menuknap</string>
+    <string name="pie_battery_status_charging">Oplader (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Opladt</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% tilbage</string>
+    <string name="pie_phone_status_no_service">Ingen tjeneste</string>
+    <string name="pie_phone_status_airplane_mode">Flytilstand til</string>
+    <string name="pie_phone_status_emergency_only">Kun nødopkald</string>
+    <string name="advanced_dev_option_wipe_app">Ryd appdata</string>
+    <string name="advanced_dev_option_force_stop">Gennemtving stop</string>
+    <string name="accessibility_dock_battery_level">Dockingstations batteri <xliff:g id="number">%d</xliff:g> procent.</string>
+    <string name="screenshot_delete_action">Slet</string>
+    <string name="screenshot_delete_confirmation">Screenshot slettet.</string>
+    <string name="accessibility_desc_add_quick_settings">Tilføj Kvikindstillinger.</string>
+</resources>
