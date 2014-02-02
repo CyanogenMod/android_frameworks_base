@@ -50,6 +50,10 @@ static SkTypeface* Typeface_create(JNIEnv* env, jobject, jstring name,
     return face;
 }
 
+static void Typeface_freeCaches(JNIEnv* env, jobject) {
+    SkTypeface::ClearCache();
+}
+
 static SkTypeface* Typeface_createFromTypeface(JNIEnv* env, jobject, SkTypeface* family, int style) {
     SkTypeface* face = SkTypeface::CreateFromTypeface(family, (SkTypeface::Style)style);
     // Try to find the closest matching font, using the standard heuristic
@@ -178,6 +182,7 @@ static JNINativeMethod gTypefaceMethods[] = {
                                            (void*)Typeface_createFromAsset },
     { "nativeCreateFromFile",     "(Ljava/lang/String;)I",
                                            (void*)Typeface_createFromFile },
+    {"nativeFreeCaches", "()V", (void*) Typeface_freeCaches},
 };
 
 int register_android_graphics_Typeface(JNIEnv* env)

@@ -352,8 +352,31 @@ public class NavigationBarView extends LinearLayout {
         mRecentLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_land);
     }
 
-    protected void updateResources() {
+    public void updateResources() {
         getIcons(mContext.getResources());
+        for (int i = 0; i < mRotatedViews.length; i++) {
+            ViewGroup container = (ViewGroup) mRotatedViews[i];
+            if (container != null) {
+                updateKeyButtonViewResources(container);
+            }
+        }
+    }
+
+    private void updateKeyButtonViewResources(ViewGroup container) {
+        ViewGroup midNavButtons = (ViewGroup) container.findViewById(R.id.mid_nav_buttons);
+        if (midNavButtons != null) {
+            final int nChildern = midNavButtons.getChildCount();
+            for (int i = 0; i < nChildern; i++) {
+                final View child = midNavButtons.getChildAt(i);
+                if (child instanceof KeyButtonView) {
+                    ((KeyButtonView) child).updateResources();
+                }
+            }
+        }
+        KeyButtonView kbv = (KeyButtonView) findViewById(R.id.six);
+        if (kbv != null) {
+            kbv.updateResources();
+        }
     }
 
     @Override
