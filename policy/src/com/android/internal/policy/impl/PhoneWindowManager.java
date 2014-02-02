@@ -362,6 +362,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mCameraSleepOnRelease;
     boolean mIsFocusPressed;
 
+    // Behavior of trackpad wake
+    boolean mTrackballWakeScreen;
+
     // Behavior of volbtn/camera music controls
     boolean mCameraMusicControls;
     boolean mVolBtnMusicControls;
@@ -627,6 +630,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TRACKBALL_WAKE_SCREEN), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USER_ROTATION), false, this,
@@ -1483,6 +1489,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mCameraSleepOnRelease = ((Settings.System.getIntForUser(resolver,
                     Settings.System.CAMERA_SLEEP_ON_RELEASE, 0, UserHandle.USER_CURRENT) == 1)
                     && mCameraWakeScreen);
+            mTrackballWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.TRACKBALL_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
             mCameraMusicControls = ((Settings.System.getIntForUser(resolver,
@@ -4397,8 +4405,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (keyCode == KeyEvent.KEYCODE_POWER) {
             policyFlags |= WindowManagerPolicy.FLAG_WAKE;
         }
+
+        final boolean isTrackballWakeKey = !isScreenOn
+            && mTrackballWakeScreen
+            && (keyCode == KeyEvent.KEYCODE_DPAD_CENTER);
+
         final boolean isWakeKey = (policyFlags
-                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0;
+                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
+                || isTrackballWakeKey;
 
         if (DEBUG_INPUT) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
