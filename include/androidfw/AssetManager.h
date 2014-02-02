@@ -75,6 +75,7 @@ public:
     static const char* TARGET_PACKAGE_NAME;
     static const char* TARGET_APK_PATH;
     static const char* IDMAP_DIR;
+    static const char* APK_EXTENSION;
 
     typedef enum CacheMode {
         CACHE_UNKNOWN = 0,
@@ -100,7 +101,14 @@ public:
      * newly-added asset source.
      */
     bool addAssetPath(const String8& path, int32_t* cookie);
-    bool addOverlayPath(const String8& path, int32_t* cookie);
+    bool addOverlayPath(const String8& path, int32_t* cookie,
+                 const String8& resApkPath, const String8& targetPkgPath,
+                 const String8& prefixPath);
+    bool addCommonOverlayPath(const String8& path, int32_t* cookie,
+                 const String8& resApkPath, const String8& prefixPath);
+    bool addIconPath(const String8& path, int32_t* cookie,
+                 const String8& resApkPath, const String8& prefixPath, uint32_t pkgIdOverride);
+    bool removeOverlayPath(const String8& path, int32_t cookie);
 
     /*                                                                       
      * Convenience for adding the standard system assets.  Uses the
@@ -231,21 +239,32 @@ public:
      * corresponding overlay package.
      */
     bool createIdmap(const char* targetApkPath, const char* overlayApkPath,
-        uint32_t targetCrc, uint32_t overlayCrc, uint32_t** outData, size_t* outSize);
+        uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime, time_t overlayMtime,
+        uint32_t** outData, size_t* outSize);
+
+    String8 getBasePackageName(uint32_t index);
 
 private:
     struct asset_path
     {
-        asset_path() : path(""), type(kFileTypeRegular), idmap(""), isSystemOverlay(false) {}
+        asset_path() : path(""), type(kFileTypeRegular), idmap(""), isSystemOverlay(false),
+                pkgIdOverride(0) {}
         String8 path;
         FileType type;
         String8 idmap;
         bool isSystemOverlay;
+        String8 prefixPath;
+        String8 resfilePath;
+        String8 resApkPath;
+        uint32_t pkgIdOverride;
     };
 
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openNonAssetInPathLocked(const char* fileName, AccessMode mode,
+        const asset_path& path, bool usePrefix = true);
+    Asset* openNonAssetInExactPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openInLocaleVendorLocked(const char* fileName, AccessMode mode,
         const asset_path& path, const char* locale, const char* vendor);
@@ -256,6 +275,7 @@ private:
         const String8& dirName, const String8& fileName);
 
     ZipFileRO* getZipFileLocked(const asset_path& path);
+    ZipFileRO* getZipFileLocked(const String8& path);
     Asset* openAssetFromFileLocked(const String8& fileName, AccessMode mode);
     Asset* openAssetFromZipLocked(const ZipFileRO* pZipFile,
         const ZipEntryRO entry, AccessMode mode, const String8& entryName);
@@ -280,12 +300,16 @@ private:
     const ResTable* getResTable(bool required = true) const;
     void setLocaleLocked(const char* locale);
     void updateResourceParamsLocked() const;
-    bool appendPathToResTable(const asset_path& ap) const;
+    bool appendPathToResTable(const asset_path& ap, size_t* entryIdx) const;
 
     Asset* openIdmapLocked(const struct asset_path& ap) const;
 
     void addSystemOverlays(const char* pathOverlaysList, const String8& targetPackagePath,
             ResTable* sharedRes, size_t offset) const;
+
+    String8 getPkgName(const char *apkPath);
+
+    String8 getOverlayResPath(const char* targetApkPath, const char* overlayApkPath);
 
     class SharedZip : public RefBase {
     public:
@@ -375,6 +399,9 @@ private:
 
     mutable ResTable* mResources;
     ResTable_config* mConfig;
+
+    String8 mBasePackageName;
+    uint32_t mBasePackageIndex;
 
     /*
      * Cached data for "loose" files.  This lets us avoid poking at the
