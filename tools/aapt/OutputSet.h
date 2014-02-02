@@ -27,10 +27,10 @@ class AaptFile;
 class OutputEntry {
 public:
     OutputEntry() {}
-    OutputEntry(const android::String8& path, const android::sp<const AaptFile>& file)
+    OutputEntry(const android::String8& path, const android::sp<AaptFile>& file)
         : mPath(path), mFile(file) {}
 
-    inline const android::sp<const AaptFile>& getFile() const {
+    inline const android::sp<AaptFile>& getFile() const {
         return mFile;
     }
 
@@ -43,7 +43,7 @@ public:
 
 private:
     android::String8 mPath;
-    android::sp<const AaptFile> mFile;
+    android::sp<AaptFile> mFile;
 };
 
 class OutputSet : public virtual android::RefBase {
