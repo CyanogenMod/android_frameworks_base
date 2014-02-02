@@ -495,6 +495,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of ENDCALL Button.  (See Settings.System.END_BUTTON_BEHAVIOR.)
     int mEndcallBehavior;
 
+    // Behavior of trackball wake
+    boolean mTrackballWakeScreen;
+
+    // Behavior of trackball unlock
+    boolean mTrackballUnlockScreen;
+
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
     int mIncallPowerBehavior;
@@ -626,6 +632,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TRACKBALL_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TRACKBALL_UNLOCK_SCREEN), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USER_ROTATION), false, this,
@@ -1499,6 +1511,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             int userRotation = Settings.System.getIntForUser(resolver,
                     Settings.System.USER_ROTATION, Surface.ROTATION_0,
                     UserHandle.USER_CURRENT);
+
+            mTrackballWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.TRACKBALL_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1);
+            mTrackballUnlockScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.TRACKBALL_UNLOCK_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
 
             if (mUserRotation != userRotation) {
                 mUserRotation = userRotation;
@@ -4355,8 +4372,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (keyCode == KeyEvent.KEYCODE_POWER) {
             policyFlags |= WindowManagerPolicy.FLAG_WAKE;
         }
+
+        final boolean isTrackballWakeKey = !isScreenOn
+            && mTrackballWakeScreen
+            && (keyCode == KeyEvent.KEYCODE_DPAD_CENTER);
+
         final boolean isWakeKey = (policyFlags
-                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0;
+                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
+                || isTrackballWakeKey;
 
         if (DEBUG_INPUT) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
