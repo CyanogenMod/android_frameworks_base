@@ -17,6 +17,7 @@
 
 package android.content.pm;
 
+import android.app.ComposedIconInfo;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -507,4 +508,9 @@ interface IPackageManager {
     boolean isPermissionRevokedByPolicy(String permission, String packageName, int userId);
 
     String getPermissionControllerPackageName();
+
+    /** Themes */
+    void updateIconMapping(String pkgName);
+    ComposedIconInfo getComposedIconInfo();
+    int processThemeResources(String themePkgName);
 }

@@ -150,26 +150,24 @@ fail:
     }
 
     int create_idmap(const char *target_apk_path, const char *overlay_apk_path,
-            uint32_t **data, size_t *size)
+            uint32_t target_hash, uint32_t overlay_hash, uint32_t **data, size_t *size)
     {
         uint32_t target_crc, overlay_crc;
-        if (get_zip_entry_crc(target_apk_path, AssetManager::RESOURCES_FILENAME,
-				&target_crc) == -1) {
-            return -1;
-        }
-        if (get_zip_entry_crc(overlay_apk_path, AssetManager::RESOURCES_FILENAME,
-				&overlay_crc) == -1) {
-            return -1;
-        }
+
+        // In the original implementation, crc of the res tables are generated
+        // theme apks however do not need a restable, everything is in assets/
+        // instead timestamps are used
+        target_crc = 0;
+        overlay_crc = 0;
 
         AssetManager am;
         bool b = am.createIdmap(target_apk_path, overlay_apk_path, target_crc, overlay_crc,
-                data, size);
+                target_hash, overlay_hash, data, size);
         return b ? 0 : -1;
     }
 
     int create_and_write_idmap(const char *target_apk_path, const char *overlay_apk_path,
-            int fd, bool check_if_stale)
+            uint32_t target_hash, uint32_t overlay_hash, int fd, bool check_if_stale)
     {
         if (check_if_stale) {
             if (!is_idmap_stale_fd(target_apk_path, overlay_apk_path, fd)) {
@@ -181,7 +179,8 @@ fail:
         uint32_t *data = NULL;
         size_t size;
 
-        if (create_idmap(target_apk_path, overlay_apk_path, &data, &size) == -1) {
+        if (create_idmap(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
+                &data, &size) == -1) {
             return -1;
         }
 
@@ -196,6 +195,7 @@ fail:
 }
 
 int idmap_create_path(const char *target_apk_path, const char *overlay_apk_path,
+        uint32_t target_hash, uint32_t overlay_hash,
         const char *idmap_path)
 {
     if (!is_idmap_stale_path(target_apk_path, overlay_apk_path, idmap_path)) {
@@ -208,7 +208,8 @@ int idmap_create_path(const char *target_apk_path, const char *overlay_apk_path,
         return EXIT_FAILURE;
     }
 
-    int r = create_and_write_idmap(target_apk_path, overlay_apk_path, fd, false);
+    int r = create_and_write_idmap(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
+            fd, false);
     close(fd);
     if (r != 0) {
         unlink(idmap_path);
@@ -216,8 +217,11 @@ int idmap_create_path(const char *target_apk_path, const char *overlay_apk_path,
     return r == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-int idmap_create_fd(const char *target_apk_path, const char *overlay_apk_path, int fd)
+int idmap_create_fd(const char *target_apk_path, const char *overlay_apk_path,
+        uint32_t target_hash, uint32_t overlay_hash,
+        int fd)
 {
-    return create_and_write_idmap(target_apk_path, overlay_apk_path, fd, true) == 0 ?
+    return create_and_write_idmap(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
+            fd, true) == 0 ?
         EXIT_SUCCESS : EXIT_FAILURE;
 }

@@ -64,6 +64,7 @@ public:
         kOpenTruncate   = 0x08,     // if it exists, empty it
     };
     status_t open(const char* zipFileName, int flags);
+    status_t openfd(int fd, int flags);
 
     /*
      * Add a file to the end of the archive.  Specify whether you want the
