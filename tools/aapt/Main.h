@@ -35,7 +35,13 @@ extern int calcPercent(long uncompressedLen, long compressedLen);
 
 extern android::status_t writeAPK(Bundle* bundle,
     const sp<AaptAssets>& assets,
-    const android::String8& outputFile);
+    const android::String8& outputFile, bool isOverlay);
+extern android::status_t writeAPK(Bundle* bundle,
+    const sp<AaptAssets>& assets,
+    int fd, bool isOverlay);
+extern android::status_t writeResFile(const char* filename, const sp<AaptAssets>& assets);
+extern android::status_t writeResFileFD(int fd, const sp<AaptAssets>& assets);
+extern sp<AaptFile> getResourceFile(const sp<AaptAssets>& assets, bool makeIfNecessary=true);
 
 extern android::status_t updatePreProcessedCache(Bundle* bundle);
 

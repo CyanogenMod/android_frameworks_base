@@ -30,12 +30,12 @@ import static com.android.server.am.ActivityStackSupervisor.HOME_STACK_ID;
 
 import android.app.AppOpsManager;
 import android.appwidget.AppWidgetManager;
+import android.content.pm.ThemeUtils;
 import android.util.ArrayMap;
 import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.ProcessStats;
-import com.android.internal.app.ThemeUtils;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessCpuTracker;
@@ -128,6 +128,7 @@ import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Proxy;
 import android.net.ProxyProperties;
 import android.net.Uri;
@@ -329,6 +330,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     // How many bytes to write into the dropbox log before truncating
     static final int DROPBOX_MAX_SIZE = 256 * 1024;
+
+    static final String PROP_REFRESH_THEME = "sys.refresh_theme";
 
     /** Run all ActivityStacks through this */
     ActivityStackSupervisor mStackSupervisor;
@@ -2845,11 +2848,18 @@ public final class ActivityManagerService extends ActivityManagerNative
                 debugFlags |= Zygote.DEBUG_ENABLE_ASSERT;
             }
 
+            //Check if zygote should refresh its fonts
+            boolean refreshTheme = false;
+            if (SystemProperties.getBoolean(PROP_REFRESH_THEME, false)) {
+                SystemProperties.set(PROP_REFRESH_THEME, "false");
+                refreshTheme = true;
+            }
+
             // Start the process.  It will either succeed and return a result containing
             // the PID of the new process, or else throw a RuntimeException.
             Process.ProcessStartResult startResult = Process.start("android.app.ActivityThread",
                     app.processName, uid, uid, gids, debugFlags, mountExternal,
-                    app.info.targetSdkVersion, app.info.seinfo, null);
+                    app.info.targetSdkVersion, app.info.seinfo, refreshTheme, null);
 
             BatteryStatsImpl bs = mBatteryStatsService.getActiveStatistics();
             synchronized (bs) {
@@ -14343,9 +14353,11 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     private void saveThemeResourceLocked(CustomTheme t, boolean isDiff){
-        if(isDiff){
-            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, t.getThemeId());
-            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());  
+        if(isDiff) {
+            Settings.Secure.putString(mContext.getContentResolver(), Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());
+            Settings.Secure.putString(mContext.getContentResolver(), Configuration.THEME_SYSTEMUI_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getSystemUiPackageName());
+            Settings.Secure.putString(mContext.getContentResolver(), Configuration.THEME_ICONPACK_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getIconPackPkgName());
+            Settings.Secure.putString(mContext.getContentResolver(), Configuration.THEME_FONT_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getFontPackPkgName());
         }
     }
 

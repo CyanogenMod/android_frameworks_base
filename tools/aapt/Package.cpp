@@ -7,6 +7,7 @@
 #include "AaptAssets.h"
 #include "ResourceTable.h"
 #include "ResourceFilter.h"
+#include "Images.h"
 
 #include <androidfw/misc.h>
 
@@ -16,10 +17,13 @@
 #include <utils/Errors.h>
 #include <utils/misc.h>
 
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <ctype.h>
 #include <errno.h>
+
+#include <private/android_filesystem_config.h>
 
 using namespace android;
 
@@ -36,13 +40,16 @@ static const char* kNoCompressExt[] = {
 };
 
 /* fwd decls, so I can write this downward */
-ssize_t processAssets(Bundle* bundle, ZipFile* zip, const sp<AaptAssets>& assets);
+ssize_t processAssets(Bundle* bundle, ZipFile* zip, const sp<AaptAssets>& assets, bool isOverlay);
 ssize_t processAssets(Bundle* bundle, ZipFile* zip, const sp<AaptDir>& dir,
-                        const AaptGroupEntry& ge, const ResourceFilter* filter);
+                        const AaptGroupEntry& ge, const ResourceFilter* filter, bool isOverlay);
 bool processFile(Bundle* bundle, ZipFile* zip,
+                        const sp<AaptGroup>& group, const sp<AaptFile>& file);
+bool processOverlayFile(Bundle* bundle, ZipFile* zip,
                         const sp<AaptGroup>& group, const sp<AaptFile>& file);
 bool okayToCompress(Bundle* bundle, const String8& pathName);
 ssize_t processJarFiles(Bundle* bundle, ZipFile* zip);
+
 
 /*
  * The directory hierarchy looks like this:
@@ -52,7 +59,80 @@ ssize_t processJarFiles(Bundle* bundle, ZipFile* zip);
  * we created.
  */
 status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
-                       const String8& outputFile)
+                        ZipFile* zip, const char* outputFileName, bool isOverlay)
+{
+    status_t result = NO_ERROR;
+    int count;
+
+    if (bundle->getVerbose()) {
+        printf("Writing all files...\n");
+    }
+
+    count = processAssets(bundle, zip, assets, isOverlay);
+    if (count < 0) {
+        fprintf(stderr, "ERROR: unable to process assets while packaging '%s'\n",
+                outputFileName);
+        result = count;
+        goto bail;
+    }
+
+    if (bundle->getVerbose()) {
+        printf("Generated %d file%s\n", count, (count==1) ? "" : "s");
+    }
+
+    if (!isOverlay) {
+        count = processJarFiles(bundle, zip);
+        if (count < 0) {
+            fprintf(stderr, "ERROR: unable to process jar files while packaging '%s'\n",
+                    outputFileName);
+            result = count;
+            goto bail;
+        }
+
+        if (bundle->getVerbose())
+            printf("Included %d file%s from jar/zip files.\n", count, (count==1) ? "" : "s");
+    }
+
+    result = NO_ERROR;
+
+    /*
+     * Check for cruft.  We set the "marked" flag on all entries we created
+     * or decided not to update.  If the entry isn't already slated for
+     * deletion, remove it now.
+     */
+    {
+        if (bundle->getVerbose())
+            printf("Checking for deleted files\n");
+        int i, removed = 0;
+        for (i = 0; i < zip->getNumEntries(); i++) {
+            ZipEntry* entry = zip->getEntryByIndex(i);
+
+            if (!entry->getMarked() && entry->getDeleted()) {
+                if (bundle->getVerbose()) {
+                    printf("      (removing crufty '%s')\n",
+                        entry->getFileName());
+                }
+                zip->remove(entry);
+                removed++;
+            }
+        }
+        if (bundle->getVerbose() && removed > 0)
+            printf("Removed %d file%s\n", removed, (removed==1) ? "" : "s");
+    }
+
+    /* tell Zip lib to process deletions and other pending changes */
+    result = zip->flush();
+    if (result != NO_ERROR) {
+        fprintf(stderr, "ERROR: Zip flush failed, archive may be hosed\n");
+        goto bail;
+    }
+
+bail:
+    return result;
+}
+
+status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
+                       const String8& outputFile, bool isOverlay)
 {
     #if BENCHMARK
     fprintf(stdout, "BENCHMARK: Starting APK Bundling \n");
@@ -62,8 +142,6 @@ status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
     status_t result = NO_ERROR;
     ZipFile* zip = NULL;
     int count;
-
-    //bundle->setPackageCount(0);
 
     /*
      * Prep the Zip archive.
@@ -108,64 +186,10 @@ status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
         goto bail;
     }
 
-    if (bundle->getVerbose()) {
-        printf("Writing all files...\n");
-    }
+    result = writeAPK(bundle, assets, zip, outputFile.string(), isOverlay);
 
-    count = processAssets(bundle, zip, assets);
-    if (count < 0) {
-        fprintf(stderr, "ERROR: unable to process assets while packaging '%s'\n",
-                outputFile.string());
-        result = count;
-        goto bail;
-    }
-
-    if (bundle->getVerbose()) {
-        printf("Generated %d file%s\n", count, (count==1) ? "" : "s");
-    }
-    
-    count = processJarFiles(bundle, zip);
-    if (count < 0) {
-        fprintf(stderr, "ERROR: unable to process jar files while packaging '%s'\n",
-                outputFile.string());
-        result = count;
-        goto bail;
-    }
-    
-    if (bundle->getVerbose())
-        printf("Included %d file%s from jar/zip files.\n", count, (count==1) ? "" : "s");
-    
-    result = NO_ERROR;
-
-    /*
-     * Check for cruft.  We set the "marked" flag on all entries we created
-     * or decided not to update.  If the entry isn't already slated for
-     * deletion, remove it now.
-     */
-    {
-        if (bundle->getVerbose())
-            printf("Checking for deleted files\n");
-        int i, removed = 0;
-        for (i = 0; i < zip->getNumEntries(); i++) {
-            ZipEntry* entry = zip->getEntryByIndex(i);
-
-            if (!entry->getMarked() && entry->getDeleted()) {
-                if (bundle->getVerbose()) {
-                    printf("      (removing crufty '%s')\n",
-                        entry->getFileName());
-                }
-                zip->remove(entry);
-                removed++;
-            }
-        }
-        if (bundle->getVerbose() && removed > 0)
-            printf("Removed %d file%s\n", removed, (removed==1) ? "" : "s");
-    }
-
-    /* tell Zip lib to process deletions and other pending changes */
-    result = zip->flush();
     if (result != NO_ERROR) {
-        fprintf(stderr, "ERROR: Zip flush failed, archive may be hosed\n");
+        fprintf(stderr, "ERROR: Writing apk failed\n");
         goto bail;
     }
 
@@ -218,8 +242,118 @@ bail:
     return result;
 }
 
+/*
+ * The directory hierarchy looks like this:
+ * "outputDir" and "assetRoot" are existing directories.
+ *
+ * On success, "bundle->numPackages" will be the number of Zip packages
+ * we created.
+ */
+status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
+                       int fd, bool isOverlay)
+{
+    #if BENCHMARK
+    fprintf(stdout, "BENCHMARK: Starting APK Bundling \n");
+    long startAPKTime = clock();
+    #endif /* BENCHMARK */
+
+    status_t result = NO_ERROR;
+    ZipFile* zip = NULL;
+    int count;
+
+    status_t status;
+    zip = new ZipFile;
+    status = zip->openfd(fd, ZipFile::kOpenReadWrite);
+    if (status != NO_ERROR) {
+        fprintf(stderr, "ERROR: unable to open file as Zip file for writing\n");
+        result = PERMISSION_DENIED;
+        goto bail;
+    }
+
+    result = writeAPK(bundle, assets, zip, "file_descriptor", isOverlay);
+
+    if (result != NO_ERROR) {
+        fprintf(stderr, "ERROR: Writing apk failed\n");
+        goto bail;
+    }
+
+    /* anything here? */
+    if (zip->getNumEntries() == 0) {
+        if (bundle->getVerbose()) {
+            printf("Archive is empty -- removing\n");
+        }
+        delete zip;        // close the file so we can remove it in Win32
+        zip = NULL;
+        close(fd);
+    }
+
+    assert(result == NO_ERROR);
+
+bail:
+    delete zip;        // must close before remove in Win32
+    close(fd);
+    if (result != NO_ERROR) {
+        if (bundle->getVerbose()) {
+            printf("Removing archive due to earlier failures\n");
+        }
+    }
+
+    if (result == NO_ERROR && bundle->getVerbose())
+        printf("Done!\n");
+
+    #if BENCHMARK
+    fprintf(stdout, "BENCHMARK: End APK Bundling. Time Elapsed: %f ms \n",(clock() - startAPKTime)/1000.0);
+    #endif /* BENCHMARK */
+    return result;
+}
+
+status_t writeResFile(const char* filename, const sp<AaptAssets>& assets) {
+    FILE* fp = fopen(filename, "w+");
+    if (fp == NULL) {
+        fprintf(stderr, "Unable to open %s for writing resTable\n", filename);
+        return PERMISSION_DENIED;
+    }
+
+    sp<AaptFile> resFile(getResourceFile(assets));
+    if (resFile == NULL || resFile->getData() == NULL || resFile->getSize() == 0) {
+        fprintf(stderr, "Res table or its data is null or empty. Nothing to write\n");
+        fclose(fp);
+        return UNKNOWN_ERROR;
+    }
+
+    int count = 0;
+    count = fwrite(resFile->getData(), 1, resFile->getSize(), fp);
+
+    if (count == 0) {
+        fprintf(stderr, "Nothing written to %s\n", filename);
+    }
+    fclose(fp);
+
+    return NO_ERROR;
+}
+
+status_t writeResFileFD(int fd, const sp<AaptAssets>& assets) {
+    FILE* fp = fdopen(fd, "w+");
+    sp<AaptFile> resFile(getResourceFile(assets));
+    if (resFile == NULL || resFile->getData() == NULL || resFile->getSize() == 0) {
+        fprintf(stderr, "Res table or its data is null or empty. Nothing to write\n");
+        fclose(fp);
+        return UNKNOWN_ERROR;
+    }
+
+    int count = 0;
+    count = fwrite(resFile->getData(), 1, resFile->getSize(), fp);
+
+    if (count == 0) {
+        fprintf(stderr, "Nothing written to %d\n", fd);
+    }
+    fclose(fp);
+
+    return NO_ERROR;
+}
+
 ssize_t processAssets(Bundle* bundle, ZipFile* zip,
-                      const sp<AaptAssets>& assets)
+                      const sp<AaptAssets>& assets, bool isOverlay)
 {
     ResourceFilter filter;
     status_t status = filter.parse(bundle->getConfigurations());
@@ -233,7 +367,7 @@ ssize_t processAssets(Bundle* bundle, ZipFile* zip,
     for (size_t i=0; i<N; i++) {
         const AaptGroupEntry& ge = assets->getGroupEntries()[i];
 
-        ssize_t res = processAssets(bundle, zip, assets, ge, &filter);
+        ssize_t res = processAssets(bundle, zip, assets, ge, &filter, isOverlay);
         if (res < 0) {
             return res;
         }
@@ -245,7 +379,7 @@ ssize_t processAssets(Bundle* bundle, ZipFile* zip,
 }
 
 ssize_t processAssets(Bundle* bundle, ZipFile* zip, const sp<AaptDir>& dir,
-        const AaptGroupEntry& ge, const ResourceFilter* filter)
+        const AaptGroupEntry& ge, const ResourceFilter* filter, bool isOverlay)
 {
     ssize_t count = 0;
 
@@ -260,7 +394,7 @@ ssize_t processAssets(Bundle* bundle, ZipFile* zip, const sp<AaptDir>& dir,
             continue;
         }
 
-        ssize_t res = processAssets(bundle, zip, subDir, ge, filterable ? filter : NULL);
+        ssize_t res = processAssets(bundle, zip, subDir, ge, filterable ? filter : NULL, isOverlay);
         if (res < 0) {
             return res;
         }
@@ -277,7 +411,9 @@ ssize_t processAssets(Bundle* bundle, ZipFile* zip, const sp<AaptDir>& dir,
         ssize_t fi = gp->getFiles().indexOfKey(ge);
         if (fi >= 0) {
             sp<AaptFile> fl = gp->getFiles().valueAt(fi);
-            if (!processFile(bundle, zip, gp, fl)) {
+            bool ret = isOverlay ? processOverlayFile(bundle, zip, gp, fl)
+                    : processFile(bundle, zip, gp, fl);
+            if (!ret) {
                 return UNKNOWN_ERROR;
             }
             count++;
@@ -407,6 +543,80 @@ bool processFile(Bundle* bundle, ZipFile* zip,
                     file->getPrintableSource().string());
         }
         return false;
+    }
+
+    return true;
+}
+
+/*
+ * Process a regular file, adding it to the archive if appropriate.
+ *
+ * This function is intended for use when creating a cached overlay package.
+ * Only xml and .9.png files are processed and added to the package.
+ *
+ * If we're in "update" mode, and the file already exists in the archive,
+ * delete the existing entry before adding the new one.
+ */
+bool processOverlayFile(Bundle* bundle, ZipFile* zip,
+                 const sp<AaptGroup>& group, const sp<AaptFile>& file)
+{
+    const bool hasData = file->hasData();
+
+    String8 storageName(group->getPath());
+    storageName.convertToResPath();
+    ZipEntry* entry;
+    bool fromGzip = false;
+    status_t result;
+
+    if (strcasecmp(storageName.getPathExtension().string(), ".gz") == 0) {
+        fromGzip = true;
+        storageName = storageName.getBasePath();
+    }
+
+    if (bundle->getUpdate()) {
+        entry = zip->getEntryByName(storageName.string());
+        if (entry != NULL) {
+            /* file already exists in archive; there can be only one */
+            if (entry->getMarked()) {
+                fprintf(stderr,
+                        "ERROR: '%s' exists twice (check for with & w/o '.gz'?)\n",
+                        file->getPrintableSource().string());
+                return false;
+            }
+            zip->remove(entry);
+        }
+    }
+
+    if (hasData) {
+        const char* name = storageName.string();
+        if (endsWith(name, ".9.png") || endsWith(name, ".xml")) {
+            if (endsWith(name, ".9.png")) {
+                preProcessImage(bundle, file);
+            }
+            result = zip->add(file->getData(), file->getSize(), storageName.string(),
+                               file->getCompressionMethod(), &entry);
+            if (result == NO_ERROR) {
+                if (bundle->getVerbose()) {
+                    printf("      '%s'%s", storageName.string(), fromGzip ? " (from .gz)" : "");
+                    if (entry->getCompressionMethod() == ZipEntry::kCompressStored) {
+                        printf(" (not compressed)\n");
+                    } else {
+                        printf(" (compressed %d%%)\n", calcPercent(entry->getUncompressedLen(),
+                                    entry->getCompressedLen()));
+                    }
+                }
+                entry->setMarked(true);
+            } else {
+                if (result == ALREADY_EXISTS) {
+                    fprintf(stderr, "      Unable to add '%s': file already in archive (try '-u'?)\n",
+                            file->getPrintableSource().string());
+                } else {
+                    fprintf(stderr, "      Unable to add '%s': Zip add failed\n",
+                            file->getPrintableSource().string());
+                }
+                return false;
+            }
+        }
     }
 
     return true;

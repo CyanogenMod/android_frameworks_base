@@ -23,12 +23,11 @@ import static com.android.server.am.ActivityStackSupervisor.HOME_STACK_ID;
 import static android.view.WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER;
 
 import android.app.AppOpsManager;
+import android.content.pm.ThemeUtils;
 import android.util.TimeUtils;
 import android.view.IWindowId;
 
 import com.android.internal.app.IBatteryStats;
-import com.android.internal.app.ThemeUtils;
-
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.policy.impl.PhoneWindowManager;
 import com.android.internal.util.FastPrintWriter;
