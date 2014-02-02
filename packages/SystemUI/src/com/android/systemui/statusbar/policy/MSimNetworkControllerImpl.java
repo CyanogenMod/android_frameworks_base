@@ -452,6 +452,10 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mSubsLabelViews.add(v);
     }
 
+    public void clearSubsLabelView() {
+        mSubsLabelViews.clear();
+    }
+
     private void updateCarrierText(int sub) {
         int textResId = 0;
         if (mAirplaneMode) {

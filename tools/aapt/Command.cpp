@@ -2441,11 +2441,38 @@ int doPackage(Bundle* bundle)
         goto bail;
     }
 
-    // Write the apk
-    if (outputAPKFile) {
+    if (outputAPKFile || bundle->getOutputResApk()) {
         // Gather all resources and add them to the APK Builder. The builder will then
         // figure out which Split they belong in.
         err = addResourcesToBuilder(assets, builder);
+        if (err != NO_ERROR) {
+            goto bail;
+        }
+    }
+
+    //Write the res apk
+    if (bundle->getOutputResApk()) {
+        const char* resPath = bundle->getOutputResApk();
+        char *endptr;
+        int resApk_fd = strtol(resPath, &endptr, 10);
+
+        if (*endptr == '\0') {
+            //OutputResDir was a file descriptor
+            //Assume there is only one set of assets, when we deal with actual split apks this may have to change
+            err = writeAPK(bundle, resApk_fd, builder->getBaseSplit(), true);
+        } else {
+            //Assume there is only one set of assets, when we deal with actual split apks this may have to change
+            err = writeAPK(bundle, String8(bundle->getOutputResApk()), builder->getBaseSplit(), true);
+        }
+
+        if (err != NO_ERROR) {
+            fprintf(stderr, "ERROR: writing '%s' failed\n", resPath);
+            goto bail;
+        }
+    }
+
+    // Write the apk
+    if (outputAPKFile) {
         if (err != NO_ERROR) {
             goto bail;
         }
@@ -2455,7 +2482,7 @@ int doPackage(Bundle* bundle)
         for (size_t i = 0; i < numSplits; i++) {
             const sp<ApkSplit>& split = splits[i];
             String8 outputPath = buildApkName(String8(outputAPKFile), split);
-            err = writeAPK(bundle, outputPath, split);
+            err = writeAPK(bundle, outputPath, split, false);
             if (err != NO_ERROR) {
                 fprintf(stderr, "ERROR: packaging of '%s' failed\n", outputPath.string());
                 goto bail;

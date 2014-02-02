@@ -183,6 +183,16 @@ interface IWindowSession {
      */
     void setWallpaperDisplayOffset(IBinder windowToken, int x, int y);
 
+    /**
+     * Get the current x offset for the wallpaper
+     */
+    int getLastWallpaperX();
+
+    /**
+     * Get the current y offset for the wallpaper
+     */
+    int getLastWallpaperY();
+
     Bundle sendWallpaperCommand(IBinder window, String action, int x, int y,
             int z, in Bundle extras, boolean sync);
 

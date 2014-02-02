@@ -64,7 +64,6 @@ public class StatusBarWindowManager {
      * @param barHeight The height of the status bar in collapsed state.
      */
     public void add(View statusBarView, int barHeight) {
-
         // Now that the status bar window encompasses the sliding panel and its
         // translucent backdrop, the entire thing is made TRANSLUCENT and is
         // hardware-accelerated.

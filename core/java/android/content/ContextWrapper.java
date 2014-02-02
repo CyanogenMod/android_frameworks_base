@@ -681,7 +681,20 @@ public class ContextWrapper extends Context {
     /** @hide */
     public Context createApplicationContext(ApplicationInfo application,
             int flags) throws PackageManager.NameNotFoundException {
-        return mBase.createApplicationContext(application, flags);
+        return createApplicationContext(application, null, flags);
+    }
+
+    /** @hide */
+    public Context createApplicationContext(ApplicationInfo application,
+            String themePackageName, int flags) throws PackageManager.NameNotFoundException {
+        return mBase.createApplicationContext(application, themePackageName, flags);
+    }
+
+    /** @hide */
+    @Override
+    public Context createPackageContextAsUser(String packageName, String themePackageName,
+            int flags, UserHandle user) throws PackageManager.NameNotFoundException {
+        return mBase.createPackageContextAsUser(packageName, themePackageName, flags, user);
     }
 
     /** @hide */

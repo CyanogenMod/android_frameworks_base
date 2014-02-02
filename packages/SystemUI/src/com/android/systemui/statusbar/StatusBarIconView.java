@@ -20,6 +20,7 @@ import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.ThemeConfig;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -198,8 +199,15 @@ public class StatusBarIconView extends AnimatedImageView {
                 if (userId == UserHandle.USER_ALL) {
                     userId = UserHandle.USER_OWNER;
                 }
-                r = context.getPackageManager()
-                        .getResourcesForApplicationAsUser(icon.iconPackage, userId);
+                PackageManager pm = context.getPackageManager();
+                final ThemeConfig config = context.getResources().getConfiguration().themeConfig;
+                if (config != null) {
+                    final String pkgName = config.getOverlayPkgNameForApp(context.getPackageName());
+                    r = pm.getThemedResourcesForApplicationAsUser(icon.iconPackage,
+                            pkgName, userId);
+                } else {
+                    r = context.getResources();
+                }
             } catch (PackageManager.NameNotFoundException ex) {
                 Log.e(TAG, "Icon package not found: " + icon.iconPackage);
                 return null;
@@ -233,6 +241,10 @@ public class StatusBarIconView extends AnimatedImageView {
         if (mNotification != null) {
             event.setParcelableData(mNotification);
         }
+    }
+
+    public String getStatusBarSlot() {
+        return mSlot;
     }
 
     @Override

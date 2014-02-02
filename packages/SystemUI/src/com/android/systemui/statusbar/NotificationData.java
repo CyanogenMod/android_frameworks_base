@@ -160,6 +160,14 @@ public class NotificationData {
         return mEntries.get(key);
     }
 
+    public Entry get(int i) {
+        return mEntries.valueAt(i);
+    }
+
+    public RankingMap getRankingMap() {
+        return mRankingMap;
+    }
+
     public void add(Entry entry, RankingMap ranking) {
         mEntries.put(entry.notification.getKey(), entry);
         updateRankingAndSort(ranking);
@@ -269,6 +277,14 @@ public class NotificationData {
             }
         }
         return false;
+    }
+
+    public void clear() {
+        mEntries.clear();
+    }
+
+    public int size() {
+        return mEntries.size();
     }
 
     // Q: What kinds of notifications should show during setup?

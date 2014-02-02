@@ -216,9 +216,20 @@ bool parse(const String8& str, ConfigDescription* out) {
 
 success:
     if (out != NULL) {
+#ifndef HAVE_ANDROID_OS
         applyVersionForCompatibility(&config);
+#else
+        // Calling applyVersionForCompatibility when compiling a theme can cause
+        // the path to be changed by AAPT which results in the themed assets not being
+        // loaded.  The only time (as of right now) that aapt is run on an android device
+        // is when it is being used for themes, so this should be the correct behavior
+        // in this case.  If AAPT is ever used on an android device for some other reason,
+        // we will need to change this.
+        printf("AAPT is running on Android, skipping applyVersionForCompatibility");
+#endif
         *out = config;
     }
+
     return true;
 }
 

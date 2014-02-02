@@ -227,7 +227,7 @@ namespace {
                 idmap_path.appendPath(flatten_path(overlay_apk_path + 1));
                 idmap_path.append("@idmap");
 
-                if (idmap_create_path(target_apk_path, overlay_apk_path,
+                if (idmap_create_path(target_apk_path, overlay_apk_path, 0, 0,
                         idmap_path.string()) != 0) {
                     ALOGE("error: failed to create idmap for target=%s overlay=%s idmap=%s\n",
                             target_apk_path, overlay_apk_path, idmap_path.string());

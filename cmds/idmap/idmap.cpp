@@ -66,29 +66,31 @@ EXAMPLES \n\
       Display an idmap file: \n\
 \n\
       $ adb shell idmap --inspect /data/resource-cache/vendor@overlay@overlay.apk@idmap \n\
-      SECTION      ENTRY        VALUE      COMMENT \n\
-      IDMAP HEADER magic        0x706d6469 \n\
-                   base crc     0xb65a383f \n\
-                   overlay crc  0x7b9675e8 \n\
-                   base path    .......... /path/to/target.apk \n\
-                   overlay path .......... /path/to/overlay.apk \n\
-      DATA HEADER  target pkg   0x0000007f \n\
-                   types count  0x00000003 \n\
-      DATA BLOCK   target type  0x00000002 \n\
-                   overlay type 0x00000002 \n\
-                   entry count  0x00000001 \n\
-                   entry offset 0x00000000 \n\
-                   entry        0x00000000 drawable/drawable \n\
-      DATA BLOCK   target type  0x00000003 \n\
-                   overlay type 0x00000003 \n\
-                   entry count  0x00000001 \n\
-                   entry offset 0x00000000 \n\
-                   entry        0x00000000 xml/integer \n\
-      DATA BLOCK   target type  0x00000004 \n\
-                   overlay type 0x00000004 \n\
-                   entry count  0x00000001 \n\
-                   entry offset 0x00000000 \n\
-                   entry        0x00000000 raw/lorem_ipsum \n\
+      SECTION      ENTRY         VALUE      COMMENT \n\
+      IDMAP HEADER magic         0x706d6469 \n\
+                   base crc      0xb65a383f \n\
+                   overlay crc   0x7b9675e8 \n\
+                   base mtime    0x1eb47d51 \n\
+                   overlay mtime 0x185f87a2 \n\
+                   base path     .......... /path/to/target.apk \n\
+                   overlay path  .......... /path/to/overlay.apk \n\
+      DATA HEADER  target pkg    0x0000007f \n\
+                   types count   0x00000003 \n\
+      DATA BLOCK   target type   0x00000002 \n\
+                   overlay type  0x00000002 \n\
+                   entry count   0x00000001 \n\
+                   entry offset  0x00000000 \n\
+                   entry         0x00000000 drawable/drawable \n\
+      DATA BLOCK   target type   0x00000003 \n\
+                   overlay type  0x00000003 \n\
+                   entry count   0x00000001 \n\
+                   entry offset  0x00000000 \n\
+                   entry         0x00000000 xml/integer \n\
+      DATA BLOCK   target type   0x00000004 \n\
+                   overlay type  0x00000004 \n\
+                   entry count   0x00000001 \n\
+                   entry offset  0x00000000 \n\
+                   entry         0x00000000 raw/lorem_ipsum \n\
 \n\
       In this example, the overlay package provides three alternative resource values:\n\
       drawable/drawable, xml/integer, and raw/lorem_ipsum \n\
@@ -120,7 +122,7 @@ NOTES \n\
     }
 
     int maybe_create_fd(const char *target_apk_path, const char *overlay_apk_path,
-            const char *idmap_str)
+            const char *idmap_str, const char *target_hash_str, const char *overlay_hash_str)
     {
         // anyone (not just root or system) may do --fd -- the file has
         // already been opened by someone else on our behalf
@@ -141,12 +143,15 @@ NOTES \n\
             ALOGD("error: failed to read apk %s: %s\n", overlay_apk_path, strerror(errno));
             return -1;
         }
+        int target_hash = strtol(target_hash_str, 0, 10);
+        int overlay_hash = strtol(overlay_hash_str, 0, 10);
 
-        return idmap_create_fd(target_apk_path, overlay_apk_path, idmap_fd);
+        return idmap_create_fd(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
+                idmap_fd);
     }
 
     int maybe_create_path(const char *target_apk_path, const char *overlay_apk_path,
-            const char *idmap_path)
+            const char *idmap_path, const char *target_hash_str, const char *overlay_hash_str)
     {
         if (!verify_root_or_system()) {
             fprintf(stderr, "error: permission denied: not user root or user system\n");
@@ -163,7 +168,10 @@ NOTES \n\
             return -1;
         }
 
-        return idmap_create_path(target_apk_path, overlay_apk_path, idmap_path);
+        int target_hash = strtol(target_hash_str, 0, 10);
+        int overlay_hash = strtol(overlay_hash_str, 0, 10);
+        return idmap_create_path(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
+                idmap_path);
     }
 
     int maybe_scan(const char *overlay_dir, const char *target_package_name,
@@ -222,12 +230,12 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (argc == 5 && !strcmp(argv[1], "--fd")) {
-        return maybe_create_fd(argv[2], argv[3], argv[4]);
+    if (argc == 7 && !strcmp(argv[1], "--fd")) {
+        return maybe_create_fd(argv[2], argv[3], argv[4], argv[5], argv[6]);
     }
 
-    if (argc == 5 && !strcmp(argv[1], "--path")) {
-        return maybe_create_path(argv[2], argv[3], argv[4]);
+    if (argc == 7 && !strcmp(argv[1], "--path")) {
+        return maybe_create_path(argv[2], argv[3], argv[4], argv[5], argv[6]);
     }
 
     if (argc == 6 && !strcmp(argv[1], "--scan")) {

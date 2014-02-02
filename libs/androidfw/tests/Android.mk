@@ -24,11 +24,13 @@ testFiles := \
     ByteBucketArray_test.cpp \
     Config_test.cpp \
     ConfigLocale_test.cpp \
-    Idmap_test.cpp \
+    PackageIdOverride_test.cpp \
     ResTable_test.cpp \
     Split_test.cpp \
     TestHelpers.cpp \
     Theme_test.cpp \
+    ThemesBags_test.cpp \
+    ThemesIdmap_test.cpp \
     TypeWrappers_test.cpp \
     ZipUtils_test.cpp
 

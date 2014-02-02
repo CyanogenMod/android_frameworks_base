@@ -754,6 +754,8 @@
         <flag name="smallestScreenSize" value="0x0800" />
         <!-- The layout direction has changed. For example going from LTR to RTL. -->
         <flag name="layoutDirection" value="0x2000" />
+        <!-- Theme has changed @hide -->
+        <flag name="themeChange" value="0x8000" />
         <!-- The font scaling factor has changed, that is the user has
              selected a new global font size. -->
         <flag name="fontScale" value="0x40000000" />

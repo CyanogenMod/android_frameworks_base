@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,11 @@
  */
 
 package android.content.pm;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -253,6 +259,34 @@ public class PackageInfo implements Parcelable {
     /** @hide */
     public boolean coreApp;
 
+    // Is Theme Apk
+    /**
+     * {@hide}
+     */
+    public boolean isThemeApk = false;
+
+    /**
+     * {@hide}
+     */
+    public boolean hasIconPack = false;
+
+    /**
+     * {@hide}
+     */
+    public ArrayList<String> mOverlayTargets;
+
+    // Is Legacy Icon Apk
+    /**
+     * {@hide}
+     */
+    public boolean isLegacyIconPackApk = false;
+
+    // ThemeInfo
+    /**
+     * {@hide}
+     */
+    public ThemeInfo themeInfo;
+
     /** @hide */
     public boolean requiredForAllUsers;
 
@@ -322,6 +356,13 @@ public class PackageInfo implements Parcelable {
         dest.writeString(restrictedAccountType);
         dest.writeString(requiredAccountType);
         dest.writeString(overlayTarget);
+
+        /* Theme-specific. */
+        dest.writeInt((isThemeApk) ? 1 : 0);
+        dest.writeStringList(mOverlayTargets);
+        dest.writeParcelable(themeInfo, parcelableFlags);
+        dest.writeInt(hasIconPack ? 1 : 0);
+        dest.writeInt((isLegacyIconPackApk) ? 1 : 0);
     }
 
     public static final Parcelable.Creator<PackageInfo> CREATOR
@@ -371,5 +412,12 @@ public class PackageInfo implements Parcelable {
         restrictedAccountType = source.readString();
         requiredAccountType = source.readString();
         overlayTarget = source.readString();
+
+        /* Theme-specific. */
+        isThemeApk = (source.readInt() != 0);
+        mOverlayTargets = source.createStringArrayList();
+        themeInfo = source.readParcelable(null);
+        hasIconPack = source.readInt() == 1;
+        isLegacyIconPackApk = source.readInt() == 1;
     }
 }
