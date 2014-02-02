@@ -46,7 +46,7 @@ public:
     ZipFile(void)
       : mZipFp(NULL), mReadOnly(false), mNeedCDRewrite(false)
       {}
-    ~ZipFile(void) {
+    virtual ~ZipFile(void) {
         if (!mReadOnly)
             flush();
         if (mZipFp != NULL)
@@ -64,6 +64,7 @@ public:
         kOpenTruncate   = 0x08,     // if it exists, empty it
     };
     status_t open(const char* zipFileName, int flags);
+    status_t openfd(int fd, int flags);
 
     /*
      * Add a file to the end of the archive.  Specify whether you want the
@@ -161,8 +162,8 @@ public:
      *
      * This will return an entry that is pending deletion.
      */
-    int getNumEntries(void) const { return mEntries.size(); }
-    ZipEntry* getEntryByIndex(int idx) const;
+    virtual int getNumEntries(void) const { return mEntries.size(); }
+    virtual ZipEntry* getEntryByIndex(int idx) const;
 
 private:
     /* these are private and not defined */
