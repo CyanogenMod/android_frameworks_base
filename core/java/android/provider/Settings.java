@@ -4656,6 +4656,12 @@ public final class Settings {
         public static final String LOCKSCREEN_NOTIFICATIONS_ALLOWED = "lockscreen_notifications_allowed";
 
         /**
+         * Set a custom notification background color
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_COLOR = "lockscreen_notifications_color"
+
+        /**
          * Turn screen on when device is pulled out of pocket
          * @hide
          */
