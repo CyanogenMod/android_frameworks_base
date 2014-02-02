@@ -239,3 +239,11 @@ $(call add-clean-step, rm -rf $(OUT_DIR)/target/common/obj/JAVA_LIBRARIES/framew
 # ******************************************************************
 # NEWER CLEAN STEPS MUST BE AT THE END OF THE LIST ABOVE THIS BANNER
 # ******************************************************************
+
+# clean steps for aapt
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/bin/aapt)
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/obj32/EXECUTABLES/aapt_intermediates)
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/bin/libaapt_tests)
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/obj/EXECUTABLES/aapt_intermediates)
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/bin/aapt)
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/symbols/system/bin/aapt)
