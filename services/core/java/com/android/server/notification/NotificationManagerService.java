@@ -1955,17 +1955,15 @@ public class NotificationManagerService extends SystemService {
         } finally {
             Binder.restoreCallingIdentity(token);
         }
-/* hharte
-        try {
-            final ProfileManager profileManager =
-                    (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
 
-            ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
-            notification = group.processNotification(notification);
-        } catch(Throwable th) {
-            Log.e(TAG, "An error occurred profiling the notification.", th);
+        final ProfileManager profileManager =
+                (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
+
+        ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+        if (group != null) {
+            group.applyOverridesToNotification(notification);
         }
-*/
+
         // If we're not supposed to beep, vibrate, etc. then don't.
         final String disableEffects = disableNotificationEffects(record);
         if (disableEffects != null) {
