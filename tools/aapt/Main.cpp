@@ -1,5 +1,6 @@
 //
 // Copyright 2006 The Android Open Source Project
+// This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
 //
 // Android Asset Packaging Tool main entry point.
 //
@@ -14,6 +15,7 @@
 #include <cstdlib>
 #include <getopt.h>
 #include <cassert>
+#include <ctype.h>
 
 using namespace android;
 
@@ -56,7 +58,7 @@ void usage(void)
         "   xmltree          Print the compiled xmls in the given assets.\n"
         "   xmlstrings       Print the strings of the given compiled xml assets.\n\n", gProgName);
     fprintf(stderr,
-        " %s p[ackage] [-d][-f][-m][-u][-v][-x][-z][-M AndroidManifest.xml] \\\n"
+        " %s p[ackage] [-d][-f][-m][-u][-v][-x[ extending-resource-id]][-z][-M AndroidManifest.xml] \\\n"
         "        [-0 extension [-0 extension ...]] [-g tolerance] [-j jarfile] \\\n"
         "        [--debug-mode] [--min-sdk-version VAL] [--target-sdk-version VAL] \\\n"
         "        [--app-version VAL] [--app-version-name TEXT] [--custom-package VAL] \\\n"
@@ -114,7 +116,7 @@ void usage(void)
         "   -m  make package directories under location specified by -J\n"
         "   -u  update existing packages (add new, replace older, remove deleted files)\n"
         "   -v  verbose output\n"
-        "   -x  create extending (non-application) resource IDs\n"
+        "   -x  either create or assign (if specified) extending (non-application) resource IDs\n"
         "   -z  require localization of resource attributes marked with\n"
         "       localization=\"suggested\"\n"
         "   -A  additional directory in which to find raw asset files\n"
@@ -347,6 +349,14 @@ int main(int argc, char* const argv[])
                 break;
             case 'x':
                 bundle.setExtending(true);
+                argc--;
+                argv++;
+                if (!argc || !isdigit(argv[0][0])) {
+                    argc++;
+                    argv--;
+                } else {
+                    bundle.setExtendedPackageId(atoi(argv[0]));
+                }
                 break;
             case 'z':
                 bundle.setRequireLocalization(true);
@@ -428,6 +438,17 @@ int main(int argc, char* const argv[])
                 convertPath(argv[0]);
                 bundle.setAndroidManifestFile(argv[0]);
                 break;
+            case 'X':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-X' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setInternalZipPath(argv[0]);
+                break;
             case 'P':
                 argc--;
                 argv++;
@@ -496,6 +517,28 @@ int main(int argc, char* const argv[])
                 } else {
                     bundle.setCompressionMethod(ZipEntry::kCompressStored);
                 }
+                break;
+            case 'Z':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-Z' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setInputAPKFile(argv[0]);
+                break;
+            case 'r':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-r' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setOutputResApk(argv[0]);
                 break;
             case '-':
                 if (strcmp(cp, "-debug-mode") == 0) {

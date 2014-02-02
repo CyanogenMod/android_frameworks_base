@@ -22,8 +22,11 @@ namespace R {
 
 namespace attr {
     enum {
-        background  = 0x01010000, // default
-        foreground  = 0x01010001, // default
+        background      = 0x01010000, // default
+        foreground      = 0x01010001, // default
+        some_dimen      = 0x01010002, // default
+        another_dimen   = 0x01010003, // default
+        windowNoTitle   = 0x01010056, // default
     };
 }
 

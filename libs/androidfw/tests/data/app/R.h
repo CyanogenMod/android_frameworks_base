@@ -29,6 +29,15 @@ namespace attr {
 namespace style {
     enum {
         Theme_One      = 0x7f020000,   // default
+        Theme_Two      = 0x7f020001,   // default
+        Theme_Three    = 0x7f020002,   // default
+        Theme_Four     = 0x7f020003,   // default
+    };
+}
+
+namespace color {
+    enum {
+        app_color    = 0x7f030000,   // default
     };
 }
 

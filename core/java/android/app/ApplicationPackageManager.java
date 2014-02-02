@@ -23,6 +23,7 @@ import android.annotation.StringRes;
 import android.annotation.XmlRes;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
@@ -1028,12 +1029,13 @@ final class ApplicationPackageManager extends PackageManager {
         if (app.packageName.equals("system")) {
             return mContext.mMainThread.getSystemContext().getResources();
         }
+
         final boolean sameUid = (app.uid == Process.myUid());
         final Resources r = mContext.mMainThread.getTopLevelResources(
                 sameUid ? app.sourceDir : app.publicSourceDir,
                 sameUid ? app.splitSourceDirs : app.splitPublicSourceDirs,
                 app.resourceDirs, app.sharedLibraryFiles, Display.DEFAULT_DISPLAY,
-                null, mContext.mPackageInfo);
+                null, mContext.mPackageInfo, mContext, app.packageName);
         if (r != null) {
             return r;
         }
@@ -1062,6 +1064,48 @@ final class ApplicationPackageManager extends PackageManager {
             ApplicationInfo ai = mPM.getApplicationInfo(appPackageName, sDefaultFlags, userId);
             if (ai != null) {
                 return getResourcesForApplication(ai);
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+        throw new NameNotFoundException("Package " + appPackageName + " doesn't exist");
+    }
+
+    /** @hide */
+    @Override public Resources getThemedResourcesForApplication(
+            ApplicationInfo app, String themePkgName) throws NameNotFoundException {
+        if (app.packageName.equals("system")) {
+            return mContext.mMainThread.getSystemContext().getResources();
+        }
+
+        Resources r = mContext.mMainThread.getTopLevelThemedResources(
+                app.uid == Process.myUid() ? app.sourceDir : app.publicSourceDir,
+                Display.DEFAULT_DISPLAY, mContext.mPackageInfo, app.packageName, themePkgName);
+        if (r != null) {
+            return r;
+        }
+        throw new NameNotFoundException("Unable to open " + app.publicSourceDir);
+    }
+
+    /** @hide */
+    @Override public Resources getThemedResourcesForApplication(
+            String appPackageName, String themePkgName) throws NameNotFoundException {
+        return getThemedResourcesForApplication(
+                getApplicationInfo(appPackageName, 0), themePkgName);
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePackageName, int userId) throws NameNotFoundException {
+        if (userId < 0) {
+            throw new IllegalArgumentException(
+                    "Call does not support special user #" + userId);
+        }
+        try {
+            ApplicationInfo ai = mPM.getApplicationInfo(appPackageName, 0, userId);
+            if (ai != null) {
+                return getThemedResourcesForApplication(ai, themePackageName);
             }
         } catch (RemoteException e) {
             throw new RuntimeException("Package manager has died", e);
@@ -2247,5 +2291,31 @@ final class ApplicationPackageManager extends PackageManager {
             }
             return false;
         }
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void updateIconMaps(String pkgName) {
+        try {
+            mPM.updateIconMapping(pkgName);
+        } catch (RemoteException re) {
+            Log.e(TAG, "Failed to update icon maps", re);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public int processThemeResources(String themePkgName) {
+        try {
+            return mPM.processThemeResources(themePkgName);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to process theme resources for " + themePkgName, e);
+        }
+
+        return 0;
     }
 }

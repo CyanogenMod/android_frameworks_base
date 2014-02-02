@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2841,6 +2842,19 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.QUICK_CLOCK";
 
     /**
+     * Broadcast Action: Indicate that unrecoverable error happened during app launch.
+     * Could indicate that curently applied theme is malicious.
+     * @hide
+     */
+    public static final String ACTION_APP_LAUNCH_FAILURE = "com.tmobile.intent.action.APP_LAUNCH_FAILURE";
+
+    /**
+     * Broadcast Action: Request to reset the unrecoverable errors count to 0.
+     * @hide
+     */
+    public static final String ACTION_APP_LAUNCH_FAILURE_RESET = "com.tmobile.intent.action.APP_LAUNCH_FAILURE_RESET";
+
+    /**
      * Activity Action: Shows the brightness setting dialog.
      * @hide
      */
@@ -2934,6 +2948,19 @@ public class Intent implements Parcelable, Cloneable {
      */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_CREATE_DOCUMENT = "android.intent.action.CREATE_DOCUMENT";
+
+    /**
+     * Broadcast Action:  A theme's resources were cached.  Includes two extra fields,
+     * {@link #EXTRA_THEME_PACKAGE_NAME}, containing the package name of the theme that was
+     * processed, and {@link #EXTRA_THEME_RESULT}, containing the result code.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.</p>
+     *
+     * @hide
+     */
+    public static final String ACTION_THEME_RESOURCES_CACHED =
+            "android.intent.action.THEME_RESOURCES_CACHED";
 
     /**
      * Activity Action: Allow the user to pick a directory subtree. When
@@ -3202,6 +3229,14 @@ public class Intent implements Parcelable, Cloneable {
      */
     @SdkConstant(SdkConstantType.INTENT_CATEGORY)
     public static final String CATEGORY_CAR_MODE = "android.intent.category.CAR_MODE";
+
+    /**
+     * Used to indicate that a theme package has been installed or un-installed.
+     *
+     * @hide
+     */
+    public static final String CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE =
+            "com.tmobile.intent.category.THEME_PACKAGE_INSTALL_STATE_CHANGE";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
@@ -3812,6 +3847,26 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final String EXTRA_SIM_ACTIVATION_RESPONSE =
             "android.intent.extra.SIM_ACTIVATION_RESPONSE";
+
+    /**
+     * Extra for {@link #ACTION_THEME_RESOURCES_CACHED} that provides the return value
+     * from processThemeResources. A value of 0 indicates a successful caching of resources.
+     * Error results are:
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_AAPT_ERROR}
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_IDMAP_ERROR}
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_UNKNOWN_ERROR}
+     *
+     * @hide
+     */
+    public static final String EXTRA_THEME_RESULT = "android.intent.extra.RESULT";
+
+    /**
+     * Extra for {@link #ACTION_THEME_RESOURCES_CACHED} that provides the package name of the
+     * theme that was processed.
+     *
+     * @hide
+     */
+    public static final String EXTRA_THEME_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

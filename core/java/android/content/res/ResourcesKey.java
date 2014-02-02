@@ -24,6 +24,7 @@ import java.util.Objects;
 public final class ResourcesKey {
     private final String mResDir;
     private final float mScale;
+    private final boolean mIsThemeable;
     private final int mHash;
 
     public final int mDisplayId;
@@ -31,18 +32,20 @@ public final class ResourcesKey {
     public final Configuration mOverrideConfiguration;
 
     public ResourcesKey(String resDir, int displayId, Configuration overrideConfiguration,
-            float scale) {
+            float scale, boolean isThemeable) {
         mResDir = resDir;
         mDisplayId = displayId;
         mOverrideConfiguration = overrideConfiguration != null
                 ? overrideConfiguration : Configuration.EMPTY;
         mScale = scale;
+        mIsThemeable = isThemeable;
 
         int hash = 17;
         hash = 31 * hash + (mResDir == null ? 0 : mResDir.hashCode());
         hash = 31 * hash + mDisplayId;
         hash = 31 * hash + mOverrideConfiguration.hashCode();
         hash = 31 * hash + Float.floatToIntBits(mScale);
+        hash = 31 * hash + (mIsThemeable ? 1 : 0);
         mHash = hash;
     }
 
@@ -74,7 +77,7 @@ public final class ResourcesKey {
         if (mScale != peer.mScale) {
             return false;
         }
-        return true;
+        return mIsThemeable == peer.mIsThemeable;
     }
 
     @Override

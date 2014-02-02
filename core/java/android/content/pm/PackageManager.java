@@ -830,6 +830,38 @@ public abstract class PackageManager {
     public static final int INSTALL_FAILED_ABORTED = -115;
 
     /**
+     * Used by themes
+     * Installation failed return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
+     * if the system failed to install the theme because aapt could not compile the app
+     * @hide
+     */
+    @SystemApi
+    public static final int INSTALL_FAILED_THEME_AAPT_ERROR = -400;
+
+    /**
+     * Used by themes
+     * Installation failed return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
+     * if the system failed to install the theme because idmap failed
+     * apps.
+     * @hide
+     */
+    @SystemApi
+    public static final int INSTALL_FAILED_THEME_IDMAP_ERROR = -401;
+
+    /**
+     * Used by themes
+     * Installation failed return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
+     * if the system failed to install the theme for an unknown reason
+     * apps.
+     * @hide
+     */
+    @SystemApi
+    public static final int INSTALL_FAILED_THEME_UNKNOWN_ERROR = -402;
+
+    /**
      * Flag parameter for {@link #deletePackage} to indicate that you don't want to delete the
      * package's data directory.
      *
@@ -3525,6 +3557,18 @@ public abstract class PackageManager {
     public abstract Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
             throws NameNotFoundException;
 
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplication(ApplicationInfo app,
+            String themePkgName) throws NameNotFoundException;
+
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplication(String appPackageName,
+            String themePkgName) throws NameNotFoundException;
+
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePkgName, int userId) throws NameNotFoundException;
+
     /**
      * Retrieve overall information about an application package defined
      * in a package archive file
@@ -4729,4 +4773,22 @@ public abstract class PackageManager {
             }
         }
     }
+
+    /**
+     * Updates the theme icon res id for the new theme
+     * @hide
+     */
+    public abstract void updateIconMaps(String pkgName);
+
+    /**
+     * Used to compile theme resources for a given theme
+     * @param themePkgName
+     * @return A value of 0 indicates success.  Possible errors returned are:
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_AAPT_ERROR},
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_IDMAP_ERROR}, or
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_UNKNOWN_ERROR}
+     *
+     * @hide
+     */
+    public abstract int processThemeResources(String themePkgName);
 }

@@ -19,6 +19,7 @@ package com.android.systemui.statusbar;
 import android.app.Notification;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.ThemeConfig;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -227,6 +228,10 @@ public class StatusBarIconView extends AnimatedImageView {
         if (mNotification != null) {
             event.setParcelableData(mNotification);
         }
+    }
+
+    public String getStatusBarSlot() {
+        return mSlot;
     }
 
     @Override
