@@ -189,6 +189,7 @@ public class DefaultContainerService extends IntentService {
             ret.recommendedInstallLocation = PackageHelper.resolveInstallLocation(context,
                     pkg.packageName, pkg.installLocation, sizeBytes, flags);
             ret.multiArch = pkg.multiArch;
+            ret.isTheme = pkg.isTheme;
 
             return ret;
         }
