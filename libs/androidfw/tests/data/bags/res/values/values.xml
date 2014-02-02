@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Two" parent="@android:style/Theme.One">
+        <item name="android:background">#0000ff</item>
+        <item name="android:foreground">@color/magenta</item>
+        <item name="android:windowNoTitle">false</item>
+    </style>
+
+    <style name="Theme.Three" parent="@style/Overlay"/>
+
+    <style name="Overlay" parent="@android:style/Theme.One">
+        <item name="android:foreground">@color/cyan</item>
+    </style>
+
+    <style name="Theme.Four" parent="@android:style/Theme.One">
+        <item name="android:background">#aabbcc</item>
+    </style>
+
+    <color name="app_color">#000000</color>
+    <color name="magenta">#ff00ff</color>
+    <color name="cyan">#00ffff</color>
+
+</resources>
