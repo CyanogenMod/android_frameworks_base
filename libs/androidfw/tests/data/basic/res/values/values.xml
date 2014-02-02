@@ -38,4 +38,7 @@
         <item>2</item>
         <item>3</item>
     </integer-array>
+
+    <dimen name="dimen1">48dp</dimen>
+    <dimen name="dimen2">16px</dimen>
 </resources>
