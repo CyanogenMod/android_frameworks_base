@@ -27,6 +27,15 @@ png_write_aapt_file(png_structp png_ptr, png_bytep data, png_size_t length)
     }
 }
 
+static void
+png_read_mem_file(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    PngMemoryFile* pngFile = (PngMemoryFile*)  png_get_io_ptr(png_ptr);
+    status_t err = pngFile->read(data, length);
+    if (err != NO_ERROR) {
+        png_error(png_ptr, "Read Error");
+    }
+}
 
 static void
 png_flush_aapt_file(png_structp /* png_ptr */)
@@ -1269,13 +1278,25 @@ static bool write_png_protected(png_structp write_ptr, String8& printableName, p
     return true;
 }
 
-status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& /* assets */,
+status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& /* assets */, //non-theme path
                          const sp<AaptFile>& file, String8* /* outNewLeafName */)
 {
     String8 ext(file->getPath().getPathExtension());
+    bool isImageInZip = !file->getZipFile().isEmpty();
 
     // We currently only process PNG images.
     if (strcmp(ext.string(), ".png") != 0) {
+        return NO_ERROR;
+    }
+
+    String8 printableName(file->getPrintableSource());
+
+    // We currently only process nine patch PNG images when building a theme apk.
+    Bundle* b = const_cast<Bundle*>(bundle);
+    if (!endsWith(printableName.string(), ".9.png") && b->getOutputResApk() != NULL) {
+        if (bundle->getVerbose()) {
+            printf("Skipping image: %s\n", file->getPrintableSource().string());
+        }
         return NO_ERROR;
     }
 
@@ -1283,15 +1304,13 @@ status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& /* assets *
     //*outNewLeafName = file->getPath().getBasePath().getFileName();
     //outNewLeafName->append(".nupng");
 
-    String8 printableName(file->getPrintableSource());
-
     if (bundle->getVerbose()) {
         printf("Processing image: %s\n", printableName.string());
     }
 
     png_structp read_ptr = NULL;
     png_infop read_info = NULL;
-    FILE* fp;
+    FILE* fp = NULL;
 
     image_info imageInfo;
 
@@ -1300,12 +1319,7 @@ status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& /* assets *
 
     status_t error = UNKNOWN_ERROR;
 
-    fp = fopen(file->getSourceFile().string(), "rb");
-    if (fp == NULL) {
-        fprintf(stderr, "%s: ERROR: Unable to open PNG file\n", printableName.string());
-        goto bail;
-    }
-
+    const size_t nameLen = file->getPath().length();
     read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, (png_error_ptr)NULL,
                                         (png_error_ptr)NULL);
     if (!read_ptr) {
@@ -1317,8 +1331,47 @@ status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& /* assets *
         goto bail;
     }
 
-    if (!read_png_protected(read_ptr, printableName, read_info, file, fp, &imageInfo)) {
-        goto bail;
+    if (isImageInZip) {
+        PngMemoryFile* pmf = new PngMemoryFile();
+
+        ZipFile* zip = new ZipFile;
+        status_t err = zip->open(file->getZipFile(), ZipFile::kOpenReadOnly);
+        if (NO_ERROR != err) {
+            fprintf(stderr, "ERROR: Unable to open %s\n", file->getZipFile().string());
+            return err;
+        }
+
+        ZipEntry* entry = zip->getEntryByName(file->getSourceFile().string());
+        size_t len = entry->getUncompressedLen();
+        void* data = zip->uncompress(entry);
+        void* buf = file->editData(len);
+        memcpy(buf, data, len);
+        free(data);
+
+        pmf->setDataSource((const char*)file->getData(), file->getSize());
+        png_set_read_fn(read_ptr, pmf, png_read_mem_file);
+        read_png(printableName.string(), read_ptr, read_info, &imageInfo);
+        if (nameLen > 6) {
+            const char* name = file->getPath().string();
+            if (name[nameLen-5] == '9' && name[nameLen-6] == '.') {
+                if (do_9patch(printableName.string(), &imageInfo) != NO_ERROR) {
+                    goto bail;
+                }
+            }
+        }
+    } else {
+        fp = fopen(file->getSourceFile().string(), "rb");
+        if (fp == NULL) {
+            fprintf(stderr, "%s: ERROR: Unable to open PNG file\n", printableName.string());
+            goto bail;
+        }
+        if (!read_png_protected(read_ptr, printableName, read_info, file, fp, &imageInfo)) {
+            goto bail;
+        }
+    }
+
+    if (isImageInZip) {
+        file->clearData();
     }
 
     write_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, (png_error_ptr)NULL,
@@ -1343,13 +1396,15 @@ status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& /* assets *
 
     error = NO_ERROR;
 
-    if (bundle->getVerbose()) {
+    if (bundle->getVerbose() && !isImageInZip) {
         fseek(fp, 0, SEEK_END);
         size_t oldSize = (size_t)ftell(fp);
         size_t newSize = file->getSize();
         float factor = ((float)newSize)/oldSize;
         int percent = (int)(factor*100);
         printf("    (processed image %s: %d%% size of source)\n", printableName.string(), percent);
+    } else if (bundle->getVerbose() && isImageInZip) {
+        printf("    (processed image %s)\n", printableName.string());
     }
 
 bail:
@@ -1508,6 +1563,20 @@ status_t postProcessImage(const Bundle* bundle, const sp<AaptAssets>& assets,
         String16 resourceName(parseResourceName(file->getSourceFile().getPathLeaf()));
         return compileXmlFile(bundle, assets, resourceName, file, table);
     }
+
+    return NO_ERROR;
+}
+
+status_t PngMemoryFile::read(png_bytep data, png_size_t length) {
+    if (data == NULL)
+        return -1;
+
+    if ((mIndex + length) >= mDataSize) {
+        length = mDataSize - mIndex;
+    }
+
+    memcpy(data, mData + mIndex, length);
+    mIndex += length;
 
     return NO_ERROR;
 }

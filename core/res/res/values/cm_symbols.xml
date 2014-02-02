@@ -26,7 +26,8 @@
     -->
     <!-- External CM specific core services -->
     <java-symbol type="array" name="config_externalCMServices" />
-        <!-- LiveDisplay -->
+
+    <!-- LiveDisplay -->
     <java-symbol type="string" name="live_display_title" />
     <java-symbol type="string" name="live_display_hint" />
     <java-symbol type="string" name="live_display_auto" />
@@ -45,4 +46,8 @@
     <java-symbol type="integer" name="config_dayColorTemperature" />
     <java-symbol type="integer" name="config_nightColorTemperature" />
     <java-symbol type="integer" name="config_outdoorAmbientLux" />
+
+    <!-- Theme install failure notification -->
+    <java-symbol type="string" name="theme_install_error_title" />
+    <java-symbol type="string" name="theme_install_error_message" />
 </resources>

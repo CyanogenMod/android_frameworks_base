@@ -27,6 +27,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.session.MediaSessionManager;
@@ -63,6 +64,8 @@ public class VolumeUI extends SystemUI {
 
     private VolumeDialogComponent mVolumeComponent;
 
+    private Configuration mConfiguration;
+
     @Override
     public void start() {
         mEnabled = mContext.getResources().getBoolean(R.bool.enable_volume_ui);
@@ -80,6 +83,7 @@ public class VolumeUI extends SystemUI {
                 mContext, Settings.Secure.VOLUME_CONTROLLER_SERVICE_COMPONENT,
                 new ServiceMonitorCallbacks());
         mVolumeControllerService.start();
+        mConfiguration = new Configuration(mContext.getResources().getConfiguration());
     }
 
     private VolumeComponent getVolumeComponent() {
@@ -91,6 +95,20 @@ public class VolumeUI extends SystemUI {
         super.onConfigurationChanged(newConfig);
         if (!mEnabled) return;
         getVolumeComponent().onConfigurationChanged(newConfig);
+
+        if (isThemeChange(newConfig)) {
+            // TODO: implement initPanel() if needed
+            //initPanel();
+        }
+        mConfiguration.setTo(newConfig);
+    }
+
+    private boolean isThemeChange(Configuration newConfig) {
+        if (mConfiguration != null) {
+            int changes = mConfiguration.updateFrom(newConfig);
+            return (changes & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
+        }
+        return false;
     }
 
     @Override
