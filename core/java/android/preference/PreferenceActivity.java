@@ -699,7 +699,7 @@ public abstract class PreferenceActivity extends ListActivity implements
      * and a preference fragment.
      */
     public boolean isMultiPane() {
-        return hasHeaders() && mPrefsContainer.getVisibility() == View.VISIBLE;
+        return hasHeaders() && !mSinglePane;
     }
 
     /**
