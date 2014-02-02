@@ -25,6 +25,7 @@ import android.util.TypedValue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -84,7 +85,9 @@ public final class AssetManager {
 
     private boolean mThemeSupport;
     private String mThemePackageName;
+    private String mIconPackageName;
     private ArrayList<Integer> mThemeCookies = new ArrayList<Integer>(2);
+    private int mIconPackCookie;
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -632,7 +635,29 @@ public final class AssetManager {
      *
      * {@hide}
      */
-    public native final int addOverlayPath(String idmapPath);
+    public native final int addOverlayPath(String idmapPath, String resArscPath, String resApkPath,
+                                           String targetPkgPath, String prefixPath);
+
+    /**
+    * Add a set of assets as an icon pack.
+    *
+    * Icon packs are different from overlays as they have a different pkg id and
+    * do not use idmap so no targetPkg is required
+    *
+    * {@hide}
+    */
+    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath, String prefixPath);
+
+    /**
+    * Delete a set of overlay assets from the asset manager. Not for use by
+    * applications. Returns true if succeeded or false on failure.
+    *
+    * Also works for icon packs
+    *
+    * {@hide}
+    */
+    public native final boolean removeOverlayPath(String packageName, int cookie);
+
 
     /**
      * Add multiple sets of assets to the asset manager at once.  See
@@ -703,6 +728,22 @@ public final class AssetManager {
             int destStyle);
 
     /**
+     * Get package name of current icon pack (may return null).
+     * {@hide}
+     */
+    public String getIconPackageName() {
+        return mIconPackageName;
+    }
+
+    /**
+     * Sets icon package name
+     * {@hide}
+     */
+    public void setIconPackageName(String packageName) {
+        mIconPackageName = packageName;
+    }
+
+    /**
      * Get package name of current theme (may return null).
      * {@hide}
      */
@@ -724,6 +765,16 @@ public final class AssetManager {
      */
     public ArrayList<Integer> getThemeCookies() {
         return mThemeCookies;
+    }
+
+    /** {@hide} */
+    public void setIconPackCookie(int cookie) {
+        mIconPackCookie = cookie;
+    }
+
+    /** {@hide} */
+    public int getIconPackCookie() {
+        return mIconPackCookie;
     }
 
     /**
@@ -852,6 +903,22 @@ public final class AssetManager {
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
 
     private native final void init(boolean isSystem);
+
+    /**
+     * {@hide}
+     */
+    public native final int getBasePackageCount();
+
+    /**
+     * {@hide}
+     */
+    public native final String getBasePackageName(int index);
+
+    /**
+     * {@hide}
+     */
+    public native final int getBasePackageId(int index);
+
     private native final void destroy();
 
     private final void incRefsLocked(int id) {

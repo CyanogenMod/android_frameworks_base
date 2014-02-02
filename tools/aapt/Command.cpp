@@ -2025,9 +2025,59 @@ int doPackage(Bundle* bundle)
         goto bail;
     }
 
+    //Write the res table
+    if (bundle->getOutputResDir()) {
+        const char* resPath = bundle->getOutputResDir();
+        char *endptr;
+        int resFile_fd = strtol(resPath, &endptr, 10);
+
+        if (*endptr == '\0') {
+            //OutputResDir was a file descriptor
+            err = writeResFileFD(resFile_fd, assets);
+        } else {
+            char resTablePath[PATH_MAX];
+            snprintf(resTablePath, PATH_MAX, "%s/resources.arsc", resPath);
+
+            fprintf(stdout, "failed to parse as fd argument, trying as path %s\n", resTablePath);
+            FileType type;
+            type = getFileType(resTablePath);
+            if (type != kFileTypeNonexistent && type != kFileTypeRegular) {
+                fprintf(stderr,
+                    "ERROR: resource file asf '%s' exists but is not regular file\n",
+                    resPath);
+                goto bail;
+            }
+            err = writeResFile(resTablePath, assets);
+        }
+
+        if (err != NO_ERROR) {
+            fprintf(stderr, "ERROR: writing '%s' failed\n", resPath);
+            goto bail;
+        }
+    }
+
+    //Write the res apk
+    if (bundle->getOutputResApk()) {
+        const char* resPath = bundle->getOutputResApk();
+        char *endptr;
+        int resApk_fd = strtol(resPath, &endptr, 10);
+
+        if (*endptr == '\0') {
+            //OutputResDir was a file descriptor
+            err = writeAPK(bundle, assets, resApk_fd, true);
+        } else {
+            err = writeAPK(bundle, assets, String8(bundle->getOutputResApk()), true);
+        }
+
+        if (err != NO_ERROR) {
+            fprintf(stderr, "ERROR: writing '%s' failed\n", resPath);
+            goto bail;
+        }
+    }
+
     // Write the apk
     if (outputAPKFile) {
-        err = writeAPK(bundle, assets, String8(outputAPKFile));
+        err = writeAPK(bundle, assets, String8(outputAPKFile), false);
         if (err != NO_ERROR) {
             fprintf(stderr, "ERROR: packaging of '%s' failed\n", outputAPKFile);
             goto bail;
