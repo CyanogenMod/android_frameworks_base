@@ -3079,6 +3079,12 @@ public final class Settings {
         public static final String CAMERA_MUSIC_CONTROLS = "camera_music_controls";
 
         /**
+         * Whether to wake the screen with the trackpad key press.
+         * @hide
+         */
+        public static final String TRACKBALL_WAKE_SCREEN = "trackball_wake_screen";
+
+        /**
          * Whether or not to launch default music player when headset is connected
          * @hide
          */
@@ -3454,6 +3460,12 @@ public final class Settings {
          * @hide
          */
         public static final String CAMERA_UNLOCK_SCREEN = "camera_unlock_screen";
+
+        /**
+         * Whether to unlock the screen with the trackpad key.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String TRACKBALL_UNLOCK_SCREEN = "trackball_unlock_screen";
 
         /**
          *  Enable statusbar double tap gesture on to put device to sleep
