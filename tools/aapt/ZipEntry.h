@@ -58,7 +58,7 @@ public:
     bool isCompressed(void) const {
         return mCDE.mCompressionMethod != kCompressStored;
     }
-    int getCompressionMethod(void) const { return mCDE.mCompressionMethod; }
+    virtual int getCompressionMethod(void) const { return mCDE.mCompressionMethod; }
 
     /*
      * Return the uncompressed length.
@@ -100,7 +100,7 @@ public:
     /*
      * Return the archived file name.
      */
-    const char* getFileName(void) const { return (const char*) mCDE.mFileName; }
+    virtual const char* getFileName(void) const { return (const char*) mCDE.mFileName; }
 
     /*
      * Application-defined "mark".  Can be useful when synchronizing the
