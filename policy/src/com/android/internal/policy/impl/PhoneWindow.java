@@ -2461,8 +2461,17 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 return false;
             }
             final Callback cb = getCallback();
-            return cb != null && !isDestroyed() && mFeatureId < 0 ? cb.dispatchTouchEvent(ev)
-                    : super.dispatchTouchEvent(ev);
+            if (cb != null && !isDestroyed() && mFeatureId < 0) {
+                if (cb instanceof android.app.Activity && mIsFloatingWindow) {
+                    android.app.Activity act = (android.app.Activity)cb;
+                    if (shouldCloseOnTouch(act, ev)) {
+                        act.finishFloating();
+                        return true;
+                    }
+                }
+                return cb.dispatchTouchEvent(ev);
+            }
+            return super.dispatchTouchEvent(ev);
         }
 
         @Override
