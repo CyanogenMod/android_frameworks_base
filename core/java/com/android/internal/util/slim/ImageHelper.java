@@ -77,11 +77,10 @@ public class ImageHelper {
         if (image == null || context == null) {
             return null;
         }
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size,
-                context.getResources().getDisplayMetrics());
 
         Bitmap d = ((BitmapDrawable) image).getBitmap();
-        Bitmap bitmapOrig = Bitmap.createScaledBitmap(d, px, px, true);
+        Bitmap bitmapOrig = Bitmap.createScaledBitmap(d,
+                Converter.dpToPx(context, size), Converter.dpToPx(context, size), true);
         return new BitmapDrawable(context.getResources(), bitmapOrig);
     }
 

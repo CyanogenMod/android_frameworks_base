@@ -404,10 +404,13 @@ public class SearchPanelView extends FrameLayout implements
         int startPosOffset;
         ButtonConfig buttonConfig;
 
-        if (isScreenPortrait()
-            || Settings.System.getIntForUser(mContext.getContentResolver(),
-                   Settings.System.NAVIGATION_BAR_CAN_MOVE,
-                   DeviceUtils.isPhone(mContext) ? 1 : 0, UserHandle.USER_CURRENT) != 1) {
+        boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
+                Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
+                    UserHandle.USER_CURRENT) == 1
+                : false;
+
+        if (isScreenPortrait() || !navigationBarCanMove) {
             startPosOffset = 1;
             endPosOffset = (mButtonsConfig.size()) + 1;
         } else {

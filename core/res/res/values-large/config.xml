@@ -26,7 +26,4 @@
     <!-- see comment in values/config.xml -->
     <integer name="config_longPressOnHomeBehavior">0</integer>
 
-    <!-- see comment in values/config.xml -->
-    <integer name="config_doubleTapOnHomeBehavior">0</integer>
-
 </resources>
