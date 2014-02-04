@@ -48,6 +48,7 @@ public class PlatLogoActivity extends Activity {
     final Handler mHandler = new Handler();
     private boolean mIsCM;
     static final int BGCOLOR = 0xffed1d24;
+    static final int BGCOLOR_CM = 0xff33b5e7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class PlatLogoActivity extends Activity {
         logo.setVisibility(View.INVISIBLE);
 
         final View bg = new View(this);
-        bg.setBackgroundColor(BGCOLOR);
+        bg.setBackgroundColor(mIsCM ? BGCOLOR_CM : BGCOLOR);
         bg.setAlpha(0f);
 
         final TextView letter = new TextView(this);
