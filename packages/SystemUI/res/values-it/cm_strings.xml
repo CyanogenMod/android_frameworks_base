@@ -19,8 +19,6 @@
     <string name="accessibility_battery_level">Batteria <xliff:g id="number">%d</xliff:g> percento.</string>
     <string name="accessibility_quick_settings_ringer">Suoneria <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrazione <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Utilizza testa CID</string>
-    <string name="bean_dream_settings_cid_summary">Utilizza la testa di CID al posto dei jellybean all\'interno di Daydream</string>
     <string name="quick_settings_profile_label">Profilo</string>
     <string name="powerwidget_screen_timeout_toast">Timeout impostato a: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>

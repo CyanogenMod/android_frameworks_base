@@ -19,8 +19,6 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Ήχος <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Χρήση κεφαλιού του Cid</string>
-    <string name="bean_dream_settings_cid_summary">Χρήση του κεφαλιού του Cid στη θέση των jellybean στο dream</string>
     <string name="quick_settings_profile_label">Προφίλ</string>
     <string name="powerwidget_screen_timeout_toast">Λήξη χρον. ορίου οθόνης: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>

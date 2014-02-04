@@ -20,8 +20,6 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">So <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibració <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Utilitza l\'icona del Cid</string>
-    <string name="bean_dream_settings_cid_summary">Utilitza l\'icona del Cid com a salvapantalles enlloc de la de jellybean</string>
     <string name="quick_settings_profile_label">Perfil</string>
     <string name="powerwidget_screen_timeout_toast">Temps d\'espera de la pantalla en: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>

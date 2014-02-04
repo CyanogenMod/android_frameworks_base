@@ -65,8 +65,6 @@
     <string name="navbar_menu_conditional_button">Menü (automatisch ausblenden)</string>
     <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
     <string name="navbar_menu_big_button">Menü</string>
-    <string name="bean_dream_settings_cid_title">Cid\'s Kopf verwenden</string>
-    <string name="bean_dream_settings_cid_summary">Den Kopf des CyanogenMod-Maskottchens anstelle der \"Jellybeans\" im Daydream verwenden</string>
     <string name="accessibility_battery_level">Akku <xliff:g id="number">%d</xliff:g> Prozent.</string>
     <string name="pie_battery_status_charging">Lädt (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Aufgeladen</string>
