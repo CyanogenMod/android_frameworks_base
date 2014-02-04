@@ -4085,6 +4085,18 @@ public final class Settings {
         public static final String NAVBAR_FORCE_ENABLE = "navbar_force_enable";
 
         /**
+         * Enable touches in screen recording
+         * @hide
+         */
+        public static final String SREC_ENABLE_TOUCHES = "srec_enable_touches";
+
+        /**
+         * Enable microphone as audio input in screen recording
+         * @hide
+         */
+        public static final String SREC_ENABLE_MIC = "srec_enable_mic";
+
+        /**
          * Volume key controls ringtone or media sound stream
          *
          * @hide

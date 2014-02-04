@@ -42,6 +42,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.systemui.R;
@@ -76,7 +77,12 @@ class GlobalScreenrecord {
     private class CaptureThread extends Thread {
         public void run() {
             Runtime rt = Runtime.getRuntime();
-            String[] cmds = new String[] {"/system/bin/screenrecord", TMP_PATH};
+            String[] cmds;
+            if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SREC_ENABLE_MIC, 0) == 1) {
+                cmds = new String[] {"/system/bin/screenrecord", "--microphone", TMP_PATH};
+            } else {
+                cmds = new String[] {"/system/bin/screenrecord", TMP_PATH};
+            }
             try {
                 Process proc = rt.exec(cmds);
                 BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -185,6 +191,10 @@ class GlobalScreenrecord {
 
         Notification notif = builder.build();
         mNotificationManager.notify(SCREENRECORD_NOTIFICATION_ID, notif);
+
+        if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SREC_ENABLE_TOUCHES, 0) == 1) {
+                Settings.System.putInt(mContext.getContentResolver(), Settings.System.SHOW_TOUCHES, 1);
+        }
     }
 
     /**
