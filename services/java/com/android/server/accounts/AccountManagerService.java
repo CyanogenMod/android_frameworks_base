@@ -2729,6 +2729,17 @@ public class AccountManagerService
 
     private void checkCallingUidAgainstAuthenticator(Account account) {
         final int uid = Binder.getCallingUid();
+
+        // Allow com.android.dialer to access the Google accounts so it can
+        // perform its own authentication for reverse lookup against Google's
+        // databases.
+        String[] packages = mPackageManager.getPackagesForUid(uid);
+        for (String pkg : packages) {
+            if (pkg.equals("com.android.dialer")) {
+                return;
+            }
+        }
+
         if (account == null || !hasAuthenticatorUid(account.type, uid)) {
             String msg = "caller uid " + uid + " is different than the authenticator's uid";
             Log.w(TAG, msg);
