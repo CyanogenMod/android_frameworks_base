@@ -161,6 +161,8 @@ private:
 
     void setupMesh(Patch* newMesh, TextureVertex* vertices);
 
+    bool hasItem(Vector<patch_pair_t>& patchesToRemove, Res_png_9patch* patch);
+
     void remove(Vector<patch_pair_t>& patchesToRemove, Res_png_9patch* patch);
 
 #if DEBUG_PATCHES

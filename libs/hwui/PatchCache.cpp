@@ -107,6 +107,17 @@ void PatchCache::clearCache() {
     mFreeBlocks = NULL;
 }
 
+bool PatchCache::hasItem(Vector<patch_pair_t>& patchesToRemove, Res_png_9patch* patch) {
+    for (size_t i = 0; i < patchesToRemove.size(); i++) {
+        const patch_pair_t& pair = patchesToRemove[i];
+        const PatchDescription& key = *pair.getFirst();
+        if (key.getPatch() == patch) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void PatchCache::remove(Vector<patch_pair_t>& patchesToRemove, Res_png_9patch* patch) {
     LruCache<PatchDescription, Patch*>::Iterator i(mCache);
     while (i.next()) {
@@ -129,7 +140,8 @@ void PatchCache::clearGarbage() {
         Mutex::Autolock _l(mLock);
         size_t count = mGarbage.size();
         for (size_t i = 0; i < count; i++) {
-            remove(patchesToRemove, mGarbage[i]);
+            if (!hasItem(patchesToRemove, mGarbage[i]))
+                remove(patchesToRemove, mGarbage[i]);
         }
         mGarbage.clear();
     }
@@ -139,8 +151,8 @@ void PatchCache::clearGarbage() {
     for (size_t i = 0; i < patchesToRemove.size(); i++) {
         const patch_pair_t& pair = patchesToRemove[i];
 
-        // Add a new free block to the list
-        const Patch* patch = pair.getSecond();
+        // Release the patch and mark the space in the free list
+        Patch* patch = pair.getSecond();
         BufferBlock* block = new BufferBlock(patch->offset, patch->getSize());
         block->next = mFreeBlocks;
         mFreeBlocks = block;
@@ -213,6 +225,7 @@ void PatchCache::setupMesh(Patch* newMesh, TextureVertex* vertices) {
         } else {
             mFreeBlocks = block->next;
         }
+        delete block;
     } else {
         // Resize the block now that it's occupied
         block->offset += size;
