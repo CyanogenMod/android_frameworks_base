@@ -17,12 +17,14 @@ package com.android.internal.util.slim;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.nfc.NfcAdapter;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.DisplayInfo;
@@ -47,6 +49,10 @@ public class DeviceUtils {
         ConnectivityManager cm =
             (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return (cm.getTetherableUsbRegexs().length != 0);
+    }
+
+    public static boolean systemProfilesEnabled(ContentResolver resolver) {
+        return (Settings.System.getInt(resolver, Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1);
     }
 
     public static boolean deviceSupportsMobileData(Context context) {

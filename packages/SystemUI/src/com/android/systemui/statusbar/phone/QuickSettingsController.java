@@ -55,6 +55,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_WIFI;
 import static com.android.internal.util.slim.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.slim.QSConstants.TILE_REBOOT;
 import static com.android.internal.util.slim.QSConstants.TILE_FCHARGE;
+import static com.android.internal.util.slim.QSConstants.TILE_PROFILE;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -109,6 +110,7 @@ import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
 import com.android.systemui.quicksettings.RebootTile;
 import com.android.systemui.quicksettings.FChargeTile;
+import com.android.systemui.quicksettings.ProfileTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -259,6 +261,11 @@ public class QuickSettingsController {
                 qs = new QuickRecordTile(mContext, this);
             } else if (tile.equals(TILE_FCHARGE)) {
                 qs = new FChargeTile(mContext, this);
+            } else if (tile.equals(TILE_PROFILE)) {
+                mTileStatusUris.add(Settings.System.getUriFor(Settings.System.SYSTEM_PROFILES_ENABLED));
+                if (DeviceUtils.systemProfilesEnabled(resolver)) {
+                    qs = new ProfileTile(mContext, this);
+                }
             } else if (tile.contains(TILE_CUSTOM)) {
                 qs = new CustomTile(mContext, this, findCustomKey(tile));
             } else if (tile.contains(TILE_CONTACT)) {
