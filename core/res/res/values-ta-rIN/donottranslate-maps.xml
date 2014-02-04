@@ -15,12 +15,12 @@
      limitations under the License.
 -->
 <resources>
-    <!-- Stub for Asturian -->
+    <!-- Stub for Tamil -->
     <integer-array name="maps_starting_lat_lng">
-        <item>40413496</item>
-        <item>-3713379</item>
+        <item>20593684</item>
+        <item>78962880</item>
     </integer-array>
     <integer-array name="maps_starting_zoom">
-        <item>6</item>
+        <item>3</item>
     </integer-array>
 </resources>
