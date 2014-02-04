@@ -30,7 +30,11 @@
             android:paddingTop="30dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:paddingBottom="1dp">
+            android:paddingBottom="1dp"
+            android:shadowRadius="4"
+            android:shadowColor="?android:attr/colorBackground"
+            android:shadowDx="2"
+            android:shadowDy="2">
         <TextView android:id="@+id/foregroundText"
             android:layout_width="0px"
             android:layout_height="wrap_content"

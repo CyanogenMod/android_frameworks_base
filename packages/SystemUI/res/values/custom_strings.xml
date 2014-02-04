@@ -38,6 +38,7 @@
     <string name="service_background_processes"><xliff:g id="memory">%1$s</xliff:g> free</string>
     <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
     <string name="service_foreground_processes"><xliff:g id="memory">%1$s</xliff:g> used</string>
+    <string name="service_foreground_processes_cached"><xliff:g id="memory">%1$s</xliff:g> used*</string>
     <!-- Text to label a process entry with the process name. -->
     <string name="service_process_name"><xliff:g id="process">%1$s</xliff:g></string>
     <!-- Running services, description for a service in the started state -->

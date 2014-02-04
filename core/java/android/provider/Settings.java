@@ -3781,6 +3781,13 @@ public final class Settings {
         public static final String RAM_USAGE_BAR = "ram_usage_bar";
 
         /**
+         * whether to include cached apps in ram usage
+         *
+         *@hide
+         */
+        public static final String RAM_USAGE_BAR_CACHED = "ram_usage_bar_cached";
+
+        /**
          * Whether or not to show circle battery around the lockscreen ring
          * @hide
          */
