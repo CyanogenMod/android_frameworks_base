@@ -30,6 +30,7 @@
 
     <!-- TODO: Put into ScrollView -->
     <com.android.systemui.statusbar.phone.QuickSettingsScrollView
+        android:id="@+id/quicksettings_panel_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/close_handle_underlap"

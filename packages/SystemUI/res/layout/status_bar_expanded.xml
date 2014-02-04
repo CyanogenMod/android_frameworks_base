@@ -63,6 +63,7 @@
             />
 
     <LinearLayout
+        android:id="@+id/notification_panel_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/close_handle_underlap"

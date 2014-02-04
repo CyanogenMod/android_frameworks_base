@@ -42,6 +42,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.systemui.R;
@@ -86,6 +88,11 @@ public class PanelView extends FrameLayout {
     private float mBrakingSpeedPx = 150; // XXX Resource
 
     private View mHandleView;
+    private LinearLayout mNotificationPanelContent;
+    private QuickSettingsScrollView mQsPanelContent;
+    private HorizontalScrollView mNotifiShorcuts;
+    private boolean mIsDynamicHeight = false;
+    private int mContainerMinimumHeight = -1;
     private float mPeekHeight;
     private float mTouchOffset;
     private float mExpandedFraction = 0;
@@ -418,6 +425,9 @@ public class PanelView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mHandleView = findViewById(R.id.handle);
+        mNotificationPanelContent = (LinearLayout) findViewById(R.id.notification_panel_content);
+        mQsPanelContent = (QuickSettingsScrollView) findViewById(R.id.quicksettings_panel_content);
+        mNotifiShorcuts = (HorizontalScrollView) findViewById(R.id.custom_notification_scrollview);
 
         loadDimens();
 
@@ -594,16 +604,29 @@ public class PanelView extends FrameLayout {
         return mHandleView;
     }
 
+    public void setIsDynamicHeight(boolean isDynamicHeight) {
+        mIsDynamicHeight = isDynamicHeight;
+    }
+
+    public void setContainerMinimumHeight(int minHeight) {
+        mContainerMinimumHeight = minHeight;
+    }
+
     // Rubberbands the panel to hold its contents.
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         if (DEBUG) logf("onMeasure(%d, %d) -> (%d, %d)",
-                widthMeasureSpec, heightMeasureSpec, getMeasuredWidth(), getMeasuredHeight());
+                widthMeasureSpec, heightMeasureSpec, getMeasuredWidth(),
+                mIsDynamicHeight ? getContentHeight() : getMeasuredHeight());
 
         // Did one of our children change size?
-        int newHeight = getMeasuredHeight();
+        int newHeight = mIsDynamicHeight ? getContentHeight() : getMeasuredHeight();
+        if (mIsDynamicHeight && mContainerMinimumHeight > 0
+                && mContainerMinimumHeight > newHeight) {
+            newHeight = mContainerMinimumHeight;
+        }
         if (newHeight != mFullHeight) {
             mFullHeight = newHeight;
             // If the user isn't actively poking us, let's rubberband to the content
@@ -617,6 +640,24 @@ public class PanelView extends FrameLayout {
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
     }
 
+    private int getContentHeight() {
+        int height = 0;
+        if (mHandleView != null) {
+            height += mHandleView.getMeasuredHeight();
+        }
+        if (mNotificationPanelContent != null) {
+            height += mNotificationPanelContent.getMeasuredHeight();
+        }
+        if (mQsPanelContent != null) {
+            height += mQsPanelContent.getMeasuredHeight();
+        }
+        if (mNotifiShorcuts != null) {
+            height += mNotifiShorcuts.getMeasuredHeight();
+        }
+        // Our window might have a dropshadow
+        height += getPaddingBottom();
+        return height;
+    }
 
     public void setExpandedHeight(float height) {
         if (DEBUG) logf("setExpandedHeight(%.1f)", height);
