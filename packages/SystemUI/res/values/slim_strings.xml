@@ -123,6 +123,10 @@
     <string name="quick_settings_contact_toggle">Contact</string>
     <string name="quick_settings_fcharge">Fast charge</string>
     <string name="quick_settings_profile">Profile</string>
+    <string name="quick_settings_camera_label">Camera</string>
+    <!-- Camera tile toasts -->
+    <string name="quick_settings_camera_error_connect">Can\'t connect to camera</string>
+    
 
     <!-- Label in drop down to identify brightness slider -->
     <string name="brightness_label">Brightness</string>

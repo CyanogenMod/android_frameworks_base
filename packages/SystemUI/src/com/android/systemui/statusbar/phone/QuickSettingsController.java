@@ -56,6 +56,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.slim.QSConstants.TILE_REBOOT;
 import static com.android.internal.util.slim.QSConstants.TILE_FCHARGE;
 import static com.android.internal.util.slim.QSConstants.TILE_PROFILE;
+import static com.android.internal.util.slim.QSConstants.TILE_CAMERA;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -111,6 +112,7 @@ import com.android.systemui.quicksettings.WifiAPTile;
 import com.android.systemui.quicksettings.RebootTile;
 import com.android.systemui.quicksettings.FChargeTile;
 import com.android.systemui.quicksettings.ProfileTile;
+import com.android.systemui.quicksettings.CameraTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -171,6 +173,7 @@ public class QuickSettingsController {
         boolean mobileDataSupported = DeviceUtils.deviceSupportsMobileData(mContext);
         boolean lteSupported = DeviceUtils.deviceSupportsLte(mContext);
         boolean torchSupported = DeviceUtils.deviceSupportsTorch(mContext);
+        boolean cameraSupported = DeviceUtils.deviceSupportsCamera();
 
         if (!bluetoothSupported) {
             TILES_DEFAULT.remove(TILE_BLUETOOTH);
@@ -188,6 +191,10 @@ public class QuickSettingsController {
 
         if (!torchSupported) {
             TILES_DEFAULT.remove(TILE_TORCH);
+        }
+
+        if (!cameraSupported) {
+            TILES_DEFAULT.remove(TILE_CAMERA);
         }
 
         // Read the stored list of tiles
@@ -266,6 +273,8 @@ public class QuickSettingsController {
                 if (DeviceUtils.systemProfilesEnabled(resolver)) {
                     qs = new ProfileTile(mContext, this);
                 }
+            } else if (tile.equals(TILE_CAMERA) && cameraSupported) {
+                qs = new CameraTile(mContext, this, mHandler);
             } else if (tile.contains(TILE_CUSTOM)) {
                 qs = new CustomTile(mContext, this, findCustomKey(tile));
             } else if (tile.contains(TILE_CONTACT)) {
