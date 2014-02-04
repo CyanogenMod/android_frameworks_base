@@ -15433,7 +15433,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             BroadcastFilter bf = new BroadcastFilter(filter, rl, callerPackage,
                     permission, callingUid, userId,
-                    (callerApp.info.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+                    (callerApp != null && callerApp.info != null && (callerApp.info.flags & ApplicationInfo.FLAG_SYSTEM) != 0));
             rl.add(bf);
             if (!bf.debugCheck()) {
                 Slog.w(TAG, "==> For Dynamic broadast");
