@@ -47,6 +47,9 @@
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
 
+    <!-- Quick Settings -->
+    <string name="quick_settings_powermenu_label">Power Menu</string>
+
     <!-- QuickSettings: Mobile data [CHAR LIMIT=NONE] -->
     <string name="quick_settings_mobile_data_label">Mobile data</string>
     <!-- QuickSettings: Roaming [CHAR LIMIT=NONE] -->

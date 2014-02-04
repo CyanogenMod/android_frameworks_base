@@ -53,6 +53,7 @@ import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.NotificationsTile;
 import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.PerfProfileTile;
+import com.android.systemui.qs.tiles.PowerMenuTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.VisualizerTile;
@@ -306,6 +307,8 @@ public class QSTileHost implements QSTile.Host {
                 return new ProfilesTile(this);
             case QSConstants.TILE_PERFORMANCE:
                 return new PerfProfileTile(this);
+            case QSConstants.TILE_POWERMENU:
+                return new PowerMenuTile(this);
             case QSConstants.TILE_ADB_NETWORK:
                 return new AdbOverNetworkTile(this);
             case QSConstants.TILE_NFC:
