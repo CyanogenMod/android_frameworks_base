@@ -187,36 +187,40 @@ public final class ProfileGroup implements Parcelable {
     // TODO : add support for LEDs / screen etc.
 
     /** @hide */
-    public Notification processNotification(Notification notification) {
-
+    public void applyOverridesToNotification(Notification notification) {
         switch (mSoundMode) {
             case OVERRIDE:
                 notification.sound = mSoundOverride;
                 break;
             case SUPPRESS:
-                silenceNotification(notification);
+                notification.defaults &= ~Notification.DEFAULT_SOUND;
+                notification.sound = null;
                 break;
             case DEFAULT:
+                break;
         }
         switch (mVibrateMode) {
             case OVERRIDE:
                 notification.defaults |= Notification.DEFAULT_VIBRATE;
                 break;
             case SUPPRESS:
-                suppressVibrate(notification);
+                notification.defaults &= ~Notification.DEFAULT_VIBRATE;
+                notification.vibrate = null;
                 break;
             case DEFAULT:
+                break;
         }
         switch (mLightsMode) {
             case OVERRIDE:
                 notification.defaults |= Notification.DEFAULT_LIGHTS;
                 break;
             case SUPPRESS:
-                suppressLights(notification);
+                notification.defaults &= ~Notification.DEFAULT_LIGHTS;
+                notification.flags &= ~Notification.FLAG_SHOW_LIGHTS;
                 break;
             case DEFAULT:
+                break;
         }
-        return notification;
     }
 
     private boolean validateOverrideUri(Context context, Uri uri) {
@@ -244,21 +248,6 @@ public final class ProfileGroup implements Parcelable {
             mRingerMode = Mode.DEFAULT;
             mDirty = true;
         }
-    }
-
-    private void silenceNotification(Notification notification) {
-        notification.defaults &= (~Notification.DEFAULT_SOUND);
-        notification.sound = null;
-    }
-
-    private void suppressVibrate(Notification notification) {
-        notification.defaults &= (~Notification.DEFAULT_VIBRATE);
-        notification.vibrate = null;
-    }
-
-    private void suppressLights(Notification notification) {
-        notification.defaults &= (~Notification.DEFAULT_LIGHTS);
-        notification.flags &= (~Notification.FLAG_SHOW_LIGHTS);
     }
 
     /** @hide */
