@@ -188,6 +188,35 @@ static inline SkBitmap::Config convertPixelFormat(PixelFormat format) {
     }
 }
 
+static void nativeSetDirtyRegion(JNIEnv* env, jclass clazz,
+        jint nativeObject, jobject dirtyRect) {
+
+    sp<Surface> surface(reinterpret_cast<Surface *>(nativeObject));
+
+    if (!isSurfaceValid(surface)) {
+        doThrowIAE(env);
+        return;
+    }
+
+    // get dirty region
+    Region dirtyRegion;
+    Rect dirty;
+
+    dirty.left = env->GetIntField(dirtyRect, gRectClassInfo.left);
+    dirty.top = env->GetIntField(dirtyRect, gRectClassInfo.top);
+    dirty.right = env->GetIntField(dirtyRect, gRectClassInfo.right);
+    dirty.bottom = env->GetIntField(dirtyRect, gRectClassInfo.bottom);
+
+    if (!dirty.isEmpty()) {
+       dirtyRegion.set(dirty);
+    }
+
+    status_t err = surface->setDirtyRegion(&dirtyRegion);
+    if (err < 0) {
+        doThrowIAE(env);
+    }
+}
+
 static inline void swapCanvasPtr(JNIEnv* env, jobject canvasObj, SkCanvas* newCanvas) {
   jobject canvasFinalizerObj = env->GetObjectField(canvasObj, gCanvasClassInfo.mFinalizer);
   SkCanvas* previousCanvas = reinterpret_cast<SkCanvas*>(
@@ -369,6 +398,8 @@ static JNINativeMethod gSurfaceMethods[] = {
             (void*)nativeReadFromParcel },
     {"nativeWriteToParcel", "(ILandroid/os/Parcel;)V",
             (void*)nativeWriteToParcel },
+    {"nativeSetDirtyRegion", "(ILandroid/graphics/Rect;)V",
+           (void*)nativeSetDirtyRegion },
 };
 
 int register_android_view_Surface(JNIEnv* env)

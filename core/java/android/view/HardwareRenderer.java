@@ -835,6 +835,8 @@ public abstract class HardwareRenderer {
         static final ThreadLocal<ManagedEGLContext> sEglContextStorage
                 = new ThreadLocal<ManagedEGLContext>();
 
+        private Surface mSurface = null;
+
         EGLContext mEglContext;
         Thread mEglThread;
 
@@ -1356,7 +1358,7 @@ public abstract class HardwareRenderer {
             }
 
             enableDirtyRegions();
-
+            mSurface = surface;
             return true;
         }
 
@@ -1461,7 +1463,12 @@ public abstract class HardwareRenderer {
                     long start = getSystemTime();
                     try {
                         status = prepareFrame(dirty);
-
+                        // sometimes we get the dirty rect as null
+                        // and also its better to check the surface
+                        // validity to avoid any crash.
+                        if(mSurface.isValid() && dirty != null) {
+                                mSurface.setDirtyRegion(dirty);
+                        }
                         saveCount = canvas.save();
                         callbacks.onHardwarePreDraw(canvas);
 
