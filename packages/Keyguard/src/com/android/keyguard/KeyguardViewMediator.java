@@ -735,7 +735,6 @@ public class KeyguardViewMediator {
 
         if (timeout <= 0) {
             // Lock now
-            mSuppressNextLockSound = true;
             doKeyguardLocked(null);
         } else {
             // Lock in the future
@@ -1122,8 +1121,6 @@ public class KeyguardViewMediator {
                         + sequence + ", mDelayedShowingSequence = " + mDelayedShowingSequence);
                 synchronized (KeyguardViewMediator.this) {
                     if (mDelayedShowingSequence == sequence) {
-                        // Don't play lockscreen SFX if the screen went off due to timeout.
-                        mSuppressNextLockSound = true;
                         doKeyguardLocked(null);
                     }
                 }
