@@ -61,7 +61,7 @@ public class CaptivePortalTracker extends StateMachine {
     private static final boolean DBG = true;
     private static final String TAG = "CaptivePortalTracker";
 
-    private static final String DEFAULT_SERVER = "clients3.google.com";
+    public static final String DEFAULT_SERVER = "clients3.google.com";
 
     private static final int SOCKET_TIMEOUT_MS = 10000;
 
