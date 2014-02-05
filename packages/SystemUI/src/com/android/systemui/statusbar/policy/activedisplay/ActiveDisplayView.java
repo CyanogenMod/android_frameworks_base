@@ -127,7 +127,7 @@ public class ActiveDisplayView extends FrameLayout {
     private Drawable mNotificationDrawable;
     private int mCreationOrientation;
     private SettingsObserver mSettingsObserver;
-    private IPowerManager mPM;
+    private static IPowerManager mPM;
     private INotificationManager mNM;
     private INotificationListenerWrapper mNotificationListener;
     private StatusBarNotification mNotification;
@@ -161,7 +161,6 @@ public class ActiveDisplayView extends FrameLayout {
     private long mDisplayTimeout = 8000L;
     private long mProximityThreshold = 5000L;
     private boolean mDistanceFar;
-    private boolean mWaitPeriod = true;
     private boolean mAttached;
 
     /**
@@ -229,7 +228,6 @@ public class ActiveDisplayView extends FrameLayout {
         }
 
         public void onReleased(final View v, final int handle) {
-            initWaitPeriod();
             doTransition(mOverflowNotifications, 1.0f, 0);
             if (!privacyMode) {
                 if (mRemoteView != null) {
@@ -242,7 +240,6 @@ public class ActiveDisplayView extends FrameLayout {
         }
 
         public void onGrabbed(final View v, final int handle) {
-            mWaitPeriod = true;
             // prevent the ActiveDisplayView from turning off while user is interacting with it
             cancelTimeoutTimer();
             restoreBrightness();
@@ -308,8 +305,7 @@ public class ActiveDisplayView extends FrameLayout {
         }
 
         void unobserve() {
-            ActiveDisplayView.this.mContext.getContentResolver()
-                    .unregisterContentObserver(this);
+            mContext.getContentResolver().unregisterContentObserver(this);
             unregisterCallbacks();
         }
 
@@ -319,8 +315,7 @@ public class ActiveDisplayView extends FrameLayout {
         }
 
         public void update() {
-            ContentResolver resolver =
-                    ActiveDisplayView.this.mContext.getContentResolver();
+            ContentResolver resolver = mContext.getContentResolver();
             boolean mNotOverridden;
 
             mNotOverridden = Settings.System.getInt(
@@ -758,25 +753,11 @@ public class ActiveDisplayView extends FrameLayout {
 
     private void turnScreenOn() {
         if (mPocketMode == 2 && !mDistanceFar) return;
-        initWaitPeriod();
         // to avoid flicker and showing any other screen than the ActiveDisplayView
         // we use a runnable posted with a 250ms delay to turn wake the device
         mHandler.removeCallbacks(runWakeDevice);
-        mHandler.postDelayed(runWakeDevice, 250);
+        mHandler.postDelayed(runWakeDevice, 400);
     }
-
-    private void initWaitPeriod() {
-        mWaitPeriod = true;
-        // delay proximitiy events by 2 seconds
-        mHandler.removeCallbacks(setWaitPeriod);
-        mHandler.postDelayed(setWaitPeriod, 2250);
-    }
-
-    private final Runnable setWaitPeriod = new Runnable() {
-        public void run() {
-            mWaitPeriod = false;
-        }
-    };
 
     private final Runnable runWakeDevice = new Runnable() {
         public void run() {
@@ -878,7 +859,7 @@ public class ActiveDisplayView extends FrameLayout {
 
     private void registerSensorListener(Sensor sensor) {
         if (sensor != null && !mAttached) {
-            mSensorManager.registerListener(mSensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mSensorListener, sensor, SensorManager.SENSOR_DELAY_UI);
             mAttached = true;
         }
     }
@@ -1187,16 +1168,8 @@ public class ActiveDisplayView extends FrameLayout {
                 } else if (value <= 1.5) {
                     mDistanceFar = false;
                     mPocketTime = System.currentTimeMillis();
-                    if (!isKeyguardLocked() || mWaitPeriod) {
+                    if (!isKeyguardLocked()) {
                         return;
-                    }
-
-                    if (mDisplayTimeout >= mProximityThreshold) {
-                        if (isScreenOn() && (mPocketTime >= (mProximityThreshold + mResetTime))) {
-                            restoreBrightness();
-                            cancelTimeoutTimer();
-                            turnScreenOff();
-                        }
                     }
                 }
             }
