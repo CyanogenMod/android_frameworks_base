@@ -22,6 +22,7 @@
     <string name="profileNameHome">Home</string>
     <string name="profileNameSilent">Silent</string>
     <string name="profileNameNight">Night</string>
+    <string name="profileNameAutomobile">Automobile</string>
 
     <!-- Names of application groups. -->
     <string name="profileGroupPhone">Phone</string>
