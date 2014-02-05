@@ -497,7 +497,6 @@ public class WifiMonitor {
         private final WifiMonitorSingleton mWifiMonitorSingleton;
         private int mRecvErrors = 0;
         private StateMachine mStateMachine = null;
-        private int mTerminateEventCount = 0;
 
         public MonitorThread(WifiNative wifiNative, WifiMonitorSingleton wifiMonitorSingleton) {
             super("WifiMonitor");
@@ -541,19 +540,8 @@ public class WifiMonitor {
                     if (m.mMonitoring) {
                         mStateMachine = m.mWifiStateMachine;
                     } else {
-                        String eventStrNoWS = eventStr.replaceAll("\\s+", "");
                         if (DBG) Log.d(TAG, "Dropping event because monitor (" + iface +
                                             ") is stopped");
-                            if (eventStrNoWS.endsWith("CTRL-EVENT-TERMINATING")) {
-                                mTerminateEventCount ++;
-                                if (mTerminateEventCount >= mWifiMonitorSingleton.mIfaceMap.size()){
-                                    Log.e(TAG, "Report SUP_DISCONNECT_EVENT");
-                                    WifiStateMachine wifiStateMachine = (WifiStateMachine)
-                                     mWifiMonitorSingleton.getMonitor("wlan0").mWifiStateMachine;
-                                    wifiStateMachine.sendMessage(SUP_DISCONNECTION_EVENT);
-                                    break;
-                                }
-                        }
                         continue;
                     }
                 }
@@ -681,14 +669,8 @@ public class WifiMonitor {
                 }
 
                 // notify and exit
-                mTerminateEventCount ++;
-                if (mTerminateEventCount >= mWifiMonitorSingleton.mIfaceMap.size()) {
-                    Log.e(TAG, "Report SUP_DISCONNECT_EVENT");
-                    WifiStateMachine wifiStateMachine = (WifiStateMachine)
-                     mWifiMonitorSingleton.getMonitor("wlan0").mWifiStateMachine;
-                    wifiStateMachine.sendMessage(SUP_DISCONNECTION_EVENT);
-                    return true;
-                }
+                mStateMachine.sendMessage(SUP_DISCONNECTION_EVENT);
+                return true;
             } else if (event == EAP_FAILURE) {
                 if (eventData.startsWith(EAP_AUTH_FAILURE_STR)) {
                     mStateMachine.sendMessage(AUTHENTICATION_FAILURE_EVENT);
