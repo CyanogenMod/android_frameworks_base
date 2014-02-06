@@ -25,7 +25,7 @@ public class AlarmTile extends QuickSettingsTile {
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSettingsActivity(new Intent(AlarmClock.ACTION_SET_ALARM));
+                startSettingsActivity(new Intent(AlarmClock.ACTION_SHOW_ALARMS));
             }
         };
 
