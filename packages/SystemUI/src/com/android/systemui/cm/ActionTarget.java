@@ -38,6 +38,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.InputDevice;
@@ -108,7 +109,8 @@ public class ActionTarget {
         } else if (action.equals(ACTION_SCREENSHOT)) {
             takeScreenshot();
             return true;
-        } else if (action.equals(ACTION_ASSIST)) {
+        } else if (action.equals(ACTION_ASSIST)
+                || action.equals(ACTION_KEYGUARD_SEARCH)) {
             Intent intent = new Intent(Intent.ACTION_ASSIST);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -159,6 +161,16 @@ public class ActionTarget {
             Intent intent = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
             mContext.sendBroadcast(intent);
             return true;
+        } else if (action.equals(ACTION_EXPANDED_DESKTOP)) {
+            boolean expandDesktopModeOn = Settings.System.getIntForUser(
+                    mContext.getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_STATE,
+                    0, UserHandle.USER_CURRENT) == 1;
+            Settings.System.putIntForUser(
+                    mContext.getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_STATE,
+                    expandDesktopModeOn ? 0 : 1, UserHandle.USER_CURRENT);
+            return true;
         } else {
             try {
                 Intent intent = Intent.parseUri(action, 0);
@@ -173,6 +185,18 @@ public class ActionTarget {
             }
             return false;
         }
+    }
+
+    public boolean isActionKeyEvent(String action) {
+        if (action.equals(ACTION_HOME)
+                || action.equals(ACTION_BACK)
+                || action.equals(ACTION_SEARCH)
+                || action.equals(ACTION_MENU)
+                || action.equals(ACTION_MENU_BIG)
+                || action.equals(ACTION_NULL)) {
+            return true;
+        }
+        return false;
     }
 
     private void dismissKeyguard() {

@@ -40,5 +40,5 @@ oneway interface IStatusBar
     void cancelPreloadRecentApps();
     void setWindowState(int window, int state);
     void setAutoRotate(boolean enabled);
+    void setPieTriggerMask(int newMask, boolean lock);
 }
-
