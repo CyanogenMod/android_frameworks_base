@@ -78,7 +78,79 @@ public class ButtonsHelper {
                     config);
     }
 
-    // get and set the navring configs from provider and return propper arraylist objects
+    // Get and set the pie configs from provider and return proper arraylist objects
+    // @ButtonConfig
+    public static ArrayList<ButtonConfig> getPieConfig(Context context) {
+        return (ConfigSplitHelper.getButtonsConfigValues(context,
+            getPieProvider(context), null, null, false));
+    }
+
+    public static ArrayList<ButtonConfig> getPieConfigWithDescription(
+            Context context, String values, String entries) {
+        return (ConfigSplitHelper.getButtonsConfigValues(context,
+            getPieProvider(context), values, entries, false));
+    }
+
+    private static String getPieProvider(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = ButtonsConstants.NAVIGATION_CONFIG_DEFAULT;
+        }
+        return config;
+    }
+
+    public static void setPieConfig(Context context,
+            ArrayList<ButtonConfig> buttonsConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = ButtonsConstants.NAVIGATION_CONFIG_DEFAULT;
+        } else {
+            config = ConfigSplitHelper.setButtonsConfig(buttonsConfig, false);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG,
+                    config);
+    }
+
+    public static ArrayList<ButtonConfig> getPieSecondLayerConfig(Context context) {
+        return (ConfigSplitHelper.getButtonsConfigValues(context,
+            getPieSecondLayerProvider(context), null, null, false));
+    }
+
+    public static ArrayList<ButtonConfig> getPieSecondLayerConfigWithDescription(
+            Context context, String values, String entries) {
+        return (ConfigSplitHelper.getButtonsConfigValues(context,
+            getPieSecondLayerProvider(context), values, entries, false));
+    }
+
+    private static String getPieSecondLayerProvider(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG_SECOND_LAYER,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = ButtonsConstants.PIE_SECOND_LAYER_CONFIG_DEFAULT;
+        }
+        return config;
+    }
+
+    public static void setPieSecondLayerConfig(Context context,
+            ArrayList<ButtonConfig> buttonsConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = ButtonsConstants.PIE_SECOND_LAYER_CONFIG_DEFAULT;
+        } else {
+            config = ConfigSplitHelper.setButtonsConfig(buttonsConfig, false);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG_SECOND_LAYER,
+                    config);
+    }
+
+    // Get and set the navring configs from provider and return propper arraylist objects
     // @ButtonConfig
     public static ArrayList<ButtonConfig> getNavRingConfig(Context context) {
         return (ConfigSplitHelper.getButtonsConfigValues(context,
@@ -248,6 +320,9 @@ public class ButtonsHelper {
                 || clickAction.equals(ButtonsConstants.ACTION_ASSIST)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_search", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_KEYGUARD_SEARCH)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/search_light", null, null);
         } else if (clickAction.equals(ButtonsConstants.ACTION_SCREENSHOT)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_screenshot", null, null);

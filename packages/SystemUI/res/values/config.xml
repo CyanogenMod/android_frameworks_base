@@ -110,5 +110,10 @@
 
     <!-- milliseconds before the heads up notification accepts touches. -->
     <integer name="heads_up_sensitivity_delay">700</integer>
+
+    <!-- Sensivity of pie gestures controlls.
+        Must be minimum 1 and maximum 10 (See @EdgeServiceConstants.java).
+        Default for pie is high sensivity -->
+    <integer name="pie_gesture_sensivity">8</integer>
 </resources>
 
