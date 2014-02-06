@@ -82,6 +82,7 @@ public class NotificationViewManager {
         public boolean privacyMode = false;
         public boolean mQuietTime;
         public int notificationColor = 0x55555555;
+        public boolean wakeOnNotification = false;
 
         public Configuration(Handler handler) {
             super(handler);
@@ -109,6 +110,8 @@ public class NotificationViewManager {
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_FORCE_EXPANDED_VIEW), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HEIGHT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_OFFSET_TOP), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -141,6 +144,8 @@ public class NotificationViewManager {
             expandedView = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_EXPANDED_VIEW, expandedView ? 1 : 0) == 1
                     && !privacyMode;
+            wakeOnNotification = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION, wakeOnNotification ? 1 : 0) == 1;
             forceExpandedView = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_FORCE_EXPANDED_VIEW, forceExpandedView ? 1 : 0) == 1
                     && !privacyMode;
@@ -200,7 +205,7 @@ public class NotificationViewManager {
             boolean showNotification = !mHostView.containsNotification(sbn) || mHostView.getNotification(sbn).when != sbn.getNotification().when;
             boolean added = mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn) && showNotification,
                     config.forceExpandedView);
-            if ( added && screenOffAndNotCovered
+            if ( added && config.wakeOnNotification && screenOffAndNotCovered
                         && showNotification && mTimeCovered == 0) {
                 wakeDevice();
             }
@@ -239,7 +244,7 @@ public class NotificationViewManager {
     }
 
     private void registerProximityListener() {
-        if (config.pocketMode == 1) {
+        if (config.pocketMode == 1 || config.wakeOnNotification) {
             // continue
         } else {
             return;
