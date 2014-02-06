@@ -387,8 +387,7 @@ public class NotificationHostView extends FrameLayout {
         final NotificationView oldView = mNotifications.get(describeNotification(sbn));
         final boolean reposted = oldView != null;
         if (reposted && oldView.bigContentView) forceBigContentView = true;
-        boolean bigContentView = (reposted && oldView.bigContentView) ||
-                (sbn.getNotification().bigContentView != null &&
+        boolean bigContentView = sbn.getNotification().bigContentView != null && ((reposted && oldView.bigContentView) ||
                 (NotificationViewManager.config.expandedView || sbn.getNotification().contentView == null));
         nv.bigContentView = bigContentView && forceBigContentView;
         RemoteViews rv = nv.bigContentView ? sbn.getNotification().bigContentView : sbn.getNotification().contentView;
