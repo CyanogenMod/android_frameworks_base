@@ -65,10 +65,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -81,8 +81,8 @@ import com.android.internal.util.MemInfoReader;
 
 import java.util.ArrayList;
 
-public class RecentsPanelView extends FrameLayout implements OnItemClickListener, RecentsCallback,
-        StatusBarPanel, Animator.AnimatorListener {
+public class RecentsPanelView extends RelativeLayout implements OnItemClickListener,
+        RecentsCallback, StatusBarPanel, Animator.AnimatorListener {
     static final String TAG = "RecentsPanelView";
     static final boolean DEBUG = PhoneStatusBar.DEBUG;
     private PopupMenu mPopup;
@@ -108,7 +108,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mFitThumbnailToXY;
     private int mRecentItemLayoutId;
     private boolean mHighEndGfx;
-    private ImageView mClearRecents;
+
+    private ImageView mClearAllRecents;
+
     private boolean ramBarEnabled;
     private boolean ramBarIncludeCached;
 
@@ -390,28 +392,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRecentsNoApps.setAlpha(1f);
             mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
 
-            final boolean showClearAllButton = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SHOW_CLEAR_RECENTS_BUTTON, 1) == 1;
-
-            if (showClearAllButton) {
-                mClearRecents.setVisibility(noApps ? View.GONE : View.VISIBLE);
-                final int clearAllButtonLocation = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT);
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams)mClearRecents.getLayoutParams();
-                switch (clearAllButtonLocation) {
-                    default:
-                    case Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT:
-                        layoutParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
-                        break;
-                    case Constants.CLEAR_ALL_BUTTON_BOTTOM_RIGHT:
-                        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-                        break;
-                }
-                mClearRecents.setLayoutParams(layoutParams);
-            } else {
-                mClearRecents.setVisibility(View.GONE);
-            }
-
             onAnimationEnd(null);
             setFocusable(true);
             setFocusableInTouchMode(true);
@@ -540,9 +520,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRecentsScrim = findViewById(R.id.recents_bg_protect);
         mRecentsNoApps = findViewById(R.id.recents_no_apps);
 
-        mClearRecents = (ImageView) findViewById(R.id.recents_clear);
-        if (mClearRecents != null){
-            mClearRecents.setOnClickListener(new OnClickListener() {
+        mClearAllRecents = (ImageView) findViewById(R.id.recents_clear);
+        if (mClearAllRecents != null){
+            mClearAllRecents.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((ViewGroup) mRecentsContainer).removeAllViewsInLayout();

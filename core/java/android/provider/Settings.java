@@ -3756,22 +3756,10 @@ public final class Settings {
         public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
 
         /**
-         *  Enable statusbar double tap gesture on to put device to sleep
+         * Enable statusbar double tap gesture on to put device to sleep
          * @hide
          */
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
-
-         /**
-         * show clear all recents button
-         *  @hide
-         */
-        public static final String SHOW_CLEAR_RECENTS_BUTTON = "clear_recents_button";
-
-        /**
-         * location of the clear all rectents button
-         * @hide
-         */
-        public static final String CLEAR_RECENTS_BUTTON_LOCATION = "clear_recents_button_location";
 
         /**
          * whether to hide the Ram Usage Bar on recent switcher
