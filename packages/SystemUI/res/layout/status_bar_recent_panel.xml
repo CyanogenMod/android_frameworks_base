@@ -32,24 +32,24 @@
         android:id="@+id/recents_bg_protect"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ram_usage_bar">
+        android:layout_above="@+id/recents_bottom_bar_container">
 
         <com.android.systemui.recent.RecentsVerticalScrollView
             android:id="@+id/recents_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="0dp"
             android:divider="@null"
             android:stackFromBottom="true"
-            android:fadingEdge="vertical"
             android:scrollbars="none"
-            android:fadingEdgeLength="@dimen/status_bar_recents_scroll_fading_edge_length"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0dp"
             android:layout_gravity="bottom|start">
 
             <LinearLayout
                 android:id="@+id/recents_linear_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:fitsSystemWindows="true" />
 
@@ -58,30 +58,28 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/recents_bottom_bar"
-        android:background="@drawable/status_bar_recents_background"
+        android:id="@+id/recents_bottom_bar_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true">
 
-        <ImageView
-            android:id="@+id/recents_clear"
-            android:clickable="true"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom|left"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_recents_clear" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/bottom_shadow" />
+
+        <include
+            layout="@layout/status_bar_recent_ram_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            layout="@layout/status_bar_recent_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
     </LinearLayout>
-
-    <include
-        layout="@layout/status_bar_recent_ram_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/recents_bottom_bar" />
 
     <include
         layout="@layout/status_bar_no_recent_apps"

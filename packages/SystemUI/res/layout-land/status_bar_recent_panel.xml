@@ -57,24 +57,11 @@
 
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/recents_bottom_bar"
-        android:background="@drawable/status_bar_recents_background"
+    <include
+        layout="@layout/status_bar_recent_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <ImageView
-            android:id="@+id/recents_clear"
-            android:clickable="true"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom|left"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_recents_clear" />
-
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true" />
 
     <include
         layout="@layout/status_bar_recent_ram_bar"
