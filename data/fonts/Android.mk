@@ -135,6 +135,7 @@ font_src_files += \
     RobotoCondensed-BoldItalic.ttf \
     DroidNaskh-Regular.ttf \
     DroidNaskhUI-Regular.ttf \
+    sahlnaskh-regular.ttf \
     DroidSansHebrew-Regular.ttf \
     DroidSansHebrew-Bold.ttf \
     DroidSansArmenian.ttf \
