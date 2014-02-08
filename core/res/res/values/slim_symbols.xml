@@ -43,8 +43,8 @@
   <java-symbol type="bool" name="config_wifiApFirmwareReload" />
 
   <!-- Power menu -->
-  <java-symbol type="color"  name="power_menu_icon_default_color" />
-  <java-symbol type="color"  name="power_menu_text_default_color" />
+  <java-symbol type="color" name="power_menu_icon_default_color" />
+  <java-symbol type="color" name="power_menu_text_default_color" />
   <java-symbol type="id" name="icon1" />
   <java-symbol type="id" name="icon2" />
   <java-symbol type="id" name="icon3" />
@@ -53,6 +53,18 @@
   <java-symbol type="string" name="global_actions_expanded_desktop_mode_on_status" />
   <java-symbol type="string" name="global_actions_expanded_desktop_mode_off_status" />
   <java-symbol type="drawable" name="ic_lock_expanded_desktop" />
+
+  <!-- Pie controls -->
+  <java-symbol type="string" name="global_actions_pie_mode_on_status" />
+  <java-symbol type="string" name="global_actions_pie_mode_off_status" />
+  <java-symbol type="drawable" name="ic_lock_pie" />
+  <java-symbol type="string" name="disable_pie_navigation_error" />
+
+  <!-- Navigation bar -->
+  <java-symbol type="string" name="global_actions_nav_bar_mode_on_status" />
+  <java-symbol type="string" name="global_actions_nav_bar_mode_off_status" />
+  <java-symbol type="drawable" name="ic_lock_navbar" />
+  <java-symbol type="string" name="disable_navigation_pie_error" />
 
   <!-- Description of accessibility direction for targets -->
   <java-symbol type="string" name="accessibility_target_direction" />
