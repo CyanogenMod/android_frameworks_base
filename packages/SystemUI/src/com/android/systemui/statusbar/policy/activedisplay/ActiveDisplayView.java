@@ -579,14 +579,14 @@ public class ActiveDisplayView extends FrameLayout {
                 } catch (RemoteException ex) {
                 }
             }
-            try {
-                if (mNotification.isClearable()) {
-                    mNM.cancelNotificationFromSystemListener(mNotificationListener,
-                    mNotification.getPackageName(), mNotification.getTag(),
-                    mNotification.getId());
+            if (mNotification.isClearable()) {
+                try {
+                     mNM.cancelNotificationFromSystemListener(mNotificationListener,
+                             mNotification.getPackageName(), mNotification.getTag(),
+                             mNotification.getId());
+                } catch (RemoteException e) {
+                } catch (NullPointerException npe) {
                 }
-            } catch (RemoteException e) {
-            } catch (NullPointerException npe) {
             }
             mNotification = null;
         }
