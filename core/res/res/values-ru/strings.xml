@@ -1024,8 +1024,9 @@
     <item quantity="other" msgid="3330713936399448749">"через <xliff:g id="COUNT">%d</xliff:g> минут"</item>
   </plurals>
   <plurals name="in_num_hours">
-    <item quantity="one" msgid="7164353342477769999">"через 1 час"</item>
-    <item quantity="other" msgid="547290677353727389">"через <xliff:g id="COUNT">%d</xliff:g> ч."</item>
+    <item quantity="one" msgid="7164353342477769999">"через <xliff:g id="COUNT">%d</xliff:g> час"</item>
+    <item quantity="few">"через <xliff:g id="COUNT">%d</xliff:g> часа"</item>
+    <item quantity="other" msgid="547290677353727389">"через <xliff:g id="COUNT">%d</xliff:g> часов"</item>
   </plurals>
   <plurals name="in_num_days">
     <item quantity="one" msgid="5413088743009839518">"завтра"</item>
@@ -1084,7 +1085,7 @@
   </plurals>
   <plurals name="duration_hours">
     <item quantity="one" msgid="8917467491248809972">"<xliff:g id="COUNT">%d</xliff:g> час"</item>
-    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> часы"</item>
+    <item quantity="few">"<xliff:g id="COUNT">%d</xliff:g> часа"</item>
     <item quantity="other" msgid="3863962854246773930">"<xliff:g id="COUNT">%d</xliff:g> часов"</item>
   </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">"Ошибка"</string>
