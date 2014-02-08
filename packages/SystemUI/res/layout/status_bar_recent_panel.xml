@@ -28,58 +28,56 @@
     android:foreground="@drawable/bg_protect"
     systemui:recentItemLayout="@layout/status_bar_recent_item">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/recents_bg_protect"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/recents_bottom_bar_container">
+        android:layout_height="match_parent">
 
         <com.android.systemui.recent.RecentsVerticalScrollView
             android:id="@+id/recents_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="0dp"
             android:divider="@null"
             android:stackFromBottom="true"
             android:scrollbars="none"
             android:fadingEdge="none"
             android:fadingEdgeLength="0dp"
-            android:layout_gravity="bottom|start">
+            android:layout_alignBottom="@+id/recents_bottom_bar_container">
 
             <LinearLayout
                 android:id="@+id/recents_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:fitsSystemWindows="true" />
+                android:orientation="vertical" />
 
         </com.android.systemui.recent.RecentsVerticalScrollView>
 
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/recents_bottom_bar_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
-
-        <View
+        <LinearLayout
+            android:id="@+id/recents_bottom_bar_container"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@drawable/bottom_shadow" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:fitsSystemWindows="true"
+            android:layout_alignParentBottom="true">
 
-        <include
-            layout="@layout/status_bar_recent_ram_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@drawable/bottom_shadow" />
 
-        <include
-            layout="@layout/status_bar_recent_bottom_bar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            <include
+                layout="@layout/status_bar_recent_ram_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            <include
+                layout="@layout/status_bar_recent_bottom_bar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <include
         layout="@layout/status_bar_no_recent_apps"

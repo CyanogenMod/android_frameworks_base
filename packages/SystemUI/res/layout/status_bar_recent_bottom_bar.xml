@@ -21,8 +21,7 @@
     android:id="@+id/recents_bottom_bar"
     android:background="@drawable/bg_recents_bottom_bar"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:fitsSystemWindows="true">
+    android:layout_height="50dp">
 
     <ImageView
         android:id="@+id/recents_clear"
