@@ -19,6 +19,11 @@
     <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
     <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
     <string name="reboot_reboot">Перезагрузка</string>
+    <string name="reboot_recovery">Режим восстановления</string>
+    <string name="reboot_bootloader">Загрузчик</string>
+    <string name="reboot_bootmenu">Загрузочное меню</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Режим обновления ПО</string>
     <string name="reboot_progress">Перезагрузка\u2026</string>
 
     <string name="global_action_screenshot">Скриншот</string>
@@ -35,9 +40,11 @@
     <string name="profileNameHome">Дом</string>
     <string name="profileNameSilent">Без звука</string>
     <string name="profileNameNight">Ночь</string>
+    <string name="profileNameAutomobile">Автомобиль</string>
     <string name="profileGroupPhone">Телефон</string>
     <string name="profileGroupCalendar">Календарь</string>
     <string name="profileGroupEmail">Почта</string>
+    <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupSMS">Сообщения</string>
     <string name="wildcardProfile">Другой</string>
 
