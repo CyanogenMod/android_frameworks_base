@@ -2486,8 +2486,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     Runnable mTorchToggle = new Runnable() {
         public void run() {
-            Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
-            mContext.sendBroadcast(i);
+            if (mFastTorchOn != mFastTorchStatus) {
+                Log.v("QuickTorch", "Trying to toggle torch "+mFastTorchOn);
+                Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+                mContext.sendBroadcast(i);
+            } else {
+                Log.v("QuickTorch", "Toggle requested, but already in target state");
+            }
         };
     };
 
