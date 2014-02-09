@@ -19,6 +19,7 @@
     <string name="profileNameHome">Huis</string>
     <string name="profileNameSilent">Stil</string>
     <string name="profileNameNight">Nag</string>
+    <string name="profileNameAutomobile">Motor</string>
     <string name="profileGroupPhone">Foon</string>
     <string name="profileGroupCalendar">Kalender</string>
     <string name="profileGroupGmail">Gmail</string>
