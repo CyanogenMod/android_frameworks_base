@@ -818,13 +818,14 @@ class AlarmManagerService extends IAlarmManager.Stub {
         if (localLOGV) Slog.v(TAG, "UpdateBlockedUids: uid = "+uid +"isBlocked = "+isBlocked);
         synchronized(mLock) {
             if(isBlocked) {
-                for( int i=0; i < mTriggeredUids.size(); i++) {
+                for( int i = 0; i < mTriggeredUids.size(); i++) {
                     if(mTriggeredUids.contains(new Integer(uid))) {
                         if (localLOGV) {
                             Slog.v(TAG,"TriggeredUids has this uid, mBroadcastRefCount="
                                 +mBroadcastRefCount);
                         }
                         mTriggeredUids.remove(new Integer(uid));
+                        i--;
                         mBlockedUids.add(new Integer(uid));
                         if(mBroadcastRefCount > 0){
                             mBroadcastRefCount--;
@@ -846,11 +847,12 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     }
                 }
             } else {
-                for(int i =0; i < mBlockedUids.size(); i++) {
+                for(int i = 0; i < mBlockedUids.size(); i++) {
                     if(!mBlockedUids.remove(new Integer(uid))) {
                         //no more matching uids break from the for loop
                         break;
                      }
+                     i--;
                 }
             }
         }
