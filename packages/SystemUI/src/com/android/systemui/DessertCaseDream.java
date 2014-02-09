@@ -30,7 +30,8 @@ public class DessertCaseDream extends DreamService {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        setInteractive(false);
+        setInteractive(true);
+        setFullscreen(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final boolean isCM = prefs.getBoolean("dessert_case_cm", false);
@@ -41,7 +42,7 @@ public class DessertCaseDream extends DreamService {
             mView = new DessertCaseView(this);
         }
 
-        mContainer = new DessertCaseView.RescalingContainer(this);
+        mContainer = new DessertCaseView.RescalingContainer(this, true);
 
         mContainer.setView(mView);
 

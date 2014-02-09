@@ -522,16 +522,29 @@ public class DessertCaseView extends FrameLayout {
         private float mDarkness;
 
         public RescalingContainer(Context context) {
+            this(context, false);
+        }
+
+        RescalingContainer(Context context, boolean dayDream) {
             super(context);
 
-            setSystemUiVisibility(0
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            );
+            if (dayDream) {
+                // For daydream is better to use setFullscreen + this window flags
+                // It creates a better ux exiting from immersive mode
+                setSystemUiVisibility(0
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            } else {
+                setSystemUiVisibility(0
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        );
+            }
         }
 
         public void setView(DessertCaseView v) {
