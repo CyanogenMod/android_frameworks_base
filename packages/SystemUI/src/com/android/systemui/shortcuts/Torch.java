@@ -19,9 +19,9 @@ package com.android.systemui.shortcuts;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.UserHandle;
 
-import com.android.internal.util.slim.ButtonsConstants;
-import com.android.internal.util.slim.SlimActions;
+import com.android.internal.util.slim.TorchConstants;
 
 public class Torch extends Activity  {
 
@@ -33,8 +33,21 @@ public class Torch extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        SlimActions.processAction(
-                this, ButtonsConstants.ACTION_TORCH, false);
+        int value = getIntent().getIntExtra("value", 2);
+        Intent intent = new Intent();
+        switch (value) {
+            case 0:
+                intent.setAction(TorchConstants.ACTION_OFF);
+                break;
+            case 1:
+                intent.setAction(TorchConstants.ACTION_ON);
+                break;
+            case 2:
+                intent.setAction(TorchConstants.ACTION_TOGGLE_STATE);
+                break;
+        }
+        this.sendBroadcastAsUser(
+                intent, new UserHandle(UserHandle.USER_CURRENT));
         this.finish();
     }
 }

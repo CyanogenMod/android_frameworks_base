@@ -44,13 +44,11 @@
     <string name="shortcut_immersive">Immersive Mode</string>
     <string name="shortcut_quiethours">Quiethours</string>
     <string name="shortcut_rotation">Rotation</string>
-    <string name="shortcut_torch">Torch Toggle</string>
+    <string name="shortcut_torch">Torch</string>
     <string name="shortcut_reboot">Reboot</string>
     <string name="shortcut_recovery">Recovery</string>
     <string name="shortcut_last_app">Last App</string>
-    <string name="shortcut_power_menu">Power Menu</string>
     <string name="shortcut_screenshot">Screenshot</string>
-    <string name="shortcut_screensleep">Go to Sleep</string>
     <string name="shortcut_volume">Volume</string>
     <string name="shortcut_toggle_title">Action to perform</string>
     <string name="shortcut_chamber">Chamber of Secrets</string>
