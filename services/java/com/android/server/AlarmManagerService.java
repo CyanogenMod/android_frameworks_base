@@ -1267,11 +1267,14 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
     private void filtQuickBootAlarms(ArrayList<Alarm> triggerList) {
 
+        ArrayList<String> whiteList = new ArrayList();
+        whiteList.add("android");
+        whiteList.add("com.android.deskclock");
+
         for (int i = triggerList.size() - 1; i >= 0; i--) {
             Alarm alarm = triggerList.get(i);
 
-            // bypass system alarms
-            if (!"android".equals(alarm.operation.getTargetPackage())) {
+            if (!whiteList.contains(alarm.operation.getTargetPackage())) {
                 triggerList.remove(i);
                 Slog.v(TAG, "ignore -> " + alarm.operation.getTargetPackage());
             }
