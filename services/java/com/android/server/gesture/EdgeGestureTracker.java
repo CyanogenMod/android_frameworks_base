@@ -22,6 +22,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 
 import com.android.internal.util.gesture.EdgeGesturePosition;
+import com.android.internal.util.gesture.EdgeServiceConstants;
 
 /**
  * A simple {@link MotionEvent} tracker class. The main aim of this tracker is to
@@ -44,6 +45,9 @@ public class EdgeGestureTracker {
     private int mPerpendicularDistance;
     private int mGracePeriodDistance;
     private long mTimeOut;
+
+    private boolean mIsImeIsActive;
+    private boolean mOverwriteImeIsActive;
 
     private int mDisplayWidth;
     private int mDisplayHeight;
@@ -99,6 +103,14 @@ public class EdgeGestureTracker {
         mActive = false;
     }
 
+    public void setImeIsActive(boolean enabled) {
+        mIsImeIsActive = enabled;
+    }
+
+    public void setOverwriteImeIsActive(boolean enabled) {
+        mOverwriteImeIsActive = enabled;
+    }
+
     public void updateDisplay(Display display) {
         Point outSize = new Point(0,0);
         display.getRealSize(outSize);
@@ -119,7 +131,8 @@ public class EdgeGestureTracker {
         setSensitivity(sensitivity);
 
         if ((positions & EdgeGesturePosition.LEFT.FLAG) != 0) {
-            if (x < mThickness && fy > 0.15f && fy < 0.85f) {
+            if (x < mThickness && fy > 0.15f
+                    && fy < (isImeActive(positions) ? 0.6f : 0.85f)) {
                 startWithPosition(motionEvent, EdgeGesturePosition.LEFT);
                 return true;
             }
@@ -131,7 +144,8 @@ public class EdgeGestureTracker {
             }
         }
         if ((positions & EdgeGesturePosition.RIGHT.FLAG) != 0) {
-            if (x > mDisplayWidth - mThickness && fy > 0.15f && fy < 0.85f) {
+            if (x > mDisplayWidth - mThickness && fy > 0.15f
+                    && fy < (isImeActive(positions) ? 0.6f : 0.85f)) {
                 startWithPosition(motionEvent, EdgeGesturePosition.RIGHT);
                 return true;
             }
@@ -143,6 +157,11 @@ public class EdgeGestureTracker {
             }
         }
         return false;
+    }
+
+    private boolean isImeActive(int positions) {
+        return (positions & EdgeServiceConstants.IME_CONTROL) != 0
+                && mIsImeIsActive && !mOverwriteImeIsActive;
     }
 
     private void startWithPosition(MotionEvent motionEvent, EdgeGesturePosition position) {

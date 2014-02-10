@@ -32,7 +32,7 @@ public final class EdgeServiceConstants {
      * <p>
      * Positions are specified by {@code EdgeGesturePosition.FLAG}.
      */
-    public static final int POSITION_MASK = 0x0000000f;
+    public static final int POSITION_MASK = 0x0000001f;
 
     /**
      * Mask for coding sensitivity within the flags of
@@ -67,5 +67,10 @@ public final class EdgeServiceConstants {
      * Highest sensitivity value.
      */
     public static final int SENSITIVITY_HIGHEST = 10;
+
+    /**
+     * Allow IME to reduce left and right trigger height.
+     */
+    public static final int IME_CONTROL = 0x10;
 
 }
