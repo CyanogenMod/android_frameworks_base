@@ -120,6 +120,17 @@
     <string name="quick_settings_fcharge">Fast charge</string>
     <string name="quick_settings_profile">Profile</string>
     <string name="quick_settings_camera_label">Camera</string>
+    <string name="quick_settings_reminder">Reminder</string>
+    <string name="quick_settings_reminder_title">Title:</string>
+    <string name="quick_settings_reminder_message">Message:</string>
+    <string name="quick_settings_reminder_time">Reminder Time</string>
+    <string name="quick_settings_reminder_set">Set Time</string>
+    <string name="quick_settings_reminder_update">Update Time</string>
+    <string name="quick_settings_reminder_no_expire">No notification</string>
+    <string name="quick_settings_reminder_dismiss">Clear Reminder</string>
+    <string name="quick_settings_reminder_dismiss_message">Clear current reminder?</string>
+    <string name="quick_settings_reminder_help_title">Touch:</string>
+    <string name="quick_settings_reminder_help_message">Touch here to set a reminder. Long-press to clear the current reminder.</string>
     <!-- Camera tile toasts
     <string name="quick_settings_camera_error_connect">Can\'t connect to camera</string> -->
     

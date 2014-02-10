@@ -143,6 +143,8 @@
                 android:permission="android.permission.BIND_WALLPAPER"
                 android:exported="true" />
 
+        <service android:name=".service.ReminderService"/>
+
         <receiver android:name=".BootReceiver" androidprv:primaryUserOnly="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -243,6 +245,20 @@
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="com.android.systemui.timedialog.MusicTileTimeDialog" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Reminder dialog sets -->
+        <activity
+            android:name="com.android.systemui.timedialog.ReminderTimeDialog"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.android.systemui.timedialog.ReminderTimeDialog"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="com.android.systemui.timedialog.ReminderTimeDialog" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
