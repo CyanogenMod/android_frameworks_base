@@ -1420,4 +1420,13 @@
     <!-- Configuration to enable non-default PDP during IWLAN -->
     <bool name="config_feature_iwlan_enabled">false</bool>
 
+    <array name="sim_icons">
+        <item>@drawable/ic_sim_icon_1</item>
+        <item>@drawable/ic_sim_icon_2</item>
+        <item>@drawable/ic_sim_icon_c</item>
+        <item>@drawable/ic_sim_icon_g</item>
+        <item>@drawable/ic_sim_icon_w</item>
+        <item>@null</item>
+    </array>
+
 </resources>
