@@ -49,6 +49,13 @@
         android:orientation="horizontal"
         >
 
+        <View
+            android:id="@+id/center_spacer"
+            android:layout_height="match_parent"
+            android:layout_width="1dp"
+            android:visibility="gone"
+            />
+
         <LinearLayout
             android:id="@+id/notification_icon_area"
             android:layout_width="0dip"
