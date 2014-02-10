@@ -1071,6 +1071,17 @@ public final class PowerManagerService extends IPowerManager.Stub
         return true;
     }
 
+    private void enableQbCharger(boolean enable) {
+        if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1 &&
+                SystemProperties.getInt("sys.quickboot.poweroff", 0) != 1) {
+            // only handle "charged" event, native charger will handle
+            // "uncharged" event itself
+            if (enable && mIsPowered && !isScreenOn()) {
+                SystemProperties.set("sys.qbcharger.enable", "true");
+            }
+        }
+    }
+
     @Override // Binder call
     public void goToSleep(long eventTime, int reason) {
         if (eventTime > SystemClock.uptimeMillis()) {
@@ -1270,6 +1281,7 @@ public final class PowerManagerService extends IPowerManager.Stub
                         + ", mBatteryLevel=" + mBatteryLevel);
             }
 
+            enableQbCharger(mIsPowered);
             if (wasPowered != mIsPowered || oldPlugType != mPlugType) {
                 mDirty |= DIRTY_IS_POWERED;
 
