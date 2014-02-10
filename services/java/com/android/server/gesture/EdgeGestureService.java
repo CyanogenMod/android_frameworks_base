@@ -299,6 +299,24 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
         }
     }
 
+    // called through Binder
+    public void setImeIsActive(boolean enabled) {
+        synchronized (mLock) {
+            if (mInputFilter != null) {
+                mInputFilter.setImeIsActive(enabled);
+            }
+        }
+    }
+
+    // called through Binder
+    public void setOverwriteImeIsActive(boolean enabled) {
+        synchronized (mLock) {
+            if (mInputFilter != null) {
+                mInputFilter.setOverwriteImeIsActive(enabled);
+            }
+        }
+    }
+
     private EdgeGestureActivationListenerRecord findListenerRecordLocked(IBinder listener) {
         for (EdgeGestureActivationListenerRecord record : mEdgeGestureActivationListener) {
             if (record.listener.asBinder().equals(listener)) {

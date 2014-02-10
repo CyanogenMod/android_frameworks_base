@@ -202,4 +202,45 @@ public class EdgeGestureManager {
         }
     }
 
+    /**
+     * Reduce left and right detection height if IME keyboard is active.
+     *
+     * @param enabled enables or disables the IME state.
+     * @hide
+     */
+    public void setImeIsActive(boolean enabled) {
+        if (DEBUG) {
+            Slog.d(TAG, "Set IME state to reduce left and right trigger height: "
+                    + enabled);
+        }
+        try {
+            if (mPs != null) {
+                mPs.setImeIsActive(enabled);
+            }
+        } catch (RemoteException e) {
+            Slog.e(TAG, "Failed to set IME state to reduce left and right trigger height: "
+                    + e.getMessage());
+        }
+    }
+
+    /**
+     * If setImeIsActive(boolean enabled) is set
+     * temporaly overwrite it for overlaying views like
+     * notification drawer or global menu.
+     *
+     * @param enabled enables or disables the override IME state.
+     * @hide
+     */
+    public void setOverwriteImeIsActive(boolean enabled) {
+        if (DEBUG) {
+            Slog.d(TAG, "Set overwrite IME state: " + enabled);
+        }
+        try {
+            if (mPs != null) {
+                mPs.setOverwriteImeIsActive(enabled);
+            }
+        } catch (RemoteException e) {
+            Slog.e(TAG, "Failed to set overwrite IME state: " + e.getMessage());
+        }
+    }
 }

@@ -17,4 +17,15 @@ interface IEdgeGestureService {
      */
     void updateEdgeGestureActivationListener(in IBinder listener, int positionFlags);
 
+    /**
+     * Reduce left and right detection height if IME keyboard is active.
+     */
+    void setImeIsActive(in boolean enabled);
+
+    /**
+     * If setImeIsActive(boolean enabled) is set
+     * temporaly overwrite it for overlaying views like
+     * notification drawer or global menu.
+     */
+    void setOverwriteImeIsActive(in boolean enabled);
 }
