@@ -159,9 +159,9 @@ public class NotificationPanelView extends PanelView {
                         mGestureStartY > getHeight() - mHandleBarHeight - getPaddingBottom();
                     mOkToFlip = getExpandedHeight() == 0;
                     int quickPulldownMode = Settings.System.getInt(getContext().getContentResolver(),
-                            Settings.System.QS_QUICK_PULLDOWN, 1);
+                            Settings.System.QS_QUICK_PULLDOWN, 0);
                     int smartPulldownMode = Settings.System.getInt(getContext().getContentResolver(),
-                            Settings.System.QS_SMART_PULLDOWN, 2);
+                            Settings.System.QS_SMART_PULLDOWN, 0);
                     if (smartPulldownMode == 1 && !mStatusBar.hasClearableNotifications()) {
                         flip = true;
                     } else if (smartPulldownMode == 2 && !mStatusBar.hasVisibleNotifications()) {
