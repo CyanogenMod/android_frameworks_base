@@ -522,12 +522,18 @@ final class UiModeManagerService extends IUiModeManager.Stub
     private void sendConfigurationLocked() {
         if (mSetUiMode != mConfiguration.uiMode
                 || mSetUiThemeMode != mConfiguration.uiThemeMode) {
+            if (mSetUiThemeMode != mConfiguration.uiThemeMode) {
+                mSetUiThemeMode = mConfiguration.uiThemeMode;
+                Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.UI_THEME_MODE, mSetUiThemeMode,
+                        UserHandle.USER_CURRENT);
+                try {
+                    ActivityManagerNative.getDefault().closeSystemDialogs(null);
+                } catch (RemoteException e) {
+                    Slog.w(TAG, "Failure communicating with activity manager", e);
+                }
+            }
             mSetUiMode = mConfiguration.uiMode;
-
-            mSetUiThemeMode = mConfiguration.uiThemeMode;
-            Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.UI_THEME_MODE, mSetUiThemeMode,
-                    UserHandle.USER_CURRENT);
 
             try {
                 ActivityManagerNative.getDefault().updateConfiguration(mConfiguration);
