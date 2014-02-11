@@ -510,7 +510,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USE_WEATHER), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_CONTROLS), false, this,
+                    Settings.System.SPIE_CONTROLS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this,
@@ -604,7 +604,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mNotificationShortcutsLayout.updateShortcuts();
                 }
             } else if (uri.equals(Settings.System.getUriFor(
-                Settings.System.PIE_CONTROLS))) {
+                Settings.System.SPIE_CONTROLS))) {
                 attachPieContainer(isPieEnabled());
             } else if (uri.equals(Settings.System.getUriFor(
                 Settings.System.EXPANDED_DESKTOP_STATE))) {
@@ -660,7 +660,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private boolean isPieEnabled() {
         return Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.PIE_CONTROLS, 0,
+            Settings.System.SPIE_CONTROLS, 0,
             UserHandle.USER_CURRENT) == 1;
     }
 
@@ -788,7 +788,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         Resources res = context.getResources();
 
-	// status bar brightness control
+	    // status bar brightness control
         mScreenWidth = (float) context.getResources().getDisplayMetrics().widthPixels;
         mMinBrightness = context.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDim);
@@ -879,6 +879,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             });
         }
 
+         // Setup pie container if enabled
+        attachPieContainer(isPieEnabled());
+
         if (mRecreating) {
             removeSidebarView();
         } else {
@@ -889,9 +892,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         addSidebarView();
-
-         // Setup pie container if enabled
-        attachPieContainer(isPieEnabled());
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;

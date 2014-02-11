@@ -139,7 +139,7 @@ public class SlimActions {
                 }
                 Settings.System.putIntForUser(
                         context.getContentResolver(),
-                        Settings.System.PIE_CONTROLS,
+                        Settings.System.SPIE_CONTROLS,
                         pieState ? 0 : 1, UserHandle.USER_CURRENT);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_NAVBAR)) {
@@ -342,7 +342,7 @@ public class SlimActions {
 
     public static boolean isPieEnabled(Context context) {
         return Settings.System.getIntForUser(context.getContentResolver(),
-                Settings.System.PIE_CONTROLS,
+                Settings.System.SPIE_CONTROLS,
                 0, UserHandle.USER_CURRENT) == 1;
     }
 

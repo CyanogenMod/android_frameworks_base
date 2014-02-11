@@ -4533,13 +4533,13 @@ public final class Settings {
          * Whether pie controls are enabled
          * @hide
          */
-        public static final String PIE_CONTROLS = "pie_controls";
+        public static final String SPIE_CONTROLS = "spie_controls";
 
         /**
          * Whether dynamic menu button is shown or not or dynamic (default)
          * @hide
          */
-        public static final String PIE_MENU = "pie_menu";
+        public static final String SPIE_MENU = "spie_menu";
 
         /**
          * Whether right edge PIE is mirrored or not
@@ -4574,20 +4574,20 @@ public final class Settings {
          * Default: LEFT
          * @hide
          */
-        public static final String PIE_GRAVITY = "pie_gravity";
+        public static final String SPIE_GRAVITY = "spie_gravity";
 
         /**
          * Relative pie size (fraction)
          * Default: 1.0f
          * @hide
          */
-        public static final String PIE_SIZE = "pie_size";
+        public static final String SPIE_SIZE = "spie_size";
 
         /**
          * Pie button color
          * @hide
          */
-        public static final String PIE_BUTTON_COLOR = "pie_button_color";
+        public static final String SPIE_BUTTON_COLOR = "spie_button_color";
 
         /**
          * Pie button press color

@@ -1219,7 +1219,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_CONTROLS), false, this,
+                    Settings.System.SPIE_CONTROLS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this,
@@ -1234,7 +1234,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
             if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.PIE_CONTROLS))) {
+                    Settings.System.SPIE_CONTROLS))) {
                 onPieModeChanged();
             } else if (uri.equals(Settings.System.getUriFor(
                 Settings.System.EXPANDED_DESKTOP_STATE))) {
@@ -1334,7 +1334,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private void onPieModeChanged() {
         boolean pieModeOn = Settings.System.getIntForUser(
                 mContext.getContentResolver(),
-                Settings.System.PIE_CONTROLS,
+                Settings.System.SPIE_CONTROLS,
                 0, UserHandle.USER_CURRENT) == 1;
         mPieState = pieModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
         if (mPieModeOn != null) {

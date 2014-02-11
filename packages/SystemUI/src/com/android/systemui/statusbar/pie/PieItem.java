@@ -120,7 +120,7 @@ public class PieItem extends PieView.PieDrawable {
                 UserHandle.USER_CURRENT);
 
         int backgroundPaintColor = Settings.System.getIntForUser(context.getContentResolver(),
-                Settings.System.PIE_BUTTON_COLOR, -2,
+                Settings.System.SPIE_BUTTON_COLOR, -2,
                 UserHandle.USER_CURRENT);
         if (backgroundPaintColor == -2) {
             backgroundPaintColor = res.getColor(R.color.pie_background_color);
@@ -159,7 +159,7 @@ public class PieItem extends PieView.PieDrawable {
         mOutlinePaint.setAlpha((int) ((1-backgroundAlpha) * 255));
         mOutlinePaint.setAntiAlias(true);
         mOutlinePaint.setStyle(Style.STROKE);
-        mOutlinePaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.pie_outline));
+        mOutlinePaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.spie_outline));
 
         setColor(res.getColor(R.color.pie_foreground_color));
     }

@@ -337,7 +337,7 @@ public class PieView extends View implements View.OnTouchListener {
         }
         mSnapPaint.setColor(snapPaintColor);
         mSnapPaint.setStyle(Style.STROKE);
-        mSnapPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.pie_snap_outline));
+        mSnapPaint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.spie_snap_outline));
         mSnapPaint.setAntiAlias(true);
         mSnapActivePaint.setColor(snapPaintColor);
 

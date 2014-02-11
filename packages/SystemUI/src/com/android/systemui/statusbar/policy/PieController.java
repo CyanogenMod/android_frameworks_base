@@ -184,16 +184,16 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_GRAVITY), false, this,
+                    Settings.System.SPIE_GRAVITY), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_BUTTONS_CONFIG), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_SIZE), false, this,
+                    Settings.System.SPIE_SIZE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_BUTTON_COLOR), false, this,
+                    Settings.System.SPIE_BUTTON_COLOR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_BUTTON_PRESSED_COLOR), false, this,
@@ -220,7 +220,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
                     Settings.System.PIE_BUTTONS_CONFIG_SECOND_LAYER), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_MENU), false, this,
+                    Settings.System.SPIE_MENU), false, this,
                     UserHandle.USER_ALL);
         }
 
@@ -406,7 +406,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         ContentResolver resolver = mContext.getContentResolver();
 
         mPieTriggerSlots = Settings.System.getIntForUser(resolver,
-                Settings.System.PIE_GRAVITY, EdgeGesturePosition.LEFT.FLAG,
+                Settings.System.SPIE_GRAVITY, EdgeGesturePosition.LEFT.FLAG,
                 UserHandle.USER_CURRENT);
 
         int sensitivity = mContext.getResources().getInteger(R.integer.pie_gesture_sensivity);
@@ -423,7 +423,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
     private void setupNavigationItems() {
         ContentResolver resolver = mContext.getContentResolver();
         // Get minimum allowed image size for layout
-        int minimumImageSize = (int) mContext.getResources().getDimension(R.dimen.pie_item_size);
+        int minimumImageSize = (int) mContext.getResources().getDimension(R.dimen.spie_item_size);
 
         mNavigationSlice.clear();
 
@@ -459,7 +459,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         }
 
         mShowMenuVisibility = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_MENU, MENU_VISIBILITY_SYSTEM,
+                Settings.System.SPIE_MENU, MENU_VISIBILITY_SYSTEM,
                 UserHandle.USER_CURRENT);
 
         setNavigationIconHints(mNavigationIconHints, true);
@@ -800,13 +800,13 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         }
 
         int triggerSlots = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_GRAVITY, EdgeGesturePosition.LEFT.FLAG,
+                Settings.System.SPIE_GRAVITY, EdgeGesturePosition.LEFT.FLAG,
                 UserHandle.USER_CURRENT);
 
         triggerSlots = triggerSlots & ~mPosition.FLAG | position.FLAG;
 
         Settings.System.putIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_GRAVITY, triggerSlots,
+                Settings.System.SPIE_GRAVITY, triggerSlots,
                 UserHandle.USER_CURRENT);
     }
 

@@ -244,14 +244,14 @@
     <dimen name="pie_padding">4dp</dimen>
 
     <!-- Radius of the snap points a the border of the screen -->
-    <dimen name="pie_snap_radius">45dp</dimen>
+    <dimen name="spie_snap_radius">45dp</dimen>
 
     <!-- Stroke width of the snap points -->
-    <dimen name="pie_snap_outline">4dp</dimen>
+    <dimen name="spie_snap_outline">4dp</dimen>
 
-    <dimen name="pie_outline">2dp</dimen>
+    <dimen name="spie_outline">2dp</dimen>
     <dimen name="pie_textsize">14sp</dimen>
-    <dimen name="pie_item_size">30dp</dimen>
+    <dimen name="spie_item_size">30dp</dimen>
 
     <dimen name="pie_navbar_radius">70dp</dimen>
     <dimen name="pie_navbar_second_layer_radius">160dp</dimen>
