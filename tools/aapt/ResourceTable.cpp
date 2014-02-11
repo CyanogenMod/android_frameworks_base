@@ -1704,6 +1704,7 @@ status_t ResourceTable::addIncludedResources(Bundle* bundle, const sp<AaptAssets
 
     // Retrieve all the packages.
     const size_t N = incl.getBasePackageCount();
+    Vector<uint32_t> usedBasePackageIds;
     for (size_t phase=0; phase<2; phase++) {
         for (size_t i=0; i<N; i++) {
             String16 name(incl.getBasePackageName(i));
@@ -1727,10 +1728,14 @@ status_t ResourceTable::addIncludedResources(Bundle* bundle, const sp<AaptAssets
                     }
                     mHaveAppPackage = true;
                 }
-                if (mNextPackageId > id) {
-                    fprintf(stderr, "Included base package ID %d already in use!\n", id);
-                    return UNKNOWN_ERROR;
+                // Make sure the package ID is not already in use by another base package.
+                for (size_t j = usedBasePackageIds.size(); j > 0; j--) {
+                    if (id == usedBasePackageIds.itemAt(j-1)) {
+                        fprintf(stderr, "Included base package ID %d already in use!\n", id);
+                        return UNKNOWN_ERROR;
+                    }
                 }
+                usedBasePackageIds.add(id);
             }
             if (id != 0) {
                 NOISY(printf("Including package %s with ID=%d\n",
