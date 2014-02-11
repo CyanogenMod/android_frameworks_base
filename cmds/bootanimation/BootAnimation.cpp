@@ -300,10 +300,10 @@ status_t BootAnimation::readyToRun() {
     FILE* fd;
     if (encryptedAnimation && access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0)
         fd = fopen(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, "r");
-    else if (access(USER_BOOTANIMATION_FILE, R_OK) == 0)
-        fd = fopen(USER_BOOTANIMATION_FILE, "r");
     else if (access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0)
         fd = fopen(SYSTEM_BOOTANIMATION_FILE, "r");
+    else if (access(USER_BOOTANIMATION_FILE, R_OK) == 0)
+        fd = fopen(USER_BOOTANIMATION_FILE, "r");
     else
         return NO_ERROR;
 
