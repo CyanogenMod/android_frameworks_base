@@ -298,14 +298,26 @@ status_t BootAnimation::readyToRun() {
     // Preload the bootanimation zip on memory, so we don't stutter
     // when showing the animation
     FILE* fd;
-    if (encryptedAnimation && access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0)
+
+    int flag = 0;
+    while (flag != 1) {
+    if (encryptedAnimation && access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0) {
         fd = fopen(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, "r");
-    else if (access(USER_BOOTANIMATION_FILE, R_OK) == 0)
+        flag = 1;
+    }
+    else if (access(USER_BOOTANIMATION_FILE, R_OK) == 0) {
         fd = fopen(USER_BOOTANIMATION_FILE, "r");
-    else if (access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0)
+        flag = 1;
+    }
+    else if (access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0) {
         fd = fopen(SYSTEM_BOOTANIMATION_FILE, "r");
-    else
+        flag = 1;
+    }
+    else {
+        flag = 1;
         return NO_ERROR;
+    }
+    }
 
     if (fd != NULL) {
         // We could use readahead..
