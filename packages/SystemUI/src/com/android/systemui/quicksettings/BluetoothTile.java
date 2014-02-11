@@ -1,7 +1,10 @@
 package com.android.systemui.quicksettings;
 
+import java.util.Set;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothAdapter.BluetoothStateChangeCallback;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -89,10 +92,19 @@ public class BluetoothTile extends QuickSettingsTile implements BluetoothStateCh
         if(enabled){
             if(connected){
                 mDrawable = R.drawable.ic_qs_bluetooth_on;
+                Set<BluetoothDevice> btDevices = mBluetoothAdapter.getBondedDevices();
+                int numDevices = btDevices.size();
+		BluetoothDevice[] btDevicesArr = new BluetoothDevice[numDevices];
+		btDevicesArr = btDevices.toArray(btDevicesArr);
+                if (numDevices == 1) {
+		    mLabel = btDevicesArr[0].getName();
+                } else {
+		    mLabel = mContext.getString(R.string.quick_settings_bluetooth_multi_label, numDevices);
+                }
             }else{
                 mDrawable = R.drawable.ic_qs_bluetooth_not_connected;
+		mLabel = mContext.getString(R.string.quick_settings_bluetooth_label);
             }
-            mLabel = mContext.getString(R.string.quick_settings_bluetooth_label);
         }else{
             mDrawable = R.drawable.ic_qs_bluetooth_off;
             mLabel = mContext.getString(R.string.quick_settings_bluetooth_off_label);
