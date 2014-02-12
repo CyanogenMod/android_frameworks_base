@@ -117,6 +117,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
     private boolean mVoiceCapable;
     private boolean mVolumeLinkNotification;
     private int mCurrentOverlayStyle = -1;
+    private int mCustomTimeoutDelay = TIMEOUT_DELAY;
 
     // True if we want to play tones on the system stream when the master stream is specified.
     private final boolean mPlayMasterStreamTones;
@@ -233,6 +234,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             final int overlayStyle = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.MODE_VOLUME_OVERLAY, VOLUME_OVERLAY_EXPANDABLE);
             changeOverlayStyle(overlayStyle);
+            mCustomTimeoutDelay = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.VOLUME_PANEL_TIMEOUT, TIMEOUT_DELAY);
         }
     };
 
@@ -353,6 +356,9 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mSettingsObserver);
         context.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.MODE_VOLUME_OVERLAY), false,
+                mSettingsObserver);
+        context.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.VOLUME_PANEL_TIMEOUT), false,
                 mSettingsObserver);
 
         // This is new with 4.2 it seems
@@ -1110,7 +1116,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
     private void resetTimeout() {
         removeMessages(MSG_TIMEOUT);
-        sendMessageDelayed(obtainMessage(MSG_TIMEOUT), TIMEOUT_DELAY);
+        sendMessageDelayed(obtainMessage(MSG_TIMEOUT), mCustomTimeoutDelay);
     }
 
     private void forceTimeout() {
