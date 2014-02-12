@@ -51,7 +51,7 @@ public class SignalClusterView
     private int mAirplaneIconId = 0;
     private boolean mEtherVisible = false;
     private int mEtherIconId = 0;
-    private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
+    private String mWifiDescription, mMobileDescription, mMobileTypeDescription, mEtherDescription;
 
     ViewGroup mWifiGroup, mMobileGroup;
     ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane, mEther;
