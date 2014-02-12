@@ -123,8 +123,12 @@ public final class LockscreenTargetUtils {
             return null;
         }
 
-        return new BitmapDrawable(context.getResources(),
-                ImageHelper.getRoundedCornerBitmap(BitmapFactory.decodeFile(fileName)));
+        if (fileName.startsWith("lockscreen_")) {
+            return new BitmapDrawable(context.getResources(),
+                    ImageHelper.getRoundedCornerBitmap(BitmapFactory.decodeFile(fileName)));
+        } else {
+            return new BitmapDrawable(context.getResources(), BitmapFactory.decodeFile(fileName));
+        }
     }
 
     public static int getInsetForIconType(Context context, String type) {
