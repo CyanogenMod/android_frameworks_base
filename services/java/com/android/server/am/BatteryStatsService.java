@@ -36,6 +36,7 @@ import android.util.Slog;
 
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.os.BatteryStatsImpl;
+import com.android.internal.os.DockBatteryStatsImpl;
 import com.android.internal.os.PowerProfile;
 
 import java.io.FileDescriptor;
@@ -59,7 +60,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
 
     BatteryStatsService(String filename, String dockfilename) {
         mStats = new BatteryStatsImpl(filename);
-        mDockStats = new BatteryStatsImpl(dockfilename);
+        mDockStats = new DockBatteryStatsImpl(dockfilename);
     }
     
     public void publish(Context context) {

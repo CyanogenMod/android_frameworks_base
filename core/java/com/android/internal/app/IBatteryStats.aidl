@@ -23,10 +23,6 @@ import android.telephony.SignalStrength;
 
 interface IBatteryStats {
     byte[] getStatistics();
-    /** @hide **/
-    byte[] getDockStatistics();
-    /** @hide **/
-    void resetStatistics();
     void noteStartWakelock(int uid, int pid, String name, int type);
     void noteStopWakelock(int uid, int pid, String name, int type);
     
@@ -79,7 +75,14 @@ interface IBatteryStats {
     void noteNetworkInterfaceType(String iface, int type);
     void noteNetworkStatsEnabled();
     void setBatteryState(int status, int health, int plugType, int level, int temp, int volt);
-    void setDockBatteryState(int status, int health, int plugType, int level, int temp, int volt);
     long getAwakeTimeBattery();
     long getAwakeTimePlugged();
+
+    // CM Implementation
+    /** @hide **/
+    byte[] getDockStatistics();
+    /** @hide **/
+    void resetStatistics();
+    /** @hide **/
+    void setDockBatteryState(int status, int health, int plugType, int level, int temp, int volt);
 }
