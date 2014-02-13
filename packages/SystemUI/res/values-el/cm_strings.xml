@@ -19,6 +19,8 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Ήχος <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="dessert_case_settings_cm_title">Εμφάνιση μασκότ του CM</string>
+    <string name="dessert_case_settings_cm_summary">Εμφάνιση των μασκότ του CM μαζί με τα επιδόρπια του Android μέσα στο dream</string>
     <string name="quick_settings_profile_label">Προφίλ</string>
     <string name="powerwidget_screen_timeout_toast">Λήξη χρον. ορίου οθόνης: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
@@ -77,5 +79,6 @@
     <string name="accessibility_dock_battery_level">Μπαταρία βάσης σύνδεσης <xliff:g id="number">%d</xliff:g> τοις εκατό.</string>
     <string name="screenshot_delete_action">Διαγραφή</string>
     <string name="screenshot_delete_confirmation">Το στιγμιότυπο οθόνης διαγράφηκε.</string>
+    <string name="accessibility_desc_add_quick_settings">Προσθήκη Γρήγορων ρυθμίσεων.</string>
     <string name="accessibility_battery_level">Μπαταρία <xliff:g id="NUMBER">%d</xliff:g> τοις εκατό.</string>
 </resources>
