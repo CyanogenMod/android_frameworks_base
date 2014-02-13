@@ -60,7 +60,7 @@
     <include
         layout="@layout/status_bar_recent_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true" />
 
     <include

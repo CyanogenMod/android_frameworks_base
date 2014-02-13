@@ -21,15 +21,17 @@
     android:id="@+id/recents_bottom_bar"
     android:background="@drawable/bg_recents_bottom_bar"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="40dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <ImageView
         android:id="@+id/recents_clear"
         android:clickable="true"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom|left"
-        android:padding="10dp"
+        android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_recents_clear" />
 
