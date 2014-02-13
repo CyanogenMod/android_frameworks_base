@@ -3058,6 +3058,13 @@ public final class Settings {
         public static final String QUICK_SETTINGS_TILES_FLIP = "quick_settings_tiles_flip";
 
         /**
+         * Let Quick Settings Panel Tiles vibrate on click
+         *
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_TILES_VIBRATE = "quick_settings_tiles_vibrate";
+
+        /**
          * Quick Settings Panel Tiles to Use
          *
          * @hide
