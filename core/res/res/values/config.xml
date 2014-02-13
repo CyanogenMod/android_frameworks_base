@@ -820,6 +820,7 @@
     <string-array name="config_locationProviderPackageNames" translatable="false">
         <!-- The standard AOSP fused location provider -->
         <item>com.android.location.fused</item>
+	<item>com.google.android.gms</item>
     </string-array>
 
     <!-- Component name of the service providing geofence API support. -->
