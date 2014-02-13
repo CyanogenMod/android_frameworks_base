@@ -51,9 +51,6 @@ public class ProfileTile extends QuickSettingsTile {
             @Override
             public void onClick(View v) {
                 createProfileDialog();
-                if (isFlipTilesEnabled()) {
-                    flipTile(0);
-                }
             }
         };
         mOnLongClick = new View.OnLongClickListener() {

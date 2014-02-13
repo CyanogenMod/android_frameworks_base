@@ -37,9 +37,6 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
             public void onClick(View v) {
                 toggleState();
                 updateResources();
-                if (isFlipTilesEnabled()) {
-                    flipTile(0);
-                }
             }
         };
 

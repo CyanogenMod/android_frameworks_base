@@ -138,6 +138,7 @@ public class QuickSettingsTile implements OnClickListener {
     }
 
     public void flipTile(int delay, boolean flipRight) {
+        if (!isFlipTilesEnabled()) { return; }
         final AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(
                 mContext,
                 (flipRight ? R.anim.flip_right : R.anim.flip_left));
@@ -201,5 +202,6 @@ public class QuickSettingsTile implements OnClickListener {
         }
 
         vibrateTile(30);
+        flipTile(0);
     }
 }
