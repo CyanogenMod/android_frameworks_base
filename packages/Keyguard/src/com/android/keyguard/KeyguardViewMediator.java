@@ -628,7 +628,7 @@ public class KeyguardViewMediator {
                 resetStateLocked(null);
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT
                    || (why == WindowManagerPolicy.OFF_BECAUSE_OF_USER && !lockImmediately)) {
-                doKeyguardLaterLocked();
+                doKeyguardLaterLocked(why);
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR) {
                 // Do not enable the keyguard if the prox sensor forced the screen off.
             } else {
@@ -638,7 +638,7 @@ public class KeyguardViewMediator {
         KeyguardUpdateMonitor.getInstance(mContext).dispatchScreenTurndOff(why);
     }
 
-    private void doKeyguardLaterLocked() {
+    private void doKeyguardLaterLocked(int why) {
         // if the screen turned off because of timeout or the user hit the power button
         // and we don't need to lock immediately, set an alarm
         // to enable it a little bit later (i.e, give the user a chance
@@ -689,14 +689,17 @@ public class KeyguardViewMediator {
             timeout = separateSlideLockTimeoutEnabled ? slideLockTimeoutDelay : lockAfterTimeout;
         }
 
+        boolean noSound = why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT;
         if (timeout <= 0) {
             // Lock now
+            mSuppressNextLockSound = noSound;
             doKeyguardLocked(null);
         } else {
             // Lock in the future
             long when = SystemClock.elapsedRealtime() + timeout;
             Intent intent = new Intent(DELAYED_KEYGUARD_ACTION);
             intent.putExtra("seq", mDelayedShowingSequence);
+            intent.putExtra("sound", !noSound);
             PendingIntent sender = PendingIntent.getBroadcast(mContext,
                     0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, when, sender);
@@ -742,7 +745,7 @@ public class KeyguardViewMediator {
     public void onDreamingStarted() {
         synchronized (this) {
             if (mScreenOn && mLockPatternUtils.isSecure()) {
-                doKeyguardLaterLocked();
+                doKeyguardLaterLocked(WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT);
             }
         }
     }
@@ -1077,6 +1080,7 @@ public class KeyguardViewMediator {
                         + sequence + ", mDelayedShowingSequence = " + mDelayedShowingSequence);
                 synchronized (KeyguardViewMediator.this) {
                     if (mDelayedShowingSequence == sequence) {
+                        mSuppressNextLockSound = !intent.getBooleanExtra("sound", true);
                         doKeyguardLocked(null);
                     }
                 }
