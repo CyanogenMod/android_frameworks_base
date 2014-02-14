@@ -200,6 +200,9 @@ public class PolicyHelper {
         } else if (clickAction.equals(PolicyConstants.ACTION_PIE)) {
             return context.getResources().getDrawable(
                 com.android.internal.R.drawable.ic_lock_pie);
+        } else if (clickAction.equals(PolicyConstants.ACTION_PAPIE)) {
+            return context.getResources().getDrawable(
+                com.android.internal.R.drawable.ic_lock_pa_pie);
         } else if (clickAction.equals(PolicyConstants.ACTION_NAVBAR)) {
             return context.getResources().getDrawable(
                 com.android.internal.R.drawable.ic_lock_navbar);

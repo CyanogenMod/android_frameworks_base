@@ -25,6 +25,12 @@
     <!-- status message in phone options dialog for when pie is off -->
     <string name="global_actions_pie_mode_off_status">SlimPie is OFF</string>
 
+    <!-- status message in phone options dialog for when pie is on -->
+    <string name="global_actions_papie_mode_on_status">PA Pie is ON</string>
+
+    <!-- status message in phone options dialog for when pie is off -->
+    <string name="global_actions_papie_mode_off_status">PA Pie is OFF</string>
+
     <!-- Error message if user want to try to disable all navigation options -->
     <string name="disable_pie_navigation_error">You cannot disable pie controls. No other navigation is enabled. Enable first the navigation bar to turn off pie controls.</string>
 

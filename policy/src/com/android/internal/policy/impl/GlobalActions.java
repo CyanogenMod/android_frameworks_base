@@ -118,6 +118,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction mAirplaneModeOn;
     private ToggleAction mExpandDesktopModeOn;
     private ToggleAction mPieModeOn;
+    private ToggleAction mPAPieModeOn;
     private ToggleAction mNavBarModeOn;
 
     private MyAdapter mAdapter;
@@ -127,6 +128,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction.State mAirplaneState = ToggleAction.State.Off;
     private ToggleAction.State mExpandDesktopState = ToggleAction.State.Off;
     private ToggleAction.State mPieState = ToggleAction.State.Off;
+    private ToggleAction.State mPAPieState = ToggleAction.State.Off;
     private ToggleAction.State mNavBarState = ToggleAction.State.Off;
     private boolean mIsWaitingForEcmExit = false;
     private boolean mHasTelephony;
@@ -432,6 +434,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             config.getClickAction(), config.getIcon(), true),
                             config.getClickActionDescription());
                 mItems.add(mPieModeOn);
+            // PA Pie controls
+            } else if (config.getClickAction().equals(PolicyConstants.ACTION_PAPIE)) {
+                constructPAPieToggle(PolicyHelper.getPowerMenuIconImage(mContext,
+                            config.getClickAction(), config.getIcon(), true),
+                            config.getClickActionDescription());
+                mItems.add(mPAPieModeOn);
             // Navigation bar
             } else if (config.getClickAction().equals(PolicyConstants.ACTION_NAVBAR)) {
                 constructNavBarToggle(PolicyHelper.getPowerMenuIconImage(mContext,
@@ -588,6 +596,30 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         onPieModeChanged();
     }
 
+    private void constructPAPieToggle(Drawable icon, String description) {
+        mPAPieModeOn = new ToggleAction(
+                icon,
+                icon,
+                description,
+                R.string.global_actions_papie_mode_on_status,
+                R.string.global_actions_papie_mode_off_status) {
+
+            void onToggle(boolean on) {
+                SlimActions.processAction(
+                    mContext, PolicyConstants.ACTION_PAPIE, false);
+            }
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return false;
+            }
+        };
+        onPAPieModeChanged();
+    }
+
     private void constructNavBarToggle(Drawable icon, String description) {
         mNavBarModeOn = new ToggleAction(
                 icon,
@@ -710,6 +742,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
         if (mPieModeOn != null) {
             mPieModeOn.updateState(mPieState);
+        }
+        if (mPAPieModeOn != null) {
+            mPAPieModeOn.updateState(mPAPieState);
         }
         if (mNavBarModeOn != null) {
             mNavBarModeOn.updateState(mNavBarState);
@@ -1244,6 +1279,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     Settings.System.SPIE_CONTROLS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1258,6 +1296,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SPIE_CONTROLS))) {
                 onPieModeChanged();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS))) {
+                onPAPieModeChanged();
             } else if (uri.equals(Settings.System.getUriFor(
                 Settings.System.EXPANDED_DESKTOP_STATE))) {
                 onExpandDesktopModeChanged();
@@ -1361,6 +1402,17 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mPieState = pieModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
         if (mPieModeOn != null) {
             mPieModeOn.updateState(mPieState);
+        }
+    }
+
+    private void onPAPieModeChanged() {
+        boolean papieModeOn = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS,
+                0, UserHandle.USER_CURRENT) == 1;
+        mPAPieState = papieModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
+        if (mPAPieModeOn != null) {
+            mPAPieModeOn.updateState(mPieState);
         }
     }
 

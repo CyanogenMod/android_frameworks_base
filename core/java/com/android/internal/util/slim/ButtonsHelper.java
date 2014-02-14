@@ -369,6 +369,9 @@ public class ButtonsHelper {
         } else if (clickAction.equals(ButtonsConstants.ACTION_PIE)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_pie", null, null);
+        } else if (clickAction.equals(ButtonsConstants.ACTION_PAPIE)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_pa_pie", null, null);
         } else if (clickAction.equals(ButtonsConstants.ACTION_NAVBAR)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_navbar", null, null);

@@ -57,7 +57,10 @@
   <!-- Pie controls -->
   <java-symbol type="string" name="global_actions_pie_mode_on_status" />
   <java-symbol type="string" name="global_actions_pie_mode_off_status" />
+  <java-symbol type="string" name="global_actions_papie_mode_on_status" />
+  <java-symbol type="string" name="global_actions_papie_mode_off_status" />
   <java-symbol type="drawable" name="ic_lock_pie" />
+  <java-symbol type="drawable" name="ic_lock_pa_pie" />
   <java-symbol type="string" name="disable_pie_navigation_error" />
 
   <!-- Navigation bar -->
