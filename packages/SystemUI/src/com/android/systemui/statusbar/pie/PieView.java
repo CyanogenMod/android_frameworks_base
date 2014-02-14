@@ -309,7 +309,7 @@ public class PieView extends View implements View.OnTouchListener {
 
     private void getDimensions() {
         mPieScale = Settings.System.getFloatForUser(mContext.getContentResolver(),
-                Settings.System.PIE_SIZE, PIE_CONTROL_SIZE_DEFAULT,
+                Settings.System.SPIE_SIZE, PIE_CONTROL_SIZE_DEFAULT,
                 UserHandle.USER_CURRENT);
         mMirrorRightPie = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_MIRROR_RIGHT, 1,

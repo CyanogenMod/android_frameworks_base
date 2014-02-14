@@ -443,7 +443,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         // Check the size set from the user and set resize values if needed
         float diff = PieView.PIE_ICON_START_SIZE_FACTOR -
                 Settings.System.getFloatForUser(resolver,
-                        Settings.System.PIE_SIZE, PieView.PIE_CONTROL_SIZE_DEFAULT,
+                        Settings.System.SPIE_SIZE, PieView.PIE_CONTROL_SIZE_DEFAULT,
                         UserHandle.USER_CURRENT);
         if (diff > 0.0f) {
             mIconResize = true;
