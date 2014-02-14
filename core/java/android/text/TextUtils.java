@@ -1749,19 +1749,21 @@ public class TextUtils {
      * Be careful: this code will need to be updated when vertical scripts will be supported
      */
     public static int getLayoutDirectionFromLocale(Locale locale) {
+        boolean mirror = SystemProperties.getBoolean(Settings.Global.DEVELOPMENT_FORCE_RTL, false);
         if (locale != null && !locale.equals(Locale.ROOT)) {
             final String scriptSubtag = ICU.addLikelySubtags(locale).getScript();
             if (scriptSubtag == null) return getLayoutDirectionFromFirstChar(locale);
 
             if (scriptSubtag.equalsIgnoreCase(ARAB_SCRIPT_SUBTAG) ||
                     scriptSubtag.equalsIgnoreCase(HEBR_SCRIPT_SUBTAG)) {
-                return View.LAYOUT_DIRECTION_RTL;
+                // If forcing into RTL layout mode and language is RTL
+                // return LTR as default, else RTL
+                return mirror ? View.LAYOUT_DIRECTION_LTR : View.LAYOUT_DIRECTION_RTL;
             }
         }
-        // If forcing into RTL layout mode, return RTL as default, else LTR
-        return SystemProperties.getBoolean(Settings.Global.DEVELOPMENT_FORCE_RTL, false)
-                ? View.LAYOUT_DIRECTION_RTL
-                : View.LAYOUT_DIRECTION_LTR;
+        // If forcing into RTL layout mode and language is LTR
+        // return RTL as default, else LTR
+        return mirror ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR;
     }
 
     /**
