@@ -120,12 +120,7 @@ public class RecentsActivity extends Activity {
 
     @Override
     public void onStart() {
-        // Hide wallpaper if it's not a static image
-        if (forceOpaqueBackground(this)) {
-            updateWallpaperVisibility(false);
-        } else {
-            updateWallpaperVisibility(true);
-        }
+        updateWallpaperVisibility(true);
         mShowing = true;
         if (mRecentsPanel != null) {
             // Call and refresh the recent tasks list in case we didn't preload tasks
