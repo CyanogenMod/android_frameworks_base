@@ -96,8 +96,6 @@
     <string name="quick_settings_quiethours_off">Quiet hours off</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE off</string>
-    <string name="quick_settings_pa_pie">PA Pie</string>
-    <string name="quick_settings_pa_pie_off">PA Pie off</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_expanded_desktop">Expanded</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
