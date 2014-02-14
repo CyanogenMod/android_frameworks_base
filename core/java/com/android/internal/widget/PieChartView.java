@@ -83,6 +83,11 @@ public class PieChartView extends View {
 
         setWillNotDraw(false);
     }
+    
+    public void setOutlineColor(int outlineColor) {
+    	mPaintOutline.setColor(outlineColor);
+    	invalidate();
+    }
 
     private static Paint buildFillPaint(int color, Resources res) {
         final Paint paint = new Paint();
