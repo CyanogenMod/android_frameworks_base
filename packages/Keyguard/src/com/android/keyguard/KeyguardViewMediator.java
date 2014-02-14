@@ -628,7 +628,7 @@ public class KeyguardViewMediator {
                 resetStateLocked(null);
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT
                    || (why == WindowManagerPolicy.OFF_BECAUSE_OF_USER && !lockImmediately)) {
-                doKeyguardLaterLocked();
+                doKeyguardLaterLocked(why);
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR) {
                 // Do not enable the keyguard if the prox sensor forced the screen off.
             } else {
@@ -638,7 +638,7 @@ public class KeyguardViewMediator {
         KeyguardUpdateMonitor.getInstance(mContext).dispatchScreenTurndOff(why);
     }
 
-    private void doKeyguardLaterLocked() {
+    private void doKeyguardLaterLocked(int why) {
         // if the screen turned off because of timeout or the user hit the power button
         // and we don't need to lock immediately, set an alarm
         // to enable it a little bit later (i.e, give the user a chance
@@ -688,6 +688,8 @@ public class KeyguardViewMediator {
         } else {
             timeout = separateSlideLockTimeoutEnabled ? slideLockTimeoutDelay : lockAfterTimeout;
         }
+
+        mSuppressNextLockSound = why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT;
 
         if (timeout <= 0) {
             // Lock now
@@ -742,7 +744,7 @@ public class KeyguardViewMediator {
     public void onDreamingStarted() {
         synchronized (this) {
             if (mScreenOn && mLockPatternUtils.isSecure()) {
-                doKeyguardLaterLocked();
+                doKeyguardLaterLocked(WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT);
             }
         }
     }
