@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,10 +19,10 @@ import com.android.systemui.statusbar.policy.LocationController.LocationSettings
 
 
 public class GPSTile extends QuickSettingsTile implements LocationSettingsChangeCallback {
-
     ContentResolver mContentResolver;
     private LocationController mLocationController;
     private boolean mLocationEnabled;
+    private int mCurrentMode;
 
     public GPSTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
@@ -33,7 +34,7 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
         mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLocationController.setLocationEnabled(!mLocationEnabled);
+                changeLocationMode();
             }
         };
 
@@ -44,6 +45,34 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
                 return true;
             }
         };
+    }
+    
+    private void changeLocationMode(){
+        int newMode;
+        
+        switch(mCurrentMode){
+        case Settings.Secure.LOCATION_MODE_OFF:
+            newMode = Settings.Secure.LOCATION_MODE_BATTERY_SAVING;
+            break;
+        case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+            newMode = Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
+            break;
+        case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+            newMode = Settings.Secure.LOCATION_MODE_SENSORS_ONLY;
+            break;
+        case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+            newMode = Settings.Secure.LOCATION_MODE_OFF;
+            break;
+        default:
+            newMode = Settings.Secure.LOCATION_MODE_OFF;
+            break;
+        }
+        
+        Log.d("TAGME", "Changing location mode to "+newMode);
+        
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.LOCATION_MODE, 
+                newMode);
     }
 
     @Override
@@ -59,8 +88,21 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
     }
 
     private synchronized void updateTile() {
-        int textResId = mLocationEnabled ? R.string.quick_settings_location_label
-                : R.string.quick_settings_location_off_label;
+        int textResId;
+        switch(mCurrentMode) {
+        case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+            textResId = R.string.location_mode_sensors_only_title;
+            break;
+        case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+            textResId = R.string.location_mode_battery_saving_title;
+            break;
+        case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+            textResId = R.string.location_mode_high_accuracy_title;
+            break;
+        default:
+            textResId = R.string.quick_settings_location_off_label;
+            break;
+        }
         mLabel = mContext.getText(textResId).toString();
         mDrawable = mLocationEnabled
                 ? R.drawable.ic_qs_location_on : R.drawable.ic_qs_location_off;
@@ -68,7 +110,11 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
 
     @Override
     public void onLocationSettingsChanged(boolean locationEnabled) {
-        mLocationEnabled = locationEnabled;
+        mCurrentMode = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+        Log.d("TAGME", "Location mode changed to " + mCurrentMode);
+        mLocationEnabled = !(mCurrentMode  == Settings.Secure.LOCATION_MODE_OFF
+                || mCurrentMode == Settings.Secure.LOCATION_MODE_BATTERY_SAVING);
         updateResources();
     }
 }
