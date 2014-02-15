@@ -15,6 +15,22 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_data_connection_HP">HSPA+</string>
+<<<<<<< HEAD
+=======
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS выкл</string>
+    <string name="quick_settings_screen_sleep">Потушить экран</string>
+    <string name="quick_settings_ringer_on">Звук вкл</string>
+    <string name="quick_settings_ringer_off">Звук выкл</string>
+    <string name="quick_settings_vibration_on">Вибрация вкл</string>
+    <string name="quick_settings_vibration_off">Вибрация выкл</string>
+    <string name="quick_settings_label_enabled">Вкл</string>
+    <string name="quick_settings_label_disabled">Выкл</string>
+    <string name="quick_settings_ringer_normal">Звук</string>
+    <string name="quick_settings_lockscreen">Экран блокировки</string>
+    <string name="quick_settings_network_type">Режим сети</string>
+    <string name="quick_settings_report_bug">Сообщить ошибку</string>
+>>>>>>> 0fda5b9... frameworks/base: added missing line
     <string name="quick_settings_music_play">Играть</string>
     <string name="quick_settings_music_pause">Пауза</string>
     <string name="quick_settings_music_schedule_title">Таймер сна</string>
