@@ -27,9 +27,21 @@
 
     <!--ScreenShot Trash-->
     <string name="screenshot_notification_delete">Törlés</string>
+    <string name="screenshot_delete_confirmation">Képernyőkép törölve</string>
 
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
+
+    <!-- Dialog Cancel/OK -->
+    <string name="cancel">Mégsem</string>
+    <string name="dlg_ok">Ok</string>
+    <string name="yes">Igen</string>
+    <string name="no">Nem</string>
+
+    <!-- Off/On/Toggle -->
+    <string name="off">Ki</string>
+    <string name="on">Be</string>
+    <string name="toggle">Kapcsoló</string>
 
     <!-- Slim Shortcut Actions -->
     <string name="shortcut_picker">Slim Parancsikonok</string>
@@ -37,9 +49,11 @@
     <string name="shortcut_quiethours">Csendes órák kapcsoló</string>
     <string name="shortcut_rotation">Forgatás zároló kapcsoló</string>
     <string name="shortcut_torch">Zseblámpa kapcsoló</string>
-    <string name="shortcut_reboot">Újraindítás (azonnali)</string>
+    <string name="shortcut_reboot">Újraindítás (azonnal)</string>
     <string name="shortcut_last_app">Utolsó alkalmazás</string>
     <string name="shortcut_screenshot">Képernyőkép</string>
+    <string name="shortcut_volume">Hangerő</string>
+    <string name="shortcut_toggle_title">Művelet végrehajtása</string>
     <string name="shortcut_chamber">Titkok kamrája</string>
     <string name="chamber_disabled">Titkok kamrája zárva</string>
     <string name="chamber_title">Beállítás karakterek bevitele</string>
@@ -49,6 +63,9 @@
     <string name="chamber_chk_message">Ez a beállítás jelölőnégyzet beállítás?</string>
     <string name="chamber_int">Érték bevitel</string>
     <string name="chamber_int_message">Add meg az értékeket amik között változtatod a beállításokat. Értékeket vesszővel válaszd el. Színeket hex-értékben add meg, pl. #FF00aacc vagy alapszínként vörös, zöld és sárga.</string>
+    <string name="chamber_name_title">Parancsikon neve</string>
+    <string name="chamber_name_message">Adj nevet a parancsikonnak.</string>
+    <string name="chamber_name_toast">Alapértelmezett név használata</string>
 
     <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>
@@ -86,6 +103,11 @@
     <string name="quick_settings_expanded_desktop_off">Normál</string>
     <string name="quick_settings_music_play">Lejátszás</string>
     <string name="quick_settings_music_pause">Szünet</string>
+    <string name="quick_settings_music_schedule_title">Elalvás kapcsoló</string>
+    <string name="quick_settings_music_schedule_in_progress">Időzítés folyamatban</string>
+    <string name="quick_settings_music_schedule_start">Időzítés kezdete</string>
+    <string name="quick_settings_music_schedule_cancel">Idözítő törölve</string>
+    <string name="quick_settings_music_schedule_update">Idözítő frissítése</string>
     <string name="quick_settings_reboot_recovery">Recovery</string>
     <string name="quick_settings_reboot">Újraindítás</string>
     <string name="quick_settings_theme_switch_dark">Sötét téma</string>
@@ -95,5 +117,17 @@
     <string name="quick_settings_quick_record_rec">Felvétel...</string>
     <string name="quick_settings_quick_record_save">Mentve</string>
     <string name="quick_settings_quick_record_play">Lejátszás...</string>
+    <string name="quick_settings_custom_toggle">Egyéni</string>
+    <string name="quick_settings_contact_toggle">Kapcsolat</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Töltés (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Feltöltve</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% hátralévő</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Nincs szolgáltatás</string>
+    <string name="pie_phone_status_airplane_mode">Repülőgép mód be</string>
+    <string name="pie_phone_status_emergency_only">Csak vészhívás</string>
 
 </resources>
