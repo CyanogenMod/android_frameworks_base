@@ -505,10 +505,4 @@
          If the text fits on one line (~14 chars), it should start with a
          linebreak to position it correctly.  [CHAR LIMIT=45] -->
     <string name="ssl_ca_cert_warning">Network may\nbe monitored</string>
-
-    <!-- Development shortcut -->
-    <string name="advanced_dev_option_wipe_app">Wipe app data</string>
-    <string name="advanced_dev_option_force_stop">Force stop</string>
-
-    <string name="powerwidget_screen_timeout_toast">Screen timeout set to: %1$d %2$s</string>
 </resources>

@@ -56,12 +56,6 @@
     <string name="navbar_menu_conditional_button">Botão menu (esconder auto.)</string>
     <string name="navbar_menu_always_button">Botão menu (sempre visível)</string>
     <string name="navbar_menu_big_button">Botão menu</string>
-    <string name="pie_battery_status_charging">Carregando (<xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Carregado</string>
-    <string name="pie_phone_status_no_service">Sem serviço</string>
-    <string name="pie_phone_status_airplane_mode">Modo avião ligado</string>
-    <string name="pie_phone_status_emergency_only">Somente chamadas de emergência</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g>%% restando</string>
     <string name="quick_settings_expanded_desktop">Expandida</string>
     <string name="quick_settings_camera_label">Câmera</string>
     <string name="quick_settings_camera_error_connect">Não foi possível conectar à câmera</string>

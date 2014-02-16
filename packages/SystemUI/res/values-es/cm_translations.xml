@@ -21,9 +21,9 @@
   <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
   <string name="dessert_case_settings_cm_title">Mostrar mascotas de CM</string>
   <string name="dessert_case_settings_cm_summary">Mostrar las mascotas de CyanogenMod junto a los postres de Android</string>
-  <string name="quick_settings_profile_label">Perfil</string>
+<!--  <string name="quick_settings_profile_label">Perfil</string>
   <string name="powerwidget_screen_timeout_toast">Tiempo de pantalla establecido a: %1$d %2$s</string>
-  <!--<string name="quick_settings_gps">GPS</string>
+  <string name="quick_settings_gps">GPS</string>
   <string name="quick_settings_gps_off">GPS desactivado</string>
   <string name="quick_settings_screen_sleep">Bloquear</string>
   <string name="quick_settings_ringer_on">Sonido</string>
@@ -67,13 +67,7 @@
   <string name="navbar_empty_button">Sin botón</string>
   <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
   <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
-  <string name="navbar_menu_big_button">Botón Menú</string>
-  <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
-  <string name="pie_battery_status_full">Cargada</string>
-  <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restante</string>
-  <string name="pie_phone_status_no_service">Sin servicio</string>
-  <string name="pie_phone_status_airplane_mode">Modo avión</string>
-  <string name="pie_phone_status_emergency_only">Solo llamadas de emergencia</string>-->
+  <string name="navbar_menu_big_button">Botón Menú</string>-->
   <string name="advanced_dev_option_wipe_app">Borrar datos</string>
   <string name="advanced_dev_option_force_stop">Forzar detención</string>
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g>%%.</string>
