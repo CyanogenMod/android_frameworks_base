@@ -65,12 +65,6 @@
   <string name="navbar_menu_conditional_button">לחצן התפריט (הסתר אוטומטית)</string>
   <string name="navbar_menu_always_button">לחצן התפריט (נראה תמיד)</string>
   <string name="navbar_menu_big_button">לחצן התפריט</string>
-  <string name="pie_battery_status_charging">טוען (<xliff:g id="percent">%d</xliff:g>%%)</string>
-  <string name="pie_battery_status_full">טעון</string>
-  <string name="pie_battery_status_discharging">נשארו <xliff:g id="percent">%d</xliff:g>%%</string>
-  <string name="pie_phone_status_no_service">אין קליטה</string>
-  <string name="pie_phone_status_airplane_mode">מצב טיסה מופעל</string>
-  <string name="pie_phone_status_emergency_only">שיחות חירום בלבד</string>
   <string name="advanced_dev_option_wipe_app">מחק נתוני יישום</string>
   <string name="advanced_dev_option_force_stop">אלץ עצירה</string>
   <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>

@@ -60,10 +60,6 @@
 
     <string name="permlab_changePrivacyGuardState">Включение или выключение защищённого режима</string>
     <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в защищённом режиме. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
-    <string name="permlab_fm_radio_receiver">Управление приёмником FM</string>
-    <string name="permdesc_fm_radio_receiver">Приложение сможет управлять FM-приёмником.</string>
-    <string name="permlab_fm_radio_transmitter">Управление передатчиком FM</string>
-    <string name="permdesc_fm_radio_transmitter">Приложение сможет управлять FM-передатчиком.</string>
     <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
     <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
     <string name="permlab_preventpower">Блокировка кнопки питания</string>

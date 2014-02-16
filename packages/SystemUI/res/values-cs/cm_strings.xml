@@ -60,12 +60,6 @@
     <string name="navbar_menu_conditional_button">Tlačítko (skrývat) Nabídka</string>
     <string name="navbar_menu_always_button">Tlačítko (vždy zobrazit) Nabídka</string>
     <string name="navbar_menu_big_button">Tlačítko Nabídka</string>
-    <string name="pie_battery_status_charging">Nabíjení (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Nabito</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% zbývá</string>
-    <string name="pie_phone_status_no_service">Žádné připojení</string>
-    <string name="pie_phone_status_airplane_mode">Režim V letadle aktivovaný</string>
-    <string name="pie_phone_status_emergency_only">Pouze tísňová volání</string>
 
     <string name="advanced_dev_option_wipe_app">Vymazat data aplikací</string>
     <string name="advanced_dev_option_force_stop">Vynutit ukončení</string>

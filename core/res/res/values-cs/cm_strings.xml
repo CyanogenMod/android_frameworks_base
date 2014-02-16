@@ -39,10 +39,6 @@
     <string name="reboot_confirm" product="default">Telefon bude restartován.</string>
     <string name="permlab_preventpower">zachovat tlačítko vypínání</string>
     <string name="permdesc_preventpower">Umožní změnit chování tlačítka pro zapínání a vypínání</string>
-    <string name="permlab_fm_radio_receiver">ovládání přijímače FM</string>
-    <string name="permdesc_fm_radio_receiver">Umožňuje ovládat přijímač FM (analogové rádio).</string>
-    <string name="permlab_fm_radio_transmitter">ovládání vysílače FM</string>
-    <string name="permdesc_fm_radio_transmitter">Umožňuje ovládat vysílač FM (analogové rádio).</string>
     <string name="permlab_sendMockSms">posílání falešných SMS zpráv</string>
     <string name="permdesc_sendMockSms">Umožní zasílat falešné SMS zprávy.
         Umožňuje zasílat SMS zprávy důvěryhodným aplikacím. Škodlivé aplikace mohou průběžně zasílat veliké množství

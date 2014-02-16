@@ -66,12 +66,6 @@
     <string name="navbar_menu_conditional_button">Przycisk Menu (autoukrywaj)</string>
     <string name="navbar_menu_always_button">Przycisk Menu (zawsze pokazuj)</string>
     <string name="navbar_menu_big_button">Przycisk Menu</string>
-    <string name="pie_battery_status_charging">Ładowanie (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Naładowana</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% pozostało</string>
-    <string name="pie_phone_status_no_service">Brak usługi</string>
-    <string name="pie_phone_status_airplane_mode">Tryb samolotowy aktywny</string>
-    <string name="pie_phone_status_emergency_only">Tylko połączenia alarmowe</string>
     <string name="advanced_dev_option_wipe_app">Usuń dane aplikacji</string>
     <string name="advanced_dev_option_force_stop">Wymuś zamknięcie</string>
     <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>

@@ -69,12 +69,6 @@
     <string name="navbar_menu_conditional_button">Menuknap (auto-skjul)</string>
     <string name="navbar_menu_always_button">Menuknap (vis altid)</string>
     <string name="navbar_menu_big_button">Menuknap</string>
-    <string name="pie_battery_status_charging">Oplader (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Opladt</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% tilbage</string>
-    <string name="pie_phone_status_no_service">Ingen tjeneste</string>
-    <string name="pie_phone_status_airplane_mode">Flytilstand til</string>
-    <string name="pie_phone_status_emergency_only">Kun nødopkald</string>
     <string name="advanced_dev_option_wipe_app">Ryd appdata</string>
     <string name="advanced_dev_option_force_stop">Gennemtving stop</string>
     <string name="accessibility_dock_battery_level">Dockingstations batteri <xliff:g id="number">%d</xliff:g> procent.</string>
