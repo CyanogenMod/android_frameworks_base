@@ -18,6 +18,7 @@ package com.android.internal.widget;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,6 +32,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.android.internal.R;
 import com.google.android.collect.Lists;
 
 import java.util.ArrayList;
@@ -76,11 +78,18 @@ public class PieChartView extends View {
     public PieChartView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mPaintOutline.setColor(Color.BLACK);
+        final float defaultOutlineWidth = 1f * getResources().getDisplayMetrics().density;
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PieChartView);
+    	int outlineColor = a.getColor(R.styleable.PieChartView_outlineColor, Color.BLACK);
+    	float outlineWidth = a.getDimension(R.styleable.PieChartView_outlineWidth, defaultOutlineWidth);
+    	int originAngle = a.getInteger(R.styleable.PieChartView_originAngle, 0);
+    	setOriginAngle(originAngle);
+    	mPaintOutline.setColor(outlineColor);
         mPaintOutline.setStyle(Style.STROKE);
-        mPaintOutline.setStrokeWidth(1f * getResources().getDisplayMetrics().density);
+        mPaintOutline.setStrokeWidth(outlineWidth);
         mPaintOutline.setAntiAlias(true);
 
+        a.recycle();
         setWillNotDraw(false);
     }
     
@@ -154,7 +163,12 @@ public class PieChartView extends View {
 
         int startAngle = mOriginAngle;
         for (Slice slice : mSlices) {
-            final int sweepAngle = (int) (slice.value * 360 / total);
+        	/* NOTE: Ceiling the result in order to prevent the loss of degrees
+        	 * along the loop which will result in a tiny non-colored slices 
+        	 * between actual slices. 
+        	 */
+            final int sweepAngle = (int) Math.ceil(slice.value * 360.0 /
+            									   (double)total);
 
             // draw slice
             slice.path.moveTo(rect.centerX(), rect.centerY());
