@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">您的手机将会重启。</string>
     <string name="permlab_preventpower">阻止电源键</string>
     <string name="permdesc_preventpower">允许应用程序完全掌控电源键</string>
-    <string name="permlab_fm_radio_receiver">控制 FM 接收器</string>
-    <string name="permdesc_fm_radio_receiver">允许应用控制 FM 接收器。</string>
-    <string name="permlab_fm_radio_transmitter">控制 FM 发射器</string>
-    <string name="permdesc_fm_radio_transmitter">允许应用控制 FM 发射器。</string>
     <string name="permlab_sendMockSms">发送模拟短信</string>
     <string name="permdesc_sendMockSms">允许应用发送模拟短信.
         这允许应用发送短信到受信任的应用. 恶意应用可能连续发送短信, 阻断设备通知系统并扰乱用户.</string>
@@ -63,6 +59,4 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>
     <string name="profile_picker_title">情景模式</string>
     <string name="profile_none">无</string>
-    <string name="permlab_cancelNotifications">取消应用程序通知</string>
-    <string name="permdesc_cancelNotifications">允许应用取消由其他应用创建的通知.</string>
 </resources>

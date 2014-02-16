@@ -66,12 +66,6 @@
     <string name="navbar_menu_conditional_button">Pulsante Menu (automatico)</string>
     <string name="navbar_menu_always_button">Pulsante Menu (fisso)</string>
     <string name="navbar_menu_big_button">Pulsante Menu</string>
-    <string name="pie_battery_status_charging">In carica (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Carica</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% rimanente</string>
-    <string name="pie_phone_status_no_service">Nessun servizio</string>
-    <string name="pie_phone_status_airplane_mode">Modalità aereo</string>
-    <string name="pie_phone_status_emergency_only">Solo chiamate di emergenza</string>
     <string name="advanced_dev_option_wipe_app">Cancella dati</string>
     <string name="advanced_dev_option_force_stop">Arresto forzato</string>
     <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>

@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">Telefonen startes på nytt.</string>
     <string name="permlab_preventpower">forhindre på/av knapp</string>
     <string name="permdesc_preventpower">Lar appen overstyre av/på knappen</string>
-    <string name="permlab_fm_radio_receiver">kontrollere FM-mottaker</string>
-    <string name="permdesc_fm_radio_receiver">Lar appen kontrollere FM-mottakeren.</string>
-    <string name="permlab_fm_radio_transmitter">kontrollere FM-sender</string>
-    <string name="permdesc_fm_radio_transmitter">Lar appen kontrollere FM-senderen.</string>
     <string name="storage_sd_dock_card">SD-kort i dokkingstasjon</string>
     <string name="app_killed_message">Appen ble drept</string>
     <string name="global_action_reboot">Start på nytt</string>

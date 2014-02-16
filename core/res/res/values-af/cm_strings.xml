@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">Jou foon gaan herlaai.</string>
     <string name="permlab_preventpower">Verhoed krag knoppie</string>
     <string name="permdesc_preventpower">Laat die program toe om die krag knoppie se gebruik te verander.</string>
-    <string name="permlab_fm_radio_receiver">Beheer FM-ontvanger</string>
-    <string name="permdesc_fm_radio_receiver">Laat die program toe om die FM-ontvanger te beheer.</string>
-    <string name="permlab_fm_radio_transmitter">Beheer FM-sender</string>
-    <string name="permdesc_fm_radio_transmitter">Laat die program toe om die FM-sender te beheer.</string>
     <string name="storage_sd_dock_card">Dok SD-kaart</string>
     <string name="app_killed_message">Program beëindig</string>
     <string name="global_action_reboot">Herlaai</string>

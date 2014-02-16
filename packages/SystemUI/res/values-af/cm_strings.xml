@@ -57,12 +57,6 @@
     <string name="navbar_menu_conditional_button">Kieslys knoppie (Outoverberg)</string>
     <string name="navbar_menu_always_button">Kieslys-knoppie (Altyd sigbaar)</string>
     <string name="navbar_menu_big_button">Kieslys-knoppie</string>
-    <string name="pie_battery_status_charging">Laai tans (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Volgelaai</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% bly oor</string>
-    <string name="pie_phone_status_no_service">Geen diens</string>
-    <string name="pie_phone_status_airplane_mode">Vliegtuigmodus aan</string>
-    <string name="pie_phone_status_emergency_only">Slegs noodoproepe</string>
     <string name="accessibility_quick_settings_ringer">Klank <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrasie <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="quick_settings_profile_label">Profiel</string>

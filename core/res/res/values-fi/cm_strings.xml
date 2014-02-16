@@ -45,10 +45,6 @@
     <string name="global_action_choose_profile">Profiili</string>
     <string name="toast_rotation_unlocked">Näytön asento auki</string>
     <string name="toast_rotation_locked">Näytön asento lukittu</string>
-    <string name="permlab_fm_radio_receiver">ohjaa fm-vastaanotinta</string>
-    <string name="permdesc_fm_radio_receiver">Sallii sovelluksen ohjata FM-vastaanotinta.</string>
-    <string name="permlab_fm_radio_transmitter">ohjaa fm-lähetintä</string>
-    <string name="permdesc_fm_radio_transmitter">Sallii sovelluksen ohjata FM-lähetintä.</string>
     <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
     <string name="permlab_preventpower">estä virtapainike</string>
     <string name="permdesc_preventpower">Sallii sovelluksen ohittaa virtapainikkeen käyttö</string>
@@ -59,6 +55,4 @@
     <string name="privacy_guard_notification_detail">Sovelluksella <xliff:g id="app">%1$s</xliff:g> ei ole pääsyä henkilökohtaisiin tietoihin</string>
     <string name="profile_picker_title">Profiilit</string>
     <string name="profile_none">Ei mitään</string>
-    <string name="permlab_cancelNotifications">peruuta sovellusten ilmoitukset</string>
-    <string name="permdesc_cancelNotifications">Sallii sovelluksen peruuttaa muiden sovellusten luomat ilmoitukset.</string>
 </resources>

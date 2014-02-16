@@ -21,10 +21,6 @@
     <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
     <string name="toast_rotation_unlocked">ディスプレイの回転をロック解除しました</string>
     <string name="toast_rotation_locked">ディスプレイの回転をロックしました</string>
-    <string name="permlab_fm_radio_receiver">FMレシーバの制御</string>
-    <string name="permdesc_fm_radio_receiver">FMレシーバの制御をアプリに許可します。</string>
-    <string name="permlab_fm_radio_transmitter">FMトランスミッターの制御</string>
-    <string name="permdesc_fm_radio_transmitter">FMトランスミッターの制御をアプリに許可します。</string>
     <string name="reboot_system" product="tablet">タブレットを再起動</string>
     <string name="reboot_system" product="default">携帯電話を再起動</string>
     <string name="global_action_screenshot">スクリーンショット</string>
@@ -59,6 +55,4 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> は、個人データにアクセスできません</string>
     <string name="profile_picker_title">プロファイル</string>
     <string name="profile_none">なし</string>
-    <string name="permlab_cancelNotifications">アプリの通知をキャンセル</string>
-    <string name="permdesc_cancelNotifications">アプリに、他のアプリで生成された通知をキャンセルすることを許可します。</string>
 </resources>

@@ -43,10 +43,6 @@
     <string name="reboot_confirm" product="default">Váš telefón sa reštartuje.</string>
     <string name="permlab_preventpower">zabránenie vypínacej klávese</string>
     <string name="permdesc_preventpower">Povolí aplikácii premostiť vypínací kláves</string>
-    <string name="permlab_fm_radio_receiver">ovládanie FM prijímača</string>
-    <string name="permdesc_fm_radio_receiver">Povolí aplikácii ovládať FM prijímač.</string>
-    <string name="permlab_fm_radio_transmitter">ovládanie FM vysielača</string>
-    <string name="permdesc_fm_radio_transmitter">Povolí aplikácii ovládať FM vysielač.</string>
     <string name="storage_sd_dock_card">SD karta v doku</string>
     <string name="app_killed_message">Aplikácia bola ukončená</string>
     <string name="global_action_reboot">Reštartovať</string>
@@ -60,8 +56,6 @@
     <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
     <string name="profile_picker_title">Profily</string>
     <string name="profile_none">Žiadny</string>
-    <string name="permlab_cancelNotifications">zrušiť oznámenia aplikácií</string>
-    <string name="permdesc_cancelNotifications">Povolí aplikácii zrušiť oznámenia vytvorené inými aplikáciami.</string>
     <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
     <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať užívateľa.</string>
     <string name="progress_nomediapresent" product="default">Nie je dostupné žiadne vymeniteľné médium\u2026</string>
