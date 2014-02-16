@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (c) 2013 SlimRoms Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- QS Battery Tile -->
+    <string name="quick_settings_battery_charging">Lade</string>
+    <string name="quick_settings_battery_discharging">Entladen</string>
+
+    <!-- Kill app toast -->
+    <string name="app_killed_message">App beended</string>
+
+    <!--ScreenShot Trash-->
+    <string name="screenshot_notification_delete">Löschen</string>
+    <string name="screenshot_delete_confirmation">Bildschirmfoto gelöscht</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+
+    <!-- Dialog Cancel/OK -->
+    <string name="cancel">Abbrechen</string>
+    <string name="dlg_ok">Ok</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+
+    <!-- Off/On/Toggle -->
+    <string name="off">Aus</string>
+    <string name="on">An</string>
+    <string name="toggle">Umschalten</string>
+
+    <!-- Slim Shortcut Actions -->
+    <string name="shortcut_picker">Slim-Verknüpfung</string>
+    <string name="shortcut_immersive">Immersive-Modus</string>
+    <string name="shortcut_quiethours">Ruhemodus</string>
+    <string name="shortcut_rotation">Rotation</string>
+    <string name="shortcut_torch">Taschenlampe</string>
+    <string name="shortcut_reboot">Neustart</string>
+    <string name="shortcut_recovery">Recovery</string>
+    <string name="shortcut_last_app">Letzte App</string>
+    <string name="shortcut_screenshot">Bildschirmfoto</string>
+    <string name="shortcut_volume">Lautstärke</string>
+    <string name="shortcut_toggle_title">Aktion ausführen</string>
+    <string name="shortcut_chamber">Kammer des Schreckens</string>
+    <string name="chamber_disabled">Kammer des Schreckens geschlossen</string>
+    <string name="chamber_title">Eingangseinstellungen String</string>
+    <string name="chamber_message">Geben Sie eine Zeichenfolge ein, die entweder eine ein- und ausschalten Funktion (Checkbox), oder möglicherweise eine Listenvorgaben ist. Zum Beispiel quiet_hours_ringer oder ähnliches. Die Einstellungen können in der Settings.java Datei gefunden werden. WARNUNG: Dieser Vorgang ist gefährlich!</string>
+    <string name="chamber_invalid">Dies ist eine ungültige Eingabe. Seien Sie vorsichtig.</string>
+    <string name="chamber_checkbox">Checkbox</string>
+    <string name="chamber_chk_message">Ist diese Einstellung eine Checkbox-Einstellung?</string>
+    <string name="chamber_int">Eingabewerte</string>
+    <string name="chamber_int_message">Geben Sie die gewünschten Werte ein, für Einstellung zwischen denen Sie umschalten möchten. Trennen Sie die einzelnen Werte durch ein Komma. Um Farbeinstellungen zu übernehmen verwenden Sie Hex-Werte wie #FF00aacc oder Grundfarbwerte wie rot, grün und gelb.</string>
+    <string name="chamber_name_title">Name der Verknüpfung</string>
+    <string name="chamber_name_message">Geben Sie der Verknüpfung einen Namen, der mit dem Symbol angezeigt wird.</string>
+    <string name="chamber_name_toast">Standardnamen verwenden</string>
+
+    <!-- Quick Settings -->
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS aus</string>
+    <string name="quick_settings_screen_sleep">Bildschirm ausschalten</string>
+    <string name="quick_settings_ringer_on">Ton an</string>
+    <string name="quick_settings_ringer_off">Ton aus</string>
+    <string name="quick_settings_vibration_on">Vibration an</string>
+    <string name="quick_settings_vibration_off">Vibration aus</string>
+    <string name="quick_settings_label_enabled">An</string>
+    <string name="quick_settings_label_disabled">Aus</string>
+    <string name="quick_settings_ringer_normal">Ton</string>
+    <string name="quick_settings_lockscreen">Sperrbildschirm</string>
+    <string name="quick_settings_network_type">Netzwerk-Modus</string>
+    <string name="quick_settings_report_bug">Fehler melden</string>
+    <string name="quick_settings_sync">Sync</string>
+    <string name="quick_settings_sync_off">Sync aus</string>
+    <string name="quick_settings_torch">Taschenlampe</string>
+    <string name="quick_settings_torch_off">Taschenlampe aus</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC aus</string>
+    <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_screen_timeout_summary" translatable="false">%1$d %2$s</string>
+    <string name="quick_settings_screen_timeout_summary_never">Nie</string>
+    <string name="quick_settings_usb_tether_off_label">Getrennt</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering aus</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP aus</string>
+    <string name="quick_settings_quiethours">Ruhemodus</string>
+    <string name="quick_settings_quiethours_off">Ruhemodus aus</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE aus</string>
+    <string name="quick_settings_volume">Lautstärke</string>
+    <string name="quick_settings_expanded_desktop">Erweitert</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_music_play">Wiedergabe</string>
+    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_schedule_title">Sleep-Timer</string>
+    <string name="quick_settings_music_schedule_in_progress">Timer läuft</string>
+    <string name="quick_settings_music_schedule_start">Timer starten</string>
+    <string name="quick_settings_music_schedule_cancel">Timer löschen</string>
+    <string name="quick_settings_music_schedule_update">Timer aktualisieren</string>
+    <string name="quick_settings_reboot_recovery">Recovery</string>
+    <string name="quick_settings_reboot">Neustart</string>
+    <string name="quick_settings_theme_switch_dark">Dunkles Theme</string>
+    <string name="quick_settings_theme_switch_light">Helles Theme</string>
+    <string name="quick_settings_quick_record_nofile">Lange drücken</string>
+    <string name="quick_settings_quick_record_def">Schnellaufnahme</string>
+    <string name="quick_settings_quick_record_rec">Aufnahme...</string>
+    <string name="quick_settings_quick_record_save">Gespeichert</string>
+    <string name="quick_settings_quick_record_play">Wird abgespielt...</string>
+    <string name="quick_settings_custom_toggle">Benutzerdefiniert</string>
+    <string name="quick_settings_contact_toggle">Kontakt</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Laden (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Geladen</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% verbleibend</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Kein Service</string>
+    <string name="pie_phone_status_airplane_mode">Flugmodus an</string>
+    <string name="pie_phone_status_emergency_only">Nur Notrufe</string>
+
+</resources>
