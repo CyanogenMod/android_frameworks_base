@@ -68,12 +68,6 @@
     <string name="navbar_menu_conditional_button">Πλήκτρο Menu (αυτόματη απόκρυψη)</string>
     <string name="navbar_menu_always_button">Πλήκτρο Menu (εμφάνιση πάντα)</string>
     <string name="navbar_menu_big_button">Πλήκτρο Menu</string>
-    <string name="pie_battery_status_charging">Φόρτιση (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Μπαταρία πλήρης</string>
-    <string name="pie_battery_status_discharging">Απομένει <xliff:g id="percent">%d</xliff:g>%%</string>
-    <string name="pie_phone_status_no_service">Καμία υπηρεσία</string>
-    <string name="pie_phone_status_airplane_mode">Λειτουργία πτήσης ενεργή</string>
-    <string name="pie_phone_status_emergency_only">Μόνο κλήσεις έκτακτης ανάγκης</string>
     <string name="advanced_dev_option_wipe_app">Εκκαθάριση δεδομένων</string>
     <string name="advanced_dev_option_force_stop">Αναγκαστική διακοπή</string>
     <string name="accessibility_dock_battery_level">Μπαταρία βάσης σύνδεσης <xliff:g id="number">%d</xliff:g> τοις εκατό.</string>

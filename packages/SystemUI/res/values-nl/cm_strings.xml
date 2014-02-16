@@ -68,12 +68,6 @@
     <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
     <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
     <string name="navbar_menu_big_button">Menuknop</string>
-    <string name="pie_battery_status_charging">Opladen (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Opgeladen</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% over</string>
-    <string name="pie_phone_status_no_service">Geen service</string>
-    <string name="pie_phone_status_airplane_mode">Vliegmodus aan</string>
-    <string name="pie_phone_status_emergency_only">Alleen noodoproepen</string>
     <string name="advanced_dev_option_wipe_app">App-gegevens wissen</string>
     <string name="advanced_dev_option_force_stop">Nu stoppen</string>
     <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>

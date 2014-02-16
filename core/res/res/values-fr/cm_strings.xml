@@ -34,10 +34,6 @@
     <string name="storage_sd_dock_card">Dock carte SD</string>
     <string name="permlab_preventpower">outrepasser le bouton d\'alimentation</string>
     <string name="permdesc_preventpower">Autoriser une application à outrepasser le bouton d\'alimentation</string>
-    <string name="permlab_fm_radio_receiver">contrôle du récepteur FM</string>
-    <string name="permdesc_fm_radio_receiver">Permettre à l\'application de contrôler le récepteur FM</string>
-    <string name="permlab_fm_radio_transmitter">contrôle du transmetteur FM</string>
-    <string name="permdesc_fm_radio_transmitter">Permettre à l\'application de contrôler le transmetteur FM</string>
     <string name="permlab_sendMockSms">envoyer des messages simulés</string>
     <string name="permdesc_sendMockSms">Permettre à l\'application d\'envoyer des messages simulés. Cela permet à une application d\'envoyer des SMS à des applications de confiance. Des applications malveillantes peuvent envoyer des messages en permanence, bloquer le système de notification de l\'appareil et perturber l\'utilisateur</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Activé</string>
@@ -62,6 +58,4 @@
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne sera pas en mesure d\'accéder aux données personnelles</string>
     <string name="profile_picker_title">Profils</string>
     <string name="profile_none">Aucun</string>
-    <string name="permlab_cancelNotifications">annule les notifications d\'application</string>
-    <string name="permdesc_cancelNotifications">Permet à l\'application de révoquer les notifications créées par d\'autres applications.</string>
 </resources>

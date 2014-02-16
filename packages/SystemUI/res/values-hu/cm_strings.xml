@@ -66,12 +66,6 @@
     <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
     <string name="navbar_menu_always_button">Menü (mindig látszik)</string>
     <string name="navbar_menu_big_button">Menü gomb</string>
-    <string name="pie_battery_status_charging">Töltés (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Feltöltve</string>
-    <string name="pie_battery_status_discharging">Akkumulátor: <xliff:g id="percent">%d</xliff:g>%%</string>
-    <string name="pie_phone_status_no_service">Nincs szolgáltatás</string>
-    <string name="pie_phone_status_airplane_mode">Replülőgép üzemmmód</string>
-    <string name="pie_phone_status_emergency_only">Csak segélyhívás</string>
     <string name="advanced_dev_option_wipe_app">Alkalmazások adatok törlése</string>
     <string name="advanced_dev_option_force_stop">Kényszerített leállítás</string>
     <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> percent.</string>
