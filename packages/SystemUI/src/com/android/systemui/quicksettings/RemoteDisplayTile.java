@@ -14,7 +14,7 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
-public class WiFiDisplayTile extends QuickSettingsTile{
+public class RemoteDisplayTile extends QuickSettingsTile{
 
     private boolean enabled = false;
     private boolean connecting;
@@ -22,7 +22,7 @@ public class WiFiDisplayTile extends QuickSettingsTile{
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
     private MediaRouter.RouteInfo connectedRoute;
 
-    public WiFiDisplayTile(Context context, 
+    public RemoteDisplayTile(Context context, 
             QuickSettingsController qsc) {
         super(context, qsc);
 
