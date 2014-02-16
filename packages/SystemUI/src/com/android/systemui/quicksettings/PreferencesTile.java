@@ -1,18 +1,21 @@
 package com.android.systemui.quicksettings;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.content.Intent;
 import android.view.View;
 
+import com.android.internal.util.nameless.NamelessUtils;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
-public class PreferencesTile extends QuickSettingsTile{
+public class PreferencesTile extends QuickSettingsTile {
+
+    private Context mContext;
 
     public PreferencesTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
 
+        mContext = context;
         mOnClick = new View.OnClickListener() {
 
             @Override
@@ -20,6 +23,24 @@ public class PreferencesTile extends QuickSettingsTile{
                 startSettingsActivity(android.provider.Settings.ACTION_SETTINGS);
             }
         };
+    }
+
+    @Override
+    public void onFlingRight() {
+        super.onFlingRight();
+        if (NamelessUtils.isPackageInstalled(mContext, "org.namelessrom.devicecontrol")) {
+            startSettingsActivity(new Intent()
+                    .setAction("org.namelessrom.devicecontrol.activities.MainActivity"));
+        }
+    }
+
+    @Override
+    public void onFlingLeft() {
+        super.onFlingLeft();
+        if (NamelessUtils.isPackageInstalled(mContext, "org.namelessrom.updatecenter")) {
+            startSettingsActivity(new Intent()
+                    .setAction("org.namelessrom.updatecenter.activities.MainActivity"));
+        }
     }
 
     @Override
