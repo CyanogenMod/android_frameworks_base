@@ -67,12 +67,6 @@
     <string name="navbar_menu_conditional_button">Botó Menú (autoAmaga)</string>
     <string name="navbar_menu_always_button">Botó Menú (mostraSempre)</string>
     <string name="navbar_menu_big_button">Botó Menú</string>
-    <string name="pie_battery_status_charging">Carregant (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Carregada</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restant</string>
-    <string name="pie_phone_status_no_service">Sense servei</string>
-    <string name="pie_phone_status_airplane_mode">Mode avió activat</string>
-    <string name="pie_phone_status_emergency_only">Només trucades d\'emergència</string>
     <string name="advanced_dev_option_wipe_app">Neteja dades d\'app</string>
     <string name="advanced_dev_option_force_stop">Força tancament</string>
     <string name="accessibility_dock_battery_level">Acoplament Bateria <xliff:g id="number">%d</xliff:g> percent.</string>

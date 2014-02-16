@@ -21,10 +21,6 @@
     <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
     <string name="toast_rotation_unlocked">ディスプレイの回転をロック解除しました</string>
     <string name="toast_rotation_locked">ディスプレイの回転をロックしました</string>
-    <string name="permlab_fm_radio_receiver">FMレシーバの制御</string>
-    <string name="permdesc_fm_radio_receiver">FMレシーバの制御をアプリに許可します。</string>
-    <string name="permlab_fm_radio_transmitter">FMトランスミッターの制御</string>
-    <string name="permdesc_fm_radio_transmitter">FMトランスミッターの制御をアプリに許可します。</string>
     <string name="reboot_system" product="tablet">タブレットを再起動</string>
     <string name="reboot_system" product="default">携帯電話を再起動</string>
     <string name="global_action_screenshot">スクリーンショット</string>

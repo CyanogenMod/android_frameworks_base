@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">Jūsų telefonas persikraus.</string>
     <string name="permlab_preventpower">Nepaisyti įjungimo klavišo</string>
     <string name="permdesc_preventpower">Leisti programoms nepaisyti įjungimo klavišo</string>
-    <string name="permlab_fm_radio_receiver">Kontroliuoti FM imtuvą</string>
-    <string name="permdesc_fm_radio_receiver">Leidžia programai valdyti FM imtuvą</string>
-    <string name="permlab_fm_radio_transmitter">Kontroliuoti FM siųstuvą</string>
-    <string name="permdesc_fm_radio_transmitter">Leidžia programai valdyti FM siųstuvą</string>
     <string name="permlab_sendMockSms">Siųsti netikrus pranešimus</string>
     <string name="permdesc_sendMockSms">Leidžia programai siųsti netikrus pranešimus. Tai leidžia programai siųsti pranešimus patikimoms programoms. Kenkėjiškos programos gali siųsti pranešimus nuolat, blokuodamos įrenginio įspėjimų sistemą ir sutrikdant vartotoją</string>
     <string name="storage_sd_dock_card">Atminties kortelės dokas</string>

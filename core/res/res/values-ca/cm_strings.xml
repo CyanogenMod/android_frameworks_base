@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">El teu telèfon es reiniciarà.</string>
     <string name="permlab_preventpower">impedeix la tecla d\'engegada</string>
     <string name="permdesc_preventpower">Permet que l\'app sobreescrigui la tecla d\'engegada</string>
-    <string name="permlab_fm_radio_receiver">controla el receptor FM</string>
-    <string name="permdesc_fm_radio_receiver">Permet a l\'app controlar el receptor FM.</string>
-    <string name="permlab_fm_radio_transmitter">controla el transmissor FM</string>
-    <string name="permdesc_fm_radio_transmitter">Permet a l\'app controlar el transmissor FM.</string>
     <string name="permlab_sendMockSms">envia missatges SMS simulats</string>
     <string name="permdesc_sendMockSms">Permet a l\'app enviar missatges SMS simulats. Això permet a una app enviar missatges SMS a pps de confiança. Apps malicioses podrien enviar missatges continuament, bloquejant el sistema de notificacions del dispositiu, molestant l\'usuari.</string>
     <string name="progress_nomediapresent" product="default">No hi ha present cap dispositiu extraïble\u2026</string>

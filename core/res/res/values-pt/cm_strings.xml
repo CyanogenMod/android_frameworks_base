@@ -48,10 +48,6 @@
     <string name="toast_rotation_unlocked">Rotação da tela está destravada</string>
     <string name="toast_rotation_locked">Rotação da tela está travada</string>
     <string name="storage_sd_dock_card">Dock cartão SD</string>
-    <string name="permlab_fm_radio_receiver">controlar receptor FM</string>
-    <string name="permdesc_fm_radio_receiver">Permite que o aplicativo controle o receptor FM</string>
-    <string name="permlab_fm_radio_transmitter">controlar transmissor FM</string>
-    <string name="permdesc_fm_radio_transmitter">Permite que o aplicativo controle o transmissor FM</string>
     <string name="stylus_app_not_installed">%s não está instalado</string>
     <string name="permlab_changePrivacyGuardState">ativar ou desativar proteção à privacidade</string>
     <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outra aplicação executa com Proteção à Privacidade. Quando um aplicativo estiver executando com Proteção à Privacidade, ela será capaz de acessar dados pessoais como contatos, registro de chamadas, ou mensagens.</string>

@@ -68,12 +68,6 @@
   <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
   <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
   <string name="navbar_menu_big_button">Botón Menú</string>
-  <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
-  <string name="pie_battery_status_full">Cargada</string>
-  <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% restante</string>
-  <string name="pie_phone_status_no_service">Sin servicio</string>
-  <string name="pie_phone_status_airplane_mode">Modo avión</string>
-  <string name="pie_phone_status_emergency_only">Solo llamadas de emergencia</string>
   <string name="advanced_dev_option_wipe_app">Borrar datos</string>
   <string name="advanced_dev_option_force_stop">Forzar detención</string>
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g>%%.</string>

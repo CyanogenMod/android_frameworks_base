@@ -76,12 +76,6 @@
     <string name="navbar_menu_always_button">Меню (всегда)</string>
     <string name="navbar_menu_big_button">Меню</string>
 
-    <string name="pie_battery_status_charging">Идёт зарядка (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Заряжено</string>
-    <string name="pie_battery_status_discharging">Заряд батареи: <xliff:g id="percent">%d</xliff:g>%%</string>
-    <string name="pie_phone_status_no_service">Нет сети</string>
-    <string name="pie_phone_status_airplane_mode">Режим полёта</string>
-    <string name="pie_phone_status_emergency_only">Только экстренные вызовы</string>
 
     <string name="advanced_dev_option_wipe_app">Стереть данные</string>
     <string name="advanced_dev_option_force_stop">Остановить</string>

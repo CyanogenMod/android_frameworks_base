@@ -44,10 +44,6 @@
     <string name="reboot_confirm" product="default">Το τηλέφωνό σας θα κάνει επανεκκίνηση.</string>
     <string name="permlab_preventpower">παράκαμψη πλήκτρου λειτουργίας</string>
     <string name="permdesc_preventpower">Επιτρέπει σε μια εφαρμογή να χρησιμοποιήσει το πλήκτρο λειτουργίας για μια διαφορετική λειτουργία</string>
-    <string name="permlab_fm_radio_receiver">έλεγχος δέκτη FM</string>
-    <string name="permdesc_fm_radio_receiver">Επιτρέπει σε μια εφαρμογή τον έλεγχο του δέκτη FM.</string>
-    <string name="permlab_fm_radio_transmitter">έλεγχος πομπού FM</string>
-    <string name="permdesc_fm_radio_transmitter">Επιτρέπει σε μια εφαρμογή τον έλεγχο του πομπού FM.</string>
     <string name="permlab_sendMockSms">αποστολή ψευδών SMS</string>
     <string name="permdesc_sendMockSms">Επιτρέπει σε μια εφαρμογή την αποστολή ψευδών μηνυμάτων SMS. Επιτρέπει σε μια εφαρμογή να στέλνει SMS σε αξιόπιστες εφαρμογές. Κακόβουλες εφαρμογές θα μπορούσαν να στέλνουν μηνύματα συνεχώς, μπλοκάροντας το σύστημα ειδοποιήσεων της συσκευής και διαταράσσοντας τον χρήστη.</string>
     <string name="storage_sd_dock_card">Κάρτα SD βάσης σύνδεσης</string>

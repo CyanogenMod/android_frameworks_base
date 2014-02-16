@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">Din telefon kommer att startas om.</string>
     <string name="permlab_preventpower">förhindra avstängningsknapp</string>
     <string name="permdesc_preventpower">Tillåter appen att åsidosätta avstängningsknappen</string>
-    <string name="permlab_fm_radio_receiver">kontrollera FM-mottagare</string>
-    <string name="permdesc_fm_radio_receiver">Tillåter appen att kontrollera FM-mottagaren.</string>
-    <string name="permlab_fm_radio_transmitter">kontrollera FM-sändare</string>
-    <string name="permdesc_fm_radio_transmitter">Tillåter appen att kontrollera FM-sändaren.</string>
     <string name="permlab_sendMockSms">skicka sken-SMS</string>
     <string name="permdesc_sendMockSms">Tillåter appen att skicka sken-SMS.
         Detta tillåter en app att skicka SMS till betrodda applikationer. Illasinnade appar kan skicka meddelanden
