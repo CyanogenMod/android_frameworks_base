@@ -112,6 +112,9 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     void updateQuickSettings() {
         TextView tv = (TextView) mTile.findViewById(R.id.text);
         tv.setText(mLabel);
+        if (mTileTextColor != -2) {
+            tv.setTextColor(mTileTextColor);
+        }
     }
 
 }

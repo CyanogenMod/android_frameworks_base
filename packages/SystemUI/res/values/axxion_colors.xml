@@ -25,4 +25,8 @@
     <color name="pie_selected_color">#ff5c5c5c</color>
     <color name="pie_long_pressed_color">#ff8c8c8c</color>
     <color name="pie_outline_color">#ff5c5c5c</color>
+    
+    <!-- Quick Settings -->
+    <color name="qs_background_color">#FF212121</color>
+    <color name="qs_background_pressed_color">#FF161616</color>
 </resources>
