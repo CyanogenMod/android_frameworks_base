@@ -22,17 +22,20 @@ import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.content.Intent;
 import android.view.View;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
-public class PreferencesTile extends QuickSettingsTile{
+public class PreferencesTile extends QuickSettingsTile {
+
+    private Context mContext;
 
     public PreferencesTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
 
+        mContext = context;
         mOnClick = new View.OnClickListener() {
 
             @Override
@@ -40,18 +43,26 @@ public class PreferencesTile extends QuickSettingsTile{
                 startSettingsActivity(android.provider.Settings.ACTION_SETTINGS);
             }
         };
+    }
 
-        mOnLongClick = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Intent intent = new Intent();
+    @Override
+    public void onFlingRight() {
+        super.onFlingRight();
+        Intent intent = new Intent();
                 intent.setComponent(new ComponentName(
                         "com.android.settings",
                         "com.android.settings.Settings$QuickSettingsTilesSettingsActivity"));
                 startSettingsActivity(intent);
-                return true;
-            }
-        };
+    }
+
+    @Override
+    public void onFlingLeft() {
+        super.onFlingLeft();
+        Intent intent = new Intent();
+                intent.setComponent(new ComponentName(
+                        "com.android.settings",
+                        "com.android.settings.Settings$CustomizationSettingsActivity"));
+                startSettingsActivity(intent);
     }
 
     @Override
