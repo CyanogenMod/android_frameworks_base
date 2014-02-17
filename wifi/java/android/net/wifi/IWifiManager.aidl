@@ -18,6 +18,8 @@ package android.net.wifi;
 
 import android.net.wifi.BatchedScanResult;
 import android.net.wifi.BatchedScanSettings;
+import android.net.wifi.PPPOEConfig;
+import android.net.wifi.PPPOEInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.ScanResult;
@@ -126,5 +128,11 @@ interface IWifiManager
     boolean isBatchedScanSupported();
 
     void pollBatchedScan();
+
+    void startPPPOE(in PPPOEConfig config);
+
+    void stopPPPOE();
+
+    PPPOEInfo getPPPOEInfo();
 }
 
