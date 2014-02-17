@@ -4,9 +4,9 @@
     <objectAnimator
         android:valueFrom="0"
         android:valueTo="90"
-        android:propertyName="rotationY" />
+        android:propertyName="rotationX" />
     <objectAnimator
         android:valueFrom="-90"
         android:valueTo="0"
-        android:propertyName="rotationY" />
+        android:propertyName="rotationX" />
 </set>
