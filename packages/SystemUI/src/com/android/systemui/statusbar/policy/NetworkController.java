@@ -62,7 +62,7 @@ import java.util.Locale;
 public class NetworkController extends BroadcastReceiver implements DemoMode {
     // debug
     static final String TAG = "StatusBar.NetworkController";
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
     private static final int FLIGHT_MODE_ICON = R.drawable.stat_sys_signal_flightmode;
@@ -1295,7 +1295,6 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         }
 
         if (!mDataConnected) {
-            Log.d(TAG, "refreshViews: Data not connected!! Set no data type icon / Roaming");
             mDataTypeIconId = 0;
             mQSDataTypeIconId = 0;
             if (isCdma()) {
