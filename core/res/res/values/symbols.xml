@@ -2015,6 +2015,7 @@
   <!-- Label for the Android system components when they are shown to the user. -->
   <java-symbol type="string" name="android_system_label" />
 
+
   <!-- Array of default activities with custom power management -->
   <java-symbol type="array" name="config_auto_perf_activities" />
 
@@ -2022,5 +2023,28 @@
   <java-symbol type="string" name="adb_net_active_notification_title" />
   <java-symbol type="string" name="adb_both_active_notification_title" />
   <java-symbol type="string" name="adb_active_generic_notification_message" />
+  
+  <!-- Progress Bar -->
+  <java-symbol type="dimen" name="spb_default_stroke_width" />
+  <java-symbol type="dimen" name="spb_default_stroke_separator_length" />
+  <java-symbol type="bool" name="spb_default_reversed" />
+  <java-symbol type="string" name="spb_default_speed" />
+  <java-symbol type="color" name="spb_default_color" />
+  <java-symbol type="integer" name="spb_default_sections_count" />
+  <java-symbol type="integer" name="spb_default_interpolator" />
+  <java-symbol type="bool" name="spb_default_mirror_mode" />
+  <java-symbol type="attr" name="spbStyle" />
+  <java-symbol type="array" name="pgcolors" />
+  <java-symbol type="array" name="gplus_colors" />
+  <java-symbol type="color" name="gplus_color_1" />
+  <java-symbol type="color" name="gplus_color_2" />
+  <java-symbol type="color" name="gplus_color_3" />
+  <java-symbol type="color" name="gplus_color_4" />
+  <java-symbol type="color" name="holo_blue_dark" />
+  <java-symbol type="color" name="holo_yellow_dark" />
+  <java-symbol type="color" name="holo_green_dark" />
+  <java-symbol type="color" name="holo_purple_dark" />
+  <java-symbol type="color" name="holo_red_dark" />
+>>>>>>> 05ddd46... User Custom ProgressBar Setting [1/2]
 
 </resources>
