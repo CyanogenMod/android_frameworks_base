@@ -2187,4 +2187,35 @@ public class WifiManager {
             super.finalize();
         }
     }
+
+   /**
+    * @hide
+    */
+   public void startPPPOE(PPPOEConfig config) {
+        try {
+            mService.startPPPOE(config);
+        } catch (RemoteException e) {
+        }
+   }
+
+   /**
+    * @hide
+    */
+   public void stopPPPOE() {
+        try {
+            mService.stopPPPOE();
+        } catch (RemoteException e) {
+        }
+   }
+
+   /**
+    * @hide
+    */
+   public PPPOEInfo getPPPOEInfo() {
+        try {
+            return mService.getPPPOEInfo();
+        } catch (RemoteException e) {
+            return null;
+        }
+   }
 }

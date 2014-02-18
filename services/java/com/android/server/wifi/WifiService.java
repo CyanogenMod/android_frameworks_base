@@ -31,6 +31,8 @@ import android.net.LinkAddress;
 import android.net.NetworkUtils;
 import android.net.RouteInfo;
 import android.net.wifi.IWifiManager;
+import android.net.wifi.PPPOEConfig;
+import android.net.wifi.PPPOEInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.BatchedScanResult;
 import android.net.wifi.BatchedScanSettings;
@@ -76,6 +78,7 @@ import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.util.AsyncChannel;
 import com.android.server.am.BatteryStatsService;
+import com.android.server.PPPOEService;
 import static com.android.server.wifi.WifiController.CMD_AIRPLANE_TOGGLED;
 import static com.android.server.wifi.WifiController.CMD_BATTERY_CHANGED;
 import static com.android.server.wifi.WifiController.CMD_EMERGENCY_MODE_CHANGED;
@@ -271,6 +274,39 @@ public final class WifiService extends IWifiManager.Stub {
     }
     WifiStateMachineHandler mWifiStateMachineHandler;
 
+    /**
+     * Handles interaction with PPPOEService
+     */
+    private class PPPOEHandler extends Handler {
+
+        PPPOEHandler(android.os.Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AsyncChannel.CMD_CHANNEL_HALF_CONNECTED: {
+                    if (msg.arg1 == AsyncChannel.STATUS_SUCCESSFUL) {
+                        Slog.e(TAG, "PPPOEService connection success");
+                    } else {
+                        Slog.e(TAG, "PPPOEService connection failure, error=" + msg.arg1);
+                    }
+                    break;
+                }
+                case AsyncChannel.CMD_CHANNEL_DISCONNECTED: {
+                    Slog.e(TAG, "PPPOEHandler channel lost, msg.arg1 =" + msg.arg1);
+                    break;
+                }
+                default: {
+                    Slog.d(TAG, "PPPOEHandler.handleMessage ignoring msg=" + msg);
+                    break;
+                }
+            }
+        }
+    }
+    PPPOEHandler mPPPOEHandler;
+
     private WifiWatchdogStateMachine mWifiWatchdogStateMachine;
 
     public WifiService(Context context) {
@@ -297,6 +333,7 @@ public final class WifiService extends IWifiManager.Stub {
         mBatchedScanSupported = mContext.getResources().getBoolean(
                 R.bool.config_wifi_batched_scan_supported);
 
+        mPPPOEHandler = new PPPOEHandler(wifiThread.getLooper());
         registerForScanModeChange();
         mContext.registerReceiver(
                 new BroadcastReceiver() {
@@ -317,6 +354,9 @@ public final class WifiService extends IWifiManager.Stub {
 
     private WifiController mWifiController;
 
+    private AsyncChannel mPPPOEServiceChannel;
+
+    private PPPOEService mPPPOEService;
     /**
      * Check if Wi-Fi needs to be enabled and start
      * if needed
@@ -335,6 +375,9 @@ public final class WifiService extends IWifiManager.Stub {
 
         mWifiWatchdogStateMachine = WifiWatchdogStateMachine.
                makeWifiWatchdogStateMachine(mContext);
+        mPPPOEService = new PPPOEService(mContext);
+        mPPPOEServiceChannel = new AsyncChannel();
+        mPPPOEServiceChannel.connect(mContext, mPPPOEHandler, mPPPOEService.getMessenger());
 
     }
 
@@ -1132,6 +1175,21 @@ public final class WifiService extends IWifiManager.Stub {
         enforceAccessPermission();
         return mWifiStateMachine.getConfigFile();
     }
+
+   public void startPPPOE(PPPOEConfig config) {
+       mPPPOEServiceChannel.sendMessage(
+               mPPPOEHandler.obtainMessage(PPPOEService.CMD_START_PPPOE, config));
+   }
+
+   public void stopPPPOE() {
+       mPPPOEServiceChannel.sendMessage(PPPOEService.CMD_STOP_PPPOE);
+   }
+
+   /**
+    */
+   public PPPOEInfo getPPPOEInfo() {
+       return mPPPOEService.getPPPOEInfo();
+   }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
