@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 The SlimRoms Project
+ * Modifications Copyright (C) 2014 The NamelessRom Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +24,19 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 
 import com.android.internal.util.slim.ButtonsConstants;
 import com.android.internal.util.slim.SlimActions;
-
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class ThemeTile extends QuickSettingsTile {
 
-    private static final int THEME_MODE_MANUAL       = 0;
+    private static final int THEME_MODE_MANUAL = 0;
     private static final int THEME_MODE_LIGHT_SENSOR = 1;
-    private static final int THEME_MODE_TWILIGHT     = 2;
+    private static final int THEME_MODE_TWILIGHT = 2;
 
     private int mThemeAutoMode;
 
@@ -59,21 +57,44 @@ public class ThemeTile extends QuickSettingsTile {
         mOnLongClick = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (mThemeAutoMode == THEME_MODE_TWILIGHT) {
-                    mThemeAutoMode = THEME_MODE_MANUAL;
-                } else {
-                    mThemeAutoMode = mThemeAutoMode + 1;
-                }
-
-                Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                        Settings.Secure.UI_THEME_AUTO_MODE, mThemeAutoMode,
-                        UserHandle.USER_CURRENT);
+                Intent intent = new Intent("android.settings.THEME_SETTINGS");
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startSettingsActivity(intent);
                 return true;
             }
         };
 
         qsc.registerObservedContent(Settings.Secure.getUriFor(
-                    Settings.Secure.UI_THEME_AUTO_MODE), this);
+                Settings.Secure.UI_THEME_AUTO_MODE), this);
+    }
+
+    @Override
+    public void onFlingRight() {
+        if (mThemeAutoMode == THEME_MODE_TWILIGHT) {
+            mThemeAutoMode = THEME_MODE_MANUAL;
+        } else {
+            mThemeAutoMode += 1;
+        }
+        saveChanges();
+        super.onFlingRight();
+    }
+
+    @Override
+    public void onFlingLeft() {
+        if (mThemeAutoMode == THEME_MODE_MANUAL) {
+            mThemeAutoMode = THEME_MODE_TWILIGHT;
+        } else {
+            mThemeAutoMode -= 1;
+        }
+        saveChanges();
+        super.onFlingLeft();
+    }
+
+    private void saveChanges() {
+        Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.UI_THEME_AUTO_MODE, mThemeAutoMode,
+                UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -95,8 +116,7 @@ public class ThemeTile extends QuickSettingsTile {
 
     private synchronized void updateTile() {
         mThemeAutoMode = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.UI_THEME_AUTO_MODE, THEME_MODE_MANUAL,
-                UserHandle.USER_CURRENT);
+                Settings.Secure.UI_THEME_AUTO_MODE, THEME_MODE_MANUAL, UserHandle.USER_CURRENT);
 
         switch (mThemeAutoMode) {
             case THEME_MODE_MANUAL:
