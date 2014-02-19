@@ -160,6 +160,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -3894,24 +3897,48 @@ public class PackageManagerService extends IPackageManager.Stub {
             mDeferredDexOpt = null;
         }
         if (pkgs != null) {
-            int i = 0;
+            final int[] i = {0};
+            final int pkgsSize = pkgs.size();
+            ExecutorService executorService = Executors.newFixedThreadPool(4);
             for (PackageParser.Package pkg : pkgs) {
-                if (!isFirstBoot()) {
-                    i++;
-                    try {
-                        ActivityManagerNative.getDefault().showBootMessage(
-                                mContext.getResources().getString(
-                                        com.android.internal.R.string.android_upgrading_apk,
-                                        i, pkgs.size()), true);
-                    } catch (RemoteException e) {
-                    }
-                }
-                PackageParser.Package p = pkg;
+                final PackageParser.Package p = pkg;
                 synchronized (mInstallLock) {
                     if (!p.mDidDexOpt) {
-                        performDexOptLI(p, false, false, true);
+                        executorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isFirstBoot()) {
+                                    i[0]++;
+                                    try {
+                                        ActivityManagerNative.getDefault().showBootMessage(
+                                                mContext.getResources().getString(
+                                                        com.android.internal.R.string.android_upgrading_apk,
+                                                        i[0], pkgsSize), true);
+                                    } catch (RemoteException e) {
+                                    }
+                                }
+                                performDexOptLI(p, false, false, true);
+                            }
+                        });
+                    } else {
+                        if (!isFirstBoot()) {
+                            i[0]++;
+                            try {
+                                ActivityManagerNative.getDefault().showBootMessage(
+                                        mContext.getResources().getString(
+                                                com.android.internal.R.string.android_upgrading_apk,
+                                                i[0], pkgsSize), true);
+                            } catch (RemoteException e) {
+                            }
+                        }
                     }
                 }
+            }
+            executorService.shutdown();
+            try {
+                executorService.awaitTermination(1, TimeUnit.DAYS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -3986,7 +4013,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     } else {
                         Log.i(TAG, "Running dexopt on: " + pkg.applicationInfo.packageName);
                         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
-                        ret = mInstaller.dexopt(path, sharedGid, !isForwardLocked(pkg));
+                        ret = mInstaller.dexoptAsync(path, sharedGid, !isForwardLocked(pkg));
                         pkg.mDidDexOpt = true;
                         performed = true;
                     }
