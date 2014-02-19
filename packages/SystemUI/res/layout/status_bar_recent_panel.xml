@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingBottom="40dp"
         android:layout_alignParentTop="true">
 
         <com.android.systemui.recent.RecentsVerticalScrollView
