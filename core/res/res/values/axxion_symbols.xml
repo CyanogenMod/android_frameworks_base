@@ -9,4 +9,11 @@
   <!-- HW Keys enable/disable -->
   <java-symbol type="bool" name="config_hwKeysOnNavBar" />
 
+  <!-- Slim recent app screen-->
+  <java-symbol type="integer" name="config_recentDefaultDur" />
+  <java-symbol type="integer" name="config_recentExitDur" />
+  <java-symbol type="style" name="Animation.RecentScreen" />
+  <java-symbol type="anim" name="recent_screen_enter" />
+  <java-symbol type="anim" name="recent_screen_fade_out" />
+
 </resources>
