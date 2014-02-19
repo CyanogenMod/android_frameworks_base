@@ -1217,6 +1217,12 @@ public final class Settings {
 
         public static final String ENABLE_ACRA = "enable_acra";
 
+        /**
+         * Whether to use the new recents screen.
+         *
+         * @hide
+         */
+        public static final String NEW_RECENTS_SCREEN = "new_recents_screen";
     }
 
     /**
