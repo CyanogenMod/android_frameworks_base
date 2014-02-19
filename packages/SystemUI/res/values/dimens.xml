@@ -261,4 +261,9 @@
     <dimen name="pie_sysinfo_second_layer_radius">255dp</dimen>
     <dimen name="pie_sysinfo_height">85sp</dimen>
 
+    <!-- Slim recent -->
+    <dimen name="recent_width">230dp</dimen>
+    <dimen name="recent_app_icon_size">48dp</dimen>
+    <dimen name="recent_thumbnail_width">198dp</dimen>
+    <dimen name="recent_thumbnail_height">140dp</dimen>
 </resources>

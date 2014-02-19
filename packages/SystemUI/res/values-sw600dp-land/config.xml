@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-** Copyright 2012, The Android Open Source Project
+** Copyright 2014, SlimRoms Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -20,22 +20,8 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
-    <!-- Enable quick settings on tablets -->
-    <bool name="config_hasSettingsPanel">true</bool>
-
-    <!-- The number of columns in the QuickSettings -->
-    <integer name="quick_settings_num_columns">3</integer>
-
-    <!-- The number of columns that the top level tiles span in the QuickSettings -->
-    <integer name="quick_settings_user_time_settings_tile_span">1</integer>
-
-    <!-- Whether rotation lock shows up in quick settings or not -->
-    <bool name="quick_settings_show_rotation_lock">true</bool>
-
-    <!-- Enable the "flip settings" panel -->
-    <bool name="config_hasFlipSettingsPanel">false</bool>
 
     <!-- Default value how much apps show the app screenshot on recents view entry -->
-    <integer name="expanded_items_default">3</integer>
+    <integer name="expanded_items_default">2</integer>
 
 </resources>
