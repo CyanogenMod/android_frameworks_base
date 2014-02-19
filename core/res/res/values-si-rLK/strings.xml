@@ -1095,8 +1095,8 @@
     <string name="no" msgid="5141531044935541497">"අවලංගු කරන්න"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"අවධානය"</string>
     <string name="loading" msgid="7933681260296021180">"පූරණය වෙමින්..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"සක්‍රීයයි"</string>
-    <string name="capital_off" msgid="6815870386972805832">"අක්‍රිය කරන්න"</string>
+    <string name="capital_on" msgid="1544682755514494298">"\u2759"</string>
+    <string name="capital_off" msgid="6815870386972805832">"\u3007"</string>
     <string name="whichApplication" msgid="4533185947064773386">"පහත භාවිතයෙන් ක්‍රියාව සම්පූර්ණ කරන්න"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"මෙම ක්‍රියාව සඳහා සුපුරුද්දෙන් භාවිත කරන්න."</string>
     <string name="clearDefaultHintMsg" msgid="3252584689512077257">"පද්ධති සැකසීම් &gt; යෙදුම් &gt; බාගැනීම් තුළ ඇති සුපුරුද්ද හිස් කරන්න."</string>
