@@ -2143,11 +2143,14 @@ public class LocationManagerService extends ILocationManager.Stub {
 
     private Location screenLocationLocked(Location location, String provider) {
 
+        if (isMockProvider(LocationManager.NETWORK_PROVIDER)) {
+            return location;
+        }
+
         LocationProviderProxy providerProxy =
                 (LocationProviderProxy)mProvidersByName.get(LocationManager.NETWORK_PROVIDER);
         if (mComboNlpPackageName == null || providerProxy == null ||
-            false == provider.equals(LocationManager.NETWORK_PROVIDER) ||
-            isMockProvider(LocationManager.NETWORK_PROVIDER)) {
+            false == provider.equals(LocationManager.NETWORK_PROVIDER)) {
             return location;
         }
 
