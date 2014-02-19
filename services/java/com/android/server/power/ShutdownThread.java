@@ -51,6 +51,7 @@ import com.android.internal.telephony.msim.ITelephonyMSim;
 
 import android.util.Log;
 import android.view.WindowManager;
+import java.lang.reflect.Method;
 
 public final class ShutdownThread extends Thread {
     // constants
@@ -544,8 +545,35 @@ public final class ShutdownThread extends Thread {
             }
         }
 
+        // Oem specific shutdown
+        deviceRebootOrShutdown(reboot, reason);
+
         // Shutdown power
         Log.i(TAG, "Performing low-level shutdown...");
         PowerManagerService.lowLevelShutdown();
     }
+
+    private static void deviceRebootOrShutdown(boolean reboot, String reason) {
+
+        Class<?> cl;
+        String deviceShutdownClassName = "com.qti.server.power.ShutdownOem";
+
+        try{
+            cl = Class.forName(deviceShutdownClassName);
+            Method m;
+            try {
+                m = cl.getMethod("rebootOrShutdown", new Class[]{boolean.class, String.class});
+                m.invoke(cl.newInstance(), reboot, reason);
+
+            } catch (NoSuchMethodException ex) {
+                //Method not found.
+            } catch (Exception ex) {
+                //Unknown exception
+            }
+        }catch(ClassNotFoundException e){
+        //Classnotfound!
+        }catch(Exception e){
+        //Unknown exception
+        }
+     }
 }
