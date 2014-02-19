@@ -19,16 +19,20 @@ package com.android.server.pm;
 import android.content.pm.PackageStats;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Slog;
+import android.util.SparseArray;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public final class Installer {
     private static final String TAG = "Installer";
 
-    private static final boolean LOCAL_DEBUG = false;
+    private static final boolean LOCAL_DEBUG = true;
 
     InputStream mIn;
 
@@ -39,6 +43,16 @@ public final class Installer {
     byte buf[] = new byte[1024];
 
     int buflen = 0;
+
+    final SparseArray<String> mResponses = new SparseArray<String>();
+    final ArrayList<Integer> mPendingRequests = new ArrayList<Integer>();
+    int mLastTransactionId = 0;
+    final Object mTransactionIdLock = new Object();
+    int id;
+
+    public Installer() {
+        mPollerThread.start();
+    }
 
     private boolean connect() {
         if (mSocket != null) {
@@ -86,8 +100,12 @@ public final class Installer {
 
     private boolean readBytes(byte buffer[], int len) {
         int off = 0, count;
-        if (len < 0)
+        try {
+            if (len < 0 || mIn.available() < len)
+                return false;
+        } catch (IOException e) {
             return false;
+        }
         while (off != len) {
             try {
                 count = mIn.read(buffer, off, len - off);
@@ -113,9 +131,13 @@ public final class Installer {
     private boolean readReply() {
         int len;
         buflen = 0;
-        if (!readBytes(buf, 2))
+        if (!readBytes(buf, 6))
             return false;
-        len = (((int) buf[0]) & 0xff) | ((((int) buf[1]) & 0xff) << 8);
+        id = (((int) buf[0]) & 0xff) | ((((int) buf[1]) & 0xff) << 8)
+                | ((((int) buf[2]) & 0xff) << 16) | ((((int) buf[3]) & 0xff) << 24);
+//        if (!readBytes(buf, 2))
+//            return false;
+        len = (((int) buf[4]) & 0xff) | ((((int) buf[5]) & 0xff) << 8);
         if ((len < 1) || (len > 1024)) {
             Slog.e(TAG, "invalid reply length (" + len + ")");
             disconnect();
@@ -127,11 +149,24 @@ public final class Installer {
         return true;
     }
 
-    private boolean writeCommand(String _cmd) {
+    private synchronized boolean writeCommand(String _cmd, int id) {
         byte[] cmd = _cmd.getBytes();
         int len = cmd.length;
         if ((len < 1) || (len > 1024))
             return false;
+        buf[0] = (byte) (id & 0xff);
+        buf[1] = (byte) ((id >> 8) & 0xff);
+        buf[2] = (byte) ((id >> 16) & 0xff);
+        buf[3] = (byte) ((id >> 24) & 0xff);
+
+        try {
+            mOut.write(buf, 0, 4);
+        } catch (IOException e) {
+            Slog.e(TAG, "write error");
+            disconnect();
+            return false;
+        }
+
         buf[0] = (byte) (len & 0xff);
         buf[1] = (byte) ((len >> 8) & 0xff);
         try {
@@ -145,39 +180,120 @@ public final class Installer {
         return true;
     }
 
-    private synchronized String transaction(String cmd) {
+    private String transaction(String cmd) {
         if (!connect()) {
             Slog.e(TAG, "connection failed");
             return "-1";
         }
 
-        if (!writeCommand(cmd)) {
+        int transactionId;
+        synchronized (mTransactionIdLock) {
+            transactionId = mLastTransactionId++;
+            if (mLastTransactionId < 0) {
+                mLastTransactionId = 0;
+            }
+        }
+        if (!writeCommand(cmd, transactionId)) {
             /*
              * If installd died and restarted in the background (unlikely but
              * possible) we'll fail on the next write (this one). Try to
              * reconnect and write the command one more time before giving up.
              */
             Slog.e(TAG, "write command failed? reconnect!");
-            if (!connect() || !writeCommand(cmd)) {
+            if (!connect() || !writeCommand(cmd, transactionId)) {
                 return "-1";
             }
         }
         if (LOCAL_DEBUG) {
-            Slog.i(TAG, "send: '" + cmd + "'");
+            Slog.i(TAG, "send ["+transactionId+"]: '" + cmd + "'");
         }
-        if (readReply()) {
-            String s = new String(buf, 0, buflen);
-            if (LOCAL_DEBUG) {
-                Slog.i(TAG, "recv: '" + s + "'");
+
+        synchronized (mPendingRequests) {
+            mPendingRequests.add(transactionId);
+            checkPoller();
+        }
+
+        try {
+            long startWaitTime = System.currentTimeMillis();
+            while(!checkForTransaction(transactionId)) {
+                final long timeToWait = startWaitTime - System.currentTimeMillis() + 100000;
+                if (timeToWait > 0) {
+                    synchronized (mResponses) {
+                        mResponses.wait(100000);
+                    }
+                }
             }
-            return s;
-        } else {
-            if (LOCAL_DEBUG) {
-                Slog.i(TAG, "fail");
-            }
+        } catch (InterruptedException e) {
             return "-1";
         }
+
+        synchronized (mPendingRequests) {
+            mPendingRequests.remove(new Integer(transactionId));
+        }
+        checkPoller();
+
+        String s;
+        synchronized (mResponses) {
+            s = mResponses.get(transactionId);
+            mResponses.remove(transactionId);
+        }
+        if (LOCAL_DEBUG) {
+            Slog.i(TAG, "recv: '" + s + "'");
+        }
+        return s == null ? "-1" : s;
     }
+
+    private void checkPoller() {
+        synchronized (mPendingRequests) {
+            Slog.v(TAG, "checkPoller handler = "+mHandler+" empty="+mPendingRequests.isEmpty());
+            if (mHandler != null) {
+                if (mPendingRequests.isEmpty()) {
+                    mHandler.removeCallbacks(mPollRunnable);
+                } else {
+                    mHandler.post(mPollRunnable);
+                }
+            }
+        }
+    }
+
+    private boolean checkForTransaction(int id) {
+        synchronized (mResponses) {
+            return mResponses.get(id) != null;
+        }
+    }
+
+    Handler mHandler;
+    Thread mPollerThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            Looper.prepare();
+            mHandler = new Handler();
+            checkPoller();
+            Looper.loop();
+        }
+    });
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        mHandler.getLooper().quit();
+    }
+
+    Runnable mPollRunnable = new Runnable() {
+        @Override
+        public void run() {
+//            Log.v(TAG, "poll runnable");
+            synchronized (mResponses) {
+                while (readReply()) {
+                    String s = new String(buf, 0, buflen);
+                    Slog.v(TAG, "put: id = "+id+" s = "+s);
+                    mResponses.put(id, s);
+                    mResponses.notifyAll();
+                }
+            }
+            mHandler.postDelayed(this, 10);
+        }
+    };
 
     private int execute(String cmd) {
         String res = transaction(cmd);
@@ -202,6 +318,16 @@ public final class Installer {
     }
 
     public int dexopt(String apkPath, int uid, boolean isPublic) {
+        StringBuilder builder = new StringBuilder("dexopt");
+        builder.append(' ');
+        builder.append(apkPath);
+        builder.append(' ');
+        builder.append(uid);
+        builder.append(isPublic ? " 1" : " 0");
+        return execute(builder.toString());
+    }
+
+    public int dexoptAsync(String apkPath, int uid, boolean isPublic) {
         StringBuilder builder = new StringBuilder("dexopt");
         builder.append(' ');
         builder.append(apkPath);
