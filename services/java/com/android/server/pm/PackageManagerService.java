@@ -160,6 +160,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -3894,25 +3897,48 @@ public class PackageManagerService extends IPackageManager.Stub {
             mDeferredDexOpt = null;
         }
         if (pkgs != null) {
-            int i = 0;
+            final int[] i = {0};
+            final int pkgsSize = pkgs.size();
+            ExecutorService executorService = Executors.newFixedThreadPool(
+                    Runtime.getRuntime().availableProcessors() + 1);
             for (PackageParser.Package pkg : pkgs) {
-                if (!isFirstBoot()) {
-                    i++;
-                    try {
-                        ActivityManagerNative.getDefault().showBootMessage(
-                                mContext.getResources().getString(
-                                        com.android.internal.R.string.android_upgrading_apk,
-                                        i, pkgs.size()), true);
-                    } catch (RemoteException e) {
-                    }
-                }
-                PackageParser.Package p = pkg;
+                final PackageParser.Package p = pkg;
                 synchronized (mInstallLock) {
                     if (!p.mDidDexOpt) {
-                        performDexOptLI(p, false, false, true);
+                        executorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isFirstBoot()) {
+                                    i[0]++;
+                                    postBootMessageUpdate(i[0], pkgsSize);
+                                }
+                                performDexOptLI(p, false, false, true);
+                            }
+                        });
+                    } else {
+                        if (!isFirstBoot()) {
+                            i[0]++;
+                            postBootMessageUpdate(i[0], pkgsSize);
+                        }
                     }
                 }
             }
+            executorService.shutdown();
+            try {
+                executorService.awaitTermination(1, TimeUnit.DAYS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void postBootMessageUpdate(int n, int total) {
+        try {
+            ActivityManagerNative.getDefault().showBootMessage(
+                    mContext.getResources().getString(
+                            com.android.internal.R.string.android_upgrading_apk,
+                            n, total), true);
+        } catch (RemoteException e) {
         }
     }
 
