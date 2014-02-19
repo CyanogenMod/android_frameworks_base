@@ -45,6 +45,11 @@ public class MSimSignalClusterView
 
     MSimNetworkController mMSimNC;
 
+    public static final int STYLE_NORMAL = 0;
+    public static final int STYLE_TEXT = 1;
+    public static final int STYLE_HIDDEN = 2;
+
+    private int mSignalClusterStyle = STYLE_NORMAL;
     private boolean mWifiVisible = false;
     private int mWifiStrengthId = 0, mWifiActivityId = 0;
     private boolean mMobileVisible = false;
@@ -236,7 +241,10 @@ public class MSimSignalClusterView
                 mSpacer.setVisibility(View.GONE);
             }
         }
+    }
 
+    public void setStyle(int style) {
+        mSignalClusterStyle = style;
     }
 }
 
