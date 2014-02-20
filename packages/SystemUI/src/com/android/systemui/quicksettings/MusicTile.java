@@ -106,6 +106,20 @@ public class MusicTile extends QuickSettingsTile {
     }
 
     @Override
+    public void onFlingRight() {
+        Intent intent = new Intent();
+                sendMediaButtonClick(KeyEvent.KEYCODE_MEDIA_NEXT);
+        super.onFlingRight();
+    }
+
+    @Override
+    public void onFlingLeft() {
+        Intent intent = new Intent();
+                sendMediaButtonClick(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+        super.onFlingLeft();
+    }
+
+    @Override
     void onPostCreate() {
         updateTile();
         super.onPostCreate();
