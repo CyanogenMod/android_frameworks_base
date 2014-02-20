@@ -719,6 +719,8 @@ static jint ImageReader_imageSetup(JNIEnv* env, jobject thiz,
                           res);
             }
         }
+        //Fail to lock, return the buffer to the queue.
+        ctx->returnLockedBuffer(buffer);
         return ACQUIRE_NO_BUFFERS;
     }
 
