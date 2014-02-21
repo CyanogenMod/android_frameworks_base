@@ -1431,4 +1431,6 @@
 
     <!-- Configuartion to support SIM refresh in STK command for dual mode card.-->
     <bool name="config_sim_refresh_for_dual_mode_card">true</bool>
+    <!-- set this value to true to set network mode as global during boot up -->
+    <bool name="config_global_phone_enabled">false</bool>
 </resources>
