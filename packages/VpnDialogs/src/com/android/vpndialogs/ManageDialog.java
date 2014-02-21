@@ -52,6 +52,8 @@ public class ManageDialog extends AlertActivity implements
     private TextView mDataReceived;
     private boolean mDataRowsHidden;
 
+    private boolean mIsShown = false;
+
     private Handler mHandler;
 
     @Override
@@ -65,51 +67,53 @@ public class ManageDialog extends AlertActivity implements
         }
 
         try {
+            if(!mIsShown) {
+                mService = IConnectivityManager.Stub.asInterface(
+                        ServiceManager.getService(Context.CONNECTIVITY_SERVICE));
 
-            mService = IConnectivityManager.Stub.asInterface(
-                    ServiceManager.getService(Context.CONNECTIVITY_SERVICE));
+                mConfig = mService.getVpnConfig();
 
-            mConfig = mService.getVpnConfig();
+                // mConfig can be null if we are a restricted user, in that case don't show this dialog
+                if (mConfig == null) {
+                    finish();
+                    return;
+                }
 
-            // mConfig can be null if we are a restricted user, in that case don't show this dialog
-            if (mConfig == null) {
-                finish();
-                return;
+                View view = View.inflate(this, R.layout.manage, null);
+                if (mConfig.session != null) {
+                    ((TextView) view.findViewById(R.id.session)).setText(mConfig.session);
+                }
+                mDuration = (TextView) view.findViewById(R.id.duration);
+                mDataTransmitted = (TextView) view.findViewById(R.id.data_transmitted);
+                mDataReceived = (TextView) view.findViewById(R.id.data_received);
+                mDataRowsHidden = true;
+
+                if (mConfig.legacy) {
+                    mAlertParams.mIconId = android.R.drawable.ic_dialog_info;
+                    mAlertParams.mTitle = getText(R.string.legacy_title);
+                } else {
+                    PackageManager pm = getPackageManager();
+                    ApplicationInfo app = pm.getApplicationInfo(mConfig.user, 0);
+                    mAlertParams.mIcon = app.loadIcon(pm);
+                    mAlertParams.mTitle = app.loadLabel(pm);
+                }
+                if (mConfig.configureIntent != null) {
+                    mAlertParams.mPositiveButtonText = getText(R.string.configure);
+                    mAlertParams.mPositiveButtonListener = this;
+                }
+                mAlertParams.mNeutralButtonText = getText(R.string.disconnect);
+                mAlertParams.mNeutralButtonListener = this;
+                mAlertParams.mNegativeButtonText = getText(android.R.string.cancel);
+                mAlertParams.mNegativeButtonListener = this;
+                mAlertParams.mView = view;
+                setupAlert();
+
+                if (mHandler == null) {
+                    mHandler = new Handler(this);
+                }
+                mHandler.sendEmptyMessage(0);
+                mIsShown = true;
             }
-
-            View view = View.inflate(this, R.layout.manage, null);
-            if (mConfig.session != null) {
-                ((TextView) view.findViewById(R.id.session)).setText(mConfig.session);
-            }
-            mDuration = (TextView) view.findViewById(R.id.duration);
-            mDataTransmitted = (TextView) view.findViewById(R.id.data_transmitted);
-            mDataReceived = (TextView) view.findViewById(R.id.data_received);
-            mDataRowsHidden = true;
-
-            if (mConfig.legacy) {
-                mAlertParams.mIconId = android.R.drawable.ic_dialog_info;
-                mAlertParams.mTitle = getText(R.string.legacy_title);
-            } else {
-                PackageManager pm = getPackageManager();
-                ApplicationInfo app = pm.getApplicationInfo(mConfig.user, 0);
-                mAlertParams.mIcon = app.loadIcon(pm);
-                mAlertParams.mTitle = app.loadLabel(pm);
-            }
-            if (mConfig.configureIntent != null) {
-                mAlertParams.mPositiveButtonText = getText(R.string.configure);
-                mAlertParams.mPositiveButtonListener = this;
-            }
-            mAlertParams.mNeutralButtonText = getText(R.string.disconnect);
-            mAlertParams.mNeutralButtonListener = this;
-            mAlertParams.mNegativeButtonText = getText(android.R.string.cancel);
-            mAlertParams.mNegativeButtonListener = this;
-            mAlertParams.mView = view;
-            setupAlert();
-
-            if (mHandler == null) {
-                mHandler = new Handler(this);
-            }
-            mHandler.sendEmptyMessage(0);
         } catch (Exception e) {
             Log.e(TAG, "onResume", e);
             finish();
@@ -119,8 +123,11 @@ public class ManageDialog extends AlertActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (!isFinishing()) {
-            finish();
+
+        if(!isChangingConfigurations()) {
+            if (!isFinishing()) {
+                mIsShown = false;
+            }
         }
     }
 
