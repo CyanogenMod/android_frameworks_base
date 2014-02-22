@@ -47,6 +47,13 @@
 
         <include layout="@layout/glow_pad_view" />
 
+        <ImageView
+            android:id="@+id/current_notification_icon"
+            android:layout_width="@dimen/handle_icon_size"
+            android:layout_height="@dimen/handle_icon_size"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter" />
+
         <View
             android:id="@+id/anchor"
             android:layout_width="0dp"
