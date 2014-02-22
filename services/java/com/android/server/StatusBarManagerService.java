@@ -189,6 +189,13 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         }
     }
 
+    public void setButtonDrawable(int buttonId, int iconId) {
+        try {
+            mBar.setButtonDrawable(buttonId, iconId);
+        } catch (RemoteException ex) {
+        }
+    }
+
     public void setIcon(String slot, String iconPackage, int iconId, int iconLevel,
             String contentDescription) {
         enforceStatusBar();

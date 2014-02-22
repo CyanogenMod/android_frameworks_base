@@ -119,7 +119,6 @@ public class KeyguardTouchDelegate {
         final IKeyguardService service = mService;
         if (service != null) {
             try {
-                Slog.e(TAG, "dispatch!");
                 service.dispatchButtonClick(buttonId);
             } catch (RemoteException e) {
                 // What to do?

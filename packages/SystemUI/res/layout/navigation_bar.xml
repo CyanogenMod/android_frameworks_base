@@ -107,7 +107,6 @@
                 android:id="@+id/show_notifs"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|left"
-                android:src="@drawable/search_light_land"
                 android:scaleType="center"
                 android:visibility="gone"/>
 
@@ -228,7 +227,6 @@
             android:id="@+id/show_notifs"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical|left"
-            android:src="@drawable/search_light_land"
             android:scaleType="center"
             android:visibility="gone"/>
 
