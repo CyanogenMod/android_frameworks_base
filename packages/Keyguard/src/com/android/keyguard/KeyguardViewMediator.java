@@ -669,7 +669,7 @@ public class KeyguardViewMediator {
                 }
             } else if (mShowing) {
                 notifyScreenOffLocked();
-                //resetStateLocked(null);
+                resetStateLocked(null);
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT
                    || (why == WindowManagerPolicy.OFF_BECAUSE_OF_USER && !lockImmediately)) {
                 doKeyguardLaterLocked(why);

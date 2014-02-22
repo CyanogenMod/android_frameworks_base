@@ -79,6 +79,7 @@ import com.android.internal.widget.LockPatternUtils;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
+import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -596,19 +597,34 @@ public class ActiveDisplayView extends FrameLayout {
      */
     private void launchNotificationPendingIntent() {
         if (mNotification != null) {
-            PendingIntent contentIntent = mNotification.getNotification().contentIntent;
-            if (contentIntent != null) {
+            PendingIntent i = mNotification.getNotification().contentIntent;
+            if (i != null) {
                 try {
-                    contentIntent.send();
-                    mNM.cancelNotificationFromSystemListener(mNotificationListener,
-                            mNotification.getPackageName(), mNotification.getTag(),
-                            mNotification.getId());
-                } catch (RemoteException re) {
-                } catch (CanceledException ce) {
+                    Intent intent = i.getIntent();
+                    intent.setFlags(
+                        intent.getFlags()
+                        | Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    if (i.isActivity()) ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+                    i.send();
+                    KeyguardTouchDelegate.getInstance(mContext).dismiss();
+                } catch (CanceledException ex) {
+                } catch (RemoteException ex) {
+                }
+            }
+            if (mNotification.isClearable()) {
+                try {
+                     mNM.cancelNotificationFromSystemListener(mNotificationListener,
+                             mNotification.getPackageName(), mNotification.getTag(),
+                             mNotification.getId());
+                } catch (RemoteException e) {
+                } catch (NullPointerException npe) {
                 }
             }
             mNotification = null;
         }
+        handleForceHideNotificationView();
     }
 
     private void showNotificationView() {
@@ -704,6 +720,13 @@ public class ActiveDisplayView extends FrameLayout {
         cancelTimeoutTimer();
         mBar.disable(0);
         unregisterSensorListener(mLightSensor);
+    }
+
+    private void handleForceHideNotificationView() {
+        mHandler.removeCallbacks(runSystemUiVis);
+        setVisibility(View.GONE);
+        restoreBrightness();
+        cancelTimeoutTimer();
     }
 
     private void handleShowNotification(boolean ping) {
@@ -863,6 +886,7 @@ public class ActiveDisplayView extends FrameLayout {
         filter.addAction(ACTION_DISPLAY_TIMEOUT);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_KEYGUARD_TARGET);
         /* uncomment the line below for testing */
         filter.addAction(ACTION_FORCE_DISPLAY);
         mContext.registerReceiver(mBroadcastReceiver, filter);
@@ -1258,6 +1282,9 @@ public class ActiveDisplayView extends FrameLayout {
                 }
                 if (mNotification != null) showNotification(mNotification, true);
                 restoreBrightness();
+            } else if (Intent.ACTION_KEYGUARD_TARGET.equals(action)) {
+                Log.i(TAG, "HEY DICKBAG, DISABLING PROXIMITY SENSOR BECAUSE YOU UNLOCKED THE KEYGUARD!!!!!!!!!");
+                disableProximitySensor();
             }
         }
     };
