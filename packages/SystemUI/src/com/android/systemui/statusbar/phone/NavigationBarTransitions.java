@@ -86,6 +86,7 @@ public final class NavigationBarTransitions extends BarTransitions {
         setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_MENU_BIG, alpha, animate);
         setKeyButtonViewQuiescentAlpha(mView.getSearchLight(), KEYGUARD_QUIESCENT_ALPHA, animate);
         setKeyButtonViewQuiescentAlpha(mView.getCameraButton(), KEYGUARD_QUIESCENT_ALPHA, animate);
+        setKeyButtonViewQuiescentAlpha(mView.getNotifsButton(), KEYGUARD_QUIESCENT_ALPHA, animate);
         applyBackButtonQuiescentAlpha(mode, animate);
 
         // apply to lights out
@@ -110,16 +111,12 @@ public final class NavigationBarTransitions extends BarTransitions {
         float backAlpha = 0;
         backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.getSearchLight());
         backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.getCameraButton());
-        backAlpha = maxVisibleQuiescentAlpha(backAlpha,
-                mView.findButton(NavbarEditor.NAVBAR_HOME));
-        backAlpha = maxVisibleQuiescentAlpha(backAlpha,
-                mView.findButton(NavbarEditor.NAVBAR_RECENT));
-        backAlpha = maxVisibleQuiescentAlpha(backAlpha,
-                mView.findButton(NavbarEditor.NAVBAR_CONDITIONAL_MENU));
-        backAlpha = maxVisibleQuiescentAlpha(backAlpha,
-                mView.findButton(NavbarEditor.NAVBAR_ALWAYS_MENU));
-        backAlpha = maxVisibleQuiescentAlpha(backAlpha,
-                mView.findButton(NavbarEditor.NAVBAR_MENU_BIG));
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.getNotifsButton());
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.findViewWithTag(NavbarEditor.NAVBAR_HOME));
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.findViewWithTag(NavbarEditor.NAVBAR_RECENT));
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.findViewWithTag(NavbarEditor.NAVBAR_CONDITIONAL_MENU));
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.findViewWithTag(NavbarEditor.NAVBAR_ALWAYS_MENU));
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.findViewWithTag(NavbarEditor.NAVBAR_MENU_BIG));
         if (backAlpha > 0) {
             setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_BACK, backAlpha, animate);
         }
@@ -136,6 +133,7 @@ public final class NavigationBarTransitions extends BarTransitions {
     public void setContentVisible(boolean visible) {
         final float alpha = visible ? 1 : 0;
         fadeContent(mView.getCameraButton(), alpha);
+        fadeContent(mView.getNotifsButton(), alpha);
         fadeContent(mView.getSearchLight(), alpha);
     }
 
