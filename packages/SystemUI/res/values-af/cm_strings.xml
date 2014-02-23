@@ -70,4 +70,7 @@
     <string name="accessibility_dock_battery_level">Dok Batery <xliff:g id="number">%d</xliff:g> persent.</string>
     <string name="screenshot_delete_action">Verwyder</string>
     <string name="screenshot_delete_confirmation">Skermkiekie geskrap</string>
+    <string name="dessert_case_settings_cm_title">Wys CM se gelukbringer</string>
+    <string name="dessert_case_settings_cm_summary">Wys CM se gelukbringer saam met Android se nageregte binne die droom</string>
+    <string name="accessibility_desc_add_quick_settings">Voegby Snel instellings.</string>
 </resources>
