@@ -826,7 +826,6 @@ public class NotificationManagerService extends INotificationManager.Stub
         final int permission = mContext.checkCallingPermission(
                 android.Manifest.permission.SYSTEM_NOTIFICATION_LISTENER);
         if (permission == PackageManager.PERMISSION_DENIED) {
-            checkCallerIsSystem();
         // Halo
         if (!component.getPackageName().equals("HaloComponent")) checkCallerIsSystem(); 
         }
