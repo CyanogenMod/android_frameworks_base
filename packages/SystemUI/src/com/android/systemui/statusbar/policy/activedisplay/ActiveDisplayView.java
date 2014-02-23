@@ -595,7 +595,7 @@ public class ActiveDisplayView extends FrameLayout {
     /**
      * Launches the pending intent for the currently selected notification
      */
-    private void launchNotificationPendingIntent() {
+    private synchronized void launchNotificationPendingIntent() {
         if (mNotification != null) {
             PendingIntent i = mNotification.getNotification().contentIntent;
             if (i != null) {
@@ -716,9 +716,18 @@ public class ActiveDisplayView extends FrameLayout {
         setVisibility(View.GONE);
         restoreBrightness();
         mBar.disable(0);
+
+        // noone is taking care of reenable the bars in this case
+        if (isLockscreenDisabled()) {
+            mBar.disable(0);
+        }
         mWakedByPocketMode = false;
+
+        // noone is taking care of reenable the bars in this case
+        if (isLockscreenDisabled()) {
+            mBar.disable(0);
+        }
         cancelTimeoutTimer();
-        mBar.disable(0);
         unregisterSensorListener(mLightSensor);
     }
 
@@ -729,7 +738,7 @@ public class ActiveDisplayView extends FrameLayout {
         cancelTimeoutTimer();
     }
 
-    private void handleShowNotification(boolean ping) {
+    private synchronized void handleShowNotification(boolean ping) {
         if (!mDisplayNotifications
             || mNotification == null
             || inQuietHoursDim() && mQuietTime) return;
@@ -742,7 +751,7 @@ public class ActiveDisplayView extends FrameLayout {
         if (ping) mGlowPadView.ping();
     }
 
-    private void handleDismissNotification() {
+    private synchronized void handleDismissNotification() {
         if (mNotification != null && mNotification.isClearable()) {
             try {
                 mNM.cancelNotificationFromSystemListener(mNotificationListener,
@@ -764,7 +773,7 @@ public class ActiveDisplayView extends FrameLayout {
         turnScreenOff();
     }
 
-    private void handleShowTime() {
+    private synchronized void handleShowTime() {
         mCurrentNotificationIcon.setImageResource(R.drawable.ic_ad_unlock);
         mGlowPadView.setHandleText("");
         mNotificationDrawable = null;
@@ -952,7 +961,7 @@ public class ActiveDisplayView extends FrameLayout {
             for (int i = sbns.length - 1; i >= 0; i--) {
                 if (sbns[i] == null)
                     continue;
-                if (shouldShowNotification() && isValidNotification(sbns[i])) {
+                if (isValidNotification(sbns[i])) {
                     return sbns[i];
                 }
             }
@@ -1055,7 +1064,7 @@ public class ActiveDisplayView extends FrameLayout {
      * Swaps the current StatusBarNotification with {@code sbn}
      * @param sbn The StatusBarNotification to swap with the current
      */
-    private void swapNotification(StatusBarNotification sbn) {
+    private synchronized void swapNotification(StatusBarNotification sbn) {
         mNotification = sbn;
         setActiveNotification(sbn, false);
     }
@@ -1358,10 +1367,10 @@ public class ActiveDisplayView extends FrameLayout {
         mExcludedApps = new HashSet<String>(Arrays.asList(appsToExclude));
     }
 
-    private boolean isLockScreenDisabled() {
+    // copied from KeyguardViewMediator
+    private boolean isLockscreenDisabled() {
         LockPatternUtils utils = new LockPatternUtils(mContext);
         utils.setCurrentUser(UserHandle.USER_OWNER);
         return utils.isLockScreenDisabled();
     }
-
 }
