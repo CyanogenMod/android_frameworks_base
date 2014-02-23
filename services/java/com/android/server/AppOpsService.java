@@ -1211,7 +1211,7 @@ public class AppOpsService extends IAppOpsService.Stub {
         for (int op : PRIVACY_GUARD_OP_STATES) {
             int switchOp = AppOpsManager.opToSwitch(op);
             setMode(switchOp, uid, packageName, state
-                    ? AppOpsManager.MODE_IGNORED : AppOpsManager.MODE_ALLOWED);
+                    ? AppOpsManager.MODE_ASK : AppOpsManager.MODE_ALLOWED);
         }
     }
 
