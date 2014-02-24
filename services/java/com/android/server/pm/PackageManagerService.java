@@ -118,7 +118,6 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.Environment.UserEnvironment;
 import android.os.UserManager;
-import android.provider.Settings.Global;
 import android.provider.Settings.Secure;
 import android.security.KeyStore;
 import android.security.SystemKeyStore;
@@ -6688,17 +6687,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             filteredFlags = flags | PackageManager.INSTALL_FROM_ADB;
         } else {
             filteredFlags = flags & ~PackageManager.INSTALL_FROM_ADB;
-        }
-
-        // Check if unknown sources allowed
-        if (android.app.AppOpsManager.isStrictEnable() &&
-            ((filteredFlags & PackageManager.INSTALL_FROM_ADB) != 0) &&
-            Global.getInt(mContext.getContentResolver(), Global.INSTALL_NON_MARKET_APPS, 0) <= 0) {
-            try {
-                observer.packageInstalled("", PackageManager.INSTALL_FAILED_UNKNOWN_SOURCES);
-            } catch (RemoteException re) {
-            }
-            return;
         }
 
         verificationParams.setInstallerUid(uid);
