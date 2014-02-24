@@ -1632,11 +1632,11 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 } else {
                     mLog.w("No in-flight alarm for " + pi + " " + intent);
                 }
-                mTriggeredUids.remove(new Integer(uid));
                 if(mBlockedUids.contains(new Integer(uid))) {
                     mBlockedUids.remove(new Integer(uid));
                 } else {
                     if(mBroadcastRefCount > 0){
+                        mTriggeredUids.remove(new Integer(uid));
                         mBroadcastRefCount--;
                         if (mBroadcastRefCount == 0) {
                             mWakeLock.release();
@@ -1664,7 +1664,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
                         // should never happen
                         try {
                         mLog.w("Alarm wakelock still held but sent queue empty");
-                        mWakeLock.setWorkSource(null);
+                        mBroadcastRefCount = 0;
+                        mWakeLock.release();
                         } catch (IllegalArgumentException ex) {
                             ex.printStackTrace();
                         }
