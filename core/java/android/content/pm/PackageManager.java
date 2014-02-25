@@ -576,6 +576,14 @@ public abstract class PackageManager {
     public static final int INSTALL_FAILED_VERSION_DOWNGRADE = -25;
 
     /**
+     * Installation return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)} if
+     * the package is from unknown sources but not trusted sources.
+     * @hide
+     */
+    public static final int INSTALL_FAILED_UNKNOWN_SOURCES = -26;
+
+    /**
      * Installation parse return code: this is passed to the {@link IPackageInstallObserver} by
      * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
      * if the parser was given a path that is not a file, or does not end with the expected
