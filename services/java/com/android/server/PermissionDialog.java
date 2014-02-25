@@ -93,9 +93,8 @@ class PermissionDialog extends BasePermissionDialog {
         String name = getAppName(mPackageName);
         if(name == null)
             name = mPackageName;
-        tv.setText(mContext.getString(com.android.internal.R.string.privacy_guard_dialog_summary,
+        setMessage(mContext.getString(com.android.internal.R.string.privacy_guard_dialog_summary,
                 name, mOpLabels[mCode]));
-        setView(mView);
 
         // After the timeout, pretend the user clicked the quit button
         //mHandler.sendMessageDelayed(
