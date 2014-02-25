@@ -4545,5 +4545,4 @@
     <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
     <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
 
-    <string name="permission">Permission</string>
 </resources>

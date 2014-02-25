@@ -123,4 +123,49 @@
     <string name="permdesc_resetBatteryStats">Allows an application to reset the current low-level battery use data.</string>
 
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
+
+    <!-- App ops requests -->
+    <string name="app_ops_access_camera">access the camera</string>
+    <string name="app_ops_access_location">access your location</string>
+    <string name="app_ops_access_notifications">read your notifications</string>
+    <string name="app_ops_alarm_wakeup">wake up the device</string>
+    <string name="app_ops_draw_on_top">draw on top</string>
+    <string name="app_ops_keep_device_awake">keep your device awake</string>
+    <string name="app_ops_make_phone_call">make a phone call</string>
+    <string name="app_ops_modify_calendar">update your calendar</string>
+    <string name="app_ops_modify_call_log">update the call log</string>
+    <string name="app_ops_modify_clipboard">modify the clipboard</string>
+    <string name="app_ops_modify_contacts">update your contacts</string>
+    <string name="app_ops_modify_settings">update system settings</string>
+    <string name="app_ops_play_audio">play audio</string>
+    <string name="app_ops_post_notification">post a notification</string>
+    <string name="app_ops_read_calendar">read your calendar</string>
+    <string name="app_ops_read_call_log">read the call log</string>
+    <string name="app_ops_read_clipboard">read the clipboard</string>
+    <string name="app_ops_read_contacts">read your contacts</string>
+    <string name="app_ops_read_mms">read your MMS messages</string>
+    <string name="app_ops_read_sms">read your SMS messages</string>
+    <string name="app_ops_receive_sms">receive an SMS message</string>
+    <string name="app_ops_record_audio">record audio</string>
+    <string name="app_ops_send_mms">send an MMS message</string>
+    <string name="app_ops_send_sms">send an SMS message</string>
+    <string name="app_ops_start_at_bootup">start at power up</string>
+    <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
+    <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
+    <string name="app_ops_toggle_wifi">toggle WiFi</string>
+    <string name="app_ops_use_alarm_volume">control alarm volume</string>
+    <string name="app_ops_use_audio_focus">control the audio focus</string>
+    <string name="app_ops_use_bluetooth_volume">control the Bluetooth volume</string>
+    <string name="app_ops_use_master_volume">control the master volume</string>
+    <string name="app_ops_use_media_buttons">use the media buttons</string>
+    <string name="app_ops_use_media_volume">control the media volume</string>
+    <string name="app_ops_use_notification_volume">control the notification volume</string>
+    <string name="app_ops_use_ring_volume">control the ringtone volume</string>
+    <string name="app_ops_use_vibrate">use haptic feedback</string>
+    <string name="app_ops_use_voice_volume">control the voice call volume</string>
+    <string name="app_ops_write_mms">write an MMS message</string>
+    <string name="app_ops_write_sms">write an SMS message</string>
+
+    <string name="privacy_guard_dialog_title">Privacy Guard</string>
+    <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> would like to <xliff:g id="op">%2$s</xliff:g>.</string>
 </resources>
