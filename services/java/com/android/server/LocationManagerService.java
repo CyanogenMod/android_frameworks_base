@@ -434,7 +434,7 @@ public class LocationManagerService extends ILocationManager.Stub {
                 mContext,
                 mLocationHandler,
                 flpHardwareProvider.getLocationHardware(),
-                com.android.internal.R.bool.config_enableFusedLocationOverlay,
+                com.android.internal.R.bool.config_enableHwFlpOverlay,
                 com.android.internal.R.string.config_fusedLocationProviderPackageName,
                 com.android.internal.R.array.config_locationProviderPackageNames);
         if(fusedProxy == null) {
