@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="accessibility_data_connection_HP">HSPA+</string>
+  <!--<string name="accessibility_data_connection_HP">HSPA+</string>-->
   <string name="accessibility_data_connection_DC">DCHSPAP</string>
   <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
@@ -71,7 +71,7 @@
   <string name="advanced_dev_option_wipe_app">Borrar datos</string>
   <string name="advanced_dev_option_force_stop">Forzar detención</string>
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g>%%.</string>
-  <string name="screenshot_delete_action">Eliminar</string>
-  <string name="screenshot_delete_confirmation">Captura eliminada.</string>
+  <!--<string name="screenshot_delete_action">Eliminar</string>
+  <string name="screenshot_delete_confirmation">Captura eliminada.</string>-->
   <string name="accessibility_desc_add_quick_settings">Añadir controles rápidos.</string>
 </resources>
