@@ -4554,5 +4554,4 @@
     <string name="transient_navigation_confirmation_long">Swipe from edge of screen to reveal system bar</string>
     <add-resource type="bool" name="config_hotswapCapable"></add-resource>
 
-    <string name="permission">Permission</string>
 </resources>
