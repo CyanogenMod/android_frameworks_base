@@ -48,4 +48,3 @@ PRODUCT_PACKAGES := \
     AndroidClock.ttf \
     AndroidClock_Highlight.ttf \
     AndroidClock_Solid.ttf \
-    sahlnaskh-regular.ttf \
