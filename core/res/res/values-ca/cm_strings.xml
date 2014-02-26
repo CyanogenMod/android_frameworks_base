@@ -66,5 +66,4 @@
     <string name="permlab_resetBatteryStats">reinicia estadítiques de la bateria</string>
     <string name="permdesc_resetBatteryStats">Permet a una aplicació reiniciar les dades de baix nivell d\'us actual de la bateria.</string>
     <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
-<string name="transient_navigation_confirmation_long">Deslliça des de la vora de la pantalla per mostrar la barra de sistema</string>
 </resources>

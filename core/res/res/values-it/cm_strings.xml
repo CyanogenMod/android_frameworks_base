@@ -16,7 +16,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="progress_nomediapresent" product="default">Non ci sono dispositivi di memoria estraibili\u2026</string>
-    <string name="transient_navigation_confirmation_long">Scorri dal bordo dello schermo per mostrare la barra di stato</string>
     <string name="profileNameDefault">Predefinito</string>
     <string name="profileNameWork">Lavoro</string>
     <string name="profileNameHome">Casa</string>

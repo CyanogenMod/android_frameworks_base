@@ -67,5 +67,4 @@
     <string name="permdesc_resetBatteryStats">Leidžia programai atkurti dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
     <string name="immersive_mode_confirmation_bottom">Braukite aukštyn iš apačios norėdami išeiti iš viso ekrano.</string>
     <string name="progress_nomediapresent" product="default">Nėra laikmenos\u2026</string>
-    <string name="transient_navigation_confirmation_long">Braukite iš ekrano krašto norėdami atskleisti sistemos juostą</string>
 </resources>

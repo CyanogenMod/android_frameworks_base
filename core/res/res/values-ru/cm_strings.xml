@@ -73,7 +73,5 @@
     <string name="perf_profile_bal">Сбалансированный</string>
     <string name="perf_profile_perf">Высокая производительность</string>
 
-    <string name="transient_navigation_confirmation_long">Проведите пальцем от края экрана, чтобы показать панель навигации.</string>
     <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
-
 </resources>

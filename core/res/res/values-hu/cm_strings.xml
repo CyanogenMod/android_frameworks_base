@@ -66,5 +66,4 @@
     <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
     <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse az akkumulátor használati adatokat</string>
     <string name="immersive_mode_confirmation_bottom">Csúsztasson fentről lefelé a teljesképernyős módból való kilépéshez.</string>
-    <string name="transient_navigation_confirmation_long">Csúsztasson a képernyő szélén a rendszer menü megjelenítéséhez</string>
 </resources>
