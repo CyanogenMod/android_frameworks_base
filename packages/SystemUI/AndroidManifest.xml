@@ -151,6 +151,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".ReminderReceiver">
+            <intent-filter>
+                <action android:name="com.android.systemui.POST_REMINDER_NOTIFY"/>
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".usb.UsbStorageActivity"
                   android:label="@*android:string/usb_storage_activity_title"
                   android:excludeFromRecents="true">

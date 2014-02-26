@@ -3811,6 +3811,12 @@ public final class Settings {
         public static final String REMINDER_ALERT_RINGER = "reminder_alert_ringer";
 
         /**
+         * Reminder alert flip interval
+         * @hide
+         */
+        public static final String REMINDER_ALERT_INTERVAL = "reminder_alert_interval";
+
+        /**
          * QuickSettings network modes to switch
          * @hide
          */
