@@ -17,10 +17,13 @@
 -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="rectangle">
-    <stroke
-        android:color="#ff606060"
-        android:width="2dp" />
-    <corners
-        android:radius="2dp" />
+       android:shape="oval">
+
+    <solid
+        android:color="@color/ad_notification_background_color" />
+
+    <size
+        android:width="@dimen/overflow_background_icon_size"
+        android:height="@dimen/overflow_background_icon_size" />
+
 </shape>

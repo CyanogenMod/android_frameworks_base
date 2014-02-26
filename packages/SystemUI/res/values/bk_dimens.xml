@@ -29,6 +29,9 @@
     <!-- Active display overflow notification icon size -->
     <dimen name="overflow_icon_size">32dp</dimen>
 
+    <!-- Active display overflow background notification icon size -->
+    <dimen name="overflow_background_icon_size">56dp</dimen>
+
     <!-- Active display Handle notification icon size -->
     <dimen name="handle_icon_size">32dp</dimen>
 

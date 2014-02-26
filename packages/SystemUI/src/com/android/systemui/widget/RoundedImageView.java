@@ -21,14 +21,20 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
+
+import java.text.NumberFormat;
 
 public class RoundedImageView extends ImageView {
 
@@ -57,6 +63,14 @@ public class RoundedImageView extends ImageView {
 
   private ScaleType mScaleType;
 
+  private Drawable mNumberBackground;
+  private Paint mNumberPain;
+  private int mNumberX;
+  private int mNumberY;
+  private int mNumbers;
+  private String mNumberText;
+  private boolean mShowNumber = false;
+
   public RoundedImageView(Context context) {
     super(context);
   }
@@ -67,6 +81,16 @@ public class RoundedImageView extends ImageView {
 
   public RoundedImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
+
+    final Resources res = context.getResources();
+    final float densityMultiplier = res.getDisplayMetrics().density;
+    final float scaledPx = 8 * densityMultiplier;
+    mNumberPain = new Paint();
+    mNumberPain.setTextAlign(Paint.Align.CENTER);
+    mNumberPain.setColor(res.getColor(R.drawable.notification_number_text_color));
+    mNumberPain.setAntiAlias(true);
+    mNumberPain.setTypeface(Typeface.DEFAULT_BOLD);
+    mNumberPain.setTextSize(scaledPx);
 
     TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RoundedImageView, defStyle, 0);
 
@@ -329,5 +353,64 @@ public class RoundedImageView extends ImageView {
     mRoundBackground = roundBackground;
     updateBackgroundDrawableAttrs();
     invalidate();
+  }
+
+  @Override
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+    if ((mNumberBackground != null) && mShowNumber) {
+        placeNumber(mNumbers, mShowNumber);
+    }
+  }
+
+  @Override
+  protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+    if ((mNumberBackground != null) && mShowNumber) {
+        mNumberBackground.draw(canvas);
+        canvas.drawText(mNumberText, mNumberX, mNumberY, mNumberPain);
+    }
+  }
+
+  public void placeNumber(int number, boolean showNumber) {
+    mShowNumber = showNumber;
+    mNumbers = number;
+    if (showNumber && (number > 1)) {
+        mNumberBackground = mContext.getResources().getDrawable(
+                            R.drawable.ic_notification_overlay);
+        final String str;
+        final int tooBig = mContext.getResources().getInteger(
+             android.R.integer.status_bar_notification_info_maxnum);
+        if (number > tooBig) {
+            str = mContext.getResources().getString(
+                    android.R.string.status_bar_notification_info_overflow);
+        } else {
+            NumberFormat f = NumberFormat.getIntegerInstance();
+            str = f.format(number);
+        }
+        mNumberText = str;
+
+        final int w = getWidth();
+        final int h = getHeight();
+        final Rect r = new Rect();
+        mNumberPain.getTextBounds(str, 0, str.length(), r);
+        final int tw = r.right - r.left;
+        final int th = r.bottom - r.top;
+        mNumberBackground.getPadding(r);
+        int dw = r.left + tw + r.right;
+        if (dw < mNumberBackground.getMinimumWidth()) {
+            dw = mNumberBackground.getMinimumWidth();
+        }
+        mNumberX = w-r.right-((dw-r.right-r.left)/2);
+        int dh = r.top + th + r.bottom;
+        if (dh < mNumberBackground.getMinimumWidth()) {
+            dh = mNumberBackground.getMinimumWidth();
+        }
+        mNumberY = h-r.bottom-((dh-r.top-th-r.bottom)/2);
+        mNumberBackground.setBounds(w-dw, h-dh, w, h);
+    } else {
+        mNumberBackground = null;
+        mNumberText = null;
+    }
   }
 }

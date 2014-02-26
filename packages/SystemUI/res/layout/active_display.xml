@@ -9,9 +9,16 @@
     <!-- All the actual content will end up being inflated and add
          to the following layout so that we can handle orientation
          changes and load the appropriate layout based on that. -->
-    <FrameLayout
-        android:id="@+id/active_view_contents"
+    <com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayHost
+        android:id="@+id/active_view_host"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <FrameLayout
+             android:id="@+id/active_view_contents"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent" />
+
+    </com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayHost>
 
 </com.android.systemui.statusbar.policy.activedisplay.ActiveDisplayView>
