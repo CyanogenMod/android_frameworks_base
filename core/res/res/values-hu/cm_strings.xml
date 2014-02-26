@@ -64,4 +64,9 @@
     <string name="perf_profile_pwrsv">Energiatakarékos</string>
     <string name="perf_profile_bal">Kiegyensúlyozott</string>
     <string name="perf_profile_perf">Teljesítménycentrikus</string>
+    <string name="permlab_interceptSmsSent">kimenő SMS üzenetek elfogása</string>
+    <string name="permdesc_interceptSmsSent">Lehetővé teszi az alkalmazás számára, hogy elfogja a kimenő SMS üzeneteket. A rosszindulatú alkalmazások ezt felhasználhatják az SMS-küldés blokkolására.</string>
+    <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
+    <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse az akkumulátor használati adatokat</string>
+    <string name="immersive_mode_confirmation_bottom">Csúsztasson fentről lefelé a teljesképernyős módból való kilépéshez.</string>
 </resources>
