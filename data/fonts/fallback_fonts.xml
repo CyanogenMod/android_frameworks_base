@@ -31,11 +31,6 @@
 <familyset>
     <family>
         <fileset>
-            <file>sahlnaskh-regular.ttf</file>
-        </fileset>
-    </family>
-    <family>
-        <fileset>
             <file variant="elegant">DroidNaskh-Regular.ttf</file>
         </fileset>
     </family>
