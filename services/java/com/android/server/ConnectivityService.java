@@ -2215,7 +2215,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
     }
 
-    void systemReady() {
+    protected void systemReady() {
         mCaptivePortalTracker = CaptivePortalTracker.makeCaptivePortalTracker(mContext, this);
         loadGlobalProxy();
 
@@ -3552,7 +3552,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         Slog.e(TAG, s);
     }
 
-    int convertFeatureToNetworkType(int networkType, String feature) {
+    protected int convertFeatureToNetworkType(int networkType, String feature) {
         int usedNetworkType = networkType;
 
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
@@ -4951,7 +4951,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         setAlarm(samplingIntervalInSeconds * 1000, mSampleIntervalElapsedIntent);
     }
 
-    void setAlarm(int timeoutInMilliseconds, PendingIntent intent) {
+    protected void setAlarm(int timeoutInMilliseconds, PendingIntent intent) {
         long wakeupTime = SystemClock.elapsedRealtime() + timeoutInMilliseconds;
         mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, wakeupTime, intent);
     }
