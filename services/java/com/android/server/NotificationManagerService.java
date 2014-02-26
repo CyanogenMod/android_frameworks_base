@@ -2028,8 +2028,9 @@ public class NotificationManagerService extends INotificationManager.Stub
                                            == AudioManager.RINGER_MODE_VIBRATE);
 
                         // The DEFAULT_VIBRATE flag trumps any custom vibration AND the fallback.
+                        // If the user has specifically turned off vibration conversions, let them disable vibrations!
                         final boolean useDefaultVibrate =
-                                (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
+                                (notification.defaults & Notification.DEFAULT_VIBRATE) != 0 && shouldConvertSoundToVibration();
 
                         if (!(QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_MUTE))
                                 && (useDefaultVibrate || convertSoundToVibration || hasCustomVibrate)
