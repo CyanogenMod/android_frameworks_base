@@ -25,7 +25,9 @@ import android.net.Uri;
 import android.provider.ContactsContract.CommonDataKinds.Callable;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.DataUsageFeedback;
+import android.telephony.DisconnectCause;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.internal.telephony.CallerInfo;
 import com.android.internal.telephony.PhoneConstants;
@@ -34,6 +36,8 @@ import com.android.internal.telephony.PhoneConstants;
  * The CallLog provider contains information about placed and received calls.
  */
 public class CallLog {
+	private static final String TAG = "CallLog";
+
     public static final String AUTHORITY = "call_log";
 
     /**
@@ -287,6 +291,17 @@ public class CallLog {
         public static final String CACHED_FORMATTED_NUMBER = "formatted_number";
 
         /**
+         * Reason the call was disconnected. Valid values are defined in
+         * {@link android.telephony.DisconnectCause}.
+         * <P>
+         * Type: INTEGER (int)
+         * </P>
+         * 
+         * @hide
+         */
+        public static final String DISCONNECT_CAUSE = "disconnect_cause";
+
+        /**
          * Adds a call to the call log.
          *
          * @param ci the CallerInfo object to get the target contact from.  Can be null
@@ -299,11 +314,13 @@ public class CallLog {
          * @param callType enumerated values for "incoming", "outgoing", or "missed"
          * @param start time stamp for the call in milliseconds
          * @param duration call duration in seconds
+         * @param disconnectCause reason the call was disconnected, see {@link DisconnectCause}
          *
          * {@hide}
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
-                int presentation, int callType, long start, int duration) {
+                int presentation, int callType, long start, int duration,
+                int disconnectCause) {
             final ContentResolver resolver = context.getContentResolver();
             int numberPresentation = PRESENTATION_ALLOWED;
 
@@ -343,6 +360,12 @@ public class CallLog {
                 values.put(CACHED_NUMBER_TYPE, ci.numberType);
                 values.put(CACHED_NUMBER_LABEL, ci.numberLabel);
             }
+            if (disconnectCause < DisconnectCause.MINIMUM_VALID_VALUE
+                    || disconnectCause > DisconnectCause.MAXIMUM_VALID_VALUE) {
+                Log.w(TAG, "addCall: Invalid disconnect cause: " + disconnectCause);
+                disconnectCause = DisconnectCause.NOT_VALID;
+            }
+            values.put(DISCONNECT_CAUSE, Integer.valueOf(disconnectCause));
 
             if ((ci != null) && (ci.person_id > 0)) {
                 // Update usage information for the number associated with the contact ID.
