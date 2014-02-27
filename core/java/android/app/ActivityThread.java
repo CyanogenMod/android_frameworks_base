@@ -4126,6 +4126,63 @@ public final class ActivityThread {
         }
     }
 
+    /*
+     * Parse a string of the form /[0-9]+[kKmMgG]?/, which is used to
+     * specify memory sizes.  [kK] indicates kilobytes, [mM] megabytes, and
+     * [gG] gigabytes.
+     *
+     * The spec says the -Xmx and -Xms options must be multiples of 1024.
+     * It doesn't say anything about -Xss.
+     *
+     * Returns 0 (a useless size) if "s" is malformed or specifies a low or
+     * non-evenly-divisible value.
+     */
+    private int parseMemOption(String s){
+        if( s.equals("") ){
+            return 0;
+        }
+
+        char lastChar = s.charAt(s.length()-1);
+        int value = 0;
+        if( lastChar == 'k' || lastChar == 'K' || lastChar == 'm' ||
+                lastChar == 'M' || lastChar == 'g' || lastChar == 'G' ) {
+
+            try{
+                value = Integer.parseInt(s.substring(0, s.length()-1));
+            } catch (Exception e){
+                throw new RuntimeException(
+                        "Invalid memory option value:" + s, e);
+            }
+            if( value != 0 ){
+                if( lastChar == 'k' || lastChar == 'K' ){
+                    value *= 1024;
+                }
+                if( lastChar == 'm' || lastChar == 'M' ){
+                    value *= 1024*1024;
+                }
+                if( lastChar == 'g' || lastChar == 'G' ){
+                    if(value>4){
+                        throw new RuntimeException(
+                                "Currently only support less than 4G in value:" + s);
+                    }
+                    value *= 1024*1024*1024;
+                }
+            }
+        } else {
+            try{
+                value = Integer.parseInt(s);
+            } catch  (Exception e){
+                throw new RuntimeException(
+                        "Invalid memory option value:" + s, e);
+            }
+        }
+        if( value % 1024 != 0 ){
+            throw new RuntimeException(
+                    "Invalid memory option value, must be multiples of 1024:" + s);
+        }
+        return value;
+    }
+
     private void handleBindApplication(AppBindData data) {
         mBoundApplication = data;
         mConfiguration = new Configuration(data.config);
@@ -4139,21 +4196,25 @@ public final class ActivityThread {
         // send up app name; do this *before* waiting for debugger
         Process.setArgV0(data.processName);
 
-        String str  = SystemProperties.get("dalvik.vm.heaputilization", "" );
+        Log.d(TAG, "handleBindApplication:" + data.processName );
+
+        String str  = SystemProperties.get("dalvik.vm.heaptargetutilization", "" );
         if( !str.equals("") ){
             float heapUtil = Float.valueOf(str.trim()).floatValue();
             VMRuntime.getRuntime().setTargetHeapUtilization(heapUtil);
-            Log.d(TAG, "setTargetHeapUtilization:" + str );
+            Log.d(TAG, "setTargetHeapUtilization:" + heapUtil );
         }
-        int heapMinFree  = SystemProperties.getInt("dalvik.vm.heapMinFree", 0 );
-        if( heapMinFree > 0 ){
-            VMRuntime.getRuntime().setTargetHeapMinFree(heapMinFree);
-            Log.d(TAG, "setTargetHeapMinFree:" + heapMinFree );
+        String heapMinFree = SystemProperties.get("dalvik.vm.heapminfree", "" );
+        int minfree =  parseMemOption(heapMinFree);
+        if( minfree > 0){
+            VMRuntime.getRuntime().setTargetHeapMinFree(minfree);
+            Log.d(TAG, "setTargetHeapMinFree:" + minfree );
         }
-        int heapConcurrentStart  = SystemProperties.getInt("dalvik.vm.heapconcurrentstart", 0 );
-        if( heapConcurrentStart > 0 ){
-            VMRuntime.getRuntime().setTargetHeapConcurrentStart(heapConcurrentStart);
-            Log.d(TAG, "setTargetHeapConcurrentStart:" + heapConcurrentStart );
+        String heapConcurrentStart  = SystemProperties.get("dalvik.vm.heapconcurrentstart", "" );
+        int concurr_start =  parseMemOption(heapConcurrentStart);
+        if( concurr_start > 0){
+            VMRuntime.getRuntime().setTargetHeapConcurrentStart(concurr_start);
+            Log.d(TAG, "setTargetHeapConcurrentStart:" + concurr_start );
         }
 
         ////
