@@ -124,7 +124,7 @@ public class Patterns {
         + "(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
         + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
         + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?"
-        + "((?:(?:[" + GOOD_IRI_HOST_CHAR + "][" + GOOD_IRI_CHAR + "\\-]{0,64}\\.)+"   // named host
+        + "((?:(?:[" + GOOD_IRI_HOST_CHAR + "][" + GOOD_IRI_HOST_CHAR + "\\-]{0,64}\\.)+"
         + TOP_LEVEL_DOMAIN_STR_FOR_WEB_URL
         + "|(?:(?:25[0-5]|2[0-4]" // or ip address
         + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(?:25[0-5]|2[0-4][0-9]"
@@ -132,9 +132,10 @@ public class Patterns {
         + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
         + "|[1-9][0-9]|[0-9])))"
         + "(?:\\:\\d{1,5})?)" // plus option port number
-        + "(\\/(?:(?:[" + GOOD_IRI_CHAR + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
-        + "\\-\\.\\+\\!\\*\\'\\(\\)\\_])|(?:\\,[" + GOOD_IRI_CHAR + "])|(?:\\%[a-fA-F0-9]{2}))*)?",
-          Pattern.CASE_INSENSITIVE);
+        + "(\\/(?:(?:[" + GOOD_IRI_HOST_CHAR
+        + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
+        + "\\-\\.\\+\\!\\*\\'\\(\\)\\_])|(?:\\,[" + GOOD_IRI_HOST_CHAR
+        + "])|(?:\\%[a-fA-F0-9]{2}))*)?", Pattern.CASE_INSENSITIVE);
 
     public static final Pattern IP_ADDRESS
         = Pattern.compile(
