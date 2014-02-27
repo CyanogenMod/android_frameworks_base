@@ -1,4 +1,6 @@
 /*
+ * Copyright (C) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.systemui.statusbar.phone;
 
 import android.bluetooth.BluetoothAdapter;
@@ -223,9 +224,9 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
     }
 
-    private final Context mContext;
-    private final Handler mHandler;
-    private final CurrentUserTracker mUserTracker;
+    protected final Context mContext;
+    protected final Handler mHandler;
+    protected final CurrentUserTracker mUserTracker;
     private final NextAlarmObserver mNextAlarmObserver;
     private final BugreportObserver mBugreportObserver;
     private final BrightnessObserver mBrightnessObserver;
@@ -261,7 +262,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
 
     private QuickSettingsTileView mRSSITile;
     private RefreshCallback mRSSICallback;
-    private RSSIState mRSSIState = new RSSIState();
+    protected RSSIState mRSSIState = new RSSIState();
 
     private QuickSettingsTileView mBluetoothTile;
     private RefreshCallback mBluetoothCallback;
@@ -313,6 +314,10 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
                 onNextAlarmChanged();
                 onBugreportChanged();
                 rebindMediaRouterAsCurrentUser();
+
+                if (dataSwitchEnabled()) {
+                    onMobileDataSwitchChanged();
+                }
             }
         };
 
@@ -506,7 +511,12 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     void addRSSITile(QuickSettingsTileView view, RefreshCallback cb) {
         mRSSITile = view;
         mRSSICallback = cb;
-        mRSSICallback.refreshView(mRSSITile, mRSSIState);
+
+        if (dataSwitchEnabled()) {
+            onMobileDataSwitchChanged();
+        } else {
+            mRSSICallback.refreshView(mRSSITile, mRSSIState);
+        }
     }
     // NetworkSignalChanged callback
     @Override
@@ -872,5 +882,18 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
                 android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0);
         boolean disable = mContext.getResources().getBoolean(R.bool.config_disableWifiAndBluetooth);
         return disable && airModeOn;
+    }
+
+    public boolean dataSwitchEnabled() {
+        return mContext.getResources().getBoolean(R.bool.config_enableDataSwitch);
+    }
+
+    protected void onMobileDataSwitchChanged() {
+        ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        mRSSIState.enabled = cm.getMobileDataEnabled();
+        if (mRSSICallback != null && mRSSITile != null) {
+            mRSSICallback.refreshView(mRSSITile, mRSSIState);
+        }
     }
 }

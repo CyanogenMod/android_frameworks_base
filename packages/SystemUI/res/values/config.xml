@@ -115,5 +115,8 @@
     <bool name="config_showEmergencyCallLabelOnly">true</bool>
     <bool name="config_showDataConnectionView">true</bool>
     <bool name="config_disableWifiAndBluetooth">false</bool>
+    <bool name="config_showApnSwitch">false</bool>
+    <bool name="config_showRoamingSetting">false</bool>
+    <bool name="config_enableDataSwitch">false</bool>
 </resources>
 
