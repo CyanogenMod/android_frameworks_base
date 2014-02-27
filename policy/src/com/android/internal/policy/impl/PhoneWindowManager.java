@@ -2029,6 +2029,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     + " canceled=" + canceled);
         }
 
+        // Add key vibrate
+        boolean isEnabled = (Settings.System.getInt(mContext.getContentResolver(),
+                   Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) != 0);
+
+        if (down && isEnabled && (repeatCount == 0)) {
+                 if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_HOME ||
+                       keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_BACK) {
+
+                       performHapticFeedbackLw(null, HapticFeedbackConstants.KEYBOARD_TAP, false);
+                 }
+        }
+
         if (mButtonLightEnabled && (down && repeatCount == 0 && (keyCode == KeyEvent.KEYCODE_HOME
                 || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU
                 || keyCode == KeyEvent.KEYCODE_SEARCH))) {
