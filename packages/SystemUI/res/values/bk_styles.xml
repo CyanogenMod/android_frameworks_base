@@ -16,17 +16,6 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Network stats -->
-    <style name="TextAppearance.StatusBar.NetworkStats"
-           parent="@*android:style/TextAppearance.StatusBar">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-    	<item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textSize">@dimen/network_stats_text_size</item>
-        <item name="android:textColor">#ffffff</item>
-    </style> 
-
     <!-- Appsidebar -->
     <style name="AppSidebarItemText" >
         <item name="android:textColor">@color/sidebar_item_text_color</item>

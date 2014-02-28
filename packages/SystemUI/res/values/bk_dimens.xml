@@ -17,9 +17,6 @@
 -->
 <resources>
 
-    <!-- Network stats text size -->
-    <dimen name="network_stats_text_size">9dp</dimen>   
-
     <!-- Top margin for overflow notifications container shown in the P.O.R.N. view -->
     <dimen name="glowpad_overflow_notifications_margin_top">64dp</dimen>
 
