@@ -15,7 +15,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="progress_nomediapresent" product="default">Není dostupné žádné vyměnitelné médium\u2026</string>
-    <string name="transient_navigation_confirmation_long">Tahem od okraje bude zobrazena systémová lišta</string>
 
     <string name="profileNameDefault">Výchozí</string>
     <string name="profileNameWork">Práce</string>

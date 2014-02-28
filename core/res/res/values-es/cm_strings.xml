@@ -70,6 +70,4 @@
 
     <!-- AOSP/CAF -->
     <string name="progress_nomediapresent" product="default">No hay medios extraíbles\u2026</string>
-    <string name="transient_navigation_confirmation_long">Deslizar hacia abajo desde el borde de la pantalla para mostrar la barra de estado</string>
-
 </resources>

@@ -64,7 +64,6 @@
     <string name="perf_profile_perf">Prestaties</string>
     <string name="permlab_interceptSmsSent">uitgaande sms-berichten onderscheppen</string>
     <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren</string>
-    <string name="transient_navigation_confirmation_long">Veeg vanaf de rand van het scherm om de systeembalk weer te geven</string>
     <string name="permlab_resetBatteryStats">accustatistieken resetten</string>
     <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
     <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>

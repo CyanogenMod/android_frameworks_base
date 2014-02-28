@@ -64,7 +64,6 @@
     <string name="perf_profile_perf">Werkverrigting</string>
     <string name="permlab_interceptSmsSent">Onderskep uitgaande SMS</string>
     <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
-    <string name="transient_navigation_confirmation_long">Skyf van die rand van die skerm om sisteem balk te openbaar</string>
     <string name="permlab_resetBatteryStats">battery statistieke terugstel</string>
     <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data terugtestel.</string>
     <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>
