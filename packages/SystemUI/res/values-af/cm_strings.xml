@@ -57,12 +57,6 @@
     <string name="navbar_menu_conditional_button">Kieslys knoppie (Outoverberg)</string>
     <string name="navbar_menu_always_button">Kieslys-knoppie (Altyd sigbaar)</string>
     <string name="navbar_menu_big_button">Kieslys-knoppie</string>
-    <string name="pie_battery_status_charging">Laai tans (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Volgelaai</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% bly oor</string>
-    <string name="pie_phone_status_no_service">Geen diens</string>
-    <string name="pie_phone_status_airplane_mode">Vliegtuigmodus aan</string>
-    <string name="pie_phone_status_emergency_only">Slegs noodoproepe</string>
     <string name="accessibility_quick_settings_ringer">Klank <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrasie <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="quick_settings_profile_label">Profiel</string>
@@ -70,12 +64,13 @@
     <string name="quick_settings_expanded_desktop_off">Normaal</string>
     <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
-    <string name="bean_dream_settings_cid_title">Gebruik Cid</string>
-    <string name="bean_dream_settings_cid_summary">Gebruik Cid in plaas van jellybeans vir die droom agtergrond</string>
     <string name="quick_settings_camera_error_connect">Kan nie aan Kamera konnekteer nie</string>
     <string name="advanced_dev_option_wipe_app">Vee program data uit</string>
     <string name="advanced_dev_option_force_stop">Dwing stop</string>
     <string name="accessibility_dock_battery_level">Dok Batery <xliff:g id="number">%d</xliff:g> persent.</string>
     <string name="screenshot_delete_action">Verwyder</string>
     <string name="screenshot_delete_confirmation">Skermkiekie geskrap</string>
+    <string name="dessert_case_settings_cm_title">Wys CM se gelukbringer</string>
+    <string name="dessert_case_settings_cm_summary">Wys CM se gelukbringer saam met Android se nageregte binne die droom</string>
+    <string name="accessibility_desc_add_quick_settings">Voegby Snel instellings.</string>
 </resources>

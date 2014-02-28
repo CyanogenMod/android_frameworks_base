@@ -19,6 +19,7 @@
     <string name="profileNameHome">Huis</string>
     <string name="profileNameSilent">Stil</string>
     <string name="profileNameNight">Nag</string>
+    <string name="profileNameAutomobile">Motor</string>
     <string name="profileGroupPhone">Foon</string>
     <string name="profileGroupCalendar">Kalender</string>
     <string name="profileGroupGmail">Gmail</string>
@@ -42,10 +43,6 @@
     <string name="reboot_confirm" product="default">Jou foon gaan herlaai.</string>
     <string name="permlab_preventpower">Verhoed krag knoppie</string>
     <string name="permdesc_preventpower">Laat die program toe om die krag knoppie se gebruik te verander.</string>
-    <string name="permlab_fm_radio_receiver">Beheer FM-ontvanger</string>
-    <string name="permdesc_fm_radio_receiver">Laat die program toe om die FM-ontvanger te beheer.</string>
-    <string name="permlab_fm_radio_transmitter">Beheer FM-sender</string>
-    <string name="permdesc_fm_radio_transmitter">Laat die program toe om die FM-sender te beheer.</string>
     <string name="storage_sd_dock_card">Dok SD-kaart</string>
     <string name="app_killed_message">Program beëindig</string>
     <string name="global_action_reboot">Herlaai</string>
@@ -67,7 +64,6 @@
     <string name="perf_profile_perf">Werkverrigting</string>
     <string name="permlab_interceptSmsSent">Onderskep uitgaande SMS</string>
     <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
-    <string name="transient_navigation_confirmation_long">Skyf van die rand van die skerm om sisteem balk te openbaar</string>
     <string name="permlab_resetBatteryStats">battery statistieke terugstel</string>
     <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data terugtestel.</string>
     <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>

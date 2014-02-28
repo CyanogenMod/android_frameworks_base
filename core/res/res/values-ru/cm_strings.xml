@@ -19,6 +19,11 @@
     <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
     <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
     <string name="reboot_reboot">Перезагрузка</string>
+    <string name="reboot_recovery">Режим восстановления</string>
+    <string name="reboot_bootloader">Загрузчик</string>
+    <string name="reboot_bootmenu">Загрузочное меню</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Режим обновления ПО</string>
     <string name="reboot_progress">Перезагрузка\u2026</string>
 
     <string name="global_action_screenshot">Скриншот</string>
@@ -35,9 +40,11 @@
     <string name="profileNameHome">Дом</string>
     <string name="profileNameSilent">Без звука</string>
     <string name="profileNameNight">Ночь</string>
+    <string name="profileNameAutomobile">Автомобиль</string>
     <string name="profileGroupPhone">Телефон</string>
     <string name="profileGroupCalendar">Календарь</string>
     <string name="profileGroupEmail">Почта</string>
+    <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupSMS">Сообщения</string>
     <string name="wildcardProfile">Другой</string>
 
@@ -53,10 +60,6 @@
 
     <string name="permlab_changePrivacyGuardState">Включение или выключение защищённого режима</string>
     <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в защищённом режиме. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
-    <string name="permlab_fm_radio_receiver">Управление приёмником FM</string>
-    <string name="permdesc_fm_radio_receiver">Приложение сможет управлять FM-приёмником.</string>
-    <string name="permlab_fm_radio_transmitter">Управление передатчиком FM</string>
-    <string name="permdesc_fm_radio_transmitter">Приложение сможет управлять FM-передатчиком.</string>
     <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
     <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
     <string name="permlab_preventpower">Блокировка кнопки питания</string>
@@ -70,7 +73,5 @@
     <string name="perf_profile_bal">Сбалансированный</string>
     <string name="perf_profile_perf">Высокая производительность</string>
 
-    <string name="transient_navigation_confirmation_long">Проведите пальцем от края экрана, чтобы показать панель навигации.</string>
     <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
-
 </resources>

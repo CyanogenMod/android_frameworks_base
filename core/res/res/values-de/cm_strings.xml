@@ -42,10 +42,6 @@
     <string name="reboot_confirm" product="default">Telefon wird neu gestartet</string>
     <string name="permlab_preventpower">Ein/Aus-Taste umbelegen</string>
     <string name="permdesc_preventpower">Ermöglicht der App, der Ein/Aus-Taste eine andere Funktion zuzuweisen</string>
-    <string name="permlab_fm_radio_receiver">UKW-Empfänger steuern</string>
-    <string name="permdesc_fm_radio_receiver">Ermöglicht der App, den UKW-Empfänger zu steuern.</string>
-    <string name="permlab_fm_radio_transmitter">UKW-Sender steuern</string>
-    <string name="permdesc_fm_radio_transmitter">Ermöglicht der App, den UKW-Sender zu steuern.</string>
     <string name="permlab_sendMockSms">Simulierte SMS senden</string>
     <string name="permdesc_sendMockSms">Ermöglicht der App, simulierte SMS zu vertrauenswürdigen Apps zu senden. Schädliche Apps könnten kontinuierlich SMS versenden, was das Benachrichtigungssystem blockieren oder anderweitig störend sein könnte.</string>
     <string name="progress_nomediapresent" product="default">Keine entfernbaren Medien vorhanden\u2026</string>
@@ -70,7 +66,4 @@
     <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
     <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen</string>
     <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
-
-    <!-- Untranslated AOSP strings -->
-    <string name="transient_navigation_confirmation_long">Von der Seite des Displays aus wischen, um die Navigationsleiste einzublenden</string>
 </resources>

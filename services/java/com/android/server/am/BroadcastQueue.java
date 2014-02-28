@@ -371,17 +371,17 @@ public final class BroadcastQueue {
         if (waitForServices && r.curComponent != null && r.queue.mDelayBehindServices
                 && r.queue.mOrderedBroadcasts.size() > 0
                 && r.queue.mOrderedBroadcasts.get(0) == r) {
-            ActivityInfo nextReceiver;
+            ResolveInfo nextReceiver;
             if (r.nextReceiver < r.receivers.size()) {
                 Object obj = r.receivers.get(r.nextReceiver);
-                nextReceiver = (obj instanceof ActivityInfo) ? (ActivityInfo)obj : null;
+                nextReceiver = (obj instanceof ResolveInfo) ? (ResolveInfo)obj : null;
             } else {
                 nextReceiver = null;
             }
             // Don't do this if the next receive is in the same process as the current one.
             if (receiver == null || nextReceiver == null
-                    || receiver.applicationInfo.uid != nextReceiver.applicationInfo.uid
-                    || !receiver.processName.equals(nextReceiver.processName)) {
+                    || receiver.applicationInfo.uid != nextReceiver.activityInfo.applicationInfo.uid
+                    || !receiver.processName.equals(nextReceiver.activityInfo.processName)) {
                 // In this case, we are ready to process the next receiver for the current broadcast,
                 // but are on a queue that would like to wait for services to finish before moving
                 // on.  If there are background services currently starting, then we will go into a

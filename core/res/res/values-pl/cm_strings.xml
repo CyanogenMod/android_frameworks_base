@@ -43,10 +43,6 @@
     <string name="reboot_confirm" product="default">Telefon zostanie uruchomiony ponownie.</string>
     <string name="permlab_preventpower">zastępowanie przycisku zasilania</string>
     <string name="permdesc_preventpower">Pozwala aplikacji na zastępowanie przycisku zasilania</string>
-    <string name="permlab_fm_radio_receiver">kontrola odbiornika FM</string>
-    <string name="permdesc_fm_radio_receiver">Zezwala aplikacji na kontrolowanie odbiornika FM</string>
-    <string name="permlab_fm_radio_transmitter">kontrola transmittera FM</string>
-    <string name="permdesc_fm_radio_transmitter">Pozwala aplikacji na kontrolowanie transmittera FM</string>
     <string name="permlab_sendMockSms">wysyłanie pozorowanych wiadomości SMS</string>
     <string name="permdesc_sendMockSms">Pozwala aplikacji na wysyłanie pozorowanych wiadomości SMS. W rezultacie umożliwi to wysyłanie SMS-ów do zaufanych aplikacji. Złośliwe aplikacje mogą wysyłać wiadomości w sposób ciągły, blokując system powiadomień urządzenia i zakłócając spokój użytkownika.</string>
     <string name="storage_sd_dock_card">Karta pamięci stacji dokującej</string>

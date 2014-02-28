@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,51 +15,58 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="global_actions_toggle_expanded_desktop_mode">拡張デスクトップ</string>
-    <string name="global_actions_expanded_desktop_mode_on_status">有効</string>
-    <string name="global_actions_expanded_desktop_mode_off_status">無効</string>
-    <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
-    <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
-    <string name="toast_rotation_unlocked">ディスプレイの回転をロック解除しました</string>
-    <string name="toast_rotation_locked">ディスプレイの回転をロックしました</string>
-    <string name="permlab_fm_radio_receiver">FMレシーバの制御</string>
-    <string name="permdesc_fm_radio_receiver">FMレシーバの制御をアプリに許可します。</string>
-    <string name="permlab_fm_radio_transmitter">FMトランスミッターの制御</string>
-    <string name="permdesc_fm_radio_transmitter">FMトランスミッターの制御をアプリに許可します。</string>
-    <string name="reboot_system" product="tablet">タブレットを再起動</string>
-    <string name="reboot_system" product="default">携帯電話を再起動</string>
-    <string name="global_action_screenshot">スクリーンショット</string>
-    <string name="reboot_reboot">再起動</string>
-    <string name="reboot_recovery">リカバリー</string>
-    <string name="reboot_bootloader">ブートローダー</string>
-    <string name="reboot_bootmenu">ブートメニュー</string>
-    <string name="reboot_fastboot">ファストブート</string>
-    <string name="reboot_download">ダウンロード</string>
-    <string name="reboot_progress">再起動中\u2026</string>
-    <string name="global_action_reboot">再起動</string>
-    <string name="permlab_preventpower">電源キーを保護</string>
-    <string name="permdesc_preventpower">電源キーを置き換えるのをアプリに許可します。</string>
-    <string name="global_action_choose_profile">プロファイル選択</string>
     <string name="profileNameDefault">デフォルト</string>
     <string name="profileNameWork">仕事</string>
     <string name="profileNameHome">自宅</string>
     <string name="profileNameSilent">サイレント</string>
     <string name="profileNameNight">夜</string>
+    <string name="profileNameAutomobile">車</string>
     <string name="profileGroupPhone">電話</string>
     <string name="profileGroupCalendar">カレンダー</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">Eメール</string>
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">その他</string>
-    <string name="app_killed_message">アプリケーションを強制終了しました</string>
+    <string name="global_action_screenshot">スクリーンショット</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">拡張デスクトップ</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">有効</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">無効</string>
+    <string name="reboot_system" product="tablet">タブレットを再起動</string>
+    <string name="reboot_system" product="default">携帯電話を再起動</string>
+    <string name="reboot_reboot">再起動</string>
+    <string name="reboot_recovery">リカバリー</string>
+    <string name="reboot_bootloader">ブートローダ</string>
+    <string name="reboot_bootmenu">ブートメニュー</string>
+    <string name="reboot_fastboot">ファストブート</string>
+    <string name="reboot_download">ダウンロード</string>
+    <string name="reboot_progress">再起動中\u2026</string>
+    <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
+    <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
+    <string name="permlab_preventpower">電源キーを使用しない</string>
+    <string name="permdesc_preventpower">電源キーの無効化をアプリケーションに許可します。</string>
+    <string name="permlab_sendMockSms">仮のSMSメッセージの送信</string>
+    <string name="permdesc_sendMockSms">仮のSMSメッセージの送信をアプリケーションに許可します。これによりアプリケーションは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリケーションが連続的にメッセージを送信したり、通知を阻止したり、ユーザーが支障をきたすおそれがあります。</string>
     <string name="storage_sd_dock_card">SDカードを接続</string>
-    <string name="stylus_app_not_installed">%s はインストールされていません</string>
-    <string name="permlab_changePrivacyGuardState">プライバシー保護を有効/無効にする</string>
-    <string name="permdesc_changePrivacyGuardState">アプリに、他のアプリがプライバシー保護で実行するかどうか変更することを許可します。アプリがプライバシー保護で実行されるとそのアプリは連絡先、通話履歴、メッセージなどの個人データにアクセスできなくなります。</string>
-    <string name="privacy_guard_notification">プライバシー保護はアクティブ</string>
-    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> は、個人データにアクセスできません</string>
+    <string name="app_killed_message">アプリケーションを強制終了しました</string>
+    <string name="global_action_reboot">再起動</string>
+    <string name="global_action_choose_profile">プロファイル</string>
+    <string name="toast_rotation_unlocked">画面の回転をロック解除しました</string>
+    <string name="toast_rotation_locked">画面の回転をロックしました</string>
+    <string name="stylus_app_not_installed">%sはインストールされていません</string>
+    <string name="permlab_changePrivacyGuardState">プライバシーガードを有効/無効にする</string>
+    <string name="permdesc_changePrivacyGuardState">他のアプリケーションのプライバシーガードを変更することをアプリケーションに許可します。プライバシーガードを有効にしてアプリケーションを実行すると、そのアプリケーションは連絡先、通話履歴、メッセージなどの個人データにアクセスできなくなります。</string>
+    <string name="privacy_guard_notification">プライバシーガードが有効です</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>は個人データにアクセスできません</string>
     <string name="profile_picker_title">プロファイル</string>
     <string name="profile_none">なし</string>
-    <string name="permlab_cancelNotifications">アプリの通知をキャンセル</string>
-    <string name="permdesc_cancelNotifications">アプリに、他のアプリで生成された通知をキャンセルすることを許可します。</string>
+    <string name="perf_profile_pwrsv">省電力</string>
+    <string name="perf_profile_bal">バランス</string>
+    <string name="perf_profile_perf">パフォーマンス</string>
+    <string name="permlab_interceptSmsSent">送信するSMSの傍受</string>
+    <string name="permdesc_interceptSmsSent">送信するSMSの傍受をアプリケーションに許可します。悪意のあるアプリケーションがメッセージの送信を阻止するおそれがあります。</string>
+    <string name="permlab_resetBatteryStats">バッテリー統計のリセット</string>
+    <string name="permdesc_resetBatteryStats">現在の低レベルのバッテリー利用データをリセットすることをアプリケーションに許可します。</string>
+    <string name="immersive_mode_confirmation_bottom">画面の最下部から上にスワイプするとフルスクリーンを終了します。</string>
+    <string name="transient_navigation_confirmation_long">画面の端からスワイプするとシステムバーを表示します</string>
+    <string name="progress_nomediapresent" product="default">取り外し可能なメディアが挿入されていません\u2026</string>
 </resources>

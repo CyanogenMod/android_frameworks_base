@@ -20,6 +20,7 @@
     <string name="profileNameHome">Thuis</string>
     <string name="profileNameSilent">Stil</string>
     <string name="profileNameNight">Nacht</string>
+    <string name="profileNameAutomobile">Onderweg</string>
     <string name="profileGroupPhone">Telefoon</string>
     <string name="profileGroupCalendar">Agenda</string>
     <string name="profileGroupGmail">Gmail</string>
@@ -49,10 +50,6 @@
     <string name="toast_rotation_unlocked">Scherm wordt automatisch gedraaid</string>
     <string name="toast_rotation_locked">Scherm wordt niet automatisch gedraaid</string>
     <string name="storage_sd_dock_card">SD-kaart in dock</string>
-    <string name="permlab_fm_radio_receiver">FM-ontvanger beheren</string>
-    <string name="permdesc_fm_radio_receiver">Hiermee kan de app de FM-ontvanger beheren.</string>
-    <string name="permlab_fm_radio_transmitter">FM-zender beheren</string>
-    <string name="permdesc_fm_radio_transmitter">Hiermee kan de app de FM-zender beheren.</string>
     <string name="permlab_sendMockSms">nep-sms verzenden</string>
     <string name="permdesc_sendMockSms">Hiermee kan de app nep-sms-berichten verzenden. Met deze machtiging kan een app sms-berichten verzenden naar vertrouwde apps. Schadelijke apps zouden continu berichten kunnen verzenden, waardoor het meldingensysteem wordt geblokkeerd en de gebruiker wordt verstoord.</string>
     <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
@@ -67,7 +64,6 @@
     <string name="perf_profile_perf">Prestaties</string>
     <string name="permlab_interceptSmsSent">uitgaande sms-berichten onderscheppen</string>
     <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren</string>
-    <string name="transient_navigation_confirmation_long">Veeg vanaf de rand van het scherm om de systeembalk weer te geven</string>
     <string name="permlab_resetBatteryStats">accustatistieken resetten</string>
     <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
     <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>

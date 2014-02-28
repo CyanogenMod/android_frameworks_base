@@ -19,8 +19,6 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Dźwięk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Wibracje <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Użyj głowy Cida</string>
-    <string name="bean_dream_settings_cid_summary">Używaj głowy Cida zamiast loga Androida Jelly Bean w animacji snu</string>
     <string name="quick_settings_profile_label">Profil</string>
     <string name="powerwidget_screen_timeout_toast">Wygaszanie ekranu po: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
@@ -68,12 +66,6 @@
     <string name="navbar_menu_conditional_button">Przycisk Menu (autoukrywaj)</string>
     <string name="navbar_menu_always_button">Przycisk Menu (zawsze pokazuj)</string>
     <string name="navbar_menu_big_button">Przycisk Menu</string>
-    <string name="pie_battery_status_charging">Ładowanie (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Naładowana</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% pozostało</string>
-    <string name="pie_phone_status_no_service">Brak usługi</string>
-    <string name="pie_phone_status_airplane_mode">Tryb samolotowy aktywny</string>
-    <string name="pie_phone_status_emergency_only">Tylko połączenia alarmowe</string>
     <string name="advanced_dev_option_wipe_app">Usuń dane aplikacji</string>
     <string name="advanced_dev_option_force_stop">Wymuś zamknięcie</string>
     <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>

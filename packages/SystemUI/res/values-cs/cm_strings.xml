@@ -16,8 +16,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrace <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Použít hlavu CIDa</string>
-    <string name="bean_dream_settings_cid_summary">Použít hlavu CIDa místo sladkých želé fazolí</string>
     <string name="quick_settings_profile_label">Profil</string>
     <string name="powerwidget_screen_timeout_toast">Vypnutí obrazovky nastaveno na: %1$d %2$s</string>
     <string name="quick_settings_gps_off">GPS vyp.</string>
@@ -62,12 +60,6 @@
     <string name="navbar_menu_conditional_button">Tlačítko (skrývat) Nabídka</string>
     <string name="navbar_menu_always_button">Tlačítko (vždy zobrazit) Nabídka</string>
     <string name="navbar_menu_big_button">Tlačítko Nabídka</string>
-    <string name="pie_battery_status_charging">Nabíjení (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Nabito</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% zbývá</string>
-    <string name="pie_phone_status_no_service">Žádné připojení</string>
-    <string name="pie_phone_status_airplane_mode">Režim V letadle aktivovaný</string>
-    <string name="pie_phone_status_emergency_only">Pouze tísňová volání</string>
 
     <string name="advanced_dev_option_wipe_app">Vymazat data aplikací</string>
     <string name="advanced_dev_option_force_stop">Vynutit ukončení</string>

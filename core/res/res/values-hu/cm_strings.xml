@@ -31,10 +31,6 @@
     <string name="reboot_confirm" product="default">A telefon újraindul.</string>
     <string name="permlab_preventpower">kikapcsológomb felülbírálata</string>
     <string name="permdesc_preventpower">Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát</string>
-    <string name="permlab_fm_radio_receiver">FM rádióvevő vezérlése</string>
-    <string name="permdesc_fm_radio_receiver">Lehetővé teszi az alkalmazás számára az FM rádióvevő vezérlését.</string>
-    <string name="permlab_fm_radio_transmitter">FM rádióadó vezérlése</string>
-    <string name="permdesc_fm_radio_transmitter">Lehetővé teszi az alkalmazás számára az FM rádióadó vezérlését.</string>
     <string name="permlab_sendMockSms">SMS utánzatok küldése</string>
     <string name="permdesc_sendMockSms">Lehetővé teszi az alkalmazás számára, hogy SMS utánzatokat hozzon létre. A rosszindulatú alkalmazások folyamatos üzenet-létrehozással zavarhatják a felhasználót, és megbéníthatják az eszköz értesítési felületét.</string>
     <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
@@ -70,5 +66,4 @@
     <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
     <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse az akkumulátor használati adatokat</string>
     <string name="immersive_mode_confirmation_bottom">Csúsztasson fentről lefelé a teljesképernyős módból való kilépéshez.</string>
-    <string name="transient_navigation_confirmation_long">Csúsztasson a képernyő szélén a rendszer menü megjelenítéséhez</string>
 </resources>

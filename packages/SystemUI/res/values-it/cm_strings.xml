@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,8 +20,8 @@
     <string name="accessibility_battery_level">Batteria <xliff:g id="number">%d</xliff:g> percento.</string>
     <string name="accessibility_quick_settings_ringer">Suoneria <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibrazione <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Utilizza testa CID</string>
-    <string name="bean_dream_settings_cid_summary">Utilizza la testa di CID al posto dei jellybean all\'interno di Daydream</string>
+    <string name="dessert_case_settings_cm_title">Mostra mascotte CM</string>
+    <string name="dessert_case_settings_cm_summary">Mostra la mascotte CM insieme ai dolci di Android all\'interno del sogno</string>
     <string name="quick_settings_profile_label">Profilo</string>
     <string name="powerwidget_screen_timeout_toast">Timeout impostato a: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
@@ -68,15 +69,10 @@
     <string name="navbar_menu_conditional_button">Pulsante Menu (automatico)</string>
     <string name="navbar_menu_always_button">Pulsante Menu (fisso)</string>
     <string name="navbar_menu_big_button">Pulsante Menu</string>
-    <string name="pie_battery_status_charging">In carica (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Carica</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% rimanente</string>
-    <string name="pie_phone_status_no_service">Nessun servizio</string>
-    <string name="pie_phone_status_airplane_mode">Modalità aereo</string>
-    <string name="pie_phone_status_emergency_only">Solo chiamate di emergenza</string>
     <string name="advanced_dev_option_wipe_app">Cancella dati</string>
     <string name="advanced_dev_option_force_stop">Arresto forzato</string>
     <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
     <string name="screenshot_delete_action">Elimina</string>
     <string name="screenshot_delete_confirmation">Screenshot eliminato.</string>
+    <string name="accessibility_desc_add_quick_settings">Aggiungi Impostazioni rapide.</string>
 </resources>

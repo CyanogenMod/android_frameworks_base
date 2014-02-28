@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
+ * Copyright (C) 2013-2014 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +89,7 @@ public class DessertCaseView extends FrameLayout {
     private static final int NUM_PASTRIES = PASTRIES.length + RARE_PASTRIES.length
             + XRARE_PASTRIES.length + XXRARE_PASTRIES.length;
 
-    private SparseArray<Drawable> mDrawables = new SparseArray<Drawable>(NUM_PASTRIES);
+    private SparseArray<Drawable> mDrawables = new SparseArray<Drawable>(getNumPastries());
 
     private static final float[] MASK = {
             0f,  0f,  0f,  0f, 255f,
@@ -169,7 +170,8 @@ public class DessertCaseView extends FrameLayout {
         }
         opts.inMutable = true;
         Bitmap loaded = null;
-        for (int[] list : new int[][] { PASTRIES, RARE_PASTRIES, XRARE_PASTRIES, XXRARE_PASTRIES }) {
+        for (int[] list : new int[][] { getPastries(), getRarePastries(),
+                getXRarePastries(), getXXRarePastries()}) {
             for (int resid : list) {
                 opts.inBitmap = loaded;
                 loaded = BitmapFactory.decodeResource(res, resid, opts);
@@ -295,13 +297,13 @@ public class DessertCaseView extends FrameLayout {
             final float which = frand();
             final Drawable d;
             if (which < 0.0005f) {
-                d = mDrawables.get(pick(XXRARE_PASTRIES));
+                d = mDrawables.get(pick(getXXRarePastries()));
             } else if (which < 0.005f) {
-                d = mDrawables.get(pick(XRARE_PASTRIES));
+                d = mDrawables.get(pick(getXRarePastries()));
             } else if (which < 0.5f) {
-                d = mDrawables.get(pick(RARE_PASTRIES));
+                d = mDrawables.get(pick(getRarePastries()));
             } else if (which < 0.7f) {
-                d = mDrawables.get(pick(PASTRIES));
+                d = mDrawables.get(pick(getPastries()));
             } else {
                 d = null;
             }
@@ -462,6 +464,26 @@ public class DessertCaseView extends FrameLayout {
         return result;
     }
 
+    protected int[] getPastries() {
+        return PASTRIES;
+    }
+
+    protected int[] getRarePastries() {
+        return RARE_PASTRIES;
+    };
+
+    protected int[] getXRarePastries() {
+        return XRARE_PASTRIES;
+    }
+
+    protected int[] getXXRarePastries() {
+        return XXRARE_PASTRIES;
+    }
+
+    protected int getNumPastries() {
+        return NUM_PASTRIES;
+    }
+
     static float frand() {
         return (float)(Math.random());
     }
@@ -500,16 +522,29 @@ public class DessertCaseView extends FrameLayout {
         private float mDarkness;
 
         public RescalingContainer(Context context) {
+            this(context, false);
+        }
+
+        RescalingContainer(Context context, boolean dayDream) {
             super(context);
 
-            setSystemUiVisibility(0
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            );
+            if (dayDream) {
+                // For daydream is better to use setFullscreen + this window flags
+                // It creates a better ux exiting from immersive mode
+                setSystemUiVisibility(0
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            } else {
+                setSystemUiVisibility(0
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        );
+            }
         }
 
         public void setView(DessertCaseView v) {

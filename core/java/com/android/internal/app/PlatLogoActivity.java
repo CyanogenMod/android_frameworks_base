@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (C) 2013-2014 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import android.provider.Settings;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemProperties;
 import android.text.method.AllCapsTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.util.DisplayMetrics;
@@ -44,12 +46,14 @@ public class PlatLogoActivity extends Activity {
     FrameLayout mContent;
     int mCount;
     final Handler mHandler = new Handler();
+    private boolean mIsCM;
     static final int BGCOLOR = 0xffed1d24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsCM = getIntent().hasExtra("is_cm");
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
@@ -58,14 +62,21 @@ public class PlatLogoActivity extends Activity {
 
         mContent = new FrameLayout(this);
         mContent.setBackgroundColor(0xC0000000);
-        
+
         final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
 
+        // Add some padding to the platlogo for devices where the
+        // width of the logo is bigger than the device width
+        int p = (int) (20 * metrics.density);
+
         final ImageView logo = new ImageView(this);
-        logo.setImageResource(com.android.internal.R.drawable.platlogo);
+        logo.setImageResource(mIsCM
+                ? com.android.internal.R.drawable.cm_platlogo
+                : com.android.internal.R.drawable.platlogo);
+        logo.setPadding(p, 0, p, 0);
         logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         logo.setVisibility(View.INVISIBLE);
 
@@ -76,21 +87,25 @@ public class PlatLogoActivity extends Activity {
         final TextView letter = new TextView(this);
 
         letter.setTypeface(bold);
-        letter.setTextSize(300);
+        letter.setTextSize(mIsCM ? 150 : 300);
         letter.setTextColor(0xFFFFFFFF);
         letter.setGravity(Gravity.CENTER);
-        letter.setText(String.valueOf(Build.ID).substring(0, 1));
+        letter.setText(mIsCM ? "CM" : "K");
 
-        final int p = (int)(4 * metrics.density);
+        String cmVersion = SystemProperties.get("ro.cm.version");
+        if (cmVersion != null) {
+            cmVersion = cmVersion.replaceAll("([0-9\\.]+?)-.*", "$1");
+        }
+
+        p = (int) (4 * metrics.density);
 
         final TextView tv = new TextView(this);
-        if (light != null) tv.setTypeface(light);
+        tv.setTypeface(light);
         tv.setTextSize(30);
         tv.setPadding(p, p, p, p);
         tv.setTextColor(0xFFFFFFFF);
         tv.setGravity(Gravity.CENTER);
-        tv.setTransformationMethod(new AllCapsTransformationMethod(this));
-        tv.setText("Android " + Build.VERSION.RELEASE);
+        tv.setText(mIsCM ? "CyanogenMod " + cmVersion : "ANDROID " + Build.VERSION.RELEASE);
         tv.setVisibility(View.INVISIBLE);
 
         mContent.addView(bg);
@@ -164,6 +179,7 @@ public class PlatLogoActivity extends Activity {
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                             | Intent.FLAG_ACTIVITY_CLEAR_TASK
                             | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                        .putExtra("is_cm", mIsCM)
                         .addCategory("com.android.internal.category.PLATLOGO"));
                 } catch (ActivityNotFoundException ex) {
                     android.util.Log.e("PlatLogoActivity", "Couldn't catch a break.");

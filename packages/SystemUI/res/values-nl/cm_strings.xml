@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012-2013 The CyanogenMod Project
+     Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
     <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_quick_settings_ringer">Geluid <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Trillen <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Hoofd van Cid gebruiken</string>
-    <string name="bean_dream_settings_cid_summary">Het hoofd van de mascotte van CyanogenMod gebruiken i.p.v. jellybeans</string>
+    <string name="dessert_case_settings_cm_title">CM-mascotte weergeven</string>
+    <string name="dessert_case_settings_cm_summary">De mascotte van CyanogenMod weergeven in de dagdroom samen met de Android-desserts</string>
     <string name="quick_settings_profile_label">Profiel</string>
     <string name="powerwidget_screen_timeout_toast">Schermtime-out ingesteld op: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
@@ -68,15 +68,10 @@
     <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
     <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
     <string name="navbar_menu_big_button">Menuknop</string>
-    <string name="pie_battery_status_charging">Opladen (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Opgeladen</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% over</string>
-    <string name="pie_phone_status_no_service">Geen service</string>
-    <string name="pie_phone_status_airplane_mode">Vliegmodus aan</string>
-    <string name="pie_phone_status_emergency_only">Alleen noodoproepen</string>
     <string name="advanced_dev_option_wipe_app">App-gegevens wissen</string>
     <string name="advanced_dev_option_force_stop">Nu stoppen</string>
     <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
     <string name="screenshot_delete_action">Verwijderen</string>
     <string name="screenshot_delete_confirmation">Screenshot verwijderd.</string>
+    <string name="accessibility_desc_add_quick_settings">Snelle instellingen toevoegen.</string>
 </resources>

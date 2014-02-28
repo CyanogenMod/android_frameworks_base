@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,23 +15,25 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="progress_nomediapresent" product="default">Non ci sono dispositivi di memoria estraibili\u2026</string>
     <string name="profileNameDefault">Predefinito</string>
     <string name="profileNameWork">Lavoro</string>
     <string name="profileNameHome">Casa</string>
     <string name="profileNameSilent">Silenzioso</string>
     <string name="profileNameNight">Notte</string>
+    <string name="profileNameAutomobile">Automobile</string>
     <string name="profileGroupPhone">Telefono</string>
     <string name="profileGroupCalendar">Calendario</string>
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Altro</string>
-    <string name="reboot_system" product="tablet">Riavvia tablet</string>
-    <string name="reboot_system" product="default">Riavvia telefono</string>
     <string name="global_action_screenshot">Cattura schermata</string>
     <string name="global_actions_toggle_expanded_desktop_mode">Desktop esteso</string>
     <string name="global_actions_expanded_desktop_mode_on_status">Attivato</string>
     <string name="global_actions_expanded_desktop_mode_off_status">Disattivato</string>
+    <string name="reboot_system" product="tablet">Riavvia tablet</string>
+    <string name="reboot_system" product="default">Riavvia telefono</string>
     <string name="reboot_reboot">Riavvia</string>
     <string name="reboot_recovery">Recovery</string>
     <string name="reboot_bootloader">Bootloader</string>
@@ -42,32 +45,26 @@
     <string name="reboot_confirm" product="default">Il telefono verrà riavviato.</string>
     <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
     <string name="permdesc_preventpower">Consente a un\'applicazione di cambiare il comportamento del tasto di spegnimento</string>
+    <string name="permlab_sendMockSms">invia messaggi SMS fittizi</string>
+    <string name="permdesc_sendMockSms">Consente all\'applicazione di inviare messaggi SMS fittizi. Le applicazioni dannose potrebbero inviare messaggi in modo continuo, bloccando il sistema di notifica del dispositivo e disturbando l\'utente.</string>
+    <string name="storage_sd_dock_card">Scheda SD dock</string>
     <string name="app_killed_message">Applicazione terminata</string>
     <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_choose_profile">Profilo</string>
     <string name="toast_rotation_unlocked">Rotazione schermo sbloccata</string>
     <string name="toast_rotation_locked">Rotazione schermo bloccata</string>
-    <string name="storage_sd_dock_card">Scheda SD dock</string>
-    <string name="permlab_fm_radio_receiver">controllo del ricevitore FM</string>
-    <string name="permdesc_fm_radio_receiver">Consente all\'applicazione di controllare il ricevitore FM.</string>
-    <string name="permlab_fm_radio_transmitter">controllo del trasmettitore FM</string>
-    <string name="permdesc_fm_radio_transmitter">Consente all\'applicazione di controllare il trasmettitore FM.</string>
     <string name="stylus_app_not_installed">%s non è installato</string>
-    <string name="permlab_changePrivacyGuardState">abilita o disabilita Privacy Guard</string>
+    <string name="permlab_changePrivacyGuardState">attiva o disattiva Privacy Guard</string>
     <string name="permdesc_changePrivacyGuardState">Consente all\'applicazione di decidere se un\'altra applicazione viene eseguita con Privacy Guard. Quando un\'applicazione viene eseguita con Privacy Guard, non ha accesso a dati personali come contatti, lista chiamate o messaggi.</string>
     <string name="privacy_guard_notification">Privacy Guard attiva</string>
     <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
     <string name="profile_picker_title">Profili</string>
     <string name="profile_none">Nessuno</string>
-    <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
-    <string name="permdesc_interceptSmsSent">Consente all\'applicazione di intercettare un SMS in uscita. Le applicazioni dannose potrebbero usarlo per impedire la spedizione di SMS.</string>
     <string name="perf_profile_pwrsv">Risparmio energetico</string>
     <string name="perf_profile_bal">Bilanciato</string>
     <string name="perf_profile_perf">Prestazioni</string>
-    <string name="progress_nomediapresent" product="default">Non ci sono dispositivi di memoria estraibili\u2026</string>
-    <string name="permlab_sendMockSms">invia messaggi SMS fittizi</string>
-    <string name="permdesc_sendMockSms">Consente all\'applicazione di inviare messaggi SMS fittizi. Le applicazioni dannose potrebbero inviare messaggi in modo continuo, bloccando il sistema di notifica del dispositivo e disturbando l\'utente.</string>
-    <string name="transient_navigation_confirmation_long">Scorri dal bordo dello schermo per mostrare la barra di stato</string>
+    <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
+    <string name="permdesc_interceptSmsSent">Consente all\'applicazione di intercettare un SMS in uscita. Le applicazioni dannose potrebbero usarlo per impedire la spedizione di SMS.</string>
     <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
     <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare i dati di utilizzo della batteria a basso livello.</string>
     <string name="immersive_mode_confirmation_bottom">Scorrere dal basso verso l\'alto per uscire dalla modalità schermo intero.</string>

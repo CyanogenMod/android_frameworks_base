@@ -1119,8 +1119,8 @@
     <string name="no" msgid="5141531044935541497">"キャンセル"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"注意"</string>
     <string name="loading" msgid="7933681260296021180">"読み込んでいます..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"ON"</string>
-    <string name="capital_off" msgid="6815870386972805832">"OFF"</string>
+    <string name="capital_on" msgid="1544682755514494298">"\u2759"</string>
+    <string name="capital_off" msgid="6815870386972805832">"\u3007"</string>
     <string name="whichApplication" msgid="4533185947064773386">"アプリケーションを選択"</string>
     <string name="whichHomeApplication" msgid="4616420172727326782">"ホームアプリを選択"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"常にこの操作で使用する"</string>
@@ -1550,7 +1550,7 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"ロック解除パターンの入力を<xliff:g id="NUMBER_0">%d</xliff:g>回間違えました。あと<xliff:g id="NUMBER_1">%d</xliff:g>回間違えると、携帯端末のロック解除にメールアカウントが必要になります。\n\n<xliff:g id="NUMBER_2">%d</xliff:g>秒後にもう一度お試しください。"</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" - "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"削除"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"推奨レベルを超えるまで音量を上げますか？\n大音量で長時間聞き続けると、聴力を損なう恐れがあります。"</string>
+    <string name="safe_media_volume_warning" product="default" msgid="7324161939475478066">"推奨レベルよりも音量を上げますか？\n長時間大音量で聞き続けると、聴力を損なうおそれがあります。"</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"ユーザー補助機能を有効にするには2本の指で押し続けてください。"</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"ユーザー補助が有効になりました。"</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"ユーザー補助をキャンセルしました。"</string>
@@ -1663,5 +1663,5 @@
     <item quantity="other" msgid="4730868920742952817">"<xliff:g id="COUNT">%d</xliff:g>秒後に再試行"</item>
   </plurals>
     <string name="restr_pin_try_later" msgid="973144472490532377">"しばらくしてから再試行"</string>
-    <string name="immersive_mode_confirmation" msgid="7227416894979047467">"全画面表示を終了するには、上から下にスワイプ"</string>
+    <string name="immersive_mode_confirmation" msgid="7227416894979047467">"画面の最上部から下にスワイプするとフルスクリーンを終了します。"</string>
 </resources>

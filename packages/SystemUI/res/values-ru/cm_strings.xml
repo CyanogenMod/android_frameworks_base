@@ -16,15 +16,20 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_quick_settings_ringer">Звук <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Вибрация <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_battery_level">Заряд батареи <xliff:g id="number">%d</xliff:g> процентов.</string>
     <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <string name="accessibility_data_connection_DC">DCHSPAP</string>
+    <string name="accessibility_desc_add_quick_settings">Добавить Быстрые настройки</string>
 
-    <string name="bean_dream_settings_cid_title">Голова Сида</string>
-    <string name="bean_dream_settings_cid_summary">Заменить желейные конфеты на голову Сида</string>
+    <string name="dessert_case_settings_cm_title">Значки CyanogenMod</string>
+    <string name="dessert_case_settings_cm_summary">Показывать Сида вместе с «десертами» в заставке</string>
 
     <string name="powerwidget_screen_timeout_toast">Задержка выкл. экрана: %1$d %2$s</string>
 
     <string name="quick_settings_battery_charged_label">Заряжено</string>
     <string name="quick_settings_profile_label">Профиль</string>
+    <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS выкл.</string>
     <string name="quick_settings_screen_sleep">Выключить экран</string>
     <string name="quick_settings_ringer_on">Вкл. звук</string>
@@ -41,6 +46,7 @@
     <string name="quick_settings_sync_off">Синхронизация выкл.</string>
     <string name="quick_settings_torch">Фонарик</string>
     <string name="quick_settings_torch_off">Фонарик выкл.</string>
+    <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC выкл.</string>
     <string name="quick_settings_screen_timeout">Тайм-аут</string>
     <string name="quick_settings_usb_tether_off_label">Отключено</string>
@@ -50,6 +56,7 @@
     <string name="quick_settings_wifiap_off">Wi-Fi модем выкл.</string>
     <string name="quick_settings_quiethours">Тихие часы</string>
     <string name="quick_settings_quiethours_off">Тихие часы выкл.</string>
+    <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE выкл.</string>
     <string name="quick_settings_volume">Громкость</string>
     <string name="quick_settings_camera_label">Камера</string>
@@ -69,17 +76,10 @@
     <string name="navbar_menu_always_button">Меню (всегда)</string>
     <string name="navbar_menu_big_button">Меню</string>
 
-    <string name="pie_battery_status_charging">Идёт зарядка (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Заряжено</string>
-    <string name="pie_battery_status_discharging">Заряд батареи: <xliff:g id="percent">%d</xliff:g>%%</string>
-    <string name="pie_phone_status_no_service">Нет сети</string>
-    <string name="pie_phone_status_airplane_mode">Режим полёта</string>
-    <string name="pie_phone_status_emergency_only">Только экстренные вызовы</string>
 
     <string name="advanced_dev_option_wipe_app">Стереть данные</string>
     <string name="advanced_dev_option_force_stop">Остановить</string>
 
     <string name="screenshot_delete_action">Удалить</string>
     <string name="screenshot_delete_confirmation">Скриншот удалён.</string>
-
 </resources>

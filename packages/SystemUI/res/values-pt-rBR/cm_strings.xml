@@ -46,8 +46,6 @@
     <string name="quick_settings_screen_timeout">Tempo limite</string>
     <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibração <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
-    <string name="bean_dream_settings_cid_title">Usar cabeça CID</string>
-    <string name="bean_dream_settings_cid_summary">Usar cabeça CID em vez de jujuba dentro do sonho</string>
     <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="navbar_dialog_title">Escolha uma ação para atribuir</string>
     <string name="navbar_home_button">Botão de início</string>
@@ -58,12 +56,6 @@
     <string name="navbar_menu_conditional_button">Botão menu (esconder auto.)</string>
     <string name="navbar_menu_always_button">Botão menu (sempre visível)</string>
     <string name="navbar_menu_big_button">Botão menu</string>
-    <string name="pie_battery_status_charging">Carregando (<xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Carregado</string>
-    <string name="pie_phone_status_no_service">Sem serviço</string>
-    <string name="pie_phone_status_airplane_mode">Modo avião ligado</string>
-    <string name="pie_phone_status_emergency_only">Somente chamadas de emergência</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g>%% restando</string>
     <string name="quick_settings_expanded_desktop">Expandida</string>
     <string name="quick_settings_camera_label">Câmera</string>
     <string name="quick_settings_camera_error_connect">Não foi possível conectar à câmera</string>
@@ -79,4 +71,7 @@
     <string name="accessibility_dock_battery_level">Bateria do Dock <xliff:g id="number" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%d</xliff:g> porcento.</string>
     <string name="screenshot_delete_action">Apagar</string>
     <string name="screenshot_delete_confirmation">A captura de tela foi apagada.</string>
+    <string name="dessert_case_settings_cm_title">Exibir mascote do CM</string>
+    <string name="dessert_case_settings_cm_summary">Exibir mascote do CM junto com as sobremesas do Android dentro do sonho</string>
+    <string name="accessibility_desc_add_quick_settings">Adicionar configurações rápidas.</string>
 </resources>
