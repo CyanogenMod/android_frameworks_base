@@ -140,8 +140,10 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(
-                getSecurityMessageDisplay(R.string.kg_sim_pin_instructions), true);
+        if (mShowDefaultMessage) {
+            mSecurityMessageDisplay.setMessage(
+                    getSecurityMessageDisplay(R.string.kg_sim_pin_instructions), true);
+        }
         mPasswordEntry.setEnabled(true);
     }
 
@@ -231,6 +233,7 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
                                 // so it knows right away.
                                 closeKeyGuard(true);
                             } else {
+                                mShowDefaultMessage = false;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
                                     if (attemptsRemaining <= 2) {
                                         // this is getting critical - show dialog
