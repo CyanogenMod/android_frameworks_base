@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="profileNameDefault">Predet.</string>
+  <string name="profileNameWork">Trabayu</string>
+  <string name="profileNameHome">Aniciu</string>
+  <string name="profileNameSilent">Silenciu</string>
+  <string name="profileNameNight">Nueche</string>
+  <string name="profileNameAutomobile">Automóvil</string>
+  <string name="profileGroupPhone">Teléfonu</string>
+  <string name="profileGroupCalendar">Calendariu</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Corréu</string>
+  <string name="profileGroupSMS">SMS</string>
+  <string name="wildcardProfile">Otru</string>
+  <string name="reboot_system" product="tablet">Reaniciar tablet</string>
+  <string name="reboot_system" product="default">Reaniciar teléfonu</string>
+  <string name="global_action_screenshot">Capturar pantalla</string>
+  <string name="global_actions_toggle_expanded_desktop_mode">Estender escritoriu</string>
+  <string name="global_actions_expanded_desktop_mode_on_status">Habilitáu</string>
+  <string name="global_actions_expanded_desktop_mode_off_status">Deshabilitada</string>
+  <string name="reboot_reboot">Reaniciar</string>
+  <string name="reboot_recovery">Mou Recovery</string>
+  <string name="reboot_bootloader">Mou Bootloader</string>
+  <string name="reboot_bootmenu">Mou Bootmenu</string>
+  <string name="reboot_fastboot">Mou Fastboot</string>
+  <string name="reboot_download">Descargar</string>
+  <string name="reboot_progress">Reaniciando\u2026</string>
+  <string name="reboot_confirm" product="tablet">La tablet va reaniciase.</string>
+  <string name="reboot_confirm" product="default">El teléfonu va reaniciase.</string>
+  <string name="permlab_preventpower">anular tecla encendíu</string>
+  <string name="permdesc_preventpower">permite que l\'aplicación cambie\'l comportamientu de la tecla d\'encendíu.</string>
+  <string name="permlab_sendMockSms">unviar mensaxes SMS simulaos</string>
+  <string name="permdesc_sendMockSms">Permite que l\'aplicación unvie mensaxes SMS simulaos a aplicaciones de confianza. Les aplicaciones malicioses puen unviar mensaxes SMS continuamente, bloquiando la barra de notificaciones ya interrumpiendo al usuariu.</string>
+  <string name="storage_sd_dock_card">Tarxeta SD de la base</string>
+  <string name="app_killed_message">Aplicación finada</string>
+  <string name="global_action_reboot">Reaniciar</string>
+  <string name="global_action_choose_profile">Perfil</string>
+  <string name="toast_rotation_unlocked">Xiru de pantalla desbloquiáu</string>
+  <string name="toast_rotation_locked">Xiru de pantalla bloquiáu</string>
+  <string name="stylus_app_not_installed">%s nun ta instalada</string>
+  <string name="permlab_changePrivacyGuardState">habilitar o deshabilitar la privacidá</string>
+  <string name="permdesc_changePrivacyGuardState">Permite que l\'aplicación cambie l\'estáu de privacidá d\'otra. Cuando una aplicación s\'executa cola privacidá habilitada, nun va poder acceder a los datos personales, talos como contautos, mensaxes o rexistros de llamaes.</string>
+  <string name="privacy_guard_notification">Privacidá activada</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nun va poder acceder a los datos personales</string>
+  <string name="profile_picker_title">Perfiles</string>
+  <string name="profile_none">Darréu</string>
+  <string name="perf_profile_pwrsv">Aforru d\'enerxía</string>
+  <string name="perf_profile_bal">Equilibráu</string>
+  <string name="perf_profile_perf">Rindimientu</string>
+  <string name="permlab_interceptSmsSent">interceutar mensaxes SMS salientes</string>
+  <string name="permdesc_interceptSmsSent">Permite que l\'aplicación interceute mensaxes SMS salientes. Les aplicaciones malicioses puen impedir los mensaxes SMS salientes.</string>
+  <string name="permlab_resetBatteryStats">restablecer estadístiques de batería</string>
+  <string name="permdesc_resetBatteryStats">Permite que l\'aplicación restableza los datos del usu de la batería.</string>
+  <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>
+</resources>
