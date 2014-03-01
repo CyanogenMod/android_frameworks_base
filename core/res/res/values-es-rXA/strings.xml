@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -27,7 +27,7 @@
     <string name="fileSizeSuffix" msgid="9164292791500531949"><xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g></string>
     <string name="untitled" msgid="4638956954852782576">&lt;Ensin títulu&gt;</string>
     <string name="ellipsis" msgid="7899829516048813237">…</string>
-    <string name="ellipsis_two_dots" msgid="1228078994866030736">...</string>
+    <string name="ellipsis_two_dots" msgid="1228078994866030736">\u2026</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">(Ensin númberu de teléfonu)</string>
     <string name="unknownName" msgid="2277556546742746522">Desconocíu</string>
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">Buzón de voz</string>
@@ -50,8 +50,8 @@
     <string name="needPuk2" msgid="4526033371987193070">Introduz el códigu PUK2 pa desbloquiar la tarxeta SIM.</string>
     <string name="enablePin" msgid="209412020907207950">Error, habilitar bloquéu de SIM/RUIM.</string>
   <plurals name="pinpuk_attempts">
-    <item quantity="one" msgid="6596245285809790142">Quédate <xliff:g id="NUMBER">%d</xliff:g> intentu pa bloquiar la tarxeta SIM."</item>
-    <item quantity="other" msgid="7530597808358774740">Quédente <xliff:g id="NUMBER">%d</xliff:g> intentos pa bloquiar la tarxeta SIM."</item>
+    <item quantity="one" msgid="6596245285809790142">Quédate <xliff:g id="NUMBER">%d</xliff:g> intentu pa bloquiar la tarxeta SIM.</item>
+    <item quantity="other" msgid="7530597808358774740">Quédente <xliff:g id="NUMBER">%d</xliff:g> intentos pa bloquiar la tarxeta SIM.</item>
   </plurals>
     <string name="imei" msgid="2625429890869005782">IMEI</string>
     <string name="meid" msgid="4841221237681254195">MEID</string>
@@ -148,7 +148,7 @@
     <string name="silent_mode_silent" msgid="319298163018473078">Timbre desactiváu</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">Mou vibración</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">Timbre activáu</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">Apagando...</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">Apagando\u2026</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">La tablet va apagase.</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">El teléfonu va apagase.</string>
     <string name="shutdown_confirm_question" msgid="2906544768881136183">¿De xuru que quies apagar el teléfonu?</string>
@@ -489,18 +489,18 @@
     <string name="permlab_captureAudioOutput" msgid="6857134498402346708">capturar salida d\'audiu</string>
     <string name="permdesc_captureAudioOutput" msgid="6210597754212208853">Permite que l\'aplicación capture y redirixa la salida d\'audiu.</string>
     <string name="permlab_captureAudioHotword" msgid="1890553935650349808">Deteutar pallabres actives</string>
-    <string name="permdesc_captureAudioHotword" msgid="9151807958153056810">Permite que l\'aplicación grabe audiu pa deteutar pallabres actives. La grabación pue facese en segundu planu pero nun impide que se grabe otra mena d\'audiu (p.ex. la videocámara).</string>
+    <string name="permdesc_captureAudioHotword" msgid="9151807958153056810">Permite que l\'aplicación grabe l\'audiu pa deteutar pallabres actives. La grabación pue facese en segundu planu pero nun impide que se grabe otra mena d\'audiu (p.ex. la videocámara).</string>
     <string name="permlab_captureVideoOutput" msgid="2246828773589094023">capturar salida de videu</string>
     <string name="permdesc_captureVideoOutput" msgid="359481658034149860">Permite que l\'aplicación capture y redirixa la salida de videu.</string>
     <string name="permlab_captureSecureVideoOutput" msgid="7815398969303382016">capturar salida de videu segura</string>
     <string name="permdesc_captureSecureVideoOutput" msgid="2779793064709350289">Permite que l\'aplicación capture y redirixa la salida de videu segura.</string>
     <string name="permlab_mediaContentControl" msgid="8749790560720562511">remanar la reproducción de ficheros multimedia y acceder a metadatos</string>
-    <string name="permdesc_mediaContentControl" msgid="1637478200272062">Permite que l\'aplicación remane la reproducción de ficheros multimedia y acceda a información d\'esta mena de ficheros (títulu, autor...).</string>
+    <string name="permdesc_mediaContentControl" msgid="1637478200272062">Permite que l\'aplicación remane la reproducción de ficheros multimedia y acceda a información d\'esta mena de ficheros (títulu, autor\u2026).</string>
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">camudar la configuración d\'audiu</string>
     <string name="permdesc_modifyAudioSettings" msgid="3522565366806248517">Permite que l\'aplicación modifique la configuración d\'audiu global (por exemplu, el volume y l\'altavoz de salida).</string>
     <string name="permlab_recordAudio" msgid="3876049771427466323">grabar soníu</string>
     <string name="permdesc_recordAudio" msgid="4906839301087980680">Permite que l\'aplicación grabe audiu col micrófonu. L\'aplicación pue usar esti permisu pa grabar audiu en cualquier momentu ensin tener la confirmación del usuariu.</string>
-    <string name="permlab_camera" msgid="3616391919559751192">realizar semeyes y vídeos</string>
+    <string name="permlab_camera" msgid="3616391919559751192">facer semeyes y vídeos</string>
     <string name="permdesc_camera" msgid="8497216524735535009">Permite que l\'aplicación faiga semeyes o grabe vídeos cola cámara. Esti permisu autoriza a l\'aplicación a usar la cámara en cualquier momentu ensin la to confirmación.</string>
     <string name="permlab_cameraDisableTransmitLed" msgid="2651072630501126222">inhabilitar l\'indicador LED de tresmisión mientres s\'usa la cámara</string>
     <string name="permdesc_cameraDisableTransmitLed" msgid="4764585465480295341">Permite qu\'una aplicación de sistema instalada previamente inhabilite l\'indicador LED qu\'alvierte del usu de la cámara.</string>
@@ -702,47 +702,47 @@
     <string name="policylab_disableKeyguardFeatures" msgid="266329104542638802">Inhabilitar funciones en bloquéu</string>
     <string name="policydesc_disableKeyguardFeatures" msgid="3467082272186534614">Evita l\'usu de dalgunes funciones mientres el bloquéu.</string>
   <string-array name="phoneTypes">
-    <item msgid="8901098336658710359">Casa"</item>
-    <item msgid="869923650527136615">Móvil"</item>
-    <item msgid="7897544654242874543">Trabayu"</item>
-    <item msgid="1103601433382158155">Fax del trabayu"</item>
-    <item msgid="1735177144948329370">Fax de casa"</item>
-    <item msgid="603878674477207394">Busca"</item>
-    <item msgid="1650824275177931637">Otru"</item>
-    <item msgid="9192514806975898961">Personalizar"</item>
+    <item msgid="8901098336658710359">Casa</item>
+    <item msgid="869923650527136615">Móvil</item>
+    <item msgid="7897544654242874543">Trabayu</item>
+    <item msgid="1103601433382158155">Fax del trabayu</item>
+    <item msgid="1735177144948329370">Fax de casa</item>
+    <item msgid="603878674477207394">Busca</item>
+    <item msgid="1650824275177931637">Otru</item>
+    <item msgid="9192514806975898961">Personalizar</item>
   </string-array>
   <string-array name="emailAddressTypes">
-    <item msgid="8073994352956129127">Casa"</item>
-    <item msgid="7084237356602625604">Trabayu"</item>
-    <item msgid="1112044410659011023">Otra"</item>
-    <item msgid="2374913952870110618">Personalizar"</item>
+    <item msgid="8073994352956129127">Casa</item>
+    <item msgid="7084237356602625604">Trabayu</item>
+    <item msgid="1112044410659011023">Otra</item>
+    <item msgid="2374913952870110618">Personalizar</item>
   </string-array>
   <string-array name="postalAddressTypes">
-    <item msgid="6880257626740047286">Casa"</item>
-    <item msgid="5629153956045109251">Trabayu"</item>
-    <item msgid="4966604264500343469">Otra"</item>
-    <item msgid="4932682847595299369">Personalizar"</item>
+    <item msgid="6880257626740047286">Casa</item>
+    <item msgid="5629153956045109251">Trabayu</item>
+    <item msgid="4966604264500343469">Otra</item>
+    <item msgid="4932682847595299369">Personalizar</item>
   </string-array>
   <string-array name="imAddressTypes">
-    <item msgid="1738585194601476694">Casa"</item>
-    <item msgid="1359644565647383708">Trabayu"</item>
-    <item msgid="7868549401053615677">Otru"</item>
-    <item msgid="3145118944639869809">Personalizar"</item>
+    <item msgid="1738585194601476694">Casa</item>
+    <item msgid="1359644565647383708">Trabayu</item>
+    <item msgid="7868549401053615677">Otru</item>
+    <item msgid="3145118944639869809">Personalizar</item>
   </string-array>
   <string-array name="organizationTypes">
-    <item msgid="7546335612189115615">Trabayu"</item>
-    <item msgid="4378074129049520373">Otra"</item>
-    <item msgid="3455047468583965104">Personalizar"</item>
+    <item msgid="7546335612189115615">Trabayu</item>
+    <item msgid="4378074129049520373">Otra</item>
+    <item msgid="3455047468583965104">Personalizar</item>
   </string-array>
   <string-array name="imProtocols">
-    <item msgid="8595261363518459565">AIM"</item>
-    <item msgid="7390473628275490700">Windows Live"</item>
-    <item msgid="7882877134931458217">Yahoo!"</item>
-    <item msgid="5035376313200585242">Skype"</item>
-    <item msgid="7532363178459444943">QQ"</item>
-    <item msgid="3713441034299660749">Google Talk"</item>
-    <item msgid="2506857312718630823">ICQ"</item>
-    <item msgid="1648797903785279353">Jabber"</item>
+    <item msgid="8595261363518459565">AIM</item>
+    <item msgid="7390473628275490700">Windows Live</item>
+    <item msgid="7882877134931458217">Yahoo!</item>
+    <item msgid="5035376313200585242">Skype</item>
+    <item msgid="7532363178459444943">QQ</item>
+    <item msgid="3713441034299660749">Google Talk</item>
+    <item msgid="2506857312718630823">ICQ</item>
+    <item msgid="1648797903785279353">Jabber</item>
   </string-array>
     <string name="phoneTypeCustom" msgid="1644738059053355820">Personalizáu</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">Casa</string>
@@ -818,7 +818,7 @@
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">Introduz el códigu PUK y un nuevu códigu PIN.</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">Códigu PUK</string>
     <string name="keyguard_password_enter_pin_prompt" msgid="8027680321614196258">Nuevu códigu PIN</string>
-    <string name="keyguard_password_entry_touch_hint" msgid="7858547464982981384"><font size="17">Toca pa introducir contraseña"</font></string>
+    <string name="keyguard_password_entry_touch_hint" msgid="7858547464982981384"><font size="17">Toca pa introducir contraseña</font></string>
     <string name="keyguard_password_enter_password_code" msgid="1054721668279049780">Introduz la contraseña pa desbloquiar.</string>
     <string name="keyguard_password_enter_pin_password_code" msgid="6391755146112503443">Inxerta\'l códigu PIN pa desbloquiar.</string>
     <string name="keyguard_password_wrong_pin_code" msgid="2422225591006134936">Códigu PIN incorreutu</string>
@@ -856,7 +856,7 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">La tarxeta SIM ta bloquiada col códigu PUK.</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">Consulta la guía del usuariu o ponte en contautu col serviciu d\'atención al cliente.</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">Inxerta\'l códigu PIN.</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">Desbloquiando tarxeta SIM...</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">Desbloquiando tarxeta SIM\u2026</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">Fixisti <xliff:g id="NUMBER_0">%d</xliff:g> intentos fallíos de creación d\'un patrón de desbloquéu. \n\nInténtalo otra vuelta en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">Introduxisti una contraseña incorreuta <xliff:g id="NUMBER_0">%d</xliff:g> vegaes. \n\nInténtalo otra vuelta en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">Introduxisti un códigu PIN incorreutu <xliff:g id="NUMBER_0">%d</xliff:g> vegaes. \n\nInténtalo otra vuelta en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
@@ -875,8 +875,8 @@
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">Contraseña</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">Aniciar sesión</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">Nome d\'usuariu o contraseña non válidu</string>
-    <string name="lockscreen_glogin_account_recovery_hint" msgid="1696924763690379073">Si escaecisti\'l to nome d\'usuariu o contraseña,\nentra na páxina "<b>google.com/accounts/recovery"</b>.</string>
-    <string name="lockscreen_glogin_checking_password" msgid="7114627351286933867">Comprobando...</string>
+    <string name="lockscreen_glogin_account_recovery_hint" msgid="1696924763690379073">Si escaecisti\'l to nome d\'usuariu o contraseña,\nentra na páxina \"<b>google.com/accounts/recovery\"</b>.</string>
+    <string name="lockscreen_glogin_checking_password" msgid="7114627351286933867">Comprobando\u2026</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">Desbloquiar</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">Activar soníu</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">Desactivar soníu</string>
@@ -988,73 +988,73 @@
     <string name="oneMonthDurationPast" msgid="7396384508953779925">hai un mes</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">hai más d\'un mes</string>
   <plurals name="num_seconds_ago">
-    <item quantity="one" msgid="4869870056547896011">hai 1 segundu"</item>
-    <item quantity="other" msgid="3903706804349556379">hai <xliff:g id="COUNT">%d</xliff:g> segundos"</item>
+    <item quantity="one" msgid="4869870056547896011">hai 1 segundu</item>
+    <item quantity="other" msgid="3903706804349556379">hai <xliff:g id="COUNT">%d</xliff:g> segundos</item>
   </plurals>
   <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">hai 1 minutu"</item>
-    <item quantity="other" msgid="2176942008915455116">hai <xliff:g id="COUNT">%d</xliff:g> minutos"</item>
+    <item quantity="one" msgid="3306787433088810191">hai 1 minutu</item>
+    <item quantity="other" msgid="2176942008915455116">hai <xliff:g id="COUNT">%d</xliff:g> minutos</item>
   </plurals>
   <plurals name="num_hours_ago">
-    <item quantity="one" msgid="9150797944610821849">hai 1 hora"</item>
-    <item quantity="other" msgid="2467273239587587569">hai <xliff:g id="COUNT">%d</xliff:g> hores"</item>
+    <item quantity="one" msgid="9150797944610821849">hai 1 hora</item>
+    <item quantity="other" msgid="2467273239587587569">hai <xliff:g id="COUNT">%d</xliff:g> hores</item>
   </plurals>
   <plurals name="last_num_days">
-    <item quantity="other" msgid="3069992808164318268">caberos <xliff:g id="COUNT">%d</xliff:g> díes"</item>
+    <item quantity="other" msgid="3069992808164318268">caberos <xliff:g id="COUNT">%d</xliff:g> díes</item>
   </plurals>
     <string name="last_month" msgid="3959346739979055432">el mes pasáu</string>
     <string name="older" msgid="5211975022815554840">anterior</string>
   <plurals name="num_days_ago">
-    <item quantity="one" msgid="861358534398115820">ayeri"</item>
-    <item quantity="other" msgid="2479586466153314633">hai <xliff:g id="COUNT">%d</xliff:g> díes"</item>
+    <item quantity="one" msgid="861358534398115820">ayeri</item>
+    <item quantity="other" msgid="2479586466153314633">hai <xliff:g id="COUNT">%d</xliff:g> díes</item>
   </plurals>
   <plurals name="in_num_seconds">
-    <item quantity="one" msgid="2729745560954905102">d\'equí a 1 segundu"</item>
-    <item quantity="other" msgid="1241926116443974687">d\'equí a <xliff:g id="COUNT">%d</xliff:g> segundos"</item>
+    <item quantity="one" msgid="2729745560954905102">d\'equí a 1 segundu</item>
+    <item quantity="other" msgid="1241926116443974687">d\'equí a <xliff:g id="COUNT">%d</xliff:g> segundos</item>
   </plurals>
   <plurals name="in_num_minutes">
-    <item quantity="one" msgid="8793095251325200395">d\'equí a 1 minutu"</item>
-    <item quantity="other" msgid="3330713936399448749">d\'equí a <xliff:g id="COUNT">%d</xliff:g> minutos"</item>
+    <item quantity="one" msgid="8793095251325200395">d\'equí a 1 minutu</item>
+    <item quantity="other" msgid="3330713936399448749">d\'equí a <xliff:g id="COUNT">%d</xliff:g> minutos</item>
   </plurals>
   <plurals name="in_num_hours">
-    <item quantity="one" msgid="7164353342477769999">d\'equí a 1 hora"</item>
-    <item quantity="other" msgid="547290677353727389">d\'equí a <xliff:g id="COUNT">%d</xliff:g>  hores"</item>
+    <item quantity="one" msgid="7164353342477769999">d\'equí a 1 hora</item>
+    <item quantity="other" msgid="547290677353727389">d\'equí a <xliff:g id="COUNT">%d</xliff:g>  hores</item>
   </plurals>
   <plurals name="in_num_days">
-    <item quantity="one" msgid="5413088743009839518">mañana"</item>
-    <item quantity="other" msgid="5109449375100953247">d\'equí a <xliff:g id="COUNT">%d</xliff:g> díes"</item>
+    <item quantity="one" msgid="5413088743009839518">mañana</item>
+    <item quantity="other" msgid="5109449375100953247">d\'equí a <xliff:g id="COUNT">%d</xliff:g> díes</item>
   </plurals>
   <plurals name="abbrev_num_seconds_ago">
-    <item quantity="one" msgid="1849036840200069118">hai 1 segundu"</item>
-    <item quantity="other" msgid="3699169366650930415">hai <xliff:g id="COUNT">%d</xliff:g> segundos"</item>
+    <item quantity="one" msgid="1849036840200069118">hai 1 segundu</item>
+    <item quantity="other" msgid="3699169366650930415">hai <xliff:g id="COUNT">%d</xliff:g> segundos</item>
   </plurals>
   <plurals name="abbrev_num_minutes_ago">
-    <item quantity="one" msgid="6361490147113871545">hai 1 minutu"</item>
-    <item quantity="other" msgid="851164968597150710">hai <xliff:g id="COUNT">%d</xliff:g> minutos"</item>
+    <item quantity="one" msgid="6361490147113871545">hai 1 minutu</item>
+    <item quantity="other" msgid="851164968597150710">hai <xliff:g id="COUNT">%d</xliff:g> minutos</item>
   </plurals>
   <plurals name="abbrev_num_hours_ago">
-    <item quantity="one" msgid="4796212039724722116">hai 1 hora"</item>
-    <item quantity="other" msgid="6889970745748538901">hai <xliff:g id="COUNT">%d</xliff:g> hores"</item>
+    <item quantity="one" msgid="4796212039724722116">hai 1 hora</item>
+    <item quantity="other" msgid="6889970745748538901">hai <xliff:g id="COUNT">%d</xliff:g> hores</item>
   </plurals>
   <plurals name="abbrev_num_days_ago">
-    <item quantity="one" msgid="8463161711492680309">ayeri"</item>
-    <item quantity="other" msgid="3453342639616481191">hai <xliff:g id="COUNT">%d</xliff:g> díes"</item>
+    <item quantity="one" msgid="8463161711492680309">ayeri</item>
+    <item quantity="other" msgid="3453342639616481191">hai <xliff:g id="COUNT">%d</xliff:g> díes</item>
   </plurals>
   <plurals name="abbrev_in_num_seconds">
-    <item quantity="one" msgid="5842225370795066299">d\'equí a 1 segundu"</item>
-    <item quantity="other" msgid="5495880108825805108">d\'equí a <xliff:g id="COUNT">%d</xliff:g> segundos"</item>
+    <item quantity="one" msgid="5842225370795066299">d\'equí a 1 segundu</item>
+    <item quantity="other" msgid="5495880108825805108">d\'equí a <xliff:g id="COUNT">%d</xliff:g> segundos</item>
   </plurals>
   <plurals name="abbrev_in_num_minutes">
-    <item quantity="one" msgid="562786149928284878">d\'equí a 1 minutu"</item>
-    <item quantity="other" msgid="4216113292706568726">d\'equí a <xliff:g id="COUNT">%d</xliff:g> minutos"</item>
+    <item quantity="one" msgid="562786149928284878">d\'equí a 1 minutu</item>
+    <item quantity="other" msgid="4216113292706568726">d\'equí a <xliff:g id="COUNT">%d</xliff:g> minutos</item>
   </plurals>
   <plurals name="abbrev_in_num_hours">
-    <item quantity="one" msgid="3274708118124045246">d\'equí a 1 hora"</item>
-    <item quantity="other" msgid="3705373766798013406">d\'equí a <xliff:g id="COUNT">%d</xliff:g> hores"</item>
+    <item quantity="one" msgid="3274708118124045246">d\'equí a 1 hora</item>
+    <item quantity="other" msgid="3705373766798013406">d\'equí a <xliff:g id="COUNT">%d</xliff:g> hores</item>
   </plurals>
   <plurals name="abbrev_in_num_days">
-    <item quantity="one" msgid="2178576254385739855">mañana"</item>
-    <item quantity="other" msgid="2973062968038355991">d\'equí a <xliff:g id="COUNT">%d</xliff:g> díes"</item>
+    <item quantity="one" msgid="2178576254385739855">mañana</item>
+    <item quantity="other" msgid="2973062968038355991">d\'equí a <xliff:g id="COUNT">%d</xliff:g> díes</item>
   </plurals>
     <string name="preposition_for_date" msgid="9093949757757445117">el <xliff:g id="DATE">%s</xliff:g></string>
     <string name="preposition_for_time" msgid="5506831244263083793">a las <xliff:g id="TIME">%s</xliff:g></string>
@@ -1072,16 +1072,16 @@
     <string name="year" msgid="4001118221013892076">añu</string>
     <string name="years" msgid="6881577717993213522">años</string>
   <plurals name="duration_seconds">
-    <item quantity="one" msgid="6962015528372969481">1 segundu"</item>
-    <item quantity="other" msgid="1886107766577166786"><xliff:g id="COUNT">%d</xliff:g> segundos"</item>
+    <item quantity="one" msgid="6962015528372969481">1 segundu</item>
+    <item quantity="other" msgid="1886107766577166786"><xliff:g id="COUNT">%d</xliff:g> segundos</item>
   </plurals>
   <plurals name="duration_minutes">
-    <item quantity="one" msgid="4915414002546085617">1 minutu"</item>
-    <item quantity="other" msgid="3165187169224908775"><xliff:g id="COUNT">%d</xliff:g> minutos"</item>
+    <item quantity="one" msgid="4915414002546085617">1 minutu</item>
+    <item quantity="other" msgid="3165187169224908775"><xliff:g id="COUNT">%d</xliff:g> minutos</item>
   </plurals>
   <plurals name="duration_hours">
-    <item quantity="one" msgid="8917467491248809972">1 hora"</item>
-    <item quantity="other" msgid="3863962854246773930"><xliff:g id="COUNT">%d</xliff:g> hores"</item>
+    <item quantity="one" msgid="8917467491248809972">1 hora</item>
+    <item quantity="other" msgid="3863962854246773930"><xliff:g id="COUNT">%d</xliff:g> hores</item>
   </plurals>
     <string name="VideoView_error_title" msgid="3534509135438353077">Incidencies col videu</string>
     <string name="VideoView_error_text_invalid_progressive_playback" msgid="3186670335938670444">Esti videu nun pue tresmitise al preséu.</string>
@@ -1098,7 +1098,7 @@
     <string name="cut" msgid="3092569408438626261">Cortar</string>
     <string name="copy" msgid="2681946229533511987">Copiar</string>
     <string name="paste" msgid="5629880836805036433">Apegar</string>
-    <string name="replace" msgid="5781686059063148930">Sustituyir...</string>
+    <string name="replace" msgid="5781686059063148930">Sustituyir\u2026</string>
     <string name="delete" msgid="6098684844021697789">Desaniciar</string>
     <string name="copyUrl" msgid="2538211579596067402">Copiar URL</string>
     <string name="selectTextMode" msgid="1018691815143165326">Esbillar testu</string>
@@ -1116,7 +1116,7 @@
     <string name="yes" msgid="5362982303337969312">Aceutar</string>
     <string name="no" msgid="5141531044935541497">Encaboxar</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">Atención</string>
-    <string name="loading" msgid="7933681260296021180">Cargando...</string>
+    <string name="loading" msgid="7933681260296021180">Cargando\u2026</string>
     <string name="capital_on" msgid="1544682755514494298">SÍ</string>
     <string name="capital_off" msgid="6815870386972805832">NON</string>
     <string name="whichApplication" msgid="4533185947064773386">Completar aición usando</string>
@@ -1147,9 +1147,9 @@
     <string name="smv_application" msgid="3307209192155442829">L\'aplicación <xliff:g id="APPLICATION">%1$s</xliff:g> (procesu <xliff:g id="PROCESS">%2$s</xliff:g>) infrinxó la política StrictMode autoaplicable.</string>
     <string name="smv_process" msgid="5120397012047462446">El procesu <xliff:g id="PROCESS">%1$s</xliff:g> infrinxó la política StrictMode autoaplicable.</string>
     <string name="android_upgrading_title" msgid="1584192285441405746">Anovando Android</string>
-    <string name="android_upgrading_apk" msgid="7904042682111526169">Optimizando aplicación <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>...</string>
+    <string name="android_upgrading_apk" msgid="7904042682111526169">Optimizando aplicación <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>\u2026</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">Aniciando aplicaciones</string>
-    <string name="android_upgrading_complete" msgid="1405954754112999229">Finando aniciu...</string>
+    <string name="android_upgrading_complete" msgid="1405954754112999229">Finando aniciu\u2026</string>
     <string name="heavy_weight_notification" msgid="9087063985776626166"><xliff:g id="APP">%1$s</xliff:g> n\'execución</string>
     <string name="heavy_weight_notification_detail" msgid="1721681741617898865">Toca esta opción pa cambiar a l\'aplicación.</string>
     <string name="heavy_weight_switcher_title" msgid="7153167085403298169">¿Cambiar aplicaciones?</string>
@@ -1179,12 +1179,12 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">Tonos</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">Tonu desconocíu</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">Rede Wi-Fi disponible"</item>
-    <item quantity="other" msgid="4192424489168397386">Redes Wi-Fi disponibles"</item>
+    <item quantity="one" msgid="6654123987418168693">Rede Wi-Fi disponible</item>
+    <item quantity="other" msgid="4192424489168397386">Redes Wi-Fi disponibles</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">Rede Wi-Fi abierta disponible"</item>
-    <item quantity="other" msgid="7915895323644292768">Redes Wi-Fi abiertes disponibles"</item>
+    <item quantity="one" msgid="1634101450343277345">Rede Wi-Fi abierta disponible</item>
+    <item quantity="other" msgid="7915895323644292768">Redes Wi-Fi abiertes disponibles</item>
   </plurals>
     <string name="wifi_available_sign_in" msgid="4029489716605255386">Aniciar sesión en rede Wi-Fi</string>
     <string name="network_available_sign_in" msgid="8495155593358054676">Aniciar sesión na rede</string>
@@ -1208,13 +1208,13 @@
     <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">La tablet va desconeutase temporalmente de la rede Wi-Fi mientres teas coneutáu a  <xliff:g id="DEVICE_NAME">%1$s</xliff:g></string>
     <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">El teléfonu va desconeutase temporalmente de la rede Wi-Fi mientres teas coneutáu a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>.</string>
     <string name="select_character" msgid="3365550120617701745">Inxertar carácter</string>
-    <string name="sms_control_title" msgid="7296612781128917719">Unviando mensaxes SMS...</string>
+    <string name="sms_control_title" msgid="7296612781128917719">Unviando mensaxes SMS\u2026</string>
     <string name="sms_control_message" msgid="3867899169651496433">&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ta unviando un gran númberu de mensaxes SMS. ¿Quies permitir que l\'aplicación siga unviando mensaxes?</string>
     <string name="sms_control_yes" msgid="3663725993855816807">Permitir</string>
     <string name="sms_control_no" msgid="625438561395534982">Refugar</string>
     <string name="sms_short_code_confirm_message" msgid="1645436466285310855">&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; quier unviar un mensaxe a &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;.</string>
-    <string name="sms_short_code_details" msgid="3492025719868078457"><font fgcolor="#ffffb060">Ye dable que s\'apliquen cargos"</font> na cuenta móvil.</string>
-    <string name="sms_premium_short_code_details" msgid="5523826349105123687"><font fgcolor="#ffffb060">Van aplicase cargos na cuenta móvil."</font></string>
+    <string name="sms_short_code_details" msgid="3492025719868078457"><font fgcolor="#ffffb060">Ye dable que s\'apliquen cargos</font> na cuenta móvil.</string>
+    <string name="sms_premium_short_code_details" msgid="5523826349105123687"><font fgcolor="#ffffb060">Van aplicase cargos na cuenta móvil.</font></string>
     <string name="sms_short_code_confirm_allow" msgid="4458878637111023413">Unviar</string>
     <string name="sms_short_code_confirm_deny" msgid="2927389840209170706">Encaboxar</string>
     <string name="sms_short_code_remember_choice" msgid="5289538592272218136">Recordar opción esbillada</string>
@@ -1231,7 +1231,7 @@
     <string name="date_picker_dialog_title" msgid="5879450659453782278">Afitar data</string>
     <string name="date_time_set" msgid="5777075614321087758">Afitar</string>
     <string name="date_time_done" msgid="2507683751759308828">Fecho</string>
-    <string name="perms_new_perm_prefix" msgid="8257740710754301407"><font size="12" fgcolor="#ff33b5e5">NUEVU:"</font></string>
+    <string name="perms_new_perm_prefix" msgid="8257740710754301407"><font size="12" fgcolor="#ff33b5e5">NUEVU:</font></string>
     <string name="perms_description_app" msgid="5139836143293299417">Proporcionáu por <xliff:g id="APP_NAME">%1$s</xliff:g></string>
     <string name="no_permissions" msgid="7283357728219338112">Nun fai falta nengún permisu</string>
     <string name="perm_costs_money" msgid="4902470324142151116">ye dable que se cobre por usar l\'aplicación.</string>
@@ -1275,10 +1275,10 @@
     <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">Toca pa seleicionar un diseñu de tecláu.</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199"> ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610"> 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>candidatos"</u></string>
+    <string name="candidates_style" msgid="4333913089637062257"><u>candidatos</u></string>
     <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">Tresnando almacenamientu USB</string>
     <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">Tresnando tarxeta SD</string>
-    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">Comprobando fallos...</string>
+    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">Comprobando fallos\u2026</string>
     <string name="ext_media_nofs_notification_title" product="nosdcard" msgid="7788040745686229307">Almacenamientu USB baleru</string>
     <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">Tarxeta SD balera</string>
     <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="7840121067427269500">Almacenamientu USB baleru o con sistema de ficheros non almitíu</string>
@@ -1360,15 +1360,15 @@
     <string name="no_matches" msgid="8129421908915840737">Nun hai coincidencies.</string>
     <string name="find_on_page" msgid="1946799233822820384">Guetar na páxina</string>
   <plurals name="matches_found">
-    <item quantity="one" msgid="8167147081136579439">Una coincidencia"</item>
+    <item quantity="one" msgid="8167147081136579439">Una coincidencia</item>
     <item quantity="other" msgid="4641872797067609177"><xliff:g id="INDEX">%d</xliff:g> de <xliff:g id="TOTAL">%d</xliff:g></item>
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">Listo</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">Desactivando almacenamientu USB...</string>
-    <string name="progress_unmounting" product="default" msgid="1327894998409537190">Desactivando tarxeta SD...</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">Desactivando almacenamientu USB\u2026</string>
+    <string name="progress_unmounting" product="default" msgid="1327894998409537190">Desactivando tarxeta SD\u2026</string>
     <string name="progress_nomediapresent" product="default">Nun hai medios extrayibles\u2026</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">Desaniciando almacenamientu USB...</string>
-    <string name="progress_erasing" product="default" msgid="6596988875507043042">Desaniciando tarxeta SD...</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">Desaniciando almacenamientu USB\u2026</string>
+    <string name="progress_erasing" product="default" msgid="6596988875507043042">Desaniciando tarxeta SD\u2026</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">Nun pudo desaniciase l\'almacenamientu USB.</string>
     <string name="format_error" product="default" msgid="7315248696644510935">Nun pudo desaniciase la tarxeta SD.</string>
     <string name="media_bad_removal" msgid="7960864061016603281">La tarxeta SD estráxose enantes de desactivala.</string>
@@ -1477,7 +1477,7 @@
     <string name="activity_chooser_view_dialog_title_default" msgid="4710013864974040615">Selecionar actividá</string>
     <string name="share_action_provider_share_with" msgid="5247684435979149216">Compartir con</string>
     <string name="list_delimeter" msgid="3975117572185494152">, </string>
-    <string name="sending" msgid="3245653681008218030">Unviando...</string>
+    <string name="sending" msgid="3245653681008218030">Unviando\u2026</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">¿Aniciar el restolador web?</string>
     <string name="SetupCallDefault" msgid="5834948469253758575">¿Aceutar la llamada?</string>
     <string name="activity_resolver_use_always" msgid="8017770747801494933">Siempre</string>
@@ -1496,8 +1496,8 @@
     <string name="media_route_chooser_searching" msgid="4776236202610828706">Guetando por preseos…</string>
     <string name="media_route_chooser_extended_settings" msgid="87015534236701604">Axustes</string>
     <string name="media_route_controller_disconnect" msgid="8966120286374158649">Desconeutar</string>
-    <string name="media_route_status_scanning" msgid="7279908761758293783">Analizando...</string>
-    <string name="media_route_status_connecting" msgid="6422571716007825440">Coneutando...</string>
+    <string name="media_route_status_scanning" msgid="7279908761758293783">Analizando\u2026</string>
+    <string name="media_route_status_connecting" msgid="6422571716007825440">Coneutando\u2026</string>
     <string name="media_route_status_available" msgid="6983258067194649391">Disponible</string>
     <string name="media_route_status_not_available" msgid="6739899962681886401">Non disponible</string>
     <string name="media_route_status_in_use" msgid="4533786031090198063">N\'usu</string>
@@ -1536,7 +1536,7 @@
     <string name="kg_login_password_hint" msgid="9057289103827298549">Contraseña</string>
     <string name="kg_login_submit_button" msgid="5355904582674054702">Aniciar sesión</string>
     <string name="kg_login_invalid_input" msgid="5754664119319872197">El nome d\'usuariu o la contraseña nun son válidos.</string>
-    <string name="kg_login_account_recovery_hint" msgid="5690709132841752974">Si escaecisti\'l nome d\'usuariu o la contraseña,\nvete a la páxina "<b>google.com/accounts/recovery"</b>.</string>
+    <string name="kg_login_account_recovery_hint" msgid="5690709132841752974">Si escaecisti\'l nome d\'usuariu o la contraseña,\nvete a la páxina \"<b>google.com/accounts/recovery\"</b>.</string>
     <string name="kg_login_checking_password" msgid="1052685197710252395">Comprobando cuenta…</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8276745642049502550">Punxisti un códigu PIN incorreutu <xliff:g id="NUMBER_0">%d</xliff:g> vegaes. \n\nVuelvi a intentalo en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7813713389422226531">Punxisti una contraseña incorreuta <xliff:g id="NUMBER_0">%d</xliff:g> vegaes. \n\nVuelvi a intentalo en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
@@ -1653,13 +1653,13 @@
     <string name="restr_pin_incorrect" msgid="8571512003955077924">Incorreutu</string>
     <string name="restr_pin_enter_old_pin" msgid="1462206225512910757">PIN actual</string>
     <string name="restr_pin_enter_new_pin" msgid="5959606691619959184">PIN nuevu</string>
-    <string name="restr_pin_confirm_pin" msgid="8501523829633146239">Confirma el PIN nuevu</string>
+    <string name="restr_pin_confirm_pin" msgid="8501523829633146239">Confirma\'l PIN nuevu</string>
     <string name="restr_pin_create_pin" msgid="8017600000263450337">Crear PIN pa modificar restricciones</string>
     <string name="restr_pin_error_doesnt_match" msgid="2224214190906994548">Los númberos PIN nun concasen. Vuelvi a intentalo.</string>
     <string name="restr_pin_error_too_short" msgid="8173982756265777792">El PIN ye enforma curtiu. Tien de tener al menos 4 díxitos.</string>
   <plurals name="restr_pin_countdown">
-    <item quantity="one" msgid="311050995198548675">Inténtalo en 1 s"</item>
-    <item quantity="other" msgid="4730868920742952817">Inténtalo en <xliff:g id="COUNT">%d</xliff:g> s"</item>
+    <item quantity="one" msgid="311050995198548675">Inténtalo en 1 s</item>
+    <item quantity="other" msgid="4730868920742952817">Inténtalo en <xliff:g id="COUNT">%d</xliff:g> s</item>
   </plurals>
     <string name="restr_pin_try_later" msgid="973144472490532377">Volver a intentalo más tarde</string>
     <string name="immersive_mode_confirmation" msgid="7227416894979047467">Esliza\'l deu hacia abaxo pa salir de la pantalla completa</string>
