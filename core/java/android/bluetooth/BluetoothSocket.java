@@ -524,7 +524,6 @@ public final class BluetoothSocket implements Closeable {
                     mSocket = null;
                 }
                 if(mPfd != null) {
-                    mPfd.detachFd();
                     mPfd.close();
                     mPfd = null;
                 }
