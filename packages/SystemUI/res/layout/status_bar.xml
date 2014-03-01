@@ -94,6 +94,14 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <com.android.systemui.statusbar.policy.NetTraffic
+                android:id="@+id/network_traffic"
+                android:textAppearance="@style/TextAppearance.StatusBar.NetTraffic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
+                android:gravity="left|center_vertical" />
+
             <LinearLayout android:id="@+id/statusIcons"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

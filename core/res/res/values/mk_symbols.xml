@@ -54,4 +54,7 @@
   <java-symbol type="string" name="bw" />
   <java-symbol type="string" name="sy" />
 
+  <!-- Net Traffic Meter-->
+  <java-symbol type="integer" name="config_networkSpeedIndicatorSingleLineFontSize" />
+  <java-symbol type="integer" name="config_networkSpeedIndicatorDualLineFontSize" />
 </resources>
