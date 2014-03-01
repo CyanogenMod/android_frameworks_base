@@ -386,7 +386,7 @@ public class VideoView extends SurfaceView
     private boolean isHTTPStreaming(Uri mUri) {
         if (mUri != null) {
             String scheme = mUri.toString();
-            if (scheme.startsWith("http://") || scheme.startsWith("http://")) {
+            if (scheme.startsWith("http://") || scheme.startsWith("https://")) {
                 if (scheme.endsWith(".m3u8") || scheme.endsWith(".m3u")
                     || scheme.contains("m3u8") || scheme.endsWith(".mpd")) {
                     // HLS or DASH streaming source
