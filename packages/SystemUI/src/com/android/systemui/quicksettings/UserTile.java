@@ -140,13 +140,13 @@ public class UserTile extends QuickSettingsTile {
                 if (um.getUsers().size() <= 1) {
                     // Try and read the display name from the local profile
                     final Cursor cursor = context.getContentResolver().query(
-                            Profile.CONTENT_URI, new String[] {Phone._ID, Phone.DISPLAY_NAME},
+                            Profile.CONTENT_URI, new String[] {Phone.PHOTO_FILE_ID, Phone.DISPLAY_NAME},
                             null, null, null);
                     if (cursor != null) {
                         try {
                             if (cursor.moveToFirst()) {
                                 name = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
-                                id = cursor.getString(cursor.getColumnIndex(Phone._ID));
+                                id = cursor.getString(cursor.getColumnIndex(Phone.PHOTO_FILE_ID));
                             }
                         } finally {
                             cursor.close();
@@ -160,9 +160,8 @@ public class UserTile extends QuickSettingsTile {
                             Bitmap rawAvatar = null;
                             InputStream is = null;
                             try {
-                                Uri.Builder uriBuilder = ContactsContract.RawContacts.CONTENT_URI.buildUpon();
+                                Uri.Builder uriBuilder = ContactsContract.DisplayPhoto.CONTENT_URI.buildUpon();
                                 uriBuilder.appendPath(id);
-                                uriBuilder.appendPath(Contacts.Photo.DISPLAY_PHOTO);
                                 is = mContext.getContentResolver().openInputStream(uriBuilder.build());
                                 rawAvatar = BitmapFactory.decodeStream(is);
                                 avatar = new BitmapDrawable(mContext.getResources(), rawAvatar);
