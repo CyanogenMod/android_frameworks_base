@@ -133,7 +133,8 @@ public class Patterns {
         + "|[1-9][0-9]|[0-9])))"
         + "(?:\\:\\d{1,5})?)" // plus option port number
         + "(\\/(?:(?:[" + GOOD_IRI_CHAR + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
-        + "\\-\\.\\+\\!\\*\\'\\(\\)\\_])|(?:\\,[" + GOOD_IRI_CHAR + "])|(?:\\%[a-fA-F0-9]{2}))*)?");
+        + "\\-\\.\\+\\!\\*\\'\\(\\)\\_])|(?:\\,[" + GOOD_IRI_CHAR + "])|(?:\\%[a-fA-F0-9]{2}))*)?",
+          Pattern.CASE_INSENSITIVE);
 
     public static final Pattern IP_ADDRESS
         = Pattern.compile(
