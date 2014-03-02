@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2011 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="prompt" msgid="8359175999006833462">"<xliff:g id="APP">%s</xliff:g> بىر  VPN باغلىنىشى قۇرۇشنى سىنايدۇ"</string>
+    <string name="warning" msgid="5470743576660160079">"داۋاملاشتۇرسىڭىز بۇ ئەپنىڭ بارلىق تور ئېقىمىنى توسۇش ھوقۇقىنى بەرگەنلىكىڭىزنى بىلدۈرىدۇ."<b>"ئەگەر بۇ ئەپكە ئىشەنمىسىڭىز بۇ ئىلتىماسنى قوبۇل قىلماڭ. "</b>"ئەگەر مەزكۇر ئەپكە ئىشەنمىگەن ئەھۋالدا بۇ ئىلتىماسنى قوبۇل قىلغان بولسىڭىز سانلىق مەلۇماتلىرىڭىزنىڭ زەھەرخەندە يۇمشاق دېتال تەرىپىدىن ئوغرىلىنىپ كېتىش خەۋپى بار."</string>
+    <string name="accept" msgid="2889226408765810173">"بۇ ئەپكە ئىشىنىمەن."</string>
+    <string name="legacy_title" msgid="192936250066580964">"VPN باغلاندى"</string>
+    <string name="configure" msgid="4905518375574791375">"سەپلىمە"</string>
+    <string name="disconnect" msgid="971412338304200056">"ئۈز"</string>
+    <string name="session" msgid="6470628549473641030">"سۆزلىشىش"</string>
+    <string name="duration" msgid="3584782459928719435">"داۋاملىشىش ۋاقتى:"</string>
+    <string name="data_transmitted" msgid="7988167672982199061">"ئەۋەتىلگىنى:"</string>
+    <string name="data_received" msgid="4062776929376067820">"تاپشۇرۇۋالغىنى:"</string>
+    <string name="data_value_format" msgid="2192466557826897580">"<xliff:g id="NUMBER_0">%1$s</xliff:g> بايت/<xliff:g id="NUMBER_1">%2$s</xliff:g> بوغچا"</string>
+</resources>
