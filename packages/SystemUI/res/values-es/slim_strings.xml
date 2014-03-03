@@ -14,102 +14,99 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- QS Battery Tile -->
+    <string name="quick_settings_battery_charging">Cargando</string>
+    <string name="quick_settings_battery_discharging">Descargando</string>
+
+    <!-- Kill app toast -->
+    <string name="app_killed_message">Proceso cerrado</string>
+
+    <!--ScreenShot Trash-->
+    <string name="screenshot_notification_delete">Borrar</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
+
+    <!-- Dialog Cancel/OK -->
+    <string name="cancel">Cancelar</string>
+    <string name="dlg_ok">Ok</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+
+    <!-- Off/On/Toggle -->
+    <string name="off">Apagar</string>
+    <string name="on">Encender</string>
+    <string name="toggle">Interruptor</string>
+
+    <!-- Slim Shortcut Actions -->
+    <string name="shortcut_picker">Accesos Directos Slim</string>
+    <string name="shortcut_immersive">Int. Modo Immersivo</string>
+    <string name="shortcut_quiethours">Int. Horas de tranquilidad</string>
+    <string name="shortcut_rotation">Int. Bloqueo Rotación</string>
+    <string name="shortcut_torch">Int. Linterna</string>
+    <string name="shortcut_reboot">Reiniciar (instantáneo)</string>
+    <string name="shortcut_last_app">Ultima ap.</string>
+    <string name="shortcut_screenshot">Captura Pantalla</string>
+    <string name="shortcut_volume">Volumen</string>
+    <string name="shortcut_toggle_title">Acción a realizar</string>
+    <string name="shortcut_chamber">Chamber of Secrets</string>
+    <string name="chamber_disabled">Chamber of secrets está cerrado</string>
+    <string name="chamber_title">Introduce parámetros de configuración</string>
+    <string name="chamber_message">Introducir un parámetro de configuración que cuyo valor sea una función "on" o "off" (checkbox) o una lista de opciones. Por ejemplo, quiet_hours_ringer o similar. Los parámtros de configuración a usar están el fichero Settings.java. CUIDADO: Esto es peligroso!</string>
+    <string name="chamber_invalid">No es un parámetro correcto. Tenga cuidado.</string>
+    <string name="chamber_checkbox">Checkbox</string>
+    <string name="chamber_chk_message">Es esto un ajuste con valor "checkbox"?</string>
+    <string name="chamber_int">Introducir valores</string>
+    <string name="chamber_int_message">Introducir los valores entre los que desea avanzar. Separar cada valor con una coma. Los parámetros de coloraceptan valores hexadecimales como #FF00aacc o colores básicos como red, green, y yellow.</string>
+    <string name="chamber_name_title">Nombre del acceso directo</string>
+    <string name="chamber_name_message">Nombre del acceso directo que se mostrará junto al icono.</string>
+    <string name="chamber_name_toast">Se usará el nombre predeterminado</string>
+
+    <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>
-    <string name="quick_settings_gps_off">GPS выкл</string>
-    <string name="quick_settings_screen_sleep">Потушить экран</string>
-    <string name="quick_settings_ringer_on">Звук вкл</string>
-    <string name="quick_settings_ringer_off">Звук выкл</string>
-    <string name="quick_settings_vibration_on">Вибрация вкл</string>
-    <string name="quick_settings_vibration_off">Вибрация выкл</string>
-    <string name="quick_settings_label_enabled">Вкл</string>
-    <string name="quick_settings_label_disabled">Выкл</string>
-    <string name="quick_settings_ringer_normal">Звук</string>
-    <string name="quick_settings_lockscreen">Экран блокировки</string>
-    <string name="quick_settings_network_type">Режим сети</string>
-    <string name="quick_settings_report_bug">Сообщить ошибку</string>
-    <string name="quick_settings_music_play">Играть</string>
-    <string name="quick_settings_music_pause">Пауза</string>
-    <string name="quick_settings_music_schedule_title">Таймер сна</string>
-    <string name="quick_settings_music_schedule_in_progress">Таймер запущен</string>
-    <string name="quick_settings_music_schedule_start">Запустить таймер</string>
-    <string name="quick_settings_music_schedule_cancel">Сбросить таймер</string>
-    <string name="quick_settings_music_schedule_update">Обновить таймер</string>
-    <string name="quick_settings_reboot">Перезагрузить</string>
-    <string name="quick_settings_reboot_recovery">В рекавери</string>
-    <string name="quick_settings_sync">Синхро</string>
-    <string name="quick_settings_sync_off">Синхро выкл</string>
-    <string name="quick_settings_torch">Фонарь</string>
-    <string name="quick_settings_torch_off">Фонарь выкл</string>
+    <string name="quick_settings_gps_off">GPS off</string>
+    <string name="quick_settings_screen_sleep">Apagar pantalla</string>
+    <string name="quick_settings_ringer_on">Sonido activado</string>
+    <string name="quick_settings_ringer_off">Sonido silenciado</string>
+    <string name="quick_settings_vibration_on">Vibración activada</string>
+    <string name="quick_settings_vibration_off">Vibración desactivada</string>
+    <string name="quick_settings_label_enabled">Encendido</string>
+    <string name="quick_settings_label_disabled">Apagado</string>
+    <string name="quick_settings_ringer_normal">Sonido</string>
+    <string name="quick_settings_lockscreen">Bloquear pantalla</string>
+    <string name="quick_settings_network_type">Modo de Red</string>
+    <string name="quick_settings_report_bug">Reportar bug</string>
+    <string name="quick_settings_sync">Sincr.</string>
+    <string name="quick_settings_sync_off">Sincr. desactivada</string>
+    <string name="quick_settings_torch">Linterna</string>
+    <string name="quick_settings_torch_off">Linterna apagada</string>
     <string name="quick_settings_nfc">NFC</string>
-    <string name="quick_settings_nfc_off">NFC Выкл</string>
-    <string name="quick_settings_screen_timeout">Задержка</string>
-    <string name="quick_settings_screen_timeout_summary_never">Никогда</string>
-    <string name="quick_settings_usb_tether_off_label">Отсоединено</string>
-    <string name="quick_settings_usb_tether_connected_label">USB-модем выкл</string>
-    <string name="quick_settings_usb_tether_on_label">USB-модем</string>
-    <string name="quick_settings_wifiap">Wi-Fi модем</string>
-    <string name="quick_settings_wifiap_off">Wi-Fi модем выкл</string>
+    <string name="quick_settings_nfc_off">NFC desactivado</string>
+    <string name="quick_settings_screen_timeout">Tiempo de espera</string>
+    <string name="quick_settings_screen_timeout_summary_never">Nunca</string>
+    <string name="quick_settings_usb_tether_off_label">Desconectado</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering desactivado</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">AP Wi-Fi</string>
+    <string name="quick_settings_wifiap_off">AP Wi-Fi apagado</string>
+    <string name="quick_settings_quiethours">Horas tranquilidad</string>
+    <string name="quick_settings_quiethours_off">Horas tranquilidad desact.</string>
     <string name="quick_settings_lte">LTE</string>
-    <string name="quick_settings_lte_off">LTE выкл</string>
-    <string name="quick_settings_volume">Громкость</string>
-    <string name="quick_settings_expanded_desktop">Расширенный</string>
-    <string name="quick_settings_expanded_desktop_off">Обычный</string>
-    <string name="app_killed_message">Приложение закрыто</string>
-    <string name="quick_settings_quiethours">Тихие часы</string>
-    <string name="quick_settings_quiethours_off">Тихие часы выкл.</string>
-
-    <string name="quick_settings_battery_charging">Зарядка</string>
-    <string name="quick_settings_battery_discharging">Не заряжается</string>
-    <string name="screenshot_notification_delete">Удалить</string>
-    <string name="screenshot_delete_confirmation">Снимок экрана удален</string>
-    <string name="shortcut_picker">Ярлыки Slim</string>
-    <string name="shortcut_immersive">Обычный режим</string>
-    <string name="shortcut_quiethours">\"Тихие часы\"</string>
-    <string name="shortcut_rotation">Блокировка поворота</string>
-    <string name="shortcut_torch">Фонарь</string>
-    <string name="shortcut_reboot">Перезагрузка</string>
-    <string name="shortcut_recovery">В рекавери</string>
-    <string name="shortcut_last_app">Предыдущее приложение</string>
-    <string name="shortcut_screenshot">Снимок экрана</string>
-    <string name="shortcut_volume">Громкость</string>
-    <string name="shortcut_toggle_title">Действие</string>
-
-    <string name="cancel">Отмена</string>
-    <string name="yes">Да</string>
-    <string name="no">Нет</string>
-    <string name="off">Выкл</string>
-    <string name="on">Вкл</string>
-    <string name="toggle">Переключить</string>
-    <string name="shortcut_chamber">Тайная комната</string>
-    <string name="chamber_disabled">Тайная комната закрыта</string>
-    <string name="chamber_title">Введите строку настроек</string>
-    <string name="chamber_message">Введите строку настроек, которая является либо функцией флажка (вкл/выкл), либо настройкой списка. Например, quiet_hours_ringer и тому подобное. Настройки можно найти в файле исходного кода Settings.java. ВНИМАНИЕ: Эта функция опасна!</string>
-    <string name="chamber_invalid">Введено неверное значение. Будьте внимательны.</string>
-    <string name="chamber_checkbox">Флажок</string>
-    <string name="chamber_chk_message">Это настройка флажка?</string>
-    <string name="chamber_int">Вводимые значения</string>
-    <string name="chamber_int_message">Введите значения, между которыми вы бы хотели переключаться, через запятую. Цветовые настройки задаются шестнадцатеричными значениями, например, #FF00aacc или базовыми значениями, как red, green, или yellow.</string>
-    <string name="chamber_name_title">Имя ярлыка</string>
-    <string name="chamber_name_message">Установить имя для отображения на ярлыке рядом со значком.</string>
-    <string name="chamber_name_toast">Используется стандартное имя</string>
-    <string name="quick_settings_theme_switch_dark">Темная тема</string>
-    <string name="quick_settings_theme_switch_light">Светлая тема</string>
-    <string name="quick_settings_quick_record_nofile">Долгое нажатие</string>
-    <string name="quick_settings_quick_record_def">Быстрая запись</string>
-    <string name="quick_settings_quick_record_rec">Записывается...</string>
-    <string name="quick_settings_quick_record_save">Сохранено</string>
-    <string name="quick_settings_quick_record_play">Воспроизводится...</string>
-    <string name="quick_settings_custom_toggle">Свой ярлык</string>
-    <string name="quick_settings_contact_toggle">Контакт</string>
-
-    <!-- Battery status in pie controls -->
-    <string name="pie_battery_status_charging">Заряжается (<xliff:g id="percent">%d</xliff:g>%%)</string>
-    <string name="pie_battery_status_full">Заряжено</string>
-    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% осталось</string>
-
-    <!-- Phone status in pie controls -->
-    <string name="pie_phone_status_no_service">Вне зоны обслуживания</string>
-    <string name="pie_phone_status_airplane_mode">Включен режим полета</string>
-    <string name="pie_phone_status_emergency_only">Только экстренные вызовы</string>
+    <string name="quick_settings_lte_off">LTE apagado</string>
+    <string name="quick_settings_volume">Volumen</string>
+    <string name="quick_settings_expanded_desktop">Expandido</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_music_play">Reproducir</string>
+    <string name="quick_settings_music_pause">Pausa</string>
+    <string name="quick_settings_reboot_recovery">Recovery</string>
+    <string name="quick_settings_reboot">Reiniciar</string>
+    <string name="quick_settings_theme_switch_dark">Tema oscuro</string>
+    <string name="quick_settings_theme_switch_light">Tema luminoso</string>
+    <string name="quick_settings_quick_record_nofile">Pulsación Larga</string>
+    <string name="quick_settings_quick_record_def">Grabación rápida</string>
+    <string name="quick_settings_quick_record_rec">Grabando...</string>
+    <string name="quick_settings_quick_record_save">Guardado</string>
+    <string name="quick_settings_quick_record_play">Reproduciendo...</string>
+    <string name="quick_settings_custom_toggle">Personalizado</string>
+    <string name="quick_settings_contact_toggle">Contacto</string>
 </resources>
