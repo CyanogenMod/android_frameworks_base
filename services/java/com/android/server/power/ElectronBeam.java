@@ -31,6 +31,7 @@ import android.opengl.EGLSurface;
 import android.opengl.GLES10;
 import android.opengl.GLES11Ext;
 import android.os.Looper;
+import android.os.SystemProperties;
 import android.util.FloatMath;
 import android.util.Slog;
 import android.view.Display;
@@ -90,6 +91,8 @@ final class ElectronBeam {
     private EGLSurface mEglSurface;
     private boolean mSurfaceVisible;
     private float mSurfaceAlpha;
+    private final int mHWRotation;
+    private final boolean mSwapNeeded;
 
     // Texture names.  We only use one texture, which contains the screenshot.
     private final int[] mTexNames = new int[1];
@@ -119,6 +122,8 @@ final class ElectronBeam {
 
     public ElectronBeam(DisplayManagerService displayManager) {
         mDisplayManager = displayManager;
+        mHWRotation = Integer.parseInt(SystemProperties.get("ro.sf.hwrotation", "0")) / 90;
+        mSwapNeeded = mHWRotation % 2 == 1;
     }
 
     /**
@@ -139,8 +144,14 @@ final class ElectronBeam {
         // This is not expected to change while the electron beam surface is showing.
         DisplayInfo displayInfo = mDisplayManager.getDisplayInfo(Display.DEFAULT_DISPLAY);
         mDisplayLayerStack = displayInfo.layerStack;
-        mDisplayWidth = displayInfo.getNaturalWidth();
-        mDisplayHeight = displayInfo.getNaturalHeight();
+
+        if (mSwapNeeded) {
+            mDisplayWidth = displayInfo.getNaturalHeight();
+            mDisplayHeight = displayInfo.getNaturalWidth();
+        } else {
+            mDisplayWidth = displayInfo.getNaturalWidth();
+            mDisplayHeight = displayInfo.getNaturalHeight();
+        }
 
         // Prepare the surface for drawing.
         if (!tryPrepare()) {
@@ -287,17 +298,17 @@ final class ElectronBeam {
         GLES10.glEnableClientState(GLES10.GL_TEXTURE_COORD_ARRAY);
 
         // draw the red plane
-        setVStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ar);
+        setVStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ar, mSwapNeeded);
         GLES10.glColorMask(true, false, false, true);
         GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
 
         // draw the green plane
-        setVStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ag);
+        setVStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ag, mSwapNeeded);
         GLES10.glColorMask(false, true, false, true);
         GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
 
         // draw the blue plane
-        setVStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ab);
+        setVStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ab, mSwapNeeded);
         GLES10.glColorMask(false, false, true, true);
         GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
 
@@ -337,7 +348,7 @@ final class ElectronBeam {
             GLES10.glEnableClientState(GLES10.GL_VERTEX_ARRAY);
 
             // draw narrow fading white line
-            setHStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ag);
+            setHStretchQuad(mVertexBuffer, mDisplayWidth, mDisplayHeight, ag, mSwapNeeded);
             GLES10.glColor4f(1.0f - ag, 1.0f - ag, 1.0f - ag, 1.0f);
             GLES10.glDrawArrays(GLES10.GL_TRIANGLE_FAN, 0, 4);
 
@@ -346,17 +357,33 @@ final class ElectronBeam {
         }
     }
 
-    private static void setVStretchQuad(FloatBuffer vtx, float dw, float dh, float a) {
-        final float w = dw + (dw * a);
-        final float h = dh - (dh * a);
+    private static void setVStretchQuad(FloatBuffer vtx, float dw, float dh, float a,
+            boolean swap) {
+        final float w;
+        final float h;
+        if (swap) {
+            w = dw - (dw * a);
+            h = dh + (dh * a);
+        } else {
+            w = dw + (dw * a);
+            h = dh - (dh * a);
+        }
         final float x = (dw - w) * 0.5f;
         final float y = (dh - h) * 0.5f;
         setQuad(vtx, x, y, w, h);
     }
 
-    private static void setHStretchQuad(FloatBuffer vtx, float dw, float dh, float a) {
-        final float w = dw + (dw * a);
-        final float h = 1.0f;
+    private static void setHStretchQuad(FloatBuffer vtx, float dw, float dh, float a,
+            boolean swap) {
+        final float w;
+        final float h;
+        if (swap) {
+            w = 1.0f;
+            h = dh + (dh * a);
+        } else {
+            w = dw + (dw * a);
+            h = 1.0f;
+        }
         final float x = (dw - w) * 0.5f;
         final float y = (dh - h) * 0.5f;
         setQuad(vtx, x, y, w, h);
@@ -526,7 +553,8 @@ final class ElectronBeam {
             mSurface = new Surface();
             mSurface.copyFrom(mSurfaceControl);
             
-            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurfaceControl);
+            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mSurfaceControl,
+                    mHWRotation);
             mSurfaceLayout.onDisplayTransaction();
         } finally {
             SurfaceControl.closeTransaction();
@@ -686,11 +714,14 @@ final class ElectronBeam {
     private static final class NaturalSurfaceLayout implements DisplayTransactionListener {
         private final DisplayManagerService mDisplayManager;
         private SurfaceControl mSurfaceControl;
+        private final int mHWRotation;
 
-        public NaturalSurfaceLayout(DisplayManagerService displayManager, SurfaceControl surfaceControl) {
+        public NaturalSurfaceLayout(DisplayManagerService displayManager,
+                SurfaceControl surfaceControl, int hwRotation) {
             mDisplayManager = displayManager;
             mSurfaceControl = surfaceControl;
             mDisplayManager.registerDisplayTransactionListener(this);
+            mHWRotation = hwRotation;
         }
 
         public void dispose() {
@@ -708,7 +739,7 @@ final class ElectronBeam {
                 }
 
                 DisplayInfo displayInfo = mDisplayManager.getDisplayInfo(Display.DEFAULT_DISPLAY);
-                switch (displayInfo.rotation) {
+                switch ((displayInfo.rotation + mHWRotation) % 4) {
                     case Surface.ROTATION_0:
                         mSurfaceControl.setPosition(0, 0);
                         mSurfaceControl.setMatrix(1, 0, 0, 1);
