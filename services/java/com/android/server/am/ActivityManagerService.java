@@ -9459,6 +9459,16 @@ public final class ActivityManagerService extends ActivityManagerNative
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_AMS_READY,
             SystemClock.uptimeMillis());
 
+        // Register system boot completed event, set max serial background services num threshold to normal
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        mContext.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mServices.onBootCompleted();
+            }
+        }, filter);
+
         synchronized(this) {
             // Make sure we have no pre-ready processes sitting around.
             
