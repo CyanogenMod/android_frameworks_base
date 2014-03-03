@@ -141,6 +141,12 @@ public final class ActiveServices {
         long timeoout;
     }
 
+    int mAdditionalBootStartingBackground;
+
+    public void onBootCompleted() {
+        mAdditionalBootStartingBackground = 0;
+    }
+
     /**
      * Information about services for a single user.
      */
@@ -206,7 +212,7 @@ public final class ActiveServices {
                 }
             }
             while (mDelayedStartList.size() > 0
-                    && mStartingBackground.size() < mMaxStartingBackground) {
+                    && mStartingBackground.size() < mMaxStartingBackground + mAdditionalBootStartingBackground) {
                 ServiceRecord r = mDelayedStartList.remove(0);
                 if (DEBUG_DELAYED_STATS) Slog.v(TAG, "REM FR DELAY LIST (exec next): " + r);
                 if (r.pendingStarts.size() <= 0) {
@@ -232,7 +238,7 @@ public final class ActiveServices {
                 Message msg = obtainMessage(MSG_BG_START_TIMEOUT);
                 sendMessageAtTime(msg, when);
             }
-            if (mStartingBackground.size() < mMaxStartingBackground) {
+            if (mStartingBackground.size() < mMaxStartingBackground + mAdditionalBootStartingBackground) {
                 mAm.backgroundServicesFinishedLocked(mUserId);
             }
         }
@@ -243,6 +249,10 @@ public final class ActiveServices {
         int maxBg = 0;
         try {
             maxBg = Integer.parseInt(SystemProperties.get("ro.config.max_starting_bg", "0"));
+        } catch(RuntimeException e) {
+        }
+        try {
+            mAdditionalBootStartingBackground = Integer.parseInt(SystemProperties.get("persist.added_boot_bgservices", "0"));
         } catch(RuntimeException e) {
         }
         mMaxStartingBackground = maxBg > 0 ? maxBg : ActivityManager.isLowRamDeviceStatic() ? 1 : 3;
@@ -257,7 +267,7 @@ public final class ActiveServices {
 
     boolean hasBackgroundServices(int callingUser) {
         ServiceMap smap = mServiceMap.get(callingUser);
-        return smap != null ? smap.mStartingBackground.size() >= mMaxStartingBackground : false;
+        return smap != null ? smap.mStartingBackground.size() >= mMaxStartingBackground + mAdditionalBootStartingBackground : false;
     }
 
     private ServiceMap getServiceMap(int callingUser) {
@@ -339,7 +349,7 @@ public final class ActiveServices {
                     if (DEBUG_DELAYED_STATS) Slog.v(TAG, "Continuing to delay: " + r);
                     return r.name;
                 }
-                if (smap.mStartingBackground.size() >= mMaxStartingBackground) {
+                if (smap.mStartingBackground.size() >= mMaxStartingBackground + mAdditionalBootStartingBackground) {
                     // Something else is starting, delay!
                     Slog.i(TAG, "Delaying start of: " + r);
                     smap.mDelayedStartList.add(r);
