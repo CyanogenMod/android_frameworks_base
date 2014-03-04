@@ -31,6 +31,7 @@ import android.os.RemoteException;
 import android.os.SELinux;
 import android.util.Log;
 
+import com.android.internal.R;
 import com.android.org.bouncycastle.util.encoders.Base64;
 
 import java.io.File;
@@ -52,8 +53,6 @@ public class LocalTransport extends IBackupTransport.Stub {
     private static final String TRANSPORT_DIR_NAME
             = "com.android.internal.backup.LocalTransport";
 
-    private static final String TRANSPORT_DESTINATION_STRING
-            = "Backing up to debug-only private cache";
 
     // The single hardcoded restore set always has the same (nonzero!) token
     private static final long RESTORE_TOKEN = 1;
@@ -82,7 +81,7 @@ public class LocalTransport extends IBackupTransport.Stub {
     }
 
     public String currentDestinationString() {
-        return TRANSPORT_DESTINATION_STRING;
+        return mContext.getString(R.string.transport_destination_string);
     }
 
     public String transportDirName() {
