@@ -17,6 +17,7 @@
 package android.os;
 
 import android.content.Context;
+import android.os.SystemProperties;
 import android.util.Log;
 
 /**
@@ -892,8 +893,13 @@ public final class PowerManager {
      * @hide
      */
     public int getDefaultButtonBrightness() {
-        return mContext.getResources().getInteger(
+        int buttonBrightnessDefault = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_buttonBrightnessSettingDefault);
+        int buttonBrightnessOverride = SystemProperties.getInt("ro.config.btnbrightness", -1);
+        if (buttonBrightnessOverride > 0) {
+            buttonBrightnessDefault = buttonBrightnessOverride;
+        }
+        return buttonBrightnessDefault;
     }
 
     /**

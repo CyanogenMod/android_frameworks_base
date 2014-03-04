@@ -1225,6 +1225,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mSingleStageCameraKey = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_singleStageCameraKey);
 
+        // Check system properties for overrides
+        int deviceHardwareKeysOverride = SystemProperties.getInt("ro.config.devicehwkeys", -1);
+        if (deviceHardwareKeysOverride > 0) {
+            mDeviceHardwareKeys = deviceHardwareKeysOverride;
+        }
+
         updateKeyAssignments();
 
         // register for dock events
@@ -1482,6 +1488,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mNavigationBarCanMove = shortSizeDp < 600;
 
         mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
+        // Create a system property for multiconfig
+        String navBarDeviceOverride = SystemProperties.get("ro.config.shownavbar");
+        if ("1".equals(navBarDeviceOverride)) {
+            mHasNavigationBar = true;
+        } else if ("0".equals(navBarDeviceOverride)) {
+            mHasNavigationBar = false;
+        }
         // Allow a system property to override this. Used by the emulator.
         // See also hasNavigationBar().
         String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
