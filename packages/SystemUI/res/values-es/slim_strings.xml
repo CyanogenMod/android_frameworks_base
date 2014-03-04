@@ -23,13 +23,14 @@
 
     <!--ScreenShot Trash-->
     <string name="screenshot_notification_delete">Borrar</string>
+    <string name="screenshot_delete_confirmation">Captura borrada</string>
 
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
 
     <!-- Dialog Cancel/OK -->
     <string name="cancel">Cancelar</string>
-    <string name="dlg_ok">Ok</string>
+    <string name="dlg_ok">Aceptar</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
 
@@ -44,7 +45,8 @@
     <string name="shortcut_quiethours">Int. Horas de tranquilidad</string>
     <string name="shortcut_rotation">Int. Bloqueo Rotación</string>
     <string name="shortcut_torch">Int. Linterna</string>
-    <string name="shortcut_reboot">Reiniciar (instantáneo)</string>
+    <string name="shortcut_reboot">Reiniciar</string>
+    <string name="shortcut_recovery">Recovery</string>
     <string name="shortcut_last_app">Ultima ap.</string>
     <string name="shortcut_screenshot">Captura Pantalla</string>
     <string name="shortcut_volume">Volumen</string>
@@ -64,7 +66,7 @@
 
     <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>
-    <string name="quick_settings_gps_off">GPS off</string>
+    <string name="quick_settings_gps_off">GPS apagado</string>
     <string name="quick_settings_screen_sleep">Apagar pantalla</string>
     <string name="quick_settings_ringer_on">Sonido activado</string>
     <string name="quick_settings_ringer_off">Sonido silenciado</string>
@@ -89,8 +91,8 @@
     <string name="quick_settings_usb_tether_on_label">Tethering</string>
     <string name="quick_settings_wifiap">AP Wi-Fi</string>
     <string name="quick_settings_wifiap_off">AP Wi-Fi apagado</string>
-    <string name="quick_settings_quiethours">Horas tranquilidad</string>
-    <string name="quick_settings_quiethours_off">Horas tranquilidad desact.</string>
+    <string name="quick_settings_quiethours">Modo descanso</string>
+    <string name="quick_settings_quiethours_off">Modo descanso desact.</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE apagado</string>
     <string name="quick_settings_volume">Volumen</string>
@@ -98,6 +100,11 @@
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_music_play">Reproducir</string>
     <string name="quick_settings_music_pause">Pausa</string>
+    <string name="quick_settings_music_schedule_title">Temporizador de sueño</string>
+    <string name="quick_settings_music_schedule_in_progress">Temporizador en progreso</string>
+    <string name="quick_settings_music_schedule_start">Iniciar temporizador</string>
+    <string name="quick_settings_music_schedule_cancel">Restablecer temporizador</string>
+    <string name="quick_settings_music_schedule_update">Actualizar temporizador</string>
     <string name="quick_settings_reboot_recovery">Recovery</string>
     <string name="quick_settings_reboot">Reiniciar</string>
     <string name="quick_settings_theme_switch_dark">Tema oscuro</string>
@@ -109,4 +116,26 @@
     <string name="quick_settings_quick_record_play">Reproduciendo...</string>
     <string name="quick_settings_custom_toggle">Personalizado</string>
     <string name="quick_settings_contact_toggle">Contacto</string>
+    <string name="quick_settings_reminder">Recordatorio</string>
+    <string name="quick_settings_reminder_title">Título:</string>
+    <string name="quick_settings_reminder_message">Mensaje:</string>
+    <string name="quick_settings_reminder_time">Hora de recordatorio</string>
+    <string name="quick_settings_reminder_set">Establecer hora</string>
+    <string name="quick_settings_reminder_update">Actualizar hora</string>
+    <string name="quick_settings_reminder_no_expire">Sin notificación</string>
+    <string name="quick_settings_reminder_dismiss">Borrar recordatorio</string>
+    <string name="quick_settings_reminder_dismiss_message">¿Borrar recordatorio actual?</string>
+    <string name="quick_settings_reminder_help_title">Tocar:</string>
+    <string name="quick_settings_reminder_noti_dismiss">Descartar</string>
+    <string name="quick_settings_reminder_help_message">Tocar aquí para crear un recordatorio. Pulsación larga para eliminarlo.</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Cargado</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% remaining</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Sin servicio</string>
+    <string name="pie_phone_status_airplane_mode">Modo avión activado</string>
+    <string name="pie_phone_status_emergency_only">Sólo llamadas de emergencia</string>
 </resources>
