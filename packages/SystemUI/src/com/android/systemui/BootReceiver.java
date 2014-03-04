@@ -104,6 +104,8 @@ public class BootReceiver extends BroadcastReceiver {
             }
 
             calendar.add(Calendar.MINUTE, timePicked);
+            calendar.add(Calendar.SECOND, -calendar.get(Calendar.SECOND));
+            calendar.add(Calendar.MILLISECOND, -calendar.get(Calendar.MILLISECOND));
             AlarmManager am = (AlarmManager)
                     context.getSystemService(Context.ALARM_SERVICE);
             PendingIntent notify = null;

@@ -100,6 +100,8 @@ public class MusicTileTimeDialog extends Activity  {
 
 
                 mCalendar.add(Calendar.MINUTE, timePicked);
+                mCalendar.add(Calendar.SECOND, -mCalendar.get(Calendar.SECOND));
+                mCalendar.add(Calendar.MILLISECOND, -mCalendar.get(Calendar.MILLISECOND));
                 AlarmManager am = (AlarmManager)
                         MusicTileTimeDialog.this.getSystemService(Context.ALARM_SERVICE);
                 PendingIntent stopMusic = null;

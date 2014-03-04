@@ -64,6 +64,13 @@
     <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
     <string name="chamber_name_toast">Using default name</string>
 
+    <!-- Camera tile toasts
+    <string name="quick_settings_camera_error_connect">Can\'t connect to camera</string> -->
+    
+    <!-- Label in drop down to identify brightness slider -->
+    <string name="brightness_label">Brightness</string>
+    <string name="powerwidget_screen_timeout_never_toast">Screen set to always on</string>
+
     <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>
     <string name="quick_settings_gps_off">GPS off</string>
@@ -131,14 +138,7 @@
     <string name="quick_settings_reminder_dismiss_message">Clear current reminder?</string>
     <string name="quick_settings_reminder_help_title">Touch:</string>
     <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
-    <string name="quick_settings_reminder_help_message">Touch here to set a reminder. Long-press to clear the current reminder.</string>
-
-    <!-- Camera tile toasts
-    <string name="quick_settings_camera_error_connect">Can\'t connect to camera</string> -->
-    
-    <!-- Label in drop down to identify brightness slider -->
-    <string name="brightness_label">Brightness</string>
-    <string name="powerwidget_screen_timeout_never_toast">Screen set to always on</string>
+    <string name="quick_settings_reminder_help_message">Touch the empty space above to set or change the reminder. Long-press to clear the current reminder.</string>
 
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Charging (<xliff:g id="percent">%d</xliff:g>%%)</string>
