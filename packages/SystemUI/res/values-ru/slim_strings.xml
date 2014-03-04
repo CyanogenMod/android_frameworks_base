@@ -112,6 +112,7 @@
     <string name="quick_settings_reminder_dismiss">Удалить напоминание</string>
     <string name="quick_settings_reminder_dismiss_message">Удалить текущее напоминание?</string>
     <string name="quick_settings_reminder_help_title">Касание:</string>
+    <string name="quick_settings_reminder_noti_dismiss">Очистить</string>
     <string name="quick_settings_reminder_help_message">Коснитесь здесь, чтобы установить напоминание. Долгое нажатие удалит текущее напоминание.</string>
 
     <!-- Battery status in pie controls -->
