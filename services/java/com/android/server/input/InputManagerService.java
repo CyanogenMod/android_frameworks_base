@@ -44,6 +44,7 @@ import android.content.res.Resources.NotFoundException;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.hardware.input.IInputDevicesChangedListener;
 import android.hardware.input.IInputManager;
 import android.hardware.input.InputManager;
@@ -186,6 +187,7 @@ public class InputManagerService extends IInputManager.Stub
     private static native void nativeReloadDeviceAliases(int ptr);
     private static native String nativeDump(int ptr);
     private static native void nativeMonitor(int ptr);
+    private static native void nativeSetHoverIcon(int ptr, PointerIcon icon);
 
     // Input event injection constants defined in InputDispatcher.h.
     private static final int INPUT_EVENT_INJECTION_SUCCEEDED = 0;
@@ -1097,6 +1099,17 @@ public class InputManagerService extends IInputManager.Stub
         setPointerSpeedUnchecked(speed);
     }
 
+    /**
+     * Notification from WindowManagerService when focused window is
+     * changed (happens mainly when new app becomes visible)
+     */
+    public void notifyWindowFocusChanged() {
+        // when focused window changes, reset the hover cursor so one app will not
+        // be able to affect the hovering behavior of other apps
+        setCustomHoverIcon(null, 0, 0);
+    }
+
+
     private void setPointerSpeedUnchecked(int speed) {
         speed = Math.min(Math.max(speed, InputManager.MIN_POINTER_SPEED),
                 InputManager.MAX_POINTER_SPEED);
@@ -1208,6 +1221,17 @@ public class InputManagerService extends IInputManager.Stub
             }
         }
     }
+
+    // Binder call
+    @Override
+    public void setCustomHoverIcon(Bitmap icon, int hotSpotX, int hotSpotY) {
+        PointerIcon pointerIcon = null;
+        if(icon != null) {
+            pointerIcon = PointerIcon.createCustomIcon(icon, hotSpotX, hotSpotY);
+        }
+        nativeSetHoverIcon(mPtr, pointerIcon);
+    }
+
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {

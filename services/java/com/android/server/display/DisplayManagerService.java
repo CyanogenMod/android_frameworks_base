@@ -795,6 +795,9 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
                 registerOverlayDisplayAdapterLocked();
                 registerWifiDisplayAdapterLocked();
                 registerVirtualDisplayAdapterLocked();
+                if (!DigitalPenOffScreenDisplayAdapter.isDigitalPenDisabled()) {
+                    registerDigitalPenOffScreenDisplayAdapterLocked();
+                }
             }
         }
     }
@@ -802,6 +805,11 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
     private void registerOverlayDisplayAdapterLocked() {
         registerDisplayAdapterLocked(new OverlayDisplayAdapter(
                 mSyncRoot, mContext, mHandler, mDisplayAdapterListener, mUiHandler));
+    }
+
+    private void registerDigitalPenOffScreenDisplayAdapterLocked() {
+        registerDisplayAdapterLocked(new DigitalPenOffScreenDisplayAdapter(
+               mSyncRoot, mContext, mHandler, mDisplayAdapterListener));
     }
 
     private void registerWifiDisplayAdapterLocked() {
@@ -1044,6 +1052,7 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
     private void configureDisplayInTransactionLocked(DisplayDevice device) {
         DisplayDeviceInfo info = device.getDisplayDeviceInfoLocked();
         boolean isPrivate = (info.flags & DisplayDeviceInfo.FLAG_PRIVATE) != 0;
+        boolean displayExistsAndEmpty = false;
 
         // Find the logical display that the display device is showing.
         // Private displays never mirror other displays.
@@ -1053,6 +1062,7 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
                 // If the display does not have any content of its own, then
                 // automatically mirror the default logical display contents.
                 display = null;
+                displayExistsAndEmpty = true;
             }
             if (display == null) {
                 display = mLogicalDisplays.get(Display.DEFAULT_DISPLAY);
@@ -1072,12 +1082,25 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
 
         // Update the viewports if needed.
         if (!mDefaultViewport.valid
-                && (info.flags & DisplayDeviceInfo.FLAG_DEFAULT_DISPLAY) != 0) {
+            && (info.flags & DisplayDeviceInfo.FLAG_DEFAULT_DISPLAY) != 0) {
             setViewportLocked(mDefaultViewport, display, device);
         }
         if (!mExternalTouchViewport.valid
                 && info.touch == DisplayDeviceInfo.TOUCH_EXTERNAL) {
-            setViewportLocked(mExternalTouchViewport, display, device);
+            if(device.getNameLocked().equals(DigitalPenOffScreenDisplayAdapter.getDisplayName()) &&
+               displayExistsAndEmpty &&
+               !DigitalPenOffScreenDisplayAdapter.isDigitalPenDisabled()) {
+                // When the digital pen off-screen display is empty
+                // (no applications published content to it), Android's default behavior is to
+                // redirect input events which are intended to this display to the main display
+                // instead. We do not want this behavior. The code below addresses the empty
+                // off-screen display situation and makes sure these input events are discarded.
+                mExternalTouchViewport.valid = true;
+                mExternalTouchViewport.displayId = -1;
+            }
+            else {
+                setViewportLocked(mExternalTouchViewport, display, device);
+            }
         }
     }
 

@@ -9805,6 +9805,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 finishUpdateFocusedWindowAfterAssignLayersLocked(updateInputWindows);
             }
 
+            mInputManager.notifyWindowFocusChanged();
+
             Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
             return true;
         }

@@ -57,6 +57,12 @@
 #define MSC_ANDROID_TIME_SEC 0x6
 #define MSC_ANDROID_TIME_USEC 0x7
 
+/**
+ * code for a special button that is used to show/hide a
+ * circular hovering cursor in the input framework.
+ */
+#define BTN_USF_HOVERING_CURSOR         0x230
+
 namespace android {
 
 enum {

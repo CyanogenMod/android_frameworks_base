@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
@@ -220,6 +221,8 @@ class ServerThread {
         boolean disableNonCoreServices = SystemProperties.getBoolean("config.disable_noncore", false);
         boolean disableNetwork = SystemProperties.getBoolean("config.disable_network", false);
         boolean disableAtlas = SystemProperties.getBoolean("config.disable_atlas", false);
+        boolean digitalPenCapable =
+            Resources.getSystem().getBoolean(com.android.internal.R.bool.config_digitalPenCapable);
 
         try {
             Slog.i(TAG, "Display Manager");
@@ -857,6 +860,23 @@ class ServerThread {
                 } catch (Throwable e) {
                     reportWtf("starting MediaRouterService", e);
                 }
+            }
+
+            if (digitalPenCapable) {
+              try {
+                  Slog.i(TAG, "Digital Pen Service");
+                  PathClassLoader digitalPenClassLoader =
+                    new PathClassLoader("system/framework/DigitalPenService.jar",
+                                        ClassLoader.getSystemClassLoader());
+                  Class digitalPenClass = digitalPenClassLoader.loadClass
+                    ("com.qti.snapdragon.digitalpen.DigitalPenService");
+                  Constructor<Class> ctor = digitalPenClass.getConstructor(Context.class);
+                  Object digitalPenRemoteObject = ctor.newInstance(context);
+                  Slog.i(TAG, "Successfully loaded DigitalPenService class");
+                  ServiceManager.addService("DigitalPen", (IBinder)digitalPenRemoteObject);
+              } catch (Throwable e) {
+                  reportWtf("starting DigitalPenService", e);
+              }
             }
         }
 

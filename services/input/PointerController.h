@@ -86,6 +86,8 @@ public:
         PRESENTATION_POINTER,
         // Show spots and a spot anchor in place of the mouse pointer.
         PRESENTATION_SPOT,
+        // Show a stylus hovering icon (small circle)
+        PRESENTATION_STYLUS_HOVER,
     };
 
     /* Sets the mode of the pointer controller. */
@@ -115,6 +117,7 @@ struct PointerResources {
     SpriteIcon spotHover;
     SpriteIcon spotTouch;
     SpriteIcon spotAnchor;
+    SpriteIcon stylusHover;
 };
 
 
@@ -172,6 +175,7 @@ public:
 
     void setDisplayViewport(int32_t width, int32_t height, int32_t orientation);
     void setPointerIcon(const SpriteIcon& icon);
+    void setHoverIcon(const SpriteIcon& icon);
     void setInactivityTimeout(InactivityTimeout inactivityTimeout);
 
 private:
@@ -230,6 +234,7 @@ private:
         float pointerAlpha;
         sp<Sprite> pointerSprite;
         SpriteIcon pointerIcon;
+        SpriteIcon hoverIcon;
         bool pointerIconChanged;
 
         int32_t buttonState;
