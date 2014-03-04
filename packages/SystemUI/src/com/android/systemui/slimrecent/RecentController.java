@@ -307,7 +307,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
                 mHandler.removeCallbacks(mRecentThirdStageLoader);
                 mWindowManager.removeViewImmediate(mParentView);
                 return true;
-            } else if (mAnimationState == ANIMATION_STATE_NONE) {
+            } else if (mAnimationState != ANIMATION_STATE_OUT) {
                 if (DEBUG) Log.d(TAG, "out animation starting");
                 mIsToggled = false;
                 mAnimationState = ANIMATION_STATE_OUT;
