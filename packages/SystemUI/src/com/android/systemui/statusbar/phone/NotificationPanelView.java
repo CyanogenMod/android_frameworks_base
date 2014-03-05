@@ -158,6 +158,7 @@ public class NotificationPanelView extends PanelView {
                     int quickPulldownMode = Settings.System.getIntForUser(
                             getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN,
                             0, UserHandle.USER_CURRENT);
+                    // Reminder: Smart PullDown linked in PhoneStatusBar via SlimActions as well
                     int smartPulldownMode = Settings.System.getIntForUser(
                             getContext().getContentResolver(), Settings.System.QS_SMART_PULLDOWN,
                             0, UserHandle.USER_CURRENT);

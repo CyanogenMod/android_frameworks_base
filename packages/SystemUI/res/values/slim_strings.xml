@@ -132,6 +132,7 @@
     <string name="quick_settings_reminder_help_title">Touch:</string>
     <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
     <string name="quick_settings_reminder_help_message">Touch here to set a reminder. Long-press to clear the current reminder.</string>
+
     <!-- Camera tile toasts
     <string name="quick_settings_camera_error_connect">Can\'t connect to camera</string> -->
     
@@ -152,5 +153,8 @@
     <!-- Slim recents -->
     <string name="status_bar_recent_playstore_item_title">Play Store</string>
     <string name="status_bar_recent_amazon_item_title">Amazon Store</string>
+
+    <!-- Smart PullDown Warning -->
+    <string name="smart_pulldown_disabled">Smart pulldown is disabled</string>
 
 </resources>
