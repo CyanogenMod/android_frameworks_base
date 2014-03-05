@@ -99,6 +99,14 @@ class SupplicantStateTracker extends StateMachine {
             mWifiConfigStore.enableAllNetworks();
             mNetworksDisabledDuringConnect = false;
         }
+
+        /* If the max supplicant loop iterations is reached or authentication
+         * failure due to wrong password, then disable that network
+         */
+        if (disableReason == WifiConfiguration.DISABLED_AUTH_FAILURE) {
+            Log.e(TAG, "reason DISABLED_AUTH_FAILURE ");
+            mWifiConfigStore.disableNetwork(netId, disableReason);
+        }
     }
 
     private void transitionOnSupplicantStateChange(StateChangeResult stateChangeResult) {
