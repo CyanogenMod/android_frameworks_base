@@ -406,7 +406,7 @@ public class SlimActions {
         return false;
     }
 
-    private static void triggerVirtualKeypress(final int keyCode, boolean longpress) {
+    public static void triggerVirtualKeypress(final int keyCode, boolean longpress) {
         InputManager im = InputManager.getInstance();
         long now = SystemClock.uptimeMillis();
 
