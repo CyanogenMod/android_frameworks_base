@@ -189,11 +189,6 @@ public final class Installer {
 
 
     private String transaction(String cmd) {
-        if (!connect()) {
-            Slog.e(TAG, "connection failed");
-            return "-1";
-        }
-
         int transactionId;
         synchronized (mTransactionIdLock) {
             transactionId = mLastTransactionId++;
@@ -208,6 +203,11 @@ public final class Installer {
                 while(mResponses.get(transactionId) == null) {
                     synchronized (mPendingRequests) {
                         if (!mPendingRequests.contains(transactionId)) {
+                            if (!connect()) {
+                                Slog.e(TAG, "connection failed");
+                                return "-1";
+                            }
+
                             if (!writeCommand(cmd, transactionId)) {
                                 /*
                                  * If installd died and restarted in the background (unlikely but
