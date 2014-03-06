@@ -128,6 +128,9 @@ public class Script extends BaseObj {
      *
      */
     protected void forEach(int slot, Allocation ain, Allocation aout, FieldPacker v) {
+        mRS.validate();
+        mRS.validateObject(ain);
+        mRS.validateObject(aout);
         if (ain == null && aout == null) {
             throw new RSIllegalArgumentException(
                 "At least one of ain or aout is required to be non-null.");
@@ -152,6 +155,9 @@ public class Script extends BaseObj {
      *
      */
     protected void forEach(int slot, Allocation ain, Allocation aout, FieldPacker v, LaunchOptions sc) {
+        mRS.validate();
+        mRS.validateObject(ain);
+        mRS.validateObject(aout);
         if (ain == null && aout == null) {
             throw new RSIllegalArgumentException(
                 "At least one of ain or aout is required to be non-null.");
@@ -187,6 +193,7 @@ public class Script extends BaseObj {
      */
     public void bindAllocation(Allocation va, int slot) {
         mRS.validate();
+        mRS.validateObject(va);
         if (va != null) {
             mRS.nScriptBindAllocation(getID(mRS), va.getID(mRS), slot);
         } else {
@@ -256,6 +263,8 @@ public class Script extends BaseObj {
      *
      */
     public void setVar(int index, BaseObj o) {
+        mRS.validate();
+        mRS.validateObject(o);
         mRS.nScriptSetVarObj(getID(mRS), index, (o == null) ? 0 : o.getID(mRS));
     }
 
