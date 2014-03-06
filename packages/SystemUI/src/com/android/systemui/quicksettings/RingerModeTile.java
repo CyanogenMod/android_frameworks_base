@@ -96,16 +96,18 @@ public class RingerModeTile extends QuickSettingsTile {
 
         // The icon will change depending on index
         findCurrentState();
-        mDrawable = mRingers.get(mRingerIndex).mDrawable;
+        mDrawable = RINGERS[mRingerIndex].mDrawable;
     }
 
     protected void toggleState() {
-        mRingerIndex++;
-        if (mRingerIndex >= mRingers.size()) {
-            mRingerIndex = 0;
-        }
-
-        Ringer r = mRingers.get(mRingerIndex);
+        Ringer r;
+        do {
+            mRingerIndex++;
+            if (mRingerIndex >= RINGERS.length) {
+                mRingerIndex = 0;
+            }
+            r = RINGERS[mRingerIndex];
+        }  while(!mRingers.contains(r));
 
         // If we are setting a vibrating state, vibrate to indicate it
         if (r.mVibrateWhenRinging) {
@@ -160,11 +162,12 @@ public class RingerModeTile extends QuickSettingsTile {
         boolean vibrateWhenRinging = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.VIBRATE_WHEN_RINGING, 0, UserHandle.USER_CURRENT) == 1;
         int ringerMode = mAudioManager.getRingerMode();
+        vibrateWhenRinging |= ringerMode == AudioManager.RINGER_MODE_VIBRATE;
 
         mRingerIndex = 0;
 
-        for (int i = 0; i < mRingers.size(); i++) {
-            Ringer r = mRingers.get(i);
+        for (int i = 0; i < RINGERS.length; i++) {
+            Ringer r = RINGERS[i];
             if (ringerMode == r.mRingerMode && vibrateWhenRinging == r.mVibrateWhenRinging) {
                 mRingerIndex = i;
                 break;
