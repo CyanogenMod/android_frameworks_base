@@ -33,6 +33,7 @@ public class SystemUIService extends Service {
      * The classes of the stuff to start.
      */
     private final Class<?>[] SERVICES = new Class[] {
+            com.android.systemui.recent.Recents.class,
             com.android.systemui.statusbar.SystemBars.class,
             com.android.systemui.usb.StorageNotification.class,
             com.android.systemui.power.PowerUI.class,
