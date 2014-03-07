@@ -25,7 +25,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -62,8 +62,8 @@ public class RecentTasksLoader implements View.OnTouchListener {
     private Handler mHandler;
 
     private int mIconDpi;
-    private ColorDrawableWithDimensions mDefaultThumbnailBackground;
-    private ColorDrawableWithDimensions mDefaultIconBackground;
+    private Bitmap mDefaultThumbnailBackground;
+    private Bitmap mDefaultIconBackground;
     private int mNumTasksInFirstScreenful = Integer.MAX_VALUE;
 
     private boolean mFirstScreenful;
@@ -100,7 +100,7 @@ public class RecentTasksLoader implements View.OnTouchListener {
         // Render default icon (just a blank image)
         int defaultIconSize = res.getDimensionPixelSize(com.android.internal.R.dimen.app_icon_size);
         int iconSize = (int) (defaultIconSize * mIconDpi / res.getDisplayMetrics().densityDpi);
-        mDefaultIconBackground = new ColorDrawableWithDimensions(0x00000000, iconSize, iconSize);
+        mDefaultIconBackground = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
 
         // Render the default thumbnail background
         int thumbnailWidth =
@@ -110,7 +110,9 @@ public class RecentTasksLoader implements View.OnTouchListener {
         int color = res.getColor(R.drawable.status_bar_recents_app_thumbnail_background);
 
         mDefaultThumbnailBackground =
-                new ColorDrawableWithDimensions(color, thumbnailWidth, thumbnailHeight);
+                Bitmap.createBitmap(thumbnailWidth, thumbnailHeight, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(mDefaultThumbnailBackground);
+        c.drawColor(color);
     }
 
     public void setRecentsPanel(RecentsPanelView newRecentsPanel, RecentsPanelView caller) {
@@ -123,11 +125,11 @@ public class RecentTasksLoader implements View.OnTouchListener {
         }
     }
 
-    public Drawable getDefaultThumbnail() {
+    public Bitmap getDefaultThumbnail() {
         return mDefaultThumbnailBackground;
     }
 
-    public Drawable getDefaultIcon() {
+    public Bitmap getDefaultIcon() {
         return mDefaultIconBackground;
     }
 
@@ -197,7 +199,7 @@ public class RecentTasksLoader implements View.OnTouchListener {
                 + td + ": " + thumbnail);
         synchronized (td) {
             if (thumbnail != null) {
-                td.setThumbnail(new BitmapDrawable(mContext.getResources(), thumbnail));
+                td.setThumbnail(thumbnail);
             } else {
                 td.setThumbnail(mDefaultThumbnailBackground);
             }
