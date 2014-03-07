@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="progress_nomediapresent" product="default">Geen verwijderbare media aanwezig\u2026</string>
+    <string name="app_ops_access_camera">toegang tot camera</string>
+    <string name="app_ops_access_location">toegang tot uw locatie</string>
+    <string name="app_ops_access_notifications">meldingen lezen</string>
+    <string name="app_ops_alarm_wakeup">apparaat ontwaken</string>
+    <string name="app_ops_draw_on_top">bovenop tekenen</string>
+    <string name="app_ops_keep_device_awake">apparaat wakker houden</string>
+    <string name="app_ops_make_phone_call">telefoongesprek starten</string>
+    <string name="app_ops_modify_calendar">agenda vernieuwen</string>
+    <string name="app_ops_modify_call_log">gespreksstatistieken vernieuwen</string>
+    <string name="app_ops_modify_clipboard">klembord aanpassen</string>
+    <string name="app_ops_modify_contacts">contacten vernieuwen</string>
+    <string name="app_ops_modify_settings">systeeminstellingen vernieuwen</string>
+    <string name="app_ops_play_audio">audio afspelen</string>
+    <string name="app_ops_post_notification">melding tonen</string>
+    <string name="app_ops_read_calendar">agenda lezen</string>
+    <string name="app_ops_read_call_log">gespreksstatistieken lezen</string>
+    <string name="app_ops_read_clipboard">klembord lezen</string>
+    <string name="app_ops_read_contacts">contacten lezen</string>
+    <string name="app_ops_read_mms">mms-berichten lezen</string>
+    <string name="app_ops_read_sms">sms-berichten lezen</string>
+    <string name="app_ops_receive_sms">mms-bericht ontvangen</string>
+    <string name="app_ops_record_audio">audio opnemen</string>
+    <string name="app_ops_send_mms">mms-bericht versturen</string>
+    <string name="app_ops_send_sms">sms-bericht versturen</string>
+    <string name="app_ops_start_at_bootup">starten tijdens opstarten</string>
+    <string name="app_ops_toggle_bluetooth">Bluetooth aan-/uitzetten</string>
+    <string name="app_ops_toggle_mobile_data">mobiele gegevens aan-/uitzetten</string>
+    <string name="app_ops_toggle_wifi">wifi aan-/uitzetten</string>
+    <string name="app_ops_use_alarm_volume">alarmvolume beheren</string>
+    <string name="app_ops_use_audio_focus">audiofocus beheren</string>
+    <string name="app_ops_use_bluetooth_volume">Bluetooth-volume beheren</string>
+    <string name="app_ops_use_master_volume">hoofdvolume beheren</string>
+    <string name="app_ops_use_media_buttons">mediaknoppen gebruiken</string>
+    <string name="app_ops_use_media_volume">mediavolume beheren</string>
+    <string name="app_ops_use_notification_volume">meldingsvolume beheren</string>
+    <string name="app_ops_use_ring_volume">beltoonvolume beheren</string>
+    <string name="app_ops_use_vibrate">trillen gebruiken</string>
+    <string name="app_ops_use_voice_volume">stemvolume beheren</string>
+    <string name="app_ops_write_mms">mms-bericht schrijven</string>
+    <string name="app_ops_write_sms">sms-bericht schrijven</string>
+    <string name="stk_cc_ussd_to_dial">USSD-verzoek veranderd naar DIAL-verzoek.</string>
+    <string name="stk_cc_ussd_to_ss">USSD-verzoek veranderd naar SS-verzoek.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD-verzoek veranderd naar nieuw USSD-verzoek.</string>
+    <string name="stk_cc_ss_to_dial">SS-verzoek veranderd naar DIAL-verzoek.</string>
+    <string name="stk_cc_ss_to_ussd">SS-verzoek veranderd naar USSD-verzoek.</string>
+    <string name="stk_cc_ss_to_ss">SS-verzoek veranderd naar nieuw SS-verzoek.</string>
+</resources>
