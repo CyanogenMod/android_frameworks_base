@@ -1265,6 +1265,33 @@ public final class BluetoothDevice implements Parcelable {
     }
 
     /**
+     * Create an L2CAP {@link BluetoothSocket} ready to start a secure
+     * outgoing connection to this remote device using SDP lookup of uuid.
+     * <p>This is designed to be used with {@link
+     * BluetoothAdapter#listenUsingL2capWithServiceRecord} for peer-peer
+     * Bluetooth applications.
+     * <p>Use {@link BluetoothSocket#connect} to initiate the outgoing
+     * connection. This will also perform an SDP lookup of the given uuid to
+     * determine which channel to connect to.
+     * <p>The remote device will be authenticated and communication on this
+     * socket will be encrypted.
+     * <p> Use this socket only if an authenticated socket link is possible.
+     * Authentication refers to the authentication of the link key to
+     * prevent man-in-the-middle type of attacks.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}
+     *
+     * @param uuid service record uuid to lookup L2CAP PSM
+     * @return a L2CAP BluetoothServerSocket ready for an outgoing connection
+     * @throws IOException on error, for example Bluetooth not available, or
+     *                     insufficient permissions
+     * @hide
+     */
+    public BluetoothSocket createL2capSocketToServiceRecord(UUID uuid) throws IOException {
+        return new BluetoothSocket(BluetoothSocket.TYPE_L2CAP, -1, true, true, this, -1,
+                new ParcelUuid(uuid));
+    }
+
+    /**
      * Create an RFCOMM {@link BluetoothSocket} socket ready to start an insecure
      * outgoing connection to this remote device using SDP lookup of uuid.
      * <p> The communication channel will not have an authenticated link key
@@ -1296,6 +1323,37 @@ public final class BluetoothDevice implements Parcelable {
         return new BluetoothSocket(BluetoothSocket.TYPE_RFCOMM, -1, false, false, this, -1,
                 new ParcelUuid(uuid));
     }
+
+    /**
+     * Create an L2CAP {@link BluetoothSocket} socket ready to start an insecure
+     * outgoing connection to this remote device using SDP lookup of uuid.
+     * <p> The communication channel will not have an authenticated link key
+     * i.e it will be subject to man-in-the-middle attacks. For Bluetooth 2.1
+     * devices, the link key will be encrypted, as encryption is mandatory.
+     * For legacy devices (pre Bluetooth 2.1 devices) the link key will
+     * be not be encrypted. Use {@link #createL2capSocketToServiceRecord} if an
+     * encrypted and authenticated communication channel is desired.
+     * <p>This is designed to be used with {@link
+     * BluetoothAdapter#listenUsingInsecureL2capWithServiceRecord} for peer-peer
+     * Bluetooth applications.
+     * <p>Use {@link BluetoothSocket#connect} to initiate the outgoing
+     * connection. This will also perform an SDP lookup of the given uuid to
+     * determine which l2cap psm to connect to.
+     * <p>The remote device will be authenticated and communication on this
+     * socket will be encrypted.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}
+     *
+     * @param uuid service record uuid to lookup L2CAP PSM
+     * @return a L2CAP BluetoothServerSocket ready for an outgoing connection
+     * @throws IOException on error, for example Bluetooth not available, or
+     *                     insufficient permissions
+     * @hide
+     */
+    public BluetoothSocket createInsecureL2capSocketToServiceRecord(UUID uuid) throws IOException {
+        return new BluetoothSocket(BluetoothSocket.TYPE_L2CAP, -1, false, false, this, -1,
+                new ParcelUuid(uuid));
+    }
+
 
     /**
      * Construct an insecure RFCOMM socket ready to start an outgoing
