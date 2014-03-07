@@ -1113,6 +1113,34 @@ public final class BluetoothAdapter {
     }
 
     /**
+     * Create a listening, secure L2CAP Bluetooth socket with Service Record.
+     * <p>A remote device connecting to this socket will be authenticated and
+     * communication on this socket will be encrypted.
+     * <p>Use {@link BluetoothServerSocket#accept} to retrieve incoming
+     * connections from a listening {@link BluetoothServerSocket}.
+     * <p>The system will assign an unused L2CAP PSM to listen on.
+     * <p>The system will also register a Service Discovery
+     * Protocol (SDP) record with the local SDP server containing the specified
+     * UUID, service name, and auto-assigned PSM number. Remote Bluetooth devices
+     * can use the same UUID to query our SDP server and discover which PSM
+     * to connect to. This SDP record will be removed when this socket is
+     * closed, or if this application closes unexpectedly.
+     * <p>Use {@link BluetoothDevice#createL2capSocketToServiceRecord} to
+     * connect to this socket from another device using the same {@link UUID}.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}
+     * @param name service name for SDP record
+     * @param uuid uuid for SDP record
+     * @return a listening L2CAP BluetoothServerSocket
+     * @throws IOException on error, for example Bluetooth not available, or
+     *                     insufficient permissions, or channel in use.
+     * @hide
+     */
+    public BluetoothServerSocket listenUsingL2capWithServiceRecord(String name, UUID uuid)
+            throws IOException {
+        return createNewL2capSocketAndRecord(name, uuid, true, true);
+    }
+
+    /**
      * Create a listening, insecure RFCOMM Bluetooth socket with Service Record.
      * <p>The link key is not required to be authenticated, i.e the communication may be
      * vulnerable to Man In the Middle attacks. For Bluetooth 2.1 devices,
@@ -1141,6 +1169,38 @@ public final class BluetoothAdapter {
     public BluetoothServerSocket listenUsingInsecureRfcommWithServiceRecord(String name, UUID uuid)
             throws IOException {
         return createNewRfcommSocketAndRecord(name, uuid, false, false);
+    }
+
+    /**
+     * Create a listening, insecure L2CAP Bluetooth socket with Service Record.
+     * <p>The link key is not required to be authenticated, i.e the communication may be
+     * vulnerable to Man In the Middle attacks. For Bluetooth 2.1 devices,
+     * the link will be encrypted, as encryption is mandartory.
+     * For legacy devices (pre Bluetooth 2.1 devices) the link will not
+     * be encrypted. Use {@link #listenUsingL2capWithServiceRecord}, if an
+     * encrypted and authenticated communication channel is desired.
+     * <p>Use {@link BluetoothServerSocket#accept} to retrieve incoming
+     * connections from a listening {@link BluetoothServerSocket}.
+     * <p>The system will assign an unused L2CAP PSM to listen on.
+     * <p>The system will also register a Service Discovery
+     * Protocol (SDP) record with the local SDP server containing the specified
+     * UUID, service name, and auto-assigned PSM number. Remote Bluetooth devices
+     * can use the same UUID to query our SDP server and discover which PSM
+     * to connect to. This SDP record will be removed when this socket is
+     * closed, or if this application closes unexpectedly.
+     * <p>Use {@link BluetoothDevice#createL2capSocketToServiceRecord} to
+     * connect to this socket from another device using the same {@link UUID}.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}
+     * @param name service name for SDP record
+     * @param uuid uuid for SDP record
+     * @return a listening L2CAP BluetoothServerSocket
+     * @throws IOException on error, for example Bluetooth not available, or
+     *                     insufficient permissions, or channel in use.
+     * @hide
+     */
+    public BluetoothServerSocket listenUsingInsecureL2capWithServiceRecord(String name, UUID uuid)
+            throws IOException {
+        return createNewL2capSocketAndRecord(name, uuid, false, false);
     }
 
      /**
@@ -1186,6 +1246,22 @@ public final class BluetoothAdapter {
             boolean auth, boolean encrypt) throws IOException {
         BluetoothServerSocket socket;
         socket = new BluetoothServerSocket(BluetoothSocket.TYPE_RFCOMM, auth,
+                        encrypt, new ParcelUuid(uuid));
+        socket.setServiceName(name);
+        int errno = socket.mSocket.bindListen();
+        if (errno != 0) {
+            //TODO(BT): Throw the same exception error code
+            // that the previous code was using.
+            //socket.mSocket.throwErrnoNative(errno);
+            throw new IOException("Error: " + errno);
+        }
+        return socket;
+    }
+
+    private BluetoothServerSocket createNewL2capSocketAndRecord(String name, UUID uuid,
+            boolean auth, boolean encrypt) throws IOException {
+        BluetoothServerSocket socket;
+        socket = new BluetoothServerSocket(BluetoothSocket.TYPE_L2CAP, auth,
                         encrypt, new ParcelUuid(uuid));
         socket.setServiceName(name);
         int errno = socket.mSocket.bindListen();
