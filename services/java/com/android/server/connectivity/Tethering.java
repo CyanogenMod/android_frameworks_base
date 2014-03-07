@@ -36,6 +36,8 @@ import android.net.LinkProperties;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.net.RouteInfo;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
@@ -127,6 +129,11 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private String[] mDefaultDnsServers;
     private static final String DNS_DEFAULT_SERVER1 = "8.8.8.8";
     private static final String DNS_DEFAULT_SERVER2 = "8.8.4.4";
+
+    private static final String ACTION_TURN_WIFI_AP_OFF =
+            "com.android.server.ACTION_TURN_WIFI_AP_OFF";
+
+    private static NotificationBroadcastReciever mNotificationBroadcastReceiver = null;
 
     private StateMachine mTetherMasterSM;
 
@@ -498,15 +505,31 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 tethered_notification_message);
 
         if (mTetheredNotification == null) {
-            mTetheredNotification = new Notification();
-            mTetheredNotification.when = 0;
-        }
-        mTetheredNotification.icon = icon;
-        mTetheredNotification.defaults &= ~Notification.DEFAULT_SOUND;
-        mTetheredNotification.flags = Notification.FLAG_ONGOING_EVENT;
-        mTetheredNotification.tickerText = title;
-        mTetheredNotification.setLatestEventInfo(getUiContext(), title, message, pi);
+            Notification.Builder builder = new Notification.Builder(mContext)
+                    .setSmallIcon(icon)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setContentIntent(pi)
+                    .setWhen(0);
+            if (icon == com.android.internal.R.drawable.stat_sys_tether_wifi) {
+                builder.addAction(
+                        0, mContext.getText(
+                                com.android.internal.R.string.notify_turn_tethering_off_title),
+                                PendingIntent.getBroadcast(mContext, 0,
+                                        new Intent(ACTION_TURN_WIFI_AP_OFF).setPackage(mContext
+                                                .getPackageName()), PendingIntent.FLAG_ONE_SHOT));
 
+                if (mNotificationBroadcastReceiver == null) {
+                    mNotificationBroadcastReceiver = new NotificationBroadcastReciever();
+                    IntentFilter filter = new IntentFilter(ACTION_TURN_WIFI_AP_OFF);
+                    mContext.registerReceiver(mNotificationBroadcastReceiver, filter);
+                }
+
+            }
+            mTetheredNotification = builder.build();
+            mTetheredNotification.defaults &= ~Notification.DEFAULT_SOUND;
+            mTetheredNotification.flags = Notification.FLAG_ONGOING_EVENT;
+        }
         notificationManager.notifyAsUser(null, mTetheredNotification.icon,
                 mTetheredNotification, UserHandle.ALL);
     }
@@ -522,6 +545,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         NotificationManager notificationManager =
             (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null && mTetheredNotification != null) {
+            if (mNotificationBroadcastReceiver != null) {
+                mContext.unregisterReceiver(mNotificationBroadcastReceiver);
+                mNotificationBroadcastReceiver = null;
+            }
             notificationManager.cancelAsUser(null, mTetheredNotification.icon,
                     UserHandle.ALL);
             mTetheredNotification = null;
@@ -1704,5 +1731,19 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
         pw.println();
         return;
+    }
+
+    private class NotificationBroadcastReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            AsyncTask.execute(new Runnable() {
+                public void run() {
+                    WifiManager wifiManager = (WifiManager)
+                            mContext.getSystemService(Context.WIFI_SERVICE);
+                    wifiManager.setWifiApEnabled(null, false);
+                    return;
+                }
+            });
+        }
     }
 }
