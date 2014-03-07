@@ -39,6 +39,8 @@ class PermissionDialog extends BasePermissionDialog {
     private final AppOpsService mService;
     private final String mPackageName;
     private final int mCode;
+    private View  mView;
+    private CheckBox mChoice;
     private int mUid;
     final CharSequence[] mOpLabels;
     private Context mContext;
@@ -81,10 +83,18 @@ class PermissionDialog extends BasePermissionDialog {
                 | WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
         getWindow().setAttributes(attrs);
 
+        mView = getLayoutInflater().inflate(
+             com.android.internal.R.layout.permission_confirmation_dialog,
+             null);
+        TextView tv = (TextView) mView.findViewById(
+            com.android.internal.R.id.permission_text);
+        mChoice = (CheckBox) mView.findViewById(
+            com.android.internal.R.id.permission_remember_choice_checkbox);
         String name = getAppName(mPackageName);
         if(name == null)
             name = mPackageName;
-        setMessage(name + ": " + mOpLabels[mCode]);
+        tv.setText(name + ": " + mOpLabels[mCode]);
+        setView(mView);
 
         // After the timeout, pretend the user clicked the quit button
         //mHandler.sendMessageDelayed(
@@ -111,7 +121,7 @@ class PermissionDialog extends BasePermissionDialog {
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             int mode;
-            boolean remember = true;
+            boolean remember = mChoice.isChecked();
             switch(msg.what) {
                 case ACTION_ALLOWED:
                     mode = AppOpsManager.MODE_ALLOWED;
