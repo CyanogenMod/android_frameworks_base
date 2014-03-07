@@ -755,6 +755,11 @@ public final class Settings {
     // End of Intent actions for Settings
 
     /**
+     * @hide - Private call() method on SettingsProvider to read from 'nameless' table.
+     */
+    public static final String CALL_METHOD_GET_NAMELESS = "GET_nameless";
+
+    /**
      * @hide - Private call() method on SettingsProvider to read from 'system' table.
      */
     public static final String CALL_METHOD_GET_SYSTEM = "GET_system";
@@ -773,6 +778,9 @@ public final class Settings {
      * @hide - User handle argument extra to the fast-path call()-based requests
      */
     public static final String CALL_METHOD_USER_KEY = "_user";
+
+    /** @hide - Private call() method to write to 'nameless' table */
+    public static final String CALL_METHOD_PUT_NAMELESS = "PUT_nameless";
 
     /** @hide - Private call() method to write to 'system' table */
     public static final String CALL_METHOD_PUT_SYSTEM = "PUT_system";
@@ -996,6 +1004,219 @@ public final class Settings {
                 if (c != null) c.close();
             }
         }
+    }
+
+    public static final class Nameless extends NameValueTable {
+        public static final String SYS_PROP_SETTING_VERSION = "sys.settings_nameless_version";
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+                Uri.parse("content://" + AUTHORITY + "/nameless");
+
+        private static final NameValueCache sNameValueCache = new NameValueCache(
+                SYS_PROP_SETTING_VERSION,
+                CONTENT_URI,
+                CALL_METHOD_GET_NAMELESS,
+                CALL_METHOD_PUT_NAMELESS);
+
+        /** @hide */
+        public static String getString(ContentResolver resolver, String name) {
+            return getStringForUser(resolver, name, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static String getStringForUser(ContentResolver resolver, String name,
+                                              int userHandle) {
+            return sNameValueCache.getStringForUser(resolver, name, userHandle);
+        }
+
+        /** @hide */
+        public static boolean putString(ContentResolver resolver, String name, String value) {
+            return putStringForUser(resolver, name, value, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean putStringForUser(ContentResolver resolver, String name, String value,
+                                               int userHandle) {
+            return sNameValueCache.putStringForUser(resolver, name, value, userHandle);
+        }
+
+        /** @hide */
+        public static Uri getUriFor(String name) {
+            return getUriFor(CONTENT_URI, name);
+        }
+
+        /** @hide */
+        public static int getInt(ContentResolver cr, String name, int def) {
+            return getIntForUser(cr, name, def, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static int getIntForUser(ContentResolver cr, String name, int def, int userHandle) {
+            final String v = getStringForUser(cr, name, userHandle);
+            try {
+                return v != null ? Integer.parseInt(v) : def;
+            } catch (NumberFormatException e) {
+                return def;
+            }
+        }
+
+        /** @hide */
+        public static int getInt(ContentResolver cr, String name)
+                throws SettingNotFoundException {
+            return getIntForUser(cr, name, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static int getIntForUser(ContentResolver cr, String name, int userHandle)
+                throws SettingNotFoundException {
+            final String v = getStringForUser(cr, name, userHandle);
+            try {
+                return Integer.parseInt(v);
+            } catch (NumberFormatException e) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+
+        /** @hide */
+        public static boolean putInt(ContentResolver cr, String name, int value) {
+            return putIntForUser(cr, name, value, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean putIntForUser(ContentResolver cr, String name, int value,
+                                            int userHandle) {
+            return putStringForUser(cr, name, Integer.toString(value), userHandle);
+        }
+
+        /** @hide */
+        public static long getLong(ContentResolver cr, String name, long def) {
+            return getLongForUser(cr, name, def, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static long getLongForUser(ContentResolver cr, String name, long def,
+                                          int userHandle) {
+            final String valString = getStringForUser(cr, name, userHandle);
+            long value;
+            try {
+                value = valString != null ? Long.parseLong(valString) : def;
+            } catch (NumberFormatException e) {
+                value = def;
+            }
+            return value;
+        }
+
+        /** @hide */
+        public static long getLong(ContentResolver cr, String name)
+                throws SettingNotFoundException {
+            return getLongForUser(cr, name, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static long getLongForUser(ContentResolver cr, String name, int userHandle)
+                throws SettingNotFoundException {
+            String valString = getStringForUser(cr, name, userHandle);
+            try {
+                return Long.parseLong(valString);
+            } catch (NumberFormatException e) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+
+        /** @hide */
+        public static boolean putLong(ContentResolver cr, String name, long value) {
+            return putLongForUser(cr, name, value, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean putLongForUser(ContentResolver cr, String name, long value,
+                                             int userHandle) {
+            return putStringForUser(cr, name, Long.toString(value), userHandle);
+        }
+
+        /** @hide */
+        public static float getFloat(ContentResolver cr, String name, float def) {
+            return getFloatForUser(cr, name, def, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static float getFloatForUser(ContentResolver cr, String name, float def,
+                                            int userHandle) {
+            final String v = getStringForUser(cr, name, userHandle);
+            try {
+                return v != null ? Float.parseFloat(v) : def;
+            } catch (NumberFormatException e) {
+                return def;
+            }
+        }
+
+        /** @hide */
+        public static float getFloat(ContentResolver cr, String name)
+                throws SettingNotFoundException {
+            return getFloatForUser(cr, name, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static float getFloatForUser(ContentResolver cr, String name, int userHandle)
+                throws SettingNotFoundException {
+            final String v = getStringForUser(cr, name, userHandle);
+            if (v == null) {
+                throw new SettingNotFoundException(name);
+            }
+            try {
+                return Float.parseFloat(v);
+            } catch (NumberFormatException e) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+
+        /** @hide */
+        public static boolean putFloat(ContentResolver cr, String name, float value) {
+            return putFloatForUser(cr, name, value, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean putFloatForUser(ContentResolver cr, String name, float value,
+                                              int userHandle) {
+            return putStringForUser(cr, name, Float.toString(value), userHandle);
+        }
+
+        /** @hide */
+        public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
+            return getBooleanForUser(cr, name, def, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean getBooleanForUser(ContentResolver cr, String name, boolean def,
+                                                int userHandle) {
+            final String v = getStringForUser(cr, name, userHandle);
+            try {
+                if (v != null) {
+                    return "1".equals(v);
+                } else {
+                    return def;
+                }
+            } catch (NumberFormatException e) {
+                return def;
+            }
+        }
+
+        /** @hide */
+        public static boolean putBoolean(ContentResolver cr, String name, boolean value) {
+            return putBooleanForUser(cr, name, value, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean putBooleanForUser(ContentResolver cr, String name, boolean value,
+                                                int userHandle) {
+            return putStringForUser(cr, name, value ? "1" : "0", userHandle);
+        }
+
+        public static final String ENABLE_ACRA = "enable_acra";
+
     }
 
     /**
