@@ -41,9 +41,17 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.Paint;
 import android.graphics.Shader.TileMode;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -725,7 +733,38 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // Should remove the default image in the frame
             // that this now covers, to improve scrolling speed.
             // That can't be done until the anim is complete though.
-            h.thumbnailViewImage.setImageBitmap(thumbnail);
+            if(Settings.System.getBoolean(
+                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false) == false) {
+
+                final int reflectionGap = 4;
+                int width = thumbnail.getWidth();
+                int height = thumbnail.getHeight();
+
+                Matrix matrix = new Matrix();
+                matrix.preScale(1, -1);
+
+                Bitmap reflectionImage = Bitmap.createBitmap(thumbnail, 0, height * 2 / 3, width, height/3, matrix, false);
+                Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height/3), Config.ARGB_8888);
+
+                Canvas canvas = new Canvas(bitmapWithReflection);
+                canvas.drawBitmap(thumbnail, 0, 0, null);
+                Paint defaultPaint = new Paint();
+                canvas.drawRect(0, height, width, height + reflectionGap, defaultPaint);
+                canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
+
+                Paint paint = new Paint();
+                LinearGradient shader = new LinearGradient(0, thumbnail.getHeight(), 0,
+                    bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff, 0x00ffffff,
+                    TileMode.CLAMP);
+                paint.setShader(shader);
+                paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
+                canvas.drawRect(0, height, width,
+                    bitmapWithReflection.getHeight() + reflectionGap, paint);
+
+                h.thumbnailViewImage.setImageBitmap(bitmapWithReflection);
+            } else {
+                h.thumbnailViewImage.setImageBitmap(thumbnail);
+            }
 
             // scale the image to fill the full width of the ImageView. do this only if
             // we haven't set a bitmap before, or if the bitmap size has changed
@@ -734,12 +773,24 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 h.thumbnailViewImageBitmap.getHeight() != thumbnail.getHeight()) {
                 if (mFitThumbnailToXY) {
                     h.thumbnailViewImage.setScaleType(ScaleType.FIT_XY);
+                    if(Settings.System.getBoolean(
+                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false) == false) {
+                        h.thumbnailViewImage.setRotationY(25.0f);
+                    }
                 } else {
-                    Matrix scaleMatrix = new Matrix();
-                    float scale = mThumbnailWidth / (float) thumbnail.getWidth();
-                    scaleMatrix.setScale(scale, scale);
-                    h.thumbnailViewImage.setScaleType(ScaleType.MATRIX);
-                    h.thumbnailViewImage.setImageMatrix(scaleMatrix);
+                    if(Settings.System.getBoolean(
+                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false) == false) {
+                        h.thumbnailViewImage.setScaleType(ScaleType.FIT_CENTER);
+                        h.thumbnailViewImage.setRotationY(25.0f);
+                        if (DEBUG) Log.d(TAG, "thumbnail.getHeight(): " + thumbnail.getHeight());
+                        if (DEBUG) Log.d(TAG, "thumbnail.getWidth(): " + thumbnail.getWidth());
+                    } else {
+                        Matrix scaleMatrix = new Matrix();
+                        float scale = mThumbnailWidth / (float) thumbnail.getWidth();
+                        scaleMatrix.setScale(scale, scale);
+                        h.thumbnailViewImage.setScaleType(ScaleType.MATRIX);
+                        h.thumbnailViewImage.setImageMatrix(scaleMatrix);
+                    }
                 }
             }
             if (show && h.thumbnailView.getVisibility() != View.VISIBLE) {
