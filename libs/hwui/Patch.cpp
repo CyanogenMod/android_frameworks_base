@@ -36,7 +36,6 @@ Patch::Patch(): vertices(NULL), verticesCount(0), indexCount(0), hasEmptyQuads(f
 }
 
 Patch::~Patch() {
-    delete[] vertices;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
