@@ -147,5 +147,10 @@
     <!-- Phone status in pie controls -->
     <string name="pie_phone_status_no_service">No service</string>
     <string name="pie_phone_status_airplane_mode">Airplane mode on</string>
-    <string name="pie_phone_status_emergency_only">Emergency calls only</string>			
+    <string name="pie_phone_status_emergency_only">Emergency calls only</string>
+
+    <!-- Slim recents -->
+    <string name="status_bar_recent_playstore_item_title">Play Store</string>
+    <string name="status_bar_recent_amazon_item_title">Amazon Store</string>
+
 </resources>
