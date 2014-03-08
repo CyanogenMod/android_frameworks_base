@@ -115,6 +115,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center_vertical</item>
         <item name="android:textSize">@dimen/network_stats_text_size</item>
         <item name="android:textColor">#ffffff</item>
     </style> 
