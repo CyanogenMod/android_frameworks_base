@@ -333,7 +333,7 @@
     <string name="permdesc_broadcastSmsReceived" msgid="4152037720034365492">Permite que l\'aplicación emita una notificación cuando se reciba un mensaxe SMS. Les aplicaciones malintencionaes puen usar esti permisu pa falsificar mensaxes SMS entrantes.</string>
     <string name="permlab_broadcastWapPush" msgid="3145347413028582371">unviar emisión recibida per aciu de mensaxe WAP PUSH</string>
     <string name="permdesc_broadcastWapPush" msgid="4783402525039442729">Permite que l\'aplicación unvie una notificación cuando se reciba un mensaxe WAP PUSH. Les aplicaciones malintencionaes puen usar esti permisu pa falsificar la receición d\'un mensaxe MMS o pa trocar ensin avisu\'l conteníu de cualquier páxina web con variantes malintencionaes.</string>
-    <string name="permlab_setProcessLimit" msgid="2451873664363662666">llimitar el númberu de procesos n\'execución</string>
+    <string name="permlab_setProcessLimit" msgid="2451873664363662666">llendar el númberu de procesos n\'execución</string>
     <string name="permdesc_setProcessLimit" msgid="7318061314040879542">Permite que l\'aplicación remane\'l númberu máximu de procesos que van executase. Nun ye necesario nunca pa les aplicaciones normales.</string>
     <string name="permlab_setAlwaysFinish" msgid="550958507798796965">forciar el zarru d\'aplicaciones en segundu planu</string>
     <string name="permdesc_setAlwaysFinish" msgid="7471310652868841499">Permite que l\'aplicación remane si les actividaes finen siempre namás que pasen a segundu planu. Les aplicaciones normales enxamás necesiten esti permisu.</string>
@@ -397,8 +397,8 @@
     <string name="permlab_signalPersistentProcesses" msgid="4539002991947376659">unviar señales Linux a aplicaciones</string>
     <string name="permdesc_signalPersistentProcesses" msgid="4896992079182649141">Permite que l\'aplicación solicite que la señal suministrada s\'unvie a tolos procesos persistentes.</string>
     <string name="permlab_persistentActivity" msgid="8841113627955563938">facer que l\'aplicación s\'execute siempre</string>
-    <string name="permdesc_persistentActivity" product="tablet" msgid="8525189272329086137">Permite que l\'aplicación faiga que dalgunes de les sos partes se caltengan na memoria. Esto pue llimitar la cantidá de memoria disponible pa otres aplicaciones y ralentizar la tablet.</string>
-    <string name="permdesc_persistentActivity" product="default" msgid="4384760047508278272">Permite que l\'aplicación faiga que dalgunes de les sos partes se caltengan na memoria. Esto pue llimitar la cantidá de memoria disponible pa otres aplicaciones y ralentizar el teléfonu.</string>
+    <string name="permdesc_persistentActivity" product="tablet" msgid="8525189272329086137">Permite que l\'aplicación faiga que dalgunes de les sos partes se caltengan na memoria. Esto pue llendar la cantidá de memoria disponible pa otres aplicaciones y ralentizar la tablet.</string>
+    <string name="permdesc_persistentActivity" product="default" msgid="4384760047508278272">Permite que l\'aplicación faiga que dalgunes de les sos partes se caltengan na memoria. Esto pue llendar la cantidá de memoria disponible pa otres aplicaciones y ralentizar el teléfonu.</string>
     <string name="permlab_deletePackages" msgid="184385129537705938">desaniciar aplicaciones</string>
     <string name="permdesc_deletePackages" msgid="7411480275167205081">Permite que l\'aplicación desanicie paquetes de Android. Les aplicaciones malintencionaes puen usar esti permisu pa desaniciar aplicaciones importantes.</string>
     <string name="permlab_clearAppUserData" msgid="274109191845842756">desaniciar datos d\'otres aplicaciones</string>
@@ -1355,7 +1355,7 @@
     <string name="skip_button_label" msgid="1275362299471631819">Saltar</string>
     <string name="throttle_warning_notification_title" msgid="4890894267454867276">Usu eleváu datos móviles</string>
     <string name="throttle_warning_notification_message" msgid="3340822228599337743">Toca pa obtener más información sobre l\'usu de datos móviles.</string>
-    <string name="throttled_notification_title" msgid="6269541897729781332">Llímite datos superáu</string>
+    <string name="throttled_notification_title" msgid="6269541897729781332">Llende datos superada</string>
     <string name="throttled_notification_message" msgid="5443457321354907181">Toca pa obtener más información sobre l\'usu de datos móviles.</string>
     <string name="no_matches" msgid="8129421908915840737">Nun hai coincidencies.</string>
     <string name="find_on_page" msgid="1946799233822820384">Guetar na páxina</string>
@@ -1388,7 +1388,7 @@
     <string name="gpsNotifMessage" msgid="1374718023224000702">Solicitú unviada por <xliff:g id="NAME">%1$s</xliff:g> (<xliff:g id="SERVICE">%2$s</xliff:g>)</string>
     <string name="gpsVerifYes" msgid="2346566072867213563">Sí</string>
     <string name="gpsVerifNo" msgid="1146564937346454865">Non</string>
-    <string name="sync_too_many_deletes" msgid="5296321850662746890">Perpasóse\'l llímite de desanicios.</string>
+    <string name="sync_too_many_deletes" msgid="5296321850662746890">Perpasóse la llende de desanicios.</string>
     <string name="sync_too_many_deletes_desc" msgid="496551671008694245">Hai <xliff:g id="NUMBER_OF_DELETED_ITEMS">%1$d</xliff:g> elementos desaniciaos pa <xliff:g id="TYPE_OF_SYNC">%2$s</xliff:g> (cuenta <xliff:g id="ACCOUNT_NAME">%3$s</xliff:g>). ¿Qué quies facer?</string>
     <string name="sync_really_delete" msgid="2572600103122596243">Desaniciar elementos</string>
     <string name="sync_undo_deletes" msgid="2941317360600338602">Desfacer los desanicios</string>
@@ -1452,11 +1452,11 @@
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">Datos móviles inhabilitaos</string>
     <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">Datos Wi-Fi inhabilitaos</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">Toca p\'habilitar.</string>
-    <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">Llímite de datos 2G-3G perpasáu</string>
-    <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">Llímite de datos 4G perpasáu</string>
-    <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">Llímite de datos móviles perpasáu</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">Llímite de datos Wi-Fi perpasáu</string>
-    <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">Llímite perpasáu en <xliff:g id="SIZE">%s</xliff:g></string>
+    <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">Llende de datos 2G-3G perpasada</string>
+    <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">Llende de datos 4G perpasada</string>
+    <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">Llende de datos móviles perpasada</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">Llende de datos Wi-Fi perpasada</string>
+    <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">Llende perpasada en <xliff:g id="SIZE">%s</xliff:g></string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">Conexones automátiques restrinxíes</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">Toca pa desaniciar la restricción.</string>
     <string name="ssl_certificate" msgid="6510040486049237639">Certificáu de seguridá</string>
