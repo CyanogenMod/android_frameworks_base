@@ -221,7 +221,7 @@ public class RecentPanelView {
     /**
      * Remove all applications. Call from controller class
      */
-    protected void removeAllApplications() {
+    protected boolean removeAllApplications() {
         final ActivityManager am = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
         for (TaskDescription td : mTasks) {
@@ -235,6 +235,7 @@ public class RecentPanelView {
         mTasks.clear();
         mCards.clear();
         mTasksSize = 0;
+        return true;
     }
 
     /**
