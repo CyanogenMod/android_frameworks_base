@@ -92,6 +92,9 @@
     <!-- Wifi Display -->
     <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
 
+    <!-- NamelessRom Additions -->
+    <uses-permission android:name="org.namelessrom.flashlight.TOGGLE_TORCH" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
