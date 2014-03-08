@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
  * Not a Contribution.
  * Copyright (C) 2010 The Android Open Source Project
  *
@@ -103,8 +103,9 @@ public class MSimNetworkController extends NetworkController {
     ArrayList<TextView> mSubsLabelViews = new ArrayList<TextView>();
 
     public interface MSimSignalCluster {
-        void setWifiIndicators(boolean visible, int strengthIcon, String contentDescription);
-        void setMobileDataIndicators(boolean visible, int strengthIcon,
+        void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
+            String contentDescription);
+        void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
                 int typeIcon, String contentDescription, String typeContentDescription,
                 int noSimIcon, int subscription);
         void setIsAirplaneMode(boolean is, int airplaneIcon);
@@ -152,7 +153,8 @@ public class MSimNetworkController extends NetworkController {
             mMSimServiceState[i] = new ServiceState();
             mMSimState[i] = IccCardConstants.State.READY;
             // phone_signal
-            mMSimPhoneSignalIconId[i] = R.drawable.stat_sys_signal_null;
+            mMSimPhoneSignalIconId[i] = 0;
+            mMSimDataSignalIconId[i] = 0;;
             mMSimLastPhoneSignalIconId[i] = -1;
             mMSimLastDataTypeIconId[i] = -1;
             mMSimDataConnected[i] = false;
@@ -234,10 +236,12 @@ public class MSimNetworkController extends NetworkController {
                 // only show wifi in the cluster if connected or if wifi-only
                 mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
                 mWifiIconId,
+                mWifiActivityIconId,
                 mContentDescriptionWifi);
         cluster.setMobileDataIndicators(
                 mHasMobileDataFeature,
                 mMSimPhoneSignalIconId[subscription],
+                mMSimMobileActivityIconId[subscription],
                 mMSimDataTypeIconId[subscription],
                 mMSimContentDescriptionPhoneSignal[subscription],
                 mMSimContentDescriptionDataType[subscription],
@@ -247,6 +251,7 @@ public class MSimNetworkController extends NetworkController {
             cluster.setMobileDataIndicators(
                     true,
                     mAlwaysShowCdmaRssi ? mPhoneSignalIconId : mWimaxIconId,
+                    mMSimMobileActivityIconId[subscription],
                     mMSimDataTypeIconId[subscription],
                     mContentDescriptionWimax,
                     mMSimContentDescriptionDataType[subscription],
@@ -257,12 +262,22 @@ public class MSimNetworkController extends NetworkController {
                     mHasMobileDataFeature,
                     mShowPhoneRSSIForData ? mMSimPhoneSignalIconId[subscription]
                         : mMSimDataSignalIconId[subscription],
+                    mMSimMobileActivityIconId[subscription],
                     mMSimDataTypeIconId[subscription],
                     mMSimContentDescriptionPhoneSignal[subscription],
                     mMSimContentDescriptionDataType[subscription],
                     mNoMSimIconId[subscription], subscription);
         }
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
+
+        Slog.d(TAG, "refreshSignalCluster, mMSimPhoneSignalIconId[" + subscription + "]="
+                    + getResourceName(mMSimPhoneSignalIconId[subscription])
+                    + " mMSimDataSignalIconId[" + subscription + "]="
+                    + getResourceName(mMSimDataSignalIconId[subscription])
+                    + " mMSimDataTypeIconId[" + subscription + "]="
+                    + getResourceName(mMSimDataTypeIconId[subscription])
+                    + " mNoMSimIconId[" + subscription + "]="
+                    + getResourceName(mNoMSimIconId[subscription]));
     }
 
     @Override
@@ -389,6 +404,7 @@ public class MSimNetworkController extends NetworkController {
                         ((signalStrength == null) ? "" : (" level=" + signalStrength.getLevel())));
                 }
                 mMSimSignalStrength[mSubscription] = signalStrength;
+                updateIconSet(mSubscription);
                 updateTelephonySignalStrength(mSubscription);
                 refreshViews(mSubscription);
             }
@@ -412,6 +428,7 @@ public class MSimNetworkController extends NetworkController {
                                 mMSimDataServiceState[mSubscription] + " for signal");
                     }
                 }
+                updateIconSet(mSubscription);
                 updateTelephonySignalStrength(mSubscription);
                 updateDataNetType(mSubscription);
                 updateDataIcon(mSubscription);
@@ -449,6 +466,8 @@ public class MSimNetworkController extends NetworkController {
                     mDataState = state;
                     mDataNetType = networkType;
                 }
+
+                updateIconSet(mSubscription);
                 updateDataNetType(mSubscription);
                 updateDataIcon(mSubscription);
                 refreshViews(mSubscription);
@@ -524,6 +543,7 @@ public class MSimNetworkController extends NetworkController {
             updateCarrierText(sub);
             Slog.d(TAG, "updateSimState simState =" + mMSimState[sub]);
         }
+        updateIconSet(sub);
         updateSimIcon(sub);
         updateDataIcon(sub);
     }
@@ -550,11 +570,16 @@ public class MSimNetworkController extends NetworkController {
 
     private final void updateTelephonySignalStrength(int subscription) {
         Slog.d(TAG, "updateTelephonySignalStrength: subscription =" + subscription);
+        int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
+
         if (!hasService(subscription) &&
                 (mMSimDataServiceState[subscription] != ServiceState.STATE_IN_SERVICE)) {
             if (DEBUG) Slog.d(TAG, " No service");
-            mMSimPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_null;
-            mMSimDataSignalIconId[subscription] = R.drawable.stat_sys_signal_null;
+            mMSimPhoneSignalIconId[subscription] =
+                    TelephonyIcons.getSignalNullIcon(subscription);
+            mMSimDataSignalIconId[subscription] =
+                    mMSimPhoneSignalIconId[subscription];
+            if (dataSub == subscription)  mQSPhoneSignalIconId = R.drawable.ic_qs_signal_no_signal;
         } else {
             if (mMSimSignalStrength[subscription] == null || (mMSimServiceState == null)) {
                 if (DEBUG) {
@@ -562,13 +587,16 @@ public class MSimNetworkController extends NetworkController {
                             + mMSimSignalStrength[subscription]
                             + " mMSimServiceState " + mMSimServiceState[subscription]);
                 }
-                mMSimPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_null;
-                mMSimDataSignalIconId[subscription] = R.drawable.stat_sys_signal_null;
-                mMSimContentDescriptionPhoneSignal[subscription] = mContext.getString(
-                        AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0]);
+                mMSimPhoneSignalIconId[subscription] =
+                        TelephonyIcons.getSignalNullIcon(subscription);
+                mMSimDataSignalIconId[subscription] = mMSimPhoneSignalIconId[subscription];
+                mMSimContentDescriptionPhoneSignal[subscription] =
+                        TelephonyIcons.getSignalStrengthDes(subscription, 0);
+                if (dataSub == subscription) {
+                    mQSPhoneSignalIconId = R.drawable.ic_qs_signal_no_signal;
+                }
             } else {
                 int iconLevel;
-                int[] iconList;
                 if (isCdma(subscription) && mAlwaysShowCdmaRssi) {
                     mLastSignalLevel = iconLevel = mMSimSignalStrength[subscription].getCdmaLevel();
                     if(DEBUG) Slog.d(TAG, "mAlwaysShowCdmaRssi= " + mAlwaysShowCdmaRssi
@@ -579,24 +607,33 @@ public class MSimNetworkController extends NetworkController {
                     mLastSignalLevel = iconLevel = mMSimSignalStrength[subscription].getLevel();
                 }
 
-                // Though mPhone is a Manager, this call is not an IPC
-                if ((isCdma(subscription) && isCdmaEri(subscription)) ||
-                        mPhone.isNetworkRoaming(subscription)) {
-                    iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
-                } else {
-                    iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH[mInetCondition];
+                mMSimPhoneSignalIconId[subscription] =
+                        TelephonyIcons.getSignalStrengthIcon(subscription, mInetCondition,
+                        iconLevel, isRoaming(subscription));
+
+                mMSimContentDescriptionPhoneSignal[subscription] =
+                        TelephonyIcons.getSignalStrengthDes(subscription, iconLevel);
+
+                mMSimDataSignalIconId[subscription] = mMSimPhoneSignalIconId[subscription];
+
+                if (dataSub == subscription) {
+                    mQSPhoneSignalIconId =
+                        TelephonyIcons.QS_TELEPHONY_SIGNAL_STRENGTH[mInetCondition][iconLevel];
                 }
 
-                Slog.d(TAG, "updateTelephonySignalStrength iconList = " + iconList + "iconLevel = "
-                        + iconLevel + " mInetCondition = " + mInetCondition);
-                mMSimPhoneSignalIconId[subscription] = iconList[iconLevel];
-                mMSimContentDescriptionPhoneSignal[subscription] = mContext.getString(
-                        AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[iconLevel]);
-
-                mMSimDataSignalIconId[subscription] = TelephonyIcons
-                        .DATA_SIGNAL_STRENGTH[mInetCondition][iconLevel];
+                Slog.d(TAG, "updateTelephonySignalStrength, sub: " + subscription
+                    + " level=" + iconLevel
+                    + " mInetCondition=" + mInetCondition
+                    + " mMSimPhoneSignalIconId[" + subscription + "]="
+                    + mMSimPhoneSignalIconId[subscription]
+                    + "/" + getResourceName(mMSimPhoneSignalIconId[subscription]));
             }
         }
+    }
+
+    private boolean isRoaming(int subscription) {
+        return (isCdma(subscription) && isCdmaEri(subscription))
+                || mPhone.isNetworkRoaming(subscription);
     }
 
     private final void updateDataNetType(int subscription) {
@@ -607,130 +644,38 @@ public class MSimNetworkController extends NetworkController {
                     + " is not DDS(=SUB" + dataSub + ")!");
             mMSimDataTypeIconId[subscription] = 0;
         } else {
+            mNetworkName = mMSimNetworkName[subscription];
             if (mIsWimaxEnabled && mWimaxConnected) {
                 // wimax is a special 4g network not handled by telephony
-                mDataIconList = TelephonyIcons.DATA_4G[mInetCondition];
                 mMSimDataTypeIconId[subscription] = R.drawable.stat_sys_data_fully_connected_4g;
                 mMSimContentDescriptionDataType[subscription] = mContext.getString(
                         R.string.accessibility_data_connection_4g);
+                mQSDataTypeIconId = TelephonyIcons.QS_DATA_4G[mInetCondition];
             } else {
                 Slog.d(TAG,"updateDataNetType sub = " + subscription
                         + " mDataNetType = " + mDataNetType);
-                switch (mDataNetType) {
-                    case TelephonyManager.NETWORK_TYPE_UNKNOWN:
-                        if (DEBUG) {
-                            Slog.e(TAG, "updateDataNetType NETWORK_TYPE_UNKNOWN");
-                        }
-                        if (!mShowAtLeastThreeGees) {
-                            mDataIconList = TelephonyIcons.DATA_G[mInetCondition];
-                            mMSimDataTypeIconId[subscription] = 0;
-                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                    R.string.accessibility_data_connection_gprs);
-                            break;
-                        } else {
-                            // fall through
-                        }
-                    case TelephonyManager.NETWORK_TYPE_EDGE:
-                        if (!mShowAtLeastThreeGees) {
-                            mDataIconList = TelephonyIcons.DATA_E[mInetCondition];
-                            mMSimDataTypeIconId[subscription] =
-                                    R.drawable.stat_sys_data_fully_connected_e;
-                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                    R.string.accessibility_data_connection_edge);
-                            break;
-                        } else {
-                            // fall through
-                        }
-                    case TelephonyManager.NETWORK_TYPE_UMTS:
-                    case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
-                        mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                        mMSimDataTypeIconId[subscription] =
-                                R.drawable.stat_sys_data_fully_connected_3g;
-                        mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                R.string.accessibility_data_connection_3g);
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    case TelephonyManager.NETWORK_TYPE_HSUPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPAP:
-                        if (mHspaDataDistinguishable) {
-                            mDataIconList = TelephonyIcons.DATA_H[mInetCondition];
-                            mMSimDataTypeIconId[subscription] =
-                                    R.drawable.stat_sys_data_fully_connected_h;
-                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                    R.string.accessibility_data_connection_3_5g);
-                        } else {
-                            mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                            mMSimDataTypeIconId[subscription] =
-                                    R.drawable.stat_sys_data_fully_connected_3g;
-                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                    R.string.accessibility_data_connection_3g);
-                        }
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_CDMA:
-                        // display 1xRTT for IS95A/B
-                        mDataIconList = TelephonyIcons.DATA_1X[mInetCondition];
-                        mMSimDataTypeIconId[subscription] =
-                                R.drawable.stat_sys_data_fully_connected_1x;
-                        mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                R.string.accessibility_data_connection_cdma);
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_1xRTT:
-                        mDataIconList = TelephonyIcons.DATA_1X[mInetCondition];
-                        mMSimDataTypeIconId[subscription] =
-                                R.drawable.stat_sys_data_fully_connected_1x;
-                        mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                R.string.accessibility_data_connection_cdma);
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_EVDO_0: //fall through
-                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                    case TelephonyManager.NETWORK_TYPE_EHRPD:
-                        mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                        mMSimDataTypeIconId[subscription] =
-                                R.drawable.stat_sys_data_fully_connected_3g;
-                        mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                R.string.accessibility_data_connection_3g);
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_LTE:
-                        mDataIconList = TelephonyIcons.DATA_4G[mInetCondition];
-                        mMSimDataTypeIconId[subscription] =
-                                R.drawable.stat_sys_data_fully_connected_4g;
-                        mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                R.string.accessibility_data_connection_4g);
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_GPRS:
-                        if (!mShowAtLeastThreeGees) {
-                            mDataIconList = TelephonyIcons.DATA_G[mInetCondition];
-                            mMSimDataTypeIconId[subscription] =
-                                    R.drawable.stat_sys_data_fully_connected_g;
-                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                    R.string.accessibility_data_connection_gprs);
-                        } else {
-                            mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
-                            mMSimDataTypeIconId[subscription] =
-                                R.drawable.stat_sys_data_fully_connected_3g;
-                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
-                                    R.string.accessibility_data_connection_3g);
-                        }
-                        break;
-                    default:
-                        if (DEBUG) {
-                            Slog.e(TAG, "updateDataNetType unknown radio:" + mDataNetType);
-                        }
-                        mDataNetType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
-                        mMSimDataTypeIconId[subscription] = 0;
-                        break;
-                }
+                mMSimDataTypeIconId[subscription] =
+                        TelephonyIcons.getDataTypeIcon(subscription);
+                mMSimContentDescriptionDataType[subscription] =
+                        TelephonyIcons.getDataTypeDesc();
+                mQSDataTypeIconId =
+                        TelephonyIcons.getQSDataTypeIcon();
             }
         }
 
+        boolean setQSDataTypeIcon = false;
         if (isCdma(subscription)) {
             if (isCdmaEri(subscription)) {
                 mMSimDataTypeIconId[subscription] = R.drawable.stat_sys_data_fully_connected_roam;
+                setQSDataTypeIcon = true;
             }
         } else if (mPhone.isNetworkRoaming(subscription)) {
             mMSimDataTypeIconId[subscription] = R.drawable.stat_sys_data_fully_connected_roam;
+            setQSDataTypeIcon = true;
+        }
+
+        if (setQSDataTypeIcon && subscription == dataSub) {
+            mQSDataTypeIconId = TelephonyIcons.QS_DATA_R[mInetCondition];
         }
     }
 
@@ -750,10 +695,31 @@ public class MSimNetworkController extends NetworkController {
         return false;
     }
 
+    private void updateIconSet(int subscription) {
+        Slog.d(TAG, "updateIconSet, subscription = " + subscription);
+        int voiceNetorkType = mMSimServiceState[subscription].getVoiceNetworkType();
+        int dataNetorkType =  mMSimServiceState[subscription].getDataNetworkType();
+        Slog.d(TAG, "updateIconSet, voice network type is: " + voiceNetorkType
+            + "/" + TelephonyManager.getNetworkTypeName(voiceNetorkType)
+            + ", data network type is: " + dataNetorkType
+            + "/" + TelephonyManager.getNetworkTypeName(dataNetorkType));
+
+        int chosenNetworkType = ((dataNetorkType == TelephonyManager.NETWORK_TYPE_UNKNOWN)
+                    ? voiceNetorkType : dataNetorkType);
+
+        Slog.d(TAG, "updateIconSet, chosenNetworkType=" + chosenNetworkType
+            + " hspaDataDistinguishable=" + String.valueOf(mHspaDataDistinguishable)
+            + " hspapDistinguishable=" + "false"
+            + " showAtLeastThreeGees=" + String.valueOf(mShowAtLeastThreeGees));
+
+        TelephonyIcons.updateDataType(subscription, chosenNetworkType, mShowAtLeastThreeGees,
+            mShow4GforLTE, mHspaDataDistinguishable, mInetCondition);
+    }
+
     private final void updateSimIcon(int cardIndex) {
         Slog.d(TAG,"In updateSimIcon card =" + cardIndex + ", simState= " + mMSimState[cardIndex]);
         if (mMSimState[cardIndex] ==  IccCardConstants.State.ABSENT) {
-            mNoMSimIconId[cardIndex] = R.drawable.stat_sys_no_sim;
+            mNoMSimIconId[cardIndex] = TelephonyIcons.getNoSimIcon();
         } else {
             mNoMSimIconId[cardIndex] = 0;
         }
@@ -785,20 +751,7 @@ public class MSimNetworkController extends NetworkController {
             if (mMSimState[subscription] == IccCardConstants.State.READY ||
                 mMSimState[subscription] == IccCardConstants.State.UNKNOWN) {
                 if (mDataState == TelephonyManager.DATA_CONNECTED) {
-                    switch (mMSimDataActivity[subscription]) {
-                        case TelephonyManager.DATA_ACTIVITY_IN:
-                            iconId = mDataIconList[1];
-                            break;
-                        case TelephonyManager.DATA_ACTIVITY_OUT:
-                            iconId = mDataIconList[2];
-                            break;
-                        case TelephonyManager.DATA_ACTIVITY_INOUT:
-                            iconId = mDataIconList[3];
-                            break;
-                        default:
-                            iconId = mDataIconList[0];
-                            break;
-                    }
+                    iconId = TelephonyIcons.getDataActivity(subscription, mDataActivity);
                     mMSimDataDirectionIconId[subscription] = iconId;
                 } else {
                     iconId = 0;
@@ -806,37 +759,27 @@ public class MSimNetworkController extends NetworkController {
                 }
             } else {
                 Slog.d(TAG,"updateDataIcon when no sim");
-                iconId = R.drawable.stat_sys_no_sim;
+                iconId = TelephonyIcons.getNoSimIcon();
                 visible = false; // no SIM? no data
             }
         } else {
             // CDMA case, mMSimDataActivity can be also DATA_ACTIVITY_DORMANT
             if (mDataState == TelephonyManager.DATA_CONNECTED) {
-                switch (mMSimDataActivity[subscription]) {
-                    case TelephonyManager.DATA_ACTIVITY_IN:
-                        iconId = mDataIconList[1];
-                        break;
-                    case TelephonyManager.DATA_ACTIVITY_OUT:
-                        iconId = mDataIconList[2];
-                        break;
-                    case TelephonyManager.DATA_ACTIVITY_INOUT:
-                        iconId = mDataIconList[3];
-                        break;
-                    case TelephonyManager.DATA_ACTIVITY_DORMANT:
-                    default:
-                        iconId = mDataIconList[0];
-                        break;
-                }
+                iconId = TelephonyIcons.getDataActivity(subscription, mDataActivity);
             } else {
                 iconId = 0;
                 visible = false;
             }
         }
 
-
         mMSimDataDirectionIconId[subscription] = iconId;
+        mMSimMobileActivityIconId[subscription] = iconId;
         mMSimDataConnected[subscription] = visible;
-        Slog.d(TAG,"updateDataIcon when mMSimDataConnected =" + mMSimDataConnected[subscription]);
+
+        Slog.d(TAG,"updateDataIcon when mMSimDataConnected[" + subscription + "] ="
+            + mMSimDataConnected[subscription]
+            + " mMSimMobileActivityIconId[" + subscription +"] = "
+            + mMSimMobileActivityIconId[subscription]);
     }
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn,
@@ -927,6 +870,7 @@ public class MSimNetworkController extends NetworkController {
         if (!mHasMobileDataFeature) {
             mMSimDataSignalIconId[subscription] = mMSimPhoneSignalIconId[subscription] = 0;
             mobileLabel = "";
+            mQSPhoneSignalIconId = 0;
         } else {
             // We want to show the carrier name if in service and either:
             //   - We are connected to mobile data, or
@@ -973,7 +917,24 @@ public class MSimNetworkController extends NetworkController {
                 if (DEBUG) {
                     wifiLabel += "xxxxXXXXxxxxXXXX";
                 }
+
+                switch (mWifiActivity) {
+                    case WifiManager.DATA_ACTIVITY_IN:
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
+                        break;
+                    case WifiManager.DATA_ACTIVITY_OUT:
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
+                        break;
+                    case WifiManager.DATA_ACTIVITY_INOUT:
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
+                        break;
+                    case WifiManager.DATA_ACTIVITY_NONE:
+                        mWifiActivityIconId = 0;
+                        break;
+                }
             }
+
+            mMSimcombinedActivityIconId[subscription] = mWifiActivityIconId;
             combinedLabel = wifiLabel;
             mMSimcombinedSignalIconId[subscription] = mWifiIconId; // set by updateWifiIcons()
             mMSimContentDescriptionCombinedSignal[subscription] = mContentDescriptionWifi;
@@ -1077,15 +1038,25 @@ public class MSimNetworkController extends NetworkController {
                     + " mMSimDataActivity=" + mMSimDataActivity[subscription]
                     + " mMSimPhoneSignalIconId=0x" + Integer.toHexString
                             (mMSimPhoneSignalIconId[subscription])
+                    + "/" + getResourceName(mMSimPhoneSignalIconId[subscription])
                     + " mMSimDataDirectionIconId=0x" + Integer.toHexString
                             (mMSimDataDirectionIconId[subscription])
                     + " mMSimDataSignalIconId=0x" + Integer.toHexString
                             (mMSimDataSignalIconId[subscription])
                     + " mMSimDataTypeIconId=0x" + Integer.toHexString
                             (mMSimDataTypeIconId[subscription])
+                    + "/" + getResourceName(mMSimDataTypeIconId[subscription])
                     + " mNoMSimIconId=0x" + Integer.toHexString(mNoMSimIconId[subscription])
+                    + "/" + getResourceName(mNoMSimIconId[subscription])
+                    + " mMSimMobileActivityIconId=0x"
+                    + Integer.toHexString(mMSimMobileActivityIconId[subscription])
+                    + "/" + getResourceName(mMSimMobileActivityIconId[subscription])
                     + " mWifiIconId=0x" + Integer.toHexString(mWifiIconId)
                     + " mBluetoothTetherIconId=0x" + Integer.toHexString(mBluetoothTetherIconId));
+        }
+
+        for (NetworkSignalChangedCallback cb : mSignalsChangedCallbacks) {
+            notifySignalsChangedCallbacks(cb);
         }
 
         if (mMSimLastPhoneSignalIconId[subscription] != mMSimPhoneSignalIconId[subscription]
@@ -1098,9 +1069,6 @@ public class MSimNetworkController extends NetworkController {
             // NB: the mLast*s will be updated later
             for (MSimSignalCluster cluster : mSimSignalClusters) {
                 refreshSignalCluster(cluster, subscription);
-            }
-            for (NetworkSignalChangedCallback cb : mSignalsChangedCallbacks) {
-                notifySignalsChangedCallbacks(cb);
             }
         }
 
