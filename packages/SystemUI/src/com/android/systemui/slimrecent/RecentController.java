@@ -18,6 +18,7 @@
 package com.android.systemui.slimrecent;
 
 import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -29,14 +30,17 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
 import android.view.WindowManager;
+import android.view.WindowManagerGlobal;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -47,6 +51,7 @@ import android.widget.RelativeLayout;
 import com.android.cards.view.CardListView;
 
 import com.android.systemui.R;
+import com.android.systemui.statusbar.BaseStatusBar;
 
 /**
  * Our main recents controller.
@@ -74,6 +79,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
 
     private Context mContext;
     private WindowManager mWindowManager;
+    private IWindowManager mWindowManagerService;
 
     private boolean mIsShowing;
     private boolean mIsToggled;
@@ -95,10 +101,14 @@ public class RecentController implements RecentPanelView.OnExitListener,
         public void onReceive(Context context, Intent intent) {
             if (DEBUG) Log.v(TAG, "onReceive: " + intent);
             final String action = intent.getAction();
+            // Screen goes off or system dialogs should close.
+            // Get rid of our recents screen
             if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) {
-                // Screen goes off or system dialogs should close.
-                // Get rid of our recents screen
-                hideRecents(false);
+                String reason = intent.getStringExtra("reason");
+                if (reason != null &&
+                        !reason.equals(BaseStatusBar.SYSTEM_DIALOG_REASON_RECENT_APPS)) {
+                    hideRecents(false);
+                }
                 if (DEBUG) Log.d(TAG, "braodcast system dialog");
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)){
                 hideRecents(true);
@@ -111,6 +121,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
         mContext = context;
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
 
         /**
          * Add intent actions to listen on it.
@@ -249,6 +260,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
         if (DEBUG) Log.d(TAG, "preloading recents");
         if (mRecentPanelView != null) {
             mIsPreloaded = true;
+            setSystemUiVisibilityFlags();
             mRecentPanelView.setCancelledByUser(false);
             mRecentPanelView.loadTasks();
         }
@@ -279,9 +291,8 @@ public class RecentController implements RecentPanelView.OnExitListener,
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 width,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                        | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                WindowManager.LayoutParams.TYPE_RECENTS_OVERLAY,
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
@@ -299,6 +310,46 @@ public class RecentController implements RecentPanelView.OnExitListener,
         // This title is for debugging only. See: dumpsys window
         params.setTitle("RecentControlPanel");
         return params;
+    }
+
+    /**
+     * For smooth user experience we attach the same systemui visbility
+     * flags the current app, where the user is on, has set.
+     */
+    private void setSystemUiVisibilityFlags() {
+        int vis = 0;
+        try {
+            vis = mWindowManagerService.getSystemUIVisibility();
+        } catch (RemoteException ex) {
+        }
+        boolean layoutBehindNavigation = true;
+        int newVis = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        if ((vis & View.STATUS_BAR_TRANSLUCENT) != 0) {
+            newVis |= View.STATUS_BAR_TRANSLUCENT
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        }
+        if ((vis & View.NAVIGATION_BAR_TRANSLUCENT) != 0) {
+            newVis |= View.NAVIGATION_BAR_TRANSLUCENT;
+        }
+        if ((vis & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
+            newVis |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            layoutBehindNavigation = false;
+        }
+        if ((vis & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0) {
+            newVis |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        }
+        if ((vis & View.SYSTEM_UI_FLAG_IMMERSIVE) != 0) {
+            newVis |= View.SYSTEM_UI_FLAG_IMMERSIVE;
+            layoutBehindNavigation = false;
+        }
+        if ((vis & View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) != 0) {
+            newVis |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            layoutBehindNavigation = false;
+        }
+        if (layoutBehindNavigation) {
+            newVis |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        }
+        mParentView.setSystemUiVisibility(newVis);
     }
 
     // Returns if panel is currently showing.
@@ -338,12 +389,23 @@ public class RecentController implements RecentPanelView.OnExitListener,
     private void showRecents() {
         if (DEBUG) Log.d(TAG, "in animation starting");
         mIsShowing = true;
+        sendCloseSystemWindows();
         CacheController.getInstance(mContext).setRecentScreenShowing(true);
         mAnimationState = ANIMATION_STATE_IN;
         mHandler.removeCallbacks(mRecentThirdStageLoader);
         mHandler.postDelayed(mRecentThirdStageLoader, mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_recentDefaultDur));
         mWindowManager.addView(mParentView, generateLayoutParameter());
+    }
+
+    private static void sendCloseSystemWindows() {
+        if (ActivityManagerNative.isSystemReady()) {
+            try {
+                ActivityManagerNative.getDefault()
+                        .closeSystemDialogs(BaseStatusBar.SYSTEM_DIALOG_REASON_RECENT_APPS);
+            } catch (RemoteException e) {
+            }
+        }
     }
 
     // Listener callback.
