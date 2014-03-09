@@ -4548,4 +4548,5 @@
     <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
 
     <string name="permission">Permission</string>
+    <string name="transport_destination_string">Backing up to debug-only private cache</string>
 </resources>
