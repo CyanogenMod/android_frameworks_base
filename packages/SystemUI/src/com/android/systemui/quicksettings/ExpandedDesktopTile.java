@@ -46,9 +46,6 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
                 Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.EXPANDED_DESKTOP_STATE,
                     !mEnabled ? 1 : 0);
-                if (isFlipTilesEnabled()) {
-                    flipTile(0);
-                }
                 Helpers.restartSystemUI();
             }
         };
