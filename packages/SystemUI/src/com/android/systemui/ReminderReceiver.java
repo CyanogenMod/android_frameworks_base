@@ -96,16 +96,24 @@ public class ReminderReceiver extends BroadcastReceiver {
                 // Stop sound on click
                 serviceIntent.putExtra("stopSelf", true);
                 result = PendingIntent.getService(
-                    context, 1, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        context, 1, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 builder.setContentIntent(result);
 
                 // Add button for dismissal
                 serviceIntent.putExtra("dismissNoti", true);
                 result = PendingIntent.getService(
-                    context, 0, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        context, 0, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 builder.addAction(R.drawable.ic_sysbar_null,
-                                    context.getResources().getString(
-                                    R.string.quick_settings_reminder_noti_dismiss), result);
+                        context.getResources().getString(
+                        R.string.quick_settings_reminder_noti_dismiss), result);
+
+                // Add button for reminding later
+                serviceIntent.putExtra("time", true);
+                result = PendingIntent.getService(
+                        context, 2, serviceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                builder.addAction(R.drawable.ic_qs_alarm_on,
+                        context.getResources().getString(
+                        R.string.quick_settings_reminder_noti_later), result);
 
                 shared.edit().putBoolean("scheduled", false).commit();
                 shared.edit().putInt("hours", -1).commit();

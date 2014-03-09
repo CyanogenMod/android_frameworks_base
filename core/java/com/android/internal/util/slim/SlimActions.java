@@ -412,6 +412,48 @@ public class SlimActions {
         }
     }
 
+    public static void startIntent(Context context, Intent intent, boolean collapseShade) {
+        if (intent == null) {
+            return;
+        }
+        final IStatusBarService barService = IStatusBarService.Stub.asInterface(
+                ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+
+        final IWindowManager windowManagerService = IWindowManager.Stub.asInterface(
+                ServiceManager.getService(Context.WINDOW_SERVICE));
+
+        boolean isKeyguardShowing = false;
+        try {
+            isKeyguardShowing = windowManagerService.isKeyguardLocked();
+        } catch (RemoteException e) {
+        }
+
+        if (collapseShade) {
+            try {
+                barService.collapsePanels();
+            } catch (RemoteException ex) {
+            }
+        }
+
+        if (isKeyguardShowing) {
+            // Have keyguard show the bouncer and launch the activity if the user succeeds.
+            try {
+                windowManagerService.showCustomIntentOnKeyguard(intent);
+            } catch (RemoteException e) {
+            }
+        } else {
+            // otherwise let us do it here
+            try {
+                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+            } catch (RemoteException e) {
+                // too bad, so sad...
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivityAsUser(intent,
+                    new UserHandle(UserHandle.USER_CURRENT));
+        }
+    }
+
     public static boolean isActionKeyEvent(String action) {
         if (action.equals(ButtonsConstants.ACTION_HOME)
                 || action.equals(ButtonsConstants.ACTION_BACK)

@@ -19,6 +19,8 @@ package com.android.systemui.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnSeekCompleteListener;
@@ -30,12 +32,16 @@ import android.os.IBinder;
 import android.os.UserHandle;
 import android.provider.Settings;
 
+import com.android.internal.util.slim.SlimActions;
 import com.android.systemui.R;
 
 public class ReminderService extends Service {
 
     private static final String POST_REMINDER_NOTIFY =
             "com.android.systemui.POST_REMINDER_NOTIFY";
+
+    private static final String KEY_REMINDER_ACTION =
+            "key_reminder_action";
 
     private MediaPlayer mMediaPlayer;
 
@@ -55,7 +61,18 @@ public class ReminderService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mStopSelf = intent.getBooleanExtra("stopSelf", false);
+        boolean startTime = intent.getBooleanExtra("time", false);
         boolean clearNoti = intent.getBooleanExtra("dismissNoti", false);
+        if (startTime) {
+            final SharedPreferences shared = this.getSharedPreferences(
+                    KEY_REMINDER_ACTION, Context.MODE_PRIVATE);
+            shared.edit().putBoolean("updated", true).commit();
+            Intent time = new Intent(
+                    "com.android.systemui.timedialog.ReminderTimeDialog");
+            time.putExtra("type", "time");
+            SlimActions.startIntent(this, time, true);
+        }
+
         if (clearNoti) {
             Intent notify = new Intent();
             notify.setAction(POST_REMINDER_NOTIFY);

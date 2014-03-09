@@ -138,6 +138,7 @@
     <string name="quick_settings_reminder_dismiss_message">Clear current reminder?</string>
     <string name="quick_settings_reminder_help_title">Touch:</string>
     <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
+    <string name="quick_settings_reminder_noti_later">Update Time</string>
     <string name="quick_settings_reminder_help_message">Touch the empty space above to set or change the reminder. Long-press to clear the current reminder.</string>
 
     <!-- Battery status in pie controls -->

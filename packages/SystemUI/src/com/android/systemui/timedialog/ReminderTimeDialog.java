@@ -61,10 +61,14 @@ public class ReminderTimeDialog extends Activity  {
     @Override
     public void onResume() {
         super.onResume();
-        if (getIntent().getBooleanExtra("clear", false)) {
-            startClearDialog();
-        } else {
+        String type = getIntent().getStringExtra("type");
+
+        if (type == null) {
             startTextDialog();
+        } else if (type.equals("time")) {
+            startTimerDialog();
+        } else {
+            startClearDialog();
         }
     }
 
