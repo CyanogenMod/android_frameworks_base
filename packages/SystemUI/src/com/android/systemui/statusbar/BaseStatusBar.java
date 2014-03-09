@@ -138,8 +138,6 @@ import com.android.internal.util.omni.OmniSwitchConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.HashMap;
 
 public abstract class BaseStatusBar extends SystemUI implements
         CommandQueue.Callbacks {
@@ -225,7 +223,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected boolean mHaloButtonVisible = true;
 
     // Omni Switch
-    private Map<Integer, Boolean> mOmniSwitchStarted = new HashMap<Integer, Boolean>();
+    private boolean mOmniSwitchEnabled;
+    private boolean mOmniSwitchStarted;
 
     /**
      * An interface for navigation key bars to allow status bars to signal which keys are
@@ -339,6 +338,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mDeviceProvisioned = provisioned;
                 updateNotificationIcons();
             }
+            mOmniSwitchEnabled = Settings.System.getIntForUser(
+                    mContext.getContentResolver(), Settings.System.RECENTS_USE_OMNISWITCH,
+                    0, UserHandle.USER_CURRENT) == 1;
         }
     };
 
@@ -418,13 +420,11 @@ public abstract class BaseStatusBar extends SystemUI implements
                     mPieController.refreshContainer();
                 }
             } else if (OmniSwitchConstants.ACTION_SERVICE_START.equals(action)) {
-                int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
-                Log.v(TAG, "OmniSwitch service started " + userId);
-                mOmniSwitchStarted.put(userId, true);
+                Log.v(TAG, "OmniSwitch service started");
+                mOmniSwitchStarted = true;
             } else if (OmniSwitchConstants.ACTION_SERVICE_STOP.equals(action)) {
-                int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
-                Log.v(TAG, "OmniSwitch service stoped " + userId);
-                mOmniSwitchStarted.put(userId, false);
+                Log.v(TAG, "OmniSwitch service stoped");
+                mOmniSwitchStarted = false;
             }
         }
     };
@@ -1218,21 +1218,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     };
 
-    private boolean isOmniSwitchEnabled() {
-        // TODO no user specific value here
-        int settingsValue = Settings.System.getInt(
-                mContext.getContentResolver(), Settings.System.RECENTS_USE_OMNISWITCH, 0);
-        boolean omniSwitchStarted = false;
-        if (mOmniSwitchStarted.containsKey(mCurrentUserId)){
-            omniSwitchStarted = mOmniSwitchStarted.get(mCurrentUserId);
-        }
-        return (settingsValue == 1) && omniSwitchStarted;
-    }
-
     protected void toggleRecentsActivity() {
-        if (isOmniSwitchEnabled()){
+        if (mOmniSwitchEnabled && mOmniSwitchStarted){
             Intent showIntent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
-            mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
+            mContext.sendBroadcast(showIntent);
         } else {
             if (mRecents != null) {
                 mRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
@@ -1241,7 +1230,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void preloadRecentTasksList() {
-        if (!isOmniSwitchEnabled()){
+        if (!mOmniSwitchEnabled){
             if (mRecents != null) {
                 mRecents.preloadRecentTasksList();
             }
@@ -1249,7 +1238,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void cancelPreloadingRecentTasksList() {
-        if (!isOmniSwitchEnabled()){
+        if (!mOmniSwitchEnabled){
             if (mRecents != null) {
                 mRecents.cancelPreloadingRecentTasksList();
             }
@@ -1257,9 +1246,9 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void closeRecents() {
-        if (isOmniSwitchEnabled()){
+        if (mOmniSwitchEnabled && mOmniSwitchStarted){
             Intent hideIntent = new Intent(OmniSwitchConstants.ACTION_HIDE_OVERLAY);
-            mContext.sendBroadcastAsUser(hideIntent, UserHandle.CURRENT);
+            mContext.sendBroadcast(hideIntent);
         } else {
             if (mRecents != null) {
                 mRecents.closeRecents();
