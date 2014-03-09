@@ -3443,6 +3443,12 @@ public final class Settings {
         public static final String POWER_UI_LOW_BATTERY_WARNING_POLICY = "power_ui_low_battery_warning_policy";
 
         /**
+         * Disable FC Notifications
+         * @hide
+         */
+        public static final String DISABLE_FC_NOTIFICATIONS = "disable_fc_notifications";
+
+        /**
          * Whether to show the IME switcher in the status bar
          * @hide
          */
