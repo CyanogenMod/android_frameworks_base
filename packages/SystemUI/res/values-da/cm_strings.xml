@@ -75,4 +75,8 @@
     <string name="screenshot_delete_action">Slet</string>
     <string name="screenshot_delete_confirmation">Screenshot slettet.</string>
     <string name="accessibility_desc_add_quick_settings">Tilføj Kvikindstillinger.</string>
+    <string name="location_mode_high_accuracy_title">Høj præcision</string>
+    <string name="location_mode_battery_saving_title">Batteribesparelse</string>
+    <string name="location_mode_sensors_only_title">Kun enhed</string>
+    <string name="location_mode_location_off_title">Placering fra</string>
 </resources>
