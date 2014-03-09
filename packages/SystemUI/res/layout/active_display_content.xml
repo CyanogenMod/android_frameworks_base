@@ -27,11 +27,11 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:background="#ff000000">
+    android:background="@color/system_bar_background_opaque" >
 
     <FrameLayout
         android:id="@+id/remote_content_parent"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/notification_panel_width"
         android:layout_height="@dimen/notification_max_height"
         android:layout_gravity="center_horizontal">
 
@@ -41,6 +41,7 @@
             android:layout_height="wrap_content" />
 
     </FrameLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

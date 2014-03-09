@@ -26,6 +26,7 @@
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:orientation="horizontal"
+    android:gravity="@*android:integer/kg_selector_gravity"
     prvandroid:targetDrawables="@array/ad_targets_unlock_only"
     prvandroid:outerRingDrawable="@*android:drawable/ic_lockscreen_outerring"
     prvandroid:outerRadius="@*android:dimen/glowpadview_target_placement_radius"

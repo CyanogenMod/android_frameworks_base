@@ -27,7 +27,7 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:background="#ff000000">
+    android:background="@color/system_bar_background_opaque" >
 
     <LinearLayout
         android:layout_width="match_parent"
