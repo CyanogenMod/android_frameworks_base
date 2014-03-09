@@ -2444,7 +2444,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private void checkBarModes() {
         if (mDemoMode) return;
         int sbMode = mStatusBarMode;
-        if (panelsEnabled() && (mInteractingWindows & StatusBarManager.WINDOW_STATUS_BAR) != 0) {
+        if (panelsEnabled() && !mHasFlipSettings && (mInteractingWindows & StatusBarManager.WINDOW_STATUS_BAR) != 0) {
             // if panels are expandable, force the status bar opaque on any interaction
             sbMode = MODE_OPAQUE;
         }
