@@ -1226,6 +1226,9 @@ public class ActiveDisplayView extends FrameLayout
     }
 
     private void unregisterCallbacks() {
+        if (mPocketMode == 2 || mPocketMode == 3) {
+            disableProximitySensor();
+        }
         if (mCallbacksRegistered) {
             Log.i(TAG, "ActiveDisplay: unregister callbacks");
             unregisterBroadcastReceiver();

@@ -160,6 +160,7 @@ public class NotificationViewManager {
             notificationColor = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_COLOR, notificationColor);
 
+            if (activeD) wakeOnNotification = false;
 			createExcludedAppsSet(excludedApps);
         }
     }

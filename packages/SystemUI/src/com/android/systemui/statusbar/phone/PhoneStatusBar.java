@@ -553,6 +553,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.REMINDER_ALERT_INTERVAL), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ENABLE_ACTIVE_DISPLAY), false, this);
             update();
         }
 
@@ -647,6 +649,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                 Settings.System.EXPANDED_DESKTOP_STATE))) {
                 mNavigationBarOverlay.setIsExpanded(isExpanded());
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.ENABLE_ACTIVE_DISPLAY))) {
+                updateActiveDisplayViewState();
             }
 
             update();
@@ -713,6 +718,19 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
                 enableOrDisableReminder();
             }
+        }
+    }
+
+    private void updateActiveDisplayViewState() {
+        final ContentResolver resolver = mContext.getContentResolver();
+
+        boolean enabled = Settings.System.getInt(
+                    resolver, Settings.System.ENABLE_ACTIVE_DISPLAY, 0) == 1;
+
+        if (enabled) {
+            addActiveDisplayView();
+        } else {
+            removeActiveDisplayView();
         }
     }
 
@@ -1122,7 +1140,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mRecreating) {
             removeSidebarView();
         } else {
-            addActiveDisplayView();
+            updateActiveDisplayViewState();
             /* ChaosLab: GestureAnywhere - BEGIN */
             addGestureAnywhereView();
             /* ChaosLab: GestureAnywhere - END */
@@ -3905,7 +3923,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 if (mRecreating) {
                     removeSidebarView();
                 } else {
-                    addActiveDisplayView();
+                    updateActiveDisplayViewState();
                 }
                 addSidebarView();
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
