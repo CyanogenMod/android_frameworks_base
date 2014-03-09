@@ -21,6 +21,7 @@ import android.app.ActivityManagerNative;
 import android.app.SearchManager;
 import android.app.IUiModeManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -342,6 +343,13 @@ public class SlimActions {
                         }
                     }
                 }
+            } else if (action.equals(ButtonsConstants.ACTION_OMNISWITCH)) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName(
+                        "org.omnirom.omniswitch",
+                        "org.omnirom.omniswitch.MainActivity"));
+                startActivity(context, windowManagerService, isKeyguardShowing, intent);
+                return;
             } else {
                 // we must have a custom uri
                 Intent intent = null;
