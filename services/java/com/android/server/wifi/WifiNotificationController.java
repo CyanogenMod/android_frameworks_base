@@ -30,6 +30,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiStateMachine;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.UserHandle;
@@ -102,7 +103,6 @@ final class WifiNotificationController {
     private final WifiStateMachine mWifiStateMachine;
     private NetworkInfo mNetworkInfo;
     private volatile int mWifiState;
-    private WifiManager wifiManager;
 
     WifiNotificationController(Context context, WifiStateMachine wsm) {
         mContext = context;
@@ -285,7 +285,13 @@ final class WifiNotificationController {
     private class NotificationBroadcastReciever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            wifiManager.setWifiEnabled(false);
+            AsyncTask.execute(new Runnable() {
+                public void run() {
+                    WifiManager wifiManager = (WifiManager)
+                                mContext.getSystemService(Context.WIFI_SERVICE);
+                    wifiManager.setWifiEnabled(false);
+                }
+            });
         }
     }
 
