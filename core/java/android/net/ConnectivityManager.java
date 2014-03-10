@@ -1186,6 +1186,7 @@ public class ConnectivityManager {
      * {@hide}
      */
     public void reportInetCondition(int networkType, int percentage) {
+        Thread.dumpStack();
         try {
             mService.reportInetCondition(networkType, percentage);
         } catch (RemoteException e) {

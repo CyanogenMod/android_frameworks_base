@@ -1118,7 +1118,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         }
 
         mInetCondition = (connectionStatus > INET_CONDITION_THRESHOLD ? 1 : 0);
-
+        System.out.println("Framework : " + connectionStatus);
         if (info != null && info.getType() == ConnectivityManager.TYPE_BLUETOOTH) {
             mBluetoothTethered = info.isConnected();
         } else {
