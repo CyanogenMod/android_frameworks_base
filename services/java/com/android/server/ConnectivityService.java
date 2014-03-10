@@ -171,7 +171,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private static final String TAG = "ConnectivityService";
 
     private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = true;
 
     private static final boolean LOGD_RULES = false;
 
@@ -3374,7 +3374,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     public void setGlobalProxy(ProxyProperties proxyProperties) {
-        enforceConnectivityInternalPermission();
+        boolean hasGlobalProxyPermission = mContext.checkCallingOrSelfPermission("cyanogenmod.permission.GLOBAL_PROXY_MANAGEMENT")
+                == PackageManager.PERMISSION_GRANTED;
+        if (!hasGlobalProxyPermission) {
+            enforceConnectivityInternalPermission();
+        }
 
         synchronized (mProxyLock) {
             if (proxyProperties == mGlobalProxy) return;
