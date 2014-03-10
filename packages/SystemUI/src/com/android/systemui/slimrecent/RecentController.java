@@ -272,6 +272,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
     public void cancelPreloadingRecentTasksList() {
         if (DEBUG) Log.d(TAG, "cancel preloading recents");
         if (mRecentPanelView != null) {
+            mIsPreloaded = false;
             mRecentPanelView.setCancelledByUser(true);
         }
     }
