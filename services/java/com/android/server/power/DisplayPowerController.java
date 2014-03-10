@@ -380,6 +380,8 @@ final class DisplayPowerController {
     private Context mContext;
 
     private KeyguardServiceWrapper mKeyguardService;
+    private final int MAX_BLUR_WIDTH = 900;
+    private final int MAX_BLUR_HEIGHT = 1600;
 
     private final ServiceConnection mKeyguardConnection = new ServiceConnection() {
         @Override
@@ -481,8 +483,12 @@ final class DisplayPowerController {
 
         Intent intent = new Intent();
         intent.setClassName("com.android.keyguard", "com.android.keyguard.KeyguardService");
-        context.bindServiceAsUser(intent, mKeyguardConnection,
-                Context.BIND_AUTO_CREATE, UserHandle.OWNER);
+        if (!context.bindServiceAsUser(intent, mKeyguardConnection,
+                Context.BIND_AUTO_CREATE, UserHandle.OWNER)) {
+            Log.e(TAG, "*** Keyguard: can't bind to keyguard");
+        } else {
+            Log.e(TAG, "*** Keyguard started");
+        }
     }
 
     private void updateAutomaticBrightnessSettings() {
@@ -603,10 +609,6 @@ final class DisplayPowerController {
      */
     public boolean requestPowerState(DisplayPowerRequest request,
             boolean waitForNegativeProximity) {
-
-        final int MAX_BLUR_WIDTH = 900;
-        final int MAX_BLUR_HEIGHT = 1600;
-
         if (DEBUG) {
             Slog.d(TAG, "requestPowerState: "
                     + request + ", waitForNegativeProximity=" + waitForNegativeProximity);
@@ -633,33 +635,8 @@ final class DisplayPowerController {
                 mDisplayReadyLocked = false;
             }
 
-            boolean seeThrough = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
-            int blurRadius = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_BLUR_RADIUS, 12);
             if (changed && !mPendingRequestChangedLocked) {
-                if ((mKeyguardService == null || !mKeyguardService.isShowing()) &&
-                            request.screenState == DisplayPowerRequest.SCREEN_STATE_OFF &&
-                            seeThrough && blurRadius > 0) {
-                    DisplayInfo di = mDisplayManager
-                            .getDisplayInfo(mDisplayManager.getDisplayIds() [0]);
-                    /* Limit max screenshot capture layer to 22000.
-                       Prevents status bar and navigation bar from being captured.*/ 
-                    Bitmap bmp = SurfaceControl
-                            .screenshot(di.getNaturalWidth(),di.getNaturalHeight(), 0, 22000);
-                    if (bmp != null) {
-                        Bitmap tmpBmp = bmp;
-
-                        // scale image if its too large
-                        if (bmp.getWidth() > MAX_BLUR_WIDTH) {
-                            tmpBmp = bmp.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, true);
-                        }
-
-                        mKeyguardService.setBackgroundBitmap(tmpBmp);
-                        bmp.recycle();
-                        tmpBmp.recycle();
-                    }
-                } else if (mKeyguardService != null && (!seeThrough || blurRadius == 0)) mKeyguardService.setBackgroundBitmap(null);
+                initSeeThrough(request);
                 mPendingRequestChangedLocked = true;
                 sendUpdatePowerStateLocked();
             }
@@ -1611,4 +1588,30 @@ final class DisplayPowerController {
     //    return Settings.System.getInt(mContext.getContentResolver(),
     //            Settings.System.SCREEN_OFF_ANIMATION, 1) == 1;
     //}
+
+    private void initSeeThrough(DisplayPowerRequest request) {
+        boolean seeThrough = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
+
+        if ((mKeyguardService == null || !mKeyguardService.isShowing()) &&
+                request.screenState == DisplayPowerRequest.SCREEN_STATE_OFF &&
+                seeThrough) {
+            DisplayInfo di = mDisplayManager
+                    .getDisplayInfo(mDisplayManager.getDisplayIds() [0]);
+            /* Limit max screenshot capture layer to 22000.
+               Prevents status bar and navigation bar from being captured.*/
+            Bitmap bmp = SurfaceControl
+                    .screenshot(di.getNaturalWidth(),di.getNaturalHeight(), 0, 22000);
+            if (bmp != null) {
+                Bitmap tmpBmp = bmp;
+                // scale image if its too large
+                if (bmp.getWidth() > MAX_BLUR_WIDTH) {
+                    tmpBmp = Bitmap.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, true);
+                }
+                mKeyguardService.setBackgroundBitmap(tmpBmp);
+                bmp.recycle();
+                tmpBmp.recycle();
+            }
+        }
+    }
 }
