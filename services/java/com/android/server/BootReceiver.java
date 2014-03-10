@@ -17,10 +17,13 @@
 package com.android.server;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.IPackageManager;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.DropBoxManager;
 import android.os.FileObserver;
@@ -30,6 +33,8 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Downloads;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Slog;
 
 import java.io.File;
@@ -85,12 +90,26 @@ public class BootReceiver extends BroadcastReceiver {
                     if (!onlyCore) {
                         removeOldUpdatePackages(context);
                     }
+                    setGlobalProxy(context);
                 } catch (Exception e) {
                     Slog.e(TAG, "Can't remove old update packages", e);
                 }
 
             }
         }.start();
+    }
+
+    private void setGlobalProxy(Context context) {
+        ContentResolver res = context.getContentResolver();
+        String currentPackage = Settings.Global.getString(res, Settings.Global.GLOBAL_PROXY_PACKAGE_NAME);
+        if (!TextUtils.isEmpty(currentPackage)) {
+            PackageManager manager = context.getPackageManager();
+            try {
+                manager.getPackageInfo(currentPackage, 0);
+            } catch (NameNotFoundException e) {
+                Settings.Global.putString(res, Settings.Global.GLOBAL_PROXY_PACKAGE_NAME, null);
+            }
+        }
     }
 
     private void removeOldUpdatePackages(Context context) {
