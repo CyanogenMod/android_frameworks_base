@@ -52,7 +52,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     protected ProgressDialog mSimUnlockProgressDialog = null;
     private CheckSimPin mCheckSimPinThread;
-
+    protected boolean mShowDefaultMessage = true;
     protected AlertDialog mRemainingAttemptsDialog;
     public KeyguardSimPinView(Context context) {
         this(context, null);
@@ -75,7 +75,9 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        if (mShowDefaultMessage) {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        }
         mPasswordEntry.setEnabled(true);
     }
 
@@ -262,6 +264,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked();
                                 mCallback.dismiss(true);
                             } else {
+                                mShowDefaultMessage = false;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
                                     if (attemptsRemaining <= 2) {
                                         // this is getting critical - show dialog
