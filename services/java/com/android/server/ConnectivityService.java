@@ -3378,7 +3378,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     public void setGlobalProxy(ProxyProperties proxyProperties) {
-        enforceConnectivityInternalPermission();
+        boolean hasGlobalProxyPermission = mContext.checkCallingOrSelfPermission("cyanogenmod.permission.GLOBAL_PROXY_MANAGEMENT")
+                == PackageManager.PERMISSION_GRANTED;
+        if (!hasGlobalProxyPermission) {
+            enforceConnectivityInternalPermission();
+        }
 
         synchronized (mProxyLock) {
             if (proxyProperties == mGlobalProxy) return;

@@ -810,6 +810,12 @@
         android:permissionGroup="android.permission-group.NETWORK"
         android:protectionLevel="signature|system" />
 
+    <!-- Allows an application to manage the global proxy.
+        @hide -->
+    <permission android:name="cyanogenmod.permission.GLOBAL_PROXY_MANAGEMENT"
+        android:permissionGroup="android.permission-group.NETWORK"
+        android:protectionLevel="dangerous" />
+
     <!-- @hide -->
     <permission android:name="android.permission.RECEIVE_DATA_ACTIVITY_CHANGE"
         android:permissionGroup="android.permission-group.NETWORK"
