@@ -133,6 +133,7 @@ import com.google.android.collect.Sets;
 
 import dalvik.system.DexClassLoader;
 
+import org.cyanogenmod.support.proxy.GlobalProxyManager;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -3378,7 +3379,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     public void setGlobalProxy(ProxyProperties proxyProperties) {
-        enforceConnectivityInternalPermission();
+        boolean hasGlobalProxyPermission = mContext.checkCallingOrSelfPermission(
+                GlobalProxyManager.GLOBAL_PROXY_MANAGEMENT_PERMISSION) == PackageManager.PERMISSION_GRANTED;
+        if (!hasGlobalProxyPermission) {
+            enforceConnectivityInternalPermission();
+        }
 
         synchronized (mProxyLock) {
             if (proxyProperties == mGlobalProxy) return;

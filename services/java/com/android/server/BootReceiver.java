@@ -17,10 +17,13 @@
 package com.android.server;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.IPackageManager;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.DropBoxManager;
 import android.os.FileObserver;
@@ -30,10 +33,14 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Downloads;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Slog;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.cyanogenmod.support.proxy.Util;
 
 /**
  * Performs a number of miscellaneous, non-system-critical actions
@@ -85,6 +92,7 @@ public class BootReceiver extends BroadcastReceiver {
                     if (!onlyCore) {
                         removeOldUpdatePackages(context);
                     }
+                    Util.resetGlobalProxyIfOwnerRemoved(context);
                 } catch (Exception e) {
                     Slog.e(TAG, "Can't remove old update packages", e);
                 }
