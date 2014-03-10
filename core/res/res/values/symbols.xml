@@ -1809,6 +1809,9 @@
   <java-symbol type="bool" name="use_motion_accel" />
   <java-symbol type="bool" name="config_setup_mms_data" />
 
+  <!-- cpu boost for horizontal scroll -->
+  <java-symbol type="bool" name="config_enableCpuBoostForScroller" />
+
   <!-- Configuration to play sms ringtone during MO/MT call -->
   <java-symbol type="bool" name="config_sms_ringtone_incall" />
   <java-symbol type="string" name="config_partial_segment_expire_age" />

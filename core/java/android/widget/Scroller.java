@@ -23,7 +23,7 @@ import android.util.FloatMath;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
-
+import org.codeaurora.Performance;
 
 /**
  * <p>This class encapsulates scrolling. You can use scrollers ({@link Scroller}
@@ -108,6 +108,13 @@ public class Scroller  {
     private float mDeceleration;
     private final float mPpi;
 
+    /*
+    * Perf boost related variables
+    * Enabled/Disabled using config_enableCpuBoostForScroller
+    * true value turns it on, by default will be turned off
+    */
+    private Performance mPerf = null;
+
     // A context-specific coefficient adjusted to physical values.
     private float mPhysicalCoeff;
 
@@ -177,6 +184,7 @@ public class Scroller  {
      * not to support progressive "flywheel" behavior in flinging.
      */
     public Scroller(Context context, Interpolator interpolator, boolean flywheel) {
+        boolean bIsPerfBoostEnabled = false;
         mFinished = true;
         mInterpolator = interpolator;
         mPpi = context.getResources().getDisplayMetrics().density * 160.0f;
@@ -184,6 +192,13 @@ public class Scroller  {
         mFlywheel = flywheel;
 
         mPhysicalCoeff = computeDeceleration(0.84f); // look and feel tuning
+        bIsPerfBoostEnabled = context.getResources().getBoolean(
+             com.android.internal.R.bool.config_enableCpuBoostForScroller);
+
+        if (mPerf == null && bIsPerfBoostEnabled) {
+            mPerf = new Performance();
+        }
+
     }
 
     /**
@@ -407,6 +422,10 @@ public class Scroller  {
         mDeltaX = dx;
         mDeltaY = dy;
         mDurationReciprocal = 1.0f / (float) mDuration;
+
+        if ((mPerf != null) && (duration != 0)) {
+            mPerf.perfLockAcquire(mDuration, mPerf.CPUS_ON_2, 0x20B, 0x30B,0x1C00);
+        }
     }
 
     /**
