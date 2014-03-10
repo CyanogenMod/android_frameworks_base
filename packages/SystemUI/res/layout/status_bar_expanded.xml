@@ -89,6 +89,16 @@
             android:layout_height="@dimen/notification_min_height"
             />
 
+            
+    <ImageView android:id="@+id/halo_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:scaleType="center"
+        android:src="@drawable/ic_notify_halo"
+        android:contentDescription="@string/accessibility_halo"
+        />           
+         
         <TextView
             android:id="@+id/emergency_calls_only"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network.EmergencyOnly"
@@ -97,8 +107,8 @@
             android:padding="4dp"
             android:gravity="center"
             android:visibility="gone"
-            />
-
+            />       
+              
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
