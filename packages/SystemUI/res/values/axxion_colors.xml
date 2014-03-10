@@ -39,4 +39,7 @@
     <color name="card_text_color_header">#ff000000</color>
     <!-- Used by selector -->
     <color name="card_pressed">#7e3c3c3c</color>
+    
+    <!-- Notifications reminder -->
+    <drawable name="reminder_bg_pressed">#FF191919</drawable>
 </resources>

@@ -59,62 +59,9 @@
 
     <ImageView
         android:id="@+id/spacer"
-        android:layout_width="2dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:background="@android:drawable/divider_horizontal_dark"
-        />
-
-    <LinearLayout
-        android:id="@+id/reminder"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
         android:background="@drawable/ic_notify_button_bg"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/title"
-            android:paddingTop="8dp"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:scrollHorizontally="true"
-            android:paddingBottom="1dp"
-            android:textAllCaps="true"
-            android:textSize="12dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            />
-        <ViewFlipper
-            android:id="@+id/message"
-            android:inAnimation="@anim/reminder_fade_in"
-            android:outAnimation="@anim/reminder_fade_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:paddingBottom="8dp"
-            />
-        <ViewFlipper
-            android:id="@+id/message_land"
-            android:inAnimation="@anim/reminder_fade_in"
-            android:outAnimation="@anim/reminder_fade_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:paddingBottom="8dp"
-            />
-    </LinearLayout>
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         />
 

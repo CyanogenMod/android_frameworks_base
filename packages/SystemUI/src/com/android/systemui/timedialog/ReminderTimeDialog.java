@@ -151,23 +151,23 @@ public class ReminderTimeDialog extends Activity  {
 
 
                 mCalendar.add(Calendar.MINUTE, timePicked);
+                mCalendar.add(Calendar.SECOND, -mCalendar.get(Calendar.SECOND));
+                mCalendar.add(Calendar.MILLISECOND, -mCalendar.get(Calendar.MILLISECOND));
                 AlarmManager am = (AlarmManager)
                         ReminderTimeDialog.this.getSystemService(Context.ALARM_SERVICE);
-                PendingIntent reminder = null;
                 Intent intent = new Intent();
                 intent.setAction(SCHEDULE_REMINDER_NOTIFY);
-                shared.edit().putBoolean("scheduled", false).commit();
-                if (mCanceled == 0) {
-                    reminder = PendingIntent.getBroadcast(
+                PendingIntent reminder = PendingIntent.getBroadcast(
                             ReminderTimeDialog.this, 1, intent,
                             PendingIntent.FLAG_CANCEL_CURRENT);
-                    am.cancel(reminder);
+                am.cancel(reminder);
+                shared.edit().putBoolean("scheduled", false).commit();
+                if (mCanceled == 0) {
                     shared.edit().putInt("hours", hours).commit();
                     shared.edit().putInt("minutes", minutes).commit();
                     am.set(AlarmManager.RTC_WAKEUP,
                             mCalendar.getTimeInMillis(), reminder);
                 } else if (mCanceled == 1) {
-                    am.cancel(reminder);
                     shared.edit().putInt("hours", -1).commit();
                     shared.edit().putInt("minutes", -1).commit();
                     shared.edit().putInt("day", -1).commit();
