@@ -4993,13 +4993,8 @@ public final class Settings {
         /**
          * Allows blurring the lockscreen background
          * @hide
-         */
+        */
         public static final String LOCKSCREEN_BLUR_BEHIND = "lockscreen_blur_behind";
-
-        /**
-         * Allows setting the radius for blur
-         * @hide
-         */
         public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
 
         /**
