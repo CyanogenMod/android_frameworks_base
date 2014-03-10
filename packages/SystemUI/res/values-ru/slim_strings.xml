@@ -111,9 +111,9 @@
     <string name="quick_settings_reminder_no_expire">Нет уведомления</string>
     <string name="quick_settings_reminder_dismiss">Удалить напоминание</string>
     <string name="quick_settings_reminder_dismiss_message">Удалить текущее напоминание?</string>
-    <string name="quick_settings_reminder_help_title">Касание:</string>
+    <string name="quick_settings_reminder_help_title">Касание</string>
     <string name="quick_settings_reminder_noti_dismiss">Очистить</string>
-    <string name="quick_settings_reminder_help_message">Коснитесь здесь, чтобы установить напоминание. Долгое нажатие удалит текущее напоминание.</string>
+    <string name="quick_settings_reminder_help_message">Коснитесь пустого места сверху, чтобы установить/изменить напоминание. Долгое нажатие удалит текущее напоминание.</string>
 
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Заряжается (<xliff:g id="percent">%d</xliff:g>%%)</string>
@@ -124,4 +124,8 @@
     <string name="pie_phone_status_no_service">Вне зоны обслуживания</string>
     <string name="pie_phone_status_airplane_mode">Включен режим полета</string>
     <string name="pie_phone_status_emergency_only">Только экстренные вызовы</string>
+
+    <!-- Smart PullDown Warning -->
+    <string name="smart_pulldown_disabled">\"Умные\" уведомления отключены</string>
+
 </resources>
