@@ -6967,6 +6967,13 @@ public final class Settings {
         public static final String SET_GLOBAL_HTTP_PROXY = "set_global_http_proxy";
 
         /**
+         * Holds the package name that is currently capable of setting a global proxy
+         *
+         * @hide
+         */
+        public static final String GLOBAL_PROXY_PACKAGE_NAME = "global_proxy_package_name";
+
+        /**
          * Setting for default DNS in case nobody suggests one
          *
          * @hide
