@@ -96,6 +96,52 @@ public final class QBluetoothAdapter {
     public static final String ACTION_ADV_ENABLE_CHANGED=
             "android.bluetooth.adapter.action.ADV_ENABLE_CHANGED";
     /**
+     * Broadcast Action: Broadcasts an intent for BLE connection
+     * parameter update complete/remote connection parameter request events
+     * <p>Always contains the extra field {@link #EXTRA_DEVICE}.
+     * <p>Always contains the extra field {@link #CONN_INTERVAL_MIN}.
+     * <p>Always contains the extra field {@link #CONN_INTERVAL_MAX}.
+     * <p>Always contains the extra field {@link #CONN_LATENCY}.
+     * <p>Always contains the extra field {@link #SUPERVISION_TIMEOUT}.
+     * <p>Always contains the extra field {@link #STATUS}.
+     * <p>Always contains the extra field {@link #EVENT}.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH} to receive.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_BLE_CONN_PARAMS =
+            "android.bluetooth.adapter.action.ACTION_BLE_CONN_PARAMS";
+    /**
+     *Used as an extra field in {@link #ACTION_BLE_CONN_PARAMS} intent.
+     * @hide
+     */
+    public static final String EXTRA_CONN_INTERVAL_MIN = "android.bluetooth.adapter.extra.CONN_INTERVAL_MIN";
+    /**
+     *Used as an extra field in {@link #ACTION_BLE_CONN_PARAMS} intent.
+     * @hide
+     */
+    public static final String EXTRA_CONN_INTERVAL_MAX = "android.bluetooth.adapter.extra.CONN_INTERVAL_MAX";
+    /**
+     *Used as an extra field in {@link #ACTION_BLE_CONN_PARAMS} intent.
+     * @hide
+     */
+    public static final String EXTRA_CONN_LATENCY = "android.bluetooth.adapter.extra.CONN_LATENCY";
+    /**
+     *Used as an extra field in {@link #ACTION_BLE_CONN_PARAMS} intent.
+     * @hide
+     */
+    public static final String EXTRA_SUPERVISION_TIMEOUT = "android.bluetooth.adapter.extra.SUPERVISION_TIMEOUT";
+    /**
+     * Used as an extra field in {@link #ACTION_BLE_CONN_PARAMS} intent.
+     * @hide
+     */
+    public static final String EXTRA_STATUS = "android.bluetooth.adapter.extra.STATUS";
+    /**
+    * Used as an extra field in {@link #ACTION_BLE_CONN_PARAMS} intent.
+     * @hide
+     */
+    public static final String EXTRA_EVENT = "android.bluetooth.adpater.extra.EVENT";
+    /**
      * Used as a String extra field in {@link #ACTION_LOCAL_NAME_CHANGED}
      * intents to request the local Bluetooth name.
      */
