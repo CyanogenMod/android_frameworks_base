@@ -56,6 +56,7 @@
     <string name="quick_settings_camera_error_connect">Keine Verbindung zur Kamera möglich</string>
     <string name="accessibility_quick_settings_ringer">Klingelton <xliff:g id="state">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state">%s</xliff:g>.</string>
+    <string name="accessibility_desc_add_quick_settings">Schnelleinstellungen hinzufügen</string>
     <string name="navbar_dialog_title">Funktion zuweisen</string>
     <string name="navbar_home_button">Home</string>
     <string name="navbar_recent_button">Anwendungsverlauf</string>
@@ -71,6 +72,12 @@
     <string name="accessibility_dock_battery_level">Dock-Akku <xliff:g id="number">%d</xliff:g> Prozent</string>
     <string name="screenshot_delete_action">Löschen</string>
     <string name="screenshot_delete_confirmation">Bildschirmfoto wurde gelöscht</string>
+    <string name="dessert_case_settings_cm_title">CM-Maskottchen anzeigen</string>
+    <string name="dessert_case_settings_cm_summary">Sowohl die CM-Maskottchen als auch die Android-Süßspeisen im \'Dream\' anzeigen</string>
+    <string name="location_mode_high_accuracy_title">Hohe Genauigkeit</string>
+    <string name="location_mode_battery_saving_title">Energiesparmodus</string>
+    <string name="location_mode_sensors_only_title">Nur Gerät</string>
+    <string name="location_mode_location_off_title">Standortbestimmung aus</string>
 
     <!-- Untranslated AOSP strings -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
