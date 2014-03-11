@@ -92,6 +92,7 @@ public class MSimNetworkController extends NetworkController {
     int[] mMSimLastDataTypeIconId;
     int[] mMSimcombinedSignalIconId;
     int[] mMSimcombinedActivityIconId;
+    int[] mMSimLastcombinedActivityIconId;
     int[] mMSimLastSimIconId;
     private int mDefaultSubscription;
     boolean[] mShowSpn;
@@ -138,6 +139,7 @@ public class MSimNetworkController extends NetworkController {
         mMSimLastCombinedSignalIconId = new int[numPhones];
         mMSimcombinedSignalIconId = new int[numPhones];
         mMSimcombinedActivityIconId = new int[numPhones];
+        mMSimLastcombinedActivityIconId = new int[numPhones];
         mMSimDataActivity = new int[numPhones];
         mMSimContentDescriptionCombinedSignal = new String[numPhones];
         mMSimContentDescriptionDataType = new String[numPhones];
@@ -162,6 +164,7 @@ public class MSimNetworkController extends NetworkController {
             mMSimLastCombinedSignalIconId[i] = -1;
             mMSimcombinedSignalIconId[i] = 0;
             mMSimcombinedActivityIconId[i] = 0;
+            mMSimLastcombinedActivityIconId[i] = 0;
             mMSimDataActivity[i] = TelephonyManager.DATA_ACTIVITY_NONE;
             mMSimLastSimIconId[i] = 0;
             mMSimNetworkName[i] = mNetworkNameDefault;
@@ -276,6 +279,8 @@ public class MSimNetworkController extends NetworkController {
                     + getResourceName(mMSimDataSignalIconId[subscription])
                     + " mMSimDataTypeIconId[" + subscription + "]="
                     + getResourceName(mMSimDataTypeIconId[subscription])
+                    + " mMSimMobileActivityIconId[" + subscription + "]="
+                    + getResourceName(mMSimMobileActivityIconId[subscription])
                     + " mNoMSimIconId[" + subscription + "]="
                     + getResourceName(mNoMSimIconId[subscription]));
     }
@@ -659,7 +664,9 @@ public class MSimNetworkController extends NetworkController {
                 mMSimContentDescriptionDataType[subscription] =
                         TelephonyIcons.getDataTypeDesc();
                 mQSDataTypeIconId =
-                        TelephonyIcons.getQSDataTypeIcon();
+                        TelephonyIcons.getQSDataTypeIcon(subscription);
+                Slog.d(TAG, "updateDataNetType, mQSDataTypeIconId = "
+                        + getResourceName(mQSDataTypeIconId));
             }
         }
 
@@ -709,7 +716,6 @@ public class MSimNetworkController extends NetworkController {
 
         Slog.d(TAG, "updateIconSet, chosenNetworkType=" + chosenNetworkType
             + " hspaDataDistinguishable=" + String.valueOf(mHspaDataDistinguishable)
-            + " hspapDistinguishable=" + "false"
             + " showAtLeastThreeGees=" + String.valueOf(mShowAtLeastThreeGees));
 
         TelephonyIcons.updateDataType(subscription, chosenNetworkType, mShowAtLeastThreeGees,
@@ -719,7 +725,7 @@ public class MSimNetworkController extends NetworkController {
     private final void updateSimIcon(int cardIndex) {
         Slog.d(TAG,"In updateSimIcon card =" + cardIndex + ", simState= " + mMSimState[cardIndex]);
         if (mMSimState[cardIndex] ==  IccCardConstants.State.ABSENT) {
-            mNoMSimIconId[cardIndex] = TelephonyIcons.getNoSimIcon();
+            mNoMSimIconId[cardIndex] = TelephonyIcons.getNoSimIcon(cardIndex);
         } else {
             mNoMSimIconId[cardIndex] = 0;
         }
@@ -751,7 +757,8 @@ public class MSimNetworkController extends NetworkController {
             if (mMSimState[subscription] == IccCardConstants.State.READY ||
                 mMSimState[subscription] == IccCardConstants.State.UNKNOWN) {
                 if (mDataState == TelephonyManager.DATA_CONNECTED) {
-                    iconId = TelephonyIcons.getDataActivity(subscription, mDataActivity);
+                    iconId = TelephonyIcons.getDataActivity(subscription,
+                            mMSimDataActivity[subscription]);
                     mMSimDataDirectionIconId[subscription] = iconId;
                 } else {
                     iconId = 0;
@@ -759,13 +766,14 @@ public class MSimNetworkController extends NetworkController {
                 }
             } else {
                 Slog.d(TAG,"updateDataIcon when no sim");
-                iconId = TelephonyIcons.getNoSimIcon();
+                iconId = TelephonyIcons.getNoSimIcon(subscription);
                 visible = false; // no SIM? no data
             }
         } else {
             // CDMA case, mMSimDataActivity can be also DATA_ACTIVITY_DORMANT
             if (mDataState == TelephonyManager.DATA_CONNECTED) {
-                iconId = TelephonyIcons.getDataActivity(subscription, mDataActivity);
+                iconId = TelephonyIcons.getDataActivity(subscription,
+                        mMSimDataActivity[subscription]);
             } else {
                 iconId = 0;
                 visible = false;
@@ -1064,7 +1072,9 @@ public class MSimNetworkController extends NetworkController {
          || mLastWimaxIconId                != mWimaxIconId
          || mMSimLastDataTypeIconId[subscription] != mMSimDataTypeIconId[subscription]
          || mLastAirplaneMode               != mAirplaneMode
-         || mMSimLastSimIconId[subscription] != mNoMSimIconId[subscription])
+         || mMSimLastSimIconId[subscription] != mNoMSimIconId[subscription]
+         || mMSimLastcombinedActivityIconId[subscription]
+                != mMSimcombinedActivityIconId[subscription])
         {
             // NB: the mLast*s will be updated later
             for (MSimSignalCluster cluster : mSimSignalClusters) {
@@ -1104,7 +1114,12 @@ public class MSimNetworkController extends NetworkController {
                 mMSimcombinedSignalIconId[subscription]) {
             mMSimLastCombinedSignalIconId[subscription] = mMSimcombinedSignalIconId[subscription];
         }
-
+        // the combined data activity icon
+        if (mMSimLastcombinedActivityIconId[subscription] !=
+                mMSimcombinedActivityIconId[subscription]) {
+            mMSimLastcombinedActivityIconId[subscription]
+                    = mMSimcombinedActivityIconId[subscription];
+        }
         // the data network type overlay
         if (mMSimLastDataTypeIconId[subscription] != mMSimDataTypeIconId[subscription]) {
             mMSimLastDataTypeIconId[subscription] = mMSimDataTypeIconId[subscription];

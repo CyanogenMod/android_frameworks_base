@@ -172,7 +172,6 @@ public class SignalClusterView
         mNoSimIconId = noSimIcon;
 
         if (showMobileActivity()) {
-            mMobileActivityId = 0;
             mDataActivityId = 0;
             mDataVisible = false;
         } else {
@@ -182,7 +181,7 @@ public class SignalClusterView
         }
 
         if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
-            if (showBoth3gAnd1x()) {
+            if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
                 mMobileCdmaVisible = true;
                 mMobileCdma1xOnlyVisible = false;
 
@@ -251,9 +250,7 @@ public class SignalClusterView
 
         if (mWifiVisible) {
             mWifi.setImageResource(mWifiStrengthId);
-            if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT) {
-                mWifiActivity.setImageResource(mWifiActivityId);
-            }
+            mWifiActivity.setImageResource(mWifiActivityId);
 
             mWifiGroup.setContentDescription(mWifiDescription);
             mWifiGroup.setVisibility(View.VISIBLE);

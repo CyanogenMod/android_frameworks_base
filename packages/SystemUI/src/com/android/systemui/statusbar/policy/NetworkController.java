@@ -91,6 +91,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     int mAirplaneIconId;
     int mNoSimIconId;
     int mLastSimIconId;
+    int mLastMobileActivityIconId;
     boolean mDataActive;
     int mLastSignalLevel;
     boolean mShowPhoneRSSIForData = false;
@@ -1226,7 +1227,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
          || mLastDataTypeIconId             != mDataTypeIconId
          || mLastAirplaneMode               != mAirplaneMode
          || mLastLocale                     != mLocale
-         || mLastSimIconId                  != mNoSimIconId)
+         || mLastSimIconId                  != mNoSimIconId
+         || mLastMobileActivityIconId       != mMobileActivityIconId)
         {
             // NB: the mLast*s will be updated later
             for (SignalCluster cluster : mSignalClusters) {
@@ -1245,6 +1247,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         // the phone icon on phones
         if (mLastPhoneSignalIconId != mPhoneSignalIconId) {
             mLastPhoneSignalIconId = mPhoneSignalIconId;
+        }
+        if (mLastMobileActivityIconId != mMobileActivityIconId) {
+            mLastMobileActivityIconId = mMobileActivityIconId;
         }
 
         // the data icon on phones
