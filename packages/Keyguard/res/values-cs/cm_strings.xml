@@ -15,5 +15,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- CAF -->
+    <string name="keyguard_password_wrong_puk_code">Neplatný PUK kód!</string>
+    <string name="keyguard_password_pin_failed">Operace PIN selhala!</string>
+    <string name="keyguard_password_puk_failed">Operace PUK selhala!</string>
+    <string name="keyguard_pin_accepted">Kód přijat!</string>
+    <string name="pinpuk_attempts">\nZbývajících pokusů: </string>
+    <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
+    <string name="keyguard_perso_locked_message">SIM/RUIM je zamčené pomocí Perso</string>
+
+    <!-- CM -->
     <string name="keyguard_discharging">Vybíjení, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 </resources>
