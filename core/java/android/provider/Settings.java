@@ -3872,6 +3872,12 @@ public final class Settings {
         public static final String NOTIFICATION_ALPHA = "notification_alpha";
 
         /**
+         * Wether the navbar menu button is on the left/right/both
+         * @hide
+         */
+        public static final String MENU_LOCATION = "menu_location";
+
+        /**
          * Show brightness slider in notification panel
          * @hide
          */
@@ -3882,6 +3888,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_HEIGHT = "lockscreen_notifications_height";
+
+        /**
+         * Enables dynamic with for shown notifications on devices >= xxhdpi
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_DYNAMIC_WIDTH = "lockscreen_notifications_dynamic_width";
 
         /**
          * Changes the offset of the notifications to the top of the screen
