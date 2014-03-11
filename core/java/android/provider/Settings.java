@@ -3778,13 +3778,6 @@ public final class Settings {
         public static final String LOCKSCREEN_NOTIFICATIONS_POCKET_MODE = "lockscreen_notifications_pocket_mode";
 
         /**
-         * Turn screen on when pulled out of pocket even if no notifications are pending
-         * Whether to enforce quiet hours regardless of the timer.
-         * @hide
-         */
-        public static final String QUIET_HOURS_FORCED = "quiet_hours_forced";
-
-        /**
          * Whether to enable quiet hours.
          * @hide
          */

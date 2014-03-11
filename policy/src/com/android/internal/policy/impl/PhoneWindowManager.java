@@ -4692,7 +4692,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // the service.
                 mHandler.postDelayed(mScreenrecordTimeout, 31 * 60 * 1000);
             }
-=======
+        }
+    }
+
     private final Runnable mQuickBootPowerLongPress = new Runnable() {
 
         public void run() {
