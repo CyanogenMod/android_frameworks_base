@@ -408,6 +408,15 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         }
     }
 
+    @Override
+    public void setAutoRotate(boolean enabled) {
+        if (mBar != null) {
+            try {
+                mBar.setAutoRotate(enabled);
+            } catch (RemoteException ex) {}
+        }
+    }
+
     private void enforceStatusBar() {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.STATUS_BAR,
                 "StatusBarManagerService");
