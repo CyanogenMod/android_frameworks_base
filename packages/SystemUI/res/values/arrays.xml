@@ -192,13 +192,15 @@
     </array>
 
     <array name="telephony_data_activity_unknown">
+        <item>0</item><!--none-->
         <item>0</item><!--in-->
         <item>0</item><!--out-->
         <item>0</item><!--inout-->
-        <item>0</item><!--default-->
+        <item>0</item><!--dormant-->
     </array>
 
     <array name="telephony_data_activity_g">
+        <item>@drawable/stat_sys_data_fully_connected_g</item>
         <item>@drawable/stat_sys_data_fully_connected_g</item>
         <item>@drawable/stat_sys_data_fully_connected_g</item>
         <item>@drawable/stat_sys_data_fully_connected_g</item>
@@ -210,9 +212,11 @@
         <item>@drawable/stat_sys_data_fully_connected_e</item>
         <item>@drawable/stat_sys_data_fully_connected_e</item>
         <item>@drawable/stat_sys_data_fully_connected_e</item>
+        <item>@drawable/stat_sys_data_fully_connected_e</item>
     </array>
 
     <array name="telephony_data_activity_2g">
+        <item>@drawable/stat_sys_data_fully_connected_g</item>
         <item>@drawable/stat_sys_data_fully_connected_g</item>
         <item>@drawable/stat_sys_data_fully_connected_g</item>
         <item>@drawable/stat_sys_data_fully_connected_g</item>
@@ -224,9 +228,11 @@
         <item>@drawable/stat_sys_data_fully_connected_3g</item>
         <item>@drawable/stat_sys_data_fully_connected_3g</item>
         <item>@drawable/stat_sys_data_fully_connected_3g</item>
+        <item>@drawable/stat_sys_data_fully_connected_3g</item>
     </array>
 
     <array name="telephony_data_activity_4g">
+        <item>@drawable/stat_sys_data_fully_connected_4g</item>
         <item>@drawable/stat_sys_data_fully_connected_4g</item>
         <item>@drawable/stat_sys_data_fully_connected_4g</item>
         <item>@drawable/stat_sys_data_fully_connected_4g</item>
@@ -238,9 +244,11 @@
         <item>@drawable/stat_sys_data_fully_connected_h</item>
         <item>@drawable/stat_sys_data_fully_connected_h</item>
         <item>@drawable/stat_sys_data_fully_connected_h</item>
+        <item>@drawable/stat_sys_data_fully_connected_h</item>
     </array>
 
     <array name="telephony_data_activity_hp">
+        <item>@drawable/stat_sys_data_fully_connected_hp</item>
         <item>@drawable/stat_sys_data_fully_connected_hp</item>
         <item>@drawable/stat_sys_data_fully_connected_hp</item>
         <item>@drawable/stat_sys_data_fully_connected_hp</item>
@@ -252,9 +260,11 @@
         <item>@drawable/stat_sys_data_fully_connected_1x</item>
         <item>@drawable/stat_sys_data_fully_connected_1x</item>
         <item>@drawable/stat_sys_data_fully_connected_1x</item>
+        <item>@drawable/stat_sys_data_fully_connected_1x</item>
     </array>
 
     <array name="telephony_data_activity_lte">
+        <item>@drawable/stat_sys_data_fully_connected_lte</item>
         <item>@drawable/stat_sys_data_fully_connected_lte</item>
         <item>@drawable/stat_sys_data_fully_connected_lte</item>
         <item>@drawable/stat_sys_data_fully_connected_lte</item>
