@@ -52,7 +52,7 @@ public class Surface implements Parcelable {
     private static native void nativeWriteToParcel(long nativeObject, Parcel dest);
 
     private static native void nativeAllocateBuffers(long nativeObject);
-    private static native void nativeSetDirtyRegion(long nativeObject, Rect dirty);
+    private static native void nativeSetDirtyRect(long nativeObject, Rect dirty);
 
     public static final Parcelable.Creator<Surface> CREATOR =
             new Parcelable.Creator<Surface>() {
@@ -165,9 +165,9 @@ public class Surface implements Parcelable {
      * Set dirty region passed from HW renderer.
      * @hide
      */
-    public void setDirtyRegion(Rect dirty) {
+    public void setDirtyRect(Rect dirty) {
         if (mNativeObject != 0) {
-            nativeSetDirtyRegion(mNativeObject,dirty);
+            nativeSetDirtyRect(mNativeObject,dirty);
         }
     }
 
