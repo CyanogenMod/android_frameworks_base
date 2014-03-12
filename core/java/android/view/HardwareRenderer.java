@@ -1467,7 +1467,7 @@ public abstract class HardwareRenderer {
                         // and also its better to check the surface
                         // validity to avoid any crash.
                         if(mSurface.isValid() && dirty != null) {
-                                mSurface.setDirtyRegion(dirty);
+                                mSurface.setDirtyRect(dirty);
                         }
                         saveCount = canvas.save();
                         callbacks.onHardwarePreDraw(canvas);
