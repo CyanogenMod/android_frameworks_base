@@ -2490,7 +2490,7 @@ public final class ViewRootImpl implements ViewParent,
                 // and also its better to check the surface
                 // validity to avoid any crash.
                 if(mSurface.isValid() && dirty != null) {
-                    mSurface.setDirtyRegion(dirty);
+                    mSurface.setDirtyRect(dirty);
                 }
 
                 dirty.setEmpty();
