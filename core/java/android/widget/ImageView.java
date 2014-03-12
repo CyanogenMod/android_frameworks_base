@@ -453,8 +453,8 @@ public class ImageView extends View {
     }
 
     /**
-     * Sets the image level, when it is constructed from a 
-     * {@link android.graphics.drawable.LevelListDrawable}.
+     * Sets the image level, see 
+     * {@link android.graphics.drawable.Drawable#setLevel(int)}.
      *
      * @param level The new level for the image.
      */
