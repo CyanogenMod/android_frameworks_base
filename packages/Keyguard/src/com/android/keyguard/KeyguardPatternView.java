@@ -147,6 +147,13 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
         mLockPatternView.setTactileFeedbackEnabled(mLockPatternUtils.isTactileFeedbackEnabled());
 
         mLockPatternView.setLockPatternSize(mLockPatternUtils.getLockPatternSize());
+        mLockPatternView.setLockPatternColor(Settings.Secure.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.Secure.LOCKSCREEN_TARGETS_COLOR, -2,
+                UserHandle.USER_CURRENT), Settings.Secure.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.Secure.LOCKSCREEN_MISC_COLOR, -2,
+                UserHandle.USER_CURRENT));
 
         if (Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_DOUBLE_TAP_SLEEP_GESTURE, 0) == 1) {

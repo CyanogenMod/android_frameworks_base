@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -359,6 +360,33 @@ public class LockPatternView extends View {
      */
     public void setTactileFeedbackEnabled(boolean tactileFeedbackEnabled) {
         mEnableHapticFeedback = tactileFeedbackEnabled;
+    }
+
+    /**
+     * Set color of pattern rings and lines
+     */
+    public void setLockPatternColor(int color, int colorFail) {
+        if (mPathPaint != null && mBitmapCircleGreen != null && mBitmapCircleRed != null) {
+                Bitmap mutableBitmap = mBitmapCircleGreen.copy(Bitmap.Config.ARGB_8888, true);
+                Bitmap mutableBitmapFail = mBitmapCircleGreen.copy(Bitmap.Config.ARGB_8888, true);
+            if (color != -2) {
+                mPathPaint.setColor(color);
+                Canvas canvasFocused = new Canvas(mutableBitmap);
+                Paint paint = new Paint();
+                paint.setAntiAlias(true);
+                paint.setColorFilter(new LightingColorFilter(color, 1));
+                canvasFocused.drawBitmap(mutableBitmap, 0, 0, paint);
+                mBitmapCircleGreen = mutableBitmap;
+            }
+            if (colorFail != -2) {
+                Canvas canvasPressed = new Canvas(mutableBitmapFail);
+                Paint paintFail = new Paint();
+                paintFail.setAntiAlias(true);
+                paintFail.setColorFilter(new LightingColorFilter(colorFail, 1));
+                canvasPressed.drawBitmap(mutableBitmapFail, 0, 0, paintFail);
+                mBitmapCircleRed = mutableBitmapFail;
+            }
+        }
     }
 
     /**

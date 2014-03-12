@@ -6461,6 +6461,18 @@ public final class Settings {
         public static final String LOCKSCREEN_FRAME_COLOR = "lockscreen_frame_color";
 
         /**
+         * Lockscreen widget add, glowpad ring, text, failed pattern ring colors
+         * @hide
+         */
+        public static final String LOCKSCREEN_MISC_COLOR = "lockscreen_misc_color";
+
+        /**
+         * Lockscreen targets and pattern ring colors
+         * @hide
+         */
+        public static final String LOCKSCREEN_TARGETS_COLOR = "lockscreen_targets_color";
+
+        /**
          *Whether lock before unlock is enabled or disabled
          * @hide
          */
