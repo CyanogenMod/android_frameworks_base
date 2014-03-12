@@ -351,7 +351,10 @@ public class ActionMenuPresenter extends BaseMenuPresenter
      */
     public boolean dismissPopupMenus() {
         boolean result = hideOverflowMenu();
-        result |= hideSubMenus();
+
+        if (result) {
+            result |= hideSubMenus();
+        }
         return result;
     }
 
