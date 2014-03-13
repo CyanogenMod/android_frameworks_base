@@ -27,6 +27,10 @@
     <integer name="pie_gesture_sensivity">8</integer>
     
     <!-- Default value how much apps show the app screenshot on recents view entry -->
-    <integer name="expanded_items_default">2</integer>
-    
-</resources>    
+    <integer name="expanded_items_default">2</integer>    
+
+    <!-- On-The-Go -->
+    <integer name="quick_settings_onthego_dialog_short_timeout">3000</integer>
+    <integer name="quick_settings_onthego_dialog_long_timeout">6000</integer>
+
+</resources>
