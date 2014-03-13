@@ -368,7 +368,7 @@ public class KeyguardUpdateMonitor {
                     state = IccCardConstants.State.PIN_REQUIRED;
                 } else if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
                     state = IccCardConstants.State.PUK_REQUIRED;
-                } else if (IccCardConstants.INTENT_VALUE_LOCKED_PERSO.equals(stateExtra)) {
+                } else if (IccCardConstants.INTENT_VALUE_LOCKED_PERSO.equals(lockedReason)) {
                     state = IccCardConstants.State.PERSO_LOCKED;
                 } else {
                     state = IccCardConstants.State.UNKNOWN;
