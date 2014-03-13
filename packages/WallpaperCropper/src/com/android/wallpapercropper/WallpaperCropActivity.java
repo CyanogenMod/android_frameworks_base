@@ -83,6 +83,14 @@ public class WallpaperCropActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCropView != null) {
+            mCropView.destroy();
+        }
+    }
+
     protected void init() {
         setContentView(R.layout.wallpaper_cropper);
 
