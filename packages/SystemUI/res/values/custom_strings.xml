@@ -51,7 +51,7 @@
     <!-- Descriptive text of a running process: singular process, plural service. -->
     <string name="running_processes_item_description_s_p"><xliff:g id="numprocess">%1$d</xliff:g>
         process and <xliff:g id="numservices">%2$d</xliff:g> services</string>
-     <!-- Descriptive text of a running process: plural process, singular service. -->
+    <!-- Descriptive text of a running process: plural process, singular service. -->
     <string name="running_processes_item_description_p_s"><xliff:g id="numprocess">%1$d</xliff:g>
         processes and <xliff:g id="numservices">%2$d</xliff:g> service</string>
     <!-- Descriptive text of a running process: plural process, plural service. -->
@@ -62,4 +62,11 @@
 
     <string name="quick_settings_theme_switch_dark">Dark theme</string>
     <string name="quick_settings_theme_switch_light">Light theme</string>
+
+    <string name="onthego_notif_ticker">On-The-Go activated</string>
+    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_stop">Stop</string>
+    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_error">Unable to start On-The-Go</string>
+    <string name="onthego_transparency">Transparency</string>
 </resources>

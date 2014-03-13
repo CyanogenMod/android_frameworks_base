@@ -22,6 +22,9 @@
     <!-- label for item that takes screenrecord in the phone options dialog -->
     <string name="global_action_screenrecord">Screen Record</string>
 
+    <!-- label for item that takes On-The-Go in the phone options dialog -->
+    <string name="global_action_onthego">On-The-Go Mode</string>
+
     <!-- TRDS -->
     <string name="theme_auto_switch_mode_error">Automatic light condition change mode is enabled. Manual switching is not possible.</string>
 

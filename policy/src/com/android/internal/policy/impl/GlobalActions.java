@@ -394,28 +394,55 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 });
         }
 
+        // next: screen record, if enabled
+        if (mShowScreenRecord) {
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.POWER_MENU_SCREENRECORD_ENABLED, 0) != 0) {
+                mItems.add(
+                        new SinglePressAction(R.drawable.ic_lock_screen_record,
+                                R.string.global_action_screenrecord) {
+
+                            public void onPress() {
+                                takeScreenrecord();
+                            }
+
+                            public boolean onLongPress() {
+                                return false;
+                            }
+
+                            public boolean showDuringKeyguard() {
+                                return true;
+                            }
+
+                            public boolean showBeforeProvisioning() {
+                                return true;
+                            }
+                        });
+            }
+        }
+
         // next: expanded desktop toggle
         // only shown if enabled and expanded desktop is enabled, disabled by default
         boolean showExpandedDesktop =
                 Settings.System.getIntForUser(cr,
                         Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT) != 0
-                && Settings.System.getIntForUser(cr,
+                        && Settings.System.getIntForUser(cr,
                         Settings.System.POWER_MENU_EXPANDED_DESKTOP_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
 
         if (showExpandedDesktop) {
             mItems.add(mExpandDesktopModeOn);
         }
 
-        // next: screen record, if enabled
-        if (mShowScreenRecord) {
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.POWER_MENU_SCREENRECORD_ENABLED, 0) != 0) {
-                mItems.add(
-                    new SinglePressAction(com.android.internal.R.drawable.ic_lock_screen_record,
-                            R.string.global_action_screenrecord) {
+        // next: On-The-Go, if enabled
+        boolean showOnTheGo = Settings.Nameless.getBoolean(cr,
+                Settings.Nameless.POWER_MENU_ONTHEGO_ENABLED, false);
+        if (showOnTheGo) {
+            mItems.add(
+                    new SinglePressAction(R.drawable.ic_lock_onthego,
+                            R.string.global_action_onthego) {
 
                         public void onPress() {
-                            takeScreenrecord();
+                            startOnTheGo();
                         }
 
                         public boolean onLongPress() {
@@ -429,8 +456,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         public boolean showBeforeProvisioning() {
                             return true;
                         }
-                    });
-            }
+                    }
+            );
         }
 
         // next: airplane mode
@@ -766,6 +793,15 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mHandler.postDelayed(mScreenrecordTimeout, 31 * 60 * 1000);
             }
         }
+    }
+
+    private void startOnTheGo() {
+        final ComponentName cn = new ComponentName("com.android.systemui",
+                "com.android.systemui.nameless.onthego.OnTheGoService");
+        final Intent startIntent = new Intent();
+        startIntent.setComponent(cn);
+        startIntent.setAction("start");
+        mContext.startService(startIntent);
     }
 
     private void prepareDialog() {
