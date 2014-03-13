@@ -28,7 +28,7 @@ import android.os.Bundle;
 import android.os.SystemProperties;
 
 /**
- * {@hide} Information about a face identified through Qualcomm camera face
+ * {@hide} Information about a face identified through Extended camera face
  *
  * <p>
  * When face detection is used with a camera, the {@link FaceDetectionListener}
@@ -37,8 +37,8 @@ import android.os.SystemProperties;
  *
  * @see FaceDetectionListener
  */
-public class QCFace extends android.hardware.Camera.Face {
-    public QCFace() {
+public class ExtendedFace extends android.hardware.Camera.Face {
+    public ExtendedFace() {
         super();
     }
 
@@ -57,7 +57,6 @@ public class QCFace extends android.hardware.Camera.Face {
 
     private static final String STR_TRUE = "true";
     private static final String STR_FALSE = "false";
-    private static final String STR_FACIAL_PROCESSING = "ro.qc.sdk.camera.facialproc";
 
     /**
      * The smilie degree for the detection of the face.
@@ -179,7 +178,7 @@ public class QCFace extends android.hardware.Camera.Face {
     private static final String BUNDLE_KEY_GAZE_LEFT_RIGHT_DEGREE = "gazeLeftRightDegree";
     private static final String BUNDLE_KEY_FACE_RECOGNIZED = "faceRecognized";
 
-    public Bundle getQCFaceInfo() {
+    public Bundle getExtendedFaceInfo() {
         Bundle faceInfo = new Bundle();
         faceInfo.putInt(BUNDLE_KEY_SMILE_VALUE, this.smileDegree);
 
