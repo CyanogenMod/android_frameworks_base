@@ -18,6 +18,7 @@ package com.android.internal.view;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.SystemProperties;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -130,7 +131,8 @@ public final class RotationPolicy {
                 try {
                     IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
                     if (enabled) {
-                        wm.freezeRotation(Surface.ROTATION_0);
+                        wm.freezeRotation(SystemProperties.getInt(
+                                          "persist.panel.orientation", 0) / 90);
                     } else {
                         wm.thawRotation();
                     }
