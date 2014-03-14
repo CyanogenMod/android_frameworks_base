@@ -21,13 +21,17 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.view.TextureView;
@@ -52,9 +56,12 @@ public class OnTheGoService extends Service {
     private static final int CAMERA_BACK  = 0;
     private static final int CAMERA_FRONT = 1;
 
+    private final Handler mHandler = new Handler();
+
     private FrameLayout         mOverlay;
     private Camera              mCamera;
     private NotificationManager mNotificationManager;
+    private SettingsObserver    mObserver;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -89,6 +96,26 @@ public class OnTheGoService extends Service {
         }
     };
 
+    private class SettingsObserver extends ContentObserver {
+
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            final ContentResolver resolver = getContentResolver();
+            resolver.registerContentObserver(Settings.Nameless.getUriFor(
+                    Settings.Nameless.ON_THE_GO_CAMERA), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+            // Reset views once changed
+            restartOnTheGo();
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         final String action = intent.getAction();
@@ -117,6 +144,8 @@ public class OnTheGoService extends Service {
         resetViews();
         registerAlphaReceiver();
         setupViews();
+        mObserver = new SettingsObserver(mHandler);
+        mObserver.observe();
 
         // Display a notification
         final Resources r = getResources();
@@ -157,6 +186,11 @@ public class OnTheGoService extends Service {
         mNotificationManager.cancel(ONTHEGO_NOTIFICATION_ID);
         mNotificationManager = null;
         stopSelf();
+    }
+
+    private void restartOnTheGo() {
+        resetViews();
+        setupViews();
     }
 
     private void toggleOnTheGoAlpha() {
