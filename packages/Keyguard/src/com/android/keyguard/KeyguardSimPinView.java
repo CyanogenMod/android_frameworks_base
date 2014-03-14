@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -50,6 +51,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     private ProgressDialog mSimUnlockProgressDialog = null;
     private CheckSimPin mCheckSimPinThread;
+    private final Handler mHandler = new Handler();
 
     private AlertDialog mRemainingAttemptsDialog;
 
@@ -174,14 +176,14 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                 final int[] result = ITelephony.Stub.asInterface(ServiceManager
                         .checkService("phone")).supplyPinReportResult(mPin);
                 Log.v(TAG, "supplyPinReportResult returned: " + result[0] + " " + result[1]);
-                post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
                         onSimCheckResponse(result[0], result[1]);
                     }
                 });
             } catch (RemoteException e) {
                 Log.e(TAG, "RemoteException for supplyPinReportResult:", e);
-                post(new Runnable() {
+                mHandler.post(new Runnable() {
                     public void run() {
                         onSimCheckResponse(PhoneConstants.PIN_GENERAL_FAILURE, -1);
                     }
@@ -236,7 +238,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
         if (mCheckSimPinThread == null) {
             mCheckSimPinThread = new CheckSimPin(mPasswordEntry.getText().toString()) {
                 void onSimCheckResponse(final int result, final int attemptsRemaining) {
-                    post(new Runnable() {
+                    mHandler.post(new Runnable() {
                         public void run() {
                             if (mSimUnlockProgressDialog != null) {
                                 mSimUnlockProgressDialog.hide();
