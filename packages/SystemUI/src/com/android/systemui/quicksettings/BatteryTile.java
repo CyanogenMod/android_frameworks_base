@@ -59,7 +59,10 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
         mOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startSettingsActivity(Intent.ACTION_POWER_USAGE_SUMMARY);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setClassName("com.android.settings", "com.android.settings.BatteryInfo");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startSettingsActivity(intent);
             }
         };
 
