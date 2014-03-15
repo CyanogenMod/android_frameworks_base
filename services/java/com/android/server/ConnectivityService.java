@@ -4218,7 +4218,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             String server = Settings.Global.getString(mContext.getContentResolver(),
                     Settings.Global.CAPTIVE_PORTAL_SERVER);
             if (server == null) {
-                server = CaptivePortalTracker.DEFAULT_SERVER;
+                server = "clients3.google.com";
             }
             return "http://" + server + "/generate_204";
         }
