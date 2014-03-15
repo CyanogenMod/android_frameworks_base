@@ -5976,6 +5976,8 @@
         <attr name="pointerIconSpotTouch" format="reference" />
         <!-- Reference to a pointer icon drawable with STYLE_SPOT_ANCHOR -->
         <attr name="pointerIconSpotAnchor" format="reference" />
+        <!-- Reference to a pointer icon drawable with STYLE_STYLUS_HOVER -->
+        <attr name="pointerIconStylusHover" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="PointerIcon">

@@ -1329,6 +1329,11 @@ protected:
 
     Vector<VirtualKey> mVirtualKeys;
 
+    // true if we support external hovering cursor control
+    bool mHasExternalHoveringCursorControl;
+    // visibility state of hovering cursor (true=visible)
+    bool mExternalHoveringCursorVisible;
+
     virtual void configureParameters();
     virtual void dumpParameters(String8& dump);
     virtual void configureRawPointerAxes();

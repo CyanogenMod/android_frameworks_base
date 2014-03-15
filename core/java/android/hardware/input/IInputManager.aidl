@@ -16,6 +16,7 @@
 
 package android.hardware.input;
 
+import android.graphics.Bitmap;
 import android.hardware.input.KeyboardLayout;
 import android.hardware.input.IInputDevicesChangedListener;
 import android.os.IBinder;
@@ -56,4 +57,7 @@ interface IInputManager {
     // Input device vibrator control.
     void vibrate(int deviceId, in long[] pattern, int repeat, IBinder token);
     void cancelVibrate(int deviceId, IBinder token);
+
+    // Custom hover icon support.
+    void setCustomHoverIcon(in Bitmap icon, int hotSpotX, int hotSpotY);
 }
