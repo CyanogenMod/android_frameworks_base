@@ -4289,6 +4289,11 @@ public final class Settings {
         public static final String NON_INTRUSIVE_INCALL = "non_intrusive_incall";
 
         /**
+         * @hide
+         */
+        public static final String SMART_PHONE_CALLER = "smart_phone_caller";
+
+        /**
          * Should Flip to Silence be used
          *
          * @hide
