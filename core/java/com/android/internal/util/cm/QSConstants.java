@@ -33,6 +33,7 @@ public class QSConstants {
         public static final String TILE_CAMERA = "toggleCamera";
         public static final String TILE_NETWORKADB = "toggleNetworkAdb";
         public static final String TILE_THEME = "toggleTheme";
+        public static final String TILE_ONTHEGO = "toggleOnTheGo";
 
         public static final String TILE_DELIMITER = "|";
         public static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
