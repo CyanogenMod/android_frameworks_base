@@ -42,6 +42,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.android.internal.util.nameless.NamelessUtils;
 import com.android.systemui.R;
 
 import java.io.IOException;
@@ -131,7 +132,7 @@ public class OnTheGoService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         logDebug("onStartCommand called");
 
-        if (intent == null) {
+        if (intent == null || !NamelessUtils.hasCamera(this)) {
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -220,6 +221,11 @@ public class OnTheGoService extends Service {
 
     private void getCameraInstance(int type) throws RuntimeException, IOException {
         releaseCamera();
+
+        if (!NamelessUtils.hasFrontCamera(this)) {
+            mCamera = Camera.open();
+            return;
+        }
 
         switch (type) {
             // Get hold of the back facing camera
