@@ -228,6 +228,15 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 com.android.internal.R.string.lockscreen_carrier_default);
         mNetworkName = mNetworkNameDefault;
 
+       // wifi
+        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        Handler handler = new WifiHandler();
+        mWifiChannel = new AsyncChannel();
+        Messenger wifiMessenger = mWifiManager.getWifiServiceMessenger();
+        if (wifiMessenger != null) {
+            mWifiChannel.connect(mContext, handler, wifiMessenger);
+        }
+
         // broadcasts
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
