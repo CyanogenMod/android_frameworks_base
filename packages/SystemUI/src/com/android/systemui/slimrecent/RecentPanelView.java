@@ -23,6 +23,7 @@ import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -69,6 +70,8 @@ public class RecentPanelView {
 
     private static final int DISPLAY_TASKS = 20;
     public static final int MAX_TASKS = DISPLAY_TASKS + 1; // allow extra for non-apps
+
+    public static final String TASK_PACKAGE_IDENTIFIER = "#ident:";
 
     private static final int EXPANDED_STATE_UNKNOWN  = 0;
     public static final int EXPANDED_STATE_EXPANDED  = 1;
@@ -173,6 +176,7 @@ public class RecentPanelView {
                 startApplication(td);
             }
         });
+
         // Listen for onLongClick to open popup menu
         card.setOnLongClickListener(new Card.OnLongCardClickListener() {
             @Override
@@ -183,6 +187,21 @@ public class RecentPanelView {
                 return true;
             }
         });
+
+        // App icon has own onLongClick action. Listen for it and
+        // process the favorite action for it.
+        card.addPartialOnLongClickListener(Card.CLICK_LISTENER_THUMBNAIL_VIEW,
+                new Card.OnLongCardClickListener() {
+            @Override
+            public boolean onLongClick(Card card, View view) {
+                RecentImageView favoriteIcon =
+                        (RecentImageView) view.findViewById(R.id.card_thumbnail_favorite);
+                favoriteIcon.setVisibility(td.getIsFavorite() ? View.INVISIBLE : View.VISIBLE);
+                handleFavoriteEntry(td);
+                return true;
+            }
+        });
+
         // Listen for card is expanded to save current value for next recent call
         card.setOnExpandAnimatorEndListener(new Card.OnExpandAnimatorEndListener() {
             @Override
@@ -210,6 +229,44 @@ public class RecentPanelView {
             }
         });
         return card;
+    }
+
+    /**
+     * Handle favorite task entry (add or remove) if user longpressed on app icon.
+     */
+    private void handleFavoriteEntry(TaskDescription td) {
+        ContentResolver resolver = mContext.getContentResolver();
+        final String favorites = Settings.System.getStringForUser(
+                    resolver, Settings.System.RECENT_PANEL_FAVORITES,
+                    UserHandle.USER_CURRENT);
+        String entryToSave = "";
+
+        if (!td.getIsFavorite()) {
+            if (favorites != null && !favorites.isEmpty()) {
+                entryToSave += favorites + "|";
+            }
+            entryToSave += td.identifier;
+        } else {
+            if (favorites == null) {
+                return;
+            }
+            for (String favorite : favorites.split("\\|")) {
+                if (favorite.equals(td.identifier)) {
+                    continue;
+                }
+                entryToSave += favorite + "|";
+            }
+            if (!entryToSave.isEmpty()) {
+                entryToSave = entryToSave.substring(0, entryToSave.length() - 1);
+            }
+        }
+
+        td.setIsFavorite(!td.getIsFavorite());
+
+        Settings.System.putStringForUser(
+                resolver, Settings.System.RECENT_PANEL_FAVORITES,
+                entryToSave,
+                UserHandle.USER_CURRENT);
     }
 
     /**
@@ -372,9 +429,9 @@ public class RecentPanelView {
                 .removeBitmapFromMemCache(String.valueOf(td.persistentTaskId));
         // Remove application icon.
         CacheController.getInstance(mContext)
-                .removeBitmapFromMemCache(td.packageName);
+                .removeBitmapFromMemCache(td.identifier);
         // Remove from expanded state list.
-        removeExpandedTaskState(td.getLabel());
+        removeExpandedTaskState(td.identifier);
     }
 
     /**
@@ -467,7 +524,7 @@ public class RecentPanelView {
      */
     private TaskDescription createTaskDescription(int taskId, int persistentTaskId,
             Intent baseIntent, ComponentName origActivity,
-            CharSequence description, int expandedState) {
+            CharSequence description, boolean isFavorite, int expandedState) {
 
         final Intent intent = new Intent(baseIntent);
         if (origActivity != null) {
@@ -481,13 +538,21 @@ public class RecentPanelView {
             final ActivityInfo info = resolveInfo.activityInfo;
             final String title = info.loadLabel(pm).toString();
 
+            String identifier = TASK_PACKAGE_IDENTIFIER;
+            final ComponentName component = intent.getComponent();
+            if (component != null) {
+                identifier += component.flattenToString();
+            } else {
+                identifier += info.packageName;
+            }
+
             if (title != null && title.length() > 0) {
                 if (DEBUG) Log.v(TAG, "creating activity desc for id="
                         + persistentTaskId + ", label=" + title);
 
                 final TaskDescription item = new TaskDescription(taskId,
                         persistentTaskId, resolveInfo, baseIntent, info.packageName,
-                        description, expandedState);
+                        identifier, description, isFavorite, expandedState);
                 item.setLabel(title);
                 return item;
             } else {
@@ -508,6 +573,18 @@ public class RecentPanelView {
         mIsLoading = true;
         updateExpandedTaskStates();
         mTasks.clear();
+
+        // Check and get user favorites.
+        final String favorites = Settings.System.getStringForUser(
+                mContext.getContentResolver(), Settings.System.RECENT_PANEL_FAVORITES,
+                UserHandle.USER_CURRENT);
+        final ArrayList<String> favList = new ArrayList<String>();
+        final ArrayList<TaskDescription> nonFavoriteTasks = new ArrayList<TaskDescription>();
+        if (favorites != null && !favorites.isEmpty()) {
+            for (String favorite : favorites.split("\\|")) {
+                favList.add(favorite);
+            }
+        }
 
         final PackageManager pm = mContext.getPackageManager();
         final ActivityManager am = (ActivityManager)
@@ -552,9 +629,17 @@ public class RecentPanelView {
 
             TaskDescription item = createTaskDescription(recentInfo.id,
                     recentInfo.persistentId, recentInfo.baseIntent,
-                    recentInfo.origActivity, recentInfo.description, EXPANDED_STATE_UNKNOWN);
+                    recentInfo.origActivity, recentInfo.description,
+                    false, EXPANDED_STATE_UNKNOWN);
 
             if (item != null) {
+                for (String fav : favList) {
+                    if (fav.equals(item.identifier)) {
+                        item.setIsFavorite(true);
+                        break;
+                    }
+                }
+
                 if (i == 0) {
                     // Skip the first task for our list but save it for later use.
                     mFirstTask = item;
@@ -567,16 +652,29 @@ public class RecentPanelView {
                     if (DEBUG) Log.v(TAG, "old expanded state = " + oldState);
                     if (firstItems < firstExpandedItems) {
                         item.setExpandedState(oldState | EXPANDED_STATE_BY_SYSTEM);
+                        // The first tasks are always added to the task list.
+                        mTasks.add(item);
                     } else {
                         if ((oldState & EXPANDED_STATE_BY_SYSTEM) != 0) {
                             oldState &= ~EXPANDED_STATE_BY_SYSTEM;
                         }
                         item.setExpandedState(oldState);
+                        // Favorite tasks are added next. Non favorite
+                        // we hold for a short time in an extra list.
+                        if (item.getIsFavorite()) {
+                            mTasks.add(item);
+                        } else {
+                            nonFavoriteTasks.add(item);
+                        }
                     }
                     firstItems++;
-                    mTasks.add(item);
                 }
             }
+        }
+
+        // Add now the non favorite tasks to the final task list.
+        for (TaskDescription item : nonFavoriteTasks) {
+            mTasks.add(item);
         }
 
         mTasksSize = mTasks.size();
@@ -603,14 +701,15 @@ public class RecentPanelView {
         for (TaskDescription item : mTasks) {
             boolean updated = false;
             for (TaskExpandedStates expandedState : mExpandedTaskStates) {
-                if (item.getLabel().equals(expandedState.getLabel())) {
+                if (item.identifier.equals(expandedState.getIdentifier())) {
                     updated = true;
                     expandedState.setExpandedState(item.getExpandedState());
                 }
             }
             if (!updated) {
                 mExpandedTaskStates.add(
-                        new TaskExpandedStates(item.getLabel(), item.getExpandedState()));
+                        new TaskExpandedStates(
+                                item.identifier, item.getExpandedState()));
             }
         }
     }
@@ -621,9 +720,9 @@ public class RecentPanelView {
      */
     private int getExpandedState(TaskDescription item) {
         for (TaskExpandedStates oldTask : mExpandedTaskStates) {
-            if (DEBUG) Log.v(TAG, "old task label = "+ oldTask.getLabel()
-                    + " new task label = " + item.getLabel());
-            if (item.getLabel().equals(oldTask.getLabel())) {
+            if (DEBUG) Log.v(TAG, "old task launch uri = "+ oldTask.getIdentifier()
+                    + " new task launch uri = " + item.identifier);
+            if (item.identifier.equals(oldTask.getIdentifier())) {
                     return oldTask.getExpandedState();
             }
         }
@@ -634,10 +733,10 @@ public class RecentPanelView {
      * We are holding a list of user expanded state of apps.
      * Remove expanded state entry due that app was removed by the user.
      */
-    private void removeExpandedTaskState(String label) {
+    private void removeExpandedTaskState(String identifier) {
         TaskExpandedStates expandedStateToDelete = null;
         for (TaskExpandedStates expandedState : mExpandedTaskStates) {
-            if (expandedState.getLabel().equals(label)) {
+            if (expandedState.getIdentifier().equals(identifier)) {
                 expandedStateToDelete = expandedState;
             }
         }
@@ -783,6 +882,7 @@ public class RecentPanelView {
             final int oldSize = mCards.size();
             final int newSize = mTasks.size();
             mCounter = 0;
+
             // Construct or update cards and publish cards recursive with current tasks.
             for (int i = newSize - 1; i >= 0; i--) {
                 if (isCancelled() || mCancelledByUser) {
@@ -857,16 +957,16 @@ public class RecentPanelView {
      * This class describes one expanded state object.
      */
     private static final class TaskExpandedStates {
-        private String mLabel;
+        private String mIdentifier;
         private int mExpandedState;
 
-        public TaskExpandedStates(String label, int expandedState) {
-            mLabel = label;
+        public TaskExpandedStates(String identifier, int expandedState) {
+            mIdentifier = identifier;
             mExpandedState = expandedState;
         }
 
-        public String getLabel() {
-            return mLabel;
+        public String getIdentifier() {
+            return mIdentifier;
         }
 
         public int getExpandedState() {

@@ -19,6 +19,8 @@ package com.android.systemui.slimrecent;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -74,25 +76,55 @@ public class AppIconLoader {
      * @params packageName
      * @params imageView
      */
-    protected void loadAppIcon(String packageName, RecentImageView imageView, float scaleFactor) {
+    protected void loadAppIcon(ResolveInfo info, String identifier,
+            RecentImageView imageView, float scaleFactor) {
         final BitmapDownloaderTask task =
-                new BitmapDownloaderTask(imageView, mContext, scaleFactor);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, packageName);
+                new BitmapDownloaderTask(imageView, mContext, scaleFactor, identifier);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, info);
     }
 
     /**
      * Loads the actual app icon.
      */
-    private static Bitmap getAppIcon(String packageName, Context context, float scaleFactor) {
+    private static Bitmap getAppIcon(ResolveInfo info, Context context, float scaleFactor) {
         if (context == null) {
             return null;
         }
         PackageManager pm = context.getPackageManager();
+        return getResizedBitmap(getFullResIcon(context, info, pm), context, scaleFactor);
+
+    }
+
+    private static Drawable getFullResDefaultActivityIcon(Context context) {
+        return getFullResIcon(context, Resources.getSystem(),
+                com.android.internal.R.mipmap.sym_def_app_icon);
+    }
+
+    private static Drawable getFullResIcon(Context context, Resources resources, int iconId) {
         try {
-            return getResizedBitmap(pm.getApplicationIcon(packageName), context, scaleFactor);
-        } catch (PackageManager.NameNotFoundException e) {
+            return resources.getDrawableForDensity(iconId,
+                    context.getResources().getDisplayMetrics().densityDpi);
+        } catch (Resources.NotFoundException e) {
+            return getFullResDefaultActivityIcon(context);
         }
-        return null;
+    }
+
+    private static Drawable getFullResIcon(Context context,
+            ResolveInfo info, PackageManager packageManager) {
+        Resources resources;
+        try {
+            resources = packageManager.getResourcesForApplication(
+                    info.activityInfo.applicationInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            resources = null;
+        }
+        if (resources != null) {
+            int iconId = info.activityInfo.getIconResource();
+            if (iconId != 0) {
+                return getFullResIcon(context, resources, iconId);
+            }
+        }
+        return getFullResDefaultActivityIcon(context);
     }
 
     /**
@@ -134,7 +166,7 @@ public class AppIconLoader {
     /**
      * AsyncTask loader for the app icon.
      */
-    private static class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+    private static class BitmapDownloaderTask extends AsyncTask<ResolveInfo, Void, Bitmap> {
 
         private Bitmap mAppIcon;
 
@@ -147,15 +179,15 @@ public class AppIconLoader {
         private String mLRUCacheKey;
 
         public BitmapDownloaderTask(RecentImageView imageView,
-                Context context, float scaleFactor) {
+                Context context, float scaleFactor, String identifier) {
             rImageViewReference = new WeakReference<RecentImageView>(imageView);
             rContext = new WeakReference<Context>(context);
             mScaleFactor = scaleFactor;
+            mLRUCacheKey = identifier;
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
-            mLRUCacheKey = null;
+        protected Bitmap doInBackground(ResolveInfo... params) {
             // Save current thread priority and set it during the loading
             // to background priority.
             mOrigPri = Process.getThreadPriority(Process.myTid());
@@ -163,7 +195,6 @@ public class AppIconLoader {
             if (isCancelled() || rContext == null) {
                 return null;
             }
-            mLRUCacheKey = params[0];
             // Load and return bitmap
             return getAppIcon(params[0], rContext.get(), mScaleFactor);
         }
@@ -189,12 +220,11 @@ public class AppIconLoader {
                 if (imageView != null) {
                     imageView.setImageBitmap(bitmap);
                 }
-            } else if (bitmap != null && context != null) {
-                CacheController.getInstance(context).setKeyExcludeRecycle(mLRUCacheKey);
-            }
-            if (bitmap != null && context != null) {
-                // Put our bitmap intu LRU cache for later use.
-                CacheController.getInstance(context).addBitmapToMemoryCache(mLRUCacheKey, bitmap);
+                if (bitmap != null && context != null) {
+                    // Put our bitmap intu LRU cache for later use.
+                    CacheController.getInstance(context)
+                            .addBitmapToMemoryCache(mLRUCacheKey, bitmap);
+                }
             }
         }
     }

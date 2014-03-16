@@ -17,7 +17,21 @@
 */
 -->
 
-<com.android.systemui.slimrecent.RecentImageView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_thumbnail_image"
-    style="@style/card.card_header_app_icon"/>
+    android:id="@+id/card_thumbnail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.android.systemui.slimrecent.RecentImageView
+        android:id="@+id/card_thumbnail_image"
+        style="@style/card.card_header_app_icon"/>
+
+    <com.android.systemui.slimrecent.RecentImageView
+        android:id="@+id/card_thumbnail_favorite"
+        android:src="@drawable/ic_recent_favorite"
+        android:layout_toEndOf="@id/card_thumbnail_image"
+        android:visibility="invisible"
+        style="@style/card.card_header_favorite_icon"/>
+
+</RelativeLayout>

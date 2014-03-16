@@ -18,6 +18,7 @@
 package com.android.systemui.slimrecent;
 
 import android.content.Context;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,21 +36,29 @@ public class RecentAppIcon extends CardThumbnail {
     private int mIconSize;
     private float mScaleFactor;
     private boolean mScaleFactorChanged;
-    private String mPackageName;
+    private boolean mIsFavorite;
+    private String mIdentifier;
+    private ResolveInfo mInfo;
 
-    public RecentAppIcon(Context context, String packageName, float scaleFactor) {
+    public RecentAppIcon(Context context, ResolveInfo info, String identifier,
+            float scaleFactor, boolean isFavorite) {
         super(context);
         mContext = context;
-        mPackageName = packageName;
+        mInfo = info;
+        mIdentifier = identifier;
         mScaleFactor = scaleFactor;
+        mIsFavorite = isFavorite;
 
         mIconSize = (int) context.getResources()
                 .getDimensionPixelSize(R.dimen.recent_app_icon_size);
     }
 
     // Update icon.
-    public void updateIcon(String packageName, float scaleFactor) {
-        mPackageName = packageName;
+    public void updateIcon(ResolveInfo info, String identifier,
+            float scaleFactor, boolean isFavorite) {
+        mInfo = info;
+        mIdentifier = identifier;
+        mIsFavorite = isFavorite;
         if (scaleFactor != mScaleFactor) {
             mScaleFactorChanged = true;
             mScaleFactor = scaleFactor;
@@ -62,7 +71,7 @@ public class RecentAppIcon extends CardThumbnail {
      */
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
-        if (view == null || mPackageName == null) {
+        if (view == null || mIdentifier == null || mInfo == null) {
             return;
         }
 
@@ -77,6 +86,7 @@ public class RecentAppIcon extends CardThumbnail {
         if (holder == null) {
             holder = new ViewHolder();
             holder.appIconView = (RecentImageView) view.findViewById(R.id.card_thumbnail_image);
+            holder.favIconView = (RecentImageView) parent.findViewById(R.id.card_thumbnail_favorite);
             // Take scale factor into account if it is different then default or it has changed.
             if (mScaleFactor != RecentController.DEFAULT_SCALE_FACTOR || mScaleFactorChanged) {
                 mScaleFactorChanged = false;
@@ -88,19 +98,22 @@ public class RecentAppIcon extends CardThumbnail {
         }
 
         final Bitmap appIcon =
-                CacheController.getInstance(mContext).getBitmapFromMemCache(mPackageName);
+                CacheController.getInstance(mContext).getBitmapFromMemCache(mIdentifier);
         if (appIcon == null || mScaleFactorChanged) {
             mScaleFactorChanged = false;
             AppIconLoader.getInstance(mContext).loadAppIcon(
-                    mPackageName, holder.appIconView, mScaleFactor);
+                    mInfo, mIdentifier, holder.appIconView, mScaleFactor);
         } else {
             holder.appIconView.setImageBitmap(appIcon);
         }
+
+        holder.favIconView.setVisibility(mIsFavorite ? View.VISIBLE : View.INVISIBLE);
 
     }
 
     static class ViewHolder {
         RecentImageView appIconView;
+        RecentImageView favIconView;
     }
 
 }

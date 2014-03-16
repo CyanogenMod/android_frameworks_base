@@ -17,6 +17,7 @@
 
 package com.android.systemui.slimrecent;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -24,10 +25,15 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.Settings;
+import android.os.UserHandle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.LruCache;
 
 import com.android.systemui.R;
+
+import java.util.ArrayList;
 
 /**
  * This class is our LRU cache controller. It holds
@@ -37,6 +43,8 @@ import com.android.systemui.R;
  * or removed and installed again the app and the icon may have changed.
  */
 public class CacheController {
+
+    private final static String TAG = "RecentCacheController";
 
     /**
      * Singleton.
@@ -53,7 +61,8 @@ public class CacheController {
     private static String sKeyExcludeRecycle;
     private static boolean sRecentScreenShowing;
 
-    private float mScaleFactor = 0.0f;
+    // Array list of all current keys.
+    private final ArrayList<String> mKeys = new ArrayList<String>();
 
     /**
      * Get the instance.
@@ -67,26 +76,69 @@ public class CacheController {
     }
 
     /**
-     * Listen for package change or added braodcast.
+     * Listen for package change or added broadcast.
      */
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Intent.ACTION_PACKAGE_CHANGED.equals(action)
-                    || Intent.ACTION_PACKAGE_ADDED.equals(action)) {
+                    || Intent.ACTION_PACKAGE_ADDED.equals(action)
+                    || Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
                 // Get the package name from the intent.
-                final Uri uri = intent.getData();
+                Uri uri = intent.getData();
                 final String packageName = uri != null ? uri.getSchemeSpecificPart() : null;
+                if (packageName == null) {
+                    return;
+                }
 
-                // If we hold the app icon allready, update it with the new one.
-                if (packageName != null && getBitmapFromMemCache(packageName) != null
-                        && mScaleFactor > 0.0f) {
-                    AppIconLoader.getInstance(mContext).loadAppIcon(
-                            packageName, null, mScaleFactor);
+                // Check if icons from the searched package are present.
+                // If yes remove them.
+                final ArrayList<String> keysToRemove = new ArrayList<String>();
+                for (String key : mKeys) {
+                    if (key.toLowerCase().contains(packageName.toLowerCase())) {
+                        keysToRemove.add(key);
+                    }
+                }
+                for (String key : keysToRemove) {
+                    Log.d(TAG, "application icon removed for uri= " + key);
+                    setKeyExcludeRecycle(key);
+                    removeBitmapFromMemCache(key);
+                }
+                if (Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
+                    mayBeRemoveFavoriteEntry(packageName);
                 }
             }
         }
     };
+
+    /**
+     * Remove favorite if current app was uninstalled.
+     */
+    private void mayBeRemoveFavoriteEntry(String packageName) {
+        ContentResolver resolver = mContext.getContentResolver();
+        final String favorites = Settings.System.getStringForUser(
+                    resolver, Settings.System.RECENT_PANEL_FAVORITES,
+                    UserHandle.USER_CURRENT);
+        String entryToSave = "";
+
+        if (favorites == null || favorites != null && favorites.isEmpty()) {
+            return;
+        }
+        for (String favorite : favorites.split("\\|")) {
+            if (favorite.toLowerCase().contains(packageName.toLowerCase())) {
+                continue;
+            }
+            entryToSave += favorite + "|";
+        }
+        if (!entryToSave.isEmpty()) {
+            entryToSave = entryToSave.substring(0, entryToSave.length() - 1);
+        }
+
+        Settings.System.putStringForUser(
+                resolver, Settings.System.RECENT_PANEL_FAVORITES,
+                entryToSave,
+                UserHandle.USER_CURRENT);
+    }
 
     /**
      * Constructor.
@@ -155,7 +207,7 @@ public class CacheController {
                      *    assign the new bitmap to the imageview. So old one has no reference.
                      * 2. Task entry was removed which removes as well any reference to the bitmap.
                      *    So we are save here as well.
-                     * 3. The CacheController broadcastreceiver put a new bitmap into
+                     * 3. The CacheController broadcastreceiver removes the bitmap from
                      *    the LRU cache. When this happens we recycle only if the recent screen
                      *    is not shown due that we may have a valid reference. This scenario
                      *    is realy realy rare. So we are save and can recycle in most of the cases
@@ -184,6 +236,7 @@ public class CacheController {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         filter.addDataScheme("package");
         mContext.registerReceiver(mBroadcastReceiver, filter);
     }
@@ -193,6 +246,9 @@ public class CacheController {
      */
     protected void addBitmapToMemoryCache(String key, Bitmap bitmap) {
         if (key != null && bitmap != null) {
+            if (key.startsWith(RecentPanelView.TASK_PACKAGE_IDENTIFIER)) {
+                mKeys.add(key);
+            }
             mMemoryCache.put(key, bitmap);
         }
     }
@@ -214,12 +270,15 @@ public class CacheController {
         if (key == null) {
             return null;
         }
+        if (key.startsWith(RecentPanelView.TASK_PACKAGE_IDENTIFIER)) {
+            mKeys.remove(key);
+        }
         return mMemoryCache.remove(key);
     }
 
     /**
-     * Set key which should be excluded from recycle.
-     * Call by AppIconLoader if no image reference is known.
+     * Set key which should be excluded from recycle if recent panel is showing.
+     * Call by BroadCastReceiver.
      */
     protected void setKeyExcludeRecycle(String key) {
         sKeyExcludeRecycle = key;
@@ -246,10 +305,4 @@ public class CacheController {
         return sRecentScreenShowing;
     }
 
-    /**
-     * Set scale factor.
-     */
-    protected void setScaleFactor(float scaleFactor) {
-        mScaleFactor = scaleFactor;
-    }
 }
