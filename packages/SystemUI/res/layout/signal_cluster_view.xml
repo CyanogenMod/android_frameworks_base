@@ -118,4 +118,9 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         />
+    <ImageView
+        android:id="@+id/ethernet"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
 </com.android.systemui.statusbar.SignalClusterView>
