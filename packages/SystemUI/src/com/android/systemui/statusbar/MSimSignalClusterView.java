@@ -220,7 +220,6 @@ public class MSimSignalClusterView
         mNoSimIconId[subscription] = noSimIcon;
 
         if (showMobileActivity()) {
-            mMobileActivityId[subscription] = 0;
             mDataActivityId[subscription] = 0;
             mDataVisible[subscription] = false;
         } else {
@@ -230,7 +229,7 @@ public class MSimSignalClusterView
         }
 
         if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
-            if (showBoth3gAnd1x()) {
+            if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
                 mMobileCdmaVisible = true;
                 mMobileCdma1xOnlyVisible = false;
 
@@ -279,9 +278,7 @@ public class MSimSignalClusterView
         if (mWifiVisible) {
             mWifiGroup.setVisibility(View.VISIBLE);
             mWifi.setImageResource(mWifiStrengthId);
-            if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT) {
-                mWifiActivity.setImageResource(mWifiActivityId);
-            }
+            mWifiActivity.setImageResource(mWifiActivityId);
             mWifiGroup.setContentDescription(mWifiDescription);
         } else {
             mWifiGroup.setVisibility(View.GONE);
@@ -333,7 +330,6 @@ public class MSimSignalClusterView
                 mSpacer.setVisibility(View.GONE);
             }
         }
-
     }
 
     private void updateMobile(int sub) {
