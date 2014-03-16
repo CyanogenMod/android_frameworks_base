@@ -1214,7 +1214,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
         }
 
-        if (!TextUtils.isEmpty(customCarrierLabel)) {
+        if (customCarrierLabel !=null && !TextUtils.isEmpty(customCarrierLabel)) {
             combinedLabel = customCarrierLabel;
             mobileLabel = customCarrierLabel;
         }
