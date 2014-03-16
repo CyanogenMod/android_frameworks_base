@@ -26,14 +26,17 @@ public final class TaskDescription {
     final int persistentTaskId; // persistent id
     final Intent intent; // launch intent for application
     final String packageName; // used to override animations (see onClick())
+    final String identifier;
     final CharSequence description;
 
     private String mLabel; // application package label
     private int mExpandedState;
+    private boolean mIsFavorite;
 
     public TaskDescription(int _taskId, int _persistentTaskId,
             ResolveInfo _resolveInfo, Intent _intent,
-            String _packageName, CharSequence _description, int expandedState) {
+            String _packageName, String _identifier, CharSequence _description,
+            boolean isFavorite, int expandedState) {
         resolveInfo = _resolveInfo;
         intent = _intent;
         taskId = _taskId;
@@ -41,8 +44,10 @@ public final class TaskDescription {
 
         description = _description;
         packageName = _packageName;
+        identifier = _identifier;
 
         mExpandedState = expandedState;
+        mIsFavorite = isFavorite;
     }
 
     public TaskDescription() {
@@ -53,6 +58,7 @@ public final class TaskDescription {
 
         description = null;
         packageName = null;
+        identifier = null;
     }
 
     public boolean isNull() {
@@ -74,4 +80,13 @@ public final class TaskDescription {
     public void setExpandedState(int expandedState) {
         mExpandedState = expandedState;
     }
+
+    public boolean getIsFavorite() {
+        return mIsFavorite;
+    }
+
+    public void setIsFavorite(boolean isFavorite) {
+        mIsFavorite = isFavorite;
+    }
+
 }

@@ -44,6 +44,13 @@
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
+    <style name="card.card_header_favorite_icon">
+        <item name="android:layout_width">@dimen/recent_favorite_icon_size</item>
+        <item name="android:layout_height">@dimen/recent_favorite_icon_size</item>
+        <item name="android:layout_marginStart">-18dp</item>
+        <item name="android:layout_marginTop">1dp</item>
+    </style>
+
     <style name="card.header_button_base">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
