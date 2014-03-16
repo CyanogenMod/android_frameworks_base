@@ -94,6 +94,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
     private final ConnectivityManager mConnectivityManager;
     private final SubscriptionManager mSubscriptionManager;
     private final boolean mHasMobileDataFeature;
+    private final boolean mHasEthernetFeature;
     private Config mConfig;
 
     // Subcontrollers.
@@ -173,6 +174,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
         // wifi
         mWifiManager = wifiManager;
+
+        // ethernet
+        mHasEthernetFeature =
+                mConnectivityManager.isNetworkSupported(ConnectivityManager.TYPE_ETHERNET);
 
         mLocale = mContext.getResources().getConfiguration().locale;
         mAccessPoints = accessPointController;
@@ -321,6 +326,12 @@ public class NetworkControllerImpl extends BroadcastReceiver
         cluster.setSubs(mCurrentSubscriptions);
         cluster.setIsAirplaneMode(mAirplaneMode, TelephonyIcons.FLIGHT_MODE_ICON,
                 R.string.accessibility_airplane_mode);
+        if (mHasEthernetFeature) {
+            int mEthernetIconId = (mInetCondition ? EthernetIcons.ETHERNET
+                    : EthernetIcons.ETHERNET_NO_NETWORK);
+            cluster.setEthernetIndicators(mEthernetConnected, mEthernetIconId,
+                    R.string.accessibility_ethernet);
+        }
         cluster.setNoSims(mHasNoSims);
         mWifiSignalController.notifyListeners();
         for (MobileSignalController mobileSignalController : mMobileSignalControllers.values()) {
@@ -575,6 +586,14 @@ public class NetworkControllerImpl extends BroadcastReceiver
             mSignalsChangedCallbacks.get(i).onAirplaneModeChanged(mAirplaneMode);
             mSignalsChangedCallbacks.get(i).onNoSimVisibleChanged(mHasNoSims);
         }
+        if (mHasEthernetFeature) {
+            int mEthernetIconId = (mInetCondition ? EthernetIcons.ETHERNET
+                    : EthernetIcons.ETHERNET_NO_NETWORK);
+            for (int i = 0; i < length; i++) {
+                mSignalClusters.get(i).setEthernetIndicators(mEthernetConnected, mEthernetIconId,
+                        R.string.accessibility_ethernet);
+            }
+        }
     }
 
     /**
@@ -683,6 +702,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
         pw.println("  - Bluetooth ----");
         pw.print("  mBtReverseTethered=");
         pw.println(mBluetoothTethered);
+
+        pw.println("  - Ethernet -----");
+        pw.print("  mEthernetConnected=");
+        pw.println(mEthernetConnected);
 
         pw.println("  - connectivity ------");
         pw.print("  mConnectedTransports=");
@@ -818,6 +841,18 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 controller.getState().enabled = show;
                 controller.notifyListeners();
+            }
+            String ethernet = args.getString("ethernet");
+            if (ethernet != null) {
+                boolean show = ethernet.equals("show");
+                int mDemoEthernetIconId = (mDemoInetCondition == 1
+                        ? EthernetIcons.ETHERNET
+                        : EthernetIcons.ETHERNET_NO_NETWORK);
+                int length = mSignalClusters.size();
+                for (int i = 0; i < length; i++) {
+                    mSignalClusters.get(i).setEthernetIndicators(show, mDemoEthernetIconId,
+                            R.string.accessibility_ethernet);
+                }
             }
             refreshCarrierLabel();
         }
@@ -1799,6 +1834,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         void setNoSims(boolean show);
 
         void setIsAirplaneMode(boolean is, int airplaneIcon, int contentDescription);
+        void setEthernetIndicators(boolean visible, int ethernetIcon, int contentDescription);
     }
 
     public interface EmergencyListener {
