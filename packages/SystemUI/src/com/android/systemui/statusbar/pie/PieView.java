@@ -461,8 +461,9 @@ public class PieView extends View implements View.OnTouchListener {
         if (mActive) {
             if (action == MotionEvent.ACTION_DOWN) {
                 mPointerId = event.getPointerId(0);
-                preloadRecentApps();
-            } else if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
+            }
+            if (action == MotionEvent.ACTION_DOWN
+                    || action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) {
                 mActiveSnap = null;
                 for (int i = 0; i < mSnapPoints.length; i++) {
                     if (mSnapPoints[i] != null) {
@@ -500,6 +501,16 @@ public class PieView extends View implements View.OnTouchListener {
                 updateActiveItem(newItem, mLongPressed);
             }
 
+            if ((action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
+                    && !mPreloadedRecentApps && mActiveItem != null && mStatusBar != null) {
+                String clickAction = mLongPressed
+                        ? (String) mActiveItem.longTag : (String) mActiveItem.tag;
+                if (ButtonsConstants.ACTION_RECENTS.equals(clickAction)) {
+                    mStatusBar.preloadRecentApps();
+                    mPreloadedRecentApps = true;
+                }
+            }
+
             if (action == MotionEvent.ACTION_UP) {
                 // Check if anything was active
                 if (mActiveSnap != null) {
@@ -511,8 +522,7 @@ public class PieView extends View implements View.OnTouchListener {
                         String clickAction = mLongPressed
                                 ? (String) mActiveItem.longTag : (String) mActiveItem.tag;
                         if (ButtonsConstants.ACTION_RECENTS.equals(clickAction)) {
-                            // Set to false to keep preload alive and block
-                            // cancelPreloadRecentApps() when we exit the view and load recents.
+                            // Prepare preload for next call and block cancelPreload.
                             mPreloadedRecentApps = false;
                         }
                         mActiveItem.onClickCall(mLongPressed);
@@ -524,6 +534,11 @@ public class PieView extends View implements View.OnTouchListener {
             if (action == MotionEvent.ACTION_CANCEL) {
                 PieView.this.exit();
             }
+        }
+        if ((action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP)
+                && mPreloadedRecentApps && mStatusBar != null) {
+            mStatusBar.cancelPreloadRecentApps();
+            mPreloadedRecentApps = false;
         }
         return true;
     }
@@ -685,7 +700,6 @@ public class PieView extends View implements View.OnTouchListener {
             }
         }
 
-        cancelPreloadRecentApps();
         updateActiveItem(null, false);
         mActive = false;
         if (mOnExitListener != null) {
@@ -716,14 +730,4 @@ public class PieView extends View implements View.OnTouchListener {
         return Color.rgb(Color.red(color), Color.green(color), Color.blue(color));
     }
 
-    private void preloadRecentApps() {
-        mPreloadedRecentApps = true;
-        mStatusBar.preloadRecentApps();
-    }
-
-    private void cancelPreloadRecentApps() {
-        if (mPreloadedRecentApps) {
-            mStatusBar.cancelPreloadRecentApps();
-        }
-    }
 }
