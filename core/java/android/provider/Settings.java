@@ -4369,12 +4369,6 @@ public final class Settings {
         public static final String CLEAR_RECENTS_BUTTON_LOCATION = "clear_recents_button_location";
 
         /**
-         * direct call by the dialer. The value is
-         * boolean (1 or 0).
-         */
-        public static final String DIALER_DIRECT_CALL = "dialer_direct_call";
-
-        /**
          * show carrier in statusbar. The value is
          * boolean (1 or 0).
          */
