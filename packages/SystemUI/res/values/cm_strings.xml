@@ -301,9 +301,12 @@
     <string name="dynamic_qs_tile_su_label">Root access</string>
     <string name="dynamic_qs_tile_adb_label" translatable="false">ADB</string>
 
-   <!-- Fingerprint -->
-   <string name="fingerprint_try_again_hint">Please scan again</string>
+    <!-- Fingerprint -->
+    <string name="fingerprint_try_again_hint">Please scan again</string>
 
     <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_dock_battery_level">Dock battery <xliff:g id="number">%d</xliff:g> percent.</string>
+
+    <!-- Content description of the ethernet icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_ethernet">Ethernet.</string>
 </resources>
