@@ -176,6 +176,18 @@ public class PopupMenu implements MenuBuilder.Callback, MenuPresenter.Callback {
     }
 
     /**
+     * Allow the popup window to draw outside the left edge of the container
+     * if mClipToScreen = true.
+     *
+     * @param enabled True to allow outside draw (default = false).
+     * @see #findDropDownPosition - #link:PopupWindow.java
+     * @hide
+     */
+    public void setAllowLeftOverdraw(boolean enabled) {
+        mPopup.setAllowLeftOverdraw(enabled);
+    }
+
+    /**
      * Set a listener that will be notified when the user selects an item from the menu.
      *
      * @param listener Listener to notify

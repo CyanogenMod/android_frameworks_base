@@ -49,6 +49,10 @@ public class RecentExpandedCard extends CardExpand {
 
     private int mPersistentTaskId = -1;
     private String mLabel;
+    private int mThumbnailWidth;
+    private int mThumbnailHeight;
+    private float mScaleFactor;
+    private boolean mScaleFactorChanged;
 
     private BitmapDownloaderTask mTask;
 
@@ -56,35 +60,51 @@ public class RecentExpandedCard extends CardExpand {
     private boolean mIsExpanded;
     private boolean mDoNotNullBitmap;
 
-    public RecentExpandedCard(Context context) {
-        this(context, R.layout.recent_inner_card_expand);
+    public RecentExpandedCard(Context context, int persistentTaskId,
+            String label, float scaleFactor) {
+        this(context, R.layout.recent_inner_card_expand,
+                persistentTaskId, label, scaleFactor);
     }
 
     // Main constructor. Set the important values we need.
-    public RecentExpandedCard(Context context, int innerLayout) {
+    public RecentExpandedCard(Context context, int innerLayout,
+            int persistentTaskId, String label, float scaleFactor) {
         super(context, innerLayout);
         mContext = context;
+        mPersistentTaskId = persistentTaskId;
+        mLabel = label;
+        mScaleFactor = scaleFactor;
 
-        final Resources res = context.getResources();
-
-        // Render the default thumbnail background
-        int thumbnailWidth =
-                (int) res.getDimensionPixelSize(R.dimen.recent_thumbnail_width);
-        int thumbnailHeight =
-                (int) res.getDimensionPixelSize(R.dimen.recent_thumbnail_height);
-
-        mDefaultThumbnailBackground = new ColorDrawableWithDimensions(
-                res.getColor(R.color.card_backgroundExpand), thumbnailWidth, thumbnailHeight);
-
+        initDimensions();
     }
 
-    public void updateExpandedContent(int persistentTaskId, String label) {
+    // Update expanded card content.
+    public void updateExpandedContent(int persistentTaskId, String label, float scaleFactor) {
         if (label != null && label.equals(mLabel)) {
             mDoNotNullBitmap = true;
         }
         mLabel = label;
         mPersistentTaskId = persistentTaskId;
         mReload = true;
+
+        if (scaleFactor != mScaleFactor) {
+            mScaleFactorChanged = true;
+            mScaleFactor = scaleFactor;
+            initDimensions();
+        }
+    }
+
+    // Setup main dimensions we need.
+    private void initDimensions() {
+        final Resources res = mContext.getResources();
+        // Render the default thumbnail background
+        mThumbnailWidth = (int) (res.getDimensionPixelSize(
+                R.dimen.recent_thumbnail_width) * mScaleFactor);
+        mThumbnailHeight = (int) (res.getDimensionPixelSize(
+                R.dimen.recent_thumbnail_height) * mScaleFactor);
+
+        mDefaultThumbnailBackground = new ColorDrawableWithDimensions(
+                res.getColor(R.color.card_backgroundExpand), mThumbnailWidth, mThumbnailHeight);
     }
 
     // Internal state if we are expanded or not.
@@ -112,6 +132,14 @@ public class RecentExpandedCard extends CardExpand {
         if (holder == null) {
             holder = new ViewHolder();
             holder.thumbnailView = (RecentImageView) view.findViewById(R.id.thumbnail);
+            // Take scale factor into account if it is different then default or it has changed.
+            if (mScaleFactor != RecentController.DEFAULT_SCALE_FACTOR || mScaleFactorChanged) {
+                mScaleFactorChanged = false;
+                final ViewGroup.LayoutParams layoutParams = holder.thumbnailView.getLayoutParams();
+                layoutParams.width = mThumbnailWidth;
+                layoutParams.height = mThumbnailHeight;
+                holder.thumbnailView.setLayoutParams(layoutParams);
+            }
             view.setTag(holder);
         }
 
@@ -131,7 +159,7 @@ public class RecentExpandedCard extends CardExpand {
             mReload = false;
             mDoNotNullBitmap = false;
 
-            mTask = new BitmapDownloaderTask(holder.thumbnailView, mContext);
+            mTask = new BitmapDownloaderTask(holder.thumbnailView, mContext, mScaleFactor);
             mTask.executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR, mPersistentTaskId);
         } else {
@@ -142,7 +170,7 @@ public class RecentExpandedCard extends CardExpand {
                         .getBitmapFromMemCache(String.valueOf(mPersistentTaskId));
 
                 if (bitmap == null) {
-                    mTask = new BitmapDownloaderTask(holder.thumbnailView, mContext);
+                    mTask = new BitmapDownloaderTask(holder.thumbnailView, mContext, mScaleFactor);
                     mTask.executeOnExecutor(
                             AsyncTask.THREAD_POOL_EXECUTOR, mPersistentTaskId);
                 } else {
@@ -158,26 +186,28 @@ public class RecentExpandedCard extends CardExpand {
     }
 
     // Loads the actual task bitmap.
-    private static Bitmap loadThumbnail(int persistentTaskId, Context context) {
+    private static Bitmap loadThumbnail(int persistentTaskId, Context context, float scaleFactor) {
         if (context == null) {
             return null;
         }
         final ActivityManager am = (ActivityManager)
                 context.getSystemService(Context.ACTIVITY_SERVICE);
-        return getResizedBitmap(am.getTaskTopThumbnail(persistentTaskId), context);
+        return getResizedBitmap(am.getTaskTopThumbnail(persistentTaskId), context, scaleFactor);
     }
 
     // Resize and crop the task bitmap to the overlay values.
-    private static Bitmap getResizedBitmap(Bitmap source, Context context) {
+    private static Bitmap getResizedBitmap(Bitmap source, Context context, float scaleFactor) {
         if (source == null) {
             return null;
         }
 
         final Resources res = context.getResources();
         final int thumbnailWidth =
-                (int) res.getDimensionPixelSize(R.dimen.recent_thumbnail_width);
+                (int) (res.getDimensionPixelSize(
+                        R.dimen.recent_thumbnail_width) * scaleFactor);
         final int thumbnailHeight =
-                (int) res.getDimensionPixelSize(R.dimen.recent_thumbnail_height);
+                (int) (res.getDimensionPixelSize(
+                        R.dimen.recent_thumbnail_height) * scaleFactor);
 
         final int sourceWidth = source.getWidth();
         final int sourceHeight = source.getHeight();
@@ -221,12 +251,15 @@ public class RecentExpandedCard extends CardExpand {
         private final WeakReference<Context> rContext;
 
         private int mOrigPri;
+        private float mScaleFactor;
 
         private String mLRUCacheKey;
 
-        public BitmapDownloaderTask(RecentImageView imageView, Context context) {
+        public BitmapDownloaderTask(RecentImageView imageView,
+                Context context, float scaleFactor) {
             rImageViewReference = new WeakReference<RecentImageView>(imageView);
             rContext = new WeakReference<Context>(context);
+            mScaleFactor = scaleFactor;
         }
 
         @Override
@@ -242,7 +275,7 @@ public class RecentExpandedCard extends CardExpand {
             }
             mLRUCacheKey = String.valueOf(params[0]);
             // Load and return bitmap
-            return loadThumbnail(params[0], rContext.get());
+            return loadThumbnail(params[0], rContext.get(), mScaleFactor);
         }
 
         @Override

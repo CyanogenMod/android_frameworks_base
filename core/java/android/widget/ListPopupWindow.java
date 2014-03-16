@@ -78,6 +78,7 @@ public class ListPopupWindow {
     private boolean mDropDownVerticalOffsetSet;
 
     private int mDropDownGravity = Gravity.NO_GRAVITY;
+    private boolean mAllowLeftOverdraw;
 
     private boolean mDropDownAlwaysVisible = false;
     private boolean mForceIgnoreOutsideTouch = false;
@@ -452,6 +453,18 @@ public class ListPopupWindow {
     }
 
     /**
+     * Allow the popup window to draw outside the left edge of the container
+     * if mClipToScreen = true.
+     *
+     * @param enabled True to allow outside draw (default = false).
+     * @see #findDropDownPosition - #link:PopupWindow.java
+     * @hide
+     */
+    public void setAllowLeftOverdraw(boolean enabled) {
+        mAllowLeftOverdraw = enabled;
+    }
+
+    /**
      * @return The width of the popup window in pixels.
      */
     public int getWidth() {
@@ -617,6 +630,7 @@ public class ListPopupWindow {
 
             mPopup.setWindowLayoutMode(widthSpec, heightSpec);
             mPopup.setClipToScreenEnabled(true);
+            mPopup.setAllowLeftOverdraw(mAllowLeftOverdraw);
             
             // use outside touchable to dismiss drop down when touching outside of it, so
             // only set this if the dropdown is not always visible

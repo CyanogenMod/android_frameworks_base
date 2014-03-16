@@ -22,8 +22,7 @@
     xmlns:card="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="@dimen/recent_width"
-    android:layout_height="match_parent"
-    android:gravity="right" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:id="@+id/recent_content"
@@ -51,7 +50,6 @@
             android:id="@+id/empty_recent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:visibility="gone"
             android:src="@drawable/ic_empty_recent"
             />

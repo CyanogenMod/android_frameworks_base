@@ -169,6 +169,11 @@ please see styles_device_defaults.xml.
         <item name="windowExitAnimation">@anim/recent_screen_exit</item>
     </style>
 
+    <style name="Animation.RecentScreen.Left">
+        <item name="windowEnterAnimation">@anim/recent_screen_enter_left</item>
+        <item name="windowExitAnimation">@anim/recent_screen_exit_left</item>
+    </style>
+
     <!-- Window animations that are applied to input method overlay windows. -->
     <style name="Animation.InputMethod">
         <item name="windowEnterAnimation">@anim/input_method_enter</item>

@@ -486,7 +486,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                         mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false);
 
         if (mCustomRecent) {
-            cRecents = new RecentController(mContext);
+            cRecents = new RecentController(mContext, mLayoutDirection);
         } else {
             mRecents = getComponent(RecentsComponent.class);
         }

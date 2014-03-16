@@ -20,9 +20,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="RecentBaseStyle"  parent="@*android:style/Theme.Holo">
-        <item name="android:popupMenuStyle">@style/RecentPopupMenu</item>
+        <item name="android:popupMenuStyle">@*android:style/Widget.Holo.ListPopupWindow</item>
     </style>
-
-    <style name="RecentPopupMenu" parent="@*android:style/Widget.Holo.ListPopupWindow" />
 
 </resources>
