@@ -2324,6 +2324,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadBooleanSetting(stmt, Settings.Global.WIFI_DISPLAY_ON,
                     R.bool.def_wifi_display_on);
+            loadIntegerSetting(stmt, Settings.Global.WIFI_DISPLAY_ROTATION,
+                    R.integer.def_wifi_display_rotation);
 
             loadStringSetting(stmt, Settings.Global.LOCK_SOUND,
                     R.string.def_lock_sound);

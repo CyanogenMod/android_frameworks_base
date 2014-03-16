@@ -388,12 +388,14 @@ final class WifiDisplayAdapter extends DisplayAdapter {
             }
         }
 
+        int rotation = Settings.Global.getInt(getContext().getContentResolver(), Settings.Global.WIFI_DISPLAY_ROTATION, 0);
+
         float refreshRate = 60.0f; // TODO: get this for real
 
         String name = display.getFriendlyDisplayName();
         String address = display.getDeviceAddress();
         IBinder displayToken = SurfaceControl.createDisplay(name, secure);
-        mDisplayDevice = new WifiDisplayDevice(displayToken, name, width, height,
+        mDisplayDevice = new WifiDisplayDevice(displayToken, name, width, height, rotation,
                 refreshRate, deviceFlags, address, surface);
         sendDisplayDeviceEventLocked(mDisplayDevice, DISPLAY_DEVICE_EVENT_ADDED);
     }
@@ -681,6 +683,7 @@ final class WifiDisplayAdapter extends DisplayAdapter {
         private String mName;
         private final int mWidth;
         private final int mHeight;
+        private final int mRotation;
         private final float mRefreshRate;
         private final int mFlags;
         private final String mAddress;
@@ -689,12 +692,13 @@ final class WifiDisplayAdapter extends DisplayAdapter {
         private DisplayDeviceInfo mInfo;
 
         public WifiDisplayDevice(IBinder displayToken, String name,
-                int width, int height, float refreshRate, int flags, String address,
+                int width, int height, int rotation, float refreshRate, int flags, String address,
                 Surface surface) {
             super(WifiDisplayAdapter.this, displayToken);
             mName = name;
             mWidth = width;
             mHeight = height;
+            mRotation = rotation;
             mRefreshRate = refreshRate;
             mFlags = flags;
             mAddress = address;
@@ -733,6 +737,7 @@ final class WifiDisplayAdapter extends DisplayAdapter {
                 mInfo.type = Display.TYPE_WIFI;
                 mInfo.address = mAddress;
                 mInfo.touch = DisplayDeviceInfo.TOUCH_EXTERNAL;
+                mInfo.rotation = mRotation;
                 mInfo.setAssumedDensityForExternalDisplay(mWidth, mHeight);
             }
             return mInfo;

@@ -6418,6 +6418,13 @@ public final class Settings {
        public static final String WIFI_DISPLAY_ON = "wifi_display_on";
 
        /**
+        * Whether Wifi display is rotated
+        * 0=normal. 1=90. 2=180. 3=270  based on Surface.ROTATION_0, etc...
+        * @hide
+        */
+       public static final String WIFI_DISPLAY_ROTATION = "wifi_display_rotation";
+
+       /**
         * Whether Wifi display certification mode is enabled/disabled
         * 0=disabled. 1=enabled.
         * @hide
