@@ -328,7 +328,7 @@ public class KeyguardViewManager {
         public ViewManagerHost(Context context) {
             super(context);
             setBackground(mBackgroundDrawable);
-            mLastConfiguration = context.getResources().getConfiguration();
+            mLastConfiguration = new Configuration(context.getResources().getConfiguration());
         }
 
         public void drawToCanvas(Canvas canvas, Drawable drawable) {
@@ -464,7 +464,7 @@ public class KeyguardViewManager {
             } else {
                 if (DEBUG) Log.v(TAG, "onConfigurationChanged: view not visible");
             }
-            mLastConfiguration = newConfig;
+            mLastConfiguration = new Configuration(newConfig);
         }
 
         @Override
