@@ -565,7 +565,7 @@ public:
                 return 0;
             }
         }
-        jfloat advancesArray[count];
+        jfloat* advancesArray = new jfloat[count];
         jfloat totalAdvance = 0;
 
         TextLayout::getTextRunAdvances(paint, text, start, count, contextCount, flags,
@@ -574,6 +574,7 @@ public:
         if (advances != NULL) {
             env->SetFloatArrayRegion(advances, advancesIndex, count, advancesArray);
         }
+        delete [] advancesArray;
         return totalAdvance;
     }
 
