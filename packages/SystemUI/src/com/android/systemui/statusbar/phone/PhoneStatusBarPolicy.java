@@ -24,6 +24,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.internal.telephony.IccCardConstants;
@@ -49,6 +51,9 @@ public class PhoneStatusBarPolicy {
     private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
 
     private static final int INET_CONDITION_THRESHOLD = 50;
+
+    private static final String SCHEDULE_SERVICE_COMMAND =
+            "com.android.settings.slim.service.SCHEDULE_SERVICE_COMMAND";
 
     private static final boolean SHOW_SYNC_ICON = false;
 
@@ -193,13 +198,29 @@ public class PhoneStatusBarPolicy {
         final int ringerMode = audioManager.getRingerMode();
         final boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||
                 ringerMode == AudioManager.RINGER_MODE_VIBRATE;
-
+        int quietHoursAuto = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.QUIET_HOURS_AUTOMATIC,
+                0, UserHandle.USER_CURRENT);
         final int iconId;
         String contentDescription = null;
         if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+            if (quietHoursAuto == 2) {
+                updateQuietHours(1);
+            } else if (quietHoursAuto == 1) {
+                updateQuietHours(0);
+            }
             iconId = R.drawable.stat_sys_ringer_vibrate;
             contentDescription = mContext.getString(R.string.accessibility_ringer_vibrate);
         } else {
+            if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+                if (quietHoursAuto == 1 || quietHoursAuto == 2) {
+                    updateQuietHours(1);
+                }
+            } else {
+                if (quietHoursAuto != 0) {
+                    updateQuietHours(0);
+                }
+            }
             iconId =  R.drawable.stat_sys_ringer_silent;
             contentDescription = mContext.getString(R.string.accessibility_ringer_silent);
         }
@@ -254,6 +275,20 @@ public class PhoneStatusBarPolicy {
             // TTY is off
             if (false) Log.v(TAG, "updateTTY: set TTY off");
             mService.setIconVisibility("tty", false);
+        }
+    }
+
+    private final void updateQuietHours(int enabled) {
+        int quietHours = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.QUIET_HOURS_ENABLED,
+                0, UserHandle.USER_CURRENT);
+        if (quietHours != enabled) {
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.QUIET_HOURS_ENABLED,
+                    enabled, UserHandle.USER_CURRENT);
+            Intent scheduleSms = new Intent();
+            scheduleSms.setAction(SCHEDULE_SERVICE_COMMAND);
+            mContext.sendBroadcast(scheduleSms);
         }
     }
 }
