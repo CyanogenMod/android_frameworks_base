@@ -56,6 +56,10 @@
     <string name="quick_settings_camera_label">Cámara</string>
     <string name="quick_settings_network_adb_disabled_label">Deshabilitado</string>
     <string name="quick_settings_network_adb_enabled_label">Habilitado</string>
+    <string name="location_mode_high_accuracy_title">Alta precisión</string>
+    <string name="location_mode_battery_saving_title">Ahorro de batería</string>
+    <string name="location_mode_sensors_only_title">Solo en dispositivo</string>
+    <string name="location_mode_location_off_title">Ubicación desactivada</string>
     <string name="quick_settings_expanded_desktop">Extendido</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_camera_error_connect">Imposible conectar con la cámara</string>
