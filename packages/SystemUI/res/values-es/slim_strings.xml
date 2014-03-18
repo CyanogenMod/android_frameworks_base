@@ -127,6 +127,7 @@
     <string name="quick_settings_reminder_dismiss_message">¿Borrar recordatorio actual?</string>
     <string name="quick_settings_reminder_help_title">Tocar:</string>
     <string name="quick_settings_reminder_noti_dismiss">Descartar</string>
+    <string name="quick_settings_reminder_noti_later">Actualizar hora</string>
     <string name="quick_settings_reminder_help_message">Tocar aquí para crear un recordatorio. Pulsación larga para eliminarlo.</string>
 
     <!-- Battery status in pie controls -->
