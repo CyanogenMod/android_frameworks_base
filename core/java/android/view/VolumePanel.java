@@ -421,6 +421,9 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mMoreButton.setVisibility(View.VISIBLE);
                 mDivider.setVisibility(View.VISIBLE);
                 mShowCombinedVolumes = true;
+                if (mCurrentOverlayStyle == VOLUME_OVERLAY_NONE) {
+                    addOtherVolumes();
+                }
                 mCurrentOverlayStyle = VOLUME_OVERLAY_EXPANDABLE;
                 break;
             case VOLUME_OVERLAY_EXPANDED :
@@ -428,6 +431,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mDivider.setVisibility(View.GONE);
                 mShowCombinedVolumes = true;
                 if (mCurrentOverlayStyle == VOLUME_OVERLAY_NONE) {
+                    mSliderGroup.removeAllViews();
                     addOtherVolumes();
                     expand();
                 }
@@ -528,6 +532,11 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
     private void addOtherVolumes() {
         if (!mShowCombinedVolumes) return;
+        synchronized (this) {
+            if (mStreamControls == null) {
+                createSliders();
+            }
+        }
 
         for (int i = 0; i < STREAMS.length; i++) {
             // Skip the phone specific ones and the active one
@@ -545,6 +554,10 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 continue;
             }
             StreamControl sc = mStreamControls.get(streamType);
+            // To be sure it was not already attached remove it.
+            if (mCurrentOverlayStyle = VOLUME_OVERLAY_EXPANDABLE) {
+                mSliderGroup.removeView(sc.group);
+            }
             mSliderGroup.addView(sc.group);
             updateSlider(sc);
         }
