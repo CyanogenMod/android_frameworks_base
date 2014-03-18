@@ -239,6 +239,7 @@ public class BatteryMeterView extends View implements DemoMode {
         }
         levels.recycle();
         colors.recycle();
+        batteryType.recycle();
 
         mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
 
