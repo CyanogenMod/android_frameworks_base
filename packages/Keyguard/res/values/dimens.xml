@@ -156,6 +156,13 @@
     <!-- Left padding of num pad key on keyguard -->
     <dimen name="kg_num_pad_key_padding_left">20dp</dimen>
 
+    <!-- Top padding of num pad key on keyguard -->
+
+    <dimen name="kg_num_pad_key_padding_top">6dp</dimen>
+
+    <!-- Bottom padding of num pad key on keyguard -->
+    <dimen name="kg_num_pad_key_padding_bottom">8dp</dimen>
+
     <!-- EmergencyCarrierArea overlap - amount to overlap the emergency button and carrier text.
          Should be 0 on devices with plenty of room (e.g. tablets) -->
     <dimen name="eca_overlap">-10dip</dimen>
