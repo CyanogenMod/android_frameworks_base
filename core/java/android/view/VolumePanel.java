@@ -421,6 +421,9 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mMoreButton.setVisibility(View.VISIBLE);
                 mDivider.setVisibility(View.VISIBLE);
                 mShowCombinedVolumes = true;
+                if (mCurrentOverlayStyle == VOLUME_OVERLAY_NONE) {
+                    reorderSliders(mActiveStreamType);
+                }
                 mCurrentOverlayStyle = VOLUME_OVERLAY_EXPANDABLE;
                 break;
             case VOLUME_OVERLAY_EXPANDED :
@@ -428,7 +431,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mDivider.setVisibility(View.GONE);
                 mShowCombinedVolumes = true;
                 if (mCurrentOverlayStyle == VOLUME_OVERLAY_NONE) {
-                    addOtherVolumes();
+                    reorderSliders(mActiveStreamType);
                     expand();
                 }
                 mCurrentOverlayStyle = VOLUME_OVERLAY_EXPANDED;
@@ -510,6 +513,11 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
     }
 
     private void reorderSliders(int activeStreamType) {
+        synchronized (this) {
+            if (mStreamControls == null) {
+                createSliders();
+            }
+        }
         mSliderGroup.removeAllViews();
 
         StreamControl active = mStreamControls.get(activeStreamType);
