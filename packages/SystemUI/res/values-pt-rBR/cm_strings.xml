@@ -74,4 +74,8 @@
     <string name="dessert_case_settings_cm_title">Exibir mascote do CM</string>
     <string name="dessert_case_settings_cm_summary">Exibir mascote do CM junto com as sobremesas do Android dentro do sonho</string>
     <string name="accessibility_desc_add_quick_settings">Adicionar configurações rápidas.</string>
+    <string name="location_mode_high_accuracy_title">Alta precisão</string>
+    <string name="location_mode_battery_saving_title">Economia de bateria</string>
+    <string name="location_mode_sensors_only_title">Somente no dispositivo</string>
+    <string name="location_mode_location_off_title">Localização desligada</string>
 </resources>
