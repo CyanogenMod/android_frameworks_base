@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012-2013 The CyanogenMod Project
+<!-- Copyright (C) 2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -58,7 +58,6 @@
     <string name="permlab_sendMockSms">Simular envio de mensagens SMS</string>
     <string name="permdesc_sendMockSms">Permite ao aplicativo simular envio de mensagens SMS.
         Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
-    <string name="progress_nomediapresent" product="default">Nenhuma mídia removível presente\u2026</string>
     <string name="perf_profile_pwrsv">Economia</string>
     <string name="perf_profile_bal">Balanceado</string>
     <string name="perf_profile_perf">Performance</string>
@@ -68,4 +67,46 @@
     <string name="permdesc_resetBatteryStats">Permite uma aplicação redefinir o nível baixo atual dos dados de uso da bateria.</string>
     <string name="immersive_mode_confirmation_bottom">Deslize para cima a partir de baixo para sair da tela cheia.</string>
     <string name="profileNameAutomobile">Automóvel</string>
+    <string name="app_ops_access_camera">acessar a câmera</string>
+    <string name="app_ops_access_location">acessar sua localização</string>
+    <string name="app_ops_access_notifications">ler suas notificações</string>
+    <string name="app_ops_alarm_wakeup">acordar o dispositivo</string>
+    <string name="app_ops_draw_on_top">desenhar no topo</string>
+    <string name="app_ops_keep_device_awake">manter seu dispositivo acordado</string>
+    <string name="app_ops_make_phone_call">realizar uma chamada</string>
+    <string name="app_ops_modify_calendar">atualizar seu calendário</string>
+    <string name="app_ops_modify_call_log">atualizar o registro de chamadas</string>
+    <string name="app_ops_modify_clipboard">modificar a área de transferência</string>
+    <string name="app_ops_modify_contacts">atualizar seus contatos</string>
+    <string name="app_ops_modify_settings">atualizar configurações de sistema</string>
+    <string name="app_ops_play_audio">reproduzir áudio</string>
+    <string name="app_ops_post_notification">postar uma notificação</string>
+    <string name="app_ops_read_calendar">ler seu calendário</string>
+    <string name="app_ops_read_call_log">ler o registro de chamadas</string>
+    <string name="app_ops_read_clipboard">ler a área de transferência</string>
+    <string name="app_ops_read_contacts">ler seus contatos</string>
+    <string name="app_ops_read_mms">ler suas mensagens MMS</string>
+    <string name="app_ops_read_sms">ler suas mensagens SMS</string>
+    <string name="app_ops_receive_sms">receber uma mensagem SMS</string>
+    <string name="app_ops_record_audio">gravra áudio</string>
+    <string name="app_ops_send_mms">enviar uma mensagem MMS</string>
+    <string name="app_ops_send_sms">enviar uma mensagem SMS</string>
+    <string name="app_ops_start_at_bootup">iniciar ao iniciar o sistema</string>
+    <string name="app_ops_toggle_bluetooth">alternar o Bluetooth</string>
+    <string name="app_ops_toggle_mobile_data">alternar dados móveis</string>
+    <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
+    <string name="app_ops_use_alarm_volume">controlar volume do alarme</string>
+    <string name="app_ops_use_audio_focus">controlar o foco do áudio</string>
+    <string name="app_ops_use_bluetooth_volume">controlar o volume do Bluetooth</string>
+    <string name="app_ops_use_master_volume">controlar o volume principal</string>
+    <string name="app_ops_use_media_buttons">controlar os botões de mídia</string>
+    <string name="app_ops_use_media_volume">controlar o volume de mídia</string>
+    <string name="app_ops_use_notification_volume">controlar o volume de notificação</string>
+    <string name="app_ops_use_ring_volume">controlar o volume de chamada</string>
+    <string name="app_ops_use_vibrate">usar resposta ao toque</string>
+    <string name="app_ops_use_voice_volume">controlar volume da chamada de voz</string>
+    <string name="app_ops_write_mms">escrever uma mensagem MMS</string>
+    <string name="app_ops_write_sms">escrever uma mensagem SMS</string>
+    <string name="privacy_guard_dialog_title">Proteção à Privacidade</string>
+    <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> gostaria de <xliff:g id="op">%2$s</xliff:g>.</string>
 </resources>
