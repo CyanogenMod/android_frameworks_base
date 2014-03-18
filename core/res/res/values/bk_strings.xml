@@ -22,4 +22,7 @@
 
     <!-- In WiFi AP notification -->
     <string name="notify_turn_tethering_off_title">Turn Tethering off</string>
+
+    <!-- label for item that takes On-The-Go in the phone options dialog -->
+    <string name="global_action_onthego">On-The-Go Mode</string>
 </resources>

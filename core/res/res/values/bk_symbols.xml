@@ -67,4 +67,8 @@
 
     <!-- Wi-Fi AP Notification -->
     <java-symbol type="string" name="notify_turn_tethering_off_title" />
+
+    <!-- On-The-Go -->
+    <java-symbol type="string" name="global_action_onthego" />
+    <java-symbol type="drawable" name="ic_lock_onthego" />
 </resources>

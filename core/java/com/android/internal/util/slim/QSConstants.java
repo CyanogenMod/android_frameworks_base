@@ -52,6 +52,7 @@ public class QSConstants {
         public static final String TILE_PROFILE= "toggleProfile";
         public static final String TILE_CAMERA= "toggleCamera";
         public static final String TILE_INTERNALMEMORY = "toggleinternalmemory";
+        public static final String TILE_ONTHEGO = "toggleOnTheGo";
 
         // dynamic tiles
         public static final String TILE_ALARM = "toggleAlarm";

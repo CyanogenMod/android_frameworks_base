@@ -88,6 +88,7 @@ import com.android.internal.util.slim.ImageHelper;
 import com.android.internal.util.slim.PolicyConstants;
 import com.android.internal.util.slim.PolicyHelper;
 import com.android.internal.util.slim.SlimActions;
+import com.android.internal.util.nameless.NamelessActions;
 
 /**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that
@@ -406,6 +407,23 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     new SinglePressAction(R.drawable.ic_lock_screenrecord, R.string.global_action_screenrecord) {
                         public void onPress() {
                             toggleScreenRecord();
+                        }
+
+                        public boolean showDuringKeyguard() {
+                            return true;
+                        }
+
+                        public boolean showBeforeProvisioning() {
+                            return true;
+                        }
+                });
+            // next: onthego
+            } else if (config.getClickAction().equals(PolicyConstants.ACTION_ONTHEGO)) {
+                mItems.add(
+                    new SinglePressAction(R.drawable.ic_lock_onthego, R.string.global_action_onthego) {
+                        public void onPress() {
+                            NamelessActions.processAction(mContext,
+                                    NamelessActions.ACTION_ONTHEGO_TOGGLE);
                         }
 
                         public boolean showDuringKeyguard() {

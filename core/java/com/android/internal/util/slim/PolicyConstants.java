@@ -29,6 +29,7 @@ public class PolicyConstants {
     public static final String ACTION_PAPIE                = "**papie**";
     public static final String ACTION_PIE                  = "**pie**";
     public static final String ACTION_NAVBAR               = "**nav_bar**";
+    public static final String ACTION_ONTHEGO = "**onthego**";
 
     public static final String ACTION_DELIMITER  = "|";
     public static final String ICON_EMPTY = "empty";
