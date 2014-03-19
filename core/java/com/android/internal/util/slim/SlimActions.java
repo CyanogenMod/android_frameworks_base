@@ -46,6 +46,7 @@ import android.view.WindowManagerGlobal;
 import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.nameless.NamelessActions;
 
 import java.net.URISyntaxException;
 
@@ -349,6 +350,14 @@ public class SlimActions {
                         "org.omnirom.omniswitch",
                         "org.omnirom.omniswitch.MainActivity"));
                 startActivity(context, windowManagerService, isKeyguardShowing, intent);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_ONTHEGO)) {
+                Intent startIntent = new Intent();
+                startIntent.setComponent(new ComponentName(
+                        "com.android.systemui",
+                        "com.android.systemui.nameless.onthego.OnTheGoService"));
+                startIntent.setAction("start");
+                context.startService(startIntent);
                 return;
             } else {
                 // we must have a custom uri

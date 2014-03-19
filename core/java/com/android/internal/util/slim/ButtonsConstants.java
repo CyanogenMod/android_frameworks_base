@@ -48,6 +48,7 @@ public class ButtonsConstants {
     public static final String ACTION_PAPIE                = "**papie**";
     public static final String ACTION_NAVBAR               = "**nav_bar**";
     public static final String ACTION_SMART_PULLDOWN       = "**smart_pulldown**";
+    public static final String ACTION_ONTHEGO              = "**onthego**";
 
     // no action
     public static final String ACTION_NULL            = "**null**";
