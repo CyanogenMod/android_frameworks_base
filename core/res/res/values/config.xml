@@ -364,6 +364,10 @@
     <!-- Wifi driver supports batched scan -->
     <bool translatable="false" name="config_wifi_batched_scan_supported">false</bool>
 
+    <!-- Wifi driver's fallback country code; WS is ISO-Alpha2 code for Samoa which
+         has restrictions on can be scanned; which may satisfy quite a few regulatory issues. -->
+    <string translatable="false" name="config_wifi_unknown_country_code">WS</string>
+
     <!-- Boolean indicating whether the start command should be called on the wireless interface
          when starting the SoftAp -->
     <bool name="config_wifiApStartInterface">false</bool>
