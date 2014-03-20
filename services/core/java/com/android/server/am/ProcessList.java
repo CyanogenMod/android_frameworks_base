@@ -181,6 +181,11 @@ final class ProcessList {
     };
     // The actual OOM killer memory levels we are using.
     private final int[] mOomMinFree = new int[mOomAdj.length];
+    // Optimal OOM killer memory levels for Low-Tier devices.
+    private final int[] mOomMinFreeLowRam = new int[] {
+            8192, 13652, 21844,
+            27308, 32768, 38228
+    };
 
     private final long mTotalMemMb;
 
@@ -242,9 +247,14 @@ final class ProcessList {
         }
 
         for (int i=0; i<mOomAdj.length; i++) {
-            int low = mOomMinFreeLow[i];
-            int high = mOomMinFreeHigh[i];
-            mOomMinFree[i] = (int)(low + ((high-low)*scale));
+            if (ActivityManager.isLowRamDeviceStatic()) {
+                // Overwrite calculated LMK parameters with the low-tier tested/validated values
+                mOomMinFree[i] = mOomMinFreeLowRam[i];
+            } else {
+                int low = mOomMinFreeLow[i];
+                int high = mOomMinFreeHigh[i];
+                mOomMinFree[i] = (int)(low + ((high-low)*scale));
+            }
         }
 
         if (minfree_abs >= 0) {
