@@ -432,7 +432,7 @@ public abstract class MediaMetadataEditor {
     protected static final SparseIntArray METADATA_KEYS_TYPE;
 
     static {
-        METADATA_KEYS_TYPE = new SparseIntArray(17);
+        METADATA_KEYS_TYPE = new SparseIntArray(18);
         // NOTE: if adding to the list below, make sure you increment the array initialization size
         // keys with long values
         METADATA_KEYS_TYPE.put(
@@ -458,5 +458,7 @@ public abstract class MediaMetadataEditor {
         // keys with Rating values
         METADATA_KEYS_TYPE.put(RATING_KEY_BY_OTHERS, METADATA_TYPE_RATING);
         METADATA_KEYS_TYPE.put(RATING_KEY_BY_USER, METADATA_TYPE_RATING);
+        // Meta data for total number of tracks in Album
+        METADATA_KEYS_TYPE.put(MediaMetadataRetriever.METADATA_KEY_NUM_TRACKS, METADATA_TYPE_LONG);
     }
 }
