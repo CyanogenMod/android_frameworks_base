@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* Copyright 2012, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources>
+
+  <!-- We don't want to publish private symbols in android.R as part of the
+       SDK.  Instead, put them here. -->
+  <private-symbols package="com.android.internal" />
+
+  <!-- Private symbols that we need to reference from framework code.  See
+       frameworks/base/core/res/MakeJavaSymbols.sed for how to easily generate
+       this.
+  -->
+  <!-- Floating Window -->
+  <java-symbol type="drawable" name="ic_floating_window_close" />
+  <java-symbol type="drawable" name="ic_floating_window_max" />
+  <java-symbol type="drawable" name="ic_floating_window_min" />
+  <java-symbol type="drawable" name="ic_floating_window_more" />
+  <java-symbol type="id" name="floating_window_background" />
+  <java-symbol type="id" name="floating_window_titlebar" />
+  <java-symbol type="id" name="floating_window_close" />
+  <java-symbol type="id" name="floating_window_max" />
+  <java-symbol type="id" name="floating_window_min" />
+  <java-symbol type="id" name="floating_window_more" />
+  <java-symbol type="id" name="floating_window_line" />
+  <java-symbol type="layout" name="floating_window_layout" />
+  <java-symbol type="string" name="floating_window_snap_top"/>
+  <java-symbol type="string" name="floating_window_snap_bottom"/>
+  <java-symbol type="string" name="floating_window_snap_left"/>
+  <java-symbol type="string" name="floating_window_snap_right"/>
+  <java-symbol type="string" name="floating_window_minimize"/>
+</resources>

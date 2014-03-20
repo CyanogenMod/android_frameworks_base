@@ -149,7 +149,7 @@ public abstract class Window {
     private int mDefaultWindowFormat = PixelFormat.OPAQUE;
 
     private boolean mHasSoftInputMode = false;
-    
+
     private boolean mDestroyed;
 
     public boolean mIsFloatingWindow = false;
