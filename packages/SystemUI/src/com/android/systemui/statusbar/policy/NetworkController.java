@@ -235,9 +235,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 com.android.internal.R.string.lockscreen_carrier_default);
         mNetworkName = mNetworkNameDefault;
 
-       // wifi
+        // wifi
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        Handler handler = new WifiHandler();
+        Handler handler = createWifiHandler();
         mWifiChannel = new AsyncChannel();
         Messenger wifiMessenger = mWifiManager.getWifiServiceMessenger();
         if (wifiMessenger != null) {
@@ -280,6 +280,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
 
     public boolean isEmergencyOnly() {
         return (mServiceState != null && mServiceState.isEmergencyOnly());
+    }
+
+    protected Handler createWifiHandler() {
+        return new WifiHandler();
     }
 
     public void addPhoneSignalIconView(ImageView v) {
