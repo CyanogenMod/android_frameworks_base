@@ -631,13 +631,26 @@ public class MSimNetworkController extends NetworkController {
                     case TelephonyManager.NETWORK_TYPE_HSDPA:
                     case TelephonyManager.NETWORK_TYPE_HSUPA:
                     case TelephonyManager.NETWORK_TYPE_HSPA:
-                    case TelephonyManager.NETWORK_TYPE_HSPAP:
                         if (mHspaDataDistinguishable) {
                             mDataIconList = TelephonyIcons.DATA_H[mInetCondition];
                             mMSimDataTypeIconId[subscription] =
                                     R.drawable.stat_sys_data_fully_connected_h;
                             mMSimContentDescriptionDataType[subscription] = mContext.getString(
                                     R.string.accessibility_data_connection_3_5g);
+                        } else {
+                            mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
+                            mMSimDataTypeIconId[subscription] =
+                                    R.drawable.stat_sys_data_fully_connected_3g;
+                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
+                                    R.string.accessibility_data_connection_3g);
+                        }
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:
+                        if (mHspaDataDistinguishable) {
+                            mDataIconList = TelephonyIcons.DATA_HP[mInetCondition];
+                            mMSimDataTypeIconId[subscription] =
+                                    R.drawable.stat_sys_data_fully_connected_hp;
+                            mMSimContentDescriptionDataType[subscription] = mContext.getString(
+                                    R.string.accessibility_data_connection_HP);
                         } else {
                             mDataIconList = TelephonyIcons.DATA_3G[mInetCondition];
                             mMSimDataTypeIconId[subscription] =
