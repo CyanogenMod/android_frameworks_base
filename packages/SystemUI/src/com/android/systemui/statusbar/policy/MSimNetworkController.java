@@ -196,6 +196,18 @@ public class MSimNetworkController extends NetworkController {
     }
 
     @Override
+    protected void createWifiHandler() {
+        // wifi
+        mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        Handler handler = new MSimWifiHandler();
+        mWifiChannel = new AsyncChannel();
+        Messenger wifiMessenger = mWifiManager.getWifiServiceMessenger();
+        if (wifiMessenger != null) {
+            mWifiChannel.connect(mContext, handler, wifiMessenger);
+        }
+    }
+
+    @Override
     protected void registerPhoneStateListener(Context context) {
         // telephony
         int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
