@@ -125,6 +125,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
     private FrameLayout mRot0;
     private FrameLayout mRot90;
+    private boolean mNavigationBarCanMove;
 
     private ArrayList<ButtonConfig> mButtonsConfig;
     private List<Integer> mButtonIdList;
@@ -947,19 +948,17 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         return mVertical;
     }
 
+    public void setNavigationBarCanMove(boolean navigationBarCanMove) {
+        mNavigationBarCanMove = navigationBarCanMove;
+    }
+
     public void reorient() {
         final int rot = mDisplay.getRotation();
         for (int i=0; i<4; i++) {
             mRotatedViews[i].setVisibility(View.GONE);
         }
 
-        boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
-                Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
-                        UserHandle.USER_CURRENT) == 1
-                : false;
-
-        if (!navigationBarCanMove) {
+        if (!mNavigationBarCanMove) {
             mCurrentView = mRotatedViews[Surface.ROTATION_0];
         } else {
             mCurrentView = mRotatedViews[rot];
