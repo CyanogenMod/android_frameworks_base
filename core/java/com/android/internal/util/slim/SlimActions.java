@@ -47,6 +47,7 @@ import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.nameless.NamelessActions;
+import com.android.internal.util.omni.OmniSwitchConstants;
 
 import java.net.URISyntaxException;
 
@@ -345,11 +346,8 @@ public class SlimActions {
                     }
                 }
             } else if (action.equals(ButtonsConstants.ACTION_OMNISWITCH)) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(
-                        "org.omnirom.omniswitch",
-                        "org.omnirom.omniswitch.MainActivity"));
-                startActivity(context, windowManagerService, isKeyguardShowing, intent);
+                Intent intent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
+                context.sendBroadcast(intent);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_ONTHEGO)) {
                 Intent startIntent = new Intent();
