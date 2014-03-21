@@ -456,6 +456,8 @@ public class SearchPanelView extends FrameLayout implements
         }
 
         mGlowPadView.setTargetResources(storedDraw);
+        mGlowPadView.setTargetDescriptionsResourceId(0);
+        mGlowPadView.setDirectionDescriptionsResourceId(0);
     }
 
     private TargetDrawable getTargetDrawable(String action, String customIconUri) {
