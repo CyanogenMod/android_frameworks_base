@@ -48,25 +48,25 @@
 
     <!-- Instructions telling the user that they entered the wrong puk while trying
          to unlock the keyguard.  Displayed in one line in a large font.  -->
-    <string name="keyguard_password_wrong_puk_code">Incorrect PUK code!</string>
+    <string name="keyguard_password_wrong_puk_code">Incorrect PUK code.</string>
 
     <!-- Instructions telling the user that the operation to unlock the keyguard
          with PIN failed. Displayed in one line in a large font.  -->
-    <string name="keyguard_password_pin_failed">PIN operation failed!</string>
+    <string name="keyguard_password_pin_failed">PIN operation failed.</string>
 
     <!-- Instructions telling the user that the operation to unlock the keyguard
          with PUK failed. Displayed in one line in a large font.  -->
-    <string name="keyguard_password_puk_failed">PUK operation failed!</string>
+    <string name="keyguard_password_puk_failed">PUK operation failed.</string>
 
 
     <!-- Notification telling the user that the PIN1 they entered is valid -->
-    <string name="keyguard_pin_accepted">Code Accepted!</string>
+    <string name="keyguard_pin_accepted">Code accepted.</string>
 
     <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
-    <string name="pinpuk_attempts">\nAttempts Remaining :</string>
+    <string name="pinpuk_attempts">\nAttempts remaining:</string>
 
     <!-- Shown in the lock screen when there is SIM card IO error. -->
-    <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
+    <string name="lockscreen_sim_error_message_short">Invalid card.</string>
 
     <!-- Instructions telling the user how to unlock the phone. -->
     <string name="keyguard_label_text">To unlock, press Menu then 0.</string>
@@ -403,7 +403,7 @@
 
     <!-- Multi SIM related -->
     <!-- Message used in Multi SIM enabled SIM PIN view -->
-    <string name="msim_kg_sim_pin_msg_format">SUB:<xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
 
     <!-- Carrier text used in Multi SIM enabled view -->
     <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
