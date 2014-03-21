@@ -52,6 +52,7 @@ namespace uirenderer {
 
 #define FILTER(paint) (!paint || paint->isFilterBitmap() ? GL_LINEAR : GL_NEAREST)
 
+#define PROPERTY_DISABLE_EXTENDED_TILING "debug.hwui.disable_extiling"
 ///////////////////////////////////////////////////////////////////////////////
 // Globals
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,6 +132,7 @@ OpenGLRenderer::OpenGLRenderer():
     mFrameStarted = false;
     mCountOverdraw = false;
     mExtendedTiling = false;
+    mExTilingDisabled = true;
     mScissorOptimizationDisabled = false;
 }
 
@@ -147,6 +149,12 @@ void OpenGLRenderer::initProperties() {
                 mScissorOptimizationDisabled ? "disabled" : "enabled");
     } else {
         INIT_LOGD("  Scissor optimization enabled");
+    }
+
+    if (property_get(PROPERTY_DISABLE_EXTENDED_TILING, property, "true")) {
+        mExTilingDisabled = !strcasecmp(property, "true");
+        INIT_LOGD("  Extended Tiling %s",
+                mExTilingDisabled ? "disabled" : "enabled");
     }
 }
 
@@ -220,7 +228,7 @@ status_t OpenGLRenderer::startFrame(bool useExTiling) {
     if (!mSuppressTiling) {
         startTiling(mSnapshot, true);
     }
-    else if (useExTiling){
+    else if (useExTiling && !mExTilingDisabled){
         startTilingEx(mSnapshot);
     }
 

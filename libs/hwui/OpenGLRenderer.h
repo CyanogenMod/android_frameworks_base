@@ -1121,6 +1121,8 @@ private:
 
     //tiling to avoid unresolves when set
     bool mExtendedTiling;
+    //extended tiling disabled or not
+    bool mExTilingDisabled;
 
     // If true, this renderer will setup drawing to emulate
     // an increment stencil buffer in the color buffer
