@@ -20,6 +20,7 @@
     <color name="keyguard_avatar_nick_color">#ffffffff</color>
     <color name="keyguard_avatar_frame_pressed_color">#ff35b5e5</color>
     <color name="kg_widget_pager_gradient">#ffffffff</color>
+    <color name="kg_widget_pager_gradient_disabled">#00000000</color>
 
     <!-- FaceLock -->
     <color name="facelock_spotlight_mask">#CC000000</color>

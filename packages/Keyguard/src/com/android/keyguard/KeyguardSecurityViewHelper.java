@@ -110,4 +110,11 @@ public class KeyguardSecurityViewHelper {
 
         return frameDrawable;
     }
+
+    public static boolean hideWidgetFrame(Context context) {
+        return Settings.System.getIntForUser(
+                context.getContentResolver(),
+                Settings.System.LOCKSCREEN_WIDGET_FRAME_ENABLED, 0,
+                UserHandle.USER_CURRENT) == 1;
+    }
 }
