@@ -51,10 +51,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
@@ -448,6 +450,7 @@ public class KeyguardHostView extends KeyguardViewBase {
             mExpandChallengeView.bringToFront();
         }
 
+        activateAlternateKeyguardEca();
     }
 
     private final OnLongClickListener mFastUnlockClickListener = new OnLongClickListener() {
@@ -500,6 +503,50 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
     }
 
+    private void activateAlternateKeyguardEca() {
+        TelephonyManager telephonyManager =
+                (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        if (mLockPatternUtils != null && mLockPatternUtils.isSecure()
+                && telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE) {
+            ImageView altEcaButton = (ImageView) findViewById(
+                    R.id.alt_emergency_call_button);
+            if (altEcaButton != null) {
+                int color = Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.Secure.LOCKSCREEN_MISC_COLOR, -2,
+                        UserHandle.USER_CURRENT);
+                if (color != -2) {
+                    Bitmap callBitmap = BitmapFactory.decodeResource(getContext().getResources(),
+                            R.drawable.ic_lockscreen_emergencycall_normal);
+                    if (callBitmap != null) {
+                        altEcaButton.setImageDrawable(
+                                returnColorizedStateListDrawable(callBitmap, color));
+                    }
+                }
+                altEcaButton.setVisibility(View.VISIBLE);
+                altEcaButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PowerManager power = (PowerManager)
+                                mContext.getSystemService(Context.POWER_SERVICE);
+                        power.userActivity(SystemClock.uptimeMillis(), true);
+                        if (TelephonyManager.getDefault().getCallState()
+                                == TelephonyManager.CALL_STATE_OFFHOOK) {
+                            mLockPatternUtils.resumeCall();
+                        } else {
+                            KeyguardUpdateMonitor.getInstance(mContext)
+                                    .reportEmergencyCallAction(true);
+                            Intent intent = new Intent("com.android.phone.EmergencyDialer.DIAL");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                            getContext().startActivityAsUser(intent,
+                                    new UserHandle(mLockPatternUtils.getCurrentUser()));
+                        }
+                    }
+                });
+            }
+        }
+    }
     private StateListDrawable returnColorizedStateListDrawable(Bitmap bitmap, int color) {
         StateListDrawable lockStates = new StateListDrawable();
         int height = bitmap.getHeight();

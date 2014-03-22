@@ -108,5 +108,24 @@
         </com.android.keyguard.KeyguardSecurityContainer>
 
     </com.android.keyguard.MultiPaneChallengeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dip"
+        android:layout_marginRight="5dip" >
+
+        <ImageView
+            android:id="@+id/alt_emergency_call_button"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/lockscreen_emergency_button" />
+    </RelativeLayout>
+
 </com.android.keyguard.KeyguardHostView>
 
