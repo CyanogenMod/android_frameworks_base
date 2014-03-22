@@ -178,6 +178,16 @@ public class ProfileManager {
     public static final String EXTRA_PROFILES_STATE = "profile_state";
 
     /**
+     * Set the resource id theme to use for the dialog picker activity.<br/>
+     * The default theme is <code>com.android.internal.R.Theme_Holo_Dialog_Alert</code>.
+     *
+     * @see #ACTION_PROFILE_PICKER
+     * @hide
+     */
+    public static final String EXTRA_PROFILE_DIALOG_THEME =
+            "android.intent.extra.profile.DIALOG_THEME";
+
+    /**
      * Profiles are disabled.
      *
      * @see #PROFILES_STATE_CHANGED_ACTION
