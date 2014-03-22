@@ -486,6 +486,28 @@ public final class QBluetoothAdapter {
         return true;
     }
 
+    /**
+     * sends LE Conn update
+     * <p>Requires the {@link android.Manifest.permission#BLUETOOTH_ADMIN}
+     * permission
+     * @return returns true if operation successful
+     /** @hide */
+     public boolean sendLEConnUpdate(BluetoothDevice device, int interval_min, int interval_max,
+             int latency, int supervisionTimeout){
+         if (mAdapter.getState() != BluetoothAdapter.STATE_ON)
+             return false;
+         Log.v(TAG, "QBluetooth adapter, sendLEConnUpdate interval_min" + interval_min +"" +
+                 " max interval_max:"+interval_max + "latency:" +latency + " supervisionTimeout="+ supervisionTimeout);
+         try {
+             synchronized(mManagerCallback) {
+                 if (mService!=null && mQService != null)
+                     return mQService.sendLEConnUpdate(device, interval_min, interval_max,
+                             latency, supervisionTimeout);
+             }
+         } catch (RemoteException e) {Log.e(TAG, "sendLEConnUpdate", e);}
+         return false;
+     }
+
     protected void finalize() throws Throwable {
         try {
             mManagerService.unregisterQAdapter(mManagerCallback);

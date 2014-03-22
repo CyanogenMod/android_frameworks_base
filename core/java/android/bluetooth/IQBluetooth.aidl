@@ -58,4 +58,6 @@ interface IQBluetooth
     void writeLeLppRssiThreshold(in String address, in byte min, in byte max);
     void readLeLppRssiThreshold(in String address);
     void enableLeLppRssiMonitor(in String address, in boolean enable);
+    boolean sendLEConnUpdate(in BluetoothDevice device, in int interval_min, in int interval_max, in int latency,
+            in int supervisionTimeout);
 }
