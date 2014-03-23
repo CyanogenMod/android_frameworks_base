@@ -38,6 +38,10 @@
     <string name="quick_settings_camera_label">Camera</string>
     <string name="quick_settings_network_adb_disabled_label">Uitgeschakeld</string>
     <string name="quick_settings_network_adb_enabled_label">Ingeschakeld</string>
+    <string name="location_mode_high_accuracy_title">Grote nauwkeurigheid</string>
+    <string name="location_mode_battery_saving_title">Accubesparing</string>
+    <string name="location_mode_sensors_only_title">Alleen apparaat</string>
+    <string name="location_mode_location_off_title">Locatie uit</string>
     <string name="quick_settings_expanded_desktop">Uitgebreid</string>
     <string name="quick_settings_expanded_desktop_off">Normaal</string>
     <string name="quick_settings_camera_error_connect">Kan geen verbinding maken met de camera.</string>
