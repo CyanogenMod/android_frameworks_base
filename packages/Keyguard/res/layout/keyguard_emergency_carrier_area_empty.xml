@@ -21,11 +21,47 @@
      it is referenced indirectly by keyguard_eca -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="0dip"
-    android:layout_height="0dip"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_gravity="center_horizontal"
-    android:layout_alignParentBottom="true">
+    android:layout_alignParentBottom="true"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/eca_overlap"
+        style="?android:attr/buttonBarStyle"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="2">
+
+        <com.android.keyguard.EmergencyButton
+            android:id="@+id/emergency_call_button"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/lockscreen_emergency_button"
+            android:text="@string/kg_emergency_call_label"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="@dimen/kg_status_line_font_size"
+            android:textColor="?android:attr/textColorSecondary"
+            android:drawablePadding="8dip"
+            android:textAllCaps="@bool/kg_use_all_caps" />
+
+        <Button android:id="@+id/forgot_password_button"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textSize="@dimen/kg_status_line_font_size"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone"
+            android:textAllCaps="@bool/kg_use_all_caps" />
+    </LinearLayout>
 
 </LinearLayout>
