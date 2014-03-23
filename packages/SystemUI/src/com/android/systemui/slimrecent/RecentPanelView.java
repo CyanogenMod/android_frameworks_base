@@ -406,19 +406,41 @@ public class RecentPanelView {
     protected boolean removeAllApplications() {
         final ActivityManager am = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        for (TaskDescription td : mTasks) {
-            // Kill all recent apps.
+        boolean hasFavorite = false;
+        final int oldTaskSize = mTasks.size() - 1;
+        for (int i = oldTaskSize; i >= 0; i--) {
+            TaskDescription td = mTasks.get(i);
+            // User favorites are not removed.
+            if (td.getIsFavorite()) {
+                hasFavorite = true;
+                continue;
+            }
+            // Remove from task stack.
             if (am != null) {
                 am.removeTask(td.persistentTaskId, ActivityManager.REMOVE_TASK_KILL_PROCESS);
-                removeApplicationBitmapCacheAndExpandedState(td);
+            }
+            // Remove from task list.
+            mTasks.remove(td);
+            // Remove the card.
+            removeRecentCard(td);
+            // Notify ArrayAdapter about the change.
+            mCardArrayAdapter.notifyDataSetChanged();
+            // Remove bitmap and expanded state.
+            removeApplicationBitmapCacheAndExpandedState(td);
+            // Correct global task size.
+            mTasksSize--;
+        }
+        return !hasFavorite;
+    }
+
+    private void removeRecentCard(TaskDescription td) {
+        for (int i = 0; i < mCards.size(); i++) {
+            RecentCard card = (RecentCard) mCards.get(i);
+            if (card != null && card.getPersistentTaskId() == td.persistentTaskId) {
+                mCards.remove(i);
+                return;
             }
         }
-        // Clear all relevant values.
-        mTasks.clear();
-        mCards.clear();
-        mCardArrayAdapter.notifyDataSetChanged();
-        mTasksSize = 0;
-        return true;
     }
 
     /**
@@ -820,6 +842,24 @@ public class RecentPanelView {
 
     protected void setScaleFactor(float factor) {
         mScaleFactor = factor;
+    }
+
+    protected boolean hasFavorite() {
+        for (TaskDescription td : mTasks) {
+            if (td.getIsFavorite()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean hasClearableTasks() {
+        for (TaskDescription td : mTasks) {
+            if (!td.getIsFavorite()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

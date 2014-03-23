@@ -632,6 +632,9 @@ public class RecentController implements RecentPanelView.OnExitListener,
 
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
+            if (!mRecentPanelView.hasClearableTasks()) {
+                return false;
+            }
             return true;
         }
 
@@ -645,6 +648,7 @@ public class RecentController implements RecentPanelView.OnExitListener,
 
             // Gesture was detected and activated. Prepare and play the animations.
             if (mActionDetected) {
+                final boolean hasFavorite = mRecentPanelView.hasFavorite();
 
                 // Setup animation for warning content - fade out.
                 ValueAnimator animation1 = ValueAnimator.ofFloat(1.0f, 0.0f);
@@ -677,8 +681,10 @@ public class RecentController implements RecentPanelView.OnExitListener,
                 });
 
                 // Setup animation for empty recent image - fade in.
-                mEmptyRecentView.setAlpha(0.0f);
-                mEmptyRecentView.setVisibility(View.VISIBLE);
+                if (!hasFavorite) {
+                    mEmptyRecentView.setAlpha(0.0f);
+                    mEmptyRecentView.setVisibility(View.VISIBLE);
+                }
                 ValueAnimator animation4 = ValueAnimator.ofFloat(0.0f, 1.0f);
                 animation4.setDuration(ANIMATION_FADE_IN_DURATION);
                 animation4.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -691,18 +697,22 @@ public class RecentController implements RecentPanelView.OnExitListener,
                 // Start all ValueAnimator animations
                 // and listen onAnimationEnd to prepare the views for the next call.
                 AnimatorSet animationSet = new AnimatorSet();
-                animationSet.playTogether(animation1, animation2, animation3, animation4);
+                if (hasFavorite) {
+                    animationSet.playTogether(animation1, animation3);
+                } else {
+                    animationSet.playTogether(animation1, animation2, animation3, animation4);
+                }
                 animationSet.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         // Animation is finished. Prepare warning content for next call.
                         mRecentWarningContent.setVisibility(View.GONE);
                         mRecentWarningContent.setAlpha(1.0f);
-                        // Prepare listview for next recent call.
-                        mCardListView.setVisibility(View.GONE);
-                        mCardListView.setAlpha(1.0f);
                         // Remove all tasks now.
                         if (mRecentPanelView.removeAllApplications()) {
+                            // Prepare listview for next recent call.
+                            mCardListView.setVisibility(View.GONE);
+                            mCardListView.setAlpha(1.0f);
                             // Finally hide our recents screen.
                             hideRecents(false);
                         }
