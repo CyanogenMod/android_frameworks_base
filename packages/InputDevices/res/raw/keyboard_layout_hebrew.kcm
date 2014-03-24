@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #
-# English (US) International keyboard layout.
+# Hebrew (based EU) keyboard layout.
 #
 
 type OVERLAY
@@ -23,357 +23,319 @@ map key 86 PLUS
 ### ROW 1
 
 key GRAVE {
-    label:                              '\u0300'
-    base:                               '\u0300'
-    shift:                              '\u0303'
+    label:                              '`'
+    base:                               ';'
+    shift:                              '~'
+    shift+capslock:                     '\u05b0'
 }
 
 key 1 {
     label:                              '1'
     base:                               '1'
     shift:                              '!'
-    ralt:                               '\u00a1'
-    ralt+shift:                         '\u00b9'
+    shift+capslock:                     '\u05b1'
 }
 
 key 2 {
     label:                              '2'
     base:                               '2'
     shift:                              '@'
-    ralt:                               '\u00b2'
+    shift+capslock:                     '\u05b2'
 }
 
 key 3 {
     label:                              '3'
     base:                               '3'
     shift:                              '#'
-    ralt:                               '\u00b3'
+    shift+capslock:                     '\u05b3'
 }
 
 key 4 {
     label:                              '4'
     base:                               '4'
     shift:                              '$'
-    ralt:                               '\u00a4'
-    ralt+shift:                         '\u00a3'
+    ralt:                               '\u20aa'
+    shift+capslock:                     '\u05b4'
 }
 
 key 5 {
     label:                              '5'
     base:                               '5'
     shift:                              '%'
-    ralt:                               '\u20ac'
+    shift+capslock:                     '\u05b5'
 }
 
 key 6 {
     label:                              '6'
     base:                               '6'
-    shift:                              '\u0302'
-    ralt:                               '\u00bc'
+    shift:                              '^'
+    shift+capslock:                     '\u05b6'
 }
 
 key 7 {
     label:                              '7'
     base:                               '7'
     shift:                              '&'
-    ralt:                               '\u00bd'
+    shift+capslock:                     '\u05b7'
 }
 
 key 8 {
     label:                              '8'
     base:                               '8'
     shift:                              '*'
-    ralt:                               '\u00be'
+    shift+capslock:                     '\u05b8'
 }
 
 key 9 {
     label:                              '9'
     base:                               '9'
     shift:                              '('
-    ralt:                               '\u2018'
+    shift+capslock:                     '\u05c2'
 }
 
 key 0 {
     label:                              '0'
     base:                               '0'
     shift:                              ')'
-    ralt:                               '\u2019'
+    shift+capslock:                     '\u05c1'
 }
 
 key MINUS {
     label:                              '-'
     base:                               '-'
     shift:                              '_'
-    ralt:                               '\u00a5'
+    ralt:                               '\u05bf'
+    shift+capslock:                     '\u05b9'
 }
 
 key EQUALS {
     label:                              '='
     base:                               '='
     shift:                              '+'
-    ralt:                               '\u00d7'
-    shift+ralt:                         '\u00f7'
+    shift+capslock:                     '\u05bc'
 }
 
 ### ROW 2
 
 key Q {
     label:                              'Q'
-    base:                               'q'
+    base:                               '/'
     shift, capslock:                    'Q'
-    ralt:                               '\u00e4'
-    shift+ralt, capslock+ralt:          '\u00c4'
 }
 
 key W {
     label:                              'W'
-    base:                               'w'
+    base:                               '\u0027'
     shift, capslock:                    'W'
-    ralt:                               '\u00e5'
-    shift+ralt, capslock+ralt:          '\u00c5'
 }
 
 key E {
     label:                              'E'
-    base:                               'e'
+    base:                               '\u05e7'
     shift, capslock:                    'E'
-    ralt:                               '\u00e9'
-    shift+ralt, capslock+ralt:          '\u00c9'
+    ralt:                               '\u20ac'
 }
 
 key R {
     label:                              'R'
-    base:                               'r'
+    base:                               '\u05e8'
     shift, capslock:                    'R'
-    ralt:                               '\u00ae'
 }
 
 key T {
     label:                              'T'
-    base:                               't'
+    base:                               '\u05d0'
     shift, capslock:                    'T'
-    ralt:                               '\u00fe'
-    shift+ralt, capslock+ralt:          '\u00de'
 }
 
 key Y {
     label:                              'Y'
-    base:                               'y'
+    base:                               '\u05d8'
     shift, capslock:                    'Y'
-    ralt:                               '\u00fc'
-    shift+ralt, capslock+ralt:          '\u00dc'
 }
 
 key U {
     label:                              'U'
-    base:                               'u'
+    base:                               '\u05d5'
     shift, capslock:                    'U'
-    ralt:                               '\u00fa'
-    shift+ralt, capslock+ralt:          '\u00da'
+    ralt:                               '\u05f0'
 }
 
 key I {
     label:                              'I'
-    base:                               'i'
+    base:                               '\u05df'
     shift, capslock:                    'I'
-    ralt:                               '\u00ed'
-    shift+ralt, capslock+ralt:          '\u00cd'
 }
 
 key O {
     label:                              'O'
-    base:                               'o'
+    base:                               '\u05dd'
     shift, capslock:                    'O'
-    ralt:                               '\u00f3'
-    shift+ralt, capslock+ralt:          '\u00d3'
 }
 
 key P {
     label:                              'P'
-    base:                               'p'
+    base:                               '\u05e4'
     shift, capslock:                    'P'
-    ralt:                               '\u00f6'
-    shift+ralt, capslock+ralt:          '\u00d6'
 }
 
 key LEFT_BRACKET {
     label:                              '['
-    base:                               '['
+    base, capslock:                     '['
     shift:                              '{'
-    ralt:                               '\u00ab'
 }
 
 key RIGHT_BRACKET {
     label:                              ']'
-    base:                               ']'
+    base, capslock:                     ']'
     shift:                              '}'
-    ralt:                               '\u00bb'
-}
-
-key BACKSLASH {
-    label:                              '\\'
-    base:                               '\\'
-    shift:                              '|'
-    ralt:                               '\u00ac'
-    shift+ralt:                         '\u00a6'
 }
 
 ### ROW 3
 
 key A {
     label:                              'A'
-    base:                               'a'
+    base:                               '\u05e9'
     shift, capslock:                    'A'
-    ralt:                               '\u00e1'
-    shift+ralt, ralt+capslock:          '\u00c1'
 }
 
 key S {
     label:                              'S'
-    base:                               's'
+    base:                               '\u05d3'
     shift, capslock:                    'S'
-    ralt:                               '\u00df'
-    shift+ralt:                         '\u00a7'
 }
 
 key D {
     label:                              'D'
-    base:                               'd'
+    base:                               '\u05d2'
     shift, capslock:                    'D'
-    ralt:                               '\u00f0'
-    shift+ralt, capslock+ralt:          '\u00d0'
 }
 
 key F {
     label:                              'F'
-    base:                               'f'
+    base:                               '\u05db'
     shift, capslock:                    'F'
 }
 
 key G {
     label:                              'G'
-    base:                               'g'
+    base:                               '\u05e2'
     shift, capslock:                    'G'
 }
 
 key H {
     label:                              'H'
-    base:                               'h'
+    base:                               '\u05d9'
     shift, capslock:                    'H'
+    ralt:                               '\u05f2'
 }
 
 key J {
     label:                              'J'
-    base:                               'j'
+    base:                               '\u05d7'
     shift, capslock:                    'J'
+    ralt:                               '\u05f1'
 }
 
 key K {
     label:                              'K'
-    base:                               'k'
+    base:                               '\u05dc'
     shift, capslock:                    'K'
 }
 
 key L {
     label:                              'L'
-    base:                               'l'
+    base:                               '\u05da'
     shift, capslock:                    'L'
-    ralt:                               '\u00f8'
-    shift+ralt, capslock+ralt:          '\u00d8'
 }
 
 key SEMICOLON {
     label:                              ';'
-    base:                               ';'
+    base:                               '\u05e3'
     shift:                              ':'
-    ralt:                               '\u00b6'
-    shift+ralt:                         '\u00b0'
+    capslock:                           ';'
 }
 
 key APOSTROPHE {
     label:                              '\''
-    base:                               '\''
+    base:                               ','
     shift:                              '"'
-    ralt:                               '\u0301'
-    shift+ralt:                         '\u0308'
+    capslock:                           '\''
+}
+
+key BACKSLASH {
+    label:                              '\\'
+    base:                               '\\'
+    shift:                              '|'
 }
 
 ### ROW 4
 
 key PLUS {
     label:                              '\\'
-    base:                               '\\'
+    base, capslock:                     '\\'
     shift:                              '|'
-    ralt:                               '\u00ac'
-    shift+ralt:                         '\u00a6'
 }
 
 key Z {
     label:                              'Z'
-    base:                               'z'
+    base:                               '\u05d6'
     shift, capslock:                    'Z'
-    ralt:                               '\u00e6'
-    shift+ralt, capslock+ralt:          '\u00c6'
 }
 
 key X {
     label:                              'X'
-    base:                               'x'
+    base:                               '\u05e1'
     shift, capslock:                    'X'
 }
 
 key C {
     label:                              'C'
-    base:                               'c'
+    base:                               '\u05d1'
     shift, capslock:                    'C'
-    ralt:                               '\u00a9'
-    shift+ralt:                         '\u00a2'
 }
 
 key V {
     label:                              'V'
-    base:                               'v'
+    base:                               '\u05d4'
     shift, capslock:                    'V'
 }
 
 key B {
     label:                              'B'
-    base:                               'b'
+    base:                               '\u05e0'
     shift, capslock:                    'B'
 }
 
 key N {
     label:                              'N'
-    base:                               'n'
+    base:                               '\u05de'
     shift, capslock:                    'N'
-    ralt:                               '\u00f1'
-    shift+ralt, capslock+ralt:          '\u00d1'
 }
 
 key M {
     label:                              'M'
-    base:                               'm'
+    base:                               '\u05e6'
     shift, capslock:                    'M'
-    ralt:                               '\u00b5'
 }
 
 key COMMA {
     label:                              ','
-    base:                               ','
+    base:                               '\u05ea'
     shift:                              '<'
-    ralt:                               '\u00e7'
-    shift+ralt, capslock+ralt:          '\u00c7'
+    capslock:                           ','
 }
 
 key PERIOD {
     label:                              '.'
-    base:                               '.'
+    base:                               '\u05e5'
     shift:                              '>'
+    capslock:                           '.'
 }
 
 key SLASH {
     label:                              '/'
-    base:                               '/'
+    base:                               '.'
     shift:                              '?'
-    ralt:                               '\u00bf'
+    capslock:                           '/'
 }
