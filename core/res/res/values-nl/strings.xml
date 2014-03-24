@@ -856,8 +856,8 @@
     <string name="emergency_calls_only" msgid="6733978304386365407">"Alleen noodoproepen"</string>
     <string name="lockscreen_network_locked_message" msgid="143389224986028501">"Netwerk vergrendeld"</string>
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"SIM-kaart is vergrendeld met PUK-code."</string>
-    <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"Raadpleeg de gebruikershandleiding of neem contact op met de klantenservice."</string>
-    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM-kaart is vergrendeld."</string>
+    <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">PIN1 geblokkeerd. PUK1 invoeren\nof\nRaadpleeg de gebruikershandleiding of neem contact op met de klantenservice.</string>
+    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM/RUIM-kaart is vergrendeld."</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"SIM-kaart ontgrendelen..."</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"U heeft uw ontgrendelingspatroon <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist getekend. \n\nProbeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"U heeft uw wachtwoord <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist getypt. \n\nProbeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
@@ -1528,7 +1528,7 @@
     <string name="kg_sim_unlock_progress_dialog_message" msgid="8950398016976865762">"Simkaart ontgrendelen..."</string>
     <string name="kg_password_wrong_pin_code" msgid="1139324887413846912">"Onjuiste pincode."</string>
     <string name="kg_invalid_sim_pin_hint" msgid="8795159358110620001">"Voer een pincode van 4 tot 8 cijfers in."</string>
-    <string name="kg_invalid_sim_puk_hint" msgid="7553388325654369575">"De PUK-code is minimaal acht nummers lang."</string>
+    <string name="kg_invalid_sim_puk_hint" msgid="7553388325654369575">"De PUK-code is acht nummers lang."</string>
     <string name="kg_invalid_puk" msgid="3638289409676051243">"Geef de juiste PUK-code opnieuw op. Bij herhaalde pogingen wordt de simkaart permanent uitgeschakeld."</string>
     <string name="kg_invalid_confirm_pin_hint" product="default" msgid="7003469261464593516">"Pincodes komen niet overeen"</string>
     <string name="kg_login_too_many_attempts" msgid="6486842094005698475">"Te veel patroonpogingen"</string>
