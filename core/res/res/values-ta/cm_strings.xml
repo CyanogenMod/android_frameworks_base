@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012-2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameDefault">"முன்னிருப்பு"</string>
+    <string name="profileNameWork">"வேலை"</string>
+    <string name="profileNameHome">"வீடு"</string>
+    <string name="profileNameSilent">"மௌனம்"</string>
+    <string name="profileNameNight">"இரவு"</string>
+    <string name="profileNameAutomobile">"வண்டி"</string>
+    <string name="profileGroupPhone">"தொலைபேசி"</string>
+    <string name="profileGroupCalendar">"நாட்காட்டி"</string>
+    <string name="profileGroupGmail">"ஜிமெயில்"</string>
+    <string name="profileGroupEmail">"மின்னஞ்சல்"</string>
+    <string name="profileGroupSMS">"எஸ்எம்எஸ்"</string>
+    <string name="wildcardProfile">"மற்றவை"</string>
+    <string name="global_action_screenshot">"திரைப்பிடிப்பு"</string>
+    <string name="global_actions_toggle_expanded_desktop_mode">"விரிவாக்கப்பட்ட மேசைத்தளம்"</string>
+    <string name="global_actions_expanded_desktop_mode_on_status">"இயக்கப்பட்டது"</string>
+    <string name="global_actions_expanded_desktop_mode_off_status">"முடக்கப்பட்டது"</string>
+    <string name="reboot_system" product="tablet">"கைக்கணினி மறுதொடக்கம் செய்யவும்."</string>
+    <string name="reboot_system" product="default">"தொலைபேசி மறுதொடக்கம் செய்யவும்."</string>
+    <string name="reboot_reboot">"மறுதொடக்கம்"</string>
+    <string name="reboot_recovery">"மீட்பு (ரெகவரி)"</string>
+    <string name="reboot_bootloader">"துவக்க ஏற்றி"</string>
+    <string name="reboot_bootmenu">"துவக்க மெனு"</string>
+    <string name="reboot_fastboot">"வேகதுவக்கி"</string>
+    <string name="reboot_download">"பதிவிறக்கம்"</string>
+    <string name="reboot_progress">"மீண்டும் துவக்க\u2026"</string>
+    <string name="reboot_confirm" product="tablet">"உங்கள் கைக்கணினி மீண்டும் துவக்கபடும்."</string>
+    <string name="reboot_confirm" product="default">"உங்கள் தொலைபேசி மீண்டும் துவக்கபடும்."</string>
+    <string name="permlab_preventpower">"ஆற்றல் பொத்தானை தடுக்க"</string>
+    <string name="permdesc_preventpower">"பயன்பாட்டை ஆற்றல் பொத்தானை புறக்கணிக்க அனுமதிக்கும்"</string>
+    <string name="permlab_sendMockSms">"போலி எஸ்எம்எஸ் அனுப்பவும்"</string>
+    <string name="permdesc_sendMockSms">"பயன்பாட்டை போலி எஸ்எம்எஸ் அனுப்ப அனுமதிக்கிறது. இந்த ஒரு பயன்பாட்டை நம்பகமான பயன்பாடுகள் எஸ்எம்எஸ் அனுப்ப அனுமதிக்கிறது. தீங்கிழைக்கும் பயன்பாடுகள் தொடர்ந்து செய்திகளை அனுப்பி சாதனம் அறிவித்தல் அமைப்பை பூட்ட மற்றும் பயனரை இடையூறு செய்ய  முடியும்."</string>
+    <string name="storage_sd_dock_card">"எஸ்டி அட்டையை இணைக்கவும்"</string>
+    <string name="app_killed_message">"பயன்பாடு கொல்லப்பட்டது"</string>
+    <string name="global_action_reboot">"மறுதொடக்கம்"</string>
+    <string name="global_action_choose_profile">"சுயவிவரம்"</string>
+    <string name="toast_rotation_unlocked">"திரை சுழற்சி திறக்கப்பட்டது."</string>
+    <string name="toast_rotation_locked">"திரை சுழற்சி பூட்டப்பட்டுள்ளது."</string>
+    <string name="stylus_app_not_installed">"%s நிறுவப்படவில்லை"</string>
+    <string name="permlab_changePrivacyGuardState">"தனியுரிமை பாதுகாப்பு செயல்படுத்த அல்லது செயல்நீக்க"</string>
+    <string name="permdesc_changePrivacyGuardState">"பயன்பாட்டை மற்றொரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்குமா என்பதை மாற்ற அனுமதிக்கிறது. ஒரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்கும் போது, இது போன்ற தொடர்புகள், அழைப்பு பதிவுகள், மற்றும் செய்திகள் போன்ற தனிப்பட்ட தரவுக்கான அணுகல் இருக்காது."</string>
+    <string name="privacy_guard_notification">"தனியுரிமை பாதுகாப்பு செயலில்"</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> தனிப்பட்ட தரவை அணுக முடியாது</string>
+    <string name="profile_picker_title">"சுயவிவரங்கள்"</string>
+    <string name="profile_none">"இவற்றில் எதுவுமில்லை"</string>
+    <string name="perf_profile_pwrsv">"சக்தி சேமிப்பு"</string>
+    <string name="perf_profile_bal">"சமப்படுத்தப்பட்ட"</string>
+    <string name="perf_profile_perf">"செயல்திறன்"</string>
+    <string name="permlab_interceptSmsSent">"வெளியேறும் எஸ்எம்எஸ் ஐ இடைமறி"</string>
+    <string name="permdesc_interceptSmsSent">"இது பயன்பாட்டை வெளியேறும் எஸ்எம்எஸ் ஐ இடைமறிக்க அனுமதிக்கிறது. தீங்கிழைக்கும் பயன்பாடுகள் வெளியேறும் எஸ்எம்எஸ் ஐ தடுக்க இதை பயன்படுத்தலாம்."</string>
+    <string name="permlab_resetBatteryStats">"மின்கலவடுக்கு புள்ளிவிவரங்களை மீட்டமைக்கவும்"</string>
+    <string name="permdesc_resetBatteryStats">"பயன்பாட்டை தற்போதைய கீழ்நிலை மின்கலவடுக்கு செலவழிவு தரவை மீட்டமைக்க அனுமதிக்கிறது."</string>
+    <string name="immersive_mode_confirmation_bottom">"முழு திரையிலிருந்து வெளியேற கீழே இருந்து தேய்க்கவும்."</string>
+</resources>
