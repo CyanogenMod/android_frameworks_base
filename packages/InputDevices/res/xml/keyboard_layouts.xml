@@ -127,4 +127,8 @@
     <keyboard-layout android:name="keyboard_layout_ukrainian"
             android:label="@string/keyboard_layout_ukrainian"
             android:keyboardLayout="@raw/keyboard_layout_ukrainian" />
+
+    <keyboard-layout android:name="keyboard_layout_hebrew"
+            android:label="@string/keyboard_layout_hebrew"
+            android:keyboardLayout="@raw/keyboard_layout_hebrew" />
 </keyboard-layouts>

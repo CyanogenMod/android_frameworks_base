@@ -101,4 +101,7 @@
 
     <!-- Ukrainian keyboard layout label. [CHAR LIMIT=35] -->
     <string name="keyboard_layout_ukrainian">Ukrainian</string>
+
+    <!-- Hebrew keyboard layout label. [CHAR LIMIT=35] -->
+    <string name="keyboard_layout_hebrew">Hebrew</string>
 </resources>
