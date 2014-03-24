@@ -19,6 +19,7 @@
     <string name="profileNameHome">Casa</string>
     <string name="profileNameSilent">Silenci</string>
     <string name="profileNameNight">Nit</string>
+    <string name="profileNameAutomobile">Automòbil</string>
     <string name="profileGroupPhone">Telèfon</string>
     <string name="profileGroupCalendar">Calendari</string>
     <string name="profileGroupGmail">Gmail</string>
@@ -66,4 +67,48 @@
     <string name="permlab_resetBatteryStats">reinicia estadítiques de la bateria</string>
     <string name="permdesc_resetBatteryStats">Permet a una aplicació reiniciar les dades de baix nivell d\'us actual de la bateria.</string>
     <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
+
+    <string name="app_ops_access_camera">accedir a la càmera</string>
+    <string name="app_ops_access_location">accedir a la teva ubicació</string>
+    <string name="app_ops_access_notifications">llegir les teves notificacions</string>
+    <string name="app_ops_alarm_wakeup">encendre el teu dispositiu</string>
+    <string name="app_ops_draw_on_top">dibuixar a sobre</string>
+    <string name="app_ops_keep_device_awake">mantenir el teu dispositiu encès</string>
+    <string name="app_ops_make_phone_call">fer una trucada</string>
+    <string name="app_ops_modify_calendar">actualitzar el teu calendari</string>
+    <string name="app_ops_modify_call_log">actualitzar el registre de trucades</string>
+    <string name="app_ops_modify_clipboard">modificar el portapapers</string>
+    <string name="app_ops_modify_contacts">actualitzar els teus contactes</string>
+    <string name="app_ops_modify_settings">actualitzar els ajustaments del sistema</string>
+    <string name="app_ops_play_audio">reproduir so</string>
+    <string name="app_ops_post_notification">publicar una notificació</string>
+    <string name="app_ops_read_calendar">llegir el teu calendari</string>
+    <string name="app_ops_read_call_log">llegir el registre de trucades</string>
+    <string name="app_ops_read_clipboard">llegir el portapapers</string>
+    <string name="app_ops_read_contacts">llegir els teus contactes</string>
+    <string name="app_ops_read_mms">llegir els teus missatges MMS</string>
+    <string name="app_ops_read_sms">llegir els teus missatges SMS</string>
+    <string name="app_ops_receive_sms">rebre un missatge SMS</string>
+    <string name="app_ops_record_audio">enregistrar so</string>
+    <string name="app_ops_send_mms">enviar un missatge MMS</string>
+    <string name="app_ops_send_sms">enviar un missatge SMS</string>
+    <string name="app_ops_start_at_bootup">iniciar-se a l\'engegar</string>
+    <string name="app_ops_toggle_bluetooth">canviar el Bluetooth</string>
+    <string name="app_ops_toggle_mobile_data">canviar les dades mòbils</string>
+    <string name="app_ops_toggle_wifi">canviar WiFi</string>
+    <string name="app_ops_use_alarm_volume">controlar el volum de l\'alarma</string>
+    <string name="app_ops_use_audio_focus">controlar el focus del so</string>
+    <string name="app_ops_use_bluetooth_volume">controlar el volum del Bluetooth</string>
+    <string name="app_ops_use_master_volume">controlar el volum principal</string>
+    <string name="app_ops_use_media_buttons">utilitzar els botons multimèdia</string>
+    <string name="app_ops_use_media_volume">controlar el volum multimèdia</string>
+    <string name="app_ops_use_notification_volume">controlar el volum de les notificacions</string>
+    <string name="app_ops_use_ring_volume">controlar el volum del to de trucada</string>
+    <string name="app_ops_use_vibrate">utilitzar resposta hàptica</string>
+    <string name="app_ops_use_voice_volume">controlar el volum de la veu de la trucada</string>
+    <string name="app_ops_write_mms">escriure un missatge MMS</string>
+    <string name="app_ops_write_sms">escriu un missatge SMS</string>
+
+    <string name="privacy_guard_dialog_title">Guarda de privacitat</string>
+    <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> voldria <xliff:g id="op">%2$s</xliff:g>.</string>
 </resources>
