@@ -24,9 +24,14 @@ import android.content.Intent;
 public class FlashLightConstants {
 
     /**
-     * Package name of the lightbulb app
+     * Package name of the flashlight app
      */
-    public static final String APP_PACKAGE_NAME = "org.namelessrom.flashlight";
+    public static final String APP_PACKAGE_NAME = "net.cactii.flash2";
+
+     /**
+     * Service name of the flashlight app
+     */
+    public static final String APP_SERVICE_NAME = APP_PACKAGE_NAME + ".TorchService";
 
     /**
      * Intent broadcast action for toggling the torch state
