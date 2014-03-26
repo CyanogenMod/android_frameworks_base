@@ -2142,15 +2142,19 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void addActiveDisplayView() {
         if (mActiveDisplayView == null) {
+            Log.v(TAG, "Adding active display view");
             mActiveDisplayView = (ActiveDisplayView)View.inflate(mContext, R.layout.active_display, null);
             mActiveDisplayView.setBar(this);
             mWindowManager.addView(mActiveDisplayView, getActiveDisplayViewLayoutParams());
+        } else {
+            Log.v(TAG, "Re-adding (no-op) active display view");
         }
     }
 
     protected void removeActiveDisplayView() {
         if (mActiveDisplayView != null) {
             mWindowManager.removeView(mActiveDisplayView);
+            mActiveDisplayView = null;
         }
     }
 
