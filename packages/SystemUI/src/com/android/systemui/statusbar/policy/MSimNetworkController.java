@@ -913,6 +913,7 @@ public class MSimNetworkController extends NetworkController {
                         mMSimContentDescriptionDataType[subscription];
             } else {
                 mMSimMobileActivityIconId[subscription] = 0;
+                mMSimcombinedActivityIconId[subscription] = 0;
             }
         }
 
