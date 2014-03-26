@@ -1,4 +1,4 @@
-Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source form and compiled forms (SGML, HTML,
 PDF, PostScript, RTF and so forth) with or without modification, are
@@ -27,6 +27,8 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
 
+=========================================================================================
+  Last update: 03/14/14
 =========================================================================================
   Description
 =========================================================================================
@@ -66,10 +68,9 @@ The following two methods are the PerfLock APIs
 
               NOTE: Enter the optimizations required in the order they appear in the table.
 
-    Returns: On success, a non-zero integer handle is returned, you must store this.
-             On error, a NULL pointer is returned.
+    Returns: REQUEST_SUCCEEDED or REQUEST_FAILED.
 
-2. perfLockRelease() [OPTIONAL]
+2. perfLockRelease()
 
     Description:
 
@@ -84,7 +85,7 @@ The following two methods are the PerfLock APIs
   Optimizations Supported
 =========================================================================================
 
-The following resource optimizations are supported for MSM8960:
+The following resource optimizations are supported:
 
  ===============================================================================================
 |         |                                        |                                            |
@@ -94,7 +95,7 @@ The following resource optimizations are supported for MSM8960:
 |    1    | ALL_CPUS_PWR_CLPS_DIS                  | Disables power collapse on all CPUs        |
 |         |                                        |                                            |
  ===============================================================================================
-|    2    | CPUS_ON_MAX                            | Minimum of four cores on                   |
+|    2    | CPUS_ON_MAX                            | Minimum of all cores on                    |
 |         |________________________________________|____________________________________________|
 |         | CPUS_ON_3                              | Minimum of three cores on                  |
 |         |________________________________________|____________________________________________|
@@ -117,8 +118,8 @@ The following resource optimizations are supported for MSM8960:
 | Example: Set CPU0 frequency to a minimum of 700 Mhz                                           |
 |          Use 0x207.                                                                           |
 |                                                                                               |
-| Example: Set CPU1 frequency to a minimum of 2.0 Ghz                                           |
-|          Use 0x314.                                                                           |
+| Example: Set CPU1 frequency to a maximum of 2.0 Ghz                                           |
+|          Use 0x1614.                                                                           |
 |                                                                                               |
  ===============================================================================================
 |    3    | CPU0_FREQ_LVL_TURBO_MAX = 0x2FE        | Set CPU0 minimum frequency to device max   |
@@ -141,9 +142,16 @@ The following resource optimizations are supported for MSM8960:
 |         | CPU3_FREQ_LVL_NONTURBO_MAX = 0x50A     | Set CPU3 minimum frequency to 1026 Mhz     |
 |         |                                        |                                            |
  ===============================================================================================
-|    7    | ALL_CPUS_FREQ_LVL_TURBO_MAX = 0x9FE    | Set all online CPUs frequency to device max|
-|         |________________________________________|____________________________________________|
-|         | ALL_CPUS_FREQ_LVL_NONTURBO_MAX = 0x90A | Set all online CPUs frequency to 1026 Mhz  |
+|    7    | CPU0_MAX_FREQ_LVL_NONTURBO_MAX = 0x150A| Set CPU0 maximum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|    8    | CPU1_MAX_FREQ_LVL_NONTURBO_MAX = 0x160A| Set CPU1 maximum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|    9    | CPU2_MAX_FREQ_LVL_NONTURBO_MAX = 0x170A| Set CPU2 maximum frequency to 1026 Mhz     |
+|         |                                        |                                            |
+ ===============================================================================================
+|   10    | CPU3_MAX_FREQ_LVL_NONTURBO_MAX = 0x180A| Set CPU3 maximum frequency to 1026 Mhz     |
 |         |                                        |                                            |
  ===============================================================================================
 
@@ -167,8 +175,8 @@ Example: Request PerfLock for minimum of two cores and set the
 
    Performance mPerf = new Performance();
 
-   mPerf.perfLockAcquire(3000, mPerf.CPUS_ON_2, \
-                       mPerf.CPU0_FREQ_LVL_NONTURBO_MAX, mPerf.CPU1_FREQ_LVL_NONTURBO_MAX);
+   mPerf.perfLockAcquire(3000, Performance.CPUS_ON_2, \
+                       Performance.CPU0_FREQ_LVL_NONTURBO_MAX, Performance.CPU1_FREQ_LVL_NONTURBO_MAX);
 
    // Critical section requiring PerfLock
 
@@ -184,7 +192,7 @@ Example: Request PerfLock for minimum of three cores in one section.
    Performance mPerf = new Performance();
    Performance sPerf = new Performance();
 
-   mPerf.perfLockAcquire(5000, mPerf.CPUS_ON_3);
+   mPerf.perfLockAcquire(5000, Performance.CPUS_ON_3);
 
    // Critical section requiring PerfLock
 
@@ -192,7 +200,7 @@ Example: Request PerfLock for minimum of three cores in one section.
 
    // other code in between
 
-   sPerf.perfLockAcquire(3000, sPerf.CPUS_ON_2);
+   sPerf.perfLockAcquire(3000, Performance.CPUS_ON_2);
 
    // Critical section requiring PerfLock
 

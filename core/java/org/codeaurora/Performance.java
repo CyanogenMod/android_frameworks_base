@@ -55,15 +55,21 @@ public class Performance
     /** @hide */ public static final int CPU3_FREQ_NONTURBO_MAX = 0x50A;
     /** @hide */ public static final int CPU3_FREQ_TURBO_MAX = 0x5FE;
 
+    /** @hide */ public static final int CPU0_MAX_FREQ_NONTURBO_MAX = 0x150A;
+
+    /** @hide */ public static final int CPU1_MAX_FREQ_NONTURBO_MAX = 0x160A;
+
+    /** @hide */ public static final int CPU2_MAX_FREQ_NONTURBO_MAX = 0x170A;
+
+    /** @hide */ public static final int CPU3_MAX_FREQ_NONTURBO_MAX = 0x180A;
+
     /** @hide */ public static final int CPUS_ON_2 = 0x702;
     /** @hide */ public static final int CPUS_ON_3 = 0x703;
-    /** @hide */ public static final int CPUS_ON_MAX = 0x704;
-    /** @hide */ public static final int CPUS_ON_LIMIT_1 = 0x7FE;
-    /** @hide */ public static final int CPUS_ON_LIMIT_2 = 0x7FD;
-    /** @hide */ public static final int CPUS_ON_LIMIT_3 = 0x7FC;
+    /** @hide */ public static final int CPUS_ON_MAX = 0x7FF;
 
-    /** @hide */ public static final int ALL_CPUS_FREQ_NONTURBO_MAX = 0x90A;
-    /** @hide */ public static final int ALL_CPUS_FREQ_TURBO_MAX = 0x9FE;
+    /** @hide */ public static final int CPUS_ON_LIMIT_1 = 0x8FE;
+    /** @hide */ public static final int CPUS_ON_LIMIT_2 = 0x8FD;
+    /** @hide */ public static final int CPUS_ON_LIMIT_3 = 0x8FC;
 
     /* The following are the PerfLock API return values*/
     /** @hide */ public static final int REQUEST_FAILED = -1;
@@ -84,29 +90,6 @@ public class Performance
     /** &hide */
     public int perfLockRelease() {
         return native_perf_lock_rel(handle);
-    }
-
-    /** &hide */
-    public void setCpuBoost() {
-        int[] configPerfLock = new int[4];
-        final int DURATION_OF_PERFLOCK = 2000;
-
-        configPerfLock[0] = ALL_CPUS_PWR_CLPS_DIS;
-        configPerfLock[1] = CPUS_ON_MAX;
-        configPerfLock[2] = CPU0_FREQ_TURBO_MAX;
-        configPerfLock[3] = CPU1_FREQ_TURBO_MAX;
-
-        perfLockAcquire(DURATION_OF_PERFLOCK, configPerfLock);
-    }
-
-    /* The following are for internal use only */
-    /** @hide */ public static final int CPUOPT_CPU0_PWRCLSP = 1;
-    /** @hide */ public static final int CPUOPT_CPU0_FREQMIN = 2;
-    /** @hide */ public static final int CPUOPT_CPU1_FREQMIN = 3;
-
-    /** &hide */
-    public int cpuSetOptions(int reqType, int reqValue) {
-        return native_cpu_setoptions(reqType, reqValue);
     }
 
     /** &hide */
