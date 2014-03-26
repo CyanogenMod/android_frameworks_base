@@ -184,6 +184,7 @@ public class SignalClusterView
             if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
                 mMobileCdmaVisible = true;
                 mMobileCdma1xOnlyVisible = false;
+                mMobileStrengthId = 0;
 
                 mMobileCdma1xId = strengthIcon;
                 mMobileCdma3gId = getMobileCdma3gId(mMobileCdma1xId);
@@ -191,8 +192,12 @@ public class SignalClusterView
                     && (show1xOnly() || isRoaming())) {
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = true;
+                mMobileStrengthId = 0;
 
                 mMobileCdma1xOnlyId = strengthIcon;
+            } else {
+                mMobileCdmaVisible = false;
+                mMobileCdma1xOnlyVisible = false;
             }
         } else {
             mMobileCdmaVisible = false;
