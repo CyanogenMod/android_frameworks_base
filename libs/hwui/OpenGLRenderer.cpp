@@ -130,7 +130,7 @@ OpenGLRenderer::OpenGLRenderer():
     mFirstSnapshot = new Snapshot;
     mFrameStarted = false;
     mCountOverdraw = false;
-
+    mExtendedTiling = false;
     mScissorOptimizationDisabled = false;
 }
 
@@ -203,7 +203,7 @@ void OpenGLRenderer::setupFrameState(float left, float top,
     mTilingClip.set(left, top, right, bottom);
 }
 
-status_t OpenGLRenderer::startFrame() {
+status_t OpenGLRenderer::startFrame(bool useExTiling) {
     if (mFrameStarted) return DrawGlInfo::kStatusDone;
     mFrameStarted = true;
 
@@ -217,8 +217,12 @@ status_t OpenGLRenderer::startFrame() {
     // This ensures we don't use tiling when a functor is going to be
     // invoked during the frame
     mSuppressTiling = mCaches.hasRegisteredFunctors();
-
-    startTiling(mSnapshot, true);
+    if (!mSuppressTiling) {
+        startTiling(mSnapshot, true);
+    }
+    else if (useExTiling){
+        startTilingEx(mSnapshot);
+    }
 
     debugOverdraw(true, true);
 
@@ -304,10 +308,30 @@ void OpenGLRenderer::startTiling(const Rect& clip, int windowHeight, bool opaque
     }
 }
 
-void OpenGLRenderer::endTiling() {
-    if (!mSuppressTiling) mCaches.endTiling();
+void OpenGLRenderer::startTilingEx(const sp<Snapshot>& s) {
+    Rect* clip = &mTilingClip;
+    if (s->flags & Snapshot::kFlagFboTarget) {
+      clip = &(s->layer->clipRect);
+    }
+
+    mCaches.startTiling(clip->left, s->height - clip->bottom,
+            clip->right - clip->left, clip->bottom - clip->top, true);
+    mExtendedTiling = true;
 }
 
+void OpenGLRenderer::endTiling() {
+    if (!mSuppressTiling)
+      mCaches.endTiling();
+    else
+      endTilingEx();
+}
+
+void OpenGLRenderer::endTilingEx() {
+    if (mExtendedTiling) {
+        mCaches.endTiling();
+        mExtendedTiling = false;
+    }
+}
 void OpenGLRenderer::finish() {
     renderOverdraw();
     endTiling();
@@ -2043,7 +2067,7 @@ status_t OpenGLRenderer::drawDisplayList(DisplayList* displayList, Rect& dirty,
     // will be performed by the display list itself
     if (displayList && displayList->isRenderable()) {
         if (CC_UNLIKELY(mCaches.drawDeferDisabled)) {
-            status = startFrame();
+            status = startFrame(true);
             ReplayStateStruct replayStruct(*this, dirty, replayFlags);
             displayList->replay(replayStruct, 0);
             return status | replayStruct.mDrawGlStatus;
@@ -2055,7 +2079,7 @@ status_t OpenGLRenderer::drawDisplayList(DisplayList* displayList, Rect& dirty,
         displayList->defer(deferStruct, 0);
 
         flushLayers();
-        status = startFrame();
+        status = startFrame(true);
 
         return status | deferredList.flush(*this, dirty);
     }
