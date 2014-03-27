@@ -8,8 +8,6 @@ import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.Phone;
-import com.android.internal.telephony.PhoneConstants;
-import com.android.internal.telephony.RILConstants;
 import com.android.systemui.R;
 
 import java.util.ArrayList;
@@ -48,7 +46,20 @@ public class LTEButton extends PowerButton{
     protected void toggleState(Context context) {
         TelephonyManager tm = (TelephonyManager)
             context.getSystemService(Context.TELEPHONY_SERVICE);
-        tm.toggleLTE();
+        int network = getCurrentPreferredNetworkMode(context);
+        switch(network) {
+            case Phone.NT_MODE_GLOBAL:
+            case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_CMDA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_WCDMA:
+                tm.toggleLTE(false);
+                break;
+            default:
+                tm.toggleLTE(true);
+                break;
+        }
     }
 
     @Override
@@ -66,12 +77,13 @@ public class LTEButton extends PowerButton{
     }
 
     private static int getCurrentPreferredNetworkMode(Context context) {
-        int preferredNetworkMode = RILConstants.PREFERRED_NETWORK_MODE;
-        if (TelephonyManager.getLteOnCdmaModeStatic() == PhoneConstants.LTE_ON_CDMA_TRUE) {
-            preferredNetworkMode = Phone.NT_MODE_GLOBAL;
+        int network = -1;
+        try {
+            network = Settings.Global.getInt(context.getContentResolver(),
+                    Settings.Global.PREFERRED_NETWORK_MODE);
+        } catch (SettingNotFoundException e) {
+            e.printStackTrace();
         }
-        int network = Settings.Global.getInt(context.getContentResolver(),
-                        Settings.Global.PREFERRED_NETWORK_MODE, preferredNetworkMode);
         return network;
     }
 }
