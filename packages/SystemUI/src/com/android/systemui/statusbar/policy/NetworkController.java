@@ -746,6 +746,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                                 R.string.accessibility_data_connection_3g);
                     }
                     break;
+                case TelephonyManager.NETWORK_TYPE_DCHSPAP:
+                    mDataIconList = TelephonyIcons.DATA_DC[mInetCondition];
+                    mDataTypeIconId = R.drawable.stat_sys_data_fully_connected_dc;
+                    mQSDataTypeIconId = TelephonyIcons.QS_DATA_DC[mInetCondition];
+                    mContentDescriptionDataType = mContext.getString(
+                            R.string.accessibility_data_connection_DC);
+                    break;
                 case TelephonyManager.NETWORK_TYPE_CDMA:
                     if (!mShowAtLeastThreeGees) {
                         // display 1xRTT for IS95A/B
