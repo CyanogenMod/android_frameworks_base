@@ -23,6 +23,13 @@ import java.util.Calendar;
 
 public class QuietHoursUtils {
     public static boolean inQuietHours(Context context, String option) {
+        // If Quiet hours is forced return immediately
+        if (Settings.System.getInt(context.getContentResolver(),
+                Settings.System.QUIET_HOURS_FORCED, 0) != 0) {
+            return true;
+        }
+
+        // Check if we are in timed Quiet hours mode
         boolean quietHoursEnabled = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.QUIET_HOURS_ENABLED, 0) != 0;
         int quietHoursStart = Settings.System.getInt(context.getContentResolver(),
