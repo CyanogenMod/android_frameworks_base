@@ -461,10 +461,12 @@ public class UsbDeviceManager {
             // with OEM specific mode.
             if (functions != null && makeDefault && !needsOemUsbOverride()) {
 
-                if (mAdbEnabled) {
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
-                } else {
-                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                if (!"charging".equals(functions)) {
+                    if (mAdbEnabled) {
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    } else {
+                        functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    }
                 }
                 if (!mDefaultFunctions.equals(functions)) {
                     if (!setUsbConfig("none")) {
