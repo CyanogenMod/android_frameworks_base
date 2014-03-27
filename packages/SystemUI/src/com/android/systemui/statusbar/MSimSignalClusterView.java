@@ -322,9 +322,10 @@ public class MSimSignalClusterView
             mMobile[subscription].setVisibility(View.GONE);
         }
 
-        if (subscription != 0) {
+        if (subscription == 0) {
             if (mMobileVisible && mWifiVisible && ((mIsAirplaneMode) ||
-                    (mNoSimIconId[subscription] != 0))) {
+                    (mNoSimIconId[subscription] != 0) ||
+                    (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT))) {
                 mSpacer.setVisibility(View.INVISIBLE);
             } else {
                 mSpacer.setVisibility(View.GONE);
