@@ -46,7 +46,7 @@ import java.util.List;
 public final class BluetoothHeadset implements BluetoothProfile {
     private static final String TAG = "BluetoothHeadset";
     private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = Log.isLoggable("Handsfree", Log.VERBOSE);
 
     /**
      * Intent used to broadcast the change in connection state of the Headset
