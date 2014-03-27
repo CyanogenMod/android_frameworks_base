@@ -5502,6 +5502,14 @@ public final class Settings {
             TELO_RADIO_GO3G_UNLOCK,
         };
 
+        /**
+         * Settings to reset on user choice. They will fall back to their default value (0).
+         *
+         * @hide
+         */
+        public static final String[] SETTINGS_TO_RESET = {
+        };
+
         // Settings moved to Settings.Secure
 
         /**
