@@ -3759,6 +3759,13 @@ public final class Settings {
 
         /**
          * Turn screen on when pulled out of pocket even if no notifications are pending
+         * Whether to enforce quiet hours regardless of the timer.
+         * @hide
+         */
+        public static final String QUIET_HOURS_FORCED = "quiet_hours_forced";
+
+        /**
+         * Whether to enable quiet hours.
          * @hide
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_SHOW_ALWAYS = "lockscreen_notifications_show_always";
