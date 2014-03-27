@@ -23,14 +23,26 @@ import java.util.Calendar;
 
 public class QuietHoursUtils {
     public static boolean inQuietHours(Context context, String option) {
+        // If Quiet hours is forced return immediately
+        if (Settings.System.getInt(context.getContentResolver(),
+                Settings.System.QUIET_HOURS_FORCED, 0) != 0) {
+            return true;
+        }
+
+        // Check if we are in timed Quiet hours mode
         boolean quietHoursEnabled = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.QUIET_HOURS_ENABLED, 0) != 0;
         int quietHoursStart = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.QUIET_HOURS_START, 0);
         int quietHoursEnd = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.QUIET_HOURS_END, 0);
-        boolean quietHoursOption = Settings.System.getInt(context.getContentResolver(),
-                option, 0) != 0;
+
+        // If an option is specified, check it otherwise, assume its a generic query
+        boolean quietHoursOption =
+                option != null
+                    ? Settings.System.getInt(context.getContentResolver(), option, 0) != 0
+                    : true;
+
         if (quietHoursEnabled && quietHoursOption && (quietHoursStart != quietHoursEnd)) {
                 // Get the date in "quiet hours" format.
                 Calendar calendar = Calendar.getInstance();
