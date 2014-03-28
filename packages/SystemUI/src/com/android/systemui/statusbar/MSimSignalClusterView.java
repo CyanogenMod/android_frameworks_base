@@ -80,6 +80,13 @@ public class MSimSignalClusterView
     private ViewGroup mMobileCdmaGroup;
     private ImageView mMobileCdma3g, mMobileCdma1x, mMobileCdma1xOnly;
 
+    //data & voice
+    private boolean[] mMobileDataVoiceVisible;
+    private int[] mMobileSignalDataId;
+    private int[] mMobileSignalVoiceId;
+    private ViewGroup[] mMobileDataVoiceGroup;
+    private ImageView[] mMobileSignalData, mMobileSignalVoice;
+
     //data
     private boolean mDataVisible[];
     private int mDataActivityId[];
@@ -102,6 +109,12 @@ public class MSimSignalClusterView
                                         R.id.data_combo_sub3};
     private int[] mDataActResourceId = {R.id.data_inout, R.id.data_inout_sub2,
                                         R.id.data_inout_sub3};
+    private int[] mMobileDataVoiceGroupResourceId = {R.id.mobile_data_voice,
+            R.id.mobile_data_voice_sub2, R.id.mobile_data_voice_sub3};
+    private int[] mMobileSignalDataResourceId = {R.id.mobile_signal_data,
+            R.id.mobile_signal_data_sub2, R.id.mobile_signal_data_sub3};
+    private int[] mMobileSignalVoiceResourceId = {R.id.mobile_signal_voice,
+            R.id.mobile_signal_voice_sub2, R.id.mobile_signal_voice_sub3};
     private final int mNumPhones = MSimTelephonyManager.getDefault().getPhoneCount();
 
     public MSimSignalClusterView(Context context) {
@@ -128,11 +141,23 @@ public class MSimSignalClusterView
         mDataActivityId = new int[mNumPhones];
         mDataGroup = new ViewGroup[mNumPhones];
         mDataActivity = new ImageView[mNumPhones];
+        mMobileDataVoiceVisible = new boolean[mNumPhones];
+        mMobileSignalDataId = new int[mNumPhones];
+        mMobileSignalVoiceId = new int[mNumPhones];
+        mMobileDataVoiceGroup = new ViewGroup[mNumPhones];
+        mMobileSignalData = new ImageView[mNumPhones];
+        mMobileSignalVoice = new ImageView[mNumPhones];
         for(int i=0; i < mNumPhones; i++) {
             mMobileStrengthId[i] = 0;
             mMobileTypeId[i] = 0;
             mMobileActivityId[i] = 0;
             mNoSimIconId[i] = 0;
+
+            mDataVisible[i] = false;
+            mMobileDataVoiceVisible[i] = false;
+            mDataActivityId[i] = 0;
+            mMobileSignalDataId[i] = 0;
+            mMobileSignalVoiceId[i] = 0;
         }
 
         mStyle = context.getResources().getInteger(R.integer.status_bar_style);
@@ -162,6 +187,13 @@ public class MSimSignalClusterView
 
             mDataGroup[i]      = (ViewGroup) findViewById(mDataGroupResourceId[i]);
             mDataActivity[i]   = (ImageView) findViewById(mDataActResourceId[i]);
+
+            mMobileDataVoiceGroup[i] =
+                    (ViewGroup) findViewById(mMobileDataVoiceGroupResourceId[i]);
+            mMobileSignalData[i] =
+                    (ImageView) findViewById(mMobileSignalDataResourceId[i]);
+            mMobileSignalVoice[i] =
+                    (ImageView) findViewById(mMobileSignalVoiceResourceId[i]);
         }
 
         mMobileCdmaGroup    = (ViewGroup) findViewById(R.id.mobile_signal_cdma);
@@ -187,6 +219,9 @@ public class MSimSignalClusterView
             mNoSimSlot[i]      = null;
             mDataGroup[i]      = null;
             mDataActivity[i]   = null;
+            mMobileDataVoiceGroup[i] = null;
+            mMobileSignalData[i] = null;
+            mMobileSignalVoice[i] = null;
         }
         mMobileCdmaGroup    = null;
         mMobileCdma3g       = null;
@@ -247,9 +282,22 @@ public class MSimSignalClusterView
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = false;
             }
+        } else if (mStyle == STATUS_BAR_STYLE_DATA_VOICE) {
+            if (showBothDataAndVoice(subscription)
+                    || getMobileVoiceId(strengthIcon) != 0) {
+                mMobileStrengthId[subscription] = 0;
+                mMobileDataVoiceVisible[subscription] = true;
+                mMobileSignalDataId[subscription] = strengthIcon;
+                mMobileSignalVoiceId[subscription]
+                        = getMobileVoiceId(mMobileSignalDataId[subscription]);
+            } else {
+                mMobileDataVoiceVisible[subscription] = false;
+            }
         } else {
             mMobileCdmaVisible = false;
             mMobileCdma1xOnlyVisible = false;
+
+            mMobileDataVoiceVisible[subscription] = false;
         }
 
         applySubscription(subscription);
@@ -297,6 +345,7 @@ public class MSimSignalClusterView
             updateMobile(subscription);
             updateCdma();
             updateData(subscription);
+            updateDataVoice(subscription);
             mMobileGroup[subscription].setVisibility(View.VISIBLE);
         } else {
             mMobileGroup[subscription].setVisibility(View.GONE);
@@ -373,6 +422,24 @@ public class MSimSignalClusterView
         }
     }
 
+    private void updateDataVoice(int sub) {
+        if (mMobileDataVoiceVisible[sub]) {
+            mMobileSignalData[sub].setImageResource(mMobileSignalDataId[sub]);
+            mMobileSignalVoice[sub].setImageResource(mMobileSignalVoiceId[sub]);
+            mMobileDataVoiceGroup[sub].setVisibility(View.VISIBLE);
+        } else {
+            mMobileDataVoiceGroup[sub].setVisibility(View.GONE);
+        }
+    }
+
+    private boolean showBothDataAndVoice(int sub) {
+        return mStyle == STATUS_BAR_STYLE_DATA_VOICE
+            &&((mMobileTypeId[sub] == R.drawable.stat_sys_data_connected_3g)
+                || (mMobileTypeId[sub] == R.drawable.stat_sys_data_connected_4g)
+                || (mMobileTypeId[sub] == R.drawable.stat_sys_data_fully_connected_3g)
+                || (mMobileTypeId[sub] == R.drawable.stat_sys_data_fully_connected_4g));
+    }
+
     private boolean showBoth3gAnd1x() {
         return mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED
             &&((mMobileTypeId[0] == R.drawable.stat_sys_data_connected_3g)
@@ -392,6 +459,55 @@ public class MSimSignalClusterView
 
     private boolean isRoaming() {
         return mMobileTypeId[0] == R.drawable.stat_sys_data_fully_connected_roam;
+    }
+
+    private int getMobileVoiceId(int icon) {
+        int returnVal = 0;
+        switch(icon){
+            case R.drawable.stat_sys_signal_0_3g:
+            case R.drawable.stat_sys_signal_0_4g:
+                returnVal = R.drawable.stat_sys_signal_0_gsm;
+                break;
+            case R.drawable.stat_sys_signal_1_3g:
+            case R.drawable.stat_sys_signal_1_4g:
+                returnVal = R.drawable.stat_sys_signal_1_gsm;
+                break;
+            case R.drawable.stat_sys_signal_2_3g:
+            case R.drawable.stat_sys_signal_2_4g:
+                returnVal = R.drawable.stat_sys_signal_2_gsm;
+                break;
+            case R.drawable.stat_sys_signal_3_3g:
+            case R.drawable.stat_sys_signal_3_4g:
+                returnVal = R.drawable.stat_sys_signal_3_gsm;
+                break;
+            case R.drawable.stat_sys_signal_4_3g:
+            case R.drawable.stat_sys_signal_4_4g:
+                returnVal = R.drawable.stat_sys_signal_4_gsm;
+                break;
+            case R.drawable.stat_sys_signal_0_3g_fully:
+            case R.drawable.stat_sys_signal_0_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_0_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_1_3g_fully:
+            case R.drawable.stat_sys_signal_1_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_1_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_2_3g_fully:
+            case R.drawable.stat_sys_signal_2_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_2_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_3_3g_fully:
+            case R.drawable.stat_sys_signal_3_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_3_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_4_3g_fully:
+            case R.drawable.stat_sys_signal_4_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_4_gsm_fully;
+                break;
+            default:
+                break;
+        }
+        return returnVal;
     }
 
     private int getMobileCdma3gId(int icon){

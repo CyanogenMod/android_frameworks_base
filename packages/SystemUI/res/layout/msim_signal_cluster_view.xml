@@ -130,6 +130,24 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 />
+            <LinearLayout
+                android:id="@+id/mobile_data_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/mobile_signal_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:id="@+id/mobile_signal_voice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
             <ImageView
                 android:id="@+id/mobile_signal"
                 android:layout_height="wrap_content"
@@ -192,6 +210,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
+            <LinearLayout
+                android:id="@+id/mobile_data_voice_sub2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/mobile_signal_data_sub2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:id="@+id/mobile_signal_voice_sub2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
             <ImageView
                 android:id="@+id/mobile_signal_sub2"
                 android:layout_height="wrap_content"
@@ -254,6 +290,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
+            <LinearLayout
+                android:id="@+id/mobile_data_voice_sub3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/mobile_signal_data_sub3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:id="@+id/mobile_signal_voice_sub3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
             <ImageView
                 android:id="@+id/mobile_signal_sub3"
                 android:layout_height="wrap_content"
