@@ -908,7 +908,7 @@ class ServerThread {
         if (safeMode) {
             ActivityManagerService.self().enterSafeMode();
             // Post the safe mode state in the Zygote class
-            Zygote.systemInSafeMode = true;
+            SystemServer.inSafeMode = true;
             // Disable the JIT for the system_server process
             VMRuntime.getRuntime().disableJitCompilation();
         } else {
@@ -1252,6 +1252,11 @@ public class SystemServer {
     // The earliest supported time.  We pick one day into 1970, to
     // give any timezone code room without going into negative time.
     private static final long EARLIEST_SUPPORTED_TIME = 86400 * 1000;
+
+   /**
+    * When set, all subsequent apps will be launched in safe mode.
+    */
+    public static boolean inSafeMode;
 
     /**
      * Called to initialize native system services.
