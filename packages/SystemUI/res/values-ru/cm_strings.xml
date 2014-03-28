@@ -18,8 +18,6 @@
     <string name="accessibility_quick_settings_vibration">Вибрация <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_battery_level">Заряд батареи <xliff:g id="number">%d</xliff:g> процентов.</string>
     <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
-    <string name="accessibility_data_connection_HP">HSPA+</string>
-    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="accessibility_desc_add_quick_settings">Добавить Быстрые настройки</string>
 
     <string name="dessert_case_settings_cm_title">Значки CyanogenMod</string>

@@ -46,7 +46,6 @@
     <string name="quick_settings_screen_timeout">Tempo limite</string>
     <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibração <xliff:g id="state" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%s</xliff:g>.</string>
-    <string name="accessibility_data_connection_HP">HSPA+</string>
     <string name="navbar_dialog_title">Escolha uma ação para atribuir</string>
     <string name="navbar_home_button">Botão de início</string>
     <string name="navbar_recent_button">Botão de recentes</string>
@@ -63,7 +62,6 @@
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="quick_settings_network_adb_disabled_label">Desativado</string>
     <string name="quick_settings_network_adb_enabled_label">Ativado</string>
     <string name="advanced_dev_option_wipe_app">Limpar dados de aplicativos</string>
