@@ -93,6 +93,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
@@ -468,6 +469,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
 
         @Override
         public boolean onEvent(int code, String raw, String[] cooked) {
+            String errorMessage = String.format("Invalid event from daemon (%s)", raw);
             switch (code) {
             case NetdResponseCode.InterfaceChange:
                     /*
@@ -478,8 +480,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                      *         "NNN Iface linkstatus <name> <up/down>"
                      */
                     if (cooked.length < 4 || !cooked[1].equals("Iface")) {
-                        throw new IllegalStateException(
-                                String.format("Invalid event from daemon (%s)", raw));
+                        throw new IllegalStateException(errorMessage);
                     }
                     if (cooked[2].equals("added")) {
                         notifyInterfaceAdded(cooked[3]);
@@ -494,8 +495,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                         notifyInterfaceLinkStateChanged(cooked[3], cooked[4].equals("up"));
                         return true;
                     }
-                    throw new IllegalStateException(
-                            String.format("Invalid event from daemon (%s)", raw));
+                    throw new IllegalStateException(errorMessage);
                     // break;
             case NetdResponseCode.BandwidthControl:
                     /*
@@ -503,15 +503,13 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                      * Format: "NNN limit alert <alertName> <ifaceName>"
                      */
                     if (cooked.length < 5 || !cooked[1].equals("limit")) {
-                        throw new IllegalStateException(
-                                String.format("Invalid event from daemon (%s)", raw));
+                        throw new IllegalStateException(errorMessage);
                     }
                     if (cooked[2].equals("alert")) {
                         notifyLimitReached(cooked[3], cooked[4]);
                         return true;
                     }
-                    throw new IllegalStateException(
-                            String.format("Invalid event from daemon (%s)", raw));
+                    throw new IllegalStateException(errorMessage);
                     // break;
             case NetdResponseCode.InterfaceClassActivity:
                     /*
@@ -519,8 +517,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                      * Format: "NNN IfaceClass <active/idle> <label>"
                      */
                     if (cooked.length < 4 || !cooked[1].equals("IfaceClass")) {
-                        throw new IllegalStateException(
-                                String.format("Invalid event from daemon (%s)", raw));
+                        throw new IllegalStateException(errorMessage);
                     }
                     boolean isActive = cooked[2].equals("active");
                     notifyInterfaceClassActivity(cooked[3], isActive);
@@ -532,9 +529,8 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                      * Format: "NNN Address updated <addr> <iface> <flags> <scope>"
                      *         "NNN Address removed <addr> <iface> <flags> <scope>"
                      */
-                    String msg = String.format("Invalid event from daemon (%s)", raw);
-                    if (cooked.length < 6 || !cooked[1].equals("Address")) {
-                        throw new IllegalStateException(msg);
+                    if (cooked.length < 7 || !cooked[1].equals("Address")) {
+                        throw new IllegalStateException(errorMessage);
                     }
 
                     int flags;
@@ -543,7 +539,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                         flags = Integer.parseInt(cooked[5]);
                         scope = Integer.parseInt(cooked[6]);
                     } catch(NumberFormatException e) {
-                        throw new IllegalStateException(msg);
+                        throw new IllegalStateException(errorMessage);
                     }
 
                     if (cooked[2].equals("updated")) {
@@ -1032,6 +1028,15 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         }
     }
 
+    private List<InterfaceAddress> excludeLinkLocal(List<InterfaceAddress> addresses) {
+        ArrayList<InterfaceAddress> filtered = new ArrayList<InterfaceAddress>(addresses.size());
+        for (InterfaceAddress ia : addresses) {
+            if (!ia.getAddress().isLinkLocalAddress())
+                filtered.add(ia);
+        }
+        return filtered;
+    }
+
     private void modifyNat(String action, String internalInterface, String externalInterface)
             throws SocketException {
         final Command cmd = new Command("nat", action, internalInterface, externalInterface);
@@ -1041,8 +1046,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         if (internalNetworkInterface == null) {
             cmd.appendArg("0");
         } else {
-            Collection<InterfaceAddress> interfaceAddresses = internalNetworkInterface
-                    .getInterfaceAddresses();
+            // Don't touch link-local routes, as link-local addresses aren't routable,
+            // kernel creates link-local routes on all interfaces automatically
+            List<InterfaceAddress> interfaceAddresses = excludeLinkLocal(
+                    internalNetworkInterface.getInterfaceAddresses());
             cmd.appendArg(interfaceAddresses.size());
             for (InterfaceAddress ia : interfaceAddresses) {
                 InetAddress addr = NetworkUtils.getNetworkPart(

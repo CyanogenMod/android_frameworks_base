@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Copyright (C) 2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="lockscreen_airplane_mode_on">Flytilstand</string>
+    <string name="lockscreen_sim_error_message_short">Ugyldigt SIM-kort.</string>
+    <string name="stk_cc_ussd_to_dial">USSD-anmodning er ændret til en DIAL-anmodning.</string>
+    <string name="stk_cc_ussd_to_ss">USSD-anmodning er ændret til en SS-anmodning.</string>
+    <string name="stk_cc_ussd_to_ussd">USSD-anmodning er ændret til en ny USSD-anmodning.</string>
+    <string name="stk_cc_ss_to_dial">SS-anmodning er ændret til en DIAL-anmodning.</string>
+    <string name="stk_cc_ss_to_ussd">SS-anmodning er ændret til en USSD-anmodning.</string>
+    <string name="stk_cc_ss_to_ss">SS-anmodning er ændret til en ny SS-anmodning.</string>
+</resources>

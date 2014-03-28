@@ -859,6 +859,7 @@
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"请参阅《用户指南》或与客服人员联系。"</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM 卡被锁定"</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"正在解锁 SIM 卡..."</string>
+    <string name="lockscreen_airplane_mode_on">"飞行模式"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地绘制了解锁图案。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地输入了密码。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地输入了 PIN。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
@@ -1664,4 +1665,46 @@
   </plurals>
     <string name="restr_pin_try_later" msgid="973144472490532377">"稍后重试"</string>
     <string name="immersive_mode_confirmation" msgid="7227416894979047467">"从顶部向下滑动即可退出全屏模式。"</string>
+
+    <!-- App Ops -->
+    <string name="permission">权限</string>
+    <string-array name="app_ops_labels">
+        <item>试图获取位置信息</item>
+        <item>试图获取位置信息</item>
+        <item>试图获取位置信息</item>
+        <item>试图使用震动器</item>
+        <item>试图读取联系人</item>
+        <item>试图修改联系人</item>
+        <item>试图读取通话记录</item>
+        <item>试图修改通话记录</item>
+        <item>试图读取日程表</item>
+        <item>试图修改日程表</item>
+        <item>试图获取位置信息</item>
+        <item>试图发出通知</item>
+        <item>试图获取位置信息</item>
+        <item>试图拨打电话</item>
+        <item>试图读取短信</item>
+        <item>试图修改短信</item>
+        <item>试图收取短信</item>
+        <item>试图收取短信</item>
+        <item>试图收取彩信</item>
+        <item>试图收取短信</item>
+        <item>试图发送短信</item>
+        <item>试图读取短信</item>
+        <item>试图修改短信</item>
+        <item>试图修改设置</item>
+        <item>试图在顶层绘图</item>
+        <item>试图获取通知</item>
+        <item>试图使用相机</item>
+        <item>试图录音</item>
+        <item>试图放音</item>
+        <item>试图读取剪贴板</item>
+        <item>试图修改剪贴板</item>
+        <item>试图开关Wifi</item>
+        <item>试图开关蓝牙</item>
+        <item>试图开关移动数据</item>
+        <item>试图发送彩信</item>
+        <item>试图读取彩信</item>
+        <item>试图修改彩信</item>
+    </string-array>
 </resources>

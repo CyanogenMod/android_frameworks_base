@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -172,4 +174,20 @@ class KeyguardUpdateMonitorCallback {
      *   {@link WindowManagerPolicy#OFF_BECAUSE_OF_PROX_SENSOR}.
      */
     public void onScreenTurnedOff(int why) { }
+    /**
+     * Called when the SIM state changes on subscription.
+     * @param simState
+     * @param subscription
+     */
+    void onSimStateChanged(IccCardConstants.State simState, int subscription) { }
+
+    /**
+     * Called when the carrier PLMN or SPN changes.
+     *
+     * @param plmn The operator name of the registered network.  May be null if it shouldn't
+     *   be displayed.
+     * @param spn The service provider name.  May be null if it shouldn't be displayed.
+     * @param subscription The subscription for which onRefreshCarrierInfo is meant
+     */
+    void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int subscription) { }
 }

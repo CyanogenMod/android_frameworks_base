@@ -67,4 +67,46 @@
     <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
     <string name="progress_nomediapresent" product="default">Ingen flytbare medier til stede\u2026</string>
+    <string name="app_ops_access_camera">tilgå kameraet</string>
+    <string name="app_ops_access_location">tilgå din placering</string>
+    <string name="app_ops_access_notifications">læse dine meddelelser</string>
+    <string name="app_ops_alarm_wakeup">vække enheden</string>
+    <string name="app_ops_draw_on_top">tegne ovenpå</string>
+    <string name="app_ops_keep_device_awake">holde din enhed vågen</string>
+    <string name="app_ops_make_phone_call">foretage opkald</string>
+    <string name="app_ops_modify_calendar">opdatere din kalender</string>
+    <string name="app_ops_modify_call_log">opdatere opkaldslisten</string>
+    <string name="app_ops_modify_clipboard">ændre udklipsholderen</string>
+    <string name="app_ops_modify_contacts">opdatere dine kontakter</string>
+    <string name="app_ops_modify_settings">opdatere systemindstillinger</string>
+    <string name="app_ops_play_audio">afspille lyd</string>
+    <string name="app_ops_post_notification">vise en meddelelse</string>
+    <string name="app_ops_read_calendar">læse din kalender</string>
+    <string name="app_ops_read_call_log">læse opkaldsliste</string>
+    <string name="app_ops_read_clipboard">læse udklipsholderen</string>
+    <string name="app_ops_read_contacts">læse dine kontakter</string>
+    <string name="app_ops_read_mms">læse dine MMS-beskeder</string>
+    <string name="app_ops_read_sms">læse dine SMS-beskeder</string>
+    <string name="app_ops_receive_sms">modtage en SMS-besked</string>
+    <string name="app_ops_record_audio">optage lyd</string>
+    <string name="app_ops_send_mms">sende en MMS-besked</string>
+    <string name="app_ops_send_sms">sende en SMS-besked</string>
+    <string name="app_ops_start_at_bootup">starte ved opstart</string>
+    <string name="app_ops_toggle_bluetooth">tænde/slukke Bluetooth</string>
+    <string name="app_ops_toggle_mobile_data">tænde/slukke mobildata</string>
+    <string name="app_ops_toggle_wifi">tænde/slukke Wi-Fi</string>
+    <string name="app_ops_use_alarm_volume">kontrollere lydstyrken for alarmer</string>
+    <string name="app_ops_use_audio_focus">kontrollere lydfokus</string>
+    <string name="app_ops_use_bluetooth_volume">kontrollere lydstyrken for Bluetooth</string>
+    <string name="app_ops_use_master_volume">kontrollere systemlydstyrken</string>
+    <string name="app_ops_use_media_buttons">bruge medieknapperne</string>
+    <string name="app_ops_use_media_volume">kontrollere lydstyrken for medier</string>
+    <string name="app_ops_use_notification_volume">kontrollere lydstyrken for meddelelser</string>
+    <string name="app_ops_use_ring_volume">kontrollere lydstyrken for ringetonen</string>
+    <string name="app_ops_use_vibrate">bruge haptisk feedback</string>
+    <string name="app_ops_use_voice_volume">styre lydstyrken for stemmeopkald</string>
+    <string name="app_ops_write_mms">skrive en MMS-besked</string>
+    <string name="app_ops_write_sms">skrive en SMS-besked</string>
+    <string name="privacy_guard_dialog_title">Privatlivsvagt</string>
+    <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ønsker at <xliff:g id="op">%2$s</xliff:g>.</string>
 </resources>

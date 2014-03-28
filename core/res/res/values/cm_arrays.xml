@@ -50,4 +50,60 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <!-- Do not translate. App ops request strings -->
+    <string-array name="app_ops_labels" translatable="false">
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_use_vibrate</item>
+        <item>@string/app_ops_read_contacts</item>
+        <item>@string/app_ops_modify_contacts</item>
+        <item>@string/app_ops_read_call_log</item>
+        <item>@string/app_ops_modify_call_log</item>
+        <item>@string/app_ops_read_calendar</item>
+        <item>@string/app_ops_modify_calendar</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_post_notification</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_make_phone_call</item>
+        <item>@string/app_ops_read_sms</item>
+        <item>@string/app_ops_write_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_send_sms</item>
+        <item>@string/app_ops_read_sms</item>
+        <item>@string/app_ops_write_sms</item>
+        <item>@string/app_ops_modify_settings</item>
+        <item>@string/app_ops_draw_on_top</item>
+        <item>@string/app_ops_access_notifications</item>
+        <item>@string/app_ops_access_camera</item>
+        <item>@string/app_ops_record_audio</item>
+        <item>@string/app_ops_play_audio</item>
+        <item>@string/app_ops_read_clipboard</item>
+        <item>@string/app_ops_modify_clipboard</item>
+        <item>@string/app_ops_use_media_buttons</item>
+        <item>@string/app_ops_use_audio_focus</item>
+        <item>@string/app_ops_use_master_volume</item>
+        <item>@string/app_ops_use_voice_volume</item>
+        <item>@string/app_ops_use_ring_volume</item>
+        <item>@string/app_ops_use_media_volume</item>
+        <item>@string/app_ops_use_alarm_volume</item>
+        <item>@string/app_ops_use_notification_volume</item>
+        <item>@string/app_ops_use_bluetooth_volume</item>
+        <item>@string/app_ops_keep_device_awake</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_toggle_wifi</item>
+        <item>@string/app_ops_toggle_bluetooth</item>
+        <item>@string/app_ops_toggle_mobile_data</item>
+        <item>@string/app_ops_alarm_wakeup</item>
+        <item>@string/app_ops_send_mms</item>
+        <item>@string/app_ops_read_mms</item>
+        <item>@string/app_ops_write_mms</item>
+        <item>@string/app_ops_start_at_bootup</item>
+    </string-array>
+
 </resources>

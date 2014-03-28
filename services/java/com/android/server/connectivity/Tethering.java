@@ -202,10 +202,13 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         IBinder b = ServiceManager.getService(Context.CONNECTIVITY_SERVICE);
         IConnectivityManager cm = IConnectivityManager.Stub.asInterface(b);
         try {
-            int activeNetType = cm.getActiveNetworkInfo().getType();
-            for (int i : ifaceTypes) {
-                if(i == activeNetType) {
-                    upstreamIfaceTypes.add(new Integer(i));
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null) {
+                int activeNetType = networkInfo.getType();
+                for (int i : ifaceTypes) {
+                    if(i == activeNetType) {
+                        upstreamIfaceTypes.add(new Integer(i));
+                    }
                 }
             }
         } catch (Exception e) {

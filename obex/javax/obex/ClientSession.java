@@ -457,8 +457,9 @@ public final class ClientSession extends ObexSession {
                 maxPacketSize = (mInput.read() << 8) + mInput.read();
 
                 //check with local max size
-                if (setMTU) {
-                    maxPacketSize = ObexHelper.A2DP_SCO_OBEX_MAX_CLIENT_PACKET_SIZE;
+                if (setMTU && maxPacketSize > ObexHelper.A2DP_OBEX_MAX_CLIENT_PACKET_SIZE) {
+                    maxPacketSize = ObexHelper.A2DP_OBEX_MAX_CLIENT_PACKET_SIZE;
+                    setMTU = false;
                 } else if (maxPacketSize > ObexHelper.MAX_CLIENT_PACKET_SIZE) {
                     maxPacketSize = ObexHelper.MAX_CLIENT_PACKET_SIZE;
                 }

@@ -771,8 +771,13 @@ public class StaticLayout extends Layout {
             ellipsisStart = i;
             ellipsisCount = len - i;
             if (forceEllipsis && ellipsisCount == 0 && len > 0) {
-                ellipsisStart = len - 1;
-                ellipsisCount = 1;
+                final char c = mMeasured.mChars[lineEnd - widthStart - 1];
+                if (c >= CHAR_FIRST_HIGH_SURROGATE && c <= CHAR_LAST_LOW_SURROGATE) {
+                    ellipsisCount = 2;
+                } else {
+                    ellipsisCount = 1;
+                }
+                ellipsisStart = len - ellipsisCount;
             }
         } else {
             // where = TextUtils.TruncateAt.MIDDLE We only support middle ellipsis on a single line

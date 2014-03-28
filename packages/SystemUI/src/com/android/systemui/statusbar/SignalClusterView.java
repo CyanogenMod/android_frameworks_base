@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2011 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,13 +48,18 @@ public class SignalClusterView
     private boolean mWifiVisible = false;
     private int mWifiStrengthId = 0, mWifiActivityId = 0;
     private boolean mMobileVisible = false;
-    private int mMobileStrengthId = 0, mMobileActivityId = 0, mMobileTypeId = 0;
+    private int mMobileStrengthId = 0, mMobileActivityId = 0;
+    private int mMobileTypeId = 0, mNoSimIconId = 0;
     private boolean mIsAirplaneMode = false;
     private int mAirplaneIconId = 0;
-    private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
+    private String mWifiDescription, mMobileDescription, mMobileTypeDescription,
+            mEthernetDescription;
+    private boolean mEthernetVisible = false;
+    private int mEthernetIconId = 0;
 
     ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane;
+    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane, mNoSimSlot,
+        mEthernet;
     View mSpacer;
 
     public SignalClusterView(Context context) {
@@ -83,8 +90,10 @@ public class SignalClusterView
         mMobile         = (ImageView) findViewById(R.id.mobile_signal);
         mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
+        mNoSimSlot      = (ImageView) findViewById(R.id.no_sim);
         mSpacer         =             findViewById(R.id.spacer);
         mAirplane       = (ImageView) findViewById(R.id.airplane);
+        mEthernet       = (ImageView) findViewById(R.id.ethernet);
 
         apply();
     }
@@ -98,8 +107,10 @@ public class SignalClusterView
         mMobile         = null;
         mMobileActivity = null;
         mMobileType     = null;
+        mNoSimSlot      = null;
         mSpacer         = null;
         mAirplane       = null;
+        mEthernet       = null;
 
         super.onDetachedFromWindow();
     }
@@ -117,13 +128,15 @@ public class SignalClusterView
 
     @Override
     public void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
-            int typeIcon, String contentDescription, String typeContentDescription) {
+            int typeIcon, String contentDescription, String typeContentDescription,
+            int noSimIcon) {
         mMobileVisible = visible;
         mMobileStrengthId = strengthIcon;
         mMobileActivityId = activityIcon;
         mMobileTypeId = typeIcon;
         mMobileDescription = contentDescription;
         mMobileTypeDescription = typeContentDescription;
+        mNoSimIconId = noSimIcon;
 
         apply();
     }
@@ -132,6 +145,16 @@ public class SignalClusterView
     public void setIsAirplaneMode(boolean is, int airplaneIconId) {
         mIsAirplaneMode = is;
         mAirplaneIconId = airplaneIconId;
+
+        apply();
+    }
+
+    @Override
+    public void setEthernetIndicators(boolean visible, int ethernetIcon,
+            String contentDescription) {
+        mEthernetVisible = visible;
+        mEthernetIconId = ethernetIcon;
+        mEthernetDescription = contentDescription;
 
         apply();
     }
@@ -172,6 +195,10 @@ public class SignalClusterView
             mAirplane.setImageDrawable(null);
         }
 
+        if(mEthernet != null) {
+            mEthernet.setImageDrawable(null);
+        }
+
         apply();
     }
 
@@ -201,6 +228,7 @@ public class SignalClusterView
 
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
             mMobileGroup.setVisibility(View.VISIBLE);
+            mNoSimSlot.setImageResource(mNoSimIconId);
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
@@ -212,10 +240,19 @@ public class SignalClusterView
             mAirplane.setVisibility(View.GONE);
         }
 
-        if (mMobileVisible && mWifiVisible && mIsAirplaneMode) {
+        if (mMobileVisible && mWifiVisible &&
+                ((mIsAirplaneMode) || (mNoSimIconId != 0))) {
             mSpacer.setVisibility(View.INVISIBLE);
         } else {
             mSpacer.setVisibility(View.GONE);
+        }
+
+        if (mEthernetVisible) {
+            mEthernet.setVisibility(View.VISIBLE);
+            mEthernet.setImageResource(mEthernetIconId);
+            mEthernet.setContentDescription(mEthernetDescription);
+        } else {
+            mEthernet.setVisibility(View.GONE);
         }
 
         if (DEBUG) Log.d(TAG,

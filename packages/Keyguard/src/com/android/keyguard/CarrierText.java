@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,13 +67,14 @@ public class CarrierText extends TextView {
      */
     private static enum StatusMode {
         Normal, // Normal case (sim card present, it's not locked)
-        NetworkLocked, // SIM card is 'network locked'.
+        PersoLocked, // SIM card is 'perso locked'.
         SimMissing, // SIM card is missing.
         SimMissingLocked, // SIM card is missing, and device isn't provisioned; don't allow access
         SimPukLocked, // SIM card is PUK locked because SIM entered wrong too many times
         SimLocked, // SIM card is currently locked
         SimPermDisabled, // SIM card is permanently disabled due to PUK unlock failure
-        SimNotReady; // SIM is not ready yet. May never be on devices w/o a SIM.
+        SimNotReady, // SIM is not ready yet. May never be on devices w/o a SIM.
+        SimIoError; //The sim card is faulty
     }
 
     public CarrierText(Context context) {
@@ -100,6 +103,9 @@ public class CarrierText extends TextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (KeyguardUpdateMonitor.sIsMultiSimEnabled) {
+            return;
+        }
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mCallback);
     }
 
@@ -118,7 +124,7 @@ public class CarrierText extends TextView {
      * @param spn
      * @return
      */
-    private CharSequence getCarrierTextForSimState(IccCardConstants.State simState,
+    protected CharSequence getCarrierTextForSimState(IccCardConstants.State simState,
             CharSequence plmn, CharSequence spn) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
@@ -131,9 +137,9 @@ public class CarrierText extends TextView {
                 carrierText = null; // nothing to display yet.
                 break;
 
-            case NetworkLocked:
+            case PersoLocked:
                 carrierText = makeCarrierStringOnEmergencyCapable(
-                        mContext.getText(R.string.keyguard_network_locked_message), plmn);
+                        getContext().getText(R.string.keyguard_perso_locked_message), plmn);
                 break;
 
             case SimMissing:
@@ -168,6 +174,12 @@ public class CarrierText extends TextView {
                         getContext().getText(R.string.keyguard_sim_puk_locked_message),
                         plmn);
                 break;
+
+            case SimIoError:
+                carrierText = makeCarrierStringOnEmergencyCapable(
+                        getContext().getText(R.string.lockscreen_sim_error_message_short),
+                        plmn);
+                break;
         }
 
         return carrierText;
@@ -198,13 +210,13 @@ public class CarrierText extends TextView {
                 && (simState == IccCardConstants.State.ABSENT ||
                         simState == IccCardConstants.State.PERM_DISABLED);
 
-        // Assume we're NETWORK_LOCKED if not provisioned
-        simState = missingAndNotProvisioned ? IccCardConstants.State.NETWORK_LOCKED : simState;
+        // Assume we're PERSO_LOCKED if not provisioned
+        simState = missingAndNotProvisioned ? IccCardConstants.State.PERSO_LOCKED : simState;
         switch (simState) {
             case ABSENT:
                 return StatusMode.SimMissing;
-            case NETWORK_LOCKED:
-                return StatusMode.SimMissingLocked;
+            case PERSO_LOCKED:
+                return StatusMode.PersoLocked;
             case NOT_READY:
                 return StatusMode.SimNotReady;
             case PIN_REQUIRED:
@@ -217,6 +229,8 @@ public class CarrierText extends TextView {
                 return StatusMode.SimPermDisabled;
             case UNKNOWN:
                 return StatusMode.SimMissing;
+            case CARD_IO_ERROR:
+                return StatusMode.SimIoError;
         }
         return StatusMode.SimMissing;
     }
@@ -240,7 +254,7 @@ public class CarrierText extends TextView {
         int carrierHelpTextId = 0;
         StatusMode status = getStatusForIccState(simState);
         switch (status) {
-            case NetworkLocked:
+            case PersoLocked:
                 carrierHelpTextId = R.string.keyguard_instructions_when_pattern_disabled;
                 break;
 

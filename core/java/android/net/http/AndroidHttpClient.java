@@ -42,6 +42,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.RequestWrapper;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
@@ -49,10 +50,13 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.HttpContext;
 
+import android.app.ActivityThread;
+import android.app.AppOpsManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
+import android.os.Binder;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
@@ -248,46 +252,107 @@ public final class AndroidHttpClient implements HttpClient {
         return delegate.getConnectionManager();
     }
 
+    private boolean isMmsRequest()
+    {
+        if(delegate.getParams() == null ||
+                delegate.getParams().getParameter(CoreProtocolPNames.USER_AGENT) == null) {
+            return false;
+        }
+
+        if(delegate.getParams().getParameter(CoreProtocolPNames.USER_AGENT).toString().contains("Android-Mms"))
+            return true;
+
+        return false;
+    }
+
+    private boolean checkMmsOps()
+    {
+        AppOpsManager appOps = (AppOpsManager) ActivityThread.currentApplication().getSystemService(Context.APP_OPS_SERVICE);
+        int callingUid = Binder.getCallingUid();
+        String callingPackage= ActivityThread.currentPackageName();
+
+        if (appOps.noteOp(AppOpsManager.OP_SEND_MMS, callingUid, callingPackage) !=
+                AppOpsManager.MODE_ALLOWED)
+                return false;
+
+        return true;
+    }
+
+    private String getMethod(HttpUriRequest request) {
+        if(request != null)
+            return request.getMethod();
+        return null;
+    }
+
+    private String getMethod(HttpRequest request) {
+        if(request != null)
+            if(request.getRequestLine() != null)
+                return request.getRequestLine().getMethod();
+        return null;
+    }
+
+    private boolean checkMmsSendPermission(String method) {
+        if(isMmsRequest() && method.equals("POST"))
+            return checkMmsOps();
+        return true;
+    }
+
     public HttpResponse execute(HttpUriRequest request) throws IOException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(request);
     }
 
     public HttpResponse execute(HttpUriRequest request, HttpContext context)
             throws IOException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(request, context);
     }
 
     public HttpResponse execute(HttpHost target, HttpRequest request)
             throws IOException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(target, request);
     }
 
     public HttpResponse execute(HttpHost target, HttpRequest request,
             HttpContext context) throws IOException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(target, request, context);
     }
 
     public <T> T execute(HttpUriRequest request,
             ResponseHandler<? extends T> responseHandler)
             throws IOException, ClientProtocolException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(request, responseHandler);
     }
 
     public <T> T execute(HttpUriRequest request,
             ResponseHandler<? extends T> responseHandler, HttpContext context)
             throws IOException, ClientProtocolException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(request, responseHandler, context);
     }
 
     public <T> T execute(HttpHost target, HttpRequest request,
             ResponseHandler<? extends T> responseHandler) throws IOException,
             ClientProtocolException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(target, request, responseHandler);
     }
 
     public <T> T execute(HttpHost target, HttpRequest request,
             ResponseHandler<? extends T> responseHandler, HttpContext context)
             throws IOException, ClientProtocolException {
+        if(!checkMmsSendPermission(getMethod(request)))
+            throw new IOException("Permission denied");
         return delegate.execute(target, request, responseHandler, context);
     }
 

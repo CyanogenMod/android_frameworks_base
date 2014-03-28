@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012-2013 The CyanogenMod Project
+     Copyright (C) 2012-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -67,7 +67,46 @@
     <string name="permlab_resetBatteryStats">accustatistieken resetten</string>
     <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
     <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
-
-    <!-- CAF -->
-    <string name="progress_nomediapresent" product="default">Geen verwijderbare media aanwezig\u2026</string>
+    <string name="app_ops_access_camera">toegang tot camera</string>
+    <string name="app_ops_access_location">toegang tot uw locatie</string>
+    <string name="app_ops_access_notifications">meldingen lezen</string>
+    <string name="app_ops_alarm_wakeup">apparaat ontwaken</string>
+    <string name="app_ops_draw_on_top">bovenop tekenen</string>
+    <string name="app_ops_keep_device_awake">apparaat wakker houden</string>
+    <string name="app_ops_make_phone_call">telefoongesprek starten</string>
+    <string name="app_ops_modify_calendar">agenda vernieuwen</string>
+    <string name="app_ops_modify_call_log">gespreksstatistieken vernieuwen</string>
+    <string name="app_ops_modify_clipboard">klembord aanpassen</string>
+    <string name="app_ops_modify_contacts">contacten vernieuwen</string>
+    <string name="app_ops_modify_settings">systeeminstellingen vernieuwen</string>
+    <string name="app_ops_play_audio">audio afspelen</string>
+    <string name="app_ops_post_notification">melding tonen</string>
+    <string name="app_ops_read_calendar">agenda lezen</string>
+    <string name="app_ops_read_call_log">gespreksstatistieken lezen</string>
+    <string name="app_ops_read_clipboard">klembord lezen</string>
+    <string name="app_ops_read_contacts">contacten lezen</string>
+    <string name="app_ops_read_mms">mms-berichten lezen</string>
+    <string name="app_ops_read_sms">sms-berichten lezen</string>
+    <string name="app_ops_receive_sms">mms-bericht ontvangen</string>
+    <string name="app_ops_record_audio">audio opnemen</string>
+    <string name="app_ops_send_mms">mms-bericht versturen</string>
+    <string name="app_ops_send_sms">sms-bericht versturen</string>
+    <string name="app_ops_start_at_bootup">starten tijdens opstarten</string>
+    <string name="app_ops_toggle_bluetooth">Bluetooth aan-/uitzetten</string>
+    <string name="app_ops_toggle_mobile_data">mobiele gegevens aan-/uitzetten</string>
+    <string name="app_ops_toggle_wifi">wifi aan-/uitzetten</string>
+    <string name="app_ops_use_alarm_volume">alarmvolume beheren</string>
+    <string name="app_ops_use_audio_focus">audiofocus beheren</string>
+    <string name="app_ops_use_bluetooth_volume">Bluetooth-volume beheren</string>
+    <string name="app_ops_use_master_volume">hoofdvolume beheren</string>
+    <string name="app_ops_use_media_buttons">mediaknoppen gebruiken</string>
+    <string name="app_ops_use_media_volume">mediavolume beheren</string>
+    <string name="app_ops_use_notification_volume">meldingsvolume beheren</string>
+    <string name="app_ops_use_ring_volume">beltoonvolume beheren</string>
+    <string name="app_ops_use_vibrate">trillen gebruiken</string>
+    <string name="app_ops_use_voice_volume">stemvolume beheren</string>
+    <string name="app_ops_write_mms">mms-bericht schrijven</string>
+    <string name="app_ops_write_sms">sms-bericht schrijven</string>
+    <string name="privacy_guard_dialog_title">Privacybescherming</string>
+    <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> wil <xliff:g id="op">%2$s</xliff:g>.</string>
 </resources>

@@ -117,6 +117,24 @@ public interface BluetoothProfile {
      */
     public static final int HANDSFREE_CLIENT = 10;
 
+     /**
+     * A2dp Source
+     * @hide
+     */
+    public static final int PROFILE_A2DP_SRC = 1;
+
+    /**
+    * A2dp Sink
+    * @hide
+    */
+    public static final int PROFILE_A2DP_SNK = 2;
+
+    /**
+    * Profile A2dp undefined
+    * @hide
+    */
+    public static final int PROFILE_A2DP_UNDEFINED = -1;
+
     /**
      * DUN
      * @hide

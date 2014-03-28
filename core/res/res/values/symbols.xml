@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/* Copyright 2012, The Android Open Source Project
+/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+** Not a Contribution.
+**
+** Copyright 2012, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -290,6 +293,11 @@
   <java-symbol type="bool" name="config_forceDefaultOrientation" />
   <java-symbol type="bool" name="config_wifi_batched_scan_supported" />
   <java-symbol type="bool" name="flip_controller_fallback_keys" />
+  <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
+  <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
+  <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
+  <java-symbol type="bool" name="config_ascii_7bit_support_for_long_message" />
+  <java-symbol type="bool" name="config_feature_iwlan_enabled" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
@@ -396,6 +404,7 @@
   <java-symbol type="string" name="activitychooserview_choose_application" />
   <java-symbol type="string" name="activitychooserview_choose_application_error" />
   <java-symbol type="string" name="alternate_eri_file" />
+  <java-symbol type="string" name="allow" />
   <java-symbol type="string" name="alwaysUse" />
   <java-symbol type="string" name="autofill_address_line_1_label_re" />
   <java-symbol type="string" name="autofill_address_line_1_re" />
@@ -457,6 +466,8 @@
   <java-symbol type="string" name="autofill_zip_code_re" />
   <java-symbol type="string" name="badPin" />
   <java-symbol type="string" name="badPuk" />
+  <java-symbol type="string" name="lockscreen_sim_error_message_short" />
+  <java-symbol type="string" name="pinpuk_attempts" />
   <java-symbol type="string" name="byteShort" />
   <java-symbol type="string" name="capability_desc_canRequestEnhancedWebAccessibility" />
   <java-symbol type="string" name="capability_title_canRequestFilterKeyEvents" />
@@ -500,6 +511,7 @@
   <java-symbol type="string" name="db_wal_sync_mode" />
   <java-symbol type="string" name="decline" />
   <java-symbol type="string" name="default_text_encoding" />
+  <java-symbol type="string" name="deny" />
   <java-symbol type="string" name="description_target_unlock_tablet" />
   <java-symbol type="string" name="display_manager_built_in_display_name" />
   <java-symbol type="string" name="display_manager_hdmi_display_name" />
@@ -633,6 +645,8 @@
   <java-symbol type="string" name="orgTypeOther" />
   <java-symbol type="string" name="orgTypeWork" />
   <java-symbol type="string" name="passwordIncorrect" />
+  <java-symbol type="string" name="enablePin" />
+  <java-symbol type="string" name="permission" />
   <java-symbol type="string" name="perms_description_app" />
   <java-symbol type="string" name="perms_new_perm_prefix" />
   <java-symbol type="string" name="petabyteShort" />
@@ -838,6 +852,12 @@
   <java-symbol type="string" name="default_audio_route_name_dock_speakers" />
   <java-symbol type="string" name="default_media_route_name_hdmi" />
   <java-symbol type="string" name="default_audio_route_category_name" />
+  <java-symbol type="string" name="stk_cc_ss_to_dial" />
+  <java-symbol type="string" name="stk_cc_ss_to_ss" />
+  <java-symbol type="string" name="stk_cc_ss_to_ussd" />
+  <java-symbol type="string" name="stk_cc_ussd_to_dial" />
+  <java-symbol type="string" name="stk_cc_ussd_to_ss" />
+  <java-symbol type="string" name="stk_cc_ussd_to_ussd" />
   <java-symbol type="string" name="safe_media_volume_warning" />
   <java-symbol type="string" name="media_route_status_scanning" />
   <java-symbol type="string" name="media_route_status_connecting" />
@@ -1395,7 +1415,12 @@
   <java-symbol type="string" name="global_action_silent_mode_on_status" />
   <java-symbol type="string" name="global_action_toggle_silent_mode" />
   <java-symbol type="string" name="invalidPuk" />
+  <java-symbol type="string" name="lockscreen_missing_sim_message_short" />
+  <java-symbol type="string" name="lockscreen_permanent_disabled_sim_message_short" />
   <java-symbol type="string" name="lockscreen_carrier_default" />
+  <java-symbol type="string" name="lockscreen_sim_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_puk_locked_message" />
+  <java-symbol type="string" name="lockscreen_airplane_mode_on" />
   <java-symbol type="style" name="Animation.LockScreen" />
   <java-symbol type="style" name="Theme.Dialog.RecentApplications" />
   <java-symbol type="style" name="Theme.ExpandedMenu" />
@@ -1428,6 +1453,7 @@
   <java-symbol type="anim" name="rotation_animation_jump_exit" />
   <java-symbol type="anim" name="rotation_animation_xfade_exit" />
   <java-symbol type="anim" name="rotation_animation_enter" />
+  <java-symbol type="array" name="app_ops_labels" />
   <java-symbol type="array" name="config_autoBrightnessButtonBacklightValues" />
   <java-symbol type="array" name="config_autoBrightnessKeyboardBacklightValues" />
   <java-symbol type="array" name="config_autoBrightnessLcdBacklightValues" />
@@ -1459,6 +1485,8 @@
   <java-symbol type="bool" name="config_wifi_dual_band_support" />
   <java-symbol type="bool" name="config_wimaxEnabled" />
   <java-symbol type="bool" name="show_ongoing_ime_switcher" />
+  <!-- Whether to enable auto provisioning the app for new SIM card on boot.-->
+  <java-symbol type="bool" name="config_auto_provision_enable" />
   <java-symbol type="color" name="config_defaultNotificationColor" />
   <java-symbol type="color" name="input_method_navigation_guard" />
   <java-symbol type="drawable" name="ic_notification_ime_default" />
@@ -1678,6 +1706,7 @@
   <java-symbol type="string" name="usb_storage_stop_title" />
   <java-symbol type="string" name="usb_storage_title" />
   <java-symbol type="style" name="Animation.RecentApplications" />
+  <java-symbol type="bool" name="config_combined_signal" />
 
   <!-- ImfTest -->
   <java-symbol type="layout" name="auto_complete_list" />
@@ -1954,4 +1983,15 @@
   <java-symbol type="dimen" name="edge_gesture_trigger_thickness" />
 
   <java-symbol type="bool" name="use_motion_accel" />
+  <java-symbol type="bool" name="config_setup_mms_data" />
+
+  <java-symbol type="string" name="config_partial_segment_expire_age" />
+
+  <java-symbol type="drawable" name="ic_privacy_guard" />
+  <java-symbol type="drawable" name="ic_privacy_guard_off" />
+  <java-symbol type="string" name="privacy_guard_dialog_title" />
+  <java-symbol type="string" name="privacy_guard_dialog_summary" />
+
+  <!-- SMS RIL_REQUEST_SEND_SMS_EXPECT_MORE -->
+  <java-symbol type="bool" name="config_smsUseExpectMore" />
 </resources>
