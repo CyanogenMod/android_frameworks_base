@@ -679,6 +679,14 @@ public class MSimNetworkController extends NetworkController {
                                     R.string.accessibility_data_connection_3g);
                         }
                         break;
+                    case TelephonyManager.NETWORK_TYPE_DCHSPAP:
+                        mDataIconList = TelephonyIcons.DATA_DC[mInetCondition];
+                        mMSimDataTypeIconId[subscription] =
+                                R.drawable.stat_sys_data_fully_connected_dc;
+                        mQSDataTypeIconId = TelephonyIcons.QS_DATA_DC[mInetCondition];
+                        mMSimContentDescriptionDataType[subscription] = mContext.getString(
+                                R.string.accessibility_data_connection_DC);
+                        break;
                     case TelephonyManager.NETWORK_TYPE_CDMA:
                         // display 1xRTT for IS95A/B
                         mDataIconList = TelephonyIcons.DATA_1X[mInetCondition];
