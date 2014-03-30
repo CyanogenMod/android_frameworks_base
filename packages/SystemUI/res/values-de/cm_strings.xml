@@ -14,8 +14,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="accessibility_data_connection_HP">HSPA+</string>
-    <string name="accessibility_data_connection_DC">DCHSPAP</string>
     <string name="quick_settings_profile_label">Profile</string>
     <string name="powerwidget_screen_timeout_toast">Bildschirmsperre nach: %1$d %2$s</string>
     <string name="quick_settings_gps">GPS</string>
