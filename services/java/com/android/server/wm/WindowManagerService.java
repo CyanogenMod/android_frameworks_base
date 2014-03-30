@@ -329,6 +329,8 @@ public class WindowManagerService extends IWindowManager.Stub
 
     final DisplaySettings mDisplaySettings;
 
+    boolean mIsShutdown = false;
+
     /**
      * All currently active sessions with clients.
      */
@@ -5176,12 +5178,14 @@ public class WindowManagerService extends IWindowManager.Stub
     // Called by window manager policy.  Not exposed externally.
     @Override
     public void shutdown(boolean confirm) {
+        mIsShutdown = true;
         ShutdownThread.shutdown(mContext, confirm);
     }
 
     // Called by window manager policy.  Not exposed externally.
     @Override
     public void rebootSafeMode(boolean confirm) {
+        mIsShutdown = true;
         ShutdownThread.rebootSafeMode(mContext, confirm);
     }
 
@@ -5913,7 +5917,8 @@ public class WindowManagerService extends IWindowManager.Stub
         //       an orientation that has different metrics than it expected.
         //       eg. Portrait instead of Landscape.
 
-        int rotation = mPolicy.rotationForOrientationLw(mForcedAppOrientation, mRotation);
+        int rotation = mIsShutdown ? Surface.ROTATION_0 : mPolicy
+                       .rotationForOrientationLw(mForcedAppOrientation, mRotation);
         boolean altOrientation = !mPolicy.rotationHasCompatibleMetricsLw(
                 mForcedAppOrientation, rotation);
 
