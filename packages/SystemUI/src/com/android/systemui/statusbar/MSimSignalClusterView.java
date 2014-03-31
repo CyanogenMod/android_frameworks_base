@@ -232,6 +232,7 @@ public class MSimSignalClusterView
             if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
                 mMobileCdmaVisible = true;
                 mMobileCdma1xOnlyVisible = false;
+                mMobileStrengthId[0] = 0;
 
                 mMobileCdma1xId = strengthIcon;
                 mMobileCdma3gId = getMobileCdma3gId(mMobileCdma1xId);
@@ -239,10 +240,14 @@ public class MSimSignalClusterView
                 //when it is roaming, just show one icon, rather than two icons for CT.
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = true;
+                mMobileStrengthId[0] = 0;
 
                 mMobileCdma1xOnlyId = strengthIcon;
+            } else {
+                mMobileCdmaVisible = false;
+                mMobileCdma1xOnlyVisible = false;
             }
-        }else {
+        } else {
             mMobileCdmaVisible = false;
             mMobileCdma1xOnlyVisible = false;
         }
