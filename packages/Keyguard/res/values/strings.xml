@@ -403,7 +403,7 @@
 
     <!-- Multi SIM related -->
     <!-- Message used in Multi SIM enabled SIM PIN view -->
-    <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
+    <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 
     <!-- Carrier text used in Multi SIM enabled view -->
     <string name="msim_carrier_text_format" translatable="false"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
