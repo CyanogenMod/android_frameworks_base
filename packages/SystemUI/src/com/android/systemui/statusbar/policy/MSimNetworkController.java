@@ -317,7 +317,15 @@ public class MSimNetworkController extends NetworkController {
             updateConnectivity(intent);
             refreshViews(mDefaultSubscription);
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
-            refreshViews(mDefaultSubscription);
+            if (mContext.getResources().getBoolean(R.bool.config_monitor_locale_change)) {
+                for (int i = 0; i < MSimTelephonyManager.getDefault().getPhoneCount(); i++) {
+                    updateNetworkName(mMSimNetworkName[i], i);
+                    updateCarrierText(i);
+                    refreshViews(i);
+                }
+            } else {
+                refreshViews(mDefaultSubscription);
+            }
         } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
             updateAirplaneMode();
             for (int i = 0; i < MSimTelephonyManager.getDefault().getPhoneCount(); i++) {
@@ -814,8 +822,18 @@ public class MSimNetworkController extends NetworkController {
         } else {
             mMSimNetworkName[subscription] = mNetworkNameDefault;
         }
+
+        // parse the string to current language string in public resources
+        if (mContext.getResources().getBoolean(R.bool.config_monitor_locale_change)) {
+            updateNetworkName(mMSimNetworkName[subscription], subscription);
+        }
         Slog.d(TAG, "mMSimNetworkName[subscription] " + mMSimNetworkName[subscription]
                                                       + "subscription " + subscription);
+    }
+
+    private void updateNetworkName(String networkName, int subscription) {
+        updateNetworkName(networkName);
+        mMSimNetworkName[subscription] = mNetworkName;
     }
 
     // ===== Full or limited Internet connectivity ==================================
