@@ -210,6 +210,7 @@ public class ActiveDisplayView extends FrameLayout
     private boolean mIsActive = false;
     private boolean mIsUnlockByUser = false;
     private boolean mIsTurnOffBySensor = false;
+    private boolean mScreenOnState = false;
 
     // user customizable settings
     private boolean mActiveDisplayEnabled = false;
@@ -254,7 +255,7 @@ public class ActiveDisplayView extends FrameLayout
             if (shouldShowNotification() && isValidNotification(sbn) && !shouldDisableActiveDisplay()) {
                 // need to make sure either the screen is off or the user is currently
                 // viewing the notifications
-                if (getVisibility() == View.VISIBLE || !isScreenOn()) {
+                if (getVisibility() == View.VISIBLE || !mScreenOnState) {
                     showNotification(sbn, true);
                 }
             }
@@ -596,7 +597,7 @@ public class ActiveDisplayView extends FrameLayout
             mPocketTime = System.currentTimeMillis();
             mProximityIsFar = false;
         }
-        if (isScreenOn() && mPocketMode != POCKET_MODE_OFF && !shouldDisableActiveDisplay() && mWakedByPocketMode) {
+        if (mScreenOnState && mPocketMode != POCKET_MODE_OFF && !shouldDisableActiveDisplay() && mWakedByPocketMode) {
             mWakedByPocketMode = false;
             Log.i(TAG, "ActiveDisplay: sent to sleep by Pocketmode");
             turnScreenOffbySensor();
@@ -606,7 +607,7 @@ public class ActiveDisplayView extends FrameLayout
     @Override
     public synchronized void onFar() {
         mProximityIsFar = true;
-        if (!isScreenOn() && mPocketMode != POCKET_MODE_OFF && !shouldDisableActiveDisplay()) {
+        if (!mScreenOnState && mPocketMode != POCKET_MODE_OFF && !shouldDisableActiveDisplay()) {
             if ((System.currentTimeMillis() >= (mPocketTime + mProximityThreshold)) && (mPocketTime != 0)) {
                 Log.i(TAG, "ActiveDisplay: wake by Pocketmode");
                 turnScreenOnbySensor();
@@ -650,7 +651,7 @@ public class ActiveDisplayView extends FrameLayout
             return;
         }
 
-        if (!isScreenOn() && !mIsActive) {
+        if (!mScreenOnState && !mIsActive) {
             Log.i(TAG, "ActiveDisplay: wake by Shakemode");
             mWakedByShakeMode = true;
             mShakeTime = System.currentTimeMillis();
@@ -666,7 +667,7 @@ public class ActiveDisplayView extends FrameLayout
                     showTime();
                 }
             }
-        } else if (mIsActive && mWakedByShakeMode && isScreenOn()) {
+        } else if (mIsActive && mWakedByShakeMode && mScreenOnState) {
             if ((System.currentTimeMillis() >= (mShakeTime + (long)(1000 * mShakeLongThreshold))) && (mShakeTime != 0)) {
                 mWakedByShakeMode = false;
                 Log.i(TAG, "ActiveDisplay: sent to sleep by Shakemode");
@@ -698,7 +699,7 @@ public class ActiveDisplayView extends FrameLayout
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mSettingsObserver.observe();
-        if (mRedisplayTimeout > 0 && !isScreenOn()) {
+        if (mRedisplayTimeout > 0 && !mScreenOnState) {
             updateRedisplayTimer();
         }
     }
@@ -1016,7 +1017,7 @@ public class ActiveDisplayView extends FrameLayout
         handleShowNotificationView();
         setActiveNotification(mNotification, true);
         inflateRemoteView(mNotification);
-        if (!isScreenOn()) {
+        if (!mScreenOnState) {
             turnScreenOn();
         }
         if (ping) mGlowPadView.ping();
@@ -1060,14 +1061,14 @@ public class ActiveDisplayView extends FrameLayout
         updateTargets();
         showNotificationView();
         invalidate();
-        if (!isScreenOn()) {
+        if (!mScreenOnState) {
             turnScreenOn();
         }
     }
 
     private void handleShowNothing() {
         restoreBrightness();
-        if (!isScreenOn()) {
+        if (!mScreenOnState) {
             turnScreenOn();
         }
         setVisibility(View.GONE);
@@ -1184,20 +1185,12 @@ public class ActiveDisplayView extends FrameLayout
     private final Runnable runScreenOn = new Runnable() {
         @Override
         public void run() {
-            if (!isScreenOn()) {
+            if (!mScreenOnState) {
                 wakeDevice();
             }
             KeyguardTouchDelegate.getInstance(mContext).dismiss();
         }
     };
-
-    private boolean isScreenOn() {
-        try {
-            return mPM.isScreenOn();
-        } catch (RemoteException e) {
-        }
-        return false;
-    }
 
     private void enableProximitySensor() {
         if (mPocketMode != POCKET_MODE_OFF && mActiveDisplayEnabled) {
@@ -1799,8 +1792,10 @@ public class ActiveDisplayView extends FrameLayout
                     hideNotificationViewOnCall();
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOnState = false;
                 onScreenTurnedOff();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOnState = true;
                 onScreenTurnedOn();
             } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
                 if (!isLockScreenDisabled()) {
@@ -1810,7 +1805,7 @@ public class ActiveDisplayView extends FrameLayout
                 cancelAllState();
                 if (mIsUnlockByUser) {
                     mIsUnlockByUser = false;
-                    if (!isScreenOn()) {
+                    if (!mScreenOnState) {
                         turnScreenOn();
                     }
                     KeyguardTouchDelegate.getInstance(mContext).dismiss();
