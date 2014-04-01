@@ -1041,6 +1041,11 @@ please see styles_device_defaults.xml.
         <item name="android:showDefault">true</item>
     </style>
 
+    <!-- @hide -->
+    <style name="Preference.Holo.Light.RingtonePreference" parent="Preference.Holo.RingtonePreference">
+        <item name="android:dialogStyle">@android:style/Theme.Holo.Light.Dialog.Alert</item>
+    </style>
+
     <!-- No margins or background by default. Could be different for x-large screens -->
     <style name="PreferencePanel">
     </style>
