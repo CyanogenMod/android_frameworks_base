@@ -34,7 +34,6 @@ import android.provider.Settings;
 import android.provider.Settings.System;
 import android.util.Log;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -224,8 +223,6 @@ public class RingtoneManager {
      * media provider's URI.
      */
     public static final int URI_COLUMN_INDEX = 2;
-
-    private static final Uri BAHHH = Uri.fromFile(new File("/system/media/audio/ringtones/Sheep.mp3"));
 
     private Activity mActivity;
     private Context mContext;
@@ -653,7 +650,7 @@ public class RingtoneManager {
                 }
             }
 
-            r.setUri(BAHHH);
+            r.setUri(ringtoneUri);
             return r;
         } catch (Exception ex) {
             Log.e(TAG, "Failed to open ringtone " + ringtoneUri + ": " + ex);
