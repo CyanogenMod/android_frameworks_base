@@ -137,6 +137,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private long mCachedMemory;
     private long mActiveMemory;
 
+    private RecentsActivity mRecentsActivity;
+
     TextView mUsedMemText;
     TextView mFreeMemText;
     TextView mRamText;
@@ -364,6 +366,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         mRecentItemLayoutId = a.getResourceId(R.styleable.RecentsPanelView_recentItemLayout, 0);
         mRecentTasksLoader = RecentTasksLoader.getInstance(context);
+        mRecentsActivity = (RecentsActivity) context;
         a.recycle();
     }
 
@@ -999,13 +1002,19 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
                 }
             } else {
-                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                        | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                boolean backPressed = mRecentsActivity != null && mRecentsActivity.mBackPressed;
+                if (!floating  || !backPressed) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
+                            | Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                            | Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
                 if (DEBUG) Log.v(TAG, "Starting activity " + intent);
                 try {
                     context.startActivityAsUser(intent, opts,
                             new UserHandle(UserHandle.USER_CURRENT));
+                    if (floating && mRecentsActivity != null) {
+                        mRecentsActivity.finish();
+                    }
                 } catch (SecurityException e) {
                     Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
                 } catch (ActivityNotFoundException e) {
@@ -1055,13 +1064,15 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
             setContentDescription(null);
         }
-	updateRamBar();
+    	updateRamBar();
     }
 
     private void startApplicationDetailsActivity(String packageName) {
+        dismissAndGoBack();
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", packageName, null));
         intent.setComponent(intent.resolveActivity(mContext.getPackageManager()));
+        intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
         TaskStackBuilder.create(getContext())
                 .addNextIntentWithParentStack(intent).startActivities();
     }
