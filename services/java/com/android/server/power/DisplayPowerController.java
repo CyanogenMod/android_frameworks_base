@@ -642,6 +642,12 @@ final class DisplayPowerController {
 
         mScreenBrightnessRampAnimator = new RampAnimator<DisplayPowerState>(
                 mPowerState, DisplayPowerState.SCREEN_BRIGHTNESS);
+
+        if (mPowerState.isScreenOn()) {
+            // If the screen is on then let the notifier know to ensure that
+            // battery stats after a boot are correct.
+            mNotifier.onScreenOn();
+        }
     }
 
     private final Animator.AnimatorListener mAnimatorListener = new Animator.AnimatorListener() {
