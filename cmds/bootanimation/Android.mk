@@ -22,6 +22,10 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
+ifeq ($(TARGET_CONTINUOUS_SPLASH_ENABLED),true)
+    LOCAL_CFLAGS += -DCONTINUOUS_SPLASH
+endif
+
 ifeq ($(TARGET_BOOTANIMATION_PRELOAD),true)
     LOCAL_CFLAGS += -DPRELOAD_BOOTANIMATION
 endif
