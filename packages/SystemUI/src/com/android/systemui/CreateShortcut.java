@@ -251,6 +251,9 @@ public class CreateShortcut extends LauncherActivity {
                             Toast.makeText(CreateShortcut.this,
                                     R.string.chamber_invalid,
                                     Toast.LENGTH_LONG).show();
+                            Toast.makeText(CreateShortcut.this,
+                                    R.string.chamber_invalid_setting,
+                                    Toast.LENGTH_LONG).show();
                             finish();
                         }
                     }
