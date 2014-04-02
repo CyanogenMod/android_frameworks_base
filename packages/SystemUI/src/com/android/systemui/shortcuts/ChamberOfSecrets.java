@@ -33,7 +33,9 @@ public class ChamberOfSecrets extends Activity  {
     private static final int SECURE_LONG = 3;
     private static final int SYSTEM_FLOAT = 4;
     private static final int SECURE_FLOAT = 5;
-
+    private static final int GLOBAL_INT = 6;
+    private static final int GLOBAL_LONG = 7;
+    private static final int GLOBAL_FLOAT = 8;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,24 @@ public class ChamberOfSecrets extends Activity  {
                         curFloat = Settings.Secure.getFloatForUser(getContentResolver(),
                                 setting, 0, UserHandle.USER_CURRENT);
                         Settings.Secure.putFloat(getContentResolver(),
+                                setting, getNewFloat(array, curFloat));
+                        break;
+                    case GLOBAL_INT:
+                        current = Settings.Global.getInt(getContentResolver(),
+                                setting, 0);
+                        Settings.Global.putInt(getContentResolver(),
+                                setting, getNewInt(array, current));
+                        break;
+                    case GLOBAL_LONG:
+                        curLong = Settings.Global.getLong(getContentResolver(),
+                                setting, 0);
+                        Settings.Global.putLong(getContentResolver(),
+                                setting, getNewLong(array, curLong));
+                        break;
+                    case GLOBAL_FLOAT:
+                        curFloat = Settings.Global.getFloat(getContentResolver(),
+                                setting, 0);
+                        Settings.Global.putFloat(getContentResolver(),
                                 setting, getNewFloat(array, curFloat));
                         break;
                 }
