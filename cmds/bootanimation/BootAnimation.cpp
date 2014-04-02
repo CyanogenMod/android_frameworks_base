@@ -355,6 +355,7 @@ bool BootAnimation::android()
     initTexture(&mAndroid[0], mAssets, "images/android-logo-mask.png");
     initTexture(&mAndroid[1], mAssets, "images/android-logo-shine.png");
 
+#ifndef CONTINUOUS_SPLASH
     // clear screen
     glShadeModel(GL_FLAT);
     glDisable(GL_DITHER);
@@ -362,6 +363,7 @@ bool BootAnimation::android()
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     eglSwapBuffers(mDisplay, mSurface);
+#endif
 
     glEnable(GL_TEXTURE_2D);
     glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
