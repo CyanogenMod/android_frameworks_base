@@ -24,6 +24,10 @@ LOCAL_SHARED_LIBRARIES := \
     libtinyalsa \
     libmedia
 
+ifeq ($(TARGET_CONTINUOUS_SPLASH_ENABLED),true)
+    LOCAL_CFLAGS += -DCONTINUOUS_SPLASH
+endif
+
 LOCAL_MODULE:= bootanimation
 
 ifdef TARGET_32_BIT_SURFACEFLINGER
