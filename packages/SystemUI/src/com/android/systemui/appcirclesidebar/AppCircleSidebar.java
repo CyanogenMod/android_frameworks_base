@@ -15,7 +15,9 @@ import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.IBinder;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -29,6 +31,7 @@ import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCircleItemClickListener,
                             CircleListView.OnItemCenteredListener {
@@ -49,10 +52,14 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
     private PackageAdapter mPackageAdapter;
     private Context mContext;
     private boolean mFirstTouch = false;
+    private boolean mFloatingWindow = false;
     private SettingsObserver mSettingsObserver;
+    private List<FloatingTaskInfo> mAppRunning;
 
     private PopupMenu mPopup;
+    private PopupMenu mPopupMax;
     private WindowManager mWM;
+    private AlarmManager mAM;
 
     public AppCircleSidebar(Context context) {
         this(context, null);
@@ -75,6 +82,8 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         super.onFinishInflate();
 
         IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_ACTIVITY_LAUNCH_DETECTOR);
+        filter.addAction(Intent.ACTION_ACTIVITY_END_DETECTOR);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(ACTION_HIDE_APP_CONTAINER);
         mContext.registerReceiver(mBroadcastReceiver, filter);
@@ -96,6 +105,7 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         mCircleListView.setVisibility(View.GONE);
         createAnimatimations();
         mSettingsObserver = new SettingsObserver(new Handler());
+        mAppRunning = new ArrayList<FloatingTaskInfo>();
     }
 
     @Override
@@ -290,6 +300,9 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
             if (mPopup != null) {
                 mPopup.dismiss();
             }
+            if (mPopupMax != null) {
+                mPopupMax.dismiss();
+            }
             cancelAutoHideTimer();
         }
         mCircleListView.startAnimation(show ? mSlideIn : mSlideOut);
@@ -372,6 +385,29 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
                 showAppContainer(false);
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 showAppContainer(false);
+            } else if (action.equals(Intent.ACTION_ACTIVITY_LAUNCH_DETECTOR)) {
+                String packageName = intent.getStringExtra("packagename");
+                IBinder packageToken = (IBinder) intent.getExtra("packagetoken");
+                if (packageName == null) {
+                    return;
+                }
+                if (!getAppFloatingInfo(packageName)) {
+                    FloatingTaskInfo taskInfo = new FloatingTaskInfo();
+                    taskInfo.packageName = packageName;
+                    taskInfo.packageToken = packageToken;
+                    mAppRunning.add(taskInfo);
+                }
+            } else if (action.equals(Intent.ACTION_ACTIVITY_END_DETECTOR)) {
+                String packageName = intent.getStringExtra("packagename");
+                if (packageName == null) {
+                    return;
+                }
+                if (getAppFloatingInfo(packageName)) {
+                    FloatingTaskInfo taskInfo = getFloatingInfo(packageName);
+                    if (taskInfo != null) {
+                        mAppRunning.remove(taskInfo);
+                    }
+                }
             }
         }
     };
@@ -381,16 +417,25 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         ComponentName cn = new ComponentName(packageName, className);
         Intent intent = Intent.makeMainActivity(cn);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (mFloatingWindow) {
+            intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+            mFloatingWindow = false;
+        } else {
+            intent.setFlags(intent.getFlags() & ~Intent.FLAG_FLOATING_WINDOW);
+        }
         mContext.startActivity(intent);
     }
 
-    private void launchApplicationFromHistory(String packageName, String className) {
-        updateAutoHideTimer(500);
-        ComponentName cn = new ComponentName(packageName, className);
-        Intent intent = Intent.makeMainActivity(cn);
-        intent.setFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                           | Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
+    private void launchApplicationFromHistory(String packageName) {
+        if (getAppFloatingInfo(packageName)) {
+            updateAutoHideTimer(500);
+            FloatingTaskInfo taskInfo = getFloatingInfo(packageName);
+            if (taskInfo != null) {
+                updateMaximizeApp(taskInfo.packageToken);
+            }
+        } else {
+            updateAutoHideTimer(AUTO_HIDE_DELAY);
+        }
     }
 
     private void killApp(String packageName) {
@@ -399,16 +444,46 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
        am.forceStopPackage(packageName);
     }
 
+    @Override
     public void onItemCentered(View v) {
-        updateAutoHideTimer(AUTO_HIDE_DELAY);
-        /*if (v != null) {
+        if (v != null) {
             final int position = (Integer) v.getTag(R.id.key_position);
             final ResolveInfo info = (ResolveInfo) mPackageAdapter.getItem(position);
             if (info != null) {
-                String packageName = info.activityInfo.packageName;
-                launchApplicationFromHistory(info.activityInfo.packageName, info.activityInfo.name);
+                final String packageName = info.activityInfo.packageName;
+                if (!getAppFloatingInfo(packageName)) {
+                    updateAutoHideTimer(AUTO_HIDE_DELAY);
+                    return;
+                }
+                final PopupMenu popup = new PopupMenu(mContext, v);
+                mPopupMax = popup;
+                popup.getMenuInflater().inflate(R.menu.sidebar_maximize_popup_menu,
+                      popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.sidebar_maximize_item) {
+                            mFloatingWindow = true;
+                            launchApplicationFromHistory(packageName);
+                        } else if (item.getItemId() == R.id.sidebar_maximize_stop_item) {
+                            FloatingTaskInfo taskInfo = getFloatingInfo(packageName);
+                            if (taskInfo != null) {
+                                mAppRunning.remove(taskInfo);
+                            }
+                            killApp(packageName);
+                        } else {
+                            return false;
+                        }
+                        return true;
+                    }
+                });
+                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    public void onDismiss(PopupMenu menu) {
+                        mPopupMax = null;
+                    }
+                });
+                popup.show();
             }
-        }*/
+        }
     }
 
     @Override
@@ -452,9 +527,16 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
                    popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId() == R.id.sidebar_float_item) {
+                        mFloatingWindow = true;
+                        launchApplication(packageName, info.activityInfo.name);
                     } else if (item.getItemId() == R.id.sidebar_inspect_item) {
                         startApplicationDetailsActivity(packageName);
                     } else if (item.getItemId() == R.id.sidebar_stop_item) {
+                        FloatingTaskInfo taskInfo = getFloatingInfo(packageName);
+                        if (taskInfo != null) {
+                            mAppRunning.remove(taskInfo);
+                        }
                         killApp(packageName);
                     } else {
                         return false;
@@ -480,5 +562,36 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         TaskStackBuilder.create(mContext)
                 .addNextIntentWithParentStack(intent).startActivities();
         showAppContainer(false);
+    }
+
+    private void updateMaximizeApp(IBinder token) {
+        IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+        try {
+             wm.notifyFloatActivityTouched(token, false);
+        } catch (RemoteException e) {
+        }
+    }
+
+    private FloatingTaskInfo getFloatingInfo(String packageName) {
+        for (FloatingTaskInfo taskInfo : mAppRunning) {
+            if (packageName.equals(taskInfo.packageName)) {
+                return taskInfo;
+            }
+        }
+        return null;
+    }
+
+    private boolean getAppFloatingInfo(String packageName) {
+        for (FloatingTaskInfo taskInfo : mAppRunning) {
+            if (packageName.equals(taskInfo.packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public class FloatingTaskInfo {
+        public IBinder packageToken;
+        public String packageName;
     }
 }

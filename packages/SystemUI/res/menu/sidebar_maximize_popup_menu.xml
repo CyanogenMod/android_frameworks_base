@@ -18,7 +18,6 @@
 */
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/sidebar_float_item" android:title="@string/app_float_item_title" />
-    <item android:id="@+id/sidebar_inspect_item" android:title="@string/status_bar_recent_inspect_item_title" />
-    <item android:id="@+id/sidebar_stop_item" android:title="@string/app_stop_item_title" />
+    <item android:id="@+id/sidebar_maximize_item" android:title="@string/app_float_maximize_item_title" />
+    <item android:id="@+id/sidebar_maximize_stop_item" android:title="@string/app_stop_item_title" />
 </menu>
