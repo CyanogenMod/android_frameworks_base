@@ -57,6 +57,8 @@
 #define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
 #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
 #define EXIT_PROP_NAME "service.bootanim.exit"
+#define QB_POWERON_PROP_NAME "sys.quickboot.poweron"
+#define QB_POWEROFF_PROP_NAME "sys.quickboot.poweroff"
 
 extern "C" int clock_nanosleep(clockid_t clock_id, int flags,
                            const struct timespec *request,
@@ -444,6 +446,12 @@ bool BootAnimation::movie()
         return false;
     }
 
+    char value[PROPERTY_VALUE_MAX];
+    property_get(QB_POWEROFF_PROP_NAME, value, "0");
+    int qb_poweroff = atoi(value);
+    property_get(QB_POWERON_PROP_NAME, value, "0");
+    int qb_poweron = atoi(value);
+
     String8 desString((char const*)descMap->getDataPtr(),
             descMap->getDataLength());
     char const* s = desString.string();
@@ -467,12 +475,16 @@ bool BootAnimation::movie()
         }
         else if (sscanf(l, " %c %d %d %s", &pathType, &count, &pause, path) == 4) {
             //LOGD("> type=%c, count=%d, pause=%d, path=%s", pathType, count, pause, path);
-            Animation::Part part;
-            part.playUntilComplete = pathType == 'c';
-            part.count = count;
-            part.pause = pause;
-            part.path = path;
-            animation.parts.add(part);
+            if ((!qb_poweron && !qb_poweroff && pathType != 'i' && pathType != 'o') ||
+                    (qb_poweron && pathType == 'i') ||
+                    (qb_poweroff && pathType == 'o')) {
+                Animation::Part part;
+                part.playUntilComplete = pathType == 'c';
+                part.count = count;
+                part.pause = pause;
+                part.path = path;
+                animation.parts.add(part);
+            }
         }
 
         s = ++endl;
