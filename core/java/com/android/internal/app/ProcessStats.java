@@ -2717,6 +2717,11 @@ public final class ProcessStats implements Parcelable {
                 mPssTable = mStats.mAddLongTable;
                 mPssTableSize = mStats.mAddLongTableSize;
             }
+
+            if (((off>>OFFSET_ARRAY_SHIFT)&OFFSET_ARRAY_MASK) >= mStats.mLongs.size()) {
+                return;
+            }
+
             long[] longs = mStats.mLongs.get((off>>OFFSET_ARRAY_SHIFT)&OFFSET_ARRAY_MASK);
             idx = (off>>OFFSET_INDEX_SHIFT)&OFFSET_INDEX_MASK;
             long count = longs[idx+PSS_SAMPLE_COUNT];
