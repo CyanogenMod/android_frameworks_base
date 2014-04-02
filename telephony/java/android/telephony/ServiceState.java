@@ -816,6 +816,8 @@ public class ServiceState implements Parcelable {
             return TelephonyManager.NETWORK_TYPE_GSM;
         case ServiceState.RIL_RADIO_TECHNOLOGY_TD_SCDMA:
             return TelephonyManager.NETWORK_TYPE_TD_SCDMA;
+        case ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN:
+            return TelephonyManager.NETWORK_TYPE_IWLAN;
         default:
             return TelephonyManager.NETWORK_TYPE_UNKNOWN;
         }
