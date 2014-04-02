@@ -733,33 +733,13 @@ public class KeyguardViewMediator {
     }
 
     private void maybeSendUserPresentBroadcast() {
-        if (mSystemReady && isKeyguardDisabled()) {
-            // Keyguard can be showing even if disabled in case the SIM PIN entry
-            // screen is showing; so make sure to not send user present if it's
-            // actually showing
-            if (!mShowing && !mShowKeyguardWakeLock.isHeld()) {
-                sendUserPresentBroadcast();
-            }
+        if (mSystemReady && mLockPatternUtils.isLockScreenDisabled()
+                && mUserManager.getUsers(true).size() == 1) {
+            // Lock screen is disabled because the user has set the preference to "None".
+            // In this case, send out ACTION_USER_PRESENT here instead of in
+            // handleKeyguardDone()
+            sendUserPresentBroadcast();
         }
-    }
-
-    private boolean isKeyguardDisabled() {
-        if (!mExternallyEnabled) {
-            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled externally");
-            return true;
-        }
-        if (mLockPatternUtils.isLockScreenDisabled() && mUserManager.getUsers(true).size() == 1) {
-            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by setting");
-            return true;
-        }
-        Profile profile = mProfileManager.getActiveProfile();
-        if (profile != null) {
-            if (profile.getScreenLockMode() == Profile.LockMode.DISABLE) {
-                if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -968,9 +948,36 @@ public class KeyguardViewMediator {
             return;
         }
 
-        if (isKeyguardDisabled() && !lockedOrMissing) {
-            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because disabled");
+        // if another app is disabling us, don't show
+        if (!mExternallyEnabled && !lockedOrMissing) {
+            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
+
+            // note: we *should* set mNeedToReshowWhenReenabled=true here, but that makes
+            // for an occasional ugly flicker in this situation:
+            // 1) receive a call with the screen on (no keyguard) or make a call
+            // 2) screen times out
+            // 3) user hits key to turn screen back on
+            // instead, we reenable the keyguard when we know the screen is off and the call
+            // ends (see the broadcast receiver below)
+            // TODO: clean this up when we have better support at the window manager level
+            // for apps that wish to be on top of the keyguard
             return;
+        }
+
+        if (mUserManager.getUsers(true).size() < 2
+                && mLockPatternUtils.isLockScreenDisabled() && !lockedOrMissing) {
+            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because lockscreen is off");
+            return;
+        }
+
+        // if the current profile has disabled us, don't show
+        Profile profile = mProfileManager.getActiveProfile();
+        if (profile != null) {
+            if (!lockedOrMissing
+                    && profile.getScreenLockMode() == Profile.LockMode.DISABLE) {
+                if (DEBUG) Log.d(TAG, "doKeyguard: not showing because of profile override");
+                return;
+            }
         }
 
         if (DEBUG) Log.d(TAG, "doKeyguard: showing the lock screen");
