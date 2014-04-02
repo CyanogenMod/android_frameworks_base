@@ -263,7 +263,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     // Recents Style
     private RecentController cRecents;
     private RecentsComponent mRecents;
-    private boolean mCustomRecent = false;
+    private int mCustomRecent;
 
     protected ActiveDisplayView mActiveDisplayView;
 
@@ -476,10 +476,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
 
-        mCustomRecent = Settings.System.getBoolean(
-                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false);
+        int mCustomRecent = Settings.System.getInt(
+                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, 0);
 
-        if (mCustomRecent) {
+        if (mCustomRecent == 1) {
             cRecents = new RecentController(mContext, mLayoutDirection);
         } else {
             mRecents = getComponent(RecentsComponent.class);
@@ -1203,9 +1203,9 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void toggleRecentsActivity() {
         if (mRecents != null || cRecents != null) {
-        mCustomRecent = Settings.System.getBoolean(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, false);
-        if(mCustomRecent)
+        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0);
+        if(mCustomRecent == 1)
             cRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
         else
             mRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
@@ -1214,9 +1214,9 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void preloadRecentTasksList() {
         if (mRecents != null || cRecents != null) {
-        mCustomRecent = Settings.System.getBoolean(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, false);
-        if (mCustomRecent)
+        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0);
+        if (mCustomRecent == 1)
             cRecents.preloadRecentTasksList();
         else
             mRecents.preloadRecentTasksList();
@@ -1225,9 +1225,9 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void cancelPreloadingRecentTasksList() {
         if (mRecents != null || cRecents != null) {
-        mCustomRecent = Settings.System.getBoolean(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, false);
-        if (mCustomRecent)
+        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0);
+        if (mCustomRecent == 1)
             cRecents.cancelPreloadingRecentTasksList();
         else
             mRecents.cancelPreloadingRecentTasksList();
@@ -1236,9 +1236,9 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void closeRecents() {
         if (mRecents != null || cRecents != null) {
-        mCustomRecent = Settings.System.getBoolean(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, false);
-        if (mCustomRecent)
+        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0);
+        if (mCustomRecent == 1)
             cRecents.closeRecents();
         else
             mRecents.closeRecents();
@@ -1246,10 +1246,11 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void rebuildRecentsScreen() {
-        mCustomRecent = Settings.System.getBoolean(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, false);
-        if (cRecents != null && mCustomRecent)   
+        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0);
+        if (cRecents != null && mCustomRecent == 1) {
                 cRecents.rebuildRecentsScreen();
+        }
     }
 
     public abstract void resetHeadsUpDecayTimer();

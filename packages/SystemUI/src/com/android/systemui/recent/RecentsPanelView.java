@@ -128,6 +128,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private int mRecentItemLayoutId;
     private boolean mHighEndGfx;
     private ImageView mClearRecents;
+    private int mCustomRecent;
 
     private LinearColorBar mRamUsageBar;
 
@@ -200,6 +201,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         public View createView(ViewGroup parent) {
             View convertView = mInflater.inflate(mRecentItemLayoutId, parent, false);
             ViewHolder holder = new ViewHolder();
+            holder.thumbnailView = convertView.findViewById(R.id.app_thumbnail);
             holder.thumbnailView = convertView.findViewById(R.id.app_thumbnail);
             holder.thumbnailViewImage =
                     (ImageView) convertView.findViewById(R.id.app_thumbnail_image);
@@ -733,8 +735,10 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // Should remove the default image in the frame
             // that this now covers, to improve scrolling speed.
             // That can't be done until the anim is complete though.
-            if(Settings.System.getBoolean(
-                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false) == false) {
+            int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0);
+
+            if(mCustomRecent == 2) {
 
                 final int reflectionGap = 4;
                 int width = thumbnail.getWidth();
@@ -773,13 +777,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 h.thumbnailViewImageBitmap.getHeight() != thumbnail.getHeight()) {
                 if (mFitThumbnailToXY) {
                     h.thumbnailViewImage.setScaleType(ScaleType.FIT_XY);
-                    if(Settings.System.getBoolean(
-                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false) == false) {
+                    if(mCustomRecent == 2) {
                         h.thumbnailViewImage.setRotationY(25.0f);
                     }
                 } else {
-                    if(Settings.System.getBoolean(
-                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, false) == false) {
+                    if(mCustomRecent == 2) {
                         h.thumbnailViewImage.setScaleType(ScaleType.FIT_CENTER);
                         h.thumbnailViewImage.setRotationY(25.0f);
                         if (DEBUG) Log.d(TAG, "thumbnail.getHeight(): " + thumbnail.getHeight());

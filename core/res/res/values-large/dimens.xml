@@ -33,8 +33,4 @@
     <!-- Preference UI dimensions for larger screens. -->
     <dimen name="preference_widget_width">56dp</dimen>
 
-    <!-- The width that is used when creating thumbnails of applications. -->
-    <dimen name="thumbnail_width">267dp</dimen>
-    <!-- The height that is used when creating thumbnails of applications. -->
-    <dimen name="thumbnail_height">168dp</dimen>
 </resources>

@@ -64,8 +64,4 @@
     <!-- width of ImmersiveModeConfirmation (-1 for match_parent) -->
     <dimen name="immersive_mode_cling_width">380dp</dimen>
 
-    <!-- The width that is used when creating thumbnails of applications. -->
-    <dimen name="thumbnail_width">267dp</dimen>
-    <!-- The height that is used when creating thumbnails of applications. -->
-    <dimen name="thumbnail_height">168dp</dimen>
 </resources>
