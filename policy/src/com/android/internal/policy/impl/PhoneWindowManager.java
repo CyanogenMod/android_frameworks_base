@@ -1119,8 +1119,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             final VolumePanel volumePanel = new VolumePanel(ThemeUtils.createUiContext(mContext),
                                                               (AudioService) getAudioService());
             if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                boolean vibrateSetting = Settings.System.getInt(mContext.getContentResolver(),
-                                           Settings.System.VIBRATE_WHEN_RINGING, 0) != 0;
+                boolean vibrateSetting = Settings.System.getIntForUser(mContext.getContentResolver(),
+                                           Settings.System.VIBRATE_WHEN_RINGING, 0, UserHandle.USER_CURRENT) != 0;
                 am.setRingerMode(vibrateSetting ? AudioManager.RINGER_MODE_VIBRATE :
                                    AudioManager.RINGER_MODE_SILENT);
             } else {
@@ -1265,8 +1265,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             @Override
             public void onChange(boolean selfChange) {
 
-                if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.EXPANDED_DESKTOP_RESTART_LAUNCHER, 1) == 1) {
+                if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_RESTART_LAUNCHER, 1, UserHandle.USER_CURRENT) == 1) {
                     // Restart default launcher activity
                     final PackageManager mPm = mContext.getPackageManager();
                     final ActivityManager am = (ActivityManager)mContext
@@ -1768,8 +1768,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
 
-            mEnableFastTorch = Settings.System.getInt(resolver,
-                    Settings.System.ENABLE_FAST_TORCH, 0) == 1;
+            mEnableFastTorch = Settings.System.getIntForUser(resolver,
+                    Settings.System.ENABLE_FAST_TORCH, 0, UserHandle.USER_CURRENT) == 1;
 
             // Use screen off timeout setting as the timeout for the lockscreen
             mLockScreenTimeout = Settings.System.getIntForUser(resolver,

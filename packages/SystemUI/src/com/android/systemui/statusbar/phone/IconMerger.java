@@ -17,14 +17,15 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.content.ContentResolver;
+import android.database.ContentObserver;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.content.ContentResolver;
-import android.database.ContentObserver;
 
 import com.android.systemui.R;
 
@@ -161,8 +162,8 @@ public class IconMerger extends LinearLayout {
     protected void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mShowCenterClock = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_CLOCK_STYLE, Clock.STYLE_CLOCK_RIGHT) == Clock.STYLE_CLOCK_CENTER;
+        mShowCenterClock = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_CLOCK_STYLE, Clock.STYLE_CLOCK_RIGHT, UserHandle.USER_CURRENT) == Clock.STYLE_CLOCK_CENTER;
 
         mIconHPadding = mContext.getResources().getDimensionPixelSize(
                 R.dimen.status_bar_icon_padding);

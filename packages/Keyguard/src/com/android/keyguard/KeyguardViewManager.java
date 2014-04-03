@@ -53,6 +53,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.renderscript.Allocation;
 import android.renderscript.Allocation.MipmapControl;
@@ -146,17 +147,17 @@ public class KeyguardViewManager {
     void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_SEE_THROUGH), false, this);
+                    Settings.System.LOCKSCREEN_SEE_THROUGH), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ACTIVE_NOTIFICATIONS), false, this);
+                    Settings.System.ACTIVE_NOTIFICATIONS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_BLUR_RADIUS), false, this);
+                    Settings.System.LOCKSCREEN_BLUR_RADIUS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS), false, this);
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_BACKGROUND_STYLE), false, this);
+                    Settings.System.LOCKSCREEN_BACKGROUND_STYLE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_BACKGROUND_COLOR), false, this);
+                    Settings.System.LOCKSCREEN_BACKGROUND_COLOR), false, this, UserHandle.USER_ALL);
         }
 
     @Override
@@ -172,18 +173,18 @@ public class KeyguardViewManager {
 
     private void updateSettings() {
         boolean mNotOverridden;
-        mSeeThrough = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
-        mBlurRadius = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_BLUR_RADIUS, mBlurRadius);
-        mNotOverridden = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.ACTIVE_NOTIFICATIONS, 0) == 1;
-        mLockscreenNotifications = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_NOTIFICATIONS, mLockscreenNotifications ? 1 : 0) == 1;
-        mBackgroundStyle = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_BACKGROUND_STYLE, 2);
-        mBackgroundColor = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_BACKGROUND_COLOR, 0x00000000);
+        mSeeThrough = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SEE_THROUGH, 0, UserHandle.USER_CURRENT) == 1;
+        mBlurRadius = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_BLUR_RADIUS, mBlurRadius, UserHandle.USER_CURRENT);
+        mNotOverridden = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.ACTIVE_NOTIFICATIONS, 0, UserHandle.USER_CURRENT) == 1;
+        mLockscreenNotifications = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_NOTIFICATIONS, mLockscreenNotifications ? 1 : 0, UserHandle.USER_CURRENT) == 1;
+        mBackgroundStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_BACKGROUND_STYLE, 2, UserHandle.USER_CURRENT);
+        mBackgroundColor = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_BACKGROUND_COLOR, 0x00000000, UserHandle.USER_CURRENT);
         if (!mSeeThrough) mCustomBackground = null;
         if (!mNotOverridden) mLockscreenNotifications = false;
         if (mLockscreenNotifications && mNotificationViewManager == null) {
@@ -195,6 +196,15 @@ public class KeyguardViewManager {
                 mNotificationViewManager = null;
             }
         }
+    }
+
+    public void onUserSwitched() {
+        updateSettings();
+        if (mKeyguardHost == null) {
+            maybeCreateKeyguardLocked(shouldEnableScreenRotation(), false, null);
+            hide();
+        }
+        mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
     }
 
     /**
@@ -250,10 +260,10 @@ public class KeyguardViewManager {
 
     private boolean shouldEnableScreenRotation() {
         Resources res = mContext.getResources();
-        boolean enableLockScreenRotation = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_ROTATION, 0) != 0;
-        boolean enableAccelerometerRotation = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION, 1) != 0;
+        boolean enableLockScreenRotation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_ROTATION, 0, UserHandle.USER_CURRENT) != 0;
+        boolean enableAccelerometerRotation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 1, UserHandle.USER_CURRENT) != 0;
         return SystemProperties.getBoolean("lockscreen.rot_override",false)
                 || (enableLockScreenRotation && enableAccelerometerRotation);
     }

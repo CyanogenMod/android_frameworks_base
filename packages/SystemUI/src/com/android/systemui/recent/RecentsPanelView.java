@@ -287,7 +287,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 }
             }
 
-            int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
+            int mHaloEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT));
 
             holder.lockedIcon.setImageResource(td.isLocked()?R.drawable.ic_recent_app_locked:R.drawable.ic_recent_app_unlock);
             holder.thumbnailView.setTag(td);
@@ -440,13 +440,13 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
             mClearRecents.setVisibility(noApps ? View.GONE : View.VISIBLE);
 
-            boolean showClearAllButton = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.SHOW_CLEAR_RECENTS_BUTTON, 1) == 1;
+            boolean showClearAllButton = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SHOW_CLEAR_RECENTS_BUTTON, 1, UserHandle.USER_CURRENT) == 1;
 
             if (showClearAllButton) {
                 mClearRecents.setVisibility(noApps ? View.GONE : View.VISIBLE);
-                int clearAllButtonLocation = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT);
+                int clearAllButtonLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT, UserHandle.USER_CURRENT);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mClearRecents.getLayoutParams();
                 switch (clearAllButtonLocation) {
                     case Constants.CLEAR_ALL_BUTTON_TOP_LEFT:
@@ -738,8 +738,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // Should remove the default image in the frame
             // that this now covers, to improve scrolling speed.
             // That can't be done until the anim is complete though.
-            int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0);
+            int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
             if(mCustomRecent == 2) {
 
@@ -976,7 +976,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         if (ad.taskId >= 0 && !floating) {
             // This is an active task; it should just go to the foreground.
 
-            int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
+            int mHaloEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(),
+                                    Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT));
             // If that task was split viewed, a normal press wil resume it to
             // normal fullscreen view
 
@@ -1174,7 +1175,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         final PopupMenu popup =
             new PopupMenu(mContext, anchorView == null ? selectedView : anchorView);
         mPopup = popup;
-        final int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
+        final int mHaloEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(),
+                                    Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT));
 
         if (mHaloEnabled != 1) {
             popup.getMenuInflater().inflate(R.menu.recent_popup_menu_split, popup.getMenu());
@@ -1331,8 +1333,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private void updateRamBar() {
         mRamUsageBar = (LinearColorBar) findViewById(R.id.ram_usage_bar);
 
-        int mRamBarMode = (Settings.System.getInt(mContext.getContentResolver(),
-                             Settings.System.RECENTS_RAM_BAR_MODE, 0));
+        int mRamBarMode = (Settings.System.getIntForUser(mContext.getContentResolver(),
+                             Settings.System.RECENTS_RAM_BAR_MODE, 0, UserHandle.USER_CURRENT));
 
         if (mRamBarMode != 0 && mRamUsageBar != null) {
 

@@ -537,27 +537,32 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.QUICK_TILES_BG_ALPHA),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.APP_SIDEBAR_POSITION), false, this);
+                    Settings.System.APP_SIDEBAR_POSITION),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CARRIER), false, this);
+                    Settings.System.STATUS_BAR_CARRIER),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUSBAR_WEATHER_STYLE), false, this);
+                    Settings.System.STATUSBAR_WEATHER_STYLE),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.USE_WEATHER), false, this);
+                    Settings.System.USE_WEATHER),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SPIE_CONTROLS), false, this,
-                    UserHandle.USER_ALL);
+                    Settings.System.SPIE_CONTROLS),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STATE), false, this,
-                    UserHandle.USER_ALL);
+                    Settings.System.EXPANDED_DESKTOP_STATE),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.REMINDER_ALERT_ENABLED), false, this,
-                    UserHandle.USER_ALL);
+                    Settings.System.REMINDER_ALERT_ENABLED),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.REMINDER_ALERT_INTERVAL), false, this,
-                    UserHandle.USER_ALL);
+                    Settings.System.REMINDER_ALERT_INTERVAL),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_ACTIVE_DISPLAY), false, this);
+                    Settings.System.ENABLE_ACTIVE_DISPLAY),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -680,8 +685,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
                     0, UserHandle.USER_CURRENT) == 1;
 
-            int sidebarPosition = Settings.System.getInt(
-                    resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
+            int sidebarPosition = Settings.System.getIntForUser(
+                    resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT, UserHandle.USER_CURRENT);
             if (sidebarPosition != mSidebarPosition) {
                 mSidebarPosition = sidebarPosition;
                 mWindowManager.updateViewLayout(mAppSidebar, getAppSidebarLayoutParams(sidebarPosition));
@@ -692,12 +697,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationShortcutsIsActive = !(notificationShortcutsIsActive == null
                     || notificationShortcutsIsActive.isEmpty());
 
-            mShowStatusBarCarrier = Settings.System.getInt(
-                resolver, Settings.System.STATUS_BAR_CARRIER, 0) == 1;
+            mShowStatusBarCarrier = Settings.System.getIntForUser(
+                resolver, Settings.System.STATUS_BAR_CARRIER, 0, UserHandle.USER_CURRENT) == 1;
             showStatusBarCarrierLabel(mShowStatusBarCarrier);
 
-            mWeatherPanelEnabled = (Settings.System.getInt(resolver,
-                    Settings.System.STATUSBAR_WEATHER_STYLE, 2) == 1)
+            mWeatherPanelEnabled = (Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 2 , UserHandle.USER_CURRENT) == 1)
                     && (Settings.System.getBoolean(resolver, Settings.System.USE_WEATHER, false));
             mWeatherPanel.setVisibility(mWeatherPanelEnabled ? View.VISIBLE : View.GONE);
 
@@ -1080,8 +1085,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         final ContentResolver cr = mContext.getContentResolver();
         mWeatherPanel = (WeatherPanel) mStatusBarWindow.findViewById(R.id.weatherpanel);
         mWeatherPanel.setOnClickListener(mWeatherPanelListener);
-        mWeatherPanelEnabled = (Settings.System.getInt(cr,
-                Settings.System.STATUSBAR_WEATHER_STYLE, 2) == 1)
+        mWeatherPanelEnabled = (Settings.System.getIntForUser(cr,
+                Settings.System.STATUSBAR_WEATHER_STYLE, 2 , UserHandle.USER_CURRENT) == 1)
                 && (Settings.System.getBoolean(cr, Settings.System.USE_WEATHER, false));
         mWeatherPanel.setVisibility(mWeatherPanelEnabled ? View.VISIBLE : View.GONE);
 

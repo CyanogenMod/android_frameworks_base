@@ -1871,14 +1871,14 @@ public class KeyguardHostView extends KeyguardViewBase {
         final boolean configDisabled = res.getBoolean(R.bool.config_disableMenuKeyInLockScreen);
         final boolean isTestHarness = ActivityManager.isRunningInTestHarness();
         final boolean fileOverride = (new File(ENABLE_MENU_KEY_FILE)).exists();
-        final boolean menuOverride = Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.MENU_UNLOCK_SCREEN, 0) == 1;
+        final boolean menuOverride = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.MENU_UNLOCK_SCREEN, 0, UserHandle.USER_CURRENT) == 1;
         return !configDisabled || isTestHarness || fileOverride || menuOverride;
     }
 
     private boolean shouldEnableHomeKey() {
-        final boolean homeOverride = Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.HOME_UNLOCK_SCREEN, 0) == 1;
+        final boolean homeOverride = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.HOME_UNLOCK_SCREEN, 0, UserHandle.USER_CURRENT) == 1;
         return homeOverride;
     }
 

@@ -633,8 +633,8 @@ final class DisplayPowerController {
                 mDisplayReadyLocked = false;
             }
 
-            boolean seeThrough = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
+            boolean seeThrough = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_SEE_THROUGH, 0, UserHandle.USER_CURRENT) == 1;
             int blurRadius = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_BLUR_RADIUS, 12);
             if (changed && !mPendingRequestChangedLocked) {
