@@ -2,8 +2,11 @@ package com.android.systemui.statusbar.appcirclesidebar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +37,8 @@ public class PackageAdapter extends BaseAdapter implements InputItemHandler.Inpu
     private Set<String> mIncludedApps = new HashSet<String>();
 
     private final InputItemHandler mInputItemHandler;
+
+    private static final String Samsung_MultiWindow_Manifest = "com.sec.android.support.multiwindow";
 
     private static final String[] AUTO_ADD_PACKAGES = new String[] {
         "com.android.settings",
@@ -183,7 +188,33 @@ public class PackageAdapter extends BaseAdapter implements InputItemHandler.Inpu
         if (mIncludedApps != null) {
             return mIncludedApps.contains(packageName);
         }
-        return isAutoAddApp(packageName);
+        boolean isSamsungMultiWindow = isSamsungMultiWindowSupport(packageName);
+        boolean isAutoAdd = isAutoAddApp(packageName);
+        if (!isSamsungMultiWindow) {
+            return isAutoAdd;
+        }
+        return isSamsungMultiWindow;
+    }
+
+    private boolean isSamsungMultiWindowSupport(String packageName) {
+        try {
+             PackageInfo packInfo = mPackageManager.getPackageInfo(packageName,
+                  PackageManager.GET_ACTIVITIES | PackageManager.GET_META_DATA);
+             if (packInfo != null) {
+                 ApplicationInfo appInfo = packInfo.applicationInfo;
+                 if (appInfo != null) {
+                     Bundle info = appInfo.metaData;
+                     if (info != null) {
+                         //boolean isSupport = info.getBoolean(Samsung_MultiWindow_Manifest);
+                         //int valueSupport = info.getInt(Samsung_MultiWindow_Manifest);
+                         return info.getBoolean(Samsung_MultiWindow_Manifest);
+                     }
+                 }
+             }
+         } catch (PackageManager.NameNotFoundException e) {
+             return false;
+         }
+         return false;
     }
 
     public void createIncludedAppsSet(String includedApps) {
