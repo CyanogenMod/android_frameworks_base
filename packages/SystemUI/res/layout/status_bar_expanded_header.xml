@@ -101,6 +101,15 @@
             />
     </FrameLayout>
 
+    <ImageView android:id="@+id/halo_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="4dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_notify_halo"
+        android:contentDescription="@string/accessibility_halo"
+        />
+
     <FrameLayout android:id="@+id/settings_button_holder"
         android:layout_width="50dp"
         android:layout_height="50dp"

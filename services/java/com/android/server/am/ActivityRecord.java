@@ -25,6 +25,7 @@ import com.android.server.am.ActivityStack.ActivityState;
 import android.app.ActivityOptions;
 import android.app.ResultInfo;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -44,6 +45,7 @@ import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
 import android.util.TimeUtils;
+import android.view.ContextThemeWrapper;
 import android.view.IApplicationToken;
 import android.view.WindowManager;
 
@@ -136,6 +138,11 @@ final class ActivityRecord {
     boolean frozenBeforeDestroy;// has been frozen but not yet destroyed.
     boolean immersive;      // immersive mode (don't interrupt if possible)
     boolean forceNewConfig; // force re-create with new config next time
+
+    boolean topIntent;
+    boolean newTask;
+    boolean floatingWindow;
+
     int launchCount;        // count of launches since last state
     long lastLaunchTime;    // time of last lauch of this activity
 
@@ -416,6 +423,54 @@ final class ActivityRecord {
                         ? android.R.style.Theme
                         : android.R.style.Theme_Holo;
             }
+
+            // This is where the package gets its first context from the attribute-cache
+            // In order to hook its attributes we set up our check for floating mutil windows here.
+            topIntent = true;
+
+            ActivityStack stack = task == null ? null : task.stack;
+
+            floatingWindow = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+
+            TaskRecord baseRecord = stack != null && stack.mTaskHistory.size() > 0 ? stack.mTaskHistory.get(stack.mTaskHistory.size() -1) : null;
+
+            if (baseRecord != null) {
+
+                ActivityRecord record = baseRecord.mActivities.size() > 0 ? baseRecord.mActivities.get(baseRecord.mActivities.size() - 1) : null;
+
+                final boolean floats = (baseRecord.intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+                final boolean taskAffinity = record == null ? false : aInfo.applicationInfo.packageName.equals(record.packageName);
+                newTask = (intent.getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) == Intent.FLAG_ACTIVITY_NEW_TASK;
+
+                // If the current intent is not a new task we will check its top parent.
+                // Perhaps it started out as a multiwindow in which case we pass the flag on
+                if (floats && (!newTask || taskAffinity)) {
+                    intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+                    // Flag the activity as sub-task
+                    topIntent = false;
+                    floatingWindow = true;
+                }
+            }
+
+            // If this is a multiwindow activity we prevent it from messing up the history stack,
+            // like jumping back home, killing the current activity or polluting recents
+            if (floatingWindow) {
+                intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                // If this is the mother-intent we make it volatile
+                if (topIntent) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                }
+
+                // Change theme
+                realTheme = com.android.internal.R.style.Theme_DeviceDefault_FloatingWindow;
+            }
+
             if ((aInfo.flags&ActivityInfo.FLAG_HARDWARE_ACCELERATED) != 0) {
                 windowFlags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
             }
