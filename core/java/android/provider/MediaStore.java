@@ -717,6 +717,11 @@ public final class MediaStore {
                             return null;
                         }
                         filePath = c.getString(1);
+                        // this DB query can return null under some synchronization issue,
+                        // returning NULL bitmap in such cases.
+                        if (filePath == null) {
+                            return null;
+                        }
                     }
                     if (isVideo) {
                         bitmap = ThumbnailUtils.createVideoThumbnail(filePath, kind);
