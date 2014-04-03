@@ -39,6 +39,9 @@ import com.android.internal.util.nameless.constants.FlashLightConstants;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.TargetDrawable;
 
+import com.android.internal.util.nameless.NamelessUtils;
+import com.android.internal.util.nameless.constants.FlashLightConstants;
+
 import java.net.URISyntaxException;
 
 public class NavigationRingHelpers {
@@ -242,5 +245,9 @@ public class NavigationRingHelpers {
                         com.android.internal.R.drawable.ic_action_assist_generic);
             }
         }
+    }
+
+    public static boolean isTorchAvailable(Context context) {
+        return NamelessUtils.isPackageInstalled(context, FlashLightConstants.APP_PACKAGE_NAME);
     }
 }

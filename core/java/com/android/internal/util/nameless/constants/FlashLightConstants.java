@@ -21,7 +21,7 @@ package com.android.internal.util.nameless.constants;
 
 import android.content.Intent;
 
-public class FlashLightConstants {
+public interface FlashLightConstants {
 
     /**
      * Package name of the flashlight app
