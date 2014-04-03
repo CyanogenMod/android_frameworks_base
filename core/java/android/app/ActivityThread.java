@@ -4210,23 +4210,28 @@ public final class ActivityThread {
 
         Log.d(TAG, "handleBindApplication:" + data.processName );
 
+        String runtime = VMRuntime.getRuntime().vmLibrary();
+
         String str  = SystemProperties.get("dalvik.vm.heaptargetutilization", "" );
         if( !str.equals("") ){
             float heapUtil = Float.valueOf(str.trim()).floatValue();
             VMRuntime.getRuntime().setTargetHeapUtilization(heapUtil);
             Log.d(TAG, "setTargetHeapUtilization:" + heapUtil );
         }
-        String heapMinFree = SystemProperties.get("dalvik.vm.heapminfree", "" );
-        int minfree =  parseMemOption(heapMinFree);
-        if( minfree > 0){
-            VMRuntime.getRuntime().setTargetHeapMinFree(minfree);
-            Log.d(TAG, "setTargetHeapMinFree:" + minfree );
-        }
-        String heapConcurrentStart  = SystemProperties.get("dalvik.vm.heapconcurrentstart", "" );
-        int concurr_start =  parseMemOption(heapConcurrentStart);
-        if( concurr_start > 0){
-            VMRuntime.getRuntime().setTargetHeapConcurrentStart(concurr_start);
-            Log.d(TAG, "setTargetHeapConcurrentStart:" + concurr_start );
+        // ART currently doesn't support these methods
+        if (runtime.equals("libdvm.so")) {
+            String heapMinFree = SystemProperties.get("dalvik.vm.heapminfree", "" );
+            int minfree =  parseMemOption(heapMinFree);
+            if( minfree > 0){
+                VMRuntime.getRuntime().setTargetHeapMinFree(minfree);
+                Log.d(TAG, "setTargetHeapMinFree:" + minfree );
+            }
+            String heapConcurrentStart  = SystemProperties.get("dalvik.vm.heapconcurrentstart", "" );
+            int concurr_start =  parseMemOption(heapConcurrentStart);
+            if( concurr_start > 0){
+                VMRuntime.getRuntime().setTargetHeapConcurrentStart(concurr_start);
+                Log.d(TAG, "setTargetHeapConcurrentStart:" + concurr_start );
+            }
         }
 
         ////
