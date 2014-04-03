@@ -779,37 +779,6 @@ public class RecentPanelView {
         }
     }
 
-    /**
-     * Third loading stage. Container is now visible,
-     * tasks were completly loaded, visible elements
-     * were loaded as well. So let us trigger for all invisible
-     * views the asynctask loaders. This triggers bitmap load
-     * for collapsed expanded cards and as well app icon load
-     * for all non visible cards on the screen.
-     * We are doing this here to avoid peformance issues
-     * on scrolling. Recents screen has a max entry of 21
-     * tasks so this is a good approach to load now all
-     * user information without having any downsides.
-     *
-     */
-    protected void updateInvisibleCards() {
-        RecentCard card;
-        final int size = mCards.size();
-        // We set here an internal value
-        // to prepare force load of the task
-        // thumbnails.
-        for (int i = 0; i < size; i++) {
-            card = (RecentCard) mCards.get(i);
-            card.forceSetLoadExpandedContent();
-        }
-        // Actually trigger on all cards the load if
-        // the content was not loaded allready. This
-        // decisision is done in the cards themselves.
-        for (int i = size - 1; i >= 0; i--) {
-            mCardArrayAdapter.getView(i, null, mListView);
-        }
-    }
-
     protected void setCancelledByUser(boolean cancelled) {
         mCancelledByUser = cancelled;
         if (cancelled) {

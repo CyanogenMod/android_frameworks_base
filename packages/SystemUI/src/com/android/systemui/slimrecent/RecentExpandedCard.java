@@ -57,7 +57,6 @@ public class RecentExpandedCard extends CardExpand {
     private BitmapDownloaderTask mTask;
 
     private boolean mReload;
-    private boolean mIsExpanded;
     private boolean mDoNotNullBitmap;
 
     public RecentExpandedCard(Context context, int persistentTaskId,
@@ -107,14 +106,6 @@ public class RecentExpandedCard extends CardExpand {
                 res.getColor(R.color.card_backgroundExpand), mThumbnailWidth, mThumbnailHeight);
     }
 
-    // Internal state if we are expanded or not.
-    // Used to reduce loading on second loading stage
-    // and to force later on third loading stage
-    // to load the actual needed thumbnail.
-    public void isExpanded(boolean isExpanded) {
-        mIsExpanded = isExpanded;
-    }
-
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
         if (view == null || mPersistentTaskId == -1) {
@@ -141,11 +132,6 @@ public class RecentExpandedCard extends CardExpand {
                 holder.thumbnailView.setLayoutParams(layoutParams);
             }
             view.setTag(holder);
-        }
-
-        if (!mIsExpanded) {
-            holder.thumbnailView.setImageDrawable(mDefaultThumbnailBackground);
-            return;
         }
 
         // Assign task bitmap to our view via async task loader. If it is just

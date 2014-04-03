@@ -106,17 +106,7 @@ public class RecentCard extends Card {
 
         final boolean isExpanded = (isSystemExpanded && !isUserCollapsed) || isUserExpanded;
 
-        // Set internal state
-        mExpandedCard.isExpanded(isExpanded);
         setExpanded(isExpanded);
-    }
-
-    // Prepare forceload of task thumbnails which were not
-    // loaded till now or are not in our LRU cache.
-    public void forceSetLoadExpandedContent() {
-        if (mExpandedCard != null) {
-            mExpandedCard.isExpanded(true);
-        }
     }
 
     @Override
