@@ -2545,6 +2545,36 @@
         android:description="@string/permdesc_accessNetworkConditions"
         android:protectionLevel="signature|system" />
 
+    <!-- =============================================================== -->
+    <!-- Permissions for accessing blacklist data                        -->
+    <!-- =============================================================== -->
+    <eat-comment />
+
+    <!-- Used for permissions that allow an application to access or configure
+         the device security information.
+         @hide This is not a third-party API (intended for system apps). -->
+    <permission-group android:name="android.permission-group.SECURITY"
+        android:label="@string/permgrouplab_security"
+        android:icon="@drawable/perm_group_security"
+        android:description="@string/permgroupdesc_security"
+        android:priority="400"/>
+
+    <!-- Allows an application to read the blacklist data.
+         @hide This is not a third-party API (intended for system apps). -->
+    <permission android:name="android.permission.READ_BLACKLIST"
+        android:permissionGroup="android.permission-group.SECURITY"
+        android:protectionLevel="signature"
+        android:label="@string/permlab_readBlacklist"
+        android:description="@string/permdesc_readBlacklist" />
+
+    <!-- Allows an application to change the blacklist data.
+         @hide This is not a third-party API (intended for system apps). -->
+    <permission android:name="android.permission.CHANGE_BLACKLIST"
+        android:permissionGroup="android.permission-group.SECURITY"
+        android:protectionLevel="signature"
+        android:label="@string/permlab_changeBlacklist"
+        android:description="@string/permdesc_changeBlacklist" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
