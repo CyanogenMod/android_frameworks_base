@@ -473,6 +473,17 @@
          The default is false. -->
     <bool name="config_lidControlsSleep">false</bool>
 
+    <!-- Indicate the device's Smart Cover coordinates.
+         If none are provided, then the feature will be disabled.
+         The array should contain 4 values, in pixels, (sample values provided):
+            Top      0
+            Left     100
+            Bottom   Top + 400
+            Right    Display Width - 100
+    -->
+    <integer-array name="config_smartCoverWindowCoords">
+    </integer-array>
+
     <!-- Indicate whether to allow the device to suspend when the screen is off
          due to the proximity sensor.  This resource should only be set to true
          if the sensor HAL correctly handles the proximity sensor as a wake-up source.
