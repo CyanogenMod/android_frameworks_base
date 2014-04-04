@@ -33,10 +33,8 @@ import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.TextureView;
@@ -76,7 +74,6 @@ public class OnTheGoService extends Service {
     private FrameLayout         mOverlay;
     private Camera              mCamera;
     private NotificationManager mNotificationManager;
-    private SensorManager       mSensorManager;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -86,37 +83,24 @@ public class OnTheGoService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceivers(false);
+        unregisterReceivers();
         resetViews();
     }
 
-    private void registerReceivers(boolean isScreenOn) {
+    private void registerReceivers() {
         final IntentFilter alphaFilter = new IntentFilter(ACTION_TOGGLE_ALPHA);
         registerReceiver(mAlphaReceiver, alphaFilter);
         final IntentFilter cameraFilter = new IntentFilter(ACTION_TOGGLE_CAMERA);
         registerReceiver(mCameraReceiver, cameraFilter);
-        if (!isScreenOn) {
-            final IntentFilter screenFilter = new IntentFilter();
-            screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
-            screenFilter.addAction(Intent.ACTION_SCREEN_ON);
-            registerReceiver(mScreenReceiver, screenFilter);
-        }
-
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     }
 
-    private void unregisterReceivers(boolean isScreenOff) {
+    private void unregisterReceivers() {
         try {
             unregisterReceiver(mAlphaReceiver);
         } catch (Exception ignored) { }
         try {
             unregisterReceiver(mCameraReceiver);
         } catch (Exception ignored) { }
-        if (!isScreenOff) {
-            try {
-                unregisterReceiver(mScreenReceiver);
-            } catch (Exception ignored) { }
-        }
     }
 
     private final BroadcastReceiver mAlphaReceiver = new BroadcastReceiver() {
@@ -139,29 +123,6 @@ public class OnTheGoService extends Service {
                     restartOnTheGo();
                 } else {
                     stopOnTheGo(true);
-                }
-            }
-        }
-    };
-
-    private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent == null) {
-                return;
-            }
-
-            synchronized (mRestartObject) {
-                final String action = intent.getAction();
-                if (action != null && !action.isEmpty()) {
-                    logDebug("mScreenReceiver: " + action);
-                    if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                        setupViews(true);
-                        registerReceivers(true);
-                    } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                        unregisterReceivers(true);
-                        resetViews();
-                    }
                 }
             }
         }
@@ -203,14 +164,14 @@ public class OnTheGoService extends Service {
         }
 
         resetViews();
-        registerReceivers(false);
+        registerReceivers();
         setupViews(false);
 
         createNotification(NOTIFICATION_STARTED);
     }
 
     private void stopOnTheGo(boolean shouldRestart) {
-        unregisterReceivers(false);
+        unregisterReceivers();
         resetViews();
 
         // Cancel notification
