@@ -1320,10 +1320,10 @@ status_t compileResourceFile(Bundle* bundle,
                         curIsFormatted = false;
                         // Untranslatable strings must only exist in the default [empty] locale
                         if (locale.size() > 0) {
-                         //   fprintf(stderr, "aapt: warning: string '%s' in %s marked untranslatable but exists"
-                          //          " in locale '%s'\n", String8(name).string(),
-                         //           bundle->getResourceSourceDirs()[0],
-                         //           locale.string());
+                            fprintf(stderr, "aapt: warning: string '%s' in %s marked untranslatable but exists"
+                                    " in locale '%s'\n", String8(name).string(),
+                                    bundle->getResourceSourceDirs()[0],
+                                    locale.string());
                             if (errorOnWarning) {
                                 hasErrors = localHasErrors = true;
                             }
@@ -1430,10 +1430,10 @@ status_t compileResourceFile(Bundle* bundle,
                             curIsFormatted = false;
                             // Untranslatable strings must only exist in the default [empty] locale
                             if (locale.size() > 0) {
-                        //        fprintf(stderr, "aapt: warning: string-array '%s' in %s marked untranslatable but exists"
-                        //                " in locale '%s'\n", String8(name).string(),
-                        //                bundle->getResourceSourceDirs()[0],
-                        //                locale.string());
+                                fprintf(stderr, "aapt: warning: string-array '%s' in %s marked untranslatable but exists"
+                                        " in locale '%s'\n", String8(name).string(),
+                                        bundle->getResourceSourceDirs()[0],
+                                        locale.string());
                                 if (errorOnWarning) {
                                     hasErrors = localHasErrors = true;
                                 }
@@ -2615,8 +2615,8 @@ ResourceTable::validateLocalizations(void)
 #ifdef SHOW_DEFAULT_TRANSLATION_WARNINGS
         // Look for strings with no default localization
         if (configSet.count(defaultLocale) == 0) {
-           // fprintf(stderr, "aapt: warning: string '%s' has no default translation in %s; found:",
-          //          String8(nameIter->first).string(), mBundle->getResourceSourceDirs()[0]);
+            fprintf(stderr, "aapt: warning: string '%s' has no default translation in %s; found:",
+                    String8(nameIter->first).string(), mBundle->getResourceSourceDirs()[0]);
             for (set<String8>::const_iterator locales = configSet.begin();
                  locales != configSet.end();
                  locales++) {
@@ -2655,12 +2655,12 @@ ResourceTable::validateLocalizations(void)
                         String8 region(config.string(), 2);
                         if (configSet.find(region) == configSet.end()) {
                             if (configSet.count(defaultLocale) == 0) {
-                          //      fprintf(stdout, "aapt: warning: "
-                           //             "**** string '%s' has no default or required localization "
-                         //               "for '%s' in %s\n",
-                         //               String8(nameIter->first).string(),
-                        //                config.string(),
-                       //                 mBundle->getResourceSourceDirs()[0]);
+                                fprintf(stdout, "aapt: warning: "
+                                        "**** string '%s' has no default or required localization "
+                                        "for '%s' in %s\n",
+                                        String8(nameIter->first).string(),
+                                        config.string(),
+                                        mBundle->getResourceSourceDirs()[0]);
                             }
                         }
                     }
