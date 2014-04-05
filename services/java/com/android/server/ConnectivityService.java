@@ -203,7 +203,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     // Set network sampling interval at 12 minutes, this way, even if the timers get
     // aggregated, it will fire at around 15 minutes, which should allow us to
     // aggregate this timer with other timers (specially the socket keep alive timers)
-    protected static final int DEFAULT_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : 12 * 60);
+
+    // Set sampling interval to -1 by default to turn of sampling.
+    protected static final int DEFAULT_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : -1 );
 
     // start network sampling a minute after booting ...
     protected static final int DEFAULT_START_SAMPLING_INTERVAL_IN_SECONDS = (VDBG ? 30 : 60);
@@ -5130,9 +5132,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 Settings.Global.CONNECTIVITY_SAMPLING_INTERVAL_IN_SECONDS,
                 DEFAULT_SAMPLING_INTERVAL_IN_SECONDS);
 
-        if (DBG) log("Setting timer for " + String.valueOf(samplingIntervalInSeconds) + "seconds");
+        // Only setAlarm if CONNECTIVITY_SAMPLING_INTERVAL_IN_SECONDS is set in
+        // Settings.db or VDBG is true. Otherwise, DEFAULT_SAMPLING_INTERVAL_IN_SECONDS
+        // is set to -1 by default.
+        if ( samplingIntervalInSeconds > 0 ){
+            if (DBG) log("Setting timer for " +
+                         String.valueOf(samplingIntervalInSeconds) + "seconds");
 
-        setAlarm(samplingIntervalInSeconds * 1000, mSampleIntervalElapsedIntent);
+            setAlarm(samplingIntervalInSeconds * 1000, mSampleIntervalElapsedIntent);
+        }
     }
 
     protected void setAlarm(int timeoutInMilliseconds, PendingIntent intent) {
