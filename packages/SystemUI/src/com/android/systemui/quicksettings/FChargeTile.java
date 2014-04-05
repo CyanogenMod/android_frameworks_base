@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,14 +61,14 @@ public class FChargeTile extends QuickSettingsTile {
                                 BufferedWriter bwriter = new BufferedWriter(fwriter);
                                 bwriter.write(enabled ? "1" : "0");
                                 bwriter.close();
-                                Settings.System.putInt(mContext.getContentResolver(),
-                                     Settings.System.FCHARGE_ENABLED, enabled ? 1 : 0);
+                                Settings.System.putIntForUser(mContext.getContentResolver(),
+                                     Settings.System.FCHARGE_ENABLED, enabled ? 1 : 0, UserHandle.USER_CURRENT);
                             }
                         }
                     } catch (IOException e) {
                         if (DBG) Log.e("FChargeToggle", "Couldn't write fast_charge file");
-                        Settings.System.putInt(mContext.getContentResolver(),
-                             Settings.System.FCHARGE_ENABLED, 0);
+                        Settings.System.putIntForUser(mContext.getContentResolver(),
+                             Settings.System.FCHARGE_ENABLED, 0, UserHandle.USER_CURRENT);
                     }
             }
         };
@@ -94,15 +95,15 @@ public class FChargeTile extends QuickSettingsTile {
                     BufferedReader breader = new BufferedReader(reader);
                     String line = breader.readLine();
                     breader.close();
-                    Settings.System.putInt(mContext.getContentResolver(),
-                            Settings.System.FCHARGE_ENABLED, line.equals("1") ? 1 : 0);
+                    Settings.System.putIntForUser(mContext.getContentResolver(),
+                            Settings.System.FCHARGE_ENABLED, line.equals("1") ? 1 : 0, UserHandle.USER_CURRENT);
                     return (line.equals("1"));
                 }
             }
         } catch (IOException e) {
             if (DBG) Log.e("FChargeToggle", "Couldn't read fast_charge file");
-            Settings.System.putInt(mContext.getContentResolver(),
-                 Settings.System.FCHARGE_ENABLED, 0);
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                 Settings.System.FCHARGE_ENABLED, 0, UserHandle.USER_CURRENT);
         }
         return false;
     }

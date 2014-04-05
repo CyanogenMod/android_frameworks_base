@@ -163,13 +163,13 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
     }
 
     public void bumpConfiguration() {
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_STICK, 1) == 1) {
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) == 1) {
 
             // Get original offset
             int gravityIndex = findGravityOffset(convertPieGravitytoGravity(
-                    Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_GRAVITY, 3)));
+                    Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.PIE_GRAVITY, 3, UserHandle.USER_CURRENT)));
 
             // Orient Pie to that place
             reorient(gravityArray[gravityIndex], false);
@@ -223,8 +223,8 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
         show(mShowing);
         if (storeSetting) {
             int gravityOffset = mOrientation;
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_STICK, 1) == 1) {
+            if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) == 1) {
 
                 gravityOffset = findGravityOffset(mOrientation);
                 switch(mDisplay.getRotation()) {
@@ -239,8 +239,8 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
                         break;
                 }
             }
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.PIE_GRAVITY, convertGravitytoPieGravity(gravityOffset));
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.PIE_GRAVITY, convertGravitytoPieGravity(gravityOffset), UserHandle.USER_CURRENT);
         }
     }
 

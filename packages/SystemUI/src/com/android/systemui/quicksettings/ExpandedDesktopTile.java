@@ -43,9 +43,9 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
             @Override
             public void onClick(View v) {
                 // Change the system setting
-                Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.putIntForUser(mContext.getContentResolver(),
                     Settings.System.EXPANDED_DESKTOP_STATE,
-                    !mEnabled ? 1 : 0);
+                    !mEnabled ? 1 : 0, UserHandle.USER_CURRENT);
                 Helpers.restartSystemUI();
             }
         };
@@ -54,12 +54,12 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
             public boolean onLongClick(View v) {
                 int expanded = getExpandDesktopMode();
                 if (expanded == 1) { 
-                    Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.EXPANDED_DESKTOP_STYLE, mExpandDesktopMode);
+                    Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STYLE, mExpandDesktopMode, UserHandle.USER_CURRENT);
                 } else {
                     mExpandDesktopMode = mExpandDesktopMode == 2 ? 1 : 2;
-                    Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.EXPANDED_DESKTOP_STYLE, mExpandDesktopMode);
+                    Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STYLE, mExpandDesktopMode, UserHandle.USER_CURRENT);
                 }
                 return true;
             }
@@ -88,8 +88,8 @@ public class ExpandedDesktopTile extends QuickSettingsTile {
     }
 
     private int getExpandDesktopMode() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.EXPANDED_DESKTOP_STYLE, 2);
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_STYLE, 2, UserHandle.USER_CURRENT);
      }
 
     private synchronized void updateTile() {

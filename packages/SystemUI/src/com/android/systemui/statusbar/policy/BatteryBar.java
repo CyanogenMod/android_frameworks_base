@@ -9,6 +9,7 @@ import android.database.ContentObserver;
 import android.graphics.drawable.Animatable;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -179,11 +180,11 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     private void updateSettings() {
         ContentResolver resolver = getContext().getContentResolver();
 
-        int color = Settings.System.getInt(resolver, Settings.System.STATUSBAR_BATTERY_BAR_COLOR,
-                0xFFFFFFFF);
+        int color = Settings.System.getIntForUser(resolver, Settings.System.STATUSBAR_BATTERY_BAR_COLOR,
+                0xFFFFFFFF, UserHandle.USER_CURRENT);
 
-        shouldAnimateCharging = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE, 0) == 1;
+        shouldAnimateCharging = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE, 0, UserHandle.USER_CURRENT) == 1;
 
         if (mBatteryCharging && mBatteryLevel < 100 && shouldAnimateCharging) {
             start();
