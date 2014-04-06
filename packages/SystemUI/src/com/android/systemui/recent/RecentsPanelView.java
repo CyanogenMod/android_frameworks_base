@@ -286,20 +286,15 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     }
                 }
             }
-
-            int mHaloEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT));
-
             holder.lockedIcon.setImageResource(td.isLocked()?R.drawable.ic_recent_app_locked:R.drawable.ic_recent_app_unlock);
             holder.thumbnailView.setTag(td);
             holder.thumbnailView.setOnLongClickListener(new OnLongClickDelegate(convertView));
-            if (mHaloEnabled != 1) {
-                holder.thumbnailView.setOnTouchListener(new OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent m) {
-                        return handleThumbnailTouch(m, holder.thumbnailView);
-                    }
-                });
-            }
+            holder.thumbnailView.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent m) {
+                    return handleThumbnailTouch(m, holder.thumbnailView);
+                }
+            });
             holder.taskDescription = td;
             holder.lockedIcon.setTag(td);
             holder.lockedIcon.setOnClickListener(onClickListener);
@@ -975,24 +970,18 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
         if (ad.taskId >= 0 && !floating) {
             // This is an active task; it should just go to the foreground.
-
-            int mHaloEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(),
-                                    Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT));
             // If that task was split viewed, a normal press wil resume it to
             // normal fullscreen view
-
-            if (mHaloEnabled != 1) {
-                IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-                try {
-                    if (DEBUG) Log.v(TAG, "Restoring window full screen after split, because of normal tap");
-                    wm.setTaskSplitView(ad.taskId, false);
-                } catch (RemoteException e) {
-                    Log.e(TAG, "Could not setTaskSplitView to fullscreen", e);
-                }
+            IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+            try {
+                if (DEBUG) Log.v(TAG, "Restoring window full screen after split, because of normal tap");
+                wm.setTaskSplitView(ad.taskId, false);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Could not setTaskSplitView to fullscreen", e);
             }
+
             am.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
                     opts);
-
         } else {
             if (floating) {
                 if (DEBUG) Log.v(TAG, "Starting floating activity " + intent);
@@ -1170,19 +1159,12 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     }
 
     public void handleLongPress(
-        final View selectedView, final View anchorView, final View thumbnailView) {
+            final View selectedView, final View anchorView, final View thumbnailView) {
         thumbnailView.setSelected(true);
         final PopupMenu popup =
             new PopupMenu(mContext, anchorView == null ? selectedView : anchorView);
         mPopup = popup;
-        final int mHaloEnabled = (Settings.System.getIntForUser(mContext.getContentResolver(),
-                                    Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT));
-
-        if (mHaloEnabled != 1) {
-            popup.getMenuInflater().inflate(R.menu.recent_popup_menu_split, popup.getMenu());
-        } else {
-            popup.getMenuInflater().inflate(R.menu.recent_popup_menu, popup.getMenu());
-        }
+        popup.getMenuInflater().inflate(R.menu.recent_popup_menu, popup.getMenu());
 
         final ViewHolder viewHolder = (ViewHolder) selectedView.getTag();
         if(viewHolder != null)
@@ -1263,7 +1245,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         getContext().startActivity(intent);
                         dismissAndGoBack();
                     }
-                } else if (item.getItemId() == R.id.recent_add_split_view && mHaloEnabled != 1) {
+                } else if (item.getItemId() == R.id.recent_add_split_view) {
                     // Either start a new activity in split view, or move the current task
                     // to front, but resized
                     openInSplitView(viewHolder, -1);
