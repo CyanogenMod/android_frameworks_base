@@ -363,14 +363,14 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
                 retVal.add(uei);
             } else {
                 Slog.w(TAG, "This kernel does not have Motorola EMU audio support");
-            }
 
-            // Monitor Samsung USB audio
-            uei = new UEventInfo("dock", BIT_USB_HEADSET_DGTL, BIT_USB_HEADSET_ANLG);
-            if (uei.checkSwitchExists()) {
-                retVal.add(uei);
-            } else {
-                Slog.w(TAG, "This kernel does not have samsung usb dock audio support");
+                // Monitor Samsung USB audio - would override EMU audio with digital capability
+                uei = new UEventInfo("dock", BIT_USB_HEADSET_DGTL, BIT_USB_HEADSET_ANLG);
+                if (uei.checkSwitchExists()) {
+                    retVal.add(uei);
+                } else {
+                    Slog.w(TAG, "This kernel does not have samsung usb dock audio support");
+                }
             }
 
             // Monitor HDMI
