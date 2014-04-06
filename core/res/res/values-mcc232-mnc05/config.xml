@@ -20,12 +20,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Don't use roaming icon for considered operators -->
     <string-array translatable="false" name="config_operatorConsideredNonRoaming">
-        <item>20403</item>
-        <item>20404</item>
-        <item>20408</item>
-        <item>20410</item>
-        <item>20412</item>
-        <item>20416</item>
-        <item>20420</item>
+        <item>23203</item>
+        <item>23210</item>
     </string-array>
 </resources>
