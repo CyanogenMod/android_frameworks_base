@@ -209,4 +209,11 @@
     <string name="status_bar_help_title">"通知会显示在这里"</string>
     <string name="status_bar_help_text">"向下滑动可随时查看通知。"\n"再次向下滑动可使用系统控制功能。"</string>
 
+    <!--start add TaskManager-->
+    <string name="tasklistview_title">任务管理器</string>
+    <string name="message_switch_fail">无法切换至此任务，接口不存在！</string>
+    <string name="tasklist_killall">全部关闭</string>
+    <string name="tasklist_memory_usage">"剩余/总内存: [<xliff:g id="NUMBER">%s</xliff:g>] / [<xliff:g id="NAME">%s</xliff:g>]"</string>
+    <string name="message_keep_one_launcher">至少保留一个桌面主屏！</string>
+    <!--end add TaskManager-->
 </resources>

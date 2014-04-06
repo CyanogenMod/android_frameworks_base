@@ -1,0 +1,40 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffffff"
+    >
+    <!--android:background="@drawable/statusbar_background"-->
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="32dip"
+        android:layout_height="32dip"
+        android:layout_margin="4dip"
+        android:gravity="center"
+        android:paddingRight="2dip"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sym_def_app_icon"
+        android:layout_alignParentLeft="true"
+    />
+
+    <TextView android:id="@+id/taskname"
+        android:layout_width="240dip"
+        android:layout_height="40dip"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:textColor="#ff000000"
+        android:layout_toRightOf="@id/icon"
+    />
+
+    <ImageView
+        android:id="@+id/kill"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:paddingRight="4dip"
+        android:src="@drawable/btn_task_close"
+        android:scaleType="fitCenter"
+        android:layout_alignParentRight="true"
+    />
+
+</RelativeLayout>
