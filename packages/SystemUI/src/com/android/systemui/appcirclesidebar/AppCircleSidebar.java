@@ -28,7 +28,6 @@ import android.widget.*;
 
 import com.android.systemui.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCircleItemClickListener,
@@ -51,7 +50,6 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
     private Context mContext;
     private boolean mFirstTouch = false;
     private SettingsObserver mSettingsObserver;
-    private ArrayList<String> mAppRunning;
 
     private PopupMenu mPopup;
     private WindowManager mWM;
@@ -90,7 +88,6 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         mCircleListView.setVisibility(View.GONE);
         createAnimatimations();
         mSettingsObserver = new SettingsObserver(new Handler());
-        mAppRunning = new ArrayList<String>();
     }
 
     @Override
@@ -440,7 +437,7 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
                    popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getItemId() == R.id.sidebar_inspect_item) {
+                    } else if (item.getItemId() == R.id.sidebar_inspect_item) {
                         startApplicationDetailsActivity(info.activityInfo.packageName);
                     } else if (item.getItemId() == R.id.sidebar_stop_item) {
                         killApp(info.activityInfo.packageName);
