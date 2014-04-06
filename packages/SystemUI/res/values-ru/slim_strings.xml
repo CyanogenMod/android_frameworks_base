@@ -86,6 +86,7 @@
     <string name="chamber_title">Введите строку настроек</string>
     <string name="chamber_message">Введите строку настроек, которая является либо функцией флажка (вкл/выкл), либо настройкой списка. Например, quiet_hours_ringer и тому подобное. Настройки можно найти в файле исходного кода Settings.java. ВНИМАНИЕ: Эта функция опасна!</string>
     <string name="chamber_invalid">Введено неверное значение. Будьте внимательны.</string>
+    <string name="chamber_invalid_setting">Попробуйте переключить настройку для этого действия вручную, чтобы убедиться, что она существует в списке настроек.</string>
     <string name="chamber_checkbox">Флажок</string>
     <string name="chamber_chk_message">Это настройка флажка?</string>
     <string name="chamber_int">Вводимые значения</string>
