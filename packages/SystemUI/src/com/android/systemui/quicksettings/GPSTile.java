@@ -79,6 +79,13 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
     }
 
     @Override
+    void onDestroy() {
+        super.onDestroy();
+        mLocationController.addSettingsChangedCallback(null);
+        mLocationController = null;
+    }
+
+    @Override
     public void updateResources() {
         updateTile();
         updateQuickSettings();
