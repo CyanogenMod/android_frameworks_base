@@ -136,13 +136,6 @@
         <service android:name=".LoadAverageService"
                 android:exported="true" />
 
-    	<service android:name=".screenstate.ScreenStateService"
-                android:exported="true" >
-            <intent-filter>
-               <android name="android.intent.action.SCREEN_STATE_SERVICE_UPDATE"/>
-            </intent-filter>
-        </service>
-
         <!-- battery saver mode -->
         <service android:name=".batterysaver.BatterySaverService" />
 
