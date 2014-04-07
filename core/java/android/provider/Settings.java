@@ -5227,54 +5227,6 @@ public final class Settings {
         public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
 
         /**
-         * TeloRadio enable
-         * @hide
-         */
-        public static final String TELO_RADIO_ENABLED = "telo_radio_enabled";
-
-        /**
-         * TeloRadio 2g with wifi
-         * @hide
-         */
-        public static final String TELO_RADIO_2G_WIFI = "telo_radio_2g_wifi";
-
-        /**
-         * TeloRadio LTE in high power
-         * @hide
-         */
-        public static final String TELO_RADIO_LTE = "telo_radio_lte";
-
-        /**
-         * TeloRadio change 2g when screenoff
-         * @hide
-         */
-        public static final String TELO_RADIO_2G_SCREENOFF = "telo_radio_2g_screenoff";
-
-        /**
-         * TeloRadio time to change 2g when screenoff
-         * @hide
-         */
-        public static final String TELO_RADIO_2G_SCREENOFF_TIME = "telo_radio_2g_screenoff_timeout";
-
-        /**
-         * TeloRadio change 3g when unlock device
-         * @hide
-         */
-        public static final String TELO_RADIO_GO3G_UNLOCK = "telo_radio_go_3g_unlock";
-
-        /**
-         *  TeloRadio Low power network
-         * @hide
-         */
-        public static final String TELO_RADIO_LOW_POWER = "telo_radio_low_power";
-
-        /**
-         * TeloRadio High power network
-         * @hide
-         */
-        public static final String TELO_RADIO_HIGH_POWER = "telo_radio_high_power";
-
-        /**
          * Enable looking up of phone numbers of nearby places
          *
          * @hide
@@ -5502,11 +5454,6 @@ public final class Settings {
             PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE,
             PHONE_BLACKLIST_REGEX_ENABLED,
             LOCKSCREEN_ALWAYS_SHOW_BATTERY,
-            TELO_RADIO_ENABLED,
-            TELO_RADIO_2G_WIFI,
-            TELO_RADIO_LTE,
-            TELO_RADIO_2G_SCREENOFF,
-            TELO_RADIO_GO3G_UNLOCK,
         };
 
         /**
