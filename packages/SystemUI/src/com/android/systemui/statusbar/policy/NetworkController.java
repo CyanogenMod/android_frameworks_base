@@ -267,6 +267,14 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         settingsObserver.observe();
     }
 
+    public void unregisterController(Context context) {
+        context.unregisterReceiver(this);
+        if (mPhone != null) {
+            mPhone.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
+        mPhoneStateListener = null;
+    }
+
     public boolean hasMobileDataFeature() {
         return mHasMobileDataFeature;
     }
@@ -332,6 +340,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         notifySignalsChangedCallbacks(cb);
     }
 
+    public void removeNetworkSignalChangedCallback(NetworkSignalChangedCallback cb) {
+        mSignalsChangedCallbacks.remove(cb);
+    }
+
     public void refreshSignalCluster(SignalCluster cluster) {
         if (mDemoMode) return;
         cluster.setWifiIndicators(
@@ -361,10 +373,6 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     mContentDescriptionDataType);
         }
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
-    }
-
-    public void removeNetworkSignalChangedCallback(NetworkSignalChangedCallback cb) {
-        mSignalsChangedCallbacks.remove(cb);
     }
 
     void notifySignalsChangedCallbacks(NetworkSignalChangedCallback cb) {

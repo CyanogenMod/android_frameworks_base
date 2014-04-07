@@ -143,6 +143,16 @@
             </intent-filter>
         </service>
 
+        <!-- battery saver mode -->
+        <service android:name=".batterysaver.BatterySaverService" />
+
+        <receiver android:name=".batterysaver.AirPlaneChangeMode"
+                android:exported="true" />
+
+        <receiver android:name=".batterysaver.DisableBatterySaverMode"
+                android:exported="true" />
+        <!-- battery saver mode -->
+
         <service android:name=".ImageWallpaper"
                 android:permission="android.permission.BIND_WALLPAPER"
                 android:exported="true" />
