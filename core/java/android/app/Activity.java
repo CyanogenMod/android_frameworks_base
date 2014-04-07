@@ -2721,7 +2721,7 @@ public class Activity extends ContextThemeWrapper
                  onUserInteraction();
              }
         }
-        if (mIsSplitView) {
+        if (mIsSplitView && ev.getAction() == MotionEvent.ACTION_DOWN) {
             IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
             try {
                 wm.notifyActivityTouched(mToken, false);
@@ -5993,11 +5993,12 @@ public class Activity extends ContextThemeWrapper
         mWindowManager = mWindow.getWindowManager();
         mCurrentConfig = config;
 
-        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_SPLIT_VIEW) != 0) {
-            final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+         if (((intent.getFlags() & Intent.FLAG_ACTIVITY_SPLIT_VIEW) != 0)
+            && !mWindow.mIsFloatingWindow) {
             updateSplitViewMetrics(true);
         }
     }
+
 
     private boolean makeNewWindow(Context context, Intent intent, ActivityInfo info) {
         boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
@@ -6187,7 +6188,9 @@ public class Activity extends ContextThemeWrapper
 
     final void performRestart() {
         mFragments.noteStateNotSaved();
-        updateSplitViewMetrics(false);
+        if (!mWindow.mIsFloatingWindow) {
+            updateSplitViewMetrics(false);
+        }
 
         if (mStopped) {
             mStopped = false;
