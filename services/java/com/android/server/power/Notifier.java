@@ -505,19 +505,22 @@ final class Notifier {
     };
 
     private void playWirelessChargingStartedSound() {
-        final String soundPath = Settings.Global.getString(mContext.getContentResolver(),
-                Settings.Global.WIRELESS_CHARGING_STARTED_SOUND);
-        if (soundPath != null) {
-            final Uri soundUri = Uri.parse("file://" + soundPath);
-            if (soundUri != null) {
-                final Ringtone sfx = RingtoneManager.getRingtone(mContext, soundUri);
-                if (sfx != null) {
-                    sfx.setStreamType(AudioManager.STREAM_SYSTEM);
-                    sfx.play();
+        // The default power sound will take over
+        if (Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.POWER_NOTIFICATIONS_ENABLED, 0) != 1) {
+            final String soundPath = Settings.Global.getString(mContext.getContentResolver(),
+                    Settings.Global.WIRELESS_CHARGING_STARTED_SOUND);
+            if (soundPath != null) {
+                final Uri soundUri = Uri.parse("file://" + soundPath);
+                if (soundUri != null) {
+                    final Ringtone sfx = RingtoneManager.getRingtone(mContext, soundUri);
+                    if (sfx != null) {
+                        sfx.setStreamType(AudioManager.STREAM_SYSTEM);
+                        sfx.play();
+                    }
                 }
             }
         }
-
         mSuspendBlocker.release();
     }
 
