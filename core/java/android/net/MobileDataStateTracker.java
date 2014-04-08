@@ -494,6 +494,48 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
     }
 
     /**
+     * Return the system properties name associated with the tcp delayed ack settings
+     * for this network.
+     */
+    @Override
+    public String getTcpDelayedAckPropName() {
+        String networkTypeStr = "default";
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                         Context.TELEPHONY_SERVICE);
+        if (tm != null) {
+            switch(tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkTypeStr = "lte";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return "net.tcp.delack." + networkTypeStr;
+    }
+
+    /**
+     * Return the system properties name associated with the tcp user config flag
+     * for this network.
+     */
+    @Override
+    public String getTcpUserConfigPropName() {
+        String networkTypeStr = "default";
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                         Context.TELEPHONY_SERVICE);
+        if (tm != null) {
+            switch(tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkTypeStr = "lte";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return "net.tcp.usercfg." + networkTypeStr;
+    }
+
+    /**
      * Tear down mobile data connectivity, i.e., disable the ability to create
      * mobile data connections.
      * TODO - make async and return nothing?
