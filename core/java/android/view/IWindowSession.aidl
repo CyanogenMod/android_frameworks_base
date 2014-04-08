@@ -174,6 +174,16 @@ interface IWindowSession {
      * how big the increment is from one screen to another.
      */
     void setWallpaperPosition(IBinder windowToken, float x, float y, float xstep, float ystep);
+
+    /**
+     * For windows with the wallpaper behind them, and the wallpaper is
+     * larger than the screen, set the offset within the screen.
+     * For multi screen launcher type applications, xstep and ystep indicate
+     * how big the increment is from one screen to another.
+     */
+    void setWallpaperPositionOverscroll(IBinder windowToken, float x, float y,
+            float xstep, float ystep, float xoverscroll, float yoverscroll,
+            int xoverscrollmax, int yoverscrollmax);
     
     void wallpaperOffsetsComplete(IBinder window);
     
