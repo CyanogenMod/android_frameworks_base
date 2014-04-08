@@ -362,6 +362,11 @@ public class TextureView extends View {
                 // Create a new SurfaceTexture for the layer.
                 mSurface = mAttachInfo.mHardwareRenderer.createSurfaceTexture(mLayer);
             }
+
+            if (mListener != null && !mUpdateSurface) {
+                mListener.onSurfaceTextureAvailable(mSurface, getWidth(), getHeight());
+            }
+
             mSurface.setDefaultBufferSize(getWidth(), getHeight());
             nCreateNativeWindow(mSurface);
 
@@ -381,9 +386,6 @@ public class TextureView extends View {
             };
             mSurface.setOnFrameAvailableListener(mUpdateListener);
 
-            if (mListener != null && !mUpdateSurface) {
-                mListener.onSurfaceTextureAvailable(mSurface, getWidth(), getHeight());
-            }
             mLayer.setLayerPaint(mLayerPaint);
         }
 
