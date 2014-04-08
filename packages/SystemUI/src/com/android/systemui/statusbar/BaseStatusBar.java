@@ -340,25 +340,25 @@ public abstract class BaseStatusBar extends SystemUI implements
         public void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_CONTROLS), false, this);
+                    Settings.System.PIE_CONTROLS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_TRIGGER), false, this);
+                    Settings.System.PIE_TRIGGER), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_GRAVITY), false, this);
+                    Settings.System.PIE_GRAVITY), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_STICK), false, this);
+                    Settings.System.PIE_STICK), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this, UserHandle.USER_ALL);
         }
 
         @Override
         public void onChange(boolean selfChange) {
             updatePieControls();
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_CONTROLS, 0) == 0) {
+            if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0, UserHandle.USER_CURRENT) == 0) {
                     PieStatusPanel.ResetPanels(true);
-            } else if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_STICK, 1) == 0) {
+            } else if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) == 0) {
                 updatePieControls();
             }
         }
@@ -430,7 +430,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (!mPieControlPanel.isShowing()) {
                 switch(action) {
                     case MotionEvent.ACTION_DOWN:
-                        centerPie = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_CENTER, 1) == 1;
+                        centerPie = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.PIE_CENTER, 1, UserHandle.USER_CURRENT) == 1;
                         actionDown = true;
                         initialX = event.getX();
                         initialY = event.getY();
@@ -476,8 +476,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
 
-        int mCustomRecent = Settings.System.getInt(
-                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, 0);
+        int mCustomRecent = Settings.System.getIntForUser(
+                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
         if (mCustomRecent == 1) {
             cRecents = new RecentController(mContext, mLayoutDirection);
@@ -505,11 +505,11 @@ public abstract class BaseStatusBar extends SystemUI implements
             // If the system process isn't there we're doomed anyway.
         }
 
-        mHaloEnabled = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HALO_ENABLED, 0) == 1;
+        mHaloEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
 
-        mHaloActive = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HALO_ACTIVE, 0) == 1;
+        mHaloActive = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HALO_ACTIVE, 0, UserHandle.USER_CURRENT) == 1;
 
         createAndAddWindows();
 
@@ -645,10 +645,10 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void updateHalo() {
-        mHaloEnabled = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HALO_ENABLED, 0) == 1;
-        mHaloActive = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HALO_ACTIVE, 0) == 1;
+        mHaloEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+        mHaloActive = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HALO_ACTIVE, 0, UserHandle.USER_CURRENT) == 1;
 
         updateHaloButton();
 
@@ -678,8 +678,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     private boolean showPie() {
-        boolean pie = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_CONTROLS, 0) == 1;
+        boolean pie = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_CONTROLS, 0, UserHandle.USER_CURRENT) == 1;
 
         return (pie);
     }
@@ -707,8 +707,8 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
 
             // Add pie (s), want some slice?
-            int gravity = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.PIE_GRAVITY, 2);
+            int gravity = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.PIE_GRAVITY, 2, UserHandle.USER_CURRENT);
 
             switch(gravity) {
                 case 0:
@@ -1203,8 +1203,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void toggleRecentsActivity() {
         if (mRecents != null || cRecents != null) {
-        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0);
+        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if(mCustomRecent == 1)
             cRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
         else
@@ -1214,8 +1214,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void preloadRecentTasksList() {
         if (mRecents != null || cRecents != null) {
-        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0);
+        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 1)
             cRecents.preloadRecentTasksList();
         else
@@ -1225,8 +1225,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void cancelPreloadingRecentTasksList() {
         if (mRecents != null || cRecents != null) {
-        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0);
+        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 1)
             cRecents.cancelPreloadingRecentTasksList();
         else
@@ -1236,8 +1236,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void closeRecents() {
         if (mRecents != null || cRecents != null) {
-        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0);
+        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 1)
             cRecents.closeRecents();
         else
@@ -1246,8 +1246,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void rebuildRecentsScreen() {
-        int mCustomRecent = Settings.System.getInt(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0);
+        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (cRecents != null && mCustomRecent == 1) {
                 cRecents.rebuildRecentsScreen();
         }
@@ -2200,7 +2200,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.APP_SIDEBAR_POSITION), false, this);
+                    Settings.System.APP_SIDEBAR_POSITION), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -2211,8 +2211,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            int sidebarPosition = Settings.System.getInt(
-                    resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
+            int sidebarPosition = Settings.System.getIntForUser(
+                    resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT, UserHandle.USER_CURRENT);
             if (sidebarPosition != mSidebarPosition) {
                 mSidebarPosition = sidebarPosition;
                 mWindowManager.updateViewLayout(mAppSidebar, getAppSidebarLayoutParams(sidebarPosition));
