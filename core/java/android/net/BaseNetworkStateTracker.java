@@ -38,6 +38,12 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
 
     public static final String PROP_TCP_BUFFER_UNKNOWN = "net.tcp.buffersize.unknown";
     public static final String PROP_TCP_BUFFER_WIFI = "net.tcp.buffersize.wifi";
+    public static final String PROP_TCP_DELACK_DEFAULT = "net.tcp.delack.default";
+    public static final String PROP_TCP_USERCFG_DEFAULT = "net.tcp.usercfg.default";
+    public static final String PROP_TCP_DELACK_WIFI = "net.tcp.delack.wifi";
+    public static final String PROP_TCP_USERCFG_WIFI = "net.tcp.usercfg.wifi";
+    public static final String PROP_TCP_DELACK_LTE = "net.tcp.delack.lte";
+    public static final String PROP_TCP_USERCFG_LTE = "net.tcp.usercfg.lte";
 
     protected Context mContext;
     private Handler mTarget;
@@ -205,5 +211,22 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     @Override
     public void stopSampling(SamplingDataTracker.SamplingSnapshot s) {
         // nothing to do
+    }
+
+    // TCP delayed ack settings
+    public String getTcpDelayedAckPropName() {
+        return PROP_TCP_DELACK_DEFAULT;
+    }
+
+    public String getTcpUserConfigPropName() {
+        return PROP_TCP_USERCFG_DEFAULT;
+    }
+
+    public String getDefaultTcpDelayedAckPropName() {
+        return PROP_TCP_DELACK_DEFAULT;
+    }
+
+    public String getDefaultTcpUserConfigPropName() {
+        return PROP_TCP_USERCFG_DEFAULT;
     }
 }
