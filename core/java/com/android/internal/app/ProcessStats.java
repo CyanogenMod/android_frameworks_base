@@ -2351,6 +2351,9 @@ public final class ProcessStats implements Parcelable {
                 mDurationsTable = mStats.mAddLongTable;
                 mDurationsTableSize = mStats.mAddLongTableSize;
             }
+            if (((off>>OFFSET_ARRAY_SHIFT)&OFFSET_ARRAY_MASK) >= mStats.mLongs.size()) {
+                return;
+            }
             long[] longs = mStats.mLongs.get((off>>OFFSET_ARRAY_SHIFT)&OFFSET_ARRAY_MASK);
             if (DEBUG) Slog.d(TAG, "Duration of " + mName + " state " + state + " inc by " + dur
                     + " from " + longs[(off>>OFFSET_INDEX_SHIFT)&OFFSET_INDEX_MASK]);
