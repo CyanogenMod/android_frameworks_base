@@ -41,6 +41,7 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.os.RemoteException;
@@ -87,6 +88,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         AppOpsManager.OP_READ_CALENDAR,
         AppOpsManager.OP_READ_SMS
     };
+
+    Looper mLooper;
 
     boolean mWriteScheduled;
     final Runnable mWriteRunner = new Runnable() {
@@ -215,6 +218,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     public AppOpsService(File storagePath) {
         mStrictEnable = AppOpsManager.isStrictEnable();
         mFile = new AtomicFile(storagePath);
+        mLooper = Looper.myLooper();
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
@@ -655,6 +659,11 @@ public class AppOpsService extends IAppOpsService.Stub {
                 op.allowedCount++;
                 return AppOpsManager.MODE_ALLOWED;
             } else {
+                if (Looper.myLooper() == mLooper) {
+                    Log.e(TAG, "noteOperation: This method will deadlock if called from the main thread. (Code: "
+                            + code + " uid: " + uid + " package: " + packageName + ")");
+                    return switchOp.mode;
+                }
                 op.noteOpCount++;
                 userDialogResult = askOperationLocked(code, uid, packageName,
                     switchOp);
@@ -701,6 +710,11 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
                 return AppOpsManager.MODE_ALLOWED;
             } else {
+                if (Looper.myLooper() == mLooper) {
+                    Log.e(TAG, "startOperation: This method will deadlock if called from the main thread. (Code: "
+                            + code + " uid: " + uid + " package: " + packageName +")");
+                    return switchOp.mode;
+                }
                 op.startOpCount++;
                 IBinder clientToken = client.mAppToken;
                 op.mClientTokens.add(clientToken);
