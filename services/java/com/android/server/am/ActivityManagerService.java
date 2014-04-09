@@ -9346,6 +9346,16 @@ public final class ActivityManagerService extends ActivityManagerNative
         IntentFilter bootFilter = new IntentFilter(AppInterface.CHECK_SCREEN_IDLE_ACTION);
         mContext.registerReceiver(new ScreenStatusReceiver(), bootFilter);
 
+        // Register system boot completed event, set max serial background services num threshold to normal
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        mContext.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mServices.onBootCompleted();
+            }
+        }, filter);
+
         synchronized(this) {
             // Make sure we have no pre-ready processes sitting around.
             
