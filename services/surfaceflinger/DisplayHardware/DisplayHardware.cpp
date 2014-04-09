@@ -53,7 +53,7 @@ void checkGLErrors()
         GLenum error = glGetError();
         if (error == GL_NO_ERROR)
             break;
-        LOGE("GL error 0x%04x", int(error));
+            //LOGE("GL error 0x%04x", int(error));
     } while(true);
 }
 
@@ -111,10 +111,12 @@ static status_t selectConfigForPixelFormat(
     eglGetConfigs(dpy, NULL, 0, &numConfigs);
     EGLConfig* const configs = new EGLConfig[numConfigs];
     eglChooseConfig(dpy, attrs, configs, numConfigs, &n);
+    LOGE("eglChooseConfig %d",n);
     for (int i=0 ; i<n ; i++) {
         EGLint nativeVisualId = 0;
         eglGetConfigAttrib(dpy, configs[i], EGL_NATIVE_VISUAL_ID, &nativeVisualId);
-        if (nativeVisualId>0 && format == nativeVisualId) {
+        LOGE("get attrib %d %d",format,nativeVisualId);
+	if (nativeVisualId>0 && format == nativeVisualId) {
             *outConfig = configs[i];
             delete [] configs;
             return NO_ERROR;
@@ -317,7 +319,7 @@ void DisplayHardware::init(uint32_t dpy)
     LOGI("flags = %08x", mFlags);
 
     // Unbind the context from this thread
-    eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    //eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 
 
     // initialize the H/W composer
