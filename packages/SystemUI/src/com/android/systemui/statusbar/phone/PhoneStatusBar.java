@@ -766,11 +766,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         setAreThereNotifications();
 
         // Other icons
-        mLocationController = new LocationController(mContext); // will post a notification
-        mBatteryController = new BatteryController(mContext);
-        mDockBatteryController = new DockBatteryController(mContext);
-        mBluetoothController = new BluetoothController(mContext);
-        mRotationLockController = new RotationLockController(mContext);
+        if (mLocationController == null) mLocationController = new LocationController(mContext);
+        if (mBatteryController == null) mBatteryController = new BatteryController(mContext);
+        if (mDockBatteryController == null) mDockBatteryController = new DockBatteryController(mContext);
+        if (mBluetoothController == null) mBluetoothController = new BluetoothController(mContext);
+        if (mRotationLockController == null) mRotationLockController = new RotationLockController(mContext);
 
         mBatteryView = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
         mDockBatteryView = (DockBatteryMeterView) mStatusBarView.findViewById(R.id.dock_battery);
