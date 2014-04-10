@@ -824,21 +824,12 @@ class QuickSettings {
             apnTile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startSettingsActivity(android.provider.Settings.ACTION_APN_SETTINGS);
+                    if (mModel != null && mModel.getApnState() != null) {
+                        mModel.getApnState().switchToNextApn(null);
+                    }
                 }
             });
-            if (LONG_PRESS_TOGGLES) {
-                apnTile.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (mModel != null && mModel.getApnState() != null) {
-                            mModel.getApnState().switchToNextApn(null);
-                        }
-                        apnTile.setPressed(false);
-                        return true;
-                    }
-                });
-            }
+
             mModel.addApnTile(apnTile, new QuickSettingsModel.RefreshCallback() {
                 @Override
                 public void refreshView(QuickSettingsTileView view, State state) {

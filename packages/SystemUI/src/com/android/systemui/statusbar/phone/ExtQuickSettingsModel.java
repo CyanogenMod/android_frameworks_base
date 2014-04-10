@@ -52,6 +52,7 @@ import android.view.View;
 
 import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.view.RotationPolicy;
@@ -111,9 +112,11 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             // if the given next apn is null, we will use the saved next apn to switch.
             if (apn == null) {
                 apn = mNextApn;
-            } else {
-                // We will only set the prefer apn to the next apn, and then the data base will be
-                // changed, so we will update the view when we receive the content changed message.
+            }
+
+            // We will only set the prefer apn to the next apn, and then the data base will be
+            // changed, so we will update the view when we receive the content changed message.
+            if (apn != null) {
                 if (DEBUG) Log.i(TAG, "switch to the next apn, and it's id: " + apn.id);
                 ContentValues values = new ContentValues();
                 values.put(APN_ID, apn.id);
@@ -268,18 +271,35 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                 }
             }
 
-            String property = TelephonyProperties.PROPERTY_APN_SIM_OPERATOR_NUMERIC;
+            int dataSub = 0;
+            String property = null;
             String mccMncFromSim = null;
+            int activePhone = 0;
+
             if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                 MSimTelephonyManager msimTM = (MSimTelephonyManager)
                         mContext.getSystemService(Context.MSIM_TELEPHONY_SERVICE);
-                int prefDataSub = msimTM.getPreferredDataSubscription();
-                mccMncFromSim =
-                    MSimTelephonyManager.getTelephonyProperty(property, prefDataSub, null);
+                dataSub = msimTM.getPreferredDataSubscription();
+                activePhone = MSimTelephonyManager.getDefault().getPhoneType(dataSub);
             } else {
-                int defaultSub = TelephonyManager.getDefaultSubscription();
-                mccMncFromSim = TelephonyManager.getTelephonyProperty(property, defaultSub, null);
+                dataSub = TelephonyManager.getDefaultSubscription();
+                activePhone = TelephonyManager.getDefault().getPhoneType(dataSub);
             }
+
+            if (activePhone == PhoneConstants.PHONE_TYPE_CDMA) {
+                property = TelephonyProperties.PROPERTY_APN_RUIM_OPERATOR_NUMERIC;
+            } else {
+                property = TelephonyProperties.PROPERTY_APN_SIM_OPERATOR_NUMERIC;
+            }
+
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                mccMncFromSim = MSimTelephonyManager
+                        .getTelephonyProperty(property, dataSub, null);
+            } else {
+                mccMncFromSim = TelephonyManager
+                        .getTelephonyProperty(property, dataSub, null);
+            }
+
             if (mccMncFromSim != null && mccMncFromSim.length() > 0) {
                 result.add(mccMncFromSim);
             }
