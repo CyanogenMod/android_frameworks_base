@@ -90,9 +90,9 @@ public class PlatLogoActivity extends Activity {
         letter.setTextSize(mIsCM ? 150 : 300);
         letter.setTextColor(0xFFFFFFFF);
         letter.setGravity(Gravity.CENTER);
-        letter.setText(mIsCM ? "CM" : "K");
+        letter.setText(mIsCM ? "XX" : "K");
 
-        String cmVersion = SystemProperties.get("ro.cm.version");
+        String cmVersion = SystemProperties.get("ro.axxion.version");
         if (cmVersion != null) {
             cmVersion = cmVersion.replaceAll("([0-9\\.]+?)-.*", "$1");
         }
@@ -105,7 +105,7 @@ public class PlatLogoActivity extends Activity {
         tv.setPadding(p, p, p, p);
         tv.setTextColor(0xFFFFFFFF);
         tv.setGravity(Gravity.CENTER);
-        tv.setText(mIsCM ? "CyanogenMod " + cmVersion : "ANDROID " + Build.VERSION.RELEASE);
+        tv.setText(mIsCM ? "AxxionKat " + cmVersion);
         tv.setVisibility(View.INVISIBLE);
 
         mContent.addView(bg);
