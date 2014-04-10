@@ -803,6 +803,16 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case GET_ACTIVITY_FOR_TASK_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int task = data.readInt();
+            boolean onlyRoot = data.readInt() != 0;
+            IBinder res = getActivityForTask(task, onlyRoot);
+            reply.writeNoException();
+            reply.writeStrongBinder(res);
+            return true;
+        }
+
         case GET_CONTENT_PROVIDER_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             IBinder b = data.readStrongBinder();
@@ -3322,6 +3332,21 @@ class ActivityManagerProxy implements IActivityManager
         reply.readException();
         data.recycle();
         reply.recycle();
+    }
+
+    public IBinder getActivityForTask(int task, boolean onlyRoot) throws RemoteException
+    {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(task);
+        data.writeInt(onlyRoot ? 1 : 0);
+        mRemote.transact(GET_ACTIVITY_FOR_TASK_TRANSACTION, data, reply, 0);
+        reply.readException();
+        IBinder res = reply.readStrongBinder();
+        data.recycle();
+        reply.recycle();
+        return res;
     }
     public int getTaskForActivity(IBinder token, boolean onlyRoot) throws RemoteException
     {

@@ -338,9 +338,30 @@
 
     <!-- Quick Settings tile defaults -->
     <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
- 
+
     <java-symbol type="array" name="config_externalCMServices" />
 
     <!-- Fingerprint default name -->
     <java-symbol type="string" name="fingerprint_default_name" />
+
+    <!-- Floating Window -->
+    <java-symbol type="drawable" name="ic_floating_window_close" />
+    <java-symbol type="drawable" name="ic_floating_window_max" />
+    <java-symbol type="drawable" name="ic_floating_window_min" />
+    <java-symbol type="drawable" name="ic_floating_window_more" />
+    <java-symbol type="id" name="floating_window_background" />
+    <java-symbol type="id" name="floating_window_titlebar" />
+    <java-symbol type="id" name="floating_window_close" />
+    <java-symbol type="id" name="floating_window_label" />
+    <java-symbol type="id" name="floating_window_max" />
+    <java-symbol type="id" name="floating_window_min" />
+    <java-symbol type="id" name="floating_window_more" />
+    <java-symbol type="id" name="floating_window_line" />
+    <java-symbol type="layout" name="floating_window_layout" />
+    <java-symbol type="string" name="floating_window_snap_top"/>
+    <java-symbol type="string" name="floating_window_snap_bottom"/>
+    <java-symbol type="string" name="floating_window_snap_left"/>
+    <java-symbol type="string" name="floating_window_snap_right"/>
+    <java-symbol type="string" name="floating_window_minimize"/>
+
 </resources>

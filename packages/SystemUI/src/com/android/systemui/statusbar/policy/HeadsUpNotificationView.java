@@ -397,6 +397,10 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
     }
 
     @Override
+    public void onChildTriggered(View v) {
+    }
+
+    @Override
     public void onBeginDrag(View v) {
     }
 

@@ -34,6 +34,7 @@ import com.android.server.am.ActivityStackSupervisor.ActivityContainer;
 import android.app.ActivityOptions;
 import android.app.ResultInfo;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -54,6 +55,7 @@ import android.util.Log;
 import android.util.Slog;
 import android.util.TimeUtils;
 import android.view.IApplicationToken;
+import android.view.ContextThemeWrapper;
 import android.view.WindowManager;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -166,6 +168,10 @@ final class ActivityRecord {
     long lastLaunchTime;    // time of last lauch of this activity
     ArrayList<ActivityContainer> mChildContainers = new ArrayList<ActivityContainer>();
 
+    boolean topIntent;
+    boolean newAppTask;
+    boolean floatingWindow;
+    
     String stringName;      // for caching of toString().
 
     private boolean inHistory;  // are we in the history stack?
@@ -423,7 +429,9 @@ final class ActivityRecord {
         // is that we have everything, and we shouldn't never consider it
         // lacking in state to be removed if it dies.
         haveState = true;
-
+        topIntent = false;
+        floatingWindow = false;
+        
         if (aInfo != null) {
             if (aInfo.targetActivity == null
                     || aInfo.launchMode == ActivityInfo.LAUNCH_MULTIPLE
@@ -454,6 +462,44 @@ final class ActivityRecord {
                         ? android.R.style.Theme
                         : android.R.style.Theme_Holo;
             }
+			// This is where the package gets its first context from the attribute-cache
+            // In order to hook its attributes we set up our check for floating multi windows here.
+            topIntent = true;
+            ActivityStack stack = supervisor.getFocusedStack();
+            floatingWindow = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+            TaskRecord baseRecord = stack != null && stack.mTaskHistory.size() > 0 ? stack.mTaskHistory.get(stack.mTaskHistory.size() -1) : null;
+
+            if (baseRecord != null) {
+                ActivityRecord record = baseRecord.mActivities.size() > 0 ? baseRecord.mActivities.get(baseRecord.mActivities.size() - 1) : null;
+                final boolean floats = (baseRecord.intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+                final boolean taskAppAffinity = record == null ? false : aInfo.applicationInfo.packageName.equals(record.packageName);
+                newAppTask = (intent.getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) == Intent.FLAG_ACTIVITY_NEW_TASK;
+                // If the current intent is not a new task we will check its top parent.
+                // Perhaps it started out as a multiwindow in which case we pass the flag on
+                if (floats && (!newAppTask || taskAppAffinity)) {
+                    intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+                    // Flag the activity as sub-task
+                    topIntent = false;
+                    floatingWindow = true;
+                }
+            }
+            // If this is a multiwindow activity we prevent it from messing up the history stack,
+            // like jumping back home, killing the current activity or polluting recents
+            if (floatingWindow) {
+                intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                // If this is the mother-intent we make it volatile
+                if (topIntent) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                }
+                // Change theme
+                realTheme = com.android.internal.R.style.Theme_DeviceDefault_FloatingWindow;
+            } else {
+                intent.setFlags(intent.getFlags() & ~Intent.FLAG_FLOATING_WINDOW);
+            } 
+                       
             if ((aInfo.flags&ActivityInfo.FLAG_HARDWARE_ACCELERATED) != 0) {
                 windowFlags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
             }
@@ -466,8 +512,8 @@ final class ActivityRecord {
                 processName = aInfo.processName;
             }
 
-            if (intent != null && (aInfo.flags & ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS) != 0) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            if ((intent != null && (aInfo.flags & ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS) != 0)
+                || floatingWindow) {
             }
 
             packageName = aInfo.applicationInfo.packageName;

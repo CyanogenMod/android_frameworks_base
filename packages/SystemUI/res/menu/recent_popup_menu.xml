@@ -23,4 +23,5 @@
     <item android:id="@+id/recent_force_stop" android:title="@string/advanced_dev_option_force_stop" />
     <item android:id="@+id/recent_wipe_app" android:title="@string/advanced_dev_option_wipe_app" />
     <item android:id="@+id/recent_uninstall" android:title="@string/advanced_dev_option_uninstall" />
+    <item android:id="@+id/recent_float_mode" android:title="@string/recent_float_mode_title" />
 </menu>

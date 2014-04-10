@@ -6143,7 +6143,6 @@ public final class Settings {
             UI_NIGHT_MODE,
             SLEEP_TIMEOUT,
             PRIVACY_GUARD_DEFAULT,
-            ADVANCED_REBOOT,
             DEVELOPMENT_SHORTCUT
         };
 

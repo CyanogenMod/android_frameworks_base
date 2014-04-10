@@ -105,5 +105,16 @@
                 android:contentDescription="@string/status_bar_notification_inspect_item_title"
                 android:src="@drawable/ic_info"
                 />
+
+        <ImageButton style="@android:style/Widget.Material.Light.Button.Borderless.Small"
+                android:id="@+id/notification_float_item"
+                android:layout_width="52dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:contentDescription="@string/recent_float_mode_title"
+                android:src="@drawable/ic_qs_floating_on"
+                />
+
     </LinearLayout>
 </com.android.systemui.statusbar.NotificationGuts>

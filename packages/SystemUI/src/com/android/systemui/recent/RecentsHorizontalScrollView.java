@@ -216,6 +216,9 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
         contentView.setTranslationY(0);
     }
 
+    public void onChildTriggered(View v) {
+    }
+
     public void onBeginDrag(View v) {
         // We do this so the underlying ScrollView knows that it won't get
         // the chance to intercept events anymore
