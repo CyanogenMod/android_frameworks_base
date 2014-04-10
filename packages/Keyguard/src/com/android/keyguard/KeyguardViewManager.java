@@ -142,6 +142,7 @@ public class KeyguardViewManager {
 
         maybeCreateKeyguardLocked(enableScreenRotation, false, options);
         maybeEnableScreenRotation(enableScreenRotation);
+        updateShowWallpaper(mKeyguardHost.shouldShowWallpaper());
 
         // Disable common aspects of the system/status/navigation bars that are not appropriate or
         // useful on any keyguard screen but can be re-shown by dialogs or SHOW_WHEN_LOCKED
@@ -242,20 +243,24 @@ public class KeyguardViewManager {
             if (!ActivityManager.isHighEndGfx() || !mScreenOn) {
                 if (d == null) {
                     d = mUserBackground;
-                } else {
-                    d.setColorFilter(BACKGROUND_COLOR, PorterDuff.Mode.SRC_OVER);
                 }
+                // no user wallpaper set
+                if (d == null) {
+                    d = new ColorDrawable(BACKGROUND_COLOR);
+                }
+                d.setColorFilter(BACKGROUND_COLOR, PorterDuff.Mode.SRC_OVER);
                 mCustomBackground = d;
                 computeCustomBackgroundBounds(mCustomBackground);
                 setBackground(mBackgroundDrawable);
             } else {
                 Drawable old = mCustomBackground;
-                if (old == null && d == null) {
+                if (old == null && d == null && mUserBackground == null) {
                     return;
                 }
                 boolean newIsNull = mUserBackground == null;
                 if (old == null) {
                     old = new ColorDrawable(BACKGROUND_COLOR);
+                    old.setColorFilter(BACKGROUND_COLOR, PorterDuff.Mode.SRC_OVER);
                 }
                 if (d == null) {
                     d = mUserBackground;
@@ -720,7 +725,6 @@ public class KeyguardViewManager {
 
         if (mKeyguardView != null) {
             mKeyguardView.onScreenTurnedOn();
-            updateShowWallpaper(mKeyguardHost.shouldShowWallpaper());
 
             // Caller should wait for this window to be shown before turning
             // on the screen.
