@@ -64,6 +64,13 @@ public class SignalClusterView
     private ViewGroup mMobileCdmaGroup;
     private ImageView mMobileCdma3g, mMobileCdma1x, mMobileCdma1xOnly;
 
+    //data & voice
+    private boolean mMobileDataVoiceVisible = false;
+    private int mMobileSignalDataId = 0;
+    private int mMobileSignalVoiceId = 0;
+    private ViewGroup mMobileDataVoiceGroup;
+    private ImageView mMobileSignalData, mMobileSignalVoice;
+
     //data
     private boolean mDataVisible = false;
     private int mDataActivityId = 0;
@@ -115,6 +122,11 @@ public class SignalClusterView
         mMobileCdma1x       = (ImageView) findViewById(R.id.mobile_signal_1x);
         mMobileCdma1xOnly   = (ImageView) findViewById(R.id.mobile_signal_1x_only);
 
+        //data & voice
+        mMobileDataVoiceGroup = (ViewGroup) findViewById(R.id.mobile_data_voice);
+        mMobileSignalData     = (ImageView) findViewById(R.id.mobile_signal_data);
+        mMobileSignalVoice    = (ImageView) findViewById(R.id.mobile_signal_voice);
+
         //data
         mDataGroup          = (ViewGroup) findViewById(R.id.data_combo);
         mDataActivity       = (ImageView) findViewById(R.id.data_inout);
@@ -144,6 +156,10 @@ public class SignalClusterView
         mDataActivity       = null;
         mAirplane           = null;
         mSpacer             = null;
+
+        mMobileDataVoiceGroup = null;
+        mMobileSignalData     = null;
+        mMobileSignalVoice    = null;
 
         super.onDetachedFromWindow();
     }
@@ -188,8 +204,7 @@ public class SignalClusterView
 
                 mMobileCdma1xId = strengthIcon;
                 mMobileCdma3gId = getMobileCdma3gId(mMobileCdma1xId);
-            } else if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED
-                    && (show1xOnly() || isRoaming())) {
+            } else if (show1xOnly() || isRoaming()) {
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = true;
                 mMobileStrengthId = 0;
@@ -199,9 +214,19 @@ public class SignalClusterView
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = false;
             }
+        } else if (mStyle == STATUS_BAR_STYLE_DATA_VOICE) {
+            if (showBothDataAndVoice() || getMobileVoiceId(strengthIcon) != 0) {
+                mMobileStrengthId = 0;
+                mMobileDataVoiceVisible = true;
+                mMobileSignalDataId = strengthIcon;
+                mMobileSignalVoiceId = getMobileVoiceId(mMobileSignalDataId);
+            } else {
+                mMobileDataVoiceVisible = false;
+            }
         } else {
             mMobileCdmaVisible = false;
             mMobileCdma1xOnlyVisible = false;
+            mMobileDataVoiceVisible = false;
         }
 
         apply();
@@ -272,6 +297,7 @@ public class SignalClusterView
             updateMobile();
             updateCdma();
             updateData();
+            updateDataVoice();
             mMobileGroup.setVisibility(View.VISIBLE);
         } else {
             mMobileGroup.setVisibility(View.GONE);
@@ -347,6 +373,24 @@ public class SignalClusterView
         }
     }
 
+    private void updateDataVoice() {
+        if (mMobileDataVoiceVisible) {
+            mMobileSignalData.setImageResource(mMobileSignalDataId);
+            mMobileSignalVoice.setImageResource(mMobileSignalVoiceId);
+            mMobileDataVoiceGroup.setVisibility(View.VISIBLE);
+        } else {
+            mMobileDataVoiceGroup.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean showBothDataAndVoice() {
+        return mStyle == STATUS_BAR_STYLE_DATA_VOICE
+            &&((mMobileTypeId == R.drawable.stat_sys_data_connected_3g)
+                || (mMobileTypeId == R.drawable.stat_sys_data_connected_4g)
+                || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_3g)
+                || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_4g));
+    }
+
     private boolean showBoth3gAnd1x() {
         return mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED
             &&((mMobileTypeId == R.drawable.stat_sys_data_connected_3g)
@@ -366,6 +410,55 @@ public class SignalClusterView
 
     private boolean isRoaming() {
         return mMobileTypeId == R.drawable.stat_sys_data_fully_connected_roam;
+    }
+
+    private int getMobileVoiceId(int icon) {
+        int returnVal = 0;
+        switch(icon){
+            case R.drawable.stat_sys_signal_0_3g:
+            case R.drawable.stat_sys_signal_0_4g:
+                returnVal = R.drawable.stat_sys_signal_0_gsm;
+                break;
+            case R.drawable.stat_sys_signal_1_3g:
+            case R.drawable.stat_sys_signal_1_4g:
+                returnVal = R.drawable.stat_sys_signal_1_gsm;
+                break;
+            case R.drawable.stat_sys_signal_2_3g:
+            case R.drawable.stat_sys_signal_2_4g:
+                returnVal = R.drawable.stat_sys_signal_2_gsm;
+                break;
+            case R.drawable.stat_sys_signal_3_3g:
+            case R.drawable.stat_sys_signal_3_4g:
+                returnVal = R.drawable.stat_sys_signal_3_gsm;
+                break;
+            case R.drawable.stat_sys_signal_4_3g:
+            case R.drawable.stat_sys_signal_4_4g:
+                returnVal = R.drawable.stat_sys_signal_4_gsm;
+                break;
+            case R.drawable.stat_sys_signal_0_3g_fully:
+            case R.drawable.stat_sys_signal_0_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_0_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_1_3g_fully:
+            case R.drawable.stat_sys_signal_1_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_1_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_2_3g_fully:
+            case R.drawable.stat_sys_signal_2_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_2_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_3_3g_fully:
+            case R.drawable.stat_sys_signal_3_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_3_gsm_fully;
+                break;
+            case R.drawable.stat_sys_signal_4_3g_fully:
+            case R.drawable.stat_sys_signal_4_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_4_gsm_fully;
+                break;
+            default:
+                break;
+        }
+        return returnVal;
     }
 
     private int getMobileCdma3gId(int icon){
