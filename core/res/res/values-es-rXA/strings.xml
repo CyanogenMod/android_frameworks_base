@@ -1366,7 +1366,6 @@
     <string name="action_mode_done" msgid="7217581640461922289">Listo</string>
     <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">Desactivando almacenamientu USB\u2026</string>
     <string name="progress_unmounting" product="default" msgid="1327894998409537190">Desactivando tarxeta SD\u2026</string>
-    <string name="progress_nomediapresent" product="default">Nun hai medios extrayibles\u2026</string>
     <string name="progress_erasing" product="nosdcard" msgid="4521573321524340058">Desaniciando almacenamientu USB\u2026</string>
     <string name="progress_erasing" product="default" msgid="6596988875507043042">Desaniciando tarxeta SD\u2026</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">Nun pudo desaniciase l\'almacenamientu USB.</string>
