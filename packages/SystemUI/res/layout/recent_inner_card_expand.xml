@@ -27,8 +27,7 @@
         android:id="@+id/thumbnail"
         android:layout_width="@dimen/recent_thumbnail_width"
         android:layout_height="@dimen/recent_thumbnail_height"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginBottom="@dimen/recent_thumbnail_bottom_padding"
         />
 
 </LinearLayout>

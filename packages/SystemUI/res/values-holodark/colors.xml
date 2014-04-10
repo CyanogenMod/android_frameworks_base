@@ -23,7 +23,7 @@
     <!-- Card Color -->
     <color name="card_background">#ff1c1c1c</color>
     <color name="card_background_header">#ff1c1c1c</color>
-    <color name="card_backgroundExpand">#ff252525</color>
+    <color name="card_backgroundExpand">#ff1c1c1c</color>
 
     <color name="card_text_color_header">#ffffffff</color>
 
