@@ -1837,7 +1837,8 @@ class AlarmManagerService extends SystemService {
                     }
                     Intent intent = new Intent(Intent.ACTION_TIME_CHANGED);
                     intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
-                            | Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+                            | Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT
+                            | Intent.FLAG_RECEIVER_FOREGROUND);
                     getContext().sendBroadcastAsUser(intent, UserHandle.ALL);
                 }
                 
