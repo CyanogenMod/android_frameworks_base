@@ -791,6 +791,30 @@ public class SubscriptionManager implements BaseColumns {
         return getPhoneId(getDefaultVoiceSubId());
     }
 
+    public static boolean isSMSPromptEnabled() {
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                return iSub.isSMSPromptEnabled();
+            }
+        } catch (RemoteException ex) {
+         // ignore it
+        }
+        return false;
+    }
+
+    public static void setSMSPromptEnabled(boolean enabled) {
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                iSub.setSMSPromptEnabled(enabled);
+            }
+        } catch (RemoteException ex) {
+         // ignore it
+        }
+    }
+
+    /** @hide */
     /**
      * @return subId of the DefaultSms subscription or the value INVALID_SUB_ID if an error.
      * @hide - to be unhidden
@@ -989,6 +1013,29 @@ public class SubscriptionManager implements BaseColumns {
 
         return subId;
 
+    }
+
+    public static boolean isVoicePromptEnabled() {
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                return iSub.isVoicePromptEnabled();
+            }
+        } catch (RemoteException ex) {
+         // ignore it
+        }
+        return false;
+    }
+
+    public static void setVoicePromptEnabled(boolean enabled) {
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                iSub.setVoicePromptEnabled(enabled);
+            }
+        } catch (RemoteException ex) {
+         // ignore it
+        }
     }
 }
 
