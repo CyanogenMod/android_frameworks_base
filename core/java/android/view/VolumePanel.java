@@ -356,6 +356,14 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         mToneGenerators = new ToneGenerator[AudioSystem.getNumStreamTypes()];
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
         mVoiceCapable = context.getResources().getBoolean(R.bool.config_voice_capable);
+        mShowCombinedVolumes = true;
+        // We always want to show multiple volumes
+        if (!mShowCombinedVolumes) {
+            mMoreButton.setVisibility(View.GONE);
+            mDivider.setVisibility(View.GONE);
+        } else {
+            mMoreButton.setOnClickListener(this);
+        }
 
         // Get the user's preferences
         mVolumeLinkNotification = Settings.System.getInt(mContext.getContentResolver(),
@@ -613,6 +621,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mSliderGroup.getChildAt(i).setVisibility(View.GONE);
             }
         }
+        mMoreButton.setVisibility(View.GONE);
+        mDivider.setVisibility(View.GONE);
     }
 
     private void collapse() {
