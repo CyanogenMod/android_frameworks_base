@@ -216,4 +216,11 @@
     <string name="tasklist_memory_usage">"剩余/总内存: [<xliff:g id="NUMBER">%s</xliff:g>] / [<xliff:g id="NAME">%s</xliff:g>]"</string>
     <string name="message_keep_one_launcher">至少保留一个桌面主屏！</string>
     <!--end add TaskManager-->
+
+    <!-- Carrier Name -->
+    <string name="China_Mobile">中国移动</string>
+    <string name="China_Unicom">中国联通</string>
+    <string name="China_Telecom">中国电信</string>
+
+    <string name="roamingTextSearching">"正在搜索服务"</string>
 </resources>

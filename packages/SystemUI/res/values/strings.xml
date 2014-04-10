@@ -520,4 +520,11 @@
     <string name="tasklist_memory_usage">"Free/Total Memory:[<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
     <string name="message_keep_one_launcher">Should keep at lease one home activity!</string>
     <!--end TaskManager-->
+
+    <!-- Carrier Name -->
+    <string name="China_Mobile">China Mobile</string>
+    <string name="China_Unicom">China Unicom</string>
+    <string name="China_Telecom">China Telecom</string>
+
+    <string name="roamingTextSearching">Searching for Service</string>
 </resources>

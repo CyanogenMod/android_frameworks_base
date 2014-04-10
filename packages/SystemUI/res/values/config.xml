@@ -132,5 +132,8 @@
     -->
     <integer name="status_bar_style">0</integer>
     <bool name="config_enableTaskManager">false</bool>
+
+    <!-- monitor locale change -->
+    <bool name="config_monitor_locale_change">false</bool>
 </resources>
 

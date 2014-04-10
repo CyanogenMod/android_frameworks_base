@@ -414,6 +414,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             refreshViews();
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
             refreshLocale();
+            if (mContext.getResources().getBoolean(R.bool.config_monitor_locale_change)) {
+                // parse the string to current language string in public resources
+                updateNetworkName(mNetworkName);
+            }
             refreshViews();
         } else if (action.equals(Intent.ACTION_LOCALE_CHANGED)) {
             updateNetworkName(false, null, false, null);
@@ -820,6 +824,20 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             mNetworkName = str.toString();
         } else {
             mNetworkName = mNetworkNameDefault;
+        }
+
+        if (mContext.getResources().getBoolean(R.bool.config_monitor_locale_change)) {
+            // parse the string to current language string in public resources
+            updateNetworkName(mNetworkName);
+        }
+    }
+
+    protected void updateNetworkName(String networkName) {
+        if (networkName != null) {
+            mNetworkName = android.util.NativeTextHelper.getInternalLocalString(mContext,
+                    networkName,
+                    R.array.origin_carrier_names,
+                    R.array.locale_carrier_names);
         }
     }
 
