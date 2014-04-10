@@ -103,15 +103,6 @@ public class KeyguardViewManager {
 
     private boolean mUnlockKeyDown = false;
 
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(intent.getAction())) {
-                mKeyguardHost.cacheUserImage();
-            }
-        }
-    };
-
     private KeyguardUpdateMonitorCallback mBackgroundChanger = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onSetBackground(Bitmap bmp) {
@@ -138,10 +129,6 @@ public class KeyguardViewManager {
         mViewManager = viewManager;
         mViewMediatorCallback = callback;
         mLockPatternUtils = lockPatternUtils;
-
-        context.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
-                android.Manifest.permission.CONTROL_KEYGUARD, null);
     }
 
     /**
@@ -225,6 +212,14 @@ public class KeyguardViewManager {
             setBackground(mBackgroundDrawable);
             cacheUserImage();
             mLastConfiguration = new Configuration(context.getResources().getConfiguration());
+
+            context.registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    cacheUserImage();
+                }
+            }, new IntentFilter(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
+                    android.Manifest.permission.CONTROL_KEYGUARD, null);
         }
 
         public void drawToCanvas(Canvas canvas, Drawable drawable) {
