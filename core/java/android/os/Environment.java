@@ -680,6 +680,14 @@ public class Environment {
     public static final String MEDIA_UNMOUNTABLE = "unmountable";
 
     /**
+     * Storage state if the media is present and in unmounting state.
+     *
+     * @see #getStorageState(File)
+     * @hide
+     */
+    public static final String MEDIA_UNMOUNTING = "unmounting";
+
+    /**
      * Returns the current state of the primary "external" storage device.
      * 
      * @see #getExternalStorageDirectory()

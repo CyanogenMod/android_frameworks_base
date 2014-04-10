@@ -951,6 +951,7 @@ class MountService extends IMountService.Stub
             action = Intent.ACTION_MEDIA_MOUNTED;
         } else if (newState == VolumeState.Unmounting) {
             action = Intent.ACTION_MEDIA_EJECT;
+            updatePublicVolumeState(volume, Environment.MEDIA_UNMOUNTING);
         } else if (newState == VolumeState.Formatting) {
         } else if (newState == VolumeState.Shared) {
             if (DEBUG_EVENTS) Slog.i(TAG, "Updating volume state media mounted");
