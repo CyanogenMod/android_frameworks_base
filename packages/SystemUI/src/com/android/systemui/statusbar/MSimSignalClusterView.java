@@ -300,6 +300,9 @@ public class MSimSignalClusterView
             mMobileGroup[subscription].setVisibility(View.VISIBLE);
         } else {
             mMobileGroup[subscription].setVisibility(View.GONE);
+            mMobileCdmaGroup.setVisibility(View.GONE);
+            mMobileCdma1xOnly.setVisibility(View.GONE);
+            mDataGroup[subscription].setVisibility(View.GONE);
         }
 
         if (mIsAirplaneMode) {

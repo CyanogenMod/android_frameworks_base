@@ -275,6 +275,9 @@ public class SignalClusterView
             mMobileGroup.setVisibility(View.VISIBLE);
         } else {
             mMobileGroup.setVisibility(View.GONE);
+            mMobileCdmaGroup.setVisibility(View.GONE);
+            mMobileCdma1xOnly.setVisibility(View.GONE);
+            mDataGroup.setVisibility(View.GONE);
         }
 
         if (mIsAirplaneMode) {
