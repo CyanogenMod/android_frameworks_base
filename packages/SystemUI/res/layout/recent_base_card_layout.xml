@@ -54,17 +54,17 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/card_content_expand_layout"
+        style="@style/card.main_contentExpand_inside"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <com.android.cards.view.component.CardShadowView
         style="@style/card.shadow_outer_layout"
         android:id="@+id/card_shadow_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <FrameLayout
-        android:id="@+id/card_content_expand_layout"
-        style="@style/card.main_contentExpand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
 
 </LinearLayout>
