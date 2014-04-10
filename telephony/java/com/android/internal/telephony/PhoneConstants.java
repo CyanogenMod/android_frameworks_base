@@ -169,6 +169,10 @@ public class PhoneConstants {
     public static final int SIM_ID_3 = 2;
     public static final int SIM_ID_4 = 3;
 
+    public static final int PHONE_ID1 = 0;
+    public static final int PHONE_ID2 = 1;
+    public static final int PHONE_ID3 = 2;
+
     // ICC SIM Application Types
     // TODO: Replace the IccCardApplicationStatus.AppType enums with these constants
     public static final int APPTYPE_UNKNOWN = 0;

@@ -553,12 +553,6 @@ interface ISms {
      */
     boolean isImsSmsSupportedForSubscriber(long subId);
 
-    /*
-     * get user prefered SMS subId
-     * @return subId id
-     */
-    long getPreferredSmsSubscription();
-
     /**
      * Gets SMS format supported on IMS.  SMS over IMS format is
      * either 3GPP or 3GPP2.
@@ -582,12 +576,6 @@ interface ISms {
      * @see #isImsSmsSupported()
      */
     String getImsSmsFormatForSubscriber(long subId);
-
-    /*
-     * Get SMS prompt property,  enabled or not
-     * @return true if enabled, false otherwise
-     */
-    boolean isSMSPromptEnabled();
 
     /**
      * Send a system stored text message.
