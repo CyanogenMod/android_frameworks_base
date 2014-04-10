@@ -107,7 +107,9 @@ public class KeyguardViewManager {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(intent.getAction())) {
-                mKeyguardHost.cacheUserImage();
+                if (mKeyguardHost != null) {
+                    mKeyguardHost.cacheUserImage();
+                }
             }
         }
     };
