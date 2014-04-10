@@ -352,6 +352,8 @@ LOCAL_SRC_FILES += \
 	location/java/android/location/ICountryListener.aidl \
 	location/java/android/location/IFusedProvider.aidl \
 	location/java/android/location/IGeocodeProvider.aidl \
+	location/java/android/location/IGeoFencer.aidl \
+	location/java/android/location/IGeoFenceListener.aidl \
 	location/java/android/location/IGeofenceProvider.aidl \
 	location/java/android/location/IGnssStatusListener.aidl \
 	location/java/android/location/IGnssStatusProvider.aidl \
