@@ -535,6 +535,9 @@ public class RecentController implements RecentPanelView.OnExitListener,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_PANEL_SCALE_FACTOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENT_PANEL_EXPANDED_MODE),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -571,6 +574,10 @@ public class RecentController implements RecentPanelView.OnExitListener,
             }
             if (mRecentPanelView != null) {
                 mRecentPanelView.setScaleFactor(mScaleFactor);
+                mRecentPanelView.setExpandedMode(Settings.System.getIntForUser(
+                    resolver, Settings.System.RECENT_PANEL_EXPANDED_MODE,
+                    mRecentPanelView.EXPANDED_MODE_AUTO,
+                    UserHandle.USER_CURRENT));
             }
         }
     }
