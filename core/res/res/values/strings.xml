@@ -3276,7 +3276,8 @@
     <!-- [CHAR LIMIT=NONE] Message shown in upgrading dialog for each .apk that is optimized. -->
     <string name="android_upgrading_apk">Optimizing app
         <xliff:g id="number" example="123">%1$d</xliff:g> of
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+        <xliff:g id="number" example="123">%2$d</xliff:g>.
+        <xliff:g id="app_name">%3$s</xliff:g></string>
 
     <!-- [CHAR LIMIT=NONE] Message to show in upgrading dialog when reached the point of starting apps. -->
     <string name="android_upgrading_starting_apps">Starting apps.</string>
