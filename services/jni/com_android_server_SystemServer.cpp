@@ -25,12 +25,25 @@
 
 namespace android {
 
+void* sensorInit(void *arg)
+{
+    ALOGI("System server: starting sensor init.\n");
+    // Start the sensor service
+    SensorService::instantiate();
+    ALOGI("System server: sensor init done.\n");
+    return NULL;
+}
+
 static void android_server_SystemServer_nativeInit(JNIEnv* env, jobject clazz) {
     char propBuf[PROPERTY_VALUE_MAX];
+    pthread_t sensor_init_thread;
+
     property_get("system_init.startsensorservice", propBuf, "1");
     if (strcmp(propBuf, "1") == 0) {
-        // Start the sensor service
-        SensorService::instantiate();
+        // We are safe to move this to a new thread because
+        // Android frame work has taken care to check whether the
+        // service is started or not before using it.
+        pthread_create( &sensor_init_thread, NULL, &sensorInit, NULL);
     }
 }
 
