@@ -358,8 +358,11 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                     soundEffect = SoundEffectConstants.NAVIGATION_UP;
                     break;
             }
+
+            View focusView = mCurrentView.findFocus();
+
             if (event.getKeyCode() == keyCodeShouldChangeFocus
-                    && mCurrentView.findFocus().focusSearch(directionShouldChangeFocus) == null) {
+                    && (focusView == null || focusView.focusSearch(directionShouldChangeFocus) == null)) {
                 mTabWidget.getChildTabViewAt(mCurrentTab).requestFocus();
                 playSoundEffect(soundEffect);
                 return true;
