@@ -170,13 +170,8 @@ public class RecentController implements RecentPanelView.OnExitListener,
                         new RecentListOnScaleGestureListener(mRecentWarningContent, cardListView));
 
         // Prepare recents panel view and set the listeners
-        cardListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                recentListGestureDetector.onTouchEvent(event);
-                return false;
-            }
-        });
+        cardListView.setGestureDetector(recentListGestureDetector);
+
         mRecentPanelView = new RecentPanelView(mContext, this, cardListView, mEmptyRecentView);
         mRecentPanelView.setOnExitListener(this);
         mRecentPanelView.setOnTasksLoadedListener(this);
