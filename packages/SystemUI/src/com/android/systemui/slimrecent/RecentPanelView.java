@@ -78,6 +78,10 @@ public class RecentPanelView {
     public static final int EXPANDED_STATE_COLLAPSED = 2;
     public static final int EXPANDED_STATE_BY_SYSTEM = 4;
 
+    public static final int EXPANDED_MODE_AUTO    = 0;
+    private static final int EXPANDED_MODE_ALWAYS = 1;
+    private static final int EXPANDED_MODE_NEVER  = 2;
+
     private static final int MENU_APP_DETAILS_ID   = 0;
     private static final int MENU_APP_PLAYSTORE_ID = 1;
     private static final int MENU_APP_AMAZON_ID    = 2;
@@ -114,6 +118,7 @@ public class RecentPanelView {
 
     private int mMainGravity;
     private float mScaleFactor;
+    private int mExpandedMode = EXPANDED_MODE_AUTO;
 
     private PopupMenu mPopup;
 
@@ -701,18 +706,25 @@ public class RecentPanelView {
                     mFirstTask = item;
                 } else {
                     // FirstExpandedItems value forces to show always the app screenshot
-                    // if the old state is not known.
-                    // All other items we check if they were expanded from the user
-                    // in last known recent app list and restore the state.
+                    // if the old state is not known and the user has set expanded mode to auto.
+                    // On all other items we check if they were expanded from the user
+                    // in last known recent app list and restore the state. This counts as well
+                    // if expanded mode is always or never.
                     int oldState = getExpandedState(item);
+                    if ((oldState & EXPANDED_STATE_BY_SYSTEM) != 0) {
+                        oldState &= ~EXPANDED_STATE_BY_SYSTEM;
+                    }
                     if (DEBUG) Log.v(TAG, "old expanded state = " + oldState);
                     if (firstItems < firstExpandedItems) {
-                        item.setExpandedState(oldState | EXPANDED_STATE_BY_SYSTEM);
+                        if (mExpandedMode != EXPANDED_MODE_NEVER) {
+                            oldState |= EXPANDED_STATE_BY_SYSTEM;
+                        }
+                        item.setExpandedState(oldState);
                         // The first tasks are always added to the task list.
                         mTasks.add(item);
                     } else {
-                        if ((oldState & EXPANDED_STATE_BY_SYSTEM) != 0) {
-                            oldState &= ~EXPANDED_STATE_BY_SYSTEM;
+                        if (mExpandedMode == EXPANDED_MODE_ALWAYS) {
+                            oldState |= EXPANDED_STATE_BY_SYSTEM;
                         }
                         item.setExpandedState(oldState);
                         // Favorite tasks are added next. Non favorite
@@ -844,6 +856,10 @@ public class RecentPanelView {
 
     protected void setScaleFactor(float factor) {
         mScaleFactor = factor;
+    }
+
+    protected void setExpandedMode(int mode) {
+        mExpandedMode = mode;
     }
 
     protected boolean hasFavorite() {
