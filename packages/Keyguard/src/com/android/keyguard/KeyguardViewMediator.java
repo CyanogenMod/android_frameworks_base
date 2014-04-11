@@ -36,7 +36,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -492,25 +491,6 @@ public class KeyguardViewMediator {
         }
     };
 
-    private class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver cr = mContext.getContentResolver();
-            cr.registerContentObserver(Settings.Global.getUriFor(
-                    Settings.Global.LOCK_SOUND), false, this);
-            cr.registerContentObserver(Settings.Global.getUriFor(
-                    Settings.Global.UNLOCK_SOUND), false, this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            reloadSounds();
-        }
-    }
-
     private void userActivity() {
         userActivity(AWAKE_INTERVAL_DEFAULT_MS);
     }
@@ -562,27 +542,6 @@ public class KeyguardViewMediator {
         mScreenOn = mPM.isScreenOn();
 
         mLockSounds = new SoundPool(1, AudioManager.STREAM_SYSTEM, 0);
-        reloadSounds();
-        int lockSoundDefaultAttenuation = context.getResources().getInteger(
-                com.android.internal.R.integer.config_lockSoundVolumeDb);
-        mLockSoundVolume = (float)Math.pow(10, (float)lockSoundDefaultAttenuation/20);
-
-        SettingsObserver observer = new SettingsObserver(new Handler());
-        observer.observe();
-    }
-
-    public void reloadSounds() {
-        final ContentResolver cr = mContext.getContentResolver();
-
-        if (mLockSoundId > 0) {
-            mLockSounds.unload(mLockSoundId);
-            mLockSoundId = 0;
-        }
-        if (mUnlockSoundId > 0) {
-            mLockSounds.unload(mUnlockSoundId);
-            mUnlockSoundId = 0;
-        }
-
         String soundPath = Settings.Global.getString(cr, Settings.Global.LOCK_SOUND);
         if (soundPath != null) {
             mLockSoundId = mLockSounds.load(soundPath, 1);
@@ -597,6 +556,9 @@ public class KeyguardViewMediator {
         if (soundPath == null || mUnlockSoundId == 0) {
             Log.w(TAG, "failed to load unlock sound from " + soundPath);
         }
+        int lockSoundDefaultAttenuation = context.getResources().getInteger(
+                com.android.internal.R.integer.config_lockSoundVolumeDb);
+        mLockSoundVolume = (float)Math.pow(10, (float)lockSoundDefaultAttenuation/20);
     }
 
     public void setBackgroundBitmap(Bitmap bmp) {
