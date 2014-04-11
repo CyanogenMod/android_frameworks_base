@@ -70,6 +70,11 @@
                 android:visibility="invisible"
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight" />
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/ime_navigation_left"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:visibility="gone" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -124,6 +129,11 @@
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight"
                 />
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/ime_navigation_right"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- lights out layout to match exactly -->
@@ -294,6 +304,11 @@
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight"
                 />
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/ime_navigation_right"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- lights out layout to match exactly -->

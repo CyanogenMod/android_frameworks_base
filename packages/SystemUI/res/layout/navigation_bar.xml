@@ -71,6 +71,11 @@
                 android:visibility="invisible"
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight" />
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/ime_navigation_left"
+                android:layout_width="@dimen/navigation_menu_key_width"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:visibility="gone" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -127,6 +132,11 @@
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight"
                 />
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/ime_navigation_right"
+                android:layout_width="@dimen/navigation_menu_key_width"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- lights out layout to match exactly -->
@@ -274,6 +284,11 @@
                 android:contentDescription="@string/accessibility_menu"
                 systemui:glowBackground="@drawable/ic_sysbar_highlight_land"
                 />
+            <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/ime_navigation_right"
+                android:layout_width="@dimen/navigation_menu_key_width"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:visibility="gone" />
             <com.android.systemui.statusbar.policy.KeyButtonView android:id="@+id/recent_apps"
                 android:layout_height="80dp"
                 android:layout_width="match_parent"

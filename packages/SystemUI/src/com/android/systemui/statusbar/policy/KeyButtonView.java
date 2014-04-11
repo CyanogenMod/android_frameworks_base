@@ -85,6 +85,13 @@ public class KeyButtonView extends ImageView {
                     setHapticFeedbackEnabled(false);
                 }
                 performLongClick();
+                if (mLongpressAction != null
+                        && (mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_UP)
+                        || mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_DOWN))) {
+                    removeCallbacks(mCheckLongPress);
+                    postDelayed(mCheckLongPress, ViewConfiguration.getDoubleTapTimeout());
+                    return;
+                }
                 setHapticFeedbackEnabled(true);
             }
         }
