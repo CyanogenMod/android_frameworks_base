@@ -234,12 +234,20 @@ static bool assertIdmapHeader(const uint32_t* map, size_t sizeBytes)
     return true;
 }
 
-static status_t idmapLookup(const uint32_t* map, size_t sizeBytes, uint32_t key, uint32_t* outValue)
+static status_t idmapLookup(const uint32_t* map, size_t sizeBytes, uint32_t key,
+                            uint32_t* outValue, uint32_t overlayPkgId)
 {
     // see README for details on the format of map
     if (!assertIdmapHeader(map, sizeBytes)) {
         return UNKNOWN_ERROR;
     }
+
+    // if the key's package ID matches the overlayPkgId, return the key as the outValue
+    if (Res_GETPACKAGE(key) == (overlayPkgId-1)) {
+        *outValue = key;
+        return NO_ERROR;
+    }
+
     map = map + IDMAP_HEADER_SIZE; // skip ahead to data segment
     // size of data block, in uint32_t
     const size_t size = (sizeBytes - ResTable::IDMAP_HEADER_SIZE_BYTES) / sizeof(uint32_t);
@@ -287,11 +295,37 @@ static status_t getIdmapPackageId(const uint32_t* map, size_t mapSize, uint32_t 
     if (!assertIdmapHeader(map, mapSize)) {
         return UNKNOWN_ERROR;
     }
+    if (mapSize <= IDMAP_HEADER_SIZE + 1) {
+        ALOGW("corrupt idmap: map size %d too short\n", mapSize);
+        return UNKNOWN_ERROR;
+    }
+    uint32_t typeCount = *(map + IDMAP_HEADER_SIZE);
+    if (typeCount == 0) {
+        ALOGW("corrupt idmap: no types\n");
+        return UNKNOWN_ERROR;
+    }
+    if (IDMAP_HEADER_SIZE + 1 + typeCount > mapSize) {
+        ALOGW("corrupt idmap: number of types %d extends past idmap size %d\n", typeCount, mapSize);
+        return UNKNOWN_ERROR;
+    }
     const uint32_t* p = map + IDMAP_HEADER_SIZE + 1;
+    // find first defined type
     while (*p == 0) {
         ++p;
+        if (--typeCount == 0) {
+            ALOGW("corrupt idmap: types declared, none found\n");
+            return UNKNOWN_ERROR;
+        }
     }
-    *outId = (map[*p + IDMAP_HEADER_SIZE + 2] >> 24) & 0x000000ff;
+
+    // determine package id from first entry of first type
+    const uint32_t offset = *p + IDMAP_HEADER_SIZE + 2;
+    if (offset > mapSize) {
+        ALOGW("corrupt idmap: entry offset %d points outside map size %d\n", offset, mapSize);
+        return UNKNOWN_ERROR;
+    }
+    *outId = (map[offset] >> 24) & 0x000000ff;
+
     return NO_ERROR;
 }
 
@@ -2516,7 +2550,7 @@ struct ResTable::Package
 struct ResTable::PackageGroup
 {
     PackageGroup(ResTable* _owner, const String16& _name, uint32_t _id)
-        : owner(_owner), name(_name), id(_id), typeCount(0), bags(NULL) { }
+        : owner(_owner), name(_name), id(_id), typeCount(0), bags(NULL), overlayPkgId(0) { }
     ~PackageGroup() {
         clearBagCache();
         const size_t N = packages.size();
@@ -2569,6 +2603,8 @@ struct ResTable::PackageGroup
     // Computed attribute bags, first indexed by the type and second
     // by the entry in that type.
     bag_set***                      bags;
+
+    uint32_t                        overlayPkgId;
 };
 
 struct ResTable::bag_set
@@ -2631,13 +2667,6 @@ status_t ResTable::Theme::applyStyle(uint32_t resID, bool force)
     const bag_entry* bag;
     uint32_t bagTypeSpecFlags = 0;
     mTable.lock();
-    uint32_t redirect = mTable.lookupRedirectionMap(resID);
-    if (redirect != 0 || resID == 0x01030005) {
-        REDIRECT_NOISY(ALOGW("applyStyle: PERFORMED REDIRECT OF ident=0x%08x FOR redirect=0x%08x\n", resID, redirect));
-    }
-    if (redirect != 0) {
-        resID = redirect;
-    }
     const ssize_t N = mTable.getBagLocked(resID, &bag, &bagTypeSpecFlags);
     TABLE_NOISY(ALOGV("Applying style 0x%08x to theme %p, count=%d", resID, this, N));
     if (N < 0) {
@@ -2957,7 +2986,7 @@ status_t ResTable::add(const void* data, size_t size, void* cookie,
     LOAD_TABLE_NOISY(
         ALOGV("Adding resources to ResTable: data=%p, size=0x%x, cookie=%p, asset=%p, copy=%d "
              "idmap=%p\n", data, size, cookie, asset, copyData, idmap));
-    
+
     if (copyData || notDeviceEndian) {
         header->ownedData = malloc(size);
         if (header->ownedData == NULL) {
@@ -3085,8 +3114,6 @@ void ResTable::uninit()
 
     mPackageGroups.clear();
     mHeaders.clear();
-
-    clearRedirections();
 }
 
 bool ResTable::getResourceName(uint32_t resID, bool allowUtf8, resource_name* outName) const
@@ -3185,6 +3212,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
 
     const Res_value* bestValue = NULL;
     const Package* bestPackage = NULL;
+    bool bestFitOverride = false;
     ResTable_config bestItem;
     memset(&bestItem, 0, sizeof(bestItem)); // make the compiler shut up
 
@@ -3214,7 +3242,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
 
     ssize_t rc = BAD_VALUE;
     size_t ip = grp->packages.size();
-    while (ip > 0) {
+    while (ip > 0 && !bestFitOverride) {
         ip--;
         int T = t;
         int E = e;
@@ -3224,12 +3252,12 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
             uint32_t overlayResID = 0x0;
             status_t retval = idmapLookup(package->header->resourceIDMap,
                                           package->header->resourceIDMapSize,
-                                          resID, &overlayResID);
+                                          resID, &overlayResID, grp->overlayPkgId);
             if (retval == NO_ERROR && overlayResID != 0x0) {
-                // for this loop iteration, this is the type and entry we really want
-                ALOGV("resource map 0x%08x -> 0x%08x\n", resID, overlayResID);
                 T = Res_GETTYPE(overlayResID);
                 E = Res_GETENTRY(overlayResID);
+                // consider themed resources as being "best fit" when they exist
+                bestFitOverride = true;
             } else {
                 // resource not present in overlay package, continue with the next package
                 continue;
@@ -3251,6 +3279,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
                 rc = offset;
                 goto out;
             }
+            bestFitOverride = false;
             continue;
         }
 
@@ -3359,24 +3388,6 @@ ssize_t ResTable::resolveReference(Res_value* value, ssize_t blockIndex,
     return blockIndex;
 }
 
-uint32_t ResTable::lookupRedirectionMap(uint32_t resID) const
-{
-    if (mError != NO_ERROR) {
-        return 0;
-    }
-
-    const int p = Res_GETPACKAGE(resID)+1;
-
-    const size_t N = mRedirectionMap.size();
-    for (size_t i=0; i<N; i++) {
-        PackageRedirectionMap* resMap = mRedirectionMap[i];
-        if (resMap->getPackage() == p) {
-            return resMap->lookupRedirection(resID);
-        }
-    }
-    return 0;
-}
-
 const char16_t* ResTable::valueToString(
     const Res_value* value, size_t stringBlock,
     char16_t tmpBuffer[TMP_BUFFER_SIZE], size_t* outLen)
@@ -3419,7 +3430,7 @@ void ResTable::unlock() const
 }
 
 ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
-        uint32_t* outTypeSpecFlags) const
+        uint32_t* outTypeSpecFlags, bool performMapping) const
 {
     if (mError != NO_ERROR) {
         return mError;
@@ -3463,7 +3474,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
     }
 
     // First see if we've already computed this bag...
-    if (grp->bags) {
+    if (grp->bags && performMapping) {
         bag_set** typeSet = grp->bags[t];
         if (typeSet) {
             bag_set* set = typeSet[e];
@@ -3516,17 +3527,23 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
 
         const Package* const package = grp->packages[ip];
         if (package->header->resourceIDMap) {
-            uint32_t overlayResID = 0x0;
-            status_t retval = idmapLookup(package->header->resourceIDMap,
-                                          package->header->resourceIDMapSize,
-                                          resID, &overlayResID);
-            if (retval == NO_ERROR && overlayResID != 0x0) {
-                // for this loop iteration, this is the type and entry we really want
-                ALOGV("resource map 0x%08x -> 0x%08x\n", resID, overlayResID);
-                T = Res_GETTYPE(overlayResID);
-                E = Res_GETENTRY(overlayResID);
+            if (performMapping) {
+                uint32_t overlayResID = 0x0;
+                status_t retval = idmapLookup(package->header->resourceIDMap,
+                                              package->header->resourceIDMapSize,
+                                              resID, &overlayResID, grp->overlayPkgId);
+                if (retval == NO_ERROR && overlayResID != 0x0) {
+                    // for this loop iteration, this is the type and entry we really want
+                    ALOGV("resource map 0x%08x -> 0x%08x\n", resID, overlayResID);
+                    T = Res_GETTYPE(overlayResID);
+                    E = Res_GETENTRY(overlayResID);
+                    resID = overlayResID;
+                } else {
+                    // resource not present in overlay package, continue with the next package
+                    continue;
+                }
             } else {
-                // resource not present in overlay package, continue with the next package
+                // we're not mapping this resource so continue on to the next package
                 continue;
             }
         }
@@ -3582,19 +3599,26 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         if (parent) {
             const bag_entry* parentBag;
             uint32_t parentTypeSpecFlags = 0;
-            uint32_t parentRedirect = lookupRedirectionMap(parent);
+            // The following code, which checks for circular references, was adapted
+            // from the original theme code written by T-Mobile
+            uint32_t parentMapped = 0;
             uint32_t parentActual = parent;
-            if (parentRedirect != 0 || parent == 0x01030005) {
-                if (parentRedirect == resID) {
-                    REDIRECT_NOISY(ALOGW("applyStyle(parent): ignoring circular redirect from parent=0x%08x to parentRedirect=0x%08x\n", parent, parentRedirect));
-                } else {
-                    REDIRECT_NOISY(ALOGW("applyStyle(parent): PERFORMED REDIRECT OF parent=0x%08x FOR parentRedirect=0x%08x\n", parent, parentRedirect));
-                    if (parentRedirect != 0) {
-                        parentActual = parentRedirect;
-                    }
+            if (package->header->resourceIDMap) {
+                status_t retval = idmapLookup(package->header->resourceIDMap,
+                                          package->header->resourceIDMapSize,
+                                          parent, &parentMapped, grp->overlayPkgId);
+                if (retval != NO_ERROR) {
+                    parentMapped = 0;
                 }
             }
-            const ssize_t NP = getBagLocked(parentActual, &parentBag, &parentTypeSpecFlags);
+            if (parentMapped != 0) {
+                if (parentMapped == resID) {
+                    TABLE_NOISY(
+                            ALOGI("Ignoring circular redirect from parent=0x%08x to parentMapped=0x%08x",
+                            parent, parentMapped));
+                }
+            }
+            const ssize_t NP = getBagLocked(parentActual, &parentBag, &parentTypeSpecFlags, parentMapped != resID);
             const size_t NT = ((NP >= 0) ? NP : 0) + N;
             set = (bag_set*)malloc(sizeof(bag_set)+sizeof(bag_entry)*NT);
             if (set == NULL) {
@@ -5226,7 +5250,7 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
                 return (mError=err);
             }
             group->basePackage = package;
-            
+
             mPackageMap[id] = (uint8_t)idx;
         } else {
             group = mPackageGroups.itemAt(idx-1);
@@ -5237,6 +5261,12 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
         err = group->packages.add(package);
         if (err < NO_ERROR) {
             return (mError=err);
+        }
+        if (idmap_id != 0) {
+            // we need to add our overlay's package ID to this group so resources that
+            // only exist in the overlay are accessed from the overlay correctly
+            mPackageMap[pkg->id] = (uint8_t)idx;
+            group->overlayPkgId = pkg->id;
         }
     } else {
         LOG_ALWAYS_FATAL("Package id out of range");
@@ -5376,90 +5406,137 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     return NO_ERROR;
 }
 
-status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, uint32_t overlayCrc,
-                               void** outData, size_t* outSize) const
+status_t ResTable::createIdmap(const ResTable& overlay,
+        uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime, time_t overlayMtime,
+        const char* targetPath, const char* overlayPath,
+        Vector<String8>& targets, Vector<String8>& overlays,
+        void** outData, size_t* outSize) const
 {
     // see README for details on the format of map
     if (mPackageGroups.size() == 0) {
+        ALOGW("idmap: target package has no package groups, cannot create idmap\n");
         return UNKNOWN_ERROR;
     }
     if (mPackageGroups[0]->packages.size() == 0) {
+        ALOGW("idmap: target package has no packages in its first package group, "
+                "cannot create idmap\n");
         return UNKNOWN_ERROR;
     }
 
-    Vector<Vector<uint32_t> > map;
-    const PackageGroup* pg = mPackageGroups[0];
-    const Package* pkg = pg->packages[0];
-    size_t typeCount = pkg->types.size();
     // starting size is header + first item (number of types in map)
     *outSize = (IDMAP_HEADER_SIZE + 1) * sizeof(uint32_t);
+    // overlay packages are assumed to contain only one package group
     const String16 overlayPackage(overlay.mPackageGroups[0]->packages[0]->package->name);
-    const uint32_t pkg_id = pkg->package->id << 24;
+    const bool useRedirections = (targets.size() > 0 && (targets.size() == overlays.size()));
+    Vector<Vector<uint32_t> > map;
+    PackageGroup* pg;
+    Package* pkg;
+    size_t typeCount;
+    uint32_t pkg_id;
 
-    for (size_t typeIndex = 0; typeIndex < typeCount; ++typeIndex) {
-        ssize_t first = -1;
-        ssize_t last = -1;
-        const Type* typeConfigs = pkg->getType(typeIndex);
-        ssize_t mapIndex = map.add();
-        if (mapIndex < 0) {
-            return NO_MEMORY;
-        }
-        Vector<uint32_t>& vector = map.editItemAt(mapIndex);
-        for (size_t entryIndex = 0; entryIndex < typeConfigs->entryCount; ++entryIndex) {
-            uint32_t resID = pkg_id
-                | (0x00ff0000 & ((typeIndex+1)<<16))
-                | (0x0000ffff & (entryIndex));
-            resource_name resName;
-            if (!this->getResourceName(resID, true, &resName)) {
-                ALOGW("idmap: resource 0x%08x has spec but lacks values, skipping\n", resID);
-                // add dummy value, or trimming leading/trailing zeroes later will fail
-                vector.push(0);
-                continue;
+    const uint32_t groupCount = mPackageGroups.size();
+    for (int groupIdx = groupCount - 1; groupIdx >= 0; groupIdx--) {
+        bool foundRedirection = false;
+        pg = mPackageGroups[groupIdx];
+        pkg = pg->packages[0];
+        typeCount = pkg->types.size();
+        pkg_id = pkg->package->id << 24;
+        for (size_t typeIndex = 0; typeIndex < typeCount; ++typeIndex) {
+            ssize_t first = -1;
+            ssize_t last = -1;
+            const Type* typeConfigs = pkg->getType(typeIndex);
+            ssize_t mapIndex = map.add();
+            if (mapIndex < 0) {
+                return NO_MEMORY;
             }
-
-            const String16 overlayType(resName.type, resName.typeLen);
-            const String16 overlayName(resName.name, resName.nameLen);
-            uint32_t overlayResID = overlay.identifierForName(overlayName.string(),
-                                                              overlayName.size(),
-                                                              overlayType.string(),
-                                                              overlayType.size(),
-                                                              overlayPackage.string(),
-                                                              overlayPackage.size());
-            if (overlayResID != 0) {
-                overlayResID = pkg_id | (0x00ffffff & overlayResID);
-                last = Res_GETENTRY(resID);
-                if (first == -1) {
-                    first = Res_GETENTRY(resID);
+            Vector<uint32_t>& vector = map.editItemAt(mapIndex);
+            for (size_t entryIndex = 0; entryIndex < typeConfigs->entryCount; ++entryIndex) {
+                uint32_t resID = pkg_id
+                    | (0x00ff0000 & ((typeIndex+1)<<16))
+                    | (0x0000ffff & (entryIndex));
+                resource_name resName;
+                if (!this->getResourceName(resID, false, &resName)) {
+                    ALOGW("idmap: resource 0x%08x has spec but lacks values, skipping\n", resID);
+                    // add dummy value, or trimming leading/trailing zeroes later will fail
+                    vector.push(0);
+                    continue;
                 }
-            }
-            vector.push(overlayResID);
-#if 0
-            if (overlayResID != 0) {
-                ALOGD("%s/%s 0x%08x -> 0x%08x\n",
-                     String8(String16(resName.type)).string(),
-                     String8(String16(resName.name)).string(),
-                     resID, overlayResID);
-            }
-#endif
-        }
 
-        if (first != -1) {
-            // shave off trailing entries which lack overlay values
-            const size_t last_past_one = last + 1;
-            if (last_past_one < vector.size()) {
-                vector.removeItemsAt(last_past_one, vector.size() - last_past_one);
+                // check if resource type is "allowed", if not push 0 to the vector and continue
+                String8 type8;
+                if (resName.type8 != NULL) {
+                    type8 = String8(resName.type8, resName.typeLen);
+                } else {
+                    type8 = String8(resName.type, resName.typeLen);
+                }
+                if (!isResTypeAllowed(type8.string())) {
+                    vector.push(0);
+                    continue;
+                }
+
+                String16 overlayType;
+                String16 overlayName;
+                overlayType = String16(resName.type, resName.typeLen);
+                overlayName = String16(resName.name, resName.nameLen);
+                if (useRedirections) {
+                    String8 name(overlayName);
+                    String8 toMatch(overlayType);
+                    toMatch.appendPath(name);
+                    foundRedirection = false;
+                    for (size_t i = 0; i < targets.size(); i++) {
+                        if (toMatch == targets.itemAt(i)) {
+                            const String8 redirection = overlays.itemAt(i);
+                            overlayType = String16(redirection.getPathDir());
+                            overlayName = String16(redirection.getPathLeaf());
+                            foundRedirection = true;
+                            break;
+                        }
+                    }
+                }
+                uint32_t overlayResID = (useRedirections && !foundRedirection) ? 0 :
+                        overlay.identifierForName(overlayName.string(),
+                        overlayName.size(),
+                        overlayType.string(),
+                        overlayType.size(),
+                        overlayPackage.string(),
+                        overlayPackage.size());
+                if (overlayResID != 0) {
+                    overlayResID = pkg_id | (0x00ffffff & overlayResID);
+                    last = Res_GETENTRY(resID);
+                    if (first == -1) {
+                        first = Res_GETENTRY(resID);
+                    }
+                }
+                vector.push(overlayResID);
+#if 0
+                if (overlayResID != 0) {
+                    ALOGD("%s/%s 0x%08x -> 0x%08x\n",
+                         String8(String16(resName.type)).string(),
+                         String8(String16(resName.name)).string(),
+                         resID, overlayResID);
+                }
+#endif
             }
-            // shave off leading entries which lack overlay values
-            vector.removeItemsAt(0, first);
-            // store offset to first overlaid resource ID of this type
-            vector.insertAt((uint32_t)first, 0, 1);
-            // reserve space for number and offset of entries, and the actual entries
-            *outSize += (2 + vector.size()) * sizeof(uint32_t);
-        } else {
-            // no entries of current type defined in overlay package
-            vector.clear();
-            // reserve space for type offset
-            *outSize += 1 * sizeof(uint32_t);
+
+            if (first != -1) {
+                // shave off trailing entries which lack overlay values
+                const size_t last_past_one = last + 1;
+                if (last_past_one < vector.size()) {
+                    vector.removeItemsAt(last_past_one, vector.size() - last_past_one);
+                }
+                // shave off leading entries which lack overlay values
+                vector.removeItemsAt(0, first);
+                // store offset to first overlaid resource ID of this type
+                vector.insertAt((uint32_t)first, 0, 1);
+                // reserve space for number and offset of entries, and the actual entries
+                *outSize += (2 + vector.size()) * sizeof(uint32_t);
+            } else {
+                // no entries of current type defined in overlay package
+                vector.clear();
+                // reserve space for type offset
+                *outSize += 1 * sizeof(uint32_t);
+            }
         }
     }
 
@@ -5468,8 +5545,24 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
     }
     uint32_t* data = (uint32_t*)*outData;
     *data++ = htodl(IDMAP_MAGIC);
-    *data++ = htodl(originalCrc);
+    *data++ = htodl(targetCrc);
     *data++ = htodl(overlayCrc);
+    *data++ = htodl(targetMtime);
+    *data++ = htodl(overlayMtime);
+    const char* paths[] = { targetPath, overlayPath };
+    for (int j = 0; j < 2; ++j) {
+        char* p = (char*)data;
+        const char* path = paths[j];
+        const size_t I = strlen(path);
+        if (I > 255) {
+            ALOGV("path exceeds expected 255 characters: %s\n", path);
+            return UNKNOWN_ERROR;
+        }
+        for (size_t i = 0; i < 256; ++i) {
+            *p++ = i < I ? path[i] : '\0';
+        }
+        data += 256 / sizeof(uint32_t);
+    }
     const size_t mapSize = map.size();
     *data++ = htodl(mapSize);
     size_t offset = mapSize;
@@ -5483,6 +5576,9 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
             *data++ = htodl(offset);
             offset += N;
         }
+    }
+    if (offset == mapSize) {
+        ALOGW("idmap: no resources in overlay package present in base package\n");
     }
     for (size_t i = 0; i < mapSize; ++i) {
         const Vector<uint32_t>& vector = map.itemAt(i);
@@ -5505,21 +5601,32 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
 }
 
 bool ResTable::getIdmapInfo(const void* idmap, size_t sizeBytes,
-                            uint32_t* pOriginalCrc, uint32_t* pOverlayCrc)
+                            uint32_t* pTargetCrc, uint32_t* pOverlayCrc,
+                            String8* pTargetPath, String8* pOverlayPath)
 {
     const uint32_t* map = (const uint32_t*)idmap;
     if (!assertIdmapHeader(map, sizeBytes)) {
         return false;
     }
-    *pOriginalCrc = map[1];
-    *pOverlayCrc = map[2];
+    if (pTargetCrc) {
+        *pTargetCrc = map[1];
+    }
+    if (pOverlayCrc) {
+        *pOverlayCrc = map[2];
+    }
+    if (pTargetPath) {
+        pTargetPath->setTo(reinterpret_cast<const char*>(map + 5));
+    }
+    if (pOverlayPath) {
+        pOverlayPath->setTo(reinterpret_cast<const char*>(map + 5 + 256 / sizeof(uint32_t)));
+    }
     return true;
 }
 
 void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
 {
     mError = NO_ERROR;
-
+    ALOGV("Removing cookie %d for package %s", cookie, packageName.string());
     size_t N = mHeaders.size();
     for (size_t i = 0; i < N; i++) {
         Header* header = mHeaders[i];
@@ -5534,11 +5641,12 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
     size_t pgCount = mPackageGroups.size();
     for (size_t pgIndex = 0; pgIndex < pgCount; pgIndex++) {
         PackageGroup* pg = mPackageGroups[pgIndex];
-
         size_t pkgCount = pg->packages.size();
+        ALOGV("Looking at pgIndex: %d, pkgCount: %d", pgIndex, pkgCount);
         size_t index = pkgCount;
         for (size_t pkgIndex = 0; pkgIndex < pkgCount; pkgIndex++) {
             const Package* pkg = pg->packages[pkgIndex];
+            ALOGV("Examining pkg: %s", String8(pkg->package->name).string());
             if (String8(String16(pkg->package->name)).compare(packageName) == 0) {
                 index = pkgIndex;
                 ALOGV("Delete Package %d id=%d name=%s\n",
@@ -5549,8 +5657,10 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
         }
         if (index < pkgCount) {
             const Package* pkg = pg->packages[index];
+            ALOGV("Looking at pkg: %s", String8(pkg->package->name).string());
             uint32_t id = dtohl(pkg->package->id);
-            if (id != 0 && id < 256) {
+            if (id != 0 && id < 256 && pkgCount == 1) {
+                ALOGV("Settings id:%d to zero in mPackageMap", id);
                 mPackageMap[id] = 0;
             }
             if (pkgCount == 1) {
@@ -5560,33 +5670,27 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
                 mPackageGroups.removeAt(pgIndex);
                 delete pg;
             } else {
+                ALOGV("Delete package at %d", index);
                 pg->packages.removeAt(index);
                 delete pkg;
             }
             return;
+        } else {
+          ALOGV("idx > pkgCount");
         }
     }
 }
 
-/*
- * Load the redirection map from the supplied map path.
- *
- * The path is expected to be a directory containing individual map cache files
- * for each package that is to have resources redirected.  Only those packages
- * that are included in this ResTable will be loaded into the redirection map.
- * For this reason, this method should be called only after all resource
- * bundles have been added to the table.
- */
-void ResTable::addRedirections(PackageRedirectionMap* resMap)
+bool ResTable::isResTypeAllowed(const char* type) const
 {
-    // TODO: Replace an existing entry matching the same package.
-    mRedirectionMap.add(resMap);
-}
-
-void ResTable::clearRedirections()
-{
-    /* This memory is being managed by strong references at the Java layer. */
-    mRedirectionMap.clear();
+    if (type == NULL) return false;
+    const char* allowedResources[] = { "color", "dimen", "drawable", "mipmap", "style" };
+    // ALLOWED_RESOURCE_COUNT should match the number of elements in allowedResources
+    const uint32_t ALLOWED_RESOURCE_COUNT = 5;
+    for (int i = 0; i < ALLOWED_RESOURCE_COUNT; i++) {
+        if (strstr(type, allowedResources[i]) != NULL) return true;
+    }
+    return false;
 }
 
 #define CHAR16_TO_CSTR(c16, len) (String8(String16(c16,len)).string())

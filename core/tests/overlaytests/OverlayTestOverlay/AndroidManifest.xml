@@ -2,5 +2,5 @@
         package="com.android.overlaytest.overlay"
         android:versionCode="1"
         android:versionName="1.0">
-    <overlay-package android:name="android"/>
+        <overlay android:targetPackage="android" android:priority="1"/>
 </manifest>

@@ -47,6 +47,7 @@ public class RingtonePreference extends Preference implements
     private int mRingtoneType;
     private boolean mShowDefault;
     private boolean mShowSilent;
+    private int mDialogStyle;
     
     private int mRequestCode;
 
@@ -61,6 +62,8 @@ public class RingtonePreference extends Preference implements
                 true);
         mShowSilent = a.getBoolean(com.android.internal.R.styleable.RingtonePreference_showSilent,
                 true);
+        mDialogStyle = a.getResourceId(
+                com.android.internal.R.styleable.RingtonePreference_dialogStyle, 0);
         a.recycle();
     }
 
@@ -131,6 +134,27 @@ public class RingtonePreference extends Preference implements
         mShowSilent = showSilent;
     }
 
+    /**
+     * Returns the resource id style of the ringtone dialog.
+     *
+     * @return The resource id of the style
+     * @hide
+     */
+    public int getDialogStyle() {
+        return mDialogStyle;
+    }
+
+    /**
+     * Sets the resource id style of the ringtone dialog.
+     *
+     * @param dialogStyle The resource id of the style.
+     * @see RingtoneManager#EXTRA_RINGTONE_DIALOG_THEME
+     * @hide
+     */
+    public void setDialogStyle(int dialogStyle) {
+        mDialogStyle = dialogStyle;
+    }
+
     @Override
     protected void onClick() {
         // Launch the ringtone picker
@@ -160,6 +184,10 @@ public class RingtonePreference extends Preference implements
         if (mShowDefault) {
             ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                     RingtoneManager.getDefaultUri(getRingtoneType()));
+        }
+        if (mDialogStyle != 0) {
+            ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DIALOG_THEME,
+                    mDialogStyle);
         }
 
         ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, mShowSilent);

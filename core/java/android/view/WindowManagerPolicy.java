@@ -129,6 +129,17 @@ public interface WindowManagerPolicy {
     public final static int ACTION_GO_TO_SLEEP = 0x00000004;
 
     /**
+     * Sticky broadcast of the current lid state
+     */
+    public final static String ACTION_LID_STATE_CHANGED = "android.intent.action.LID_STATE_CHANGED";
+
+    /**
+     * Extra in {@link #ACTION_LID_STATE_CHANGED} indicating the state:
+     * See {@link #LID_ABSENT}, {@link #LID_CLOSED}, and {@link #LID_OPEN}.
+     */
+    public final static String EXTRA_LID_STATE = "state";
+
+    /**
      * Interface to the Window Manager state associated with a particular
      * window.  You can hold on to an instance of this interface from the call
      * to prepareAddWindow() until removeWindow().

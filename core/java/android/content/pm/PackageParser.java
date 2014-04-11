@@ -29,6 +29,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PatternMatcher;
 import android.os.UserHandle;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -38,6 +39,7 @@ import android.util.TypedValue;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -51,6 +53,7 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,6 +64,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.android.internal.util.XmlUtils;
 
@@ -79,6 +83,17 @@ public class PackageParser {
 
     /** File name in an APK for the Android manifest. */
     private static final String ANDROID_MANIFEST_FILENAME = "AndroidManifest.xml";
+    /** Path to overlay directory in a theme APK */
+    private static final String OVERLAY_PATH = "assets/overlays/";
+    /** Path to icon directory in a theme APK */
+    private static final String ICON_PATH = "assets/icons/";
+
+    private static final String PACKAGE_REDIRECTIONS_XML = "res/xml/redirections.xml";
+
+    private static final String TAG_PACKAGE_REDIRECTIONS = "package-redirections";
+    private static final String TAG_RESOURCE_REDIRECTIONS = "resource-redirections";
+    private static final String TAG_ITEM = "item";
+    private static final String ATTRIBUTE_ITEM_NAME = "name";
 
     /** @hide */
     public static class NewPermissionInfo {
@@ -262,17 +277,6 @@ public class PackageParser {
     }
     */
 
-    public static String getLockedZipFilePath(String path) {
-        if (path == null) {
-            return null;
-        }
-        if (isPackageFilename(path)) {
-            return path.substring(0, path.length() - 4) + ".locked.zip";
-        } else {
-            return path + ".locked.zip";
-        }
-    }
-
     /**
      * Generate and return the {@link PackageInfo} for a parsed package.
      *
@@ -314,17 +318,26 @@ public class PackageParser {
         pi.sharedUserId = p.mSharedUserId;
         pi.sharedUserLabel = p.mSharedUserLabel;
         pi.isThemeApk = p.mIsThemeApk;
-        pi.setDrmProtectedThemeApk(false);
+        pi.hasIconPack = p.hasIconPack;
+        pi.isLegacyThemeApk = p.mIsLegacyThemeApk;
+
         if (pi.isThemeApk) {
+            pi.mOverlayTargets = p.mOverlayTargets;
             int N = p.mThemeInfos.size();
             if (N > 0) {
                 pi.themeInfos = new ThemeInfo[N];
                 for (int i = 0; i < N; i++) {
                     pi.themeInfos[i] = p.mThemeInfos.get(i);
-                    pi.setDrmProtectedThemeApk(pi.isDrmProtectedThemeApk() || pi.themeInfos[i].isDrmProtected);
                 }
-                if (pi.isDrmProtectedThemeApk()) {
-                    pi.setLockedZipFilePath(PackageParser.getLockedZipFilePath(p.mPath));
+            }
+        }
+        if (pi.isLegacyThemeApk) {
+            pi.mOverlayTargets = p.mOverlayTargets;
+            int N = p.mLegacyThemeInfos.size();
+            if (N > 0) {
+                pi.legacyThemeInfos = new LegacyThemeInfo[N];
+                for (int i = 0; i < N; i++) {
+                    pi.legacyThemeInfos[i] = p.mLegacyThemeInfos.get(i);
                 }
             }
         }
@@ -336,6 +349,7 @@ public class PackageParser {
         }
         pi.restrictedAccountType = p.mRestrictedAccountType;
         pi.requiredAccountType = p.mRequiredAccountType;
+        pi.overlayTarget = p.mOverlayTarget;
         pi.firstInstallTime = firstInstallTime;
         pi.lastUpdateTime = lastUpdateTime;
         if ((flags&PackageManager.GET_GIDS) != 0) {
@@ -521,6 +535,11 @@ public class PackageParser {
 
     public Package parsePackage(File sourceFile, String destCodePath,
             DisplayMetrics metrics, int flags) {
+        return parsePackage(sourceFile, destCodePath, metrics, flags, true);
+    }
+
+    public Package parsePackage(File sourceFile, String destCodePath,
+            DisplayMetrics metrics, int flags, boolean trustedOverlay) {
         mParseError = PackageManager.INSTALL_SUCCEEDED;
 
         mArchiveSourcePath = sourceFile.getPath();
@@ -573,7 +592,7 @@ public class PackageParser {
         Exception errorException = null;
         try {
             // XXXX todo: need to figure out correct configuration.
-            pkg = parsePackage(res, parser, flags, errorText);
+            pkg = parsePackage(res, parser, flags, trustedOverlay, errorText);
         } catch (Exception e) {
             errorException = e;
             mParseError = PackageManager.INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION;
@@ -610,7 +629,284 @@ public class PackageParser {
         //pkg.applicationInfo.publicSourceDir = destRes;
         pkg.mSignatures = null;
 
+        // If the pkg is a theme, we need to know what themes it overlays
+        // and determine if it has an icon pack
+        if (pkg.mIsThemeApk) {
+            //Determine existance of Overlays
+            ArrayList<String> overlayTargets = scanPackageOverlays(sourceFile);
+            for(String overlay : overlayTargets) {
+                pkg.mOverlayTargets.add(overlay);
+            }
+
+            pkg.hasIconPack = packageHasIconPack(sourceFile);
+        }
+
+        if (pkg.mIsLegacyThemeApk) {
+            pkg.mPackageRedirections = scanPackageRedirections(sourceFile, res, pkg.packageName);
+            Set<String> overlayTargets = pkg.mPackageRedirections.keySet();
+            for (String target : overlayTargets) {
+                pkg.mOverlayTargets.add(target);
+            }
+        }
+
         return pkg;
+    }
+
+
+    private ArrayList<String> scanPackageOverlays(File originalFile) {
+        Set<String> overlayTargets = new HashSet<String>();
+
+        try {
+            final ZipFile privateZip = new ZipFile(originalFile.getPath());
+            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+            while (privateZipEntries.hasMoreElements()) {
+                final ZipEntry zipEntry = privateZipEntries.nextElement();
+                final String zipEntryName = zipEntry.getName();
+
+                if (zipEntryName.startsWith(OVERLAY_PATH) && zipEntryName.length() > 16) {
+                    String[] subdirs = zipEntryName.split("/");
+                    overlayTargets.add(subdirs[2]);
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            overlayTargets.clear();
+        }
+
+        ArrayList<String> overlays = new ArrayList<String>();
+        overlays.addAll(overlayTargets);
+        return overlays;
+    }
+
+    private boolean packageHasIconPack(File originalFile) {
+        try {
+            final ZipFile privateZip = new ZipFile(originalFile.getPath());
+            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+            while (privateZipEntries.hasMoreElements()) {
+                final ZipEntry zipEntry = privateZipEntries.nextElement();
+                final String zipEntryName = zipEntry.getName();
+
+                if (zipEntryName.startsWith(ICON_PATH) && zipEntryName.length() > ICON_PATH.length()) {
+                    return true;
+                }
+            }
+        } catch(Exception e) {
+            Log.e(TAG, "Could not read zip entries while checking if apk has icon pack", e);
+        }
+        return false;
+    }
+
+    private Map<String, Map<String, String>> scanPackageRedirections(File originalFile, Resources res, String themePkgName) {
+        AssetManager am = new AssetManager();
+        am.addAssetPath(originalFile.getAbsolutePath());
+        Resources themeResources = new Resources(am, res.getDisplayMetrics(), res.getConfiguration());
+        Map<String, String> pkgRedirectionsMap = getPackageRedirections(am, themeResources);
+        if (pkgRedirectionsMap == null)
+            pkgRedirectionsMap = new HashMap<String, String>();
+        // Unfortunately, some legacy themes don't provide a list of package redirections
+        // so we must search the theme apk's res/xml/ and use that list to decide which
+        // packages have resources to be redirected.
+        List<String> packageRedirections = getRedirectionFiles(originalFile);
+        for (String s : packageRedirections) {
+            if (!pkgRedirectionsMap.containsValue(s))
+                pkgRedirectionsMap.put(xmlNameToPackageName(s), s);
+        }
+
+        Set<String> keys = pkgRedirectionsMap.keySet();
+        Map<String, Map<String, String>> redirectionsMap = new HashMap<String, Map<String, String>>();
+        for (String key : keys) {
+            Map<String, String> resRedirectionsMap =
+                    getResourceRedirections(pkgRedirectionsMap.get(key), key, themeResources, themePkgName);
+            if (resRedirectionsMap != null) redirectionsMap.put(key, resRedirectionsMap);
+        }
+        return redirectionsMap;
+    }
+
+
+    /**
+     * Processes redirections.xml and generates a mapping of the various package
+     * redirection xmls and the package they map to.
+     * @return
+     */
+    private Map<String, String> getPackageRedirections(AssetManager am, Resources themeResources) {
+        Map<String, String> redirectionsMap = new HashMap<String, String>();
+        try {
+            XmlResourceParser parser = am.openXmlResourceParser(PACKAGE_REDIRECTIONS_XML);
+            int type;
+            while ((type=parser.next()) != XmlPullParser.END_DOCUMENT) {
+                switch (type) {
+                    case XmlPullParser.START_DOCUMENT:
+                    {
+                        break;
+                    }
+                    case XmlPullParser.START_TAG:
+                    {
+                        String name = parser.getName();
+                        if (TAG_PACKAGE_REDIRECTIONS.equals(name)) {
+                            String pkg = "";
+                            String res = "";
+
+                            for (int i=0,size=parser.getAttributeCount();i!=size;++i) {
+                                if ("name".equals(parser.getAttributeName(i))) {
+                                    pkg = parser.getAttributeValue(i);
+                                } else if ("resource".equals(parser.getAttributeName(i))) {
+                                    res = parser.getAttributeValue(i);
+                                    if (res.startsWith("@")) {
+                                        // since we are reading an Android binary XML, the value
+                                        // after @ is a resource ID so we need to use that to get
+                                        // the resource type and resource name this ID belongs to
+                                        int resId = Integer.parseInt(res.substring(1));
+                                        String resName = themeResources.getResourceEntryName(resId);
+                                        String resType = themeResources.getResourceTypeName(resId);
+                                        res = "res" + File.separator + resType + File.separator
+                                                + resName + ".xml";
+                                    }
+                                }
+                            }
+                            if (!TextUtils.isEmpty(pkg) && !TextUtils.isEmpty(res)) {
+                                redirectionsMap.put(pkg, res);
+                            }
+                        }
+                        break;
+                    }
+                    case XmlPullParser.END_TAG:
+                    {
+                        break;
+                    }
+                    case XmlPullParser.TEXT:
+                    {
+                        break;
+                    }
+                }
+            }
+        } catch (XmlPullParserException e) {
+            return null;
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            return null;
+        }
+
+        return (redirectionsMap != null && redirectionsMap.size() > 0) ? redirectionsMap : null;
+    }
+
+    /**
+     * Process an xml file with redirections for a given package
+     * @param name xml asset to parse
+     * @param pkg Name of the package this xml maps to
+     * @return True if the asset was successfully processed
+     */
+    private Map<String, String> getResourceRedirections(String name, String pkg, Resources themeResources, String themePkgName) {
+        AssetManager am = themeResources.getAssets();
+        if (!name.startsWith("res/"))
+            name = "res/" + name;
+        if (!name.endsWith(".xml"))
+            name = name + ".xml";
+        XmlResourceParser parser = null;
+        int type;
+
+        Map<String, String> redirections = new HashMap<String, String>();
+        try {
+            parser = themeResources.getAssets().openXmlResourceParser(name);
+            String overlay = null;
+            String target = null;
+            while ((type=parser.next()) != XmlPullParser.END_DOCUMENT) {
+                switch (type) {
+                    case XmlPullParser.START_DOCUMENT:
+                        break;
+                    case XmlPullParser.START_TAG:
+                        if (TAG_ITEM.equals(parser.getName())) {
+                            for (int i=0,size=parser.getAttributeCount();i!=size;++i) {
+                                if (ATTRIBUTE_ITEM_NAME.equals(parser.getAttributeName(i)))
+                                    target = parser.getAttributeValue(i);
+                            }
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (TAG_ITEM.equals(parser.getName()))
+                            target = null;
+                        break;
+                    case XmlPullParser.TEXT:
+                        if (target != null) {
+                            overlay = parser.getText();
+                            // remove @ in overlay name
+                            if (overlay.startsWith("@")) {
+                                overlay = overlay.substring(1);
+                            }
+                            // check that the resource types match and exist before adding it to the
+                            // redirections map.
+                            if (typesMatch(target, overlay) && resourceExists(overlay, themePkgName, themeResources)) {
+                                redirections.put(target, overlay);
+                            }
+                        }
+                        break;
+                }
+            }
+        } catch (XmlPullParserException e) {
+            // TODO: remove printing of stack trace
+            e.printStackTrace();
+            return null;
+        } catch (IOException e1) {
+            // TODO: remove printing of stack trace
+            e1.printStackTrace();
+            return null;
+        }
+        parser.close();
+        return redirections;
+    }
+
+    private boolean resourceExists(String overlay, String pkg, Resources themeResources) {
+        int overlayIndex = overlay.indexOf('/');
+        if (overlayIndex >= 0) {
+            final String type = overlay.substring(0, overlayIndex);
+            final String name = overlay.substring(overlayIndex+1);
+            int id = themeResources.getIdentifier(name, type, pkg);
+            return id != 0;
+        }
+        return false;
+    }
+
+    private boolean typesMatch(String target, String overlay) {
+        int targetIndex = target.indexOf('/');
+        int overlayIndex = overlay.indexOf('/');
+        if (targetIndex >= 0 && overlayIndex >=0) {
+            final String targetType = target.substring(0, targetIndex);
+            final String overlayType = overlay.substring(0, overlayIndex);
+            return targetType.equals(overlayType);
+        }
+        return false;
+    }
+
+    private List<String> getRedirectionFiles(File originalFile) {
+        List<String> redirectionsList = new ArrayList<String>();
+        final ZipFile zip;
+        try {
+            zip = new ZipFile(originalFile);
+            final Enumeration<? extends ZipEntry> entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                final ZipEntry entry = entries.nextElement();
+                final String entryName = entry.getName();
+                if (entryName.startsWith("res/xml/") && !entryName.contains(PACKAGE_REDIRECTIONS_XML)) {
+                    redirectionsList.add(entryName);
+                }
+            }
+            zip.close();
+        } catch (IOException e) {
+            return null;
+        }
+        return redirectionsList;
+    }
+
+    private String xmlNameToPackageName(String xmlName) {
+        if (xmlName == null || !xmlName.endsWith(".xml"))
+            return null;
+
+        final int lastSeparator = xmlName.lastIndexOf('/');
+        if (lastSeparator >= 0) {
+            xmlName = xmlName.substring(lastSeparator + 1);
+        }
+        xmlName = xmlName.substring(0, xmlName.lastIndexOf('.'));
+        return xmlName.replace('_', '.');
     }
 
     /**
@@ -986,8 +1282,8 @@ public class PackageParser {
     }
 
     private Package parsePackage(
-        Resources res, XmlResourceParser parser, int flags, String[] outError)
-        throws XmlPullParserException, IOException {
+        Resources res, XmlResourceParser parser, int flags, boolean trustedOverlay,
+        String[] outError) throws XmlPullParserException, IOException {
         AttributeSet attrs = parser;
 
         mParseInstrumentationArgs = null;
@@ -1011,6 +1307,8 @@ public class PackageParser {
         }
 
         final Package pkg = new Package(pkgName);
+        Bundle metaDataBundle = new Bundle();
+
         boolean foundApp = false;
         
         TypedArray sa = res.obtainAttributes(attrs,
@@ -1086,6 +1384,31 @@ public class PackageParser {
                 if (!parseApplication(pkg, res, parser, attrs, flags, outError)) {
                     return null;
                 }
+            } else if (tagName.equals("overlay")) {
+                pkg.mTrustedOverlay = trustedOverlay;
+
+                sa = res.obtainAttributes(attrs,
+                        com.android.internal.R.styleable.AndroidManifestResourceOverlay);
+                pkg.mOverlayTarget = sa.getString(
+                        com.android.internal.R.styleable.AndroidManifestResourceOverlay_targetPackage);
+                pkg.mOverlayPriority = sa.getInt(
+                        com.android.internal.R.styleable.AndroidManifestResourceOverlay_priority,
+                        -1);
+                sa.recycle();
+
+                if (pkg.mOverlayTarget == null) {
+                    outError[0] = "<overlay> does not specify a target package";
+                    mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                    return null;
+                }
+                if (pkg.mOverlayPriority < 0 || pkg.mOverlayPriority > 9999) {
+                    outError[0] = "<overlay> priority must be between 0 and 9999";
+                    mParseError =
+                        PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                    return null;
+                }
+                XmlUtils.skipCurrentTag(parser);
+
             } else if (tagName.equals("keys")) {
                 if (!parseKeys(pkg, res, parser, attrs, outError)) {
                     return null;
@@ -1361,10 +1684,15 @@ public class PackageParser {
                 // Just skip this tag
                 XmlUtils.skipCurrentTag(parser);
                 continue;
+                
+            } else if (parser.getName().equals("meta-data")) {
+                if ((metaDataBundle=parseMetaData(res, parser, attrs, metaDataBundle,
+                        outError)) == null) {
+                    return null;
+                }
             } else if (tagName.equals("theme")) {
-                // this is a theme apk.
-                pkg.mIsThemeApk = true;
-                pkg.mThemeInfos.add(new ThemeInfo(parser, res, attrs));
+                pkg.mIsLegacyThemeApk = true;
+                pkg.mLegacyThemeInfos.add(new LegacyThemeInfo(parser, res, attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();
@@ -1455,7 +1783,7 @@ public class PackageParser {
                         >= android.os.Build.VERSION_CODES.DONUT)) {
             pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES;
         }
-        if (pkg.mIsThemeApk) {
+        if (pkg.mIsThemeApk || pkg.mIsLegacyThemeApk) {
             pkg.applicationInfo.isThemeable = false;
         }
 
@@ -1470,6 +1798,20 @@ public class PackageParser {
             }
         }
 
+        //Is this pkg a theme?
+        if (metaDataBundle.containsKey(ThemeInfo.META_TAG_NAME)) {
+            pkg.mIsThemeApk = true;
+            pkg.mTrustedOverlay = true;
+            pkg.mOverlayPriority = 1;
+            pkg.mThemeInfos.add(new ThemeInfo(metaDataBundle));
+        }
+
+        // Is this pkg a legacy theme
+        if (pkg.mIsLegacyThemeApk) {
+            pkg.mIsThemeApk = true;
+            pkg.mTrustedOverlay = true;
+            pkg.mOverlayPriority = 1;
+        }
         return pkg;
     }
 
@@ -1902,28 +2244,11 @@ public class PackageParser {
         return a;
     }
 
-    private void parseApplicationThemeAttributes(XmlPullParser parser, AttributeSet attrs,
-            ApplicationInfo appInfo) {
-        for (int i = 0; i < attrs.getAttributeCount(); i++) {
-            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
-                continue;
-            }
-            String attrName = attrs.getAttributeName(i);
-            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
-                appInfo.isThemeable = attrs.getAttributeBooleanValue(i, false);
-                return;
-            }
-        }
-    }
-
     private void parseActivityThemeAttributes(XmlPullParser parser, AttributeSet attrs,
-            ActivityInfo ai) {
+                                              ActivityInfo ai) {
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
-            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
-                continue;
-            }
             String attrName = attrs.getAttributeName(i);
-            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
+            if (attrName.equalsIgnoreCase(ApplicationInfo.HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
                 ai.configChanges |= ActivityInfo.CONFIG_THEME_RESOURCE;
             }
         }
@@ -1937,7 +2262,6 @@ public class PackageParser {
 
         // assume that this package is themeable unless explicitly set to false.
         ai.isThemeable = true;
-        parseApplicationThemeAttributes(parser, attrs, ai);
 
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -3582,10 +3906,19 @@ public class PackageParser {
 
         // Is Theme Apk
         public boolean mIsThemeApk = false;
+        public final ArrayList<String> mOverlayTargets = new ArrayList<String>(0);
+        public Map<String, Map<String, String>> mPackageRedirections
+                = new HashMap<String, Map<String, String>>();
 
         // Theme info
         public final ArrayList<ThemeInfo> mThemeInfos = new ArrayList<ThemeInfo>(0);
-        
+
+        // Legacy theme
+        public boolean mIsLegacyThemeApk = false;
+        public final ArrayList<LegacyThemeInfo> mLegacyThemeInfos = new ArrayList<LegacyThemeInfo>(0);
+        public final Map<String, String> mLegacyThemePackageRedirections =
+                new HashMap<String, String>();
+
         // // User set enabled state.
         // public int mSetEnabled = PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
         //
@@ -3625,6 +3958,12 @@ public class PackageParser {
          * same as another.
          */
         public ManifestDigest manifestDigest;
+
+        public String mOverlayTarget;
+        public int mOverlayPriority;
+        public boolean mTrustedOverlay;
+
+        public boolean hasIconPack;
 
         /**
          * Data used to feed the KeySetManager

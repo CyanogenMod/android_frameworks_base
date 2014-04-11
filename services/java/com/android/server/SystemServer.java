@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
- * Copyright (c) 2012, 2013. The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012, 2013, 2014. The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,14 +28,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
+import android.content.pm.ThemeUtils;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.database.ContentObserver;
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
+import android.net.INetworkPolicyManager;
+import android.net.INetworkStatsService;
+import android.os.IBinder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.INetworkManagementService;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StrictMode;
@@ -54,6 +60,7 @@ import android.view.WindowManager;
 import com.android.internal.R;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.SamplingProfilerIntegration;
+import com.android.internal.util.MemInfoReader;
 import com.android.server.accessibility.AccessibilityManagerService;
 import com.android.server.accounts.AccountManagerService;
 import com.android.server.am.ActivityManagerService;
@@ -85,6 +92,9 @@ import dalvik.system.Zygote;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import dalvik.system.PathClassLoader;
+import java.lang.reflect.Constructor;
 
 class ServerThread {
     private static final String TAG = "SystemServer";
@@ -186,6 +196,7 @@ class ServerThread {
         NetworkStatsService networkStats = null;
         NetworkPolicyManagerService networkPolicy = null;
         ConnectivityService connectivity = null;
+        Object qcCon = null;
         WifiP2pService wifiP2p = null;
         WifiService wifi = null;
         NsdService serviceDiscovery= null;
@@ -419,6 +430,7 @@ class ServerThread {
         PrintManagerService printManager = null;
         GestureService gestureService = null;
         MediaRouterService mediaRouter = null;
+        ThemeService themeService = null;
         EdgeGestureService edgeGestureService = null;
 
         // Bring up services needed for UI.
@@ -572,19 +584,48 @@ class ServerThread {
                     reportWtf("starting Wi-Fi Service", e);
                 }
 
-                try {
-                    Slog.i(TAG, "Connectivity Service");
-                    connectivity = new ConnectivityService(
-                            context, networkManagement, networkStats, networkPolicy);
-                    ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);
-                    networkStats.bindConnectivityManager(connectivity);
-                    networkPolicy.bindConnectivityManager(connectivity);
+               try {
+                   int enableCne = 1;
+                   if (!deviceHasSufficientMemory()) {
+                       enableCne = SystemProperties.getInt("persist.cne.override.memlimit", 0);
+                   }
+                   int cneFeature = (enableCne == 1) ?
+                       SystemProperties.getInt("persist.cne.feature", 0) : 0;
 
-                    wifiP2p.connectivityServiceReady();
-                    wifi.checkAndStartWifi();
-                } catch (Throwable e) {
-                    reportWtf("starting Connectivity Service", e);
-                }
+                   try {
+                       if ( cneFeature > 0 && cneFeature < 10 ) {
+                           Slog.i(TAG, "QcConnectivity Service");
+                           PathClassLoader qcsClassLoader =
+                               new PathClassLoader("/system/framework/services-ext.jar",
+                                       ClassLoader.getSystemClassLoader());
+                           Class qcsClass =
+                               qcsClassLoader.loadClass("com.android.server.QcConnectivityService");
+                           Constructor qcsConstructor = qcsClass.getConstructor
+                               (new Class[] {Context.class, INetworkManagementService.class,
+                                INetworkStatsService.class, INetworkPolicyManager.class});
+                           qcCon = qcsConstructor.newInstance(
+                                   context, networkManagement, networkStats, networkPolicy);
+                           connectivity = (ConnectivityService) qcCon;
+                       } else {
+                           Slog.i(TAG, "Connectivity Service");
+                           connectivity = new ConnectivityService( context, networkManagement,
+                                   networkStats, networkPolicy);
+                       }
+                   } catch (Throwable e) {
+                       connectivity = new ConnectivityService( context, networkManagement,
+                               networkStats, networkPolicy);
+                   }
+
+                   if (connectivity != null) {
+                       ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);
+                       networkStats.bindConnectivityManager(connectivity);
+                       networkPolicy.bindConnectivityManager(connectivity);
+                       wifi.checkAndStartWifi();
+                       wifiP2p.connectivityServiceReady();
+                   }
+               } catch (Throwable e) {
+                   reportWtf("starting Connectivity Service", e);
+               }
 
                 try {
                     Slog.i(TAG, "Network Service Discovery Service");
@@ -850,7 +891,7 @@ class ServerThread {
                 }
             }
 
-            if (!disableNonCoreServices && 
+            if (!disableNonCoreServices &&
                 context.getResources().getBoolean(R.bool.config_dreamsSupported)) {
                 try {
                     Slog.i(TAG, "Dreams Service");
@@ -898,6 +939,13 @@ class ServerThread {
                 reportWtf("starting Print Service", e);
             }
 
+            try {
+                Slog.i(TAG, "Theme Service");
+                themeService = new ThemeService(context);
+                ServiceManager.addService(Context.THEME_SERVICE, themeService);
+            } catch (Throwable e) {
+                reportWtf("starting Theme Service", e);
+            }
             if (!disableNonCoreServices) {
                 try {
                     Slog.i(TAG, "Media Router Service");
@@ -908,12 +956,6 @@ class ServerThread {
                 }
             }
 
-            try {
-                Slog.i(TAG, "AssetRedirectionManager Service");
-                ServiceManager.addService("assetredirection", new AssetRedirectionManagerService(context));
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting AssetRedirectionManager Service", e);
-            }
 
             try {
                 Slog.i(TAG, "EdgeGesture service");
@@ -1047,6 +1089,7 @@ class ServerThread {
         filter.addAction(Intent.ACTION_APP_LAUNCH_FAILURE_RESET);
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addAction(ThemeUtils.ACTION_THEME_CHANGED);
         filter.addCategory(Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE);
         filter.addDataScheme("package");
         context.registerReceiver(new AppsLaunchFailureReceiver(), filter);
@@ -1081,6 +1124,7 @@ class ServerThread {
         final MSimTelephonyRegistry msimTelephonyRegistryF = msimTelephonyRegistry;
         final PrintManagerService printManagerF = printManager;
         final MediaRouterService mediaRouterF = mediaRouter;
+        final IPackageManager pmf = pm;
 
         // We now tell the activity manager it is okay to run third party
         // code.  It will call back into us once it has gotten to the state
@@ -1245,6 +1289,15 @@ class ServerThread {
                 } catch (Throwable e) {
                     reportWtf("Notifying MediaRouterService running", e);
                 }
+
+                try {
+                    CustomTheme customTheme = CustomTheme.getBootTheme(contextF.getContentResolver());
+                    String iconPkg = customTheme.getIconPackPkgName();
+                    pmf.updateIconMapping(iconPkg);
+                } catch (Throwable e) {
+                    reportWtf("Icon Mapping failed", e);
+                }
+
             }
         });
 
@@ -1263,6 +1316,17 @@ class ServerThread {
                     "com.android.systemui.SystemUIService"));
         //Slog.d(TAG, "Starting service: " + intent);
         context.startServiceAsUser(intent, UserHandle.OWNER);
+    }
+
+    private static final boolean deviceHasSufficientMemory() {
+        final long MEMORY_SIZE_MIN = 512 * 1024 * 1024;
+
+        MemInfoReader minfo = new MemInfoReader();
+        minfo.readMemInfo();
+        if (minfo.getTotalSize() <= MEMORY_SIZE_MIN) {
+            return false;
+        }
+        return true;
     }
 }
 
