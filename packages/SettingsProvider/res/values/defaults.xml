@@ -180,4 +180,6 @@
     <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
     <integer name="def_battery_style">0</integer>
 
+    <!-- Default value of Settings.System.NOISE_SUPPRESSION -->
+    <bool name="def_noise_suppression">false</bool>
 </resources>
