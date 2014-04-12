@@ -141,8 +141,7 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
 
     public void resetState() {
         if (mShowDefaultMessage) {
-            mSecurityMessageDisplay.setMessage(
-                    getSecurityMessageDisplay(R.string.kg_sim_pin_instructions), true);
+            showDefaultMessage();
         }
         mPasswordEntry.setEnabled(true);
     }
@@ -235,15 +234,15 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
                             } else {
                                 mShowDefaultMessage = false;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    mRemainingAttempts = attemptsRemaining;
+                                    // show message
+                                    mSecurityMessageDisplay.setMessage(
+                                            getSecurityMessageDisplay(
+                                            getPinPasswordErrorMessage(
+                                            attemptsRemaining)), true);
                                     if (attemptsRemaining <= 2) {
                                         // this is getting critical - show dialog
                                         getSimRemainingAttemptsDialog(attemptsRemaining).show();
-                                    } else {
-                                        // show message
-                                        mSecurityMessageDisplay.setMessage(
-                                                getSecurityMessageDisplay(
-                                                getPinPasswordErrorMessage(
-                                                attemptsRemaining)), true);
                                     }
                                 } else {
                                     // "PIN operation failed!" - no idea what this was and no way to
@@ -281,5 +280,23 @@ public class MSimKeyguardSimPinView extends KeyguardSimPinView {
                 KeyguardUpdateMonitor.getInstance(mContext).getPinLockedSubscription()+1,msg);
     }
 
+    @Override
+    protected void showDefaultMessage() {
+        if (mRemainingAttempts >= 0) {
+            mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay(
+                    getPinDefaultMessage(mRemainingAttempts)), true);
+            return;
+        }
+        int sub = KeyguardUpdateMonitor.getInstance(mContext).getPinLockedSubscription();
+        new MSimCheckSimPin("", sub) {
+            void onSimCheckResponse(final int result, final int attemptsRemaining) {
+                if (attemptsRemaining >= 0) {
+                    mRemainingAttempts = attemptsRemaining;
+                    mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay(
+                            getPinDefaultMessage(attemptsRemaining)), true);
+                }
+            }
+        }.start();
+    }
 }
 

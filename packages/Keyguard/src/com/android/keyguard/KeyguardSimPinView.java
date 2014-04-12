@@ -53,6 +53,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     protected ProgressDialog mSimUnlockProgressDialog = null;
     private CheckSimPin mCheckSimPinThread;
     protected boolean mShowDefaultMessage = true;
+    protected int mRemainingAttempts = -1;
     protected AlertDialog mRemainingAttemptsDialog;
     public KeyguardSimPinView(Context context) {
         this(context, null);
@@ -76,7 +77,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     public void resetState() {
         if (mShowDefaultMessage) {
-            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+            showDefaultMessage();
         }
         mPasswordEntry.setEnabled(true);
     }
@@ -98,6 +99,21 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
         return displayMessage;
     }
 
+    protected String getPinDefaultMessage(int attemptsRemaining) {
+        String displayMessage = getContext().getString(R.string.kg_sim_pin_instructions);
+
+        if (attemptsRemaining == 0) {
+            displayMessage = getContext().getString(R.string.kg_password_wrong_pin_code_pukked);
+        } else if (attemptsRemaining > 0) {
+            displayMessage = getContext().getResources()
+                    .getQuantityString(R.plurals.kg_password_default_pin_message,
+                    attemptsRemaining, attemptsRemaining);
+        }
+        if (DEBUG) Log.d(LOG_TAG, "getPinDefaultMessage:"
+                + " attemptsRemaining=" + attemptsRemaining
+                + " displayMessage=" + displayMessage);
+        return displayMessage;
+    }
 
     @Override
     protected boolean shouldLockout(long deadline) {
@@ -159,6 +175,14 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     @Override
     public void showUsabilityHint() {
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mShowDefaultMessage) {
+            showDefaultMessage();
+        }
     }
 
     @Override
@@ -265,14 +289,14 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                                 mCallback.dismiss(true);
                             } else {
                                 mShowDefaultMessage = false;
+                                mRemainingAttempts = attemptsRemaining;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    // show message
+                                    mSecurityMessageDisplay.setMessage(
+                                            getPinPasswordErrorMessage(attemptsRemaining), true);
                                     if (attemptsRemaining <= 2) {
                                         // this is getting critical - show dialog
                                         getSimRemainingAttemptsDialog(attemptsRemaining).show();
-                                    } else {
-                                        // show message
-                                        mSecurityMessageDisplay.setMessage(
-                                                getPinPasswordErrorMessage(attemptsRemaining), true);
                                     }
                                 } else {
                                     // "PIN operation failed!" - no idea what this was and no way to
@@ -293,6 +317,23 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
             };
             mCheckSimPinThread.start();
         }
+    }
+
+    protected void showDefaultMessage() {
+        if (mRemainingAttempts >= 0) {
+            mSecurityMessageDisplay.setMessage(
+                    getPinDefaultMessage(mRemainingAttempts), true);
+            return;
+        }
+        new CheckSimPin("") {
+            void onSimCheckResponse(final int result, final int attemptsRemaining) {
+                 if (attemptsRemaining >= 0) {
+                    mRemainingAttempts = attemptsRemaining;
+                    mSecurityMessageDisplay.setMessage(
+                            getPinDefaultMessage(attemptsRemaining), true);
+                }
+            }
+        }.start();
     }
 }
 
