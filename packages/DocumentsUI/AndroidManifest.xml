@@ -9,9 +9,10 @@
         android:label="@string/app_label"
         android:supportsRtl="true">
 
-        <!-- TODO: allow rotation when state saving is in better shape -->
+        <!-- TODO: allow rotation when state saving is in better shape. -->
         <activity
             android:name=".DocumentsActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme"
             android:icon="@drawable/ic_doc_text">
             <intent-filter android:priority="100">
