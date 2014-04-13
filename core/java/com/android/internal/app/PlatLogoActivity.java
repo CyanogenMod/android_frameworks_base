@@ -105,7 +105,7 @@ public class PlatLogoActivity extends Activity {
         tv.setPadding(p, p, p, p);
         tv.setTextColor(0xFFFFFFFF);
         tv.setGravity(Gravity.CENTER);
-        tv.setText(mIsCM ? "AxxionKat " + cmVersion);
+        tv.setText(mIsCM ? "AxxionKat " + cmVersion : "ANDROID " + Build.VERSION.RELEASE);
         tv.setVisibility(View.INVISIBLE);
 
         mContent.addView(bg);
