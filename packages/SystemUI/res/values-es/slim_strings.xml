@@ -56,6 +56,7 @@
     <string name="chamber_title">Introduce parámetros de configuración</string>
     <string name="chamber_message">Introducir un parámetro de configuración que cuyo valor sea una función "on" o "off" (checkbox) o una lista de opciones. Por ejemplo, quiet_hours_ringer o similar. Los parámtros de configuración a usar están el fichero Settings.java. CUIDADO: Esto es peligroso!</string>
     <string name="chamber_invalid">No es un parámetro correcto. Tenga cuidado.</string>
+    <string name="chamber_invalid_setting">Probar a activar/desactivar la configuración manualmente para confirmar que la opción para está acción existe en la base de datos.</string>
     <string name="chamber_checkbox">Checkbox</string>
     <string name="chamber_chk_message">Es esto un ajuste con valor "checkbox"?</string>
     <string name="chamber_int">Introducir valores</string>
@@ -139,4 +140,12 @@
     <string name="pie_phone_status_no_service">Sin servicio</string>
     <string name="pie_phone_status_airplane_mode">Modo avión activado</string>
     <string name="pie_phone_status_emergency_only">Sólo llamadas de emergencia</string>
+
+    <!-- Smart PullDown Warning -->
+    <string name="smart_pulldown_disabled">Despliegue inteligente desactivado</string>
+
+    <!-- Navigation bar IME navigation -->
+    <string name="accessibility_ime_navigation_left">Cursor izquierda</string>
+    <string name="accessibility_ime_navigation_right">Cursor derecha</string>
+
 </resources>
