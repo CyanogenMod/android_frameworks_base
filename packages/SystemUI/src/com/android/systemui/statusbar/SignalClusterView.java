@@ -314,7 +314,8 @@ public class SignalClusterView
         }
 
         if (mMobileVisible && mWifiVisible &&
-                ((mIsAirplaneMode) || (mNoSimIconId != 0))) {
+                ((mIsAirplaneMode) || (mNoSimIconId != 0) ||
+                (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT))) {
             mSpacer.setVisibility(View.INVISIBLE);
         } else {
             mSpacer.setVisibility(View.GONE);
