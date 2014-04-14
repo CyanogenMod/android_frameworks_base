@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -76,7 +75,6 @@ public class ReminderTimeDialog extends Activity  {
         final SharedPreferences shared = this.getSharedPreferences(
                 KEY_REMINDER_ACTION, Context.MODE_PRIVATE);
         final EditText title = (EditText) view.findViewById(R.id.title);
-        title.setFilters(new InputFilter[] { new InputFilter.LengthFilter(maxChar) });
         final EditText message = (EditText) view.findViewById(R.id.message);
         String titleText = shared.getString("title", null);
         String messageText = shared.getString("message", null);
@@ -95,6 +93,7 @@ public class ReminderTimeDialog extends Activity  {
         .setPositiveButton(R.string.dlg_ok,
             new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                shared.edit().putBoolean("updated", true).commit();
                 shared.edit().putString("title", title.getText().toString()).commit();
                 shared.edit().putString("message", message.getText().toString()).commit();
                 startTimerDialog();
@@ -158,7 +157,6 @@ public class ReminderTimeDialog extends Activity  {
                 Intent intent = new Intent();
                 intent.setAction(SCHEDULE_REMINDER_NOTIFY);
                 shared.edit().putBoolean("scheduled", false).commit();
-                updateView();
                 if (mCanceled == 0) {
                     reminder = PendingIntent.getBroadcast(
                             ReminderTimeDialog.this, 1, intent,
@@ -174,6 +172,7 @@ public class ReminderTimeDialog extends Activity  {
                     shared.edit().putInt("minutes", -1).commit();
                     shared.edit().putInt("day", -1).commit();
                 }
+                updateView();
                 ReminderTimeDialog.this.finish();
             };
         }, hour, minutes, DateFormat.is24HourFormat(this));

@@ -80,6 +80,11 @@
         <TextView
             android:id="@+id/title"
             android:paddingTop="8dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
             android:paddingBottom="1dp"
             android:textAllCaps="true"
             android:textSize="12dp"
@@ -89,6 +94,15 @@
             />
         <ViewFlipper
             android:id="@+id/message"
+            android:inAnimation="@anim/reminder_fade_in"
+            android:outAnimation="@anim/reminder_fade_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:paddingBottom="8dp"
+            />
+        <ViewFlipper
+            android:id="@+id/message_land"
             android:inAnimation="@anim/reminder_fade_in"
             android:outAnimation="@anim/reminder_fade_out"
             android:layout_width="wrap_content"
