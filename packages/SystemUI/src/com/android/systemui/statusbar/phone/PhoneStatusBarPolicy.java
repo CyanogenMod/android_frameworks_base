@@ -156,6 +156,10 @@ public class PhoneStatusBarPolicy {
         mService.setIconVisibility("sync_active", false);
         // "sync_failing" is obsolete: b/1297963
 
+        // VoiceWakeup state
+        mService.setIcon("voice_wakeup", R.drawable.stat_sys_voice_wakeup, 0, null);
+        mService.setIconVisibility("voice_wakeup", false);
+
         // volume
         mService.setIcon("volume", R.drawable.stat_sys_ringer_silent, 0, null);
         mService.setIconVisibility("volume", false);
