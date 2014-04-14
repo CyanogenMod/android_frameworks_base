@@ -886,7 +886,7 @@ public class PackageParser {
             while (entries.hasMoreElements()) {
                 final ZipEntry entry = entries.nextElement();
                 final String entryName = entry.getName();
-                if (entryName.startsWith("res/xml/") && !entryName.contains(PACKAGE_REDIRECTIONS_XML)) {
+                if (entryName.startsWith("res/xml") && !entryName.contains(PACKAGE_REDIRECTIONS_XML)) {
                     redirectionsList.add(entryName);
                 }
             }
