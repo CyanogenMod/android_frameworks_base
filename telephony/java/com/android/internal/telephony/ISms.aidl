@@ -329,4 +329,11 @@ interface ISms {
      * @see #isImsSmsSupported()
      */
     String getImsSmsFormat();
+
+    /**
+     * Get the capacity count of sms on Icc card.
+     *
+     * @return capacity of ICC
+     */
+    int getSmsCapacityOnIcc();
 }
