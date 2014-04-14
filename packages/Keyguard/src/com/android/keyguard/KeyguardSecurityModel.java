@@ -81,6 +81,10 @@ public class KeyguardSecurityModel {
     }
 
     SecurityMode getSecurityMode() {
+        return getSecurityMode(false);
+    }
+
+    SecurityMode getSecurityMode(boolean forceShowInsecure) {
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
         final IccCardConstants.State simState = updateMonitor.getSimState();
         final Profile profile = mProfileManager.getActiveProfile();
@@ -91,6 +95,10 @@ public class KeyguardSecurityModel {
                 && mLockPatternUtils.isPukUnlockScreenEnable()) {
             mode = SecurityMode.SimPuk;
         } else if (profile.getScreenLockModeWithDPM(mContext) != Profile.LockMode.INSECURE) {
+            if (forceShowInsecure) {
+                // Slider or sim locks are forced by user
+                return mode;
+            }
             final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
             switch (security) {
                 case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
