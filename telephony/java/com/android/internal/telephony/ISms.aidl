@@ -719,4 +719,12 @@ interface ISms {
     void sendStoredMultipartText(long subId, String callingPkg, in Uri messageUri,
                 String scAddress, in List<PendingIntent> sentIntents,
                 in List<PendingIntent> deliveryIntents);
+
+    /**
+     * Get the capacity count of sms on Icc card.
+     *
+     * @param subId for subId which getSmsCapacityOnIcc is queried.
+     * @return capacity of ICC
+     */
+    int getSmsCapacityOnIccForSubscriber(long subId);
 }
