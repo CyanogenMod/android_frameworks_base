@@ -34,6 +34,8 @@ import android.content.res.CustomTheme;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -45,12 +47,14 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.provider.ThemesContract;
 import android.util.Log;
 import android.webkit.URLUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,6 +65,8 @@ import static android.content.pm.ThemeUtils.SYSTEM_THEME_PATH;
 import static android.content.pm.ThemeUtils.THEME_BOOTANIMATION_PATH;
 
 import java.util.List;
+
+import com.android.internal.util.cm.LockscreenBackgroundUtil;
 
 /**
  * {@hide}
@@ -394,9 +400,51 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private void updateLockscreen() {
-        // TODO: implement actual behavior
-        sleepQuiet(100);
+    private boolean updateLockscreen() {
+        boolean success = false;
+        if ("default".equals(mPkgName)) {
+            Settings.System.putInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND_STYLE,
+                    LockscreenBackgroundUtil.LOCKSCREEN_STYLE_DEFAULT);
+            success = true;
+        } else {
+            success = setCustomLockScreenWallpaper();
+        }
+
+        if (success) {
+            mContext.sendBroadcast(new Intent(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED));
+        }
+        return success;
+    }
+
+    private boolean setCustomLockScreenWallpaper() {
+        try {
+            //Get input WP stream from the theme
+            Context themeCtx = mContext.createPackageContext(mPkgName, Context.CONTEXT_IGNORE_SECURITY);
+            AssetManager assetManager = themeCtx.getAssets();
+            String wpPath = ThemeUtils.getLockscreenWallpaperPath(assetManager);
+            if (wpPath == null) {
+                Log.w(TAG, "Not setting lockscreen wp because wallpaper file was not found.");
+                return false;
+            }
+            InputStream is = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/" + wpPath);
+
+            //Get outgoing wp path from settings
+            File wallpaperFile = LockscreenBackgroundUtil.getWallpaperFile(mContext);
+            wallpaperFile.createNewFile();
+            wallpaperFile.setReadable(true, false);
+            FileOutputStream out = new FileOutputStream(wallpaperFile);
+
+            //Decode bitmap to check it is ok and copy it over
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+        } catch (Exception e) {
+            Log.e(TAG, "There was an error setting lockscreen wp for pkg " + mPkgName, e);
+            return false;
+        }
+
+        Settings.System.putInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND_STYLE,
+                LockscreenBackgroundUtil.LOCKSCREEN_STYLE_IMAGE);
+        return true;
     }
 
     private boolean updateWallpaper() {
@@ -502,14 +550,6 @@ public class ThemeService extends IThemeService.Stub {
                     Log.e(TAG, "Unable to force stop package, did you forget platform signature?" ,e);
                 }
             }
-        }
-    }
-
-    private void sleepQuiet(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
