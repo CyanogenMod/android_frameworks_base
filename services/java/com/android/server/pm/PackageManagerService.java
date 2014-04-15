@@ -32,6 +32,7 @@ import static libcore.io.OsConstants.S_IXGRP;
 import static libcore.io.OsConstants.S_IROTH;
 import static libcore.io.OsConstants.S_IXOTH;
 
+import android.util.Pair;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
 import com.android.internal.content.NativeLibraryHelper;
@@ -156,6 +157,8 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
@@ -293,6 +296,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     // Where package redirections are stored for legacy themes
     private static final String REDIRECTIONS_PATH = "/data/app/redirections";
+
+    private static final long PACKAGE_HASH_EXPIRATION = 3*60*1000; // 3 minutes
 
     final HandlerThread mHandlerThread = new HandlerThread("PackageManager",
             Process.THREAD_PRIORITY_BACKGROUND);
@@ -486,6 +491,9 @@ public class PackageManagerService extends IPackageManager.Stub {
     private AppOpsManager mAppOps;
 
     private IconPackHelper mIconPackHelper;
+
+    private Map<String, Pair<Integer, Long>> mPackageHashes =
+            new HashMap<String, Pair<Integer, Long>>();
 
     // Set of pending broadcasts for aggregating enable/disable of components.
     static class PendingPackageBroadcasts {
@@ -3663,7 +3671,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
-        if (mInstaller.idmap(pkg.mScanPath, opkg.mScanPath, redirectionsPath, sharedGid) != 0) {
+        if (mInstaller.idmap(pkg.mScanPath, opkg.mScanPath, redirectionsPath, sharedGid,
+                getPackageHashCode(pkg), getPackageHashCode(opkg)) != 0) {
             Slog.e(TAG, "Failed to generate idmap for " + pkg.mScanPath + " and " + opkg.mScanPath);
             return false;
         }
@@ -5571,8 +5580,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     /**
-     * Compares the last modified time of the target and overlay to those stored
-     * in the idmap and returns true if either time differs
+     * Compares the 32 bit hash of the target and overlay to those stored
+     * in the idmap and returns true if either hash differs
      * @param targetPkg
      * @param overlayPkg
      * @return
@@ -5582,23 +5591,22 @@ public class PackageManagerService extends IPackageManager.Stub {
                                       PackageParser.Package overlayPkg) {
         if (targetPkg == null || overlayPkg == null) return false;
 
+        int targetHash = getPackageHashCode(targetPkg);
+        int overlayHash = getPackageHashCode(overlayPkg);
+
         File idmap = new File(getIdmapPath(targetPkg, overlayPkg));
         if (!idmap.exists())
             return true;
 
-        int[] mtimes;
+        int[] hashes;
         try {
-            mtimes = getIdmapTimes(idmap);
+            hashes = getIdmapHashes(idmap);
         } catch (IOException e) {
             return true;
         }
-        File f = new File(targetPkg.mPath);
-        if ((int)(f.lastModified() / 1000) != mtimes[0]) {
-            return true;
-        }
 
-        f = new File(overlayPkg.mPath);
-        if ((int)(f.lastModified() / 1000) != mtimes[1]) {
+        if (targetHash == 0 || overlayHash == 0 ||
+                targetHash != hashes[0] || overlayHash != hashes[1]) {
             return true;
         }
         return false;
@@ -5610,7 +5618,7 @@ public class PackageManagerService extends IPackageManager.Stub {
      * @return
      * @throws IOException
      */
-    private int[] getIdmapTimes(File idmap) throws IOException {
+    private int[] getIdmapHashes(File idmap) throws IOException {
         int[] times = new int[2];
         ByteBuffer bb = ByteBuffer.allocate(20);
         bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -5622,6 +5630,39 @@ public class PackageManagerService extends IPackageManager.Stub {
         times[1] = ib.get(4);
 
         return times;
+    }
+
+    /**
+     * Get a 32 bit hashcode for the given package.
+     * @param pkg
+     * @return
+     */
+    private int getPackageHashCode(PackageParser.Package pkg) {
+        Pair<Integer, Long> p = mPackageHashes.get(pkg.packageName);
+        if (p != null && (System.currentTimeMillis() - p.second < PACKAGE_HASH_EXPIRATION)) {
+            return p.first;
+        }
+        if (p != null) {
+            mPackageHashes.remove(p);
+        }
+
+        byte[] md5 = getFileMd5Sum(pkg.mPath);
+        if (md5 == null) return 0;
+
+        p = new Pair(Arrays.hashCode(md5), System.currentTimeMillis());
+        mPackageHashes.put(pkg.packageName, p);
+        return p.first;
+    }
+
+    private byte[] getFileMd5Sum(String path) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            DigestInputStream dis = new DigestInputStream(new FileInputStream(path), md);
+            dis.close();
+            return md.digest();
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     private void setUpCustomResolverActivity(PackageParser.Package pkg) {
