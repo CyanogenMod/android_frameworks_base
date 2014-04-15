@@ -9474,6 +9474,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (intent.getAction().equals(AppInterface.CHECK_SCREEN_IDLE_ACTION)) {
                 Slog.i(TAG, "ICC has requested idle screen status");
                 Intent idleScreenIntent = new Intent(AppInterface.CAT_IDLE_SCREEN_ACTION);
+                idleScreenIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 boolean isIdle = getFocusedStack().isHomeStack();
                 idleScreenIntent.putExtra("SCREEN_IDLE", isIdle);
                 Slog.i(TAG, "Broadcasting Home idle screen Intent"
