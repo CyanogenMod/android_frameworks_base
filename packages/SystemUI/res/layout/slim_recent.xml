@@ -42,6 +42,9 @@
             android:overScrollMode="never"
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
+            android:fitsSystemWindows="true"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             card:list_card_layout_resourceID="@layout/recent_base_card" />
 
         <ImageView
@@ -67,7 +70,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:src="@drawable/ic_menu_delete"
             />
 

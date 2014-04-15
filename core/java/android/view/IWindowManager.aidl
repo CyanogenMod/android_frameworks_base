@@ -297,4 +297,11 @@ interface IWindowManager
     void setSplitViewRect(int l, int t, int r, int b);
 
     /** SPLIT VIEW END **/
+   
+    /**
+     * Get current system ui visibility mode.
+     *
+     * @hide
+     */
+    int getSystemUIVisibility();
 }
