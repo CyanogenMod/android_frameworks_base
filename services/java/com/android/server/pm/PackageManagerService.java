@@ -5582,6 +5582,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                                       PackageParser.Package overlayPkg) {
         if (targetPkg == null || overlayPkg == null) return false;
 
+        // recreate idmap for system apps including framework-res.apk
+        if (targetPkg.applicationInfo.sourceDir.contains("/system/")) return true;
+
         File idmap = new File(getIdmapPath(targetPkg, overlayPkg));
         if (!idmap.exists())
             return true;
