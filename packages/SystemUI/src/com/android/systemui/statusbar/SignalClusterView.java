@@ -333,10 +333,14 @@ public class SignalClusterView
             mMobileType.setVisibility(View.GONE);
         }
 
-        if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT
-                && mNoSimIconId != 0) {
-            mNoSimSlot.setVisibility(View.VISIBLE);
-            mMobile.setVisibility(View.GONE);
+        if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT) {
+            if (mNoSimIconId != 0) {
+                mNoSimSlot.setVisibility(View.VISIBLE);
+                mMobile.setVisibility(View.GONE);
+            } else {
+                mNoSimSlot.setVisibility(View.GONE);
+                mMobile.setVisibility(View.VISIBLE);
+            }
         }
     }
 
