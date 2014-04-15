@@ -24,13 +24,17 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.RemoteException;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -77,6 +81,8 @@ public class RecentController implements RecentPanelView.OnExitListener,
     // Animation state.
     private int mAnimationState = ANIMATION_STATE_NONE;
 
+    public static float DEFAULT_SCALE_FACTOR = 1.0f;
+
     private Context mContext;
     private WindowManager mWindowManager;
     private IWindowManager mWindowManagerService;
@@ -91,6 +97,12 @@ public class RecentController implements RecentPanelView.OnExitListener,
     private LinearLayout mRecentContent;
     private LinearLayout mRecentWarningContent;
     private ImageView mEmptyRecentView;
+
+    private int mLayoutDirection;
+    private int mMainGravity;
+    private int mUserGravity;
+
+    private float mScaleFactor = DEFAULT_SCALE_FACTOR;
 
     // Main panel view.
     private RecentPanelView mRecentPanelView;
@@ -117,8 +129,9 @@ public class RecentController implements RecentPanelView.OnExitListener,
         }
     };
 
-    public RecentController(Context context) {
+    public RecentController(Context context, int layoutDirection) {
         mContext = context;
+        mLayoutDirection = layoutDirection;
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
@@ -196,6 +209,9 @@ public class RecentController implements RecentPanelView.OnExitListener,
             }
         });
 
+        // Settings observer
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe();
     }
 
     /**
@@ -204,20 +220,13 @@ public class RecentController implements RecentPanelView.OnExitListener,
      */
     public void rebuildRecentsScreen() {
         // Set new layout parameters and backgrounds.
-        if (mRecentContainer != null && mRecentContent != null
-                && mEmptyRecentView != null && mRecentWarningContent != null) {
-
+        if (mRecentContainer != null) {
             final ViewGroup.LayoutParams layoutParams = mRecentContainer.getLayoutParams();
-            layoutParams.width =
-                    mContext.getResources().getDimensionPixelSize(R.dimen.recent_width);
+            layoutParams.width = (int) (mContext.getResources()
+                    .getDimensionPixelSize(R.dimen.recent_width) * mScaleFactor);
             mRecentContainer.setLayoutParams(layoutParams);
 
-            mRecentContent.setBackgroundResource(0);
-            mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow);
-            mRecentWarningContent.setBackgroundResource(0);
-            mRecentWarningContent.setBackgroundResource(R.drawable.recent_warning_bg_dropshadow);
-            mEmptyRecentView.setImageResource(0);
-            mEmptyRecentView.setImageResource(R.drawable.ic_empty_recent);
+            setGravityAndImageResources();
         }
         // Rebuild complete adapter and lists to force style updates.
         if (mRecentPanelView != null) {
@@ -226,11 +235,56 @@ public class RecentController implements RecentPanelView.OnExitListener,
     }
 
     /**
+     * Calculate main gravity based on layout direction and user gravity value.
+     * Set and update all resources and notify the different layouts about the change.
+     */
+    private void setGravityAndImageResources() {
+        // Calculate and set gravitiy.
+        if (mLayoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            if (mUserGravity == Gravity.LEFT) {
+                mMainGravity = Gravity.RIGHT;
+            } else {
+                mMainGravity = Gravity.LEFT;
+            }
+        } else {
+            mMainGravity = mUserGravity;
+        }
+
+        // Set layout direction.
+        mRecentContainer.setLayoutDirection(mLayoutDirection);
+
+        // Reset all backgrounds.
+        mRecentContent.setBackgroundResource(0);
+        mRecentWarningContent.setBackgroundResource(0);
+        mEmptyRecentView.setImageResource(0);
+
+        // Set correct backgrounds based on calculated main gravity.
+        if (mMainGravity == Gravity.LEFT) {
+            mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow_left);
+            mRecentWarningContent.setBackgroundResource(
+                    R.drawable.recent_warning_bg_dropshadow_left);
+            mEmptyRecentView.setImageResource(R.drawable.ic_empty_recent_left);
+        } else {
+            mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow);
+            mRecentWarningContent.setBackgroundResource(
+                    R.drawable.recent_warning_bg_dropshadow);
+            mEmptyRecentView.setImageResource(R.drawable.ic_empty_recent);
+        }
+        // Notify panel view about new main gravity.
+        if (mRecentPanelView != null) {
+            mRecentPanelView.setMainGravity(mMainGravity);
+        }
+    }
+
+    /**
      * External call. Toggle recents panel.
      */
     public void toggleRecents(Display display, int layoutDirection, View statusBarView) {
         if (DEBUG) Log.d(TAG, "toggle recents panel");
-
+        if (mLayoutDirection != layoutDirection) {
+            mLayoutDirection = layoutDirection;
+            setGravityAndImageResources();
+        }
         if (mAnimationState == ANIMATION_STATE_NONE) {
             if (!isShowing()) {
                 mIsToggled = true;
@@ -288,7 +342,8 @@ public class RecentController implements RecentPanelView.OnExitListener,
      * @return LayoutParams
      */
     private WindowManager.LayoutParams generateLayoutParameter() {
-        final int width = mContext.getResources().getDimensionPixelSize(R.dimen.recent_width);
+        final int width = (int) (mContext.getResources()
+                .getDimensionPixelSize(R.dimen.recent_width) * mScaleFactor);
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 width,
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -298,16 +353,23 @@ public class RecentController implements RecentPanelView.OnExitListener,
                         | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
-        // Set animation for our recent window
-        params.windowAnimations = com.android.internal.R.style.Animation_RecentScreen;
         // Turn on hardware acceleration for high end gfx devices.
         if (ActivityManager.isHighEndGfx()) {
             params.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
             params.privateFlags |=
                     WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_HARDWARE_ACCELERATED;
         }
+
         // Set gravitiy.
-        params.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+        params.gravity = Gravity.CENTER_VERTICAL | mMainGravity;
+
+        // Set animation for our recent window.
+        if (mMainGravity == Gravity.LEFT) {
+            params.windowAnimations = com.android.internal.R.style.Animation_RecentScreen_Left;
+        } else {
+            params.windowAnimations = com.android.internal.R.style.Animation_RecentScreen;
+        }
+
         // This title is for debugging only. See: dumpsys window
         params.setTitle("RecentControlPanel");
         return params;
@@ -455,6 +517,64 @@ public class RecentController implements RecentPanelView.OnExitListener,
             mAnimationState = ANIMATION_STATE_NONE;
         }
     };
+
+    /**
+     * Settingsobserver to take care of the user settings.
+     * Either gravity or scale factor of our recent panel can change.
+     */
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENT_PANEL_GRAVITY),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENT_PANEL_SCALE_FACTOR),
+                    false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            update();
+        }
+
+        public void update() {
+            // Close recent panel if it is opened.
+            hideRecents(false);
+
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // Get user gravity.
+            mUserGravity = Settings.System.getIntForUser(
+                    resolver, Settings.System.RECENT_PANEL_GRAVITY, Gravity.RIGHT,
+                    UserHandle.USER_CURRENT);
+
+            // Set main gravity and background images.
+            setGravityAndImageResources();
+
+            // Get user scale factor.
+            float scaleFactor = Settings.System.getIntForUser(
+                    resolver, Settings.System.RECENT_PANEL_SCALE_FACTOR, 100,
+                    UserHandle.USER_CURRENT) / 100.0f;
+
+            // If changed set new scalefactor, rebuild the recent panel
+            // and notify RecentPanelView and CacheController about new value.
+            if (scaleFactor != mScaleFactor) {
+                mScaleFactor = scaleFactor;
+                rebuildRecentsScreen();
+            }
+            if (mRecentPanelView != null) {
+                mRecentPanelView.setScaleFactor(mScaleFactor);
+            }
+            CacheController.getInstance(mContext).setScaleFactor(mScaleFactor);
+        }
+    }
 
     /**
      * Extended SimpleOnScaleGestureListener to take

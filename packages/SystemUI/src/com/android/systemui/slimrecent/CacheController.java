@@ -53,6 +53,8 @@ public class CacheController {
     private static String sKeyExcludeRecycle;
     private static boolean sRecentScreenShowing;
 
+    private float mScaleFactor = 0.0f;
+
     /**
      * Get the instance.
      */
@@ -77,8 +79,10 @@ public class CacheController {
                 final String packageName = uri != null ? uri.getSchemeSpecificPart() : null;
 
                 // If we hold the app icon allready, update it with the new one.
-                if (packageName != null && getBitmapFromMemCache(packageName) != null) {
-                    AppIconLoader.getInstance(mContext).loadAppIcon(packageName, null);
+                if (packageName != null && getBitmapFromMemCache(packageName) != null
+                        && mScaleFactor > 0.0f) {
+                    AppIconLoader.getInstance(mContext).loadAppIcon(
+                            packageName, null, mScaleFactor);
                 }
             }
         }
@@ -242,4 +246,10 @@ public class CacheController {
         return sRecentScreenShowing;
     }
 
+    /**
+     * Set scale factor.
+     */
+    protected void setScaleFactor(float scaleFactor) {
+        mScaleFactor = scaleFactor;
+    }
 }

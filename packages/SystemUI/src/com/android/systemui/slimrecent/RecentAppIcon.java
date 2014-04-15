@@ -33,15 +33,27 @@ public class RecentAppIcon extends CardThumbnail {
     private Context mContext;
 
     private int mIconSize;
+    private float mScaleFactor;
+    private boolean mScaleFactorChanged;
     private String mPackageName;
 
-    public RecentAppIcon(Context context) {
+    public RecentAppIcon(Context context, String packageName, float scaleFactor) {
         super(context);
         mContext = context;
+        mPackageName = packageName;
+        mScaleFactor = scaleFactor;
+
+        mIconSize = (int) context.getResources()
+                .getDimensionPixelSize(R.dimen.recent_app_icon_size);
     }
 
-    public void updateIcon(String packageName) {
+    // Update icon.
+    public void updateIcon(String packageName, float scaleFactor) {
         mPackageName = packageName;
+        if (scaleFactor != mScaleFactor) {
+            mScaleFactorChanged = true;
+            mScaleFactor = scaleFactor;
+        }
     }
 
     /**
@@ -65,13 +77,22 @@ public class RecentAppIcon extends CardThumbnail {
         if (holder == null) {
             holder = new ViewHolder();
             holder.appIconView = (RecentImageView) view.findViewById(R.id.card_thumbnail_image);
+            // Take scale factor into account if it is different then default or it has changed.
+            if (mScaleFactor != RecentController.DEFAULT_SCALE_FACTOR || mScaleFactorChanged) {
+                mScaleFactorChanged = false;
+                final ViewGroup.LayoutParams layoutParams = holder.appIconView.getLayoutParams();
+                layoutParams.width = layoutParams.height = (int) (mIconSize * mScaleFactor);
+                holder.appIconView.setLayoutParams(layoutParams);
+            }
             view.setTag(holder);
         }
 
         final Bitmap appIcon =
                 CacheController.getInstance(mContext).getBitmapFromMemCache(mPackageName);
-        if (appIcon == null) {
-            AppIconLoader.getInstance(mContext).loadAppIcon(mPackageName, holder.appIconView);
+        if (appIcon == null || mScaleFactorChanged) {
+            mScaleFactorChanged = false;
+            AppIconLoader.getInstance(mContext).loadAppIcon(
+                    mPackageName, holder.appIconView, mScaleFactor);
         } else {
             holder.appIconView.setImageBitmap(appIcon);
         }

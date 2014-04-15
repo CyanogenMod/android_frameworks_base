@@ -17,7 +17,8 @@
 */
 -->
 
-<com.android.systemui.slimrecent.RecentImageView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_thumbnail_image"
-    style="@style/card.card_header_app_icon"/>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/decelerate_interpolator">
+    <translate android:fromXDelta="0" android:toXDelta="-100%p"
+        android:duration="@android:integer/config_recentExitDur"/>
+</set>

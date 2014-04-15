@@ -74,21 +74,22 @@ public class AppIconLoader {
      * @params packageName
      * @params imageView
      */
-    protected void loadAppIcon(String packageName, RecentImageView imageView) {
-        final BitmapDownloaderTask task = new BitmapDownloaderTask(imageView, mContext);
+    protected void loadAppIcon(String packageName, RecentImageView imageView, float scaleFactor) {
+        final BitmapDownloaderTask task =
+                new BitmapDownloaderTask(imageView, mContext, scaleFactor);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, packageName);
     }
 
     /**
      * Loads the actual app icon.
      */
-    private static Bitmap getAppIcon(String packageName, Context context) {
+    private static Bitmap getAppIcon(String packageName, Context context, float scaleFactor) {
         if (context == null) {
             return null;
         }
         PackageManager pm = context.getPackageManager();
         try {
-            return getResizedBitmap(pm.getApplicationIcon(packageName), context);
+            return getResizedBitmap(pm.getApplicationIcon(packageName), context, scaleFactor);
         } catch (PackageManager.NameNotFoundException e) {
         }
         return null;
@@ -100,13 +101,13 @@ public class AppIconLoader {
      * The reality shows that a lot apps do not care about and add just one big icon for
      * all screen resolution.
      */
-    private static Bitmap getResizedBitmap(Drawable source, Context context) {
+    private static Bitmap getResizedBitmap(Drawable source, Context context, float scaleFactor) {
         if (source == null) {
             return null;
         }
 
-        final int iconSize =
-                context.getResources().getDimensionPixelSize(R.dimen.recent_app_icon_size);
+        final int iconSize = (int) (context.getResources()
+                .getDimensionPixelSize(R.dimen.recent_app_icon_size) * scaleFactor);
 
         final Bitmap bitmap = ((BitmapDrawable) source).getBitmap();
         final Bitmap scaledBitmap = Bitmap.createBitmap(iconSize, iconSize, Config.ARGB_8888);
@@ -141,12 +142,15 @@ public class AppIconLoader {
         private final WeakReference<Context> rContext;
 
         private int mOrigPri;
+        private float mScaleFactor;
 
         private String mLRUCacheKey;
 
-        public BitmapDownloaderTask(RecentImageView imageView, Context context) {
+        public BitmapDownloaderTask(RecentImageView imageView,
+                Context context, float scaleFactor) {
             rImageViewReference = new WeakReference<RecentImageView>(imageView);
             rContext = new WeakReference<Context>(context);
+            mScaleFactor = scaleFactor;
         }
 
         @Override
@@ -161,7 +165,7 @@ public class AppIconLoader {
             }
             mLRUCacheKey = params[0];
             // Load and return bitmap
-            return getAppIcon(params[0], rContext.get());
+            return getAppIcon(params[0], rContext.get(), mScaleFactor);
         }
 
         @Override
