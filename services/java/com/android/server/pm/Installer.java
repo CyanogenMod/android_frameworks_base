@@ -342,7 +342,8 @@ public final class Installer {
         return execute(builder.toString());
     }
 
-    public int idmap(String targetApkPath, String overlayApkPath, String redirectionsPath, int uid) {
+    public int idmap(String targetApkPath, String overlayApkPath, String redirectionsPath, int uid,
+                     int targetHash, int overlayHash) {
         StringBuilder builder = new StringBuilder("idmap");
         builder.append(' ');
         builder.append(targetApkPath);
@@ -350,6 +351,10 @@ public final class Installer {
         builder.append(overlayApkPath);
         builder.append(' ');
         builder.append(uid);
+        builder.append(' ');
+        builder.append(targetHash);
+        builder.append(' ');
+        builder.append(overlayHash);
         if (redirectionsPath != null) {
             builder.append(' ');
             builder.append(redirectionsPath);
