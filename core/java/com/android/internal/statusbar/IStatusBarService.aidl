@@ -54,4 +54,10 @@ interface IStatusBarService
     void setWindowState(int window, int state);
     void setAutoRotate(boolean enabled);
     void setPieTriggerMask(int newMask, boolean lock);
+    void toggleNotificationShade();
+    void toggleQSShade();
+    void toggleScreenshot();
+    void toggleLastApp();
+    void toggleKillApp();
+    void togglePowerMenu();
 }
