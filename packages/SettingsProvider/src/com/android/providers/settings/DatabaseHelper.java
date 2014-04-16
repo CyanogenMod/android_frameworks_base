@@ -2023,19 +2023,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void loadQuickBootSetting(SQLiteDatabase db) {
-        boolean qbEnabled = true;
-        final PackageManager pm = mContext.getPackageManager();
-        try {
-            pm.getPackageInfo("com.qapp.quickboot", PackageManager.GET_META_DATA);
-        } catch (NameNotFoundException e) {
-            qbEnabled = false;
-        }
         db.beginTransaction();
         SQLiteStatement stmt = null;
         try {
             stmt = db.compileStatement("INSERT OR REPLACE INTO global(name,value)"
                     + " VALUES(?,?);");
-            loadSetting(stmt, Settings.Global.ENABLE_QUICKBOOT, qbEnabled ? 1 : 0);
+            loadSetting(stmt, Settings.Global.ENABLE_QUICKBOOT, 0);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
