@@ -6397,21 +6397,6 @@ public final class Settings {
         public static final String UI_NIGHT_MODE = "ui_night_mode";
 
         /**
-         * The current theme mode that has been selected by the user.  Owned
-         * and controlled by UiModeManagerService.
-         * @hide
-         */
-        public static final String UI_THEME_MODE = "ui_theme_mode";
-
-        /**
-         * Auto theme mode which switches either based on daytime or lightsensor
-         * values: 0 = manual (default), 1 = auto twilight (based on daytime)
-         * 2 = auto lightsensor (based on light conditions)
-         * @hide
-         */
-        public static final String UI_THEME_AUTO_MODE = "ui_theme_auto_mode";
-
-        /**
          * Whether screensavers are enabled.
          * @hide
          */
@@ -6574,8 +6559,6 @@ public final class Settings {
             MOUNT_UMS_NOTIFY_ENABLED,
             UI_NIGHT_MODE,
             ADVANCED_REBOOT,
-            UI_THEME_MODE,
-            UI_THEME_AUTO_MODE,
             PRIVACY_GUARD_DEFAULT,
             PRIVACY_GUARD_NOTIFICATION,
             DEVELOPER_OPTIONS_ENABLED,

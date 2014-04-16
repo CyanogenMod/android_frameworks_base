@@ -59,20 +59,19 @@
         <item name="android:textColor">@color/status_bar_clock_color</item>
     </style>
 
-    <style name="TextAppearance.StatusBar.Clock" parent="@*android:style/TextAppearance.StatusBar.Icon">
-        <!-- Note: must be dp to fit in status bar -->
-        <item name="android:textSize">16dp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/status_bar_clock_color</item>
-    </style>
-
-
     <style name="TextAppearance.StatusBar.Traffic" parent="@*android:style/TextAppearance.StatusBar.Icon">
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textColor">@color/status_bar_traffic_color</item>
+    </style>
+
+    <style name="TextAppearance.StatusBar.Clock" parent="@*android:style/TextAppearance.StatusBar.Icon">
+        <!-- Note: must be dp to fit in status bar -->
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/status_bar_clock_color</item>
     </style>
 
     <style name="TextAppearance.StatusBar.Expanded" parent="@*android:style/TextAppearance.StatusBar" />
@@ -91,16 +90,16 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="TextAppearance.StatusBar.Expanded.Network" parent="@style/TextAppearance.StatusBar.Expanded.Date">
-        <item name="android:textColor">#999999</item>
-    </style>
-
     <style name="TextAppearance.StatusBar.Signal" parent="@*android:style/TextAppearance.StatusBar.Icon">
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">12dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/status_bar_clock_color</item>
     </style>
+
+    <style name="TextAppearance.StatusBar.Expanded.Network" parent="@style/TextAppearance.StatusBar.Expanded.Date">
+        <item name="android:textColor">#999999</item>
+	</style>
 
     <style name="TextAppearance.StatusBar.Expanded.Network.EmergencyOnly">
     </style>
@@ -153,8 +152,6 @@
     <style name="BaseBrightnessDialogContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
     </style>
@@ -189,15 +186,16 @@
 
     <!-- Slim recents -->
     <style name="card.header_simple_title">
-        <item name="android:textSize">@dimen/card_header_simple_title_text_size</item>
+        <item name="android:textSize">@dimen/recent_text_size</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textColor">@color/card_text_color_header</item>
-        <item name="android:width">120dp</item>
-        <item name="android:height">@dimen/recent_app_icon_size</item>
-        <item name="android:gravity">left|center_vertical</item>
-        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_width">@dimen/recent_header_width</item>
+        <item name="android:layout_height">@dimen/recent_app_icon_size</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:layout_marginStart">0dp</item>
         <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
         <item name="android:layout_marginBottom">6dp</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">false</item>
@@ -205,27 +203,29 @@
         <item name="android:maxLines">2</item>
     </style>
 
-    <style name="card_thumbnail_image">
+    <style name="card.card_header_app_icon">
         <item name="android:layout_width">@dimen/recent_app_icon_size</item>
         <item name="android:layout_height">@dimen/recent_app_icon_size</item>
-        <item name="android:layout_gravity">left|top</item>
-        <item name="android:scaleType">centerCrop</item>
         <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
     <style name="card.header_button_base">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:paddingLeft">@dimen/card_header_button_padding_left</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:paddingStart">@dimen/card_header_button_padding_start</item>
         <item name="android:focusable">false</item>
         <item name="android:focusableInTouchMode">false</item>
         <item name="android:clickable">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+    </style>
+
+    <style name="RecentBaseStyle"  parent="@*android:style/Theme.Holo.Light">
+        <item name="android:popupMenuStyle">@*android:style/Widget.Holo.Light.ListPopupWindow</item>
     </style>
 
 </resources>

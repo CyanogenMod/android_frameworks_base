@@ -18,10 +18,4 @@
     <color name="chip">#ddd</color>
     <color name="item_root_pressed">#33cccccc</color>
     <color name="item_root_focused">#66cccccc</color>
-
-    <!-- background colors from layout -->
-    <color name="bg1">#fff</color>
-    <color name="bg2">#ddd</color>
-    <color name="bg3">#ccc</color>
-
 </resources>

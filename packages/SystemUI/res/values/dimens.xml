@@ -233,7 +233,10 @@
     <!-- Slim recent -->
     <dimen name="recent_width">230dp</dimen>
     <dimen name="recent_app_icon_size">48dp</dimen>
+    <dimen name="recent_favorite_icon_size">18dp</dimen>
     <dimen name="recent_thumbnail_width">198dp</dimen>
     <dimen name="recent_thumbnail_height">140dp</dimen>
-
+    <dimen name="recent_header_width">120dp</dimen>
+    <dimen name="recent_text_size">20dp</dimen>
+    <dimen name="recent_thumbnail_bottom_padding">4dp</dimen>
 </resources>

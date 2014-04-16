@@ -1988,9 +1988,6 @@
   <java-symbol type="string" name="symbol_picker_z" />
   <java-symbol type="string" name="symbol_picker_Z" />
 
-  <!-- UI theme mode -->
-  <java-symbol type="integer" name="config_uiThemeMode" />
-  <java-symbol type="string" name="theme_auto_switch_mode_error" />
   <!-- Screen record -->
   <java-symbol type="drawable" name="ic_lock_screen_record" />
   <java-symbol type="string" name="global_action_screenrecord" />

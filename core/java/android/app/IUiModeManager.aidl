@@ -51,16 +51,4 @@ interface IUiModeManager {
      * 2 for night, and 3 for automatic mode switching.
      */
     int getNightMode();
-
-    /**
-     * Sets the system ui theme mode. Only the system can do this.
-     *
-     * possible theme modes @link Configuration
-     * {@link #UI_THEME_MODE_NORMAL},
-     * {@link #UI_THEME_MODE_HOLO_DARK}, {@link #UI_THEME_MODE_HOLO_LIGHT}
-     *
-     * @hide
-     */
-    void setUiThemeMode(int mode);
-
 }

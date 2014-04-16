@@ -48,7 +48,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/menu_settings"
-            android:theme="@style/DialogWhenLarge"
+            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge"
             android:exported="false" />
 
         <provider

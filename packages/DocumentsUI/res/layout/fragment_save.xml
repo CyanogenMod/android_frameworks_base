@@ -23,7 +23,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/bg3" />
+        android:background="#ccc" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:gravity="center_vertical"
-        android:background="@color/bg2"
+        android:background="#ddd"
         android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
         <ImageView
