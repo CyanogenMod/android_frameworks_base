@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2012 The Android Open Source Project
  * Copyright (C) 2013 The SlimRoms Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,6 +50,7 @@ public class CustomTile extends QuickSettingsTile {
     private static final String TAG = "CustomTile";
 
     private static final String KEY_TOGGLE_STATE = "custom_toggle_state";
+    private static final String CHAMBER_FIRED = "com.android.systemui.CHAMBER_FIRED";
 
     private static final int SYSTEM_INT = 0;
     private static final int SECURE_INT = 1;
@@ -58,6 +58,9 @@ public class CustomTile extends QuickSettingsTile {
     private static final int SECURE_LONG = 3;
     private static final int SYSTEM_FLOAT = 4;
     private static final int SECURE_FLOAT = 5;
+    private static final int GLOBAL_INT = 6;
+    private static final int GLOBAL_LONG = 7;
+    private static final int GLOBAL_FLOAT = 8;
 
     private QuickSettingsController mQsc;
 
@@ -67,12 +70,15 @@ public class CustomTile extends QuickSettingsTile {
     private String mWatchedSetting = null;
     private String mResolverIcon = null;
     private String mResolverName = null;
-    private String mResolverValues = null;
 
     private String[] mClickActions = new String[5];
     private String[] mLongActions = new String[5];
-    private  String[] mActionStrings = new String[5];
-    private  String[] mCustomIcon = new String[5];
+    private String[] mActionStrings = new String[5];
+    private String[] mCustomIcon = new String[5];
+
+    private int[] mResolvedInts = new int[5];
+    private long[] mResolvedLongs = new long[5];
+    private float[] mResolvedFloats = new float[5];
 
     private boolean mCollapse = false;
     private boolean mMatchState = false;
@@ -203,17 +209,18 @@ public class CustomTile extends QuickSettingsTile {
             mStateMatched = mNumberOfActions - 1;
         }
 
-        if (mMatchState && mNumberOfActions >= 1) {
-            SlimActions.processActionWithOptions(
-                    mContext, mClickActions[mStateMatched], false, mCollapse);
-        } else {
-            SlimActions.processActionWithOptions(
-                    mContext, mClickActions[mState], false, mCollapse);
-        }
-
-        // Let the tile update itself on resolve otherwise
         if (mWatchedSetting == null) {
+            if (mMatchState && mNumberOfActions >= 1) {
+                SlimActions.processActionWithOptions(
+                        mContext, mClickActions[mStateMatched], false, mCollapse);
+            } else {
+                SlimActions.processActionWithOptions(
+                        mContext, mClickActions[mState], false, mCollapse);
+            }
             updateResources();
+        } else {
+            // Tile will update once the resolver fires
+            changeAdvancedSetting();
         }
     }
 
@@ -276,7 +283,68 @@ public class CustomTile extends QuickSettingsTile {
         mShared.edit().putInt("state" + mKey, mState).commit();
     }
 
-    private void updateResolver() {
+    private void changeAdvancedSetting() {
+        switch (mTypeResolved) {
+            case SYSTEM_INT:
+                Settings.System.putIntForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedInts[mState],
+                        UserHandle.USER_CURRENT);
+                break;
+            case SECURE_INT:
+                Settings.Secure.putIntForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedInts[mState],
+                        UserHandle.USER_CURRENT);
+                break;
+            case SYSTEM_LONG:
+                Settings.System.putLongForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedLongs[mState],
+                        UserHandle.USER_CURRENT);
+                break;
+            case SECURE_LONG:
+                Settings.Secure.putLongForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedLongs[mState],
+                        UserHandle.USER_CURRENT);
+                break;
+            case SYSTEM_FLOAT:
+                Settings.System.putFloatForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedFloats[mState],
+                        UserHandle.USER_CURRENT);
+                break;
+            case SECURE_FLOAT:
+                Settings.Secure.putFloatForUser(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedFloats[mState],
+                        UserHandle.USER_CURRENT);
+                break;
+            case GLOBAL_INT:
+                Settings.Global.putInt(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedInts[mState]);
+                break;
+            case GLOBAL_LONG:
+                Settings.Global.putLong(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedLongs[mState]);
+                break;
+            case GLOBAL_FLOAT:
+                Settings.Global.putFloat(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, mResolvedFloats[mState]);
+                break;
+            default:
+                break;
+        }
+        if (mCollapse) {
+            mQsc.mBar.collapseAllPanels(true);
+        }
+    }
+
+    private void updateResolver(final boolean fireIntent) {
         int current = 0;
         long curLong = 0;
         float curFloat = 0;
@@ -286,90 +354,159 @@ public class CustomTile extends QuickSettingsTile {
                 current= Settings.System.getIntForUser(
                         mContext.getContentResolver(),
                         mWatchedSetting, 0, UserHandle.USER_CURRENT);
-                matchIntState(current);
+                matchIntState(current, fireIntent);
                 break;
             case SECURE_INT:
                 current = Settings.Secure.getIntForUser(
                         mContext.getContentResolver(),
                         mWatchedSetting, 0, UserHandle.USER_CURRENT);
-                matchIntState(current);
+                matchIntState(current, fireIntent);
                 break;
             case SYSTEM_LONG:
-                curLong= Settings.System.getIntForUser(
+                curLong= Settings.System.getLongForUser(
                         mContext.getContentResolver(),
                         mWatchedSetting, 0, UserHandle.USER_CURRENT);
-                matchLongState(curLong);
+                matchLongState(curLong, fireIntent);
                 break;
             case SECURE_LONG:
                 curLong = Settings.Secure.getLongForUser(
                         mContext.getContentResolver(),
                         mWatchedSetting, 0, UserHandle.USER_CURRENT);
-                matchLongState(curLong);
+                matchLongState(curLong, fireIntent);
                 break;
             case SYSTEM_FLOAT:
-                curFloat= Settings.System.getLongForUser(
+                curFloat= Settings.System.getFloatForUser(
                         mContext.getContentResolver(),
                         mWatchedSetting, 0, UserHandle.USER_CURRENT);
-                matchFloatState(curFloat);
+                matchFloatState(curFloat, fireIntent);
                 break;
             case SECURE_FLOAT:
                 curFloat = Settings.Secure.getFloatForUser(
                         mContext.getContentResolver(),
                         mWatchedSetting, 0, UserHandle.USER_CURRENT);
-                matchFloatState(curFloat);
+                matchFloatState(curFloat, fireIntent);
+                break;
+            case GLOBAL_INT:
+                current = Settings.Global.getInt(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0);
+                matchIntState(current, fireIntent);
+                break;
+            case GLOBAL_LONG:
+                curLong = Settings.Global.getLong(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0);
+                matchLongState(curLong, fireIntent);
+                break;
+            case GLOBAL_FLOAT:
+                curFloat = Settings.Global.getFloat(
+                        mContext.getContentResolver(),
+                        mWatchedSetting, 0);
+                matchFloatState(curFloat, fireIntent);
                 break;
             default:
                 updateResources();
                 break;
         }
+        updateResources();
     }
 
-    private void matchIntState(int current) {
+    private void matchIntState(final int current, final boolean fireIntent) {
         mState = -1;
-        String[] strArray = mResolverValues.split(",");
+        for (int i = 0; i < mNumberOfActions; i++) {
+            if (mResolvedInts[i] == current) {
+                mState = i;
+            }
+        }
+        if (fireIntent) {
+            sendIntent(current, 0, 0f);
+        }
+    }
+
+    private void matchLongState(final long current, final boolean fireIntent) {
+        mState = -1;
+        for (int i = 0; i < mNumberOfActions; i++) {
+            if (mResolvedLongs[i] == current) {
+                mState = i;
+            }
+        }
+        if (fireIntent) {
+            sendIntent(0, current, 0f);
+        }
+    }
+
+    private void matchFloatState(final float current, final boolean fireIntent) {
+        mState = -1;
+        for (int i = 0; i < mNumberOfActions; i++) {
+            if (mResolvedFloats[i] == current) {
+                mState = i;
+            }
+        }
+        if (fireIntent) {
+            sendIntent(0, 0, current);
+        }
+    }
+
+    private void processStringToResolved(final String resolvedSettings) {
+        final String[] strArray = resolvedSettings.split(",");
         for (int i = 0; i < strArray.length; i++) {
             try {
-                if (current == Integer.parseInt(strArray[i])) {
-                    mState = i;
+                switch (mTypeResolved) {
+                    case SYSTEM_INT:
+                    case SECURE_INT:
+                    case GLOBAL_INT:
+                        mResolvedInts[i] = Integer.parseInt(strArray[i]);
+                        break;
+                    case SYSTEM_LONG:
+                    case SECURE_LONG:
+                    case GLOBAL_LONG:
+                        mResolvedLongs[i] = Long.parseLong(strArray[i]);
+                        break;
+                    case SYSTEM_FLOAT:
+                    case SECURE_FLOAT:
+                    case GLOBAL_FLOAT:
+                        mResolvedFloats[i] = Float.parseFloat(strArray[i]);
+                        break;
                 }
             } catch (NumberFormatException e) {
                 // We already checked this string
                 // parse won't fail
             }
         }
-        updateResources();
     }
 
-    private void matchLongState(long current) {
-        mState = -1;
-        String[] strArray = mResolverValues.split(",");
-        for (int i = 0; i < strArray.length; i++) {
-            try {
-                if (current == Long.parseLong(strArray[i])) {
-                    mState = i;
-                }
-            } catch (NumberFormatException e) {
-                // We already checked this string
-                // parse won't fail
-            }
-        }
-        updateResources();
-    }
+    /* Small API to allow the user to send this setting update to popular profile-management
+     * apps such as Tasker and Llama.  Users can set up an intant receiver to catch extras:
+     * "%setting_key" and or "%setting_value"
+     * and match them in pseudo-code to process a desired action
+     */
+    private void sendIntent(int intVal, long longVal, float floatVal) {
+        // Allow the toggle to observe setting to get current value (initial inflation)
+        // without sending any intent needlessly
+        final String settingResolved = "setting_key";
+        final String valueSent = "setting_value";
 
-    private void matchFloatState(float current) {
-        mState = -1;
-        String[] strArray = mResolverValues.split(",");
-        for (int i = 0; i < strArray.length; i++) {
-            try {
-                if (current == Float.parseFloat(strArray[i])) {
-                    mState = i;
-                }
-            } catch (NumberFormatException e) {
-                // We already checked this string
-                // parse won't fail
-            }
+        Intent intent = new Intent(CHAMBER_FIRED);
+        intent.putExtra(settingResolved, mWatchedSetting);
+
+        switch (mTypeResolved) {
+            case SYSTEM_INT:
+            case SECURE_INT:
+            case GLOBAL_INT:
+                intent.putExtra(valueSent, intVal);
+                break;
+            case SYSTEM_LONG:
+            case SECURE_LONG:
+            case GLOBAL_LONG:
+                intent.putExtra(valueSent, longVal);
+                break;
+            case SYSTEM_FLOAT:
+            case SECURE_FLOAT:
+            case GLOBAL_FLOAT:
+                intent.putExtra(valueSent, floatVal);
+                break;
         }
-        updateResources();
+        mContext.sendBroadcast(intent);
     }
 
     private void extractActionsFromString() {
@@ -419,11 +556,20 @@ public class CustomTile extends QuickSettingsTile {
                     mResolverSetting = Settings.Secure.getUriFor(mWatchedSetting);
                     mQsc.addtoInstantObserverMap(mResolverSetting, this);
                     break;
+                case GLOBAL_INT:
+                case GLOBAL_LONG:
+                case GLOBAL_FLOAT:
+                    mResolverSetting = Settings.Global.getUriFor(mWatchedSetting);
+                    mQsc.addtoInstantObserverMap(mResolverSetting, this);
             }
             mResolverIcon = settingSplit[1].equals(" ") ? null : settingSplit[1];
             mResolverName = settingSplit[2].equals(" ") ? null : settingSplit[2];
-            mResolverValues = settingSplit[3].equals(" ") ? null : settingSplit[3];
-            updateResolver();
+            final String resolvedStringValues
+                    = settingSplit[3].equals(" ") ? null : settingSplit[3];
+            if (resolvedStringValues != null) {
+                processStringToResolved(resolvedStringValues);
+            }
+            updateResolver(false);
         } else {
             mResolverSetting = null;
             mTypeResolved = -1;
@@ -445,7 +591,7 @@ public class CustomTile extends QuickSettingsTile {
     @Override
     public void onChangeUri(ContentResolver resolver, Uri uri) {
         if (uri.equals(mResolverSetting) && mWatchedSetting != null) {
-            updateResolver();
+            updateResolver(true);
         } else {
             updateSettings();
         }

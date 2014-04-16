@@ -36,6 +36,7 @@ public class ChamberOfSecrets extends Activity  {
     private static final int GLOBAL_INT = 6;
     private static final int GLOBAL_LONG = 7;
     private static final int GLOBAL_FLOAT = 8;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
