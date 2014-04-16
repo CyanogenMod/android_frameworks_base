@@ -1527,7 +1527,7 @@
     <!-- Allows an application to read or write the system settings. -->
     <permission android:name="android.permission.WRITE_SETTINGS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="normal"
+        android:protectionLevel="dangerous"
         android:label="@string/permlab_writeSettings"
         android:description="@string/permdesc_writeSettings" />
 
