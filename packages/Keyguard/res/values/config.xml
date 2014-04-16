@@ -32,4 +32,6 @@
     <!-- True if we need to show on "Slide" lock screen -->
     <bool name="config_showEmergencyButton">false</bool>
 
+    <!-- display for radio tech -->
+    <bool name="config_display_RAT">false</bool>
 </resources>

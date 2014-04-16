@@ -52,6 +52,7 @@ import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.TelephonyIntents;
 
 import android.telephony.MSimTelephonyManager;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import com.google.android.collect.Lists;
@@ -107,6 +108,8 @@ public class KeyguardUpdateMonitor {
     private IccCardConstants.State []mSimState;
     private CharSequence []mTelephonyPlmn;
     private CharSequence []mTelephonySpn;
+    private CharSequence []mOriginalTelephonyPlmn;
+    private CharSequence []mOriginalTelephonySpn;
     private int mRingMode;
     private int mPhoneState;
     private boolean mKeyguardIsVisible;
@@ -117,6 +120,9 @@ public class KeyguardUpdateMonitor {
 
     // Battery status
     private BatteryStatus mBatteryStatus;
+
+    boolean[] mShowSpn;
+    boolean[] mShowPlmn;
 
     // Password attempts
     private int mFailedAttempts = 0;
@@ -276,6 +282,12 @@ public class KeyguardUpdateMonitor {
                 // Update PLMN and SPN for corresponding subscriptions.
                 mTelephonyPlmn[subscription] = getTelephonyPlmnFrom(intent);
                 mTelephonySpn[subscription] = getTelephonySpnFrom(intent);
+                mOriginalTelephonyPlmn[subscription] = getTelephonyPlmnFrom(intent);
+                mOriginalTelephonySpn[subscription] = getTelephonySpnFrom(intent);
+                mShowSpn[subscription] = intent.getBooleanExtra(
+                        TelephonyIntents.EXTRA_SHOW_SPN, false);
+                mShowPlmn[subscription] = intent.getBooleanExtra(
+                        TelephonyIntents.EXTRA_SHOW_PLMN, false);
                 final Message msg = mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE);
                 msg.arg1 = subscription;
                 mHandler.sendMessage(msg);
@@ -308,9 +320,87 @@ public class KeyguardUpdateMonitor {
                        intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0), 0));
             } else if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
                 dispatchBootCompleted();
+            } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
+                ServiceState state = ServiceState.newFromBundle(intent.getExtras());
+                int sub = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY, MSimConstants.SUB1);
+                Log.d(TAG, "ACTION_SERVICE_STATE_CHANGED on sub: " + sub + " showSpn:" +
+                        mShowSpn[sub] + " showPlmn:" + mShowPlmn[sub]);
+                //display 2G/3G/4G if operator ask for showing radio tech
+                if (mContext.getResources().getBoolean(R.bool.config_display_RAT)
+                        && (ServiceState.STATE_IN_SERVICE == state.getDataRegState()
+                        || ServiceState.STATE_IN_SERVICE == state.getVoiceRegState())) {
+                    concatenate(mShowSpn[sub], mShowPlmn[sub], sub, state);
+
+                    final Message msg = mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE);
+                    msg.arg1 = sub;
+                    mHandler.sendMessage(msg);
+                }
             }
         }
     };
+
+    private void concatenate(boolean showSpn, boolean showPlmn, int sub, ServiceState state) {
+        String rat = getRadioTech(state, sub);
+        if (showSpn) {
+            mTelephonySpn[sub] = new StringBuilder().append(mOriginalTelephonySpn[sub]).append(rat)
+                    .toString();
+        } else if (showPlmn) {
+            mTelephonyPlmn[sub] = new StringBuilder().append(mOriginalTelephonyPlmn[sub]).append
+                    (rat).toString();
+        }
+    }
+
+    private String getRadioTech(ServiceState serviceState, int sub) {
+        String radioTech = "";
+        int networkType = 0;
+        Log.d(TAG, "dataRegState = " + serviceState.getDataRegState() + " voiceRegState = "
+                + serviceState.getVoiceRegState() + " sub = " + sub);
+        if (ServiceState.STATE_IN_SERVICE == serviceState.getDataRegState()
+                && ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN
+                != serviceState.getRadioTechnology()) {
+            networkType = serviceState.getDataNetworkType();
+            radioTech = new StringBuilder().append(" ").append(networkTypeToString(networkType))
+                    .toString();
+        } else if (ServiceState.STATE_IN_SERVICE == serviceState.getVoiceRegState()
+                && ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN
+                != serviceState.getRilVoiceRadioTechnology()) {
+            networkType = serviceState.getVoiceNetworkType();
+            radioTech = new StringBuilder().append(" ").append(networkTypeToString(networkType))
+                    .toString();
+        }
+        return radioTech;
+    }
+
+    /**
+     * Convert network type to String
+     *
+     * @param networkType
+     * @return String representation of the NetworkType
+     *
+     */
+    private String networkTypeToString(int networkType) {
+        String ratClassName = "";
+        int networkClass = TelephonyManager.getNetworkClass(networkType);
+        Log.d(TAG, "networkType = " + networkType + " networkClass = " + networkClass);
+        switch (networkClass) {
+            case TelephonyManager.NETWORK_CLASS_UNKNOWN:
+                ratClassName = "";
+                break;
+            case TelephonyManager.NETWORK_CLASS_2_G:
+                ratClassName = "2G";
+                break;
+            case TelephonyManager.NETWORK_CLASS_3_G:
+                ratClassName = "3G";
+                break;
+            case TelephonyManager.NETWORK_CLASS_4_G:
+                ratClassName = "4G";
+                break;
+            default:
+                ratClassName = "";
+                break;
+        }
+        return ratClassName;
+    }
 
     private final BroadcastReceiver mBroadcastAllReceiver = new BroadcastReceiver() {
 
@@ -533,12 +623,17 @@ public class KeyguardUpdateMonitor {
         // Initialize PLMN, SPN strings and SIM states for the subscriptions.
         mTelephonyPlmn = new CharSequence[numPhones];
         mTelephonySpn = new CharSequence[numPhones];
+        mOriginalTelephonyPlmn = new CharSequence[numPhones];
+        mOriginalTelephonySpn = new CharSequence[numPhones];
         mSimState = new IccCardConstants.State[numPhones];
         for (int i = 0; i < numPhones; i++) {
             mTelephonyPlmn[i] = getDefaultPlmn();
             mTelephonySpn[i] = null;
             mSimState[i] = IccCardConstants.State.NOT_READY;
         }
+
+        mShowSpn = new boolean[numPhones];
+        mShowPlmn = new boolean[numPhones];
 
         // Watch for interesting updates
         final IntentFilter filter = new IntentFilter();
@@ -552,6 +647,7 @@ public class KeyguardUpdateMonitor {
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(DevicePolicyManager.ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED);
         filter.addAction(Intent.ACTION_USER_REMOVED);
+        filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
         context.registerReceiver(mBroadcastReceiver, filter);
 
         final IntentFilter bootCompleteFilter = new IntentFilter();
