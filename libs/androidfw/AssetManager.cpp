@@ -22,6 +22,7 @@
 #define LOG_TAG "asset"
 #define ATRACE_TAG ATRACE_TAG_RESOURCES
 //#define LOG_NDEBUG 0
+#define wipe delete
 
 #include <androidfw/Asset.h>
 #include <androidfw/AssetDir.h>
@@ -831,7 +832,7 @@ const ResTable* AssetManager::getResTable(bool required) const
             }
 
             if (!shared) {
-                delete ass;
+                wipe ass;
             }
         }
         if (idmap != NULL) {
@@ -969,7 +970,7 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
         Asset* oidmap = openIdmapLocked(ap);
         error = rt->add(ass, cookie, !shared, oidmap);
         if (!shared) {
-            delete ass;
+            wipe ass;
         }
         if (oidmap != NULL) {
             delete oidmap;
