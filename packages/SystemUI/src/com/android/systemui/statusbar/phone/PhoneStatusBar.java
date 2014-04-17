@@ -81,6 +81,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowManagerGlobal;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
@@ -249,6 +250,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private boolean mHasQuickAccessSettings;
     private boolean mQuickAccessLayoutLinked = true;
     private QuickSettingsHorizontalScrollView mRibbonView;
+    private boolean mShowRibbonOnBottom = false;
     private QuickSettingsController mRibbonQS;
 
     // top bar
@@ -564,6 +566,31 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mRibbonQS = null;
     }
 
+    private void placeQuickSettings(boolean showOnBottom) {
+        if (mRibbonView == null)
+            return;
+        LinearLayout parent = (LinearLayout) mRibbonView.getParent();
+        LinearLayout bottom_bar = (LinearLayout) mStatusBarWindow
+                .findViewById(R.id.bottom_bar);
+        if (showOnBottom && !parent.equals(bottom_bar)) {
+            parent.removeView(mRibbonView);
+            bottom_bar.addView(mRibbonView);
+        } else if (!showOnBottom && parent.equals(bottom_bar)) {
+            LinearLayout main_layout = (LinearLayout) mStatusBarWindow
+                    .findViewById(R.id.main_layout);
+            parent.removeView(mRibbonView);
+            main_layout.addView(mRibbonView, 0);
+        } else
+            return;
+
+        MarginLayoutParams lp = (MarginLayoutParams) mCarrierLabel.getLayoutParams();
+        lp.bottomMargin = mContext.getResources().getDimensionPixelSize(
+                R.dimen.close_handle_height);
+        if (showOnBottom)
+            lp.bottomMargin += mRibbonView.getHeight();
+        mCarrierLabel.setLayoutParams(lp);
+    }
+
     private void inflateRibbon() {
         if (mRibbonView == null) {
             ViewStub ribbon_stub = (ViewStub) mStatusBarWindow.findViewById(R.id.ribbon_settings_stub);
@@ -586,6 +613,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mRibbonQS.setupQuickSettings();
             }
         }
+        placeQuickSettings(mShowRibbonOnBottom);
     }
 
     // ================================================================================
@@ -945,6 +973,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             final ContentResolver resolver = mContext.getContentResolver();
             mHasQuickAccessSettings = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_QUICK_ACCESS, 0, UserHandle.USER_CURRENT) == 1;
+            mShowRibbonOnBottom = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_QUICK_ACCESS_BOTTOM, 0, UserHandle.USER_CURRENT) == 1;
             mQuickAccessLayoutLinked = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_QUICK_ACCESS_LINKED, 1, UserHandle.USER_CURRENT) == 1;
             if (mHasQuickAccessSettings) {
@@ -3547,6 +3577,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     cleanupRibbon();
                 }
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
+                    Settings.System.QS_QUICK_ACCESS_BOTTOM))) {
+                final ContentResolver resolver = mContext.getContentResolver();
+                mShowRibbonOnBottom = Settings.System.getIntForUser(resolver,
+                        Settings.System.QS_QUICK_ACCESS_BOTTOM, 1, UserHandle.USER_CURRENT) == 1;
+                placeQuickSettings(mShowRibbonOnBottom);
+            } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS_LINKED))) {
                 final ContentResolver resolver = mContext.getContentResolver();
                 boolean layoutLinked = Settings.System.getIntForUser(resolver,
@@ -3607,6 +3643,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.QS_QUICK_ACCESS_LINKED),
+                    false, this, UserHandle.USER_ALL);
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QS_QUICK_ACCESS_BOTTOM),
                     false, this, UserHandle.USER_ALL);
 
             cr.registerContentObserver(
