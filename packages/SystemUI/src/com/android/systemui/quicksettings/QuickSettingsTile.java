@@ -76,11 +76,13 @@ public class QuickSettingsTile implements OnClickListener {
         if (tv != null) {
             tv.setVisibility(View.GONE);
         }
+        // Image margins are set by the controller, so no need to set them here
+    }
+
+    public void setImageMargins(int margin) {
         View image = getImageView();
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
-            int margin = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.qs_tile_ribbon_icon_margin);
             params.topMargin = params.bottomMargin = margin;
             image.setLayoutParams(params);
         }
