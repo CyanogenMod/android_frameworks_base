@@ -44,33 +44,18 @@
         android:orientation="vertical"
         android:animateLayoutChanges="false"
         >
-        <include
-            layout="@layout/subs_label"
-            android:layout_height="@dimen/carrier_label_height"
-            android:layout_width="match_parent"
-            android:layout_gravity="bottom"
-            />
-
-        <include
-            layout="@layout/carrier_label"
-            android:layout_height="@dimen/carrier_label_height"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/close_handle_height"
-            android:layout_gravity="bottom"
-            />
+        <include layout="@layout/subs_label" />
+        <include layout="@layout/carrier_label" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/notification_panel_header_height"
         android:layout_marginBottom="@dimen/close_handle_underlap"
         android:orientation="vertical"
         android:animateLayoutChanges="false"
         >
-
-        <include layout="@layout/status_bar_expanded_header"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/notification_panel_header_height"
-            />
 
         <ViewStub android:id="@+id/ribbon_settings_stub"
             android:layout="@layout/ribbon_settings"
@@ -114,4 +99,16 @@
             </ScrollView>
         </FrameLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/close_handle_height"
+        android:background="@drawable/notification_panel_bg"
+        android:orientation="vertical"
+        android:animateLayoutChanges="false"
+        />
+
+     <include layout="@layout/status_bar_expanded_header" />
 </com.android.systemui.statusbar.phone.NotificationPanelView><!-- end of sliding panel -->
