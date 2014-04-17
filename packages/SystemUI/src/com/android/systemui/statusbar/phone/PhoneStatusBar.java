@@ -559,12 +559,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void cleanupRibbon() {
-        if (mRibbonView == null) {
-            return;
+        if (mRibbonView != null)
+            mRibbonView.setVisibility(View.GONE);
+        if (mRibbonQS != null) {
+            mRibbonQS.shutdown();
+            mRibbonQS = null;
         }
-        mRibbonView.setVisibility(View.GONE);
-        mRibbonQS.shutdown();
-        mRibbonQS = null;
     }
 
     private void inflateRibbon() {
@@ -3342,6 +3342,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // Update the QuickSettings container
         if (mQS != null) mQS.updateResources();
+        if (mRibbonQS != null)
+            mRibbonQS.updateResources();
         if (mNavigationBarView != null)  {
             mNavigationBarView.updateResources();
             updateSearchPanel();
@@ -3594,6 +3596,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     cleanupRibbon();
                 }
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
+                    Settings.System.QS_QUICK_ACCESS_SIZE))) {
+                if (mRibbonQS != null)
+                    mRibbonQS.updateResources();
+            } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS_LINKED))) {
                 final ContentResolver resolver = mContext.getContentResolver();
                 boolean layoutLinked = Settings.System.getIntForUser(resolver,
@@ -3660,6 +3666,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.QS_QUICK_ACCESS),
+                    false, this, UserHandle.USER_ALL);
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QS_QUICK_ACCESS_SIZE),
                     false, this, UserHandle.USER_ALL);
 
             cr.registerContentObserver(

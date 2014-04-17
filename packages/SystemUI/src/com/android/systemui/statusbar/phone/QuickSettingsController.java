@@ -54,6 +54,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
@@ -64,8 +65,11 @@ import android.telephony.MSimTelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 import com.android.internal.util.cm.QSUtils;
+import com.android.systemui.R;
 import com.android.systemui.quicksettings.AirplaneModeTile;
 import com.android.systemui.quicksettings.AlarmTile;
 import com.android.systemui.quicksettings.AutoRotateTile;
@@ -103,6 +107,7 @@ import com.android.systemui.quicksettings.VolumeTile;
 import com.android.systemui.quicksettings.RemoteDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
+import com.android.systemui.statusbar.phone.QuickSettingsContainerView.QSSize;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -415,6 +420,7 @@ public class QuickSettingsController {
                 }
             }
         }
+        updateResources();
     }
 
     void setupContentObserver() {
@@ -504,9 +510,36 @@ public class QuickSettingsController {
     }
 
     public void updateResources() {
+        updateSize();
         mContainerView.updateResources();
         for (QuickSettingsTile t : mQuickSettingsTiles) {
             t.updateResources();
+        }
+    }
+
+    private void updateSize() {
+        if (mContainerView == null || !mRibbonMode)
+            return;
+
+        QSSize size = mContainerView.getRibbonSize();
+        int height, margin;
+        if (size == QSSize.AutoNarrow || size == QSSize.Narrow) {
+            height = R.dimen.qs_ribbon_height_small;
+            margin = R.dimen.qs_tile_ribbon_icon_margin_small;
+        } else {
+            height = R.dimen.qs_ribbon_height_big;
+            margin = R.dimen.qs_tile_ribbon_icon_margin_big;
+        }
+        Resources res = mContext.getResources();
+        height = res.getDimensionPixelSize(height);
+        margin = res.getDimensionPixelSize(margin);
+
+        View parent = (View) mContainerView.getParent();
+        LayoutParams lp = parent.getLayoutParams();
+        lp.height = height;
+        parent.setLayoutParams(lp);
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.setImageMargins(margin);
         }
     }
 }
