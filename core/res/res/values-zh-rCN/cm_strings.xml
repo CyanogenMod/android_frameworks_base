@@ -27,6 +27,7 @@
   <string name="profileGroupGmail">Gmail</string>
   <string name="profileGroupEmail">电子邮件</string>
   <string name="profileGroupSMS">短信</string>
+  <string name="wildcardProfile">其他</string>
   <string name="global_action_screenshot">屏幕截图</string>
   <string name="global_actions_toggle_expanded_desktop_mode">扩展桌面</string>
   <string name="global_actions_expanded_desktop_mode_on_status">已启用</string>
@@ -108,7 +109,6 @@
   <string name="app_ops_use_voice_volume">控制语音通话音量</string>
   <string name="app_ops_write_mms">编写彩信</string>
   <string name="app_ops_write_sms">编写短信</string>
-  <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
   <string name="permission_remember_choice">记住我的选择</string>
 </resources>

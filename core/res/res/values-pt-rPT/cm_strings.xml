@@ -54,19 +54,27 @@
   <string name="toast_rotation_unlocked">Rotação de ecrã desbloqueada</string>
   <string name="toast_rotation_locked">Rotação de ecrã bloqueada</string>
   <string name="stylus_app_not_installed">%s não está instalado</string>
-  <string name="permlab_changePrivacyGuardState">ativar ou desativar privacy guard</string>
-  <string name="permdesc_changePrivacyGuardState">Permite à aplicação escolher se outra aplicação corre com Privacy Guard. Quando uma aplicação corre com Privacy Guard, não terá acesso a dados pessoais como contactos, registo de chamadas ou mensagens.</string>
-  <string name="privacy_guard_notification">Privacy Guard ativo</string>
+  <string name="permlab_changePrivacyGuardState">ativar ou desativar proteção da privacidade</string>
+  <string name="permdesc_changePrivacyGuardState">Permite à aplicação escolher se outra aplicação corre com Proteção da Privacidade. Quando uma aplicação corre com Proteção da Privacidade, não terá acesso a dados pessoais como contactos, registo de chamadas ou mensagens.</string>
+  <string name="privacy_guard_notification">PProteção da Privacidade ativa</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> não poderá aceder a dados pessoais</string>
   <string name="profile_picker_title">Perfis</string>
   <string name="profile_none">Nenhum</string>
   <string name="perf_profile_pwrsv">Poupança de energia</string>
   <string name="perf_profile_bal">Equilibrado</string>
   <string name="perf_profile_perf">Desempenho</string>
-  <string name="permlab_interceptSmsSent">interceptar saída de SMS</string>
+  <string name="permlab_interceptSmsSent">intercetar saída de SMS</string>
   <string name="permdesc_interceptSmsSent">Permite à aplicação intercetar um SMS a ser enviado. Aplicações maliciosas podem usar isto para prevenir o envio de SMS.</string>
   <string name="permlab_resetBatteryStats">reiniciar estatísticas da bateria</string>
   <string name="permdesc_resetBatteryStats">Permite a uma aplicação reiniciar os dados de uso de bateria\nde baixo nível.</string>
+  <string name="permgrouplab_security">Segurança</string>
+  <string name="permgroupdesc_security">Permissões relacionadas com as informações de segurança do dispositivo.</string>
+  <string name="permlab_readPhoneBlacklist">Ler a lista negra do telefone</string>
+  <string name="permdesc_readPhoneBlacklist">Permite a uma aplicação ler informações sobre números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
+  <string name="permlab_changePhoneBlacklist">Alterar a lista negra do telefone</string>
+  <string name="permdesc_changePhoneBlacklist">Permite a uma aplicação alterar os números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
+  <string name="permlab_accessThemeService">Aceder ao serviço de temas</string>
+  <string name="permdesc_accessThemeService">Permite a uma aplicação aceder ao serviço de temas. Nunca deverá ser necessário para aplicações normais.</string>
   <string name="immersive_mode_confirmation_bottom">Deslize de baixo para cima para sair de ecrã inteiro.</string>
   <string name="app_ops_access_camera">aceder à câmara</string>
   <string name="app_ops_access_location">aceder à sua localização</string>
@@ -108,7 +116,7 @@
   <string name="app_ops_use_voice_volume">controlar o volume das chamadas de voz</string>
   <string name="app_ops_write_mms">escrever uma mensagem MMS</string>
   <string name="app_ops_write_sms">escrever uma mensagem SMS</string>
-  <string name="privacy_guard_dialog_title">Proteção à Privacidade</string>
+  <string name="privacy_guard_dialog_title">Proteção da Privacidade</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="aplicação">%1$s</xliff:g> gostaria de <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Memorizar a minha escolha</string>
 </resources>

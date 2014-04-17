@@ -15,5 +15,7 @@
      limitations under the License.
 -->
 <resources>
+  <string name="crop_wallpaper">Hintergrundbild beschneiden</string>
   <string name="wallpaper_instructions">Hintergrund festlegen</string>
+  <string name="wallpaper_load_fail">Bild konnte nicht als Hintergrund geladen werden</string>
 </resources>

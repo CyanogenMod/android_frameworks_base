@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">多工按鈕</string>
   <string name="navbar_search_button">搜尋按鈕</string>
   <string name="navbar_back_button">返回按鈕</string>
-  <string name="navbar_empty_button">空按鈕</string>
+  <string name="navbar_empty_button">留空</string>
   <string name="navbar_menu_conditional_button">選單按鈕 (自動隱藏)</string>
   <string name="navbar_menu_always_button">選單按鈕 (一律顯示)</string>
   <string name="navbar_menu_big_button">選單按鈕</string>

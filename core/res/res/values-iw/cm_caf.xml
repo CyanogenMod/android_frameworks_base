@@ -20,4 +20,10 @@
   <string name="lockscreen_sim_error_message_short">כרטיס לא מתאים.</string>
   <string name="lockscreen_airplane_mode_on">מצב טיסה</string>
   <string name="progress_nomediapresent" product="default">אין מדיה חיצונית\u2026</string>
+  <string name="stk_cc_ussd_to_dial">בקשת USSD שונתה לבקשת חיוג.</string>
+  <string name="stk_cc_ussd_to_ss">בקשת USSD שונתה לבקשת SS.</string>
+  <string name="stk_cc_ussd_to_ussd">בקשת USSD שונתה לבקשת USSD חדשה.</string>
+  <string name="stk_cc_ss_to_dial">בקשת SS שונתה לבקשת חיוג.</string>
+  <string name="stk_cc_ss_to_ussd">בקשת SS שונתה לבקשת USSD.</string>
+  <string name="stk_cc_ss_to_ss">בקשת SS שונתה לבקשת SS חדשה.</string>
 </resources>

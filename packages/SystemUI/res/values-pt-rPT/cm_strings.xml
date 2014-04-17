@@ -68,13 +68,13 @@
   <string name="navbar_recent_button">Botão Recentes</string>
   <string name="navbar_search_button">Botão Pesquisa</string>
   <string name="navbar_back_button">Botão Voltar</string>
-  <string name="navbar_empty_button">Botão Vazio</string>
+  <string name="navbar_empty_button">Deixe em branco</string>
   <string name="navbar_menu_conditional_button">Botão Menu (esconder auto)</string>
   <string name="navbar_menu_always_button">Botão Menu (sempre visível)</string>
   <string name="navbar_menu_big_button">Botão Menu</string>
   <string name="advanced_dev_option_wipe_app">Limpar dados da aplicação</string>
   <string name="advanced_dev_option_force_stop">Forçar paragem</string>
-  <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> porcento.</string>
+  <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
   <string name="screenshot_delete_action">Eliminar</string>
   <string name="screenshot_delete_confirmation">Captura de ecrã eliminada.</string>
   <string name="accessibility_desc_add_quick_settings">Adicionar Definições rápidas.</string>

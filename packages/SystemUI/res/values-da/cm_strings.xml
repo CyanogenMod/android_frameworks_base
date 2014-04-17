@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Seneste-knap</string>
   <string name="navbar_search_button">Søgeknap</string>
   <string name="navbar_back_button">Tilbageknap</string>
-  <string name="navbar_empty_button">Tom knap</string>
+  <string name="navbar_empty_button">Efterlad blank</string>
   <string name="navbar_menu_conditional_button">Menuknap (auto-skjul)</string>
   <string name="navbar_menu_always_button">Menuknap (vis altid)</string>
   <string name="navbar_menu_big_button">Menuknap</string>

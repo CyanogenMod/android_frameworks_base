@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
   <string name="permlab_resetBatteryStats">battery statistieke terugstel</string>
   <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data terugtestel.</string>
+  <string name="permgrouplab_security">Sekuriteit</string>
+  <string name="permgroupdesc_security">Regte met betrekking tot toestel sekuriteitsinligting.</string>
+  <string name="permlab_readPhoneBlacklist">lees foon swartlys</string>
+  <string name="permdesc_readPhoneBlacklist">Laat \'n program toe om inligting oor telefoonnommers wat geblokkeer is van inkomende oproepe of boodskappe te lees.</string>
+  <string name="permlab_changePhoneBlacklist">Verander selfoon swartlys</string>
+  <string name="permdesc_changePhoneBlacklist">Laat \'n program toe om van die telefoonnommers wat geblokkeer is vir inkomende oproepe of boodskappe te verander.</string>
+  <string name="permlab_accessThemeService">Toegang tot tema diens</string>
+  <string name="permdesc_accessThemeService">Laat \'n program toe om toegang na die tema diens te verkry. Moet nooit nodig wees vir normale programme nie.</string>
   <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>
   <string name="app_ops_access_camera">toegang tot die kamera</string>
   <string name="app_ops_access_location">toegang tot jou ligging</string>

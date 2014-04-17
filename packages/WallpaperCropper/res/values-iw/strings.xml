@@ -15,5 +15,7 @@
      limitations under the License.
 -->
 <resources>
-  <string name="wallpaper_instructions">הגדר טפט</string>
+  <string name="crop_wallpaper">חתוך רקע</string>
+  <string name="wallpaper_instructions">הגדר רקע</string>
+  <string name="wallpaper_load_fail">לא הצליח לטעון תמונה כרקע</string>
 </resources>

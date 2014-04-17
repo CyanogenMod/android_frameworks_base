@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Sallii sovelluksen pysäyttää lähtevät tekstiviestit. Haitalliset sovellukset saattavat käyttää tätä estääkseen kaikki lähtevät tekstiviestit.</string>
   <string name="permlab_resetBatteryStats">nollaa akun tilastot</string>
   <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset akun käytön tilastot.</string>
+  <string name="permgrouplab_security">Turvallisuus</string>
+  <string name="permgroupdesc_security">Laitteen turvallisuuteen liittyvät oikeudet.</string>
+  <string name="permlab_readPhoneBlacklist">lue puhelimen mustaa listaa</string>
+  <string name="permdesc_readPhoneBlacklist">Sallii sovelluksen lukea tietoja numeroista, joista saapuvat puhelut ja viestit on estetty.</string>
+  <string name="permlab_changePhoneBlacklist">muokkaa puhelimen mustaa listaa</string>
+  <string name="permdesc_changePhoneBlacklist">Sallii sovelluksen muokata puhelinnumeroita, joista saapuvat puhelut ja viestit on estetty.</string>
+  <string name="permlab_accessThemeService">pääsy teemapalveluun</string>
+  <string name="permdesc_accessThemeService">Sallii sovelluksen päästä teemapalveluun. Tavalliset sovellukset ei koskaan tarvitse tätä.</string>
   <string name="immersive_mode_confirmation_bottom">Pyyhkäise alhaalta ylös poistuaksesi koko näytön tilasta.</string>
   <string name="app_ops_access_camera">käytä kameraa</string>
   <string name="app_ops_access_location">käytä sijaintia</string>
