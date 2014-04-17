@@ -936,6 +936,7 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
 {
     Asset* ass = NULL;
     size_t cookiePos = (size_t)cookie;
+    bool shared = true;
 
     assert(dirName != NULL);
     assert(ap != NULL);
@@ -946,6 +947,7 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
         // Res file is outside APK
         ass = const_cast<AssetManager*>(this)->
               openAssetFromFileLocked(ap.resfilePath, Asset::ACCESS_BUFFER);
+        shared = false;
     } else if (ap.type != kFileTypeDirectory) {
         ass = const_cast<AssetManager*>(this)->
             mZipSet.getZipResourceTableAsset(ap.path);
@@ -959,18 +961,24 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
                     mZipSet.setZipResourceTableAsset(ap.path, ass);
             }
         }
-     }
+    }
 
-     //Add the resources to the collection of ResTables
-     status_t error = NO_ERROR;
-     if (ass != NULL) {
-         Asset* oidmap = openIdmapLocked(ap);
-         error = rt->add(ass, cookie, false, oidmap);
-     } else {
-       ALOGW("Unable to load asset %s, ResTable not updated", ap.path.string());
-     }
+    //Add the resources to the collection of ResTables
+    status_t error = NO_ERROR;
+    if (ass != NULL) {
+        Asset* oidmap = openIdmapLocked(ap);
+        error = rt->add(ass, cookie, !shared, oidmap);
+        if (!shared) {
+            delete ass;
+        }
+        if (oidmap != NULL) {
+            delete oidmap;
+        }
+    } else {
+        ALOGW("Unable to load asset %s, ResTable not updated", ap.path.string());
+    }
 
-     return (error == NO_ERROR);
+    return (error == NO_ERROR);
 }
 
 bool AssetManager::removeOverlayPath(const String8& packageName, void* cookie)
