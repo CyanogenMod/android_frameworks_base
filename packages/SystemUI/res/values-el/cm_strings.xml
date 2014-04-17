@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Πλήκτρο πρόσφατων εφαρμογών</string>
   <string name="navbar_search_button">Πλήκτρο αναζήτησης</string>
   <string name="navbar_back_button">Πλήκτρο πίσω</string>
-  <string name="navbar_empty_button">Άδειο πλήκτρο</string>
+  <string name="navbar_empty_button">Να μείνει κενό</string>
   <string name="navbar_menu_conditional_button">Πλήκτρο μενού (αυτόματη απόκρυψη)</string>
   <string name="navbar_menu_always_button">Πλήκτρο μενού (εμφάνιση πάντα)</string>
   <string name="navbar_menu_big_button">Πλήκτρο μενού</string>

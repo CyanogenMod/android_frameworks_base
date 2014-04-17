@@ -15,6 +15,5 @@
      limitations under the License.
 -->
 <resources>
-  <string name="wallpaper_instructions">Ustaw tapetę</string>
   <string name="wallpaper_load_fail">Nie można załadować obrazu jako tapetę</string>
 </resources>

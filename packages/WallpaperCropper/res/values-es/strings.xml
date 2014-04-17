@@ -16,6 +16,5 @@
 -->
 <resources>
   <string name="crop_wallpaper">Recortar fondo</string>
-  <string name="wallpaper_instructions">Establecer fondo de pantalla</string>
   <string name="wallpaper_load_fail">No se puede cargar esta imagen como fondo de pantalla</string>
 </resources>

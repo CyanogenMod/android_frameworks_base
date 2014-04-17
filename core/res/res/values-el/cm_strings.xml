@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Επιτρέπει στην εφαρμογή να παρεμποδίσει τα εξερχόμενα SMS. Κακόβουλες εφαρμογές μπορεί να το χρησιμοποιήσουν για να εμποδίσουν τη αποστολή SMS.</string>
   <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
   <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
+  <string name="permgrouplab_security">Ασφάλεια</string>
+  <string name="permgroupdesc_security">Δικαιώματα που σχετίζονται με την ασφάλεια των πληροφοριών της συσκευής.</string>
+  <string name="permlab_readPhoneBlacklist">ανάγνωση της μαύρης λίστας τηλεφώνου</string>
+  <string name="permdesc_readPhoneBlacklist">Επιτρέπει σε μια εφαρμογή την ανάγνωση πληροφοριών σχετικά με τους αριθμούς τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
+  <string name="permlab_changePhoneBlacklist">αλλαγή της μαύρης λίστας τηλεφώνου</string>
+  <string name="permdesc_changePhoneBlacklist">Επιτρέπει σε μια εφαρμογή την αλλαγή των αριθμών τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
+  <string name="permlab_accessThemeService">πρόσβαση στην υπηρεσία θεμάτων</string>
+  <string name="permdesc_accessThemeService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία θεμάτων. Δεν πρέπει να απαιτείται από κανονικές εφαρμογές.</string>
   <string name="immersive_mode_confirmation_bottom">Σύρετε από το κάτω μέρος προς τα πάνω για να βγείτε από την πλήρη οθόνη</string>
   <string name="app_ops_access_camera">πρόσβαση στην φωτογρ. μηχανή</string>
   <string name="app_ops_access_location">πρόσβαση στην τοποθεσία σας</string>

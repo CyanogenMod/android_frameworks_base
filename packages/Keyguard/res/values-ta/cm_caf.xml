@@ -16,6 +16,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="pinpuk_attempts">\nமீதமுள்ள முயற்சிகள்:</string>
-  <string name="lockscreen_sim_error_message_short">செல்லுபடியாகாத அட்டை.</string>
+  <string name="keyguard_password_wrong_puk_code">தவறான PUK குறியீடு.</string>
+  <string name="keyguard_password_pin_failed">PIN செயல்பாடு தோல்வியுற்றது.</string>
+  <string name="keyguard_password_puk_failed">PUK செயல்பாடு தோல்வியுற்றது.</string>
+  <string name="keyguard_pin_accepted">குறியீடு ஏற்கப்பட்டது.</string>
 </resources>

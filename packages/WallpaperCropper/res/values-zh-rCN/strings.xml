@@ -16,6 +16,5 @@
 -->
 <resources>
   <string name="crop_wallpaper">裁剪壁纸</string>
-  <string name="wallpaper_instructions">设置壁纸</string>
   <string name="wallpaper_load_fail">无法加载图像为墙纸</string>
 </resources>

@@ -15,5 +15,7 @@
      limitations under the License.
 -->
 <resources>
+  <string name="crop_wallpaper">Duvar kağıdını kırp</string>
   <string name="wallpaper_instructions">Duvar kağıdını ayarla</string>
+  <string name="wallpaper_load_fail">Resim duvar kağıdı olarak yüklenemedi</string>
 </resources>

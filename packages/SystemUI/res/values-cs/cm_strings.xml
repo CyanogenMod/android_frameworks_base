@@ -22,6 +22,7 @@
   <string name="dessert_case_settings_cm_summary">Při spuštěném šetřiči obrazovky zobrazit maskoty CM společně s dezerty Android</string>
   <string name="quick_settings_profile_label">Profil</string>
   <string name="powerwidget_screen_timeout_toast">Vypnutí obrazovky nastaveno na: %1$d %2$s</string>
+  <string name="quick_settings_gps">GPS</string>
   <string name="quick_settings_gps_off">GPS VYP</string>
   <string name="quick_settings_screen_sleep">Uspat</string>
   <string name="quick_settings_ringer_on">Zvuk ZAP</string>
@@ -38,6 +39,7 @@
   <string name="quick_settings_sync_off">Synch. VYP</string>
   <string name="quick_settings_torch">Svítilna</string>
   <string name="quick_settings_torch_off">Svítilna VYP</string>
+  <string name="quick_settings_nfc">NFC</string>
   <string name="quick_settings_nfc_off">NFC VYP</string>
   <string name="quick_settings_screen_timeout">Režim spánku</string>
   <string name="quick_settings_usb_tether_off_label">Odpojeno</string>
@@ -47,6 +49,7 @@
   <string name="quick_settings_wifiap_off">Wi-Fi AP VYP</string>
   <string name="quick_settings_quiethours">Čas klidu</string>
   <string name="quick_settings_quiethours_off">Čas klidu VYP</string>
+  <string name="quick_settings_lte">LTE</string>
   <string name="quick_settings_lte_off">LTE VYP</string>
   <string name="quick_settings_volume">Hlasitost</string>
   <string name="quick_settings_camera_label">Fotoaparát</string>
@@ -65,7 +68,7 @@
   <string name="navbar_recent_button">Tlačítko Nedávné</string>
   <string name="navbar_search_button">Tlačítko Hledat</string>
   <string name="navbar_back_button">Tlačítko Zpět</string>
-  <string name="navbar_empty_button">Prázdné tlačítko</string>
+  <string name="navbar_empty_button">Ponechte prázdné</string>
   <string name="navbar_menu_conditional_button">Tlačítko (skrývat) Nabídka</string>
   <string name="navbar_menu_always_button">Tlačítko (vždy zobrazit) Nabídka</string>
   <string name="navbar_menu_big_button">Tlačítko Nabídka</string>

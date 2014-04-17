@@ -16,6 +16,6 @@
 -->
 <resources>
   <string name="crop_wallpaper">Recortar papel de parede</string>
-  <string name="wallpaper_instructions">Definir papel de parede</string>
+  <string name="wallpaper_instructions">Definir imagem de fundo</string>
   <string name="wallpaper_load_fail">Não foi possivel carregar a imagem como papel de parede</string>
 </resources>
