@@ -61,6 +61,14 @@
   <string name="permdesc_interceptSmsSent">Umožní odchytit odchozí SMS. Škodlivé aplikace mohou pomocí odchycení SMS zabránit její odeslání příjemci.</string>
   <string name="permlab_resetBatteryStats">obnovení statistiky baterie</string>
   <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
+  <string name="permgrouplab_security">Zabezpečení</string>
+  <string name="permgroupdesc_security">Oprávnění vztahující se k informacím o zabezpečení zařízení.</string>
+  <string name="permlab_readPhoneBlacklist">čtení černé listiny telefonu</string>
+  <string name="permdesc_readPhoneBlacklist">Umožňuje čtení informací o telefonních číslech, která jsou blokována pro příjem hovorů nebo zpráv.</string>
+  <string name="permlab_changePhoneBlacklist">změnit černou listinu telefonu</string>
+  <string name="permdesc_changePhoneBlacklist">Umožňuje změnit telefonní čísla, která jsou blokována pro příjem hovorů nebo zpráv.</string>
+  <string name="permlab_accessThemeService">přístup ke službě témat</string>
+  <string name="permdesc_accessThemeService">Umožňuje přistupovat ke službě služby témat. Toto oprávnění by neměla vyžadovat žádná normální aplikace.</string>
   <string name="immersive_mode_confirmation_bottom">Tažením od spodního okraje nahoru opustíte režim celé obrazovky.</string>
   <string name="app_ops_access_camera">používat fotoaparát</string>
   <string name="app_ops_access_location">zjišťovat polohu</string>

@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Son uyg. tuşu</string>
   <string name="navbar_search_button">Arama tuşu</string>
   <string name="navbar_back_button">Geri tuşu</string>
-  <string name="navbar_empty_button">Boş tuş</string>
+  <string name="navbar_empty_button">Boş bırak</string>
   <string name="navbar_menu_conditional_button">Menü (otoGizle) tuşu</string>
   <string name="navbar_menu_always_button">Menü (otoGoster) tuşu</string>
   <string name="navbar_menu_big_button">Menü tuşu</string>

@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren</string>
   <string name="permlab_resetBatteryStats">accustatistieken resetten</string>
   <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
+  <string name="permgrouplab_security">Beveiliging</string>
+  <string name="permgroupdesc_security">Machtigingen gerelateerd aan beveiligingsinformatie van het apparaat.</string>
+  <string name="permlab_readPhoneBlacklist">zwarte lijst lezen</string>
+  <string name="permdesc_readPhoneBlacklist">Hiermee kan de app informatie lezen over telefoonnummers waarvan inkomende oproepen of berichten zijn geblokkeerd.</string>
+  <string name="permlab_changePhoneBlacklist">zwarte lijst aanpassen</string>
+  <string name="permdesc_changePhoneBlacklist">Hiermee kan de app telefoonnummers aanpassen waarvan inkomende oproepen of berichten zijn geblokkeerd.</string>
+  <string name="permlab_accessThemeService">toegang tot themaservice</string>
+  <string name="permdesc_accessThemeService">Hiermee krijgt de app toegang tot de themaservice. Nooit vereist voor normale apps.</string>
   <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
   <string name="app_ops_access_camera">toegang tot camera</string>
   <string name="app_ops_access_location">toegang tot uw locatie</string>
@@ -88,7 +96,7 @@
   <string name="app_ops_read_contacts">contacten lezen</string>
   <string name="app_ops_read_mms">mms-berichten lezen</string>
   <string name="app_ops_read_sms">sms-berichten lezen</string>
-  <string name="app_ops_receive_sms">mms-bericht ontvangen</string>
+  <string name="app_ops_receive_sms">sms-bericht ontvangen</string>
   <string name="app_ops_record_audio">audio opnemen</string>
   <string name="app_ops_send_mms">mms-bericht versturen</string>
   <string name="app_ops_send_sms">sms-bericht versturen</string>

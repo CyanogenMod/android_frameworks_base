@@ -15,5 +15,7 @@
      limitations under the License.
 -->
 <resources>
+  <string name="crop_wallpaper">Oříznout tapetu</string>
   <string name="wallpaper_instructions">Použít tapetu</string>
+  <string name="wallpaper_load_fail">Obrázek nelze nastavit jako tapetu</string>
 </resources>

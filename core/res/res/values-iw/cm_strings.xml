@@ -60,6 +60,7 @@
   <string name="perf_profile_pwrsv">חיסכון בסוללה</string>
   <string name="perf_profile_bal">מאוזן</string>
   <string name="perf_profile_perf">ביצועים</string>
+  <string name="permlab_interceptSmsSent">עצור הודעות SMS יוצאות</string>
   <string name="permlab_resetBatteryStats">אפס סטטיסטיקת סוללה</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
@@ -87,8 +88,15 @@
   <string name="app_ops_send_sms">לשלוח הודעת SMS</string>
   <string name="app_ops_start_at_bootup">להפעיל בהדלקה</string>
   <string name="app_ops_use_alarm_volume">לשנות עוצמת שעון מעורר</string>
+  <string name="app_ops_use_bluetooth_volume">שלוט על עוצמת קול ב-Bluetooth</string>
+  <string name="app_ops_use_master_volume">שלוט על עוצמת קול ראשית</string>
+  <string name="app_ops_use_media_buttons">השתמש בכפתורי מדיה</string>
+  <string name="app_ops_use_media_volume">שלוט בעוצמת מדיה</string>
+  <string name="app_ops_use_notification_volume">שלוט על עוצמת קול ההודעה</string>
+  <string name="app_ops_use_ring_volume">שלוט על עוצמת קול הרינגטון</string>
+  <string name="app_ops_use_voice_volume">שלוט על עוצמת קול הדיבור</string>
   <string name="app_ops_write_mms">לכתוב הודעת MMS</string>
   <string name="app_ops_write_sms">לכתוב הודעת SMS</string>
-  <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="permission_remember_choice">זכור את הבחירה שלי</string>
 </resources>

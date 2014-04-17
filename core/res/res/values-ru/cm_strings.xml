@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
   <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
   <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
+  <string name="permgrouplab_security">Безопасность</string>
+  <string name="permgroupdesc_security">Разрешения, относящиеся к безопасности данных на устройстве.</string>
+  <string name="permlab_readPhoneBlacklist">Просмотр чёрного списка</string>
+  <string name="permdesc_readPhoneBlacklist">Приложение сможет считывать информацию о списке абонентов, от которых заблокированы входящие звонки или сообщения.</string>
+  <string name="permlab_changePhoneBlacklist">Изменение чёрного списка</string>
+  <string name="permdesc_changePhoneBlacklist">Приложение сможет изменять список абонентов, от которых заблокированы входящие звонки или сообщения.</string>
+  <string name="permlab_accessThemeService">Доступ к службе тем</string>
+  <string name="permdesc_accessThemeService">Приложение сможет получать доступ к службе тем. Это разрешение не используется обычными приложениями.</string>
   <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
   <string name="app_ops_access_camera">получить доступ к камере</string>
   <string name="app_ops_access_location">получить доступ к местоположению устройства</string>

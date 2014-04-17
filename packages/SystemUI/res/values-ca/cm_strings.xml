@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Botó Recent</string>
   <string name="navbar_search_button">Botó Cerca</string>
   <string name="navbar_back_button">Botó Enrera</string>
-  <string name="navbar_empty_button">Botó Buit</string>
+  <string name="navbar_empty_button">Deixa buit</string>
   <string name="navbar_menu_conditional_button">Botó Menú (autoAmaga)</string>
   <string name="navbar_menu_always_button">Botó Menú (mostraSempre)</string>
   <string name="navbar_menu_big_button">Botó Menú</string>

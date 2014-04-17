@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Anwendungsverlauf</string>
   <string name="navbar_search_button">Suche</string>
   <string name="navbar_back_button">Zurück</string>
-  <string name="navbar_empty_button">Nicht belegt</string>
+  <string name="navbar_empty_button">Leer lassen</string>
   <string name="navbar_menu_conditional_button">Menü (automatisch ausblenden)</string>
   <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
   <string name="navbar_menu_big_button">Menü</string>

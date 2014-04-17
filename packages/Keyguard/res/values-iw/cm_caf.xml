@@ -23,4 +23,5 @@
   <string name="pinpuk_attempts">\nנסיונות נותרו:</string>
   <string name="lockscreen_sim_error_message_short">כרטיס שגוי.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM נעול ב-Perso</string>
+  <string name="msim_kg_sim_pin_msg_format">הרשמה: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
 </resources>

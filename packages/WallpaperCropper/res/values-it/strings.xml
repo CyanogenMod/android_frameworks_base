@@ -16,6 +16,5 @@
 -->
 <resources>
   <string name="crop_wallpaper">Ritaglia sfondo</string>
-  <string name="wallpaper_instructions">Imposta sfondo</string>
   <string name="wallpaper_load_fail">Impossibile caricare l\'immagine come sfondo</string>
 </resources>

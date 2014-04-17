@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Onlangse programme knoppie</string>
   <string name="navbar_search_button">Soek-knoppie</string>
   <string name="navbar_back_button">Terug-knoppie</string>
-  <string name="navbar_empty_button">Leë knoppie</string>
+  <string name="navbar_empty_button">Los leeg</string>
   <string name="navbar_menu_conditional_button">Kieslys knoppie (Outoverberg)</string>
   <string name="navbar_menu_always_button">Kieslys-knoppie (Altyd sigbaar)</string>
   <string name="navbar_menu_big_button">Kieslys-knoppie</string>

@@ -21,6 +21,7 @@
   <string name="profileNameHome">Otthon</string>
   <string name="profileNameSilent">Néma</string>
   <string name="profileNameNight">Éjszaka</string>
+  <string name="profileNameAutomobile">Autóban</string>
   <string name="profileGroupPhone">Telefon</string>
   <string name="profileGroupCalendar">Naptár</string>
   <string name="profileGroupGmail">Gmail</string>
@@ -34,7 +35,11 @@
   <string name="reboot_system" product="tablet">Táblagép újraindítása</string>
   <string name="reboot_system" product="default">Telefon újraindítása</string>
   <string name="reboot_reboot">Újraindítás</string>
+  <string name="reboot_recovery">Recovery</string>
+  <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_bootmenu">Bootmenü</string>
+  <string name="reboot_fastboot">Fastboot</string>
+  <string name="reboot_download">Download</string>
   <string name="reboot_progress">Újraindítás\u2026</string>
   <string name="reboot_confirm" product="tablet">A táblagép újraindul.</string>
   <string name="reboot_confirm" product="default">A telefon újraindul.</string>
@@ -63,7 +68,46 @@
   <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
   <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse az akkumulátor használati adatokat</string>
   <string name="immersive_mode_confirmation_bottom">Csúsztasson lentről felfelé a teljesképernyős módból való kilépéshez.</string>
+  <string name="app_ops_access_camera">hozzáférés a kamerához</string>
+  <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>
+  <string name="app_ops_access_notifications">értesítések olvasása</string>
   <string name="app_ops_alarm_wakeup">felébresztheti az eszközt</string>
-  <string name="privacy_guard_dialog_title">Adatvédelmi beállítások</string>
+  <string name="app_ops_draw_on_top">előtérben maradni</string>
+  <string name="app_ops_keep_device_awake">készülék ébrentartása</string>
+  <string name="app_ops_make_phone_call">hívást kezdeményezhet</string>
+  <string name="app_ops_modify_calendar">frissítheti a naptárat</string>
+  <string name="app_ops_modify_call_log">frissítheti a hívásnaplót</string>
+  <string name="app_ops_modify_clipboard">módosíthatja a vágólapot</string>
+  <string name="app_ops_modify_contacts">frissítheti a névjegyzéket</string>
+  <string name="app_ops_modify_settings">frissítheti a rendszerbeállításokat</string>
+  <string name="app_ops_play_audio">zene lejátszása</string>
+  <string name="app_ops_post_notification">értesítés küldése</string>
+  <string name="app_ops_read_calendar">naptár olvasása</string>
+  <string name="app_ops_read_call_log">hívásnapló olvasása</string>
+  <string name="app_ops_read_clipboard">vágólap olvasása</string>
+  <string name="app_ops_read_contacts">névjegyek olvasása</string>
+  <string name="app_ops_read_mms">MMS üzenetek olvasása</string>
+  <string name="app_ops_read_sms">MMS üzenetek olvasása</string>
+  <string name="app_ops_receive_sms">SMS üzenet fogadása</string>
+  <string name="app_ops_record_audio">hangfelvétel</string>
+  <string name="app_ops_send_mms">MMS üzenet küldése</string>
+  <string name="app_ops_send_sms">SMS üzenet küldése</string>
+  <string name="app_ops_start_at_bootup">elindulás bekapcsoláskor</string>
+  <string name="app_ops_toggle_bluetooth">Bluetooth kapcsolása</string>
+  <string name="app_ops_toggle_mobile_data">mobilinternet kapcsolása</string>
+  <string name="app_ops_toggle_wifi">WiFi kapcsolása</string>
+  <string name="app_ops_use_alarm_volume">ébresztőhang vezérlése</string>
+  <string name="app_ops_use_audio_focus">hang fókusz vezérlése</string>
+  <string name="app_ops_use_bluetooth_volume">Bluetooth hangerő vezérlése</string>
+  <string name="app_ops_use_master_volume">fő hangerő vezérlése</string>
+  <string name="app_ops_use_media_buttons">média gombok használata</string>
+  <string name="app_ops_use_media_volume">média hangerő vezérlése</string>
+  <string name="app_ops_use_notification_volume">értesítési hangerő vezérlése</string>
+  <string name="app_ops_use_ring_volume">csengőhang hangerejének vezérlése</string>
+  <string name="app_ops_use_vibrate">érintési visszajelzés használata</string>
+  <string name="app_ops_use_voice_volume">hívás közbeni hang vezérlése</string>
+  <string name="app_ops_write_mms">MMS írása</string>
+  <string name="app_ops_write_sms">SMS írása</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> a következő műveletet szeretné végrehajtani: <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Jegyezze meg a választást</string>
 </resources>

@@ -18,7 +18,6 @@
 <resources>
   <string name="pinpuk_attempts">\nPozostałych prób:</string>
   <string name="lockscreen_sim_error_message_short">Nieprawidłowa karta.</string>
-  <string name="lockscreen_airplane_mode_on">Opcje trybu samolotowego</string>
   <string name="progress_nomediapresent" product="default">Brak wymiennego nośnika pamięci\u2026</string>
   <string name="stk_cc_ussd_to_dial">Żądanie USSD jest modyfikowane na DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Żądanie USSD jest modyfikowane na SS.</string>
