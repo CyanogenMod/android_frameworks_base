@@ -60,17 +60,14 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/notification_panel_header_height"
         android:layout_marginBottom="@dimen/close_handle_underlap"
         android:orientation="vertical"
         android:animateLayoutChanges="false"
         >
-
-        <include layout="@layout/status_bar_expanded_header"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/notification_panel_header_height"
-            />
 
         <ViewStub android:id="@+id/ribbon_settings_stub"
             android:layout="@layout/ribbon_settings"
@@ -114,4 +111,18 @@
             </ScrollView>
         </FrameLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:animateLayoutChanges="false"
+        android:layout_marginBottom="@dimen/close_handle_height"
+        />
+
+     <include layout="@layout/status_bar_expanded_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/notification_panel_header_height"
+        />
 </com.android.systemui.statusbar.phone.NotificationPanelView><!-- end of sliding panel -->
