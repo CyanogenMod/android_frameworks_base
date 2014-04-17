@@ -487,4 +487,14 @@ public class QuickSettingsController {
             t.updateResources();
         }
     }
+
+    public void setImageMargins(int margin) {
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.setImageMargins(margin);
+        }
+    }
+
+    public void setSingleRowCellWidth(int cellWidth) {
+        mContainerView.setCellWidth(cellWidth);
+    }
 }

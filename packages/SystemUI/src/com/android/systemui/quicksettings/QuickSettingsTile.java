@@ -70,11 +70,14 @@ public class QuickSettingsTile implements OnClickListener {
         if (tv != null) {
             tv.setVisibility(View.GONE);
         }
+        setImageMargins(mContext.getResources().getDimensionPixelSize(
+                R.dimen.qs_tile_ribbon_icon_margin_normal));
+    }
+
+    public void setImageMargins(int margin) {
         View image = mTile.findViewById(R.id.image);
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
-            int margin = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.qs_tile_ribbon_icon_margin);
             params.topMargin = params.bottomMargin = margin;
             image.setLayoutParams(params);
         }
