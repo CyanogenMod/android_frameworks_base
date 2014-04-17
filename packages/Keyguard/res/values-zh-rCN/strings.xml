@@ -163,4 +163,8 @@
     <item quantity="one" msgid="3256893607561060649">"SIM 卡已被停用，需要输入 PUK 码才能继续使用。您还有<xliff:g id="NUMBER">%d</xliff:g>次尝试机会。如果仍然失败，SIM 卡将永远无法使用。有关详情，请联系您的运营商。"</item>
     <item quantity="other" msgid="5477305226026342036">"SIM 卡已被停用，需要输入 PUK 码才能继续使用。您还有<xliff:g id="NUMBER">%d</xliff:g>次尝试机会。如果仍然失败，SIM 卡将永远无法使用。有关详情，请联系您的运营商。"</item>
   </plurals>
+    <string name="China_Mobile">中国移动</string>
+    <string name="China_Unicom">中国联通</string>
+    <string name="China_Telecom">中国电信</string>
+    <string name="roamingTextSearching">"正在搜索服务"</string>
 </resources>

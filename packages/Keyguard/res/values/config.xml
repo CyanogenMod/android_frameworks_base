@@ -34,4 +34,7 @@
 
     <!-- display for radio tech -->
     <bool name="config_display_RAT">false</bool>
+
+    <!-- monitor locale change -->
+    <bool name="config_monitor_locale_change">false</bool>
 </resources>
