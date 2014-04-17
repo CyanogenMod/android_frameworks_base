@@ -229,4 +229,8 @@
 
     <!-- Padding under status bar battery icon -->
     <dimen name="status_bar_battery_bottom_padding">1px</dimen>
+
+    <dimen name="qs_ribbon_size_small">32dp</dimen>
+    <dimen name="qs_ribbon_size_medium">48dp</dimen>
+    <dimen name="qs_ribbon_size_large">64dp</dimen>
 </resources>

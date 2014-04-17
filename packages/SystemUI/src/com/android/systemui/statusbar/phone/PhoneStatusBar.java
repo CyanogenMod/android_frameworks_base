@@ -555,6 +555,30 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
+    private void setRibbonSize() {
+        if (mRibbonView == null)
+            return;
+        int sizeId = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_QUICK_ACCESS_SIZE, -99, UserHandle.USER_CURRENT);
+        if (sizeId == -99)
+            return;
+        switch (sizeId) {
+            case 2:
+                sizeId = R.dimen.qs_ribbon_size_small;
+                break;
+            case 1:
+                sizeId = R.dimen.qs_ribbon_size_medium;
+                break;
+            case 0:
+            default:
+                sizeId = R.dimen.qs_ribbon_size_large;
+                break;
+        }
+        LayoutParams lp = mRibbonView.getLayoutParams();
+        lp.height = mContext.getResources().getDimensionPixelSize(sizeId);
+        mRibbonView.setLayoutParams(lp);
+    }
+
     private void cleanupRibbon() {
         if (mRibbonView == null) {
             return;
@@ -570,6 +594,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (ribbon_stub != null) {
                 mRibbonView = (QuickSettingsHorizontalScrollView) ((ViewStub)ribbon_stub).inflate();
                 mRibbonView.setVisibility(View.VISIBLE);
+                setRibbonSize();
             }
         }
         if (mRibbonQS == null) {
@@ -3547,6 +3572,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     cleanupRibbon();
                 }
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
+                    Settings.System.QS_QUICK_ACCESS_SIZE))) {
+                setRibbonSize();
+            } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS_LINKED))) {
                 final ContentResolver resolver = mContext.getContentResolver();
                 boolean layoutLinked = Settings.System.getIntForUser(resolver,
@@ -3603,6 +3631,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.QS_QUICK_ACCESS),
+                    false, this, UserHandle.USER_ALL);
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QS_QUICK_ACCESS_SIZE),
                     false, this, UserHandle.USER_ALL);
 
             cr.registerContentObserver(
