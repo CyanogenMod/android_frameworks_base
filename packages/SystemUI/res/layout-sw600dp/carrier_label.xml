@@ -18,6 +18,8 @@
 -->
 
 <Space
-    xmlns:android="http://schemas.android.com/apk/res/android"    
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:visibility="gone"
+    android:layout_width="0px"
+    android:layout_height="0px"
     />
