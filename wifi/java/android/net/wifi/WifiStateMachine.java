@@ -1669,7 +1669,12 @@ public class WifiStateMachine extends StateMachine {
             enableBackgroundScanCommand(screenOn == false);
         }
 
-        if (screenOn) enableAllNetworks();
+        // While wps is running, DO NOT enabled all networks
+        // to prevent auto-connect to other APs.
+        if (screenOn && (getCurrentState() != mWpsRunningState)) {
+            enableAllNetworks();
+        }
+
         if (mUserWantsSuspendOpt.get()) {
             if (screenOn) {
                 sendMessage(CMD_SET_SUSPEND_OPT_ENABLED, 0, 0);
