@@ -53,6 +53,9 @@ public class QuickSettingsContainerView extends FrameLayout {
     private Context mContext;
     private boolean mSmallIcons;
 
+    // Cell width for single row
+    private int mCellWidth = -1;
+
     public QuickSettingsContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.QuickSettingsContainer, 0, 0);
@@ -60,6 +63,17 @@ public class QuickSettingsContainerView extends FrameLayout {
         a.recycle();
         mContext = context;
         updateResources();
+    }
+
+    /**
+     * Set cell width for single row mode
+     *
+     * @param cellWidth New cell width or -1 for squared cells (cellWidth =
+     *            cellHeight)
+     */
+    public void setCellWidth(int cellWidth) {
+        mCellWidth = cellWidth;
+        requestLayout();
     }
 
     @Override
@@ -99,8 +113,8 @@ public class QuickSettingsContainerView extends FrameLayout {
         float cellGap = mCellGap;
 
         if (mSingleRow) {
-            cellWidth = MeasureSpec.getSize(heightMeasureSpec);
-            cellHeight = (int) cellWidth;
+            cellHeight = MeasureSpec.getSize(heightMeasureSpec);
+            cellWidth = (mCellWidth >= 0) ? mCellWidth : cellHeight;
             cellGap /= 2;
         } else {
             cellHeight = (int) getResources().getDimension(R.dimen.quick_settings_cell_height);
