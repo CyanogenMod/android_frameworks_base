@@ -75,7 +75,7 @@
         <ViewStub android:id="@+id/ribbon_settings_stub"
             android:layout="@layout/ribbon_settings"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/notification_min_height"
+            android:layout_height="@dimen/qs_ribbon_height_big"
             />
 
         <TextView

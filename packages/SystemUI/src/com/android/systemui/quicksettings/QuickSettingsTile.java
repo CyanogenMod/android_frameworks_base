@@ -76,11 +76,13 @@ public class QuickSettingsTile implements OnClickListener {
         if (tv != null) {
             tv.setVisibility(View.GONE);
         }
+        // Image margins are set by the controller, so no need to set them here
+    }
+
+    public void setImageMargins(int margin) {
         View image = mTile.findViewById(R.id.image);
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
-            int margin = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.qs_tile_ribbon_icon_margin);
             params.topMargin = params.bottomMargin = margin;
             image.setLayoutParams(params);
         }
@@ -96,14 +98,8 @@ public class QuickSettingsTile implements OnClickListener {
                 tv.setPadding(0, mTileTextPadding, 0, 0);
             }
         }
-        View image = mTile.findViewById(R.id.image);
-        if (image != null) {
-            MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
-            int margin = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.qs_tile_ribbon_icon_margin);
-            params.topMargin = params.bottomMargin = margin;
-            image.setLayoutParams(params);
-        }
+        setImageMargins(mContext.getResources().getDimensionPixelSize(
+                R.dimen.qs_tile_ribbon_icon_margin_big));
     }
 
     void onPostCreate() {}
