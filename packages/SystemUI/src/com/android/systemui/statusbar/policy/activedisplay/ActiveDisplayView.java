@@ -225,6 +225,7 @@ public class ActiveDisplayView extends FrameLayout
     private boolean mShowNotificationCount = false;
     private boolean mEnableDoubleTap = false;
     private boolean mEnableShake = false;
+    private boolean mEnableShakeForce = false;
     private boolean mDisableShakeQuite = false;
     private int mShakeTimeout = 3;
     private int mShakeThreshold = 10;
@@ -256,7 +257,15 @@ public class ActiveDisplayView extends FrameLayout
                 // need to make sure either the screen is off or the user is currently
                 // viewing the notifications
                 if (getVisibility() == View.VISIBLE || !mScreenOnState) {
-                    showNotification(sbn, true);
+                    if (mEnableShakeForce) {
+                        if((mShakeTimeout > 0) && (!inQuietHours() && mQuietTime)) {
+                            enableShakeSensor();
+                            updateShakeTimer();
+                            Log.i(TAG, "Shake enable by force option.");
+                        }
+                    } else {
+                        showNotification(sbn, true);
+                    }
                 }
             }
         }
@@ -384,6 +393,8 @@ public class ActiveDisplayView extends FrameLayout
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_SHAKE_EVENT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_DISPLAY_SHAKE_FORCE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_SHAKE_QUITE_HOURS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_DISPLAY_SHAKE_THRESHOLD), false, this);
@@ -473,6 +484,9 @@ public class ActiveDisplayView extends FrameLayout
                     UserHandle.USER_CURRENT_OR_SELF) != 0;
             mEnableShake = Settings.System.getIntForUser(
                     resolver, Settings.System.ACTIVE_DISPLAY_SHAKE_EVENT, 0,
+                    UserHandle.USER_CURRENT_OR_SELF) != 0;
+            mEnableShakeForce = Settings.System.getIntForUser(
+                    resolver, Settings.System.ACTIVE_DISPLAY_SHAKE_FORCE, 0,
                     UserHandle.USER_CURRENT_OR_SELF) != 0;
             mDisableShakeQuite = Settings.System.getIntForUser(
                     resolver, Settings.System.ACTIVE_DISPLAY_SHAKE_QUITE_HOURS, 0,
@@ -1104,7 +1118,7 @@ public class ActiveDisplayView extends FrameLayout
 
     if(mShakeTimeout == 0){
         enableShakeSensor();
-            Log.w(TAG, "Shake always enable.");
+            Log.i(TAG, "Shake always enable.");
     }
 
         mWakedByPocketMode = false;
@@ -1138,7 +1152,7 @@ public class ActiveDisplayView extends FrameLayout
         if(mShakeTimeout > 0) {
             enableShakeSensor();
             updateShakeTimer();
-            Log.w(TAG, "Shake enable by screen time out.");
+            Log.i(TAG, "Shake enable by screen time out.");
         }
         try {
             mPM.goToSleep(SystemClock.uptimeMillis(), GO_TO_SLEEP_REASON_TIMEOUT);
@@ -1149,10 +1163,10 @@ public class ActiveDisplayView extends FrameLayout
     private void turnScreenOffbySensor() {
         mIsTurnOffBySensor = true;
         KeyguardTouchDelegate.getInstance(mContext).onScreenTurnedOff(OFF_BECAUSE_OF_PROX_SENSOR);
-	if(mShakeTimeout > 0) {
+    	if(mShakeTimeout > 0) {
             enableShakeSensor();
             updateShakeTimer();
-            Log.w(TAG, "Shake enable by sensor.");
+            Log.i(TAG, "Shake enable by sensor.");
         }
         turnScreenOff();
     }
@@ -1778,7 +1792,7 @@ public class ActiveDisplayView extends FrameLayout
             } else if (action.equals(ACTION_SHAKE_TIMEOUT)) {
                 synchronized (ActiveDisplayView.this) {
                     disableShakeSensor();
-                    Log.w(TAG, "Shake disabled by time out.");
+                    Log.i(TAG, "Shake disabled by time out.");
                 }
             } else if (action.equals(ACTION_DISPLAY_TIMEOUT)) {
                 final int sequence = intent.getIntExtra("seq", 0);
@@ -1856,7 +1870,7 @@ public class ActiveDisplayView extends FrameLayout
         PendingIntent sender = PendingIntent.getBroadcast(mContext,
                     0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         mAM.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, when, sender);
-	Log.w(TAG, "Shake timeout set.");
+    	Log.i(TAG, "Shake timeout set.");
     }
 
     /**

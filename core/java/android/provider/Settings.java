@@ -2834,6 +2834,12 @@ public final class Settings {
         public static final String ACTIVE_DISPLAY_SHAKE_EVENT = "active_display_shake_event";
 
         /**
+         * force shake device to show active display.
+         * @hide
+         */
+        public static final String ACTIVE_DISPLAY_SHAKE_FORCE = "active_display_shake_force";
+
+        /**
          * shake device to show/hide active display.
          * @hide
          */
