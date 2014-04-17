@@ -343,8 +343,9 @@ interface ITelephonyMSim {
 
     /**
      * Returns the all observed cell information of the device.
+     * @param subscription user preferred subscription.
      */
-    List<CellInfo> getAllCellInfo();
+    List<CellInfo> getAllCellInfo(int subscription);
 
     /**
      * get default subscription
