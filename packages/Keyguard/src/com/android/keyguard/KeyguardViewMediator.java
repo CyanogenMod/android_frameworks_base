@@ -561,10 +561,6 @@ public class KeyguardViewMediator {
         mLockSoundVolume = (float)Math.pow(10, (float)lockSoundDefaultAttenuation/20);
     }
 
-    public void setBackgroundBitmap(Bitmap bmp) {
-        mKeyguardViewManager.setBackgroundBitmap(bmp);
-    }
-
     /**
      * Let us know that the system is ready after startup.
      */
