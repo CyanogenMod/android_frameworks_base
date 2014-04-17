@@ -201,6 +201,10 @@ android_media_AudioRecord_setup(JNIEnv *env, jobject thiz, jobject weak_this,
     //ALOGV("sampleRate=%d, audioFormat=%d, channel mask=%x, buffSizeInBytes=%d",
     //     sampleRateInHertz, audioFormat, channelMask, buffSizeInBytes);
 
+#ifdef STE_HARDWARE
+    if (source == 1999) source = 1;
+#endif
+
     if (!audio_is_input_channel(channelMask)) {
         ALOGE("Error creating AudioRecord: channel mask %#x is not valid.", channelMask);
         return AUDIORECORD_ERROR_SETUP_INVALIDCHANNELMASK;
