@@ -937,9 +937,9 @@ public class MSimTelephonyManager {
      *
      * @hide pending API review
      */
-    public List<CellInfo> getAllCellInfo() {
+    public List<CellInfo> getAllCellInfo(int subscription) {
         try {
-            return getITelephonyMSim().getAllCellInfo();
+            return getITelephonyMSim().getAllCellInfo(subscription);
         } catch (RemoteException ex) {
             return null;
         } catch (NullPointerException ex) {
