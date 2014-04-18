@@ -375,10 +375,14 @@ public class MSimSignalClusterView
             mMobileType[subscription].setVisibility(View.GONE);
         }
 
-        if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT
-                && mNoSimIconId[subscription] != 0) {
-            mNoSimSlot[subscription].setVisibility(View.VISIBLE);
-            mMobile[subscription].setVisibility(View.GONE);
+        if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT) {
+            if (mNoSimIconId[subscription] != 0) {
+                mNoSimSlot[subscription].setVisibility(View.VISIBLE);
+                mMobile[subscription].setVisibility(View.GONE);
+            } else {
+                mNoSimSlot[subscription].setVisibility(View.GONE);
+                mMobile[subscription].setVisibility(View.VISIBLE);
+            }
         }
 
         if (subscription == 0) {
