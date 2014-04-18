@@ -12576,7 +12576,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         app.foregroundActivities = false;
         app.hasShownUi = false;
         app.hasAboveClient = false;
-        app.hasClientActivities = false;
 
         mServices.killServicesLocked(app, allowRestart);
 
