@@ -55,6 +55,8 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
     protected String mPinText;
     protected StateMachine mStateMachine = new StateMachine();
     protected AlertDialog mRemainingAttemptsDialog;
+    protected boolean mShowDefaultMessage = true;
+    protected int mRemainingAttempts = -1;
 
     protected class StateMachine {
         final int ENTER_PUK = 0;
@@ -99,7 +101,9 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint, true);
+            if (mShowDefaultMessage) {
+                showDefaultMessage();
+            }
             mPasswordEntry.requestFocus();
         }
     }
@@ -118,6 +122,21 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         }
         if (DEBUG) Log.d(LOG_TAG, "getPukPasswordErrorMessage:"
                 + " attemptsRemaining=" + attemptsRemaining + " displayMessage=" + displayMessage);
+        return displayMessage;
+    }
+
+    protected String getPukDefaultMessage(int attemptsRemaining) {
+        String displayMessage = getContext().getString(R.string.kg_puk_enter_puk_hint);
+
+        if (attemptsRemaining == 0) {
+            displayMessage = getContext().getString(R.string.kg_password_wrong_puk_code_dead);
+        } else if (attemptsRemaining > 0) {
+            displayMessage = getContext().getResources()
+                    .getQuantityString(R.plurals.kg_password_default_puk_message,
+                    attemptsRemaining, attemptsRemaining);
+        }
+        if (DEBUG) Log.d(LOG_TAG, "getPukDefaultMessage:" + " attemptsRemaining=" +
+                attemptsRemaining + " displayMessage=" + displayMessage);
         return displayMessage;
     }
 
@@ -190,6 +209,14 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         mPasswordEntry.requestFocus();
 
         mSecurityMessageDisplay.setTimeout(0); // don't show ownerinfo/charging status by default
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mShowDefaultMessage) {
+            showDefaultMessage();
+        }
     }
 
     @Override
@@ -312,14 +339,15 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked();
                                 mCallback.dismiss(true);
                             } else {
+                                mShowDefaultMessage = false;
+                                mRemainingAttempts = attemptsRemaining;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    // show message
+                                    mSecurityMessageDisplay.setMessage(
+                                            getPukPasswordErrorMessage(attemptsRemaining), true);
                                     if (attemptsRemaining <= 2) {
                                         // this is getting critical - show dialog
                                         getPukRemainingAttemptsDialog(attemptsRemaining).show();
-                                    } else {
-                                        // show message
-                                        mSecurityMessageDisplay.setMessage(
-                                                getPukPasswordErrorMessage(attemptsRemaining), true);
                                     }
                                 } else {
                                     mSecurityMessageDisplay.setMessage(getContext().getString(
@@ -342,6 +370,23 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
     @Override
     protected void verifyPasswordAndUnlock() {
         mStateMachine.next();
+    }
+
+    protected void showDefaultMessage() {
+        if (mRemainingAttempts >= 0) {
+            mSecurityMessageDisplay.setMessage(
+                    getPukDefaultMessage(mRemainingAttempts), true);
+            return;
+        }
+        new CheckSimPuk("", "") {
+            void onSimLockChangedResponse(final int result, final int attemptsRemaining) {
+                 if (attemptsRemaining >= 0) {
+                    mRemainingAttempts = attemptsRemaining;
+                    mSecurityMessageDisplay.setMessage(
+                            getPukDefaultMessage(attemptsRemaining), true);
+                }
+            }
+        }.start();
     }
 }
 

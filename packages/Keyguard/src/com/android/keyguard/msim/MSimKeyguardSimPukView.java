@@ -80,8 +80,9 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(
-                    getSecurityMessageDisplay(R.string.kg_puk_enter_puk_hint), true);
+            if (mShowDefaultMessage) {
+                showDefaultMessage();
+            }
             mPasswordEntry.requestFocus();
         }
     }
@@ -171,14 +172,15 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked();
                                 mCallback.dismiss(true);
                             } else {
+                                mShowDefaultMessage = false;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
+                                    mRemainingAttempts = attemptsRemaining;
+                                    // show message
+                                    mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
+                                            (getPukPasswordErrorMessage(attemptsRemaining)), true);
                                     if (attemptsRemaining <= 2) {
                                         // this is getting critical - show dialog
                                         getPukRemainingAttemptsDialog(attemptsRemaining).show();
-                                    } else {
-                                        // show message
-                                        mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
-                                                (getPukPasswordErrorMessage(attemptsRemaining)), true);
                                     }
                                 } else {
                                     mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
@@ -209,9 +211,26 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
         // Returns the String in the format
         // "SUB:%d : %s", sub, msg
         return getContext().getString(R.string.msim_kg_sim_pin_msg_format,
-                KeyguardUpdateMonitor.getInstance(mContext).getPinLockedSubscription()+1,msg);
+                KeyguardUpdateMonitor.getInstance(mContext).getPukLockedSubscription()+1,msg);
     }
 
-
+    @Override
+    protected void showDefaultMessage() {
+        if (mRemainingAttempts >= 0) {
+            mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
+                    (getPukDefaultMessage(mRemainingAttempts)), true);
+            return;
+        }
+        int sub = KeyguardUpdateMonitor.getInstance(mContext).getPukLockedSubscription();
+        new MSimCheckSimPuk("", "", sub) {
+            void onSimLockChangedResponse(final int result, final int attemptsRemaining) {
+                 if (attemptsRemaining >= 0) {
+                    mRemainingAttempts = attemptsRemaining;
+                    mSecurityMessageDisplay.setMessage(getSecurityMessageDisplay
+                            (getPukDefaultMessage(attemptsRemaining)), true);
+                }
+            }
+        }.start();
+    }
 }
 
