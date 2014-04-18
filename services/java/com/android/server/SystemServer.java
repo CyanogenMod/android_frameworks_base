@@ -1,8 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
- * Copyright (c) 2012, 2013, 2014. The Linux Foundation. All rights reserved.
- * Not a Contribution.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,13 +34,9 @@ import android.database.Cursor;
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
-import android.net.INetworkPolicyManager;
-import android.net.INetworkStatsService;
-import android.os.IBinder;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
-import android.os.INetworkManagementService;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StrictMode;
@@ -60,7 +54,6 @@ import android.view.WindowManager;
 import com.android.internal.R;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.SamplingProfilerIntegration;
-import com.android.internal.util.MemInfoReader;
 import com.android.server.accessibility.AccessibilityManagerService;
 import com.android.server.accounts.AccountManagerService;
 import com.android.server.am.ActivityManagerService;
@@ -95,9 +88,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import dalvik.system.PathClassLoader;
-import java.lang.reflect.Constructor;
 
 class ServerThread {
     private static final String TAG = "SystemServer";
@@ -173,7 +163,6 @@ class ServerThread {
         NetworkStatsService networkStats = null;
         NetworkPolicyManagerService networkPolicy = null;
         ConnectivityService connectivity = null;
-        Object qcCon = null;
         WifiP2pService wifiP2p = null;
         WifiService wifi = null;
         NsdService serviceDiscovery= null;
@@ -555,48 +544,19 @@ class ServerThread {
                     reportWtf("starting Wi-Fi Service", e);
                 }
 
-               try {
-                   int enableCne = 1;
-                   if (!deviceHasSufficientMemory()) {
-                       enableCne = SystemProperties.getInt("persist.cne.override.memlimit", 0);
-                   }
-                   int cneFeature = (enableCne == 1) ?
-                       SystemProperties.getInt("persist.cne.feature", 0) : 0;
+                try {
+                    Slog.i(TAG, "Connectivity Service");
+                    connectivity = new ConnectivityService(
+                            context, networkManagement, networkStats, networkPolicy);
+                    ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);
+                    networkStats.bindConnectivityManager(connectivity);
+                    networkPolicy.bindConnectivityManager(connectivity);
 
-                   try {
-                       if ( cneFeature > 0 && cneFeature < 10 ) {
-                           Slog.i(TAG, "QcConnectivity Service");
-                           PathClassLoader qcsClassLoader =
-                               new PathClassLoader("/system/framework/services-ext.jar",
-                                       ClassLoader.getSystemClassLoader());
-                           Class qcsClass =
-                               qcsClassLoader.loadClass("com.android.server.QcConnectivityService");
-                           Constructor qcsConstructor = qcsClass.getConstructor
-                               (new Class[] {Context.class, INetworkManagementService.class,
-                                INetworkStatsService.class, INetworkPolicyManager.class});
-                           qcCon = qcsConstructor.newInstance(
-                                   context, networkManagement, networkStats, networkPolicy);
-                           connectivity = (ConnectivityService) qcCon;
-                       } else {
-                           Slog.i(TAG, "Connectivity Service");
-                           connectivity = new ConnectivityService( context, networkManagement,
-                                   networkStats, networkPolicy);
-                       }
-                   } catch (Throwable e) {
-                       connectivity = new ConnectivityService( context, networkManagement,
-                               networkStats, networkPolicy);
-                   }
-
-                   if (connectivity != null) {
-                       ServiceManager.addService(Context.CONNECTIVITY_SERVICE, connectivity);
-                       networkStats.bindConnectivityManager(connectivity);
-                       networkPolicy.bindConnectivityManager(connectivity);
-                       wifi.checkAndStartWifi();
-                       wifiP2p.connectivityServiceReady();
-                   }
-               } catch (Throwable e) {
-                   reportWtf("starting Connectivity Service", e);
-               }
+                    wifiP2p.connectivityServiceReady();
+                    wifi.checkAndStartWifi();
+                } catch (Throwable e) {
+                    reportWtf("starting Connectivity Service", e);
+                }
 
                 try {
                     Slog.i(TAG, "Network Service Discovery Service");
@@ -862,7 +822,7 @@ class ServerThread {
                 }
             }
 
-            if (!disableNonCoreServices &&
+            if (!disableNonCoreServices && 
                 context.getResources().getBoolean(R.bool.config_dreamsSupported)) {
                 try {
                     Slog.i(TAG, "Dreams Service");
@@ -1289,17 +1249,6 @@ class ServerThread {
                     "com.android.systemui.SystemUIService"));
         //Slog.d(TAG, "Starting service: " + intent);
         context.startServiceAsUser(intent, UserHandle.OWNER);
-    }
-
-    private static final boolean deviceHasSufficientMemory() {
-        final long MEMORY_SIZE_MIN = 512 * 1024 * 1024;
-
-        MemInfoReader minfo = new MemInfoReader();
-        minfo.readMemInfo();
-        if (minfo.getTotalSize() <= MEMORY_SIZE_MIN) {
-            return false;
-        }
-        return true;
     }
 }
 
