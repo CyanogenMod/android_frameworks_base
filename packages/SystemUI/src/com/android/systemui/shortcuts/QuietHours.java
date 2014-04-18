@@ -24,6 +24,9 @@ import android.provider.Settings;
 
 public class QuietHours extends Activity  {
 
+    private static final String SCHEDULE_SERVICE_COMMAND =
+            "com.android.settings.slim.service.SCHEDULE_SERVICE_COMMAND";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,13 @@ public class QuietHours extends Activity  {
         Settings.System.putIntForUser(getContentResolver(),
                 Settings.System.QUIET_HOURS_ENABLED, value,
                 UserHandle.USER_CURRENT_OR_SELF);
+        autoSmsIntentBroadcast();
         this.finish();
+    }
+
+    private void autoSmsIntentBroadcast() {
+        Intent scheduleSms = new Intent();
+        scheduleSms.setAction(SCHEDULE_SERVICE_COMMAND);
+        this.sendBroadcast(scheduleSms);
     }
 }

@@ -52,6 +52,9 @@ public class PhoneStatusBarPolicy {
 
     private static final int INET_CONDITION_THRESHOLD = 50;
 
+    private static final String SCHEDULE_SERVICE_COMMAND =
+            "com.android.settings.slim.service.SCHEDULE_SERVICE_COMMAND";
+
     private static final boolean SHOW_SYNC_ICON = false;
 
     private final Context mContext;
@@ -283,6 +286,9 @@ public class PhoneStatusBarPolicy {
             Settings.System.putIntForUser(mContext.getContentResolver(),
                     Settings.System.QUIET_HOURS_ENABLED,
                     enabled, UserHandle.USER_CURRENT);
+            Intent scheduleSms = new Intent();
+            scheduleSms.setAction(SCHEDULE_SERVICE_COMMAND);
+            mContext.sendBroadcast(scheduleSms);
         }
     }
 }
