@@ -251,4 +251,5 @@
     <!-- Storage -->
     <java-symbol type="string" name="storage_usb" />
     <java-symbol type="string" name="storage_uicc" />
+    <java-symbol type="bool" name="config_batterySdCardAccessibility" />
 </resources>
