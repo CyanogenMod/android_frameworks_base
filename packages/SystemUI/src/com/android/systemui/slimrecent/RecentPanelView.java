@@ -502,24 +502,17 @@ public class RecentPanelView {
         // Move it to foreground or start it with custom animation.
         final ActivityManager am = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        if (td.taskId >= 0) {
-            // This is an active task; it should just go to the foreground.
-            am.moveTaskToFront(td.taskId, ActivityManager.MOVE_TASK_WITH_HOME, getAnimation());
-        } else {
-            final Intent intent = td.intent;
-            intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                    | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                    | Intent.FLAG_FLOATING_WINDOW
+        final Intent intent = td.intent;
+        intent.addFlags(Intent.FLAG_FLOATING_WINDOW
                     | Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (DEBUG) Log.v(TAG, "Starting activity " + intent);
-            try {
-                mContext.startActivityAsUser(intent, getAnimation(),
-                        new UserHandle(UserHandle.USER_CURRENT));
-            } catch (SecurityException e) {
-                Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
-            } catch (ActivityNotFoundException e) {
-                Log.e(TAG, "Error launching activity " + intent, e);
-            }
+        if (DEBUG) Log.v(TAG, "Starting activity " + intent);
+        try {
+            mContext.startActivityAsUser(intent, getAnimation(),
+                    new UserHandle(UserHandle.USER_CURRENT));
+        } catch (SecurityException e) {
+            Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "Error launching activity " + intent, e);
         }
         exit();
     }
