@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1022,7 +1023,8 @@ public class SettingsProvider extends ContentProvider {
             if (soundUri != null) {
                 // Proxy the openFile call to media provider
                 String authority = soundUri.getAuthority();
-                if (authority.equals(MediaStore.AUTHORITY)) {
+                if (authority.equals(MediaStore.AUTHORITY) ||
+                        authority.equals(RingtoneManager.THEME_AUTHORITY)) {
                     return context.getContentResolver().openFileDescriptor(soundUri, mode);
                 }
             }
@@ -1050,11 +1052,11 @@ public class SettingsProvider extends ContentProvider {
             if (soundUri != null) {
                 // Proxy the openFile call to media provider
                 String authority = soundUri.getAuthority();
-                if (authority.equals(MediaStore.AUTHORITY)) {
+                if (authority.equals(MediaStore.AUTHORITY) ||
+                        authority.equals(RingtoneManager.THEME_AUTHORITY)) {
                     ParcelFileDescriptor pfd = null;
                     try {
-                        pfd = context.getContentResolver().openFileDescriptor(soundUri, mode);
-                        return new AssetFileDescriptor(pfd, 0, -1);
+                        return context.getContentResolver().openAssetFileDescriptor(soundUri, mode);
                     } catch (FileNotFoundException ex) {
                         // fall through and open the fallback ringtone below
                     }

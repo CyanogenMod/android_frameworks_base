@@ -16,8 +16,6 @@
 
 package android.content.res;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 
@@ -34,11 +32,6 @@ public final class CustomTheme implements Cloneable {
     private CustomTheme() {
         mThemeId = SystemProperties.get("persist.sys.themeId");
         mThemePackageName = SystemProperties.get("persist.sys.themePackageName");
-    }
-
-    private CustomTheme(Parcel src) {
-        mThemeId = src.readString();
-        mThemePackageName = src.readString();
     }
 
     public CustomTheme(String themeId, String packageName) {

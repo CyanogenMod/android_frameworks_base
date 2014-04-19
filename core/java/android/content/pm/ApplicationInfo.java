@@ -469,6 +469,18 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * @hide
      */
     public int enabledSetting = PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
+    /**
+     * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
+     * {@hide}
+     */
+    public boolean isThemeable = false;
+
+    private static final String PLUTO_SCHEMA = "http://www.w3.org/2001/pluto.html";
+
+    /**
+     * @hide
+     */
+    public static final String PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME = "isThemeable";
 
     /**
      * @hide
@@ -476,10 +488,11 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public static final String PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME = "handleThemeConfigChanges";
 
     /**
-     * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
-     * {@hide}
+     * @hide
      */
-    public boolean isThemeable = false;
+    public static boolean isPlutoNamespace(String namespace) {
+        return namespace != null && namespace.equalsIgnoreCase(PLUTO_SCHEMA);
+    }
 
     /**
      * For convenient access to package's install location.

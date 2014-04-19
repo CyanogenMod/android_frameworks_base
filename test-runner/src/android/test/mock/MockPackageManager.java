@@ -628,6 +628,14 @@ public class MockPackageManager extends PackageManager {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @hide - to match hiding in superclass
+     */
+    @Override
+    public List<PackageInfo> getInstalledThemePackages() {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public void verifyPendingInstall(int id, int verificationCode) {
         throw new UnsupportedOperationException();
