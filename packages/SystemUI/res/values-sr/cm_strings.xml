@@ -67,16 +67,16 @@
   <string name="navbar_dialog_title">Изаберите акцију да доделите</string>
   <string name="navbar_home_button">Главно дугме</string>
   <string name="navbar_recent_button">Најскорије дугме</string>
-  <string name="navbar_search_button">Тастер за претраживање</string>
-  <string name="navbar_back_button">Тастер за повратак назад</string>
+  <string name="navbar_search_button">Дугме за претраживање</string>
+  <string name="navbar_back_button">Дугме за повратак назад</string>
   <string name="navbar_empty_button">Остави празно</string>
-  <string name="navbar_menu_conditional_button">Мени (аутосакриј) тастер</string>
-  <string name="navbar_menu_always_button">Мени (увекприкажи) тастер</string>
-  <string name="navbar_menu_big_button">Тастер за Мени</string>
+  <string name="navbar_menu_conditional_button">Мени (ауто сакриј) дугме</string>
+  <string name="navbar_menu_always_button">Мени (увек прикажи) дугме</string>
+  <string name="navbar_menu_big_button">Дугме за Мени</string>
   <string name="advanced_dev_option_wipe_app">Обришите податке апликације</string>
   <string name="advanced_dev_option_force_stop">Приморано заустављање</string>
   <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> посто.</string>
   <string name="screenshot_delete_action">Обриши</string>
-  <string name="screenshot_delete_confirmation">Screenshot је обрисан.</string>
-  <string name="accessibility_desc_add_quick_settings">Додај брза подешавања.</string>
+  <string name="screenshot_delete_confirmation">Снимак екрана је обрисан.</string>
+  <string name="accessibility_desc_add_quick_settings">Додајте брза подешавања.</string>
 </resources>
