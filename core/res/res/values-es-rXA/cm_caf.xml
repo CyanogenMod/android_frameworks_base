@@ -18,6 +18,7 @@
 <resources>
   <string name="pinpuk_attempts">\nIntentos restantes:</string>
   <string name="lockscreen_sim_error_message_short">Tarxeta inválida.</string>
+  <string name="lockscreen_airplane_mode_on">Mou avión</string>
   <string name="progress_nomediapresent" product="default">Nun hai medios estrayibles\u2026</string>
   <string name="stk_cc_ussd_to_dial">Solicitú USSD modifícase a solicitú DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Solicitú USSD modifícase a solicitú SS.</string>

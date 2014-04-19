@@ -19,9 +19,9 @@
   <string name="keyguard_password_wrong_puk_code">קוד PUK שגוי.</string>
   <string name="keyguard_password_pin_failed">פעולת PIN נכשלה.</string>
   <string name="keyguard_password_puk_failed">פעולת PUK נכשלה.</string>
-  <string name="keyguard_pin_accepted">קוד התקבל.</string>
-  <string name="pinpuk_attempts">\nנסיונות נותרו:</string>
+  <string name="keyguard_pin_accepted">הקוד התקבל.</string>
+  <string name="pinpuk_attempts">\nנסיונות שנותרו:</string>
   <string name="lockscreen_sim_error_message_short">כרטיס שגוי.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM נעול ב-Perso</string>
-  <string name="msim_kg_sim_pin_msg_format">הרשמה: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
+  <string name="msim_kg_sim_pin_msg_format">הרשמה: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

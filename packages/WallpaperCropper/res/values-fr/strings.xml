@@ -16,5 +16,6 @@
 -->
 <resources>
   <string name="crop_wallpaper">Recadrer le fond d\'écran</string>
+  <string name="wallpaper_instructions">Définir le fond d\'écran</string>
   <string name="wallpaper_load_fail">Impossible de charger l\'image comme un fond d\'écran</string>
 </resources>

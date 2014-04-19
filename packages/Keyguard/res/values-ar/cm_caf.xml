@@ -16,11 +16,11 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_password_wrong_puk_code">Nesprávny kód PUK.</string>
-  <string name="keyguard_password_pin_failed">Operácia PIN zlyhala.</string>
-  <string name="keyguard_password_puk_failed">Operácia PUK zlyhala.</string>
-  <string name="keyguard_pin_accepted">Kód bol prijatý.</string>
-  <string name="pinpuk_attempts">\nZostávajúce pokusy:</string>
-  <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
-  <string name="keyguard_perso_locked_message">SIM/RUIM je uzamknuté pomocou Perso</string>
+  <string name="keyguard_password_wrong_puk_code">رمز PUK غير صحيحة.</string>
+  <string name="keyguard_password_pin_failed">فشلت عملية PIN.</string>
+  <string name="keyguard_password_puk_failed">فشلت عملية PUK.</string>
+  <string name="keyguard_pin_accepted">الرمز مقبول.</string>
+  <string name="pinpuk_attempts">\nالمحاولات المتبقية:</string>
+  <string name="lockscreen_sim_error_message_short">البطاقة غير صالحة.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM هو تأمين شخصي</string>
 </resources>

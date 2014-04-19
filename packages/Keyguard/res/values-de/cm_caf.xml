@@ -23,6 +23,5 @@
   <string name="pinpuk_attempts">\nVerbleibende Versuche:</string>
   <string name="lockscreen_sim_error_message_short">Ungültige Karte</string>
   <string name="keyguard_perso_locked_message">SIM-Karte ist gesperrt</string>
-  <string name="msim_kg_sim_pin_msg_format">SIM <xliff:g id="number">%d</xliff:g> : <xliff:g id="msg">%s</xliff:g>.</string>
-  <string name="msim_carrier_text_format"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>
