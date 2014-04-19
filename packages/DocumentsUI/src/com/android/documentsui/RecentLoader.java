@@ -65,13 +65,13 @@ public class RecentLoader extends AsyncTaskLoader<DirectoryResult> {
     /**
      * Time to wait for first pass to complete before returning partial results.
      */
-    private static final int MAX_FIRST_PASS_WAIT_MILLIS = 500;
+    private static final int MAX_FIRST_PASS_WAIT_MILLIS = 400;
 
     /** Maximum documents from a single root. */
-    private static final int MAX_DOCS_FROM_ROOT = 64;
+    private static final int MAX_DOCS_FROM_ROOT = 100;
 
     /** Ignore documents older than this age. */
-    private static final long REJECT_OLDER_THAN = 45 * DateUtils.DAY_IN_MILLIS;
+    private static final long REJECT_OLDER_THAN = 64 * DateUtils.DAY_IN_MILLIS;
 
     /** MIME types that should always be excluded from recents. */
     private static final String[] RECENT_REJECT_MIMES = new String[] { Document.MIME_TYPE_DIR };
