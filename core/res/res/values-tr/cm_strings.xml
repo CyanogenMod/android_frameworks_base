@@ -81,7 +81,7 @@
   <string name="app_ops_access_notifications">Bildirimleri okuma</string>
   <string name="app_ops_alarm_wakeup">cihazı uyandırma</string>
   <string name="app_ops_draw_on_top">en üstte görüntülenme</string>
-  <string name="app_ops_keep_device_awake">cihazık uyanık tut</string>
+  <string name="app_ops_keep_device_awake">cihazı uyanık tut</string>
   <string name="app_ops_make_phone_call">telefon görüşmesi yapma</string>
   <string name="app_ops_modify_calendar">Takvimini güncelleme</string>
   <string name="app_ops_modify_call_log">arama kaydını güncelleme</string>

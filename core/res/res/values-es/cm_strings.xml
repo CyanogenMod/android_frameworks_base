@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Permite que la aplicación intercepte mensajes SMS salientes. Las aplicaciones maliciosas pueden impedir los mensajes SMS salientes.</string>
   <string name="permlab_resetBatteryStats">restablecer estadísticas de batería</string>
   <string name="permdesc_resetBatteryStats">Permite que la aplicación restablezca los datos del uso de la batería.</string>
+  <string name="permgrouplab_security">Seguridad</string>
+  <string name="permgroupdesc_security">Permisos relacionados con la seguridad de la información del dispositivo.</string>
+  <string name="permlab_readPhoneBlacklist">leer lista negra del teléfono</string>
+  <string name="permdesc_readPhoneBlacklist">Permite que la aplicación lea la información sobre los números de teléfono bloqueados de llamadas o mensajes entrantes.</string>
+  <string name="permlab_changePhoneBlacklist">cambiar la lista negra del teléfono</string>
+  <string name="permdesc_changePhoneBlacklist">Permite que la aplicación cambie los números de teléfono bloqueados de llamadas o mensajes entrantes.</string>
+  <string name="permlab_accessThemeService">acceso al servicio de temas</string>
+  <string name="permdesc_accessThemeService">Permite que la aplicación acceda al servicio de temas. Nunca debería ser necesario para aplicaciones normales.</string>
   <string name="immersive_mode_confirmation_bottom">Desliza el dedo hacia arriba desde el borde inferior para salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a tu ubicación</string>

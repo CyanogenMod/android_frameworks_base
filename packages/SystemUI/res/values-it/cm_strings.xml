@@ -68,6 +68,7 @@
   <string name="navbar_recent_button">Pulsante Recenti</string>
   <string name="navbar_search_button">Pulsante Cerca</string>
   <string name="navbar_back_button">Pulsante Indietro</string>
+  <string name="navbar_empty_button">Lascia vuoto</string>
   <string name="navbar_menu_conditional_button">Pulsante Menu (automatico)</string>
   <string name="navbar_menu_always_button">Pulsante Menu (fisso)</string>
   <string name="navbar_menu_big_button">Pulsante Menu</string>
