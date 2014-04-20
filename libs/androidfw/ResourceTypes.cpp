@@ -5626,18 +5626,6 @@ bool ResTable::getIdmapInfo(const void* idmap, size_t sizeBytes,
 void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
 {
     mError = NO_ERROR;
-    ALOGV("Removing cookie %d for package %s", cookie, packageName.string());
-    size_t N = mHeaders.size();
-    for (size_t i = 0; i < N; i++) {
-        Header* header = mHeaders[i];
-        if ((size_t)header->cookie == (size_t)cookie) {
-            if (header->ownedData != NULL) {
-                free(header->ownedData);
-            }
-            mHeaders.removeAt(i);
-            break;
-        }
-    }
     size_t pgCount = mPackageGroups.size();
     for (size_t pgIndex = 0; pgIndex < pgCount; pgIndex++) {
         PackageGroup* pg = mPackageGroups[pgIndex];
@@ -5674,11 +5662,24 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
                 pg->packages.removeAt(index);
                 delete pkg;
             }
-            return;
+            break;
         } else {
           ALOGV("idx > pkgCount");
         }
     }
+    ALOGV("Removing cookie %d for package %s", cookie, packageName.string());
+    size_t N = mHeaders.size();
+    for (size_t i = 0; i < N; i++) {
+        Header* header = mHeaders[i];
+        if ((size_t)header->cookie == (size_t)cookie) {
+            if (header->ownedData != NULL) {
+                free(header->ownedData);
+            }
+            mHeaders.removeAt(i);
+            break;
+        }
+    }
+
 }
 
 bool ResTable::isResTypeAllowed(const char* type) const
