@@ -1813,6 +1813,7 @@ public final class Settings {
 
         /**
          * If all file types can be accepted over Bluetooth OBEX.
+         * @hide
          */
         public static final String BLUETOOTH_ACCEPT_ALL_FILES =
             "bluetooth_accept_all_files";
