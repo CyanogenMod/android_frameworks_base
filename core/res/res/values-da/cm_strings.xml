@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Tillader app\'en at blokere en udgående SMS. Ondsindede apps kan bruge dette til at forhindre udgående SMS-beskeder.</string>
   <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
   <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
+  <string name="permgrouplab_security">Sikkerhed</string>
+  <string name="permgroupdesc_security">Tilladelser vedr. enhedens sikkerhedsinformation.</string>
+  <string name="permlab_readPhoneBlacklist">læs telefonens sortliste</string>
+  <string name="permdesc_readPhoneBlacklist">Tillader en app at læse informationer om telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
+  <string name="permlab_changePhoneBlacklist">ændre telefonens sortliste</string>
+  <string name="permdesc_changePhoneBlacklist">Tillader en app at ændre telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
+  <string name="permlab_accessThemeService">tilgå tematjenesten</string>
+  <string name="permdesc_accessThemeService">Tillader en app at tilgå tematjenesten. Bør aldrig være nødvendig for alm. apps.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
   <string name="app_ops_access_camera">tilgå kameraet</string>
   <string name="app_ops_access_location">tilgå din placering</string>

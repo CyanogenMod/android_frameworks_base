@@ -68,7 +68,6 @@
   <string name="navbar_recent_button">Botón Recientes</string>
   <string name="navbar_search_button">Botón Búsqueda</string>
   <string name="navbar_back_button">Botón Atrás</string>
-  <string name="navbar_empty_button">Sin botón</string>
   <string name="navbar_menu_conditional_button">Botón Menú (auto-ocultar)</string>
   <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
   <string name="navbar_menu_big_button">Botón Menú</string>

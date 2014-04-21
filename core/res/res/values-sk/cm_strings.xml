@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Umožňuje aplikácii zachytiť odchádzajúce SMS. Škodlivé aplikácie môžu pomocou tohto povolenia zabrániť odchodu SMS správ.</string>
   <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
   <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
+  <string name="permgrouplab_security">Zabezpečenie</string>
+  <string name="permgroupdesc_security">Povolenia súvisiace s informáciami o bezpečnosti zariadenia.</string>
+  <string name="permlab_readPhoneBlacklist">čítať čiernu listinu telefónu</string>
+  <string name="permdesc_readPhoneBlacklist">Umožňuje aplikácii čítať informácie o telefónnych číslach, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
+  <string name="permlab_changePhoneBlacklist">zmeniť čiernu listinu telefónu</string>
+  <string name="permdesc_changePhoneBlacklist">Umožňuje aplikácii zmeniť telefónne čísla, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
+  <string name="permlab_accessThemeService">prístup k službe tém</string>
+  <string name="permdesc_accessThemeService">Umožňuje aplikácii prístup k službe na správu tém. Toto povolenie nie je bežné pre štandardné aplikácie.</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>

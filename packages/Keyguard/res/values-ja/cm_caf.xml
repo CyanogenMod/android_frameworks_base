@@ -16,10 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_password_wrong_puk_code">Nieprawidłowy kod PUK.</string>
-  <string name="keyguard_password_pin_failed">Nieudana operacja PIN.</string>
-  <string name="keyguard_password_puk_failed">Nieudana operacja PUK.</string>
-  <string name="keyguard_pin_accepted">Kod zaakceptowany.</string>
-  <string name="keyguard_perso_locked_message">Blokada Perso karty SIM/RUIM</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
+  <string name="keyguard_password_wrong_puk_code">PUKコードが正しくありません。</string>
+  <string name="keyguard_password_pin_failed">PIN操作に失敗しました。</string>
+  <string name="keyguard_password_puk_failed">PUK操作に失敗しました。</string>
+  <string name="keyguard_pin_accepted">コードが認証されました。</string>
+  <string name="pinpuk_attempts">\n残り試行回数:</string>
+  <string name="lockscreen_sim_error_message_short">無効なSIMカードです。</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIMカードはペルソロックされています。</string>
+  <string name="msim_kg_sim_pin_msg_format">サブ: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>。</string>
 </resources>

@@ -53,8 +53,6 @@
   <string name="quick_settings_lte_off">LTE désactivé</string>
   <string name="quick_settings_volume">Volume</string>
   <string name="quick_settings_camera_label">Appareil photo</string>
-  <string name="quick_settings_network_adb_disabled_label">Désactivé</string>
-  <string name="quick_settings_network_adb_enabled_label">Activé</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d connecté</string>
   <string name="location_mode_high_accuracy_title">Haute précision</string>
   <string name="location_mode_battery_saving_title">Économie de batterie</string>
@@ -68,7 +66,6 @@
   <string name="navbar_recent_button">Bouton d\'applications récentes</string>
   <string name="navbar_search_button">Bouton de recherche</string>
   <string name="navbar_back_button">Bouton retour</string>
-  <string name="navbar_empty_button">Bouton vide</string>
   <string name="navbar_menu_conditional_button">Bouton menu (masqué automatiquement)</string>
   <string name="navbar_menu_always_button">Bouton menu (toujours affiché)</string>
   <string name="navbar_menu_big_button">bouton menu</string>

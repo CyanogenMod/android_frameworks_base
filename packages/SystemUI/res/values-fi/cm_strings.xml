@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Viimeisimmät-näppäin</string>
   <string name="navbar_search_button">Hakunäppäin</string>
   <string name="navbar_back_button">Takaisin-näppäin</string>
-  <string name="navbar_empty_button">Tyhjä näppäin</string>
+  <string name="navbar_empty_button">Jätä tyhjäksi</string>
   <string name="navbar_menu_conditional_button">Valikkonäppäin (piilota)</string>
   <string name="navbar_menu_always_button">Valikkonäppäin (näytä aina)</string>
   <string name="navbar_menu_big_button">Valikkonäppäin</string>

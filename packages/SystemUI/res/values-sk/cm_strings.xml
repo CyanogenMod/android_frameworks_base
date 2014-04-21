@@ -68,7 +68,7 @@
   <string name="navbar_recent_button">Tlačidlo Nedávne</string>
   <string name="navbar_search_button">Tlačidlo Hľadať</string>
   <string name="navbar_back_button">Tlačidlo Späť</string>
-  <string name="navbar_empty_button">Prázdne tlačidlo</string>
+  <string name="navbar_empty_button">Ponechať prázdne</string>
   <string name="navbar_menu_conditional_button">Tlačidlo Ponuka (automaticky skrývané)</string>
   <string name="navbar_menu_always_button">Tlačidlo Ponuka (vždy viditeľné)</string>
   <string name="navbar_menu_big_button">Tlačidlo Ponuka</string>
