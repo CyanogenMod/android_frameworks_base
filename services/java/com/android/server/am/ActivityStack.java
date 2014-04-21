@@ -1161,9 +1161,11 @@ final class ActivityStack {
                     // Aggregate current change flags.
                     configChanges |= r.configChangeFlags;
 
+                    int mHaloEnabled = (Settings.System.getInt(
+                                            mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
                     boolean isSplitView = false;
                     boolean isFloating = r.floatingWindow;
-                    if (!isFloating) {
+                    if (isFloating || mHaloEnabled != 1) {
                         try {
                             IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
                             isSplitView = wm.isTaskSplitView(r.task.taskId);

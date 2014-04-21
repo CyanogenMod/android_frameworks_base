@@ -9942,30 +9942,34 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
             }
 
-            if (DEBUG_FOCUS_LIGHT) Slog.v(TAG, "findFocusedWindow: Found new focus @ " + i +
-                        " = " + win);
-            // Dispatch to this window if it is wants key events.
+            if (DEBUG_FOCUS_LIGHT) Slog.v(TAG, "findFocusedWindow: Found new focus @ " + i + " = " + win);
 
+            int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
 
-            if (win.canReceiveKeys()) {
-                if (mFocusedApp != null) {
-                    if (mIsTokenSplitted.containsKey(mFocusedApp.token) && mIsTokenSplitted.get(mFocusedApp.token)) {
-                        if ((mTaskTouched != null && mTaskTouched.equals(mFocusedApp.token)) || mTaskTouched == null) {
-                            if (DEBUG_FOCUS) Slog.v(
-                                TAG, "Found focus @ " + i + " = " + win);
-                            return win;
+            if(mHaloEnabled != 1){
+                // Dispatch to this window if it is wants key events.
+                if (win.canReceiveKeys()) {
+                    if (mFocusedApp != null) {
+                        if (mIsTokenSplitted.containsKey(mFocusedApp.token) && mIsTokenSplitted.get(mFocusedApp.token)) {
+                            if ((mTaskTouched != null && mTaskTouched.equals(mFocusedApp.token)) || mTaskTouched == null) {
+                                if (DEBUG_FOCUS) Slog.v(
+                                    TAG, "Found focus @ " + i + " = " + win);
+                                return win;
+                            } else {
+                                if (DEBUG_FOCUS || localLOGV) Slog.v(
+                                    TAG, "Task " + win + " is split, but not last touched");
+                            }
                         } else {
-                            if (DEBUG_FOCUS || localLOGV) Slog.v(
-                                TAG, "Task " + win + " is split, but not last touched");
+                            if (DEBUG_FOCUS) Slog.v(TAG, "Task " + win + " has no split token");
+                            return win;
                         }
                     } else {
-                        if (DEBUG_FOCUS) Slog.v(TAG, "Task " + win + " has no split token");
+                        if (DEBUG_FOCUS) Slog.v(TAG, "Null thisApp");
                         return win;
                     }
-                } else {
-                    if (DEBUG_FOCUS) Slog.v(TAG, "Null thisApp");
-                    return win;
-                }
+                }        
+            } else {
+                return win;
             }
         }
 
