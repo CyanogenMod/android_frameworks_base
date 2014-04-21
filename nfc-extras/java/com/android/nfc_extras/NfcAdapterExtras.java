@@ -22,6 +22,7 @@ import android.content.Context;
 import android.nfc.INfcAdapterExtras;
 import android.nfc.NfcAdapter;
 import android.os.RemoteException;
+import android.content.Intent;
 import android.util.Log;
 
 /**
@@ -258,6 +259,14 @@ public final class NfcAdapterExtras {
         } catch (RemoteException e) {
             attemptDeadServiceRecovery(e);
             return false;
+        }
+    }
+
+    public void deliverSeIntent(Intent seIntent) {
+        try {
+            sService.deliverSeIntent(mPackageName, seIntent);
+        } catch (RemoteException e) {
+            attemptDeadServiceRecovery(e);
         }
     }
 }
