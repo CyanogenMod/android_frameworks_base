@@ -1170,7 +1170,7 @@ final class ActivityStack {
                         Slog.e(TAG, "Cannot get split view status", e);
                     }
 
-                    if (r.fullscreen && (!isSplitView || !r.floatingWindow)) {
+                    if (r.fullscreen && !isSplitView) {
                         // At this point, nothing else needs to be shown
                         if (DEBUG_VISBILITY) Slog.v(TAG, "Fullscreen: at " + r);
                         behindFullscreen = true;
@@ -2696,9 +2696,6 @@ final class ActivityStack {
             boolean setState) {
         if (mResumedActivity == r) {
             mResumedActivity = null;
-        }
-        if (mPausingActivity == r) {
-            mPausingActivity = null;
         }
         if (mService.mFocusedActivity == r) {
             mService.mFocusedActivity = null;
