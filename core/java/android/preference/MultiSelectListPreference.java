@@ -44,21 +44,21 @@ public class MultiSelectListPreference extends DialogPreference {
     private Set<String> mValues = new HashSet<String>();
     private Set<String> mNewValues = new HashSet<String>();
     private boolean mPreferenceChanged;
-    
+
     public MultiSelectListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.MultiSelectListPreference, 0, 0);
         mEntries = a.getTextArray(com.android.internal.R.styleable.MultiSelectListPreference_entries);
         mEntryValues = a.getTextArray(com.android.internal.R.styleable.MultiSelectListPreference_entryValues);
         a.recycle();
     }
-    
+
     public MultiSelectListPreference(Context context) {
         this(context, null);
     }
-    
+
     /**
      * Sets the human-readable entries to be shown in the list. This will be
      * shown in subsequent dialogs.
@@ -72,7 +72,7 @@ public class MultiSelectListPreference extends DialogPreference {
     public void setEntries(CharSequence[] entries) {
         mEntries = entries;
     }
-    
+
     /**
      * @see #setEntries(CharSequence[])
      * @param entriesResId The entries array as a resource.
@@ -80,7 +80,7 @@ public class MultiSelectListPreference extends DialogPreference {
     public void setEntries(int entriesResId) {
         setEntries(getContext().getResources().getTextArray(entriesResId));
     }
-    
+
     /**
      * The list of entries to be shown in the list in subsequent dialogs.
      * 
@@ -89,7 +89,7 @@ public class MultiSelectListPreference extends DialogPreference {
     public CharSequence[] getEntries() {
         return mEntries;
     }
-    
+
     /**
      * The array to find the value to save for a preference when an entry from
      * entries is selected. If a user clicks on the second item in entries, the
@@ -108,7 +108,7 @@ public class MultiSelectListPreference extends DialogPreference {
     public void setEntryValues(int entryValuesResId) {
         setEntryValues(getContext().getResources().getTextArray(entryValuesResId));
     }
-    
+
     /**
      * Returns the array of values to be saved for the preference.
      * 
@@ -117,7 +117,7 @@ public class MultiSelectListPreference extends DialogPreference {
     public CharSequence[] getEntryValues() {
         return mEntryValues;
     }
-    
+
     /**
      * Sets the value of the key. This should contain entries in
      * {@link #getEntryValues()}.
@@ -130,14 +130,14 @@ public class MultiSelectListPreference extends DialogPreference {
 
         persistStringSet(values);
     }
-    
+
     /**
      * Retrieves the current value of the key.
      */
     public Set<String> getValues() {
         return mValues;
     }
-    
+
     /**
      * Returns the index of the given value (in the entry values array).
      * 
@@ -154,17 +154,17 @@ public class MultiSelectListPreference extends DialogPreference {
         }
         return -1;
     }
-    
+
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        
+
         if (mEntries == null || mEntryValues == null) {
             throw new IllegalStateException(
                     "MultiSelectListPreference requires an entries array and " +
                     "an entryValues array.");
         }
-        
+
         boolean[] checkedItems = getSelectedItems();
         builder.setMultiChoiceItems(mEntries, checkedItems,
                 new DialogInterface.OnMultiChoiceClickListener() {
@@ -179,24 +179,24 @@ public class MultiSelectListPreference extends DialogPreference {
         mNewValues.clear();
         mNewValues.addAll(mValues);
     }
-    
+
     private boolean[] getSelectedItems() {
         final CharSequence[] entries = mEntryValues;
         final int entryCount = entries.length;
         final Set<String> values = mValues;
         boolean[] result = new boolean[entryCount];
-        
+
         for (int i = 0; i < entryCount; i++) {
             result[i] = values.contains(entries[i].toString());
         }
-        
+
         return result;
     }
-    
+
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-        
+
         if (positiveResult && mPreferenceChanged) {
             final Set<String> values = mNewValues;
             if (callChangeListener(values)) {
@@ -205,25 +205,27 @@ public class MultiSelectListPreference extends DialogPreference {
         }
         mPreferenceChanged = false;
     }
-    
+
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         final CharSequence[] defaultValues = a.getTextArray(index);
-        final int valueCount = defaultValues != null ? defaultValues.length : 0;
-        final Set<String> result = new HashSet<String>();
-        
-        for (int i = 0; i < valueCount; i++) {
-            result.add(defaultValues[i].toString());
+        if (defaultValues != null) {
+            final int valueCount = defaultValues.length;
+            final Set<String> result = new HashSet<String>();
+
+            for (int i = 0; i < valueCount; i++) {
+                result.add(defaultValues[i].toString());
+            }
+            return result;
         }
-        
-        return result;
+        return null;
     }
-    
+
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         setValues(restoreValue ? getPersistedStringSet(mValues) : (Set<String>) defaultValue);
     }
-    
+
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
@@ -231,42 +233,42 @@ public class MultiSelectListPreference extends DialogPreference {
             // No need to save instance state
             return superState;
         }
-        
+
         final SavedState myState = new SavedState(superState);
         myState.values = getValues();
         return myState;
     }
-    
+
     private static class SavedState extends BaseSavedState {
         Set<String> values;
-        
+
         public SavedState(Parcel source) {
             super(source);
             values = new HashSet<String>();
             String[] strings = source.readStringArray();
-            
+
             final int stringCount = strings.length;
             for (int i = 0; i < stringCount; i++) {
                 values.add(strings[i]);
             }
         }
-        
+
         public SavedState(Parcelable superState) {
             super(superState);
         }
-        
+
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeStringArray(values.toArray(new String[0]));
         }
-        
+
         public static final Parcelable.Creator<SavedState> CREATOR =
                 new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
-            
+
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
