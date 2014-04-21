@@ -2530,7 +2530,7 @@ struct ResTable::Package
             delete types[i];
         }
     }
-    
+
     ResTable* const                 owner;
     const Header* const             header;
     const ResTable_package* const   package;
@@ -2538,7 +2538,7 @@ struct ResTable::Package
 
     ResStringPool                   typeStrings;
     ResStringPool                   keyStrings;
-    
+
     const Type* getType(size_t idx) const {
         return idx < types.size() ? types[idx] : NULL;
     }
@@ -2550,7 +2550,8 @@ struct ResTable::Package
 struct ResTable::PackageGroup
 {
     PackageGroup(ResTable* _owner, const String16& _name, uint32_t _id)
-        : owner(_owner), name(_name), id(_id), typeCount(0), bags(NULL), overlayPkgId(0) { }
+        : owner(_owner), name(_name), id(_id), typeCount(0), bags(NULL),
+          overlayPkgId(0), overlayPackage(NULL) { }
     ~PackageGroup() {
         clearBagCache();
         const size_t N = packages.size();
@@ -2588,23 +2589,24 @@ struct ResTable::PackageGroup
             bags = NULL;
         }
     }
-    
+
     ResTable* const                 owner;
     String16 const                  name;
     uint32_t const                  id;
     Vector<Package*>                packages;
-    
+
     // This is for finding typeStrings and other common package stuff.
     Package*                        basePackage;
 
     // For quick access.
     size_t                          typeCount;
-    
+
     // Computed attribute bags, first indexed by the type and second
     // by the entry in that type.
     bag_set***                      bags;
 
     uint32_t                        overlayPkgId;
+    Package*                        overlayPackage;
 };
 
 struct ResTable::bag_set
@@ -2750,7 +2752,7 @@ status_t ResTable::Theme::applyStyle(uint32_t resID, bool force)
 
     //ALOGI("Applying style 0x%08x (force=%d)  theme %p...\n", resID, force, this);
     //dumpToLog();
-    
+
     return NO_ERROR;
 }
 
@@ -2759,7 +2761,7 @@ status_t ResTable::Theme::setTo(const Theme& other)
     //ALOGI("Setting theme %p from theme %p...\n", this, &other);
     //dumpToLog();
     //other.dumpToLog();
-    
+
     if (&mTable == &other.mTable) {
         for (size_t i=0; i<Res_MAXPACKAGE; i++) {
             if (mPackages[i] != NULL) {
@@ -2789,7 +2791,7 @@ status_t ResTable::Theme::setTo(const Theme& other)
 
     //ALOGI("Final theme:");
     //dumpToLog();
-    
+
     return NO_ERROR;
 }
 
@@ -2799,7 +2801,7 @@ ssize_t ResTable::Theme::getAttribute(uint32_t resID, Res_value* outValue,
     int cnt = 20;
 
     if (outTypeSpecFlags != NULL) *outTypeSpecFlags = 0;
-    
+
     do {
         const ssize_t p = mTable.getResourcePackageIndex(resID);
         const uint32_t t = Res_GETTYPE(resID);
@@ -2873,12 +2875,12 @@ void ResTable::Theme::dumpToLog() const
     for (size_t i=0; i<Res_MAXPACKAGE; i++) {
         package_info* pi = mPackages[i];
         if (pi == NULL) continue;
-        
+
         ALOGI("  Package #0x%02x:\n", (int)(i+1));
         for (size_t j=0; j<pi->numTypes; j++) {
             type_info& ti = pi->types[j];
             if (ti.numEntries == 0) continue;
-            
+
             ALOGI("    Type #0x%02x:\n", (int)(j+1));
             for (size_t k=0; k<ti.numEntries; k++) {
                 theme_entry& te = ti.entries[k];
@@ -2940,11 +2942,11 @@ status_t ResTable::add(Asset* asset, void* cookie, bool copyData, const void* id
 status_t ResTable::add(ResTable* src)
 {
     mError = src->mError;
-    
+
     for (size_t i=0; i<src->mHeaders.size(); i++) {
         mHeaders.add(src->mHeaders[i]);
     }
-    
+
     for (size_t i=0; i<src->mPackageGroups.size(); i++) {
         PackageGroup* srcPg = src->mPackageGroups[i];
         PackageGroup* pg = new PackageGroup(this, srcPg->name, srcPg->id);
@@ -2955,9 +2957,9 @@ status_t ResTable::add(ResTable* src)
         pg->typeCount = srcPg->typeCount;
         mPackageGroups.add(pg);
     }
-    
+
     memcpy(mPackageMap, src->mPackageMap, sizeof(mPackageMap));
-    
+
     return mError;
 }
 
@@ -3242,12 +3244,20 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
 
     ssize_t rc = BAD_VALUE;
     size_t ip = grp->packages.size();
+    bool checkOverlay = grp->overlayPackage != NULL;
     while (ip > 0 && !bestFitOverride) {
         ip--;
         int T = t;
         int E = e;
 
-        const Package* const package = grp->packages[ip];
+        const Package* const package = checkOverlay ? grp->overlayPackage : grp->packages[ip];
+        if (checkOverlay) {
+            checkOverlay = false;
+            ip++;
+        }
+        if (!package) {
+            continue;
+        }
         if (package->header->resourceIDMap) {
             uint32_t overlayResID = 0x0;
             status_t retval = idmapLookup(package->header->resourceIDMap,
@@ -3320,7 +3330,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
             // are identical (diff == 0), or overlay packages will not take effect.
             continue;
         }
-        
+
         bestItem = thisConfig;
         bestValue = item;
         bestPackage = package;
@@ -3514,18 +3524,23 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
     bag_set* set = NULL;
 
     TABLE_NOISY(ALOGI("Building bag: %p\n", (void*)resID));
-    
+
     ResTable_config bestConfig;
     memset(&bestConfig, 0, sizeof(bestConfig));
 
     // Now collect all bag attributes from all packages.
     size_t ip = grp->packages.size();
+    bool checkOverlay = grp->overlayPackage != NULL;
     while (ip > 0) {
         ip--;
         int T = t;
         int E = e;
 
-        const Package* const package = grp->packages[ip];
+        const Package* const package = checkOverlay ? grp->overlayPackage : grp->packages[ip];
+        if (checkOverlay) {
+            checkOverlay = false;
+            ip++;
+        }
         if (package->header->resourceIDMap) {
             if (performMapping) {
                 uint32_t overlayResID = 0x0;
@@ -3586,7 +3601,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
             ? dtohl(((const ResTable_map_entry*)entry)->parent.ident) : 0;
         const uint32_t count = entrySize >= sizeof(ResTable_map_entry)
             ? dtohl(((const ResTable_map_entry*)entry)->count) : 0;
-        
+
         size_t N = count;
 
         TABLE_NOISY(ALOGI("Found map: size=%p parent=%p count=%d\n",
@@ -3649,7 +3664,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         } else {
             set->typeSpecFlags = -1;
         }
-        
+
         // Now merge in the new attributes...
         ssize_t curOff = offset;
         const ResTable_map* map;
@@ -3912,7 +3927,7 @@ nope:
             TABLE_NOISY(printf("Expected type structure not found in package %s for idnex %d\n",
                                String8(group->name).string(), ti));
         }
-        
+
         size_t NTC = typeConfigs->configs.size();
         for (size_t tci=0; tci<NTC; tci++) {
             const ResTable_type* const ty = typeConfigs->configs[tci];
@@ -3928,9 +3943,9 @@ nope:
                 if (offset == ResTable_type::NO_ENTRY) {
                     continue;
                 }
-                
+
                 offset += typeOffset;
-                
+
                 if (offset > (dtohl(ty->header.size)-sizeof(ResTable_entry))) {
                     ALOGW("ResTable_entry at %d is beyond type chunk data %d",
                          offset, dtohl(ty->header.size));
@@ -3944,7 +3959,7 @@ nope:
                          String8(name, nameLen).string());
                     return 0;
                 }
-                
+
                 const ResTable_entry* const entry = (const ResTable_entry*)
                     (((const uint8_t*)ty) + offset);
                 if (dtohs(entry->size) < sizeof(*entry)) {
@@ -4101,7 +4116,7 @@ static bool parse_unit(const char* str, Res_value* outValue,
     if (*realEnd != 0) {
         return false;
     }
-    
+
     const unit_entry* cur = unitNames;
     while (cur->name) {
         if (len == cur->len && strncmp(cur->name, str, len) == 0) {
@@ -4252,7 +4267,7 @@ bool ResTable::stringToFloat(const char16_t* s, size_t len, Res_value* outValue)
             if (neg) {
                 mantissa = (-mantissa) & Res_value::COMPLEX_MANTISSA_MASK;
             }
-            outValue->data |= 
+            outValue->data |=
                 (radix<<Res_value::COMPLEX_RADIX_SHIFT)
                 | (mantissa<<Res_value::COMPLEX_MANTISSA_SHIFT);
             //printf("Input value: %f 0x%016Lx, mult: %f, radix: %d, shift: %d, final: 0x%08x\n",
@@ -4365,7 +4380,7 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
         // Note: we don't check attrType here because the reference can
         // be to any other type; we just need to count on the client making
         // sure the referenced type is correct.
-        
+
         //printf("Looking up ref: %s\n", String8(s, len).string());
 
         // It's a reference!
@@ -4452,7 +4467,7 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
             }
         }
     }
-    
+
     if (*s == '#') {
         // It's a color!  Convert to an integer of the form 0xaarrggbb.
         uint32_t color = 0;
@@ -4552,7 +4567,7 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
         //       String8(package).string(), String8(type).string(),
         //       String8(name).string());
         uint32_t specFlags = 0;
-        uint32_t rid = 
+        uint32_t rid =
             identifierForName(name.string(), name.size(),
                               type.string(), type.size(),
                               package.string(), package.size(), &specFlags);
@@ -4717,7 +4732,7 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
                             return true;
                         }
                     }
-    
+
                 }
                 bag++;
                 cnt--;
@@ -5079,43 +5094,43 @@ ssize_t ResTable::getEntry(
             entryIndex, (int)allTypes->entryCount);
         return BAD_TYPE;
     }
-        
+
     const ResTable_type* type = NULL;
     uint32_t offset = ResTable_type::NO_ENTRY;
     ResTable_config bestConfig;
     memset(&bestConfig, 0, sizeof(bestConfig)); // make the compiler shut up
-    
+
     const size_t NT = allTypes->configs.size();
     for (size_t i=0; i<NT; i++) {
         const ResTable_type* const thisType = allTypes->configs[i];
         if (thisType == NULL) continue;
-        
+
         ResTable_config thisConfig;
         thisConfig.copyFromDtoH(thisType->config);
 
         TABLE_GETENTRY(ALOGI("Match entry 0x%x in type 0x%x (sz 0x%x): %s\n",
                            entryIndex, typeIndex+1, dtohl(thisType->config.size),
                            thisConfig.toString().string()));
-        
+
         // Check to make sure this one is valid for the current parameters.
         if (config && !thisConfig.match(*config)) {
             TABLE_GETENTRY(ALOGI("Does not match config!\n"));
             continue;
         }
-        
+
         // Check if there is the desired entry in this type.
-        
+
         const uint8_t* const end = ((const uint8_t*)thisType)
             + dtohl(thisType->header.size);
         const uint32_t* const eindex = (const uint32_t*)
             (((const uint8_t*)thisType) + dtohs(thisType->header.headerSize));
-        
+
         uint32_t thisOffset = dtohl(eindex[entryIndex]);
         if (thisOffset == ResTable_type::NO_ENTRY) {
             TABLE_GETENTRY(ALOGI("Skipping because it is not defined!\n"));
             continue;
         }
-        
+
         if (type != NULL) {
             // Check if this one is less specific than the last found.  If so,
             // we will skip it.  We check starting with things we most care
@@ -5125,19 +5140,19 @@ ssize_t ResTable::getEntry(
                 continue;
             }
         }
-        
+
         type = thisType;
         offset = thisOffset;
         bestConfig = thisConfig;
         TABLE_GETENTRY(ALOGI("Best entry so far -- using it!\n"));
         if (!config) break;
     }
-    
+
     if (type == NULL) {
         TABLE_GETENTRY(ALOGI("No value found for requested entry!\n"));
         return BAD_INDEX;
     }
-    
+
     offset += dtohl(type->entriesStart);
     TABLE_NOISY(aout << "Looking in resource table " << package->header->header
           << ", typeOff="
@@ -5202,21 +5217,21 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
              (void*)dtohl(pkg->keyStrings));
         return (mError=BAD_TYPE);
     }
-    
+
     Package* package = NULL;
     PackageGroup* group = NULL;
-    uint32_t id = idmap_id != 0 ? idmap_id : dtohl(pkg->id);
+    uint32_t id = dtohl(pkg->id);
     // If at this point id == 0, pkg is an overlay package without a
     // corresponding idmap. During regular usage, overlay packages are
     // always loaded alongside their idmaps, but during idmap creation
     // the package is temporarily loaded by itself.
     if (id < 256) {
-    
+
         package = new Package(this, header, pkg);
         if (package == NULL) {
             return (mError=NO_MEMORY);
         }
-        
+
         size_t idx = mPackageMap[id];
         if (idx == 0) {
             idx = mPackageGroups.size()+1;
@@ -5250,8 +5265,8 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
                 return (mError=err);
             }
             group->basePackage = package;
-
             mPackageMap[id] = (uint8_t)idx;
+            group->overlayPkgId = pkg->id;
         } else {
             group = mPackageGroups.itemAt(idx-1);
             if (group == NULL) {
@@ -5263,20 +5278,21 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
             return (mError=err);
         }
         if (idmap_id != 0) {
-            // we need to add our overlay's package ID to this group so resources that
-            // only exist in the overlay are accessed from the overlay correctly
-            mPackageMap[pkg->id] = (uint8_t)idx;
-            group->overlayPkgId = pkg->id;
+            PackageGroup* targetGroup = mPackageGroups.itemAt(mPackageMap[idmap_id] - 1);
+            if (targetGroup) {
+                targetGroup->overlayPkgId = pkg->id;
+                targetGroup->overlayPackage = package;
+            }
         }
     } else {
         LOG_ALWAYS_FATAL("Package id out of range");
         return NO_ERROR;
     }
 
-    
+
     // Iterate through all chunks.
     size_t curPackage = 0;
-    
+
     const ResChunk_header* chunk =
         (const ResChunk_header*)(((const uint8_t*)pkg)
                                  + dtohs(pkg->header.headerSize));
@@ -5295,9 +5311,9 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
             if (err != NO_ERROR) {
                 return (mError=err);
             }
-            
+
             const size_t typeSpecSize = dtohl(typeSpec->header.size);
-            
+
             LOAD_TABLE_NOISY(printf("TypeSpec off %p: type=0x%x, headerSize=0x%x, size=%p\n",
                                     (void*)(base-(const uint8_t*)chunk),
                                     dtohs(typeSpec->header.type),
@@ -5313,12 +5329,12 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
                      (void*)typeSpecSize);
                 return (mError=BAD_TYPE);
             }
-            
+
             if (typeSpec->id == 0) {
                 ALOGW("ResTable_type has an id of 0.");
                 return (mError=BAD_TYPE);
             }
-            
+
             while (package->types.size() < typeSpec->id) {
                 package->types.add(NULL);
             }
@@ -5334,7 +5350,7 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
             t->typeSpecFlags = (const uint32_t*)(
                     ((const uint8_t*)typeSpec) + dtohs(typeSpec->header.headerSize));
             t->typeSpec = typeSpec;
-            
+
         } else if (ctype == RES_TABLE_TYPE_TYPE) {
             const ResTable_type* type = (const ResTable_type*)(chunk);
             err = validate_chunk(&type->header, sizeof(*type)-sizeof(ResTable_config)+4,
@@ -5342,9 +5358,9 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
             if (err != NO_ERROR) {
                 return (mError=err);
             }
-            
+
             const size_t typeSize = dtohl(type->header.size);
-            
+
             LOAD_TABLE_NOISY(printf("Type off %p: type=0x%x, headerSize=0x%x, size=%p\n",
                                     (void*)(base-(const uint8_t*)chunk),
                                     dtohs(type->header.type),
@@ -5368,7 +5384,7 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
                 ALOGW("ResTable_type has an id of 0.");
                 return (mError=BAD_TYPE);
             }
-            
+
             while (package->types.size() < type->id) {
                 package->types.add(NULL);
             }
@@ -5381,7 +5397,7 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
                     (int)dtohl(type->entryCount), (int)t->entryCount);
                 return (mError=BAD_TYPE);
             }
-            
+
             TABLE_GETENTRY(
                 ResTable_config thisConfig;
                 thisConfig.copyFromDtoH(type->config);
@@ -5402,7 +5418,7 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     if (group->typeCount == 0) {
         group->typeCount = package->types.size();
     }
-    
+
     return NO_ERROR;
 }
 
@@ -5650,6 +5666,14 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
             if (id != 0 && id < 256 && pkgCount == 1) {
                 ALOGV("Settings id:%d to zero in mPackageMap", id);
                 mPackageMap[id] = 0;
+            }
+            size_t N = mPackageGroups.size();
+            // Check if this package is being reference in any other groups and remove it
+            for (int i = 0; i < N; i++) {
+                PackageGroup* grp = mPackageGroups.itemAt(i);
+                if (grp->overlayPackage == pkg) {
+                    grp->overlayPackage = NULL;
+                }
             }
             if (pkgCount == 1) {
                 ALOGV("Delete Package Group %d id=%d packageCount=%d name=%s\n",
