@@ -39,8 +39,8 @@ public class StatusHeaderMachine {
     private static final String TAG = "StatusHeaderMachine";
 
     // Daily calendar periods
-    // Night starts at 18:00
-    private static final int TIME_NIGHT = 22;
+    // Night starts at 20:00
+    private static final int TIME_NIGHT = 20;
     private static final int DRAWABLE_NIGHT = R.drawable.notifhead_night;
     // Morning starts at 07:00
     private static final int TIME_MORNING = 7;
