@@ -292,9 +292,13 @@ public class CustomTile extends QuickSettingsTile {
                         UserHandle.USER_CURRENT);
                 break;
             case SECURE_INT:
+                // Implement same method as location tile where stored
+                // Value isn't the same as resolver value
                 Settings.Secure.putIntForUser(
                         mContext.getContentResolver(),
-                        mWatchedSetting, mResolvedInts[mState],
+                        "location_last_mode".equals(mWatchedSetting)
+                        ? "location_mode" : mWatchedSetting,
+                        mResolvedInts[mState],
                         UserHandle.USER_CURRENT);
                 break;
             case SYSTEM_LONG:
