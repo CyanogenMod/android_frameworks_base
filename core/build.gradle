@@ -1,0 +1,20 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 319
+    buildToolsVersion '19.0.3'
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 319
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile '.dummy_AndroidManifest.xml'
+            java.srcDirs = ['java']
+            res.srcDirs = ['res']
+        }
+    }
+
+}
