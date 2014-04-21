@@ -16,8 +16,5 @@
 
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- App circle sidebar -->
-    <string name="app_float_maximize_item_title">Maximize</string>
-    <string name="app_float_item_title">Float view</string>
     <string name="app_stop_item_title">Kill app</string>
 </resources>
