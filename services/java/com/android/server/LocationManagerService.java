@@ -2127,19 +2127,7 @@ public class LocationManagerService extends ILocationManager.Stub {
 
     private Location screenLocationLocked(Location location, String provider) {
 
-        if (isMockProvider(LocationManager.NETWORK_PROVIDER)) {
-            return location;
-        }
-
-        LocationProviderProxy providerProxy =
-                (LocationProviderProxy)mProvidersByName.get(LocationManager.NETWORK_PROVIDER);
-        if (mComboNlpPackageName == null || providerProxy == null ||
-            false == provider.equals(LocationManager.NETWORK_PROVIDER)) {
-            return location;
-        }
-
-        String connectedNlpPackage = providerProxy.getConnectedPackageName();
-        if (connectedNlpPackage == null || !connectedNlpPackage.equals(mComboNlpPackageName)) {
+        if (false == provider.equals(LocationManager.NETWORK_PROVIDER)) {
             return location;
         }
 
