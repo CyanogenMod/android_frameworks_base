@@ -983,22 +983,33 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             am.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
                     opts);
         } else {
-            if (!floating) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                       | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                       | Intent.FLAG_ACTIVITY_NEW_TASK);
-            } else {
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                       | Intent.FLAG_FLOATING_WINDOW);
-            }
-            if (DEBUG) Log.v(TAG, "Starting activity " + intent);
-            try {
-                context.startActivityAsUser(intent, opts,
+            if (floating) {
+                if (DEBUG) Log.v(TAG, "Starting floating activity " + intent);
+                try {
+                    context.startActivityAsUser(intent, opts,
                         new UserHandle(UserHandle.USER_CURRENT));
-            } catch (SecurityException e) {
-                Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
-            } catch (ActivityNotFoundException e) {
-                Log.e(TAG, "Error launching activity " + intent, e);
+                } catch (SecurityException e) {
+                    Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
+                }
+            } else {
+                boolean backPressed = mRecentsActivity != null && mRecentsActivity.mBackPressed;
+                if (!floating  || !backPressed) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
+                            | Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                            | Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+                if (DEBUG) Log.v(TAG, "Starting activity " + intent);
+                try {
+                    context.startActivityAsUser(intent, opts,
+                            new UserHandle(UserHandle.USER_CURRENT));
+                    if (floating && mRecentsActivity != null) {
+                        mRecentsActivity.finish();
+                    }
+                } catch (SecurityException e) {
+                    Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, "Error launching activity " + intent, e);
+                }
             }
         }
         if (usingDrawingCache) {
