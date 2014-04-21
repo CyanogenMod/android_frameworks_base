@@ -79,4 +79,5 @@
         <item name="android:shadowRadius">2.0</item>
         <item name="android:lineSpacingMultiplier">1.1</item>
     </style>
+
 </resources>
