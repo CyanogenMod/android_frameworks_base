@@ -119,4 +119,6 @@
     <!-- Height of carrier label + close handle -->
     <dimen name="weather_text_margin">56dp</dimen>
 
+    <!-- Circle App Sidebar -->
+    <dimen name="app_sidebar_trigger_width">8dip</dimen>
 </resources>
