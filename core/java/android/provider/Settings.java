@@ -5259,11 +5259,6 @@ public final class Settings {
         public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate";
 
         /**
-         * @hide
-         */
-        public static final String HIDE_BATTERY_ICON = "hide_battery_icon";
-
-        /**
          * use Alt Activity Resolver Grid
          * boolean
          *
