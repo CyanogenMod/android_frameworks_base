@@ -199,8 +199,8 @@
     <integer name="def_qs_quick_pulldown">0</integer>
 
     <!-- Defaults for Settings.System.LOCKSCREEN_TARGETS. -->
-    <string name="def_lockscreen_targets" translatable="false"></string>
-    <string name="def_lockscreen_targets_no_telephony" translatable="false"></string>
+    <string name="def_lockscreen_targets" translatable="false">#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.mms/.ui.ConversationList;S.icon_resource=ic_lockscreen_sms_normal;end|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.andrew.apollo/.ui.activities.HomeActivity;S.icon_resource=ic_lockscreen_music_normal;end|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.dialer/.DialtactsActivity;S.icon_resource=ic_lockscreen_phone_normal;end|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.browser/.BrowserActivity;S.icon_resource=ic_lockscreen_browser_normal;end</string>
+    <string name="def_lockscreen_targets_no_telephony" translatable="false">empty|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.browser/.BrowserActivity;S.icon_resource=ic_lockscreen_browser_normal;end|empty|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.andrew.apollo/.ui.activities.HomeActivity;S.icon_resource=ic_lockscreen_music_normal;end</string>
 
     <!-- Defaults for Settings.System.DEV_FORCE_SHOW_NAVBAR. -->
     <integer name="def_force_disable_navkeys">0</integer>
