@@ -58,6 +58,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_PROFILE;
 import static com.android.internal.util.slim.QSConstants.TILE_CAMERA;
 import static com.android.internal.util.slim.QSConstants.TILE_INTERNALMEMORY;
 import static com.android.internal.util.slim.QSConstants.TILE_ONTHEGO;
+import static com.android.internal.util.slim.QSConstants.TILE_BATTERYSAVER;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -115,6 +116,7 @@ import com.android.systemui.quicksettings.FChargeTile;
 import com.android.systemui.quicksettings.ProfileTile;
 import com.android.systemui.quicksettings.CameraTile;
 import com.android.systemui.quicksettings.OnTheGoTile;
+import com.android.systemui.quicksettings.BatterySaverTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -272,6 +274,8 @@ public class QuickSettingsController {
                 qs = new InternalMemory(mContext, this);
             } else if (tile.equals(TILE_ONTHEGO)) {
                 qs = new OnTheGoTile(mContext, this);
+            } else if (tile.equals(TILE_BATTERYSAVER)) {
+                qs = new BatterySaverTile(mContext, this);
             } else if (tile.equals(TILE_PROFILE)) {
                 mTileStatusUris.add(Settings.System.getUriFor(Settings.System.SYSTEM_PROFILES_ENABLED));
                 if (DeviceUtils.systemProfilesEnabled(resolver)) {
