@@ -5623,6 +5623,13 @@ public final class Settings {
         public static final String OVERSCROLL_WEIGHT = "overscroll_weight";
 
         /**
+         * Settings: Whether to force multi pane mode for Settings
+         *
+         * @hide
+         */
+        public static final String FORCE_MULTI_PANE = "force_multi_pane";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
