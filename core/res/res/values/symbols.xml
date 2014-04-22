@@ -1824,6 +1824,7 @@
   <java-symbol type="bool" name="config_hasRemovableLid" />
   <java-symbol type="string" name="config_deviceKeyHandlerLib" />
   <java-symbol type="string" name="config_deviceKeyHandlerClass" />
+  <java-symbol type="bool" name="config_batterySdCardAccessibility" />
 
   <!-- Telephony -->
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
