@@ -135,5 +135,10 @@
 
     <!-- monitor locale change -->
     <bool name="config_monitor_locale_change">false</bool>
+    <integer-array name="config_showVoiceAndDataForSub">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+    </integer-array>
 </resources>
 

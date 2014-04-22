@@ -44,6 +44,7 @@ public class SignalClusterView
     private final int STATUS_BAR_STYLE_DATA_VOICE = 3;
 
     private int mStyle = 0;
+    private int[] mShowTwoBars;
 
     NetworkController mNC;
 
@@ -97,6 +98,8 @@ public class SignalClusterView
         super(context, attrs, defStyle);
 
         mStyle = context.getResources().getInteger(R.integer.status_bar_style);
+        mShowTwoBars = context.getResources().getIntArray(
+                R.array.config_showVoiceAndDataForSub);
     }
 
     public void setNetworkController(NetworkController nc) {
@@ -389,11 +392,18 @@ public class SignalClusterView
     }
 
     private boolean showBothDataAndVoice() {
-        return mStyle == STATUS_BAR_STYLE_DATA_VOICE
-            &&((mMobileTypeId == R.drawable.stat_sys_data_connected_3g)
+        if (mStyle != STATUS_BAR_STYLE_DATA_VOICE) {
+            return false;
+        }
+
+        if (mShowTwoBars[0] == 0) {
+            return false;
+        }
+
+        return (mMobileTypeId == R.drawable.stat_sys_data_connected_3g)
                 || (mMobileTypeId == R.drawable.stat_sys_data_connected_4g)
                 || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_3g)
-                || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_4g));
+                || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_4g);
     }
 
     private boolean showBoth3gAnd1x() {
