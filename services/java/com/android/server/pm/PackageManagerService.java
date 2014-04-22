@@ -299,6 +299,13 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private static final long PACKAGE_HASH_EXPIRATION = 3*60*1000; // 3 minutes
 
+    /**
+     * IDMAP hash version code used to alter the resulting hash and force recreating
+     * of the idmap.  This value should be changed whenever there is a need to force
+     * an update to all idmaps.
+     */
+    private static final byte IDMAP_HASH_VERSION = 1;
+
     final HandlerThread mHandlerThread = new HandlerThread("PackageManager",
             Process.THREAD_PRIORITY_BACKGROUND);
     final PackageHandler mHandler;
@@ -5649,7 +5656,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         byte[] md5 = getFileMd5Sum(pkg.mPath);
         if (md5 == null) return 0;
 
-        p = new Pair(Arrays.hashCode(md5), System.currentTimeMillis());
+        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(md5).put(IDMAP_HASH_VERSION).array()),
+                System.currentTimeMillis());
         mPackageHashes.put(pkg.packageName, p);
         return p.first;
     }
