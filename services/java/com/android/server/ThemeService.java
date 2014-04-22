@@ -343,7 +343,7 @@ public class ThemeService extends IThemeService.Stub {
             File outFile = new File(dirPath, asset);
             FileUtils.copyToFile(is, outFile);
             FileUtils.setPermissions(outFile, FileUtils.S_IRWXU|FileUtils.S_IRGRP|FileUtils.S_IRWXO, -1, -1);
-            ThemeUtils.setAudible(mContext, outFile, type);
+            ThemeUtils.setAudible(mContext, outFile, type, pi.themeInfos[0].name);
         } catch (Exception e) {
             Log.e(TAG, "There was an error installing the new audio file for pkg " + mPkgName, e);
             return false;
@@ -389,7 +389,7 @@ public class ThemeService extends IThemeService.Stub {
             File outFile = new File(dirPath, asset.substring(asset.lastIndexOf('/') + 1));
             FileUtils.copyToFile(is, outFile);
             FileUtils.setPermissions(outFile, FileUtils.S_IRWXU|FileUtils.S_IRGRP|FileUtils.S_IRWXO, -1, -1);
-            ThemeUtils.setAudible(mContext, outFile, type);
+            ThemeUtils.setAudible(mContext, outFile, type, pi.legacyThemeInfos[0].name);
         } catch (Exception e) {
             Log.e(TAG, "There was an error installing the new audio file for pkg " + mPkgName, e);
             return false;
