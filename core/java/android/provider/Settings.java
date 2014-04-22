@@ -1254,6 +1254,13 @@ public final class Settings {
          * @hide
          */
         public static final String ON_THE_GO_SERVICE_RESTART = "on_the_go_service_restart";
+
+        /**
+         * Crazy Lab: Whether to force multi pane mode for Settings
+         *
+         * @hide
+         */
+        public static final String FORCE_MULTI_PANE = "force_multi_pane";
     }
 
     /**
