@@ -154,4 +154,8 @@
     <string name="keyguard_transport_play_description" msgid="2924628863741150956">"[播放] 按鈕"</string>
     <string name="keyguard_transport_stop_description" msgid="3084179324810575787">"[停止] 按鈕"</string>
     <string name="keyguard_carrier_default" msgid="8700650403054042153">"沒有服務。"</string>
+    <string name="China_Mobile">中國移動</string>
+    <string name="China_Unicom">中國聯通</string>
+    <string name="China_Telecom">中國電信</string>
+    <string name="roamingTextSearching">"正在搜索服務"</string>
 </resources>

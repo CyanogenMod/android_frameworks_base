@@ -33,6 +33,7 @@ import java.util.Locale;
 
 public class CarrierText extends TextView {
     private static CharSequence mSeparator;
+    protected Context mContext;
 
     private LockPatternUtils mLockPatternUtils;
 
@@ -83,6 +84,7 @@ public class CarrierText extends TextView {
 
     public CarrierText(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
         mLockPatternUtils = new LockPatternUtils(mContext);
         boolean useAllCaps = mContext.getResources().getBoolean(R.bool.kg_use_all_caps);
         setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
@@ -128,9 +130,30 @@ public class CarrierText extends TextView {
             CharSequence plmn, CharSequence spn) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
+        String localPlmn = null;
+        String localSpn = null;
+        if (mContext.getResources().getBoolean(R.bool.config_monitor_locale_change)) {
+            if (plmn != null) {
+                localPlmn = android.util.NativeTextHelper.getInternalLocalString(mContext,
+                    plmn.toString(),
+                    R.array.origin_carrier_names,
+                    R.array.locale_carrier_names);
+            }
+            if (spn != null) {
+                localSpn = android.util.NativeTextHelper.getInternalLocalString(mContext,
+                    spn.toString(),
+                    R.array.origin_carrier_names,
+                    R.array.locale_carrier_names);
+            }
+        }
+
         switch (status) {
             case Normal:
-                carrierText = concatenate(plmn, spn);
+                if (mContext.getResources().getBoolean(R.bool.config_monitor_locale_change)) {
+                    carrierText = concatenate(localPlmn, localSpn);
+                } else {
+                    carrierText = concatenate(plmn, spn);
+                }
                 break;
 
             case SimNotReady:

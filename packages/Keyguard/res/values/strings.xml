@@ -418,4 +418,9 @@
         <item quantity="one">SIM is now disabled. Enter PUK code to continue. You have <xliff:g id="number">%d</xliff:g> remaining attempt before SIM becomes permanently unusable. Contact carrier for details.</item>
         <item quantity="other">SIM is now disabled. Enter PUK code to continue. You have <xliff:g id="number">%d</xliff:g> remaining attempts before SIM becomes permanently unusable. Contact carrier for details.</item>
     </plurals>
+    <!-- Carrier Name -->
+    <string name="China_Mobile">China Mobile</string>
+    <string name="China_Unicom">China Unicom</string>
+    <string name="China_Telecom">China Telecom</string>
+    <string name="roamingTextSearching">Searching for Service</string>
 </resources>
