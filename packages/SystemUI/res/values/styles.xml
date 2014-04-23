@@ -59,6 +59,12 @@
         <item name="android:textColor">@color/status_bar_clock_color</item>
     </style>
 
+    <style name="TextAppearance.StatusBar.SimSlotLabel" parent="@android:style/TextAppearance.StatusBar.Icon">
+        <item name="android:textSize">10.0dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ff808080</item>
+    </style>
+
     <style name="TextAppearance.StatusBar.Clock" parent="@*android:style/TextAppearance.StatusBar.Icon">
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">16dp</item>
