@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.internal.telephony.MSimConstants;
 import com.android.systemui.statusbar.policy.NetworkController;
@@ -66,12 +67,17 @@ public class MSimSignalClusterView
     ViewGroup[] mMobileGroup;
     ImageView mWifi, mWifiActivity, mAirplane;
     ImageView[] mNoSimSlot;
+    TextView[] mMobileSlot;
     ImageView[] mMobile;
     ImageView[] mMobileActivity;
     ImageView[] mMobileType;
     View mSpacer;
     private int[] mMobileGroupResourceId = {R.id.mobile_combo, R.id.mobile_combo_sub2,
                                           R.id.mobile_combo_sub3};
+    private int[] mMobileSlotResourceId = {R.id.mobile_slot_label, R.id.mobile_slot_label_2,
+                                          R.id.mobile_slot_label_3};
+    private int[] mMobileSlotString = {R.string.sim_slot, R.string.sim_slot_2,
+                                          R.string.sim_slot_3};
     private int[] mMobileResourceId = {R.id.mobile_signal, R.id.mobile_signal_sub2,
                                      R.id.mobile_signal_sub3};
     private int[] mMobileActResourceId = {R.id.mobile_inout, R.id.mobile_inout_sub2,
@@ -98,6 +104,7 @@ public class MSimSignalClusterView
         mNoSimIconId = new int[mNumPhones];
         mMobileGroup = new ViewGroup[mNumPhones];
         mNoSimSlot = new ImageView[mNumPhones];
+        mMobileSlot = new TextView[mNumPhones];
         mMobile = new ImageView[mNumPhones];
         mMobileActivity = new ImageView[mNumPhones];
         mMobileType = new ImageView[mNumPhones];
@@ -126,6 +133,7 @@ public class MSimSignalClusterView
 
         for (int i = 0; i < mNumPhones; i++) {
             mMobileGroup[i]    = (ViewGroup) findViewById(mMobileGroupResourceId[i]);
+            mMobileSlot[i]     = (TextView) findViewById(mMobileSlotResourceId[i]);
             mMobile[i]         = (ImageView) findViewById(mMobileResourceId[i]);
             mMobileActivity[i] = (ImageView) findViewById(mMobileActResourceId[i]);
             mMobileType[i]     = (ImageView) findViewById(mMobileTypeResourceId[i]);
@@ -143,6 +151,7 @@ public class MSimSignalClusterView
         mAirplane       = null;
         for (int i = 0; i < mNumPhones; i++) {
             mMobileGroup[i]    = null;
+            mMobileSlot[i]     = null;
             mMobile[i]         = null;
             mMobileActivity[i] = null;
             mMobileType[i]     = null;
@@ -214,6 +223,7 @@ public class MSimSignalClusterView
 
         if (mMobileVisible && !mIsAirplaneMode) {
             mMobileGroup[subscription].setVisibility(View.VISIBLE);
+            mMobileSlot[subscription].setText(mMobileSlotString[subscription]);
             mMobile[subscription].setImageResource(mMobileStrengthId[subscription]);
             mMobileGroup[subscription].setContentDescription(mMobileTypeDescription + " "
                 + mMobileDescription[subscription]);
