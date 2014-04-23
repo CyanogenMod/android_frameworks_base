@@ -67,6 +67,45 @@ void TextLayout::handleText(SkPaint *paint, const jchar* text, jsize len,
 void TextLayout::getTextRunAdvances(SkPaint* paint, const jchar* chars, jint start,
                                     jint count, jint contextCount, jint dirFlags,
                                     jfloat* resultAdvances, jfloat* resultTotalAdvance) {
+
+#ifdef REVERIE
+    int ii = 0;
+    for(int i = 0; i < count; i++){
+        if((chars[i + start] > 0x900 && chars[i + start] < 0xaff) || (chars[i + start] >0xb80 &&
+            chars[i + start] < 0xd7f) || (chars[i + start] >= 0xe00 && chars[i + start] <0xe7f))
+            ii = 1;
+    }
+    if(ii == 1 ){
+        jfloat totalAdvance = 0;
+        SkScalar* scalarArray = new SkScalar[(count + 2)];
+        size_t widths;
+        char* text = new char[(count * 2) + 2];
+        for(int i = 0; i < count * 2; i += 2){
+            int unichar = paint->unicharToGlyph(chars[(i / 2) + start]);
+            text[i] = (char)(unichar & 0xff);
+            text[i+1] = (char)((unichar & 0xff00) >> 8);
+        }
+        const char *text2 = text;
+        widths = paint->getTextWidths(text2, count << 1, scalarArray);
+        for (size_t i = 0; i < widths; i++) {
+            totalAdvance += SkScalarToFloat(scalarArray[i]);
+            if (resultAdvances)
+                resultAdvances[i] = SkScalarToFloat(scalarArray[i]);
+        }
+        if (resultTotalAdvance)
+            *resultTotalAdvance = totalAdvance;
+        if(text){
+            delete(text);
+            text = NULL;
+        }
+        if(scalarArray){
+            delete(scalarArray);
+            scalarArray = NULL;
+        }
+        return;
+    }
+#endif
+
     sp<TextLayoutValue> value = TextLayoutEngine::getInstance().getValue(paint,
             chars, start, count, contextCount, dirFlags);
     if (value == NULL) {

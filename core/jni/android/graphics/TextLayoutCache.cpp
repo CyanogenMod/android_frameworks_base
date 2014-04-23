@@ -700,6 +700,11 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* conte
     // into the shaperItem
     ssize_t indexFontRun = isRTL ? count - 1 : 0;
     jfloat totalAdvance = *outTotalAdvance;
+
+#ifdef REVERIE
+    jfloat totalAdvance1 =totalAdvance;
+#endif
+
     ScriptRun run;  // relative to chars
     while ((isRTL) ?
             hb_utf16_script_run_prev(&run, chars, count, &indexFontRun):
@@ -767,6 +772,42 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* conte
 
     *outTotalAdvance = totalAdvance;
 
+#ifdef REVERIE
+    int ii = 0;
+    for(int i = 0; i < count; i++){
+        if((chars[i] > 0x900 && chars[i] < 0xaff) || (chars[i] > 0xb80 &&
+            chars[i] < 0xd7f) || (chars[i] >= 0xe00 && chars[i] < 0xe7f) ){
+            ii = 1;
+            break;
+        }
+     }
+    if(ii == 1){
+        SkScalar * scalarArray = new SkScalar[count + 2];//(SkScalar*)resultAdvances;
+        size_t widths;
+        char* text = new char[ (count * 2) + 2];
+        for(int i = 0; i < count * 2; i+=2){
+            int unichar = paint->unicharToGlyph(chars[(i / 2)]);
+            text[i] = (char)(unichar & 0xff);
+            text[i+1] = (char)((unichar & 0xff00) >> 8);
+        }
+        const char * text2 = text;
+        widths = paint->getTextWidths(text2, count << 1, scalarArray);
+        for (size_t i = 0; i < widths; i++) {
+            if(scalarArray[i]!=0)
+                totalAdvance1 += SkScalarToFloat(scalarArray[i]);
+        }
+        *outTotalAdvance = totalAdvance1;
+        if(text){
+            delete(text);
+            text = NULL;
+        }
+        if(scalarArray){
+            delete(scalarArray);
+            scalarArray = NULL;
+        }
+    }
+#endif
+
 #if DEBUG_GLYPHS
     ALOGD("         -- final totalAdvance = %f", totalAdvance);
     ALOGD("-------- End of Script Run --------");
@@ -800,6 +841,18 @@ bool TextLayoutShaper::isComplexScript(hb_script_t script) {
     case HB_SCRIPT_HAN:
     case HB_SCRIPT_KATAKANA:
     case HB_SCRIPT_HIRAGANA:
+#ifdef REVERIE
+    case HB_SCRIPT_DEVANAGARI:
+    case HB_SCRIPT_BENGALI:
+    case HB_SCRIPT_GURMUKHI:
+    case HB_SCRIPT_GUJARATI:
+    case HB_SCRIPT_TAMIL:
+    case HB_SCRIPT_TELUGU:
+    case HB_SCRIPT_KANNADA:
+    case HB_SCRIPT_MALAYALAM:
+    case HB_SCRIPT_ORIYA:
+    case HB_SCRIPT_THAI:
+#endif
         return false;
     default:
         return true;
