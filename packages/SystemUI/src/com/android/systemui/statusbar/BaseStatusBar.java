@@ -261,8 +261,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     private boolean mDeviceProvisioned = false;
 
     // Recents Style
-    private RecentController cRecents;
-    private RecentsComponent mRecents;
+    private RecentController slimRecents;
+    private RecentsComponent stockRecents;
     private int mCustomRecent;
 
     protected ActiveDisplayView mActiveDisplayView;
@@ -480,9 +480,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                         mContext.getContentResolver(), Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
         if (mCustomRecent == 1) {
-            cRecents = new RecentController(mContext, mLayoutDirection);
+            slimRecents = new RecentController(mContext, mLayoutDirection);
         } else {
-            mRecents = getComponent(RecentsComponent.class);
+            stockRecents = getComponent(RecentsComponent.class);
         }
 
         mLocale = mContext.getResources().getConfiguration().locale;
@@ -1202,54 +1202,54 @@ public abstract class BaseStatusBar extends SystemUI implements
     };
 
     protected void toggleRecentsActivity() {
-        if (mRecents != null || cRecents != null) {
+        if (stockRecents != null || slimRecents != null) {
         int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if(mCustomRecent == 1)
-            cRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
+            slimRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
         else
-            mRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
+            stockRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
         }
     }
 
     protected void preloadRecentTasksList() {
-        if (mRecents != null || cRecents != null) {
+        if (stockRecents != null || slimRecents != null) {
         int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 1)
-            cRecents.preloadRecentTasksList();
+            slimRecents.preloadRecentTasksList();
         else
-            mRecents.preloadRecentTasksList();
+            stockRecents.preloadRecentTasksList();
         }
     }
 
     protected void cancelPreloadingRecentTasksList() {
-        if (mRecents != null || cRecents != null) {
+        if (stockRecents != null || slimRecents != null) {
         int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 1)
-            cRecents.cancelPreloadingRecentTasksList();
+            slimRecents.cancelPreloadingRecentTasksList();
         else
-            mRecents.cancelPreloadingRecentTasksList();
+            stockRecents.cancelPreloadingRecentTasksList();
         }
     }
 
     protected void closeRecents() {
-        if (mRecents != null || cRecents != null) {
+        if (stockRecents != null || slimRecents != null) {
         int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 1)
-            cRecents.closeRecents();
+            slimRecents.closeRecents();
         else
-            mRecents.closeRecents();
+            stockRecents.closeRecents();
         }
     }
 
     protected void rebuildRecentsScreen() {
         int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
-        if (cRecents != null && mCustomRecent == 1) {
-                cRecents.rebuildRecentsScreen();
+        if (slimRecents != null && mCustomRecent == 1) {
+                slimRecents.rebuildRecentsScreen();
         }
     }
 
