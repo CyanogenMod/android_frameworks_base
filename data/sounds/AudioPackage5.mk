@@ -44,7 +44,6 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/notifications/Procyon.ogg:system/media/audio/notifications/Procyon.ogg \
 	$(LOCAL_PATH)/notifications/regulus.ogg:system/media/audio/notifications/regulus.ogg \
 	$(LOCAL_PATH)/notifications/sirius.ogg:system/media/audio/notifications/sirius.ogg \
-	$(LOCAL_PATH)/notifications/Sirrah.ogg:system/media/audio/notifications/Sirrah.ogg \
 	$(LOCAL_PATH)/ringtones/ANDROMEDA.ogg:system/media/audio/ringtones/ANDROMEDA.ogg \
 	$(LOCAL_PATH)/ringtones/Aquila.ogg:system/media/audio/ringtones/Aquila.ogg \
 	$(LOCAL_PATH)/ringtones/ArgoNavis.ogg:system/media/audio/ringtones/ArgoNavis.ogg \
