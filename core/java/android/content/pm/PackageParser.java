@@ -835,7 +835,7 @@ public class PackageParser {
                             }
                             // check that the resource types match and exist before adding it to the
                             // redirections map.
-                            if (typesMatch(target, overlay) && resourceExists(overlay, themePkgName, themeResources)) {
+                            if (resourceExists(overlay, themePkgName, themeResources)) {
                                 redirections.put(target, overlay);
                             }
                         }
@@ -862,17 +862,6 @@ public class PackageParser {
             final String name = overlay.substring(overlayIndex+1);
             int id = themeResources.getIdentifier(name, type, pkg);
             return id != 0;
-        }
-        return false;
-    }
-
-    private boolean typesMatch(String target, String overlay) {
-        int targetIndex = target.indexOf('/');
-        int overlayIndex = overlay.indexOf('/');
-        if (targetIndex >= 0 && overlayIndex >=0) {
-            final String targetType = target.substring(0, targetIndex);
-            final String overlayType = overlay.substring(0, overlayIndex);
-            return targetType.equals(overlayType);
         }
         return false;
     }
