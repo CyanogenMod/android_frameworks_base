@@ -2854,6 +2854,16 @@ public class AudioService extends IAudioService.Stub {
             case BluetoothProfile.HEADSET:
                 synchronized (mScoClients) {
                     mBluetoothHeadset = null;
+                    synchronized (mConnectedDevices) {
+                        if (mForcedUseForComm == AudioSystem.FORCE_BT_SCO) {
+                            Log.d(TAG, "Hfp service disconnects, update device to NONE");
+                            mForcedUseForComm = AudioSystem.FORCE_NONE;
+                            sendMsg(mAudioHandler, MSG_SET_FORCE_USE, SENDMSG_QUEUE,
+                                    AudioSystem.FOR_COMMUNICATION, mForcedUseForComm, null, 0);
+                            sendMsg(mAudioHandler, MSG_SET_FORCE_USE, SENDMSG_QUEUE,
+                                    AudioSystem.FOR_RECORD, mForcedUseForComm, null, 0);
+                        }
+                    }
                 }
                 break;
 
