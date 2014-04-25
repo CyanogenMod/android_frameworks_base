@@ -422,4 +422,8 @@ public class StatusBarKeyguardViewManager {
     public boolean isGoingToNotificationShade() {
         return mPhoneStatusBar.isGoingToNotificationShade();
     }
+
+    public boolean isKeyguardShowingMedia() {
+        return mPhoneStatusBar.isKeyguardShowingMedia();
+    }
 }
