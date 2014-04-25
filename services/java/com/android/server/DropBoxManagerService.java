@@ -60,12 +60,12 @@ import java.util.zip.GZIPOutputStream;
  */
 public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
     private static final String TAG = "DropBoxManagerService";
-    private static final int DEFAULT_AGE_SECONDS = 3 * 86400;
-    private static final int DEFAULT_MAX_FILES = 1000;
+    private static final int DEFAULT_AGE_SECONDS = 2 * 86400;
+    private static final int DEFAULT_MAX_FILES = 2000;
     private static final int DEFAULT_QUOTA_KB = 5 * 1024;
     private static final int DEFAULT_QUOTA_PERCENT = 10;
     private static final int DEFAULT_RESERVE_PERCENT = 10;
-    private static final int QUOTA_RESCAN_MILLIS = 5000;
+    private static final int QUOTA_RESCAN_MILLIS = 4000;
 
     // mHandler 'what' value.
     private static final int MSG_SEND_BROADCAST = 1;
@@ -207,7 +207,7 @@ public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
             temp = new File(mDropBoxDir, "drop" + Thread.currentThread().getId() + ".tmp");
             int bufferSize = mBlockSize;
             if (bufferSize > 4096) bufferSize = 4096;
-            if (bufferSize < 512) bufferSize = 512;
+            if (bufferSize < 1024) bufferSize = 1024;
             FileOutputStream foutput = new FileOutputStream(temp);
             output = new BufferedOutputStream(foutput, bufferSize);
             if (read == buffer.length && ((flags & DropBoxManager.IS_GZIPPED) == 0)) {
