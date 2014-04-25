@@ -1540,8 +1540,8 @@ public final class ActivityThread {
      */
     Resources getTopLevelResources(String resDir, String[] overlayDirs,
             int displayId, Configuration overrideConfiguration,
-            LoadedApk pkgInfo, Context context) {
-        return mResourcesManager.getTopLevelResources(resDir, overlayDirs, displayId, pkgInfo.mPackageName,
+            LoadedApk pkgInfo, Context context, String pkgName) {
+        return mResourcesManager.getTopLevelResources(resDir, overlayDirs, displayId, pkgName,
                 overrideConfiguration, pkgInfo.getCompatibilityInfo(), null, context);
     }
 
