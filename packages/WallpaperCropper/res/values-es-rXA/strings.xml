@@ -16,5 +16,6 @@
 -->
 <resources>
   <string name="crop_wallpaper">Recortar el fondu de pantalla</string>
+  <string name="wallpaper_instructions">Afitar fondu de pantalla</string>
   <string name="wallpaper_load_fail">Nun pudo cargase la imaxe como fondu de pantalla</string>
 </resources>
