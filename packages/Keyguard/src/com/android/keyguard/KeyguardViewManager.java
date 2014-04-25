@@ -183,7 +183,6 @@ public class KeyguardViewManager {
         private Drawable mUserBackground;
         private Drawable mCustomBackground;
         private Configuration mLastConfiguration;
-        private int mLockscreenStyle;
 
         // This is a faster way to draw the background on devices without hardware acceleration
         private final Drawable mBackgroundDrawable = new Drawable() {
@@ -353,25 +352,14 @@ public class KeyguardViewManager {
         }
 
         private void cacheUserImage() {
-            Drawable userDrawable = null;
-            mLockscreenStyle = LockscreenBackgroundUtil.getLockscreenStyle(mContext);
-            switch (mLockscreenStyle) {
-                case LockscreenBackgroundUtil.LOCKSCREEN_STYLE_IMAGE:
-                        File imageFile = LockscreenBackgroundUtil.getWallpaperFile(mContext);
-                        if (imageFile != null) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.toString());
-                            userDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
-                        } else {
-                            userDrawable = null;
-                        }
-                    break;
-                case LockscreenBackgroundUtil.LOCKSCREEN_STYLE_DEFAULT:
-                default:
-                    userDrawable = null;
-                    break;
+            WallpaperManager wm = WallpaperManager.getInstance(mContext);
+            Bitmap bitmap = wm.getKeyguardBitmap();
+            if (bitmap != null) {
+                mUserBackground = new BitmapDrawable(mContext.getResources(), bitmap);
+            } else {
+                mUserBackground = null;
             }
-            mUserBackground = userDrawable;
-            setCustomBackground(mUserBackground);
+            setCustomBackground(null);
         }
 
         public boolean shouldShowWallpaper(boolean hiding) {
@@ -389,7 +377,7 @@ public class KeyguardViewManager {
         }
 
         public boolean shouldShowWallpaper() {
-            return mLockscreenStyle == LockscreenBackgroundUtil.LOCKSCREEN_STYLE_DEFAULT;
+            return mUserBackground == null;
         }
 
     }
