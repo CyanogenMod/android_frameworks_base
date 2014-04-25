@@ -24,7 +24,7 @@
   <string name="powerwidget_screen_timeout_toast">Mise en veille de l\'écran réglée à : %1$d %2$s</string>
   <string name="quick_settings_gps">GPS</string>
   <string name="quick_settings_gps_off">GPS désactivé</string>
-  <string name="quick_settings_screen_sleep">Mettre en veille</string>
+  <string name="quick_settings_screen_sleep">Mise en veille</string>
   <string name="quick_settings_ringer_on">Son activé</string>
   <string name="quick_settings_ringer_off">Son désactivé</string>
   <string name="quick_settings_vibration_on">Vibreur activé</string>
@@ -53,10 +53,12 @@
   <string name="quick_settings_lte_off">LTE désactivé</string>
   <string name="quick_settings_volume">Volume</string>
   <string name="quick_settings_camera_label">Appareil photo</string>
+  <string name="quick_settings_network_adb_disabled_label">Désactivé</string>
+  <string name="quick_settings_network_adb_enabled_label">Activé</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d connecté</string>
   <string name="location_mode_high_accuracy_title">Haute précision</string>
   <string name="location_mode_battery_saving_title">Économie de batterie</string>
-  <string name="location_mode_sensors_only_title">Seulement l\'appareil</string>
+  <string name="location_mode_sensors_only_title">Appareil uniquement</string>
   <string name="location_mode_location_off_title">Localisation désactivée</string>
   <string name="quick_settings_expanded_desktop">Étendu</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
@@ -66,6 +68,7 @@
   <string name="navbar_recent_button">Bouton d\'applications récentes</string>
   <string name="navbar_search_button">Bouton de recherche</string>
   <string name="navbar_back_button">Bouton retour</string>
+  <string name="navbar_empty_button">Laisser vide</string>
   <string name="navbar_menu_conditional_button">Bouton menu (masqué automatiquement)</string>
   <string name="navbar_menu_always_button">Bouton menu (toujours affiché)</string>
   <string name="navbar_menu_big_button">bouton menu</string>
