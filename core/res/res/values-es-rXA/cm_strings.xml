@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Permite que l\'aplicación interceute mensaxes SMS salientes. Les aplicaciones malicioses puen impedir los mensaxes SMS salientes.</string>
   <string name="permlab_resetBatteryStats">restablecer estadístiques de batería</string>
   <string name="permdesc_resetBatteryStats">Permite que l\'aplicación restableza los datos del usu de la batería.</string>
+  <string name="permgrouplab_security">Seguridá</string>
+  <string name="permgroupdesc_security">Permisos rellacionaos a la seguridá de la información del preséu.</string>
+  <string name="permlab_readPhoneBlacklist">Lleer llista prieta del teléfonu</string>
+  <string name="permdesc_readPhoneBlacklist">Permite a una aplicación lleer información sobre los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
+  <string name="permlab_changePhoneBlacklist">camudar la llista prieta del teléfonu</string>
+  <string name="permdesc_changePhoneBlacklist">Permite qu\'una aplicación camude los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
+  <string name="permlab_accessThemeService">Accesu al serviciu de temes</string>
+  <string name="permdesc_accessThemeService">Permite l\'accesu a una aplicación al Servicio de temes. Enxamás tendría de facer falta p\'aplicaciones normales.</string>
   <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>
@@ -108,6 +116,7 @@
   <string name="app_ops_use_voice_volume">remanar el volume de la llamada</string>
   <string name="app_ops_write_mms">escribir un mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir un mensaxe SMS</string>
+  <string name="privacy_guard_dialog_title">Privacidá</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> quies <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Recordar la mio eleición</string>
 </resources>
