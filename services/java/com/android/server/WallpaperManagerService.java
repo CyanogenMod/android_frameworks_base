@@ -95,7 +95,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
      * Minimum time between crashes of a wallpaper service for us to consider
      * restarting it vs. just reverting to the static wallpaper.
      */
-    static final long MIN_WALLPAPER_CRASH_TIME = 10000;
+    static final long MIN_WALLPAPER_CRASH_TIME = 20000;
     static final String WALLPAPER = "wallpaper";
     static final String WALLPAPER_INFO = "wallpaper_info.xml";
 
