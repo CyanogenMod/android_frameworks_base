@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Permet à l\'application d\'intercepter les SMS sortants. Des applications malveillantes peuvent utiliser cela pour empêcher l\'envoie de SMS.</string>
   <string name="permlab_resetBatteryStats">réinitialiser les statistiques de la batterie</string>
   <string name="permdesc_resetBatteryStats">Permet à une application de réinitialiser les données actuelles d\'utilisation de la batterie à faible niveau.</string>
+  <string name="permgrouplab_security">Sécurité</string>
+  <string name="permgroupdesc_security">Autorisations liées à des informations de sécurité du périphérique.</string>
+  <string name="permlab_readPhoneBlacklist">lire la liste noire de téléphone</string>
+  <string name="permdesc_readPhoneBlacklist">Autorise une application de lire les informations sur les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
+  <string name="permlab_changePhoneBlacklist">modifier la liste noire du téléphone</string>
+  <string name="permdesc_changePhoneBlacklist">Autorise une application à modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
+  <string name="permlab_accessThemeService">accèder au service de thème</string>
+  <string name="permdesc_accessThemeService">Autorise une application à accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
   <string name="immersive_mode_confirmation_bottom">Balayez du haut vers le bas pour quitter le mode plein écran.</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
   <string name="app_ops_access_location">accéder à votre emplacement</string>
@@ -108,6 +116,7 @@
   <string name="app_ops_use_voice_volume">contrôler le volume d\'appels</string>
   <string name="app_ops_write_mms">écrire un MMS</string>
   <string name="app_ops_write_sms">écrire un SMS</string>
+  <string name="privacy_guard_dialog_title">Protection des données</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> voudrait <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Se souvenir de mon choix</string>
 </resources>

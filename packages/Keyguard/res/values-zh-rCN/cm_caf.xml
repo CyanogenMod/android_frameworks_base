@@ -23,5 +23,5 @@
   <string name="pinpuk_attempts">\n剩余次数：</string>
   <string name="lockscreen_sim_error_message_short">SIM 卡无效。</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM 已被锁定</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB：<xliff:g id="number"> %d </xliff:g>：<xliff:g id="msg"> %s </xliff:g>。</string>
+  <string name="msim_kg_sim_pin_msg_format">订阅：<xliff:g id="number">%d</xliff:g>：<xliff:g id="msg">%s</xliff:g></string>
 </resources>
