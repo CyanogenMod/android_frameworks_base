@@ -55,7 +55,6 @@ import android.text.TextUtils;
 import android.util.AndroidException;
 import android.util.Log;
 
-import com.android.internal.util.cm.LockscreenBackgroundUtil;
 import com.android.internal.widget.ILockSettings;
 
 import java.net.URISyntaxException;
@@ -3911,7 +3910,7 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_BACKGROUND_STYLE = "lockscreen_background_style";
 
-         /**
+        /**
          * Action for long-pressing back button on lock screen
          * @hide
          */
