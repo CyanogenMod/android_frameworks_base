@@ -86,10 +86,11 @@ public class RecentPanelView {
     private static final int EXPANDED_MODE_NEVER  = 2;
 
     private static final int MENU_APP_DETAILS_ID   = 0;
-    private static final int MENU_APP_WIPE_ID      = 1;
-    private static final int MENU_APP_STOP_ID      = 2;
-    private static final int MENU_APP_PLAYSTORE_ID = 3;
-    private static final int MENU_APP_AMAZON_ID    = 4;
+    private static final int MENU_APP_FLOATING_ID  = 1;
+    private static final int MENU_APP_WIPE_ID      = 2;
+    private static final int MENU_APP_STOP_ID      = 3;
+    private static final int MENU_APP_PLAYSTORE_ID = 4;
+    private static final int MENU_APP_AMAZON_ID    = 5;
 
     private static final String PLAYSTORE_REFERENCE = "com.android.vending";
     private static final String AMAZON_REFERENCE    = "com.amazon.venezia";
@@ -300,6 +301,8 @@ public class RecentPanelView {
         popup.getMenu().add(0, MENU_APP_DETAILS_ID, 0,
                 mContext.getResources().getString(R.string.status_bar_recent_inspect_item_title));
 
+        popup.getMenu().add(0, MENU_APP_FLOATING_ID, 0,
+                mContext.getResources().getString(R.string.status_bar_notification_floating_item_title));
 
         if (Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.DEVELOPMENT_SHORTCUT, 0) == 1) {
@@ -337,6 +340,14 @@ public class RecentPanelView {
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == MENU_APP_DETAILS_ID) {
                     startApplicationDetailsActivity(td.packageName, null, null);
+                } else if (item.getItemId() == MENU_APP_FLOATING_ID) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            | Intent.FLAG_FLOATING_WINDOW);
+                    intent.setComponent(td.intent.getComponent());
+                    mContext.startActivity(intent);
+                    exit();
                 } else if (item.getItemId() == MENU_APP_STOP_ID) {
                     ActivityManager am = (ActivityManager)mContext.getSystemService(
                             Context.ACTIVITY_SERVICE);
