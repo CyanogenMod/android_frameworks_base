@@ -41,6 +41,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.ThemeConfig;
 import android.database.ContentObserver;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -1360,12 +1361,15 @@ public abstract class BaseStatusBar extends SystemUI implements
         // set up the adaptive layout
         View contentViewLocal = null;
         View bigContentViewLocal = null;
+        final ThemeConfig themeConfig = mContext.getResources().getConfiguration().themeConfig;
+        String themePackageName = themeConfig != null ?
+                themeConfig.getOverlayPkgNameForApp(mContext.getPackageName()) : null;
         try {
             contentViewLocal = contentView.apply(mContext, expanded,
-                    mOnClickHandler);
+                    mOnClickHandler, themePackageName);
             if (bigContentView != null) {
                 bigContentViewLocal = bigContentView.apply(mContext, expanded,
-                        mOnClickHandler);
+                        mOnClickHandler, themePackageName);
             }
         }
         catch (RuntimeException e) {

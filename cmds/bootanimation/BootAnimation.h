@@ -87,7 +87,7 @@ private:
     bool readFile(const char* name, String8& outString);
     bool movie();
 
-    enum ImageID { IMG_DATA = 0, IMG_SYS = 1, IMG_ENC = 2 };
+    enum ImageID { IMG_DATA = 0, IMG_SYS = 1, IMG_ENC = 2, IMG_THEME = 3 };
     char *getAnimationFileName(ImageID image);
     char *getBootRingtoneFileName(ImageID image);
     void playBackgroundMusic();

@@ -23,9 +23,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.ThemeConfig;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.media.AudioManager;
@@ -73,8 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 113;
-
+    private static final int DATABASE_VERSION = 115;
+    
     private static final String HEADSET = "_headset";
     private static final String SPEAKER = "_speaker";
     private static final String EARPIECE = "_earpiece";
@@ -1837,6 +1842,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 113;
         }
 
+        if (upgradeVersion < 114) {
+            // CM11 used "holo" as a system default theme. For CM12 and up its been
+            // switched to "system". So change all "holo" references in themeConfig to "system"
+            final String NAME_THEME_CONFIG = "themeConfig";
+            Cursor c = null;
+            try {
+                String[] projection = new String[]{"value"};
+                String selection = "name=?";
+                String[] selectionArgs = new String[] { NAME_THEME_CONFIG };
+                c = db.query(TABLE_SECURE, projection, selection,
+                        selectionArgs, null, null, null);
+                if (c != null && c.moveToFirst()) {
+                    String jsonConfig = c.getString(0);
+                    if (jsonConfig != null) {
+                        jsonConfig = jsonConfig.replace(
+                                "\"holo\"", '"' + ThemeConfig.SYSTEM_DEFAULT + '"');
+
+                        // Now update the entry
+                        SQLiteStatement stmt = db.compileStatement(
+                                "UPDATE " + TABLE_SECURE + " SET value = ? "
+                                        + " WHERE name = ?");
+                        stmt.bindString(1, jsonConfig);
+                        stmt.bindString(2, NAME_THEME_CONFIG);
+                        stmt.execute();
+                    }
+                }
+            } catch(SQLiteException ex) {
+                Log.e(TAG, "Unable to update theme config value", ex);
+            } finally {
+                if (c != null) c.close();
+            }
+            upgradeVersion = 114;
+        }
+
+       if (upgradeVersion < 115) {
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value) VALUES(?,?);");
+                loadDefaultThemeSettings(stmt);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 115;
+        }
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -2416,6 +2468,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 R.bool.def_haptic_feedback);
     }
 
+    private void loadDefaultThemeSettings(SQLiteStatement stmt) {
+        loadStringSetting(stmt, Settings.Secure.DEFAULT_THEME_PACKAGE, R.string.def_theme_package);
+        loadStringSetting(stmt, Settings.Secure.DEFAULT_THEME_COMPONENTS,
+                R.string.def_theme_components);
+    }
+
     private void loadSecureSettings(SQLiteDatabase db) {
         SQLiteStatement stmt = null;
         try {
@@ -2523,6 +2581,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
                         R.string.def_input_method);
             }
+
+            loadDefaultThemeSettings(stmt);
 
             if (!TextUtils.isEmpty(mContext.getResources().getString(
                     R.string.def_enable_input_methods))) {
