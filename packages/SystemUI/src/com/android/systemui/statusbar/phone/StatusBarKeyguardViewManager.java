@@ -495,4 +495,8 @@ public class StatusBarKeyguardViewManager {
             mPhoneStatusBar.getNavigationBarView().setWakeAndUnlocking(true);
         }
     }
+
+    public boolean isKeyguardShowingMedia() {
+        return mPhoneStatusBar.isKeyguardShowingMedia();
+    }
 }
