@@ -1902,6 +1902,15 @@ public class Intent implements Parcelable, Cloneable {
      */
     @Deprecated @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_WALLPAPER_CHANGED = "android.intent.action.WALLPAPER_CHANGED";
+
+    /**
+     * Broadcast Action: The current keyguard wallpaper configuration
+     * has changed and should be re-read.
+     * {@hide}
+     */
+    public static final String ACTION_KEYGUARD_WALLPAPER_CHANGED =
+            "android.intent.action.KEYGUARD_WALLPAPER_CHANGED";
+
     /**
      * Broadcast Action: The current device {@link android.content.res.Configuration}
      * (orientation, locale, etc) has changed.  When such a change happens, the
