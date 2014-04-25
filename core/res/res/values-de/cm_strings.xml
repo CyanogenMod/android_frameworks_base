@@ -70,6 +70,8 @@
   <string name="permgrouplab_security">Sicherheit</string>
   <string name="permlab_readPhoneBlacklist">Sperrliste lesen</string>
   <string name="permlab_changePhoneBlacklist">Sperrliste ändern</string>
+  <string name="permlab_accessThemeService">Zugriff auf den Design-Dienst</string>
+  <string name="permdesc_accessThemeService">Ermöglicht der App, auf den Design-Dienst zuzugreifen. Wird für normale Apps nicht benötigt.</string>
   <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>

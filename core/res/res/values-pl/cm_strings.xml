@@ -67,6 +67,14 @@
   <string name="permdesc_interceptSmsSent">Pozwala aplikacji przechwytywać wychodzące SMS-y. Złośliwe aplikacje mogą używać tego do zablokowania wychodzących wiadomości.</string>
   <string name="permlab_resetBatteryStats">resetowanie statystyk baterii</string>
   <string name="permdesc_resetBatteryStats">Pozwala aplikacji na resetowanie aktualnych niskopoziomowych statystyk baterii.</string>
+  <string name="permgrouplab_security">Zabezpieczenia</string>
+  <string name="permgroupdesc_security">Uprawnienia związane z informacjami o bezpieczeństwie urządzenia.</string>
+  <string name="permlab_readPhoneBlacklist">odczytywanie czarnej listy</string>
+  <string name="permdesc_readPhoneBlacklist">Umożliwia aplikacji odczytywanie informacji o numerach telefonów, od których przychodzące połączenia i wiadomości są blokowane.</string>
+  <string name="permlab_changePhoneBlacklist">edytowanie czarnej listy</string>
+  <string name="permdesc_changePhoneBlacklist">Umożliwia aplikacji zmianę numerów telefonów, od których przychodzące połączenia i wiadomości są blokowane.</string>
+  <string name="permlab_accessThemeService">dostęp do usługi motywów</string>
+  <string name="permdesc_accessThemeService">Umożliwia aplikacji dostęp do usługi motywów (nie powinno być wymagane przez standardowe aplikacje).</string>
   <string name="immersive_mode_confirmation_bottom">Przeciągnij palcem w górę od spodu ekranu, aby wyjść z trybu maksymalizacji.</string>
   <string name="app_ops_access_camera">dostęp do kamery</string>
   <string name="app_ops_access_location">dostęp do lokalizacji</string>
@@ -108,6 +116,7 @@
   <string name="app_ops_use_voice_volume">kontrolowanie głośności rozmów</string>
   <string name="app_ops_write_mms">pisanie MMS-ów</string>
   <string name="app_ops_write_sms">pisanie SMS-ów</string>
+  <string name="privacy_guard_dialog_title">Ochrona prywatności</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> czy chciałbyś <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Zapamiętaj mój wybór</string>
 </resources>

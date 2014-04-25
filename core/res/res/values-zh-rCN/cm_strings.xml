@@ -68,6 +68,14 @@
   <string name="permdesc_interceptSmsSent">允许应用拦截传出的短信。恶意程序可能用这种方法阻止发送短信。</string>
   <string name="permlab_resetBatteryStats">重置电池统计信息</string>
   <string name="permdesc_resetBatteryStats">允许应用程序重置当前低电量电池使用数据。</string>
+  <string name="permgrouplab_security">安全</string>
+  <string name="permgroupdesc_security">与设备安全信息相关的权限。</string>
+  <string name="permlab_readPhoneBlacklist">读取手机黑名单</string>
+  <string name="permdesc_readPhoneBlacklist">允许应用程序读取有关被阻止来电或信息的电话号码的信息。</string>
+  <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
+  <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
+  <string name="permlab_accessThemeService">访问主题服务</string>
+  <string name="permdesc_accessThemeService">允许应用访问主题服务。正常应用不应需要此权限。</string>
   <string name="immersive_mode_confirmation_bottom">从底部上划以退出全屏模式。</string>
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>
@@ -109,6 +117,7 @@
   <string name="app_ops_use_voice_volume">控制语音通话音量</string>
   <string name="app_ops_write_mms">编写彩信</string>
   <string name="app_ops_write_sms">编写短信</string>
+  <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
   <string name="permission_remember_choice">记住我的选择</string>
 </resources>

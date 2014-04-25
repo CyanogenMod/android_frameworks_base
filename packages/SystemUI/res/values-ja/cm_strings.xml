@@ -16,8 +16,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="accessibility_quick_settings_ringer">サウンド <xliff:g id="state" example="Off">%s</xliff:g></string>
-  <string name="accessibility_quick_settings_vibration">バイブレーション <xliff:g id="state" example="Off">%s</xliff:g></string>
+  <string name="accessibility_quick_settings_ringer">音<xliff:g id="state" example="Off">%s</xliff:g></string>
+  <string name="accessibility_quick_settings_vibration">バイブレーション<xliff:g id="state" example="Off">%s</xliff:g></string>
   <string name="dessert_case_settings_cm_title">CMのマスコットを表示</string>
   <string name="dessert_case_settings_cm_summary">イースターエッグにAndroidのデザートと一緒にCMのマスコットを表示する</string>
   <string name="quick_settings_profile_label">プロファイル</string>
@@ -25,30 +25,30 @@
   <string name="quick_settings_gps">GPS</string>
   <string name="quick_settings_gps_off">GPS OFF</string>
   <string name="quick_settings_screen_sleep">スリープ</string>
-  <string name="quick_settings_ringer_on">サウンド ON</string>
-  <string name="quick_settings_ringer_off">サウンド OFF</string>
-  <string name="quick_settings_vibration_on">バイブレーション ON</string>
-  <string name="quick_settings_vibration_off">バイブレーション OFF</string>
+  <string name="quick_settings_ringer_on">サウンドON</string>
+  <string name="quick_settings_ringer_off">サウンドOFF</string>
+  <string name="quick_settings_vibration_on">バイブレーションON</string>
+  <string name="quick_settings_vibration_off">バイブレーションOFF</string>
   <string name="quick_settings_label_enabled">ON</string>
   <string name="quick_settings_label_disabled">OFF</string>
-  <string name="quick_settings_ringer_normal">サウンド</string>
+  <string name="quick_settings_ringer_normal">音</string>
   <string name="quick_settings_lockscreen">ロック画面</string>
   <string name="quick_settings_network_type">ネットワークモード</string>
   <string name="quick_settings_report_bug">バグ報告</string>
   <string name="quick_settings_sync">同期</string>
-  <string name="quick_settings_sync_off">同期 OFF</string>
+  <string name="quick_settings_sync_off">同期OFF</string>
   <string name="quick_settings_torch">トーチ</string>
-  <string name="quick_settings_torch_off">トーチ OFF</string>
+  <string name="quick_settings_torch_off">トーチOFF</string>
   <string name="quick_settings_nfc">NFC</string>
   <string name="quick_settings_nfc_off">NFC OFF</string>
   <string name="quick_settings_screen_timeout">タイムアウト</string>
   <string name="quick_settings_usb_tether_off_label">切断されました</string>
-  <string name="quick_settings_usb_tether_connected_label">テザリング OFF</string>
+  <string name="quick_settings_usb_tether_connected_label">テザリングOFF</string>
   <string name="quick_settings_usb_tether_on_label">テザリング</string>
   <string name="quick_settings_wifiap">Wi-Fiテザリング</string>
-  <string name="quick_settings_wifiap_off">Wi-Fiテザリング OFF</string>
+  <string name="quick_settings_wifiap_off">Wi-FiテザリングOFF</string>
   <string name="quick_settings_quiethours">おやすみモード</string>
-  <string name="quick_settings_quiethours_off">おやすみモード OFF</string>
+  <string name="quick_settings_quiethours_off">おやすみモードOFF</string>
   <string name="quick_settings_lte">LTE</string>
   <string name="quick_settings_lte_off">LTE OFF</string>
   <string name="quick_settings_volume">音量</string>
@@ -59,7 +59,7 @@
   <string name="location_mode_high_accuracy_title">高精度</string>
   <string name="location_mode_battery_saving_title">バッテリー節電</string>
   <string name="location_mode_sensors_only_title">端末のみ</string>
-  <string name="location_mode_location_off_title">位置情報 OFF</string>
+  <string name="location_mode_location_off_title">現在地OFF</string>
   <string name="quick_settings_expanded_desktop">拡張デスクトップ</string>
   <string name="quick_settings_expanded_desktop_off">通常</string>
   <string name="quick_settings_camera_error_connect">カメラに接続できません</string>

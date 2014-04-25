@@ -20,6 +20,8 @@
   <string name="keyguard_password_pin_failed">Nieudana operacja PIN.</string>
   <string name="keyguard_password_puk_failed">Nieudana operacja PUK.</string>
   <string name="keyguard_pin_accepted">Kod zaakceptowany.</string>
+  <string name="pinpuk_attempts">\nPozostałych prób:</string>
+  <string name="lockscreen_sim_error_message_short">Nieprawidłowa karta.</string>
   <string name="keyguard_perso_locked_message">Blokada Perso karty SIM/RUIM</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g>.</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="numer">%d</xliff:g>: <xliff:g id="wiadomość">%s</xliff:g></string>
 </resources>
