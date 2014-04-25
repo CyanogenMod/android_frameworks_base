@@ -68,6 +68,7 @@
   <string name="navbar_recent_button">Alkalmazás előzmények gomb</string>
   <string name="navbar_search_button">Keresés gomb</string>
   <string name="navbar_back_button">Vissza gomb</string>
+  <string name="navbar_empty_button">Hagyja üresen</string>
   <string name="navbar_menu_conditional_button">Menü (auto elrejtés)</string>
   <string name="navbar_menu_always_button">Menü (mindig látszik)</string>
   <string name="navbar_menu_big_button">Menü gomb</string>

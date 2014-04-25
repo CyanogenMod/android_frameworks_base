@@ -23,5 +23,5 @@
   <string name="pinpuk_attempts">\nHátralevő kisérlet száma:</string>
   <string name="lockscreen_sim_error_message_short">Érvénytelen kártya.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM Perso zárva</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number"> %d </xliff:g>: <xliff:g id="msg"> %s </xliff:g>.</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>
