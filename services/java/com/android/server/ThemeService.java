@@ -403,8 +403,7 @@ public class ThemeService extends IThemeService.Stub {
     private boolean updateLockscreen() {
         boolean success = false;
         if ("default".equals(mPkgName)) {
-            Settings.System.putInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND_STYLE,
-                    LockscreenBackgroundUtil.LOCKSCREEN_STYLE_DEFAULT);
+            WallpaperManager.getInstance(mContext).clearKeyguardWallpaper();
             success = true;
         } else {
             success = setCustomLockScreenWallpaper();
@@ -428,22 +427,11 @@ public class ThemeService extends IThemeService.Stub {
             }
             InputStream is = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/" + wpPath);
 
-            //Get outgoing wp path from settings
-            File wallpaperFile = LockscreenBackgroundUtil.getWallpaperFile(mContext);
-            wallpaperFile.createNewFile();
-            wallpaperFile.setReadable(true, false);
-            FileOutputStream out = new FileOutputStream(wallpaperFile);
-
-            //Decode bitmap to check it is ok and copy it over
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            WallpaperManager.getInstance(mContext).setKeyguardStream(is);
         } catch (Exception e) {
             Log.e(TAG, "There was an error setting lockscreen wp for pkg " + mPkgName, e);
             return false;
         }
-
-        Settings.System.putInt(mContext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND_STYLE,
-                LockscreenBackgroundUtil.LOCKSCREEN_STYLE_IMAGE);
         return true;
     }
 
