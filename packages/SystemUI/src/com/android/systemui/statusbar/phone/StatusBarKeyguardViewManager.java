@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Slog;
 import android.view.KeyEvent;
 import android.view.View;
@@ -421,5 +422,9 @@ public class StatusBarKeyguardViewManager {
 
     public boolean isGoingToNotificationShade() {
         return mPhoneStatusBar.isGoingToNotificationShade();
+    }
+
+    public boolean isKeyguardShowingMedia() {
+        return mPhoneStatusBar.isKeyguardShowingMedia();
     }
 }

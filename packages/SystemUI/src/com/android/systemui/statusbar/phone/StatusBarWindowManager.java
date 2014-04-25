@@ -232,6 +232,7 @@ public class StatusBarWindowManager {
         boolean bouncerShowing;
         boolean keyguardFadingAway;
         boolean qsExpanded;
+        boolean keyguardShowingMedia;
 
         /**
          * The {@link BaseStatusBar} state from the status bar.
