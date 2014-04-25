@@ -21,6 +21,8 @@ import android.util.Xml;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -74,25 +76,64 @@ public class FontListParser {
     }
 
     /* Parse fallback list (no names) */
-    public static Config parse(InputStream in) throws XmlPullParserException, IOException {
+    public static Config parse(File configFilename, File fontDir)
+            throws XmlPullParserException, IOException {
+        FileInputStream in = new FileInputStream(configFilename);
+        if (isLegacyFormat(configFilename)) {
+            return parseLegacyFormat(in, fontDir.getAbsolutePath());
+        } else {
+            return parseNormalFormat(in, fontDir.getAbsolutePath());
+        }
+    }
+
+    private static boolean isLegacyFormat(File configFilename)
+            throws XmlPullParserException, IOException {
+        FileInputStream in = new FileInputStream(configFilename);
+        boolean isLegacy = false;
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setInput(in, null);
             parser.nextTag();
-            return readFamilies(parser);
+            parser.require(XmlPullParser.START_TAG, null, "familyset");
+            String version = parser.getAttributeValue(null, "version");
+            isLegacy = version == null;
+        } finally {
+            in.close();
+        }
+        return isLegacy;
+    }
+
+    public static Config parseLegacyFormat(InputStream in, String dirName)
+            throws XmlPullParserException, IOException {
+        try {
+            List<LegacyFontListParser.Family> legacyFamilies = LegacyFontListParser.parse(in);
+            FontListConverter converter = new FontListConverter(legacyFamilies, dirName);
+            return converter.convert();
         } finally {
             in.close();
         }
     }
 
-    private static Config readFamilies(XmlPullParser parser)
+    public static Config parseNormalFormat(InputStream in, String dirName)
+            throws XmlPullParserException, IOException {
+        try {
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setInput(in, null);
+            parser.nextTag();
+            return readFamilies(parser, dirName);
+        } finally {
+            in.close();
+        }
+    }
+
+    private static Config readFamilies(XmlPullParser parser, String dirPath)
             throws XmlPullParserException, IOException {
         Config config = new Config();
         parser.require(XmlPullParser.START_TAG, null, "familyset");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) continue;
             if (parser.getName().equals("family")) {
-                config.families.add(readFamily(parser));
+                config.families.add(readFamily(parser, dirPath));
             } else if (parser.getName().equals("alias")) {
                 config.aliases.add(readAlias(parser));
             } else {
@@ -102,7 +143,7 @@ public class FontListParser {
         return config;
     }
 
-    private static Family readFamily(XmlPullParser parser)
+    private static Family readFamily(XmlPullParser parser, String dirPath)
             throws XmlPullParserException, IOException {
         String name = parser.getAttributeValue(null, "name");
         String lang = parser.getAttributeValue(null, "lang");
@@ -116,7 +157,7 @@ public class FontListParser {
                 int weight = weightStr == null ? 400 : Integer.parseInt(weightStr);
                 boolean isItalic = "italic".equals(parser.getAttributeValue(null, "style"));
                 String filename = parser.nextText();
-                String fullFilename = "/system/fonts/" + filename;
+                String fullFilename = dirPath + File.separatorChar + filename;
                 fonts.add(new Font(fullFilename, weight, isItalic));
             } else {
                 skip(parser);

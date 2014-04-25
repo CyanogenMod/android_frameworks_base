@@ -291,6 +291,8 @@
     <protected-broadcast android:name="android.nfc.handover.intent.action.TRANSFER_PROGRESS" />
     <protected-broadcast android:name="android.nfc.handover.intent.action.TRANSFER_DONE" />
 
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
 
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
@@ -1538,6 +1540,14 @@
         android:protectionLevel="normal"
         android:label="@string/permlab_setWallpaper"
         android:description="@string/permdesc_setWallpaper" />
+
+    <!-- Allows applications to set the keyguard wallpaper
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_WALLPAPER"
+        android:permissionGroup="android.permission-group.WALLPAPER"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_setKeyguardWallpaper"
+        android:description="@string/permdesc_setKeyguardWallpaper" />
 
     <!-- Allows applications to set the wallpaper hints -->
     <permission android:name="android.permission.SET_WALLPAPER_HINTS"
@@ -2877,6 +2887,30 @@
         android:label="@string/permlab_changePhoneBlacklist"
         android:description="@string/permdesc_changePhoneBlacklist" />
 
+     <!-- Allows an application to use the Theme Service
+          @hide -->
+     <permission android:name="android.permission.ACCESS_THEME_MANAGER"
+         android:label="@string/permlab_accessThemeService"
+         android:description="@string/permdesc_accessThemeService"
+         android:protectionLevel="signature" />
+
+     <!-- Allows an application to read the current theme configuration and
+          get information about the various themes currently installed
+          @hide -->
+     <permission android:name="android.permission.READ_THEMES"
+         android:label="@string/permlab_readThemes"
+         android:description="@string/permdesc_readThemesDesc"
+         android:protectionLevel="normal" />
+
+     <!-- Allows an application to write the current theme configuration and
+          write information about the various themes currently installed.
+          Changing themes should be done through the service ACCESS_THEME_MANAGER
+          @hide -->
+     <permission android:name="android.permission.WRITE_THEMES"
+         android:label="@string/permlab_writeThemes"
+         android:description="@string/permdesc_writeThemesDesc"
+         android:protectionLevel="system|signature" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
@@ -3071,6 +3105,18 @@
                 <!-- MCS always uses REMOTE_INTENT: category=MASTER_CLEAR -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="android.intent.category.MASTER_CLEAR" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.android.server.AppsFailureReceiver" >
+            <intent-filter>
+                <action android:name="com.tmobile.intent.action.APP_FAILURE" />
+                <action android:name="com.tmobile.intent.action.APP_FAILURE_RESET" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+                <category android:name="com.tmobile.intent.category.THEME_PACKAGE_INSTALL_STATE_CHANGE" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 

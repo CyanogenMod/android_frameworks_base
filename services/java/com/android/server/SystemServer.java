@@ -27,10 +27,13 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
+import android.content.pm.ThemeUtils;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.ThemeConfig;
 import android.media.AudioService;
 import android.media.tv.TvInputManager;
 import android.os.Build;
@@ -529,6 +532,7 @@ public final class SystemServer {
         LockSettingsService lockSettings = null;
         AssetAtlasService atlas = null;
         MediaRouterService mediaRouter = null;
+        ThemeService themeService = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -967,6 +971,14 @@ public final class SystemServer {
                 mSystemServiceManager.startService(TvInputManagerService.class);
             }
 
+            try {
+                Slog.i(TAG, "Theme Service");
+                themeService = new ThemeService(context);
+                ServiceManager.addService(Context.THEME_SERVICE, themeService);
+            } catch (Throwable e) {
+                reportWtf("starting Theme Service", e);
+            }
+
             if (!disableNonCoreServices) {
                 try {
                     Slog.i(TAG, "Media Router Service");
@@ -1110,6 +1122,16 @@ public final class SystemServer {
             reportWtf("making Display Manager Service ready", e);
         }
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_APP_FAILURE);
+        filter.addAction(Intent.ACTION_APP_FAILURE_RESET);
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addAction(ThemeUtils.ACTION_THEME_CHANGED);
+        filter.addCategory(Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE);
+        filter.addDataScheme("package");
+        context.registerReceiver(new AppsFailureReceiver(), filter);
+
         // These are needed to propagate to the runnable below.
         final MountService mountServiceF = mountService;
         final NetworkManagementService networkManagementF = networkManagement;
@@ -1131,6 +1153,7 @@ public final class SystemServer {
         final MediaRouterService mediaRouterF = mediaRouter;
         final AudioService audioServiceF = audioService;
         final MmsServiceBroker mmsServiceF = mmsService;
+        final ThemeService themeServiceF = themeService;
 
         // We now tell the activity manager it is okay to run third party
         // code.  It will call back into us once it has gotten to the state
@@ -1264,6 +1287,17 @@ public final class SystemServer {
                     if (mmsServiceF != null) mmsServiceF.systemRunning();
                 } catch (Throwable e) {
                     reportWtf("Notifying MmsService running", e);
+                }
+
+                try {
+                    // now that the system is up, apply default theme if applicable
+                    if (themeServiceF != null) themeServiceF.systemRunning();
+                    ThemeConfig themeConfig =
+                            ThemeConfig.getBootTheme(context.getContentResolver());
+                    String iconPkg = themeConfig.getIconPackPkgName();
+                    mPackageManagerService.updateIconMapping(iconPkg);
+                } catch (Throwable e) {
+                    reportWtf("Icon Mapping failed", e);
                 }
             }
         });

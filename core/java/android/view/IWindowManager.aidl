@@ -125,7 +125,7 @@ interface IWindowManager
     boolean inKeyguardRestrictedInputMode();
     void dismissKeyguard();
     void keyguardGoingAway(boolean disableWindowAnimations,
-            boolean keyguardGoingToNotificationShade);
+            boolean keyguardGoingToNotificationShade, boolean keyguardShowingMedia);
 
     void closeSystemDialogs(String reason);
 
@@ -221,6 +221,16 @@ interface IWindowManager
      */
     Bitmap screenshotApplications(IBinder appToken, int displayId, int maxWidth,
             int maxHeight, boolean force565);
+
+    /**
+     * Get the current x offset for the wallpaper
+     */
+    int getLastWallpaperX();
+
+    /**
+     * Get the current y offset for the wallpaper
+     */
+    int getLastWallpaperY();
 
     /**
      * Called by the status bar to notify Views of changes to System UI visiblity.

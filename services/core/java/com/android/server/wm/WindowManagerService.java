@@ -2053,6 +2053,36 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
+    public int getLastWallpaperX() {
+        int curTokenIndex = mWallpaperTokens.size();
+        while (curTokenIndex > 0) {
+            curTokenIndex--;
+            WindowToken token = mWallpaperTokens.get(curTokenIndex);
+            int curWallpaperIndex = token.windows.size();
+            while (curWallpaperIndex > 0) {
+                curWallpaperIndex--;
+                WindowState wallpaperWin = token.windows.get(curWallpaperIndex);
+                return wallpaperWin.mXOffset;
+            }
+        }
+        return -1;
+    }
+
+    public int getLastWallpaperY() {
+        int curTokenIndex = mWallpaperTokens.size();
+        while (curTokenIndex > 0) {
+            curTokenIndex--;
+            WindowToken token = mWallpaperTokens.get(curTokenIndex);
+            int curWallpaperIndex = token.windows.size();
+            while (curWallpaperIndex > 0) {
+                curWallpaperIndex--;
+                WindowState wallpaperWin = token.windows.get(curWallpaperIndex);
+                return wallpaperWin.mYOffset;
+            }
+        }
+        return -1;
+    }
+
     boolean updateWallpaperOffsetLocked(WindowState wallpaperWin, int dw, int dh,
             boolean sync) {
         boolean changed = false;
@@ -5336,7 +5366,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     @Override
     public void keyguardGoingAway(boolean disableWindowAnimations,
-            boolean keyguardGoingToNotificationShade) {
+            boolean keyguardGoingToNotificationShade, boolean keyguardShowingMedia) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DISABLE_KEYGUARD)
                 != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException("Requires DISABLE_KEYGUARD permission");
@@ -5345,6 +5375,7 @@ public class WindowManagerService extends IWindowManager.Stub
             mAnimator.mKeyguardGoingAway = true;
             mAnimator.mKeyguardGoingAwayToNotificationShade = keyguardGoingToNotificationShade;
             mAnimator.mKeyguardGoingAwayDisableWindowAnimations = disableWindowAnimations;
+            mAnimator.mKeyguardGoingAwayShowingMedia = keyguardShowingMedia;
             requestTraversalLocked();
         }
     }
