@@ -354,8 +354,8 @@ public class MSimNetworkController extends NetworkController {
     }
 
     private void setCarrierText() {
-        String carrierName = mCarrierTextSub[MSimConstants.SUB1]
-                  + "    " + mCarrierTextSub[MSimConstants.SUB2];
+        String carrierName = mCarrierTextSub[MSimConstants.SUB1] + "-1"
+                  + "    " + mCarrierTextSub[MSimConstants.SUB2] + "-2";
         for (int i = 0; i < mSubsLabelViews.size(); i++) {
             TextView v = mSubsLabelViews.get(i);
             v.setText(carrierName);
