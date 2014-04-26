@@ -2215,7 +2215,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                     resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT, UserHandle.USER_CURRENT);
             if (sidebarPosition != mSidebarPosition) {
                 mSidebarPosition = sidebarPosition;
-                mWindowManager.updateViewLayout(mAppSidebar, getAppSidebarLayoutParams(sidebarPosition));
+                removeSidebarView();
+                addSidebarView();
             }
         }
     }

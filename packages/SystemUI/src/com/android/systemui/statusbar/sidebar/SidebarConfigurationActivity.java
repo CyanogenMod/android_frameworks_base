@@ -186,6 +186,8 @@ public class SidebarConfigurationActivity extends Activity {
             }
             sendBroadcast(new Intent(AppSidebar.ACTION_SIDEBAR_ITEMS_CHANGED));
             Toast.makeText(this, R.string.toast_items_saved, Toast.LENGTH_SHORT).show();
+            mSidebarContents.removeAllViews();
+            populateSidebar();
             return true;
             case android.R.id.home:
                 onBackPressed();
