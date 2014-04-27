@@ -104,7 +104,7 @@ public abstract class KeyguardActivityLauncher {
         // after showing lockscreen camera (bug 11063890).
         KeyguardUpdateMonitor.getInstance(getContext()).setAlternateUnlockEnabled(false);
 
-        if (lockPatternUtils.isSecure()) {
+        if (lockPatternUtils.isSecure() && !KeyguardHostView.shakeInsecure()) {
             // Launch the secure version of the camera
             if (wouldLaunchResolverActivity(SECURE_CAMERA_INTENT)) {
                 // TODO: Show disambiguation dialog instead.
@@ -175,7 +175,7 @@ public abstract class KeyguardActivityLauncher {
                 Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        boolean isSecure = lockPatternUtils.isSecure();
+        boolean isSecure = lockPatternUtils.isSecure() && !KeyguardHostView.shakeInsecure();
         if (!isSecure || showsWhileLocked) {
             if (!isSecure) {
                 getCallback().dismiss(false);
