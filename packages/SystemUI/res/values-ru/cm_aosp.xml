@@ -16,5 +16,5 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="quick_settings_battery_charged_label">Заряжено</string>
-    <string name="accessibility_battery_level">Заряд батареи <xliff:g id="number">%d</xliff:g>%</string>
+    <string name="accessibility_battery_level">Заряд батареи <xliff:g id="number">%d</xliff:g>%%</string>
 </resources>
