@@ -1339,11 +1339,6 @@ public class LocationManagerService extends ILocationManager.Stub {
                 if (removeReceiver && receiverRecords.size() == 0) {
                     removeUpdatesLocked(mReceiver);
                 }
-
-                // and also stop the provider if it has no more update records
-                if (globalRecords.isEmpty()) {
-                    applyRequirementsLocked(this.mProvider);
-                }
             }
         }
 
