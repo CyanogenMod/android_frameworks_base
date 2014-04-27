@@ -54,6 +54,7 @@ public class QSConstants {
         public static final String TILE_INTERNALMEMORY = "toggleinternalmemory";
         public static final String TILE_ONTHEGO = "toggleOnTheGo";
         public static final String TILE_BATTERYSAVER = "toggleBatterySaver";
+        public static final String TILE_WEATHER = "toggleWeather";
 
         // dynamic tiles
         public static final String TILE_ALARM = "toggleAlarm";
