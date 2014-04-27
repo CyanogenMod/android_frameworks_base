@@ -348,8 +348,7 @@ public class ThemeUtils {
                 (fileName.endsWith(".mp3") || fileName.endsWith(".ogg")));
     }
 
-    public static boolean setAudible(Context context, File ringtone, int type) {
-        final String name = ringtone.getName();
+    public static boolean setAudible(Context context, File ringtone, int type, String name) {
         final String path = ringtone.getAbsolutePath();
         final String mimeType = name.endsWith(".ogg") ? "audio/ogg" : "audio/mp3";
         ContentValues values = new ContentValues();

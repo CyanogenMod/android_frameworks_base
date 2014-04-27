@@ -785,6 +785,16 @@ public final class AssetManager {
         mThemeCookies.add(cookie);
     }
 
+    /** {@hide} */
+    public String getAppName() {
+        return mAppName;
+    }
+
+    /** {@hide} */
+    public void setAppName(String pkgName) {
+        mAppName = pkgName;
+    }
+
     /**
      * Determine whether the state in this asset manager is up-to-date with
      * the files on the filesystem.  If false is returned, you need to

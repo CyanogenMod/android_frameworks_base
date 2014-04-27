@@ -650,7 +650,6 @@
   <java-symbol type="string" name="orgTypeWork" />
   <java-symbol type="string" name="passwordIncorrect" />
   <java-symbol type="string" name="enablePin" />
-  <java-symbol type="string" name="permission" />
   <java-symbol type="string" name="perms_description_app" />
   <java-symbol type="string" name="perms_new_perm_prefix" />
   <java-symbol type="string" name="petabyteShort" />
@@ -1824,6 +1823,7 @@
   <java-symbol type="bool" name="config_hasRemovableLid" />
   <java-symbol type="string" name="config_deviceKeyHandlerLib" />
   <java-symbol type="string" name="config_deviceKeyHandlerClass" />
+  <java-symbol type="bool" name="config_batterySdCardAccessibility" />
 
   <!-- Telephony -->
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />

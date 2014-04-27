@@ -193,6 +193,7 @@ public class ResourcesManager {
         //}
 
         AssetManager assets = new AssetManager();
+        assets.setAppName(packageName);
         assets.setThemeSupport(compatInfo.isThemeable);
         if (assets.addAssetPath(resDir) == 0) {
             return null;
@@ -268,17 +269,9 @@ public class ResourcesManager {
      */
     private void setActivityIcons(Resources r) {
         SparseArray<PackageItemInfo> iconResources = new SparseArray<PackageItemInfo>();
-        String pkgName = null;
+        String pkgName = r.getAssets().getAppName();
         PackageInfo pkgInfo = null;
         ApplicationInfo appInfo = null;
-
-        int count = r.getAssets().getBasePackageCount();
-        if (count > 1) {
-            pkgName = r.getAssets().getBasePackageName(1);
-        } else if (count <= 1) {
-            return;
-        }
-
 
         try {
             pkgInfo = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES, UserHandle.myUserId());
