@@ -153,6 +153,76 @@ please see styles_device_defaults.xml.
         <item name="windowExitAnimation">@anim/toast_exit</item>
     </style>
 
+    <style name="Animation.Toast.Fade">
+	<item name="windowEnterAnimation">@anim/fade_in</item>
+        <item name="windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <style name="Animation.Toast.SlideRight">
+	<item name="windowEnterAnimation">@anim/slide_in_right</item>
+	<item name="windowExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="Animation.Toast.SlideLeft">
+        <item name="windowEnterAnimation">@anim/slide_in_left</item>
+        <item name="windowExitAnimation">@anim/slide_out_left</item>
+    </style>
+
+    <style name="Animation.Toast.SlideRightLeft">
+        <item name="windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="windowExitAnimation">@anim/slide_out_left</item>
+    </style>
+
+    <style name="Animation.Toast.SlideLeftRight">
+        <item name="windowEnterAnimation">@anim/slide_in_left</item>
+        <item name="windowExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="Animation.Toast.Xylon">
+        <item name="windowEnterAnimation">@anim/xylon_toast_enter</item>
+        <item name="windowExitAnimation">@anim/xylon_toast_exit</item>
+    </style>
+
+    <style name="Animation.Toast.Toko">
+        <item name="windowEnterAnimation">@anim/toko_toast_enter</item>
+        <item name="windowExitAnimation">@anim/toko_toast_exit</item>
+    </style>
+
+    <style name="Animation.Toast.Tn">
+        <item name="windowEnterAnimation">@anim/tn_toast_enter</item>
+        <item name="windowExitAnimation">@anim/tn_toast_exit</item>
+    </style>
+
+    <style name="Animation.Toast.Honami">
+        <item name="windowEnterAnimation">@anim/honami_toast_enter</item>
+        <item name="windowExitAnimation">@anim/honami_toast_exit</item>
+    </style>
+
+    <style name="Animation.Toast.FastFade">
+        <item name="windowEnterAnimation">@anim/fast_fade_in</item>
+        <item name="windowExitAnimation">@anim/fast_fade_out</item>
+    </style>
+
+    <style name="Animation.Toast.GrowFade">
+        <item name="windowEnterAnimation">@anim/grow_fade_in</item>
+        <item name="windowExitAnimation">@anim/fast_fade_out</item>
+    </style>
+
+    <style name="Animation.Toast.GrowFadeCenter">
+        <item name="windowEnterAnimation">@anim/grow_fade_in_center</item>
+        <item name="windowExitAnimation">@anim/fast_fade_out</item>
+    </style>
+
+    <style name="Animation.Toast.GrowFadeBottom">
+        <item name="windowEnterAnimation">@anim/grow_fade_in_from_bottom</item>
+        <item name="windowExitAnimation">@anim/fast_fade_out</item>
+    </style>
+
+    <style name="Animation.Toast.Translucent">
+        <item name="windowEnterAnimation">@anim/translucent_enter</item>
+        <item name="windowExitAnimation">@anim/translucent_exit</item>
+    </style>
+
     <style name="Animation.DropDownDown">
         <item name="windowEnterAnimation">@anim/grow_fade_in</item>
         <item name="windowExitAnimation">@anim/shrink_fade_out</item>

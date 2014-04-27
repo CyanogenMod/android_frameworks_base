@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- *
+ * Modification copyright (C) 2014 - AOSB Project - Credit zst123 "XuiMod"
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,6 +25,7 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -344,7 +345,7 @@ public class Toast {
             params.height = WindowManager.LayoutParams.WRAP_CONTENT;
             params.width = WindowManager.LayoutParams.WRAP_CONTENT;
             params.format = PixelFormat.TRANSLUCENT;
-            params.windowAnimations = com.android.internal.R.style.Animation_Toast;
+	        params.windowAnimations = com.android.internal.R.style.Animation_Toast;
             params.type = WindowManager.LayoutParams.TYPE_TOAST;
             params.setTitle("Toast");
             params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -386,6 +387,56 @@ public class Toast {
                 // the layout direction
                 final Configuration config = mView.getContext().getResources().getConfiguration();
                 final int gravity = Gravity.getAbsoluteGravity(mGravity, config.getLayoutDirection());
+                switch(Settings.System.getInt(context.getContentResolver(), Settings.System.ACTIVITY_ANIMATION_CONTROLS[10], 1)) {
+                case 0:
+	                mParams.windowAnimations = -1;
+	                break;
+                case 1:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast;
+	                break;
+                case 2:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Fade;
+	                break;
+                case 3:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_SlideRight;
+	                break;
+                case 4:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_SlideLeft;
+	                break;
+                case 5:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Xylon;
+	                break;
+                case 6:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Toko;
+	                break;
+                case 7:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Tn;
+	                break;
+                case 8:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Honami;
+	                break;
+                case 9:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_FastFade;
+	                break;
+                case 10:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_GrowFade;
+	                break;
+                case 11:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_GrowFadeCenter;
+	                break;
+                case 12:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_GrowFadeBottom;
+	                break;
+                case 13:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Translucent;
+	                break;
+                case 14:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_SlideLeftRight;
+	                break;
+                case 15:
+	                mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_SlideRightLeft;
+	                break;
+                }
                 mParams.gravity = gravity;
                 if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.FILL_HORIZONTAL) {
                     mParams.horizontalWeight = 1.0f;

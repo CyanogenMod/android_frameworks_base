@@ -17,11 +17,13 @@
 package android.view;
 
 import android.app.AppGlobals;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
@@ -180,7 +182,13 @@ public class ViewConfiguration {
     /**
      * Maximum velocity to initiate a fling, as measured in dips per second
      */
-    private static final int MAXIMUM_FLING_VELOCITY = 8000;
+    private static int MAXIMUM_FLING_VELOCITY = 15000;
+
+    /**
+     * Maximum velocity to initiate a fling, as measured in dips per second
+     * @hide
+     */
+    public static final int DEFAULT_MAXIMUM_FLING_VELOCITY = 15000;
 
     /**
      * Delay before dispatching a recurring accessibility event in milliseconds.
@@ -200,17 +208,35 @@ public class ViewConfiguration {
     /**
      * The coefficient of friction applied to flings/scrolls.
      */
-    private static final float SCROLL_FRICTION = 0.015f;
+    private static float SCROLL_FRICTION = 0.011f;
+
+    /**
+     * The coefficient of friction applied to flings/scrolls.
+     * @hide
+     */
+    public static final float DEFAULT_SCROLL_FRICTION = 0.011f;
 
     /**
      * Max distance in dips to overscroll for edge effects
      */
-    private static final int OVERSCROLL_DISTANCE = 0;
+    private static int OVERSCROLL_DISTANCE = 0;
+
+    /**
+     * Max distance in dips to overscroll for edge effects
+     * @hide
+     */
+    public static final int DEFAULT_OVERSCROLL_DISTANCE = 0;
 
     /**
      * Max distance in dips to overfling for edge effects
      */
-    private static final int OVERFLING_DISTANCE = 6;
+    private static int OVERFLING_DISTANCE = 6;
+
+    /**
+     * Max distance in dips to overfling for edge effects
+     * @hide
+     */
+    public static final int DEFAULT_OVERFLING_DISTANCE = 6;
 
     private final int mEdgeSlop;
     private final int mFadingEdgeLength;
@@ -268,6 +294,40 @@ public class ViewConfiguration {
      * @see android.util.DisplayMetrics
      */
     private ViewConfiguration(Context context) {
+
+        final ContentResolver resolver = context.getContentResolver();
+        if (Settings.System.getInt(resolver,
+                          Settings.System.ANIMATION_CONTROLS_NO_SCROLL, 0) != 1) {
+            SCROLL_FRICTION = DEFAULT_SCROLL_FRICTION;
+            MAXIMUM_FLING_VELOCITY = DEFAULT_MAXIMUM_FLING_VELOCITY;
+            OVERSCROLL_DISTANCE = DEFAULT_OVERSCROLL_DISTANCE;
+            OVERFLING_DISTANCE = DEFAULT_OVERFLING_DISTANCE;
+        } else {
+            SCROLL_FRICTION = Settings.System.getFloat(resolver,
+                          Settings.System.CUSTOM_SCROLL_FRICTION, DEFAULT_SCROLL_FRICTION);
+            int maximumFlingVelocity = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_FLING_VELOCITY, DEFAULT_MAXIMUM_FLING_VELOCITY);
+            if (maximumFlingVelocity == 0) {
+                MAXIMUM_FLING_VELOCITY = DEFAULT_MAXIMUM_FLING_VELOCITY;
+            } else {
+                MAXIMUM_FLING_VELOCITY = maximumFlingVelocity;
+            }
+            int overScrollDistance = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_OVERSCROLL_DISTANCE, DEFAULT_OVERSCROLL_DISTANCE);
+            if (overScrollDistance > 100) {
+                OVERSCROLL_DISTANCE = DEFAULT_OVERSCROLL_DISTANCE;
+            } else {
+                OVERSCROLL_DISTANCE = overScrollDistance;
+            }
+            int overFlingDistance = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_OVERFLING_DISTANCE, DEFAULT_OVERFLING_DISTANCE);
+            if (overFlingDistance > 100 || overFlingDistance == 0) {
+                OVERFLING_DISTANCE = DEFAULT_OVERFLING_DISTANCE;
+            } else {
+                OVERFLING_DISTANCE = overFlingDistance;
+            }
+        }
+
         final Resources res = context.getResources();
         final DisplayMetrics metrics = res.getDisplayMetrics();
         final Configuration config = res.getConfiguration();

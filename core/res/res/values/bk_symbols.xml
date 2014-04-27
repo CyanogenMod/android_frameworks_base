@@ -78,4 +78,64 @@
     <java-symbol type="string" name="setting_confirmation_ask_me_later" />
     <java-symbol type="string" name="setting_confirmation_yes" />
     <java-symbol type="string" name="setting_confirmation_no" />
+
+    <!-- AOKP -->
+    <java-symbol type="string" name="animation_default"/>
+    <java-symbol type="string" name="animation_fade"/>
+    <java-symbol type="string" name="animation_slide_left"/>
+    <java-symbol type="string" name="animation_slide_right"/>
+    <java-symbol type="string" name="animation_slide_left_no_fade"/>
+    <java-symbol type="string" name="animation_slide_right_no_fade"/>
+    <java-symbol type="string" name="animation_slide_up"/>
+    <java-symbol type="string" name="animation_slide_down"/>
+    <java-symbol type="string" name="animation_translucent"/>
+    <java-symbol type="string" name="animation_grow_shrink"/>
+    <java-symbol type="string" name="animation_grow_shrink_center"/>
+    <java-symbol type="string" name="animation_grow_shrink_bottom"/>
+    <java-symbol type="string" name="animation_grow_shrink_left"/>
+    <java-symbol type="string" name="animation_grow_shrink_right"/>
+    <java-symbol type="string" name="animation_random"/>
+    <java-symbol type="anim" name="animcontrol_shrink_fade_out_ribbon" />
+    <java-symbol type="anim" name="animcontrol_shrink_fade_out_center_ribbon" />
+    <java-symbol type="anim" name="animcontrol_shrink_fade_out_right_ribbon" />
+    <java-symbol type="anim" name="animcontrol_shrink_fade_out_left_ribbon" />
+    <java-symbol type="anim" name="animcontrol_shrink_fade_out_from_bottom_ribbon" />
+    <java-symbol type="anim" name="animcontrol_grow_fade_in_ribbon" />
+    <java-symbol type="anim" name="animcontrol_grow_fade_in_center_ribbon" />
+    <java-symbol type="anim" name="animcontrol_grow_fade_in_left_ribbon" />
+    <java-symbol type="anim" name="animcontrol_grow_fade_in_right_ribbon" />
+    <java-symbol type="anim" name="animcontrol_grow_fade_in_from_bottom_ribbon" />
+    <java-symbol type="anim" name="animcontrol_translucent_enter_ribbon" />
+    <java-symbol type="anim" name="animcontrol_translucent_exit_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slide_in_down" />
+    <java-symbol type="anim" name="animcontrol_slide_out_up" />
+    <java-symbol type="anim" name="animcontrol_slide_in_right_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slide_out_right_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slide_in_left_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slide_out_left_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slow_fade_in" />
+    <java-symbol type="anim" name="animcontrol_slow_fade_out" />
+    <java-symbol type="anim" name="animcontrol_slide_in_up_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slide_out_down_ribbon" />
+    <java-symbol type="anim" name="animcontrol_slide_out_right_no_fade" />
+    <java-symbol type="anim" name="animcontrol_slide_out_left_no_fade" />
+    <java-symbol type="anim" name="animcontrol_slide_in_right_no_fade" />
+    <java-symbol type="anim" name="animcontrol_slide_in_left_no_fade" />
+    <java-symbol type="array" name="anim_controls_entries" />
+
+    <!-- Toast Animation -->
+    <java-symbol type="style" name="Animation.Toast.Fade" />
+    <java-symbol type="style" name="Animation.Toast.SlideRight" />
+    <java-symbol type="style" name="Animation.Toast.SlideLeft" />
+    <java-symbol type="style" name="Animation.Toast.Xylon" />
+    <java-symbol type="style" name="Animation.Toast.Toko" />
+    <java-symbol type="style" name="Animation.Toast.Tn" />
+    <java-symbol type="style" name="Animation.Toast.Honami" />
+    <java-symbol type="style" name="Animation.Toast.FastFade" />
+    <java-symbol type="style" name="Animation.Toast.GrowFade" />
+    <java-symbol type="style" name="Animation.Toast.GrowFadeCenter" />
+    <java-symbol type="style" name="Animation.Toast.GrowFadeBottom" />
+    <java-symbol type="style" name="Animation.Toast.Translucent" />
+    <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
+    <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
 </resources>
