@@ -59,32 +59,22 @@ import static com.android.internal.util.slim.QSConstants.TILE_CAMERA;
 import static com.android.internal.util.slim.QSConstants.TILE_INTERNALMEMORY;
 import static com.android.internal.util.slim.QSConstants.TILE_ONTHEGO;
 import static com.android.internal.util.slim.QSConstants.TILE_BATTERYSAVER;
-import static com.android.internal.util.slim.QSConstants.TILE_WEATHER;
 
-import android.app.Activity;
-import android.app.ActivityManagerNative;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.WindowManager;
-import android.view.WindowManagerGlobal;
 
 import com.android.internal.util.slim.DeviceUtils;
 import com.android.systemui.quicksettings.AirplaneModeTile;
@@ -127,11 +117,7 @@ import com.android.systemui.quicksettings.ProfileTile;
 import com.android.systemui.quicksettings.CameraTile;
 import com.android.systemui.quicksettings.OnTheGoTile;
 import com.android.systemui.quicksettings.BatterySaverTile;
-import com.android.systemui.quicksettings.WeatherTile;
 
-import com.android.systemui.R;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -297,9 +283,6 @@ public class QuickSettingsController {
                 }
             } else if (tile.equals(TILE_CAMERA) && cameraSupported) {
                 qs = new CameraTile(mContext, this, mHandler);
-            } else if (tile.equals(TILE_WEATHER)) {
-                qs = new WeatherTile(mContext, this, mHandler);
-                WeatherDialog();
             } else if (tile.contains(TILE_CUSTOM)) {
                 qs = new CustomTile(mContext, this, findCustomKey(tile));
             } else if (tile.contains(TILE_CONTACT)) {
@@ -479,50 +462,6 @@ public class QuickSettingsController {
         mContainerView.updateResources();
         for (QuickSettingsTile t : mQuickSettingsTiles) {
             t.updateResources();
-        }
-    }
-
-    private void WeatherDialog() {
-        int check = filecheck("/sdcard/Android/data/weather.txt");
-        if ( check == 0 ) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setPositiveButton(R.string.weather_ok, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-
-            builder.setNegativeButton(R.string.weather_link, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                 Intent intent = new Intent();
-                 intent.setClassName("com.cyanogenmod.lockclock", "com.cyanogenmod.lockclock.preference.Preferences");
-                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                 mContext.startActivity(intent);
-                 }
-            });
-        builder.setMessage(R.string.weather_dialog_msg);
-        builder.setTitle(R.string.weather_notify);
-        builder.setCancelable(true);
-        final Dialog dialog = builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        try {
-            WindowManagerGlobal.getWindowManagerService().dismissKeyguard();
-        } catch (RemoteException e) {
-        }
-        dialog.show();
-        }
-    }
-
-    public int filecheck(String PATH) {
-        File f = new File(PATH);
-        int isfile;
-        if (f.isFile()) {
-           isfile = 1;
-        return isfile;
-        } else {
-          isfile = 0 ;
-        return isfile;
         }
     }
 }
