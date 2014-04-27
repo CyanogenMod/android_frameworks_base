@@ -1330,6 +1330,9 @@
     <!-- Whether cpu boost is enabled for overscroller fling. -->
     <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
 
+    <!-- Whether cpu boost is enabled for horizontal scroll. -->
+    <bool name="config_enableCpuBoostForScroller">false</bool>
+
     <!-- User display names for app ops codes -->
     <string-array name="app_ops_labels">
         <item>Trying to access location</item>
