@@ -95,7 +95,7 @@
     <string name="navbar_recent_button">Recent button</string>
     <string name="navbar_search_button">Search button</string>
     <string name="navbar_back_button">Back button</string>
-    <string name="navbar_empty_button">Empty button</string>
+    <string name="navbar_empty_button">Leave empty</string>
     <string name="navbar_menu_conditional_button">Menu (autoHide) button</string>
     <string name="navbar_menu_always_button">Menu (alwaysShow) button</string>
     <string name="navbar_menu_big_button">Menu button</string>
@@ -113,4 +113,9 @@
 
     <!-- Content description for the add quick settings tile button. [CHAR LIMIT=NONE] -->
     <string name="accessibility_desc_add_quick_settings">Add Quick settings.</string>
+
+    <!-- Sim Slot number -->
+    <string name="sim_slot" translatable="false">1</string>
+    <string name="sim_slot_2" translatable="false">2</string>
+    <string name="sim_slot_3" translatable="false">3</string>
 </resources>

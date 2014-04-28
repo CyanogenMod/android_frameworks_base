@@ -236,6 +236,18 @@ final class WindowState implements WindowManagerPolicy.WindowState {
     int mXOffset;
     int mYOffset;
 
+    // Wallpaper windows: pixels for overscroll
+    int mWallpaperXOverscrollMax = -1;
+    int mWallpaperYOverscrollMax = -1;
+
+    // Wallpaper windows: overscroll pixels offset based on above variables.
+    float mWallpaperXOverscroll = -1;
+    float mWallpaperYOverscroll = -1;
+
+    // Wallpaper windows: pixels offset based on above variables.
+    int mXOverscrollOffset;
+    int mYOverscrollOffset;
+
     /**
      * This is set after IWindowSession.relayout() has been called at
      * least once for the window.  It allows us to detect the situation
@@ -435,6 +447,10 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         mLastRequestedHeight = 0;
         mXOffset = 0;
         mYOffset = 0;
+        mXOverscrollOffset = 0;
+        mYOverscrollOffset = 0;
+        mWallpaperXOverscrollMax = 0;
+        mWallpaperYOverscrollMax = 0;
         mLayer = 0;
         mInputWindowHandle = new InputWindowHandle(
                 mAppToken != null ? mAppToken.mInputApplicationHandle : null, this,
@@ -1372,6 +1388,10 @@ final class WindowState implements WindowManagerPolicy.WindowState {
             pw.print(prefix); pw.print("Offsets x="); pw.print(mXOffset);
                     pw.print(" y="); pw.println(mYOffset);
         }
+        if (mXOverscrollOffset != 0 || mYOverscrollOffset != 0) {
+            pw.print(prefix); pw.print("Overscroll Offsets x="); pw.print(mXOverscrollOffset);
+                    pw.print(" y="); pw.println(mYOverscrollOffset);
+        }
         if (dumpAll) {
             pw.print(prefix); pw.print("mGivenContentInsets=");
                     mGivenContentInsets.printShortString(pw);
@@ -1455,6 +1475,10 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         if (mWallpaperXStep != -1 || mWallpaperYStep != -1) {
             pw.print(prefix); pw.print("mWallpaperXStep="); pw.print(mWallpaperXStep);
                     pw.print(" mWallpaperYStep="); pw.println(mWallpaperYStep);
+        }
+        if (mWallpaperXOverscrollMax != -1 || mWallpaperYOverscrollMax != -1) {
+            pw.print(prefix); pw.print("mWallpaperXOverscrollMax="); pw.print(mWallpaperXOverscrollMax);
+                    pw.print(" mWallpaperYOverscrollMax="); pw.println(mWallpaperYOverscrollMax);
         }
     }
 

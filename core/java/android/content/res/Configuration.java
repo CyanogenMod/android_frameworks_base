@@ -422,13 +422,23 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     /**
      * @hide
      */
-    public static final String THEME_ID_PERSISTENCE_PROPERTY = "persist.sys.themeId";
+    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
 
     /**
      * @hide
      */
-    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
-    
+    public static final String THEME_SYSTEMUI_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themeSysUiPkgName";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_ICONPACK_PACKAGE_NAME_PERSISTENCE_PROPERTY = "themeIconPackPkgName";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_FONT_PACKAGE_NAME_PERSISTENCE_PROPERTY = "themeFontPackPkgName";
+
     /**
      * Overall orientation of the screen.  May be one of
      * {@link #ORIENTATION_LANDSCAPE}, {@link #ORIENTATION_PORTRAIT}.
@@ -647,7 +657,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             customTheme = (CustomTheme) o.customTheme.clone();
         }
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder(128);
         sb.append("{");
@@ -1162,14 +1172,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(compatScreenHeightDp);
         dest.writeInt(compatSmallestScreenWidthDp);
         dest.writeInt(seq);
-
-        if (customTheme == null) {
-            dest.writeInt(0);
-        } else {
-            dest.writeInt(1);
-            dest.writeString(customTheme.getThemeId());
-            dest.writeString(customTheme.getThemePackageName());
-        }
+        dest.writeParcelable(customTheme, flags);
     }
 
     public void readFromParcel(Parcel source) {
@@ -1198,12 +1201,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatScreenHeightDp = source.readInt();
         compatSmallestScreenWidthDp = source.readInt();
         seq = source.readInt();
-
-        if (source.readInt() != 0) {
-            String themeId = source.readString();
-            String themePackage = source.readString();
-            customTheme = new CustomTheme(themeId, themePackage);
-        }
+        customTheme = source.readParcelable(CustomTheme.class.getClassLoader());
     }
     
     public static final Parcelable.Creator<Configuration> CREATOR
@@ -1271,18 +1269,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         n = this.smallestScreenWidthDp - that.smallestScreenWidthDp;
         if (n != 0) return n;
         n = this.densityDpi - that.densityDpi;
-        //if (n != 0) return n;
+        if (n != 0) return n;
         if (this.customTheme == null) {
             if (that.customTheme != null) return 1;
-        } else if (that.customTheme == null) {
-            return -1;
         } else {
-            n = this.customTheme.getThemeId().compareTo(that.customTheme.getThemeId());
-            if (n != 0) return n;
-            n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());
-            if (n != 0) return n;
+            n = this.customTheme.compareTo(that.customTheme);
         }
-
         return n;
     }
 

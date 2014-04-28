@@ -16,6 +16,7 @@
 
 package com.android.internal.os;
 
+import android.graphics.Typeface;
 import android.net.Credentials;
 import android.net.LocalSocket;
 import android.os.Process;
@@ -220,6 +221,11 @@ class ZygoteConnection {
                 ZygoteInit.setCloseOnExec(serverPipeFd, true);
             }
 
+            //Replace the font cache if the theme changed
+            if (parsedArgs.refreshTheme) {
+                Typeface.recreateDefaults();
+            }
+
             /**
              * In order to avoid leaking descriptors to the Zygote child,
              * the native code must close the two Zygote socket descriptors
@@ -377,6 +383,9 @@ class ZygoteConnection {
 
         /** from --invoke-with */
         String invokeWith;
+
+        /** from --refresh_theme */
+        boolean refreshTheme;
 
         /**
          * Any args after and including the first non-option arg
@@ -537,6 +546,8 @@ class ZygoteConnection {
                     mountExternal = Zygote.MOUNT_EXTERNAL_MULTIUSER;
                 } else if (arg.equals("--mount-external-multiuser-all")) {
                     mountExternal = Zygote.MOUNT_EXTERNAL_MULTIUSER_ALL;
+                } else if (arg.equals("--refresh_theme")) {
+                    refreshTheme = true;
                 } else {
                     break;
                 }

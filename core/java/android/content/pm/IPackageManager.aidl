@@ -42,7 +42,6 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.UserInfo;
 import android.content.pm.VerificationParams;
 import android.content.pm.VerifierDeviceIdentity;
-import android.content.pm.ThemeInfo;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.content.IntentSender;
@@ -421,4 +420,7 @@ interface IPackageManager {
 
     boolean setApplicationBlockedSettingAsUser(String packageName, boolean blocked, int userId);
     boolean getApplicationBlockedSettingAsUser(String packageName, int userId);
+
+    /** Themes */
+    void updateIconMapping(String pkgName);
 }

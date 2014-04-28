@@ -342,6 +342,41 @@ public final class Installer {
         return execute(builder.toString());
     }
 
+    public int idmap(String targetApkPath, String overlayApkPath, String redirectionsPath, int uid,
+                     int targetHash, int overlayHash) {
+        StringBuilder builder = new StringBuilder("idmap");
+        builder.append(' ');
+        builder.append(targetApkPath);
+        builder.append(' ');
+        builder.append(overlayApkPath);
+        builder.append(' ');
+        builder.append(uid);
+        builder.append(' ');
+        builder.append(targetHash);
+        builder.append(' ');
+        builder.append(overlayHash);
+        if (redirectionsPath != null) {
+            builder.append(' ');
+            builder.append(redirectionsPath);
+        }
+        return execute(builder.toString());
+    }
+
+    public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid, int pkgId) {
+        StringBuilder builder = new StringBuilder("aapt");
+        builder.append(' ');
+        builder.append(themeApkPath);
+        builder.append(' ');
+        builder.append(internalPath);
+        builder.append(' ');
+        builder.append(resTablePath);
+        builder.append(' ');
+        builder.append(uid);
+        builder.append(' ');
+        builder.append(pkgId);
+        return execute(builder.toString());
+    }
+
     public int movedex(String srcPath, String dstPath) {
         StringBuilder builder = new StringBuilder("movedex");
         builder.append(' ');

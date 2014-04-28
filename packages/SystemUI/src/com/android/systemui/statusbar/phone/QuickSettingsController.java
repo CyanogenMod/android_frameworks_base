@@ -220,7 +220,7 @@ public class QuickSettingsController {
                     qs = new WiFiTile(mContext, this, mStatusBarService.mNetworkController);
                 }
             } else if (tile.equals(TILE_GPS)) {
-                qs = new GPSTile(mContext, this);
+                qs = new GPSTile(mContext, this, mStatusBarService.mLocationController);
             } else if (tile.equals(TILE_BLUETOOTH) && bluetoothSupported) {
                 qs = new BluetoothTile(mContext, this, mStatusBarService.mBluetoothController);
             } else if (tile.equals(TILE_BRIGHTNESS)) {
@@ -388,9 +388,16 @@ public class QuickSettingsController {
         loadTiles();
         setupBroadcastReceiver();
         setupContentObserver();
-        if (mRibbonMode) {
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean smallIcons = Settings.System.getIntForUser(resolver,
+                Settings.System.QUICK_SETTINGS_SMALL_ICONS, 0, UserHandle.USER_CURRENT) == 1;
+        if (mRibbonMode || smallIcons) {
             for (QuickSettingsTile t : mQuickSettingsTiles) {
-                t.switchToRibbonMode();
+                if (mRibbonMode) {
+                    t.switchToRibbonMode();
+                } else {
+                    t.switchToSmallIcons();
+                }
             }
         }
     }

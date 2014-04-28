@@ -67,6 +67,8 @@ public class WallpaperManager {
     private static boolean DEBUG = false;
     private float mWallpaperXStep = -1;
     private float mWallpaperYStep = -1;
+    private int mWallpaperXOverscroll = -1;
+    private int mWallpaperYOverscroll = -1;
 
     /**
      * Activity Action: Show settings for choosing wallpaper. Do not use directly to construct
@@ -950,12 +952,47 @@ public class WallpaperManager {
     public void setWallpaperOffsets(IBinder windowToken, float xOffset, float yOffset) {
         try {
             //Log.v(TAG, "Sending new wallpaper offsets from app...");
-            WindowManagerGlobal.getWindowSession().setWallpaperPosition(
-                    windowToken, xOffset, yOffset, mWallpaperXStep, mWallpaperYStep);
+            WindowManagerGlobal.getWindowSession().setWallpaperPositionOverscroll(
+                    windowToken, xOffset, yOffset, mWallpaperXStep, mWallpaperYStep,
+                    -1, -1, mWallpaperXOverscroll, mWallpaperYOverscroll);
             //Log.v(TAG, "...app returning after sending offsets!");
         } catch (RemoteException e) {
             // Ignore.
         }
+    }
+
+    /**
+     * Set the position of the current wallpaper within any larger space, when
+     * that wallpaper is visible behind the given window.  The X and Y offsets
+     * are floating point numbers ranging from 0 to 1, representing where the
+     * wallpaper should be positioned within the range specified by setWallpaperOverscroll.
+     *
+     * @param windowToken The window who these offsets should be associated
+     * with, as returned by {@link android.view.View#getWindowToken()
+     * View.getWindowToken()}.
+     * @param xOverscrollOffset The overscroll offset along the X dimension, from 0 to 1.
+     * @param yOverscrollOffset The overscroll offset along the Y dimension, from 0 to 1.
+     *
+     * @hide
+     */
+    public void setWallpaperOverscrollOffsets(IBinder windowToken, float xOverscrollOffset,
+            float yOverscrollOffset) {
+        try {
+            //Log.v(TAG, "Sending new wallpaper offsets from app...");
+            WindowManagerGlobal.getWindowSession().setWallpaperPositionOverscroll(
+                    windowToken, -1, -1, mWallpaperXStep, mWallpaperYStep,
+                    xOverscrollOffset, yOverscrollOffset, mWallpaperXOverscroll,
+                    mWallpaperYOverscroll);
+            //Log.v(TAG, "...app returning after sending offsets!");
+        } catch (RemoteException e) {
+            // Ignore.
+        }
+    }
+
+    /** @hide */
+    public void setWallpaperOverscroll(int xOverscroll, int yOverscroll) {
+        mWallpaperXOverscroll = xOverscroll;
+        mWallpaperYOverscroll = yOverscroll;
     }
 
     /**

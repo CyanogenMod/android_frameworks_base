@@ -412,6 +412,17 @@ int main(int argc, char* const argv[])
                 convertPath(argv[0]);
                 bundle.setAndroidManifestFile(argv[0]);
                 break;
+            case 'X':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-X' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setInternalZipPath(argv[0]);
+                break;
             case 'P':
                 argc--;
                 argv++;
@@ -480,6 +491,39 @@ int main(int argc, char* const argv[])
                 } else {
                     bundle.setCompressionMethod(ZipEntry::kCompressStored);
                 }
+                break;
+            case 'Z':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-Z' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setInputAPKFile(argv[0]);
+                break;
+            case 'R':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-R' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setOutputResDir(argv[0]);
+                break;
+            case 'r':
+                argc--;
+                argv++;
+                if (!argc) {
+                    fprintf(stderr, "ERROR: No argument supplied for '-r' option\n");
+                    wantUsage = true;
+                    goto bail;
+                }
+                convertPath(argv[0]);
+                bundle.setOutputResApk(argv[0]);
                 break;
             case '-':
                 if (strcmp(cp, "-debug-mode") == 0) {

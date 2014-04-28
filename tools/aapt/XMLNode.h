@@ -181,6 +181,9 @@ private:
     status_t flatten_node(const StringPool& strings, const sp<AaptFile>& dest,
             bool stripComments, bool stripRawValues) const;
 
+    static sp<XMLNode> parseFromZip(const sp<AaptFile>& file);
+    static sp<XMLNode> parseFromAsset(const Asset& asset);
+
     String16 mNamespacePrefix;
     String16 mNamespaceUri;
     String16 mElementName;

@@ -45,7 +45,7 @@ public class Surface implements Parcelable {
     private static native boolean nativeIsConsumerRunningBehind(int nativeObject);
     private static native int nativeReadFromParcel(int nativeObject, Parcel source);
     private static native void nativeWriteToParcel(int nativeObject, Parcel dest);
-    private static native void nativeSetDirtyRegion(int nativeObject, Rect dirty);
+    private static native void nativeSetDirtyRect(int nativeObject, Rect dirty);
 
     public static final Parcelable.Creator<Surface> CREATOR =
             new Parcelable.Creator<Surface>() {
@@ -153,9 +153,9 @@ public class Surface implements Parcelable {
      * Set dirty region passed from HW renderer.
      * @hide
      */
-    public void setDirtyRegion(Rect dirty) {
+    public void setDirtyRect(Rect dirty) {
         if (mNativeObject != 0) {
-            nativeSetDirtyRegion(mNativeObject,dirty);
+            nativeSetDirtyRect(mNativeObject,dirty);
         }
     }
 

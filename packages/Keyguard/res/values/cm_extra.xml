@@ -17,7 +17,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Do not translate - Dummy strings to prevent aapt warnings -->
     <string name="add_widget_item"></string>
-    <string name="app_name"></string>
     <string name="do_keyguard"></string>
     <string name="kg_password_wrong_pin_code"></string>
     <string name="none_menu_item"></string>

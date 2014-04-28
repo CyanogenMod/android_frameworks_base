@@ -781,8 +781,18 @@
          to false.
          -->
     <bool name="config_enableFusedLocationOverlay" translatable="false">true</bool>
+    <!-- Whether to enable fused hardware provider overlay which allows fused
+         hardware provider to be replaced by an app at run-time. When disabled,
+         only the config_fusedLocationProviderPackageName package will be
+         searched for fused location provider, otherwise packages whose
+         signature matches the signatures of config_locationProviderPackageNames
+         will be searched, and the service with the highest version number will
+         be picked. Anyone who wants to disable the overlay mechanism can set it
+         to false.
+         -->
+    <bool name="config_enableHwFlpOverlay" translatable="false">true</bool>
     <!-- Package name providing fused location support. Used only when
-         config_enableFusedLocationOverlay is false. -->
+         config_enableFusedLocationOverlay or config_enableHwFlpOverlay is false. -->
     <string name="config_fusedLocationProviderPackageName" translatable="false">com.android.location.fused</string>
 
     <!-- Whether to enable geocoder overlay which allows geocoder to be replaced
@@ -829,8 +839,11 @@
         <item>com.android.location.fused</item>
     </string-array>
 
-    <!-- Component name of the service providing geofence API support. -->
-    <string name="config_geofenceProvider" translatable="false">com.qualcomm.location</string>
+    <!-- Component name of the geofence services provider. -->
+    <string name="config_geofenceServicesProvider" translatable="false">com.qualcomm.location</string>
+
+    <!-- Component name of the combo network location provider. -->
+    <string name="config_comboNetworkLocationProvider" translatable="false">com.qualcomm.location</string>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
     use cases -->

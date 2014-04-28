@@ -19,15 +19,17 @@ package com.android.server;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.CustomTheme;
-import android.util.Log;
-import android.app.ActivityManager;
+import android.content.pm.ThemeUtils;
+import android.content.res.ThemeManager;
 import android.os.SystemClock;
+import android.provider.ThemesContract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppsLaunchFailureReceiver extends BroadcastReceiver {
 
-    private static final int FAILURES_THRESHOLD = 5;
+    private static final int FAILURES_THRESHOLD = 3;
     private static final int EXPIRATION_TIME_IN_MILLISECONDS = 30000; // 30 seconds
 
     private int mFailuresCount = 0;
@@ -51,20 +53,27 @@ public class AppsLaunchFailureReceiver extends BroadcastReceiver {
             if (mFailuresCount <= FAILURES_THRESHOLD) {
                 mFailuresCount++;
                 if (mFailuresCount == FAILURES_THRESHOLD) {
-                    CustomTheme defaultTheme = CustomTheme.getSystemTheme();
-                    ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-                    Configuration currentConfig = am.getConfiguration();
-                    currentConfig.customTheme = new CustomTheme(
-                            defaultTheme.getThemeId(),
-                            defaultTheme.getThemePackageName());
-                    am.updateConfiguration(currentConfig);
+                    // let the theme manager take care of getting us back on the default theme
+                    ThemeManager tm = (ThemeManager) context.getSystemService(Context.THEME_SERVICE);
+                    List<String> components = new ArrayList<String>();
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_FONTS);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_LAUNCHER);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_ALARMS);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_BOOT_ANIM);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_ICONS);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_LOCKSCREEN);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_NOTIFICATIONS);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS);
+                    components.add(ThemesContract.ThemesColumns.MODIFIES_RINGTONES);
+                    tm.requestThemeChange("default", components);
                 }
             }
-        } else if (action.equals(Intent.ACTION_APP_LAUNCH_FAILURE_RESET)) {
+        } else if (action.equals(Intent.ACTION_APP_LAUNCH_FAILURE_RESET)
+                || action.equals(ThemeUtils.ACTION_THEME_CHANGED)) {
             mFailuresCount = 0;
             mStartTime = SystemClock.uptimeMillis();
         } else if (action.equals(Intent.ACTION_PACKAGE_ADDED) ||
-                   action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
             mFailuresCount = 0;
             mStartTime = SystemClock.uptimeMillis();
         }
