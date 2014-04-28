@@ -11045,7 +11045,6 @@ public class WindowManagerService extends IWindowManager.Stub
     public void addSystemUIVisibilityFlag(int flag) {
         mLastStatusBarVisibility |= flag;
     }
-        }
     /** SPLIT VIEW **/
     private int mSplitViewTasks[];
     private int mNextSplitViewLocation;
@@ -11223,13 +11222,5 @@ public class WindowManagerService extends IWindowManager.Stub
 
     }
     /** END SPLIT VIEW **/
-
-    /* @hide */
-    @Override
-    public int getSystemUIVisibility() {
-        return mLastStatusBarVisibility;
-    }
-
-}
 
 }
