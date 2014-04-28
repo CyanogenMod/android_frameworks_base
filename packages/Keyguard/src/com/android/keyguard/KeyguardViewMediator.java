@@ -796,7 +796,10 @@ public class KeyguardViewMediator {
     }
 
     private void maybeSendUserPresentBroadcast() {
-        if (mSystemReady && isKeyguardDisabled()) {
+        if ((mSystemReady && isKeyguardDisabled())
+                || (mSystemReady && !mKeyguardViewManager.isShowing())) {
+            // If mKeyguardViewManager.isShowing() is false, the screen turned off
+            // but the user turned it back on before the lock delay took place.
             // Keyguard can be showing even if disabled in case the SIM PIN entry
             // screen is showing; so make sure to not send user present if it's
             // actually showing
