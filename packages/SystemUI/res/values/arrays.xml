@@ -1112,12 +1112,18 @@
         <item>中国移动</item>
         <item>中国联通</item>
         <item>中国电信</item>
+        <item>中國移動</item>
+        <item>中國聯通</item>
+        <item>中國電信</item>
         <item>Searching for Service</item>
     </string-array>
 
     <string-array name="locale_carrier_names" translatable="false">
         <item>China_Mobile</item>
         <item>China_Unicom</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
         <item>China_Mobile</item>
         <item>China_Unicom</item>
         <item>China_Telecom</item>
