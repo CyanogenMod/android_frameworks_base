@@ -92,7 +92,7 @@ public class PlatLogoActivity extends Activity {
         letter.setGravity(Gravity.CENTER);
         letter.setText(mIsCM ? "XX" : "K");
 
-        String cmVersion = SystemProperties.get("ro.axxion.version");
+        String cmVersion = SystemProperties.get("ro.platlogo.version");
         if (cmVersion != null) {
             cmVersion = cmVersion.replaceAll("([0-9\\.]+?)-.*", "$1");
         }
