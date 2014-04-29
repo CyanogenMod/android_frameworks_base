@@ -639,14 +639,23 @@ public final class AssetManager {
                                            String targetPkgPath, String prefixPath);
 
     /**
-    * Add a set of assets as an icon pack.
-    *
-    * Icon packs are different from overlays as they have a different pkg id and
-    * do not use idmap so no targetPkg is required
-    *
-    * {@hide}
-    */
-    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath, String prefixPath);
+     * Add a set of assets as an icon pack.
+     *
+     * Icon packs are different from overlays as they have a different pkg id and
+     * do not use idmap so no targetPkg is required
+     *
+     * {@hide}
+     */
+    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath,
+                                        String prefixPath);
+
+    /**
+     * Add a set of common assets.
+     *
+     * {@hide}
+     */
+    public native final int addCommonOverlayPath(String idmapPath, String resArscPath,
+                                                 String resApkPath, String prefixPath);
 
     /**
     * Delete a set of overlay assets from the asset manager. Not for use by
