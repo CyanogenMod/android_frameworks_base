@@ -4258,6 +4258,10 @@ public class Activity extends ContextThemeWrapper
         }
     }
 
+    /**
+     * Hide from public api
+     * @hide
+     */
     public void finishFloating() {
         mMainThread.performFinishFloating();
     }

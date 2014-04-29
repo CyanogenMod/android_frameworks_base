@@ -79,6 +79,12 @@ public class TaskStackBuilder {
         return new TaskStackBuilder(context);
     }
 
+    /**
+     * Hide from the public api
+     *
+     * @hide
+     * @param firstTaskOnHome
+     */
     public void setTaskOnHome(boolean firstTaskOnHome) {
         mFirstTaskOnHome = firstTaskOnHome;
     }

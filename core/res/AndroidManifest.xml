@@ -374,6 +374,8 @@
     <!-- Internal permission protecting access to internal notification listener
         @hide -->
     <permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER"
+        android:label="@string/permlab_accessNotifications"
+        android:description="@string/permdesc_accessNotifications"
         android:protectionLevel="signature|system" />
 
     <!-- =============================================================== -->
