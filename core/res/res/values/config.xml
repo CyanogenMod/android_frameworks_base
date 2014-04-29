@@ -1450,4 +1450,7 @@
             1xRTT voice call, irrespective of IMS registration state  -->
     <bool name="config_send_sms1x_on_voice_call">true</bool>
 
+    <!-- Should the device show AM/PM in unlock screen -->
+    <bool name="config_show_ampm_in_unlock_screen">false</bool>
+
 </resources>
