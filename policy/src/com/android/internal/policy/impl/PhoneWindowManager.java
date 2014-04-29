@@ -3959,6 +3959,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         final boolean canceled = event.isCanceled();
         final int keyCode = event.getKeyCode();
+        AudioManager audioManager = (AudioManager) mContext.getSystemService(
+                Context.AUDIO_SERVICE);
 
         if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
 
@@ -4092,7 +4094,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                     && (result & ACTION_PASS_TO_USER) == 0) {
                                 // If we are in call but we decided not to pass the key to
                                 // the application, handle the volume change here.
-                                handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
+                                if(audioManager.isBluetoothScoOn()) {
+                                    handleVolumeKey(AudioManager.STREAM_BLUETOOTH_SCO, keyCode);
+                                } else {
+                                    handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
+                                }
                                 break;
                             }
                         } catch (RemoteException ex) {
