@@ -38,7 +38,7 @@
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">14dp</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/status_bar_traffic_color</item>
+        <item name="android:textColor">#ffff4444</item>
     </style>
 
     <style name="TextAppearance.StatusBar.Expanded" parent="@*android:style/TextAppearance.StatusBar" />
