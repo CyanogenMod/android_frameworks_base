@@ -589,7 +589,7 @@ bool processOverlayFile(Bundle* bundle, ZipFile* zip,
 
     if (hasData) {
         const char* name = storageName.string();
-        if (endsWith(name, ".9.png") || endsWith(name, ".xml")) {
+        if (endsWith(name, ".9.png") || endsWith(name, ".xml") || endsWith(name, ".arsc")) {
             if (endsWith(name, ".9.png")) {
                 preProcessImage(bundle, file);
             }
