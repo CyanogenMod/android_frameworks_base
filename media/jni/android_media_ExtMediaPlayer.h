@@ -47,7 +47,7 @@ struct extfields_t
 };
  static extfields_t extfields;
 
-#define MAX_NUM_PARCELS 5
+#define MAX_NUM_PARCELS 30
 
 class JNIExtMediaPlayerListener: public MediaPlayerListener
 {
