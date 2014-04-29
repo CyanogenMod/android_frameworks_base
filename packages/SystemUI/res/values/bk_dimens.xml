@@ -120,5 +120,5 @@
     <dimen name="weather_text_margin">56dp</dimen>
 
     <!-- Circle App Sidebar -->
-    <dimen name="app_sidebar_trigger_width">8dip</dimen>
+    <dimen name="app_sidebar_trigger_width">15dip</dimen>
 </resources>
