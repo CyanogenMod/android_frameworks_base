@@ -440,7 +440,6 @@ public class WifiMonitor {
                         } catch (InterruptedException ignore) {
                         }
                     } else {
-                        mIfaceMap.remove(iface);
                         m.mWifiStateMachine.sendMessage(SUP_DISCONNECTION_EVENT);
                         Log.e(TAG, "startMonitoring(" + iface + ") failed!");
                         break;
