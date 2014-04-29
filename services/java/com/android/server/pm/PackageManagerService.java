@@ -32,6 +32,7 @@ import static libcore.io.OsConstants.S_IXGRP;
 import static libcore.io.OsConstants.S_IROTH;
 import static libcore.io.OsConstants.S_IXOTH;
 
+import android.content.res.AssetManager;
 import android.util.Pair;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
@@ -299,10 +300,14 @@ public class PackageManagerService extends IPackageManager.Stub {
     //Where the icon pack can be found in a themed apk
     private static final String APK_PATH_TO_ICONS = "assets/icons/";
 
+    private static final String COMMON_OVERLAY = ThemeUtils.COMMON_RES_TARGET;
+    private static final String APK_PATH_TO_COMMON_OVERLAY = APK_PATH_TO_OVERLAY + COMMON_OVERLAY;
+
     // Where package redirections are stored for legacy themes
     private static final String REDIRECTIONS_PATH = "/data/app/redirections";
 
     private static final long PACKAGE_HASH_EXPIRATION = 3*60*1000; // 3 minutes
+    private static final long COMMON_RESOURCE_EXPIRATION = 3*60*1000; // 3 minutes
 
     /**
      * IDMAP hash version code used to alter the resulting hash and force recreating
@@ -506,6 +511,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private Map<String, Pair<Integer, Long>> mPackageHashes =
             new HashMap<String, Pair<Integer, Long>>();
+
+    private Map<String, Long> mAvailableCommonResources = new HashMap<String, Long>();
 
     // Set of pending broadcasts for aggregating enable/disable of components.
     static class PendingPackageBroadcasts {
@@ -5406,6 +5413,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
                 try {
                     ThemeUtils.createCacheDirIfNotExists();
+                    if (hasCommonResources(pkg)
+                            && shouldCompileCommonResources(pkg)) {
+                        ThemeUtils.createCacheDirIfNotExists();
+                        ThemeUtils.createResourcesDirIfNotExists(COMMON_OVERLAY,
+                                pkg.applicationInfo.publicSourceDir);
+                        compileResources(COMMON_OVERLAY, pkg);
+                        mAvailableCommonResources.put(pkg.packageName, System.currentTimeMillis());
+                    }
                     ThemeUtils.createResourcesDirIfNotExists(target, pkg.applicationInfo.publicSourceDir);
                     compileResources(target, pkg);
                     insertIntoOverlayMap(target, pkg);
@@ -5439,7 +5454,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         //when creating the resource table. We care about the resource table's name because
         //it is used when removing the table by cookie.
         try {
-            createTempManifest(pkg.packageName);
+            createTempManifest(COMMON_OVERLAY.equals(target)
+                    ? ThemeUtils.getCommonPackageName(pkg.packageName) : pkg.packageName);
             compileResourcesWithAapt(target, pkg);
         } finally {
             cleanupTempManifest();
@@ -5484,13 +5500,37 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
-    private void compileResourcesWithAapt(String target, PackageParser.Package pkg) throws Exception {
+    private boolean hasCommonResources(PackageParser.Package pkg) throws Exception {
+        boolean ret = false;
+        // check if assets/overlays/common exists in this theme
+        Context themeContext = mContext.createPackageContext(pkg.packageName, 0);
+        if (themeContext != null) {
+            AssetManager assets = themeContext.getAssets();
+            String[] common = assets.list("overlays/common");
+            if (common != null && common.length > 0) ret = true;
+        }
+
+        return ret;
+    }
+
+    private void compileResourcesWithAapt(String target, PackageParser.Package pkg)
+            throws Exception {
         String internalPath = APK_PATH_TO_OVERLAY + target;
         String resPath = ThemeUtils.getResDir(target, pkg);
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
-        int pkgId = target.equals("android") ? Resources.THEME_FRAMEWORK_PKG_ID : Resources.THEME_APP_PKG_ID;
+        int pkgId;
+        if ("android".equals(target)) {
+            pkgId = Resources.THEME_FRAMEWORK_PKG_ID;
+        } else if (COMMON_OVERLAY.equals(target)) {
+            pkgId = Resources.THEME_COMMON_PKG_ID;
+        } else {
+            pkgId = Resources.THEME_APP_PKG_ID;
+        }
 
-        if (mInstaller.aapt(pkg.mScanPath, internalPath, resPath, sharedGid, pkgId) != 0) {
+        boolean hasCommonResources = (hasCommonResources(pkg) && !COMMON_OVERLAY.equals(target));
+        if (mInstaller.aapt(pkg.mScanPath, internalPath, resPath, sharedGid, pkgId,
+                hasCommonResources ? ThemeUtils.getResDir(COMMON_OVERLAY, pkg)
+                        + File.separator + "resources.apk" : "") != 0) {
             throw new Exception("Failed to run aapt");
         }
     }
@@ -5499,7 +5539,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         String resPath = ThemeUtils.getIconPackDir(pkg.packageName);
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
 
-        if (mInstaller.aapt(pkg.mScanPath, APK_PATH_TO_ICONS, resPath, sharedGid, Resources.THEME_ICON_PKG_ID) != 0) {
+        if (mInstaller.aapt(pkg.mScanPath, APK_PATH_TO_ICONS, resPath, sharedGid,
+                Resources.THEME_ICON_PKG_ID, "") != 0) {
             throw new Exception("Failed to run aapt");
         }
     }
@@ -5635,6 +5676,22 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         if (targetHash == 0 || overlayHash == 0 ||
                 targetHash != hashes[0] || overlayHash != hashes[1]) {
+            // if the overlay changed we'll want to recreate the common resources if it has any
+            if (overlayHash != hashes[1]
+                    && mAvailableCommonResources.containsKey(overlayPkg.packageName)) {
+                mAvailableCommonResources.remove(overlayPkg.packageName);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean shouldCompileCommonResources(PackageParser.Package pkg) {
+        if (!mAvailableCommonResources.containsKey(pkg.packageName)) return true;
+
+        long lastUpdated = mAvailableCommonResources.get(pkg.packageName);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastUpdated > COMMON_RESOURCE_EXPIRATION) {
             return true;
         }
         return false;

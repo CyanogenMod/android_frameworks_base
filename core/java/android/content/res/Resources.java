@@ -88,6 +88,12 @@ public class Resources {
     public static final int THEME_APP_PKG_ID = 0x61;
     /** @hide */
     public static final int THEME_ICON_PKG_ID = 0x62;
+    /**
+     * The common resource pkg id needs to be less than the THEME_FRAMEWORK_PKG_ID
+     * otherwise aapt will complain and fail
+     * @hide
+     */
+    public static final int THEME_COMMON_PKG_ID = THEME_FRAMEWORK_PKG_ID - 1;
 
     private static final Object sSync = new Object();
     /*package*/ static Resources mSystem = null;

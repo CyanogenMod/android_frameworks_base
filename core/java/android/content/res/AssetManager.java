@@ -85,8 +85,10 @@ public final class AssetManager {
     private boolean mThemeSupport;
     private String mThemePackageName;
     private String mIconPackageName;
+    private String mCommonResPackageName;
     private ArrayList<Integer> mThemeCookies = new ArrayList<Integer>(2);
     private int mIconPackCookie;
+    private int mCommonResCookie;
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -638,14 +640,23 @@ public final class AssetManager {
                                            String targetPkgPath, String prefixPath);
 
     /**
-    * Add a set of assets as an icon pack.
-    *
-    * Icon packs are different from overlays as they have a different pkg id and
-    * do not use idmap so no targetPkg is required
-    *
-    * {@hide}
-    */
-    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath, String prefixPath);
+     * Add a set of assets as an icon pack.
+     *
+     * Icon packs are different from overlays as they have a different pkg id and
+     * do not use idmap so no targetPkg is required
+     *
+     * {@hide}
+     */
+    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath,
+                                        String prefixPath);
+
+    /**
+     * Add a set of common assets.
+     *
+     * {@hide}
+     */
+    public native final int addCommonOverlayPath(String idmapPath, String resArscPath,
+                                                 String resApkPath, String prefixPath);
 
     /**
     * Delete a set of overlay assets from the asset manager. Not for use by
@@ -743,6 +754,22 @@ public final class AssetManager {
     }
 
     /**
+     * Get package name of current common resources (may return null).
+     * {@hide}
+     */
+    public String getCommonResPackageName() {
+        return mCommonResPackageName;
+    }
+
+    /**
+     * Sets common resources package name
+     * {@hide}
+     */
+    public void setCommonResPackageName(String packageName) {
+        mCommonResPackageName = packageName;
+    }
+
+    /**
      * Get package name of current theme (may return null).
      * {@hide}
      */
@@ -774,6 +801,16 @@ public final class AssetManager {
     /** {@hide} */
     public int getIconPackCookie() {
         return mIconPackCookie;
+    }
+
+    /** {@hide} */
+    public void setCommonResCookie(int cookie) {
+        mCommonResCookie = cookie;
+    }
+
+    /** {@hide} */
+    public int getCommonResCookie() {
+        return mCommonResCookie;
     }
 
     /**
