@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.FileUtils;
 import android.os.SystemProperties;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -53,10 +54,13 @@ public class ThemeUtils {
     /* Path inside a theme APK to the overlay folder */
     public static final String OVERLAY_PATH = "assets/overlays/";
     public static final String ICONS_PATH = "assets/icons/";
+    public static final String COMMON_RES_PATH = "assets/overlays/common/";
     public static final String FONT_XML = "fonts.xml";
     public static final String RESTABLE_EXTENSION = ".arsc";
     public static final String IDMAP_PREFIX = "/data/resource-cache/";
     public static final String IDMAP_SUFFIX = "@idmap";
+    public static final String COMMON_RES_SUFFIX = ".common";
+    public static final String COMMON_RES_TARGET = "common";
 
     // path to external theme resources, i.e. bootanimation.zip
     public static final String SYSTEM_THEME_PATH = "/data/system/theme";
@@ -139,6 +143,12 @@ public class ThemeUtils {
         sb.append(targetPkgName);
         sb.append('/');
         return sb.toString();
+    }
+
+    public static String getCommonPackageName(String themePackageName) {
+        if (TextUtils.isEmpty(themePackageName)) return null;
+
+        return COMMON_RES_TARGET;
     }
 
     public static void createCacheDirIfNotExists() throws IOException {
