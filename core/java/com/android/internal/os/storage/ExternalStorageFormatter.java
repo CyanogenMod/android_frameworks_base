@@ -300,6 +300,7 @@ public class ExternalStorageFormatter extends Service
             fail(R.string.media_removed);
         } else if (Environment.MEDIA_SHARED.equals(status)) {
             fail(R.string.media_shared);
+        } else if (Environment.MEDIA_UNMOUNTING.equals(status)) {
         } else {
             fail(R.string.media_unknown_state);
             Log.w(TAG, "Unknown storage state: " + status);
