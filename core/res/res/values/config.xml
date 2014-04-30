@@ -513,6 +513,12 @@
     <!-- Class name for default keyguard appwidget [DO NOT TRANSLATE] -->
     <string name="widget_default_class_name"></string>
 
+    <!-- Package name for keyguard to use -->
+    <string name="config_keyguardPackage">com.android.keyguard</string>
+
+    <!-- Class name for keyguard service to use -->
+    <string name="config_keyguardService">com.android.keyguard.KeyguardService</string>
+
     <!-- Indicate whether the SD card is accessible without removing the battery. -->
     <bool name="config_batterySdCardAccessibility">false</bool>
 
