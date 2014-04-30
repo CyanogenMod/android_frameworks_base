@@ -94,6 +94,7 @@
     <uses-permission android:name="org.namelessrom.flashlight.TOGGLE_TORCH" />
 
     <application
+        android:name="com.android.systemui.nameless.NamelessApplication"
         android:persistent="true"
         android:allowClearUserData="false"
         android:allowBackup="false"
