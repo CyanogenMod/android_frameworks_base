@@ -207,4 +207,7 @@
 
     <!-- Default value of Settings.System.NOISE_SUPPRESSION -->
     <bool name="def_noise_suppression">false</bool>
+
+    <!-- Default value of Settings.System.SCREEN_ANIMATION_STYLE -->
+    <integer name="def_screen_animation_style">0</integer>
 </resources>
