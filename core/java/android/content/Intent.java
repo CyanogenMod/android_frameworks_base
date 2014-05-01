@@ -3678,6 +3678,8 @@ public class Intent implements Parcelable, Cloneable {
     /**
      * If set, this intent will always match start up as a floating window
      * in mutil window scenarios.
+     *
+     * @hide
      */
     public static final int FLAG_FLOATING_WINDOW = 0x00002000;
 

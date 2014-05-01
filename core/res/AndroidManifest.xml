@@ -2515,6 +2515,14 @@
         android:description="@string/permdesc_accessNotifications"
         android:protectionLevel="signature|system" />
 
+    <!-- Internal permission protecting access to internal notification listener
+        @hide
+    -->
+   <permission android:name="android.permission.SYSTEM_NOTIFICATION_LISTENER"
+        android:label="@string/permlab_accessNotifications"
+        android:description="@string/permdesc_accessNotifications"
+        android:protectionLevel="signature|system" />
+
     <!-- Allows access to keyguard secure storage.  Only allowed for system processes.
         @hide -->
     <permission android:name="android.permission.ACCESS_KEYGUARD_SECURE_STORAGE"
