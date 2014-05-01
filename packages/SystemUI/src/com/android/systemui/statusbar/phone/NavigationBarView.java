@@ -370,6 +370,7 @@ public class NavigationBarView extends LinearLayout {
             ViewGroup container = (ViewGroup) mRotatedViews[i];
             if (container != null) {
                 updateKeyButtonViewResources(container);
+                updateLightsOutResources(container);
             }
         }
     }
@@ -377,17 +378,39 @@ public class NavigationBarView extends LinearLayout {
     private void updateKeyButtonViewResources(ViewGroup container) {
         ViewGroup midNavButtons = (ViewGroup) container.findViewById(R.id.mid_nav_buttons);
         if (midNavButtons != null) {
-            final int nChildern = midNavButtons.getChildCount();
-            for (int i = 0; i < nChildern; i++) {
+            final int nChildren = midNavButtons.getChildCount();
+            for (int i = 0; i < nChildren; i++) {
                 final View child = midNavButtons.getChildAt(i);
                 if (child instanceof KeyButtonView) {
                     ((KeyButtonView) child).updateResources();
                 }
             }
         }
-        KeyButtonView kbv = (KeyButtonView) findViewById(R.id.six);
+        KeyButtonView kbv = (KeyButtonView) findViewById(R.id.one);
         if (kbv != null) {
             kbv.updateResources();
+        }
+        kbv = (KeyButtonView) findViewById(R.id.six);
+        if (kbv != null) {
+            kbv.updateResources();
+        }
+    }
+
+    private void updateLightsOutResources(ViewGroup container) {
+        ViewGroup lightsOut = (ViewGroup) container.findViewById(R.id.lights_out);
+        if (lightsOut != null) {
+            final int nChildren = lightsOut.getChildCount();
+            for (int i = 0; i < nChildren; i++) {
+                final View child = lightsOut.getChildAt(i);
+                if (child instanceof ImageView) {
+                    final ImageView iv = (ImageView) child;
+                    // clear out the existing drawable, this is required since the
+                    // ImageView keeps track of the resource ID and if it is the same
+                    // it will not update the drawable.
+                    iv.setImageDrawable(null);
+                    iv.setImageResource(R.drawable.ic_sysbar_lights_out_dot_large);
+                }
+            }
         }
     }
 
