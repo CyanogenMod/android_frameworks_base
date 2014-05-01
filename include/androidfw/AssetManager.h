@@ -104,7 +104,7 @@ public:
     bool addOverlayPath(const String8& path, void** cookie, const String8& resArscPath,
                  const String8& resApkPath, const String8& targetPkgPath, const String8& prefixPath);
     bool addIconPath(const String8& path, void** cookie, const String8& resArscPath,
-                 const String8& resApkPath, const String8& prefixPath);
+                 const String8& resApkPath, const String8& prefixPath, uint32_t pkgIdOverride);
     bool addCommonOverlayPath(const String8& path, void** cookie, const String8& resArscPath,
                  const String8& resApkPath, const String8& prefixPath);
     bool removeOverlayPath(const String8& path, void* cookie);
@@ -252,6 +252,8 @@ private:
         String8 prefixPath;
         String8 resfilePath;
         String8 resApkPath;
+        uint32_t pkgIdOverride;
+        asset_path() : pkgIdOverride(0) {}
     };
 
     bool updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
