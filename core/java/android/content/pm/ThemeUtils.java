@@ -86,6 +86,20 @@ public class ThemeUtils {
 
     public static final String ACTION_THEME_CHANGED = "org.cyanogenmod.intent.action.THEME_CHANGED";
 
+    // Actions in manifests which identify legacy icon packs
+    public static final String[] sSupportedActions = new String[] {
+            "org.adw.launcher.THEMES",
+            "com.gau.go.launcherex.theme"
+    };
+
+    // Categories in manifests which identify legacy icon packs
+    public static final String[] sSupportedCategories = new String[] {
+            "com.fede.launcher.THEME_ICONPACK",
+            "com.anddoes.launcher.THEME",
+            "com.teslacoilsw.launcher.THEME"
+    };
+
+
     /*
      * Retrieve the path to a resource table (ie resource.arsc)
      * Themes have a resources.arsc for every overlay package targeted. These are compiled
