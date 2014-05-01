@@ -44,6 +44,10 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
                 return true;
             }
         };
+
+        mCurrentMode = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+        updateTile();
     }
 
     private void changeLocationMode(){
