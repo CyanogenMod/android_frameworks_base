@@ -1284,9 +1284,9 @@ public:
     ~ResTable();
 
     status_t add(const void* data, size_t size, void* cookie,
-                 bool copyData=false, const void* idmap = NULL);
+                 bool copyData=false, const void* idmap = NULL, const uint32_t pkgIdOverride=0);
     status_t add(Asset* asset, void* cookie,
-                 bool copyData=false, const void* idmap = NULL);
+                 bool copyData=false, const void* idmap = NULL, const uint32_t pkgIdOverride=0);
     status_t add(ResTable* src);
 
     status_t getError() const;
@@ -1577,7 +1577,7 @@ private:
     struct bag_set;
 
     status_t add(const void* data, size_t size, void* cookie,
-                 Asset* asset, bool copyData, const Asset* idmap);
+                 Asset* asset, bool copyData, const Asset* idmap, const uint32_t pkgIdOverride);
 
     ssize_t getResourcePackageIndex(uint32_t resID) const;
     ssize_t getEntry(
@@ -1586,7 +1586,8 @@ private:
         const ResTable_type** outType, const ResTable_entry** outEntry,
         const Type** outTypeClass) const;
     status_t parsePackage(
-        const ResTable_package* const pkg, const Header* const header, uint32_t idmap_id);
+        ResTable_package* const pkg, const Header* const header, uint32_t idmap_id,
+        uint32_t pkgIdOverride);
 
     bool isResTypeAllowed(const char* type) const;
 
