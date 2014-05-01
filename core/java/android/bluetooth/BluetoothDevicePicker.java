@@ -44,6 +44,14 @@ public interface BluetoothDevicePicker {
             "android.bluetooth.devicepicker.action.DEVICE_SELECTED";
 
     /**
+     * Broadcast when no BT device is selected from BT device picker screen.
+     * This happens when user presses back button.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_DEVICE_NOT_SELECTED =
+            "org.codeaurora.bluetooth.devicepicker.action.DEVICE_NOT_SELECTED";
+
+    /**
      * Broadcast when someone want to select one BT device from devices list.
      * This intent contains below extra data:
      * - {@link #EXTRA_NEED_AUTH} (boolean): if need authentication
