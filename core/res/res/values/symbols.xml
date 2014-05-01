@@ -1953,4 +1953,7 @@
   <java-symbol type="drawable" name="ic_privacy_guard_off" />
   <java-symbol type="string" name="privacy_guard_dialog_title" />
   <java-symbol type="string" name="privacy_guard_dialog_summary" />
+
+  <!-- Label for the Android system components when they are shown to the user. -->
+  <java-symbol type="string" name="android_system_label" />
 </resources>
