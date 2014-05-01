@@ -3805,6 +3805,27 @@ public final class Settings {
          * @hide
          */
         public static final String PERFORMANCE_PROFILE = "performance_profile";
+        
+        /**  
+         * Enable Menu key
+         *
+         * @hide
+         */
+        public static final String KEY_MENU_ENABLED = "key_menu_enabled";
+
+        /**
+         * Enable Back key
+         *
+         * @hide
+         */
+        public static final String KEY_BACK_ENABLED = "key_back_enabled";
+ 
+        /**
+         * Enable Home key
+         *
+         * @hide
+         */
+        public static final String KEY_HOME_ENABLED = "key_home_enabled";
 
         /**
          * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
