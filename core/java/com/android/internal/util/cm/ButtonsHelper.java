@@ -214,9 +214,6 @@ public class ButtonsHelper {
         } else if (clickAction.equals(NavigationRingConstants.ACTION_NOTIFICATIONS)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_notifications", null, null);
-        } else if (clickAction.equals(NavigationRingConstants.ACTION_LAST_APP)) {
-            resId = systemUiResources.getIdentifier(
-                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_lastapp", null, null);
         } else if (clickAction.equals(NavigationRingConstants.ACTION_VIBRATE)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_vib", null, null);
