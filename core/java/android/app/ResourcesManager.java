@@ -435,7 +435,8 @@ public class ResourcesManager {
 
         if (piTheme == null || piTheme.applicationInfo == null ||
                     piTarget == null || piTarget.applicationInfo == null ||
-                    piAndroid == null || piAndroid.applicationInfo == null) {
+                    piAndroid == null || piAndroid.applicationInfo == null ||
+                    piTheme.mOverlayTargets == null) {
             return false;
         }
 
@@ -498,7 +499,16 @@ public class ResourcesManager {
             String iconDir = ThemeUtils.getIconPackDir(iconPkg); //ThemeUtils.getResDir(piTarget.packageName, piTheme);
             String resTablePath = iconDir + "/resources.arsc";
             String resApkPath = iconDir + "/resources.apk";
-            int cookie = assets.addIconPath(themeIconPath, resTablePath, resApkPath, prefixPath);
+
+            // Legacy Icon packs have everything in their APK
+            if (piIcon.isLegacyIconPackApk) {
+                prefixPath = "";
+                resApkPath = "";
+                resTablePath = "";
+            }
+
+            int cookie = assets.addIconPath(themeIconPath, resTablePath, resApkPath, prefixPath,
+                    Resources.THEME_ICON_PKG_ID);
             if (cookie != 0) {
                 assets.setIconPackCookie(cookie);
                 assets.setIconPackageName(iconPkg);
