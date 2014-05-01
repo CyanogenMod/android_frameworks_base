@@ -320,6 +320,7 @@ public class PackageParser {
         pi.isThemeApk = p.mIsThemeApk;
         pi.hasIconPack = p.hasIconPack;
         pi.isLegacyThemeApk = p.mIsLegacyThemeApk;
+        pi.isLegacyIconPackApk = p.mIsLegacyIconPackApk;
 
         if (pi.isThemeApk) {
             pi.mOverlayTargets = p.mOverlayTargets;
@@ -2853,6 +2854,26 @@ public class PackageParser {
                 if (!parseIntent(res, parser, attrs, true, intent, outError)) {
                     return null;
                 }
+
+                // Check if package is a legacy icon pack
+                if (!owner.mIsLegacyIconPackApk) {
+                    for(String action : ThemeUtils.sSupportedActions) {
+                        if (intent.hasAction(action)) {
+                            owner.mIsLegacyIconPackApk = true;
+                            break;
+                        }
+
+                    }
+                }
+                if (!owner.mIsLegacyIconPackApk) {
+                    for(String category : ThemeUtils.sSupportedCategories) {
+                        if (intent.hasCategory(category)) {
+                            owner.mIsLegacyIconPackApk = true;
+                            break;
+                        }
+                    }
+                }
+
                 if (intent.countActions() == 0) {
                     Slog.w(TAG, "No actions in intent filter at "
                             + mArchiveSourcePath + " "
@@ -3903,6 +3924,7 @@ public class PackageParser {
 
         // Legacy theme
         public boolean mIsLegacyThemeApk = false;
+        public boolean mIsLegacyIconPackApk = false;
         public final ArrayList<LegacyThemeInfo> mLegacyThemeInfos = new ArrayList<LegacyThemeInfo>(0);
         public final Map<String, String> mLegacyThemePackageRedirections =
                 new HashMap<String, String>();

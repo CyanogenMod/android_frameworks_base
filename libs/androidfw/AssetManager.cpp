@@ -251,20 +251,25 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie)
 
 /*
  * packagePath: Path to the APK that contains our icon assets
- * cookie: Set by this method. The caller can use this cookie to refer to the asset path that has been added.
- * resArscPath: Path to the overlay's cached resources table. If it is NULL it is assumed they are in the overlay APK"
- * resApkPath: Path to the overlay's processed and cached resources.
- * prefixPath: This is the base path internal to the icon APK. For example, if we have theme "com.redtheme.apk"
+ * cookie: Set by this method. The caller can use this cookie to refer to the added asset path.
+ * resArscPath: Path to the icon packs resource table.
+                Leave it NULL if the table is in the icon APK
+ * resApkPath: Path to the icon APK's processed and cached resources.
+ * prefixPath: This is the base path internal to the icon APK.
+               For example, if we have theme "com.redtheme.apk"
  *  assets/
  *    icons/
  *        res/
  *          drawable/
  *              foo.png
- * Our resources.arsc will reference foo.png's path as "res/drawable/foo.png"
- * so we need "assets/icons/" as a prefix
+ * Our restable will reference foo.png's path as "res/drawable/foo.png"
+ * so we need "assets/com.android.launcher/" as a prefix
+ * pkgIdOverride: The package id we want to give. This will overridet the id in the res table.
+ *                This is necessary for legacy icon packs because they are compiled with the
+ *                standard 7F package id.
 */
 bool AssetManager::addIconPath(const String8& packagePath, void** cookie, const String8& resArscPath,
-        const String8& resApkPath, const String8& prefixPath)
+        const String8& resApkPath, const String8& prefixPath, uint32_t pkgIdOverride)
 {
     AutoMutex _l(mLock);
 
@@ -288,6 +293,7 @@ bool AssetManager::addIconPath(const String8& packagePath, void** cookie, const 
     oap.resfilePath = resArscPath;
     oap.resApkPath = resApkPath;
     oap.prefixPath = prefixPath;
+    oap.pkgIdOverride = pkgIdOverride;
     mAssetPaths.add(oap);
     *cookie = (void*)mAssetPaths.size();
 
@@ -832,7 +838,7 @@ const ResTable* AssetManager::getResTable(bool required) const
                     // can quickly copy it out for others.
                     ALOGV("Creating shared resources for %s", ap.path.string());
                     sharedRes = new ResTable();
-                    sharedRes->add(ass, (void*)(i+1), false, idmap);
+                    sharedRes->add(ass, (void*)(i+1), false, idmap, ap.pkgIdOverride);
 #ifdef HAVE_ANDROID_OS
                     const char* data = getenv("ANDROID_DATA");
                     LOG_ALWAYS_FATAL_IF(data == NULL, "ANDROID_DATA not set");
@@ -864,7 +870,7 @@ const ResTable* AssetManager::getResTable(bool required) const
                 rt->add(sharedRes);
             } else {
                 ALOGV("Parsing resources for %s", ap.path.string());
-                rt->add(ass, (void*)(i+1), !shared, idmap);
+                rt->add(ass, (void*)(i+1), !shared, idmap, ap.pkgIdOverride);
             }
 
             if (!shared) {
@@ -956,7 +962,7 @@ void AssetManager::addSystemOverlays(const char* pathOverlaysList,
         if (oass != NULL) {
             Asset* oidmap = openIdmapLocked(oap);
             offset++;
-            sharedRes->add(oass, (void*)(offset + 1), false, oidmap);
+            sharedRes->add(oass, (void*)(offset + 1), false, oidmap, oap.pkgIdOverride);
             const_cast<AssetManager*>(this)->mAssetPaths.add(oap);
             const_cast<AssetManager*>(this)->mZipSet.addOverlay(targetPackagePath, oap);
         }
@@ -1004,7 +1010,7 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
     status_t error = NO_ERROR;
     if (ass != NULL) {
         Asset* oidmap = openIdmapLocked(ap);
-        error = rt->add(ass, cookie, !shared, oidmap);
+        error = rt->add(ass, cookie, !shared, oidmap, ap.pkgIdOverride);
         if (!shared) {
             delete ass;
         }
