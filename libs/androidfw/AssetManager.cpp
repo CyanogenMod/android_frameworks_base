@@ -260,11 +260,13 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie)
  *        res/
  *          drawable/
  *              foo.png
+ * pkgIdOverride: The package id we want to give. This will override whatever is in the res table
+ * which is useful for legacy theme packs that are not compiled with aapt on the device
  * Our resources.arsc will reference foo.png's path as "res/drawable/foo.png"
  * so we need "assets/icons/" as a prefix
 */
 bool AssetManager::addIconPath(const String8& packagePath, void** cookie, const String8& resArscPath,
-        const String8& resApkPath, const String8& prefixPath)
+        const String8& resApkPath, const String8& prefixPath, uint32_t pkgIdOverride)
 {
     AutoMutex _l(mLock);
 
@@ -288,6 +290,7 @@ bool AssetManager::addIconPath(const String8& packagePath, void** cookie, const 
     oap.resfilePath = resArscPath;
     oap.resApkPath = resApkPath;
     oap.prefixPath = prefixPath;
+    oap.pkgIdOverride = pkgIdOverride;
     mAssetPaths.add(oap);
     *cookie = (void*)mAssetPaths.size();
 
@@ -795,7 +798,7 @@ const ResTable* AssetManager::getResTable(bool required) const
                     // can quickly copy it out for others.
                     ALOGV("Creating shared resources for %s", ap.path.string());
                     sharedRes = new ResTable();
-                    sharedRes->add(ass, (void*)(i+1), false, idmap);
+                    sharedRes->add(ass, (void*)(i+1), false, idmap, ap.pkgIdOverride);
 #ifdef HAVE_ANDROID_OS
                     const char* data = getenv("ANDROID_DATA");
                     LOG_ALWAYS_FATAL_IF(data == NULL, "ANDROID_DATA not set");
@@ -827,7 +830,7 @@ const ResTable* AssetManager::getResTable(bool required) const
                 rt->add(sharedRes);
             } else {
                 ALOGV("Parsing resources for %s", ap.path.string());
-                rt->add(ass, (void*)(i+1), !shared, idmap);
+                rt->add(ass, (void*)(i+1), !shared, idmap, ap.pkgIdOverride);
             }
 
             if (!shared) {
@@ -919,7 +922,7 @@ void AssetManager::addSystemOverlays(const char* pathOverlaysList,
         if (oass != NULL) {
             Asset* oidmap = openIdmapLocked(oap);
             offset++;
-            sharedRes->add(oass, (void*)(offset + 1), false, oidmap);
+            sharedRes->add(oass, (void*)(offset + 1), false, oidmap, oap.pkgIdOverride);
             const_cast<AssetManager*>(this)->mAssetPaths.add(oap);
             const_cast<AssetManager*>(this)->mZipSet.addOverlay(targetPackagePath, oap);
         }
@@ -967,7 +970,7 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
     status_t error = NO_ERROR;
     if (ass != NULL) {
         Asset* oidmap = openIdmapLocked(ap);
-        error = rt->add(ass, cookie, !shared, oidmap);
+        error = rt->add(ass, cookie, !shared, oidmap, ap.pkgIdOverride);
         if (!shared) {
             delete ass;
         }
