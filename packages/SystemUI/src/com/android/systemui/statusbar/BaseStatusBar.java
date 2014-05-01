@@ -443,6 +443,16 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
+    public void restartHalo() {
+        if (mHalo != null) {
+            mHalo.cleanUp();
+            mWindowManager.removeView(mHalo);
+            mHalo = null;
+        }
+        updateNotificationIcons();
+        updateHalo();
+    }
+    
     protected void updateHaloButton() {
         if (!mHaloEnabled) {
             mHaloButtonVisible = false;
@@ -454,16 +464,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
-    public void restartHalo() {
-        if (mHalo != null) {
-            mHalo.cleanUp();
-            mWindowManager.removeView(mHalo);
-            mHalo = null;
-        }
-        updateNotificationIcons();
-        updateHalo();
-    }
-
     protected void updateHalo() {
         mHaloEnabled = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.HALO_ENABLED, 0) == 1;
@@ -471,8 +471,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         mHaloActive = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.HALO_ACTIVE, 0) == 1;
 
-        updateHaloButton();
-
+        mHaloButton.setImageResource(mHaloActive
+                ? R.drawable.ic_notify_halo_pressed
+                : R.drawable.ic_notify_halo_normal);
+     
         if (!mHaloEnabled) {
           mHaloActive = false;
         }

@@ -49,7 +49,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 
 import com.android.internal.R;
-import com.android.internal.util.temasek.ImageHelper;
+import com.android.internal.util.axxion.ImageHelper;
 
 import java.util.ArrayList;
 
