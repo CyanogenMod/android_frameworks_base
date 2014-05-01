@@ -56,11 +56,11 @@ public class BatteryMeterView extends View implements DemoMode {
     public static final int BATTERY_STYLE_NORMAL                = 0;
     public static final int BATTERY_STYLE_PERCENT               = 1;
     public static final int BATTERY_STYLE_ICON_PERCENT          = 2;
-    public static final int BATTERY_STYLE_ICON_JBSTYLE_PERCENT  = 3;
-    public static final int BATTERY_STYLE_CIRCLE                = 4;
-    public static final int BATTERY_STYLE_CIRCLE_PERCENT        = 5;
-    public static final int BATTERY_STYLE_DOTTED_CIRCLE         = 6;
-    public static final int BATTERY_STYLE_DOTTED_CIRCLE_PERCENT = 7;
+    public static final int BATTERY_STYLE_CIRCLE                = 3;
+    public static final int BATTERY_STYLE_CIRCLE_PERCENT        = 4;
+    public static final int BATTERY_STYLE_DOTTED_CIRCLE         = 5;
+    public static final int BATTERY_STYLE_DOTTED_CIRCLE_PERCENT = 6;
+    public static final int BATTERY_STYLE_ICON_JBSTYLE_PERCENT  = 7;
     public static final int BATTERY_STYLE_GONE                  = 8;
 
     public static final int FULL = 96;
@@ -131,7 +131,7 @@ public class BatteryMeterView extends View implements DemoMode {
 
                 setContentDescription(
                         context.getString(R.string.accessibility_battery_level, level));
-                updateSettings();
+                updateSettings(false);
             } else if (action.equals(ACTION_LEVEL_TEST)) {
                 testmode = true;
                 post(new Runnable() {
@@ -252,7 +252,7 @@ public class BatteryMeterView extends View implements DemoMode {
         mBoltPoints = loadBoltPoints(res);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-        updateSettings();
+        updateSettings(false);
     }
 
     private static float[] loadBoltPoints(Resources res) {
@@ -457,11 +457,16 @@ public class BatteryMeterView extends View implements DemoMode {
         }
     }
 
-    public void updateSettings() {
+    public void updateSettings(final boolean isQuickSettingsTile) {
         ContentResolver resolver = mContext.getContentResolver();
 
         mBatteryStyle = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_BATTERY, 0, UserHandle.USER_CURRENT);
+
+        if (isQuickSettingsTile && mBatteryStyle == BATTERY_STYLE_GONE) {
+            mBatteryStyle = 0;
+        }
+
         mBatteryColor = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_BATTERY_COLOR, -2, UserHandle.USER_CURRENT);
         mPercentageColor = Settings.System.getIntForUser(resolver,
@@ -571,7 +576,8 @@ public class BatteryMeterView extends View implements DemoMode {
            || mBatteryStyle == BATTERY_STYLE_ICON_PERCENT)) {
              mTextPaint.setColor(Color.RED);
         } else if (tracker.level >= 90 && tracker.plugged &&
-           (mBatteryStyle == BATTERY_STYLE_PERCENT || mBatteryStyle == BATTERY_STYLE_ICON_JBSTYLE_PERCENT)) {
+           (mBatteryStyle == BATTERY_STYLE_PERCENT
+            || mBatteryStyle == BATTERY_STYLE_ICON_JBSTYLE_PERCENT)) {
              mTextPaint.setColor(Color.GREEN);
         } else if (mPercentageColor == -2) {
              if (mBatteryStyle == BATTERY_STYLE_ICON_PERCENT) {
@@ -581,7 +587,8 @@ public class BatteryMeterView extends View implements DemoMode {
                  mTextPaint.setColor(mContext.getResources().getColor(
                          R.color.batterymeter_charge_color));
              }
-        } else if (!tracker.plugged) {
+        } else if (!tracker.plugged
+                   || (tracker.plugged && mBatteryStyle == BATTERY_STYLE_ICON_JBSTYLE_PERCENT)) {
              mTextPaint.setColor(mPercentageColor);
         }
         postInvalidate();
