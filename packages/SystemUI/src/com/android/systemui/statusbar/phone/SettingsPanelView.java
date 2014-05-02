@@ -123,7 +123,9 @@ public class SettingsPanelView extends PanelView {
         super.fling(vel, always);
     }
 
-    public void setService(PhoneStatusBar phoneStatusBar) {
+    @Override
+    public void setStatusBar(PhoneStatusBar phoneStatusBar) {
+        super.setStatusBar(phoneStatusBar);
         if (mQS != null) {
             mQS.setService(phoneStatusBar);
         }

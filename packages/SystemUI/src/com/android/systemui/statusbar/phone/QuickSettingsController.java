@@ -30,6 +30,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM;
 import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM_KEY;
 import static com.android.internal.util.slim.QSConstants.TILE_DELIMITER;
 import static com.android.internal.util.slim.QSConstants.TILE_EXPANDEDDESKTOP;
+import static com.android.internal.util.slim.QSConstants.TILE_EQUALIZER;
 import static com.android.internal.util.slim.QSConstants.TILE_IMESWITCHER;
 import static com.android.internal.util.slim.QSConstants.TILE_LOCATION;
 import static com.android.internal.util.slim.QSConstants.TILE_LOCKSCREEN;
@@ -86,6 +87,7 @@ import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.ContactTile;
 import com.android.systemui.quicksettings.CustomTile;
+import com.android.systemui.quicksettings.EqualizerTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.InputMethodTile;
 import com.android.systemui.quicksettings.InternalMemory;
@@ -323,6 +325,8 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_USBTETHER)
                     && DeviceUtils.deviceSupportsUsbTether(mContext)) {
                 qs = new UsbTetherTile(mContext, this);
+            } else if (tile.equals(TILE_EQUALIZER)) {
+                qs = new EqualizerTile(mContext, this);
             }
 
             if (qs != null) {
@@ -462,6 +466,18 @@ public class QuickSettingsController {
         mContainerView.updateResources();
         for (QuickSettingsTile t : mQuickSettingsTiles) {
             t.updateResources();
+        }
+    }
+
+    public void onSettingsHidden() {
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.onSettingsHidden();
+        }
+    }
+
+    public void onSettingsVisible() {
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.onSettingsVisible();
         }
     }
 }

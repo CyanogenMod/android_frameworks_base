@@ -183,6 +183,8 @@
     <!-- On-The-Go Mode -->
     <string name="quick_settings_onthego_back">Rear Camera</string>
     <string name="quick_settings_onthego_front">Front Camera</string>
+    <!-- Equalizer -->
+    <string name="quick_settings_equalizer">Equalizer</string>
 
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Charging (<xliff:g id="percent">%d</xliff:g>%%)</string>
