@@ -153,12 +153,12 @@ status_t BootAnimation::initTexture(Texture* texture, AssetManager& assets,
     return NO_ERROR;
 }
 
-status_t BootAnimation::initTexture(const Animation::Frame& frame)
+status_t BootAnimation::initTexture(void* buffer, size_t len)
 {
     //StopWatch watch("blah");
 
     SkBitmap bitmap;
-    SkMemoryStream  stream(frame.map->getDataPtr(), frame.map->getDataLength());
+    SkMemoryStream  stream(buffer, len);
     SkImageDecoder* codec = SkImageDecoder::Factory(&stream);
     if (codec) {
         codec->setDitherImage(false);
@@ -171,11 +171,6 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
                 SkImageDecoder::kDecodePixels_Mode);
         delete codec;
     }
-
-    // FileMap memory is never released until application exit.
-    // Release it now as the texture is already loaded and the memory used for
-    // the packed resource can be released.
-    frame.map->release();
 
     // ensure we can call getPixels(). No need to call unlock, since the
     // bitmap will go out of scope when we return from this method.
@@ -451,7 +446,6 @@ bool BootAnimation::movie()
 
     String8 desString((char const*)descMap->getDataPtr(),
             descMap->getDataLength());
-    descMap->release();
     char const* s = desString.string();
 
     Animation animation;
@@ -576,7 +570,9 @@ bool BootAnimation::movie()
                         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                     }
-                    initTexture(frame);
+                    initTexture(
+                            frame.map->getDataPtr(),
+                            frame.map->getDataLength());
                 }
 
                 if (!clearReg.isEmpty()) {
