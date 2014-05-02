@@ -229,4 +229,7 @@
 
     <!-- Padding under status bar battery icon -->
     <dimen name="status_bar_battery_bottom_padding">1px</dimen>
+    <dimen name="eqalizer_path_effect_1">5dp</dimen>
+    <dimen name="eqalizer_path_effect_2">1dp</dimen>
+    <dimen name="eqalizer_path_stroke_width">4dp</dimen>
 </resources>

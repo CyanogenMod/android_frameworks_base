@@ -35,4 +35,6 @@
 
     <!-- Enable the "flip settings" panel -->
     <bool name="config_hasFlipSettingsPanel">false</bool>
+
+    <integer name="equalizer_divisions">2</integer>
 </resources>
