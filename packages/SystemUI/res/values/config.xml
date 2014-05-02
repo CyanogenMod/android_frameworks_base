@@ -111,5 +111,7 @@
 
     <!-- milliseconds before the heads up notification accepts touches. -->
     <integer name="heads_up_sensitivity_delay">700</integer>
-</resources>
 
+    <!-- The amount of lines to draw for the equalizer tile -->
+    <integer name="equalizer_divisions">4</integer>
+</resources>
