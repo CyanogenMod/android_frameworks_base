@@ -98,6 +98,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     boolean mShowAtLeastThreeGees = false;
     boolean mAlwaysShowCdmaRssi = false;
     boolean mShow4GforLTE = false;
+    boolean mShowRsrpSignalLevelforLTE = false;
 
     private String mCarrierText = "";
 
@@ -207,6 +208,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 com.android.internal.R.bool.config_alwaysUseCdmaRssi);
         mShow4GforLTE = mContext.getResources().getBoolean(
                 R.bool.config_show4GForLTE);
+        mShowRsrpSignalLevelforLTE = mContext.getResources().getBoolean(
+                R.bool.config_showRsrpSignalLevelforLTE);
         // set up the default wifi icon, used when no radios have ever appeared
         updateWifiIcons();
         updateWimaxIcons();
@@ -682,6 +685,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                             + " instead of level=" + mSignalStrength.getLevel());
                 } else {
                     mLastSignalLevel = iconLevel = mSignalStrength.getLevel();
+                    if (mShowRsrpSignalLevelforLTE ) {
+                        if (mServiceState.getDataNetworkType() ==
+                                TelephonyManager.NETWORK_TYPE_LTE) {
+                            mLastSignalLevel = iconLevel =
+                                    mSignalStrength.getAlternateLteLevel();
+                        }
+                    }
                 }
 
                 mPhoneSignalIconId = TelephonyIcons.getSignalStrengthIcon(mInetCondition,

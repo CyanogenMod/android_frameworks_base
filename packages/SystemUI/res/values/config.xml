@@ -140,5 +140,6 @@
         <item>0</item>
         <item>0</item>
     </integer-array>
+    <bool name="config_showRsrpSignalLevelforLTE ">false</bool>
 </resources>
 

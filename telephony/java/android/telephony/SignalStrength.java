@@ -778,6 +778,24 @@ public class SignalStrength implements Parcelable {
      *
      * @hide
      */
+    public int getAlternateLteLevel() {
+        int rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+
+        if (mLteRsrp > -44) rsrpIconLevel = -1;
+        else if (mLteRsrp >= -97) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
+        else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
+        else if (mLteRsrp >= -113) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
+        else if (mLteRsrp >= -120) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
+        else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+
+        return rsrpIconLevel;
+    }
+
+    /**
+     * Get LTE as level 0..4
+     *
+     * @hide
+     */
     public int getLteLevel() {
         /*
          * TS 36.214 Physical Layer Section 5.1.3 TS 36.331 RRC RSSI = received

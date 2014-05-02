@@ -618,6 +618,13 @@ public class MSimNetworkController extends NetworkController {
                             + " instead of level= " + mMSimSignalStrength[subscription].getLevel());
                 } else {
                     mLastSignalLevel = iconLevel = mMSimSignalStrength[subscription].getLevel();
+                    if (mShowRsrpSignalLevelforLTE ) {
+                        if (mServiceState.getDataNetworkType() ==
+                                TelephonyManager.NETWORK_TYPE_LTE) {
+                            mLastSignalLevel = iconLevel =
+                                    mSignalStrength.getAlternateLteLevel();
+                        }
+                    }
                 }
 
                 mMSimPhoneSignalIconId[subscription] =
