@@ -1010,7 +1010,7 @@ public class MediaScanner
                         int phoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
                         for (int i = MSimConstants.SUB2; i < phoneCount; i++) {
                             // Set the default setting to the given URI for multi SIMs
-                            setSettingIfNotSet((Settings.System.RINGTONE + (i+1)), tableUri, rowId);
+                            setSettingIfNotSet((Settings.System.RINGTONE + "_" + (i+1)), tableUri, rowId);
                         }
                     }
                     mDefaultRingtoneSet = true;
