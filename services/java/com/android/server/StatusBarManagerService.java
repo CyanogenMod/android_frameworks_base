@@ -413,7 +413,8 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         if (mBar != null) {
             try {
                 mBar.setAutoRotate(enabled);
-        }        
+            } catch (RemoteException ex) {}
+        }
     }
     
     @Override

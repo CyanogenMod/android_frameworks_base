@@ -396,9 +396,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.NOTIFICATION_BACKGROUND_LANDSCAPE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_BACKGROUND_ALPHA), false, this);
-             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_ALPHA), false, this);
-        updateSettings();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_ALPHA), false, this);    
+            resolver.registerContentObserver(Settings.System.getUriFor(        
                     Settings.System.PIE_CONTROLS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -406,23 +406,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     UserHandle.USER_ALL);
             updateSettings();
         }
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.PIE_CONTROLS))) {
-                attachPieContainer(isPieEnabled());
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.EXPANDED_DESKTOP_STATE))) {
-                mNavigationBarOverlay.setIsExpanded(isExpanded());
-            }
-            updateSettings();
-        }
         
-        // Used for notification drawer background
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            super.onChange(selfChange, uri);
-
             if (uri.equals(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_BACKGROUND))
                 || uri.equals(Settings.System.getUriFor(
@@ -436,8 +422,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mSettingsPanel.setBackgroundDrawables();
                 }
             } else if (uri.equals(Settings.System.getUriFor(
-                Settings.System.NOTIFICATION_ALPHA))) {
+                    Settings.System.NOTIFICATION_ALPHA))) {
                 setNotificationAlpha();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.PIE_CONTROLS))) {
+                attachPieContainer(isPieEnabled());
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STATE))) {
+                mNavigationBarOverlay.setIsExpanded(isExpanded());
             }
             updateSettings();
         }
