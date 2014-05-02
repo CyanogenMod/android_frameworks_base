@@ -158,4 +158,13 @@ public class SettingsPanelView extends PanelView {
         }
         return super.onTouchEvent(event);
     }
+
+    protected void onPanelHidden() {
+        mQS.onSettingsHidden();
+    };
+
+    @Override
+    protected void onPanelShownVisible() {
+        mQS.onSettingsVisible();
+    }
 }

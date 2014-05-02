@@ -592,6 +592,11 @@ public class PanelView extends FrameLayout {
         if (!(mRubberbandingEnabled && (mTracking || mRubberbanding)) && h > fh) h = fh;
 
         mExpandedHeight = h;
+        if (mExpandedHeight == 0) {
+            onPanelHidden();
+        } else {
+            onPanelShown();
+        }
 
         if (DEBUG) logf("setExpansion: height=%.1f fh=%.1f tracking=%s rubber=%s", h, fh, mTracking?"T":"f", mRubberbanding?"T":"f");
 
@@ -602,6 +607,10 @@ public class PanelView extends FrameLayout {
 
         mExpandedFraction = Math.min(1f, (fh == 0) ? 0 : h / fh);
     }
+
+    protected void onPanelHidden() { }
+
+    protected void onPanelShown() { }
 
     private float getFullHeight() {
         if (mFullHeight <= 0) {

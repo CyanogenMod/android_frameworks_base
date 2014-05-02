@@ -19,7 +19,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="top"
     android:orientation="vertical">
-    <ImageView
+    <!--  <ImageView
         android:id="@+id/image"
         android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
         android:layout_marginBottom="@dimen/qs_cawarn_tile_margin_below_icon"
@@ -27,13 +27,21 @@
         android:layout_height="@dimen/qs_tile_icon_size"
         android:layout_gravity="top|center_horizontal"
         android:scaleType="centerInside"
-        />
-    <TextView
-        style="@style/TextAppearance.QuickSettings.TileView.AllInOne"
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        />-->
+    <com.android.systemui.quicksettings.QuickTileVisualizer
+        android:id="@+id/visualizer_view"
+        android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
+        android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
+        android:layout_width="@dimen/qs_tile_icon_size"
+        android:layout_height="@dimen/qs_tile_icon_size"
         android:layout_gravity="top|center_horizontal"
-        android:gravity="top|center_horizontal"
-        />
+        android:visibility="gone" />
+    <TextView
+            style="@style/TextAppearance.QuickSettings.TileView"
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:gravity="top|center_horizontal"
+            />
 </LinearLayout>
