@@ -273,7 +273,9 @@ final class WifiNotificationController {
             }
         } else {
             if (mNotificationBroadcastReceiver != null) {
-                mContext.unregisterReceiver(mNotificationBroadcastReceiver);
+                try {
+                    mContext.unregisterReceiver(mNotificationBroadcastReceiver);
+                } catch (Exception ignored) { /* nothing to do here */ }
             }
             notificationManager.cancelAsUser(null, ICON_NETWORKS_AVAILABLE, UserHandle.ALL);
         }
