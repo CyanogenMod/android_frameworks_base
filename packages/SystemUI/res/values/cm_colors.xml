@@ -15,8 +15,9 @@
      limitations under the License.
 -->
 <resources>
-
-    <!-- Color for the "No recent apps" text in the recent apps list. -->
+    <!-- Color for the "No recent apps" text in the recent apps list -->
     <color name="no_recent_apps">#bebebe</color>
 
+    <!-- Color for the Equalizer tile -->
+    <color name="equalizer_fill_color">#96FFFFFF</color>
 </resources>
