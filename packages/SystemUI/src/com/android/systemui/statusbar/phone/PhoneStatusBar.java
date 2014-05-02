@@ -903,6 +903,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
 
                 if (mSettingsPanel != null) {
+                    mSettingsPanel.setStatusBar(this);
                     if (!ActivityManager.isHighEndGfx()) {
                         mSettingsPanel.setBackground(new FastColorDrawable(context.getResources().getColor(
                                 R.color.notification_panel_solid_background)));
@@ -977,6 +978,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         return mStatusBarView;
+    }
+
+    protected void onQuickSettingsHidden() {
+        mQS.onSettingsHidden();
+    }
+
+    protected void onQuickSettingsVisible() {
+        mQS.onSettingsVisible();
     }
 
     @Override
@@ -3593,6 +3602,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.QS_DYNAMIC_DOCK_BATTERY),
+                    false, this, UserHandle.USER_ALL);
+
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QS_DYNAMIC_EQUALIZER),
                     false, this, UserHandle.USER_ALL);
 
             cr.registerContentObserver(
