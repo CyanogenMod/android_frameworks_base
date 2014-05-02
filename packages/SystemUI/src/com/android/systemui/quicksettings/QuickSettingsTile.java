@@ -170,4 +170,8 @@ public class QuickSettingsTile implements OnClickListener {
             mQsc.mBar.collapseAllPanels(true);
         }
     }
+
+    public void onSettingsHidden() { }
+
+    public void onSettingsVisible() { }
 }
