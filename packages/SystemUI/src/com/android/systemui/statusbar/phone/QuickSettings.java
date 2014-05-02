@@ -38,6 +38,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
+import android.media.AudioService;
 import android.media.MediaRouter;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
