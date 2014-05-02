@@ -158,4 +158,5 @@ public class SettingsPanelView extends PanelView {
         }
         return super.onTouchEvent(event);
     }
+
 }

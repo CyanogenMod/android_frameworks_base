@@ -746,6 +746,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
         if (mHasFlipSettings) {
+            mNotificationPanel.setService(this);
             mNotificationButton = (ImageView) mStatusBarWindow.findViewById(R.id.notification_button);
             mAddTileButton = (ImageView) mStatusBarWindow.findViewById(R.id.add_tile_button);
             if (mNotificationButton != null) {
@@ -977,6 +978,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         return mStatusBarView;
+    }
+
+    protected void onQuickSettingsHidden() {
+        mQS.onSettingsHidden();
+    }
+
+    protected void onQuickSettingsVisible() {
+        mQS.onSettingsVisible();
     }
 
     @Override
