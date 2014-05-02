@@ -3225,6 +3225,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             toggleQSShade();
         } else if (smartPulldownMode == 2 && !hasVisibleNotifications()) {
             toggleQSShade();
+        } else if (smartPulldownMode == 3 && !hasVisibleNotifications()
+                && !hasClearableNotifications()) {
+            toggleQSShade();
         } else if (smartPulldownMode == 0) {
             Toast.makeText(mContext,
                     R.string.smart_pulldown_disabled,

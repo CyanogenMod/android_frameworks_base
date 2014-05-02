@@ -166,6 +166,9 @@ public class NotificationPanelView extends PanelView {
                         flip = true;
                     } else if (smartPulldownMode == 2 && !mStatusBar.hasVisibleNotifications()) {
                         flip = true;
+                    } else if (smartPulldownMode == 3 && !mStatusBar.hasVisibleNotifications()
+                            && !mStatusBar.hasClearableNotifications()) {
+                        flip = true;
                     } else if (quickPulldownMode == 1
                             && mGestureStartX > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE)) {
                         flip = true;
