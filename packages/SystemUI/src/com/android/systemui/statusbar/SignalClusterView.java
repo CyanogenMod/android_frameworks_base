@@ -19,6 +19,7 @@ package com.android.systemui.statusbar;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
+import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
@@ -82,7 +83,10 @@ public class SignalClusterView
         super.onAttachedToWindow();
 
         ContentResolver res = mContext.getContentResolver();
-        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUSBAR_SIGNAL_TEXT), false, mSettingsObserver);
+        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_SIGNAL_TEXT), false, mSettingsObserver);
+        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_AIRPLANE_COLOR), false, mSettingsObserver);
+        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_DATA_COLOR), false, mSettingsObserver);
+        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_WIFI_COLOR), false, mSettingsObserver);
         updateSettings();
 
         mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
@@ -195,6 +199,9 @@ public class SignalClusterView
         if (mWifiVisible) {
             mWifi.setImageResource(mWifiStrengthId);
             mWifiActivity.setImageResource(mWifiActivityId);
+            int Color = Settings.System.getInt(mContext.getContentResolver(), Settings.System.STATUS_BAR_WIFI_COLOR, -1);
+            mWifi.setColorFilter(Color, Mode.MULTIPLY);
+            mWifiActivity.setColorFilter(Color, Mode.MULTIPLY);
 
             mWifiGroup.setContentDescription(mWifiDescription);
             mWifiGroup.setVisibility(View.VISIBLE);
@@ -208,9 +215,13 @@ public class SignalClusterView
                     mWifiStrengthId, mWifiActivityId));
 
         if (mMobileVisible && !mIsAirplaneMode) {
+            int Color = Settings.System.getInt(mContext.getContentResolver(), Settings.System.STATUS_BAR_DATA_COLOR, -1);
             mMobile.setImageResource(mMobileStrengthId);
             mMobileActivity.setImageResource(mMobileActivityId);
             mMobileType.setImageResource(mMobileTypeId);
+            mMobile.setColorFilter(Color , Mode.MULTIPLY);
+            mMobileActivity.setColorFilter(Color , Mode.MULTIPLY);
+            mMobileType.setColorFilter(Color , Mode.MULTIPLY);
 
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
             mMobileGroup.setVisibility(View.VISIBLE);
@@ -227,7 +238,9 @@ public class SignalClusterView
         }
 
         if (mIsAirplaneMode) {
+            int Color = Settings.System.getInt(mContext.getContentResolver(), Settings.System.STATUS_BAR_AIRPLANE_COLOR, -1);
             mAirplane.setImageResource(mAirplaneIconId);
+            mAirplane.setColorFilter(Color , Mode.MULTIPLY);
             mAirplane.setVisibility(View.VISIBLE);
         } else {
             mAirplane.setVisibility(View.GONE);

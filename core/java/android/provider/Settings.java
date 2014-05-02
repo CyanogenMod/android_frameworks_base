@@ -5630,6 +5630,30 @@ public final class Settings {
         public static final String FORCE_MULTI_PANE = "force_multi_pane";
 
         /**
+         * Statusbar Wifi Color
+         * @hide
+         */
+        public static final String STATUS_BAR_WIFI_COLOR = "status_bar_wifi_color";
+
+        /**
+         * Statusbar Data Color
+         * @hide
+         */
+        public static final String STATUS_BAR_DATA_COLOR = "status_bar_data_color";
+
+        /**
+         * Statusbar Airplain Color
+         * @hide
+         */
+        public static final String STATUS_BAR_AIRPLANE_COLOR = "status_bar_airplane_color";
+
+        /**
+         * Statusbar Volume Color
+         * @hide
+         */
+        public static final String STATUS_BAR_VOLUME_COLOR = "status_bar_volume_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
