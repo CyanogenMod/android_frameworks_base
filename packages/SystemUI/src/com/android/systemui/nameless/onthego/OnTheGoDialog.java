@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
@@ -79,9 +80,8 @@ public class OnTheGoDialog extends Dialog {
         final ContentResolver resolver = mContext.getContentResolver();
 
         final SeekBar mSlider = (SeekBar) findViewById(R.id.alpha_slider);
-        final float value = Settings.Nameless.getFloat(resolver,
-                Settings.Nameless.ON_THE_GO_ALPHA,
-                0.5f);
+        final float value = Settings.Nameless.getFloatForUser(resolver,
+                Settings.Nameless.ON_THE_GO_ALPHA, 0.5f, UserHandle.USER_CURRENT);
         final int progress = ((int) (value * 100));
         mSlider.setProgress(progress);
         mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -105,31 +105,29 @@ public class OnTheGoDialog extends Dialog {
             findViewById(R.id.onthego_category_1).setVisibility(View.GONE);
         } else {
             final Switch mServiceToggle = (Switch) findViewById(R.id.onthego_service_toggle);
-            final boolean restartService = Settings.Nameless.getBoolean(resolver,
-                    Settings.Nameless.ON_THE_GO_SERVICE_RESTART,
-                    false);
+            final boolean restartService = Settings.Nameless.getBooleanForUser(resolver,
+                    Settings.Nameless.ON_THE_GO_SERVICE_RESTART, false, UserHandle.USER_CURRENT);
             mServiceToggle.setChecked(restartService);
             mServiceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Settings.Nameless.putBoolean(resolver,
-                            Settings.Nameless.ON_THE_GO_SERVICE_RESTART,
-                            b);
+                    Settings.Nameless.putBooleanForUser(resolver,
+                            Settings.Nameless.ON_THE_GO_SERVICE_RESTART, b,
+                            UserHandle.USER_CURRENT);
                     dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
                 }
             });
 
             final Switch mCamSwitch = (Switch) findViewById(R.id.onthego_camera_toggle);
-            final boolean useFrontCam = (Settings.Nameless.getInt(resolver,
-                    Settings.Nameless.ON_THE_GO_CAMERA,
-                    0) == 1);
+            final boolean useFrontCam = (Settings.Nameless.getIntForUser(resolver,
+                    Settings.Nameless.ON_THE_GO_CAMERA, 0, UserHandle.USER_CURRENT) == 1);
             mCamSwitch.setChecked(useFrontCam);
             mCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    Settings.Nameless.putInt(resolver,
-                            Settings.Nameless.ON_THE_GO_CAMERA,
-                            (b ? 1 : 0));
+                    Settings.Nameless.putIntForUser(resolver,
+                            Settings.Nameless.ON_THE_GO_CAMERA, (b ? 1 : 0),
+                            UserHandle.USER_CURRENT);
                     sendCameraBroadcast();
                     dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
                 }
