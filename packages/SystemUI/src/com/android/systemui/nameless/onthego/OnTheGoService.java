@@ -147,8 +147,7 @@ public class OnTheGoService extends Service implements ShakeDetector.Listener {
             synchronized (mRestartObject) {
                 final ContentResolver resolver = getContentResolver();
                 final boolean restartService = Settings.System.getBoolean(resolver,
-                        Settings.System.ON_THE_GO_SERVICE_RESTART,
-                        false);
+                        Settings.System.ON_THE_GO_SERVICE_RESTART, false);
                 if (restartService) {
                     restartOnTheGo();
                 } else {
@@ -256,16 +255,14 @@ public class OnTheGoService extends Service implements ShakeDetector.Listener {
     };
 
     private void toggleOnTheGoAlpha() {
-        final float alpha = Settings.System.getFloat(getContentResolver(),
-                Settings.System.ON_THE_GO_ALPHA,
-                0.5f);
+        final float alpha = Settings.System.getFloatForUser(getContentResolver(),
+                Settings.System.ON_THE_GO_ALPHA, 0.5f, UserHandle.USER_CURRENT);
         toggleOnTheGoAlpha(alpha);
     }
 
     private void toggleOnTheGoAlpha(float alpha) {
-        Settings.System.putFloat(getContentResolver(),
-                Settings.System.ON_THE_GO_ALPHA,
-                alpha);
+        Settings.System.putFloatForUser(getContentResolver(),
+                Settings.System.ON_THE_GO_ALPHA, alpha, UserHandle.USER_CURRENT);
 
         if (mOverlay != null) {
             mOverlay.setAlpha(alpha);
@@ -304,8 +301,8 @@ public class OnTheGoService extends Service implements ShakeDetector.Listener {
     private void setupViews(final boolean isRestarting) {
         logDebug("Setup Views, restarting: " + (isRestarting ? "true" : "false"));
 
-        final int cameraType = Settings.System.getInt(getContentResolver(),
-                Settings.System.ON_THE_GO_CAMERA, 0);
+        final int cameraType = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.ON_THE_GO_CAMERA, 0, UserHandle.USER_CURRENT);
 
         try {
             getCameraInstance(cameraType);
@@ -449,8 +446,8 @@ public class OnTheGoService extends Service implements ShakeDetector.Listener {
         if (mCamera == null) return;
 
         final Camera.CameraInfo info = new Camera.CameraInfo();
-        final int cameraType = Settings.System.getInt(getContentResolver(),
-                Settings.System.ON_THE_GO_CAMERA, 0);
+        final int cameraType = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.ON_THE_GO_CAMERA, 0, UserHandle.USER_CURRENT);
         Camera.getCameraInfo(cameraType, info);
         final int rotation = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay().getRotation();
