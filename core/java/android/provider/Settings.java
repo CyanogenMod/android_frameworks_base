@@ -5662,13 +5662,6 @@ public final class Settings {
         public static final String PEEK_STATE = "peek_state";
 
         /**
-         * Whether to not showing active display when there is annoying notifications.
-         * Set the timeout of peek when pikcing up the device
-         * @hide
-         */
-        public static final String PEEK_PICKUP_TIMEOUT = "peek_pickup_timeout";
-
-        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
