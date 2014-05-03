@@ -795,11 +795,12 @@ public class NotificationManagerService extends INotificationManager.Stub
         for (NotificationListenerInfo info : toRemove) {
             final ComponentName component = info.component;
             final int oldUser = info.userid;
-            if (!info.isSystem || 
-                (!component.getPackageName().equals("HaloComponent") && !component.getPackageName().equals("ActiveDisplayComponent"))) {                
-                // Do not un-register HALO and ActiveDisplay, we un-register only when HALO is closed
+            if (!info.isSystem) {
+                if (!component.getPackageName().equals("HaloComponent") || !component.getPackageName().equals("ActiveDisplayComponent")) {
                 Slog.v(TAG, "disabling notification listener for user " + oldUser + ": " + component);
+                // Do not un-register HALO and ActiveDisplay, we un-register only when HALO is closed
                 unregisterListenerService(component, info.userid);
+                }
             }
 	    }
 
