@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
  * Copyright (C) 2010-2012 CyanogenMod Project
+ * Modifications Copyright (C) 2013-2014 The NamelessRom Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +86,7 @@ import java.util.UUID;
 
 
 /**
- * Needed for takeScreenshot and takeScreenrecord
+ * Needed for takeScreenshot
  */
 import android.content.ServiceConnection;
 import android.content.ComponentName;
@@ -432,7 +433,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                                 R.string.global_action_screenrecord) {
 
                             public void onPress() {
-                                takeScreenrecord();
+                                NamelessActions.processAction(mContext,
+                                        NamelessActions.ACTION_SCREEN_RECORD);
                             }
 
                             public boolean onLongPress() {
@@ -754,73 +756,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (mContext.bindServiceAsUser(intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
                 mScreenshotConnection = conn;
                 mHandler.postDelayed(mScreenshotTimeout, 10000);
-            }
-        }
-    }
-
-    /**
-     * functions needed for taking screen record.
-     */
-    final Object mScreenrecordLock = new Object();
-    ServiceConnection mScreenrecordConnection = null;
-
-    final Runnable mScreenrecordTimeout = new Runnable() {
-        @Override public void run() {
-            synchronized (mScreenrecordLock) {
-                if (mScreenrecordConnection != null) {
-                    mContext.unbindService(mScreenrecordConnection);
-                    mScreenrecordConnection = null;
-                }
-            }
-        }
-    };
-
-    // Assume this is called from the Handler thread.
-    private void takeScreenrecord() {
-        synchronized (mScreenrecordLock) {
-            if (mScreenrecordConnection != null) {
-                return;
-            }
-            ComponentName cn = new ComponentName("com.android.systemui",
-                    "com.android.systemui.omni.screenrecord.TakeScreenrecordService");
-            Intent intent = new Intent();
-            intent.setComponent(cn);
-            ServiceConnection conn = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    synchronized (mScreenrecordLock) {
-                        Messenger messenger = new Messenger(service);
-                        Message msg = Message.obtain(null, 1);
-                        final ServiceConnection myConn = this;
-                        Handler h = new Handler(mHandler.getLooper()) {
-                            @Override
-                            public void handleMessage(Message msg) {
-                                synchronized (mScreenrecordLock) {
-                                    if (mScreenrecordConnection == myConn) {
-                                        mContext.unbindService(mScreenrecordConnection);
-                                        mScreenrecordConnection = null;
-                                        mHandler.removeCallbacks(mScreenrecordTimeout);
-                                    }
-                                }
-                            }
-                        };
-                        msg.replyTo = new Messenger(h);
-                        msg.arg1 = msg.arg2 = 0;
-                        try {
-                            messenger.send(msg);
-                        } catch (RemoteException e) {
-                        }
-                    }
-                }
-                @Override
-                public void onServiceDisconnected(ComponentName name) {}
-            };
-            if (mContext.bindServiceAsUser(
-                    intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
-                mScreenrecordConnection = conn;
-                // Screenrecord max duration is 30 minutes. Allow 31 minutes before killing
-                // the service.
-                mHandler.postDelayed(mScreenrecordTimeout, 31 * 60 * 1000);
             }
         }
     }

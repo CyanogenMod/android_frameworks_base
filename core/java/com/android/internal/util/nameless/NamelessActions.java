@@ -26,6 +26,7 @@ import android.content.Intent;
 public class NamelessActions {
 
     public static final String ACTION_ONTHEGO_TOGGLE = "action_onthego_toggle";
+    public static final String ACTION_SCREEN_RECORD  = "action_screen_record";
 
     public static void processAction(final Context context, final String action) {
 
@@ -35,6 +36,8 @@ public class NamelessActions {
 
         if (ACTION_ONTHEGO_TOGGLE.equals(action)) {
             actionOnTheGoToggle(context);
+        } else if (ACTION_SCREEN_RECORD.equals(action)) {
+            actionScreenRecord(context);
         }
 
     }
@@ -42,6 +45,15 @@ public class NamelessActions {
     private static void actionOnTheGoToggle(final Context context) {
         final ComponentName cn = new ComponentName("com.android.systemui",
                 "com.android.systemui.nameless.onthego.OnTheGoService");
+        final Intent startIntent = new Intent();
+        startIntent.setComponent(cn);
+        startIntent.setAction("start");
+        context.startService(startIntent);
+    }
+
+    private static void actionScreenRecord(final Context context) {
+        final ComponentName cn = new ComponentName("com.android.systemui",
+                "com.android.systemui.nameless.screenrecord.ScreenRecordService");
         final Intent startIntent = new Intent();
         startIntent.setComponent(cn);
         startIntent.setAction("start");
