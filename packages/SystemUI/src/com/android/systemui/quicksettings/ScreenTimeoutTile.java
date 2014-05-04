@@ -61,8 +61,11 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
         mOnLongClick = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent("android.settings.DISPLAY_SETTINGS");
-                startSettingsActivity(intent);
+                Settings.System.putIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.System.SCREEN_OFF_TIMEOUT, SCREEN_TIMEOUT_NEVER,
+                        UserHandle.USER_CURRENT);
+                updateResources();
                 return true;
             }
         };
