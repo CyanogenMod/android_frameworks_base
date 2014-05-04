@@ -2813,7 +2813,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         @Override
         public void tickerStarting() {
-	    if (!mHaloActive) {
+	       if (!mHaloActive) {
                 mTicking = true;
                 mStatusBarContents.setVisibility(View.GONE);
                 mCenterClockLayout.setVisibility(View.GONE);
@@ -2827,7 +2827,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         @Override
         public void tickerDone() {
-	    if (!mHaloActive) {
+	       if (!mHaloActive) {
                 mStatusBarContents.setVisibility(View.VISIBLE);
                 mCenterClockLayout.setVisibility(View.VISIBLE);
                 mTickerView.setVisibility(View.GONE);
@@ -2835,11 +2835,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_down_out,
                             mTickingDoneListener));
                 mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in, null));              
-	    }
+	        } 
         }
 
         public void tickerHalting() {
-	    if (!mHaloActive) {
+	       if (!mHaloActive) {
                 if (mStatusBarContents.getVisibility() != View.VISIBLE) {
                     mStatusBarContents.setVisibility(View.VISIBLE);
                     mCenterClockLayout.setVisibility(View.VISIBLE);
@@ -2848,8 +2848,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mCenterClockLayout.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
                 }
                 mTickerView.setVisibility(View.GONE);
-                // we do not animate the ticker away at this point, just get rid of it (b/6992707)
-	    }
+                 // we do not animate the ticker away at this point, just get rid of it (b/6992707)
+	        }
+        }
     }
 
     Animation.AnimationListener mTickingDoneListener = new Animation.AnimationListener() {;
