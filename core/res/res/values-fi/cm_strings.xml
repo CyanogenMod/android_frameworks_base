@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">Sallii sovelluksen muokata puhelinnumeroita, joista saapuvat puhelut ja viestit on estetty.</string>
   <string name="permlab_accessThemeService">pääsy teemapalveluun</string>
   <string name="permdesc_accessThemeService">Sallii sovelluksen päästä teemapalveluun. Tavalliset sovellukset ei koskaan tarvitse tätä.</string>
+  <string name="permlab_setKeyguardWallpaper">aseta näppäinlukon taustakuva</string>
+  <string name="permdesc_setKeyguardWallpaper">Sallii sovelluksen vaihtaa lukitusnäytön taustakuva.</string>
   <string name="immersive_mode_confirmation_bottom">Pyyhkäise alhaalta ylös poistuaksesi koko näytön tilasta.</string>
   <string name="app_ops_access_camera">käytä kameraa</string>
   <string name="app_ops_access_location">käytä sijaintia</string>
