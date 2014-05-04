@@ -52,6 +52,7 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.StrictMode;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -5270,8 +5271,9 @@ public class Activity extends ContextThemeWrapper
 
     private boolean makeNewWindow(Context context, Intent intent, ActivityInfo info) {
         boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+        boolean mFloatingMode = (Settings.System.getInt(getContentResolver(), Settings.System.FLOATING_MODE, 1) == 1);
         boolean history = (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
-        if (intent != null && floating && !history) {
+        if (intent != null && floating && !history && mFloatingMode) {
 
             TypedArray styleArray = context.obtainStyledAttributes(info.theme, com.android.internal.R.styleable.Window);
             TypedValue backgroundValue = styleArray.peekValue(com.android.internal.R.styleable.Window_windowBackground);
