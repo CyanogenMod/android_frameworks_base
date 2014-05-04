@@ -1466,9 +1466,9 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public class NotificationClicker implements View.OnClickListener {
-        public KeyguardTouchDelegate mKeyguard;
+        private KeyguardTouchDelegate mKeyguard;
         public PendingIntent mPendingIntent;
-        public Intent mIntent;
+        private Intent mIntent;
         public String mPkg;
         public String mTag;
         public int mId;
@@ -1521,7 +1521,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 int[] pos = new int[2];
                 v.getLocationOnScreen(pos);
                 Intent overlay = new Intent();
-                if (mFloat) overlay.addFlags(Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //if (mFloat) overlay.addFlags(Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 overlay.setSourceBounds(
                         new Rect(pos[0], pos[1], pos[0] + v.getWidth(), pos[1] + v.getHeight()));
                 try {
