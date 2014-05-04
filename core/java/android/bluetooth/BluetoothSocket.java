@@ -201,7 +201,6 @@ public final class BluetoothSocket implements Closeable {
         as.mSocketOS = as.mSocket.getOutputStream();
         as.mAddress = RemoteAddr;
         as.mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(RemoteAddr);
-        as.mPort = mPort;
         return as;
     }
     /**
@@ -406,61 +405,6 @@ public final class BluetoothSocket implements Closeable {
         return acceptedSocket;
     }
 
-    /**
-     * setSocketOpt for the Buetooth Socket.
-     *
-     * @param optionName socket option name
-     * @param optionVal  socket option value
-     * @param optionLen  socket option length
-     * @return -1 on immediate error,
-     *               0 otherwise
-     * @hide
-     */
-    public int setSocketOpt(int optionName, byte [] optionVal, int optionLen) throws IOException {
-        int ret = 0;
-        if (mSocketState == SocketState.CLOSED) throw new IOException("socket closed");
-        IBluetooth bluetoothProxy = BluetoothAdapter.getDefaultAdapter().getBluetoothService(null);
-        if (bluetoothProxy == null) {
-            Log.e(TAG, "setSocketOpt fail, reason: bluetooth is off");
-            return -1;
-        }
-        try {
-            if(VDBG) Log.d(TAG, "setSocketOpt(), mType: " + mType + " mPort: " + mPort);
-            ret = bluetoothProxy.setSocketOpt(mType, mPort, optionName, optionVal, optionLen);
-        } catch (RemoteException e) {
-            Log.e(TAG, Log.getStackTraceString(new Throwable()));
-            return -1;
-        }
-        return ret;
-    }
-
-    /**
-     * getSocketOpt for the Buetooth Socket.
-     *
-     * @param optionName socket option name
-     * @param optionVal  socket option value
-     * @return -1 on immediate error,
-     *               length of returned socket option otherwise
-     * @hide
-     */
-    public int getSocketOpt(int optionName, byte [] optionVal) throws IOException {
-        int ret = 0;
-        if (mSocketState == SocketState.CLOSED) throw new IOException("socket closed");
-        IBluetooth bluetoothProxy = BluetoothAdapter.getDefaultAdapter().getBluetoothService(null);
-        if (bluetoothProxy == null) {
-            Log.e(TAG, "getSocketOpt fail, reason: bluetooth is off");
-            return -1;
-        }
-        try {
-            if(VDBG) Log.d(TAG, "getSocketOpt(), mType: " + mType + " mPort: " + mPort);
-            ret = bluetoothProxy.getSocketOpt(mType, mPort, optionName, optionVal);
-        } catch (RemoteException e) {
-            Log.e(TAG, Log.getStackTraceString(new Throwable()));
-            return -1;
-        }
-        return ret;
-    }
-
     /*package*/ int available() throws IOException {
         if (VDBG) Log.d(TAG, "available: " + mSocketIS);
         return mSocketIS.available();
@@ -478,15 +422,9 @@ public final class BluetoothSocket implements Closeable {
     }
 
     /*package*/ int read(byte[] b, int offset, int length) throws IOException {
-            int ret = -1;
+
             if (VDBG) Log.d(TAG, "read in:  " + mSocketIS + " len: " + length);
-            if(mSocketIS != null) {
-                try {
-                    ret = mSocketIS.read(b, offset, length);
-                } catch (IOException e) {
-                    Log.e(TAG, "IOException while reading the InputStream");
-                }
-            }
+            int ret = mSocketIS.read(b, offset, length);
             if(ret < 0)
                 throw new IOException("bt socket closed, read return: " + ret);
             if (VDBG) Log.d(TAG, "read out:  " + mSocketIS + " ret: " + ret);
@@ -523,10 +461,8 @@ public final class BluetoothSocket implements Closeable {
                     mSocket.close();
                     mSocket = null;
                 }
-                if(mPfd != null) {
-                    mPfd.close();
-                    mPfd = null;
-                }
+                if(mPfd != null)
+                    mPfd.detachFd();
            }
         }
     }
