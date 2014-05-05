@@ -81,7 +81,7 @@ public class NotificationViewManager {
         public float offsetTop = 0.3f;
         public boolean privacyMode = false;
         public int notificationColor = 0x55555555;
-        public boolean dynamicWidth = true;
+        public boolean dynamicWidth = false;
 
         public Configuration(Handler handler) {
             super(handler);
