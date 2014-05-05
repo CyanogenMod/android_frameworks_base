@@ -63,5 +63,8 @@
     <string name="service_free_mem"><xliff:g id="memory">%1$s</xliff:g> free</string>
     <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
     <string name="service_used_mem"><xliff:g id="memory">%1$s</xliff:g> used</string>
+    
+    <!-- Title shown in recents popup for showing app in floating mode -->
+    <string name="status_bar_recent_floating_item_title">Floating mode</string>
 
 </resources>
