@@ -1822,4 +1822,8 @@
   <!-- sim refresh for dual mode card -->
   <java-symbol type="bool" name="config_sim_refresh_for_dual_mode_card" />
   <java-symbol type="bool" name="config_global_phone_enabled" />
+
+  <!-- From keyguard for showing am/pm in unlock screen -->
+  <java-symbol type="bool" name="config_show_ampm_in_unlock_screen" />
+
 </resources>

@@ -91,6 +91,7 @@ public class KeyguardStatusView extends GridLayout {
         mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
         mDateView = (TextClock) findViewById(R.id.date_view);
         mClockView = (TextClock) findViewById(R.id.clock_view);
+        mClockView.setEllipsize(null);
         mLockPatternUtils = new LockPatternUtils(getContext());
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();
         setEnableMarquee(screenOn);
@@ -156,11 +157,17 @@ public class KeyguardStatusView extends GridLayout {
             dateView = DateFormat.getBestDateTimePattern(locale, dateViewSkel);
 
             clockView12 = DateFormat.getBestDateTimePattern(locale, clockView12Skel);
-            // CLDR insists on adding an AM/PM indicator even though it wasn't in the skeleton
-            // format.  The following code removes the AM/PM indicator if we didn't want it.
-            if (!clockView12Skel.contains("a")) {
-                clockView12 = clockView12.replaceAll("a", "").trim();
+            boolean showAmPm = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_show_ampm_in_unlock_screen);
+
+            if (showAmPm == false) {
+                // CLDR insists on adding an AM/PM indicator even though it wasn't in the skeleton
+                // format.  The following code removes the AM/PM indicator if we didn't want it.
+                if (!clockView12Skel.contains("a")) {
+                    clockView12 = clockView12.replaceAll("a", "").trim();
+                }
             }
+
 
             clockView24 = DateFormat.getBestDateTimePattern(locale, clockView24Skel);
 
