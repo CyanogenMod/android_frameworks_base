@@ -177,7 +177,16 @@ public class UserTile extends QuickSettingsTile {
                             }
                         }
                     }
+                } else {
+                    name = userName;
+                    Bitmap rawAvatar = um.getUserIcon(userId);
+                    if (rawAvatar != null) {
+                        avatar = new BitmapDrawable(mContext.getResources(), rawAvatar);
+                    } else {
+                        avatar = mContext.getResources().getDrawable(R.drawable.ic_qs_default_user);
+                    }
                 }
+
                 return new Pair<String, Drawable>(name, avatar);
             }
 
