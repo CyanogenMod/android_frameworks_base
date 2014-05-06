@@ -204,8 +204,10 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             loge("CONNECTED event did not supply link properties.");
             mLinkProperties = new LinkProperties();
         }
-        mLinkProperties.setMtu(mContext.getResources().getInteger(
+        if (mLinkProperties.getMtu() <= 0) {
+            mLinkProperties.setMtu(mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_mobile_mtu));
+        }
         mLinkCapabilities = intent.getParcelableExtra(
                 PhoneConstants.DATA_LINK_CAPABILITIES_KEY);
         if (mLinkCapabilities == null) {
@@ -489,6 +491,48 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             loge("unknown network type: " + tm.getNetworkType());
         }
         return "net.tcp.buffersize." + networkTypeStr;
+    }
+
+    /**
+     * Return the system properties name associated with the tcp delayed ack settings
+     * for this network.
+     */
+    @Override
+    public String getTcpDelayedAckPropName() {
+        String networkTypeStr = "default";
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                         Context.TELEPHONY_SERVICE);
+        if (tm != null) {
+            switch(tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkTypeStr = "lte";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return "net.tcp.delack." + networkTypeStr;
+    }
+
+    /**
+     * Return the system properties name associated with the tcp user config flag
+     * for this network.
+     */
+    @Override
+    public String getTcpUserConfigPropName() {
+        String networkTypeStr = "default";
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                         Context.TELEPHONY_SERVICE);
+        if (tm != null) {
+            switch(tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkTypeStr = "lte";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return "net.tcp.usercfg." + networkTypeStr;
     }
 
     /**
