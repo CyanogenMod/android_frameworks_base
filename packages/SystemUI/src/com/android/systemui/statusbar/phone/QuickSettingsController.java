@@ -211,7 +211,7 @@ public class QuickSettingsController {
         for (String tile : tiles.split("\\|")) {
             QuickSettingsTile qs = null;
             if (tile.equals(TILE_USER)) {
-                qs = new UserTile(mContext, this);
+                qs = new UserTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_BATTERY)) {
                 qs = new BatteryTile(mContext, this, mStatusBarService.mBatteryController);
             } else if (tile.equals(TILE_SETTINGS)) {
