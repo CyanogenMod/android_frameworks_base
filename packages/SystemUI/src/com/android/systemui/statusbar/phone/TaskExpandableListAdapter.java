@@ -718,6 +718,7 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
         public boolean filter() {
             if (pkgName != null) {
                 return pkgName.equals("com.android.phone")
+                        || pkgName.equals("com.android.dialer")
                         || pkgName.equals("com.quicinc.fmradio");
             }
             return true;
