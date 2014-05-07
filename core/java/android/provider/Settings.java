@@ -5383,6 +5383,12 @@ public final class Settings {
         public static final String WHITELIST_APP_CIRCLE_BAR = "whitelist_app_circle_bar";
 
         /**
+         * Set app circle bar trigger width.
+         * @hide
+         */
+        public static final String APP_CIRCLE_SIDEBAR_TRIGGER_WIDTH = "app_circle_bar_trigger_width";
+
+        /**
          * Whether to enable voice wakeup.  The value is boolean (1 or 0).
          * @hide
          */

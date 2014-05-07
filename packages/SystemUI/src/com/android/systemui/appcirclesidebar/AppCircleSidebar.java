@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.*;
 
 import com.android.systemui.R;
+import com.android.systemui.chaos.TriggerOverlayView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -124,6 +125,8 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
                     Settings.System.ENABLE_APP_CIRCLE_BAR), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.WHITELIST_APP_CIRCLE_BAR), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.APP_CIRCLE_SIDEBAR_TRIGGER_WIDTH), false, this);
             update();
         }
 
@@ -144,6 +147,10 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
             String includedApps = Settings.System.getStringForUser(resolver,
                     Settings.System.WHITELIST_APP_CIRCLE_BAR,
                     UserHandle.USER_CURRENT_OR_SELF);
+            int width = Settings.System.getInt(
+                    resolver, Settings.System.APP_CIRCLE_SIDEBAR_TRIGGER_WIDTH, 15);
+            if (mTriggerWidth != width)
+                setTriggerWidth(width);
             if (mPackageAdapter != null) {
                 mPackageAdapter.createIncludedAppsSet(includedApps);
                 mPackageAdapter.reloadApplications();
@@ -480,5 +487,15 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         TaskStackBuilder.create(mContext)
                 .addNextIntentWithParentStack(intent).startActivities();
         showAppContainer(false);
+    }
+
+    protected void setTriggerWidth(int value) {
+        mLayoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
+        mTriggerWidth = value;
+        mLayoutParams.width = mTriggerWidth;
+        try {
+            mWM.updateViewLayout(this, mLayoutParams);
+        } catch (Exception e) {
+        }
     }
 }
