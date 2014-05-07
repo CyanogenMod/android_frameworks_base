@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -48,7 +49,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.hardware.Sensor;
 import android.media.RemoteControlClient;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,7 +74,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RemoteViews.OnClickHandler;
 
+import com.android.internal.util.slim.ButtonsConstants;
 import com.android.internal.util.slim.ShakeListener;
+import com.android.internal.util.slim.SlimActions;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -115,13 +117,17 @@ public class KeyguardHostView extends KeyguardViewBase {
     private boolean mEnableFallback; // TODO: This should get the value from KeyguardPatternView
     private SecurityMode mCurrentSecuritySelection = SecurityMode.Invalid;
     private int mAppWidgetToShow;
+    private int mShakeSecureDirection;
     private boolean mDefaultAppWidgetAttached;
     private boolean mLockBeforeUnlock;
-    private boolean mNoRegister;
+    private boolean mUserEventsExist;
     private long mShakeTimer;
+
+    private String[] mShakeEvent = new String[3];
 
     private static boolean mShakeEnabled;
     private static boolean mSecurityBypassed;
+    private static boolean mShakeBypassed;
 
     private View mExpandChallengeView;
 
@@ -447,46 +453,70 @@ public class KeyguardHostView extends KeyguardViewBase {
         // Shake to secure device temporarily and disable security
         // upon successful unlock - disabled if device admin requires
         // security to be enabled
-        mShakeEnabled = Settings.Secure.getIntForUser(
+        final int shakeSecure = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(),
-                Settings.Secure.LOCK_SHAKE_TEMP_SECURE, 0, mUserId) == 1
+                Settings.Secure.LOCK_SHAKE_TEMP_SECURE, 0, mUserId);
+        mShakeEnabled = shakeSecure != 0
                 && mLockPatternUtils.getRequestedMinimumPasswordLength()
                 == DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED
                 && mLockPatternUtils.isSecure();
-        if (mShakeEnabled) {
+        for (int i = 0; i < 3; i++) {
+            final String event = Settings.Secure.getStringForUser(
+                    mContext.getContentResolver(),
+                    Settings.Secure.LOCK_SHAKE_EVENTS[i], mUserId);
+            if (event != null && !event.equals(ButtonsConstants.ACTION_NULL)) {
+                mUserEventsExist = true;
+                mShakeEvent[i] = event;
+            }
+        }
+        if (mShakeEnabled || mUserEventsExist) {
+            if (mShakeEnabled) {
+                switch (shakeSecure) {
+                    case 1:
+                        mShakeSecureDirection = -1;
+                        break;
+                    case 2:
+                        mShakeSecureDirection = 0;
+                        break;
+                    case 3:
+                        mShakeSecureDirection = 1;
+                        break;
+                    case 4:
+                        mShakeSecureDirection = 2;
+                        break;
+                    default:
+                        mShakeSecureDirection = -2;
+                        break;
+                }
+                mShakeTimer = Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.Secure.LOCK_SHAKE_SECURE_TIMER, 0, mUserId);
+                mSecurityBypassed = Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.Secure.LOCK_TEMP_SECURE_MODE, 0, mUserId) == 0;
+                PowerManager powerManager = (PowerManager)
+                        mContext.getSystemService(Context.POWER_SERVICE);
+                if (!powerManager.isScreenOn()) {
+                    initializeShakeTimer();
+                }
+            } else {
+                mShakeSecureDirection = -2;
+            }
             mShakeListener = new ShakeListener(mContext);
             mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
-                public void onShake() {
-                    // User shook the device, security is now enabled until the next
-                    // time we successfully unlock.
-                    if (mSecurityBypassed) {
-                        unRegisterShakeListener();
-                        mSecurityBypassed = false;
-                        Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                                Settings.Secure.LOCK_TEMP_SECURE_MODE, 1, mUserId);
-                        if (mViewMediatorCallback != null) {
-                            mViewMediatorCallback.adjustStatusBarLocked();
-                        }
-                        Vibrator vib = (Vibrator) mContext.getSystemService(
-                                Context.VIBRATOR_SERVICE);
-                        vib.vibrate(250);
-                        PowerManager pm = (PowerManager)
-                                mContext.getSystemService(Context.POWER_SERVICE);
-                        pm.goToSleep(SystemClock.uptimeMillis());
+                public void onShake(int direction) {
+                    if (!mShakeBypassed) {
+                        performShakeEvent(direction);
                     }
                 }
             });
-            mShakeTimer = Settings.Secure.getIntForUser(
+            mShakeListener.setSensitivity(true, Settings.System.getIntForUser(
                     mContext.getContentResolver(),
-                    Settings.Secure.LOCK_SHAKE_SECURE_TIMER, 0, mUserId);
-            mSecurityBypassed = Settings.Secure.getIntForUser(
-                    mContext.getContentResolver(),
-                    Settings.Secure.LOCK_TEMP_SECURE_MODE, 0, mUserId) == 0;
-            PowerManager powerManager = (PowerManager)
-                    mContext.getSystemService(Context.POWER_SERVICE);
-            if (!powerManager.isScreenOn()) {
-                initializeShakeTimer();
-            }
+                    Settings.System.SHAKE_SENSITIVITY, 0, mUserId));
+            // Keyguard double-inflation on boot.  Ensure unregister of first shake listener
+            mShakeListener.setDestroyEvents(new String[] {
+                    Intent.ACTION_USER_PRESENT,
+                    Intent.ACTION_SCREEN_OFF} );
         }
 
         setBackButtonEnabled(false);
@@ -495,10 +525,8 @@ public class KeyguardHostView extends KeyguardViewBase {
                 Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) != 0;
 
         if (KeyguardUpdateMonitor.getInstance(mContext).hasBootCompleted()) {
-            mNoRegister = false;
             updateAndAddWidgets();
         } else {
-            mNoRegister = true;
             // We can't add widgets until after boot completes because AppWidgetHost may try
             // to contact the providers.  Do it later.
             mPostBootCompletedRunnable = new Runnable() {
@@ -535,6 +563,65 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
     };
 
+    private void performShakeEvent(int direction) {
+        if (mShakeSecureDirection == -1) {
+            onShakeSecure();
+        } else {
+            if (mContext.getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_LANDSCAPE) {
+                // X and Y values are swapped in landscape
+                if (direction == 0) {
+                    direction = 1;
+                } else if (direction == 1) {
+                    direction = 0;
+                }
+            }
+            if (mShakeSecureDirection == direction) {
+                onShakeSecure();
+            } else {
+                if (mShakeEvent[direction] != null
+                        && !mShakeEvent[direction].equals(ButtonsConstants.ACTION_NULL)) {
+                    final boolean hapticsDisabled = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.HAPTIC_FEEDBACK_ENABLED, 0, mUserId) == 0;
+                    if (!hapticsDisabled) {
+                        Vibrator vib = (android.os.Vibrator) mContext.getSystemService(
+                                Context.VIBRATOR_SERVICE);
+                        vib.vibrate(30);
+                    }
+                    if ("**keyguard_camera**".equals(mShakeEvent[direction])) {
+                        launchCamera();
+                    } else {
+                        SlimActions.processAction(mContext, mShakeEvent[direction], false);
+                    }
+                }
+            }
+        }
+    }
+
+    private void onShakeSecure() {
+        if (shakeInsecure()) {
+            // User shook the device in the desired direction
+            // security is now enabled until the next
+            // time we successfully unlock.
+            if (!mUserEventsExist) {
+                unRegisterShakeListener();
+            }
+            mSecurityBypassed = false;
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.LOCK_TEMP_SECURE_MODE, 1, mUserId);
+            if (mViewMediatorCallback != null) {
+                mViewMediatorCallback.adjustStatusBarLocked();
+            }
+            Vibrator vib = (Vibrator) mContext.getSystemService(
+                    Context.VIBRATOR_SERVICE);
+            vib.vibrate(250);
+            PowerManager pm = (PowerManager)
+                    mContext.getSystemService(Context.POWER_SERVICE);
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
+    }
+
     private void updateAndAddWidgets() {
         cleanupAppWidgetIds();
         addDefaultWidgets();
@@ -560,6 +647,10 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     public static boolean shakeInsecure() {
         return mShakeEnabled && mSecurityBypassed;
+    }
+
+    public static void setShakeBypassed(final boolean bypassed) {
+        mShakeBypassed = bypassed;
     }
 
     private long shakeTimedSecurity() {
@@ -1325,15 +1416,12 @@ public class KeyguardHostView extends KeyguardViewBase {
         requestFocus();
         minimizeChallengeIfDesired();
 
-        if (shakeInsecure() && mLockPatternUtils.isSecure()) {
-            if (!mNoRegister && mShakeListener != null) {
-                mShakeListener.registerShakeListener();
-            }
-            if (mViewMediatorCallback != null) {
-                scheduleShakeSecurity(0);
-            }
+        if (mShakeListener != null) {
+            mShakeListener.registerShakeListener();
         }
-        mNoRegister = false;
+        if (shakeInsecure() && mViewMediatorCallback != null) {
+            scheduleShakeSecurity(0);
+        }
     }
 
     @Override
@@ -1951,6 +2039,7 @@ public class KeyguardHostView extends KeyguardViewBase {
                     @Override
                     public void hideSecurityView(int duration) {
                         mSecurityViewContainer.animate().alpha(0).setDuration(duration);
+                        unRegisterShakeListener();
                     }
 
                     @Override
@@ -2096,9 +2185,7 @@ public class KeyguardHostView extends KeyguardViewBase {
     }
 
     private void unRegisterShakeListener() {
-        if (mShakeEnabled && mLockPatternUtils.isSecure()
-                && mShakeListener != null) {
-            mNoRegister = false;
+        if (mShakeListener != null) {
             mShakeListener.unregisterShakeListener();
         }
     }

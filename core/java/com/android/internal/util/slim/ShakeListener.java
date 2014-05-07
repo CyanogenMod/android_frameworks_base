@@ -16,7 +16,11 @@
 
 package com.android.internal.util.slim;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Handler;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,13 +28,8 @@ import android.hardware.SensorManager;
 
 public class ShakeListener implements SensorEventListener {
 
-    private static final int MIN_ACCEL = 12;
-    private static final int MIN_SHAKES = 5;
     private static final int MAX_DURATION = 400;
-
-    private static final int X_ACCEL = 0;
-    private static final int Y_ACCEL = 1;
-    private static final int Z_ACCEL = 2;
+    private static final int MIN_SHAKES = 4;
 
     private float mGravX = 0.0f;
     private float mGravY = 0.0f;
@@ -43,6 +42,8 @@ public class ShakeListener implements SensorEventListener {
     private long mLastShake = 0;
     private int mShakeCount = 0;
 
+    private boolean mCoolOff;
+    private int mMinAccel = 12;
     /* mAccelDirection grid-locks the shake listener
      * to listen to only one direction for each series of
      * shakes.  This allows the user to shake in any back
@@ -50,11 +51,13 @@ public class ShakeListener implements SensorEventListener {
      * direction they must choose
      */
     private int mAccelDirection = -1;
+    private int mLastShakeDirection = -1;
 
     private Context mContext;
 
     private SensorManager mSensorManager;
     private OnShakeListener mShakeListener;
+    private Handler mHandler = new Handler();
 
     public ShakeListener(Context context) {
         mContext = context;
@@ -64,8 +67,39 @@ public class ShakeListener implements SensorEventListener {
         mShakeListener = shakeListener;
     }
 
+    /*
+     * Defaults assume a very intentional shake
+     * Sensitivity may need adjusting in other situations
+     */
+    public void setSensitivity(boolean coolOff, int sensitivity) {
+        switch (sensitivity) {
+            case -1:
+                // Extra sensitive
+                mMinAccel = 10;
+                break;
+            case 1:
+                // Less sensitive
+                mMinAccel = 14;
+                break;
+            default:
+                // Default no change
+                mMinAccel = 12;
+                break;
+        }
+        mCoolOff = coolOff;
+    }
+
+    public void setDestroyEvents(final String[] events) {
+        IntentFilter filter = new IntentFilter();
+        for (int i = 0; i < events.length; i++) {
+            filter.addAction(events[i]);
+        }
+        mContext.registerReceiver(mBroadcastReceiver, filter);
+    }
+
     public interface OnShakeListener {
-        public void onShake();
+        // The direction of the shake is passed
+        public void onShake(int direction);
     }
 
     private SensorManager getSensorManager() {
@@ -95,40 +129,42 @@ public class ShakeListener implements SensorEventListener {
         mGravY = alpha * mGravY + (1 - alpha) * event.values[SensorManager.DATA_Y];
         mGravZ = alpha * mGravZ + (1 - alpha) * event.values[SensorManager.DATA_Z];
 
-        mAccelX = event.values[SensorManager.DATA_X] - mGravX;
-        mAccelY = event.values[SensorManager.DATA_Y] - mGravY;
+        mAccelX = event.values[SensorManager.DATA_X] - mGravX + 1.0f;
+        mAccelY = event.values[SensorManager.DATA_Y] - mGravY + 1.5f;
         mAccelZ = event.values[SensorManager.DATA_Z] - mGravZ;
 
         float maxLinearAcceleration = 0.0f;
 
         switch (mAccelDirection) {
-            case X_ACCEL:
+            case SensorManager.DATA_X:
                 maxLinearAcceleration = mAccelX;
                 break;
-            case Y_ACCEL:
+            case SensorManager.DATA_Y:
                 maxLinearAcceleration = mAccelY;
                 break;
-            case Z_ACCEL:
+            case SensorManager.DATA_Z:
                 maxLinearAcceleration = mAccelZ;
                 break;
             default:
                 maxLinearAcceleration = mAccelX;
-                mAccelDirection = X_ACCEL;
+                mAccelDirection = SensorManager.DATA_X;
                 if (mAccelY > maxLinearAcceleration) {
-                    mAccelDirection = Y_ACCEL;
+                    mAccelDirection = SensorManager.DATA_Y;
                     maxLinearAcceleration = mAccelY;
                 }
                 if (mAccelZ > maxLinearAcceleration) {
-                    mAccelDirection = Z_ACCEL;
+                    mAccelDirection = SensorManager.DATA_Z;
                     maxLinearAcceleration = mAccelZ;
                 }
-                if (maxLinearAcceleration < MIN_ACCEL) {
+                if (maxLinearAcceleration < mMinAccel) {
                     mAccelDirection = -1;
                 }
                 break;
         }
 
-        if (maxLinearAcceleration >= MIN_ACCEL) {
+        if (maxLinearAcceleration >= mMinAccel) {
+            mHandler.removeCallbacks(resetDirection);
+            mHandler.postDelayed(resetDirection, MAX_DURATION);
             long now = System.currentTimeMillis();
             boolean firstShake = false;
 
@@ -147,25 +183,68 @@ public class ShakeListener implements SensorEventListener {
                     mLastShake = now;
                     mShakeCount++;
                     if (mShakeCount >= MIN_SHAKES) {
-                        mShakeListener.onShake();
-                        mInitialShake = 0;
-                        mLastShake = 0;
-                        mShakeCount = 0;
-                        mAccelDirection = -1;
+                        if (mLastShakeDirection != mAccelDirection) {
+                            // Set directly to x,y,z - 0,1,2 - AOSP changes
+                            // thus won't affect our shake listeners and we
+                            // can keep the values for all future versions
+                            switch (mAccelDirection) {
+                                case SensorManager.DATA_X:
+                                    mShakeListener.onShake(0);
+                                    break;
+                                case SensorManager.DATA_Y:
+                                    mShakeListener.onShake(1);
+                                    break;
+                                case SensorManager.DATA_Z:
+                                    mShakeListener.onShake(2);
+                                    break;
+                            }
+                            if (mCoolOff) {
+                                mLastShakeDirection = mAccelDirection;
+                                mHandler.removeCallbacks(delayShakes);
+                                mHandler.postDelayed(delayShakes, MAX_DURATION + 300);
+                            }
+                        }
+                        resetShakes();
                     }
                 }
             } else {
                 // Gravity met but too slow
-                mInitialShake = now;
-                mLastShake = now;
-                mShakeCount = 1;
-                mAccelDirection = -1;
+                resetShakes();
             }
         }
+    }
+
+    private void resetShakes() {
+        mGravX = 0.0f;
+        mGravY = 0.0f;
+        mGravZ = 0.0f;
+        mInitialShake = 0;
+        mLastShake = 0;
+        mShakeCount = 0;
+        mAccelDirection = -1;
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
+
+    final Runnable delayShakes = new Runnable () {
+        public void run() {
+            mLastShakeDirection = -1;
+        }
+    };
+
+    final Runnable resetDirection = new Runnable () {
+        public void run() {
+            resetShakes();
+        }
+    };
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            unregisterShakeListener();
+            ShakeListener.this.mContext.unregisterReceiver(mBroadcastReceiver);
+        }
+    };
 
 }

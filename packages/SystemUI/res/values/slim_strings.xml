@@ -44,6 +44,7 @@
     <string name="shortcut_immersive">Immersive Mode</string>
     <string name="shortcut_quiethours">Quiethours</string>
     <string name="shortcut_rotation">Rotation</string>
+    <string name="shortcut_shakeevent">Shake events</string>
     <string name="shortcut_torch">Torch</string>
     <string name="shortcut_reboot">Reboot</string>
     <string name="shortcut_recovery">Recovery</string>
@@ -104,6 +105,8 @@
     <string name="quick_settings_quiethours_off">Quiet hours off</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE off</string>
+    <string name="quick_settings_shakeevents">Shake events</string>
+    <string name="quick_settings_shakeevents_off">Shake events off</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_expanded_desktop">Expanded</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>

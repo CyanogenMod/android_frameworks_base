@@ -45,6 +45,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_QUIETHOURS;
 import static com.android.internal.util.slim.QSConstants.TILE_RINGER;
 import static com.android.internal.util.slim.QSConstants.TILE_SCREENTIMEOUT;
 import static com.android.internal.util.slim.QSConstants.TILE_SETTINGS;
+import static com.android.internal.util.slim.QSConstants.TILE_SHAKE;
 import static com.android.internal.util.slim.QSConstants.TILE_SLEEP;
 import static com.android.internal.util.slim.QSConstants.TILE_SYNC;
 import static com.android.internal.util.slim.QSConstants.TILE_THEME;
@@ -116,6 +117,7 @@ import com.android.systemui.quicksettings.QuietHoursTile;
 import com.android.systemui.quicksettings.RingerModeTile;
 import com.android.systemui.quicksettings.ScreenTimeoutTile;
 import com.android.systemui.quicksettings.SleepScreenTile;
+import com.android.systemui.quicksettings.ShakeEventTile;
 import com.android.systemui.quicksettings.SyncTile;
 import com.android.systemui.quicksettings.ThemeTile;
 import com.android.systemui.quicksettings.ToggleLockscreenTile;
@@ -316,6 +318,8 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_WEATHER)) {
                 qs = new WeatherTile(mContext, this, mHandler);
                 WeatherDialog();
+            } else if (tile.equals(TILE_SHAKE)) {
+                qs = new ShakeEventTile(mContext, this);
             } else if (tile.contains(TILE_CUSTOM)) {
                 qs = new CustomTile(mContext, this, findCustomKey(tile));
             } else if (tile.contains(TILE_CONTACT)) {

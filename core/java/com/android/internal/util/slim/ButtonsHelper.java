@@ -219,6 +219,33 @@ public class ButtonsHelper {
                     config);
     }
 
+    /*
+     * Get and set the list of apps where shaking the device will do nothing
+     */
+    public static ArrayList<ButtonConfig> getDisabledShakeApps(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.DISABLED_SHAKE_APPS,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = "";
+        }
+
+        return (ConfigSplitHelper.getButtonsConfigValues(context, config, null, null, true));
+    }
+
+    public static void setDisabledShakeApps(Context context,
+            ArrayList<ButtonConfig> buttonsConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = "";
+        } else {
+            config = ConfigSplitHelper.setButtonsConfig(buttonsConfig, true);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.DISABLED_SHAKE_APPS, config);
+    }
+
     // get and set the lockcreen shortcut configs from provider and return propper arraylist objects
     // @ButtonConfig
     public static ArrayList<ButtonConfig> getLockscreenShortcutConfig(Context context) {

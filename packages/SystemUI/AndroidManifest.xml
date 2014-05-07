@@ -349,6 +349,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.android.systemui.shortcuts.ShakeEvents"
+            android:label="@string/shortcut_shakeevent"
+            android:icon="@drawable/ic_qs_shake_events"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.systemui.SHORTCUT" />
+                <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.android.systemui.shortcuts.Recovery"
             android:label="@string/shortcut_recovery"
             android:icon="@drawable/ic_qs_reboot_recovery"
