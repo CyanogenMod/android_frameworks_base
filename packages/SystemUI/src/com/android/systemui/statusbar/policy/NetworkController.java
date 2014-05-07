@@ -167,6 +167,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     int mLastCombinedSignalIconId = -1;
     int mLastDataTypeIconId = -1;
     String mLastCombinedLabel = "";
+    private String mCustomCarrierLabel = "";
 
     private boolean mHasMobileDataFeature;
 
@@ -262,6 +263,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         updateAirplaneMode();
 
         mLastLocale = mContext.getResources().getConfiguration().locale;
+
+        mCustomCarrierLabel = Settings.System.getStringForUser(mContext.getContentResolver(),
+                Settings.System.CUSTOM_CARRIER_LABEL, UserHandle.USER_CURRENT);
 
         SettingsObserver settingsObserver = new SettingsObserver(new Handler());
         settingsObserver.observe();
@@ -442,6 +446,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         } else if (action.equals(Intent.ACTION_CUSTOM_CARRIER_LABEL_CHANGED)) {
             refreshViews();
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+            mCustomCarrierLabel = Settings.System.getStringForUser(mContext.getContentResolver(),
+                Settings.System.CUSTOM_CARRIER_LABEL, UserHandle.USER_CURRENT);
+
             refreshLocale();
             refreshViews();
         } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
@@ -1065,9 +1072,6 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         int N;
         final boolean emergencyOnly = isEmergencyOnly();
 
-        final String customCarrierLabel = Settings.System.getStringForUser(mContext.getContentResolver(),
-                Settings.System.CUSTOM_CARRIER_LABEL, UserHandle.USER_CURRENT);
-
         if (!mHasMobileDataFeature) {
             mDataSignalIconId = mPhoneSignalIconId = 0;
             mQSPhoneSignalIconId = 0;
@@ -1222,9 +1226,10 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
         }
 
-        if (customCarrierLabel !=null && !TextUtils.isEmpty(customCarrierLabel)) {
-            combinedLabel = customCarrierLabel;
-            mobileLabel = customCarrierLabel;
+        if (mCustomCarrierLabel !=null && !TextUtils.isEmpty(mCustomCarrierLabel)) {
+            combinedLabel = mCustomCarrierLabel;
+            mobileLabel = mCustomCarrierLabel;
+            wifiLabel = mCustomCarrierLabel;
         }
 
         // Cleanup the double quotes
