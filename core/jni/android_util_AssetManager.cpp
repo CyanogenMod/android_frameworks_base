@@ -544,6 +544,43 @@ static jint android_content_AssetManager_addIconPath(JNIEnv* env, jobject clazz,
     return (res) ? (jint)cookie : 0;
 }
 
+static jint android_content_AssetManager_addCommonOverlayPath(JNIEnv* env, jobject clazz,
+                                                     jstring packagePath, jstring resArscPath,
+                                                     jstring resApkPath, jstring prefixPath)
+{
+    ScopedUtfChars packagePath8(env, packagePath);
+    if (packagePath8.c_str() == NULL) {
+        return 0;
+    }
+
+    ScopedUtfChars resArscPath8(env, resArscPath);
+    if (resArscPath8.c_str() == NULL) {
+        return 0;
+    }
+
+    ScopedUtfChars resApkPath8(env, resApkPath);
+    if (resApkPath8.c_str() == NULL) {
+        return 0;
+    }
+
+    ScopedUtfChars prefixPath8(env, prefixPath);
+    if (prefixPath8.c_str() == NULL) {
+        return 0;
+    }
+
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return 0;
+    }
+
+    void* cookie;
+    bool res = am->addCommonOverlayPath(String8(packagePath8.c_str()), &cookie,
+            String8(resArscPath8.c_str()), String8(resApkPath8.c_str()),
+            String8(prefixPath8.c_str()));
+
+    return (res) ? (jint)cookie : 0;
+}
+
 static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject clazz,
                                                      jstring packagePath, jstring resArscPath, jstring resApkPath,
                                                      jstring targetPkgPath, jstring prefixPath)
@@ -579,8 +616,9 @@ static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject cla
     }
 
     void* cookie;
-    bool res = am->addOverlayPath(String8(packagePath8.c_str()), &cookie, String8(resArscPath8.c_str()),
-            String8(resApkPath8.c_str()), String8(targetPkgPath8.c_str()), String8(prefixPath8.c_str()));
+    bool res = am->addOverlayPath(String8(packagePath8.c_str()), &cookie,
+            String8(resArscPath8.c_str()), String8(resApkPath8.c_str()),
+            String8(targetPkgPath8.c_str()), String8(prefixPath8.c_str()));
 
     return (res) ? (jint)cookie : 0;
 }
@@ -1855,6 +1893,8 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getBasePackageId },
     { "addIconPath",   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I",
         (void*) android_content_AssetManager_addIconPath },
+    { "addCommonOverlayPath",   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I",
+        (void*) android_content_AssetManager_addCommonOverlayPath },
     { "removeOverlayPath",   "(Ljava/lang/String;I)Z",
         (void*) android_content_AssetManager_removeOverlayPath },
     { "isUpToDate",     "()Z",

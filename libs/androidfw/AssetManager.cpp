@@ -300,6 +300,43 @@ bool AssetManager::addIconPath(const String8& packagePath, void** cookie, const 
 }
 
 
+bool AssetManager::addCommonOverlayPath(const String8& packagePath, void** cookie,
+        const String8& resArscPath, const String8& resApkPath, const String8& prefixPath)
+{
+    AutoMutex _l(mLock);
+
+    ALOGV("package path: %s, resArscPath %s, resApkPath %s, prefixPath %s",
+            packagePath.string(), resArscPath.string(),
+            resApkPath.string(), prefixPath.string());
+
+    // Skip if we have it already.
+    for (size_t i=0; i < mAssetPaths.size(); i++) {
+        if (mAssetPaths[i].path == packagePath && mAssetPaths[i].resfilePath == resArscPath) {
+            if (cookie) {
+                *cookie = (void*)(i+1);
+            }
+            return true;
+        }
+    }
+
+    asset_path oap;
+    oap.path = packagePath;
+    oap.type = ::getFileType(packagePath.string());
+    oap.resfilePath = resArscPath;
+    oap.resApkPath = resApkPath;
+    oap.prefixPath = prefixPath;
+    mAssetPaths.add(oap);
+    *cookie = (void*)mAssetPaths.size();
+
+    ResTable* rt = mResources;
+    if (rt != NULL) {
+        return updateResTableFromAssetPath(rt, oap, *cookie);
+    }
+
+    return true;
+}
+
+
 /*
  * packagePath: Path to the APK that contains our overlay
  * cookie: Set by this method. The caller can use this cookie to refer to the asset path that has been added.
