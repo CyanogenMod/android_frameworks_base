@@ -340,6 +340,9 @@
   <java-symbol type="bool" name="config_ascii_7bit_support_for_long_message" />
   <java-symbol type="bool" name="config_lte_capable" />
   <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
+
+  <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
+
   <java-symbol type="integer" name="config_bluetooth_max_advertisers" />
   <java-symbol type="integer" name="config_bluetooth_max_scan_filters" />
   <java-symbol type="integer" name="config_cursorWindowSize" />
@@ -2101,4 +2104,8 @@
 
   <!-- sim refresh for dual mode card -->
   <java-symbol type="bool" name="config_sim_refresh_for_dual_mode_card" />
+
+  <!-- Data Connectivity Error Configurations -->
+  <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />
+  <java-symbol type="bool" name="config_protocol_errors_perm_failure" />
 </resources>
