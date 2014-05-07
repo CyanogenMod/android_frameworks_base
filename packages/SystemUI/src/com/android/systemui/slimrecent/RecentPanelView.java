@@ -85,7 +85,6 @@ public class RecentPanelView {
     private static final int MENU_APP_DETAILS_ID   = 0;
     private static final int MENU_APP_PLAYSTORE_ID = 1;
     private static final int MENU_APP_AMAZON_ID    = 2;
-    private static final int MENU_APP_POPUP_ID     = 3;
 
     private static final String PLAYSTORE_REFERENCE = "com.android.vending";
     private static final String AMAZON_REFERENCE    = "com.amazon.venezia";
@@ -189,7 +188,7 @@ public class RecentPanelView {
             public boolean onLongClick(Card card, View view) {
                 constructMenu(
                         (ImageButton) view.findViewById(R.id.card_header_button_expand),
-                        td);
+                        td.packageName);
                 return true;
             }
         });
@@ -278,7 +277,7 @@ public class RecentPanelView {
     /**
      * Construct popup menu for longpress.
      */
-    private void constructMenu(final View selectedView, final TaskDescription td) {
+    private void constructMenu(final View selectedView, final String packageName) {
         if (selectedView == null) {
             return;
         }
@@ -296,14 +295,11 @@ public class RecentPanelView {
         popup.getMenu().add(0, MENU_APP_DETAILS_ID, 0,
                 mContext.getResources().getString(R.string.status_bar_recent_inspect_item_title));
 
-        popup.getMenu().add(0, MENU_APP_POPUP_ID, 0,
-                mContext.getResources().getString(R.string.status_bar_recent_floating_item_title));
-
         // Add playstore or amazon entry if it is provided by the application.
-        if (checkAppInstaller(td.packageName, PLAYSTORE_REFERENCE)) {
+        if (checkAppInstaller(packageName, PLAYSTORE_REFERENCE)) {
             popup.getMenu().add(0, MENU_APP_PLAYSTORE_ID, 0,
                     getApplicationLabel(PLAYSTORE_REFERENCE));
-        } else if (checkAppInstaller(td.packageName, AMAZON_REFERENCE)) {
+        } else if (checkAppInstaller(packageName, AMAZON_REFERENCE)) {
             popup.getMenu().add(0, MENU_APP_AMAZON_ID, 0,
                     getApplicationLabel(AMAZON_REFERENCE));
         }
@@ -312,15 +308,13 @@ public class RecentPanelView {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == MENU_APP_DETAILS_ID) {
-                    startApplicationDetailsActivity(td.packageName, null, null);
-                } else if (item.getItemId() == MENU_APP_POPUP_ID) {
-                    startApplicationPopup(td);
+                    startApplicationDetailsActivity(packageName, null, null);
                 } else if (item.getItemId() == MENU_APP_PLAYSTORE_ID) {
                     startApplicationDetailsActivity(null,
-                            PLAYSTORE_APP_URI_QUERY + td.packageName, PLAYSTORE_REFERENCE);
+                            PLAYSTORE_APP_URI_QUERY + packageName, PLAYSTORE_REFERENCE);
                 } else if (item.getItemId() == MENU_APP_AMAZON_ID) {
                     startApplicationDetailsActivity(null,
-                            AMAZON_APP_URI_QUERY + td.packageName, AMAZON_REFERENCE);
+                            AMAZON_APP_URI_QUERY + packageName, AMAZON_REFERENCE);
                 }
                 return true;
             }
@@ -483,33 +477,6 @@ public class RecentPanelView {
             final Intent intent = td.intent;
             intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
                     | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                    | Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (DEBUG) Log.v(TAG, "Starting activity " + intent);
-            try {
-                mContext.startActivityAsUser(intent, getAnimation(),
-                        new UserHandle(UserHandle.USER_CURRENT));
-            } catch (SecurityException e) {
-                Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
-            } catch (ActivityNotFoundException e) {
-                Log.e(TAG, "Error launching activity " + intent, e);
-            }
-        }
-        exit();
-    }
-
-    private void startApplicationPopup(TaskDescription td) {
-        // Starting app is requested by the user.
-        // Move it to foreground or start it with custom animation.
-        final ActivityManager am = (ActivityManager)
-                mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        if (td.taskId >= 0) {
-            // This is an active task; it should just go to the foreground.
-            am.moveTaskToFront(td.taskId, ActivityManager.MOVE_TASK_WITH_HOME, getAnimation());
-        } else {
-            final Intent intent = td.intent;
-            intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                    | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                    | Intent.FLAG_FLOATING_WINDOW
                     | Intent.FLAG_ACTIVITY_NEW_TASK);
             if (DEBUG) Log.v(TAG, "Starting activity " + intent);
             try {
