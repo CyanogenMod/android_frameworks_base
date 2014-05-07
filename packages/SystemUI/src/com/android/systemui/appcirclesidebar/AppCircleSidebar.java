@@ -50,6 +50,7 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
     private PackageAdapter mPackageAdapter;
     private Context mContext;
     private boolean mFirstTouch = false;
+    private boolean mFloatingWindow = false;
     private SettingsObserver mSettingsObserver;
     private ArrayList<String> mAppRunning;
 
@@ -367,6 +368,10 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (mFloatingWindow) {
+            intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+            mFloatingWindow = false;
+        }
         intent.setComponent(cn);
         mContext.startActivity(intent);
     }
@@ -379,6 +384,10 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         intent.setFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
                         | Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        if (mFloatingWindow) {
+            intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
+            mFloatingWindow = false;
+        }
         intent.setComponent(cn);
         mContext.startActivity(intent);
     }
@@ -440,7 +449,10 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
                    popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getItemId() == R.id.sidebar_inspect_item) {
+                    if (item.getItemId() == R.id.sidebar_float_item) {
+                        mFloatingWindow = true;
+                        launchApplication(info.activityInfo.packageName, info.activityInfo.name);
+                    } else if (item.getItemId() == R.id.sidebar_inspect_item) {
                         startApplicationDetailsActivity(info.activityInfo.packageName);
                     } else if (item.getItemId() == R.id.sidebar_stop_item) {
                         killApp(info.activityInfo.packageName);
