@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-** Copyright 2012, The Android Open Source Project
+** Copyright (c) 2014 The Linux Foundation. All rights reserved.
+** Not a Contribution.
+** Copyright 2009, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -17,28 +19,10 @@
 */
 -->
 
+<!-- These resources are around just to allow their values to be customized
+     for different hardware and product builds.  Do not translate. -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- CDMA home system id for Verizon -->
-    <string-array translatable="false" name="config_cdma_home_system">
-        <item>64</item>
-        <item>65</item>
-        <item>76</item>
-        <item>77</item>
-        <item>78</item>
-        <item>79</item>
-        <item>80</item>
-        <item>81</item>
-        <item>82</item>
-        <item>83</item>
-    </string-array>
-
-    <bool name="config_auto_attach_data_on_creation">false</bool>
-
-    <string-array translatable="false" name="config_sms_convert_destination_number_support">
-        <item>true</item>
-    </string-array>
-    <string translatable="false" name="prohibit_manual_network_selection_in_gobal_mode">true</string>
     <!-- Configuration that determines if ACTIVATE_REJECT_GGSN is to be
          treated as a permanent error -->
     <bool translatable="false" name="config_reject_ggsn_perm_failure">false</bool>
