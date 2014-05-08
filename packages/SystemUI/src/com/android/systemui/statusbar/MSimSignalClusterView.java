@@ -265,25 +265,26 @@ public class MSimSignalClusterView
             mDataActivityId[subscription] = activityIcon;
             mDataVisible[subscription] = (activityIcon != 0) ? true : false;
         }
-
         if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
-            if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
-                mMobileCdmaVisible = true;
-                mMobileCdma1xOnlyVisible = false;
-                mMobileStrengthId[0] = 0;
+            if (subscription == MSimConstants.DEFAULT_SUBSCRIPTION) {
+                if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
+                    mMobileCdmaVisible = true;
+                    mMobileCdma1xOnlyVisible = false;
+                    mMobileStrengthId[0] = 0;
 
-                mMobileCdma1xId = strengthIcon;
-                mMobileCdma3gId = getMobileCdma3gId(mMobileCdma1xId);
-            } else if (show1xOnly() || isRoaming()) {
-                //when it is roaming, just show one icon, rather than two icons for CT.
-                mMobileCdmaVisible = false;
-                mMobileCdma1xOnlyVisible = true;
-                mMobileStrengthId[0] = 0;
+                    mMobileCdma1xId = strengthIcon;
+                    mMobileCdma3gId = getMobileCdma3gId(mMobileCdma1xId);
+                } else if (show1xOnly() || isRoaming()) {
+                    //when it is roaming, just show one icon, rather than two icons for CT.
+                    mMobileCdmaVisible = false;
+                    mMobileCdma1xOnlyVisible = true;
+                    mMobileStrengthId[0] = 0;
 
-                mMobileCdma1xOnlyId = strengthIcon;
-            } else {
-                mMobileCdmaVisible = false;
-                mMobileCdma1xOnlyVisible = false;
+                    mMobileCdma1xOnlyId = strengthIcon;
+                } else {
+                    mMobileCdmaVisible = false;
+                    mMobileCdma1xOnlyVisible = false;
+                }
             }
         } else if (mStyle == STATUS_BAR_STYLE_DATA_VOICE) {
             if (showBothDataAndVoice(subscription)
