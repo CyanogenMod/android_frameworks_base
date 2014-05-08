@@ -163,28 +163,6 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
     }
 
     public void bumpConfiguration() {
-        if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) == 1) {
-
-            // Get original offset
-            int gravityIndex = findGravityOffset(convertPieGravitytoGravity(
-                    Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.PIE_GRAVITY, 3, UserHandle.USER_CURRENT)));
-
-            // Orient Pie to that place
-            reorient(gravityArray[gravityIndex], false);
-
-            // Now re-orient it for landscape orientation
-            switch(mDisplay.getRotation()) {
-                case Surface.ROTATION_270:
-                    reorient(gravityArray[gravityIndex + 1], false);
-                    break;
-                case Surface.ROTATION_90:
-                    reorient(gravityArray[gravityIndex - 1], false);
-                    break;
-            }
-        }
-
         show(false);
         if (mPieControl != null) mPieControl.onPieConfigurationChanged();
     }
@@ -223,22 +201,6 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
         show(mShowing);
         if (storeSetting) {
             int gravityOffset = mOrientation;
-            if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) == 1) {
-
-                gravityOffset = findGravityOffset(mOrientation);
-                switch(mDisplay.getRotation()) {
-                    case Surface.ROTATION_270:
-                        gravityOffset = gravityArray[gravityOffset - 1];
-                        break;
-                    case Surface.ROTATION_90:
-                        gravityOffset = gravityArray[gravityOffset + 1];
-                        break;
-                    default:
-                        gravityOffset = mOrientation;
-                        break;
-                }
-            }
             Settings.System.putIntForUser(mContext.getContentResolver(),
                     Settings.System.PIE_GRAVITY, convertGravitytoPieGravity(gravityOffset), UserHandle.USER_CURRENT);
         }
@@ -320,7 +282,7 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
         } else if (buttonName.equals(PieControl.SCREENSHOT_BUTTON)) {
             takeScreenshot();
         } else if (buttonName.equals(PieControl.POWER_BUTTON)) {
-            goToSleep();
+            injectKeyDelayed(KeyEvent.KEYCODE_POWER);
         } else if (buttonName.equals(PieControl.KILL_TASK_BUTTON)) {
             KillTask mKillTask = new KillTask(mContext);
             mHandler.post(mKillTask);
@@ -342,7 +304,7 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
                         ServiceManager.getService(mContext.STATUS_BAR_SERVICE)).toggleQSShade();
             } catch (RemoteException e) {
                 // wtf is this
-            } 
+            }
         }
     }
 
@@ -364,11 +326,6 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
             } catch (ActivityNotFoundException e) {
             }
         }
-    }
-
-    private void goToSleep() {
-        PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-        pm.goToSleep(SystemClock.uptimeMillis());
     }
 
     private void toggleLastApp() {
@@ -469,7 +426,6 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
                         };
                         msg.replyTo = new Messenger(h);
                         msg.arg1 = msg.arg2 = 0;
-
                         /*
                          * remove for the time being if (mStatusBar != null &&
                          * mStatusBar.isVisibleLw()) msg.arg1 = 1; if
@@ -530,6 +486,6 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
     };
 
     public boolean getKeyguardStatus() {
-        return mKeyguardManger.isKeyguardLocked() && mKeyguardManger.isKeyguardSecure();
+        return mKeyguardManger.isKeyguardLocked() && mKeyguardManger.isKeyguardSecure() || mKeyguardManger.isKeyguardLocked() && !mKeyguardManger.isKeyguardSecure();
     }
 }

@@ -346,12 +346,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     };
 
-    private class SettingsObserver extends ContentObserver {
-        public SettingsObserver(Handler handler) {
+    private class PieSettingsObserver extends ContentObserver {
+        PieSettingsObserver(Handler handler) {
             super(handler);
         }
 
-        public void observe() {
+        void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_CONTROLS), false, this, UserHandle.USER_ALL);
@@ -359,8 +359,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                     Settings.System.PIE_TRIGGER), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_GRAVITY), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_STICK), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.EXPANDED_DESKTOP_STATE), false, this, UserHandle.USER_ALL);
         }
@@ -371,12 +369,11 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_CONTROLS, 0, UserHandle.USER_CURRENT) == 0) {
                     PieStatusPanel.ResetPanels(true);
-            } else if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) == 0) {
-                updatePieControls();
             }
         }
     };
+
+    private PieSettingsObserver mPieSettingsObserver = new PieSettingsObserver(mHandler);
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
         @Override
@@ -486,6 +483,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mContext.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED), true,
                 mProvisioningObserver);
+
+        mPieSettingsObserver.observe();
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
@@ -620,16 +619,10 @@ public abstract class BaseStatusBar extends SystemUI implements
             Settings.System.getUriFor(Settings.System.PIE_GRAVITY), false, new ContentObserver(new Handler()) {
                 @Override
                 public void onChange(boolean selfChange) {
-                    if (Settings.System.getInt(mContext.getContentResolver(),
-                            Settings.System.PIE_STICK, 1) == 0) {
-                        updatePieControls();
-                    }
+                    updatePieControls();
                 }
             });
             attachPie();
-
-        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
-        settingsObserver.observe();
     }
 
     public void setHaloTaskerActive(boolean haloTaskerActive, boolean updateNotificationIcons) {

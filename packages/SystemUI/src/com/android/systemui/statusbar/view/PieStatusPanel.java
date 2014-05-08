@@ -16,49 +16,31 @@
 
 package com.android.systemui.statusbar.view;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
-import android.database.ContentObserver;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.View.OnTouchListener;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 
-import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
-import com.android.systemui.statusbar.NotificationData;
-import com.android.systemui.statusbar.policy.NotificationRowLayout;
-import com.android.systemui.statusbar.PieControlPanel;
-
 import java.util.ArrayList;
-import java.util.List;
+
+import com.android.systemui.R;
+import com.android.systemui.statusbar.NotificationData;
+import com.android.systemui.statusbar.PieControlPanel;
+import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.statusbar.policy.NotificationRowLayout;
 
 public class PieStatusPanel {
 
@@ -139,8 +121,8 @@ public class PieStatusPanel {
     private View.OnClickListener mHaloButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
             // Activate HALO
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.HALO_ACTIVE, 1);
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.HALO_ACTIVE, 1, UserHandle.USER_CURRENT);
             hidePanels(true);
         }
     };
@@ -153,6 +135,7 @@ public class PieStatusPanel {
         }
     };
 
+
     private View.OnClickListener mNotificationButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
             setCurrentViewState(PieStatusPanel.NOTIFICATIONS_PANEL);
@@ -164,11 +147,11 @@ public class PieStatusPanel {
     protected void showHaloButton(boolean show) {
         if (mHaloButton != null) {
             if(show) {
-                mHaloActive = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.HALO_ACTIVE, 0) == 1;
-                mHaloEnabled = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.HALO_ENABLED, 0) == 1;
-                mHaloButton.setVisibility(!mHaloActive ? View.VISIBLE : View.GONE);
+                mHaloActive = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.HALO_ACTIVE, 0, UserHandle.USER_CURRENT) == 1;
+                mHaloEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.HALO_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+                mHaloButton.setVisibility(!mHaloActive && mHaloEnabled ? View.VISIBLE : View.GONE);
             } else {
                 mHaloButton.setVisibility(View.GONE);
             }
@@ -378,7 +361,7 @@ public class PieStatusPanel {
 
     private void showPanel(View panel) {
         mContentFrame.setBackgroundColor(0);
-        ValueAnimator alphAnimation  = ValueAnimator.ofInt(0, 1);
+        ValueAnimator alphAnimation = ValueAnimator.ofInt(0, 1);
         alphAnimation.addUpdateListener(new AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -439,4 +422,3 @@ public class PieStatusPanel {
                 PixelFormat.TRANSLUCENT);
     }
 }
-

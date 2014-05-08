@@ -4496,12 +4496,6 @@ public final class Settings {
         public static final String PIE_SEARCH = "pie_search";
 
         /**
-         * Pie will not rotate. Should default to 1 (yes, do not rotate)
-         * @hide
-         */
-        public static final String PIE_STICK = "pie_stick";
-
-        /**
          * Center Pie? Should default to 1 (yes, center)
          * @hide
          */

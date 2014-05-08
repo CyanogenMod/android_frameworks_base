@@ -51,6 +51,7 @@ import android.graphics.RectF;
 import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -100,6 +101,7 @@ public class PieMenu extends FrameLayout {
     private static int ANIMATOR_SNAP_GROW = ANIMATOR_ACC_INC_15 + 2;
     private static int ANIMATOR_END = ANIMATOR_SNAP_GROW;
 
+    private static final int COLOR_OUTLINES_MASK = 0x22000000;
     private static final int COLOR_ALPHA_MASK = 0xaa000000;
     private static final int COLOR_OPAQUE_MASK = 0xff000000;
     private static final int COLOR_SNAP_BACKGROUND = 0xffffffff;
@@ -193,8 +195,6 @@ public class PieMenu extends FrameLayout {
     private float mEndBattery;
     private int mBatteryLevel;
 
-    Handler mHandler;
-
     private class SnapPoint {
         public SnapPoint(int snapX, int snapY, int snapRadius, int snapAlpha, int snapGravity) {
             x = snapX;
@@ -286,27 +286,38 @@ public class PieMenu extends FrameLayout {
         mPanelOrientation = mPanel.getOrientation();
 
         // Fetch modes
-        boolean expanded = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.EXPANDED_DESKTOP_STATE, 0) == 1;
-        mUseMenuAlways = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_MENU, 1) == 1;
-        mUseLastApp = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_LAST_APP, 0) == 1;
-        mUseKillTask = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_KILL_TASK, 0) == 1;
-        mUseAppWindow = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_APP_WINDOW, 0) == 1;
-        mUseActNotif = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_ACT_NOTIF, 0) == 1;
-        mUseActQs = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_ACT_QS, 0) == 1;
-        mUseScreenShot = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_SCREENSHOT, 0) == 1;
-        mUsePower = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_POWER, 0) == 1;
-        mUseSearch = Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_SEARCH, 1) == 1;
-        mStatusMode = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_MODE, 2);
-        mPieSize = Settings.System.getFloat(mContext.getContentResolver(),
-                Settings.System.PIE_SIZE, 1.0f);
-        mPieAngle = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_ANGLE, 12);
-        mPieGap = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_GAP, 2);
-        mHapticFeedback = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) != 0;
+        boolean expanded = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 1;
+        mUseMenuAlways = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_MENU, 1, UserHandle.USER_CURRENT) == 1;
+        mUseSearch = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_SEARCH, 1, UserHandle.USER_CURRENT) == 1;
+        mUseLastApp = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_LAST_APP, 0, UserHandle.USER_CURRENT) == 1;
+        mUsePower = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_POWER, 0, UserHandle.USER_CURRENT) == 1;
+        mUseKillTask = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_KILL_TASK, 0, UserHandle.USER_CURRENT) == 1;
+        mUseAppWindow = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_APP_WINDOW, 0, UserHandle.USER_CURRENT) == 1;
+        mUseActNotif = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_ACT_NOTIF, 0, UserHandle.USER_CURRENT) == 1;
+        mUseActQs = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_ACT_QS, 0, UserHandle.USER_CURRENT) == 1;
+        mUseScreenShot = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_SCREENSHOT, 0, UserHandle.USER_CURRENT) == 1;
+        mUseSearch = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_SEARCH, 1, UserHandle.USER_CURRENT) == 1;
+        mStatusMode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_MODE, 0, UserHandle.USER_CURRENT);
+        mPieSize = Settings.System.getFloatForUser(mContext.getContentResolver(),
+                Settings.System.PIE_SIZE, 1.0f, UserHandle.USER_CURRENT);
+        mPieAngle = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_ANGLE, 12, UserHandle.USER_CURRENT);
+        mPieGap = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_GAP, 2, UserHandle.USER_CURRENT);
+        mHapticFeedback = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
         mIsProtected = mPanel.getKeyguardStatus();
 
         // Snap
@@ -386,34 +397,34 @@ public class PieMenu extends FrameLayout {
         mBatteryPathJuice = makeSlice(mStartBattery, mStartBattery, mInnerBatteryRadius, mOuterBatteryRadius, mCenter);
 
         // Colors
-        mEnableColor = (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.PIE_ENABLE_COLOR, 0) == 1);
+        mEnableColor = (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_ENABLE_COLOR, 0, UserHandle.USER_CURRENT) == 1);
 
         mNotificationPaint.setColor(getResources().getColor(R.color.status));
         mSnapBackground.setColor(getResources().getColor(R.color.snap_background));
 
         if (mEnableColor) {
-            mPieBackground.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_BACKGROUND, COLOR_PIE_BACKGROUND) | COLOR_ALPHA_MASK);
-            mPieSelected.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_SELECT, COLOR_PIE_SELECT) | COLOR_ALPHA_MASK);
-            mPieOutlines.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_OUTLINES, COLOR_PIE_OUTLINES) | COLOR_ALPHA_MASK);
-            mClockPaint.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_STATUS_CLOCK, COLOR_STATUS));
-            mAmPmPaint.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_STATUS_CLOCK, COLOR_STATUS));
-            mStatusPaint.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_STATUS, COLOR_STATUS));
-            mChevronBackgroundLeft.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_CHEVRON_LEFT, COLOR_CHEVRON_LEFT) | COLOR_OPAQUE_MASK);
-            mChevronBackgroundRight.setColor(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_CHEVRON_RIGHT, COLOR_CHEVRON_RIGHT) | COLOR_OPAQUE_MASK);
-            mBatteryJuice.setColorFilter(new PorterDuffColorFilter(extractRGB(Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.PIE_JUICE, COLOR_BATTERY_JUICE)) | COLOR_OPAQUE_MASK, Mode.SRC_ATOP));
+            mPieBackground.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_BACKGROUND, COLOR_PIE_BACKGROUND, UserHandle.USER_CURRENT) | COLOR_ALPHA_MASK);
+            mPieSelected.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_SELECT, COLOR_PIE_SELECT, UserHandle.USER_CURRENT) | COLOR_ALPHA_MASK);
+            mPieOutlines.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_OUTLINES, COLOR_PIE_OUTLINES, UserHandle.USER_CURRENT) | COLOR_OUTLINES_MASK);
+            mClockPaint.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_STATUS_CLOCK, COLOR_STATUS, UserHandle.USER_CURRENT));
+            mAmPmPaint.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_STATUS_CLOCK, COLOR_STATUS, UserHandle.USER_CURRENT));
+            mStatusPaint.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_STATUS, COLOR_STATUS, UserHandle.USER_CURRENT));
+            mChevronBackgroundLeft.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_CHEVRON_LEFT, COLOR_CHEVRON_LEFT, UserHandle.USER_CURRENT) | COLOR_OPAQUE_MASK);
+            mChevronBackgroundRight.setColor(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_CHEVRON_RIGHT, COLOR_CHEVRON_RIGHT, UserHandle.USER_CURRENT) | COLOR_OPAQUE_MASK);
+            mBatteryJuice.setColorFilter(new PorterDuffColorFilter(extractRGB(Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.PIE_JUICE, COLOR_BATTERY_JUICE, UserHandle.USER_CURRENT)) | COLOR_OPAQUE_MASK, Mode.SRC_ATOP));
 
             for (PieItem item : mItems) {
-                item.setColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.PIE_BUTTON_COLOR, COLOR_PIE_BUTTON));
+                item.setColor(Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.PIE_BUTTON_COLOR, COLOR_PIE_BUTTON, UserHandle.USER_CURRENT));
             }
         } else {
             mPieBackground.setColor(getResources().getColor(R.color.pie_background));
@@ -615,12 +626,13 @@ public class PieMenu extends FrameLayout {
             }
         });
 
-        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
-        settingsObserver.observe();
+        mPieSettingsObserver.observe();
 
         // Get all dimensions
         getDimensions();
     }
+
+    private PieSettingsObserver mPieSettingsObserver = new PieSettingsObserver(new Handler());
 
     public void init() {
         mStatusPanel = new PieStatusPanel(mContext, mPanel);
@@ -827,7 +839,7 @@ public class PieMenu extends FrameLayout {
                     float snapTouch = snapDistance < mSnapRadius * 7 ? 200 - (snapDistance * (200 - snap.alpha) / (mSnapRadius * 7)) : snap.alpha;
 
                     mSnapBackground.setAlpha((int)(snapTouch));
-                    int len = (int)(snap.radius * 1.3f + (snap.active ? mAnimators[ANIMATOR_SNAP_GROW].fraction * 500 : 0));
+                    int len = (int)(snap.radius * 1.3f);
                     int thick = (int)(len * 0.2f);
 
                     Path plus = new Path();
@@ -984,8 +996,7 @@ public class PieMenu extends FrameLayout {
         float distanceX = mCenter.x-mX;
         float distanceY = mCenter.y-mY;
         mCenterDistance = (float)Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-        float shadeTreshold = mOuterChevronRadius;
-
+        float shadeTreshold = mOuterChevronRadius; 
         int action = evt.getActionMasked();
         if (MotionEvent.ACTION_DOWN == action) {
             // Open panel
@@ -1065,7 +1076,6 @@ public class PieMenu extends FrameLayout {
                         state = distanceY < 0 ? PieStatusPanel.QUICK_SETTINGS_PANEL : PieStatusPanel.NOTIFICATIONS_PANEL;
                         break;
                 }
-
                 if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.PIE_NOTIFICATIONS, 0) == 1 && !mIsProtected) {
                     if (state == PieStatusPanel.QUICK_SETTINGS_PANEL &&
@@ -1170,8 +1180,8 @@ public class PieMenu extends FrameLayout {
     }
 
     //setup observer to do stuff!
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
+    private class PieSettingsObserver extends ContentObserver {
+        PieSettingsObserver(Handler handler) {
             super(handler);
         }
 
@@ -1179,21 +1189,31 @@ public class PieMenu extends FrameLayout {
             ContentResolver resolver = mContext.getContentResolver();
 
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_BACKGROUND), false, this);
+                    Settings.System.PIE_BACKGROUND), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_SELECT), false, this);
+                    Settings.System.PIE_SELECT), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_OUTLINES), false, this);
+                    Settings.System.PIE_OUTLINES), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_STATUS_CLOCK), false, this);
+                    Settings.System.PIE_STATUS_CLOCK), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_STATUS), false, this);
+                    Settings.System.PIE_STATUS), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_CHEVRON_LEFT), false, this);
+                    Settings.System.PIE_CHEVRON_LEFT), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_CHEVRON_RIGHT), false, this);
+                    Settings.System.PIE_CHEVRON_RIGHT), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PIE_JUICE), false, this);
+                    Settings.System.PIE_JUICE), false, this,
+                    UserHandle.USER_ALL);
+
+            // Get all dimensions
             getDimensions();
         }
 

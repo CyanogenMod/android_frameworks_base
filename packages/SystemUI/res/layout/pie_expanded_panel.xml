@@ -28,14 +28,14 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip">
+            android:paddingStart="20dip"
+            android:paddingEnd="20dip">
 
             <RelativeLayout
                 android:id="@+id/datetime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="8dp"
+                android:paddingEnd="8dp"
                 android:enabled="false"
                 >
                 <com.android.systemui.statusbar.policy.Clock
@@ -48,13 +48,28 @@
                     android:layout_centerVertical="true"
                     />
 
-                <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
-                    android:layout_toRightOf="@id/clock"
-                    android:layout_centerVertical="true"
-                    />
+		<RelativeLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@id/clock"           
+		    >	
+			<com.android.systemui.statusbar.policy.DateView 
+			    android:id="@+id/date"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:singleLine="true"
+			    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+			    />
+			<com.android.systemui.statusbar.policy.LunarDateView
+			    android:id="@+id/lunardate"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:singleLine="true"
+			    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+			    android:layout_below="@id/date"
+			    />
+		</RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -65,12 +80,9 @@
                 android:enabled="false"
                 >
 
-
                 <ImageView android:id="@+id/halo_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_notify_halo_normal"
                     android:contentDescription="@string/accessibility_halo"
@@ -79,10 +91,9 @@
                 <ImageView android:id="@+id/clear_all_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/halo_button"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/halo_button"
+                    android:layout_marginStart="8dp"
                     android:src="@drawable/ic_notify_clear"
                     android:contentDescription="@string/accessibility_clear_all"
                     />
@@ -92,8 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/clear_all_button"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:src="@drawable/ic_notify_quicksettings"
                     android:contentDescription="@string/accessibility_desc_quick_settings"
                     />
@@ -102,9 +112,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/quicksettings_button"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/clear_all_button"
+                    android:layout_marginStart="8dp"
                     android:src="@drawable/ic_notifications"
                     android:visibility="gone"
                     android:contentDescription="@string/accessibility_notifications_button"
@@ -118,8 +127,8 @@
             android:id="@+id/content_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip"
+            android:paddingStart="20dip"
+            android:paddingEnd="20dip"
             android:fadingEdge="none"
             android:overScrollMode="ifContentScrolls"/>
 
