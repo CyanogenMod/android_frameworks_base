@@ -710,6 +710,7 @@ static void android_hardware_Camera_setHasPreviewCallback(JNIEnv *env, jobject t
 static void android_hardware_Camera_setMetadataCb(JNIEnv *env, jobject thiz, jboolean mode)
 {
     ALOGV("setMetadataCb: mode:%d", (int)mode);
+#ifndef QCOM_ICS_COMPAT
     JNICameraContext* context;
     status_t rc;
     sp<Camera> camera = get_native_camera(env, thiz, &context);
@@ -723,6 +724,7 @@ static void android_hardware_Camera_setMetadataCb(JNIEnv *env, jobject thiz, jbo
     if (rc != NO_ERROR) {
         jniThrowException(env, "java/lang/RuntimeException", "set metadata mode failed");
     }
+#endif
 }
 
 static void android_hardware_Camera_addCallbackBuffer(JNIEnv *env, jobject thiz, jbyteArray bytes, int msgType) {
