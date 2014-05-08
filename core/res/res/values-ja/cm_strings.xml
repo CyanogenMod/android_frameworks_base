@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">着信やメッセージをブロックしている電話番号の変更をアプリに許可します。</string>
   <string name="permlab_accessThemeService">テーマサービスへのアクセス</string>
   <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリでは使用しません。</string>
+  <string name="permlab_setKeyguardWallpaper">キーガードの壁紙の設定</string>
+  <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
   <string name="immersive_mode_confirmation_bottom">全画面表示を終了するには、上から下にスワイプ</string>
   <string name="app_ops_access_camera">カメラへのアクセス</string>
   <string name="app_ops_access_location">位置情報へのアクセス</string>

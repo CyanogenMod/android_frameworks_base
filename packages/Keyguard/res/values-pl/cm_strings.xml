@@ -16,5 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">Ekran blokady</string>
   <string name="keyguard_discharging">Rozładowanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 </resources>

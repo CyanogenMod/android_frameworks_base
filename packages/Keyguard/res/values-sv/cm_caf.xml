@@ -16,6 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">பூட்டுதிரை</string>
-  <string name="keyguard_discharging">மின்சக்தி குறைகிறது, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_password_wrong_puk_code">Inkorrekt PUK-kod.</string>
+  <string name="keyguard_password_pin_failed">PIN-åtgärden misslyckades.</string>
+  <string name="keyguard_password_puk_failed">PUK-åtgärden misslyckades.</string>
+  <string name="keyguard_pin_accepted">Kod beviljad.</string>
+  <string name="pinpuk_attempts">\nÅterstående försök:</string>
+  <string name="lockscreen_sim_error_message_short">Ogiltigt SIM.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM är Persolåst</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

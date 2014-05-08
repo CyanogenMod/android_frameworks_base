@@ -17,8 +17,15 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="profileNameDefault">預設</string>
+  <string name="profileNameWork">工作</string>
+  <string name="profileNameHome">住家</string>
+  <string name="profileNameSilent">安靜</string>
+  <string name="profileNameNight">夜晚</string>
   <string name="profileNameAutomobile">汽車</string>
-  <string name="global_action_screenshot">螢幕擷取</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="global_action_screenshot">螢幕截圖</string>
+  <string name="reboot_recovery">修復模式</string>
+  <string name="reboot_bootloader">啟動載入程式 (Bootloader)</string>
   <string name="app_ops_access_camera">存取相機</string>
   <string name="app_ops_modify_clipboard">修改剪貼簿</string>
   <string name="app_ops_toggle_mobile_data">切換流動數據</string>
