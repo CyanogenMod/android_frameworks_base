@@ -487,6 +487,7 @@ public class InputManagerService extends IInputManager.Stub
             }
 
             if (oldFilter != null) {
+                mInputFilter = null;
                 mInputFilterHost.disconnectLocked();
                 mInputFilterChain.remove(mInputFilterHost);
                 mInputFilterHost = null;
@@ -498,6 +499,7 @@ public class InputManagerService extends IInputManager.Stub
             }
 
             if (filter != null) {
+                mInputFilter = filter;
                 ChainedInputFilterHost head = mInputFilterChain.isEmpty() ? null :
                     mInputFilterChain.get(0);
                 mInputFilterHost = new ChainedInputFilterHost(filter, head);
