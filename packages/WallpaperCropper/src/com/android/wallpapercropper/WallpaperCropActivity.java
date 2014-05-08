@@ -75,7 +75,7 @@ public class WallpaperCropActivity extends Activity {
 
     protected CropView mCropView;
     protected Uri mUri;
-    private View mSetWallpaperButton;
+    protected View mSetWallpaperButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,7 @@ public class WallpaperCropActivity extends Activity {
         // Load image in background
         final BitmapRegionTileSource.UriBitmapSource bitmapSource =
                 new BitmapRegionTileSource.UriBitmapSource(this, imageUri, 1024);
-        mSetWallpaperButton.setVisibility(View.INVISIBLE);
+        mSetWallpaperButton.setEnabled(false);
         Runnable onLoad = new Runnable() {
             public void run() {
                 if (bitmapSource.getLoadingState() != BitmapSource.State.LOADED) {
@@ -126,7 +126,7 @@ public class WallpaperCropActivity extends Activity {
                             Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    mSetWallpaperButton.setVisibility(View.VISIBLE);
+                    mSetWallpaperButton.setEnabled(true);
                 }
             }
         };
@@ -308,13 +308,14 @@ public class WallpaperCropActivity extends Activity {
         return 0;
     }
 
-    protected void setWallpaper(String filePath, final boolean finishActivityWhenDone) {
-        int rotation = getRotationFromExif(filePath);
+    protected void setWallpaper(Uri uri, final boolean finishActivityWhenDone) {
+        int rotation = getRotationFromExif(this, uri);
         BitmapCropTask cropTask = new BitmapCropTask(
-                this, filePath, null, rotation, 0, 0, true, false, null);
+                this, uri, null, rotation, 0, 0, true, false, null);
         final Point bounds = cropTask.getImageBounds();
         Runnable onEndCrop = new Runnable() {
             public void run() {
+                updateWallpaperDimensions(bounds.x, bounds.y);
                 if (finishActivityWhenDone) {
                     setResult(Activity.RESULT_OK);
                     finish();
@@ -338,6 +339,9 @@ public class WallpaperCropActivity extends Activity {
                 inSize.x, inSize.y, outSize.x, outSize.y, false);
         Runnable onEndCrop = new Runnable() {
             public void run() {
+                // Passing 0, 0 will cause launcher to revert to using the
+                // default wallpaper size
+                updateWallpaperDimensions(0, 0);
                 if (finishActivityWhenDone) {
                     setResult(Activity.RESULT_OK);
                     finish();
@@ -376,6 +380,7 @@ public class WallpaperCropActivity extends Activity {
         int cropRotation = mCropView.getImageRotation();
         float cropScale = mCropView.getWidth() / (float) cropRect.width();
 
+
         Matrix rotateMatrix = new Matrix();
         rotateMatrix.setRotate(cropRotation);
         float[] rotatedInSize = new float[] { inSize.x, inSize.y };
@@ -383,7 +388,8 @@ public class WallpaperCropActivity extends Activity {
         rotatedInSize[0] = Math.abs(rotatedInSize[0]);
         rotatedInSize[1] = Math.abs(rotatedInSize[1]);
 
-        // Due to rounding errors in the cropview renderer the edges can be slightly offset
+
+        // due to rounding errors in the cropview renderer the edges can be slightly offset
         // therefore we ensure that the boundaries are sanely defined
         cropRect.left = Math.max(0, cropRect.left);
         cropRect.right = Math.min(rotatedInSize[0], cropRect.right);
@@ -431,6 +437,7 @@ public class WallpaperCropActivity extends Activity {
 
         Runnable onEndCrop = new Runnable() {
             public void run() {
+                updateWallpaperDimensions(outWidth, outHeight);
                 if (finishActivityWhenDone) {
                     setResult(Activity.RESULT_OK);
                     finish();
@@ -808,6 +815,48 @@ public class WallpaperCropActivity extends Activity {
             if (mOnEndRunnable != null) {
                 mOnEndRunnable.run();
             }
+        }
+    }
+
+    protected void updateWallpaperDimensions(int width, int height) {
+        String spKey = getSharedPreferencesKey();
+        SharedPreferences sp = getSharedPreferences(spKey, Context.MODE_MULTI_PROCESS);
+        SharedPreferences.Editor editor = sp.edit();
+        if (width != 0 && height != 0) {
+            editor.putInt(WALLPAPER_WIDTH_KEY, width);
+            editor.putInt(WALLPAPER_HEIGHT_KEY, height);
+        } else {
+            editor.remove(WALLPAPER_WIDTH_KEY);
+            editor.remove(WALLPAPER_HEIGHT_KEY);
+        }
+        editor.commit();
+
+        suggestWallpaperDimension(getResources(),
+                sp, getWindowManager(), WallpaperManager.getInstance(this), true);
+    }
+
+    static public void suggestWallpaperDimension(Resources res,
+            final SharedPreferences sharedPrefs,
+            WindowManager windowManager,
+            final WallpaperManager wallpaperManager, boolean fallBackToDefaults) {
+        final Point defaultWallpaperSize = getDefaultWallpaperSize(res, windowManager);
+        // If we have saved a wallpaper width/height, use that instead
+
+        int savedWidth = sharedPrefs.getInt(WALLPAPER_WIDTH_KEY, -1);
+        int savedHeight = sharedPrefs.getInt(WALLPAPER_HEIGHT_KEY, -1);
+
+        if (savedWidth == -1 || savedHeight == -1) {
+            if (!fallBackToDefaults) {
+                return;
+            } else {
+                savedWidth = defaultWallpaperSize.x;
+                savedHeight = defaultWallpaperSize.y;
+            }
+        }
+
+        if (savedWidth != wallpaperManager.getDesiredMinimumWidth() ||
+                savedHeight != wallpaperManager.getDesiredMinimumHeight()) {
+            wallpaperManager.suggestDesiredDimensions(savedWidth, savedHeight);
         }
     }
 

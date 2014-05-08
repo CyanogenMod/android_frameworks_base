@@ -18,15 +18,10 @@
 */
 -->
 
-<com.android.wallpapercropper.AlphaDisableableButton
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ActionBarSetWallpaperStyle"
-    android:id="@+id/set_wallpaper_button"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingRight="20dp"
-    android:drawableLeft="@drawable/ic_actionbar_accept"
-    android:drawablePadding="8dp"
-    android:gravity="start|center_vertical"
-    android:text="@string/wallpaper_instructions">
-</com.android.wallpapercropper.AlphaDisableableButton>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+  <item
+     android:id="@+id/menu_delete"
+     android:title="@string/wallpaper_delete"
+     android:showAsAction="always"
+     android:icon="@android:drawable/ic_menu_delete" />
+</menu>

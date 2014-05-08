@@ -28,11 +28,11 @@
         android:layout_height="match_parent" />
     <ProgressBar
         android:id="@+id/loading"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        style="@android:style/Widget.Holo.ProgressBar.Large"
         android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:indeterminate="true"
         android:indeterminateOnly="true"
         android:background="@android:color/transparent" />
