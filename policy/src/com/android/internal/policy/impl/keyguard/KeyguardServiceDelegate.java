@@ -29,9 +29,6 @@ import com.android.internal.widget.LockPatternUtils;
  * local or remote instances of keyguard.
  */
 public class KeyguardServiceDelegate {
-    // TODO: propagate changes to these to {@link KeyguardTouchDelegate}
-    public static final String KEYGUARD_PACKAGE = "com.android.keyguard";
-    public static final String KEYGUARD_CLASS = "com.android.keyguard.KeyguardService";
 
     private static final String TAG = "KeyguardServiceDelegate";
     private static final boolean DEBUG = false;
@@ -103,12 +100,17 @@ public class KeyguardServiceDelegate {
     };
 
     public KeyguardServiceDelegate(Context context, LockPatternUtils lockPatternUtils) {
+        final String keyguardPackage = context.getString(
+                com.android.internal.R.string.config_keyguardPackage);
+        final String keyguardClass = context.getString(
+                com.android.internal.R.string.config_keyguardService);
+
         Intent intent = new Intent();
-        intent.setClassName(KEYGUARD_PACKAGE, KEYGUARD_CLASS);
+        intent.setClassName(keyguardPackage, keyguardClass);
         mScrim = createScrim(context);
         if (!context.bindServiceAsUser(intent, mKeyguardConnection,
                 Context.BIND_AUTO_CREATE, UserHandle.OWNER)) {
-            if (DEBUG) Log.v(TAG, "*** Keyguard: can't bind to " + KEYGUARD_CLASS);
+            if (DEBUG) Log.v(TAG, "*** Keyguard: can't bind to " + keyguardClass);
         } else {
             if (DEBUG) Log.v(TAG, "*** Keyguard started");
         }

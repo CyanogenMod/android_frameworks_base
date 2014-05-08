@@ -142,6 +142,11 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessThemeService">Allows an app to access the theme service. Should never be needed for normal apps.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+    <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setKeyguardWallpaper">Allows an app to change the lock screen wallpaper.</string>
+
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
 
     <!-- App ops requests -->

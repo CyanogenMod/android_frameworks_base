@@ -13159,12 +13159,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 info.mHardwareRenderer.safelyRun(new Runnable() {
                     @Override
                     public void run() {
+                        // cancelLayerUpdate() is not called here because the
+                        // glCanvas is null when HardwareRender is disabled
+                        // cancelLayerUpdate is actually done in the glCanvas.
                         mHardwareLayer.destroy();
                         mHardwareLayer = null;
 
-                        if (mDisplayList != null) {
-                            mDisplayList.reset();
-                        }
                         invalidate(true);
                         invalidateParentCaches();
                     }
