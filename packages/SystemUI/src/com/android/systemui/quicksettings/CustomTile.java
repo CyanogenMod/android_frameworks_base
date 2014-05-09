@@ -28,6 +28,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -64,6 +65,8 @@ public class CustomTile extends QuickSettingsTile {
 
     private QuickSettingsController mQsc;
 
+    private Handler mHandler = new Handler();
+
     private Uri mResolverSetting = null;
 
     private String mKey;
@@ -82,11 +85,13 @@ public class CustomTile extends QuickSettingsTile {
 
     private boolean mCollapse = false;
     private boolean mMatchState = false;
+    private boolean mDoubleReverse = false;
 
     private int mNumberOfActions = 0;
     private int mState = 0;
     private int mStateMatched = 0;
     private int mTypeResolved = -1;
+    private int mTaps = 0;
 
     SharedPreferences mShared;
 
@@ -103,7 +108,7 @@ public class CustomTile extends QuickSettingsTile {
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                performClickAction();
+                processClick();
             }
         };
         mOnLongClick = new View.OnLongClickListener() {
@@ -177,18 +182,43 @@ public class CustomTile extends QuickSettingsTile {
             case 0:
                 mCollapse = false;
                 mMatchState = false;
+                mDoubleReverse = false;
                 break;
             case 1:
                 mCollapse = true;
                 mMatchState = false;
+                mDoubleReverse = false;
                 break;
             case 2:
                 mCollapse = false;
                 mMatchState = true;
+                mDoubleReverse = false;
                 break;
             case 3:
                 mCollapse = true;
                 mMatchState = true;
+                mDoubleReverse = false;
+                break;
+            case 4:
+                mCollapse = false;
+                mMatchState = false;
+                mDoubleReverse = true;
+                break;
+            case 5:
+                mCollapse = true;
+                mMatchState = false;
+                mDoubleReverse = true;
+                break;
+            case 6:
+                mCollapse = false;
+                mMatchState = true;
+                mDoubleReverse = true;
+                break;
+            case 7:
+                mCollapse = true;
+                mMatchState = true;
+                mDoubleReverse = true;
+                break;
         }
     }
 
@@ -200,7 +230,22 @@ public class CustomTile extends QuickSettingsTile {
         return null;
     }
 
-    private void performClickAction() {
+    private void processClick() {
+        if (mDoubleReverse) {
+            mHandler.removeCallbacks(checkDouble);
+            if (mTaps > 0) {
+                mTaps = 0;
+                decrementTileAndPerformAction();
+            } else {
+                mTaps++;
+                mHandler.postDelayed(checkDouble, 230);
+            }
+        } else {
+            incrementTileAndPerformAction();
+        }
+    }
+
+    private void incrementTileAndPerformAction() {
         if (mState < mNumberOfActions - 1 && mState > -1) {
             mState++;
             mStateMatched = mState - 1;
@@ -209,6 +254,36 @@ public class CustomTile extends QuickSettingsTile {
             mStateMatched = mNumberOfActions - 1;
         }
 
+        performClickAction();
+    }
+
+    private void decrementTileAndPerformAction() {
+        if (mState > 0) {
+            mState--;
+        } else {
+            mState = mNumberOfActions -1;
+        }
+        mStateMatched = mState;
+
+        performClickAction();
+
+        if (mState < mNumberOfActions - 1 && mState > -1) {
+            mStateMatched = mState - 1;
+        } else {
+            mStateMatched = mNumberOfActions - 1;
+        }
+    }
+
+    final Runnable checkDouble = new Runnable () {
+        public void run() {
+            if (mTaps > 0) {
+                incrementTileAndPerformAction();
+            }
+            mTaps = 0;
+        }
+    };
+
+    private void performClickAction() {
         if (mWatchedSetting == null) {
             if (mMatchState && mNumberOfActions >= 1) {
                 SlimActions.processActionWithOptions(
@@ -534,7 +609,7 @@ public class CustomTile extends QuickSettingsTile {
         try {
             saveExtras(Integer.parseInt(settingSplit[0]));
         } catch (NumberFormatException e) {
-            saveExtras(Integer.parseInt("1"));
+            saveExtras(0);
         }
 
         if (settingSplit.length != 6) {
