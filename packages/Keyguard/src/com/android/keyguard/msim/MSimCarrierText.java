@@ -51,6 +51,12 @@ public class MSimCarrierText extends CarrierText {
             mSimState[sub] = simState;
             updateCarrierText(mSimState, mPlmn, mSpn);
         }
+
+        @Override
+        void onAirplaneModeChanged(boolean on) {
+            mAirplaneMode = on;
+            updateCarrierText(mSimState, mPlmn, mSpn);
+        }
     };
 
     private void initialize() {
@@ -71,14 +77,19 @@ public class MSimCarrierText extends CarrierText {
 
     protected void updateCarrierText(State []simState, CharSequence []plmn, CharSequence []spn) {
         CharSequence text = "";
-        for (int i = 0; i < simState.length; i++) {
-            CharSequence displayText = getCarrierTextForSimState(simState[i], plmn[i], spn[i]);
-            if (mContext.getResources().getBoolean(R.bool.kg_use_all_caps)) {
-                displayText = (displayText != null ? displayText.toString().toUpperCase() : "");
+
+        if (mAirplaneMode && showAPM) {
+            text = getContext().getText(com.android.internal.R.string.lockscreen_airplane_mode_on);
+        } else {
+            for (int i = 0; i < simState.length; i++) {
+                CharSequence displayText = getCarrierTextForSimState(simState[i], plmn[i], spn[i]);
+                if (mContext.getResources().getBoolean(R.bool.kg_use_all_caps)) {
+                    displayText = (displayText != null ?
+                            displayText.toString().toUpperCase() : "");
+                }
+                text = (TextUtils.isEmpty(text) ? displayText : getContext().getString(
+                        R.string.msim_carrier_text_format, text, displayText));
             }
-            text = (TextUtils.isEmpty(text)
-                    ? displayText
-                    : getContext().getString(R.string.msim_carrier_text_format, text, displayText));
         }
         Log.d(TAG, "updateCarrierText: text = " + text);
         setText(text);

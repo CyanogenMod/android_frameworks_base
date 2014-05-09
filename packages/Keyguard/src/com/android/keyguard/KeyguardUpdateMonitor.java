@@ -99,6 +99,7 @@ public class KeyguardUpdateMonitor {
     protected static final int MSG_REPORT_EMERGENCY_CALL_ACTION = 318;
     private static final int MSG_SCREEN_TURNED_ON = 319;
     private static final int MSG_SCREEN_TURNED_OFF = 320;
+    private static final int MSG_AIRPLANE_MODE_CHANGED = 321;
 
     private static KeyguardUpdateMonitor sInstance;
 
@@ -205,6 +206,9 @@ public class KeyguardUpdateMonitor {
                     break;
                 case MSG_SCREEN_TURNED_ON:
                     handleScreenTurnedOn();
+                    break;
+                case MSG_AIRPLANE_MODE_CHANGED:
+                    handleAirplaneModeChanged((Boolean) msg.obj);
                     break;
             }
         }
@@ -318,6 +322,9 @@ public class KeyguardUpdateMonitor {
             } else if (Intent.ACTION_USER_REMOVED.equals(action)) {
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_REMOVED,
                        intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0), 0));
+            } else if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)) {
+                boolean state = intent.getBooleanExtra("state", false);
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_AIRPLANE_MODE_CHANGED, state));
             } else if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
                 dispatchBootCompleted();
             } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
@@ -596,6 +603,15 @@ public class KeyguardUpdateMonitor {
         }
     }
 
+    private void handleAirplaneModeChanged(boolean on) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onAirplaneModeChanged(on);
+            }
+        }
+    }
+
     private void handleUserInfoChanged(int userId) {
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -647,6 +663,7 @@ public class KeyguardUpdateMonitor {
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(DevicePolicyManager.ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED);
         filter.addAction(Intent.ACTION_USER_REMOVED);
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
         context.registerReceiver(mBroadcastReceiver, filter);
 
@@ -1101,6 +1118,9 @@ public class KeyguardUpdateMonitor {
                 mDisplayClientState.intent);
         callback.onMusicPlaybackStateChanged(mDisplayClientState.playbackState,
                 mDisplayClientState.playbackEventTime);
+        boolean airplaneModeOn = Settings.System.getInt(
+            mContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+        callback.onAirplaneModeChanged(airplaneModeOn);
     }
 
     public void sendKeyguardVisibilityChanged(boolean showing) {

@@ -37,6 +37,9 @@ public class CarrierText extends TextView {
 
     private LockPatternUtils mLockPatternUtils;
 
+    protected boolean mAirplaneMode;
+    protected boolean showAPM;
+
     private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
         private CharSequence mPlmn;
         private CharSequence mSpn;
@@ -52,6 +55,12 @@ public class CarrierText extends TextView {
         @Override
         public void onSimStateChanged(IccCardConstants.State simState) {
             mSimState = simState;
+            updateCarrierText(mSimState, mPlmn, mSpn);
+        }
+
+        @Override
+        void onAirplaneModeChanged(boolean on) {
+            mAirplaneMode = on;
             updateCarrierText(mSimState, mPlmn, mSpn);
         }
 
@@ -88,10 +97,20 @@ public class CarrierText extends TextView {
         mLockPatternUtils = new LockPatternUtils(mContext);
         boolean useAllCaps = mContext.getResources().getBoolean(R.bool.kg_use_all_caps);
         setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
+        showAPM = context.getResources().getBoolean(R.bool.config_display_APM);
     }
 
     protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn) {
-        setText(getCarrierTextForSimState(simState, plmn, spn));
+        CharSequence text = "";
+
+        if (mAirplaneMode && showAPM) {
+            // if airplane mode is on, show "airplane mode"
+            text = getContext().getText(com.android.internal.R.string.lockscreen_airplane_mode_on);
+        } else {
+            text = getCarrierTextForSimState(simState, plmn, spn);
+        }
+
+        setText(text);
     }
 
     @Override
