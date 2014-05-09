@@ -21,7 +21,7 @@
   <string name="profileNameHome">Casa</string>
   <string name="profileNameSilent">Silencio</string>
   <string name="profileNameNight">Noche</string>
-  <string name="profileNameAutomobile">Automóvil</string>
+  <string name="profileNameAutomobile">Coche</string>
   <string name="profileGroupPhone">Teléfono</string>
   <string name="profileGroupCalendar">Calendario</string>
   <string name="profileGroupGmail">Gmail</string>
@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">Permite que la aplicación cambie los números de teléfono bloqueados de llamadas o mensajes entrantes.</string>
   <string name="permlab_accessThemeService">acceso al servicio de temas</string>
   <string name="permdesc_accessThemeService">Permite que la aplicación acceda al servicio de temas. Nunca debería ser necesario para aplicaciones normales.</string>
+  <string name="permlab_setKeyguardWallpaper">establecer fondo de pantalla de bloqueo</string>
+  <string name="permdesc_setKeyguardWallpaper">Permite que la aplicación establezca el fondo de pantalla de bloqueo.</string>
   <string name="immersive_mode_confirmation_bottom">Desliza el dedo hacia arriba desde el borde inferior para salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a tu ubicación</string>

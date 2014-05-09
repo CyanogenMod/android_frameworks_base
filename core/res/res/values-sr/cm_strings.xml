@@ -34,7 +34,7 @@
   <string name="global_actions_expanded_desktop_mode_off_status">Онемогућено</string>
   <string name="reboot_system" product="tablet">Рестартуј таблет</string>
   <string name="reboot_system" product="default">Рестартуј телефон</string>
-  <string name="reboot_reboot">Рестарт</string>
+  <string name="reboot_reboot">Рестартуј</string>
   <string name="reboot_recovery">Опоравак</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_bootmenu">Bootмeни</string>
@@ -46,10 +46,10 @@
   <string name="permlab_preventpower">Спречи power тастер</string>
   <string name="permdesc_preventpower">Дозвољава апликацији да заобиђе power тастер</string>
   <string name="permlab_sendMockSms">Пошаљи лажне SMS поруке</string>
-  <string name="permdesc_sendMockSms">Дозвољава апликацији да шаље лажне SMS поруке. Ово омогућава слање SMS-а на поузданим апликацијама. Злонамерне апликације могу да непрекидно шаљу поруке, блокирајући систем обавештавања уређаја и ремете корисника.</string>
+  <string name="permdesc_sendMockSms">Дозвољава апликацији да шаље лажне SMS поруке. Ово омогућава слање SMS-а на поузданим апликацијама. Злонамерне апликације могу непрекидно да шаљу поруке, блокирајући систем обавештавања уређаја и ремете корисника.</string>
   <string name="storage_sd_dock_card">Dock SD картица</string>
-  <string name="app_killed_message">Апликација затворена</string>
-  <string name="global_action_reboot">Рестарт</string>
+  <string name="app_killed_message">Апликација је затворена</string>
+  <string name="global_action_reboot">Рестартуј</string>
   <string name="global_action_choose_profile">Профил</string>
   <string name="toast_rotation_unlocked">Ротација екрана откључана</string>
   <string name="toast_rotation_locked">Ротација екрана закључана</string>
@@ -75,7 +75,9 @@
   <string name="permdesc_changePhoneBlacklist">Омогућава апликацији да промени бројеве телефона које су блокирани за долазне позиве или поруке.</string>
   <string name="permlab_accessThemeService">Приступ сервису тема</string>
   <string name="permdesc_accessThemeService">Омогућава апликацији да приступи услузи тема. Никада не би требало за нормалне апликације.</string>
-  <string name="immersive_mode_confirmation_bottom">Пребаците нагоре од дна до излазак из целог екрана.</string>
+  <string name="permlab_setKeyguardWallpaper">Поставите тапет тастатуре</string>
+  <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени тапет на закључаном екрану.</string>
+  <string name="immersive_mode_confirmation_bottom">Пребаците нагоре од дна за излазак из целог екрана.</string>
   <string name="app_ops_access_camera">Приступ камери</string>
   <string name="app_ops_access_location">Приступ Вашој локацији</string>
   <string name="app_ops_access_notifications">Прочитајте Ваша обавештења</string>

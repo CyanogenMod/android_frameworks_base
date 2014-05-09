@@ -68,10 +68,15 @@
   <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
   <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen</string>
   <string name="permgrouplab_security">Sicherheit</string>
+  <string name="permgroupdesc_security">Berechtigungen welche die Gerätesicherheit betreffen.</string>
   <string name="permlab_readPhoneBlacklist">Sperrliste lesen</string>
+  <string name="permdesc_readPhoneBlacklist">Ermöglicht der App, gesperrte Telefonnummern für eingehende Anrufe oder Nachrichten zu lesen.</string>
   <string name="permlab_changePhoneBlacklist">Sperrliste ändern</string>
+  <string name="permdesc_changePhoneBlacklist">Ermöglicht der App, gesperrte Telefonnummern für eingehende Anrufe oder Nachrichten zu ändern.</string>
   <string name="permlab_accessThemeService">Zugriff auf den Design-Dienst</string>
   <string name="permdesc_accessThemeService">Ermöglicht der App, auf den Design-Dienst zuzugreifen. Wird für normale Apps nicht benötigt.</string>
+  <string name="permlab_setKeyguardWallpaper">Sperrbildschirm-Hintergrund ändern</string>
+  <string name="permdesc_setKeyguardWallpaper">Ermöglicht der App, den Sperrbildschirm-Hintergrund zu ändern.</string>
   <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>

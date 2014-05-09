@@ -16,5 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">鎖定畫面</string>
   <string name="keyguard_discharging">非充電中，<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 </resources>
