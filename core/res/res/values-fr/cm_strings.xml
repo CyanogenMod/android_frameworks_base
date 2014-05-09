@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">Autorise une application à modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_accessThemeService">accèder au service de thème</string>
   <string name="permdesc_accessThemeService">Autorise une application à accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
+  <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran du clavier de verrouillage</string>
+  <string name="permdesc_setKeyguardWallpaper">Autorise une application à changer le fond de l\'écran de verrouillage.</string>
   <string name="immersive_mode_confirmation_bottom">Balayez du haut vers le bas pour quitter le mode plein écran.</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
   <string name="app_ops_access_location">accéder à votre emplacement</string>

@@ -231,7 +231,8 @@ public final class Installer {
         return execute(builder.toString());
     }
 
-    public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid, int pkgId) {
+    public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid,
+                    int pkgId, String commonResourcesPath) {
         StringBuilder builder = new StringBuilder("aapt");
         builder.append(' ');
         builder.append(themeApkPath);
@@ -243,6 +244,8 @@ public final class Installer {
         builder.append(uid);
         builder.append(' ');
         builder.append(pkgId);
+        builder.append(' ');
+        builder.append(commonResourcesPath);
         return execute(builder.toString());
     }
 

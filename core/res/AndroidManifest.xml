@@ -1377,6 +1377,14 @@
         android:label="@string/permlab_setWallpaper"
         android:description="@string/permdesc_setWallpaper" />
 
+    <!-- Allows applications to set the keyguard wallpaper
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_WALLPAPER"
+        android:permissionGroup="android.permission-group.WALLPAPER"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_setKeyguardWallpaper"
+        android:description="@string/permdesc_setKeyguardWallpaper" />
+
     <!-- Allows applications to set the wallpaper hints -->
     <permission android:name="android.permission.SET_WALLPAPER_HINTS"
         android:permissionGroup="android.permission-group.WALLPAPER"

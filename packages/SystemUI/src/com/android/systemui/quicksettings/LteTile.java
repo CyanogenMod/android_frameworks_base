@@ -37,10 +37,7 @@ public class LteTile extends QuickSettingsTile {
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setClassName("com.android.phone", "com.android.phone.Settings");
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startSettingsActivity(intent);
+                startSettingsActivity(Settings.ACTION_DATA_ROAMING_SETTINGS);
                 return true;
             }
         };

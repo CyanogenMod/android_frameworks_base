@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">يسمح لي التطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
   <string name="permlab_accessThemeService">الوصول إلى خدمة الموضوع</string>
   <string name="permdesc_accessThemeService">يسمح تطبيق للوصول إلى خدمة الموضوع. ينبغي أن لا تكون لهاحاجة ابدأ لتطبيقات اىعادية.</string>
+  <string name="permlab_setKeyguardWallpaper">تعيين خلفية للإطار</string>
+  <string name="permdesc_setKeyguardWallpaper">يسمح ااتطبيق بتغيير خلفية شاشة القفل.</string>
   <string name="immersive_mode_confirmation_bottom">مرر أعلى من الجزء السفلي للخروج من وضع ملء الشاشة.</string>
   <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
   <string name="app_ops_access_location">الوصول إلى الموقع الخاص بك</string>
