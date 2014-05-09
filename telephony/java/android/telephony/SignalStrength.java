@@ -656,7 +656,7 @@ public class SignalStrength implements Parcelable {
         if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_GREAT;
         else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GOOD;
         else if (cdmaDbm >= -95) levelDbm = SIGNAL_STRENGTH_MODERATE;
-        else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
+        else if (cdmaDbm >= -125) levelDbm = SIGNAL_STRENGTH_POOR;
         else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
         // Ec/Io are in dB*10
@@ -686,7 +686,7 @@ public class SignalStrength implements Parcelable {
         else if (cdmaDbm >= -82) cdmaAsuLevel = 8;
         else if (cdmaDbm >= -90) cdmaAsuLevel = 4;
         else if (cdmaDbm >= -95) cdmaAsuLevel = 2;
-        else if (cdmaDbm >= -100) cdmaAsuLevel = 1;
+        else if (cdmaDbm >= -125) cdmaAsuLevel = 1;
         else cdmaAsuLevel = 99;
 
         // Ec/Io are in dB*10
@@ -716,7 +716,7 @@ public class SignalStrength implements Parcelable {
         if (evdoDbm >= -65) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
         else if (evdoDbm >= -75) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
         else if (evdoDbm >= -90) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
-        else if (evdoDbm >= -105) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
+        else if (evdoDbm >= -125) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
         else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
         if (evdoSnr >= 7) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
@@ -745,7 +745,7 @@ public class SignalStrength implements Parcelable {
         else if (evdoDbm >= -75) levelEvdoDbm = 8;
         else if (evdoDbm >= -85) levelEvdoDbm = 4;
         else if (evdoDbm >= -95) levelEvdoDbm = 2;
-        else if (evdoDbm >= -105) levelEvdoDbm = 1;
+        else if (evdoDbm >= -125) levelEvdoDbm = 1;
         else levelEvdoDbm = 99;
 
         if (evdoSnr >= 7) levelEvdoSnr = 16;
@@ -805,7 +805,7 @@ public class SignalStrength implements Parcelable {
         else if (mLteRsrp >= -85) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
         else if (mLteRsrp >= -95) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
         else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
-        else if (mLteRsrp >= -115) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
+        else if (mLteRsrp >= -120) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
         else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
         /*
@@ -832,7 +832,7 @@ public class SignalStrength implements Parcelable {
              * associated with LTE RSRP and the bars associated with the LTE
              * RS_SNR
              */
-            return (rsrpIconLevel < snrIconLevel ? rsrpIconLevel : snrIconLevel);
+            return (rsrpIconLevel > snrIconLevel ? rsrpIconLevel : snrIconLevel);
         }
 
         if (snrIconLevel != -1) return snrIconLevel;
