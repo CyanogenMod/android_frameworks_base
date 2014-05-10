@@ -3898,7 +3898,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 animateExpandSettingsPanel(true);
             } else {
                 startActivityDismissingKeyguard(
-                        new Intent(AlarmClock.ACTION_SHOW_ALARMS), true);
+                        new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             }
         }
     };
