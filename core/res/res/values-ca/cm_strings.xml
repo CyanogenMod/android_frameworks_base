@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">Permet a una app canviar els números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
   <string name="permlab_accessThemeService">accés al servei de temes</string>
   <string name="permdesc_accessThemeService">Permet a una app accedir al servei de temes. No s\'hauria de necessitar mai en les apps normals.</string>
+  <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
+  <string name="permdesc_setKeyguardWallpaper">Permet que una app estableixi el fons de la pantalla de bloqueig.</string>
   <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>
