@@ -227,4 +227,18 @@
     <string name="extmedia_format_message_cm" product="nosdcard">All data on your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. -->
     <string name="extmedia_format_message_cm" product="default">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+
+    <!-- Storage notification -->
+    <string name="storage_checking_notification_title">Preparing <xliff:g id="storage" example="SD card">%s</xliff:g></string>
+    <string name="storage_checking_notification_message">Checking <xliff:g id="storage" example="SD card">%s</xliff:g> for errors.</string>
+    <string name="storage_nofs_notification_title">Blank <xliff:g id="storage" example="SD card">%s</xliff:g></string>
+    <string name="storage_nofs_notification_message"><xliff:g id="storage" example="SD card">%s</xliff:g> is blank or has unsupported filesystem.</string>
+    <string name="storage_unmountable_notification_title">Damaged <xliff:g id="storage" example="SD card">%s</xliff:g></string>
+    <string name="storage_unmountable_notification_message"><xliff:g id="storage" example="SD card">%s</xliff:g> is damaged. Try reformatting it.</string>
+    <string name="storage_badremoval_notification_title"><xliff:g id="storage" example="SD card">%s</xliff:g> unexpectedly removed</string>
+    <string name="storage_badremoval_notification_message">Unmount <xliff:g id="storage" example="SD card">%s</xliff:g> before removing to avoid data loss.</string>
+    <string name="storage_safe_unmount_notification_title"><xliff:g id="storage" example="SD card">%s</xliff:g> safe to remove</string>
+    <string name="storage_safe_unmount_notification_message">You can safely remove <xliff:g id="storage" example="SD card">%s</xliff:g>.</string>
+    <string name="storage_nomedia_notification_title">Removed <xliff:g id="storage" example="SD card">%s</xliff:g></string>
+    <string name="storage_nomedia_notification_message"><xliff:g id="storage" example="SD card">%s</xliff:g> removed. Insert new media.</string>
 </resources>

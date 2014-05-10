@@ -2021,4 +2021,22 @@
 
   <!-- External media format -->
   <java-symbol type="string" name="extmedia_format_message_cm" />
+
+  <!-- Used for storage notification -->
+  <java-symbol type="string" name="storage_internal" />
+  <java-symbol type="string" name="storage_sd_card" />
+  <java-symbol type="string" name="storage_usb" />
+
+  <java-symbol type="string" name="storage_badremoval_notification_message" />
+  <java-symbol type="string" name="storage_badremoval_notification_title" />
+  <java-symbol type="string" name="storage_checking_notification_message" />
+  <java-symbol type="string" name="storage_checking_notification_title" />
+  <java-symbol type="string" name="storage_nofs_notification_message" />
+  <java-symbol type="string" name="storage_nofs_notification_title" />
+  <java-symbol type="string" name="storage_nomedia_notification_message" />
+  <java-symbol type="string" name="storage_nomedia_notification_title" />
+  <java-symbol type="string" name="storage_safe_unmount_notification_message" />
+  <java-symbol type="string" name="storage_safe_unmount_notification_title" />
+  <java-symbol type="string" name="storage_unmountable_notification_message" />
+  <java-symbol type="string" name="storage_unmountable_notification_title" />
 </resources>
