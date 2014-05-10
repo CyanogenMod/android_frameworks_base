@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The MoKee OpenSource Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Lunar -->  
+    <string-array name="animals"  translatable="false">
+        <item>鼠</item>
+        <item>牛</item>
+        <item>虎</item>
+        <item>兔</item>
+        <item>龍</item>
+        <item>蛇</item>
+        <item>馬</item>
+        <item>羊</item>
+        <item>猴</item>
+        <item>雞</item>
+        <item>狗</item>
+        <item>豬</item>
+    </string-array>
+
+    <string-array name="gan"  translatable="false">
+        <item>甲</item>
+        <item>乙</item>
+        <item>丙</item>
+        <item>丁</item>
+        <item>戊</item>
+        <item>己</item>
+        <item>庚</item>
+        <item>辛</item>
+        <item>壬</item>
+        <item>癸</item>
+    </string-array>
+
+    <string-array name="zhi"  translatable="false">
+        <item>子</item>
+        <item>丑</item>
+        <item>寅</item>
+        <item>卯</item>
+        <item>辰</item>
+        <item>巳</item>
+        <item>午</item>
+        <item>未</item>
+        <item>申</item>
+        <item>酉</item>
+        <item>戌</item>
+        <item>亥</item>
+    </string-array>
+
+    <string-array name="chinesenumber"  translatable="false">
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>七</item>
+        <item>八</item>
+        <item>九</item>
+        <item>十</item>
+        <item>十一</item>
+        <item>十二</item>
+    </string-array>
+
+    <string-array name="chineseten"  translatable="false">
+        <item>初</item>
+        <item>十</item>
+        <item>廿</item>
+        <item>卅</item>
+    </string-array>
+
+    <string-array name="solar_term">
+        <item></item>           
+        <item>小寒</item>
+        <item>大寒</item>
+        <item>立春</item>
+        <item>雨水</item>
+        <item>驚蟄</item>
+        <item>春分</item>
+        <item>清明</item>
+        <item>谷雨</item>
+        <item>立夏</item>
+        <item>小滿</item>
+        <item>芒種</item>
+        <item>夏至</item>
+        <item>小暑</item>
+        <item>大暑</item>
+        <item>立秋</item>
+        <item>處暑</item>
+        <item>白露</item>
+        <item>秋分</item>
+        <item>寒露</item>
+        <item>霜降</item>
+        <item>立冬</item>
+        <item>小雪</item>
+        <item>大雪</item>
+        <item>冬至</item>
+    </string-array>
+
+    <string-array name="solar_holiday">
+        <item>0101 元旦節</item>
+        <item>0214 情人節</item>
+        <item>0308 婦女節</item>
+        <item>0312 植樹節</item>
+        <item>0401 愚人節</item>
+        <item>0501 勞動節</item>
+        <item>0504 青年節</item>
+        <item>0601 兒童節</item>
+        <item>0701 建黨節</item>
+        <item>0801 建軍節</item>
+        <item>0910 教師節</item>
+        <item>1001 國慶節</item>
+        <item>1225 聖誕節</item>
+    </string-array>
+
+    <string-array name="lunar_festival">
+        <item>臘月廿九 除夕</item>
+        <item>臘月三十 除夕</item>
+        <item>正月初一 春節</item>
+        <item>正月十五 元宵節</item>
+        <item>五月初五 端午節</item>
+        <item>七月初七 七夕節</item>
+        <item>七月十五 中元節</item>
+        <item>八月十五 中秋節</item>
+        <item>九月初九 重陽節</item>
+        <item>臘月初八 臘八節</item>
+        <item>臘月廿三 小年</item>
+    </string-array>
+
+    <string-array name="lunar_month_name">
+        <item>正</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>七</item>
+        <item>八</item>
+        <item>九</item>
+        <item>十</item>
+        <item>冬</item>
+        <item>臘</item>
+    </string-array>
+
+</resources>
