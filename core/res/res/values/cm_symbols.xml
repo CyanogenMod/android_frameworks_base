@@ -278,6 +278,34 @@
     <java-symbol type="string" name="usb_media_removed" />
     <java-symbol type="string" name="usb_media_shared" />
 
+    <!-- SD card storage notification -->
+    <java-symbol type="string" name="sd_ext_media_badremoval_notification_message" />
+    <java-symbol type="string" name="sd_ext_media_badremoval_notification_title" />
+    <java-symbol type="string" name="sd_ext_media_checking_notification_message" />
+    <java-symbol type="string" name="sd_ext_media_checking_notification_title" />
+    <java-symbol type="string" name="sd_ext_media_nofs_notification_message" />
+    <java-symbol type="string" name="sd_ext_media_nofs_notification_title" />
+    <java-symbol type="string" name="sd_ext_media_nomedia_notification_message" />
+    <java-symbol type="string" name="sd_ext_media_nomedia_notification_title" />
+    <java-symbol type="string" name="sd_ext_media_safe_unmount_notification_message" />
+    <java-symbol type="string" name="sd_ext_media_safe_unmount_notification_title" />
+    <java-symbol type="string" name="sd_ext_media_unmountable_notification_message" />
+    <java-symbol type="string" name="sd_ext_media_unmountable_notification_title" />
+
+    <!-- USB storage notification -->
+    <java-symbol type="string" name="usb_ext_media_badremoval_notification_message" />
+    <java-symbol type="string" name="usb_ext_media_badremoval_notification_title" />
+    <java-symbol type="string" name="usb_ext_media_checking_notification_message" />
+    <java-symbol type="string" name="usb_ext_media_checking_notification_title" />
+    <java-symbol type="string" name="usb_ext_media_nofs_notification_message" />
+    <java-symbol type="string" name="usb_ext_media_nofs_notification_title" />
+    <java-symbol type="string" name="usb_ext_media_nomedia_notification_message" />
+    <java-symbol type="string" name="usb_ext_media_nomedia_notification_title" />
+    <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_message" />
+    <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_title" />
+    <java-symbol type="string" name="usb_ext_media_unmountable_notification_message" />
+    <java-symbol type="string" name="usb_ext_media_unmountable_notification_title" />
+
     <!-- LiveDisplay -->
     <java-symbol type="string" name="live_display_title" />
     <java-symbol type="string" name="live_display_hint" />
