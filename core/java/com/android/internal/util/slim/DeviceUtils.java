@@ -37,6 +37,7 @@ import com.android.internal.telephony.PhoneConstants;
 import static android.hardware.Sensor.TYPE_LIGHT;
 import static android.hardware.Sensor.TYPE_PROXIMITY;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +79,10 @@ public class DeviceUtils {
             (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return (tm.getLteOnCdmaMode() == PhoneConstants.LTE_ON_CDMA_TRUE)
                     || tm.getLteOnGsmMode() != 0;
+    }
+
+    public static boolean deviceSupportsFastcharge() {
+            return new File("/sys/kernel/fast_charge/force_fast_charge").exists();
     }
 
     public static boolean deviceSupportsCamera() {

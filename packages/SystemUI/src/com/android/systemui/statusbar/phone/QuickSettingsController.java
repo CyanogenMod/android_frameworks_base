@@ -176,6 +176,7 @@ public class QuickSettingsController {
     void loadTiles() {
         // Filter items not compatible with device
         boolean bluetoothSupported = DeviceUtils.deviceSupportsBluetooth();
+        boolean fastChargeSupported = DeviceUtils.deviceSupportsFastcharge();
         boolean mobileDataSupported = DeviceUtils.deviceSupportsMobileData(mContext);
         boolean lteSupported = DeviceUtils.deviceSupportsLte(mContext);
         boolean torchSupported = DeviceUtils.deviceSupportsTorch(mContext);
@@ -183,6 +184,10 @@ public class QuickSettingsController {
 
         if (!bluetoothSupported) {
             TILES_DEFAULT.remove(TILE_BLUETOOTH);
+        }
+
+        if (!fastChargeSupported) {
+            TILES_DEFAULT.remove(TILE_FCHARGE);
         }
 
         if (!mobileDataSupported) {
@@ -271,7 +276,9 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_QUICKRECORD)) {
                 qs = new QuickRecordTile(mContext, this);
             } else if (tile.equals(TILE_FCHARGE)) {
+                if (fastChargeSupported) {
                 qs = new FChargeTile(mContext, this);
+                }
             } else if (tile.equals(TILE_INTERNALMEMORY)) {
                 qs = new InternalMemory(mContext, this);
             } else if (tile.equals(TILE_ONTHEGO)) {
