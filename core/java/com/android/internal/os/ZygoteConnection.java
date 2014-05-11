@@ -221,11 +221,6 @@ class ZygoteConnection {
                 ZygoteInit.setCloseOnExec(serverPipeFd, true);
             }
 
-            //Replace the font cache if the theme changed
-            if (parsedArgs.refreshTheme) {
-                Typeface.recreateDefaults();
-            }
-
             /**
              * In order to avoid leaking descriptors to the Zygote child,
              * the native code must close the two Zygote socket descriptors
