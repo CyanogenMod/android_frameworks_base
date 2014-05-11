@@ -194,40 +194,6 @@ public class Typeface {
         };
     }
 
-    /**
-     * Clears caches in java and skia.
-     * Skia will then reparse font config
-     * @hide
-     */
-    public static void recreateDefaults() {
-        nativeFreeCaches();
-        sTypefaceCache.clear();
-
-        int newDefault = nativeCreate(null, Typeface.NORMAL);
-        int newDefaultBold = nativeCreate(null, Typeface.BOLD);
-        int newSansSerif = nativeCreate("sans-serif", 0);
-        int newSerif = nativeCreate("serif", 0);
-        int newMonoSpace = nativeCreate("monospace", 0);
-        int newItalic = nativeCreate( null, Typeface.ITALIC);
-        int newBoldItalic = nativeCreate(null, Typeface.BOLD_ITALIC);
-
-        nativeUnref(DEFAULT.native_instance);
-        nativeUnref(DEFAULT_BOLD.native_instance);
-        nativeUnref(SANS_SERIF.native_instance);
-        nativeUnref(SERIF.native_instance);
-        nativeUnref(MONOSPACE.native_instance);
-        nativeUnref(sDefaults[2].native_instance);
-        nativeUnref(sDefaults[3].native_instance);
-
-        DEFAULT.native_instance = newDefault;
-        DEFAULT_BOLD.native_instance = newDefaultBold;
-        SANS_SERIF.native_instance = newSansSerif;
-        SERIF.native_instance = newSerif;
-        MONOSPACE.native_instance = newMonoSpace;
-        sDefaults[2].native_instance = newItalic;
-        sDefaults[3].native_instance = newBoldItalic;
-    }
-
     protected void finalize() throws Throwable {
         try {
             nativeUnref(native_instance);
@@ -259,5 +225,4 @@ public class Typeface {
     private static native int  nativeGetStyle(int native_instance);
     private static native int  nativeCreateFromAsset(AssetManager mgr, String path);
     private static native int nativeCreateFromFile(String path);
-    private static native void nativeFreeCaches();
 }
