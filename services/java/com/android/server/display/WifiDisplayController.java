@@ -284,7 +284,8 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
                 WifiP2pWfdInfo wfdInfo = new WifiP2pWfdInfo();
                 wfdInfo.setWfdEnabled(true);
-                wfdInfo.setDeviceType(WifiP2pWfdInfo.WFD_SOURCE);
+                //wfdInfo.setDeviceType(WifiP2pWfdInfo.WFD_SOURCE);
+                wfdInfo.setDeviceType(WifiP2pWfdInfo.SOURCE_OR_PRIMARY_SINK);
                 wfdInfo.setSessionAvailable(true);
                 wfdInfo.setControlPort(DEFAULT_CONTROL_PORT);
                 wfdInfo.setMaxThroughput(MAX_THROUGHPUT);
