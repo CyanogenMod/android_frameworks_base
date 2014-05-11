@@ -197,4 +197,14 @@ public class DeviceUtils {
         return getScreenType(con) == DEVICE_TABLET;
     }
 
+    public static boolean deviceSupportsCPUFreq() {
+    /*
+     * Actually every kernel should support this,
+     * but just in case!
+     */
+    String[] paths = { "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq" };
+    for (String path : paths)
+        if (new File(path).exists()) return true;
+        return false;
+    }
 }

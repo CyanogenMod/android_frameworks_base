@@ -26,6 +26,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_BLUETOOTH;
 import static com.android.internal.util.slim.QSConstants.TILE_BRIGHTNESS;
 import static com.android.internal.util.slim.QSConstants.TILE_BUGREPORT;
 import static com.android.internal.util.slim.QSConstants.TILE_CONTACT;
+import static com.android.internal.util.slim.QSConstants.TILE_CPUFREQ;
 import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM;
 import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM_KEY;
 import static com.android.internal.util.slim.QSConstants.TILE_DELIMITER;
@@ -86,6 +87,7 @@ import com.android.systemui.quicksettings.BluetoothTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.ContactTile;
+import com.android.systemui.quicksettings.CPUFreqTile;
 import com.android.systemui.quicksettings.CustomTile;
 import com.android.systemui.quicksettings.EqualizerTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
@@ -181,6 +183,7 @@ public class QuickSettingsController {
         boolean lteSupported = DeviceUtils.deviceSupportsLte(mContext);
         boolean torchSupported = DeviceUtils.deviceSupportsTorch(mContext);
         boolean cameraSupported = DeviceUtils.deviceSupportsCamera();
+        boolean cpufreqSupported = DeviceUtils.deviceSupportsCPUFreq();
 
         if (!bluetoothSupported) {
             TILES_DEFAULT.remove(TILE_BLUETOOTH);
@@ -253,6 +256,10 @@ public class QuickSettingsController {
                 qs = new AutoRotateTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_AIRPLANE)) {
                 qs = new AirplaneModeTile(mContext, this, mStatusBarService.mNetworkController);
+            } else if (tile.contains(TILE_CPUFREQ)) {
+                if (cpufreqSupported) {
+                    qs = new CPUFreqTile(mContext, this);
+                }
             } else if (tile.equals(TILE_TORCH)) {
                 qs = new TorchTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_SLEEP)) {
