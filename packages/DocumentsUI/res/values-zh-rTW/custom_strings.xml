@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The OmniROM Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_standalone">文件管理員</string>
+    <string name="toast_success_delete">文件已刪除</string>
+    <string name="dialog_delete_confirm_title">刪除文件?</string>
+    <string name="menu_copy">復制</string>
+    <string name="menu_cut">剪下</string>
+    <string name="menu_paste">粘貼</string>
+    <plurals name="files_copied">
+        <item quantity="one">文件已放到剪貼薄中</item>
+        <item quantity="other">%d 個文件已放到剪貼薄中</item>
+    </plurals>
+    <plurals name="files_pasted">
+        <item quantity="one">該文件已被粘貼。上傳會在背景完成.</item>
+        <item quantity="other">%d 個文件已被粘貼。上傳會在背景完成.</item>
+    </plurals>
+    <string name="copy_in_progress">拷貝中...</string>
+    <string name="delete_in_progress">刪除中...</string>
+    <plurals name="dialog_delete_confirm_message">
+        <item quantity="one">此文件將被永久刪除!</item>
+        <item quantity="other">這些文件將被永久刪除!</item>
+    </plurals>
+    <string name="ok">確定</string>
+    <string name="cancel">取消</string>
+</resources>
