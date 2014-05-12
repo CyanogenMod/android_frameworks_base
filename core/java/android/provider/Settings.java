@@ -5702,6 +5702,12 @@ public final class Settings {
         public static final String STATUS_BAR_CUSTOM_HEADER = "status_bar_custom_header";
 
         /**
+         * Weather Tile Icon
+         * @hide
+         */
+        public static final String WEATHER_TILE_ICON = "weather_tile_icon";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

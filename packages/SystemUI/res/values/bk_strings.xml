@@ -90,4 +90,62 @@
     <string name="location_mode_sensors_only_title">Device only</string>
     <!-- [CHAR LIMIT=30] Location settings screen, location off mode -->
     <string name="location_mode_location_off_title">Location off</string>
+
+    <!-- Weather tile panel String -->
+    <string name="need_to_update_weather">Tap to update</string>
+    <string name="no_weather_file">Not found weather file</string>
+    <string name="weather_notify">Notification</string>
+    <string name="weather_ok">OK</string>
+    <string name="weather_link">Shortcut</string>
+    <string name="weather_dialog_msg">Your Phone maybe off Weather Panel in cLock or Not save Weather data file\nYou need Switch on Display Weather in Long press Weather Lockscreen > widgets > LockClock > Weather panel</string>
+
+    <!-- Weather - Weather codes -->
+    <string name="weather_0">Tornado</string>
+    <string name="weather_1">Tropical Storm</string>
+    <string name="weather_2">Hurricane</string>
+    <string name="weather_3">Severe Thunderstorms</string>
+    <string name="weather_4">Thunderstorms</string>
+    <string name="weather_5">Mixed Rain and Snow</string>
+    <string name="weather_6">Mixed Rain and Sleet</string>
+    <string name="weather_7">Mixed Snow and Sleet</string>
+    <string name="weather_8">Freezing Drizzle</string>
+    <string name="weather_9">Drizzle</string>
+    <string name="weather_10">Freezing Rain</string>
+    <string name="weather_11">Showers</string>
+    <string name="weather_12">Showers</string>
+    <string name="weather_13">Snow Flurries</string>
+    <string name="weather_14">Light Snow Showers</string>
+    <string name="weather_15">Blowing Snow</string>
+    <string name="weather_16">Snow</string>
+    <string name="weather_17">Hail</string>
+    <string name="weather_18">Sleet</string>
+    <string name="weather_19">Dust</string>
+    <string name="weather_20">Foggy</string>
+    <string name="weather_21">Haze</string>
+    <string name="weather_22">Smoky</string>
+    <string name="weather_23">Blustery</string>
+    <string name="weather_24">Windy</string>
+    <string name="weather_25">Cold</string>
+    <string name="weather_26">Cloudy</string>
+    <string name="weather_27">Mostly Cloudy</string> <!-- Night -->
+    <string name="weather_28">Mostly Cloudy</string> <!-- Day -->
+    <string name="weather_29">Partly Cloudy</string> <!-- Night -->
+    <string name="weather_30">Partly Cloudy</string> <!-- Day -->
+    <string name="weather_31">Clear</string> <!-- Night -->
+    <string name="weather_32">Sunny</string>
+    <string name="weather_33">Fair</string> <!-- Night -->
+    <string name="weather_34">Fair</string> <!-- Day -->
+    <string name="weather_35">Mixed Rain and Hail</string>
+    <string name="weather_36">Hot</string>
+    <string name="weather_37">Isolated Thunderstorms</string>
+    <string name="weather_38">Scattered Thunderstorms</string>
+    <string name="weather_39">Scattered Thunderstorms</string>
+    <string name="weather_40">Scattered Showers</string>
+    <string name="weather_41">Heavy Snow</string>
+    <string name="weather_42">Scattered Snow Showers</string>
+    <string name="weather_43">Heavy Snow</string>
+    <string name="weather_44">Partly Cloudy</string>
+    <string name="weather_45">Thundershowers</string>
+    <string name="weather_46">Snow Showers</string>
+    <string name="weather_47">Isolated Thundershowers</string>
 </resources>

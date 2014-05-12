@@ -16,6 +16,7 @@
 
     <uses-permission android:name="android.permission.STATUS_BAR_SERVICE" />
     <uses-permission android:name="android.permission.STATUS_BAR" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.REMOTE_AUDIO_PLAYBACK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -102,6 +103,9 @@
 
     <!-- DownloadProvider -->
     <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
+
+    <!-- WeatherTile -->
+    <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 
     <application
         android:persistent="true"
