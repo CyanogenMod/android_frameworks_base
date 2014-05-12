@@ -2674,24 +2674,26 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mClearButton.setEnabled(clearable);
         }
 
-        final View nlo = mStatusBarView.findViewById(R.id.notification_lights_out);
-        final boolean showDot = (any&&!areLightsOn());
-        if (showDot != (nlo.getAlpha() == 1.0f)) {
-            if (showDot) {
-                nlo.setAlpha(0f);
-                nlo.setVisibility(View.VISIBLE);
+        if (any) {
+            final View nlo = mStatusBarView.findViewById(R.id.notification_lights_out);
+            final boolean showDot = (!areLightsOn());
+            if (showDot != (nlo.getAlpha() == 1.0f)) {
+                if (showDot) {
+                    nlo.setAlpha(0f);
+                    nlo.setVisibility(View.VISIBLE);
+                }
+                nlo.animate()
+                    .alpha(showDot?1:0)
+                    .setDuration(showDot?750:250)
+                    .setInterpolator(new AccelerateInterpolator(2.0f))
+                    .setListener(showDot ? null : new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator _a) {
+                            nlo.setVisibility(View.GONE);
+                        }
+                    })
+                    .start();
             }
-            nlo.animate()
-                .alpha(showDot?1:0)
-                .setDuration(showDot?750:250)
-                .setInterpolator(new AccelerateInterpolator(2.0f))
-                .setListener(showDot ? null : new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator _a) {
-                        nlo.setVisibility(View.GONE);
-                    }
-                })
-                .start();
         }
 
         if (!mCarrierAndWifiViewBlocked) {
