@@ -85,6 +85,18 @@ public class KeyButtonView extends ImageView {
         }
     };
 
+    Runnable mGlowAnimatorDown = new Runnable() {
+        public void run() {
+            setPressed(true);
+        }
+    };
+
+    Runnable mGlowAnimatorUp = new Runnable() {
+        public void run() {
+            setPressed(false);
+        }
+    };
+
     public KeyButtonView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -305,7 +317,7 @@ public class KeyButtonView extends ImageView {
             case MotionEvent.ACTION_DOWN:
                 //Log.d("KeyButtonView", "press");
                 mDownTime = SystemClock.uptimeMillis();
-                setPressed(true);
+                post(mGlowAnimatorDown);
                 if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_DOWN, 0, mDownTime);
                 } else {
@@ -336,7 +348,7 @@ public class KeyButtonView extends ImageView {
                 break;
             case MotionEvent.ACTION_UP:
                 final boolean doIt = isPressed();
-                setPressed(false);
+                post(mGlowAnimatorUp);
                 if (mCode != 0) {
                     if (doIt) {
                         sendEvent(KeyEvent.ACTION_UP, 0);
