@@ -140,7 +140,14 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                 }
             });
         }
-        showCancelButton();
+        if (mContext.getResources().getBoolean(R.bool.config_show_cancel_button)) {
+            showCancelButton();
+        } else {
+            final View cancel = findViewById(R.id.key_cancel);
+            if (cancel != null) {
+                cancel.setVisibility(INVISIBLE);
+            }
+        }
 
         // The delete button is of the PIN keyboard itself in some (e.g. tablet) layouts,
         // not a separate view
