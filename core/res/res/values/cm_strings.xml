@@ -208,6 +208,9 @@
     <string name="app_ops_write_mms">write an MMS message</string>
     <string name="app_ops_write_sms">write an SMS message</string>
 
+    <!-- WiFi turn off notification -->
+    <string name="notify_turn_wifi_off_title">Turn Wi-Fi off</string>
+
     <string name="privacy_guard_dialog_title">Privacy Guard</string>
     <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> would like to <xliff:g id="op">%2$s</xliff:g>.</string>
 
