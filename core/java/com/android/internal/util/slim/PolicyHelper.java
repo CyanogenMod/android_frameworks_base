@@ -206,6 +206,9 @@ public class PolicyHelper {
         } else if (clickAction.equals(PolicyConstants.ACTION_NAVBAR)) {
             return context.getResources().getDrawable(
                 com.android.internal.R.drawable.ic_lock_navbar);
+        } else if (clickAction.equals(PolicyConstants.ACTION_MOBILEDATA)) {
+            return context.getResources().getDrawable(
+                com.android.internal.R.drawable.ic_lock_mobile_data);
         }
         return null;
     }

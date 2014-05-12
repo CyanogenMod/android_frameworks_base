@@ -47,4 +47,13 @@
     <string name="animation_grow_shrink_left">Grow in (Left)</string>
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
     <string name="animation_random">Random</string>
+
+    <!-- label for item that toggle mobile data -->
+    <string name="global_actions_toggle_mobile_data">Mobile data</string>
+
+    <!-- status message in phone options dialog for when mobile data is on -->
+    <string name="global_actions_mobile_data_on_status">Mobile data is ON</string>
+
+    <!-- status message in phone options dialog for when mobile data is off -->
+    <string name="global_actions_mobile_data_off_status">Mobile data is OFF</string>
 </resources>

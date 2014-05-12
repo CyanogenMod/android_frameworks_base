@@ -121,6 +121,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction mPieModeOn;
     private ToggleAction mPAPieModeOn;
     private ToggleAction mNavBarModeOn;
+    private ToggleAction mMobileDataOn;
 
     private MyAdapter mAdapter;
 
@@ -131,11 +132,13 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction.State mPieState = ToggleAction.State.Off;
     private ToggleAction.State mPAPieState = ToggleAction.State.Off;
     private ToggleAction.State mNavBarState = ToggleAction.State.Off;
+    private ToggleAction.State mMobileDataState = ToggleAction.State.Off;
     private boolean mIsWaitingForEcmExit = false;
     private boolean mHasTelephony;
     private boolean mHasVibrator;
     private Profile mChosenProfile;
     private final boolean mShowSilentToggle;
+    private ConnectivityManager mConnectivityManager;
 
     private static int mTextColor;
 
@@ -162,9 +165,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         TelephonyManager telephonyManager =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
-        ConnectivityManager cm = (ConnectivityManager)
+        mConnectivityManager = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        mHasTelephony = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
+        mHasTelephony = mConnectivityManager.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
         mContext.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON), true,
                 mAirplaneModeObserver);
@@ -458,6 +461,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             config.getClickAction(), config.getIcon(), true),
                             config.getClickActionDescription());
                 mItems.add(mPAPieModeOn);
+            // Mobile Data
+            } else if (config.getClickAction().equals(PolicyConstants.ACTION_MOBILEDATA)) {
+                constructMobileDataToggle(PolicyHelper.getPowerMenuIconImage(mContext,
+                            config.getClickAction(), config.getIcon(), true),
+                            config.getClickActionDescription());
+                mItems.add(mMobileDataOn);
             // Navigation bar
             } else if (config.getClickAction().equals(PolicyConstants.ACTION_NAVBAR)) {
                 constructNavBarToggle(PolicyHelper.getPowerMenuIconImage(mContext,
@@ -564,6 +573,37 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
         };
         onAirplaneModeChanged();
+    }
+
+    private void constructMobileDataToggle(Drawable icon, String description) {
+        mMobileDataOn = new ToggleAction(
+                icon,
+                icon,
+                description,
+                R.string.global_actions_mobile_data_on_status,
+                R.string.global_actions_mobile_data_off_status) {
+
+            void onToggle(boolean on) {
+                // comment
+                Log.i(TAG, "MobileData Toggle On");
+                boolean currentState = mConnectivityManager.getMobileDataEnabled();
+                mConnectivityManager.setMobileDataEnabled(!currentState);
+            }
+
+            @Override
+            protected void changeStateFromPress(boolean buttonOn) {
+                // comment
+                Log.i(TAG, "changeStateFromPress");
+            }
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return false;
+            }
+        };
     }
 
     private void constructExpandedDesktopToggle(Drawable icon, String description) {
@@ -754,6 +794,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         refreshSilentMode();
         if (mAirplaneModeOn != null) {
             mAirplaneModeOn.updateState(mAirplaneState);
+        }
+        if (mMobileDataOn != null) {
+            mMobileDataOn.updateState(mConnectivityManager.getMobileDataEnabled() ? ToggleAction.State.On : ToggleAction.State.Off);
         }
         if (mExpandDesktopModeOn != null) {
             mExpandDesktopModeOn.updateState(mExpandDesktopState);
