@@ -581,6 +581,13 @@ class ServerThread {
                 } catch (Throwable e) {
                     reportWtf("starting Service Discovery Service", e);
                 }
+
+                try {
+                    Slog.i(TAG, "DPM Service");
+                    startDpmService(context, connectivity);
+                } catch (Throwable e) {
+                    reportWtf("starting DpmService", e);
+                }
             }
 
             if (!disableNonCoreServices) {
@@ -1184,6 +1191,34 @@ class ServerThread {
             return false;
         }
         return true;
+    }
+
+    private static final void startDpmService(Context context, ConnectivityService connectivity) {
+        try {
+            Object dpmObj = null;
+            int dpmFeature = SystemProperties.getInt("persist.dpm.feature", 0);
+            Slog.i(TAG, "DPM configuration set to " + dpmFeature);
+
+            if (dpmFeature > 0 && dpmFeature < 8) {
+                PathClassLoader dpmClassLoader =
+                  new PathClassLoader("/system/framework/com.qti.dpmframework.jar",
+                                        ClassLoader.getSystemClassLoader());
+                Class dpmClass = dpmClassLoader.loadClass("com.qti.dpm.DpmService");
+                Constructor dpmConstructor = dpmClass.getConstructor(
+                                    new Class[] {Context.class, ConnectivityService.class});
+                dpmObj = dpmConstructor.newInstance(context, connectivity);
+                try {
+                    if(dpmObj != null && (dpmObj instanceof IBinder)) {
+                        ServiceManager.addService("dpmservice", (IBinder)dpmObj);
+                        Slog.i(TAG, "Created DPM Service");
+                    }
+                } catch (Exception e) {
+                    Slog.i(TAG, "starting DPM Service", e);
+                }
+            }
+        } catch (Throwable e) {
+            Slog.i(TAG, "starting DPM Service", e);
+        }
     }
 }
 
