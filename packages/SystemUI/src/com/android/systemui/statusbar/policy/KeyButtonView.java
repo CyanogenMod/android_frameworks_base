@@ -85,6 +85,24 @@ public class KeyButtonView extends ImageView {
         }
     };
 
+    Runnable mGlowAnimatorDown = new Runnable() {
+        public void run() {
+            setPressed(true);
+        }
+    };
+
+    Runnable mGlowAnimatorUp = new Runnable() {
+        public void run() {
+            setPressed(false);
+        }
+    };
+
+    Runnable mHapticFeedback = new Runnable() {
+        public void run() {
+            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        }
+    };
+
     public KeyButtonView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -305,12 +323,12 @@ public class KeyButtonView extends ImageView {
             case MotionEvent.ACTION_DOWN:
                 //Log.d("KeyButtonView", "press");
                 mDownTime = SystemClock.uptimeMillis();
-                setPressed(true);
+                post(mGlowAnimatorDown);
                 if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_DOWN, 0, mDownTime);
                 } else {
                     // Provide the same haptic feedback that the system offers for virtual keys.
-                    performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                    post(mHapticFeedback);
                 }
                 if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
@@ -326,17 +344,20 @@ public class KeyButtonView extends ImageView {
                         && y < getHeight() + mTouchSlop);
                 break;
             case MotionEvent.ACTION_CANCEL:
-                setPressed(false);
-                if (mCode != 0) {
-                    sendEvent(KeyEvent.ACTION_UP, KeyEvent.FLAG_CANCELED);
-                }
                 if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
+                }
+                post(mGlowAnimatorUp);
+                if (mCode != 0) {
+                    sendEvent(KeyEvent.ACTION_UP, KeyEvent.FLAG_CANCELED);
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 final boolean doIt = isPressed();
-                setPressed(false);
+                if (supportsLongPress()) {
+                    removeCallbacks(mCheckLongPress);
+                }
+                post(mGlowAnimatorUp);
                 if (mCode != 0) {
                     if (doIt) {
                         sendEvent(KeyEvent.ACTION_UP, 0);
@@ -350,9 +371,6 @@ public class KeyButtonView extends ImageView {
                     if (doIt) {
                         performClick();
                     }
-                }
-                if (supportsLongPress()) {
-                    removeCallbacks(mCheckLongPress);
                 }
                 break;
         }
