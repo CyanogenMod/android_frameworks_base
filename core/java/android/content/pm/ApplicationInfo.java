@@ -471,11 +471,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public int enabledSetting = PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 
     /**
-     * @hide
-     */
-    public static final String HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME = "handleThemeConfigChanges";
-
-    /**
      * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
      * {@hide}
      */
