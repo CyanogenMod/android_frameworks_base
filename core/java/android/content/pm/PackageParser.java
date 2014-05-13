@@ -2244,16 +2244,6 @@ public class PackageParser {
         return a;
     }
 
-    private void parseActivityThemeAttributes(XmlPullParser parser, AttributeSet attrs,
-                                              ActivityInfo ai) {
-        for (int i = 0; i < attrs.getAttributeCount(); i++) {
-            String attrName = attrs.getAttributeName(i);
-            if (attrName.equalsIgnoreCase(ApplicationInfo.HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
-                ai.configChanges |= ActivityInfo.CONFIG_THEME_RESOURCE;
-            }
-        }
-    }
-
     private boolean parseApplication(Package owner, Resources res,
             XmlPullParser parser, AttributeSet attrs, int flags, String[] outError)
         throws XmlPullParserException, IOException {
@@ -2848,8 +2838,6 @@ public class PackageParser {
         if (outError[0] != null) {
             return null;
         }
-
-        parseActivityThemeAttributes(parser, attrs, a.info);
 
         int outerDepth = parser.getDepth();
         int type;
