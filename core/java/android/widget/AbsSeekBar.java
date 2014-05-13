@@ -49,13 +49,17 @@ public abstract class AbsSeekBar extends ProgressBar {
      * progress.
      */
     private int mKeyProgressIncrement = 1;
-    
     private static final int NO_ALPHA = 0xFF;
     private float mDisabledAlpha;
+
+    private float mInitialY;
+
+    private long mInitialDelayTime = 0;
     
     private int mScaledTouchSlop;
     private float mTouchDownX;
     private boolean mIsDragging;
+    private boolean mWentOutsideY;
 
     public AbsSeekBar(Context context) {
         super(context);
@@ -368,6 +372,7 @@ public abstract class AbsSeekBar extends ProgressBar {
                     if (mThumb != null) {
                         invalidate(mThumb.getBounds()); // This may be within the padding region
                     }
+                    mInitialY = event.getY();
                     onStartTrackingTouch();
                     trackTouchEvent(event);
                     attemptClaimDrag();
@@ -403,6 +408,7 @@ public abstract class AbsSeekBar extends ProgressBar {
                     trackTouchEvent(event);
                     onStopTrackingTouch();
                 }
+                mWentOutsideY = false;
                 // ProgressBar doesn't know to repaint the thumb drawable
                 // in its inactive state when the touch stops (because the
                 // value has not apparently changed)
@@ -423,6 +429,7 @@ public abstract class AbsSeekBar extends ProgressBar {
     private void trackTouchEvent(MotionEvent event) {
         final int width = getWidth();
         final int available = width - mPaddingLeft - mPaddingRight;
+        final float y = event.getY();
         int x = (int)event.getX();
         float scale;
         float progress = 0;
@@ -446,9 +453,52 @@ public abstract class AbsSeekBar extends ProgressBar {
             }
         }
         final int max = getMax();
-        progress += scale * max;
-        
-        setProgress(updateTouchProgress(getProgress(), (int) progress), true);
+        final int currProgress = getProgress();
+        final float distance = Math.abs(mInitialY - y);
+        if (distance >= 300 || mWentOutsideY) {
+            mWentOutsideY = true;
+            // User has their finger far up/down in the Y direction
+            // so we allow for fine movement of the progress bar
+            // to help them access the exact value they would like
+            if (mInitialDelayTime == 0) {
+                mInitialDelayTime = System.currentTimeMillis();
+            }
+
+            int delayTime = 0;
+            // User is very far from the starting y value
+            // so we implement a timer that allows for even
+            // finer and slower control of the x values of the slider
+            if (distance >= 300 && distance < 400) {
+                delayTime = 250;
+            } else if (distance >= 400 && distance < 500) {
+                delayTime = 350;
+            } else if (distance >= 500 && distance < 600) {
+                delayTime = 450;
+            } else if (distance >= 600) {
+                delayTime = 550;
+            }
+
+
+            if (System.currentTimeMillis() - mInitialDelayTime >= delayTime) {
+                mInitialDelayTime = 0;
+                // Separate into pixel-sized sections
+                final int increment = Math.max(1, Math.round(max / available));
+                final float incomingProgress = progress + scale * max;
+                if (incomingProgress > currProgress) {
+                    progress = currProgress + increment;
+                } else if (incomingProgress < currProgress){
+                    progress = currProgress - increment;
+                } else {
+                    progress = currProgress;
+                }
+            } else {
+                // No change, small incremental changes in effect
+                progress = currProgress;
+            }
+        } else {
+            progress += scale * max;
+        }    
+        setProgress(updateTouchProgress(currProgress, (int) progress), true);
     }
 
     /**
