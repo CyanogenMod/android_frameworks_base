@@ -81,6 +81,10 @@ public class PPPOEService {
 
     public static final int CMD_START_PPPOE               = 0;
     public static final int CMD_STOP_PPPOE                = 1;
+    public static final int CMD_START_PPPOE_DELAY         = 2;
+
+    //default delay start PPPOE timer
+    public static final int DELAY_START_PPPOE_TIMER       = 5 * 1000;
 
     /*
      * below ACTION and EXTRA definition are the requirement of China Telecom
@@ -222,11 +226,22 @@ public class PPPOEService {
             Log.i(TAG, "handleMessage msg is " + msg);
             switch(msg.what) {
                 case CMD_START_PPPOE:
-                    PPPOEConfig config = (PPPOEConfig) msg.obj;
-                    startPPPOE(config);
+                    long delayTimer = 0;
+                    if (mContext == null) {
+                        delayTimer = DELAY_START_PPPOE_TIMER;
+                    } else {
+                        delayTimer = mContext.getResources().getInteger(
+                                com.android.internal.R.integer.config_delay_startPPPOE_timer);
+                    }
+                    mMainHandler.sendMessageDelayed(mMainHandler.obtainMessage(
+                            CMD_START_PPPOE_DELAY, (PPPOEConfig) msg.obj), delayTimer);
                     break;
                 case CMD_STOP_PPPOE:
                     stopPPPOE();
+                    break;
+                case CMD_START_PPPOE_DELAY:
+                    PPPOEConfig config = (PPPOEConfig) msg.obj;
+                    startPPPOE(config);
                     break;
                 default:
                     break;
@@ -234,7 +249,6 @@ public class PPPOEService {
         }
 
     };
-
 
     private void startPPPOE(PPPOEConfig config) {
         NativeDaemonEvent event = null;

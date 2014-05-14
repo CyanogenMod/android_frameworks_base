@@ -1461,7 +1461,11 @@
     <!-- Configuration that determines if ACTIVATE_REJECT_GGSN is to be treated as
          a permanent error -->
     <bool name="config_reject_ggsn_perm_failure">true</bool>
+
     <!-- Configuration that determines if PROTOCOL_ERRORS is to be treated as a
          permanent error -->
     <bool name="config_protocol_errors_perm_failure">true</bool>
+
+    <!-- config delay timer to start PPPOE -->
+    <integer name="config_delay_startPPPOE_timer" translatable="false">5000</integer>
 </resources>
