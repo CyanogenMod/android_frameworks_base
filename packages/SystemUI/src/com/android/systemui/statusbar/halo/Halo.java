@@ -1741,6 +1741,11 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                         loadLastNotification(false);
                     } else {
                         tick(entry, 0, 0, false, false, false);
+                        // prevent halo showing removed notification after gesture
+                        mLastNotificationEntry = entry;
+
+                        // no notification left, reset mTaskIntent
+                        if (entry == null) mTaskIntent = null;
                     }
                     final int c = getHaloMsgCount()-getHidden() < 0 ? 0 : getHaloMsgCount()-getHidden();
                     mEffect.setHaloMessageNumber(c);
