@@ -37,4 +37,5 @@
 
     <!-- monitor locale change -->
     <bool name="config_monitor_locale_change">false</bool>
+    <bool name="config_showEmergencyCallOnlyInLockScreen">false</bool>
 </resources>
