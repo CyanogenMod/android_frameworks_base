@@ -22,4 +22,16 @@
         <item>@drawable/ic_ad_target_unlock</item>
     </array>
 
+    <!-- Cardinal directions for the compass tile -->
+    <string-array name="cardinal_directions">
+        <item>N</item>  <!-- North -->
+        <item>NE</item> <!-- North east -->
+        <item>E</item>  <!-- East -->
+        <item>SE</item> <!-- South east -->
+        <item>S</item>  <!-- South -->
+        <item>SW</item> <!-- South west -->
+        <item>W</item>  <!-- West -->
+        <item>NW</item> <!-- North west -->
+    </string-array>
+
 </resources>
