@@ -28,7 +28,7 @@ import android.util.Log;
 
 public class SensorActivityHandler {
 
-    private final static String TAG = "NotificationPeek.SensorActivityHandler";
+    private final static String TAG = "Peek.SensorActivityHandler";
 
     private final static int INCREMENTS_TO_DISABLE = 5;
     private final static float NOISE_THRESHOLD = 0.5f;
@@ -100,7 +100,7 @@ public class SensorActivityHandler {
                                     mGyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
                         }
                     }
-                    if(NotificationPeek.DEBUG) {
+                    if(Peek.DEBUG) {
                         Log.d(TAG, "In pocket: "+inPocket+", old: "+mInPocket);
                     }
                     boolean oldInPocket = mInPocket;
@@ -133,7 +133,7 @@ public class SensorActivityHandler {
                         if(dX >= NOISE_THRESHOLD ||
                                 dY >= NOISE_THRESHOLD || dZ >= NOISE_THRESHOLD) {
                             if (mWaitingForMovement) {
-                                if(NotificationPeek.DEBUG) Log.d(TAG, "On table: false");
+                                if(Peek.DEBUG) Log.d(TAG, "On table: false");
                                 mOnTable = false;
                                 mCallback.onTableModeChanged(mOnTable);
                                 registerEventListeners();
@@ -146,7 +146,7 @@ public class SensorActivityHandler {
                                 mSensorIncrement ++;
                                 if (mSensorIncrement == INCREMENTS_TO_DISABLE) {
                                     unregisterProximityEvent();
-                                    if(NotificationPeek.DEBUG) Log.d(TAG, "On table: true");
+                                    if(Peek.DEBUG) Log.d(TAG, "On table: true");
                                     mOnTable = true;
                                     mCallback.onTableModeChanged(mOnTable);
                                     mWaitingForMovement = true;
@@ -195,13 +195,13 @@ public class SensorActivityHandler {
 
     public void registerEventListeners() {
         if(!mProximityRegistered) {
-            if(NotificationPeek.DEBUG) Log.d(TAG, "Registering proximity polling");
+            if(Peek.DEBUG) Log.d(TAG, "Registering proximity polling");
             mSensorManager.registerListener(mProximityEventListener, mProximitySensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
             mProximityRegistered = true;
         }
         if(!mGyroscopeRegistered) {
-            if(NotificationPeek.DEBUG) Log.d(TAG, "Registering gyroscope polling");
+            if(Peek.DEBUG) Log.d(TAG, "Registering gyroscope polling");
             mSensorManager.registerListener(mGyroscopeEventListener, mGyroscopeSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
             mGyroscopeRegistered = true;
@@ -215,7 +215,7 @@ public class SensorActivityHandler {
 
     private void unregisterProximityEvent() {
         if(mProximityRegistered) {
-            if(NotificationPeek.DEBUG) Log.d(TAG, "Unregistering proximity polling");
+            if(Peek.DEBUG) Log.d(TAG, "Unregistering proximity polling");
             mSensorManager.unregisterListener(mProximityEventListener);
             mProximityRegistered = false;
         }
@@ -223,7 +223,7 @@ public class SensorActivityHandler {
 
     private void unregisterGyroscopeEvent() {
         if(mGyroscopeRegistered) {
-            if(NotificationPeek.DEBUG) Log.d(TAG, "Unregistering gyroscope polling");
+            if(Peek.DEBUG) Log.d(TAG, "Unregistering gyroscope polling");
             mSensorManager.unregisterListener(mGyroscopeEventListener);
             mLastX = mLastY = mLastZ = 0;
             mSensorIncrement = 0;

@@ -31,17 +31,17 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.systemui.R;
 import com.android.systemui.SwipeHelper;
 
-public class NotificationLayout extends LinearLayout implements SwipeHelper.Callback {
+public class PeekLayout extends LinearLayout implements SwipeHelper.Callback {
 
     private SwipeHelper mSwipeHelper;
 
-    private NotificationPeek mNotificationPeek;
+    private Peek mPeek;
 
-    public NotificationLayout(Context context) {
+    public PeekLayout(Context context) {
         this(context, null);
     }
 
-    public NotificationLayout(Context context, AttributeSet attrs) {
+    public PeekLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         float densityScale = context.getResources().getDisplayMetrics().density;
         float pagingTouchSlop = ViewConfiguration.get(context).getScaledPagingTouchSlop();
@@ -67,8 +67,8 @@ public class NotificationLayout extends LinearLayout implements SwipeHelper.Call
         return mSwipeHelper.onTouchEvent(event) || super.onTouchEvent(event);
     }
 
-    public void setNotificationPeek(NotificationPeek peek) {
-        mNotificationPeek = peek;
+    public void setPeek(Peek peek) {
+        mPeek = peek;
     }
 
     @Override
@@ -78,26 +78,26 @@ public class NotificationLayout extends LinearLayout implements SwipeHelper.Call
 
     @Override
     public View getChildContentView(View v) {
-        return mNotificationPeek.getNotificationView();
+        return mPeek.getNotificationView();
     }
 
     @Override
     public boolean canChildBeDismissed(View v) {
         StatusBarNotification n = (StatusBarNotification)
-                mNotificationPeek.getNotificationView().getTag();
+                mPeek.getNotificationView().getTag();
         return n.isClearable();
     }
 
     @Override
     public void onChildDismissed(View v) {
         StatusBarNotification n = (StatusBarNotification)
-                mNotificationPeek.getNotificationView().getTag();
+                mPeek.getNotificationView().getTag();
         final String pkg = n.getPackageName();
         final String tag = n.getTag();
         final int id = n.getId();
         try {
-            mNotificationPeek.getStatusBarService().onNotificationClear(pkg, tag, id);
-            mNotificationPeek.setAnimating(false);
+            mPeek.getStatusBarService().onNotificationClear(pkg, tag, id);
+            mPeek.setAnimating(false);
         } catch (RemoteException ex) {
             // system process is dead if we're here.
         }
@@ -105,11 +105,11 @@ public class NotificationLayout extends LinearLayout implements SwipeHelper.Call
 
     @Override
     public void onBeginDrag(View v) {
-        mNotificationPeek.setAnimating(true);
+        mPeek.setAnimating(true);
     }
 
     @Override
     public void onDragCancelled(View v) {
-        mNotificationPeek.setAnimating(false);
+        mPeek.setAnimating(false);
     }
 }

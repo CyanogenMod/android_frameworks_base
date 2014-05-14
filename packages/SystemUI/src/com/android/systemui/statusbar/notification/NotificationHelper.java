@@ -34,6 +34,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,6 +48,7 @@ import android.widget.TextView;
 
 import com.android.internal.widget.SizeAdaptiveLayout;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.BaseStatusBar.NotificationClicker;
 import com.android.systemui.statusbar.NotificationData.Entry;
 
@@ -54,30 +57,64 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PanelHelper {
+/* This class has some helper methods and also works as a bridge for Peek's notifications and its surrounding layers */
+public class NotificationHelper {
 
     public final static String DELIMITER = "|";
 
-    // Static methods
+    private TelephonyManager mTelephonyManager;
+    private BaseStatusBar mStatusBar;
+    private Peek mPeek;
 
+    public boolean mRingingOrConnected = false;
+
+    private Context mContext;
+
+    public NotificationHelper(BaseStatusBar statusBar, Context context) {
+        mContext = context;
+        mStatusBar = statusBar;
+        mPeek = mStatusBar.getPeekInstance();
+        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        mTelephonyManager.listen(new CallStateListener(), PhoneStateListener.LISTEN_CALL_STATE);
+    }
+
+    public boolean isPeekEnabled() {
+        return mPeek.mEnabled;
+    }
+
+    public boolean isPeekShowing() {
+        return mPeek.isShowing();
+    }
+
+    public Peek getPeek() {
+        return mPeek;
+    }
+
+    /**
+     * Hint: <!-- XYZ --> = XYZ feature(s) make use of the following
+     * -------------------------------------------------------------
+     * <!-- Peek -->
+     * Main check to verify we need to show this notification or process it
+     */
     public static boolean shouldDisplayNotification(
-            StatusBarNotification oldNotif, StatusBarNotification newNotif) {
+            StatusBarNotification oldNotif, StatusBarNotification newNotif, boolean when) {
         // First check for ticker text, if they are different, some other parameters will be
         // checked to determine if we should show the notification.
         CharSequence oldTickerText = oldNotif.getNotification().tickerText;
         CharSequence newTickerText = newNotif.getNotification().tickerText;
+
         if (newTickerText == null ? oldTickerText == null : newTickerText.equals(oldTickerText)) {
             // If old notification title isn't null, show notification if
             // new notification title is different. If it is null, show notification
             // if the new one isn't.
             String oldNotificationText = getNotificationTitle(oldNotif);
             String newNotificationText = getNotificationTitle(newNotif);
-            if(newNotificationText == null ? oldNotificationText != null : 
-                    !newNotificationText.equals(oldNotificationText)) return true;
+            if(newNotificationText == null ? oldNotificationText != null :
+               !newNotificationText.equals(oldNotificationText)) return true;
 
             // Last chance, check when the notifications were posted. If times
-            // are equal, we shouldn't display the new notification.
-            if(oldNotif.getNotification().when != newNotif.getNotification().when) return true;
+            // are equal, we shouldn't display the new notification. (Should apply to peek only)
+            if(when && (oldNotif.getNotification().when != newNotif.getNotification().when)) return true;
             return false;
         }
         return true;
@@ -95,11 +132,16 @@ public class PanelHelper {
 
     public static String getContentDescription(StatusBarNotification content) {
         if (content != null) {
-            return content.getPackageName() + DELIMITER + content.getId();
+            String tag = content.getTag() == null ? "null" : content.getTag();
+            return content.getPackageName() + DELIMITER + content.getId() + DELIMITER + tag;
         }
         return null;
     }
 
+    /**
+     * <!-- Peek -->
+     * Touch brigde
+     */
     public static View.OnTouchListener getHighlightTouchListener(final int color) {
         return new View.OnTouchListener() {
             @Override
@@ -129,5 +171,37 @@ public class PanelHelper {
                 return false;
             }
         };
+    }
+
+    /**
+     * <!-- Peek -->
+     * Call state listener
+     * Telephony states booleans
+     */
+    private class CallStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    mRingingOrConnected = true;
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:
+                    mRingingOrConnected = false;
+                    break;
+            }
+        }
+    }
+
+
+    public boolean isRingingOrConnected() {
+        return mRingingOrConnected;
+    }
+
+    public boolean isSimPanelShowing() {
+        int state = mTelephonyManager.getSimState();
+        return state == TelephonyManager.SIM_STATE_PIN_REQUIRED
+                 || state == TelephonyManager.SIM_STATE_PUK_REQUIRED
+                 || state == TelephonyManager.SIM_STATE_NETWORK_LOCKED;
     }
 }
