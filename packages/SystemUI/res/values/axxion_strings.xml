@@ -48,5 +48,9 @@
    
     <!-- Power menu -->
     <string name="quick_settings_powermenu_label">Power Menu</string> 
+    
+        <!-- CPUFreq -->
+    <string name="cpufreq_max">Max CPU Freq</string>
+    <string name="cpufreq_min">Min CPU Freq</string>  
 
 </resources>

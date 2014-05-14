@@ -17,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.PhoneConstants;
+import java.io.File;
 
 public class QSUtils {
         public static boolean deviceSupportsImeSwitcher(Context ctx) {
@@ -87,5 +88,15 @@ public class QSUtils {
 
         public static boolean adbEnabled(ContentResolver resolver) {
             return (Settings.Global.getInt(resolver, Settings.Global.ADB_ENABLED, 0)) == 1;
+        }
+        public static boolean deviceSupportsCPUFreq() {
+            /*
+             * Actually every kernel should support this,
+             * but just in case!
+             */
+            String[] paths = { "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq" };
+            for (String path : paths)
+                if (new File(path).exists()) return true;
+            return false;
         }
 }
