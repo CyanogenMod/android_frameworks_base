@@ -423,4 +423,8 @@ interface IPackageManager {
 
     /** Themes */
     void updateIconMapping(String pkgName);
+
+    /** Protected Apps */
+    void setComponentProtectedSetting(in ComponentName componentName, in boolean newState,
+            int userId);
 }
