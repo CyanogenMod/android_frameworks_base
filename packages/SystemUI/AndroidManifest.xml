@@ -95,6 +95,9 @@
         android:process="com.android.systemui"
         android:supportsRtl="true">
 
+        <uses-library android:name="org.cyanogenmod.hardware"
+            android:required="false" />
+
         <!-- Broadcast receiver that gets the broadcast at boot time and starts
              up everything else.
              TODO: Should have an android:permission attribute

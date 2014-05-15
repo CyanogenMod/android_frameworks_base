@@ -3546,6 +3546,12 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
+         *  Enable double tap gesture on to wake device
+         * @hide
+         */
+        public static final String DOUBLE_TAP_WAKE_GESTURE = "double_tap_wake_gesture";
+
+        /**
          * Whether to enable voice wakeup.  The value is boolean (1 or 0).
          * @hide
          */
