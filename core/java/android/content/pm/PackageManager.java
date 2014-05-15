@@ -1347,6 +1347,18 @@ public abstract class PackageManager {
             = "android.content.pm.extra.PERMISSION_LIST";
 
     /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has set to protected status
+     */
+    public static final boolean COMPONENT_PROTECTED_STATUS = false;
+
+    /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has been explicitly set to visible status
+     */
+    public static final boolean COMPONENT_VISIBLE_STATUS = true;
+
+    /**
      * Retrieve overall information about an application package that is
      * installed on the system.
      * <p>
@@ -3238,4 +3250,9 @@ public abstract class PackageManager {
         return Environment.getDataDirectory().toString() + "/user/" + userId
                 + "/" + packageName;
     }
+
+    /**
+     * Update Component protection state
+     */
+    public abstract void setComponentProtectedSetting(ComponentName componentName, boolean newState);
 }

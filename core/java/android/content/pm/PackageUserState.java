@@ -35,6 +35,8 @@ public class PackageUserState {
 
     public HashSet<String> disabledComponents;
     public HashSet<String> enabledComponents;
+    public HashSet<String> protectedComponents;
+    public HashSet<String> visibleComponents;
 
     public PackageUserState() {
         installed = true;
@@ -53,5 +55,9 @@ public class PackageUserState {
                 ? new HashSet<String>(o.disabledComponents) : null;
         enabledComponents = o.enabledComponents != null
                 ? new HashSet<String>(o.enabledComponents) : null;
+        protectedComponents = o.protectedComponents != null
+                ? new HashSet<String>(o.protectedComponents) : null;
+        visibleComponents = o.visibleComponents != null
+                ? new HashSet<String>(o.visibleComponents) : null;
     }
 }
