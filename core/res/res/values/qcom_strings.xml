@@ -87,5 +87,6 @@
         <item>Trying to turn on/off Wi-Fi</item>
         <item>Trying to trun on/off Bluetooth</item>
         <item>Trying to start at bootup</item>
+        <item>Trying to turn on/off NFC</item>
     </string-array>
 </resources>
