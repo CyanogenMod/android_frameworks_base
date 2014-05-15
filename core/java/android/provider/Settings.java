@@ -5682,6 +5682,13 @@ public final class Settings {
         public static final String PEEK_PICKUP_TIMEOUT = "peek_pickup_timeout";
 
         /**
+         * Time to show notification
+         * 5000ms = default
+         * @hide
+         */
+        public static final String PEEK_WAKE_TIMEOUT = "peek_wake_timeout";
+
+        /**
          * In call dialpad state.
          * 0 = hidden
          * 1 = showing
