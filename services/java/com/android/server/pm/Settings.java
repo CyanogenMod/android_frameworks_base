@@ -101,6 +101,8 @@ final class Settings {
     private static final String TAG_ITEM = "item";
     private static final String TAG_DISABLED_COMPONENTS = "disabled-components";
     private static final String TAG_ENABLED_COMPONENTS = "enabled-components";
+    private static final String TAG_PROTECTED_COMPONENTS = "protected-components";
+    private static final String TAG_VISIBLE_COMPONENTS = "visible-components";
     private static final String TAG_PACKAGE_RESTRICTIONS = "package-restrictions";
     private static final String TAG_PACKAGE = "pkg";
 
@@ -482,7 +484,7 @@ final class Settings {
                                     true, // stopped,
                                     true, // notLaunched
                                     false, // blocked
-                                    null, null, null);
+                                    null, null, null, null, null);
                             writePackageRestrictionsLPr(user.id);
                         }
                     }
@@ -881,7 +883,7 @@ final class Settings {
                                 false,  // stopped
                                 false,  // notLaunched
                                 false,  // blocked
-                                null, null, null);
+                                null, null, null, null, null);
                     }
                     return;
                 }
@@ -943,6 +945,8 @@ final class Settings {
 
                     HashSet<String> enabledComponents = null;
                     HashSet<String> disabledComponents = null;
+                    HashSet<String> protectedComponents = null;
+                    HashSet<String> visibleComponents = null;
 
                     int packageDepth = parser.getDepth();
                     while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
@@ -957,11 +961,16 @@ final class Settings {
                             enabledComponents = readComponentsLPr(parser);
                         } else if (tagName.equals(TAG_DISABLED_COMPONENTS)) {
                             disabledComponents = readComponentsLPr(parser);
+                        } else if (tagName.equals(TAG_PROTECTED_COMPONENTS)) {
+                            protectedComponents = readComponentsLPr(parser);
+                        } else if (tagName.equals(TAG_VISIBLE_COMPONENTS)) {
+                            visibleComponents = readComponentsLPr(parser);
                         }
                     }
 
                     ps.setUserState(userId, enabled, installed, stopped, notLaunched, blocked,
-                            enabledCaller, enabledComponents, disabledComponents);
+                            enabledCaller, enabledComponents, disabledComponents,
+                            protectedComponents, visibleComponents);
                 } else if (tagName.equals("preferred-activities")) {
                     readPreferredActivitiesLPw(parser, userId);
                 } else {
@@ -1072,7 +1081,11 @@ final class Settings {
                         || (ustate.enabledComponents != null
                                 && ustate.enabledComponents.size() > 0)
                         || (ustate.disabledComponents != null
-                                && ustate.disabledComponents.size() > 0)) {
+                                && ustate.disabledComponents.size() > 0)
+                        || (ustate.protectedComponents != null
+                                && ustate.protectedComponents.size() > 0)
+                        || (ustate.visibleComponents != null
+                                && ustate.visibleComponents.size() > 0)) {
                     serializer.startTag(null, TAG_PACKAGE);
                     serializer.attribute(null, ATTR_NAME, pkg.name);
                     if (DEBUG_MU) Log.i(TAG, "  pkg=" + pkg.name + ", state=" + ustate.enabled);
@@ -1116,6 +1129,26 @@ final class Settings {
                             serializer.endTag(null, TAG_ITEM);
                         }
                         serializer.endTag(null, TAG_DISABLED_COMPONENTS);
+                    }
+                    if (ustate.protectedComponents != null
+                            && ustate.protectedComponents.size() > 0) {
+                        serializer.startTag(null, TAG_PROTECTED_COMPONENTS);
+                        for (final String name : ustate.protectedComponents) {
+                            serializer.startTag(null, TAG_ITEM);
+                            serializer.attribute(null, ATTR_NAME, name);
+                            serializer.endTag(null, TAG_ITEM);
+                        }
+                        serializer.endTag(null, TAG_PROTECTED_COMPONENTS);
+                    }
+                    if (ustate.visibleComponents != null
+                            && ustate.visibleComponents.size() > 0) {
+                        serializer.startTag(null, TAG_VISIBLE_COMPONENTS);
+                        for (final String name : ustate.visibleComponents) {
+                            serializer.startTag(null, TAG_ITEM);
+                            serializer.attribute(null, ATTR_NAME, name);
+                            serializer.endTag(null, TAG_ITEM);
+                        }
+                        serializer.endTag(null, TAG_VISIBLE_COMPONENTS);
                     }
                     serializer.endTag(null, TAG_PACKAGE);
                 }
