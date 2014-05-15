@@ -274,6 +274,12 @@ final class VirtualDisplayAdapter extends DisplayAdapter {
 
                 if ((mFlags & DisplayManager.VIRTUAL_DISPLAY_FLAG_SECURE) != 0) {
                     mInfo.flags |= DisplayDeviceInfo.FLAG_SECURE;
+                    if ((mFlags & DisplayManager.
+                                VIRTUAL_DISPLAY_FLAG_SUPPORTS_PROTECTED_BUFFERS)
+                            != 0) {
+                        mInfo.flags |=
+                                DisplayDeviceInfo.FLAG_SUPPORTS_PROTECTED_BUFFERS;
+                    }
                 }
                 if ((mFlags & DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION) != 0) {
                     mInfo.flags |= DisplayDeviceInfo.FLAG_PRESENTATION;
