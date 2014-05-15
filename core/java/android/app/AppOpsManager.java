@@ -209,7 +209,9 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_BOOT_COMPLETED = 49;
     /** @hide */
-    public static final int _NUM_OP = 50;
+    public static final int OP_NFC_CHANGE = 50;
+    /** @hide */
+    public static final int _NUM_OP = 51;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION =
@@ -283,6 +285,7 @@ public class AppOpsManager {
             OP_READ_MMS,
             OP_WRITE_MMS,
             OP_BOOT_COMPLETED,
+            OP_NFC_CHANGE,
     };
 
     /**
@@ -333,6 +336,7 @@ public class AppOpsManager {
             null,
             OPSTR_MONITOR_LOCATION,
             OPSTR_MONITOR_HIGH_POWER_LOCATION,
+            null,
             null,
             null,
             null,
@@ -397,6 +401,7 @@ public class AppOpsManager {
             "READ_MMS",
             "WRITE_MMS",
             "BOOT_COMPLETED",
+            "NFC_CHANGE",
     };
 
     /**
@@ -454,6 +459,7 @@ public class AppOpsManager {
             android.Manifest.permission.READ_SMS,
             android.Manifest.permission.WRITE_SMS,
             android.Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            android.Manifest.permission.NFC,
     };
 
     /**
@@ -510,6 +516,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED, // OP_READ_MMS
             AppOpsManager.MODE_ALLOWED, // OP_WRITE_MMS
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
+            AppOpsManager.MODE_ALLOWED, // OP_NFC_CHANGE
     };
 
     /**
@@ -566,6 +573,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ASK,     // OP_READ_MMS
             AppOpsManager.MODE_ASK,     // OP_WRITE_MMS
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
+            AppOpsManager.MODE_ASK, // OP_NFC_CHANGE
     };
 
 
@@ -593,6 +601,7 @@ public class AppOpsManager {
             false,
             false,
             true,      // OP_WRITE_SMS
+            false,
             false,
             false,
             false,
