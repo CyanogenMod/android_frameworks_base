@@ -25,6 +25,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_BRIGHTNESS;
 import static com.android.internal.util.cm.QSConstants.TILE_CAMERA;
 import static com.android.internal.util.cm.QSConstants.TILE_COMPASS;
 import static com.android.internal.util.cm.QSConstants.TILE_DELIMITER;
+import static com.android.internal.util.cm.QSConstants.TILE_DOUBLE_TAP;
 import static com.android.internal.util.cm.QSConstants.TILE_EXPANDEDDESKTOP;
 import static com.android.internal.util.cm.QSConstants.TILE_GPS;
 import static com.android.internal.util.cm.QSConstants.TILE_HEADS_UP;
@@ -76,6 +77,7 @@ import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.CameraTile;
 import com.android.systemui.quicksettings.CompassTile;
 import com.android.systemui.quicksettings.DockBatteryTile;
+import com.android.systemui.quicksettings.DoubleTapTile;
 import com.android.systemui.quicksettings.EqualizerTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.GPSTile;
@@ -299,6 +301,8 @@ public class QuickSettingsController {
                 }
             } else if (tile.equals(TILE_COMPASS)) {
                 qs = new CompassTile(mContext, this);
+            } else if (tile.equals(TILE_DOUBLE_TAP)) {
+                qs = new DoubleTapTile(mContext, this);
             } else if (tile.equals(TILE_HEADS_UP)) {
                 qs = new HeadsUpTile(mContext, this);
             }
