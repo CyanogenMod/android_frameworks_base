@@ -98,4 +98,5 @@
     <!-- Title of dialog when prompting user to select an app to share documents with [CHAR LIMIT=32] -->
     <string name="share_via">Share via</string>
 
+    <string name="toast_not_show_thumbnail">Can not show thumbnail on low ram device.</string>
 </resources>
