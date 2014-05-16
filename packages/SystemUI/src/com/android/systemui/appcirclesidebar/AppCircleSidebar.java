@@ -376,10 +376,14 @@ public class AppCircleSidebar extends FrameLayout implements PackageAdapter.OnCi
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (mFloatingWindow) {
+            Intent transparent = new Intent(mContext, com.android.systemui.Transparent.class);
+            transparent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            mContext.startActivity(transparent);
             intent.addFlags(Intent.FLAG_FLOATING_WINDOW);
             mFloatingWindow = false;
+        } else {
+            intent.setFlags(intent.getFlags() & ~Intent.FLAG_FLOATING_WINDOW);
         }
-        intent.setComponent(cn);
         mContext.startActivity(intent);
     }
 
