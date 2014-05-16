@@ -47,6 +47,7 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.crdroid.TaskUtils;
 import com.android.internal.util.cm.TorchConstants;
 import static com.android.internal.util.cm.NavigationRingConstants.*;
 import com.android.systemui.R;
@@ -106,6 +107,9 @@ public class ActionTarget {
 	} else if (action.equals(ACTION_POWER_MENU)) {
             Intent intent = new Intent(Intent.ACTION_POWERMENU);
 	    mContext.sendBroadcast(intent);
+            return true;
+        } else if (action.equals(ACTION_LAST_APP)) {
+            TaskUtils.toggleLastAppImpl(mContext);
             return true;
         } else if (action.equals(ACTION_IME)) {
             mContext.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));

@@ -38,6 +38,7 @@ public class NavigationRingConstants {
     public static final String ACTION_EXPANDED_DESKTOP     = "**expanded_desktop**";
     public static final String ACTION_KEYGUARD_SEARCH      = "**keyguard_search**";
     public static final String ACTION_NONE                 = "**none**";
+    public static final String ACTION_LAST_APP             = "**last_app**";   
 
 
     // no action
