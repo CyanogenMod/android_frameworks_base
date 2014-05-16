@@ -32,6 +32,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -46,6 +47,8 @@ public class BatteryMeterView extends View implements DemoMode {
 
     public static final int FULL = 96;
     public static final int EMPTY = 4;
+    public static final int ADD_LEVEL = 10;
+    public static final int ANIM_DURATION = 500;
 
     public static final float SUBPIXEL = 0.4f;  // inset rects for softer edges
 
@@ -55,6 +58,8 @@ public class BatteryMeterView extends View implements DemoMode {
     Paint mFramePaint, mBatteryPaint, mWarningTextPaint, mTextPaint, mBoltPaint;
     int mButtonHeight;
     private float mTextHeight, mWarningTextHeight;
+    private int mAnimOffset;
+    private boolean mIsCharging;
 
     private int mHeight;
     private int mWidth;
@@ -67,6 +72,7 @@ public class BatteryMeterView extends View implements DemoMode {
     private final RectF mButtonFrame = new RectF();
     private final RectF mClipFrame = new RectF();
     private final RectF mBoltFrame = new RectF();
+    private final Handler mHandler;
 
     private class BatteryTracker extends BroadcastReceiver {
         public static final int UNKNOWN_LEVEL = -1;
@@ -142,6 +148,12 @@ public class BatteryMeterView extends View implements DemoMode {
     }
 
     BatteryTracker mTracker = new BatteryTracker();
+    private final Runnable mInvalidate = new Runnable() {
+        @Override
+        public void run() {
+            postInvalidate();
+        }
+    };
 
     @Override
     public void onAttachedToWindow() {
@@ -175,6 +187,7 @@ public class BatteryMeterView extends View implements DemoMode {
     public BatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        mHandler = new Handler();
         final Resources res = context.getResources();
         TypedArray levels = res.obtainTypedArray(R.array.batterymeter_color_levels);
         TypedArray colors = res.obtainTypedArray(R.array.batterymeter_color_values);
@@ -258,10 +271,39 @@ public class BatteryMeterView extends View implements DemoMode {
         return color;
     }
 
+    private int updateChargingAnimLevel(BatteryTracker tracker) {
+        int curLevel = tracker.level;
+
+        if (tracker.status != BatteryManager.BATTERY_STATUS_CHARGING) {
+            if (mIsCharging) {
+                mIsCharging = false;
+                mAnimOffset = 0;
+                mHandler.removeCallbacks(mInvalidate);
+            }
+        } else {
+            mIsCharging = true;
+
+            curLevel += mAnimOffset;
+            if (curLevel >= FULL) {
+                curLevel = 100;
+                mAnimOffset = 0;
+            } else {
+                mAnimOffset += ADD_LEVEL;
+            }
+
+            mHandler.removeCallbacks(mInvalidate);
+            mHandler.postDelayed(mInvalidate, ANIM_DURATION);
+        }
+        return curLevel;
+    }
+
     @Override
     public void draw(Canvas c) {
         BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
-        final int level = tracker.level;
+        final int level =
+                mContext.getResources().getBoolean(R.bool.config_show_battery_charging_anim)
+                ? updateChargingAnimLevel(tracker)
+                : tracker.level;
 
         if (level == BatteryTracker.UNKNOWN_LEVEL) return;
 
