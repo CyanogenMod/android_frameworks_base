@@ -283,6 +283,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     QuickSettingsContainerView mSettingsContainer;
     int mSettingsPanelGravity;
 
+    boolean mDoubleTapToSleep;
+
     // Ribbon settings
     private boolean mHasQuickAccessSettings;
     private boolean mQuickAccessLayoutLinked = true;
@@ -608,6 +610,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QUICK_SETTINGS_RIBBON_TILES), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this,
+                    UserHandle.USER_ALL);
             update();
         }
 
@@ -805,6 +810,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mFlipInterval = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.REMINDER_ALERT_INTERVAL, 1500, UserHandle.USER_CURRENT);
 
+            mDoubleTapToSleep = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
+
             boolean reminderHolder = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.REMINDER_ALERT_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
             if (reminderHolder != mReminderEnabled) {
@@ -822,6 +830,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 enableOrDisableReminder();
             }
         }
+    }
+
+    protected boolean isDoubleTapEnabled() {
+        return mDoubleTapToSleep;
     }
 
     private void updateActiveDisplayViewState() {
