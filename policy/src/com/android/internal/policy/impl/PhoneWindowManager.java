@@ -711,7 +711,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.USE_EDGE_SERVICE_FOR_GESTURES), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVBAR_FORCE_ENABLE), false, this,
+                            Settings.System.NAVBAR_FORCE_ENABLE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Nameless.getUriFor(
+                            Settings.Nameless.LONG_PRESS_KILL_DELAY), false, this,
                     UserHandle.USER_ALL);
 
             updateSettings();
@@ -1285,8 +1288,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.bool.config_enableTranslucentDecor);
         mHasRemovableLid = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_hasRemovableLid);
-        mBackKillTimeout = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_backKillTimeout);
         mDeviceHardwareKeys = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
         mSingleStageCameraKey = mContext.getResources().getBoolean(
@@ -1622,6 +1623,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mCameraMusicControls = ((Settings.System.getIntForUser(resolver,
                     Settings.System.CAMERA_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1)
                     && !mCameraWakeScreen);
+
+            mBackKillTimeout = Settings.Nameless.getIntForUser(resolver,
+                    Settings.Nameless.LONG_PRESS_KILL_DELAY, 1000, UserHandle.USER_CURRENT);
 
             mExpandedDesktopStyle = Settings.System.getIntForUser(resolver,
                     Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
