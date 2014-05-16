@@ -135,10 +135,6 @@ public class ImmersiveModeConfirmation {
     }
 
     public void onPowerKeyDown(boolean isScreenOn, long time, boolean inImmersiveMode) {
-        if (mPanicPackage != null && !isScreenOn && (time - mPanicTime < mPanicThresholdMs)) {
-            // turning the screen back on within the panic threshold
-            unconfirmPackage(mPanicPackage);
-        }
         if (isScreenOn && inImmersiveMode) {
             // turning the screen off, remember if we were in immersive mode
             mPanicTime = time;
@@ -151,14 +147,6 @@ public class ImmersiveModeConfirmation {
 
     public void confirmCurrentPrompt() {
         mHandler.post(confirmAction(mPromptPackage));
-    }
-
-    private void unconfirmPackage(String pkg) {
-        if (pkg != null) {
-            if (DEBUG) Slog.d(TAG, "Unconfirming immersive mode confirmation for " + pkg);
-            mConfirmedPackages.remove(pkg);
-            saveSetting();
-        }
     }
 
     private void handleHide() {
