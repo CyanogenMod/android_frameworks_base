@@ -854,7 +854,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
             mMSimNetworkController = new MSimNetworkController(mContext);
             mMSimSignalClusterView = (MSimSignalClusterView)
-              mStatusBarView.findViewById(R.id.msim_signal_cluster);
+                    mStatusBarView.findViewById(R.id.msim_signal_cluster);
             for (int i=0; i < MSimTelephonyManager.getDefault().getPhoneCount(); i++) {
                 mMSimNetworkController.addSignalCluster(mMSimSignalClusterView, i);
             }
@@ -1025,9 +1025,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 inflateRibbon();
             }
 
-            // TODO: make multiuser aware
-            mBrightnessSliderEnabled = Settings.System.getBoolean(resolver,
-                    Settings.System.NOTIFICATION_BRIGHTNESS_SLIDER, false);
+            mBrightnessSliderEnabled = Settings.System.getBooleanForUser(resolver,
+                    Settings.System.NOTIFICATION_BRIGHTNESS_SLIDER, false, UserHandle.USER_CURRENT);
             if (mBrightnessSliderEnabled) {
                 cleanupBrightnessSlider();
                 mBrightnessView = null;
