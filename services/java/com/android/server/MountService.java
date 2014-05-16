@@ -854,7 +854,7 @@ class MountService extends IMountService.Stub
             }
 
             if (code == VoldResponseCode.VolumeDiskInserted) {
-                if(!isUsbMassStorageConnected())
+                if(!(isUsbMassStorageConnected() && volume.allowMassStorage()))
                     new Thread("MountService#VolumeDiskInserted") {
                         @Override
                         public void run() {
