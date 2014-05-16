@@ -38,4 +38,7 @@
     <!-- monitor locale change -->
     <bool name="config_monitor_locale_change">false</bool>
     <bool name="config_showEmergencyCallOnlyInLockScreen">false</bool>
+
+    <!-- display airplane mode in lock sreen when phone is in APM mode -->
+    <bool name="config_display_APM">false</bool>
 </resources>

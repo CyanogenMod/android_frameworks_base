@@ -190,4 +190,11 @@ class KeyguardUpdateMonitorCallback {
      * @param subscription The subscription for which onRefreshCarrierInfo is meant
      */
     void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int subscription) { }
+
+    /**
+     * Called when the airplane mode changes.
+     *
+     * @param on Indicates if the airplane mode is now enable.
+     */
+    void onAirplaneModeChanged(boolean on) { }
 }
