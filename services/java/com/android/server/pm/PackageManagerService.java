@@ -3660,11 +3660,22 @@ public class PackageManagerService extends IPackageManager.Stub {
             Log.w(TAG, "Unable to create idmap for " + pkg.packageName + ": no overlay packages");
             return false;
         }
+        final String pkgName = pkg.packageName;
         for (PackageParser.Package opkg : overlays.values()) {
             for(String overlayTarget : opkg.mOverlayTargets) {
-                if (overlayTarget.equals(pkg.packageName)) {
-                    if (!createIdmapForPackagePairLI(pkg, opkg, "")) {
-                        return false;
+                if (overlayTarget.equals(pkgName)) {
+                    try {
+                        if (opkg.mIsLegacyThemeApk) {
+                            createTempPackageRedirections(pkgName,
+                                    opkg.mPackageRedirections.get(pkgName));
+                        }
+                        if (!createIdmapForPackagePairLI(pkg, opkg, opkg.mIsLegacyThemeApk ?
+                                REDIRECTIONS_PATH : "")) {
+                            return false;
+                        }
+                    } catch (IOException e) {
+                    } finally {
+                        if (opkg.mIsLegacyThemeApk) cleanupTempPackageRedirections();
                     }
                 }
             }
