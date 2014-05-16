@@ -1,1 +1,1 @@
-include ':core', ':packages:DocumentsUI', ':packages:Keyguard', ':packages:SystemUI'
+include ':core', ':packages:DocumentsUI', ':packages:Keyguard', ':packages:SystemUI', ':policy'
