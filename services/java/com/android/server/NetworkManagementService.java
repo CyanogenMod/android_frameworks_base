@@ -575,7 +575,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     @Override
-    public void addUpstreamV6Interface(String iface) throws IllegalStateException {
+    public void addUpstreamV6Interface(String iface) throws RemoteException {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
 
@@ -585,12 +585,12 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             cmd.appendArg(iface);
             mConnector.execute(cmd);
         } catch (NativeDaemonConnectorException e) {
-            throw new IllegalStateException("Cannot add upstream interface");
+            throw new RemoteException("Cannot add upstream interface");
         }
     }
 
     @Override
-    public void removeUpstreamV6Interface(String iface) throws IllegalStateException {
+    public void removeUpstreamV6Interface(String iface) throws RemoteException {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
 
@@ -601,7 +601,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             cmd.appendArg(iface);
             mConnector.execute(cmd);
         } catch (NativeDaemonConnectorException e) {
-            throw new IllegalStateException("Cannot remove upstream interface");
+            throw new RemoteException("Cannot remove upstream interface");
         }
     }
 
