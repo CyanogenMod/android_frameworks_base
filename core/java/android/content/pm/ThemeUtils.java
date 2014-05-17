@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.FileUtils;
 import android.os.SystemProperties;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -46,6 +47,8 @@ import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import static android.content.res.CustomTheme.HOLO_DEFAULT;
 
 /**
  * @hide
@@ -486,6 +489,23 @@ public class ThemeUtils {
             }
         }
         return null;
+    }
+
+    public static String getDefaultThemePackageName(Context context) {
+        final String defaultThemePkg = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.DEFAULT_THEME_PACKAGE);
+        if (!TextUtils.isEmpty(defaultThemePkg)) {
+            PackageManager pm = context.getPackageManager();
+            try {
+                if (pm.getPackageInfo(defaultThemePkg, 0) != null) {
+                    return defaultThemePkg;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                // doesn't exist so holo will be default
+            }
+        }
+
+        return HOLO_DEFAULT;
     }
 
     private static class ThemedUiContext extends ContextWrapper {
