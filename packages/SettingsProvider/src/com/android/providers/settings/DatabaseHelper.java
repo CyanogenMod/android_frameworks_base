@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 101;
+    private static final int DATABASE_VERSION = 102;
 
     private Context mContext;
     private int mUserHandle;
@@ -1637,6 +1637,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.endTransaction();
             }
             upgradeVersion = 101;
+        }
+
+        if (upgradeVersion == 101) {
+
         }
 
         // *** Remember to update DATABASE_VERSION above!
