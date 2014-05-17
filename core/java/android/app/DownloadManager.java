@@ -274,13 +274,6 @@ public class DownloadManager {
     public final static int PAUSED_BY_MANUAL = 5;
 
     /**
-     * Value of {@link #COLUMN_REASON} when the download is paused by manual.
-     *
-     * @hide
-     */
-    public final static int PAUSED_BY_MANUAL = 5;
-
-    /**
      * Broadcast intent action sent by the download manager when a download completes.
      */
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
