@@ -5484,12 +5484,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     private boolean hasCommonResources(PackageParser.Package pkg) throws Exception {
         boolean ret = false;
         // check if assets/overlays/common exists in this theme
-        Context themeContext = mContext.createPackageContext(pkg.packageName, 0);
-        if (themeContext != null) {
-            AssetManager assets = themeContext.getAssets();
-            String[] common = assets.list("overlays/common");
-            if (common != null && common.length > 0) ret = true;
-        }
+        ZipFile apk = new ZipFile(new File(pkg.mScanPath));
+        if (apk.getEntry("assets/overlays/common") != null) ret = true;
 
         return ret;
     }
