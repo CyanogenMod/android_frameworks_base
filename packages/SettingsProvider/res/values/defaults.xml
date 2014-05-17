@@ -202,4 +202,17 @@
     <!-- Defaults for Settings.System.LOCKSCREEN_TARGETS. -->
     <string name="def_lockscreen_targets" translatable="false"></string>
     <string name="def_lockscreen_targets_no_telephony" translatable="false"></string>
+
+    <!-- Defaults for Settings.System.DEV_FORCE_SHOW_NAVBAR. -->
+    <integer name="def_force_disable_navkeys">0</integer>
+
+    <!-- Default value of Settings.System.NOISE_SUPPRESSION -->
+    <bool name="def_noise_suppression">false</bool>
+
+    <!-- Default value of Settings.System.SCREEN_ANIMATION_STYLE -->
+    <integer name="def_screen_animation_style">0</integer>
+
+    <!-- Default theme -->
+    <string name="def_theme_package"></string>
+    <string name="def_theme_components"></string>
 </resources>

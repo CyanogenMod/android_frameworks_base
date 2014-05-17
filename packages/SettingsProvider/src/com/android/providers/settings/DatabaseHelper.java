@@ -26,6 +26,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -79,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 101;
+    private static final int DATABASE_VERSION = 102;
 
     private Context mContext;
     private int mUserHandle;
@@ -1657,6 +1658,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 101;
         }
 
+        if (upgradeVersion == 101) {
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value) VALUES(?,?);");
+                loadDefaultThemeSettings(stmt);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 102;
+        }
+
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -2182,6 +2197,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 R.bool.def_haptic_feedback);
     }
 
+    private void loadDefaultThemeSettings(SQLiteStatement stmt) {
+        loadStringSetting(stmt, Settings.Secure.DEFAULT_THEME_PACKAGE, R.string.def_theme_package);
+        loadStringSetting(stmt, Settings.Secure.DEFAULT_THEME_COMPONENTS,
+                R.string.def_theme_components);
+    }
+
     private void loadSecureSettings(SQLiteDatabase db) {
         SQLiteStatement stmt = null;
         try {
@@ -2266,6 +2287,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadBooleanSetting(stmt, Settings.Secure.USER_SETUP_COMPLETE,
                     R.bool.def_user_setup_complete);
+
+            loadDefaultThemeSettings(stmt);
         } finally {
             if (stmt != null) stmt.close();
         }
