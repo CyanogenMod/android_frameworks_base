@@ -162,4 +162,9 @@
     <string name="app_ops_write_mms">write an MMS message</string>
     <string name="app_ops_write_sms">write an SMS message</string>
 
+    <!-- Performance profile modes -->
+    <string name="perf_profile_pwrsv">Power save</string>
+    <string name="perf_profile_bal">Balanced</string>
+    <string name="perf_profile_perf">Performance</string>
+
 </resources>
