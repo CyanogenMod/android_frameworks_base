@@ -34,6 +34,7 @@ public class QuickSettingsTile implements OnClickListener {
     protected OnLongClickListener mOnLongClick;
     protected final int mTileLayout;
     protected int mDrawable;
+    protected float mDegree;
     protected String mLabel;
     protected int mTileTextSize;
     protected int mTileTextPadding;
@@ -48,6 +49,7 @@ public class QuickSettingsTile implements OnClickListener {
     public QuickSettingsTile(Context context, QuickSettingsController qsc, int layout) {
         mContext = context;
         mDrawable = R.drawable.ic_notifications;
+        mDegree = 0;
         mLabel = mContext.getString(R.string.quick_settings_label_enabled);
         mStatusbarService = qsc.mStatusBarService;
         mQsc = qsc;
@@ -133,6 +135,7 @@ public class QuickSettingsTile implements OnClickListener {
         View image = mTile.findViewById(R.id.image);
         if (image != null && image instanceof ImageView) {
             ((ImageView) image).setImageResource(mDrawable);
+            ((ImageView) image).setRotation(mDegree);
         }
     }
 
