@@ -211,4 +211,10 @@
     <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
     <!-- Default wi-fi direct name -->
     <string name="def_wifi_direct_name" translatable="false"></string>
+
+    <!-- Performance profile modes -->
+    <string name="perf_profile_pwrsv">Power save</string>
+    <string name="perf_profile_bal">Balanced</string>
+    <string name="perf_profile_perf">Performance</string>
+
 </resources>

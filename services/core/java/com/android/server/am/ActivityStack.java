@@ -1579,7 +1579,8 @@ final class ActivityStack {
 
         if (DEBUG_SWITCH) Slog.v(TAG, "Resuming " + next);
 
-        mActivityTrigger.activityResumeTrigger(next.intent);
+        // Some activities may want to alter the system power management
+        mStackSupervisor.mPm.activityResumed(next.intent);
 
         // If we are currently pausing an activity, then don't do anything
         // until that is done.
