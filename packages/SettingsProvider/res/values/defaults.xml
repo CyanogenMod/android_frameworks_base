@@ -212,7 +212,11 @@
     <!-- Default value of Settings.System.SCREEN_ANIMATION_STYLE -->
     <integer name="def_screen_animation_style">0</integer>
 
+
     <!-- Default theme -->
     <string name="def_theme_package"></string>
     <string name="def_theme_components"></string>
+
+    <!-- Default value of Settings.System.DOUBLE_TAP_SLEEP_GESTURE -->
+    <integer name="def_double_tap_sleep_gesture">1</integer>
 </resources>
