@@ -5407,6 +5407,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     insertIntoOverlayMap(target, pkg);
                     generateIdmap(target, pkg);
                 } catch(Exception e) {
+                    Log.w(TAG, "Unable to process theme " + pkgName, e);
                     mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
                     uninstallThemeForAllApps(pkg);
                     return null;
@@ -5484,12 +5485,10 @@ public class PackageManagerService extends IPackageManager.Stub {
     private boolean hasCommonResources(PackageParser.Package pkg) throws Exception {
         boolean ret = false;
         // check if assets/overlays/common exists in this theme
-        Context themeContext = mContext.createPackageContext(pkg.packageName, 0);
-        if (themeContext != null) {
-            AssetManager assets = themeContext.getAssets();
-            String[] common = assets.list("overlays/common");
-            if (common != null && common.length > 0) ret = true;
-        }
+        AssetManager assets = new AssetManager();
+        assets.addAssetPath(pkg.mScanPath);
+        String[] common = assets.list("overlays/common");
+        if (common != null && common.length > 0) ret = true;
 
         return ret;
     }
