@@ -108,4 +108,10 @@
     <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
     <!-- ADB notification message-->
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
+
+    <!-- Performance profile modes -->
+    <string name="perf_profile_pwrsv">Power save</string>
+    <string name="perf_profile_bal">Balanced</string>
+    <string name="perf_profile_perf">Performance</string>
+
 </resources>

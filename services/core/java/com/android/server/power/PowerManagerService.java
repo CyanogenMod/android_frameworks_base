@@ -471,6 +471,7 @@ public final class PowerManagerService extends SystemService
     private static native void nativeSetAutoSuspend(boolean enable);
     private static native void nativeSendPowerHint(int hintId, int data);
     private static native void nativeCpuBoost(int duration);
+    static native void nativeSetPowerProfile(int profile);
     private boolean mKeyboardVisible = false;
 
     private SensorManager mSensorManager;
@@ -481,6 +482,8 @@ public final class PowerManagerService extends SystemService
     android.os.PowerManager.WakeLock mProximityWakeLock;
     SensorEventListener mProximityListener;
 
+    private PerformanceManager mPerformanceManager;
+
     public PowerManagerService(Context context) {
         super(context);
         mContext = context;
@@ -490,6 +493,7 @@ public final class PowerManagerService extends SystemService
         mHandler = new PowerManagerHandler(mHandlerThread.getLooper());
         mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        mPerformanceManager = new PerformanceManager(context);
 
         synchronized (mLock) {
             mWakeLockSuspendBlocker = createSuspendBlockerLocked("PowerManagerService.WakeLocks");
@@ -641,6 +645,8 @@ public final class PowerManagerService extends SystemService
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
                     false, mSettingsObserver, UserHandle.USER_ALL);
+
+            mPerformanceManager.reset();
 
             // Go.
             readConfigurationLocked();
@@ -3278,6 +3284,18 @@ public final class PowerManagerService extends SystemService
             }
         }
 
+        @Override
+        public void setPowerProfile(String profile) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER, null);
+
+            mPerformanceManager.setPowerProfile(profile);
+        }
+
+        @Override
+        public String getPowerProfile() {
+            return mPerformanceManager.getPowerProfile();
+        }
+
         /**
          * Boost the CPU
          * @param duration Duration to boost the CPU for, in milliseconds.
@@ -3286,12 +3304,20 @@ public final class PowerManagerService extends SystemService
         @Override
         public void cpuBoost(int duration) {
             if (duration > 0 && duration <= MAX_CPU_BOOST_TIME) {
-                nativeCpuBoost(duration);
+                // Don't send boosts if we're in another power profile
+                String profile = mPerformanceManager.getPowerProfile();
+                if (profile == null || profile.equals(PowerManager.PROFILE_BALANCED)) {
+                    nativeCpuBoost(duration);
+                }
             } else {
                 Log.e(TAG, "Invalid boost duration: " + duration);
             }
         }
 
+        @Override
+        public void activityResumed(String componentName) {
+            mPerformanceManager.activityResumed(componentName);
+        }
 
         /**
          * Reboots the device.
