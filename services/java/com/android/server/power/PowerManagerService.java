@@ -411,6 +411,8 @@ public final class PowerManagerService extends IPowerManager.Stub
     private static native void nativeCpuBoost(int duration);
     private boolean mKeyboardVisible = false;
 
+    private PerformanceManager mPerformanceManager;
+
     public PowerManagerService() {
         synchronized (mLock) {
             mWakeLockSuspendBlocker = createSuspendBlockerLocked("PowerManagerService.WakeLocks");
@@ -456,6 +458,8 @@ public final class PowerManagerService extends IPowerManager.Stub
         mDisplayBlanker.unblankAllDisplays();
 
         mAutoBrightnessHandler = new AutoBrightnessHandler(context);
+
+        mPerformanceManager = new PerformanceManager(context);
 
     }
 
@@ -2551,6 +2555,21 @@ public final class PowerManagerService extends IPowerManager.Stub
         // Grab and release lock for watchdog monitor to detect deadlocks.
         synchronized (mLock) {
         }
+    }
+
+
+    @Override
+    public void setPowerProfile(String profile) throws RemoteException {
+        mPerformanceManager.setPowerProfile(profile);
+    }
+
+    @Override
+    public String getPowerProfile() throws RemoteException {
+        return mPerformanceManager.getPowerProfile();
+    }
+
+    public void activityResumed(Intent intent) {
+        mPerformanceManager.activityResumed(intent);
     }
 
     @Override // Binder call
