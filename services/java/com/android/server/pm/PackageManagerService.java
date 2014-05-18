@@ -3656,15 +3656,23 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private boolean createIdmapsForPackageLI(PackageParser.Package pkg) {
         HashMap<String, PackageParser.Package> overlays = mOverlays.get(pkg.packageName);
+        final String pkgName = pkg.packageName;
         if (overlays == null) {
-            Log.w(TAG, "Unable to create idmap for " + pkg.packageName + ": no overlay packages");
+            Log.w(TAG, "Unable to create idmap for " + pkgName + ": no overlay packages");
             return false;
         }
         for (PackageParser.Package opkg : overlays.values()) {
             for(String overlayTarget : opkg.mOverlayTargets) {
-                if (overlayTarget.equals(pkg.packageName)) {
-                    if (!createIdmapForPackagePairLI(pkg, opkg, "")) {
-                        return false;
+                if (overlayTarget.equals(pkgName)) {
+                    try {
+                        if (opkg.mIsLegacyThemeApk) {
+                            generateIdmapForLegacyTheme(pkgName, opkg);
+                        } else {
+                            generateIdmap(pkgName, opkg);
+                        }
+                    } catch (IOException e) {
+                        Log.w(TAG, "Unable to create idmap for " + pkgName
+                                + ": no overlay packages", e);
                     }
                 }
             }
@@ -5376,13 +5384,13 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             // Generate Idmaps and res tables if pkg is a theme
             for(String target : pkg.mOverlayTargets) {
+                insertIntoOverlayMap(target, pkg);
                 if (!shouldCreateIdmap(mPackages.get(target), pkg)) {
                     continue;
                 }
                 if (pkg.mIsLegacyThemeApk) {
                     if (target != null) {
                         try {
-                            insertIntoOverlayMap(target, pkg);
                             generateIdmapForLegacyTheme(target, pkg);
                         } catch (Exception e) {
                             mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
@@ -5404,7 +5412,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                     ThemeUtils.createResourcesDirIfNotExists(target, pkg.applicationInfo.publicSourceDir);
                     compileResources(target, pkg);
-                    insertIntoOverlayMap(target, pkg);
                     generateIdmap(target, pkg);
                 } catch(Exception e) {
                     Log.w(TAG, "Unable to process theme " + pkgName, e);
