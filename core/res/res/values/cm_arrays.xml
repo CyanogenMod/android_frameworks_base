@@ -51,6 +51,15 @@
         <item>2</item>
     </string-array>
 
+    <!-- Automatic power profile management per app.
+         Each item should list the fully-qualified activity
+         name and the power profile id, separated by a comma. -->
+    <string-array name="config_auto_perf_activities" translatable="false">
+        <item>com.aurorasoftworks.quadrant.*BenchmarkExecutionActivity,2</item>
+        <item>com.antutu.ABenchMark.*,2</item>
+        <item>.*com.antutu.benchmark.*,2</item>
+    </string-array>
+
     <!-- Do not translate. App ops request strings -->
     <string-array name="app_ops_labels" translatable="false">
         <item>@string/app_ops_access_location</item>
