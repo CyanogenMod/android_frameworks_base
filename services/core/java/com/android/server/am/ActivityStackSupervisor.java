@@ -237,7 +237,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
      */
     String mPrivacyGuardPackageName = null;
 
-    private PowerManager mPm;
+    PowerManager mPm;
 
     /**
      * We don't want to allow the device to go to sleep while in the process
