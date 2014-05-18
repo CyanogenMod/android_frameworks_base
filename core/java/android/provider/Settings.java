@@ -3220,6 +3220,13 @@ public final class Settings {
         public static final String QUICK_SETTINGS_RIBBON_TILES = "quick_settings_ribbon_tiles";
 
         /**
+         * Quick Settings Quick access ribbon - enable labels
+         *
+         * @hide
+         */
+        public static final String QS_QUICK_ACCESS_LABEL = "qs_quick_access_label";
+
+        /**
          * Whether to hide the notification screen after clicking on a widget
          * button
          *

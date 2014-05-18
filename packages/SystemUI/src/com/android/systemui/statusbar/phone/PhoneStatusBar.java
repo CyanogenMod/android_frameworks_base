@@ -601,6 +601,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.QS_QUICK_ACCESS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_QUICK_ACCESS_LABEL), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS_LINKED), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1150,14 +1153,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             QuickSettingsContainerView mRibbonContainer = (QuickSettingsContainerView)
                     mStatusBarWindow.findViewById(R.id.quick_settings_ribbon_container);
             if (mRibbonContainer != null) {
+                final ContentResolver resolver = mContext.getContentResolver();
                 mRibbonQS = new QuickSettingsController(mContext, mRibbonContainer, this,
                         mQuickAccessLayoutLinked ? Settings.System.QUICK_SETTINGS_TILES
                             : Settings.System.QUICK_SETTINGS_RIBBON_TILES);
+                boolean isLabelVisible = Settings.System.getIntForUser(
+                        resolver, Settings.System.QS_QUICK_ACCESS_LABEL, 0,
+                        UserHandle.USER_CURRENT) == 1;
                 mRibbonQS.hideLiveTiles(true);
                 mRibbonQS.setService(this);
                 mRibbonQS.setBar(mStatusBarView);
                 mRibbonQS.setupQuickSettings();
-                mRibbonQS.setTileTitleVisibility(false);
+                mRibbonQS.setTileTitleVisibility(isLabelVisible);
             }
         }
     }
