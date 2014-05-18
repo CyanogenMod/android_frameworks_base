@@ -63,6 +63,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_INTERNALMEMORY;
 import static com.android.internal.util.slim.QSConstants.TILE_ONTHEGO;
 import static com.android.internal.util.slim.QSConstants.TILE_BATTERYSAVER;
 import static com.android.internal.util.slim.QSConstants.TILE_WEATHER;
+import static com.android.internal.util.slim.QSConstants.TILE_SCREENCAST;
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -134,6 +135,7 @@ import com.android.systemui.quicksettings.CameraTile;
 import com.android.systemui.quicksettings.OnTheGoTile;
 import com.android.systemui.quicksettings.BatterySaverTile;
 import com.android.systemui.quicksettings.WeatherTile;
+import com.android.systemui.quicksettings.ScreenCastTile;
 
 import com.android.systemui.R;
 
@@ -362,6 +364,8 @@ public class QuickSettingsController {
                 qs = new UsbTetherTile(mContext, this);
             } else if (tile.equals(TILE_EQUALIZER)) {
                 qs = new EqualizerTile(mContext, this);
+            } else if (tile.equals(TILE_SCREENCAST)) {
+                qs = new ScreenCastTile(mContext, this);
             }
 
             if (qs != null) {
