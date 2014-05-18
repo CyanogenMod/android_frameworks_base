@@ -1229,7 +1229,6 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         if (mCustomCarrierLabel !=null && !TextUtils.isEmpty(mCustomCarrierLabel)) {
             combinedLabel = mCustomCarrierLabel;
             mobileLabel = mCustomCarrierLabel;
-            wifiLabel = mCustomCarrierLabel;
         }
 
         // Cleanup the double quotes
