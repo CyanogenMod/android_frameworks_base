@@ -7042,6 +7042,13 @@ public final class Settings {
         public static final String LOCK_SCREEN_OWNER_INFO = "lock_screen_owner_info";
 
         /**
+         * Allow all (non keyguard specific) widgets to be added to the lockscreen
+         * @hide
+         */
+        public static final String ALLOW_ALL_LOCKSCREEN_WIDGETS =
+            "allow_all_lockscreen_widgets";
+
+        /**
          * Ids of the user-selected appwidgets on the lockscreen (comma-delimited).
          * @hide
          */
