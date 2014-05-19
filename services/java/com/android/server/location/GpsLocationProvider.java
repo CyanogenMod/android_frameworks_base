@@ -540,6 +540,18 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
             mSuplServerHost = mProperties.getProperty("SUPL_HOST");
             String portString = mProperties.getProperty("SUPL_PORT");
+
+            ContentResolver objContentResolver = mContext.getContentResolver();
+            if (Settings.Global.getString(objContentResolver,
+                    ASSISTED_GPS_SUPL_HOST) == null
+                    || Settings.Global.getString(objContentResolver,
+                           ASSISTED_GPS_SUPL_PORT) == null) {
+                Settings.Global.putString(objContentResolver,
+                        ASSISTED_GPS_SUPL_HOST, mSuplServerHost);
+                Settings.Global.putString(objContentResolver,
+                        ASSISTED_GPS_SUPL_PORT, portString);
+            }
+
             if (mSuplServerHost != null && portString != null) {
                 try {
                     mSuplServerPort = Integer.parseInt(portString);
