@@ -1018,7 +1018,14 @@ bool AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
             delete oidmap;
         }
     } else {
-        ALOGW("Unable to load asset %s, ResTable not updated", ap.path.string());
+        if (!ap.resfilePath.isEmpty()) {
+            // when attempting to load common resources that may not exist we would see
+            // numerous "Unable to load asset ..." messages in the log. We really don't need
+             // to be spamming the user's log with this since it is not a critical problem
+            ALOGV("Unable to load asset %s, ResTable not updated", ap.resfilePath.string());
+        } else {
+            ALOGW("Unable to load asset %s, ResTable not updated", ap.path.string());
+        }
     }
 
     return (error == NO_ERROR);
