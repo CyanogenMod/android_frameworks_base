@@ -131,8 +131,15 @@ public class UsbDeviceManager {
         }
         @Override
         public void onChange(boolean selfChange) {
+            String buildType = System.getProperty("ro.build.type");
+            int defInt;
+            if (buildType.equalsIgnoreCase("eng")) {
+                defInt = 1;
+            } else {
+                defInt = 0;
+            }
             boolean enable = (Settings.Global.getInt(mContentResolver,
-                    Settings.Global.ADB_ENABLED, 0) > 0);
+                    Settings.Global.ADB_ENABLED, defInt) > 0);
             mHandler.sendMessage(MSG_ENABLE_ADB, enable);
         }
     }
