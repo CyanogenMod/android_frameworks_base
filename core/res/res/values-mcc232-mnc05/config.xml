@@ -21,5 +21,6 @@
     <!-- Don't use roaming icon for considered operators -->
     <string-array translatable="false" name="config_operatorConsideredNonRoaming">
         <item>23203</item>
+        <item>23201</item>
     </string-array>
 </resources>
