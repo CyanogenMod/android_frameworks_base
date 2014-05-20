@@ -1513,4 +1513,22 @@
 
          The default value is false which represents AOSP behavior. -->
     <bool name="config_smsUseExpectMore">false</bool>
+
+    <!-- Automatic power profile management per app.
+         Each item should list the fully-qualified activity
+         name and the power profile id, separated by a comma. -->
+    <string-array name="config_auto_perf_activities" translatable="false">
+    </string-array>
+
+    <!-- Control the behavior when the user long presses the menu button.
+            0 - Nothing
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
+         This needs to match the constants in
+         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_longPressOnMenuBehavior">3</integer>
 </resources>
