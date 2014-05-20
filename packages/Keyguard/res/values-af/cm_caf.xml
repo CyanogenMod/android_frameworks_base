@@ -20,7 +20,7 @@
   <string name="keyguard_password_pin_failed">PIN werking het misluk!</string>
   <string name="keyguard_password_puk_failed">PUK werking het misluk!</string>
   <string name="keyguard_pin_accepted">Kode Aanvaar!</string>
-  <string name="pinpuk_attempts">\nOorblywende pogings :</string>
+  <string name="pinpuk_attempts">\nOorblywende pogings:</string>
   <string name="lockscreen_sim_error_message_short">Ongeldige kaart.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM Perso gesluit</string>
   <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>

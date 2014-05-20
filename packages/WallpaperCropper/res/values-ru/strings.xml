@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Обрезка изображения</string>
   <string name="wallpaper_instructions">Установить обои</string>
   <string name="wallpaper_load_fail">Не удалось загрузить изображение</string>

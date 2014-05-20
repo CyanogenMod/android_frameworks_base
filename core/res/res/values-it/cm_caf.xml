@@ -15,11 +15,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\nTentativi rimanenti:</string>
   <string name="lockscreen_sim_error_message_short">Scheda non valida.</string>
   <string name="lockscreen_airplane_mode_on">Modalità aereo</string>
-  <string name="progress_nomediapresent" product="default">Non sono presenti dispositivi rimovibili di memorizzazione\u2026</string>
+  <string name="progress_nomediapresent" product="default">Non sono presenti dispositivi di memorizzazione rimovibili\u2026</string>
   <string name="stk_cc_ussd_to_dial">Richiesta USSD modificata in richiesta DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Richiesta USSD modificata in richiesta SS.</string>
   <string name="stk_cc_ussd_to_ussd">Richiesta USSD modificata in nuova richiesta USSD.</string>

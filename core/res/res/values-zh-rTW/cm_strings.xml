@@ -75,6 +75,8 @@
   <string name="permdesc_changePhoneBlacklist">允許應用程式變更被封鎖來電或訊息的電話號碼。</string>
   <string name="permlab_accessThemeService">存取主題服務</string>
   <string name="permdesc_accessThemeService">允許應用程式存取主題服務 (一般應用程式不需使用)。</string>
+  <string name="permlab_setKeyguardWallpaper">設定鎖定畫面桌布</string>
+  <string name="permdesc_setKeyguardWallpaper">允許應用程式變更鎖定畫面桌布。</string>
   <string name="immersive_mode_confirmation_bottom">從底部向上滑動即可退出全螢幕模式。</string>
   <string name="app_ops_access_camera">存取相機</string>
   <string name="app_ops_access_location">存取您的位置</string>
