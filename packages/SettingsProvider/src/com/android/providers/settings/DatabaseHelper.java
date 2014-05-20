@@ -2088,6 +2088,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    private void loadRibbonSetting(SQLiteDatabase db) {
+        String tiles = mContext.getResources().getString(R.string.def_quick_settings_ribbon_tiles);
+        if (!TextUtils.isEmpty(tiles)) {
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
+                        + " VALUES(?,?);");
+                loadSetting(stmt, Settings.System.QS_QUICK_ACCESS, "1");
+                loadSetting(stmt, Settings.System.QS_QUICK_ACCESS_LINKED, "0");
+                loadSetting(stmt, Settings.System.QUICK_SETTINGS_RIBBON_TILES, tiles);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+        }
+    }
+
     private void loadSettings(SQLiteDatabase db) {
         loadSystemSettings(db);
         loadSecureSettings(db);
