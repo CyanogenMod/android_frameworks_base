@@ -1344,6 +1344,7 @@
     <string name="dlg_error_title" msgid="7323658469626514207">"USB操作失败"</string>
     <string name="dlg_ok" msgid="7376953167039865701">"确定"</string>
     <string name="usb_mtp_notification_title" msgid="3699913097391550394">"已作为媒体设备连接"</string>
+    <string name="usb_charging_notification_title">以充电方式连接</string>
     <string name="usb_ptp_notification_title" msgid="1960817192216064833">"作为相机连接"</string>
     <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"作为安装程序连接"</string>
     <string name="usb_accessory_notification_title" msgid="7848236974087653666">"已连接到USB配件"</string>
