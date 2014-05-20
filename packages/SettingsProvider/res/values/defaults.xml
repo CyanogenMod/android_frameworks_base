@@ -219,4 +219,7 @@
 
     <!-- Default value of Settings.System.DOUBLE_TAP_SLEEP_GESTURE -->
     <integer name="def_double_tap_sleep_gesture">1</integer>
+
+    <!-- Default value of Settings.System.QUICK_SETTINGS_RIBBON_TILES -->
+    <string name="def_quick_settings_ribbon_tiles"></string>
 </resources>
