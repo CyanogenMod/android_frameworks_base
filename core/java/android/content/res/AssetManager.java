@@ -72,6 +72,7 @@ public final class AssetManager {
     
     // For communication with native code.
     private int mObject;
+    private int mNObject;  // used by the NDK
 
     private StringBlock mStringBlocks[] = null;
     
@@ -820,6 +821,16 @@ public final class AssetManager {
      */
     public void addThemeCookie(int cookie) {
         mThemeCookies.add(cookie);
+    }
+
+    /** {@hide} */
+    public String getAppName() {
+        return mAppName;
+    }
+
+    /** {@hide} */
+    public void setAppName(String pkgName) {
+        mAppName = pkgName;
     }
 
     /**
