@@ -21,6 +21,7 @@ import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Slog;
 import android.util.SparseArray;
 
@@ -364,7 +365,13 @@ public final class Installer {
 
     public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid,
                     int pkgId, String commonResourcesPath) {
-        StringBuilder builder = new StringBuilder("aapt");
+
+        StringBuilder builder = new StringBuilder();
+        if (TextUtils.isEmpty(commonResourcesPath)) {
+            builder.append("aapt");
+        } else {
+            builder.append("aapt_with_common");
+        }
         builder.append(' ');
         builder.append(themeApkPath);
         builder.append(' ');
@@ -375,8 +382,12 @@ public final class Installer {
         builder.append(uid);
         builder.append(' ');
         builder.append(pkgId);
-        builder.append(' ');
-        builder.append(commonResourcesPath);
+
+        if (!TextUtils.isEmpty(commonResourcesPath)) {
+            builder.append(' ');
+            builder.append(commonResourcesPath);
+        }
+
         return execute(builder.toString());
     }
 
