@@ -20,6 +20,7 @@ import android.bluetooth.IBluetoothCallback;
 import android.bluetooth.IBluetoothStateChangeCallback;
 import android.bluetooth.BluetoothActivityEnergyInfo;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothRemoteDiRecord;
 import android.os.ParcelUuid;
 import android.os.ParcelFileDescriptor;
 
@@ -100,4 +101,5 @@ interface IBluetooth
 
     int setSocketOpt(int type, int port, int optionName, in byte [] optionVal, int optionLen);
     int getSocketOpt(int type, int port, int optionName, out byte [] optionVal);
+    BluetoothRemoteDiRecord getRemoteDiRecord(in BluetoothDevice device);
 }
