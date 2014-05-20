@@ -61,13 +61,10 @@ public class ImmersiveModeConfirmation {
     private final H mHandler;
     private final ArraySet<String> mConfirmedPackages = new ArraySet<String>();
     private final long mShowDelayMs;
-    private final long mPanicThresholdMs;
 
     private ClingWindowView mClingWindow;
     private String mLastPackage;
     private String mPromptPackage;
-    private long mPanicTime;
-    private String mPanicPackage;
     private WindowManager mWindowManager;
     private boolean mStatusBarHidden;
 
@@ -75,8 +72,6 @@ public class ImmersiveModeConfirmation {
         mContext = context;
         mHandler = new H();
         mShowDelayMs = getNavBarExitDuration() * 3;
-        mPanicThresholdMs = context.getResources()
-                .getInteger(R.integer.config_immersive_mode_confirmation_panic);
         mWindowManager = (WindowManager)
                 mContext.getSystemService(Context.WINDOW_SERVICE);
     }
@@ -134,31 +129,8 @@ public class ImmersiveModeConfirmation {
         }
     }
 
-    public void onPowerKeyDown(boolean isScreenOn, long time, boolean inImmersiveMode) {
-        if (mPanicPackage != null && !isScreenOn && (time - mPanicTime < mPanicThresholdMs)) {
-            // turning the screen back on within the panic threshold
-            unconfirmPackage(mPanicPackage);
-        }
-        if (isScreenOn && inImmersiveMode) {
-            // turning the screen off, remember if we were in immersive mode
-            mPanicTime = time;
-            mPanicPackage = mLastPackage;
-        } else {
-            mPanicTime = 0;
-            mPanicPackage = null;
-        }
-    }
-
     public void confirmCurrentPrompt() {
         mHandler.post(confirmAction(mPromptPackage));
-    }
-
-    private void unconfirmPackage(String pkg) {
-        if (pkg != null) {
-            if (DEBUG) Slog.d(TAG, "Unconfirming immersive mode confirmation for " + pkg);
-            mConfirmedPackages.remove(pkg);
-            saveSetting();
-        }
     }
 
     private void handleHide() {
