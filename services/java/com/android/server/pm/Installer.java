@@ -375,7 +375,6 @@ public final class Installer {
         builder.append(uid);
         builder.append(' ');
         builder.append(pkgId);
-        builder.append(' ');
         builder.append(commonResourcesPath);
         return execute(builder.toString());
     }
