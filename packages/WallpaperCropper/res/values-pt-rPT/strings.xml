@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Recortar papel de parede</string>
   <string name="wallpaper_instructions">Definir imagem de fundo</string>
   <string name="wallpaper_load_fail">Não foi possivel carregar a imagem como papel de parede</string>
