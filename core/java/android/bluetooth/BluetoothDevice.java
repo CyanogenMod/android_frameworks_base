@@ -1465,4 +1465,24 @@ public final class BluetoothDevice implements Parcelable {
         } catch (RemoteException e) {Log.e(TAG, "", e);}
         return null;
     }
+
+    /**
+     * Get Di record of a remote device.
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}.
+     * @return DiRecord or null
+     * @hide
+     */
+    public BluetoothRemoteDiRecord getRemoteDiRecord() {
+        if (sService == null) {
+            Log.e(TAG, "BT not enabled. Cannot get Remote Di record");
+            return null;
+        }
+
+        try {
+            return sService.getRemoteDiRecord(this);
+        } catch (RemoteException e) {
+            Log.e(TAG, "", e);
+        }
+        return null;
+    }
 }
