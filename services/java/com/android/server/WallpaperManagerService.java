@@ -98,6 +98,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
     static final long MIN_WALLPAPER_CRASH_TIME = 10000;
     static final String WALLPAPER = "wallpaper";
     static final String WALLPAPER_INFO = "wallpaper_info.xml";
+    static final String WALLPAPER_INFO_TMP = "wallpaper_info.xml.tmp";
     static final String KEYGUARD_WALLPAPER = "keyguard_wallpaper";
     static final String KEYGUARD_WALLPAPER_INFO = "keyguard_wallpaper_info.xml";
 
@@ -163,6 +164,11 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                         mKeyguardWallpaper.imageWallpaperPending = false;
                         saveSettingsLocked(mKeyguardWallpaper);
                     }
+                } else if (WALLPAPER_INFO_TMP.equals(path) &&
+                        mWallpaper.wallpaperComponent != null &&
+                        !IMAGE_WALLPAPER.equals(mWallpaper.wallpaperComponent) &&
+                        event == CLOSE_WRITE) {
+                    notifyCallbacksLocked(mWallpaper);
                 }
             }
         }
