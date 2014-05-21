@@ -44,7 +44,7 @@ class BasePermissionDialog extends AlertDialog {
     public void onStart() {
         super.onStart();
         setEnabled(false);
-        mHandler.sendMessageDelayed(mHandler.obtainMessage(0), 1000);
+        mHandler.sendMessage(mHandler.obtainMessage(0));
     }
 
     public boolean dispatchKeyEvent(KeyEvent event) {
