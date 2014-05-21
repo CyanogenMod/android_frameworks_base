@@ -772,6 +772,14 @@ class MountService extends IMountService.Stub
                         } else if (st == VolumeState.Mounted) {
                             state = Environment.MEDIA_MOUNTED;
                             Slog.i(TAG, "Media already mounted on daemon connection");
+                            if (volume.getUuid() == null) {
+                                Slog.i(TAG, "Scanning UUID");
+                                try {
+                                    mConnector.execute("volume", "scanuuid", path);
+                                } catch (NativeDaemonConnectorException ex) {
+                                    Slog.e(TAG, "Failed to scan UUID at " + path);
+                                }
+                            }
                         } else if (st == VolumeState.Shared) {
                             state = Environment.MEDIA_SHARED;
                             Slog.i(TAG, "Media shared on daemon connection");
