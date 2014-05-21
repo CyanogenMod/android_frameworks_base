@@ -89,7 +89,7 @@
   <string name="app_ops_modify_call_log">atualização do registo de chamadas</string>
   <string name="app_ops_modify_clipboard">modificar a área de transferência</string>
   <string name="app_ops_modify_contacts">atualizar os seus contatos</string>
-  <string name="app_ops_modify_settings">atualizar as configurações de sistema</string>
+  <string name="app_ops_modify_settings">atualizar as definições de sistema</string>
   <string name="app_ops_play_audio">reproduzir áudio</string>
   <string name="app_ops_post_notification">postar uma notificação</string>
   <string name="app_ops_read_calendar">ver o seu calendário</string>

@@ -192,6 +192,21 @@ public class ThemesContract {
         public static final String IS_LEGACY_THEME = "is_legacy_theme";
 
         /**
+         * 1 if this theme is the system default theme.
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String IS_DEFAULT_THEME = "is_default_theme";
+
+        /**
+         * 1 if this theme is a legacy iconpack. A legacy icon pack is an APK that was written
+         * for Trebuchet or a 3rd party launcher.
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String IS_LEGACY_ICONPACK = "is_legacy_iconpack";
+
+        /**
          * install/update time in millisecs. When the row is inserted this column
          * is populated by the PackageInfo. It is used for syncing to PM
          * <P>Type: INTEGER</P>

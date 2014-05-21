@@ -409,7 +409,10 @@ public final class PowerManagerService extends IPowerManager.Stub
     private static native void nativeSetInteractive(boolean enable);
     private static native void nativeSetAutoSuspend(boolean enable);
     private static native void nativeCpuBoost(int duration);
+    static native void nativeSetPowerProfile(int profile);
     private boolean mKeyboardVisible = false;
+
+    private PerformanceManager mPerformanceManager;
 
     public PowerManagerService() {
         synchronized (mLock) {
@@ -456,6 +459,8 @@ public final class PowerManagerService extends IPowerManager.Stub
         mDisplayBlanker.unblankAllDisplays();
 
         mAutoBrightnessHandler = new AutoBrightnessHandler(context);
+
+        mPerformanceManager = new PerformanceManager(context);
 
     }
 
@@ -2189,7 +2194,11 @@ public final class PowerManagerService extends IPowerManager.Stub
     @Override // Binder call
     public void cpuBoost(int duration) {
         if (duration > 0 && duration <= MAX_CPU_BOOST_TIME) {
-            nativeCpuBoost(duration);
+            // Don't send boosts if we're in another power profile
+            String profile = mPerformanceManager.getPowerProfile();
+            if (profile == null || profile.equals(PowerManager.PROFILE_BALANCED)) {
+                nativeCpuBoost(duration);
+            }
         } else {
             Log.e(TAG, "Invalid boost duration: " + duration);
         }
@@ -2551,6 +2560,23 @@ public final class PowerManagerService extends IPowerManager.Stub
         // Grab and release lock for watchdog monitor to detect deadlocks.
         synchronized (mLock) {
         }
+    }
+
+
+    @Override
+    public void setPowerProfile(String profile) throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER, null);
+
+        mPerformanceManager.setPowerProfile(profile);
+    }
+
+    @Override
+    public String getPowerProfile() throws RemoteException {
+        return mPerformanceManager.getPowerProfile();
+    }
+
+    public void activityResumed(Intent intent) {
+        mPerformanceManager.activityResumed(intent);
     }
 
     @Override // Binder call

@@ -77,7 +77,7 @@
   <string name="permdesc_accessThemeService">Омогућава апликацији да приступи услузи тема. Никада не би требало за нормалне апликације.</string>
   <string name="permlab_setKeyguardWallpaper">Поставите тапет тастатуре</string>
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени тапет на закључаном екрану.</string>
-  <string name="immersive_mode_confirmation_bottom">Пребаците нагоре од дна за излазак из целог екрана.</string>
+  <string name="immersive_mode_confirmation_bottom">Превуците нагоре од дна за излазак из целог екрана.</string>
   <string name="app_ops_access_camera">Приступ камери</string>
   <string name="app_ops_access_location">Приступ Вашој локацији</string>
   <string name="app_ops_access_notifications">Прочитајте Ваша обавештења</string>

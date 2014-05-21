@@ -15,11 +15,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\nTentativas restantes:</string>
   <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
   <string name="lockscreen_airplane_mode_on">Modo de Avião</string>
-  <string name="progress_nomediapresent" product="default">Sem media removível\u2026</string>
+  <string name="progress_nomediapresent" product="default">Sem média removível\u2026</string>
   <string name="stk_cc_ussd_to_dial">Pedido USSD é modificado para pedido DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Pedido USSD é modificado para pedido SS.</string>
   <string name="stk_cc_ussd_to_ussd">Pedido USSD é modificado para novo pedido USSD.</string>

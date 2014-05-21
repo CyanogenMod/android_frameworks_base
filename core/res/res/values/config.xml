@@ -1031,14 +1031,6 @@
     <!-- The VoiceMail default value is displayed to my own number if it is true -->
     <bool name="config_telephony_use_own_number_for_voicemail">false</bool>
 
-    <!-- Set additional audio parameters for incall audio
-         Usage: parameter=onstring=offstring
-         Examples: <item>realcall=on=off</item>
-                   <item>dualmic_enabled=true=false</item>
-                   <item>mic_boost=yes=no</item> -->
-    <string-array name="config_telephony_set_audioparameters" translatable="false">
-    </string-array>
-
     <!-- If this value is true, Sms encoded as octet is decoded by utf8 decoder.
          If false, decoded by Latin decoder. -->
     <bool name="config_sms_utf8_support">false</bool>
@@ -1383,10 +1375,6 @@
     <string-array translatable="false" name="config_operatorConsideredNonRoaming">
     </string-array>
 
-    <!-- Threshold (in ms) under which a screen off / screen on will be considered a reset of the
-         immersive mode confirmation prompt.-->
-    <integer name="config_immersive_mode_confirmation_panic">5000</integer>
-
     <!-- For some operators, PDU has garbages. To fix it, need to use valid index -->
     <integer name="config_valid_wappush_index">-1</integer>
 
@@ -1525,4 +1513,23 @@
 
          The default value is false which represents AOSP behavior. -->
     <bool name="config_smsUseExpectMore">false</bool>
+
+    <!-- Automatic power profile management per app.
+         Each item should list the fully-qualified activity
+         name and the power profile id, separated by a comma. -->
+    <string-array name="config_auto_perf_activities" translatable="false">
+    </string-array>
+
+    <!-- Control the behavior when the user long presses the menu button.
+            0 - Nothing
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
+         This needs to match the constants in
+         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_longPressOnMenuBehavior">3</integer>
+
 </resources>

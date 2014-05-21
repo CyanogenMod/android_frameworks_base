@@ -29,7 +29,6 @@ import static com.android.server.am.ActivityManagerService.DEBUG_TRANSITION;
 import static com.android.server.am.ActivityManagerService.DEBUG_USER_LEAVING;
 import static com.android.server.am.ActivityManagerService.DEBUG_VISBILITY;
 import static com.android.server.am.ActivityManagerService.VALIDATE_TOKENS;
-
 import static com.android.server.am.ActivityStackSupervisor.DEBUG_ADD_REMOVE;
 import static com.android.server.am.ActivityStackSupervisor.DEBUG_APP;
 import static com.android.server.am.ActivityStackSupervisor.DEBUG_SAVED_STATE;
@@ -40,6 +39,7 @@ import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.util.Objects;
 import com.android.server.Watchdog;
 import com.android.server.am.ActivityManagerService.ItemMatcher;
+import com.android.server.power.PowerManagerService;
 import com.android.server.wm.AppTransition;
 import com.android.server.wm.TaskGroup;
 import com.android.server.wm.WindowManagerService;
@@ -71,14 +71,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
-import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
 import android.view.Display;
-import com.android.internal.app.ActivityTrigger;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -257,18 +254,9 @@ final class ActivityStack {
 
     final Handler mHandler;
 
-    static final ActivityTrigger mActivityTrigger;
-
-    static {
-        if (!TextUtils.isEmpty(SystemProperties.get("ro.vendor.extension_library"))) {
-            mActivityTrigger = new ActivityTrigger();
-        } else {
-            mActivityTrigger = null;
-        }
-    }
+    private final PowerManagerService mPowerManager;
 
     final class ActivityStackHandler extends Handler {
-
         //public Handler() {
         //    if (localLOGV) Slog.v(TAG, "Handler started!");
         //}
@@ -350,6 +338,7 @@ final class ActivityStack {
         mContext = context;
         mStackId = stackId;
         mCurrentUser = service.mCurrentUserId;
+        mPowerManager = service.mPowerManager;
     }
 
     boolean okToShow(ActivityRecord r) {
@@ -1362,9 +1351,8 @@ final class ActivityStack {
 
         if (DEBUG_SWITCH) Slog.v(TAG, "Resuming " + next);
 
-        if (mActivityTrigger != null) {
-            mActivityTrigger.activityResumeTrigger(next.intent);
-        }
+        // Some activities may want to alter the system power management
+        mPowerManager.activityResumed(next.intent);
 
         // If we are currently pausing an activity, then don't do anything
         // until that is done.
@@ -1796,9 +1784,6 @@ final class ActivityStack {
 
         r.putInHistory();
         r.frontOfTask = newTask;
-        if (mActivityTrigger != null) {
-            mActivityTrigger.activityStartTrigger(r.intent);
-        }
         if (!isHomeStack() || numActivities() > 0) {
             // We want to show the starting preview window if we are
             // switching to a new task, or the next activity's process is

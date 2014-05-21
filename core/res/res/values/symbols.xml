@@ -306,7 +306,6 @@
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
   <java-symbol type="integer" name="config_extraFreeKbytesAbsolute" />
-  <java-symbol type="integer" name="config_immersive_mode_confirmation_panic" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
   <java-symbol type="integer" name="config_lowMemoryKillerMinFreeKbytesAdjust" />
   <java-symbol type="integer" name="config_lowMemoryKillerMinFreeKbytesAbsolute" />
@@ -1398,6 +1397,7 @@
   <java-symbol type="integer" name="config_lidNavigationAccessibility" />
   <java-symbol type="integer" name="config_lidOpenRotation" />
   <java-symbol type="integer" name="config_longPressOnHomeBehavior" />
+  <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
   <java-symbol type="layout" name="global_actions_item" />
   <java-symbol type="layout" name="global_actions_silent_mode" />
   <java-symbol type="layout" name="recent_apps_dialog" />
@@ -1830,7 +1830,6 @@
   <!-- Telephony -->
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
   <java-symbol type="bool" name="config_samsung_stk" />
-  <java-symbol type="array" name="config_telephony_set_audioparameters" />
 
   <!-- Hardware Key ReMapping -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
@@ -2007,4 +2006,7 @@
 
   <!-- Label for the Android system components when they are shown to the user. -->
   <java-symbol type="string" name="android_system_label" />
+
+  <!-- Array of default activities with custom power management -->
+  <java-symbol type="array" name="config_auto_perf_activities" />
 </resources>

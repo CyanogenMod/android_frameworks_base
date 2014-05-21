@@ -15,9 +15,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\n剩余尝试次数：</string>
   <string name="lockscreen_sim_error_message_short">无效的 SIM 卡。</string>
   <string name="lockscreen_airplane_mode_on">飞行模式</string>
   <string name="progress_nomediapresent" product="default">没有可移动媒体\u2026</string>
+  <string name="stk_cc_ussd_to_dial">USSD 请求已修改为 DIAL 请求。</string>
+  <string name="stk_cc_ussd_to_ss">USSD 请求已修改为 SS 请求。</string>
+  <string name="stk_cc_ussd_to_ussd">USSD 请求已修改为新的 USSD 请求。</string>
+  <string name="stk_cc_ss_to_dial">SS 请求已修改为 DIAL 请求。</string>
+  <string name="stk_cc_ss_to_ussd">SS 请求已修改为 USSD 请求。</string>
+  <string name="stk_cc_ss_to_ss">SS 请求已修改为新的 SS 请求。</string>
 </resources>
