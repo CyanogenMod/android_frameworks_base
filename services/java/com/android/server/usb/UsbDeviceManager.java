@@ -16,6 +16,7 @@
 
 package com.android.server.usb;
 
+import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -674,6 +675,10 @@ public class UsbDeviceManager {
                     id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
+                } else if (AppOpsManager.isStrictEnable()) {
+                    // Default config is false, when it is true, if find none of above, will still
+                    // update USB connection notification
+                    id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } else {
                     // There is a different notification for USB tethering so we don't need one here
                     //if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
