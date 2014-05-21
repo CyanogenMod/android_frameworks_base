@@ -970,10 +970,12 @@ public class AudioService extends IAudioService.Stub {
         // setting volume on master stream type also controls silent mode
         if (((flags & AudioManager.FLAG_ALLOW_RINGER_MODES) != 0) ||
                 (mStreamVolumeAlias[streamType] == getMasterStreamType())) {
-            int newRingerMode;
+            int newRingerMode = getRingerMode();
             if (index == 0) {
-                newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
-                                              : AudioManager.RINGER_MODE_SILENT;
+                if (newRingerMode != AudioManager.RINGER_MODE_SILENT) {
+                    newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
+                                                  : AudioManager.RINGER_MODE_SILENT;
+                }
             } else {
                 newRingerMode = AudioManager.RINGER_MODE_NORMAL;
             }
