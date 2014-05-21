@@ -13,7 +13,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false" android:drawable="@android:drawable/scrubber_control_disabled_holo_light" />
     <item android:state_pressed="true" android:drawable="@android:drawable/scrubber_control_pressed_holo_light" />

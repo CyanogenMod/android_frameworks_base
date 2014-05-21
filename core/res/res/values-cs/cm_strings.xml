@@ -34,6 +34,12 @@
   <string name="global_actions_expanded_desktop_mode_off_status">Vypnuto</string>
   <string name="reboot_system" product="tablet">Restartovat tablet</string>
   <string name="reboot_system" product="default">Restartovat telefon</string>
+  <string name="reboot_reboot">Reboot</string>
+  <string name="reboot_recovery">Recovery</string>
+  <string name="reboot_bootloader">Bootloader</string>
+  <string name="reboot_bootmenu">Bootmenu</string>
+  <string name="reboot_fastboot">Fastboot</string>
+  <string name="reboot_download">Download</string>
   <string name="reboot_progress">Restart\u2026</string>
   <string name="reboot_confirm" product="tablet">Tablet bude restartován.</string>
   <string name="reboot_confirm" product="default">Telefon bude restartován.</string>
