@@ -58,6 +58,7 @@ import com.android.systemui.BatteryMeterView;
 public class BatteryCircleMeterView extends ImageView {
     private Handler mHandler = new Handler();
     // state variables
+    private boolean mIsQuickSettings;
     private boolean mAttached;      // whether or not attached to a window
     private boolean mActivated;     // whether or not activated due to system settings
     private boolean mPercentage;    // whether or not to show percentage number
@@ -175,7 +176,7 @@ public class BatteryCircleMeterView extends ImageView {
 
         mPathEffect = new DashPathEffect(new float[]{3,2},0);
 
-        updateSettings(false);
+        updateSettings(mIsQuickSettings);
     }
 
     @Override
@@ -281,6 +282,8 @@ public class BatteryCircleMeterView extends ImageView {
     public void updateSettings(final boolean isQuickSettingsTile) {
         Resources res = getResources();
         ContentResolver resolver = getContext().getContentResolver();
+
+        mIsQuickSettings = isQuickSettingsTile;
 
         mBatteryStyle = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_BATTERY, 0, UserHandle.USER_CURRENT);
