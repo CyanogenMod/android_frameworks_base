@@ -85,6 +85,7 @@ public class ThemeService extends IThemeService.Stub {
 
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
+        private static final int MESSAGE_APPLY_DEFAULT_THEME = 2;
 
         public ThemeWorkerHandler(Looper looper) {
             super(looper);
@@ -96,6 +97,9 @@ public class ThemeService extends IThemeService.Stub {
                 case MESSAGE_CHANGE_THEME:
                     final ThemeData themeData = (ThemeData) msg.obj;
                     doApplyTheme(themeData.pkgName, themeData.components);
+                    break;
+                case MESSAGE_APPLY_DEFAULT_THEME:
+                    doApplyDefaultTheme();
                     break;
                 default:
                     Log.w(TAG, "Unknown message " + msg.what);
@@ -203,6 +207,42 @@ public class ThemeService extends IThemeService.Stub {
         killLaunchers();
 
         postFinish(true, pkgName);
+    }
+
+    private void doApplyDefaultTheme() {
+        final ContentResolver resolver = mContext.getContentResolver();
+        final String defaultThemePkg = Settings.Secure.getString(resolver,
+                Settings.Secure.DEFAULT_THEME_PACKAGE);
+        final boolean shouldApply = !TextUtils.isEmpty(defaultThemePkg) &&
+                Settings.Secure.getInt(resolver,
+                        Settings.Secure.DEFAULT_THEME_APPLIED_ON_FIRST_BOOT, 0) == 0;
+        if (shouldApply) {
+            String defaultThemeComponents = Settings.Secure.getString(resolver,
+                    Settings.Secure.DEFAULT_THEME_COMPONENTS);
+            List<String> components;
+            if (TextUtils.isEmpty(defaultThemeComponents)) {
+                components = new ArrayList<String>(9);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_FONTS);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_LAUNCHER);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_ALARMS);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_BOOT_ANIM);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_ICONS);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_LOCKSCREEN);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_NOTIFICATIONS);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS);
+                components.add(ThemesContract.ThemesColumns.MODIFIES_RINGTONES);
+            } else {
+                components = new ArrayList<String>(
+                        Arrays.asList(defaultThemeComponents.split("\\|")));
+            }
+            try {
+                requestThemeChange(defaultThemePkg, components);
+                Settings.Secure.putInt(resolver,
+                        Settings.Secure.DEFAULT_THEME_APPLIED_ON_FIRST_BOOT, 1);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Unable to set default theme", e);
+            }
+        }
     }
 
     private void updateProvider(List<String> components) {
@@ -614,6 +654,15 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     @Override
+    public void applyDefaultTheme() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        Message msg = Message.obtain();
+        msg.what = ThemeWorkerHandler.MESSAGE_APPLY_DEFAULT_THEME;
+        mHandler.sendMessage(msg);
+    }
+
+    @Override
     public boolean isThemeApplying(String pkgName) throws RemoteException {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
@@ -659,43 +708,5 @@ public class ThemeService extends IThemeService.Stub {
         File anim = new File(SYSTEM_THEME_PATH + File.separator + "bootanimation.zip");
         if (anim.exists())
             anim.delete();
-    }
-
-    public void applyDefaultTheme() {
-        mContext.enforceCallingOrSelfPermission(
-                Manifest.permission.ACCESS_THEME_MANAGER, null);
-        final ContentResolver resolver = mContext.getContentResolver();
-        final String defaultThemePkg = Settings.Secure.getString(resolver,
-                Settings.Secure.DEFAULT_THEME_PACKAGE);
-        final boolean shouldApply = !TextUtils.isEmpty(defaultThemePkg) &&
-                Settings.Secure.getInt(resolver,
-                        Settings.Secure.DEFAULT_THEME_APPLIED_ON_FIRST_BOOT, 0) == 0;
-        if (shouldApply) {
-            String defaultThemeComponents = Settings.Secure.getString(resolver,
-                    Settings.Secure.DEFAULT_THEME_COMPONENTS);
-            List<String> components;
-            if (TextUtils.isEmpty(defaultThemeComponents)) {
-                components = new ArrayList<String>(9);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_FONTS);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_LAUNCHER);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_ALARMS);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_BOOT_ANIM);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_ICONS);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_LOCKSCREEN);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_NOTIFICATIONS);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS);
-                components.add(ThemesContract.ThemesColumns.MODIFIES_RINGTONES);
-            } else {
-                components = new ArrayList<String>(
-                        Arrays.asList(defaultThemeComponents.split("\\|")));
-            }
-            try {
-                requestThemeChange(defaultThemePkg, components);
-                Settings.Secure.putInt(resolver,
-                        Settings.Secure.DEFAULT_THEME_APPLIED_ON_FIRST_BOOT, 1);
-            } catch (RemoteException e) {
-                Log.w(TAG, "Unable to set default theme", e);
-            }
-        }
     }
 }
