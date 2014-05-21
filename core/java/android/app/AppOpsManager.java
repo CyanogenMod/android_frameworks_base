@@ -874,9 +874,9 @@ public class AppOpsManager {
             AppOpsManager.MODE_ASK,     // OP_CALL_PHONE
             AppOpsManager.MODE_ASK,     // OP_READ_SMS
             AppOpsManager.MODE_ASK,     // OP_WRITE_SMS
-            AppOpsManager.MODE_ASK,     // OP_RECEIVE_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_SMS
             AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_EMERGECY_SMS
-            AppOpsManager.MODE_ASK,     // OP_RECEIVE_MMS
+            AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_MMS
             AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_WAP_PUSH
             AppOpsManager.MODE_ASK,     // OP_SEND_SMS
             AppOpsManager.MODE_ALLOWED, // OP_READ_ICC_SMS
@@ -937,7 +937,7 @@ public class AppOpsManager {
         true,     // OP_WRITE_SMS
         false,    // OP_RECEIVE_SMS
         false,    // OP_RECEIVE_EMERGECY_SMS
-        true,     // OP_RECEIVE_MMS
+        false,    // OP_RECEIVE_MMS
         false,    // OP_RECEIVE_WAP_PUSH
         true,     // OP_SEND_SMS
         false,    // OP_READ_ICC_SMS
