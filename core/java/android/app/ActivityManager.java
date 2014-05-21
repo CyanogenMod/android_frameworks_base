@@ -284,7 +284,15 @@ public class ActivityManager {
     /** @hide Process is being cached for later use and is empty. */
     public static final int PROCESS_STATE_CACHED_EMPTY = 13;
 
-    private static boolean _isHighEndGfx, _highEndGfxInit;
+    // Vanir memoization for commonly accessed methods
+    private static boolean _isHighEndGfx, _isLowRamDeviceStatic, _testHarness;
+    private static int _vmHeapClass, _vmHeapGrowth;
+
+    private static boolean _isLowRamDeviceStaticInit = false;
+    private static boolean _highEndGfxInit = false;
+    private static boolean _staticGetLargeMemoryClassInit = false;
+    private static boolean _staticGetMemoryClassInit = false;
+    private static boolean _isRunningInTestHarnessInit = false;
 
     /*package*/ ActivityManager(Context context, Handler handler) {
         mContext = context;
@@ -405,9 +413,14 @@ public class ActivityManager {
     static public int staticGetMemoryClass() {
         // Really brain dead right now -- just take this from the configured
         // vm heap size, and assume it is in megabytes and thus ends with "m".
-        String vmHeapSize = SystemProperties.get("dalvik.vm.heapgrowthlimit", "");
-        if (vmHeapSize != null && !"".equals(vmHeapSize)) {
-            return Integer.parseInt(vmHeapSize.substring(0, vmHeapSize.length()-1));
+        if (!_staticGetMemoryClassInit) {
+            String vmHeapSize = SystemProperties.get("dalvik.vm.heapgrowthlimit", "");
+            if (vmHeapSize != null && !"".equals(vmHeapSize)) {
+                _vmHeapGrowth = Integer.parseInt(vmHeapSize.substring(0, vmHeapSize.length()-1));
+                _staticGetMemoryClassInit = true;
+            }
+        } else {
+            return _vmHeapGrowth;
         }
         return staticGetLargeMemoryClass();
     }
@@ -433,8 +446,12 @@ public class ActivityManager {
     static public int staticGetLargeMemoryClass() {
         // Really brain dead right now -- just take this from the configured
         // vm heap size, and assume it is in megabytes and thus ends with "m".
-        String vmHeapSize = SystemProperties.get("dalvik.vm.heapsize", "16m");
-        return Integer.parseInt(vmHeapSize.substring(0, vmHeapSize.length()-1));
+        if (!_staticGetLargeMemoryClassInit) {
+            String vmHeapSize = SystemProperties.get("dalvik.vm.heapsize", "16m");
+            _vmHeapClass = Integer.parseInt(vmHeapSize.substring(0, vmHeapSize.length()-1));
+            _staticGetLargeMemoryClassInit = true;
+        }
+        return _vmHeapClass;
     }
 
     /**
@@ -450,7 +467,11 @@ public class ActivityManager {
 
     /** @hide */
     public static boolean isLowRamDeviceStatic() {
-        return "true".equals(SystemProperties.get("ro.config.low_ram", "false"));
+        if (!_isLowRamDeviceStaticInit) {
+            _isLowRamDeviceStatic = "true".equals(SystemProperties.get("ro.config.low_ram", "false"));
+            _isLowRamDeviceStaticInit = true;
+        }
+        return _isLowRamDeviceStatic;
     }
 
     /**
@@ -461,9 +482,9 @@ public class ActivityManager {
      */
     static public boolean isHighEndGfx() {
         if (!_highEndGfxInit) {
-            _highEndGfxInit = true;
             _isHighEndGfx = (isLowRamDeviceStatic() ||
                 Resources.getSystem().getBoolean(com.android.internal.R.bool.config_avoidGfxAccel));
+            _highEndGfxInit = true;
         }
         return _isHighEndGfx;
     }
@@ -2102,7 +2123,11 @@ public class ActivityManager {
      * Returns "true" if device is running in a test harness.
      */
     public static boolean isRunningInTestHarness() {
-        return SystemProperties.getBoolean("ro.test_harness", false);
+        if (!_isRunningInTestHarnessInit) {
+            _testHarness = SystemProperties.getBoolean("ro.test_harness", false);
+            _isRunningInTestHarnessInit = true;
+        }
+        return _testHarness;
     }
 
     /**
