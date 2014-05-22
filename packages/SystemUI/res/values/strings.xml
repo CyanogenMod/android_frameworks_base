@@ -527,4 +527,5 @@
     <string name="China_Telecom">China Telecom</string>
 
     <string name="roamingTextSearching">Searching for Service</string>
+    <string name="quick_settings_dds_sub">Card <xliff:g id="number">%d</xliff:g> data</string>
 </resources>

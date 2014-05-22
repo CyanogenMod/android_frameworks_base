@@ -223,4 +223,5 @@
     <string name="China_Telecom">中国电信</string>
 
     <string name="roamingTextSearching">"正在搜索服务"</string>
+    <string name="quick_settings_dds_sub">卡 <xliff:g id="number">%d</xliff:g> 数据</string>
 </resources>

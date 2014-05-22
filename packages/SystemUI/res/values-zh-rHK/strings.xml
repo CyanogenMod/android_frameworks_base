@@ -207,4 +207,5 @@
     <string name="China_Unicom">中國聯通</string>
     <string name="China_Telecom">中國電信</string>
     <string name="roamingTextSearching">"正在搜索服務"</string>
+    <string name="quick_settings_dds_sub">卡 <xliff:g id="number">%d</xliff:g> 數據</string>
 </resources>
