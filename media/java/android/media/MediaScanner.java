@@ -1005,6 +1005,9 @@ public class MediaScanner
                     setSettingIfNotSet(Settings.System.NOTIFICATION_SOUND, tableUri, rowId);
                     mDefaultNotificationSet = true;
                 } else if (ringtones) {
+                    // memorize default system ringtone persistently
+                    setSettingIfNotSet(Settings.System.DEFAULT_RINGTONE, tableUri, rowId);
+
                     setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
                     if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                         int phoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
