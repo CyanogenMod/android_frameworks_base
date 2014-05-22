@@ -606,6 +606,37 @@ public class TelephonyManager {
         return  SystemProperties.getInt(TelephonyProperties.PROPERTY_DEFAULT_SUBSCRIPTION, 0);
     }
 
+    /**
+     * Convert network type to String
+     *
+     * @param networkType
+     * @return String representation of the networkClass
+     * @hide
+     */
+    public String networkTypeToString(int networkType) {
+        String ratClassName = "";
+        int networkClass = getNetworkClass(networkType);
+        Rlog.d(TAG, "networkType = " + networkType + " networkClass = " + networkClass);
+        if (mContext == null) return null;
+        switch (networkClass) {
+            case TelephonyManager.NETWORK_CLASS_2_G:
+                ratClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_rat_2g);
+                break;
+            case TelephonyManager.NETWORK_CLASS_3_G:
+                ratClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_rat_3g);
+                break;
+            case TelephonyManager.NETWORK_CLASS_4_G:
+                ratClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_rat_4g);
+                break;
+            default:
+                ratClassName = "";
+                break;
+        }
+        return ratClassName;
+    }
 
     /**
      * Gets the telephony property.

@@ -1453,4 +1453,8 @@
     <!-- Should the device show AM/PM in unlock screen -->
     <bool name="config_show_ampm_in_unlock_screen">false</bool>
 
+    <!-- config 2G/3G/4G RAT strings for carriers -->
+    <string name="config_rat_2g" translatable="false">2G</string>
+    <string name="config_rat_3g" translatable="false">3G</string>
+    <string name="config_rat_4g" translatable="false">4G</string>
 </resources>

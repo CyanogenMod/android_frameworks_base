@@ -135,6 +135,10 @@
 
     <!-- monitor locale change -->
     <bool name="config_monitor_locale_change">false</bool>
+
+    <!-- display for radio tech -->
+    <bool name="config_display_rat">false</bool>
+
     <integer-array name="config_showVoiceAndDataForSub">
         <item>0</item>
         <item>0</item>
