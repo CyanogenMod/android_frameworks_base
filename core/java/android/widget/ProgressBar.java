@@ -40,11 +40,6 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pools.SynchronizedPool;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 import android.view.Gravity;
 import android.view.RemotableViewMethod;
 import android.view.View;
@@ -321,28 +316,9 @@ public class ProgressBar extends View {
                  Settings.System.PROGRESSBAR_COLOR_3, -1);
          int Color4 = Settings.System.getInt(mContext.getContentResolver(),
                  Settings.System.PROGRESSBAR_COLOR_4, -1);
-         int Colors[] = { Color1, Color2, Color3, Color4 };
 
-	Interpolator interpolator = null;
-         switch(Settings.System.getInt(mContext.getContentResolver(),Settings.System.PROGRESSBAR_INTERPOLATOR, 0)) {
-		case 0:
-		    break;
-		case 1:
-		    interpolator = new AccelerateInterpolator();
-		    break;
-		case 2:
-		    interpolator = new LinearInterpolator();
-		    break;
-		case 3:
-		    interpolator = new AccelerateDecelerateInterpolator();
-		    break;
-		case 4:
-		    interpolator = new DecelerateInterpolator();
-		    break;
-	}
-
+	int Colors[] = { Color1, Color2, Color3, Color4 };
          Builder abc = new SmoothProgressDrawable.Builder(context);
-	 if(interpolator != null) {
                 drawable = (abc
                 .colors(Colors)
 		.speed(Speed)
@@ -351,20 +327,7 @@ public class ProgressBar extends View {
                 .sectionsCount(Count+1)
 		.reversed(IsReversed)
                 .mirrorMode(IsMirrorMode)
-		.interpolator(interpolator)
                 .build());
-	} else {
-		drawable = (abc
-                .colors(Colors)
-                .speed(Speed)
-                .strokeWidth(Width)
-                .separatorLength(Length)
-                .sectionsCount(Count+1)
-                .reversed(IsReversed)
-                .mirrorMode(IsMirrorMode)
-                .build());
-
-	}
 	}
         if (drawable != null) {
             drawable = tileifyIndeterminate(drawable);
