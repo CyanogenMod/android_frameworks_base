@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -598,7 +599,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
 
         boolean wakeupFiltered = false;
-        if ((type == AlarmManager.RTC_WAKEUP
+        if (operation.getCreatorUid() >= Process.FIRST_APPLICATION_UID &&
+                (type == AlarmManager.RTC_WAKEUP
                         || type == AlarmManager.ELAPSED_REALTIME_WAKEUP)
                 && mAppOps.checkOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
                         operation.getCreatorUid(),
