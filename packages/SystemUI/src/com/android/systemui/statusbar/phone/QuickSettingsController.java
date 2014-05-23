@@ -494,4 +494,16 @@ public class QuickSettingsController {
             t.updateResources();
         }
     }
+
+    public void onSettingsHidden() {
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.onSettingsHidden();
+        }
+    }
+
+    public void onSettingsVisible() {
+        for (QuickSettingsTile t : mQuickSettingsTiles) {
+            t.onSettingsVisible();
+        }
+    }
 }
