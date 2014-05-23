@@ -41,4 +41,7 @@
 
     <!-- display airplane mode in lock sreen when phone is in APM mode -->
     <bool name="config_display_APM">false</bool>
+
+    <!-- show cancel button on SIM PIN lock screen-->
+    <bool name="config_show_cancel_button">false</bool>
 </resources>
