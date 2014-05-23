@@ -321,6 +321,11 @@ public class DirectoryFragment extends Fragment {
         getLoaderManager().restartLoader(mLoaderId, null, mCallbacks);
 
         updateDisplayState();
+
+        if (mSvelteRecents) {
+            Toast.makeText(getActivity(), R.string.toast_not_show_thumbnail,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
