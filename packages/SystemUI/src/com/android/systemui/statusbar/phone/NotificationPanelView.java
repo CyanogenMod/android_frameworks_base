@@ -59,10 +59,6 @@ public class NotificationPanelView extends PanelView {
         super(context, attrs);
     }
 
-    public void setStatusBar(PhoneStatusBar bar) {
-        mStatusBar = bar;
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();

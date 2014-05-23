@@ -74,7 +74,9 @@ public class SettingsPanelView extends PanelView {
         }
     }
 
-    public void setImeWindowStatus(boolean visible) {
+    @Override
+    public void setStatusBar(PhoneStatusBar phoneStatusBar) {
+        super.setStatusBar(phoneStatusBar);
         if (mQS != null) {
             mQS.setImeWindowStatus(visible);
         }

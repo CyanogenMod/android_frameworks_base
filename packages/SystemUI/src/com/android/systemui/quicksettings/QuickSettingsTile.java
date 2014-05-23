@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.app.ActivityManagerNative;
@@ -26,7 +42,6 @@ import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
 public class QuickSettingsTile implements OnClickListener {
-
     protected final Context mContext;
     protected QuickSettingsContainerView mContainer;
     protected QuickSettingsTileView mTile;
@@ -76,6 +91,7 @@ public class QuickSettingsTile implements OnClickListener {
         if (tv != null) {
             tv.setVisibility(View.GONE);
         }
+
         View image = mTile.findViewById(R.id.image);
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
@@ -96,6 +112,7 @@ public class QuickSettingsTile implements OnClickListener {
                 tv.setPadding(0, mTileTextPadding, 0, 0);
             }
         }
+
         View image = mTile.findViewById(R.id.image);
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
@@ -106,13 +123,21 @@ public class QuickSettingsTile implements OnClickListener {
         }
     }
 
-    void onPostCreate() {}
+    void onPostCreate() {
+        // Do nothing here
+    }
 
-    public void onDestroy() {}
+    public void onDestroy() {
+        // Do nothing here
+    }
 
-    public void onReceive(Context context, Intent intent) {}
+    public void onReceive(Context context, Intent intent) {
+        // Do nothing here
+    }
 
-    public void onChangeUri(ContentResolver resolver, Uri uri) {}
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        // Do nothing here
+    }
 
     public void updateResources() {
         if (mTile != null) {
@@ -130,6 +155,7 @@ public class QuickSettingsTile implements OnClickListener {
                 tv.setPadding(0, mTileTextPadding, 0, 0);
             }
         }
+
         View image = mTile.findViewById(R.id.image);
         if (image != null && image instanceof ImageView) {
             ((ImageView) image).setImageResource(mDrawable);
@@ -146,12 +172,17 @@ public class QuickSettingsTile implements OnClickListener {
     }
 
     private void startSettingsActivity(Intent intent, boolean onlyProvisioned) {
-        if (onlyProvisioned && !mStatusbarService.isDeviceProvisioned()) return;
+        if (onlyProvisioned && !mStatusbarService.isDeviceProvisioned()) {
+            return;
+        }
+
         try {
-            // Dismiss the lock screen when Settings starts.
+            // Dismiss the lock screen when Settings starts
             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
         } catch (RemoteException e) {
+            // Do nothing here
         }
+
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
         mStatusbarService.animateCollapsePanels();
@@ -169,5 +200,13 @@ public class QuickSettingsTile implements OnClickListener {
         if (shouldCollapse) {
             mQsc.mBar.collapseAllPanels(true);
         }
+    }
+
+    public void onSettingsHidden() {
+        // Do nothing here
+    }
+
+    public void onSettingsVisible() {
+        // Do nothing here
     }
 }
