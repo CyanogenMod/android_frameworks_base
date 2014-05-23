@@ -945,6 +945,18 @@ public class MediaPlayer implements SubtitleController.Listener
         return null;
     }
 
+    public Uri getCurrentRingtoneUriByType(Context context, int ringtoneType, Uri uri) {
+        Uri soundUri = null;
+        if (ringtoneType == RingtoneManager.TYPE_RINGTONE) {
+            soundUri = RingtoneManager.getActualRingtoneUriBySubId(context,
+                    RingtoneManager.getDefaultRingtoneSubIdByUri(uri));
+        } else {
+            soundUri = RingtoneManager.getActualDefaultRingtoneUri(context,
+                    ringtoneType);
+        }
+        return soundUri;
+    }
+
     /**
      * Sets the data source as a content Uri.
      *
@@ -978,8 +990,7 @@ public class MediaPlayer implements SubtitleController.Listener
         } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)
                 && Settings.AUTHORITY.equals(uri.getAuthority())) {
             // Redirect ringtones to go directly to underlying provider
-            uri = RingtoneManager.getActualDefaultRingtoneUri(context,
-                    RingtoneManager.getDefaultType(uri));
+            uri = getCurrentRingtoneUriByType(context, RingtoneManager.getDefaultType(uri), uri);
             if (uri == null) {
                 throw new FileNotFoundException("Failed to resolve default ringtone");
             }
