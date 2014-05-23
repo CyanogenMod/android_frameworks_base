@@ -24,10 +24,12 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
 import android.util.Log;
+import android.util.SettingConfirmationHelper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -57,11 +59,21 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
     private int mNumItemsInOneScreenful;
     private Runnable mOnScrollListener;
 
+    private boolean mConfirmationDialogAnswered = true;
+    private boolean mDismissAfterConfirmation = false;
+
     public RecentsHorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
         float densityScale = getResources().getDisplayMetrics().density;
         float pagingTouchSlop = ViewConfiguration.get(mContext).getScaledPagingTouchSlop();
         mSwipeHelper = new SwipeHelper(SwipeHelper.Y, this, densityScale, pagingTouchSlop);
+
+        if (Settings.System.getInt(context.getContentResolver(),
+            Settings.System.RECENTS_SWIPE_FLOATING, 0) == 1) {
+            mSwipeHelper.setTriggerEnabled(true);
+            mSwipeHelper.setTriggerDirection(SwipeHelper.DOWN);
+        }
+
         mFadedEdgeDrawHelper = FadedEdgeDrawHelper.create(context, attrs, this, false);
         mRecycledViews = new HashSet<View>();
     }
@@ -214,6 +226,14 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
         }
     }
 
+    public boolean isConfirmationDialogAnswered() {
+        return mConfirmationDialogAnswered;
+    }
+
+    public void setDismissAfterConfirmation(boolean dismiss) {
+        mDismissAfterConfirmation = dismiss;
+    }
+
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (DEBUG) Log.v(TAG, "onInterceptTouchEvent()");
         return mSwipeHelper.onInterceptTouchEvent(ev) ||
@@ -246,12 +266,45 @@ public class RecentsHorizontalScrollView extends HorizontalScrollView
     }
 
     public void onChildTriggered(View v) {
+        mCallback.handleFloat(v);
     }
 
     public void onBeginDrag(View v) {
         // We do this so the underlying ScrollView knows that it won't get
         // the chance to intercept events anymore
         requestDisallowInterceptTouchEvent(true);
+
+        final Context context = getContext();
+        int swipeStatus = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.RECENTS_SWIPE_FLOATING, 0);
+
+        if (swipeStatus == 0 || swipeStatus == 3) {
+            mConfirmationDialogAnswered = false;
+            mDismissAfterConfirmation = false;
+
+            SettingConfirmationHelper.showConfirmationDialogForSetting(
+                context,
+                context.getString(R.string.recents_swipe_floating_title),
+                context.getString(R.string.recents_swipe_floating_message_landscape),
+                context.getResources().getDrawable(R.drawable.recents_swipe_floating_landscape),
+                Settings.System.RECENTS_SWIPE_FLOATING,
+                new SettingConfirmationHelper.OnSelectListener() {
+                    @Override
+                    public void onSelect(boolean enabled) {
+                        if (enabled){
+                            mSwipeHelper.setTriggerEnabled(true);
+                            mSwipeHelper.setTriggerDirection(SwipeHelper.DOWN);
+                        }
+                        // Dialog finished, recents can safely be dismissed later
+                        mConfirmationDialogAnswered = true;
+                        if (mDismissAfterConfirmation) {
+                            // Recents is already empty, so dismiss right after
+                            // this dialog
+                            mCallback.dismiss();
+                        }
+                    }
+                });
+        }
     }
 
     public void onDragCancelled(View v) {
