@@ -508,6 +508,12 @@ public class ThemeUtils {
         return null;
     }
 
+    public static String getWallpaperPath(AssetManager assetManager) throws IOException {
+        String[] assets = assetManager.list("wallpapers");
+        if (assets == null || assets.length == 0) return null;
+        return "wallpapers/" + assets[0];
+    }
+
     public static String getDefaultThemePackageName(Context context) {
         final String defaultThemePkg = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.DEFAULT_THEME_PACKAGE);
