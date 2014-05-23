@@ -1003,6 +1003,19 @@ public class SettingsProvider extends ContentProvider {
         return count;
     }
 
+    public Uri getCurrentRingtoneUriByType(int ringtoneType, Uri uri) {
+        Uri soundUri = null;
+        Context context = getContext();
+        if (ringtoneType == RingtoneManager.TYPE_RINGTONE) {
+            soundUri = RingtoneManager.getActualRingtoneUriBySubId(context,
+                    RingtoneManager.getDefaultRingtoneSubIdByUri(uri));
+        } else {
+            soundUri = RingtoneManager.getActualDefaultRingtoneUri(context,
+                    ringtoneType);
+        }
+        return soundUri;
+    }
+
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
 
@@ -1017,7 +1030,7 @@ public class SettingsProvider extends ContentProvider {
             Context context = getContext();
 
             // Get the current value for the default sound
-            Uri soundUri = RingtoneManager.getActualDefaultRingtoneUri(context, ringtoneType);
+            Uri soundUri = getCurrentRingtoneUriByType(ringtoneType,uri);
 
             if (soundUri != null) {
                 // Proxy the openFile call to media provider
@@ -1045,7 +1058,7 @@ public class SettingsProvider extends ContentProvider {
             Context context = getContext();
 
             // Get the current value for the default sound
-            Uri soundUri = RingtoneManager.getActualDefaultRingtoneUri(context, ringtoneType);
+            Uri soundUri = getCurrentRingtoneUriByType(ringtoneType,uri);
 
             if (soundUri != null) {
                 // Proxy the openFile call to media provider
