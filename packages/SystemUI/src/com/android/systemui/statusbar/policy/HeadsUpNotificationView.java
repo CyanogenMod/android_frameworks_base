@@ -224,6 +224,10 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
     }
 
     @Override
+    public void onChildTriggered(View v) {
+    }
+
+    @Override
     public void onBeginDrag(View v) {
         // We need to prevent any surrounding View from intercepting us now.
         requestDisallowInterceptTouchEvent(true);
