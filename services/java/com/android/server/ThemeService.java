@@ -507,10 +507,24 @@ public class ThemeService extends IThemeService.Stub {
                         c.getColumnIndex(ThemesContract.ThemesColumns.IS_LEGACY_THEME)) == 1;
                 if (!isLegacyTheme) {
                     String wallpaper = c.getString(c.getColumnIndex(ThemesContract.ThemesColumns.WALLPAPER_URI));
-                    if (URLUtil.isAssetUrl(wallpaper)) {
-                        in = ThemeUtils.getInputStreamFromAsset(themeContext, wallpaper);
+                    if (wallpaper != null) {
+                        if (URLUtil.isAssetUrl(wallpaper)) {
+                            in = ThemeUtils.getInputStreamFromAsset(themeContext, wallpaper);
+                        } else {
+                            in = mContext.getContentResolver().openInputStream(Uri.parse(wallpaper));
+                        }
                     } else {
-                        in = mContext.getContentResolver().openInputStream(Uri.parse(wallpaper));
+                        // try and get the wallpaper directly from the apk if the URI was null
+                        Context themeCtx = mContext.createPackageContext(mPkgName,
+                                Context.CONTEXT_IGNORE_SECURITY);
+                        AssetManager assetManager = themeCtx.getAssets();
+                        String wpPath = ThemeUtils.getWallpaperPath(assetManager);
+                        if (wpPath == null) {
+                            Log.w(TAG, "Not setting wp because wallpaper file was not found.");
+                            return false;
+                        }
+                        in = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/"
+                                + wpPath);
                     }
                     WallpaperManager.getInstance(mContext).setStream(in);
                 } else {
