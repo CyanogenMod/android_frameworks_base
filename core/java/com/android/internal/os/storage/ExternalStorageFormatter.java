@@ -18,6 +18,7 @@ import android.os.storage.StorageVolume;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.os.Looper;
 
 import com.android.internal.R;
 import java.util.ArrayList;
@@ -260,6 +261,7 @@ public class ExternalStorageFormatter extends Service
                             mIsFormatSuccess = true;
                             success = true;
                         } catch (Exception e) {
+                            Looper.prepare();
                             Toast.makeText(ExternalStorageFormatter.this,
                                     R.string.format_error, Toast.LENGTH_LONG).show();
                         }
