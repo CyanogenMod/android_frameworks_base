@@ -2488,6 +2488,12 @@ public final class Settings {
         public static final String DTMF_TONE_TYPE_WHEN_DIALING = "dtmf_tone_type";
 
         /**
+         * Whether incall glowpad background is transparent or not.  The value is
+         * boolean (1 or 0).
+        */
+        public static final String INCALL_GLOWPAD_TRANSPARENCY = "incall_glowpad_transparency";
+
+        /**
          * Whether the hearing aid is enabled. The value is
          * boolean (1 or 0).
          * @hide
