@@ -243,6 +243,8 @@ public:
         Vector<String8>& targets, Vector<String8>& overlays,
         uint32_t** outData, size_t* outSize);
 
+    String8 getBasePackageName(int index);
+
 private:
     struct asset_path
     {
@@ -392,6 +394,9 @@ private:
 
     mutable ResTable* mResources;
     ResTable_config* mConfig;
+
+    String8 mBasePackageName;
+    int32_t mBasePackageIndex;
 
     /*
      * Cached data for "loose" files.  This lets us avoid poking at the
