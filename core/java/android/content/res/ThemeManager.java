@@ -123,6 +123,14 @@ public class ThemeManager {
         }
     }
 
+    public void applyDefaultTheme() {
+        try {
+            mService.applyDefaultTheme();
+        } catch (RemoteException e) {
+            Log.w(TAG, "Unable to access ThemeService", e);
+        }
+    }
+
     public boolean isThemeApplying(String pkgName) {
         try {
             return mService.isThemeApplying(pkgName);

@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -72,6 +73,10 @@ class AlarmManagerService extends IAlarmManager.Stub {
     // The threshold for how long an alarm can be late before we print a
     // warning message.  The time duration is in milliseconds.
     private static final long LATE_ALARM_THRESHOLD = 10 * 1000;
+
+    // The threshold for the power off alarm time can be set. The time
+    // duration is in milliseconds.
+    private static final long POWER_OFF_ALARM_THRESHOLD = 120 * 1000;
 
     private static final int RTC_WAKEUP_MASK = 1 << RTC_WAKEUP;
     private static final int RTC_MASK = 1 << RTC;
@@ -598,7 +603,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
 
         boolean wakeupFiltered = false;
-        if ((type == AlarmManager.RTC_WAKEUP
+        if (operation.getCreatorUid() >= Process.FIRST_APPLICATION_UID &&
+                (type == AlarmManager.RTC_WAKEUP
                         || type == AlarmManager.ELAPSED_REALTIME_WAKEUP)
                 && mAppOps.checkOpNoThrow(AppOpsManager.OP_ALARM_WAKEUP,
                         operation.getCreatorUid(),
@@ -721,7 +727,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         final int N = mAlarmBatches.size();
         for (int i = 0; i < N; i++) {
             Batch b = mAlarmBatches.get(i);
-            if (b.isRtcPowerOffWakeup()) {
+            long intervalTime  = b.start - SystemClock.elapsedRealtime();
+            if (b.isRtcPowerOffWakeup() && intervalTime > POWER_OFF_ALARM_THRESHOLD) {
                 return b;
             }
         }
@@ -1346,7 +1353,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     mClockReceiver.scheduleTimeTickEvent();
                     Intent intent = new Intent(Intent.ACTION_TIME_CHANGED);
                     intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
-                            | Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+                            | Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT
+                            | Intent.FLAG_RECEIVER_FOREGROUND);
                     mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
                 }
                 

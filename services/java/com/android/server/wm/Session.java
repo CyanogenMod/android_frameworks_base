@@ -389,7 +389,16 @@ final class Session extends IWindowSession.Stub
     }
 
     public void setWallpaperPosition(IBinder window, float x, float y, float xStep, float yStep) {
-        setWallpaperPositionOverscroll(window, x, y, xStep, yStep, -1, -1, -1, -1);
+        synchronized(mService.mWindowMap) {
+            long ident = Binder.clearCallingIdentity();
+            try {
+                mService.setWindowWallpaperPositionLocked(
+                        mService.windowForClientLocked(this, window, true),
+                        x, y, xStep, yStep);
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
     }
 
     /**
