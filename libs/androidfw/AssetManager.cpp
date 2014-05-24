@@ -464,6 +464,19 @@ String8 AssetManager::getPkgName(const char *apkPath) {
         return pkgName;
     }
 
+/**
+ * Returns the base package name as defined in the AndroidManifest.xml
+ */
+String8 AssetManager::getBasePackageName(int index)
+{
+    if (index >= mAssetPaths.size()) return String8::empty();
+
+    if (mBasePackageName.isEmpty()) {
+        mBasePackageName = getPkgName(mAssetPaths[index].path.string());
+    }
+    return mBasePackageName;
+}
+
 String8 AssetManager::getOverlayResPath(const char* targetApkPath, const char* overlayApkPath)
 {
     //Remove leading '/'
