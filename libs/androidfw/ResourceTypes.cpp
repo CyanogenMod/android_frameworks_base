@@ -3274,6 +3274,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
                 E = Res_GETENTRY(overlayResID);
                 // consider themed resources as being "best fit" when they exist
                 bestFitOverride = true;
+                ALOGD("THEMES: resource %d mapped to %d", resID, overlayResID);
             } else {
                 // resource not present in overlay package, continue with the next package
                 continue;

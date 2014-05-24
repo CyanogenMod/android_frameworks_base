@@ -464,6 +464,10 @@ String8 AssetManager::getPkgName(const char *apkPath) {
         return pkgName;
     }
 
+String8 AssetManager::getBasePackageName(int index) {
+    return getPkgName(mAssetPaths[index].path.string());
+}
+
 String8 AssetManager::getOverlayResPath(const char* targetApkPath, const char* overlayApkPath)
 {
     //Remove leading '/'
