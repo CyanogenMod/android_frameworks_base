@@ -1146,7 +1146,29 @@ public class WallpaperManager {
         mWallpaperXStep = xStep;
         mWallpaperYStep = yStep;
     }
-    
+
+    /** @hide */
+    public int getLastWallpaperX() {
+        try {
+            return WindowManagerGlobal.getWindowSession().getLastWallpaperX();
+        } catch (RemoteException e) {
+            // Ignore.
+        }
+
+        return -1;
+    }
+
+    /** @hide */
+    public int getLastWallpaperY() {
+        try {
+            return WindowManagerGlobal.getWindowSession().getLastWallpaperY();
+        } catch (RemoteException e) {
+            // Ignore.
+        }
+
+        return -1;
+    }
+
     /**
      * Send an arbitrary command to the current active wallpaper.
      * 

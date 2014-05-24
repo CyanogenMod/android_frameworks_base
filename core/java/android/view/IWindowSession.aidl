@@ -186,7 +186,17 @@ interface IWindowSession {
             int xoverscrollmax, int yoverscrollmax);
     
     void wallpaperOffsetsComplete(IBinder window);
-    
+
+    /**
+     * Get the current x offset for the wallpaper
+     */
+    int getLastWallpaperX();
+
+    /**
+     * Get the current y offset for the wallpaper
+     */
+    int getLastWallpaperY();
+
     Bundle sendWallpaperCommand(IBinder window, String action, int x, int y,
             int z, in Bundle extras, boolean sync);
     
