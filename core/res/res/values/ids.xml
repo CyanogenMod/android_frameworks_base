@@ -19,6 +19,8 @@
 <resources>
   <item type="id" name="background" />
   <item type="id" name="checkbox" />
+  <item type="id" name="monitor_box" />
+  <item type="id" name="seek_bar" />
   <item type="id" name="content" />
   <item type="id" name="empty" />
   <item type="id" name="hint" />

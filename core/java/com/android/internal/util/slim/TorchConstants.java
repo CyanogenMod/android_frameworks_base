@@ -41,10 +41,30 @@ public class TorchConstants {
 
     /**
      * Extra for {@link ACTION_TOGGLE_STATE}:
+     * When toggling on, don't display a notification
+     * that the torch is active
+     */
+    public static final String NOTIFICATION_SHOWN = "notification";
+
+    /**
+     * Extra for {@link ACTION_TOGGLE_STATE}:
      * When toggling to on, use the bright brightness setting
      * Type: boolean
      */
     public static final String EXTRA_BRIGHT_MODE = "bright";
+
+    /**
+     * Extra for {@link ACTION_TOGGLE_STATE}:
+     * When toggling on, use a strobing effect
+     */
+    public static final String STROBE_MODE = "strobe";
+
+    /**
+     * Extra for {@link ACTION_TOGGLE_STATE}:
+     * When toggling on, lenght of strobe
+     * if strobe is enabled
+     */
+    public static final String STROBE_PERIOD = "period";
 
     /**
      * Intent action for 'torch state changed' broadcast

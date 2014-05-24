@@ -2008,6 +2008,18 @@ public final class Settings {
         public static final int VOLUME_OVERLAY_NONE = 3;
 
         /**
+         * Whether the torch will pulse on incoming call
+         * @hide
+         */
+        public static final String TORCH_WHILE_RINGING = "torch_while_ringing";
+
+        /**
+         * Pulse rate of the incoming call torch (if enabled)
+         * @hide
+         */
+        public static final String TORCH_WHILE_RINGING_PERIOD = "torch_while_ringing_period";
+
+        /**
          * Timeout for volume panel
          * @hide
          */
