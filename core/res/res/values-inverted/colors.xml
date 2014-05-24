@@ -18,22 +18,6 @@
 */
 -->
 <resources>
-    <drawable name="screen_background_light">#ffffffff</drawable>
-    <drawable name="screen_background_dark">#ff000000</drawable>
-    <drawable name="status_bar_closed_default_background">#ff000000</drawable>
-    <drawable name="status_bar_opened_default_background">#ff000000</drawable>
-    <drawable name="notification_item_background_color">#ff111111</drawable>
-    <drawable name="notification_item_background_color_pressed">#ff454545</drawable>
-    <drawable name="search_bar_default_color">#ff000000</drawable>
-    <drawable name="safe_mode_background">#60000000</drawable>
-    <!-- Background drawable that can be used for a transparent activity to
-         be able to display a dark UI: this darkens its background to make
-         a dark (default theme) UI more visible. -->
-    <drawable name="screen_background_dark_transparent">#80000000</drawable>
-    <!-- Background drawable that can be used for a transparent activity to
-         be able to display a light UI: this lightens its background to make
-         a light UI more visible. -->
-    <drawable name="screen_background_light_transparent">#80ffffff</drawable>
     <color name="safe_mode_text">#80ffffff</color>
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
@@ -61,27 +45,7 @@
     <color name="link_text_dark">#5c5cff</color>
     <color name="link_text_light">#0000ee</color>
     <color name="suggestion_highlight_text">#ba1010</color>
-
-    <drawable name="stat_notify_sync_noanim">@drawable/stat_notify_sync_anim0</drawable>
-    <drawable name="stat_sys_download_done">@drawable/stat_sys_download_done_static</drawable>
-    <drawable name="stat_sys_upload_done">@drawable/stat_sys_upload_anim0</drawable>
-    <drawable name="dialog_frame">@drawable/panel_background</drawable>
-    <drawable name="alert_dark_frame">@drawable/popup_full_dark</drawable>
-    <drawable name="alert_light_frame">@drawable/popup_full_bright</drawable>
-    <drawable name="menu_frame">@drawable/menu_background</drawable>
-    <drawable name="menu_full_frame">@drawable/menu_background_fill_parent_width</drawable>
-    <drawable name="editbox_dropdown_dark_frame">@drawable/editbox_dropdown_background_dark</drawable>
-    <drawable name="editbox_dropdown_light_frame">@drawable/editbox_dropdown_background</drawable>
-
-    <drawable name="dialog_holo_dark_frame">@drawable/dialog_full_holo_dark</drawable>
-    <drawable name="dialog_holo_light_frame">@drawable/dialog_full_holo_light</drawable>
-
-    <drawable name="input_method_fullscreen_background">#fff9f9f9</drawable>
-    <drawable name="input_method_fullscreen_background_holo">@drawable/screen_background_holo_dark</drawable>
     <color name="input_method_navigation_guard">#ff000000</color>
-
-    <!-- For date picker widget -->
-    <drawable name="selected_day_background">#fff60000</drawable>
 
     <!-- For settings framework -->
     <color name="lighter_gray">#ddd</color>
@@ -125,8 +89,6 @@
     <color name="facelock_spotlight_mask">#CC000000</color>
 
     <!-- For holo theme -->
-      <drawable name="screen_background_holo_light">#fff3f3f3</drawable>
-      <drawable name="screen_background_holo_dark">#ff000000</drawable>
     <color name="background_holo_dark">#ff000000</color>
     <color name="background_holo_light">#fff3f3f3</color>
     <color name="bright_foreground_holo_dark">@android:color/background_holo_light</color>
@@ -191,9 +153,6 @@
     <color name="holo_blue_bright">#ffff0000</color>
     <!-- A really bright Holo shade of gray -->
     <color name="holo_gray_bright">#33CCCCCC</color>
-
-    <drawable name="notification_template_icon_bg">#33e51616</drawable>
-    <drawable name="notification_template_icon_low_bg">#0cffffff</drawable>
 
     <!-- Keyguard colors -->
     <color name="keyguard_avatar_frame_color">#ffffffff</color>
