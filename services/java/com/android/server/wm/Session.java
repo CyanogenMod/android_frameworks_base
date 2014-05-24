@@ -419,6 +419,34 @@ final class Session extends IWindowSession.Stub
         }
     }
 
+    /**
+     * @hide
+     */
+    public int getLastWallpaperX() {
+        synchronized(mService.mWindowMap) {
+            long ident = Binder.clearCallingIdentity();
+            try {
+                return mService.getLastWallpaperX();
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public int getLastWallpaperY() {
+        synchronized(mService.mWindowMap) {
+            long ident = Binder.clearCallingIdentity();
+            try {
+                return mService.getLastWallpaperY();
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+
     public void wallpaperOffsetsComplete(IBinder window) {
         mService.wallpaperOffsetsComplete(window);
     }
