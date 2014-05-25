@@ -16,12 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_password_wrong_puk_code">錯誤的 PUK 碼。</string>
-  <string name="keyguard_password_pin_failed">PIN 碼操作失敗。</string>
-  <string name="keyguard_password_puk_failed">PUK 碼操作失敗。</string>
-  <string name="keyguard_pin_accepted">PIN 碼已接受。</string>
-  <string name="pinpuk_attempts">\n剩餘嘗試次數：</string>
-  <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
-  <string name="keyguard_perso_locked_message">SIM 卡/RUIM 卡被 Perso 鎖定</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB：<xliff:g id="number">%d</xliff:g>：<xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_password_wrong_puk_code">PUK ​ผิด</string>
+  <string name="keyguard_password_pin_failed">PIN ล้มเหลว</string>
+  <string name="keyguard_password_puk_failed">PUK ล้มเหลว</string>
+  <string name="keyguard_pin_accepted">ยอมรับรหัสผ่าน</string>
+  <string name="pinpuk_attempts">\nความพยายามที่เหลือ:</string>
+  <string name="lockscreen_sim_error_message_short">บัตรไม่ถูกต้อง</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM ถูกล็อค</string>
+  <string name="msim_kg_sim_pin_msg_format">ย่อย: <xliff:g id="number"> %d</xliff:g>: <xliff:g id="msg"> %s</xliff:g></string>
 </resources>

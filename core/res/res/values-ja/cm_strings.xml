@@ -40,7 +40,7 @@
   <string name="reboot_bootmenu">ブートメニュー</string>
   <string name="reboot_fastboot">ファストブート</string>
   <string name="reboot_download">ダウンロード</string>
-  <string name="reboot_progress">再起動しています\u2026</string>
+  <string name="reboot_progress">再起動中\u2026</string>
   <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
   <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
   <string name="permlab_preventpower">電源キーを使用しない</string>
