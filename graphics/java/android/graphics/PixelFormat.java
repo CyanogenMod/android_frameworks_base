@@ -79,6 +79,8 @@ public class PixelFormat
     @Deprecated
     public static final int JPEG        = 0x100;
 
+    public static final int VIDEO_HOLE  = 0x101;
+
     /*
      * We use a class initializer to allow the native code to cache some
      * field offsets.

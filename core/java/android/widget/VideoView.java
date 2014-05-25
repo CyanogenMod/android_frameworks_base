@@ -41,6 +41,9 @@ import android.widget.MediaController.MediaPlayerControl;
 
 import java.io.IOException;
 import java.util.Map;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 /**
  * Displays a video file.  The VideoView class
@@ -49,7 +52,9 @@ import java.util.Map;
  * it can be used in any layout manager, and provides various display options
  * such as scaling and tinting.
  */
-public class VideoView extends SurfaceView implements MediaPlayerControl {
+public class VideoView extends SurfaceView implements MediaPlayerControl,
+View.OnLayoutChangeListener
+{
     private String TAG = "VideoView";
     // settable by the client
     private Uri         mUri;
@@ -105,6 +110,35 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public VideoView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initVideoView();
+    }
+
+    /** get current hdmi display mode*/
+    private static final String MODE_PATH = "/sys/class/display/mode";
+    private boolean chkIfHdmiMode() {
+       String modeStr = null;
+
+       File file = new File(MODE_PATH);
+       if (!file.exists()) {
+             return false;
+       }
+       try {
+             BufferedReader reader = new BufferedReader(new FileReader(MODE_PATH), 32);
+             try {
+                  modeStr = reader.readLine();
+             } finally {
+                  reader.close();
+             }
+             if(modeStr == null)
+             return false;
+
+       } catch (IOException e) {
+             Log.e("MediaController", "IO Exception when read: " + MODE_PATH, e);
+             return false;
+       }
+       if (modeStr.equals("panel"))
+             return false;
+       else
+             return true;
     }
 
     @Override
@@ -192,6 +226,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         mVideoHeight = 0;
         getHolder().addCallback(mSHCallback);
         getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+	addOnLayoutChangeListener(this);
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
@@ -572,6 +607,31 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             }
         }
     }
+
+	@Override
+	public void onLayoutChange(View v, int left, int top, int right, int bottom,
+	            int oldLeft, int oldTop, int oldRight, int oldBottom){
+	         int Rotation=0;
+	         Log.i(TAG,"Layout changed,left="+left+" top="+top+" right="+right+" bottom="+bottom);
+			 Log.i(TAG,"Layout changed,oldLeft="+oldLeft+" oldTop="+oldTop+" oldRight="+oldRight+" oldBottom="+oldBottom);
+			 if (mMediaPlayer != null){
+				StringBuilder builder = new StringBuilder();;
+				builder.append(".left="+left);
+				builder.append(".top="+top);
+				builder.append(".right="+right);
+				builder.append(".bottom="+bottom);
+
+				builder.append(".oldLeft="+oldLeft);
+				builder.append(".oldTop="+oldTop);
+				builder.append(".oldRight="+oldRight);
+				builder.append(".oldBottom="+oldBottom);
+
+				builder.append(".Rotation="+Rotation);
+
+				Log.i(TAG,builder.toString());
+				mMediaPlayer.setParameter(MediaPlayer.KEY_PARAMETER_AML_VIDEO_POSITION_INFO,builder.toString());
+			 }
+	}
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {

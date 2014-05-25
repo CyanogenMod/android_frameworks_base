@@ -896,12 +896,12 @@ class ServerThread extends Thread {
                 }
             }
 
-            try {
+            /*try {
                 Slog.i(TAG, "IdleMaintenanceService");
                 new IdleMaintenanceService(context, battery);
             } catch (Throwable e) {
                 reportWtf("starting IdleMaintenanceService", e);
-            }
+            }*/
         }
 
         // make sure the ADB_ENABLED setting value matches the secure property value

@@ -1447,6 +1447,12 @@ public final class Settings {
             putIntForUser(cr, SHOW_GTALK_SERVICE_STATUS, flag ? 1 : 0, userHandle);
         }
 
+	 /**
+          * HDMI settings.
+          */
+        public static final String HDMI_DUAL_DISP = "hdmi_dual_disp";
+        public static final String HDMI_SPDIF     = "hdmi_spdif";
+
         /**
          * @deprecated Use {@link android.provider.Settings.Global#STAY_ON_WHILE_PLUGGED_IN} instead
          */

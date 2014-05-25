@@ -896,6 +896,30 @@ public class Activity extends ContextThemeWrapper
         mFragments.dispatchCreate();
         getApplication().dispatchActivityCreated(this, savedInstanceState);
         mCalled = true;
+
+        setSdkVersion(mActivityInfo.packageName);
+    }
+
+    private void setSdkVersion(String packageName){
+        //work round for nexflix play
+        int ver = android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
+        if("com.netflix.mediaclient".equals(packageName) /*||
+            "com.android.test".equals(packageName)*/){
+            ver = 15;
+        }else{
+            return;
+            //ver = SystemProperties.getInt("ro.build.version.sdk", 0);
+        }
+
+        try {
+            android.os.Build.VERSION version = new android.os.Build.VERSION();
+            java.lang.reflect.Field f = version.getClass().getDeclaredField("SDK_INT");
+            f.setAccessible(true);
+            f.setInt(version, ver);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e);
+        }
+        Log.i(TAG, "package name:" + packageName + " sdk_version: " + android.os.Build.VERSION.SDK_INT);
     }
 
     /**

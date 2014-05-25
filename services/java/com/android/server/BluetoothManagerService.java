@@ -39,6 +39,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -99,6 +100,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private static final int SERVICE_IBLUETOOTHGATT = 2;
 
     private final Context mContext;
+
+    private PowerManager.WakeLock mWakeLock;
 
     // Locks are not provided for mName and mAddress.
     // They are accessed in handler or broadcast receiver, same thread context.
@@ -213,6 +216,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         mName = null;
         mErrorRecoveryRetryCounter = 0;
         mContentResolver = context.getContentResolver();
+	PowerManager powerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
+	mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         mCallbacks = new RemoteCallbackList<IBluetoothManagerCallback>();
         mStateChangeCallbacks = new RemoteCallbackList<IBluetoothStateChangeCallback>();
         IntentFilter filter = new IntentFilter(Intent.ACTION_BOOT_COMPLETED);
@@ -311,6 +316,18 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         if ((name != null) && (address != null)) {
             Settings.Secure.putInt(mContentResolver, SECURE_SETTINGS_BLUETOOTH_ADDR_VALID, 1);
         }
+    }
+
+    private void acquireWakeLock() {
+        if (DBG) Log.d(TAG,"acquireWakeLockk");
+        if (mWakeLock != null && !mWakeLock.isHeld())
+            mWakeLock.acquire();
+    }
+
+    private void releaseWakeLock() {
+        if (DBG) Log.d(TAG,"releaseWakeLock");
+        if (mWakeLock != null && mWakeLock.isHeld())
+            mWakeLock.release();
     }
 
     public IBluetooth registerAdapter(IBluetoothManagerCallback callback){
@@ -1161,6 +1178,14 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     }
                 }
             }
+
+            //when turning on bt, acquire wake lock
+            if(newState == BluetoothAdapter.STATE_TURNING_ON)
+                acquireWakeLock();
+
+            //when bt is off, release wake lock
+            if(newState == BluetoothAdapter.STATE_OFF)
+                releaseWakeLock();
 
             //Send broadcast message to everyone else
             Intent intent = new Intent(BluetoothAdapter.ACTION_STATE_CHANGED);

@@ -3329,7 +3329,8 @@ public class Camera {
          *         exposure compensation is not supported.
          */
         public int getMaxExposureCompensation() {
-            return getInt(KEY_MAX_EXPOSURE_COMPENSATION, 0);
+            //return getInt(KEY_MAX_EXPOSURE_COMPENSATION, 0);
+	    return 0;
         }
 
         /**
@@ -3340,7 +3341,8 @@ public class Camera {
          *         exposure compensation is not supported.
          */
         public int getMinExposureCompensation() {
-            return getInt(KEY_MIN_EXPOSURE_COMPENSATION, 0);
+            //return getInt(KEY_MIN_EXPOSURE_COMPENSATION, 0);
+	    return 0;
         }
 
         /**

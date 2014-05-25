@@ -1,0 +1,10 @@
+diff a/telephony/java/android/telephony/TelephonyManager.java b/telephony/java/android/telephony/TelephonyManager.java	(rejected hunks)
+@@ -24,6 +24,8 @@ import android.os.RemoteException;
+ import android.os.ServiceManager;
+ import android.os.SystemProperties;
+ import android.telephony.Rlog;
++import android.util.Log;
++import android.provider.Settings;
+ 
+ import com.android.internal.telephony.IPhoneSubInfo;
+ import com.android.internal.telephony.ITelephony;

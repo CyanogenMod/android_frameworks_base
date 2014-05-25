@@ -682,7 +682,7 @@ public class WifiStateMachine extends StateMachine {
         mScanResultCache = new LruCache<String, ScanResult>(SCAN_RESULT_CACHE_SIZE);
 
         PowerManager powerManager = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getName());
+	mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getName());
 
         mSuspendWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WifiSuspend");
         mSuspendWakeLock.setReferenceCounted(false);
@@ -761,7 +761,49 @@ public class WifiStateMachine extends StateMachine {
     /*********************************************************
      * Methods exposed for public use
      ********************************************************/
+/*
+    public void acquireShutdownLock() {
+	loge("wifi : acquireShutdownLock");
+	if (!mShutdownLock.isHeld())
+	    mShutdownLock.acquire();
+    }
 
+    public void releaseShutdownLock() {
+	loge("wifi : releaseShutdownLock");
+	if (mShutdownLock.isHeld())
+	    mShutdownLock.release();
+    }
+
+    private void acquireHungLock() {
+	loge("wifi : acquireHungLock");
+	if (!mHungLock.isHeld())
+	    mHungLock.acquire();
+    }
+
+    private void releaseHungLock() {
+	loge("wifi : releaseHungLock");
+	if (mHungLock.isHeld())
+	    mHungLock.release();
+    }
+
+    private void acquireSodLock() {
+	loge("wifi : acquireSodLock");
+	if (!mSodLock.isHeld())
+	    mSodLock.acquire();
+    }
+
+    public void releaseSodLock() {
+	loge("wifi : releaseSodLock");
+	if (mSodLock.isHeld())
+	    mSodLock.release();
+    }
+
+    private boolean isScreenOn() {
+	if (mPowerManager != null)
+	    return mPowerManager.isScreenOn();
+	return true;
+    }
+*/
     public Messenger getMessenger() {
         return new Messenger(getHandler());
     }
@@ -1392,6 +1434,7 @@ public class WifiStateMachine extends StateMachine {
     private void setCountryCode() {
         String countryCode = Settings.Global.getString(mContext.getContentResolver(),
                 Settings.Global.WIFI_COUNTRY_CODE);
+
         if (countryCode != null && !countryCode.isEmpty()) {
             setCountryCode(countryCode, false);
         } else {
@@ -2148,8 +2191,8 @@ public class WifiStateMachine extends StateMachine {
                     }
                     break;
                 case WifiMonitor.DRIVER_HUNG_EVENT:
-                    setSupplicantRunning(false);
-                    setSupplicantRunning(true);
+			setSupplicantRunning(false);
+			setSupplicantRunning(true);
                     break;
                 case WifiManager.CONNECT_NETWORK:
                     replyToMessage(message, WifiManager.CONNECT_NETWORK_FAILED,
@@ -2703,6 +2746,7 @@ public class WifiStateMachine extends StateMachine {
                     }
                     mWakeLock.acquire();
                     mWifiNative.stopDriver();
+		    mWifiNative.unloadDriver();
                     mWakeLock.release();
                     if (mP2pSupported) {
                         transitionTo(mWaitForP2pDisableState);

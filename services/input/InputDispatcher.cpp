@@ -123,9 +123,11 @@ static bool isValidMotionAction(int32_t action, size_t pointerCount) {
     case AMOTION_EVENT_ACTION_CANCEL:
     case AMOTION_EVENT_ACTION_MOVE:
     case AMOTION_EVENT_ACTION_OUTSIDE:
+#ifndef AML_FT5X_HACK
     case AMOTION_EVENT_ACTION_HOVER_ENTER:
     case AMOTION_EVENT_ACTION_HOVER_MOVE:
     case AMOTION_EVENT_ACTION_HOVER_EXIT:
+#endif
     case AMOTION_EVENT_ACTION_SCROLL:
         return true;
     case AMOTION_EVENT_ACTION_POINTER_DOWN:

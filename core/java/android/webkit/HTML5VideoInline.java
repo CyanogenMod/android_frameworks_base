@@ -19,16 +19,19 @@ package android.webkit;
 import android.Manifest.permission;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
+import android.media.MediaPlayer;
 import android.webkit.HTML5VideoView;
 import android.webkit.HTML5VideoViewProxy;
 import android.view.Surface;
 import android.opengl.GLES20;
 import android.os.PowerManager;
+import android.util.Log;
 
 /**
  * @hide This is only used by the browser
  */
 public class HTML5VideoInline extends HTML5VideoView{
+    private static final String LOGTAG = "HTML5VideoFullScreen";
 
     // Due to the fact that the decoder consume a lot of memory, we make the
     // surface texture as singleton. But the GL texture (m_textureNames)
@@ -124,6 +127,30 @@ public class HTML5VideoInline extends HTML5VideoView{
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public  void updateLayout(int x,int y,int width,int height) {
+        Log.i(LOGTAG,"Layout changed,x="+x+" y="+y+" width="+width+" height="+height);
+
+        if (mPlayer != null){
+            StringBuilder builder = new StringBuilder();;
+            builder.append(".left="+x);
+            builder.append(".top="+y);
+            builder.append(".right="+(x+width));
+            builder.append(".bottom="+(y+height));
+
+            builder.append(".oldLeft="+0);
+            builder.append(".oldTop="+0);
+            builder.append(".oldRight="+0);
+            builder.append(".oldBottom="+0);
+
+            builder.append(".Rotation="+0);
+
+            Log.i(LOGTAG,builder.toString());
+            mPlayer.setParameter(MediaPlayer.KEY_PARAMETER_AML_VIDEO_POSITION_INFO,builder.toString());
+        }
+        return ;
     }
 
     private void setFrameAvailableListener(SurfaceTexture.OnFrameAvailableListener l) {

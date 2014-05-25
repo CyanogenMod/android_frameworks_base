@@ -306,6 +306,14 @@ public class WindowManagerService extends IWindowManager.Stub
             if (DevicePolicyManager.ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED.equals(action)) {
                 mKeyguardDisableHandler.sendEmptyMessage(
                     KeyguardDisableHandler.KEYGUARD_POLICY_CHANGED);
+            } else if (WindowManagerPolicy.ACTION_HDMI_PLUGGED.equals(action)) {
+                 mTVOutOn
+			= intent.getBooleanExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, false);
+                 Slog.i("WindowManagerService ", "TvOut Intent receiver, tvout status="+ mTVOutOn);
+		  if (mTVOutOn)
+		    acquireScreenDimLock();
+		  else
+		    releaseScreenDimLock();
             }
         }
     };
@@ -564,6 +572,9 @@ public class WindowManagerService extends IWindowManager.Stub
 
     PowerManagerService mPowerManager;
 
+    private boolean mTVOutOn = false;
+    private PowerManager.WakeLock HdmiScreenOn;
+
     float mWindowAnimationScale = 1.0f;
     float mTransitionAnimationScale = 1.0f;
     float mAnimatorDurationScale = 1.0f;
@@ -819,7 +830,14 @@ public class WindowManagerService extends IWindowManager.Stub
         // Track changes to DevicePolicyManager state so we can enable/disable keyguard.
         IntentFilter filter = new IntentFilter();
         filter.addAction(DevicePolicyManager.ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED);
-        mContext.registerReceiver(mBroadcastReceiver, filter);
+        filter.addAction(WindowManagerPolicy.ACTION_HDMI_PLUGGED);
+        Intent intent = mContext.registerReceiver(mBroadcastReceiver, filter);
+        if (intent != null) {
+            // Retrieve current sticky tvout event broadcast.
+            mTVOutOn
+		= intent.getBooleanExtra(WindowManagerPolicy.EXTRA_HDMI_PLUGGED_STATE, false);
+        }
+	HdmiScreenOn = pmc.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "HDMI");
 
         mHoldingScreenWakeLock = pmc.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
                 | PowerManager.ON_AFTER_RELEASE, TAG);
@@ -2774,6 +2792,24 @@ public class WindowManagerService extends IWindowManager.Stub
 
             win.mEnforceSizeCompat = (win.mAttrs.flags & FLAG_COMPATIBLE_WINDOW) != 0;
 
+            // Hack: setting Surface to OPAQUE for PixelFormat.VIDEO_HOLE
+            if (((attrChanges & WindowManager.LayoutParams.FORMAT_CHANGED) != 0) &&
+                (attrs != null)) {
+                if (attrs.format == PixelFormat.VIDEO_HOLE) {
+                    /* attibute changed to PixelFormat.VIDEO_HOLE */
+                    if (win.mWinAnimator.mSurfaceControl != null) {
+                        SurfaceControl.openTransaction();
+                        try {
+                            win.mWinAnimator.mSurfaceControl.setFlags(SurfaceControl.OPAQUE, SurfaceControl.OPAQUE);
+                        } finally {
+                            SurfaceControl.closeTransaction();
+                        }
+                    }
+                    attrChanges &= ~WindowManager.LayoutParams.FORMAT_CHANGED;
+                    attrs.format = PixelFormat.RGBA_8888;
+                }
+            }
+
             if ((attrChanges & WindowManager.LayoutParams.ALPHA_CHANGED) != 0) {
                 winAnimator.mAlpha = attrs.alpha;
             }
@@ -2937,6 +2973,12 @@ public class WindowManagerService extends IWindowManager.Stub
 
                 outSurface.release();
                 if (DEBUG_VISIBILITY) Slog.i(TAG, "Releasing surface in: " + win);
+            }
+
+            // Restore PixelFormat.VIDEO_HOLE to PixelFormat.RGBA_8888
+            // after Surface.OPAQUE is set or a new Surface is created.
+            if (win.mAttrs.format == PixelFormat.VIDEO_HOLE) {
+                win.mAttrs.format = PixelFormat.RGBA_8888;
             }
 
             if (focusMayChange) {
@@ -10693,5 +10735,19 @@ public class WindowManagerService extends IWindowManager.Stub
         if (displayContent != null) {
             displayContent.updateDisplayInfo();
         }
+    }
+
+    private void acquireScreenDimLock() {
+	if (!HdmiScreenOn.isHeld()) {
+	    Log.d("WindowManagerService ", "acquireScreenDimLock");
+	    HdmiScreenOn.acquire();
+	}
+    }
+
+    private void releaseScreenDimLock() {
+	if (HdmiScreenOn.isHeld()) {
+	    Log.d("WindowManagerService ", "releaseScreenDimLock");
+	    HdmiScreenOn.release();
+	}
     }
 }
