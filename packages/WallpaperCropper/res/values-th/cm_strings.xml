@@ -15,14 +15,14 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_keyguard_wallpaper">清除</string>
+  <string name="clear_keyguard_wallpaper">ล้าง</string>
   <plurals name="number_of_items_selected">
-    <item quantity="other">已選取 %1$d 個</item>
+    <item quantity="other">%1$d ถูกเลือก</item>
   </plurals>
-  <string name="wallpaper_accessibility_name">桌布第 %1$d 張，共 %2$d 張</string>
-  <string name="announce_selection">已選取 <xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g></string>
-  <string name="wallpaper_delete">刪除</string>
-  <string name="pick_image">選擇圖片</string>
-  <string name="pick_wallpaper">桌布</string>
-  <string name="activity_not_found">應用程式未安裝。</string>
+  <string name="wallpaper_accessibility_name">ภาพพื้นหลัง %1$d ของ %2$d</string>
+  <string name="announce_selection">เลือก <xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g></string>
+  <string name="wallpaper_delete">ลบ</string>
+  <string name="pick_image">เลือกรูปภาพ</string>
+  <string name="pick_wallpaper">ภาพพื้นหลัง</string>
+  <string name="activity_not_found">แอปนี้ไม่ถูกติดตั้ง</string>
 </resources>
