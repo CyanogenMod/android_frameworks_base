@@ -423,4 +423,7 @@
     <string name="China_Unicom">China Unicom</string>
     <string name="China_Telecom">China Telecom</string>
     <string name="roamingTextSearching">Searching for Service</string>
+    <string name="unknown_artist_name">Unknown artist</string>
+    <string name="unknown_title_name">Unknown title</string>
+    <string name="unknown_album_name">Unknown album</string>
 </resources>

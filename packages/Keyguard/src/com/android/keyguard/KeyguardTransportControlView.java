@@ -33,6 +33,7 @@ import android.media.RemoteController;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.transition.ChangeBounds;
@@ -92,6 +93,7 @@ public class KeyguardTransportControlView extends FrameLayout {
     private java.text.DateFormat mFormat;
 
     private Date mTempDate = new Date();
+    private Context mContext = null;
 
     /**
      * The metadata which should be populated into the view once we've been attached
@@ -271,6 +273,7 @@ public class KeyguardTransportControlView extends FrameLayout {
     public KeyguardTransportControlView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (DEBUG) Log.v(TAG, "Create TCV " + this);
+        mContext = context;
         mAudioManager = new AudioManager(mContext);
         mCurrentPlayState = RemoteControlClient.PLAYSTATE_NONE; // until we get a callback
         mRemoteController = new RemoteController(context, mRCClientUpdateListener);
@@ -445,12 +448,24 @@ public class KeyguardTransportControlView extends FrameLayout {
 
     void updateMetadata(RemoteController.MetadataEditor data) {
         if (isAttachedToWindow()) {
-            mMetadata.artist = data.getString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST,
+             String artist = data.getString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST,
                     mMetadata.artist);
-            mMetadata.trackTitle = data.getString(MediaMetadataRetriever.METADATA_KEY_TITLE,
+            if (artist == null || artist.equals(MediaStore.UNKNOWN_STRING)) {
+                artist = mContext.getString(R.string.unknown_artist_name);
+            }
+            mMetadata.artist = artist;
+            String trackTitle = data.getString(MediaMetadataRetriever.METADATA_KEY_TITLE,
                     mMetadata.trackTitle);
-            mMetadata.albumTitle = data.getString(MediaMetadataRetriever.METADATA_KEY_ALBUM,
+            if (trackTitle == null || trackTitle.equals(MediaStore.UNKNOWN_STRING)) {
+                trackTitle = mContext.getString(R.string.unknown_title_name);
+            }
+            mMetadata.trackTitle = trackTitle;
+            String albumTitle = data.getString(MediaMetadataRetriever.METADATA_KEY_ALBUM,
                     mMetadata.albumTitle);
+            if (albumTitle == null || albumTitle.equals(MediaStore.UNKNOWN_STRING)) {
+                albumTitle = mContext.getString(R.string.unknown_album_name);
+            }
+            mMetadata.albumTitle = albumTitle;
             mMetadata.duration = data.getLong(MediaMetadataRetriever.METADATA_KEY_DURATION, -1);
             mMetadata.bitmap = data.getBitmap(MediaMetadataEditor.BITMAP_KEY_ARTWORK,
                     mMetadata.bitmap);

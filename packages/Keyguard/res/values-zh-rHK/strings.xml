@@ -158,4 +158,7 @@
     <string name="China_Unicom">中國聯通</string>
     <string name="China_Telecom">中國電信</string>
     <string name="roamingTextSearching">"正在搜索服務"</string>
+    <string name="unknown_artist_name">未知音樂人</string>
+    <string name="unknown_title_name">未知標題</string>
+    <string name="unknown_album_name">未知專集</string>
 </resources>
