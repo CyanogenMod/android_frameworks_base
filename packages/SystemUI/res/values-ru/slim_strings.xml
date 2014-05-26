@@ -99,11 +99,14 @@
     <string name="chamber_name_toast">Используется стандартное имя</string>
     <string name="quick_settings_theme_switch_dark">Темная тема</string>
     <string name="quick_settings_theme_switch_light">Светлая тема</string>
+    <string name="quick_settings_quick_record_deleted">Удалено...</string>
     <string name="quick_settings_quick_record_nofile">Долгое нажатие</string>
     <string name="quick_settings_quick_record_def">Быстрая запись</string>
     <string name="quick_settings_quick_record_rec">Записывается...</string>
     <string name="quick_settings_quick_record_save">Сохранено</string>
     <string name="quick_settings_quick_record_play">Воспроизводится...</string>
+    <string name="quick_settings_quick_record_dialog_cancel">Закрыть</string>
+    <string name="quick_settings_quick_record_dialog">Воспроизвести запись\nДолгое нажатие для удаления</string>
     <string name="quick_settings_custom_toggle">Свой ярлык</string>
     <string name="quick_settings_contact_toggle">Контакт</string>
     <string name="quick_settings_reminder">Напоминание</string>
