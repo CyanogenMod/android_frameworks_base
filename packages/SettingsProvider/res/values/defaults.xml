@@ -26,6 +26,7 @@
     <bool name="def_auto_time">true</bool>
     <bool name="def_auto_time_zone">true</bool>
     <bool name="def_accelerometer_rotation">true</bool>
+    <bool name="def_lockscreen_rotation">@*android:bool/config_enableLockScreenRotation</bool>
     <!-- Default screen brightness, from 0 to 255.  102 is 40%. -->
     <integer name="def_screen_brightness">102</integer>
     <bool name="def_screen_brightness_automatic_mode">false</bool>
