@@ -99,6 +99,7 @@
     <string name="navbar_menu_conditional_button">Menu (autoHide) button</string>
     <string name="navbar_menu_always_button">Menu (alwaysShow) button</string>
     <string name="navbar_menu_big_button">Menu button</string>
+    <string name="navbar_power_button">Power button</string>
 
     <!-- Development shortcut -->
     <string name="advanced_dev_option_wipe_app">Wipe app data</string>

@@ -87,6 +87,7 @@ public final class NavigationBarTransitions extends BarTransitions {
         setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_CONDITIONAL_MENU, alpha, animate);
         setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_ALWAYS_MENU, alpha, animate);
         setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_MENU_BIG, alpha, animate);
+	setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_POWER, alpha, animate);
         setKeyButtonViewQuiescentAlpha(mView.getSearchLight(), KEYGUARD_QUIESCENT_ALPHA, animate);
         setKeyButtonViewQuiescentAlpha(mView.getCameraButton(), KEYGUARD_QUIESCENT_ALPHA, animate);
         applyBackButtonQuiescentAlpha(mode, animate);
@@ -123,6 +124,8 @@ public final class NavigationBarTransitions extends BarTransitions {
                 mView.findButton(NavbarEditor.NAVBAR_ALWAYS_MENU));
         backAlpha = maxVisibleQuiescentAlpha(backAlpha,
                 mView.findButton(NavbarEditor.NAVBAR_MENU_BIG));
+	backAlpha = maxVisibleQuiescentAlpha(backAlpha,
+                mView.findButton(NavbarEditor.NAVBAR_POWER));
         if (backAlpha > 0) {
             setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_BACK, backAlpha, animate);
         }

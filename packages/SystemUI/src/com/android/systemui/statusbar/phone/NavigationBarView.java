@@ -531,7 +531,7 @@ public class NavigationBarView extends LinearLayout {
         setButtonVisibility(NavbarEditor.NAVBAR_ALWAYS_MENU, !disableRecent);
         setButtonVisibility(NavbarEditor.NAVBAR_MENU_BIG, !disableRecent);
         setButtonVisibility(NavbarEditor.NAVBAR_SEARCH, !disableRecent);
-
+	setButtonVisibility(NavbarEditor.NAVBAR_POWER, !disableRecent);
         final boolean showSearch = disableHome && !disableSearch;
         final boolean showCamera = showSearch && !mCameraDisabledByDpm
                 && mLockUtils.getCameraEnabled();

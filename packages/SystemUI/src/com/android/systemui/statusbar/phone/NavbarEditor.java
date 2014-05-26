@@ -133,9 +133,15 @@ public class NavbarEditor implements View.OnTouchListener {
             KeyEvent.KEYCODE_MENU, R.drawable.ic_sysbar_menu_big,
             R.drawable.ic_sysbar_menu_big_land, 0);
 
+    public static final ButtonInfo NAVBAR_POWER = new ButtonInfo("power",
+            R.string.navbar_power_button, R.string.accessibility_power,
+            KeyEvent.KEYCODE_POWER, R.drawable.ic_sysbar_power, R.drawable.ic_sysbar_power_land,
+            R.drawable.ic_sysbar_power_side);
+
+
     private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[] {
         NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_SEARCH,
-        NAVBAR_RECENT, NAVBAR_CONDITIONAL_MENU, NAVBAR_ALWAYS_MENU, NAVBAR_MENU_BIG
+        NAVBAR_RECENT, NAVBAR_CONDITIONAL_MENU, NAVBAR_ALWAYS_MENU, NAVBAR_MENU_BIG, NAVBAR_POWER
     };
 
     private static final String DEFAULT_SETTING_STRING = "empty|back|home|recent|empty|menu0";
