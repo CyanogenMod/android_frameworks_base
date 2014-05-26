@@ -174,7 +174,8 @@ int32_t AssetManager::getGlobalCount()
 AssetManager::AssetManager(CacheMode cacheMode)
     : mLocale(NULL), mVendor(NULL),
       mResources(NULL), mConfig(new ResTable_config),
-      mCacheMode(cacheMode), mCacheValid(false)
+      mCacheMode(cacheMode), mCacheValid(false),
+      mBasePackageIndex(-1)
 {
     int count = android_atomic_inc(&gCount)+1;
     //ALOGI("Creating AssetManager %p #%d\n", this, count);
@@ -463,6 +464,20 @@ String8 AssetManager::getPkgName(const char *apkPath) {
         manifestAsset->close();
         return pkgName;
     }
+
+/**
+ * Returns the base package name as defined in the AndroidManifest.xml
+ */
+String8 AssetManager::getBasePackageName(int index)
+{
+    if (index >= mAssetPaths.size()) return String8::empty();
+
+    if (mBasePackageName.isEmpty() || mBasePackageIndex != index) {
+        mBasePackageName = getPkgName(mAssetPaths[index].path.string());
+        mBasePackageIndex = index;
+    }
+    return mBasePackageName;
+}
 
 String8 AssetManager::getOverlayResPath(const char* targetApkPath, const char* overlayApkPath)
 {

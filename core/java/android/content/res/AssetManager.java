@@ -965,6 +965,11 @@ public final class AssetManager {
     /**
      * {@hide}
      */
+    public native final String getBaseResourcePackageName(int index);
+
+    /**
+     * {@hide}
+     */
     public native final int getBasePackageId(int index);
 
     private native final void destroy();

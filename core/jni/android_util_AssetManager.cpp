@@ -1840,6 +1840,18 @@ static jstring android_content_AssetManager_getBasePackageName(JNIEnv* env, jobj
         return JNI_FALSE;
     }
 
+    String16 packageName(am->getBasePackageName(index));
+    return env->NewString((const jchar*)packageName.string(), packageName.size());
+}
+
+static jstring android_content_AssetManager_getBaseResourcePackageName(JNIEnv* env, jobject clazz,
+                                                                       jint index)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
     String16 packageName(am->getResources().getBasePackageName(index));
     return env->NewString((const jchar*)packageName.string(), packageName.size());
 }
@@ -1893,6 +1905,8 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getBasePackageCount },
     { "getBasePackageName", "(I)Ljava/lang/String;",
         (void*) android_content_AssetManager_getBasePackageName },
+    { "getBaseResourcePackageName", "(I)Ljava/lang/String;",
+        (void*) android_content_AssetManager_getBaseResourcePackageName },
     { "getBasePackageId", "(I)I",
         (void*) android_content_AssetManager_getBasePackageId },
     { "addIconPath",   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)I",
