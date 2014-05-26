@@ -203,19 +203,23 @@ public class SignalClusterView
         }
 
         if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
-            if (showBoth3gAnd1x() || getMobileCdma3gId(strengthIcon) != 0) {
+            if (showDataAndVoice() || getCdma2gId(strengthIcon) != 0) {
                 mMobileCdmaVisible = true;
                 mMobileCdma1xOnlyVisible = false;
                 mMobileStrengthId = 0;
 
-                mMobileCdma1xId = strengthIcon;
-                mMobileCdma3gId = getMobileCdma3gId(mMobileCdma1xId);
+                mMobileCdma3gId = strengthIcon;
+                mMobileCdma1xId = getCdma2gId(mMobileCdma3gId);
             } else if (show1xOnly() || isRoaming()) {
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = true;
                 mMobileStrengthId = 0;
 
-                mMobileCdma1xOnlyId = strengthIcon;
+                if (mDataVisible && getCdmaRoamId(strengthIcon) != 0) {
+                    mMobileCdma1xOnlyId = getCdmaRoamId(strengthIcon);
+                } else {
+                    mMobileCdma1xOnlyId = strengthIcon;
+                }
             } else {
                 mMobileCdmaVisible = false;
                 mMobileCdma1xOnlyVisible = false;
@@ -419,10 +423,12 @@ public class SignalClusterView
         return ret;
     }
 
-    private boolean showBoth3gAnd1x() {
+    private boolean showDataAndVoice() {
         return mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED
-            &&((mMobileTypeId == R.drawable.stat_sys_data_connected_3g)
-                ||(mMobileTypeId == R.drawable.stat_sys_data_fully_connected_3g));
+                && ((mMobileTypeId == R.drawable.stat_sys_data_connected_3g)
+                || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_3g)
+                || (mMobileTypeId == R.drawable.stat_sys_data_connected_4g)
+                || (mMobileTypeId == R.drawable.stat_sys_data_fully_connected_4g));
     }
 
     private boolean show1xOnly() {
@@ -537,38 +543,107 @@ public class SignalClusterView
         return returnVal;
     }
 
-    private int getMobileCdma3gId(int icon){
+    private int getCdma2gId(int icon){
         int returnVal = 0;
         switch(icon){
-            case R.drawable.stat_sys_signal_0_1x:
-                returnVal = R.drawable.stat_sys_signal_0_3g;
+            case R.drawable.stat_sys_signal_0_3g:
+            case R.drawable.stat_sys_signal_0_4g:
+                returnVal = R.drawable.stat_sys_signal_0_2g;
                 break;
-            case R.drawable.stat_sys_signal_1_1x:
-                returnVal = R.drawable.stat_sys_signal_1_3g;
+            case R.drawable.stat_sys_signal_1_3g:
+            case R.drawable.stat_sys_signal_1_4g:
+                returnVal = R.drawable.stat_sys_signal_1_2g;
                 break;
-            case R.drawable.stat_sys_signal_2_1x:
-                returnVal = R.drawable.stat_sys_signal_2_3g;
+            case R.drawable.stat_sys_signal_2_3g:
+            case R.drawable.stat_sys_signal_2_4g:
+                returnVal = R.drawable.stat_sys_signal_2_2g;
                 break;
-            case R.drawable.stat_sys_signal_3_1x:
-                returnVal = R.drawable.stat_sys_signal_3_3g;
+            case R.drawable.stat_sys_signal_3_3g:
+            case R.drawable.stat_sys_signal_3_4g:
+                returnVal = R.drawable.stat_sys_signal_3_2g;
                 break;
-            case R.drawable.stat_sys_signal_4_1x:
-                returnVal = R.drawable.stat_sys_signal_4_3g;
+            case R.drawable.stat_sys_signal_4_3g:
+            case R.drawable.stat_sys_signal_4_4g:
+                returnVal = R.drawable.stat_sys_signal_4_2g;
                 break;
-            case R.drawable.stat_sys_signal_0_1x_fully:
-                returnVal = R.drawable.stat_sys_signal_0_3g_fully;
+            case R.drawable.stat_sys_signal_0_3g_fully:
+            case R.drawable.stat_sys_signal_0_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_0_2g_fully;
                 break;
-            case R.drawable.stat_sys_signal_1_1x_fully:
-                returnVal = R.drawable.stat_sys_signal_1_3g_fully;
+            case R.drawable.stat_sys_signal_1_3g_fully:
+            case R.drawable.stat_sys_signal_1_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_1_2g_fully;
                 break;
-            case R.drawable.stat_sys_signal_2_1x_fully:
-                returnVal = R.drawable.stat_sys_signal_2_3g_fully;
+            case R.drawable.stat_sys_signal_2_3g_fully:
+            case R.drawable.stat_sys_signal_2_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_2_2g_fully;
                 break;
-            case R.drawable.stat_sys_signal_3_1x_fully:
-                returnVal = R.drawable.stat_sys_signal_3_3g_fully;
+            case R.drawable.stat_sys_signal_3_3g_fully:
+            case R.drawable.stat_sys_signal_3_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_3_2g_fully;
                 break;
-            case R.drawable.stat_sys_signal_4_1x_fully:
-                returnVal = R.drawable.stat_sys_signal_4_3g_fully;
+            case R.drawable.stat_sys_signal_4_3g_fully:
+            case R.drawable.stat_sys_signal_4_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_4_2g_fully;
+                break;
+            default:
+                break;
+        }
+        return returnVal;
+    }
+
+    private int getCdmaRoamId(int icon){
+        int returnVal = 0;
+        switch(icon){
+            case R.drawable.stat_sys_signal_0_2g_default_roam:
+            case R.drawable.stat_sys_signal_0_3g_default_roam:
+            case R.drawable.stat_sys_signal_0_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_0_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_1_2g_default_roam:
+            case R.drawable.stat_sys_signal_1_3g_default_roam:
+            case R.drawable.stat_sys_signal_1_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_1_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_2_2g_default_roam:
+            case R.drawable.stat_sys_signal_2_3g_default_roam:
+            case R.drawable.stat_sys_signal_2_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_2_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_3_2g_default_roam:
+            case R.drawable.stat_sys_signal_3_3g_default_roam:
+            case R.drawable.stat_sys_signal_3_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_3_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_4_2g_default_roam:
+            case R.drawable.stat_sys_signal_4_3g_default_roam:
+            case R.drawable.stat_sys_signal_4_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_4_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_0_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_0_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_0_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_0_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_1_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_1_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_1_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_1_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_2_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_2_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_2_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_2_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_3_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_3_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_3_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_3_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_4_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_4_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_4_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_4_default_fully_roam;
                 break;
             default:
                 break;
