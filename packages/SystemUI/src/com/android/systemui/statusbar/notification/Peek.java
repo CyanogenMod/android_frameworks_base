@@ -70,6 +70,8 @@ public class Peek implements SensorActivityHandler.SensorChangedCallback {
     private final static String TAG = "Peek";
     public final static boolean DEBUG = false;
 
+    private static final String PEEK_APPLICATION = "com.jedga.peek";
+
     private static final float ICON_LOW_OPACITY = 0.3f;
     private static final long SCREEN_ON_START_DELAY = 300; // 300 ms
     private static final long REMOVE_VIEW_DELAY = 300; // 300 ms
@@ -113,10 +115,24 @@ public class Peek implements SensorActivityHandler.SensorChangedCallback {
         return mKeyguardManager.isKeyguardLocked() && mKeyguardManager.isKeyguardSecure();
     }
 
+    private boolean isPeekAppInstalled() {
+        return isPackageInstalled(PEEK_APPLICATION);
+    }
+
+    private boolean isPackageInstalled(String packagename) {
+        PackageManager pm = mContext.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
+    }
+
     private void updateStatus() {
         mEnabled = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.PEEK_STATE,
-                0, UserHandle.USER_CURRENT) == 1;
+                0, UserHandle.USER_CURRENT) == 1 && !isPeekAppInstalled();
         if (mEnabled) {
             mSensorHandler.registerScreenReceiver();
         } else {
