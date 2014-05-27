@@ -39,7 +39,7 @@
   <string name="reboot_bootloader">Завантажувач</string>
   <string name="reboot_bootmenu">Меню завантаження</string>
   <string name="reboot_fastboot">Fastboot</string>
-  <string name="reboot_download">Завантажити</string>
+  <string name="reboot_download">Режим оновлення ПЗ</string>
   <string name="reboot_progress">Перезавантаження\u2026</string>
   <string name="reboot_confirm" product="tablet">Ваш планшет перезавантажиться.</string>
   <string name="reboot_confirm" product="default">Ваш телефон перезавантажиться.</string>

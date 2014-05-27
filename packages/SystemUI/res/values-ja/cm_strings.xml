@@ -31,7 +31,7 @@
   <string name="quick_settings_vibration_off">バイブレーションOFF</string>
   <string name="quick_settings_label_enabled">ON</string>
   <string name="quick_settings_label_disabled">OFF</string>
-  <string name="quick_settings_ringer_normal">音</string>
+  <string name="quick_settings_ringer_normal">サウンド</string>
   <string name="quick_settings_lockscreen">ロック画面</string>
   <string name="quick_settings_network_type">ネットワークモード</string>
   <string name="quick_settings_report_bug">バグ報告</string>
