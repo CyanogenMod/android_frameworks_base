@@ -549,10 +549,7 @@ public final class BluetoothAdapter {
      *         immediate error
      */
     public boolean disable() {
-        try {
-            return mManagerService.disable(true);
-        } catch (RemoteException e) {Log.e(TAG, "", e);}
-        return false;
+        return disable(true);
     }
 
     /**
@@ -568,7 +565,7 @@ public final class BluetoothAdapter {
     public boolean disable(boolean persist) {
 
         try {
-            return mManagerService.disable(persist);
+            return mManagerService.disable(ActivityThread.currentPackageName(), persist);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
         return false;
     }
