@@ -74,7 +74,7 @@
   <string name="navbar_menu_big_button">選單按鈕</string>
   <string name="advanced_dev_option_wipe_app">清除應用程式資料</string>
   <string name="advanced_dev_option_force_stop">強制停止</string>
-  <string name="accessibility_dock_battery_level">座架電池 <xliff:g id="number">%d</xliff:g>%。</string>
+  <string name="accessibility_dock_battery_level">座架電池 <xliff:g id="number">%d</xliff:g>%%。</string>
   <string name="screenshot_delete_action">刪除</string>
   <string name="screenshot_delete_confirmation">已刪除螢幕擷取畫面。</string>
   <string name="accessibility_desc_add_quick_settings">新增快速設定。</string>

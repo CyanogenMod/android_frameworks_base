@@ -74,7 +74,7 @@
   <string name="navbar_menu_big_button">菜单键</string>
   <string name="advanced_dev_option_wipe_app">擦除应用数据</string>
   <string name="advanced_dev_option_force_stop">强行停止</string>
-  <string name="accessibility_dock_battery_level">底座电池 <xliff:g id="number">%d</xliff:g> %。</string>
+  <string name="accessibility_dock_battery_level">底座电池 <xliff:g id="number">%d</xliff:g> %%。</string>
   <string name="screenshot_delete_action">删除</string>
   <string name="screenshot_delete_confirmation">屏幕截图已删除。</string>
   <string name="accessibility_desc_add_quick_settings">添加快速设置。</string>
