@@ -73,13 +73,29 @@ public class ShakeListener implements SensorEventListener {
      */
     public void setSensitivity(boolean coolOff, int sensitivity) {
         switch (sensitivity) {
+            case -4:
+                // Ultra sensitive (reacts to nearly everything)
+                mMinAccel = 6;
+                break;
+            case -3:
+                // Super sensitive
+                mMinAccel = 7;
+                break;
+            case -2:
+                // Very sensitive
+                mMinAccel = 8;
+                break;
             case -1:
-                // Extra sensitive
+                // More sensitive
                 mMinAccel = 10;
                 break;
             case 1:
                 // Less sensitive
                 mMinAccel = 14;
+                break;
+            case 2:
+                // Very insensitive (don't expect to love this one)
+                mMinAccel = 15;
                 break;
             default:
                 // Default no change
