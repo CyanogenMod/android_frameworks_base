@@ -2031,7 +2031,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                         final boolean useDefaultVibrate =
                                 (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
 
-                        if (!(QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_MUTE))
+                        if (!(QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_STILL))
                                 && (useDefaultVibrate || convertSoundToVibration || hasCustomVibrate)
                                 && !(audioManager.getRingerMode()
                                         == AudioManager.RINGER_MODE_SILENT)) {
