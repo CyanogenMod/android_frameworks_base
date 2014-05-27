@@ -80,6 +80,7 @@ import android.view.WindowManager;
 
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.util.XmlUtils;
+import com.android.server.display.DisplayManagerService;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -442,6 +443,7 @@ public class AudioService extends IAudioService.Stub {
     // TODO merge orientation and rotation
     private final boolean mMonitorOrientation;
     private final boolean mMonitorRotation;
+    private final DisplayManagerService mDisplay;
 
     private boolean mDockAudioMediaEnabled = true;
 
@@ -565,8 +567,8 @@ public class AudioService extends IAudioService.Stub {
         }
         mMonitorRotation = SystemProperties.getBoolean("ro.audio.monitorRotation", false);
         if (mMonitorRotation) {
-            mDeviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE))
-                    .getDefaultDisplay().getRotation();
+            mDisplay = (DisplayManagerService) mContext.getSystemService(Context.DISPLAY_SERVICE);
+            mDeviceRotation = mDisplay.getDefaultViewportOrientation();
             Log.v(TAG, "monitoring device rotation, initial=" + mDeviceRotation);
             // initialize rotation in AudioSystem
             setRotationForAudioSystem();
@@ -4601,8 +4603,7 @@ public class AudioService extends IAudioService.Stub {
                 }
             }
             if (mMonitorRotation) {
-                int newRotation = ((WindowManager) context.getSystemService(
-                        Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+                int newRotation = mDisplay.getDefaultViewportOrientation();
                 if (newRotation != mDeviceRotation) {
                     mDeviceRotation = newRotation;
                     setRotationForAudioSystem();

@@ -1115,6 +1115,17 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
         }
     }
 
+    /**
+     * Expose the current "true" orientation of the display for users who need it
+     * ie to establish speaker configuration.
+     *
+     * @hide
+     */
+
+    public int getDefaultViewportOrientation() {
+        return (mDefaultViewport.valid ? mDefaultViewport.rotation : 0);
+    }
+
     // Runs on Handler thread.
     // Delivers display event notifications to callbacks.
     private void deliverDisplayEvent(int displayId, int event) {
