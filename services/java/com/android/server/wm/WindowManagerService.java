@@ -11047,8 +11047,12 @@ public class WindowManagerService extends IWindowManager.Stub
     public Object getWindowManagerLock() {
         return mWindowMap;
     }
-
-
+    
+    /* @hide */
+    @Override
+    public void toggleGlobalMenu() {
+        mPolicy.toggleGlobalMenu();
+    }
 
     @Override
     public void addSystemUIVisibilityFlag(int flag) {

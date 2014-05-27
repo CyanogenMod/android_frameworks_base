@@ -608,14 +608,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         @Override
         public void onReceive(Context context, Intent intent) {
-           final String action = intent.getAction();
-            if (action.equals(Intent.ACTION_POWERMENU)) {
-                showGlobalActionsDialog();
-            }
+            final String action = intent.getAction();
             if (action.equals(Intent.ACTION_POWERMENU_REBOOT)) {
                 mWindowManagerFuncs.rebootTile(); 
             }
-
         }
 
         private void registerSelf() {
@@ -623,7 +619,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mIsRegistered = true;
 
                 IntentFilter filter = new IntentFilter();
-                filter.addAction(Intent.ACTION_POWERMENU);
                 filter.addAction(Intent.ACTION_POWERMENU_REBOOT);
                 mContext.registerReceiver(mPowerMenuReceiver, filter);
             }
@@ -1015,6 +1010,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHandler.removeCallbacks(mRingerChordLongPress);
     }
 
+    private final Runnable mGlobalMenu = new Runnable() {
+        @Override
+        public void run() {
+            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS);
+            showGlobalActionsDialog(false);
+        }
+    };
+ 
     private final Runnable mPowerLongPress = new Runnable() {
         @Override
         public void run() {
@@ -4189,6 +4192,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private boolean expandedDesktopHidesStatusBar() {
         return mExpandedDesktopStyle == 2;
+    }
+       
+    /** {@inheritDoc} */
+    public void toggleGlobalMenu() {
+        mHandler.post(mGlobalMenu);
     }
 
     private void offsetInputMethodWindowLw(WindowState win) {

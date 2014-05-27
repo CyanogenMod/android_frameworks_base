@@ -304,4 +304,11 @@ interface IWindowManager
      * @hide
      */
     int getSystemUIVisibility();
+
+    /**
+     * Toggle global menu
+     *
+     * @hide
+     */
+    void toggleGlobalMenu();
 }

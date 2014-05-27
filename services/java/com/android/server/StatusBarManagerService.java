@@ -471,15 +471,6 @@ public class StatusBarManagerService extends IStatusBarService.Stub
         }
     }
 
-    @Override
-    public void togglePowerMenu() {
-        if (mBar != null) {
-            try {
-                mBar.togglePowerMenu();
-            } catch (RemoteException ex) {}
-        }
-    }
-
     private void enforceStatusBar() {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.STATUS_BAR,
                 "StatusBarManagerService");

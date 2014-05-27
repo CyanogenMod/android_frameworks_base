@@ -125,7 +125,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_TOGGLE_LAST_APP = 1030;
     protected static final int MSG_TOGGLE_SCREENSHOT = 1031;
     protected static final int MSG_TOGGLE_KILL_APP = 1032;
-    protected static final int MSG_TOGGLE_POWER_MENU = 1033;
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
@@ -830,13 +829,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         mHandler.removeMessages(msg);
         mHandler.sendEmptyMessage(msg);
     }
-
-    @Override
-    public void togglePowerMenu() {
-        int msg = MSG_TOGGLE_POWER_MENU;
-        mHandler.removeMessages(msg);
-        mHandler.sendEmptyMessage(msg);
-    }
     
     @Override
     public void preloadRecentApps() {
@@ -1035,13 +1027,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             am.moveTaskToFront(lastAppId, am.MOVE_TASK_NO_USER_ACTION);
         }
     }
-
-    protected void actionPowerMenu() {
-        Intent intent = new Intent(Intent.ACTION_POWERMENU);
-        mContext.sendBroadcast(intent);
-        //return true;
-    }
-
+    
     protected View.OnTouchListener mRecentsPreloadOnTouchListener = new View.OnTouchListener() {
         // additional optimization when we have software system buttons - start loading the recent
         // tasks on touch down
@@ -1148,11 +1134,7 @@ public abstract class BaseStatusBar extends SystemUI implements
              case MSG_TOGGLE_KILL_APP:
                  if (DEBUG) Slog.d(TAG, "toggle kill app");
                  mHandler.post(mKillTask);
-                 break;
-             case MSG_TOGGLE_POWER_MENU:
-                 if (DEBUG) Slog.d(TAG, "toggle power menu");
-                 actionPowerMenu();
-                 break;                                 
+                 break;                            
              case MSG_OPEN_SEARCH_PANEL:
                  if (DEBUG) Log.d(TAG, "opening search panel");
                  if (mSearchPanelView != null) {

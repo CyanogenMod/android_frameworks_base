@@ -176,7 +176,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
      * @param keyguardLocked True if keyguard is locked
      */
     public void showDialog(boolean keyguardLocked, boolean isDeviceProvisioned) {
-       showDialog(keyguardLocked, isDeviceProvisioned, false);
+        showDialog(keyguardLocked, isDeviceProvisioned, false);
     }
   
     public void showDialog(boolean keyguardLocked, boolean isDeviceProvisioned, boolean mShowReboot) {

@@ -3,6 +3,9 @@ package com.android.systemui.quicksettings;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.view.IWindowManager;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -18,9 +21,12 @@ public class PowerMenuTile extends QuickSettingsTile{
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	qsc.mBar.collapseAllPanels(true);
-                Intent intent = new Intent(Intent.ACTION_POWERMENU);
-                mContext.sendBroadcast(intent);
+                try {
+                    IWindowManager windowManagerService = IWindowManager.Stub.asInterface(
+                        ServiceManager.getService(Context.WINDOW_SERVICE));
+                    windowManagerService.toggleGlobalMenu();
+                } catch (RemoteException e) {
+                }
             }
         };
         mOnLongClick = new View.OnLongClickListener() {
