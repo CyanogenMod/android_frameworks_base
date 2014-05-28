@@ -12,8 +12,7 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src) \
 
 LOCAL_JAVA_LIBRARIES := telephony-common
 LOCAL_STATIC_JAVA_LIBRARIES := android-support-v4 android-support-v13 jsr305
-LOCAL_STATIC_JAVA_LIBRARIES := android-opt-cards
-LOCAL_STATIC_JAVA_LIBRARIES := android-visualizer
+LOCAL_STATIC_JAVA_LIBRARIES := android-visualizer android-opt-cards
 
 LOCAL_PACKAGE_NAME := SystemUI
 LOCAL_CERTIFICATE := platform
