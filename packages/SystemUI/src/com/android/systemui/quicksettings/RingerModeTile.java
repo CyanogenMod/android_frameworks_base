@@ -26,6 +26,13 @@ public class RingerModeTile extends QuickSettingsTile {
         new Ringer(AudioManager.RINGER_MODE_NORMAL, true, R.drawable.ic_qs_ring_vibrate_on)
     };
 
+    private static final int[] TEXTS = new int[] {
+        R.string.quick_settings_ringer_silent,
+        R.string.quick_settings_ringer_vibrate,
+        R.string.quick_settings_ringer_normal,
+        R.string.quick_settings_ringer_vibrate_ring
+    };
+
     private ArrayList<Ringer> mRingers;
     private int mRingerIndex;
 
@@ -91,8 +98,7 @@ public class RingerModeTile extends QuickSettingsTile {
     }
 
     private void updateTile() {
-        // The title does not change
-        mLabel = mContext.getString(R.string.quick_settings_ringer_normal);
+        mLabel = mContext.getString(TEXTS[mRingerIndex]);
 
         // The icon will change depending on index
         findCurrentState();
