@@ -684,7 +684,7 @@ public class ThemeService extends IThemeService.Stub {
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
         Message msg = Message.obtain();
         msg.what = ThemeWorkerHandler.MESSAGE_APPLY_DEFAULT_THEME;
-        mHandler.sendMessage(msg);
+        mHandler.sendMessageDelayed(msg, 1000);
     }
 
     @Override
