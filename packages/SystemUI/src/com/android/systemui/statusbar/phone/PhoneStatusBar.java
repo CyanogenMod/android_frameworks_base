@@ -430,7 +430,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         void observe() {
-        void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);

@@ -1867,7 +1867,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mPieController != null) {
             mPieController.restorePieTriggerMask();
         }
-        
+    }    
     protected void setIconHiddenByUser(String iconPackage, boolean hide) {
         if (iconPackage == null
                 || iconPackage.isEmpty()
