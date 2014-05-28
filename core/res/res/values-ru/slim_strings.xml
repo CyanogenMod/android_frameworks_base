@@ -15,6 +15,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="notify_turn_wifi_ap_off_title">Отключить точку доступа Wi-Fi</string>
+    <string name="default_string">По умолчанию</string>
     <string name="accessibility_target_direction">Проведите по экрану для выбора действия</string>
     <string name="theme_auto_switch_mode_error">Автоматические переключение в зависимости от освещения включено. Ручное переключение невозможно.</string>
 
