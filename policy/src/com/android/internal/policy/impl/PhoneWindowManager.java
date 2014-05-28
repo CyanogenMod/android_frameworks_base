@@ -2751,7 +2751,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
                         Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
                         mContext.sendOrderedBroadcast(intent, null);
-                        return -1;
                     } else if (SHOW_PROCESSES_ON_ALT_MENU &&
                             (metaState & KeyEvent.META_ALT_ON) == KeyEvent.META_ALT_ON) {
                         Intent service = new Intent();
@@ -2766,8 +2765,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                         Settings.System.putInt(
                                 res, Settings.System.SHOW_PROCESSES, shown ? 0 : 1);
-                        return -1;
                     }
+                    return -1;
                 } else if (longPress) {
                     if (mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
                         if (mLongPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
@@ -2781,30 +2780,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                 }
             }
-            if (mPressOnMenuBehavior != KEY_ACTION_MENU) {
-                if (!down && mMenuPressed) {
-                    mMenuPressed = false;
-                    if (mPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
-                        cancelPreloadRecentApps();
-                    }
-                    if (!canceled) {
-                        performKeyAction(mPressOnMenuBehavior);
-                    }
+            if (!down && mMenuPressed) {
+                mMenuPressed = false;
+                if (mPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
+                    cancelPreloadRecentApps();
                 }
-                return -1;
-            } else {
-                if (!down) {
-                    if (mMenuPressed) {
-                        mMenuPressed = false;
-                        cancelPreloadRecentApps();
-                        performKeyAction(mPressOnMenuBehavior);
-                    } else if (mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
-                        return -1;
-                    }
-                } else {
-                    return -1;
+                if (!canceled) {
+                    performKeyAction(mPressOnMenuBehavior);
                 }
             }
+            return -1;
         } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             if (down) {
                 if (repeatCount == 0) {
