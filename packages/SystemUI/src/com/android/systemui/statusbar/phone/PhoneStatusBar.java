@@ -3077,16 +3077,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mRibbonView.setVisibility(View.GONE);
                 mRibbonView.setScaleX(0f);
             }
-            mNotificationButton.setVisibility(View.VISIBLE);
-            mNotificationButton.setAlpha(percent);
             if (mHaloEnabled) {
                 mHaloButton.setVisibility(View.GONE);
                 mHaloButton.setAlpha(percent);
             }
+            mNotificationButton.setVisibility(View.VISIBLE);
+            mNotificationButton.setAlpha(percent);
+            mClearButton.setVisibility(View.GONE);
+            mClearButton.setAlpha(percent);
+
             updateCarrierAndWifiLabelVisibility(true);
             updateNotificationShortcutsVisibility(false);
         }
-        mClearButton.setVisibility(View.GONE);
     }
 
     public void flipToSettings() {
