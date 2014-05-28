@@ -2096,6 +2096,9 @@
   <public type="style" name="Theme.DeviceDefault.NoActionBar.TranslucentDecor" id="0x010301e3" />
   <public type="style" name="Theme.DeviceDefault.Light.NoActionBar.TranslucentDecor" id="0x010301e4" />
 
+  <public type="color" name="trds_background" id="0x0106001c" />
+  <public type="color" name="trds_text" id="0x0106001d" />
+
   <!-- CTS tests reference these resources, but fail because we added
        new ones, changing the order, and Google didn't declare these
        as public resources. This fixes it for the 4.4_r1 CTS release. -->
