@@ -76,7 +76,6 @@ import java.util.List;
  */
 public class ThemeService extends IThemeService.Stub {
     private static final String TAG = ThemeService.class.getName();
-    private static final int DELAY_APPLY_DEFAULT_THEME = 1000;
 
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
@@ -685,7 +684,7 @@ public class ThemeService extends IThemeService.Stub {
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
         Message msg = Message.obtain();
         msg.what = ThemeWorkerHandler.MESSAGE_APPLY_DEFAULT_THEME;
-        mHandler.sendMessageDelayed(msg, DELAY_APPLY_DEFAULT_THEME);
+        mHandler.sendMessage(msg);
     }
 
     @Override
