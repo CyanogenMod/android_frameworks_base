@@ -639,11 +639,13 @@ public class MSimNetworkController extends NetworkController {
                             + " instead of level= " + mMSimSignalStrength[subscription].getLevel());
                 } else {
                     mLastSignalLevel = iconLevel = mMSimSignalStrength[subscription].getLevel();
-                    if (mShowRsrpSignalLevelforLTE ) {
-                        if (mServiceState.getDataNetworkType() ==
+                    if (mShowRsrpSignalLevelforLTE) {
+                        if (mMSimServiceState[subscription].getDataNetworkType() ==
                                 TelephonyManager.NETWORK_TYPE_LTE) {
-                            mLastSignalLevel = iconLevel =
-                                    mSignalStrength.getAlternateLteLevel();
+                            int level = mMSimSignalStrength[subscription].getAlternateLteLevel();
+                            mLastSignalLevel = iconLevel = (level == -1 ? 0 : level);
+                            Slog.d(TAG, "updateTelephonySignalStrength, data type is lte, level = "
+                                + level + " | " + mMSimSignalStrength[subscription]);
                         }
                     }
                 }
