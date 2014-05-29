@@ -80,6 +80,7 @@ public class ThemeService extends IThemeService.Stub {
 
     private static final String GOOGLE_SETUPWIZARD_PACKAGE = "com.google.android.setupwizard";
     private static final String CM_SETUPWIZARD_PACKAGE = "com.cyanogenmod.account";
+    private static final String NAMELESS_SETUPWIZARD_PACKAGE = "org.namelessrom.setupwizard";
 
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
@@ -614,9 +615,10 @@ public class ThemeService extends IThemeService.Stub {
         }
     }
 
-    private boolean isSetupActivity(ResolveInfo info) {
-        return GOOGLE_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName) ||
-               CM_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName);
+    private boolean isSetupActivity(final ResolveInfo info) {
+        return GOOGLE_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName)
+                || CM_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName)
+                || NAMELESS_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName);
     }
 
     private void postProgress(String pkgName) {
