@@ -630,7 +630,7 @@ const uint16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
                     AutoMutex lock(mDecodeLock);
 
                     if (mCache == NULL) {
-#ifdef HAVE_ANDROID_OS
+#ifndef HAVE_ANDROID_OS
                         STRING_POOL_NOISY(ALOGI("CREATING STRING CACHE OF %d bytes",
                                 mHeader->stringCount*sizeof(char16_t**)));
 #else
