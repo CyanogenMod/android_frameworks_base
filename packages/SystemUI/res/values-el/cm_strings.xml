@@ -56,6 +56,7 @@
   <string name="quick_settings_network_adb_disabled_label">Ανενεργό</string>
   <string name="quick_settings_network_adb_enabled_label">Ενεργό</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d συνδέθηκε</string>
+  <string name="quick_settings_equalizer">Ισοσταθμιστής</string>
   <string name="location_mode_high_accuracy_title">Υψηλή ακρίβεια</string>
   <string name="location_mode_battery_saving_title">Εξοικονόμηση μπαταρίας</string>
   <string name="location_mode_sensors_only_title">Μόνο στη συσκευή</string>

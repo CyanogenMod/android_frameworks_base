@@ -57,6 +57,7 @@
   <string name="quick_settings_network_adb_disabled_label">Онемогућено</string>
   <string name="quick_settings_network_adb_enabled_label">Омогућено</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d повезан</string>
+  <string name="quick_settings_equalizer">Еквилајзер</string>
   <string name="location_mode_high_accuracy_title">Висока прецизност</string>
   <string name="location_mode_battery_saving_title">Уштеда батерије</string>
   <string name="location_mode_sensors_only_title">Само уређај</string>
@@ -67,7 +68,7 @@
   <string name="navbar_dialog_title">Изаберите акцију да доделите</string>
   <string name="navbar_home_button">Главно дугме</string>
   <string name="navbar_recent_button">Најскорије дугме</string>
-  <string name="navbar_search_button">Дугме за претраживање</string>
+  <string name="navbar_search_button">Дугме за претрагу</string>
   <string name="navbar_back_button">Дугме за повратак назад</string>
   <string name="navbar_empty_button">Остави празно</string>
   <string name="navbar_menu_conditional_button">Мени (ауто сакриј) дугме</string>

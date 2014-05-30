@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy szerkessze azokat a telefonszámokat melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
   <string name="permlab_accessThemeService">hozzáférés a témaszolgáltatáshoz</string>
   <string name="permdesc_accessThemeService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen a témaszolgáltatáshoz. Általános alkalmazásoknak soha nem kell ilyen engedély.</string>
+  <string name="permlab_readThemes">téma információjának megtekintése</string>
+  <string name="permdesc_readThemesDesc">Lehetővé teszi az alkalmazásnak, hogy megtekintse a témákat és megállapítsa, melyik téma aktív.</string>
+  <string name="permlab_writeThemes">témák módosítása</string>
+  <string name="permdesc_writeThemesDesc">Lehetővé teszi az alkalmazásnak, hogy új témákat hozzon létre és módosítsa a jelenleg aktív témát.</string>
   <string name="permlab_setKeyguardWallpaper">billentyűzár háttérképének beállítása</string>
   <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára a képernyőzár hátterének módosítását.</string>
   <string name="immersive_mode_confirmation_bottom">Csúsztasson lentről felfelé a teljesképernyős módból való kilépéshez.</string>

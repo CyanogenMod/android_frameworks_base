@@ -17,5 +17,5 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">鎖定螢幕</string>
-  <string name="keyguard_discharging">正在放電，<xliff:g id="number"> %d </xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_discharging">非充電中，<xliff:g id="number"> %d </xliff:g><xliff:g id="percent">%%</xliff:g></string>
 </resources>

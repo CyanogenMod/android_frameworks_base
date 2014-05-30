@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Laat \'n program toe om van die telefoonnommers wat geblokkeer is vir inkomende oproepe of boodskappe te verander.</string>
   <string name="permlab_accessThemeService">Toegang tot tema diens</string>
   <string name="permdesc_accessThemeService">Laat \'n program toe om toegang na die tema diens te verkry. Moet nooit nodig wees vir normale programme nie.</string>
+  <string name="permlab_readThemes">lees jou tema inligting</string>
+  <string name="permdesc_readThemesDesc">Laat die program toe om jou temas te lees en bepaal watter tema jy toegepas het.</string>
+  <string name="permlab_writeThemes">verander jou temas</string>
+  <string name="permdesc_writeThemesDesc">Laat die program toe om nuwe temas by te voeg en verander die tema wat jy toegepas het.</string>
   <string name="permlab_setKeyguardWallpaper">Stel slotskerm agtergrond in</string>
   <string name="permdesc_setKeyguardWallpaper">Laat \'n program toe om die slotskerm agtergrond te verander.</string>
   <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>

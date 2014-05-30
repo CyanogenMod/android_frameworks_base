@@ -75,8 +75,12 @@
   <string name="permdesc_changePhoneBlacklist">Permite a uma aplicação alterar os números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
   <string name="permlab_accessThemeService">Aceder ao serviço de temas</string>
   <string name="permdesc_accessThemeService">Permite a uma aplicação aceder ao serviço de temas. Nunca deverá ser necessário para aplicações normais.</string>
-  <string name="permlab_setKeyguardWallpaper">Definir o papel de parede do ecrã de bloqueio</string>
-  <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar o papel de parede do ecrã de bloqueio.</string>
+  <string name="permlab_readThemes">ler a informação do tema</string>
+  <string name="permdesc_readThemesDesc">Permite a uma aplicação ler os seus temas e determinar qual o tema que têm aplicado.</string>
+  <string name="permlab_writeThemes">modificar os seus temas</string>
+  <string name="permdesc_writeThemesDesc">Permite a uma aplicação inserir novos temas e modificar o tema que têm aplicado.</string>
+  <string name="permlab_setKeyguardWallpaper">Definir a imagem de fundo do ecrã de bloqueio</string>
+  <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar a imagem de fundo do ecrã de bloqueio.</string>
   <string name="immersive_mode_confirmation_bottom">Deslize de baixo para cima para sair de ecrã inteiro.</string>
   <string name="app_ops_access_camera">aceder à câmara</string>
   <string name="app_ops_access_location">aceder à sua localização</string>

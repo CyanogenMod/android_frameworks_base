@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">אפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, שעבורם נחסמות הודעות ושיחות נכנסות.</string>
   <string name="permlab_accessThemeService">גישה לשירות ערכת הצבעים</string>
   <string name="permdesc_accessThemeService">אפשר ליישום לגשת לשירות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
+  <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב</string>
+  <string name="permdesc_readThemesDesc">אפשר ליישום לקרוא את ערכות העיצוב ולקבוע איזו ערכה קבעת.</string>
+  <string name="permlab_writeThemes">שינוי ערכות העיצוב</string>
+  <string name="permdesc_writeThemesDesc">אפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות אילו הוחלו.</string>
   <string name="permlab_setKeyguardWallpaper">הגדר רקע ל-keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">אפשר ליישום לשנות את הרקע של מסך הנעילה.</string>
   <string name="immersive_mode_confirmation_bottom">החלק למעלה מהתחתית כדי לצאת ממסך מלא.</string>

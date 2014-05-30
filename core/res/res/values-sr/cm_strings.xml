@@ -32,14 +32,14 @@
   <string name="global_actions_toggle_expanded_desktop_mode">Проширена радна површина</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Омогућено</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Онемогућено</string>
-  <string name="reboot_system" product="tablet">Рестартуј таблет</string>
-  <string name="reboot_system" product="default">Рестартуј телефон</string>
+  <string name="reboot_system" product="tablet">Рестартуј</string>
+  <string name="reboot_system" product="default">Рестартуј</string>
   <string name="reboot_reboot">Рестартуј</string>
-  <string name="reboot_recovery">Опоравак</string>
+  <string name="reboot_recovery">Режим Опоравка</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_bootmenu">Bootмeни</string>
   <string name="reboot_fastboot">Брзиboot</string>
-  <string name="reboot_download">Преузимање</string>
+  <string name="reboot_download">Режим Преузимања</string>
   <string name="reboot_progress">Рестартовање\u2026</string>
   <string name="reboot_confirm" product="tablet">Tаблет ће се рестартовати.</string>
   <string name="reboot_confirm" product="default">Tелефон ће се рестартовати.</string>
@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Омогућава апликацији да промени бројеве телефона које су блокирани за долазне позиве или поруке.</string>
   <string name="permlab_accessThemeService">Приступ сервису тема</string>
   <string name="permdesc_accessThemeService">Омогућава апликацији да приступи услузи тема. Никада не би требало за нормалне апликације.</string>
+  <string name="permlab_readThemes">Прочитајте информације о Вашој теми</string>
+  <string name="permdesc_readThemesDesc">Дозволите апликацији да чита Ваше теме и одлучује која тема ће бити примењена.</string>
+  <string name="permlab_writeThemes">Модификујте Ваше теме</string>
+  <string name="permdesc_writeThemesDesc">Дозволите апликацији да убацује нове теме и модификује коју тему ћете променити.</string>
   <string name="permlab_setKeyguardWallpaper">Поставите тапет тастатуре</string>
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени тапет на закључаном екрану.</string>
   <string name="immersive_mode_confirmation_bottom">Превуците нагоре од дна за излазак из целог екрана.</string>
