@@ -809,11 +809,12 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         final boolean showSearch = disableHome && !disableSearch;
         final boolean showNotifs = showSearch &&
             Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS, 1) == 1
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS, 0) == 1
             && Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.ACTIVE_NOTIFICATIONS, 1) == 1
+                    Settings.System.ACTIVE_NOTIFICATIONS, 0) == 1
             && Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, 0) == 0;
+
         final View notifsButton = getNotifsButton();
         if (notifsButton != null) {
             setVisibleOrGone(notifsButton, showNotifs && mWasNotifsButtonVisible);
