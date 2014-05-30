@@ -106,7 +106,9 @@ public class ViewFlipper extends ViewAnimator {
         super.onDetachedFromWindow();
         mVisible = false;
         if (!mSelfMaintained) {
+            try {
             getContext().unregisterReceiver(mReceiver);
+        } catch (Exception ignored) { }
         }
         updateRunning();
     }

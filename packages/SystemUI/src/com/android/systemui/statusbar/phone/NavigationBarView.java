@@ -56,6 +56,7 @@ import android.view.accessibility.AccessibilityManager.TouchExplorationStateChan
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.internal.util.slim.ButtonConfig;
 import com.android.internal.util.slim.ButtonsConstants;
@@ -713,7 +714,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         if (DEBUG) {
             android.widget.Toast.makeText(mContext,
                 "Navigation icon hints = " + hints,
-                500).show();
+                    Toast.LENGTH_SHORT).show();
         }
 
         mNavigationIconHints = hints;

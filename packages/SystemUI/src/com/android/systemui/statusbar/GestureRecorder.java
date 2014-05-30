@@ -229,7 +229,7 @@ public class GestureRecorder {
         synchronized (mGestures) {
             try {
                 BufferedWriter w = new BufferedWriter(new FileWriter(mLogfile, /*append=*/ true));
-                w.append(toJsonLocked() + "\n");
+                w.append(toJsonLocked()).append('\n');
                 w.close();
                 mGestures.clear();
                 // If we have a pending gesture, push it back

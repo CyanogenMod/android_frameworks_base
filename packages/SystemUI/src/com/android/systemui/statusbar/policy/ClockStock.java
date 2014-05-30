@@ -97,7 +97,9 @@ public class ClockStock extends TextView implements DemoMode {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mAttached) {
-            getContext().unregisterReceiver(mIntentReceiver);
+            try {
+                getContext().unregisterReceiver(mIntentReceiver);
+            } catch (Exception ignored) { }
             mAttached = false;
         }
     }

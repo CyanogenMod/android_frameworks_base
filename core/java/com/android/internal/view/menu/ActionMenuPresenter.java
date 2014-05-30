@@ -21,8 +21,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.transition.Transition;
-import android.transition.TransitionManager;
 import android.util.SparseBooleanArray;
 import android.view.ActionProvider;
 import android.view.Gravity;
@@ -750,7 +748,7 @@ public class ActionMenuPresenter extends BaseMenuPresenter
         @Override
         public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing) {
             if (menu instanceof SubMenuBuilder) {
-                ((SubMenuBuilder) menu).getRootMenu().close(false);
+                menu.getRootMenu().close(false);
             }
             final MenuPresenter.Callback cb = getCallback();
             if (cb != null) {

@@ -67,7 +67,7 @@ public class InputMethodUtils {
             final StackTraceElement[] frames = e.getStackTrace();
             // Start at 1 because the first frame is here and we don't care about it
             for (int j = 1; j < frames.length; ++j) {
-                sb.append(frames[j].toString() + "\n");
+                sb.append(frames[j].toString()).append('\n');
             }
         }
         return sb.toString();
@@ -84,7 +84,7 @@ public class InputMethodUtils {
                 if (TextUtils.isEmpty(apiCallStack)) {
                     // Overwrite apiCallStack if it's empty
                     apiCallStack = tempCallStack;
-                } else if (tempCallStack.indexOf("Transact(") < 0) {
+                } else if (!tempCallStack.contains("Transact(")) {
                     // Overwrite apiCallStack if it's not a binder call
                     apiCallStack = tempCallStack;
                 } else {

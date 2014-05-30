@@ -111,7 +111,9 @@ public class UsbDebuggingActivity extends AlertActivity
     @Override
     protected void onStop() {
         if (mDisconnectedReceiver != null) {
-            unregisterReceiver(mDisconnectedReceiver);
+            try {
+                unregisterReceiver(mDisconnectedReceiver);
+            } catch (Exception ignored) { }
         }
         super.onStop();
     }

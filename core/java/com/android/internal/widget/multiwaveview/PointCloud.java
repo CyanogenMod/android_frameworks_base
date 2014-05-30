@@ -109,8 +109,8 @@ public class PointCloud {
         float radius;
 
         public Point(float x2, float y2, float r) {
-            x = (float) x2;
-            y = (float) y2;
+            x = x2;
+            y = y2;
             radius = r;
         }
     }
@@ -142,7 +142,7 @@ public class PointCloud {
         mPointCloud.clear();
         final float pointAreaRadius =  (outerRadius - innerRadius);
         final float ds = (2.0f * PI * innerRadius / INNER_POINTS);
-        final int bands = (int) Math.round(pointAreaRadius / ds);
+        final int bands = Math.round(pointAreaRadius / ds);
         final float dr = pointAreaRadius / bands;
         float r = innerRadius;
         for (int b = 0; b <= bands; b++, r += dr) {

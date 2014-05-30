@@ -86,7 +86,9 @@ public class DateView extends TextView {
         super.onDetachedFromWindow();
 
         mDateFormat = null; // reload the locale next time
-        mContext.unregisterReceiver(mIntentReceiver);
+        try {
+            mContext.unregisterReceiver(mIntentReceiver);
+        } catch (Exception ignored) { }
     }
 
     protected void updateClock() {

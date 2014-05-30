@@ -181,7 +181,9 @@ public class DhcpStateMachine extends StateMachine {
     class DefaultState extends State {
         @Override
         public void exit() {
-            mContext.unregisterReceiver(mBroadcastReceiver);
+            try {
+                mContext.unregisterReceiver(mBroadcastReceiver);
+            } catch (Exception ignored) { }
         }
         @Override
         public boolean processMessage(Message message) {

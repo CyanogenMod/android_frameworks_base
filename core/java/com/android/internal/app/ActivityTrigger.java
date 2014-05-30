@@ -30,7 +30,6 @@ package com.android.internal.app;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import android.util.Log;
 
 public class ActivityTrigger
 {

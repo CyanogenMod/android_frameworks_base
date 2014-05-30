@@ -132,7 +132,7 @@ public class DrawableHolder implements AnimatorListener {
         canvas.translate(mX, mY);
         canvas.scale(mScaleX, mScaleY);
         canvas.translate(-0.5f*getWidth(), -0.5f*getHeight());
-        mDrawable.setAlpha((int) Math.round(mAlpha * 255f));
+        mDrawable.setAlpha(Math.round(mAlpha * 255f));
         mDrawable.draw(canvas);
         canvas.restore();
     }

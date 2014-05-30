@@ -17,7 +17,6 @@
 package com.android.systemui.statusbar.policy;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 

@@ -2049,7 +2049,9 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mSearchPanelView != null) {
             mWindowManager.removeViewImmediate(mSearchPanelView);
         }
-        mContext.unregisterReceiver(mBroadcastReceiver);
+        try {
+            mContext.unregisterReceiver(mBroadcastReceiver);
+        } catch (Exception ignored) { }
     }
 
     public void addNavigationBarCallback(NavigationBarCallback callback) {

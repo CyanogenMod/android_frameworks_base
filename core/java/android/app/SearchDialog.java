@@ -300,7 +300,9 @@ public class SearchDialog extends Dialog {
     public void onStop() {
         super.onStop();
 
-        getContext().unregisterReceiver(mConfChangeListener);
+        try {
+            getContext().unregisterReceiver(mConfChangeListener);
+        } catch (Exception ignored) { }
 
         // dump extra memory we're hanging on to
         mLaunchComponent = null;

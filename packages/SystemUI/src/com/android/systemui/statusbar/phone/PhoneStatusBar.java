@@ -4792,8 +4792,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mNavigationBarView != null) {
             mWindowManager.removeViewImmediate(mNavigationBarView);
         }
-        mContext.unregisterReceiver(mBroadcastReceiver);
-        mContext.unregisterReceiver(mAppBroadcastReceiver);
+        try {
+            mContext.unregisterReceiver(mBroadcastReceiver);
+        } catch (Exception ignored) { }
+        try {
+            mContext.unregisterReceiver(mAppBroadcastReceiver);
+        } catch (Exception ignored) { }
     }
 
     private boolean mDemoModeAllowed;

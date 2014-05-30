@@ -51,7 +51,9 @@ public abstract class CurrentUserTracker extends BroadcastReceiver {
     }
 
     public void stopTracking() {
-        mContext.unregisterReceiver(this);
+        try {
+            mContext.unregisterReceiver(this);
+        } catch (Exception ignored) { }
     }
 
     public abstract void onUserSwitched(int newUserId);

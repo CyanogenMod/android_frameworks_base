@@ -87,7 +87,9 @@ public class UsbResolverActivity extends ResolverActivity {
     @Override
     protected void onDestroy() {
         if (mDisconnectedReceiver != null) {
-            unregisterReceiver(mDisconnectedReceiver);
+            try {
+                unregisterReceiver(mDisconnectedReceiver);
+            } catch (Exception ignored) { }
         }
         super.onDestroy();
     }

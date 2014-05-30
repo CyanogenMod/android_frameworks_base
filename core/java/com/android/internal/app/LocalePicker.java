@@ -187,9 +187,7 @@ public class LocalePicker extends ListFragment {
         }
 
         final LocaleInfo[] localeInfos = new LocaleInfo[finalSize];
-        for (int i = 0; i < finalSize; i++) {
-            localeInfos[i] = preprocess[i];
-        }
+        System.arraycopy(preprocess, 0, localeInfos, 0, finalSize);
         Arrays.sort(localeInfos);
 
         final LayoutInflater inflater =

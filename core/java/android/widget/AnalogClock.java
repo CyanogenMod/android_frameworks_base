@@ -125,7 +125,9 @@ public class AnalogClock extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mAttached) {
-            getContext().unregisterReceiver(mIntentReceiver);
+            try {
+                getContext().unregisterReceiver(mIntentReceiver);
+            } catch (Exception ignored) { }
             mAttached = false;
         }
     }

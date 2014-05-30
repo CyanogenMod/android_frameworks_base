@@ -850,7 +850,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         if (mShowSilentToggle) {
             try {
                 mContext.unregisterReceiver(mRingerModeReceiver);
-            } catch (IllegalArgumentException ie) {
+            } catch (Exception ie) {
                 // ignore this
                 Log.w(TAG, ie);
             }

@@ -90,9 +90,7 @@ public class StatusBarIconList implements Parcelable {
     public void defineSlots(String[] slots) {
         final int N = slots.length;
         String[] s = mSlots = new String[N];
-        for (int i=0; i<N; i++) {
-            s[i] = slots[i];
-        }
+        System.arraycopy(slots, 0, s, 0, N);
         mIcons = new StatusBarIcon[N];
     }
 

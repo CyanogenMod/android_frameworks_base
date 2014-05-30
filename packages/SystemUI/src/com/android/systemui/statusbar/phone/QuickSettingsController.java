@@ -384,7 +384,9 @@ public class QuickSettingsController {
             mContext.getContentResolver().unregisterContentObserver(mObserver);
         }
         if (mReceiver != null) {
-            mContext.unregisterReceiver(mReceiver);
+            try {
+                mContext.unregisterReceiver(mReceiver);
+            } catch (Exception ignored) { }
         }
         for (QuickSettingsTile qs : mQuickSettingsTiles) {
             qs.onDestroy();

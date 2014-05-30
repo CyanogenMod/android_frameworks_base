@@ -58,7 +58,7 @@ public class NetInitiatedActivity extends AlertActivity implements DialogInterfa
         @Override
         public void onReceive(Context context, Intent intent) {
             if (DEBUG) Log.d(TAG, "NetInitiatedReceiver onReceive: " + intent.getAction());
-            if (intent.getAction() == GpsNetInitiatedHandler.ACTION_NI_VERIFY) {
+            if (intent.getAction().equals(GpsNetInitiatedHandler.ACTION_NI_VERIFY)) {
                 handleNIVerify(intent);
             }
         }
@@ -115,7 +115,9 @@ public class NetInitiatedActivity extends AlertActivity implements DialogInterfa
     protected void onPause() {
         super.onPause();
         if (DEBUG) Log.d(TAG, "onPause");
-        unregisterReceiver(mNetInitiatedReceiver);
+        try {
+            unregisterReceiver(mNetInitiatedReceiver);
+        } catch (Exception ignored) { }
     }
 
     /**

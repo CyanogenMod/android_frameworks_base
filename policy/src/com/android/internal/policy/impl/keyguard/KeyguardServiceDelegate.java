@@ -12,7 +12,6 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.util.Log;
 import android.util.Slog;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -61,7 +60,7 @@ public class KeyguardServiceDelegate {
         public int currentUser;
         public boolean screenIsOn;
         public boolean bootCompleted;
-    };
+    }
 
     public interface ShowListener {
         public void onShown(IBinder windowToken);
@@ -83,7 +82,7 @@ public class KeyguardServiceDelegate {
             }
             hideScrim();
         }
-    };
+    }
 
     // A delegate class to map a particular invocation with an OnKeyguardExitResult object.
     private final class KeyguardExitDelegate extends IKeyguardExitCallback.Stub {
@@ -100,7 +99,7 @@ public class KeyguardServiceDelegate {
                 mOnKeyguardExitResult.onKeyguardExitResult(success);
             }
         }
-    };
+    }
 
     public KeyguardServiceDelegate(Context context, LockPatternUtils lockPatternUtils) {
         Intent intent = new Intent();
@@ -276,14 +275,13 @@ public class KeyguardServiceDelegate {
         mKeyguardState.currentUser = newUserId;
     }
 
-    private static final View createScrim(Context context) {
+    private static View createScrim(Context context) {
         View view = new View(context);
 
-        int flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+        final int flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
                 | WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
-                | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
-                ;
+                | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
 
         final int stretch = ViewGroup.LayoutParams.MATCH_PARENT;
         final int type = WindowManager.LayoutParams.TYPE_KEYGUARD_SCRIM;

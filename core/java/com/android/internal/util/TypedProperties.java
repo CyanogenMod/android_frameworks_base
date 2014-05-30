@@ -85,20 +85,20 @@ public class TypedProperties extends HashMap<String, Object> {
     }
 
     // A sentinel instance used to indicate a null string.
-    static final String NULL_STRING = new String("<TypedProperties:NULL_STRING>");
+    static final String NULL_STRING = "<TypedProperties:NULL_STRING>";
 
     // Constants used to represent the supported types.
-    static final int TYPE_UNSET = 'x';
+    static final int TYPE_UNSET   = 'x';
     static final int TYPE_BOOLEAN = 'Z';
-    static final int TYPE_BYTE = 'I' | 1 << 8;
+    static final int TYPE_BYTE    = 'I' | 1 << 8;
     // TYPE_CHAR: character literal syntax not supported; use short.
-    static final int TYPE_SHORT = 'I' | 2 << 8;
-    static final int TYPE_INT = 'I' | 4 << 8;
-    static final int TYPE_LONG = 'I' | 8 << 8;
-    static final int TYPE_FLOAT = 'F' | 4 << 8;
-    static final int TYPE_DOUBLE = 'F' | 8 << 8;
-    static final int TYPE_STRING = 'L' | 's' << 8;
-    static final int TYPE_ERROR = -1;
+    static final int TYPE_SHORT   = 'I' | 2 << 8;
+    static final int TYPE_INT     = 'I' | 4 << 8;
+    static final int TYPE_LONG    = 'I' | 8 << 8;
+    static final int TYPE_FLOAT   = 'F' | 4 << 8;
+    static final int TYPE_DOUBLE  = 'F' | 8 << 8;
+    static final int TYPE_STRING  = 'L' | 's' << 8;
+    static final int TYPE_ERROR   = -1;
 
     /**
      * Converts a string to an internal type constant.
@@ -146,7 +146,7 @@ public class TypedProperties extends HashMap<String, Object> {
          */
         final String identifierPattern = "[a-zA-Z_$][0-9a-zA-Z_$]*";
         final Pattern propertyNamePattern =
-            Pattern.compile("(" + identifierPattern + "\\.)*" + identifierPattern);
+                Pattern.compile("(" + identifierPattern + "\\.)*" + identifierPattern);
 
 
         while (true) {
@@ -268,22 +268,22 @@ public class TypedProperties extends HashMap<String, Object> {
                 if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {
                     throw new ParseException(st, "8-bit integer constant");
                 }
-                return new Byte((byte)value);
+                return (byte) value;
             case 2:
                 if (value < Short.MIN_VALUE || value > Short.MAX_VALUE) {
                     throw new ParseException(st, "16-bit integer constant");
                 }
-                return new Short((short)value);
+                return (short) value;
             case 4:
                 if (value < Integer.MIN_VALUE || value > Integer.MAX_VALUE) {
                     throw new ParseException(st, "32-bit integer constant");
                 }
-                return new Integer((int)value);
+                return (int) value;
             case 8:
                 if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
                     throw new ParseException(st, "64-bit integer constant");
                 }
-                return new Long(value);
+                return value;
             default:
                 throw new IllegalStateException(
                     "Internal error; unexpected integer type width " + width);
@@ -317,10 +317,10 @@ public class TypedProperties extends HashMap<String, Object> {
                         throw new ParseException(st, "32-bit float constant");
                     }
                 }
-                return new Float((float)value);
+                return (float) value;
             } else {
                 // This property is a double; no need to truncate.
-                return new Double(value);
+                return value;
             }
         } else if (type == TYPE_STRING) {
             // Expect a quoted string or the word "null".
@@ -437,7 +437,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Boolean) {
-            return ((Boolean)value).booleanValue();
+            return (Boolean) value;
         }
         throw new TypeException(property, value, "boolean");
     }
@@ -457,7 +457,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Byte) {
-            return ((Byte)value).byteValue();
+            return (Byte) value;
         }
         throw new TypeException(property, value, "byte");
     }
@@ -477,7 +477,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Short) {
-            return ((Short)value).shortValue();
+            return (Short) value;
         }
         throw new TypeException(property, value, "short");
     }
@@ -497,7 +497,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Integer) {
-            return ((Integer)value).intValue();
+            return (Integer) value;
         }
         throw new TypeException(property, value, "int");
     }
@@ -517,7 +517,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Long) {
-            return ((Long)value).longValue();
+            return (Long) value;
         }
         throw new TypeException(property, value, "long");
     }
@@ -537,7 +537,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Float) {
-            return ((Float)value).floatValue();
+            return (Float) value;
         }
         throw new TypeException(property, value, "float");
     }
@@ -557,7 +557,7 @@ public class TypedProperties extends HashMap<String, Object> {
             return def;
         }
         if (value instanceof Double) {
-            return ((Double)value).doubleValue();
+            return (Double) value;
         }
         throw new TypeException(property, value, "double");
     }

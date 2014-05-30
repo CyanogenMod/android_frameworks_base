@@ -244,7 +244,9 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         }
 
         // stop receiving broadcasts
-        getContext().unregisterReceiver(mBroadcastReceiver);
+        try {
+            getContext().unregisterReceiver(mBroadcastReceiver);
+        } catch (Exception ignored) { }
 
         mHandler.postDelayed(mCleanup, 100);
      }

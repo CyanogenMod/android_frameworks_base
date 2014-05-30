@@ -45,13 +45,13 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
     private BroadcastReceiver mStorageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
+            final String action = intent.getAction();
             Log.d("ExternalMediaFormatActivity", "got action " + action);
 
-            if (action == Intent.ACTION_MEDIA_REMOVED ||
-                action == Intent.ACTION_MEDIA_CHECKING ||
-                action == Intent.ACTION_MEDIA_MOUNTED ||
-                action == Intent.ACTION_MEDIA_SHARED) {
+            if (action != null && (action.equals(Intent.ACTION_MEDIA_REMOVED) ||
+                    action.equals(Intent.ACTION_MEDIA_CHECKING) ||
+                    action.equals(Intent.ACTION_MEDIA_MOUNTED) ||
+                    action.equals(Intent.ACTION_MEDIA_SHARED))) {
                 finish();
             }
         }
@@ -111,7 +111,9 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
     protected void onPause() {
         super.onPause();
 
-        unregisterReceiver(mStorageReceiver);
+        try {
+            unregisterReceiver(mStorageReceiver);
+        } catch (Exception ignored) { }
     }
 
     /**

@@ -468,6 +468,7 @@ public class SlidingTab extends ViewGroup {
         // setBackgroundColor(0x80808080);
     }
 
+    private final static RuntimeException stackException = new RuntimeException(LOG_TAG + "stack:");
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -481,7 +482,7 @@ public class SlidingTab extends ViewGroup {
                     || heightSpecMode == MeasureSpec.UNSPECIFIED) {
                 Log.e("SlidingTab", "SlidingTab cannot have UNSPECIFIED MeasureSpec"
                         +"(wspec=" + widthSpecMode + ", hspec=" + heightSpecMode + ")",
-                        new RuntimeException(LOG_TAG + "stack:"));
+                        stackException);
             }
         }
 
