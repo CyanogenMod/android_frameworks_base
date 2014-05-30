@@ -502,7 +502,7 @@ public abstract class AbstractMessageParser {
 
     for (int index = nextChar; index < endChar; ++index) {
       char ch = text.charAt(index);
-      Character key = Character.valueOf(ch);
+      Character key = ch;
       if (seenCharacters.containsKey(key)) {
         // Already seen this character, just append an unmatched token, which
         // will print plaintext character
@@ -527,7 +527,7 @@ public abstract class AbstractMessageParser {
     // Append any necessary end tokens
     for (Character key : seenCharacters.keySet()) {
       if (seenCharacters.get(key) == Boolean.TRUE) {
-        Format end = new Format(key.charValue(), false);
+        Format end = new Format(key, false);
         end.setMatched(true);
         addToken(end);
       }
@@ -992,7 +992,7 @@ public abstract class AbstractMessageParser {
       if (getPhoto() != null) {
         info.add(getPhotoURL(getUser(), getAlbum(), getPhoto()));
       } else {
-        info.add((String)null);
+        info.add(null);
       }
       return info;
     }
@@ -1356,7 +1356,7 @@ public abstract class AbstractMessageParser {
     }
 
     public TrieNode getOrCreateChild(char ch) {
-      Character key = Character.valueOf(ch);
+      Character key = ch;
       TrieNode node = children.get(key);
       if (node == null) {
         node = new TrieNode(text + String.valueOf(ch));

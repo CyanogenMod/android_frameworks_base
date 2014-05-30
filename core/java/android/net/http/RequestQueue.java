@@ -250,7 +250,9 @@ public class RequestQueue implements RequestFeeder {
         if (HttpLog.LOGV) HttpLog.v("RequestQueue.disablePlatformNotifications() network");
 
         if (mProxyChangeReceiver != null) {
-            mContext.unregisterReceiver(mProxyChangeReceiver);
+            try {
+                mContext.unregisterReceiver(mProxyChangeReceiver);
+            } catch (Exception ignored) { }
             mProxyChangeReceiver = null;
         }
     }

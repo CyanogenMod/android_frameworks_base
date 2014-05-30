@@ -916,8 +916,10 @@ public abstract class WallpaperService extends Service {
             
             if (DEBUG) Log.v(TAG, "onDestroy(): " + this);
             onDestroy();
-            
-            unregisterReceiver(mReceiver);
+
+            try {
+                unregisterReceiver(mReceiver);
+            } catch (Exception ignored) { }
             
             if (mCreated) {
                 try {

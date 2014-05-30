@@ -47,7 +47,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
@@ -788,7 +787,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         if (mShowSilentToggle) {
             try {
                 mContext.unregisterReceiver(mRingerModeReceiver);
-            } catch (IllegalArgumentException ie) {
+            } catch (Exception ie) {
                 // ignore this
                 Log.w(TAG, ie);
             }

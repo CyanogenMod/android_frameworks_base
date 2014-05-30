@@ -223,7 +223,9 @@ public class DateTimeView extends TextView {
 
     private void unregisterReceivers() {
         Context context = getContext();
-        context.unregisterReceiver(mBroadcastReceiver);
+        try {
+            context.unregisterReceiver(mBroadcastReceiver);
+        } catch (Exception ignored) { }
         context.getContentResolver().unregisterContentObserver(mContentObserver);
     }
 

@@ -77,7 +77,9 @@ public class QuietHoursTile extends QuickSettingsTile {
 
         // Remove the receiver, if its set
         if (mReceiver != null) {
-            mContext.unregisterReceiver(mReceiver);
+            try {
+                mContext.unregisterReceiver(mReceiver);
+            } catch (Exception ignored) { }
         }
         super.onDestroy();
     }

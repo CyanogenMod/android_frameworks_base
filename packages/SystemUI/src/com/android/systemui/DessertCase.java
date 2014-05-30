@@ -17,13 +17,10 @@
 
 package com.android.systemui;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
-import android.os.Handler;
 import android.util.Slog;
-import android.view.animation.DecelerateInterpolator;
 
 import com.android.systemui.cm.CMCaseView;
 

@@ -127,7 +127,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.lang.reflect.Constructor;
 
 import static android.view.WindowManager.LayoutParams.*;
@@ -5761,7 +5760,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (pkgName == null) {
             pkgName = "stop.looking.at.me.swan";
         }
-        this.currentPackageName = pkgName;
+        PhoneWindowManager.currentPackageName = pkgName;
     }
 
     // debugging 'Android is upgrading...' ProgressDialog

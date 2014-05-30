@@ -21,13 +21,6 @@ import android.widget.Toast;
 
 import com.android.internal.R;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Takes care of unmounting and formatting external storage.

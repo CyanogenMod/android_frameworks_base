@@ -21,13 +21,11 @@ package com.android.keyguard;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import android.util.Log;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
-import com.android.internal.widget.LockPatternUtils;
 
 import android.telephony.MSimTelephonyManager;
 

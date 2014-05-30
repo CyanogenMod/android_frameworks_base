@@ -21,8 +21,6 @@ import android.util.DisplayMetrics;
 import android.view.DisplayInfo;
 import android.view.WindowManager;
 
-import java.util.ArrayList;
-
 public class DeviceUtils {
 
     // Device types

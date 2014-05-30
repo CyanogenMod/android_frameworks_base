@@ -19,7 +19,6 @@ package com.android.keyguard;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
@@ -531,7 +530,7 @@ public class KeyguardWidgetFrame extends FrameLayout {
         if (Float.compare(mOverScrollAmount, r) != 0) {
             mOverScrollAmount = r;
             mForegroundGradient = left ? mLeftToRightGradient : mRightToLeftGradient;
-            mForegroundAlpha = (int) Math.round((0.5f * r * 255));
+            mForegroundAlpha = Math.round((0.5f * r * 255));
 
             // We bump up the alpha of the outline to hide the fact that the overlay is drawing
             // over the rounded part of the frame.

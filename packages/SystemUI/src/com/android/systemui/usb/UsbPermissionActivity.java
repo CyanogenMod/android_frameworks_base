@@ -151,7 +151,9 @@ public class UsbPermissionActivity extends AlertActivity
         }
 
         if (mDisconnectedReceiver != null) {
-            unregisterReceiver(mDisconnectedReceiver);
+            try {
+                unregisterReceiver(mDisconnectedReceiver);
+            } catch (Exception ignored) { }
         }
         super.onDestroy();
     }

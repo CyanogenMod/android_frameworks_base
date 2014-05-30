@@ -34,8 +34,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import static com.android.internal.util.cm.NavigationRingConstants.*;
-import com.android.internal.util.nameless.NamelessUtils;
-import com.android.internal.util.nameless.constants.FlashLightConstants;
+
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.TargetDrawable;
 
@@ -152,12 +151,12 @@ public class NavigationRingHelpers {
     }
 
     private static TargetDrawable createDrawableForActivity(Resources res, Drawable activityIcon) {
-        Drawable iconBg = res.getDrawable(
+        final Drawable iconBg = res.getDrawable(
                 com.android.internal.R.drawable.ic_navigation_ring_blank_normal);
-        Drawable iconBgActivated = res.getDrawable(
+        final Drawable iconBgActivated = res.getDrawable(
                 com.android.internal.R.drawable.ic_navigation_ring_blank_activated);
 
-        int margin = (int)(iconBg.getIntrinsicHeight() / 3);
+        final int margin = iconBg.getIntrinsicHeight() / 3;
         LayerDrawable icon = new LayerDrawable (new Drawable[] { iconBg, activityIcon });
         LayerDrawable iconActivated = new LayerDrawable (new Drawable[] { iconBgActivated, activityIcon });
 

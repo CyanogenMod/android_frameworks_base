@@ -50,7 +50,7 @@ public class SmileyResources implements AbstractMessageParser.Resources {
         if (i == null) {
             return -1;
         }
-        return i.intValue();
+        return i;
     }
 
     private final TrieNode smileys = new TrieNode();

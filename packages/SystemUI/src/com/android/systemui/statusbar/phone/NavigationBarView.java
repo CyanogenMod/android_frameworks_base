@@ -56,6 +56,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.R;
@@ -485,7 +486,7 @@ public class NavigationBarView extends LinearLayout {
         if (DEBUG) {
             android.widget.Toast.makeText(mContext,
                 "Navigation icon hints = " + hints,
-                500).show();
+                    Toast.LENGTH_SHORT).show();
         }
 
         mNavigationIconHints = hints;

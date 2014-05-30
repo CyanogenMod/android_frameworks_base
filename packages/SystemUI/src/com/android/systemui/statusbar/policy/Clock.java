@@ -173,8 +173,12 @@ public class Clock extends TextView implements DemoMode, OnClickListener, OnLong
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mAttached) {
-            getContext().unregisterReceiver(mIntentReceiver);
-            getContext().getContentResolver().unregisterContentObserver(mSettingsObserver);
+            try {
+                getContext().unregisterReceiver(mIntentReceiver);
+            } catch (Exception ignored) { }
+            try {
+                getContext().getContentResolver().unregisterContentObserver(mSettingsObserver);
+            } catch (Exception ignored) { }
             mAttached = false;
         }
     }

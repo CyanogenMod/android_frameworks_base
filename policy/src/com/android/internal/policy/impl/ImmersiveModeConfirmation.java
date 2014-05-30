@@ -146,11 +146,9 @@ public class ImmersiveModeConfirmation {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_TOAST,
-                0
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                         | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-                ,
+                        | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
         lp.setTitle("ImmersiveModeConfirmation");
         lp.windowAnimations = com.android.internal.R.style.Animation_RecentApplications;
@@ -271,7 +269,10 @@ public class ImmersiveModeConfirmation {
 
         @Override
         public void onDetachedFromWindow() {
-            mContext.unregisterReceiver(mReceiver);
+            super.onDetachedFromWindow();
+            try {
+                mContext.unregisterReceiver(mReceiver);
+            } catch (Exception ignored) { }
         }
 
         @Override

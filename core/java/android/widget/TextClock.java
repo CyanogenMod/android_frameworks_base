@@ -500,7 +500,9 @@ public class TextClock extends TextView {
     }
 
     private void unregisterReceiver() {
-        getContext().unregisterReceiver(mIntentReceiver);
+        try {
+            getContext().unregisterReceiver(mIntentReceiver);
+        } catch (Exception ignored) { }
     }
 
     private void unregisterObserver() {

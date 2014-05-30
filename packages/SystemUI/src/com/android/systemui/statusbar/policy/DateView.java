@@ -94,7 +94,9 @@ public class DateView extends TextView implements OnClickListener, OnLongClickLi
         super.onDetachedFromWindow();
 
         mDateFormat = null; // reload the locale next time
-        mContext.unregisterReceiver(mIntentReceiver);
+        try {
+            mContext.unregisterReceiver(mIntentReceiver);
+        } catch (Exception ignored) { }
     }
 
     protected void updateClock() {

@@ -603,7 +603,7 @@ public class ActionMenuView extends LinearLayout implements MenuBuilder.ItemInvo
         }
 
         public LayoutParams(LayoutParams other) {
-            super((LinearLayout.LayoutParams) other);
+            super(other);
             isOverflowButton = other.isOverflowButton;
         }
 

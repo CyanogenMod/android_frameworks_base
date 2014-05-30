@@ -402,7 +402,9 @@ public class ZoomButtonsController implements View.OnTouchListener {
             }
 
             // No longer care about configuration changes
-            mContext.unregisterReceiver(mConfigurationChangedReceiver);
+            try {
+                mContext.unregisterReceiver(mConfigurationChangedReceiver);
+            } catch (Exception ignored) { }
 
             mWindowManager.removeView(mContainer);
             mHandler.removeCallbacks(mPostedVisibleInitializer);

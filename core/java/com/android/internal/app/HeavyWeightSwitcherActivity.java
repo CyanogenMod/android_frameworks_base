@@ -32,7 +32,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,7 +64,7 @@ public class HeavyWeightSwitcherActivity extends Activity {
         
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
         
-        mStartIntent = (IntentSender)getIntent().getParcelableExtra(KEY_INTENT);
+        mStartIntent = getIntent().getParcelableExtra(KEY_INTENT);
         mHasResult = getIntent().getBooleanExtra(KEY_HAS_RESULT, false);
         mCurApp = getIntent().getStringExtra(KEY_CUR_APP);
         mCurTask = getIntent().getIntExtra(KEY_CUR_TASK, 0);

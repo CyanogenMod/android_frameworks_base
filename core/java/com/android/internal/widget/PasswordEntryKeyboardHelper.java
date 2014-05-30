@@ -21,9 +21,7 @@ import android.content.res.Resources;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
-import android.os.Handler;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -92,9 +90,7 @@ public class PasswordEntryKeyboardHelper implements OnKeyboardActionListener {
             if (layouts.length != mLayouts.length) {
                 throw new RuntimeException("Wrong number of layouts");
             }
-            for (int i = 0; i < mLayouts.length; i++) {
-                mLayouts[i] = layouts[i];
-            }
+            System.arraycopy(layouts, 0, mLayouts, 0, mLayouts.length);
         }
         createKeyboards();
     }

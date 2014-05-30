@@ -51,7 +51,6 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.telephony.MSimTelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
@@ -428,7 +427,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         enableUserSelectorIfNecessary();
         minimizeChallengeIfDesired();
 
-        mExpandChallengeView = (View) findViewById(R.id.expand_challenge_handle);
+        mExpandChallengeView = findViewById(R.id.expand_challenge_handle);
         if (mExpandChallengeView != null) {
             mExpandChallengeView.setOnLongClickListener(mFastUnlockClickListener);
             mExpandChallengeView.bringToFront();

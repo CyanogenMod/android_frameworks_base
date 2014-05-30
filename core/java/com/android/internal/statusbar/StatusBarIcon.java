@@ -64,7 +64,7 @@ public class StatusBarIcon implements Parcelable {
 
     public void readFromParcel(Parcel in) {
         this.iconPackage = in.readString();
-        this.user = (UserHandle) in.readParcelable(null);
+        this.user = in.readParcelable(null);
         this.iconId = in.readInt();
         this.iconLevel = in.readInt();
         this.visible = in.readInt() != 0;

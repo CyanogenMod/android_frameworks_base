@@ -329,7 +329,9 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
                 return true;
             }
             IIntentReceiver rec = IIntentReceiver.Stub.asInterface(b);
-            unregisterReceiver(rec);
+            try {
+                unregisterReceiver(rec);
+            } catch (Exception ignored) { }
             reply.writeNoException();
             return true;
         }

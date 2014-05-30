@@ -2099,7 +2099,9 @@ public class AccountManager {
             }
             mAccountsUpdatedListeners.remove(listener);
             if (mAccountsUpdatedListeners.isEmpty()) {
-                mContext.unregisterReceiver(mAccountsChangedBroadcastReceiver);
+                try {
+                    mContext.unregisterReceiver(mAccountsChangedBroadcastReceiver);
+                } catch (Exception ignored) { }
             }
         }
     }

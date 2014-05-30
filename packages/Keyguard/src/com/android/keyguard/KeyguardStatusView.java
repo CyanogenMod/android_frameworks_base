@@ -28,7 +28,6 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Slog;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextClock;
@@ -161,8 +160,12 @@ public class KeyguardStatusView extends GridLayout {
         super.onDetachedFromWindow();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
 
-        mContext.unregisterReceiver(mBroadcastReceiver);
-        mContext.getContentResolver().unregisterContentObserver(mContentObserver);
+        try {
+            mContext.unregisterReceiver(mBroadcastReceiver);
+        } catch (Exception ignored) { }
+        try {
+            mContext.getContentResolver().unregisterContentObserver(mContentObserver);
+        } catch (Exception ignored) { }
     }
 
     public int getAppWidgetId() {

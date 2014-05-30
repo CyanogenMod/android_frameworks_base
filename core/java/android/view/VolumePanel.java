@@ -275,7 +275,9 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         }
 
         public void onDismiss(DialogInterface unused) {
-            mContext.unregisterReceiver(this);
+            try {
+                mContext.unregisterReceiver(this);
+            } catch (Exception ignored) { }
             cleanUp();
         }
 

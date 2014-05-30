@@ -692,7 +692,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         for (int i = 0; i < childCount; i++) {
             // disallowing padding in paged view (just pass 0)
             final View child = getPageAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            final LayoutParams lp = child.getLayoutParams();
 
             int childWidthMode;
             if (lp.width == LayoutParams.WRAP_CONTENT) {
@@ -1343,7 +1343,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             f /= Math.abs(f);
         }
 
-        int overScrollAmount = (int) Math.round(f * screenSize);
+        int overScrollAmount = Math.round(f * screenSize);
         if (amount < 0) {
             mOverScrollX = overScrollAmount;
             super.scrollTo(0, getScrollY());
@@ -1367,7 +1367,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             f /= Math.abs(f);
         }
 
-        int overScrollAmount = (int) Math.round(OVERSCROLL_DAMP_FACTOR * f * screenSize);
+        int overScrollAmount = Math.round(OVERSCROLL_DAMP_FACTOR * f * screenSize);
         if (amount < 0) {
             mOverScrollX = overScrollAmount;
             super.scrollTo(0, getScrollY());
@@ -1816,7 +1816,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         int screenCenter = getViewportOffsetX() + getScrollX() + (getViewportWidth() / 2);
         final int childCount = getChildCount();
         for (int i = 0; i < childCount; ++i) {
-            View layout = (View) getPageAt(i);
+            View layout = getPageAt(i);
             int childWidth = getScaledMeasuredWidth(layout);
             int halfChildWidth = (childWidth / 2);
             int childCenter = getViewportOffsetX() + getChildOffset(i) + halfChildWidth;
@@ -2429,7 +2429,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
 
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
-            float t = ((Float) animation.getAnimatedValue()).floatValue();
+            float t = (Float) animation.getAnimatedValue();
             long curTime = AnimationUtils.currentAnimationTimeMillis();
 
             mFrom.left += (mVelocity.x * (curTime - mPrevTime) / 1000f);
@@ -2443,7 +2443,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             mVelocity.y *= mFriction;
             mPrevTime = curTime;
         }
-    };
+    }
 
     private Runnable createPostDeleteAnimationRunnable(final View dragView) {
         return new Runnable() {

@@ -1136,7 +1136,7 @@ public class LockPatternView extends View {
             super(in);
             mSerializedPattern = in.readString();
             mDisplayMode = in.readInt();
-            mPatternSize = (byte) in.readByte();
+            mPatternSize = in.readByte();
             mInputEnabled = (Boolean) in.readValue(null);
             mInStealthMode = (Boolean) in.readValue(null);
             mTactileFeedbackEnabled = (Boolean) in.readValue(null);

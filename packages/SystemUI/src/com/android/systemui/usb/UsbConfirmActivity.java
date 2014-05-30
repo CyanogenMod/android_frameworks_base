@@ -104,7 +104,9 @@ public class UsbConfirmActivity extends AlertActivity
     @Override
     protected void onDestroy() {
         if (mDisconnectedReceiver != null) {
-            unregisterReceiver(mDisconnectedReceiver);
+            try {
+                unregisterReceiver(mDisconnectedReceiver);
+            } catch (Exception ignored) { }
         }
         super.onDestroy();
     }
