@@ -1400,6 +1400,27 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         setCarrierText();
     }
 
+    public int getVoiceNetworkType() {
+        if (mServiceState == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        return mServiceState.getVoiceNetworkType();
+    }
+
+    public int getDataNetworkType() {
+        if (mServiceState == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        return mServiceState.getDataNetworkType();
+    }
+
+    public int getGsmSignalLevel() {
+        if (mSignalStrength == null) {
+            return SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        }
+        return mSignalStrength.getGsmLevel();
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("NetworkController state:");
         pw.println(String.format("  %s network type %d (%s)",

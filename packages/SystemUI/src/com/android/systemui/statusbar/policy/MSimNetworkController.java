@@ -1211,6 +1211,27 @@ public class MSimNetworkController extends NetworkController {
         setCarrierText();
     }
 
+    public int getVoiceNetworkType(int sub) {
+        if (mMSimServiceState[sub] == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        return mMSimServiceState[sub].getVoiceNetworkType();
+    }
+
+    public int getDataNetworkType(int sub) {
+        if (mMSimServiceState[sub] == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        return mMSimServiceState[sub].getDataNetworkType();
+    }
+
+    public int getGsmSignalLevel(int sub) {
+        if (mMSimSignalStrength[sub] == null) {
+            return mMSimSignalStrength[sub].SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        }
+        return mMSimSignalStrength[sub].getGsmLevel();
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args, int subscription) {
         pw.println("NetworkController for SUB : " + subscription + " state:");
         pw.println(String.format("  %s network type %d (%s)",
