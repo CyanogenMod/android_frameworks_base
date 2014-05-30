@@ -1083,8 +1083,7 @@ public class KeyguardUpdateMonitor {
 
     public void reportSimUnlocked(int subscription) {
         if (DEBUG) Log.d(TAG, "reportSimUnlocked(" + subscription + ")");
-        mSimState[subscription] = IccCardConstants.State.READY;
-        handleSimStateChange(new SimArgs(mSimState[subscription], subscription));
+        handleSimStateChange(new SimArgs(IccCardConstants.State.READY, subscription));
     }
 
     /**
