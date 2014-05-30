@@ -76,6 +76,10 @@
   <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
   <string name="permlab_accessThemeService">访问主题服务</string>
   <string name="permdesc_accessThemeService">允许应用访问主题服务。正常应用不应需要此权限。</string>
+  <string name="permlab_readThemes">读取您的主题信息</string>
+  <string name="permdesc_readThemesDesc">允许程序读取您的主题并确定您已使用的主题。</string>
+  <string name="permlab_writeThemes">修改您的主题</string>
+  <string name="permdesc_writeThemesDesc">允许程序修改您已经使用的主题，并插入新的主题。</string>
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
   <string name="immersive_mode_confirmation_bottom">从底部上划以退出全屏模式。</string>

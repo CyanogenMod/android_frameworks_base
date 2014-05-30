@@ -19,7 +19,7 @@
   <string name="profileNameDefault">預設</string>
   <string name="profileNameWork">工作</string>
   <string name="profileNameHome">住家</string>
-  <string name="profileNameSilent">安靜</string>
+  <string name="profileNameSilent">静音</string>
   <string name="profileNameNight">夜晚</string>
   <string name="profileNameAutomobile">汽車</string>
   <string name="profileGroupPhone">電話</string>
@@ -30,8 +30,8 @@
   <string name="wildcardProfile">其他</string>
   <string name="global_action_screenshot">螢幕擷取</string>
   <string name="global_actions_toggle_expanded_desktop_mode">擴展桌面</string>
-  <string name="global_actions_expanded_desktop_mode_on_status">啟用</string>
-  <string name="global_actions_expanded_desktop_mode_off_status">停用</string>
+  <string name="global_actions_expanded_desktop_mode_on_status">已啟用</string>
+  <string name="global_actions_expanded_desktop_mode_off_status">已停用</string>
   <string name="reboot_system" product="tablet">重新啟動平板電腦</string>
   <string name="reboot_system" product="default">重新啟動手機</string>
   <string name="reboot_reboot">重新啟動</string>
@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">您的手機將會重新啟動。</string>
   <string name="permlab_preventpower">防止使用電源鍵</string>
   <string name="permdesc_preventpower">允許應用程式覆寫電源鍵的功能。</string>
-  <string name="permlab_sendMockSms">傳送模擬簡訊</string>
+  <string name="permlab_sendMockSms">發送模擬簡訊</string>
   <string name="permdesc_sendMockSms">允許應用程式傳送模擬簡訊。這會允許應用程式傳送簡訊給信任的應用程式。惡意應用程式可能會不斷地傳送訊息，妨礙裝置的通知系統以及干擾使用者。</string>
   <string name="storage_sd_dock_card">座架 SD 卡</string>
   <string name="app_killed_message">應用程式已終止</string>
@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">允許應用程式變更被封鎖來電或訊息的電話號碼。</string>
   <string name="permlab_accessThemeService">存取主題服務</string>
   <string name="permdesc_accessThemeService">允許應用程式存取主題服務 (一般應用程式不需使用)。</string>
+  <string name="permlab_readThemes">閱讀您的主題資訊</string>
+  <string name="permdesc_readThemesDesc">允許應用程式讀取您的主題，並確定您已應用的主題。</string>
+  <string name="permlab_writeThemes">修改你的主題</string>
+  <string name="permdesc_writeThemesDesc">允許應用程式來插入新的主題和修改您已應用的主題。</string>
   <string name="permlab_setKeyguardWallpaper">設定鎖定畫面桌布</string>
   <string name="permdesc_setKeyguardWallpaper">允許應用程式變更鎖定畫面桌布。</string>
   <string name="immersive_mode_confirmation_bottom">從底部向上滑動即可退出全螢幕模式。</string>
@@ -96,12 +100,12 @@
   <string name="app_ops_read_call_log">讀取通話紀錄</string>
   <string name="app_ops_read_clipboard">讀取剪貼簿</string>
   <string name="app_ops_read_contacts">讀取您的聯絡人資料</string>
-  <string name="app_ops_read_mms">讀取您的多媒體訊息</string>
+  <string name="app_ops_read_mms">讀取您的多媒體簡訊</string>
   <string name="app_ops_read_sms">讀取您的簡訊</string>
   <string name="app_ops_receive_sms">接收簡訊</string>
   <string name="app_ops_record_audio">錄音</string>
-  <string name="app_ops_send_mms">傳送多媒體訊息</string>
-  <string name="app_ops_send_sms">傳送簡訊</string>
+  <string name="app_ops_send_mms">發送多媒體簡訊</string>
+  <string name="app_ops_send_sms">發送簡訊</string>
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toggle_bluetooth">切換藍牙</string>
   <string name="app_ops_toggle_mobile_data">切換行動數據</string>
@@ -116,7 +120,7 @@
   <string name="app_ops_use_ring_volume">控制鈴聲音量</string>
   <string name="app_ops_use_vibrate">使用觸控震動</string>
   <string name="app_ops_use_voice_volume">控制語音通話音量</string>
-  <string name="app_ops_write_mms">撰寫多媒體訊息</string>
+  <string name="app_ops_write_mms">撰寫多媒體簡訊</string>
   <string name="app_ops_write_sms">撰寫簡訊</string>
   <string name="privacy_guard_dialog_title">隱私守衛</string>
   <string name="privacy_guard_dialog_summary">「<xliff:g id="app">%1$s</xliff:g>」想要<xliff:g id="op">%2$s</xliff:g>。</string>

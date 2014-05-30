@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Umožňuje změnit telefonní čísla, která jsou blokována pro příjem hovorů nebo zpráv.</string>
   <string name="permlab_accessThemeService">přístup ke službě témat</string>
   <string name="permdesc_accessThemeService">Umožňuje přistupovat ke službě služby témat. Toto oprávnění by neměla vyžadovat žádná normální aplikace.</string>
+  <string name="permlab_readThemes">čtení informace o tématu</string>
+  <string name="permdesc_readThemesDesc">Umožňuje načíst témata a určit, které téma je použité.</string>
+  <string name="permlab_writeThemes">změnit téma</string>
+  <string name="permdesc_writeThemesDesc">Umožňuje vložit nové téma a změnit informaci o tom, které téma je použito.</string>
   <string name="permlab_setKeyguardWallpaper">nastavit tapetu zámku kláves</string>
   <string name="permdesc_setKeyguardWallpaper">Umožní změnit tapetu zámku obrazovky.</string>
   <string name="immersive_mode_confirmation_bottom">Tažením od spodního okraje nahoru opustíte režim celé obrazovky.</string>

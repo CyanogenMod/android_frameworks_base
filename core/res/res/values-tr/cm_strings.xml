@@ -75,6 +75,12 @@
   <string name="permdesc_changePhoneBlacklist">Bir uygulamanın gelen çağrıları ya da mesajları engellenmiş telefon numaralarını değiştirmesine izin verir.</string>
   <string name="permlab_accessThemeService">tema hizmetine erişim</string>
   <string name="permdesc_accessThemeService">Bir uygulamanın tema hizmetine erişimine izin verir. Normal uygulamalar için gerekli değildir.</string>
+  <string name="permlab_readThemes">tema bilgisini oku</string>
+  <string name="permdesc_readThemesDesc">Uygulamanın temalarınızı okumasına ve hangi
+temayı uyguladığınızı belirlemesine izin verir.</string>
+  <string name="permlab_writeThemes">temaları değiştir</string>
+  <string name="permdesc_writeThemesDesc">Uygulamanın yeni temalar eklemesine ve
+uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permlab_setKeyguardWallpaper">tuş kilidi duvar kağıdını ayarla</string>
   <string name="permdesc_setKeyguardWallpaper">Bir uygulamanın kilit ekranı duvar kağıdını değiştirmesine izin verir.</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıkmak için aşağıdan yukarı kaydırın.</string>

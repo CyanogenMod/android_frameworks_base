@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Autorise une application à modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_accessThemeService">accèder au service de thème</string>
   <string name="permdesc_accessThemeService">Autorise une application à accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
+  <string name="permlab_readThemes">lire les informations de votre thème</string>
+  <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
+  <string name="permlab_writeThemes">modifier vos thèmes</string>
+  <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
   <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran du clavier de verrouillage</string>
   <string name="permdesc_setKeyguardWallpaper">Autorise une application à changer le fond de l\'écran de verrouillage.</string>
   <string name="immersive_mode_confirmation_bottom">Balayez du haut vers le bas pour quitter le mode plein écran.</string>

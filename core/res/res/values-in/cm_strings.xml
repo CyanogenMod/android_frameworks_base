@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Standar</string>
+  <string name="profileNameDefault">Default</string>
   <string name="profileNameWork">Kerja</string>
   <string name="profileNameHome">Home</string>
   <string name="profileNameSilent">Diam</string>
@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Memungkinkan aplikasi untuk mengubah nomor telepon yang diblokir untuk panggilan atau pesan.</string>
   <string name="permlab_accessThemeService">mengakses layanan tema</string>
   <string name="permdesc_accessThemeService">Memungkinkan aplikasi untuk mengakses layanan tema. Seharusnya tidak diperlukan oleh aplikasi biasa.</string>
+  <string name="permlab_readThemes">baca info tema Anda</string>
+  <string name="permdesc_readThemesDesc">Izinkan aplikasi untuk membaca tema anda dan menentukan tema yang telah anda terapkan.</string>
+  <string name="permlab_writeThemes">modifikasi tema anda</string>
+  <string name="permdesc_writeThemesDesc">Izinkan aplikasi untuk memasukkan tema baru dan mengubah tema yang telah anda terapkan.</string>
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah wallpaper layar kunci.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe dari bawah ke atas untuk keluar dari layar penuh.</string>

@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Επιτρέπει σε μια εφαρμογή την αλλαγή των αριθμών τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
   <string name="permlab_accessThemeService">πρόσβαση στην υπηρεσία θεμάτων</string>
   <string name="permdesc_accessThemeService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία θεμάτων. Δεν πρέπει να απαιτείται από κανονικές εφαρμογές.</string>
+  <string name="permlab_readThemes">ανάγνωση πληροφοριών του θέματος σας</string>
+  <string name="permdesc_readThemesDesc">Επιτρέπει στην εφαρμογή να διαβάζει τα θέματα σας και να προσδιορίσει ποιο θέμα έχετε εφαρμόσει.</string>
+  <string name="permlab_writeThemes">τροποποίηση των θεμάτων σας</string>
+  <string name="permdesc_writeThemesDesc">Επιτρέπει στην εφαρμογή να εισάγει νέα θέματα και να τροποποιήσει το θέμα που έχετε εφαρμόσει.</string>
   <string name="permlab_setKeyguardWallpaper">ορισμός ταπετσαρίας οθόνης κλειδώματος</string>
   <string name="permdesc_setKeyguardWallpaper">Επιτρέπει σε μια εφαρμογή την αλλαγή της ταπετσαρίας της οθόνης κλειδώματος.</string>
   <string name="immersive_mode_confirmation_bottom">Σύρετε από το κάτω μέρος προς τα πάνω για να βγείτε από την πλήρη οθόνη</string>

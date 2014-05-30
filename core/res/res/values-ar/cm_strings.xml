@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">التلقائي</string>
+  <string name="profileNameDefault">الافتراضي</string>
   <string name="profileNameWork">العمل</string>
   <string name="profileNameHome">الصفحة الرئيسية</string>
   <string name="profileNameSilent">صامت</string>
@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">يسمح لي التطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
   <string name="permlab_accessThemeService">الوصول إلى خدمة الموضوع</string>
   <string name="permdesc_accessThemeService">يسمح تطبيق للوصول إلى خدمة الموضوع. ينبغي أن لا تكون لهاحاجة ابدأ لتطبيقات اىعادية.</string>
+  <string name="permlab_readThemes">قراءة معلومات حول الموضوع الخاص بك</string>
+  <string name="permdesc_readThemesDesc">يسمح للتطبيق بقراءة المواضيع الخاصة بك وتحديد الموضوع الذي قمت بتطبيقه.</string>
+  <string name="permlab_writeThemes">تعديل المواضيع</string>
+  <string name="permdesc_writeThemesDesc">يسمح التطبيق بإدراج مواضيع جديدة وتعديل الموضوع التي قمت بتطبيقها.</string>
   <string name="permlab_setKeyguardWallpaper">تعيين خلفية للإطار</string>
   <string name="permdesc_setKeyguardWallpaper">يسمح ااتطبيق بتغيير خلفية شاشة القفل.</string>
   <string name="immersive_mode_confirmation_bottom">مرر أعلى من الجزء السفلي للخروج من وضع ملء الشاشة.</string>

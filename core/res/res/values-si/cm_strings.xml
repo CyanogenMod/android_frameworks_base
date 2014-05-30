@@ -65,8 +65,8 @@
   <string name="perf_profile_perf">ක්‍රියාකාරීත්වය</string>
   <string name="permlab_interceptSmsSent">යවන කෙටි පනිවිඩ අතුරුවැරීම</string>
   <string name="permdesc_interceptSmsSent">යවන කෙටි පනිවිඩ අතුරුවැරීම සඳහා යෙදුමට අවසර දෙන්න. ද්වේෂසහගත යෙදුම් විසින් යවන කෙටි පනිවිඩ වැලැක්වීම සඳහා මෙය යොදා ගැනීමට පුළුවන.</string>
-  <string name="permlab_resetBatteryStats">බැටරි සංඛ්‍යාති ප්‍රත්‍යාරම්භනය</string>
-  <string name="permdesc_resetBatteryStats">වත්මන් බැටරි භාවිතයේ පහත්-තල දත්ත ප්‍රත්‍යාරම්භ කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
+  <string name="permlab_resetBatteryStats">බැටරි සංඛ්‍යාති යලි පිහිටුවන්න</string>
+  <string name="permdesc_resetBatteryStats">වත්මන් බැටරි භාවිතයේ පහත්-තල දත්ත යලි පිහිටුවීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="permgrouplab_security">ආරක්ෂාව</string>
   <string name="permgroupdesc_security">උපාංගයේ ආරක්ෂක තොරතුරු වලට අදාළ අනුමැති.</string>
   <string name="permlab_readPhoneBlacklist">දුරකථන අපලේඛණය කියවීම</string>
@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">පැමිණෙන ඇමතුම් හෝ පණිවිඩ සඳහා අවහිර කර ඇති ඇමතුම් අංක වෙනස් කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="permlab_accessThemeService">තේමා සේවාව පරිශීලනය</string>
   <string name="permdesc_accessThemeService">තේමා සේවාව පරිශීලනය සඳහා යෙදුමකට අවසර දෙන්න. සාමාන්‍ය යෙදුම් සඳහා කවදාවත්ම අවශ්‍ය නොවේ.</string>
+  <string name="permlab_readThemes">ඔබගේ තේමා තොරතුරු කියවන්න</string>
+  <string name="permdesc_readThemesDesc">ඔබගේ තේමා කියවීමට සහ ඔබ යොදා ඇත්තේ කුමන තේමාව දැයි නිර්ණය කිරීමට, යෙදුමට අවසර දෙන්න.</string>
+  <string name="permlab_writeThemes">ඔබගේ තේමා වෙනස් කරන්න</string>
+  <string name="permdesc_writeThemesDesc">අලුත් තේමා ඇතුල් කිරීමට සහ ඔබ යොදා ඇති තේමාව වෙනස් කිරීමට, යෙදුමට අවසර දෙන්න.</string>
   <string name="permlab_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය සැකසීම</string>
   <string name="permdesc_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය වෙනස්කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="immersive_mode_confirmation_bottom">පුන් තිරයෙන් පිටවීමට පතුලේ සිට උඩට අතුල්ලන්න.</string>
