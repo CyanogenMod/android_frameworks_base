@@ -482,7 +482,7 @@ class QuickSettings {
 
                     if (mModel.dataSwitchEnabled()) {
                         Resources r = mContext.getResources();
-                        rssiState.signalIconId = rssiState.enabled
+                        rssiState.signalIconId = rssiState.enabled && !mModel.isAirplaneModeOn()
                                 ? R.drawable.ic_qs_data_on
                                 : R.drawable.ic_qs_data_off;
                         rssiState.label = rssiState.enabled

@@ -422,6 +422,10 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             mContext.getContentResolver().registerContentObserver(
                     Settings.Global.getUriFor(Settings.Global.MOBILE_DATA),
                     false, this, mUserTracker.getCurrentUserId());
+
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON),
+                    false, this, mUserTracker.getCurrentUserId());
         }
     }
 

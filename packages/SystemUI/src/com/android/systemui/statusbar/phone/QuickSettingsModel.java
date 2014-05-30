@@ -877,11 +877,8 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     }
 
     public boolean isRadioProhibited() {
-        boolean airModeOn = (android.provider.Settings.System.getInt(
-                mContext.getContentResolver(),
-                android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0);
         boolean disable = mContext.getResources().getBoolean(R.bool.config_disableWifiAndBluetooth);
-        return disable && airModeOn;
+        return disable && isAirplaneModeOn();
     }
 
     public boolean dataSwitchEnabled() {
@@ -895,5 +892,11 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         if (mRSSICallback != null && mRSSITile != null) {
             mRSSICallback.refreshView(mRSSITile, mRSSIState);
         }
+    }
+
+    public boolean isAirplaneModeOn() {
+        return (android.provider.Settings.System.getInt(
+                mContext.getContentResolver(),
+                android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0);
     }
 }
