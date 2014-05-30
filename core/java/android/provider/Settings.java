@@ -3169,13 +3169,6 @@ public final class Settings {
         public static final String QS_DYNAMIC_IME = "qs_dyanmic_ime";
 
         /**
-         * Quick Settings Panel Dynamic Equalizer Tiles
-         *
-         * @hide
-         */
-        public static final String QS_EQUALIZER = "qs_dynamic_equalizer";
-
-        /**
          * Quick Settings Panel Dynamic Tiles
          *
          * @hide

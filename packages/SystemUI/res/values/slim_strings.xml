@@ -188,8 +188,7 @@
     <!-- On-The-Go Mode -->
     <string name="quick_settings_onthego_back">Rear Camera</string>
     <string name="quick_settings_onthego_front">Front Camera</string>
-    <!-- Equalizer -->
-    <string name="quick_settings_equalizer">Equalizer</string>
+
     <!-- CPUFreq -->
     <string name="cpufreq_max">Max CPU Freq</string>
     <string name="cpufreq_min">Min CPU Freq</string>

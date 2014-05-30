@@ -353,8 +353,4 @@ public class QuickSettingsTile implements OnClickListener {
             return true;
         }
     }
-
-    public void onSettingsHidden() { }
-
-    public void onSettingsVisible() { }
 }

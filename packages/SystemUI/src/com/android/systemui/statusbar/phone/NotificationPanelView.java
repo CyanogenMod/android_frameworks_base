@@ -61,6 +61,7 @@ public class NotificationPanelView extends PanelView {
     View mHandleView;
     ImageView mBackground;
     int mFingers;
+    PhoneStatusBar mStatusBar;
     boolean mOkToFlip;
 
     private float mGestureStartX;
@@ -72,6 +73,10 @@ public class NotificationPanelView extends PanelView {
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setStatusBar(PhoneStatusBar bar) {
+        mStatusBar = bar;
     }
 
     @Override

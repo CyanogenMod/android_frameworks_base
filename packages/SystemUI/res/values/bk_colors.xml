@@ -52,6 +52,4 @@
 
     <!-- THEMEABLE PIE PIE PIE PIE PIE? -->
 
-    <!-- Color for the Equalizer tile -->
-    <color name="equalizer_fill_color">#96FFFFFF</color>
 </resources>
