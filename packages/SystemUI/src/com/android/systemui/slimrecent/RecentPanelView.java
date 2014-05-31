@@ -683,6 +683,12 @@ public class RecentPanelView {
         int firstItems = 0;
         final int firstExpandedItems =
                 mContext.getResources().getInteger(R.integer.expanded_items_default);
+
+        // Also show the topmost task?
+        boolean showTopmost = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.RECENT_PANEL_SHOW_TOPMOST, 0,
+                UserHandle.USER_CURRENT) == 1;
+
         boolean loadOneExcluded = true;
         // Get current task list. We do not need to do it in background. We only load MAX_TASKS.
         for (int i = 0, index = 0; i < numTasks && (index < MAX_TASKS); ++i) {
@@ -726,9 +732,10 @@ public class RecentPanelView {
                 }
 
                 if (i == 0) {
-                    // Skip the first task for our list but save it for later use.
+                    // Save the first task for later use.
                     mFirstTask = item;
-                } else {
+                }
+                if (i > 0 || showTopmost) {
                     // FirstExpandedItems value forces to show always the app screenshot
                     // if the old state is not known and the user has set expanded mode to auto.
                     // On all other items we check if they were expanded from the user
