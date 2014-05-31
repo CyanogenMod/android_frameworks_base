@@ -53,6 +53,8 @@ public class ButtonsConstants {
     public static final String ACTION_IME_NAVIGATION_RIGHT = "**ime_nav_right**";
     public static final String ACTION_IME_NAVIGATION_UP    = "**ime_nav_up**";
     public static final String ACTION_IME_NAVIGATION_DOWN  = "**ime_nav_down**";
+    public static final String ACTION_VOL_UP               = "**vol_up**";
+    public static final String ACTION_VOL_DOWN             = "**vol_down**";
 
     // no action
     public static final String ACTION_NULL            = "**null**";

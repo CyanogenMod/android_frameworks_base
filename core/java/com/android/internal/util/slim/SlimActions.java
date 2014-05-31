@@ -101,6 +101,12 @@ public class SlimActions {
             if (action.equals(ButtonsConstants.ACTION_HOME)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_HOME, isLongpress);
                 return;
+            } else if (action.equals(ButtonsConstants.ACTION_VOL_UP)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_VOLUME_UP, isLongpress);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_VOL_DOWN)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_VOLUME_DOWN, isLongpress);
+                return;
             } else if (action.equals(ButtonsConstants.ACTION_BACK)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_BACK, isLongpress);
                 return;
@@ -493,7 +499,9 @@ public class SlimActions {
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT
             || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
             || keyCode == KeyEvent.KEYCODE_DPAD_UP
-            || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            || keyCode == KeyEvent.KEYCODE_DPAD_DOWN
+            || keyCode == KeyEvent.KEYCODE_VOLUME_UP
+            || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             downflags = upflags = KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE;
         } else {
             downflags = upflags = KeyEvent.FLAG_FROM_SYSTEM | KeyEvent.FLAG_VIRTUAL_HARD_KEY;
