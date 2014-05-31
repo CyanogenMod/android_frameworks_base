@@ -22,6 +22,7 @@ import android.app.admin.DevicePolicyManager;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.os.SystemClock;
+import android.telephony.ServiceState;
 import android.view.WindowManagerPolicy;
 
 import com.android.internal.telephony.IccCardConstants;
@@ -197,4 +198,9 @@ class KeyguardUpdateMonitorCallback {
      * @param on Indicates if the airplane mode is now enable.
      */
     void onAirplaneModeChanged(boolean on) { }
+
+    /**
+     * Called when the sevice state changes.
+     */
+    void onServiceStateChanged(ServiceState state, int sub) { }
 }

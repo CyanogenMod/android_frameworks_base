@@ -100,6 +100,7 @@ public class KeyguardUpdateMonitor {
     private static final int MSG_SCREEN_TURNED_ON = 319;
     private static final int MSG_SCREEN_TURNED_OFF = 320;
     private static final int MSG_AIRPLANE_MODE_CHANGED = 321;
+    private static final int MSG_SERVICE_STATE_CHANGED = 322;
 
     private static KeyguardUpdateMonitor sInstance;
 
@@ -210,6 +211,9 @@ public class KeyguardUpdateMonitor {
                     break;
                 case MSG_AIRPLANE_MODE_CHANGED:
                     handleAirplaneModeChanged((Boolean) msg.obj);
+                    break;
+                case MSG_SERVICE_STATE_CHANGED:
+                    handleServiceStateChanged((ServiceState) msg.obj, msg.arg1);
                     break;
             }
         }
@@ -334,6 +338,10 @@ public class KeyguardUpdateMonitor {
                 Log.d(TAG, "ACTION_SERVICE_STATE_CHANGED on sub: " + sub + " showSpn:" +
                         mShowSpn[sub] + " showPlmn:" + mShowPlmn[sub] + " mServiceState: "
                         + mServiceState[sub]);
+                final Message message =
+                        mHandler.obtainMessage(MSG_SERVICE_STATE_CHANGED, mServiceState[sub]);
+                message.arg1 = sub;
+                mHandler.sendMessage(message);
 
                 //display 2G/3G/4G if operator ask for showing radio tech
                 if ((mServiceState[sub] != null) && (mServiceState[sub].getDataRegState() ==
@@ -955,6 +963,15 @@ public class KeyguardUpdateMonitor {
         }
     }
 
+    private void handleServiceStateChanged(ServiceState state, int sub) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onServiceStateChanged(state, sub);
+            }
+        }
+    }
+
     /**
      * Handle {@link #MSG_CLOCK_VISIBILITY_CHANGED}
      */
@@ -1149,6 +1166,10 @@ public class KeyguardUpdateMonitor {
 
     public IccCardConstants.State getSimState(int subscription) {
         return mSimState[subscription];
+    }
+
+    public ServiceState[] getServiceStates() {
+        return mServiceState;
     }
 
     public int getPinLockedSubscription() {

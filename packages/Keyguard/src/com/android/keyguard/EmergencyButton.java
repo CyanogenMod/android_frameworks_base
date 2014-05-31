@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.telephony.MSimTelephonyManager;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -39,6 +41,7 @@ public class EmergencyButton extends Button {
 
     private static final int EMERGENCY_CALL_TIMEOUT = 10000; // screen timeout after starting e.d.
     private static final String ACTION_EMERGENCY_DIAL = "com.android.phone.EmergencyDialer.DIAL";
+    private ServiceState mServiceState[];
 
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -52,6 +55,13 @@ public class EmergencyButton extends Button {
             State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
             updateEmergencyCallButton(simState, phoneState);
         };
+
+        void onServiceStateChanged(ServiceState state, int sub) {
+            mServiceState[sub] = state;
+            int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
+            State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
+            updateEmergencyCallButton(simState, phoneState);
+        }
     };
     private LockPatternUtils mLockPatternUtils;
     private PowerManager mPowerManager;
@@ -62,6 +72,8 @@ public class EmergencyButton extends Button {
 
     public EmergencyButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
+        mServiceState = new ServiceState[numPhones];
     }
 
     @Override
@@ -88,7 +100,18 @@ public class EmergencyButton extends Button {
         });
         int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
         State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
+        mServiceState = KeyguardUpdateMonitor.getInstance(mContext).getServiceStates();
         updateEmergencyCallButton(simState, phoneState);
+    }
+
+    private boolean canMakeEmergencyCall() {
+        for (ServiceState state : mServiceState) {
+            if ((state != null) && (state.isEmergencyOnly() ||
+                    state.getVoiceRegState() != ServiceState.STATE_OUT_OF_SERVICE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -127,6 +150,9 @@ public class EmergencyButton extends Button {
                 enabled = mLockPatternUtils.isSecure() ||
                         mContext.getResources().getBoolean(R.bool.config_showEmergencyButton);
             }
+        }
+        if (mContext.getResources().getBoolean(R.bool.config_showEmergencyButton)) {
+            enabled = enabled && canMakeEmergencyCall();
         }
         mLockPatternUtils.updateEmergencyCallButtonState(this, phoneState, enabled, false);
     }
