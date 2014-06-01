@@ -745,8 +745,13 @@ public class UsbDeviceManager {
             if (mAdbEnabled && mConnected) {
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))
                  || Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.ADB_NOTIFY, 1) == 0)
+                    Settings.Secure.ADB_NOTIFY, 1) == 0) {
+                    if (mAdbNotificationShown) {
+                        mAdbNotificationShown = false;
+                        mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
+                    }
                     return;
+                }
 
                 if (!mAdbNotificationShown) {
                     Resources r = mContext.getResources();
