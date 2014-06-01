@@ -1308,7 +1308,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(ACTION_DEMO);
         filter.addAction(CUSTOM_LOCKSCREEN_STATE);
-        filter.addAction(MODLOCK_STATE);
         filter.addAction(SCHEDULE_REMINDER_NOTIFY);
         context.registerReceiver(mBroadcastReceiver, filter);
 
