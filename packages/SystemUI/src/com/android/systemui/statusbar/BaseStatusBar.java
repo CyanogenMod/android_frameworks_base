@@ -100,6 +100,7 @@ import com.android.systemui.statusbar.halo.Halo;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.PieController;
 
+import com.android.internal.util.axxion.TaskUtils;
 import com.android.internal.util.cm.DevUtils;
 
 import java.util.ArrayList;
