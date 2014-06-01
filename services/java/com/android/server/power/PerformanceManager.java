@@ -71,17 +71,14 @@ class PerformanceManager {
                            !TextUtils.isEmpty(mPerfProfileProperty);
 
         if (mProfilesEnabled) {
-            mCurrentProfile = Settings.System.getString(context.getContentResolver(),
-                    Settings.Secure.PERFORMANCE_PROFILE);
-            if (mCurrentProfile == null) {
-                mCurrentProfile = mPerfProfileDefault;
-            }
-
             // Magic value- this will use a power hint instead of relying on
             // a property trigger via init. This will become the default
             // after devices have been updated.
             mUsePowerHAL = "powerhal".equals(mPerfProfileProperty);
-            selectProfile(mCurrentProfile);
+
+            // Reset the stored value to the default profile when we are initialized.
+            // We currently do not want to support booting in perf or powersave modes.
+            setPowerProfileLocked(mPerfProfileDefault);
         }
     }
 
