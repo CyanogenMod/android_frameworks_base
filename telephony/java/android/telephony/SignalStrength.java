@@ -806,13 +806,14 @@ public class SignalStrength implements Parcelable {
          * = -10log P1/P2 dB
          */
         int rssiIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN, rsrpIconLevel = -1, snrIconLevel = -1;
+        boolean isTdLte = (getTdScdmaLevel() != SIGNAL_STRENGTH_NONE_OR_UNKNOWN);
 
         if (mLteRsrp > -44) rsrpIconLevel = -1;
-        else if (mLteRsrp >= -85) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
-        else if (mLteRsrp >= -95) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
-        else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
-        else if (mLteRsrp >= -115) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
-        else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        else if (mLteRsrp >= (isTdLte ? - 97 : -85)) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
+        else if (mLteRsrp >= (isTdLte ? -105 : -95)) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
+        else if (mLteRsrp >= (isTdLte ? -113 : -105)) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
+        else if (mLteRsrp >= (isTdLte ? -120 : -115)) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
+        else if (isTdLte || (mLteRsrp >= -140)) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
         /*
          * Values are -200 dB to +300 (SNR*10dB) RS_SNR >= 13.0 dB =>4 bars 4.5
@@ -833,6 +834,9 @@ public class SignalStrength implements Parcelable {
 
         /* Choose a measurement type to use for notification */
         if (snrIconLevel != -1 && rsrpIconLevel != -1) {
+            if (isTdLte) {
+                return rsrpIconLevel;
+            }
             /*
              * The number of bars displayed shall be the smaller of the bars
              * associated with LTE RSRP and the bars associated with the LTE
