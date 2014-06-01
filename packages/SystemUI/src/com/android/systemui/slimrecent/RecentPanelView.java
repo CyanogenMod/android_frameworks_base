@@ -125,6 +125,11 @@ public class RecentPanelView {
     private float mScaleFactor;
     private int mExpandedMode = EXPANDED_MODE_AUTO;
 
+    private TaskDescription mLastTopmostTask;
+    private int mLastTopmostExpandedState;
+    private TaskDescription mTaskToRestore;
+    private int mStateToRestore;
+
     private PopupMenu mPopup;
 
     public interface OnExitListener {
@@ -735,12 +740,14 @@ public class RecentPanelView {
                     // Save the first task for later use.
                     mFirstTask = item;
                 }
+
                 if (i > 0 || showTopmost) {
                     // FirstExpandedItems value forces to show always the app screenshot
                     // if the old state is not known and the user has set expanded mode to auto.
                     // On all other items we check if they were expanded from the user
                     // in last known recent app list and restore the state. This counts as well
                     // if expanded mode is always or never.
+
                     int oldState = getExpandedState(item);
                     if ((oldState & EXPANDED_STATE_BY_SYSTEM) != 0) {
                         oldState &= ~EXPANDED_STATE_BY_SYSTEM;
@@ -750,7 +757,30 @@ public class RecentPanelView {
                         if (mExpandedMode != EXPANDED_MODE_NEVER) {
                             oldState |= EXPANDED_STATE_BY_SYSTEM;
                         }
-                        item.setExpandedState(oldState);
+                        //Handle expanded state of topmost task:
+                        //Topmost Task is always shown collapsed, we're saving its expanded state and restore it later
+                        if (i == 0) {
+                            if (mLastTopmostTask == null) {
+                                //No topmost task saved, do this now...
+                                mLastTopmostTask = item;
+                                mLastTopmostExpandedState = oldState;
+                            } else if (!mLastTopmostTask.identifier.equals(mFirstTask.identifier)) {
+                                //Topmost task has changed! Restore the state of the last one in one of the next loop iterations...
+                                mTaskToRestore = mLastTopmostTask;
+                                mStateToRestore = mLastTopmostExpandedState;
+
+                                //item holds our new topmost task, save the item and its expanded state...
+                                mLastTopmostTask = item;
+                                mLastTopmostExpandedState = oldState;
+                            }
+                            //now set the state of topmost task to collapsed
+                            item.setExpandedState(EXPANDED_STATE_COLLAPSED);
+                        } else if ((mTaskToRestore != null) && (item.identifier.equals(mTaskToRestore.identifier))) {
+                            item.setExpandedState(mStateToRestore);
+                            mTaskToRestore = null;
+                        } else {
+                            item.setExpandedState(oldState);
+                        }
                         // The first tasks are always added to the task list.
                         mTasks.add(item);
                     } else {
