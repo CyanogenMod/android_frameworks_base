@@ -3647,34 +3647,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         return finalList;
     }
-
-    private boolean createIdmapsForPackageLI(PackageParser.Package pkg) {
-        HashMap<String, PackageParser.Package> overlays = mOverlays.get(pkg.packageName);
-        final String pkgName = pkg.packageName;
-        if (overlays == null) {
-            Log.w(TAG, "Unable to create idmap for " + pkgName + ": no overlay packages");
-            return false;
-        }
-        for (PackageParser.Package opkg : overlays.values()) {
-            for(String overlayTarget : opkg.mOverlayTargets) {
-                if (overlayTarget.equals(pkgName)) {
-                    try {
-                        if (opkg.mIsLegacyThemeApk) {
-                            generateIdmapForLegacyTheme(pkgName, opkg);
-                        } else {
-                            generateIdmap(pkgName, opkg);
-                        }
-                    } catch (Exception e) {
-                        Log.w(TAG, "Unable to create idmap for " + pkgName
-                                + ": no overlay packages", e);
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
     private boolean createIdmapForPackagePairLI(PackageParser.Package pkg,
             PackageParser.Package opkg, String redirectionsPath) {
         if (DEBUG_PACKAGE_SCANNING) Log.d(TAG, "Generating idmaps between " + pkg.packageName + ":" + opkg.packageName);
