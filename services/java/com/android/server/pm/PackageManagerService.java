@@ -5458,7 +5458,16 @@ public class PackageManagerService extends IPackageManager.Stub {
             return;
         }
 
-        compileResourcesIfNeeded(targetPkg.packageName, themePkg);
+
+        // Always use the manifest's pkgName when compiling resources
+        // the member value of "packageName" is dependent on whether this was a clean install
+        // or an upgrade w/  If the app is an upgrade then the original package name is used.
+        // because libandroidfw uses the manifests's pkgName during idmap creation we must
+        // be consistent here and use the same name, otherwise idmap will look in the wrong place
+        // for the resource table.
+        String pkgName = targetPkg.mRealPackage != null ?
+                targetPkg.mRealPackage : targetPkg.packageName;
+        compileResourcesIfNeeded(pkgName, themePkg);
         generateIdmap(targetPkg.packageName, themePkg);
     }
 
