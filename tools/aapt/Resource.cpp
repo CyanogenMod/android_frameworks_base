@@ -637,7 +637,7 @@ static bool applyFileOverlay(Bundle *bundle,
                             baseGroup->removeFile(baseFileIndex);
                         } else {
                             // didn't find a match fall through and add it..
-                            if (true || bundle->getVerbose()) {
+                            if (bundle->getVerbose()) {
                                 printf("nothing matches overlay file %s, for flavor %s\n",
                                         overlayGroup->getLeaf().string(),
                                         overlayFiles.keyAt(overlayGroupIndex).toString().string());
