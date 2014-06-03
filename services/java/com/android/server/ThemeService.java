@@ -154,7 +154,7 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (components == null || components.size() == 0) {
-            postFinish(true, pkgName);
+            postFinish(true, pkgName, components);
             return;
         }
 
