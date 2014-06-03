@@ -1323,7 +1323,7 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         ArrayList<ThemeWallpaperInfo> themeWallpapers =
                 new ArrayList<ThemeWallpaperInfo>();
         ContentResolver cr = getContentResolver();
-        String[] projection = { ThemesColumns.PKG_NAME, ThemesColumns.IS_LEGACY_THEME };
+        String[] projection = {ThemesColumns.PKG_NAME, ThemesColumns.IS_LEGACY_THEME};
         String selection = ThemesColumns.MODIFIES_LAUNCHER + "=? AND " +
                 ThemesColumns.PKG_NAME + "!=?";
         String[] selectoinArgs = {"1", "default"};
@@ -1336,14 +1336,15 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
                 String pkgName = c.getString(c.getColumnIndexOrThrow(ThemesColumns.PKG_NAME));
                 boolean isLegacy = c.getInt(c.getColumnIndexOrThrow(
                         ThemesColumns.IS_LEGACY_THEME)) == 1;
-                    bmp = getThemeWallpaper(this, "wallpapers", pkgName, isLegacy, true /* thumb*/);
+                bmp = getThemeWallpaper(this, "wallpapers", pkgName, isLegacy, true /* thumb*/);
+                if (bmp != null) {
                     themeWallpapers.add(
                             new ThemeWallpaperInfo(this, pkgName, isLegacy,
                                     new BitmapDrawable(getResources(), bmp)));
-                    if (bmp != null) {
-                        Log.d("", String.format("Loaded bitmap of size %dx%d for %s",
-                                bmp.getWidth(), bmp.getHeight(), pkgName));
-                    }
+
+                    Log.d("", String.format("Loaded bitmap of size %dx%d for %s",
+                            bmp.getWidth(), bmp.getHeight(), pkgName));
+                }
             }
             c.close();
         }
@@ -1354,7 +1355,7 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         ArrayList<ThemeLockWallpaperInfo> themeWallpapers =
                 new ArrayList<ThemeLockWallpaperInfo>();
         ContentResolver cr = getContentResolver();
-        String[] projection = { ThemesColumns.PKG_NAME };
+        String[] projection = {ThemesColumns.PKG_NAME};
         String selection = ThemesColumns.MODIFIES_LOCKSCREEN + "=? AND " +
                 ThemesColumns.PKG_NAME + "!=?";
         String[] selectoinArgs = {"1", "default"};
@@ -1365,14 +1366,15 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
             Bitmap bmp;
             while (c.moveToNext()) {
                 String pkgName = c.getString(c.getColumnIndexOrThrow(ThemesColumns.PKG_NAME));
-                    bmp = getThemeWallpaper(this, "lockscreen", pkgName, false, true /* thumb*/);
+                bmp = getThemeWallpaper(this, "lockscreen", pkgName, false, true /* thumb*/);
+                if (bmp != null) {
                     themeWallpapers.add(
                             new ThemeLockWallpaperInfo(this, pkgName,
                                     new BitmapDrawable(getResources(), bmp)));
-                    if (bmp != null) {
-                        Log.d("", String.format("Loaded bitmap of size %dx%d for %s",
-                                bmp.getWidth(), bmp.getHeight(), pkgName));
-                    }
+
+                    Log.d("", String.format("Loaded bitmap of size %dx%d for %s",
+                            bmp.getWidth(), bmp.getHeight(), pkgName));
+                }
             }
             c.close();
         }

@@ -255,6 +255,8 @@
     <protected-broadcast
         android:name="com.android.server.connectivityservice.CONNECTED_TO_PROVISIONING_NETWORK_ACTION" />
 
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
     <!-- ====================================== -->
