@@ -136,7 +136,7 @@
     <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Слишком много удалений <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
     <string name="low_memory" product="tablet" msgid="6494019234102154896">"Память планшетного ПК заполнена. Удалите какие-нибудь файлы, чтобы освободить место."</string>
     <string name="low_memory" product="default" msgid="3475999286680000541">"Память телефона заполнена. Удалите какие-нибудь файлы, чтобы освободить место."</string>
-    <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"Действия в сети могут отслеживаться"</string>
+    <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"Сеть может отслеживаться"</string>
     <string name="ssl_ca_cert_noti_by_unknown" msgid="4475437862189850602">"администратором"</string>
     <string name="ssl_ca_cert_noti_managed" msgid="4030263497686867141">"администратором домена <xliff:g id="MANAGING_DOMAIN">%s</xliff:g>"</string>
     <string name="me" msgid="6545696007631404292">"Я"</string>
@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"Удаление ярлыков"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Приложение сможет удалять ярлыки с главного экрана без вмешательства пользователя."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"Перенаправление исходящих вызовов"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Приложение сможет обрабатывать исходящие вызовы и изменять набираемые номера, а также отслеживать, перенаправлять или блокировать исходящие вызовы."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Приложение сможет видеть набранный номер во время исходящего вызова и при необходимости перенаправлять вызов или завершать его."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"Прием SMS-сообщений"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Приложение сможет получать и обрабатывать SMS. Это значит, что оно сможет отслеживать и удалять отправленные на ваше устройство сообщения, не показывая их."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"Прием MMS-сообщений"</string>
@@ -279,9 +279,9 @@
     <string name="permdesc_receiveWapPush" msgid="748232190220583385">"Приложение сможет получать и обрабатывать WAP-сообщения. Это значит, что оно сможет отслеживать и удалять отправленные на ваше устройство сообщения, не показывая их."</string>
     <string name="permlab_getTasks" msgid="6466095396623933906">"Получение данных о запущенных приложениях"</string>
     <string name="permdesc_getTasks" msgid="7454215995847658102">"Приложение сможет получать информацию о недавно запущенных и выполняемых задачах, а следовательно, и о приложениях, используемых на устройстве."</string>
-    <string name="permlab_interactAcrossUsers" msgid="7114255281944211682">"разрешить взаимодействие со всеми аккаунтами"</string>
+    <string name="permlab_interactAcrossUsers" msgid="7114255281944211682">"Взаимодействие с аккаунтами всех пользователей"</string>
     <string name="permdesc_interactAcrossUsers" msgid="364670963623385786">"Приложение сможет выполнять действия во всех аккаунтах на этом устройстве. При этом защита от вредоносных приложений может быть недостаточной."</string>
-    <string name="permlab_interactAcrossUsersFull" msgid="2567734285545074105">"Полное взаимодействие со всеми аккаунтами"</string>
+    <string name="permlab_interactAcrossUsersFull" msgid="2567734285545074105">"Полное взаимодействие с аккаунтами всех пользователей"</string>
     <string name="permdesc_interactAcrossUsersFull" msgid="376841368395502366">"Приложение сможет выполнять любые действия во всех аккаунтах на этом устройстве."</string>
     <string name="permlab_manageUsers" msgid="1676150911672282428">"Управлять аккаунтами"</string>
     <string name="permdesc_manageUsers" msgid="8409306667645355638">"Приложения смогут управлять аккаунтами на этом устройстве (выполнять поиск, создавать и удалять их)"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Домашний"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Рабочий"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Другой"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Не найдено приложение для просмотра контакта"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Введите PIN-код"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Введите PUK-код и новый PIN-код"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK-код"</string>
@@ -1112,10 +1113,10 @@
     <string name="deleteText" msgid="6979668428458199034">"Удалить"</string>
     <string name="inputMethod" msgid="1653630062304567879">"Способ ввода"</string>
     <string name="editTextMenuTitle" msgid="4909135564941815494">"Операции с текстом"</string>
-    <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Заканчивается свободное место"</string>
-    <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Некоторые системные функции могут не работать"</string>
-    <string name="app_running_notification_title" msgid="8718335121060787914">"Приложение «<xliff:g id="APP_NAME">%1$s</xliff:g>» выполняется"</string>
-    <string name="app_running_notification_text" msgid="4653586947747330058">"Нажмите, чтобы получить дополнительные сведения или завершить приложение."</string>
+    <string name="low_internal_storage_view_title" msgid="5576272496365684834">"Недостаточно памяти"</string>
+    <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Некоторые функции могут не работать"</string>
+    <string name="app_running_notification_title" msgid="8718335121060787914">"Приложение \"<xliff:g id="APP_NAME">%1$s</xliff:g>\" выполняется"</string>
+    <string name="app_running_notification_text" msgid="4653586947747330058">"Нажмите, чтобы получить дополнительные данные или выключить приложение."</string>
     <string name="ok" msgid="5970060430562524910">"ОК"</string>
     <string name="cancel" msgid="6442560571259935130">"Отмена"</string>
     <string name="yes" msgid="5362982303337969312">"ОК"</string>
