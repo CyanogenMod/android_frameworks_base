@@ -155,10 +155,10 @@ public class WeatherTile extends QuickSettingsTile {
             tv.setText(state);
         }
         if (tv1 !=null) {
-            tv1.setText(current+"℃");
+            tv1.setText(current);
         }
         if (tv3 !=null) {
-            tv2.setText(low+"℃ | "+high+"℃");
+            tv2.setText(low+" | "+high);
         }
         if (tv3 !=null) {
             tv3.setText(ConditionStringresID);
