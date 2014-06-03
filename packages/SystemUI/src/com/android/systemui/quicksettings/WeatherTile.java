@@ -120,7 +120,7 @@ public class WeatherTile extends QuickSettingsTile {
         int check = filecheck();
         if (check == 1) {
         int check2 = getline();
-        if (check2 == 10) {
+        if (check2 == 5) {
 
         //parse weather
         String condition = Readfile(1);
@@ -128,11 +128,6 @@ public class WeatherTile extends QuickSettingsTile {
         String lowtemp = Readfile(3);
         String hightemp = Readfile(4);
         String currenttemp = Readfile(5);
-        String tempunit = Readfile(6);
-        String humidity = Readfile(7);
-        String windstrength = Readfile(8);
-        String winddirection = Readfile(9);
-        String SpeedUnit = Readfile(10);
 
         //transform string
         StringTokenizer st;
@@ -144,30 +139,30 @@ public class WeatherTile extends QuickSettingsTile {
         String current = st.nextToken();
 
         //SETIMAGE
-        String resName = null;
-        IconSet = Settings.System.getString(mContext.getContentResolver(), Settings.System.WEATHER_TILE_ICON);
-        if (IconSet == null) {
-            resName = "@drawable/weather_color_" + condition;
-        } else if (IconSet.equals("color")) {
-            resName = "@drawable/weather_color_" + condition;
-        } else if (IconSet.equals("mono")) {
-            resName = "@drawable/weather_" + condition;
-        } else if (IconSet.equals("vclouds")) {
-            resName = "@drawable/weather_vclouds_" + condition;
-        }
+        String resName = "@drawable/weather_color_" + condition;
         String packName = mContext.getPackageName();
         int resID = mContext.getResources().getIdentifier(resName, "drawable", packName);
-        iv.setImageResource(resID);
+        if (iv != null) {
+            iv.setImageResource(resID);
+        }
 
         //GET CONDITION TEXT
         String ConditionStringresName = "@string/weather_" + condition;
         int ConditionStringresID = mContext.getResources().getIdentifier(ConditionStringresName, "string", packName);
 
         //SETTEXT
-        tv.setText(state);
-        tv1.setText(current+"℃");
-        tv2.setText(low+"℃ | "+high+"℃");
-        tv3.setText(ConditionStringresID);
+        if (tv !=null) {
+            tv.setText(state);
+        }
+        if (tv1 !=null) {
+            tv1.setText(current+"℃");
+        }
+        if (tv3 !=null) {
+            tv2.setText(low+"℃ | "+high+"℃");
+        }
+        if (tv3 !=null) {
+            tv3.setText(ConditionStringresID);
+            }        
         } else {
             setNofile();
             }
@@ -182,24 +177,22 @@ public class WeatherTile extends QuickSettingsTile {
         TextView tv2 = (TextView) mTile.findViewById(R.id.text2);
         TextView tv3 = (TextView) mTile.findViewById(R.id.text3);
         ImageView iv = (ImageView) mTile.findViewById(R.id.image);
-        tv.setText(R.string.need_to_update_weather);
-        tv2.setText(R.string.no_weather_file);
-        tv1.setText("");
-        tv3.setText("");
-        String resName = null;
-            if (IconSet == null) {
-                resName = "@drawable/weather_color_na";
-            } else if ( IconSet.equals("color")) {
-                resName = "@drawable/weather_color_na";
-            } else if ( IconSet.equals("mono")) {
-                resName = "@drawable/weather_na";
-            } else if ( IconSet.equals("vclouds")) {
-                resName = "@drawable/weather_vclouds_na";
-            }
-            String packName = mContext.getPackageName();
-            int resID = mContext.getResources().getIdentifier(resName, "drawable", packName);
-    		iv.setImageResource(resID);
+        if (tv !=null) {
+            tv.setText(R.string.need_to_update_weather);
         }
+        if (tv1 !=null) {
+            tv1.setText("");
+        }
+        if (tv2 !=null) {
+            tv2.setText(R.string.no_weather_file);
+        }
+        if (tv3 !=null) {
+            tv3.setText("");
+        }
+        if (iv !=null) {
+            iv.setImageResource(R.drawable.weather_na);
+        }
+    }
 
     public String Readfile(int num){
         FileReader readFile;
