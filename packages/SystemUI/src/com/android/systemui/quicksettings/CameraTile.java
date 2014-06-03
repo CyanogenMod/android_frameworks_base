@@ -269,12 +269,22 @@ public class CameraTile extends QuickSettingsTile {
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                final Intent intent = new Intent();
                 if (mCamera != null) {
-                    return false;
-                }
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setType("image/*");
 
-                Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                startSettingsActivity(intent);
+                    mHandler.post(mReleaseCameraRunnable);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startSettingsActivity(intent);
+                        }
+                    }, 150);
+                } else {
+                    intent.setAction(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                    startSettingsActivity(intent);
+                }
                 return true;
             }
         };
