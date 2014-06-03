@@ -19,6 +19,7 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
+import android.telephony.SignalStrength;
 import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
@@ -288,13 +289,14 @@ public class MSimSignalClusterView
             }
         } else if (mStyle == STATUS_BAR_STYLE_DATA_VOICE) {
             if (showBothDataAndVoice(subscription)
-                    || getMobileVoiceId(strengthIcon) != 0) {
+                    && getMobileVoiceId(subscription) != 0) {
                 mMobileStrengthId[subscription] = 0;
                 mMobileDataVoiceVisible[subscription] = true;
                 mMobileSignalDataId[subscription] = strengthIcon;
                 mMobileSignalVoiceId[subscription]
-                        = getMobileVoiceId(mMobileSignalDataId[subscription]);
+                        = getMobileVoiceId(subscription);
             } else {
+                mMobileStrengthId[subscription] = convertMobileStrengthIcon(mMobileStrengthId[subscription]);
                 mMobileDataVoiceVisible[subscription] = false;
             }
         } else {
@@ -454,10 +456,19 @@ public class MSimSignalClusterView
             return false;
         }
 
-        return (mMobileTypeId[sub] == R.drawable.stat_sys_data_connected_3g)
-                || (mMobileTypeId[sub] == R.drawable.stat_sys_data_connected_4g)
-                || (mMobileTypeId[sub] == R.drawable.stat_sys_data_fully_connected_3g)
-                || (mMobileTypeId[sub] == R.drawable.stat_sys_data_fully_connected_4g);
+        if (mMSimNC == null) {
+            return false;
+        }
+
+        boolean ret = false;
+        int dataType = mMSimNC.getDataNetworkType(sub);
+        int voiceType = mMSimNC.getVoiceNetworkType(sub);
+        if ((dataType == TelephonyManager.NETWORK_TYPE_TD_SCDMA
+                || dataType == TelephonyManager.NETWORK_TYPE_LTE)
+            && voiceType == TelephonyManager.NETWORK_TYPE_GSM) {
+            ret = true;
+        }
+        return ret;
     }
 
     private boolean showBoth3gAnd1x() {
@@ -481,48 +492,97 @@ public class MSimSignalClusterView
         return mMobileTypeId[0] == R.drawable.stat_sys_data_fully_connected_roam;
     }
 
-    private int getMobileVoiceId(int icon) {
-        int returnVal = 0;
+    private int getMobileVoiceId(int sub) {
+        if (mMSimNC == null) {
+            return 0;
+        }
+
+        int retValue = 0;
+        int level = mMSimNC.getGsmSignalLevel(sub);
+        switch(level){
+            case SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN:
+                retValue = R.drawable.stat_sys_signal_0_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_POOR:
+                retValue = R.drawable.stat_sys_signal_1_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_MODERATE:
+                retValue = R.drawable.stat_sys_signal_2_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_GOOD:
+                retValue = R.drawable.stat_sys_signal_3_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_GREAT:
+                retValue = R.drawable.stat_sys_signal_4_gsm;
+                break;
+            default:
+                break;
+        }
+        return retValue;
+    }
+
+    private int convertMobileStrengthIcon(int icon) {
+        int returnVal = icon;
         switch(icon){
             case R.drawable.stat_sys_signal_0_3g:
+                returnVal = R.drawable.stat_sys_signal_0_3g_default;
+                break;
             case R.drawable.stat_sys_signal_0_4g:
-                returnVal = R.drawable.stat_sys_signal_0_gsm;
+                returnVal = R.drawable.stat_sys_signal_0_4g_default;
                 break;
             case R.drawable.stat_sys_signal_1_3g:
+                returnVal = R.drawable.stat_sys_signal_1_3g_default;
+                break;
             case R.drawable.stat_sys_signal_1_4g:
-                returnVal = R.drawable.stat_sys_signal_1_gsm;
+                returnVal = R.drawable.stat_sys_signal_1_4g_default;
                 break;
             case R.drawable.stat_sys_signal_2_3g:
+                returnVal = R.drawable.stat_sys_signal_2_3g_default;
+                break;
             case R.drawable.stat_sys_signal_2_4g:
-                returnVal = R.drawable.stat_sys_signal_2_gsm;
+                returnVal = R.drawable.stat_sys_signal_2_4g_default;
                 break;
             case R.drawable.stat_sys_signal_3_3g:
+                returnVal = R.drawable.stat_sys_signal_3_3g_default;
+                break;
             case R.drawable.stat_sys_signal_3_4g:
-                returnVal = R.drawable.stat_sys_signal_3_gsm;
+                returnVal = R.drawable.stat_sys_signal_3_4g_default;
                 break;
             case R.drawable.stat_sys_signal_4_3g:
+                returnVal = R.drawable.stat_sys_signal_4_3g_default;
+                break;
             case R.drawable.stat_sys_signal_4_4g:
-                returnVal = R.drawable.stat_sys_signal_4_gsm;
+                returnVal = R.drawable.stat_sys_signal_4_4g_default;
                 break;
             case R.drawable.stat_sys_signal_0_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_0_3g_default_fully;
+                break;
             case R.drawable.stat_sys_signal_0_4g_fully:
-                returnVal = R.drawable.stat_sys_signal_0_gsm_fully;
+                returnVal = R.drawable.stat_sys_signal_0_4g_default_fully;
                 break;
             case R.drawable.stat_sys_signal_1_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_1_3g_default_fully;
+                break;
             case R.drawable.stat_sys_signal_1_4g_fully:
-                returnVal = R.drawable.stat_sys_signal_1_gsm_fully;
+                returnVal = R.drawable.stat_sys_signal_1_4g_default_fully;
                 break;
             case R.drawable.stat_sys_signal_2_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_2_3g_default_fully;
+                break;
             case R.drawable.stat_sys_signal_2_4g_fully:
-                returnVal = R.drawable.stat_sys_signal_2_gsm_fully;
+                returnVal = R.drawable.stat_sys_signal_2_4g_default_fully;
                 break;
             case R.drawable.stat_sys_signal_3_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_3_3g_default_fully;
+                break;
             case R.drawable.stat_sys_signal_3_4g_fully:
-                returnVal = R.drawable.stat_sys_signal_3_gsm_fully;
+                returnVal = R.drawable.stat_sys_signal_3_4g_default_fully;
                 break;
             case R.drawable.stat_sys_signal_4_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_4_3g_default_fully;
+                break;
             case R.drawable.stat_sys_signal_4_4g_fully:
-                returnVal = R.drawable.stat_sys_signal_4_gsm_fully;
+                returnVal = R.drawable.stat_sys_signal_4_4g_default_fully;
                 break;
             default:
                 break;
