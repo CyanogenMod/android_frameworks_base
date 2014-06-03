@@ -76,12 +76,12 @@ import android.os.Trace;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.EventLog;
-import android.util.Log;
 import android.util.Slog;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
-import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
+
+import com.android.internal.app.ActivityTrigger;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -1148,19 +1148,7 @@ final class ActivityStack {
                     // Aggregate current change flags.
                     configChanges |= r.configChangeFlags;
 
-		    int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
-                    boolean isSplitView = false;
-
-		    if(mHaloEnabled != 1){
-		            try {
-		                IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-		                isSplitView = wm.isTaskSplitView(r.task.taskId);
-		            } catch (RemoteException e) {
-		                Slog.e(TAG, "Cannot get split view status", e);
-		            }
-		    }
-
-                    if (r.fullscreen && !isSplitView) {
+                    if (r.fullscreen) {
                         // At this point, nothing else needs to be shown
                         if (DEBUG_VISBILITY) Slog.v(TAG, "Fullscreen: at " + r);
                         behindFullscreen = true;
@@ -1268,7 +1256,6 @@ final class ActivityStack {
      * nothing happened.
      */
     final boolean resumeTopActivityLocked(ActivityRecord prev) {
-		Log.e("XPLOD", "Resume Top Activity Locked " + prev);
         return resumeTopActivityLocked(prev, null);
     }
 

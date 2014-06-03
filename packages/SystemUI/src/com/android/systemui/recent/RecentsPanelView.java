@@ -29,7 +29,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.PackageManager;
@@ -40,7 +39,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
@@ -89,10 +87,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class RecentsPanelView extends FrameLayout implements OnItemClickListener, RecentsCallback,
         StatusBarPanel, Animator.AnimatorListener {
@@ -118,8 +112,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mFitThumbnailToXY;
     private int mRecentItemLayoutId;
     private boolean mHighEndGfx;
-    private int mDragPositionX;
-    private int mDragPositionY;
     private ImageView mClearRecents;
 
     private RecentsActivity mRecentsActivity;
@@ -266,19 +258,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 }
             }
 
-	    int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
-
             holder.thumbnailView.setTag(td);
             holder.thumbnailView.setOnLongClickListener(new OnLongClickDelegate(convertView));
-
-	    if(mHaloEnabled != 1){
-		    holder.thumbnailView.setOnTouchListener(new OnTouchListener() {
-		        @Override
-		        public boolean onTouch(View v, MotionEvent m) {
-		            return handleThumbnailTouch(m, holder.thumbnailView);
-		        }
-		    });
-	    }
             holder.taskDescription = td;
             return convertView;
         }
@@ -438,57 +419,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
     }
 
-    private boolean handleThumbnailTouch(MotionEvent m, View thumb) {
-        // If we have two touches, let user snap on top or bottom
-        int pointerCount = m.getPointerCount();
-        if (pointerCount == 2) {
-            int action = m.getActionMasked();
-            int currX = (int) m.getX(1);
-            int currY = (int) m.getY(1);
-
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    mDragPositionX = currX;
-                    mDragPositionY = currY;
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    handleThumbnailDragRelease(thumb);
-                    break;
-
-                case MotionEvent.ACTION_MOVE:
-                    int diffX = currX - mDragPositionX;
-                    int diffY = currY - mDragPositionY;
-                    thumb.setTranslationX(thumb.getTranslationX() + diffX);
-                    thumb.setTranslationY(thumb.getTranslationY() + diffY);
-                    mDragPositionX = currX;
-                    mDragPositionY = currY;
-                    break;
-            }
-            return true;
-        } else {
-            mDragPositionX = 0;
-            mDragPositionY = 0;
-            return false;
-        }
-    }
-
-    private void handleThumbnailDragRelease(View view) {
-        ViewHolder holder = (ViewHolder) view.getTag();
-        WindowManager wm = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        if (mDragPositionY < height/2) {
-            openInSplitView(holder, 0);
-        } else {
-            openInSplitView(holder, 1);
-        }
-    }
-
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
         final ViewRootImpl root = getViewRootImpl();
@@ -511,10 +441,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
     public void dismissAndGoBack() {
         mRecentsActivity.dismissAndGoBack();
-    }
-
-    public void dismissAndDoNothing() {
-        ((RecentsActivity) mContext).dismissAndDoNothing();
     }
 
     public void onAnimationCancel(Animator animation) {
@@ -833,23 +759,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
         if (ad.taskId >= 0 && !floating) {
             // This is an active task; it should just go to the foreground.
-
-	    int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
-
-            // If that task was split viewed, a normal press wil resume it to
-            // normal fullscreen view
-	    if(mHaloEnabled != 1){
-		    IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-		    try {
-		        if (DEBUG) Log.v(TAG, "Restoring window full screen after split, because of normal tap");
-		        wm.setTaskSplitView(ad.taskId, false);
-		    } catch (RemoteException e) {
-		        Log.e(TAG, "Could not setTaskSplitView to fullscreen", e);
-		    }
-	    }
             am.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
                     opts);
-
         } else {
             boolean backPressed = mRecentsActivity != null && mRecentsActivity.mBackPressed;
             if (!floating || !backPressed) {
@@ -931,111 +842,13 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
     }
 
-    /**
-	* Opens the task linked in the ViewHolder in split view mode.
-	* @param holder ViewHolder of a task thumbnail
-	* @param location Where to put the split app (-1 for auto, 0 for top, 1 for bottom (the
-	* reference is a phone in portrait))
-    */
-    public void openInSplitView(ViewHolder holder, int location) {
-        if (holder != null) {
-            final Context context = holder.thumbnailView.getContext();
-            final ActivityManager am = (ActivityManager)
-                context.getSystemService(Context.ACTIVITY_SERVICE);
-            final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-
-            TaskDescription ad = holder.taskDescription;
-
-            show(false);
-            dismissAndDoNothing();
-
-            // If we weren't on the homescreen, resize the previous activity (if not already split)
-            final List<ActivityManager.RecentTaskInfo> recentTasks =
-                am.getRecentTasks(20, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
-
-            if (recentTasks != null && recentTasks.size() > 0) {
-                final PackageManager pm = mContext.getPackageManager();
-                ActivityInfo homeInfo = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
-                        .resolveActivityInfo(pm, 0);
-                int taskInt = 0;
-                ActivityManager.RecentTaskInfo taskInfo = recentTasks.get(1);
-                Log.e("XPLOD", "Resizing previous activity " + taskInfo.baseIntent);
-                Intent intent = new Intent(taskInfo.baseIntent);
-                if (taskInfo.origActivity != null) {
-                    intent.setComponent(taskInfo.origActivity);
-                }
-
-                ComponentName component = intent.getComponent();
-
-                if (homeInfo == null
-                    || !homeInfo.packageName.equals(component.getPackageName())
-                    || !homeInfo.name.equals(component.getClassName())) {
-                    Log.e("XPLOD", "not home intent, splitting");
-                    // This is not the home activity, so split it
-                    try {
-                        wm.setTaskSplitView(taskInfo.persistentId, true);
-                    } catch (RemoteException e) {
-                        Log.e(TAG, "Could not set previous task to split view", e);
-                    }
-
-                    // We move this to front first, then our activity, so it updates
-                    am.moveTaskToFront(taskInfo.persistentId, 0, null);
-                }
-            }
-
-            if (ad.taskId >= 0) {
-                // The task is already launched. The Activity will pull its split
-                // information from WindowManagerService once it resumes, so we
-                // set its state here.
-                try {
-                    wm.setTaskSplitView(ad.taskId, true);
-                } catch (RemoteException e) {
-                    Log.e(TAG, "Could not setTaskSplitView", e);
-                }
-                am.moveTaskToFront(ad.taskId, 0, null);
-            } else {
-                // The app has been killed (we have no taskId for it), so we start
-                // a new one with the SPLIT_VIEW flag
-                Intent intent = ad.intent;
-                intent.addFlags(Intent.FLAG_ACTIVITY_SPLIT_VIEW
-                    | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                if (DEBUG) Log.v(TAG, "Starting split view activity " + intent);
-
-                try {
-                    context.startActivityAsUser(intent, null,
-                            new UserHandle(UserHandle.USER_CURRENT));
-                } catch (SecurityException e) {
-                    Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
-                }
-            }
-
-	    /** notify split view layout changes **/
-            try {
-                ActivityManagerNative.getDefault().notifySplitViewLayoutChanged();
-            } catch (RemoteException e) {
-                Log.e(TAG, "Could not notify split view layout", e);
-            }
-
-        } else {
-            throw new IllegalStateException("Oops, no tag on view to split!");
-        }
-    }
-
     public void handleLongPress(
             final View selectedView, final View anchorView, final View thumbnailView) {
         thumbnailView.setSelected(true);
         final PopupMenu popup =
             new PopupMenu(mContext, anchorView == null ? selectedView : anchorView);
         mPopup = popup;
-
-	int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
-
-	if(mHaloEnabled != 1){
-        	popup.getMenuInflater().inflate(R.menu.recent_popup_menu_split, popup.getMenu());
-	}else{
-		popup.getMenuInflater().inflate(R.menu.recent_popup_menu, popup.getMenu());
-	}
+        popup.getMenuInflater().inflate(R.menu.recent_popup_menu, popup.getMenu());
 
         final ContentResolver cr = mContext.getContentResolver();
         if (Settings.Secure.getInt(cr,
@@ -1067,9 +880,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-
-		int mHaloEnabled = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_ENABLED, 0));
-
                 if (item.getItemId() == R.id.recent_remove_item) {
                     ((ViewGroup) mRecentsContainer).removeViewInLayout(selectedView);
                 } else if (item.getItemId() == R.id.recent_inspect_item) {
@@ -1081,11 +891,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     } else {
                         throw new IllegalStateException("Oops, no tag on view " + selectedView);
                     }
-                } else if (item.getItemId() == R.id.recent_add_split_view && mHaloEnabled != 1) {
-                    // Either start a new activity in split view, or move the current task
-                    // to front, but resized
-                    ViewHolder holder = (ViewHolder)selectedView.getTag();
-                    openInSplitView(holder, -1);
                 } else if (item.getItemId() == R.id.recent_force_stop) {
                     ViewHolder viewHolder = (ViewHolder) selectedView.getTag();
                     if (viewHolder != null) {
