@@ -19,8 +19,10 @@ package android.app;
 import android.util.ArrayMap;
 import android.util.SuperNotCalledException;
 import com.android.internal.app.ActionBarImpl;
+import com.android.internal.widget.FloatingWindowView;
 import com.android.internal.policy.PolicyManager;
 
+import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -39,6 +41,8 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -69,12 +73,14 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
@@ -85,6 +91,7 @@ import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -654,7 +661,7 @@ public class Activity extends ContextThemeWrapper
     private static final boolean DEBUG_LIFECYCLE = false;
 
     /** Standard activity result: operation canceled. */
-    public static final int RESULT_CANCELED    = 0;
+    public static final int RESULT_CANCELED     = 0;
     /** Standard activity result: operation succeeded. */
     public static final int RESULT_OK           = -1;
     /** Start of user-defined activity results. */
@@ -667,6 +674,9 @@ public class Activity extends ContextThemeWrapper
     private static final String SAVED_DIALOGS_TAG = "android:savedDialogs";
     private static final String SAVED_DIALOG_KEY_PREFIX = "android:dialog_";
     private static final String SAVED_DIALOG_ARGS_KEY_PREFIX = "android:dialog_args_";
+
+    private static final String SAVED_WINDOW_LAYOUT_IDS_KEY = "android:savedWindowLayoutIds";
+    private static final String SAVED_WINDOW_LAYOUT_TAG = "android:savedWindowLayout";
 
     private static class ManagedDialog {
         Dialog mDialog;
@@ -709,8 +719,9 @@ public class Activity extends ContextThemeWrapper
         ArrayList<Fragment> fragments;
         ArrayMap<String, LoaderManagerImpl> loaders;
     }
+
     /* package */ NonConfigurationInstances mLastNonConfigurationInstances;
-    
+
     private Window mWindow;
 
     private WindowManager mWindowManager;
@@ -731,10 +742,10 @@ public class Activity extends ContextThemeWrapper
             return Activity.this.findViewById(id);
         }
     };
-    
+
     ArrayMap<String, LoaderManagerImpl> mAllLoaderManagers;
     LoaderManagerImpl mLoaderManager;
-    
+
     private static final class ManagedCursor {
         ManagedCursor(Cursor cursor) {
             mCursor = cursor;
@@ -746,6 +757,7 @@ public class Activity extends ContextThemeWrapper
         private boolean mReleased;
         private boolean mUpdated;
     }
+
     private final ArrayList<ManagedCursor> mManagedCursors =
         new ArrayList<ManagedCursor>();
 
@@ -759,7 +771,7 @@ public class Activity extends ContextThemeWrapper
 
     private int mDefaultKeyMode = DEFAULT_KEYS_DISABLE;
     private SpannableStringBuilder mDefaultKeySsb = null;
-    
+
     protected static final int[] FOCUSED_STATE_SET = {com.android.internal.R.attr.state_focused};
 
     @SuppressWarnings("unused")
@@ -767,6 +779,52 @@ public class Activity extends ContextThemeWrapper
 
     private Thread mUiThread;
     final Handler mHandler = new Handler();
+
+    private Rect mOriginalBounds;
+    private boolean mIsSplitView;
+
+    private final int UNKNOWN = -10000;
+    private final int SNAP_NONE = 0;
+    private final int SNAP_LEFT = 1;
+    private final int SNAP_TOP = 2;
+    private final int SNAP_RIGHT = 3;
+    private final int SNAP_BOTTOM = 4;
+    private final int MOVE_MAX_RANGE = 10;
+
+    private Runnable mRunnable;
+    private Runnable mLayoutRunnable;
+    private int mRange = 100;
+    private int mSensitivity = 50;
+    private int mSnap = SNAP_NONE;
+    private int[] mSnapParam = new int[3]; // w,h,g
+    private int[] mOldParam = new int[2]; // w,h
+    private boolean mSnapped;
+    private int[] mOldLayout;
+    private int[] mLastLayout;
+    private boolean mTimeoutRunning;
+    private boolean mTimeoutDone;
+    private boolean mRestorePosition;
+    private boolean mChangedPreviousRange;
+    private float[] mPreviousRange = new float[2];
+
+    private Float screenX ;
+    private Float screenY ;
+    private Float viewX ;
+    private Float viewY ;
+    private Float leftFromScreen ;
+    private Float topFromScreen ;
+    private int mCurrentScreenHeight;
+    private int mCurrentScreenWidth;
+    private int mPreviousOrientation;
+    private int mAppMinimumWidth;
+    private int mAppMinimumHeight;
+    private int mAppFloatViewWidth;
+    private int mAppFloatViewHeight;
+    private boolean mChangedFlags = false;
+    private boolean isAlreadyAttachToWindow = false;
+    private boolean mIsFullscreenApp = false;
+    private ScaleGestureDetector mScaleGestureDetector;
+    private FloatingWindowView mFloatingWindowView;
 
     /** Return the intent that started this activity. */
     public Intent getIntent() {
@@ -796,7 +854,7 @@ public class Activity extends ContextThemeWrapper
     public final boolean isChild() {
         return mParent != null;
     }
-    
+
     /** Return the parent activity if this view is an embedded child. */
     public final Activity getParent() {
         return mParent;
@@ -846,7 +904,7 @@ public class Activity extends ContextThemeWrapper
         }
         return lm;
     }
-    
+
     /**
      * Calls {@link android.view.Window#getCurrentFocus} on the
      * Window of this Activity to return the currently focused view.
@@ -906,6 +964,10 @@ public class Activity extends ContextThemeWrapper
         mFragments.dispatchCreate();
         getApplication().dispatchActivityCreated(this, savedInstanceState);
         mCalled = true;
+        mPreviousOrientation = getResources().getConfiguration().orientation;
+        sendAppLaunchBroadcast();
+        mScaleGestureDetector = new ScaleGestureDetector(getApplicationContext(), mScaleGestureListener);
+        mScaleGestureDetector.setQuickScaleEnabled(false);
     }
 
     /**
@@ -919,6 +981,7 @@ public class Activity extends ContextThemeWrapper
     final void performRestoreInstanceState(Bundle savedInstanceState) {
         onRestoreInstanceState(savedInstanceState);
         restoreManagedDialogs(savedInstanceState);
+        restoreManagedWindowLayout(savedInstanceState);
     }
 
     /**
@@ -949,7 +1012,7 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
-    
+
     /**
      * Restore the state of any saved managed dialogs.
      *
@@ -980,6 +1043,54 @@ public class Activity extends ContextThemeWrapper
                 }
             }
         }
+    }
+
+    private void restoreManagedWindowLayout(Bundle savedInstanceState) {
+        final Bundle b = savedInstanceState.getBundle(SAVED_WINDOW_LAYOUT_TAG);
+        if (b == null) {
+            return;
+        }
+
+        if (mWindow == null) {
+            return;
+        }
+
+        if (!mWindow.mIsFloatingWindow) {
+            return;
+        }
+
+        final int[] ids = b.getIntArray(SAVED_WINDOW_LAYOUT_IDS_KEY);
+        final int x = ids[0];
+        final int y = ids[1];
+        final int width = ids[2];
+        final int height = ids[3];
+        mSnap = ids[4];
+        WindowManager.LayoutParams params = mWindow.getAttributes();
+        params.x = x;
+        params.y = y;
+        switch (mSnap) {
+              case SNAP_LEFT:
+                   params.width = (mCurrentScreenWidth / 2);
+                   params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                   break;
+              case SNAP_RIGHT:
+                   params.width = (mCurrentScreenWidth / 2);
+                   params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                   break;
+              case SNAP_TOP:
+                   params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                   params.height = (mCurrentScreenHeight / 2);
+                   break;
+              case SNAP_BOTTOM:
+                   params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                   params.height = (mCurrentScreenHeight / 2);
+                   break;
+              case SNAP_NONE:
+                   params.width = width;
+                   params.height = height;
+                   break;
+        }
+        mWindow.setAttributes(params);
     }
 
     private Dialog createDialog(Integer dialogId, Bundle state, Bundle args) {
@@ -1025,7 +1136,7 @@ public class Activity extends ContextThemeWrapper
     /**
      * Called after {@link #onCreate} &mdash; or after {@link #onRestart} when  
      * the activity had been stopped, but is now again being displayed to the 
-	 * user.  It will be followed by {@link #onResume}.
+     * user.  It will be followed by {@link #onResume}.
      *
      * <p><em>Derived classes must call through to the super class's
      * implementation of this method.  If they do not, an exception will be
@@ -1037,8 +1148,9 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onStart() {
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onStart " + this);
+        setupFloatingActionBar(false);
         mCalled = true;
-        
+
         if (!mLoadersStarted) {
             mLoadersStarted = true;
             if (mLoaderManager != null) {
@@ -1050,6 +1162,40 @@ public class Activity extends ContextThemeWrapper
         }
 
         getApplication().dispatchActivityStarted(this);
+    }
+
+    private void setupFloatingActionBar(boolean reload) {
+        if (mWindow == null) {
+            return;
+        }
+
+        if (!mWindow.mIsFloatingWindow) {
+            return;
+        }
+
+        if (mWindow.peekDecorView() == null) {
+            return;
+        }
+
+        FrameLayout decorFloatingView = (FrameLayout) mWindow.peekDecorView().getRootView();
+        if (decorFloatingView == null) {
+            return;
+        }
+        if (!reload) {
+            decorFloatingView.setFitsSystemWindows(true);
+            mFloatingWindowView = new FloatingWindowView(this, getActionBarHeight(true));
+            decorFloatingView.addView(mFloatingWindowView, -1, FloatingWindowView.getParams());
+            decorFloatingView.setTagInternal(android.R.id.extractArea, mFloatingWindowView);
+        } else {
+            mFloatingWindowView = (FloatingWindowView) decorFloatingView.getTag(android.R.id.extractArea);
+            decorFloatingView.bringChildToFront(mFloatingWindowView);
+        }
+        if (mActionBar != null) {
+            mActionBar.setFloatingWindowBar(mFloatingWindowView);
+            if (reload && mActionBar.isShowing()) {
+                mActionBar.changeColorFromActionBar();
+            }
+        }
     }
 
     /**
@@ -1098,6 +1244,7 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onResume() {
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onResume " + this);
+        setupFloatingActionBar(true);
         getApplication().dispatchActivityResumed(this);
         mCalled = true;
     }
@@ -1156,6 +1303,7 @@ public class Activity extends ContextThemeWrapper
     final void performSaveInstanceState(Bundle outState) {
         onSaveInstanceState(outState);
         saveManagedDialogs(outState);
+        saveManagedWindowLayout(outState);
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onSaveInstanceState " + this + ": " + outState);
     }
 
@@ -1247,6 +1395,27 @@ public class Activity extends ContextThemeWrapper
         outState.putBundle(SAVED_DIALOGS_TAG, dialogState);
     }
 
+    private void saveManagedWindowLayout(Bundle outState) {
+        if (mWindow == null) {
+            return;
+        }
+
+        if (!mWindow.mIsFloatingWindow) {
+            return;
+        }
+
+        Bundle windowLayoutState = new Bundle();
+
+        int[] ids = new int[5];
+        WindowManager.LayoutParams params = mWindow.getAttributes();
+        ids[0] = params.x;
+        ids[1] = params.y;
+        ids[2] = params.width;
+        ids[3] = params.height;
+        ids[4] = mSnap;
+        windowLayoutState.putIntArray(SAVED_WINDOW_LAYOUT_IDS_KEY, ids);
+        outState.putBundle(SAVED_WINDOW_LAYOUT_TAG, windowLayoutState);
+    }
 
     /**
      * Called as part of the activity lifecycle when an activity is going into
@@ -1309,23 +1478,23 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onUserLeaveHint() {
     }
-    
+
     /**
      * Generate a new thumbnail for this activity.  This method is called before
      * pausing the activity, and should draw into <var>outBitmap</var> the
      * imagery for the desired thumbnail in the dimensions of that bitmap.  It
      * can use the given <var>canvas</var>, which is configured to draw into the
      * bitmap, for rendering if desired.
-     * 
+     *
      * <p>The default implementation returns fails and does not draw a thumbnail;
      * this will result in the platform creating its own thumbnail if needed.
-     * 
+     *
      * @param outBitmap The bitmap to contain the thumbnail.
      * @param canvas Can be used to render into the bitmap.
-     * 
+     *
      * @return Return true if you have drawn into the bitmap; otherwise after
      *         you return it will be filled with a default thumbnail.
-     * 
+     *
      * @see #onCreateDescription
      * @see #onSaveInstanceState
      * @see #onPause
@@ -1338,15 +1507,15 @@ public class Activity extends ContextThemeWrapper
      * Generate a new description for this activity.  This method is called
      * before pausing the activity and can, if desired, return some textual
      * description of its current state to be displayed to the user.
-     * 
+     *
      * <p>The default implementation returns null, which will cause you to
      * inherit the description from the previous activity.  If all activities
      * return null, generally the label of the top activity will be used as the
      * description.
-     * 
+     *
      * @return A description of what the user is doing.  It should be short and
      *         sweet (only a few words).
-     * 
+     *
      * @see #onCreateThumbnail
      * @see #onSaveInstanceState
      * @see #onPause
@@ -1425,8 +1594,8 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onDestroy() {
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onDestroy " + this);
+        sendAppEndBroadcast();
         mCalled = true;
-
         // dismiss any dialogs we are managing.
         if (mManagedDialogs != null) {
             final int numDialogs = mManagedDialogs.size();
@@ -1508,7 +1677,19 @@ public class Activity extends ContextThemeWrapper
             // Pass the configuration changed event to the window
             mWindow.onConfigurationChanged(newConfig);
             if (mWindow.mIsFloatingWindow) {
-                scaleFloatingWindow(null);
+                refreshAppLayoutSize();
+                Configuration config = getResources().getConfiguration();
+                if (config.orientation != mPreviousOrientation) {
+                    WindowManager.LayoutParams params = mWindow.getAttributes();
+                    final int old_x = params.x;
+                    final int old_y = params.y;
+                    params.x = old_y;
+                    params.y = old_x;
+                    params.width = mAppFloatViewWidth;
+                    params.height = mAppFloatViewHeight;
+                    mWindow.setAttributes(params);
+                    mPreviousOrientation = config.orientation;
+                }
             }
         }
 
@@ -1518,7 +1699,7 @@ public class Activity extends ContextThemeWrapper
             mActionBar.onConfigurationChanged(newConfig);
         }
     }
-    
+
     /**
      * If this activity is being destroyed because it can not handle a
      * configuration parameter being changed (and thus its
@@ -1528,7 +1709,7 @@ public class Activity extends ContextThemeWrapper
      * destroyed.  Note that there is no guarantee that these will be
      * accurate (other changes could have happened at any time), so you should
      * only use this as an optimization hint.
-     * 
+     *
      * @return Returns a bit field of the configuration parameters that are
      * changing, as defined by the {@link android.content.res.Configuration}
      * class.
@@ -1536,21 +1717,21 @@ public class Activity extends ContextThemeWrapper
     public int getChangingConfigurations() {
         return mConfigChangeFlags;
     }
-    
+
     /**
      * Retrieve the non-configuration instance data that was previously
      * returned by {@link #onRetainNonConfigurationInstance()}.  This will
      * be available from the initial {@link #onCreate} and
      * {@link #onStart} calls to the new instance, allowing you to extract
      * any useful dynamic state from the previous instance.
-     * 
+     *
      * <p>Note that the data you retrieve here should <em>only</em> be used
      * as an optimization for handling configuration changes.  You should always
      * be able to handle getting a null pointer back, and an activity must
      * still be able to restore itself to its previous state (through the
      * normal {@link #onSaveInstanceState(Bundle)} mechanism) even if this
      * function returns null.
-     * 
+     *
      * @return Returns the object previously returned by
      * {@link #onRetainNonConfigurationInstance()}.
      *
@@ -1563,7 +1744,7 @@ public class Activity extends ContextThemeWrapper
         return mLastNonConfigurationInstances != null
                 ? mLastNonConfigurationInstances.activity : null;
     }
-    
+
     /**
      * Called by the system, as part of destroying an
      * activity due to a configuration change, when it is known that a new
@@ -1572,7 +1753,7 @@ public class Activity extends ContextThemeWrapper
      * itself, which can later be retrieved by calling
      * {@link #getLastNonConfigurationInstance()} in the new activity
      * instance.
-     * 
+     *
      * <em>If you are targeting {@link android.os.Build.VERSION_CODES#HONEYCOMB}
      * or later, consider instead using a {@link Fragment} with
      * {@link Fragment#setRetainInstance(boolean)
@@ -1592,14 +1773,14 @@ public class Activity extends ContextThemeWrapper
      * the {@link #getLastNonConfigurationInstance()} method of the following
      * activity instance as described there.
      * </ul>
-     * 
+     *
      * <p>These guarantees are designed so that an activity can use this API
      * to propagate extensive state from the old to new activity instance, from
      * loaded bitmaps, to network connections, to evenly actively running
      * threads.  Note that you should <em>not</em> propagate any data that
      * may change based on the configuration, including any data loaded from
      * resources such as strings, layouts, or drawables.
-     * 
+     *
      * <p>The guarantee of no message handling during the switch to the next
      * activity simplifies use with active objects.  For example if your retained
      * state is an {@link android.os.AsyncTask} you are guaranteed that its
@@ -1619,21 +1800,21 @@ public class Activity extends ContextThemeWrapper
     public Object onRetainNonConfigurationInstance() {
         return null;
     }
-    
+
     /**
      * Retrieve the non-configuration instance data that was previously
      * returned by {@link #onRetainNonConfigurationChildInstances()}.  This will
      * be available from the initial {@link #onCreate} and
      * {@link #onStart} calls to the new instance, allowing you to extract
      * any useful dynamic state from the previous instance.
-     * 
+     *
      * <p>Note that the data you retrieve here should <em>only</em> be used
      * as an optimization for handling configuration changes.  You should always
      * be able to handle getting a null pointer back, and an activity must
      * still be able to restore itself to its previous state (through the
      * normal {@link #onSaveInstanceState(Bundle)} mechanism) even if this
      * function returns null.
-     * 
+     *
      * @return Returns the object previously returned by
      * {@link #onRetainNonConfigurationChildInstances()}
      */
@@ -1641,7 +1822,7 @@ public class Activity extends ContextThemeWrapper
         return mLastNonConfigurationInstances != null
                 ? mLastNonConfigurationInstances.children : null;
     }
-    
+
     /**
      * This method is similar to {@link #onRetainNonConfigurationInstance()} except that
      * it should return either a mapping from  child activity id strings to arbitrary objects,
@@ -1652,7 +1833,7 @@ public class Activity extends ContextThemeWrapper
     HashMap<String,Object> onRetainNonConfigurationChildInstances() {
         return null;
     }
-    
+
     NonConfigurationInstances retainNonConfigurationInstances() {
         Object activity = onRetainNonConfigurationInstance();
         HashMap<String, Object> children = onRetainNonConfigurationChildInstances();
@@ -1679,7 +1860,7 @@ public class Activity extends ContextThemeWrapper
         if (activity == null && children == null && fragments == null && !retainLoaders) {
             return null;
         }
-        
+
         NonConfigurationInstances nci = new NonConfigurationInstances();
         nci.activity = activity;
         nci.children = children;
@@ -1718,7 +1899,7 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
-    
+
     /**
      * Called when a Fragment is being attached to this activity, immediately
      * after the call to its {@link Fragment#onAttach Fragment.onAttach()}
@@ -1726,14 +1907,14 @@ public class Activity extends ContextThemeWrapper
      */
     public void onAttachFragment(Fragment fragment) {
     }
-    
+
     /**
      * Wrapper around
      * {@link ContentResolver#query(android.net.Uri , String[], String, String[], String)}
      * that gives the resulting {@link Cursor} to call
      * {@link #startManagingCursor} so that the activity will manage its
      * lifecycle for you.
-     * 
+     *
      * <em>If you are targeting {@link android.os.Build.VERSION_CODES#HONEYCOMB}
      * or later, consider instead using {@link LoaderManager} instead, available
      * via {@link #getLoaderManager()}.</em>
@@ -1743,14 +1924,14 @@ public class Activity extends ContextThemeWrapper
      * you call {@link #stopManagingCursor} on a cursor from a managed query, the system <em>will
      * not</em> automatically close the cursor and, in that case, you must call
      * {@link Cursor#close()}.</p>
-     * 
+     *
      * @param uri The URI of the content provider to query.
      * @param projection List of columns to return.
      * @param selection SQL WHERE clause.
      * @param sortOrder SQL ORDER BY clause.
-     * 
+     *
      * @return The Cursor that was returned by query().
-     * 
+     *
      * @see ContentResolver#query(android.net.Uri , String[], String, String[], String)
      * @see #startManagingCursor
      * @hide
@@ -2064,7 +2245,7 @@ public class Activity extends ContextThemeWrapper
      */
     public final void setDefaultKeyMode(int mode) {
         mDefaultKeyMode = mode;
-        
+
         // Some modes use a SpannableStringBuilder to track & dispatch input events
         // This list must remain in sync with the switch in onKeyDown()
         switch (mode) {
@@ -2119,7 +2300,7 @@ public class Activity extends ContextThemeWrapper
             }
             return true;
         }
-        
+
         if (mDefaultKeyMode == DEFAULT_KEYS_DISABLE) {
             return false;
         } else if (mDefaultKeyMode == DEFAULT_KEYS_SHORTCUT) {
@@ -2143,12 +2324,12 @@ public class Activity extends ContextThemeWrapper
 
                     final String str = mDefaultKeySsb.toString();
                     clearSpannable = true;
-                    
+
                     switch (mDefaultKeyMode) {
                     case DEFAULT_KEYS_DIALER:
                         Intent intent = new Intent(Intent.ACTION_DIAL,  Uri.parse("tel:" + str));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);    
+                        startActivity(intent);
                         break;
                     case DEFAULT_KEYS_SEARCH_LOCAL:
                         startSearch(str, false, null, false);
@@ -2212,7 +2393,7 @@ public class Activity extends ContextThemeWrapper
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
         return false;
     }
-    
+
     /**
      * Called when the activity has detected the user's press of the back
      * key.  The default implementation simply finishes the current activity,
@@ -2253,10 +2434,9 @@ public class Activity extends ContextThemeWrapper
             finish();
             return true;
         }
-        
         return false;
     }
-    
+
     /**
      * Called when the trackball was moved and not handled by any of the
      * views inside of the activity.  So, for example, if the trackball moves
@@ -2325,7 +2505,7 @@ public class Activity extends ContextThemeWrapper
      */
     public void onUserInteraction() {
     }
-    
+
     public void onWindowAttributesChanged(WindowManager.LayoutParams params) {
         // Update window manager if: we have a view, that view is
         // attached to its parent (which will be a RootView), and
@@ -2370,7 +2550,7 @@ public class Activity extends ContextThemeWrapper
      */
     public void onWindowFocusChanged(boolean hasFocus) {
     }
-    
+
     /**
      * Called when the main window associated with the activity has been
      * attached to the window manager.
@@ -2380,7 +2560,7 @@ public class Activity extends ContextThemeWrapper
      */
     public void onAttachedToWindow() {
     }
-    
+
     /**
      * Called when the main window associated with the activity has been
      * detached from the window manager.
@@ -2390,7 +2570,7 @@ public class Activity extends ContextThemeWrapper
      */
     public void onDetachedFromWindow() {
     }
-    
+
     /**
      * Returns true if this activity's <em>main</em> window currently has window focus.
      * Note that this is not the same as the view itself having focus.
@@ -2409,7 +2589,7 @@ public class Activity extends ContextThemeWrapper
         }
         return false;
     }
-    
+
     /**
      * Called to process key events.  You can override this to intercept all 
      * key events before they are dispatched to the window.  Be sure to call 
@@ -2459,15 +2639,535 @@ public class Activity extends ContextThemeWrapper
      * @return boolean Return true if this event was consumed.
      */
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            onUserInteraction();
+        if (mWindow.mIsFloatingWindow) {
+            if (isUnSnap()) {
+                mScaleGestureDetector.onTouchEvent(ev);
+            }
+            int actionBarHeight = getActionBarHeight(false);
+            switch (ev.getAction()) {
+                  case MotionEvent.ACTION_DOWN:
+                       setTouchViewDown(ev.getX(), ev.getY());
+                       onUserInteraction();
+                       updateFocusApp();
+                       if (viewY < actionBarHeight) {
+                           if (!mChangedPreviousRange) {
+                               setPreviousTouchRange(ev.getRawX(), ev.getRawY());
+                               mChangedPreviousRange = true;
+                           }
+                       }
+                       break;
+                  case MotionEvent.ACTION_MOVE:
+                       if (viewY < actionBarHeight) {
+                           changeFlagsLayoutParams();
+                           setTouchViewMove(ev.getRawX(), ev.getRawY());
+                           if (mRestorePosition && moveRangeAboveLimit(ev)) {
+                               restoreOldPosition();
+                           }
+                           showSnap((int) ev.getRawX(), (int) ev.getRawY());
+                       }
+                       break;
+                  case MotionEvent.ACTION_UP:
+                       if (viewY < actionBarHeight) {
+                           mChangedFlags = false;
+                           finishSnap(isValidSnap() && mTimeoutDone);
+                           discardTimeout();
+                           mChangedPreviousRange = false;
+                       }
+                       break;
+             }
+        } else {
+             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+                 onUserInteraction();
+             }
         }
         if (getWindow().superDispatchTouchEvent(ev)) {
             return true;
         }
+
         return onTouchEvent(ev);
     }
-    
+
+    /**
+     * @hide
+     */
+    public void setTouchViewDown(float x , float y) {
+        viewX = x;
+        viewY = y;
+    }
+
+    /**
+     * @hide
+     */
+    public void setPreviousTouchRange(float x , float y) {
+        mPreviousRange[0] = x;
+        mPreviousRange[1] = y;
+    }
+
+    /**
+     * @hide
+     */
+    public void setTouchViewMove(float x , float y) {
+        screenX = x;
+        screenY = y;
+        leftFromScreen = (screenX - viewX);
+        topFromScreen = (screenY - viewY);
+        initLayoutParams(leftFromScreen, topFromScreen);
+    }
+
+    /**
+     * @hide
+     */
+    public void setChangedPreviousRange(boolean needed) {
+        mChangedPreviousRange = needed;
+    }
+
+    /**
+     * @hide
+     */
+    public boolean getChangedPreviousRange() {
+        return mChangedPreviousRange;
+    }
+
+    private int getActionBarHeight(boolean smaller) {
+        ActionBar actionBar = getActionBar();
+        int actionBarHeight = (actionBar != null) ? actionBar.getHeight()
+                          : getAppDimensionPixel(smaller);
+        return (smaller ? getAppDimensionPixel(smaller) : actionBarHeight);
+    }
+
+    /**
+     * @hide
+     */
+    public void updateFocusApp() {
+        IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+        try {
+             wm.notifyFloatActivityTouched(mToken, false);
+        } catch (RemoteException e) {
+             Log.e(TAG, "Cannot notify activity touched", e);
+        }
+    }
+
+    private void initLayoutParams(float x , float y) {
+        WindowManager.LayoutParams param = mWindow.getAttributes();
+        param.x = (int) x;
+        param.y = (int) y;
+        mWindow.setAttributes(param);
+    }
+
+    /**
+     * @hide
+     */
+    public void changeFlagsLayoutParams() {
+        mWindow.setGravity(Gravity.LEFT | Gravity.TOP);
+        if (!mChangedFlags) {
+            mChangedFlags = true;
+            mWindow.setCloseOnTouchOutside(false);
+            mWindow.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+            mWindow.addFlags(WindowManager.LayoutParams.FLAG_SPLIT_TOUCH);
+            if (ActivityManager.isHighEndGfx()) {
+                mWindow.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+            }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void setChangedFlags(boolean changed) {
+        mChangedFlags = changed;
+    }
+
+    /**
+     * @hide
+     */
+    public boolean moveRangeAboveLimit(MotionEvent event) {
+        final float x = event.getRawX();
+        final float y = event.getRawY();
+
+        boolean returnValue = false;
+        if (Math.abs(mPreviousRange[0] - x) > MOVE_MAX_RANGE) {
+            returnValue = true;
+        } else if (Math.abs(mPreviousRange[1] - y) > MOVE_MAX_RANGE) {
+            returnValue = true;
+        }
+        return returnValue;
+    }
+
+    /**
+     * @hide
+     */
+    public void showSnap(int x, int y) {
+        initSnappable(x, y);
+        calculateSnap();
+        if (isValidSnap()) {
+            setupTimeout();
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void finishSnap(boolean apply) {
+        if (apply) {
+            if (saveOldPosition()) {
+                mRestorePosition = true;
+            }
+	    WindowManager.LayoutParams lpp = mWindow.getAttributes();
+	    lpp.width = mSnapParam[0];
+	    lpp.height = mSnapParam[1];
+	    int gravity = mSnapParam[2];
+	    lpp.x = (gravity == Gravity.RIGHT) ? (mCurrentScreenWidth / 2) : 0;
+	    lpp.y = (gravity == Gravity.BOTTOM) ? (mCurrentScreenHeight / 2) : 0;
+	    mWindow.setAttributes(lpp);
+        } else {
+	    mSnap = SNAP_NONE;
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public boolean isValidSnap() {
+        return (mSnapParam[0] != UNKNOWN) &&
+                (mSnapParam[1] != UNKNOWN) &&
+                 (mSnapParam[2] != UNKNOWN);
+    }
+
+    private boolean saveOldPosition() {
+        if (mRestorePosition) return true;
+        if (mSnapped) {
+            return (isUnSnap() || mTimeoutRunning);
+        }
+        mSnapped = true;
+        final WindowManager.LayoutParams params = mWindow.getAttributes();
+        int[] layout = { params.x, params.y, params.width, params.height };
+        mOldLayout = layout;
+        return true;
+    }
+
+    private boolean isUnSnap() {
+        return (mSnap == SNAP_NONE);
+    }
+
+    /**
+     * @hide
+     */
+    public boolean restoreOldPosition() {
+        if (!mSnapped) return false;
+        restoreOldPositionWithoutRefresh();
+        return true;
+    }
+
+    private void restoreOldPositionWithoutRefresh() {
+        if (!mSnapped) return;
+        WindowManager.LayoutParams params = mWindow.getAttributes();
+        params.x = mOldLayout[0];
+        params.y = mOldLayout[1];
+        params.width = mOldLayout[2];
+        params.height = mOldLayout[3];
+        mWindow.setAttributes(params);
+        mSnapped = false;
+        mRestorePosition = false;
+    }
+
+    /**
+     * @hide
+     */
+    public boolean getRestorePosition() {
+        return mRestorePosition;
+    }
+
+    private boolean initSnappable(int x, int y) {
+        if ((Math.abs(mOldParam[0] - x) > mSensitivity) ||
+              (Math.abs(mOldParam[1] - y) > mSensitivity)) {
+            mOldParam[0] = x;
+            mOldParam[1] = y;
+            return false;
+        }
+        mOldParam[0] = x;
+        mOldParam[1] = y;
+
+        if (x < mRange) {
+            mSnap = SNAP_LEFT;
+        } else if (x > (mCurrentScreenWidth - mRange)) {
+            mSnap = SNAP_RIGHT;
+        } else if (y < mRange) {
+            mSnap = SNAP_TOP;
+        } else if (y > (mCurrentScreenHeight - mRange)) {
+            mSnap = SNAP_BOTTOM;
+        } else {
+            mSnap = SNAP_NONE;
+            return false;
+        }
+        return true;
+    }
+
+    private void refreshAppLayoutSize() {
+        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+
+        try {
+            Rect windowFloatViewBounds = wm.getFloatViewRect();
+            mAppFloatViewWidth = (windowFloatViewBounds.right - windowFloatViewBounds.left);
+            mAppFloatViewHeight = (windowFloatViewBounds.bottom - windowFloatViewBounds.top);
+
+            Rect windowCurrentScreenBounds = wm.getAppFullscreenViewRect();
+            mCurrentScreenWidth = (windowCurrentScreenBounds.right - windowCurrentScreenBounds.left);
+            mCurrentScreenHeight = (windowCurrentScreenBounds.bottom - windowCurrentScreenBounds.top);
+
+            Rect windowMinimumBounds = wm.getAppMinimumViewRect();
+            mAppMinimumWidth = (windowMinimumBounds.right - windowMinimumBounds.left);
+            mAppMinimumHeight = (windowMinimumBounds.bottom - windowMinimumBounds.top);
+
+        } catch (RemoteException e) {
+            Log.e(TAG, "Could not perform get size view layout", e);
+        }
+    }
+
+    private void refreshAppFloatViewSize() {
+        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+
+        try {
+            Rect windowBounds = wm.getFloatViewRect();
+            mAppFloatViewWidth = (windowBounds.right - windowBounds.left);
+            mAppFloatViewHeight = (windowBounds.bottom - windowBounds.top);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Could not perform float view layout", e);
+        }
+    }
+
+    private void refreshCurrentScreenSize() {
+        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+
+        try {
+            Rect windowBounds = wm.getAppFullscreenViewRect();
+            mCurrentScreenWidth = (windowBounds.right - windowBounds.left);
+            mCurrentScreenHeight = (windowBounds.bottom - windowBounds.top);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Could not perform get app fullscreen view layout", e);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void forceSnap(int side) {
+        if (side == SNAP_NONE) {
+            restoreOldPosition();
+            return;
+        }
+        if (mSnapped) {
+            restoreOldPositionWithoutRefresh();
+        }
+        mSnap = side;
+        calculateSnap();
+        finishSnap(true);
+    }
+
+    private void calculateSnap() {
+        switch (mSnap) {
+              case SNAP_LEFT:
+                   mSnapParam[0] = (mCurrentScreenWidth / 2);
+                   mSnapParam[1] = ViewGroup.LayoutParams.MATCH_PARENT;
+                   mSnapParam[2] = Gravity.TOP | Gravity.LEFT;
+                   break;
+              case SNAP_RIGHT:
+                   mSnapParam[0] = (mCurrentScreenWidth / 2);
+                   mSnapParam[1] = ViewGroup.LayoutParams.MATCH_PARENT;
+                   mSnapParam[2] = Gravity.RIGHT;
+                   break;
+              case SNAP_TOP:
+                   mSnapParam[0] = ViewGroup.LayoutParams.MATCH_PARENT;
+                   mSnapParam[1] = (mCurrentScreenHeight / 2);
+                   mSnapParam[2] = Gravity.TOP;
+                   break;
+              case SNAP_BOTTOM:
+                   mSnapParam[0] = ViewGroup.LayoutParams.MATCH_PARENT;
+                   mSnapParam[1] = (mCurrentScreenHeight / 2);
+                   mSnapParam[2] = Gravity.BOTTOM;
+                   break;
+              case SNAP_NONE:
+                   mSnapParam[0] = UNKNOWN;
+                   mSnapParam[1] = UNKNOWN;
+                   mSnapParam[2] = UNKNOWN;
+                   break;
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public boolean getTimeoutDone() {
+        return mTimeoutDone;
+    }
+
+    /**
+     * @hide
+     */
+    public void discardTimeout() {
+        mTimeoutDone = false;
+        mTimeoutRunning = false;
+        mHandler.removeCallbacks(mRunnable);
+    }
+
+    private void setupTimeout() {
+        if (mTimeoutRunning) return;
+        if (mRunnable == null) {
+            mRunnable = new Runnable() {
+                  @Override
+                  public void run() {
+                      mHandler.postDelayed(new Runnable() {
+                               @Override
+                               public void run() {
+                                   mTimeoutRunning = false;
+                                   mTimeoutDone = true;
+                               }
+                      }, 250);
+                  }
+            };
+        }
+        mTimeoutRunning = true;
+        mHandler.postDelayed(mRunnable, 750);
+    }
+
+    private int getAppDimensionPixel(boolean smaller) {
+        float scale = getResources().getDisplayMetrics().density;
+        int sized = smaller ? 32 : 48;
+        int pixel = (int) (sized * scale + 0.5f);
+        return pixel;
+    }
+
+    private void refreshAppMinimumSize() {
+        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+
+        try {
+            Rect windowBounds = wm.getAppMinimumViewRect();
+            mAppMinimumWidth = (windowBounds.right - windowBounds.left);
+            mAppMinimumHeight = (windowBounds.bottom - windowBounds.top);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Could not perform get app minimum view layout", e);
+        }
+    }
+
+    private void sendAppLaunchBroadcast() {
+        Intent appIntent = new Intent(Intent.ACTION_ACTIVITY_LAUNCH_DETECTOR);
+        appIntent.putExtra("packagename", getPackageName());
+        appIntent.addFlags(
+                Intent.FLAG_RECEIVER_REGISTERED_ONLY | Intent.FLAG_RECEIVER_FOREGROUND);
+        sendBroadcast(appIntent);
+    }
+
+    private void sendAppEndBroadcast() {
+        Intent endIntent = new Intent(Intent.ACTION_ACTIVITY_END_DETECTOR);
+        endIntent.putExtra("packagename", getPackageName());
+        endIntent.addFlags(
+                Intent.FLAG_RECEIVER_REGISTERED_ONLY | Intent.FLAG_RECEIVER_FOREGROUND);
+        sendBroadcast(endIntent);
+    }
+
+    private void setProgressLayoutApp() {
+        if (mLayoutRunnable == null) {
+            mLayoutRunnable = new Runnable() {
+                  @Override
+                  public void run() {
+                      setCurrentLayoutApp();
+                  }
+            };
+        }
+        mHandler.postDelayed(mLayoutRunnable, 500);
+    }
+
+    private void discardLayoutProgress() {
+        mHandler.removeCallbacks(mLayoutRunnable);
+    }
+
+    private void setCurrentLayoutApp() {
+        if (isUnSnap()) {
+            final WindowManager.LayoutParams params = mWindow.getAttributes();
+            final int width = params.width;
+            final int height = params.height;
+            if (width >= mCurrentScreenWidth) {
+                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            } else if (width <= mAppMinimumWidth) {
+                params.width = mAppMinimumWidth;
+            }
+            if (height >= mCurrentScreenHeight) {
+                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            } else if (height <= mAppMinimumHeight) {
+                params.height = mAppMinimumHeight;
+            }
+            mWindow.setAttributes(params);
+        }
+        mHandler.removeCallbacks(mLayoutRunnable);
+    }
+
+    /**
+     * @hide
+     */
+    public void setFullscreenApp() {
+        if (mIsFullscreenApp) {
+            return;
+        }
+        WindowManager.LayoutParams params = mWindow.getAttributes();
+        int[] layout = { params.x, params.y, params.width, params.height };
+        mLastLayout = layout;
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        mWindow.setAttributes(params);
+        mIsFullscreenApp = true;
+    }
+
+    /**
+     * @hide
+     */
+    public void restorePreviousLayoutApp() {
+        if (!mIsFullscreenApp) {
+            return;
+        }
+        WindowManager.LayoutParams params = mWindow.getAttributes();
+        params.x = mLastLayout[0];
+        params.y = mLastLayout[1];
+        params.width = mLastLayout[2];
+        params.height = mLastLayout[3];
+        mWindow.setAttributes(params);
+        mIsFullscreenApp = false;
+    }
+
+    private final ScaleGestureDetector.OnScaleGestureListener mScaleGestureListener
+            = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+        private float lastSpanX;
+        private float lastSpanY;
+        private WindowManager.LayoutParams params;
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+            discardLayoutProgress();
+            lastSpanX = scaleGestureDetector.getCurrentSpanX();
+            lastSpanY = scaleGestureDetector.getCurrentSpanY();
+            params = mWindow.getAttributes();
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            float spanX = scaleGestureDetector.getCurrentSpanX();
+            float spanY = scaleGestureDetector.getCurrentSpanY();
+            float newWidth = spanX / lastSpanX * (float) params.width;
+            float newHeight = spanY / lastSpanY * (float) params.height;
+            params.width = (int) newWidth;
+            params.height = (int) newHeight;
+            mWindow.setAttributes(params);
+            lastSpanX = spanX;
+            lastSpanY = spanY;
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            setProgressLayoutApp();
+        }
+    };
+
     /**
      * Called to process trackball events.  You can override this to
      * intercept all trackball events before they are dispatched to the
@@ -2619,7 +3319,7 @@ public class Activity extends ContextThemeWrapper
                     }
                 }
                 return false;
-                
+
             case Window.FEATURE_CONTEXT_MENU:
                 if(titleCondensed != null) {
                     EventLog.writeEvent(50000, 1, titleCondensed.toString());
@@ -2633,7 +3333,7 @@ public class Activity extends ContextThemeWrapper
                 return false;
         }
     }
-    
+
     /**
      * Default implementation of
      * {@link android.view.Window.Callback#onPanelClosed(int, Menu)} for
@@ -2669,7 +3369,7 @@ public class Activity extends ContextThemeWrapper
     public void invalidateOptionsMenu() {
         mWindow.invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
     }
-    
+
     /**
      * Initialize the contents of the Activity's standard options menu.  You
      * should place your menu items in to <var>menu</var>.
@@ -2871,7 +3571,7 @@ public class Activity extends ContextThemeWrapper
             mParent.onOptionsMenuClosed(menu);
         }
     }
-    
+
     /**
      * Programmatically opens the options menu. If the options menu is already
      * open, this method does nothing.
@@ -2917,7 +3617,7 @@ public class Activity extends ContextThemeWrapper
     public void registerForContextMenu(View view) {
         view.setOnCreateContextMenuListener(this);
     }
-    
+
     /**
      * Prevents a context menu to be shown for the given view. This method will remove the
      * {@link OnCreateContextMenuListener} on the view.
@@ -2928,7 +3628,7 @@ public class Activity extends ContextThemeWrapper
     public void unregisterForContextMenu(View view) {
         view.setOnCreateContextMenuListener(null);
     }
-    
+
     /**
      * Programmatically opens the context menu for a particular {@code view}.
      * The {@code view} should have been added via
@@ -2939,14 +3639,14 @@ public class Activity extends ContextThemeWrapper
     public void openContextMenu(View view) {
         view.showContextMenu();
     }
-    
+
     /**
      * Programmatically closes the most recently opened context menu, if showing.
      */
     public void closeContextMenu() {
         mWindow.closePanel(Window.FEATURE_CONTEXT_MENU);
     }
-    
+
     /**
      * This hook is called whenever an item in a context menu is selected. The
      * default implementation simply returns false to have the normal processing
@@ -3126,7 +3826,7 @@ public class Activity extends ContextThemeWrapper
             }
             mManagedDialogs.put(id, md);
         }
-        
+
         md.mArgs = args;
         onPrepareDialog(id, md.mDialog, args);
         md.mDialog.show();
@@ -3155,7 +3855,7 @@ public class Activity extends ContextThemeWrapper
         if (mManagedDialogs == null) {
             throw missingDialog(id);
         }
-        
+
         final ManagedDialog md = mManagedDialogs.get(id);
         if (md == null) {
             throw missingDialog(id);
@@ -3226,7 +3926,7 @@ public class Activity extends ContextThemeWrapper
         startSearch(null, false, null, false); 
         return true;
     }
-    
+
     /**
      * This hook is called to launch the search UI.
      * 
@@ -4140,7 +4840,7 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
-    
+
     void makeVisible() {
         if (!mWindowAdded) {
             ViewManager wm = getWindowManager();
@@ -4149,7 +4849,7 @@ public class Activity extends ContextThemeWrapper
         }
         mDecor.setVisibility(View.VISIBLE);
     }
-    
+
     /**
      * Check to see whether this activity is in the process of finishing,
      * either because you called {@link #finish} on it or someone else
@@ -4415,7 +5115,7 @@ public class Activity extends ContextThemeWrapper
             mParent.setRequestedOrientation(requestedOrientation);
         }
     }
-    
+
     /**
      * Return the current requested orientation of the activity.  This will
      * either be the orientation requested in its component's manifest, or
@@ -4438,7 +5138,7 @@ public class Activity extends ContextThemeWrapper
         }
         return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     }
-    
+
     /**
      * Return the identifier of the task this activity is in.  This identifier
      * will remain the same for the lifetime of the activity.
@@ -4541,7 +5241,7 @@ public class Activity extends ContextThemeWrapper
         
         mSearchManager = new SearchManager(this, null);
     }
-    
+
     @Override
     public Object getSystemService(String name) {
         if (getBaseContext() == null) {
@@ -4636,7 +5336,7 @@ public class Activity extends ContextThemeWrapper
         getWindow().setFeatureInt(Window.FEATURE_INDETERMINATE_PROGRESS,
                 visible ? Window.PROGRESS_VISIBILITY_ON : Window.PROGRESS_VISIBILITY_OFF);
     }
-    
+
     /**
      * Sets whether the horizontal progress bar in the title should be indeterminate (the circular
      * is always indeterminate).
@@ -4650,7 +5350,7 @@ public class Activity extends ContextThemeWrapper
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS,
                 indeterminate ? Window.PROGRESS_INDETERMINATE_ON : Window.PROGRESS_INDETERMINATE_OFF);
     }
-    
+
     /**
      * Sets the progress for the progress bars in the title.
      * <p>
@@ -4664,7 +5364,7 @@ public class Activity extends ContextThemeWrapper
     public final void setProgress(int progress) {
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS, progress + Window.PROGRESS_START);
     }
-    
+
     /**
      * Sets the secondary progress for the progress bar in the title. This
      * progress is drawn between the primary progress (set via
@@ -4714,7 +5414,7 @@ public class Activity extends ContextThemeWrapper
     public final int getVolumeControlStream() {
         return getWindow().getVolumeControlStream();
     }
-    
+
     /**
      * Runs the specified action on the UI thread. If the current thread is the UI
      * thread, then the action is executed immediately. If the current thread is
@@ -4759,7 +5459,7 @@ public class Activity extends ContextThemeWrapper
         if (!"fragment".equals(name)) {
             return onCreateView(name, context, attrs);
         }
-        
+
         String fname = attrs.getAttributeValue(null, "class");
         TypedArray a = 
             context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.Fragment);
@@ -4769,7 +5469,7 @@ public class Activity extends ContextThemeWrapper
         int id = a.getResourceId(com.android.internal.R.styleable.Fragment_id, View.NO_ID);
         String tag = a.getString(com.android.internal.R.styleable.Fragment_tag);
         a.recycle();
-        
+
         int containerId = parent != null ? parent.getId() : 0;
         if (containerId == View.NO_ID && id == View.NO_ID && tag == null) {
             throw new IllegalArgumentException(attrs.getPositionDescription()
@@ -5192,7 +5892,7 @@ public class Activity extends ContextThemeWrapper
         attach(context, aThread, instr, token, 0, application, intent, info, title, parent, id,
             lastNonConfigurationInstances, config);
     }
-    
+
     final void attach(Context context, ActivityThread aThread,
             Instrumentation instr, IBinder token, int ident,
             Application application, Intent intent, ActivityInfo info,
@@ -5262,8 +5962,13 @@ public class Activity extends ContextThemeWrapper
             // Create our new window
             mWindow = PolicyManager.makeNewWindow(this);
             mWindow.mIsFloatingWindow = true;
-            mWindow.setCloseOnTouchOutsideIfNotSet(true);
-            mWindow.setGravity(Gravity.CENTER);
+            if (!isAlreadyAttachToWindow) {
+                isAlreadyAttachToWindow = true;
+                mWindow.setCloseOnTouchOutsideIfNotSet(true);
+                mWindow.setGravity(Gravity.CENTER);
+                // Scale it
+                scaleFloatingWindow();
+            }
 
             mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
                     WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -5272,34 +5977,23 @@ public class Activity extends ContextThemeWrapper
             params.dimAmount = 0.5f;
             mWindow.setAttributes((WindowManager.LayoutParams) params);
 
-            // Scale it
-            scaleFloatingWindow(context);
-
+            refreshAppLayoutSize();
             return true;
         } else {
             mWindow = PolicyManager.makeNewWindow(this);
-
             return false;
         }
     }
 
-    private void scaleFloatingWindow(Context context) {
-        if (!mWindow.mIsFloatingWindow) {
-            return;
-        }
-        WindowManager wm = null;
-        if (context != null) {
-            wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        } else {
-            wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        }
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        if (metrics.heightPixels > metrics.widthPixels) {
-            mWindow.setLayout((int)(metrics.widthPixels * 0.9f), (int)(metrics.heightPixels * 0.7f));
-        } else {
-            mWindow.setLayout((int)(metrics.widthPixels * 0.7f), (int)(metrics.heightPixels * 0.8f));
+    private void scaleFloatingWindow() {
+        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+
+        try {
+            Rect windowBounds = wm.getFloatViewRect();
+            mWindow.setLayout(windowBounds.right - windowBounds.left,
+                    windowBounds.bottom - windowBounds.top);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Could not perform float view layout", e);
         }
     }
 
@@ -5314,7 +6008,7 @@ public class Activity extends ContextThemeWrapper
                 com.android.internal.R.styleable.Window_windowNoDisplay, false);
         mFragments.dispatchActivityCreated();
     }
-    
+
     final void performStart() {
         mFragments.noteStateNotSaved();
         mCalled = false;
@@ -5339,7 +6033,7 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
-    
+
     final void performRestart() {
         mFragments.noteStateNotSaved();
 
@@ -5378,14 +6072,14 @@ public class Activity extends ContextThemeWrapper
             performStart();
         }
     }
-    
+
     final void performResume() {
         performRestart();
-        
+
         mFragments.execPendingActions();
-        
+
         mLastNonConfigurationInstances = null;
-        
+
         mCalled = false;
         // mResumed is set by the instrumentation
         mInstrumentation.callActivityOnResume(this);
@@ -5397,10 +6091,10 @@ public class Activity extends ContextThemeWrapper
 
         // Now really resume, and install the current status bar and menu.
         mCalled = false;
-        
+
         mFragments.dispatchResume();
         mFragments.execPendingActions();
-        
+
         onPostResume();
         if (!mCalled) {
             throw new SuperNotCalledException(
@@ -5423,7 +6117,7 @@ public class Activity extends ContextThemeWrapper
         }
         mResumed = false;
     }
-    
+
     final void performUserLeaving() {
         onUserInteraction();
         onUserLeaveHint();
@@ -5441,7 +6135,7 @@ public class Activity extends ContextThemeWrapper
                 }
             }
         }
-        
+
         if (!mStopped) {
             if (mWindow != null) {
                 mWindow.closeAllPanels();
@@ -5450,9 +6144,9 @@ public class Activity extends ContextThemeWrapper
             if (mToken != null && mParent == null) {
                 WindowManagerGlobal.getInstance().setStoppedState(mToken, true);
             }
-            
+
             mFragments.dispatchStop();
-            
+
             mCalled = false;
             mInstrumentation.callActivityOnStop(this);
             if (!mCalled) {
@@ -5460,7 +6154,7 @@ public class Activity extends ContextThemeWrapper
                     "Activity " + mComponent.toShortString() +
                     " did not call through to super.onStop()");
             }
-    
+
             synchronized (mManagedCursors) {
                 final int N = mManagedCursors.size();
                 for (int i=0; i<N; i++) {
@@ -5471,7 +6165,7 @@ public class Activity extends ContextThemeWrapper
                     }
                 }
             }
-    
+
             mStopped = true;
         }
         mResumed = false;
@@ -5494,7 +6188,7 @@ public class Activity extends ContextThemeWrapper
             mLoaderManager.doDestroy();
         }
     }
-    
+
     /**
      * @hide
      */

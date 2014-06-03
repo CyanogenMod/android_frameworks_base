@@ -719,6 +719,13 @@ public class ActionBarView extends AbsActionBarView {
         return mLogo != null;
     }
 
+    /**
+     * @hide
+     */
+    public TextView getTitleViewActionBar() {
+        return mTitleView;
+    }
+
     public void setNavigationMode(int mode) {
         final int oldMode = mNavigationMode;
         if (mode != oldMode) {

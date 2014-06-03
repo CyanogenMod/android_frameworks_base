@@ -94,6 +94,20 @@ public class ActionBarContainer extends FrameLayout {
         invalidate();
     }
 
+    /**
+     * @hide
+     */
+    public Drawable getPrimaryBackground() {
+        return mBackground;
+    }
+
+    /**
+     * @hide
+     */
+    public Drawable getStackedBackground() {
+        return mStackedBackground;
+    }
+
     public void setStackedBackground(Drawable bg) {
         if (mStackedBackground != null) {
             mStackedBackground.setCallback(null);

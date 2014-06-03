@@ -544,6 +544,7 @@ easier.
     <style name="Theme.DeviceDefault.Light.Panel" parent="Theme.Holo.Light.Panel" >
 
     </style>
+
     <!-- DeviceDefault theme for windows that want to have the user's selected wallpaper appear
     behind them. -->
     <style name="Theme.DeviceDefault.Wallpaper" parent="Theme.Holo.Wallpaper" >
