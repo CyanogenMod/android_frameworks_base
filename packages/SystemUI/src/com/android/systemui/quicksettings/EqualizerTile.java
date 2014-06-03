@@ -26,6 +26,7 @@ import android.media.RemoteControlClient;
 import android.media.RemoteController;
 import android.media.audiofx.AudioEffect;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
@@ -191,6 +192,13 @@ public class EqualizerTile extends QuickSettingsTile {
     @Override
     public void updateQuickSettings() {
         super.updateQuickSettings();
+        TextView tv = (TextView) mTile.findViewById(R.id.text);
+
+        if (tv != null) {
+            tv.setText(mLabel);
+            tv.setTextSize(mTileTextSize);
+            tv.setPadding(0, mTileTextPadding, 0, 0);
+        }
 
         boolean isMusicPlaying = isMusicPlaying();
         mVisualizer.setEnabled(isMusicPlaying);
