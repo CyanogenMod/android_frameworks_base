@@ -1897,7 +1897,7 @@
     <permission android:name="android.permission.INJECT_EVENTS"
         android:label="@string/permlab_injectEvents"
         android:description="@string/permdesc_injectEvents"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signatureOrSystem" />
 
     <!-- @hide Allows an application to register an input filter which filters the stream
          of user events (keys, touch, trackball) before they are dispatched to any window. -->
