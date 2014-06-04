@@ -5619,7 +5619,6 @@ public class PackageManagerService extends IPackageManager.Stub {
            String idmapPath = getIdmapPath(appPkg, opkg);
            new File(idmapPath).delete();
         }
-        mOverlays.remove(appPkg.packageName);
     }
 
     private void recursiveDelete(File f) {
