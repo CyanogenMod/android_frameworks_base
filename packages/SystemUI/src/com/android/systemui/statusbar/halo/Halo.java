@@ -156,6 +156,8 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
     private String mNotificationText = "";
 
     private Paint mPaintHolo = new Paint();
+    private Paint mPaintHoloGrey = new Paint();
+    private Paint mPaintWhite = new Paint();
     private Paint mPaintHoloRed = new Paint();
 
     private boolean mAttached = false;
@@ -240,7 +242,7 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
             if (!selfChange) {
                 //mEffect.wake();
                 mBar.restartHalo();
-                //mEffect.ping(mPaintHoloBlue, HaloEffect.WAKE_TIME);
+                //mEffect.ping(mPaintHoloGrey, HaloEffect.WAKE_TIME);
                 mEffect.nap(HaloEffect.SNAP_TIME + 1000);
                 if (mHideTicker) mEffect.sleep(HaloEffect.SNAP_TIME + HaloEffect.NAP_TIME + HaloEffect.EXTRA_SLEEP_TIME, HaloEffect.SLEEP_TIME, false);
             }
@@ -315,8 +317,10 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         mTriggerPos = getWMParams();
 
         // Init colors
-        mPaintHolo.setAntiAlias(true);
-        mPaintHolo.setColor(0xff33b5e5);
+        mPaintHoloGrey.setAntiAlias(true);
+        mPaintHoloGrey.setColor(0xffbbbbbb);
+        mPaintWhite.setAntiAlias(true);
+        mPaintWhite.setColor(0xfff0f0f0);
         mPaintHoloRed.setAntiAlias(true);
         mPaintHoloRed.setColor(0xffcc0000);
 
@@ -1615,13 +1619,25 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                     if (mIsNotificationNew) {
                         mNotificationText = text;
                         mLastNotificationEntry = entry;
-                        if (mState == STATE_IDLE || mState == STATE_HIDDEN) {
-                            if (mState == STATE_HIDDEN) clearTicker();
-                            mEffect.wake();
-                            mEffect.nap(HaloEffect.NAP_DELAY + HaloEffect.WAKE_TIME * 2);
-                            if (mHideTicker) mEffect.sleep(HaloEffect.SLEEP_DELAY + HaloEffect.WAKE_TIME * 2, HaloEffect.SLEEP_TIME, false);
-                        } else if (mNinjaMode && mState == STATE_SILENT) {
-                            mEffect.sleep(HaloEffect.WAKE_TIME * 3, HaloEffect.SLEEP_TIME, true);
+                        if (mState != STATE_FIRST_RUN) {
+                            if (mState == STATE_IDLE || mState == STATE_HIDDEN) {
+                                if (mState == STATE_HIDDEN) clearTicker();
+                                mEffect.wake();
+                                mEffect.nap(HaloEffect.NAP_DELAY + HaloEffect.WAKE_TIME * 2);
+                            } else if (mHaloHide && mState == STATE_SILENT) {
+                                mEffect.sleep(HaloEffect.WAKE_TIME * 3,
+                                                HaloEffect.SLEEP_TIME, true);
+                            }
+                            boolean showMsgBox = Settings.System
+                                                         .getInt(mContext.getContentResolver(),
+                                                         Settings.System.HALO_MSGBOX, 1) == 1;
+                            mPingNewcomer = true;
+                            tick(entry, HaloEffect.WAKE_TIME * 2, 1000, true, showMsgBox);
+
+                            // Pop while not tasking, only if notification is certified fresh
+                            if (mGesture != GESTURE_TASK && mState != STATE_SILENT) {
+                                mEffect.ping(mPaintHoloGrey, HaloEffect.WAKE_TIME * 2);
+                            }
                         }
                         boolean showMsgBox = Settings.System.getInt(mContext.getContentResolver(), Settings.System.HALO_MSGBOX, 1) == 1;
                         tick(entry, HaloEffect.WAKE_TIME * 2, 1000, true, showMsgBox, false);
@@ -1774,10 +1790,10 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
                                 NotificationData.Entry entry = mNotificationData.get(getHaloMsgIndex(lastMsg - 1, true));                                
                                 mEffect.wake();
                                 mEffect.nap(HaloEffect.NAP_DELAY + HaloEffect.WAKE_TIME * 2);
-                                if (mHideTicker) mEffect.sleep(HaloEffect.SLEEP_DELAY + HaloEffect.WAKE_TIME * 2, HaloEffect.SLEEP_TIME, false);
-                                boolean showMsgBox = Settings.System.getInt(resolver, Settings.System.HALO_MSGBOX, 1) == 1;
-                                tick(entry, HaloEffect.WAKE_TIME * 2, 1000, false, showMsgBox, false);
-                                mEffect.ping(mPaintHolo, HaloEffect.WAKE_TIME * 2);
+                                boolean showMsgBox = Settings.System.getInt(resolver,
+                                                            Settings.System.HALO_MSGBOX, 1) == 1;
+                                tick(entry, HaloEffect.WAKE_TIME * 2, 1000, false, showMsgBox);
+                                mEffect.ping(mPaintHoloGrey, HaloEffect.WAKE_TIME * 2);
                                 mPingNewcomer = false;
                             }
                     }
