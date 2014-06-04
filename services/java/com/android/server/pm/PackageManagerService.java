@@ -176,6 +176,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import libcore.io.ErrnoException;
 import libcore.io.IoUtils;
@@ -5777,21 +5779,27 @@ public class PackageManagerService extends IPackageManager.Stub {
             mPackageHashes.remove(p);
         }
 
-        byte[] md5 = getFileMd5Sum(pkg.mPath);
-        if (md5 == null) return 0;
+        byte[] crc = getFileCrC(pkg.mPath);
+        if (crc == null) return 0;
 
-        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(md5).put(IDMAP_HASH_VERSION).array()),
+        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(crc).put(IDMAP_HASH_VERSION).array()),
                 System.currentTimeMillis());
         mPackageHashes.put(pkg.packageName, p);
         return p.first;
     }
 
-    private byte[] getFileMd5Sum(String path) {
+    private byte[] getFileCrC(String path) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            DigestInputStream dis = new DigestInputStream(new FileInputStream(path), md);
-            dis.close();
-            return md.digest();
+            ZipFile zfile = new ZipFile(path);
+            ZipEntry entry = zfile.getEntry("META-INF/MANIFEST.MF");
+            if (entry == null) {
+                Log.e(TAG, "Unable to get MANIFEST.MF from " + path);
+                return null;
+            }
+
+            long crc = entry.getCrc();
+            if (crc == -1) Log.e(TAG, "Unable to get CRC for " + path);
+            return ByteBuffer.allocate(8).putLong(crc).array();
         } catch (Exception e) {
         }
         return null;
