@@ -41,57 +41,60 @@
         <item>com.google.android.gsf|com.google.android.talk</item>
     </string-array>
 
-    <!-- User display names for app ops codes -->
-    <string-array name="app_ops_labels">
-        <item>Trying to access location</item>
-        <item>Trying to access location</item>
-        <item>Trying to access location</item>
-        <item>Trying to use vibrate</item>
-        <item>Trying to read contacts</item>
-        <item>Trying to modify contacts</item>
-        <item>Trying to read call log</item>
-        <item>Trying to modify call log</item>
-        <item>Trying to read calendar</item>
-        <item>Trying to modify calendar</item>
-        <item>Trying to access location</item>
-        <item>Trying to post notification</item>
-        <item>Trying to access location</item>
-        <item>Trying to make phone call</item>
-        <item>Trying to read SMS</item>
-        <item>Trying to write/modify SMS</item>
-        <item>Trying to receive SMS</item>
-        <item>Trying to receive SMS</item>
-        <item>Trying to receive SMS</item>
-        <item>Trying to receive SMS</item>
-        <item>Trying to send SMS</item>
-        <item>Trying to read SMS</item>
-        <item>Trying to write/modify SMS</item>
-        <item>Trying to modify settings</item>
-        <item>Trying to draw on top</item>
-        <item>Trying to access notifications</item>
-        <item>Trying to access Camera</item>
-        <item>Trying to record audio</item>
-        <item>Trying to play audio</item>
-        <item>Trying to read clipboard</item>
-        <item>Trying to modify clipboard</item>
-        <item>Trying to use media buttons</item>
-        <item>Trying to use audio focus</item>
-        <item>Trying to use master volume</item>
-        <item>Trying to use voice volume</item>
-        <item>Trying to use ring volume</item>
-        <item>Trying to use media volume</item>
-        <item>Trying to use alarm volume</item>
-        <item>Trying to use notification volume</item>
-        <item>Trying to use bluetooth volume</item>
-        <item>Trying to Keep device awake</item>
-        <item>Trying to access location</item>
-        <item>Trying to access location</item>
-        <item>Trying to turn on/off Wifi</item>
-        <item>Trying to turn on/off bluetooth</item>
-        <item>Trying to turn on/off mobile data</item>
-        <item>Trying to send MMS</item>
-        <item>Trying to read MMS</item>
-        <item>Trying to write MMS</item>
-        <item>Trying to start at bootup</item>
+    <!-- Do not translate. App ops request strings -->
+    <string-array name="app_ops_labels" translatable="false">
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_use_vibrate</item>
+        <item>@string/app_ops_read_contacts</item>
+        <item>@string/app_ops_modify_contacts</item>
+        <item>@string/app_ops_read_call_log</item>
+        <item>@string/app_ops_modify_call_log</item>
+        <item>@string/app_ops_read_calendar</item>
+        <item>@string/app_ops_modify_calendar</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_post_notification</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_make_phone_call</item>
+        <item>@string/app_ops_read_sms</item>
+        <item>@string/app_ops_write_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_receive_sms</item>
+        <item>@string/app_ops_send_sms</item>
+        <item>@string/app_ops_read_sms</item>
+        <item>@string/app_ops_write_sms</item>
+        <item>@string/app_ops_modify_settings</item>
+        <item>@string/app_ops_draw_on_top</item>
+        <item>@string/app_ops_access_notifications</item>
+        <item>@string/app_ops_access_camera</item>
+        <item>@string/app_ops_record_audio</item>
+        <item>@string/app_ops_play_audio</item>
+        <item>@string/app_ops_read_clipboard</item>
+        <item>@string/app_ops_modify_clipboard</item>
+        <item>@string/app_ops_use_media_buttons</item>
+        <item>@string/app_ops_use_audio_focus</item>
+        <item>@string/app_ops_use_master_volume</item>
+        <item>@string/app_ops_use_voice_volume</item>
+        <item>@string/app_ops_use_ring_volume</item>
+        <item>@string/app_ops_use_media_volume</item>
+        <item>@string/app_ops_use_alarm_volume</item>
+        <item>@string/app_ops_use_notification_volume</item>
+        <item>@string/app_ops_use_bluetooth_volume</item>
+        <item>@string/app_ops_keep_device_awake</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_access_location</item>
+        <item>@string/app_ops_toggle_wifi</item>
+        <item>@string/app_ops_toggle_bluetooth</item>
+        <item>@string/app_ops_toggle_mobile_data</item>
+        <item>@string/app_ops_alarm_wakeup</item>
+        <item>@string/app_ops_send_mms</item>
+        <item>@string/app_ops_read_mms</item>
+        <item>@string/app_ops_write_mms</item>
+        <item>@string/app_ops_start_at_bootup</item>
+        <item>@string/app_ops_toggle_nfc</item>
     </string-array>
+
 </resources>
