@@ -1728,5 +1728,6 @@
         <item>试图读取彩信</item>
         <item>试图修改彩信</item>
         <item>试图自启动</item>
+        <item>试图开关NFC</item>
     </string-array>
 </resources>

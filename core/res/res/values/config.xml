@@ -1388,6 +1388,7 @@
         <item>Trying to read MMS</item>
         <item>Trying to write MMS</item>
         <item>Trying to start at bootup</item>
+        <item>Trying to turn on/off NFC</item>
     </string-array>
 
     <!-- Configuration to restart radio upon PDP_DEACTIVATE with
