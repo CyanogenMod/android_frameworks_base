@@ -81,8 +81,6 @@ import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.WindowManagerGlobal;
 
-import com.android.internal.app.ActivityTrigger;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;

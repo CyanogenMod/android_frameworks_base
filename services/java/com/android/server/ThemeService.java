@@ -48,6 +48,7 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.ThemesContract;
 import android.text.TextUtils;
@@ -75,6 +76,9 @@ import java.util.List;
  */
 public class ThemeService extends IThemeService.Stub {
     private static final String TAG = ThemeService.class.getName();
+
+    private static final String GOOGLE_SETUPWIZARD_PACKAGE = "com.google.android.setupwizard";
+    private static final String CM_SETUPWIZARD_PACKAGE = "com.cyanogenmod.account";
 
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
@@ -461,7 +465,8 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (success) {
-            mContext.sendBroadcast(new Intent(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED));
+            mContext.sendBroadcastAsUser(new Intent(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
+                    UserHandle.ALL);
         }
         return success;
     }
@@ -595,7 +600,8 @@ public class ThemeService extends IThemeService.Stub {
 
         List<ResolveInfo> infos = pm.queryIntentActivities(homeIntent, 0);
         for(ResolveInfo info : infos) {
-            if (info.activityInfo != null && info.activityInfo.applicationInfo != null) {
+            if (info.activityInfo != null && info.activityInfo.applicationInfo != null &&
+                    !isSetupActivity(info)) {
                 String pkgToStop = info.activityInfo.applicationInfo.packageName;
                 Log.d(TAG, "Force stopping " +  pkgToStop + " for theme change");
                 try {
@@ -605,6 +611,11 @@ public class ThemeService extends IThemeService.Stub {
                 }
             }
         }
+    }
+
+    private boolean isSetupActivity(ResolveInfo info) {
+        return GOOGLE_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName) ||
+               CM_SETUPWIZARD_PACKAGE.equals(info.activityInfo.packageName);
     }
 
     private void postProgress(String pkgName) {
