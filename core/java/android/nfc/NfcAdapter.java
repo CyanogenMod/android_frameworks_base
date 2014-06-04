@@ -22,6 +22,7 @@ import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.Activity;
 import android.app.ActivityThread;
+import android.app.AppOpsManager;
 import android.app.OnActivityPausedListener;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -309,6 +310,7 @@ public final class NfcAdapter {
 
     final NfcActivityManager mNfcActivityManager;
     final Context mContext;
+    private final AppOpsManager mAppOps;
 
     /**
      * A callback to be invoked when the system finds a tag while the foreground activity is
@@ -512,6 +514,7 @@ public final class NfcAdapter {
     NfcAdapter(Context context) {
         mContext = context;
         mNfcActivityManager = new NfcActivityManager(this);
+        mAppOps = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
     }
 
     /**
@@ -642,6 +645,9 @@ public final class NfcAdapter {
      * @hide
      */
     public boolean enable() {
+        if (mAppOps.noteOp(AppOpsManager.OP_NFC_CHANGE) != AppOpsManager.MODE_ALLOWED){
+            return false;
+        }
         try {
             return sService.enable();
         } catch (RemoteException e) {
