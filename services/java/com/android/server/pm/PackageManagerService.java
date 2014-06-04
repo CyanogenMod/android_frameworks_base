@@ -5580,11 +5580,12 @@ public class PackageManagerService extends IPackageManager.Stub {
     private void uninstallThemeForAllApps(PackageParser.Package opkg) {
         for(String target : opkg.mOverlayTargets) {
             HashMap<String, PackageParser.Package> map = mOverlays.get(target);
+
             if (map != null) {
                 map.remove(opkg.packageName);
             }
 
-            if (map.isEmpty()) {
+            if (map != null && map.isEmpty()) {
                 mOverlays.remove(target);
             }
 
