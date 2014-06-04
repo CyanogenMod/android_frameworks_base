@@ -40,7 +40,6 @@ import com.android.internal.app.ResolverActivity;
 import com.android.internal.content.NativeLibraryHelper;
 import com.android.internal.content.PackageHelper;
 import com.android.internal.util.FastPrintWriter;
-import com.android.internal.policy.impl.PhoneWindowManager;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.XmlUtils;
 import com.android.server.DeviceStorageMonitorService;
@@ -117,7 +116,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
-import android.os.PowerManager;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SELinux;
@@ -142,7 +140,6 @@ import android.util.SparseArray;
 import android.util.Xml;
 import android.view.Display;
 import android.view.WindowManager;
-import android.view.WindowManagerPolicy;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
@@ -181,6 +178,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import libcore.io.ErrnoException;
 import libcore.io.IoUtils;
@@ -233,8 +232,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     // Suffix used during package installation when copying/moving
     // package apks to install directory.
     private static final String INSTALL_PACKAGE_SUFFIX = "-";
-
-    private final PowerManager mPm;
 
     static final int SCAN_MONITOR = 1<<0;
     static final int SCAN_NO_DEX = 1<<1;
@@ -606,9 +603,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     // Stores a list of users whose package restrictions file needs to be updated
     private HashSet<Integer> mDirtyUsers = new HashSet<Integer>();
-
-    WindowManager mWindowManager;
-    private final WindowManagerPolicy mPolicy; // to set packageName
 
     final private DefaultContainerConnection mDefContainerConn =
             new DefaultContainerConnection();
@@ -1188,7 +1182,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         mSettings.addSharedUserLPw("android.uid.shell", SHELL_UID,
                 ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_PRIVILEGED);
 
-        mPm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
         mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
         String separateProcesses = SystemProperties.get("debug.separate_processes");
@@ -1210,9 +1203,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         mInstaller = installer;
 
-        mWindowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-        Display d = mWindowManager.getDefaultDisplay();
-        mPolicy = new PhoneWindowManager();
+        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
         d.getMetrics(mMetrics);
 
         File frameworkDir;
@@ -4064,7 +4056,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                             public void run() {
                                 if (!isFirstBoot()) {
                                     i[0]++;
-                                    postBootMessageUpdate(i[0], pkgsSize, p);
+                                    postBootMessageUpdate(i[0], pkgsSize);
                                 }
                                 performDexOptLI(p, false, false, true);
                             }
@@ -4072,7 +4064,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     } else {
                         if (!isFirstBoot()) {
                             i[0]++;
-                            postBootMessageUpdate(i[0], pkgsSize, p);
+                            postBootMessageUpdate(i[0], pkgsSize);
                         }
                     }
                 }
@@ -4088,20 +4080,12 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
-    private void postBootMessageUpdate(int n, int total, PackageParser.Package p) {
+    private void postBootMessageUpdate(int n, int total) {
         try {
-            // give the packagename to the PhoneWindowManager
-            ApplicationInfo ai;
-            try {
-                ai = mContext.getPackageManager().getApplicationInfo(p.packageName, 0);
-            } catch (Exception e) {
-                ai = null;
-            }
-            mPolicy.setPackageName((String) (ai != null ? mContext.getPackageManager().getApplicationLabel(ai) : p.packageName));
             ActivityManagerNative.getDefault().showBootMessage(
                     mContext.getResources().getString(
-                        com.android.internal.R.string.android_upgrading_apk,
-                        n, total), true);
+                            com.android.internal.R.string.android_upgrading_apk,
+                            n, total), true);
         } catch (RemoteException e) {
         }
     }
@@ -4153,7 +4137,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     private int performDexOptLI(PackageParser.Package pkg, boolean forceDex, boolean defer,
             HashSet<String> done) {
         boolean performed = false;
-        mPm.cpuBoost(1500000);
         if (done != null) {
             done.add(pkg.packageName);
             if (pkg.usesLibraries != null) {
@@ -5830,21 +5813,27 @@ public class PackageManagerService extends IPackageManager.Stub {
             mPackageHashes.remove(p);
         }
 
-        byte[] md5 = getFileMd5Sum(pkg.mPath);
-        if (md5 == null) return 0;
+        byte[] crc = getFileCrC(pkg.mPath);
+        if (crc == null) return 0;
 
-        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(md5).put(IDMAP_HASH_VERSION).array()),
+        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(crc).put(IDMAP_HASH_VERSION).array()),
                 System.currentTimeMillis());
         mPackageHashes.put(pkg.packageName, p);
         return p.first;
     }
 
-    private byte[] getFileMd5Sum(String path) {
+    private byte[] getFileCrC(String path) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            DigestInputStream dis = new DigestInputStream(new FileInputStream(path), md);
-            dis.close();
-            return md.digest();
+            ZipFile zfile = new ZipFile(path);
+            ZipEntry entry = zfile.getEntry("META-INF/MANIFEST.MF");
+            if (entry == null) {
+                Log.e(TAG, "Unable to get MANIFEST.MF from " + path);
+                return null;
+            }
+
+            long crc = entry.getCrc();
+            if (crc == -1) Log.e(TAG, "Unable to get CRC for " + path);
+            return ByteBuffer.allocate(8).putLong(crc).array();
         } catch (Exception e) {
         }
         return null;
