@@ -262,6 +262,7 @@ public final class BatteryService extends SystemService {
                 @Override
                 public void run() {
                     if (ActivityManagerNative.isSystemReady()) {
+                        Slog.e(TAG, "silent_reboot shutdownIfNoPowerLocked");
                         Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
                         intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -281,6 +282,7 @@ public final class BatteryService extends SystemService {
                 @Override
                 public void run() {
                     if (ActivityManagerNative.isSystemReady()) {
+                        Slog.e(TAG, "silent_reboot shutdownIfOverTempLocked");
                         Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
                         intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
