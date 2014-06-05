@@ -233,7 +233,7 @@ static void __BITMAP_OPTS ToColor_SI8_Alpha(SkColor dst[], const void* src, int 
     do {
         *dst++ = SkUnPreMultiply::PMColorToColor(colors[*s++]);
     } while (--width != 0);
-    ctable->unlockColors(false);
+    ctable->unlockColors();
 }
 
 static void __BITMAP_OPTS ToColor_SI8_Raw(SkColor dst[], const void* src, int width,
@@ -246,7 +246,7 @@ static void __BITMAP_OPTS ToColor_SI8_Raw(SkColor dst[], const void* src, int wi
         *dst++ = SkColorSetARGB(SkGetPackedA32(c), SkGetPackedR32(c),
                                 SkGetPackedG32(c), SkGetPackedB32(c));
     } while (--width != 0);
-    ctable->unlockColors(false);
+    ctable->unlockColors();
 }
 
 static void __BITMAP_OPTS ToColor_SI8_Opaque(SkColor dst[], const void* src, int width,
@@ -259,7 +259,7 @@ static void __BITMAP_OPTS ToColor_SI8_Opaque(SkColor dst[], const void* src, int
         *dst++ = SkColorSetRGB(SkGetPackedR32(c), SkGetPackedG32(c),
                                SkGetPackedB32(c));
     } while (--width != 0);
-    ctable->unlockColors(false);
+    ctable->unlockColors();
 }
 
 // can return NULL
@@ -448,9 +448,15 @@ static jboolean Bitmap_hasAlpha(JNIEnv* env, jobject, SkBitmap* bitmap) {
     return !bitmap->isOpaque();
 }
 
-static void Bitmap_setHasAlpha(JNIEnv* env, jobject, SkBitmap* bitmap,
-                               jboolean hasAlpha) {
-    bitmap->setIsOpaque(!hasAlpha);
+static void Bitmap_setAlphaAndPremultiplied(JNIEnv* env, jobject, SkBitmap* bitmap,
+                                            jboolean hasAlpha, jboolean isPremul) {
+    if (!hasAlpha) {
+        bitmap->setAlphaType(kOpaque_SkAlphaType);
+    } else if (isPremul) {
+        bitmap->setAlphaType(kPremul_SkAlphaType);
+    } else {
+        bitmap->setAlphaType(kUnpremul_SkAlphaType);
+    }
 }
 
 static jboolean Bitmap_hasMipMap(JNIEnv* env, jobject, SkBitmap* bitmap) {
@@ -549,14 +555,14 @@ static jboolean Bitmap_writeToParcel(JNIEnv* env, jobject,
     p->writeInt32(bitmap->rowBytes());
     p->writeInt32(density);
 
-    if (bitmap->getConfig() == SkBitmap::kIndex8_Config) {
+    if (bitmap->config() == SkBitmap::kIndex8_Config) {
         SkColorTable* ctable = bitmap->getColorTable();
         if (ctable != NULL) {
             int count = ctable->count();
             p->writeInt32(count);
             memcpy(p->writeInplace(count * sizeof(SkPMColor)),
                    ctable->lockColors(), count * sizeof(SkPMColor));
-            ctable->unlockColors(false);
+            ctable->unlockColors();
         } else {
             p->writeInt32(0);   // indicate no ctable
         }
@@ -776,7 +782,7 @@ static JNINativeMethod gBitmapMethods[] = {
     {   "nativeRowBytes",           "(I)I", (void*)Bitmap_rowBytes },
     {   "nativeConfig",             "(I)I", (void*)Bitmap_config },
     {   "nativeHasAlpha",           "(I)Z", (void*)Bitmap_hasAlpha },
-    {   "nativeSetHasAlpha",        "(IZ)V", (void*)Bitmap_setHasAlpha },
+    {   "nativeSetAlphaAndPremultiplied", "(IZZ)V", (void*)Bitmap_setAlphaAndPremultiplied},
     {   "nativeHasMipMap",          "(I)Z", (void*)Bitmap_hasMipMap },
     {   "nativeSetHasMipMap",       "(IZ)V", (void*)Bitmap_setHasMipMap },
     {   "nativeCreateFromParcel",

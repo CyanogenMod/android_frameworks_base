@@ -238,7 +238,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     static final int SCAN_UPDATE_TIME = 1<<6;
     static final int SCAN_DEFER_DEX = 1<<7;
     static final int SCAN_BOOTING = 1<<8;
-    static final int SCAN_TRUSTED_OVERLAY = 1<<9;
+    static final int SCAN_DELETE_DATA_ON_FAILURES = 1<<9;
+    static final int SCAN_TRUSTED_OVERLAY = 1<<10;
 
     static final int REMOVE_CHATTY = 1<<16;
 
@@ -381,7 +382,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             new HashMap<String, PackageParser.Package>();
 
     // Information for the parser to write more useful error messages.
-    File mScanningPath;
     int mLastScanError;
 
     // ----------------------------------------------------------------
@@ -938,7 +938,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                                     int[] uidArray = new int[] { res.pkg.applicationInfo.uid };
                                     ArrayList<String> pkgList = new ArrayList<String>(1);
                                     pkgList.add(res.pkg.applicationInfo.packageName);
-                                    sendResourcesChangedBroadcast(true, false,
+                                    sendResourcesChangedBroadcast(true, true,
                                             pkgList,uidArray, null);
                                 }
                             }
@@ -4384,7 +4384,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             mLastScanError = PackageManager.INSTALL_FAILED_INVALID_APK;
             return null;
         }
-        mScanningPath = scanFile;
 
         if ((parseFlags&PackageParser.PARSE_IS_SYSTEM) != 0) {
             pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SYSTEM;
@@ -4404,7 +4403,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (mAndroidApplication != null) {
                     Slog.w(TAG, "*************************************************");
                     Slog.w(TAG, "Core android package being redefined.  Skipping.");
-                    Slog.w(TAG, " file=" + mScanningPath);
+                    Slog.w(TAG, " file=" + scanFile);
                     Slog.w(TAG, "*************************************************");
                     mLastScanError = PackageManager.INSTALL_FAILED_DUPLICATE_PACKAGE;
                     return null;
@@ -4908,6 +4907,10 @@ public class PackageManagerService extends IPackageManager.Stub {
         if ((scanMode&SCAN_NO_DEX) == 0) {
             if (performDexOptLI(pkg, forceDex, (scanMode&SCAN_DEFER_DEX) != 0, false)
                     == DEX_OPT_FAILED) {
+                if ((scanMode & SCAN_DELETE_DATA_ON_FAILURES) != 0) {
+                    removeDataDirsLI(pkg.packageName);
+                }
+
                 mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
                 return null;
             }
@@ -4985,6 +4988,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                     PackageParser.Package clientPkg = clientLibPkgs.get(i);
                     if (performDexOptLI(clientPkg, forceDex, (scanMode&SCAN_DEFER_DEX) != 0, false)
                             == DEX_OPT_FAILED) {
+                        if ((scanMode & SCAN_DELETE_DATA_ON_FAILURES) != 0) {
+                            removeDataDirsLI(pkg.packageName);
+                        }
+
                         mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
                         return null;
                     }
@@ -9815,7 +9822,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             replacePackageLI(pkg, parseFlags, scanMode, args.user,
                     installerPackageName, res);
         } else {
-            installNewPackageLI(pkg, parseFlags, scanMode, args.user,
+            installNewPackageLI(pkg, parseFlags, scanMode | SCAN_DELETE_DATA_ON_FAILURES, args.user,
                     installerPackageName, res);
         }
         synchronized (mPackages) {
@@ -11341,7 +11348,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         DumpState dumpState = new DumpState();
         boolean fullPreferred = false;
-        
+        boolean checkin = false;
+
         String packageName = null;
         
         int opti = 0;
@@ -11355,7 +11363,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // Right now we only know how to print all.
             } else if ("-h".equals(opt)) {
                 pw.println("Package manager dump options:");
-                pw.println("  [-h] [-f] [cmd] ...");
+                pw.println("  [-h] [-f] [--checkin] [cmd] ...");
+                pw.println("    --checkin: dump for a checkin");
                 pw.println("    -f: print details of intent filters");
                 pw.println("    -h: print this help");
                 pw.println("  cmd may be one of:");
@@ -11373,13 +11382,15 @@ public class PackageManagerService extends IPackageManager.Stub {
                 pw.println("    <package.name>: info about given package");
                 pw.println("    k[eysets]: print known keysets");
                 return;
+            } else if ("--checkin".equals(opt)) {
+                checkin = true;
             } else if ("-f".equals(opt)) {
                 dumpState.setOptionEnabled(DumpState.OPTION_SHOW_FILTERS);
             } else {
                 pw.println("Unknown argument: " + opt + "; use -h for help");
             }
         }
-        
+
         // Is the caller requesting to dump a particular piece of data?
         if (opti < args.length) {
             String cmd = args[opti];
@@ -11421,17 +11432,26 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
         }
 
+        if (checkin) {
+            pw.println("vers,1");
+        }
+
         // reader
         synchronized (mPackages) {
             if (dumpState.isDumping(DumpState.DUMP_VERIFIERS) && packageName == null) {
-                if (dumpState.onTitlePrinted())
-                    pw.println();
-                pw.println("Verifiers:");
-                pw.print("  Required: ");
-                pw.print(mRequiredVerifierPackage);
-                pw.print(" (uid=");
-                pw.print(getPackageUid(mRequiredVerifierPackage, 0));
-                pw.println(")");
+                if (!checkin) {
+                    if (dumpState.onTitlePrinted())
+                        pw.println();
+                    pw.println("Verifiers:");
+                    pw.print("  Required: ");
+                    pw.print(mRequiredVerifierPackage);
+                    pw.print(" (uid=");
+                    pw.print(getPackageUid(mRequiredVerifierPackage, 0));
+                    pw.println(")");
+                } else if (mRequiredVerifierPackage != null) {
+                    pw.print("vrfy,"); pw.print(mRequiredVerifierPackage);
+                    pw.print(","); pw.println(getPackageUid(mRequiredVerifierPackage, 0));
+                }
             }
 
             if (dumpState.isDumping(DumpState.DUMP_LIBS) && packageName == null) {
@@ -11440,21 +11460,37 @@ public class PackageManagerService extends IPackageManager.Stub {
                 while (it.hasNext()) {
                     String name = it.next();
                     SharedLibraryEntry ent = mSharedLibraries.get(name);
-                    if (!printedHeader) {
-                        if (dumpState.onTitlePrinted())
-                            pw.println();
-                        pw.println("Libraries:");
-                        printedHeader = true;
-                    }
-                    pw.print("  ");
-                    pw.print(name);
-                    pw.print(" -> ");
-                    if (ent.path != null) {
-                        pw.print("(jar) ");
-                        pw.print(ent.path);
+                    if (!checkin) {
+                        if (!printedHeader) {
+                            if (dumpState.onTitlePrinted())
+                                pw.println();
+                            pw.println("Libraries:");
+                            printedHeader = true;
+                        }
+                        pw.print("  ");
                     } else {
-                        pw.print("(apk) ");
-                        pw.print(ent.apk);
+                        pw.print("lib,");
+                    }
+                    pw.print(name);
+                    if (!checkin) {
+                        pw.print(" -> ");
+                    }
+                    if (ent.path != null) {
+                        if (!checkin) {
+                            pw.print("(jar) ");
+                            pw.print(ent.path);
+                        } else {
+                            pw.print(",jar,");
+                            pw.print(ent.path);
+                        }
+                    } else {
+                        if (!checkin) {
+                            pw.print("(apk) ");
+                            pw.print(ent.apk);
+                        } else {
+                            pw.print(",apk,");
+                            pw.print(ent.apk);
+                        }
                     }
                     pw.println();
                 }
@@ -11463,16 +11499,22 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (dumpState.isDumping(DumpState.DUMP_FEATURES) && packageName == null) {
                 if (dumpState.onTitlePrinted())
                     pw.println();
-                pw.println("Features:");
+                if (!checkin) {
+                    pw.println("Features:");
+                }
                 Iterator<String> it = mAvailableFeatures.keySet().iterator();
                 while (it.hasNext()) {
                     String name = it.next();
-                    pw.print("  ");
+                    if (!checkin) {
+                        pw.print("  ");
+                    } else {
+                        pw.print("feat,");
+                    }
                     pw.println(name);
                 }
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_RESOLVERS)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_RESOLVERS)) {
                 if (mActivities.dump(pw, dumpState.getTitlePrinted() ? "\nActivity Resolver Table:"
                         : "Activity Resolver Table:", "  ", packageName,
                         dumpState.isOptionEnabled(DumpState.OPTION_SHOW_FILTERS))) {
@@ -11495,7 +11537,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_PREFERRED)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_PREFERRED)) {
                 for (int i=0; i<mSettings.mPreferredActivities.size(); i++) {
                     PreferredIntentResolver pir = mSettings.mPreferredActivities.valueAt(i);
                     int user = mSettings.mPreferredActivities.keyAt(i);
@@ -11509,7 +11551,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_PREFERRED_XML)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_PREFERRED_XML)) {
                 pw.flush();
                 FileOutputStream fout = new FileOutputStream(fd);
                 BufferedOutputStream str = new BufferedOutputStream(fout);
@@ -11531,11 +11573,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_PERMISSIONS)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_PERMISSIONS)) {
                 mSettings.dumpPermissionsLPr(pw, packageName, dumpState);
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_PROVIDERS)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_PROVIDERS)) {
                 boolean printedSomething = false;
                 for (PackageParser.Provider p : mProviders.mProviders.values()) {
                     if (packageName != null && !packageName.equals(p.info.packageName)) {
@@ -11572,19 +11614,19 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_KEYSETS)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_KEYSETS)) {
                 mSettings.mKeySetManager.dump(pw, packageName, dumpState);
             }
 
             if (dumpState.isDumping(DumpState.DUMP_PACKAGES)) {
-                mSettings.dumpPackagesLPr(pw, packageName, dumpState);
+                mSettings.dumpPackagesLPr(pw, packageName, dumpState, checkin);
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_SHARED_USERS)) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_SHARED_USERS)) {
                 mSettings.dumpSharedUsersLPr(pw, packageName, dumpState);
             }
 
-            if (dumpState.isDumping(DumpState.DUMP_MESSAGES) && packageName == null) {
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_MESSAGES) && packageName == null) {
                 if (dumpState.onTitlePrinted())
                     pw.println();
                 mSettings.dumpReadMessagesLPr(pw, dumpState);
@@ -11823,7 +11865,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (uidArr != null) {
                 extras.putIntArray(Intent.EXTRA_CHANGED_UID_LIST, uidArr);
             }
-            if (replacing && !mediaStatus) {
+            if (replacing) {
                 extras.putBoolean(Intent.EXTRA_REPLACING, replacing);
             }
             String action = mediaStatus ? Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE

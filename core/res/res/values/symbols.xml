@@ -296,7 +296,6 @@
   <java-symbol type="bool" name="config_useFixedVolume" />
   <java-symbol type="bool" name="config_forceDefaultOrientation" />
   <java-symbol type="bool" name="config_wifi_batched_scan_supported" />
-  <java-symbol type="bool" name="flip_controller_fallback_keys" />
   <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
   <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
@@ -331,6 +330,7 @@
   <java-symbol type="integer" name="config_mobile_mtu" />
   <java-symbol type="integer" name="config_volte_replacement_rat"/>
   <java-symbol type="integer" name="config_valid_wappush_index" />
+  <java-symbol type="integer" name="config_overrideHasPermanentMenuKey" />
 
   <java-symbol type="color" name="tab_indicator_text_v4" />
 
@@ -710,6 +710,7 @@
   <java-symbol type="string" name="mobile_provisioning_url" />
   <java-symbol type="string" name="mobile_redirected_provisioning_url" />
   <java-symbol type="string" name="progress_nomediapresent" />
+  <java-symbol type="string" name="quick_contacts_not_available" />
   <java-symbol type="string" name="reboot_safemode_confirm" />
   <java-symbol type="string" name="reboot_safemode_title" />
   <java-symbol type="string" name="relationTypeAssistant" />
