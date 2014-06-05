@@ -33,6 +33,7 @@ import static libcore.io.OsConstants.S_IROTH;
 import static libcore.io.OsConstants.S_IXOTH;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.util.Pair;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
@@ -12380,5 +12381,30 @@ public class PackageManagerService extends IPackageManager.Stub {
         for (Package pkg : mPackages.values()) {
             pkg.applicationInfo.themedIcon = 0;
         }
+    }
+
+    @Override
+    public Bitmap[] getIconBackBitmap() {
+        return mIconPackHelper != null ? mIconPackHelper.getIconBackBitmap() : null;
+    }
+
+    @Override
+    public Bitmap getIconMaskBitmap() {
+        return mIconPackHelper != null ? mIconPackHelper.getIconMaskBitmap() : null;
+    }
+
+    @Override
+    public Bitmap getIconUponBitmap() {
+        return mIconPackHelper != null ? mIconPackHelper.getIconUponBitmap() : null;
+    }
+
+    @Override
+    public float getIconScale() {
+        return mIconPackHelper != null ? mIconPackHelper.getIconScale() : 1.0f;
+    }
+
+    @Override
+    public int getIconSize() {
+        return mIconPackHelper != null ? mIconPackHelper.getIconSize() : 0;
     }
 }
