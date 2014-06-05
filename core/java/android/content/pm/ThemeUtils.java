@@ -78,6 +78,8 @@ public class ThemeUtils {
             + File.separator + "notifications";
     public static final String SYSTEM_THEME_ALARM_PATH = SYSTEM_THEME_PATH
             + File.separator + "alarms";
+    public static final String SYSTEM_THEME_ICON_CACHE_DIR = SYSTEM_THEME_PATH
+            + File.separator + "icons";
     // internal path to bootanimation.zip inside theme apk
     public static final String THEME_BOOTANIMATION_PATH = "assets/bootanimation/bootanimation.zip";
 
@@ -249,6 +251,17 @@ public class ThemeUtils {
      */
     public static void createAlarmDirIfNotExists() {
         createDirIfNotExists(SYSTEM_THEME_ALARM_PATH);
+    }
+
+    /**
+     * Create SYSTEM_THEME_ICON_CACHE_DIR directory if it does not exist
+     */
+    public static void createIconCacheDirIfNotExists() {
+        createDirIfNotExists(SYSTEM_THEME_ICON_CACHE_DIR);
+    }
+
+    public static void clearIconCache() {
+        deleteFilesInDir(SYSTEM_THEME_ICON_CACHE_DIR);
     }
 
     //Note: will not delete populated subdirs
