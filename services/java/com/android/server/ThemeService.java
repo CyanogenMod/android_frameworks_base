@@ -139,6 +139,7 @@ public class ThemeService extends IThemeService.Stub {
         ThemeUtils.createAlarmDirIfNotExists();
         ThemeUtils.createNotificationDirIfNotExists();
         ThemeUtils.createRingtoneDirIfNotExists();
+        ThemeUtils.createIconCacheDirIfNotExists();
     }
 
     public void systemRunning() {

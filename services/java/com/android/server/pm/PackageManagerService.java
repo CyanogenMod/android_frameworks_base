@@ -32,7 +32,9 @@ import static libcore.io.OsConstants.S_IXGRP;
 import static libcore.io.OsConstants.S_IROTH;
 import static libcore.io.OsConstants.S_IXOTH;
 
+import android.app.ComposedIconInfo;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.util.Pair;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
@@ -12390,6 +12392,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 "could not update icon mapping because caller does not have change config permission");
 
         synchronized (mPackages) {
+            ThemeUtils.clearIconCache();
             mIconPackHelper = new IconPackHelper(mContext);
             try {
                 mIconPackHelper.loadIconPack(pkgName);
@@ -12400,14 +12403,13 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
 
             for (Activity activity : mActivities.mActivities.values()) {
-                int id = mIconPackHelper
-                        .getResourceIdForActivityIcon(activity.info);
-                activity.info.themedIcon = id;
+                activity.info.themedIcon =
+                        mIconPackHelper.getResourceIdForActivityIcon(activity.info);
             }
 
             for (Package pkg : mPackages.values()) {
-                int id = mIconPackHelper.getResourceIdForApp(pkg.packageName);
-                pkg.applicationInfo.themedIcon = id;
+                pkg.applicationInfo.themedIcon =
+                        mIconPackHelper.getResourceIdForApp(pkg.packageName);
             }
         }
     }
@@ -12421,5 +12423,10 @@ public class PackageManagerService extends IPackageManager.Stub {
         for (Package pkg : mPackages.values()) {
             pkg.applicationInfo.themedIcon = 0;
         }
+    }
+
+    @Override
+    public ComposedIconInfo getComposedIconInfo() {
+        return mIconPackHelper != null ? mIconPackHelper.getComposedIconInfo() : null;
     }
 }
