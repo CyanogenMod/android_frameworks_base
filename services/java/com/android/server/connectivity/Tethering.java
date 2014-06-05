@@ -92,6 +92,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private Object mPublicSync;
 
     private static final Integer MOBILE_TYPE = new Integer(ConnectivityManager.TYPE_MOBILE);
+    private static final Integer WIFI_TYPE = new Integer(ConnectivityManager.TYPE_WIFI);
     private static final Integer HIPRI_TYPE = new Integer(ConnectivityManager.TYPE_MOBILE_HIPRI);
     private static final Integer DUN_TYPE = new Integer(ConnectivityManager.TYPE_MOBILE_DUN);
 
@@ -201,23 +202,31 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         Collection<Integer> upstreamIfaceTypes = new ArrayList();
         IBinder b = ServiceManager.getService(Context.CONNECTIVITY_SERVICE);
         IConnectivityManager cm = IConnectivityManager.Stub.asInterface(b);
+
+        int activeNetType = ConnectivityManager.TYPE_NONE;
         try {
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if (networkInfo != null) {
-                int activeNetType = networkInfo.getType();
-                for (int i : ifaceTypes) {
-                    if(i == activeNetType) {
-                        upstreamIfaceTypes.add(new Integer(i));
-                    }
-                }
-            }
+            activeNetType = cm.getActiveNetworkInfo().getType();
         } catch (Exception e) {
-            Log.d(TAG, "Exception adding default nw to upstreamIfaceTypes: " + e);
+            Log.d(TAG, "exception when get active network info:" + e);
         }
+
         for (int i : ifaceTypes) {
-            if(!upstreamIfaceTypes.contains(new Integer(i))) {
+            if (i == activeNetType) {
                 upstreamIfaceTypes.add(new Integer(i));
             }
+        }
+
+        for (int i : ifaceTypes) {
+            if (!upstreamIfaceTypes.contains(new Integer(i))) {
+                upstreamIfaceTypes.add(new Integer(i));
+            }
+        }
+        if ((activeNetType == ConnectivityManager.TYPE_MOBILE)
+                && upstreamIfaceTypes.contains(WIFI_TYPE)) {
+            upstreamIfaceTypes.remove(WIFI_TYPE);
+        } else if ((activeNetType == ConnectivityManager.TYPE_WIFI)
+                && upstreamIfaceTypes.contains(MOBILE_TYPE)) {
+            upstreamIfaceTypes.remove(MOBILE_TYPE);
         }
 
         synchronized (mPublicSync) {
