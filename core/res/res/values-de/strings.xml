@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"Verknüpfungen deinstallieren"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Ermöglicht einer App das Entfernen von Verknüpfungen vom Startbildschirm ohne Eingriff des Nutzers"</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"Ausgehende Anrufe umleiten"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Ermöglicht der App, ausgehende Anrufe zu verarbeiten und die zu wählende Nummer zu ändern. Die Berechtigung erlaubt der App, ausgehende Anrufe zu überwachen, umzuleiten und zu unterbinden."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Ermöglicht der App die Erkennung der während eines ausgehenden Anrufs gewählten Nummer und gibt ihr die Möglichkeit, den Anruf an eine andere Nummer umzuleiten oder den Anruf ganz abzubrechen"</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"SMS empfangen"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Ermöglicht der App, SMS zu empfangen und zu verarbeiten. Das bedeutet, dass die App an Ihr Gerät gesendete Nachrichten überwachen und löschen kann, ohne sie Ihnen anzuzeigen."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"MMS empfangen"</string>
@@ -456,9 +456,9 @@
     <string name="permlab_writeCallLog" msgid="8552045664743499354">"Anrufliste bearbeiten"</string>
     <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"Ermöglicht der App, die Anrufliste Ihres Tablets zu ändern, einschließlich der Daten über ein- und ausgehende Anrufe. Schädliche Apps können so Ihre Anrufliste löschen oder ändern."</string>
     <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"Ermöglicht der App, die Anrufliste Ihres Telefons zu ändern, einschließlich der Daten über ein- und ausgehende Anrufe. Schädliche Apps können so Ihre Anrufliste löschen oder ändern."</string>
-    <string name="permlab_readProfile" msgid="4701889852612716678">"Meine Kontaktkarten lesen"</string>
+    <string name="permlab_readProfile" msgid="4701889852612716678">"Ihre Kontaktkarten lesen"</string>
     <string name="permdesc_readProfile" product="default" msgid="5462475151849888848">"Ermöglicht der App, auf Ihrem Gerät gespeicherte personenbezogene Profildaten zu lesen, einschließlich Ihres Namens und Ihrer Kontaktdaten. Die App kann Sie somit identifizieren und Ihre Profildaten an andere senden."</string>
-    <string name="permlab_writeProfile" msgid="907793628777397643">"Meine Kontaktkarten ändern"</string>
+    <string name="permlab_writeProfile" msgid="907793628777397643">"Ihre Kontaktkarten ändern"</string>
     <string name="permdesc_writeProfile" product="default" msgid="5552084294598465899">"Ermöglicht der App, auf Ihrem Gerät gespeicherte personenbezogene Profildaten zu ändern, einschließlich Ihres Namens und Ihrer Kontaktdaten, sowie Daten hinzuzufügen. Die App kann Sie so identifizieren und Ihre Profildaten an andere senden."</string>
     <string name="permlab_readSocialStream" product="default" msgid="1268920956152419170">"In sozialem Stream lesen"</string>
     <string name="permdesc_readSocialStream" product="default" msgid="4255706027172050872">"Ermöglicht der App, auf Updates aus sozialen Netzwerken von Ihnen und Ihren Freunden zuzugreifen und diese zu synchronisieren. Seien Sie vorsichtig, wenn Sie Informationen teilen: Der App wird erlaubt, die Kommunikation zwischen Ihnen und Ihren Freunden in sozialen Netzwerken zu lesen, unabhängig von der Vertraulichkeit der kommunizierten Informationen. Hinweis: Diese Berechtigung kann möglicherweise nicht in allen sozialen Netzwerken erzwungen werden."</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Privat"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Geschäftlich"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Sonstige"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Es wurde keine App zum Anzeigen dieses Kontakts gefunden."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"PIN-Code eingeben"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"PUK und neuen PIN-Code eingeben"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK-Code"</string>
@@ -837,7 +838,7 @@
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Erneut versuchen"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Erneut versuchen"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Die maximal zulässige Anzahl an Face Unlock-Versuchen wurde überschritten."</string>
-    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Wird geladen... (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_plugged_in" msgid="8057762828355572315">"Wird aufgeladen... (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
     <string name="lockscreen_charged" msgid="321635745684060624">"Aufgeladen"</string>
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Ladegerät anschließen"</string>
@@ -1205,7 +1206,7 @@
     <string name="wifi_p2p_invitation_to_connect_title" msgid="4958803948658533637">"Einladung zum Aufbau einer Verbindung"</string>
     <string name="wifi_p2p_from_message" msgid="570389174731951769">"Von:"</string>
     <string name="wifi_p2p_to_message" msgid="248968974522044099">"An:"</string>
-    <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Geben Sie die erforderliche PIN ein:"</string>
+    <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Geben Sie die PIN ein:"</string>
     <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN:"</string>
     <string name="wifi_p2p_frequency_conflict_message" product="tablet" msgid="8012981257742232475">"Das Tablet wird vorübergehend vom WLAN getrennt, während eine Verbindung mit <xliff:g id="DEVICE_NAME">%1$s</xliff:g> besteht."</string>
     <string name="wifi_p2p_frequency_conflict_message" product="default" msgid="7363907213787469151">"Das Telefon wird vorübergehend vom WLAN getrennt, während eine Verbindung mit <xliff:g id="DEVICE_NAME">%1$s</xliff:g> hergestellt wird."</string>
@@ -1418,7 +1419,7 @@
     <string name="keyboardview_keycode_delete" msgid="3337914833206635744">"Löschen"</string>
     <string name="keyboardview_keycode_done" msgid="1992571118466679775">"Fertig"</string>
     <string name="keyboardview_keycode_mode_change" msgid="4547387741906537519">"Modusänderung"</string>
-    <string name="keyboardview_keycode_shift" msgid="2270748814315147690">"Umschalttaste"</string>
+    <string name="keyboardview_keycode_shift" msgid="2270748814315147690">"Shift"</string>
     <string name="keyboardview_keycode_enter" msgid="2985864015076059467">"Eingabetaste"</string>
     <string name="activitychooserview_choose_application" msgid="2125168057199941199">"App auswählen"</string>
     <string name="activitychooserview_choose_application_error" msgid="8624618365481126668">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> konnte nicht gestartet werden."</string>

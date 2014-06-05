@@ -150,6 +150,7 @@ public class ImmersiveModeConfirmation {
                         | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
+        lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
         lp.setTitle("ImmersiveModeConfirmation");
         lp.windowAnimations = com.android.internal.R.style.Animation_RecentApplications;
         lp.gravity = Gravity.FILL;

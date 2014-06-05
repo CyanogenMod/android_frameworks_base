@@ -994,7 +994,7 @@
     <!-- Max space (in MB) allocated to DownloadManager to store the downloaded
          files if they are to be stored in DownloadManager's data dir,
          which typically is /data/data/com.android.providers.downloads/files -->
-    <integer name="config_downloadDataDirSize">100</integer>
+    <integer name="config_downloadDataDirSize">200</integer>
 
     <!-- Max number of downloads allowed to proceed concurrently -->
     <integer name="config_MaxConcurrentDownloadsAllowed">5</integer>
@@ -1397,6 +1397,17 @@
 
     <!-- True will enable the screen-off animation. -->
     <bool name="config_screenOffAnimation">true</bool>
+
+    <!-- NOT USED IN CM. see config_deviceHardwareKeys
+         Retaining this entry to preserve config ID sequences
+
+         Override the default detection behavior for the framework method
+         android.view.ViewConfiguration#hasPermanentMenuKey().
+         Valid settings are:
+         0 - No change. Use the default autodetection behavior.
+         1 - The device DOES have a permanent menu key; ignore autodetection.
+         2 - The device DOES NOT have a permanent menu key; ignore autodetection. -->
+    <integer name="config_overrideHasPermanentMenuKey">0</integer>
 
     <!-- Timeout in MS for how long you have to long-press the back key to
          kill the foreground app. -->
