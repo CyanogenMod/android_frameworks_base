@@ -15,12 +15,28 @@
  */
 package android.app;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import android.content.pm.PackageInfo;
+import android.content.res.IThemeService;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.PaintDrawable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.util.Log;
+import android.util.TypedValue;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -40,28 +56,87 @@ import android.util.DisplayMetrics;
 
 /** @hide */
 public class IconPackHelper {
+    private static final String TAG = IconPackHelper.class.getSimpleName();
     private static final String ICON_MASK_TAG = "iconmask";
     private static final String ICON_BACK_TAG = "iconback";
     private static final String ICON_UPON_TAG = "iconupon";
     private static final String ICON_SCALE_TAG = "scale";
+    private static final String ICON_BACK_FORMAT = "iconback%d";
+
+    private static final ComponentName ICON_BACK_COMPONENT;
+    private static final ComponentName ICON_MASK_COMPONENT;
+    private static final ComponentName ICON_UPON_COMPONENT;
+    private static final ComponentName ICON_SCALE_COMPONENT;
+
+    private static final float DEFAULT_SCALE = 1.0f;
+    private static final int COMPOSED_ICON_COOKIE = 128;
 
     private final Context mContext;
     private Map<ComponentName, String> mIconPackResourceMap;
     private String mLoadedIconPackName;
     private Resources mLoadedIconPackResource;
-    private float mIconScale;
+    private ComposedIconInfo mComposedIconInfo;
+    private int mIconBackCount = 0;
+
+    static {
+        ICON_BACK_COMPONENT = new ComponentName(ICON_BACK_TAG, "");
+        ICON_MASK_COMPONENT = new ComponentName(ICON_MASK_TAG, "");
+        ICON_UPON_COMPONENT = new ComponentName(ICON_UPON_TAG, "");
+        ICON_SCALE_COMPONENT = new ComponentName(ICON_SCALE_TAG, "");
+    }
 
     public IconPackHelper(Context context) {
         mContext = context;
         mIconPackResourceMap = new HashMap<ComponentName, String>();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        mComposedIconInfo = new ComposedIconInfo();
+        mComposedIconInfo.iconSize = am.getLauncherLargeIconSize();
+        mComposedIconInfo.iconDensity = am.getLauncherLargeIconDensity();
     }
 
-    private static void loadResourcesFromXmlParser(XmlPullParser parser,
+    private void loadResourcesFromXmlParser(XmlPullParser parser,
             Map<ComponentName, String> iconPackResources) throws XmlPullParserException, IOException {
+        mIconBackCount = 0;
         int eventType = parser.getEventType();
         do {
 
             if (eventType != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            String tag = parser.getName();
+            if (tag.equalsIgnoreCase(ICON_MASK_TAG) ||
+                    tag.equalsIgnoreCase(ICON_BACK_TAG) ||
+                    tag.equalsIgnoreCase(ICON_UPON_TAG)) {
+                String icon = parser.getAttributeValue(null, "img");
+                if (icon == null) {
+                    if (parser.getAttributeCount() >= 1) {
+                        if (tag.equalsIgnoreCase(ICON_BACK_TAG)) {
+                            mIconBackCount = parser.getAttributeCount();
+                            for (int i = 0; i < mIconBackCount; i++) {
+                                tag = String.format(ICON_BACK_FORMAT, i);
+                                icon = parser.getAttributeValue(i);
+                                iconPackResources.put(new ComponentName(tag, ""),
+                                        icon);
+                            }
+                            continue;
+                        } else {
+                            icon = parser.getAttributeValue(0);
+                        }
+                    }
+                }
+                iconPackResources.put(new ComponentName(parser.getName().toLowerCase(), ""), icon);
+                continue;
+            }
+
+            if (parser.getName().equalsIgnoreCase(ICON_SCALE_TAG)) {
+                String factor = parser.getAttributeValue(null, "factor");
+                if (factor == null) {
+                    if (parser.getAttributeCount() == 1) {
+                        factor = parser.getAttributeValue(0);
+                    }
+                }
+                iconPackResources.put(ICON_SCALE_COMPONENT, factor);
                 continue;
             }
 
@@ -104,24 +179,70 @@ public class IconPackHelper {
         if (packageName == null) {
             mLoadedIconPackResource = null;
             mLoadedIconPackName = null;
+            mComposedIconInfo.iconBack = null;
+            mComposedIconInfo.iconMask = mComposedIconInfo.iconUpon = null;
+            mComposedIconInfo.iconScale = 0;
         } else {
+            mIconBackCount = 0;
             Resources res = createIconResource(mContext, packageName);
             mIconPackResourceMap = getIconResMapFromXml(res, packageName);
             mLoadedIconPackResource = res;
             mLoadedIconPackName = packageName;
-            String scale = mIconPackResourceMap.get(ICON_SCALE_TAG);
-            if (scale != null) {
-                try {
-                    mIconScale = Float.valueOf(scale);
-                } catch (NumberFormatException e) {
-                }
-            }
-
+            loadComposedIconComponents();
         }
     }
 
-    public float getIconScale() {
-        return mIconScale;
+    public ComposedIconInfo getComposedIconInfo() {
+        return mComposedIconInfo;
+    }
+
+    private Bitmap getDrawableBitmap(BitmapDrawable drawable) {
+        return drawable != null ? drawable.getBitmap() : null;
+    }
+
+    private Drawable getDrawableForName(ComponentName component) {
+        if (isIconPackLoaded()) {
+            String item = mIconPackResourceMap.get(component);
+            if (!TextUtils.isEmpty(item)) {
+                int id = getResourceIdForDrawable(item);
+                if (id != 0) {
+                    return mLoadedIconPackResource.getDrawable(id);
+                }
+            }
+        }
+        return null;
+    }
+
+    private void loadComposedIconComponents() {
+        mComposedIconInfo.iconMask = (BitmapDrawable) getDrawableForName(ICON_MASK_COMPONENT);
+        mComposedIconInfo.iconUpon = (BitmapDrawable) getDrawableForName(ICON_UPON_COMPONENT);
+
+        // Take care of loading iconback which can have multiple images
+        if (mIconPackResourceMap.containsKey(ICON_BACK_COMPONENT)) {
+            mComposedIconInfo.iconBack = new BitmapDrawable[1];
+            mComposedIconInfo.iconBack[0] =
+                    (BitmapDrawable) getDrawableForName(ICON_BACK_COMPONENT);
+            mIconBackCount = 1;
+        } else if (mIconBackCount > 0) {
+            mComposedIconInfo.iconBack = new BitmapDrawable[mIconBackCount];
+            for (int i = 0; i < mIconBackCount; i++) {
+                mComposedIconInfo.iconBack[i] =
+                        (BitmapDrawable) getDrawableForName(
+                                new ComponentName(String.format(ICON_BACK_FORMAT, i), ""));
+            }
+        }
+
+        // Get the icon scale from this pack
+        String scale = mIconPackResourceMap.get(ICON_SCALE_COMPONENT);
+        if (scale != null) {
+            try {
+                mComposedIconInfo.iconScale = Float.valueOf(scale);
+            } catch (NumberFormatException e) {
+                mComposedIconInfo.iconScale = DEFAULT_SCALE;
+            }
+        } else {
+            mComposedIconInfo.iconScale = DEFAULT_SCALE;
+        }
     }
 
     public static Resources createIconResource(Context context, String packageName) throws NameNotFoundException {
@@ -151,7 +272,7 @@ public class IconPackHelper {
         return res;
     }
 
-    public static Map<ComponentName, String> getIconResMapFromXml(Resources res, String packageName) {
+    public Map<ComponentName, String> getIconResMapFromXml(Resources res, String packageName) {
         XmlPullParser parser = null;
         InputStream inputStream = null;
         Map<ComponentName, String> iconPackResources = new HashMap<ComponentName, String>();
@@ -254,15 +375,19 @@ public class IconPackHelper {
         if (!isIconPackLoaded()) {
             return 0;
         }
-        ComponentName compName = new ComponentName(info.packageName.toLowerCase(), info.name.toLowerCase());
+        ComponentName compName = new ComponentName(info.packageName.toLowerCase(),
+                info.name.toLowerCase());
         String drawable = mIconPackResourceMap.get(compName);
+        if (drawable != null) {
+            int resId = getResourceIdForDrawable(drawable);
+            if (resId != 0) return resId;
+        }
+
+        // Icon pack doesn't have an icon for the activity, fallback to package icon
+        compName = new ComponentName(info.packageName.toLowerCase(), "");
+        drawable = mIconPackResourceMap.get(compName);
         if (drawable == null) {
-            // Icon pack doesn't have an icon for the activity, fallback to package icon
-            compName = new ComponentName(info.packageName.toLowerCase(), "");
-            drawable = mIconPackResourceMap.get(compName);
-            if (drawable == null) {
-                return 0;
-            }
+            return 0;
         }
         return getResourceIdForDrawable(drawable);
     }
@@ -277,12 +402,147 @@ public class IconPackHelper {
     public Drawable getDrawableForActivity(ActivityInfo info) {
         int id = getResourceIdForActivityIcon(info);
         if (id == 0) return null;
-        return mLoadedIconPackResource.getDrawable(id);
+        return mLoadedIconPackResource.getDrawable(id, false);
     }
 
     public Drawable getDrawableForActivityWithDensity(ActivityInfo info, int density) {
         int id = getResourceIdForActivityIcon(info);
         if (id == 0) return null;
-        return mLoadedIconPackResource.getDrawableForDensity(id, density);
+        return mLoadedIconPackResource.getDrawableForDensity(id, density, false);
+    }
+
+    public static class IconCustomizer {
+        private static final Random sRandom = new Random(System.currentTimeMillis());
+        private static final IThemeService sThemeService;
+
+        static {
+            sThemeService = IThemeService.Stub.asInterface(
+                    ServiceManager.getService(Context.THEME_SERVICE));
+        }
+        private static Bitmap createIconBitmap(Drawable icon, Resources res, Drawable iconBack,
+                                       Drawable iconMask, Drawable iconUpon, float scale,
+                                       int iconSize) {
+            if (iconSize <= 0) return null;
+
+            final Canvas canvas = new Canvas();
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.DITHER_FLAG,
+                    Paint.FILTER_BITMAP_FLAG));
+
+            if (icon instanceof PaintDrawable) {
+                PaintDrawable painter = (PaintDrawable) icon;
+                painter.setIntrinsicWidth(iconSize);
+                painter.setIntrinsicHeight(iconSize);
+            } else if (icon instanceof BitmapDrawable) {
+                // Ensure the bitmap has a density.
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) icon;
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                if (bitmap.getDensity() == Bitmap.DENSITY_NONE) {
+                    bitmapDrawable.setTargetDensity(res.getDisplayMetrics());
+                }
+                canvas.setDensity(bitmap.getDensity());
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(iconSize, iconSize,
+                    Bitmap.Config.ARGB_8888);
+            canvas.setBitmap(bitmap);
+
+            // Scale the original
+            Rect oldBounds = new Rect();
+            oldBounds.set(icon.getBounds());
+            icon.setBounds(0, 0, iconSize, iconSize);
+            canvas.save();
+            canvas.scale(scale, scale, iconSize / 2, iconSize/2);
+            icon.draw(canvas);
+            canvas.restore();
+
+            // Mask off the original if iconMask is not null
+            if (iconMask != null) {
+                iconMask.setBounds(icon.getBounds());
+                ((BitmapDrawable) iconMask).getPaint().setXfermode(
+                        new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+                iconMask.draw(canvas);
+            }
+            // Draw the iconBack if not null and then the original (scaled and masked) icon on top
+            if (iconBack != null) {
+                canvas.setBitmap(null);
+                Bitmap finalBitmap = Bitmap.createBitmap(iconSize, iconSize,
+                        Bitmap.Config.ARGB_8888);
+                canvas.setBitmap(finalBitmap);
+                iconBack.setBounds(icon.getBounds());
+                iconBack.draw(canvas);
+                canvas.drawBitmap(bitmap, null, icon.getBounds(), null);
+                bitmap = finalBitmap;
+            }
+            // Finally draw the foreground if one was supplied
+            if (iconUpon != null) {
+                iconUpon.draw(canvas);
+            }
+            icon.setBounds(oldBounds);
+            bitmap.setDensity(canvas.getDensity());
+            canvas.setBitmap(null);
+
+            return bitmap;
+        }
+
+        public static Drawable getComposedIconDrawable(Drawable icon, Context context,
+                                                       ComposedIconInfo iconInfo) {
+            final Resources res = context.getResources();
+            return getComposedIconDrawable(icon, res, iconInfo);
+        }
+
+        public static Drawable getComposedIconDrawable(Drawable icon, Resources res,
+                                                       ComposedIconInfo iconInfo) {
+            if (iconInfo == null) return icon;
+            Drawable back = null;
+            if (iconInfo.iconBack != null && iconInfo.iconBack.length > 0) {
+                back = iconInfo.iconBack[sRandom.nextInt(iconInfo.iconBack.length)];
+            }
+            Bitmap bmp = createIconBitmap(icon, res, back, iconInfo.iconMask, iconInfo.iconUpon,
+                    iconInfo.iconScale, iconInfo.iconSize);
+            return bmp != null ? new BitmapDrawable(res, bmp): null;
+        }
+
+        public static void getValue(Resources res, int resId, TypedValue outValue,
+                                    Drawable baseIcon) {
+            if (!(baseIcon instanceof BitmapDrawable)) return;
+
+            if (outValue.extraValue == null) outValue.extraValue = new TypedValue();
+            outValue.extraValue.setTo(outValue);
+            outValue.assetCookie = COMPOSED_ICON_COOKIE;
+            outValue.data = resId & (COMPOSED_ICON_COOKIE << 24 | 0x00ffffff);
+            outValue.string = getCachedIconPath(res.getAssets().getAppName(), resId,
+                    outValue.density);
+
+            if (!(new File(outValue.string.toString()).exists())) {
+                // compose the icon and cache it
+                final ComposedIconInfo iconInfo = res.getComposedIconInfo();
+                Drawable back = null;
+                if (iconInfo.iconBack != null && iconInfo.iconBack.length > 0) {
+                    back = iconInfo.iconBack[sRandom.nextInt(iconInfo.iconBack.length)];
+                }
+                Bitmap bmp = createIconBitmap(baseIcon, res, back, iconInfo.iconMask,
+                        iconInfo.iconUpon, iconInfo.iconScale, iconInfo.iconSize);
+                if (!cacheComposedIcon(bmp, outValue.string.toString())) {
+                    Log.w(TAG, "Unable to cache icon " + outValue.string);
+                    // restore the original TypedValue
+                    outValue.setTo(outValue.extraValue);
+                }
+            }
+        }
+
+        private static boolean cacheComposedIcon(Bitmap bmp, String path) {
+            try {
+                return sThemeService.cacheComposedIcon(bmp, path);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Unable to cache icon.");
+            }
+
+            return false;
+        }
+
+        private static String getCachedIconPath(String pkgName, int resId, int density) {
+            return String.format("%s/%s_%08x_%d.png", ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR,
+                    pkgName, resId, density);
+        }
     }
 }
