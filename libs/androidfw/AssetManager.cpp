@@ -75,6 +75,7 @@ static const char* kAssetsRoot = "assets";
 static const char* kAppZipName = NULL; //"classes.jar";
 static const char* kSystemAssets = "framework/framework-res.apk";
 static const char* kResourceCache = "resource-cache";
+static const int   kComposedIconAsset = 128;
 
 static const char* kExcludeExtension = ".EXCLUDE";
 
@@ -755,6 +756,16 @@ Asset* AssetManager::openNonAsset(void* cookie, const char* fileName, AccessMode
             fileName, mode, mAssetPaths.itemAt(which));
         if (pAsset != NULL) {
             return pAsset != kExcludedAsset ? pAsset : NULL;
+        }
+    } else if ((size_t)cookie == kComposedIconAsset) {
+        asset_path ap;
+        String8 path(fileName);
+        ap.type = kFileTypeDirectory;
+        ap.path = path.getPathDir();
+        Asset* pAsset = openNonAssetInPathLocked(
+            path.getPathLeaf().string(), mode, ap);
+        if (pAsset != NULL) {
+            return pAsset;
         }
     }
 

@@ -178,6 +178,12 @@ public class TypedValue {
      * */
     public int density;
 
+    /**
+     * Extra Value for composed icons
+     * @hide
+     */
+    public TypedValue extraValue;
+
     /* ------------------------------------------------------------ */
 
     /** Return the data for this value as a float.  Only use for values
