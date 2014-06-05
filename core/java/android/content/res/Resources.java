@@ -21,6 +21,7 @@ import com.android.internal.util.XmlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.IconPackHelper.IconCustomizer;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageItemInfo;
 import android.graphics.Movie;
@@ -139,6 +140,10 @@ public class Resources {
     private WeakReference<IBinder> mToken;
 
     private SparseArray<PackageItemInfo> mIcons;
+    private Drawable mIconBackDrawable;
+    private Drawable mIconMaskDrawable;
+    private Drawable mIconUponDrawable;
+    private float mIconScale;
 
     static {
         sPreloadedDrawables = new LongSparseArray[2];
@@ -726,6 +731,12 @@ public class Resources {
                 mTmpValue = value;
             }
         }
+
+        if (info != null && info.themedIcon == 0) {
+            Drawable composedIcon = IconCustomizer.getComposedIconDrawable(res, this,
+                    mIconBackDrawable, mIconMaskDrawable, mIconUponDrawable, mIconScale);
+            if (composedIcon != null) res = composedIcon;
+        }
         return res;
     }
 
@@ -786,6 +797,11 @@ public class Resources {
             if (mTmpValue == null) {
                 mTmpValue = value;
             }
+        }
+        if (info != null && info.themedIcon == 0) {
+            Drawable composedIcon = IconCustomizer.getComposedIconDrawable(res, this,
+                    mIconBackDrawable, mIconMaskDrawable, mIconUponDrawable, mIconScale);
+            if (composedIcon != null) res = composedIcon;
         }
         return res;
     }
@@ -2469,6 +2485,15 @@ public class Resources {
     /** @hide */
     public void setIconResources(SparseArray<PackageItemInfo> icons) {
         mIcons = icons;
+    }
+
+    /** @hide */
+    public void setCustomIcons(Drawable iconBack, Drawable iconMask, Drawable iconUpon,
+                               float scale) {
+        mIconBackDrawable = iconBack;
+        mIconMaskDrawable = iconMask;
+        mIconUponDrawable = iconUpon;
+        mIconScale = scale;
     }
 
     private Resources() {
