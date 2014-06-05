@@ -13,22 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.content.res;
+package android.app;
 
-import android.content.res.IThemeChangeListener;
-import android.graphics.Bitmap;
-
-import java.util.List;
-
-/** {@hide} */
-interface IThemeService {
-    void requestThemeChangeUpdates(in IThemeChangeListener listener);
-    void removeUpdates(in IThemeChangeListener listener);
-
-    void requestThemeChange(String pkgName, in List<String> components);
-    void applyDefaultTheme();
-    boolean isThemeApplying(String pkgName);
-    int getProgress(String pkgName);
-
-    boolean cacheComposedIcon(in Bitmap icon, String path);
-}
+/** @hide */
+parcelable ComposedIconInfo;
