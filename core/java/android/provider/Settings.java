@@ -4018,12 +4018,6 @@ public final class Settings {
          * @hide
          */
         public static final String HALO_NINJA = "halo_ninja";
-        
-        /**
-          * HALO color, default is 0xff33b5e5 (normal)
-         * @hide
-         */
-        public static final String HALO_COLOR = "halo_color";
 
         /**
          * HALO message box?, should default to 1 (yes, show message box on incoming notification)
