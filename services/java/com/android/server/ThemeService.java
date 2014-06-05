@@ -37,6 +37,7 @@ import android.content.res.CustomTheme;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -57,6 +58,7 @@ import android.webkit.URLUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -139,6 +141,7 @@ public class ThemeService extends IThemeService.Stub {
         ThemeUtils.createAlarmDirIfNotExists();
         ThemeUtils.createNotificationDirIfNotExists();
         ThemeUtils.createRingtoneDirIfNotExists();
+        ThemeUtils.createIconCacheDirIfNotExists();
     }
 
     public void systemRunning() {
@@ -725,6 +728,27 @@ public class ThemeService extends IThemeService.Stub {
         synchronized(this) {
             return mProgress;
         }
+    }
+
+    @Override
+    public boolean cacheComposedIcon(Bitmap icon, String path) throws RemoteException {
+        final long token = Binder.clearCallingIdentity();
+        boolean success;
+        FileOutputStream os = null;
+        try {
+            os = new FileOutputStream(path);
+            icon.compress(Bitmap.CompressFormat.PNG, 90, os);
+            os.close();
+            FileUtils.setPermissions(new File(path),
+                    FileUtils.S_IRWXU|FileUtils.S_IRWXG|FileUtils.S_IROTH,
+                    -1, -1);
+            success = true;
+        } catch (Exception e) {
+            success = false;
+            Log.w(TAG, "Unable to cache icon " + path, e);
+        }
+        Binder.restoreCallingIdentity(token);
+        return success;
     }
 
     private boolean applyBootAnimation(String themePath) {
