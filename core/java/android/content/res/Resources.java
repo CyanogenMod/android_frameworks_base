@@ -16,11 +16,13 @@
 
 package android.content.res;
 
+import android.app.ComposedIconInfo;
 import com.android.internal.util.XmlUtils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.IconPackHelper.IconCustomizer;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageItemInfo;
 import android.graphics.Movie;
@@ -139,6 +141,7 @@ public class Resources {
     private WeakReference<IBinder> mToken;
 
     private SparseArray<PackageItemInfo> mIcons;
+    private ComposedIconInfo mComposedIconInfo;
 
     static {
         sPreloadedDrawables = new LongSparseArray[2];
@@ -1152,6 +1155,12 @@ public class Resources {
         }
         boolean found = mAssets.getResourceValue(id, 0, outValue, resolveRefs);
         if (found) {
+            if (info != null && info.themedIcon == 0) {
+                Drawable dr = loadDrawable(outValue, id);
+                IconCustomizer.getValue(this, id, outValue, dr);
+            } else {
+                outValue.extraValue = null;
+            }
             return;
         }
         throw new NotFoundException("Resource ID #0x"
@@ -1180,6 +1189,12 @@ public class Resources {
         }
         boolean found = mAssets.getResourceValue(id, density, outValue, resolveRefs);
         if (found) {
+            if (info != null && info.themedIcon == 0) {
+                Drawable dr = loadDrawable(outValue, id);
+                IconCustomizer.getValue(this, id, outValue, dr);
+            } else {
+                outValue.extraValue = null;
+            }
             return;
         }
         throw new NotFoundException("Resource ID #0x" + Integer.toHexString(id));
@@ -2188,6 +2203,11 @@ public class Resources {
                     Trace.traceEnd(Trace.TRACE_TAG_RESOURCES);
                 }
             }
+            if (dr != null && value.extraValue != null) {
+                Drawable composedIcon = IconCustomizer.getComposedIconDrawable(dr, this,
+                        mComposedIconInfo);
+                if (composedIcon != null) dr = composedIcon;
+            }
         }
 
         if (dr != null) {
@@ -2469,6 +2489,16 @@ public class Resources {
     /** @hide */
     public void setIconResources(SparseArray<PackageItemInfo> icons) {
         mIcons = icons;
+    }
+
+    /** @hide */
+    public void setCustomIcons(ComposedIconInfo iconInfo) {
+        mComposedIconInfo = iconInfo;
+    }
+
+    /** @hide */
+    public ComposedIconInfo getComposedIconInfo() {
+        return mComposedIconInfo;
     }
 
     private Resources() {
