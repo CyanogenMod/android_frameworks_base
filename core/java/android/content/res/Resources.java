@@ -16,11 +16,13 @@
 
 package android.content.res;
 
+import android.app.ComposedIconInfo;
 import com.android.internal.util.XmlUtils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.IconPackHelper.IconCustomizer;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageItemInfo;
 import android.graphics.Movie;
@@ -139,6 +141,7 @@ public class Resources {
     private WeakReference<IBinder> mToken;
 
     private SparseArray<PackageItemInfo> mIcons;
+    private ComposedIconInfo mComposedIconInfo;
 
     static {
         sPreloadedDrawables = new LongSparseArray[2];
@@ -726,6 +729,12 @@ public class Resources {
                 mTmpValue = value;
             }
         }
+
+        if (info != null && info.themedIcon == 0) {
+            Drawable composedIcon = IconCustomizer.getComposedIconDrawable(res, this,
+                    mComposedIconInfo);
+            if (composedIcon != null) res = composedIcon;
+        }
         return res;
     }
 
@@ -786,6 +795,11 @@ public class Resources {
             if (mTmpValue == null) {
                 mTmpValue = value;
             }
+        }
+        if (info != null && info.themedIcon == 0) {
+            Drawable composedIcon = IconCustomizer.getComposedIconDrawable(res, this,
+                    mComposedIconInfo);
+            if (composedIcon != null) res = composedIcon;
         }
         return res;
     }
@@ -2469,6 +2483,11 @@ public class Resources {
     /** @hide */
     public void setIconResources(SparseArray<PackageItemInfo> icons) {
         mIcons = icons;
+    }
+
+    /** @hide */
+    public void setCustomIcons(ComposedIconInfo iconInfo) {
+        mComposedIconInfo = iconInfo;
     }
 
     private Resources() {
