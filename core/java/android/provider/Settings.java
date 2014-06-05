@@ -3983,6 +3983,44 @@ public final class Settings {
          public static final String HALO_ENABLED = "halo_enabled";
      
         /**
+         * Enable custom HALO Colors
+         * @hide
+         **/
+        public static final String HALO_COLOR = "halo_color";
+
+        /**
+         * HALO Circle Color
+         * @hide
+         **/
+        public static final String HALO_CIRCLE_COLOR = "halo_circle_color";
+
+        /**
+         * HALO Effect Color
+         **/
+        public static final String HALO_EFFECT_COLOR = "halo_effect_color";
+        
+        /**
+         * HALO Notification Title Color
+         * @hide
+         **/
+        public static final String HALO_NOTIFICATION_TITLE_COLOR = "halo_notification_title_color";
+
+        /**
+         * HALO Notification Description Color
+         **/
+        public static final String HALO_NOTIFICATION_DESC_COLOR = "halo_notification_desc_color";
+        
+        /**
+         * HALO Speech Bubble Color
+         **/
+        public static final String HALO_SPEECH_BUBBLE_COLOR = "halo_speech_bubble_color";
+        
+        /**
+         * HALO Text Color
+         **/
+        public static final String HALO_TEXT_COLOR = "halo_text_color";
+     
+        /**
          * HALO, should default to 0 (no, do not show)
          * @hide
          */
