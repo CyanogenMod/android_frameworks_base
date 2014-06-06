@@ -117,6 +117,9 @@
          hardware; give them audio for now until full HAL support is added. -->
     <permission name="android.permission.MANAGE_VOICE_KEYPHRASES">
         <group gid="audio" />
+
+    <permission name="android.permission.HARDWARE_ABSTRACTION_ACCESS" >
+        <group gid="system" />
     </permission>
 
     <!-- ================================================================== -->
