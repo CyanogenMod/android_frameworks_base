@@ -1159,7 +1159,6 @@ public abstract class PreferenceActivity extends ListActivity implements
             try {
                 mFragmentBreadCrumbs = (FragmentBreadCrumbs)crumbs;
             } catch (ClassCastException e) {
-                setTitle(title);
                 return;
             }
             if (mFragmentBreadCrumbs == null) {
@@ -1173,17 +1172,12 @@ public abstract class PreferenceActivity extends ListActivity implements
                 // Hide the breadcrumb section completely for single-pane
                 View bcSection = findViewById(com.android.internal.R.id.breadcrumb_section);
                 if (bcSection != null) bcSection.setVisibility(View.GONE);
-                setTitle(title);
             }
             mFragmentBreadCrumbs.setMaxVisible(2);
             mFragmentBreadCrumbs.setActivity(this);
         }
-        if (mFragmentBreadCrumbs.getVisibility() != View.VISIBLE) {
-            setTitle(title);
-        } else {
-            mFragmentBreadCrumbs.setTitle(title, shortTitle);
-            mFragmentBreadCrumbs.setParentTitle(null, null, null);
-        }
+        mFragmentBreadCrumbs.setTitle(title, shortTitle);
+        mFragmentBreadCrumbs.setParentTitle(null, null, null);
     }
 
     /**
