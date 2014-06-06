@@ -93,9 +93,6 @@
   <!-- Fast Charge -->
   <java-symbol type="string" name="config_fastChargePath" />
 
-  <!-- Force permanent menu key -->
-  <java-symbol type="bool" name="config_force_permanent_menu_key" />
-
   <!-- Hardware key rebinding -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
 
