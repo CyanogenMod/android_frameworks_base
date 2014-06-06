@@ -34,4 +34,7 @@
         <item>NW</item> <!-- North west -->
     </string-array>
 
+    <array name="hover_blacklisted_packages">
+        <item>com.google.android.googlequicksearchbox</item>
+    </array>
 </resources>

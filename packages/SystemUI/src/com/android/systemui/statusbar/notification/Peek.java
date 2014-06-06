@@ -203,7 +203,8 @@ public class Peek implements SensorActivityHandler.SensorChangedCallback {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    // mStatusBar.dismissHover(); // hide hover if showing
+                    // hide hover if showing
+                    mStatusBar.getHoverInstance().dismissHover(false, false);
                     dismissNotification();
                 }
                 return true;

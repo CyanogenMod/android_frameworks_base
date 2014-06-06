@@ -38,7 +38,8 @@ bool InputWindowInfo::isTrustedOverlay() const {
             || layoutParamsType == TYPE_INPUT_METHOD_DIALOG
             || layoutParamsType == TYPE_SECURE_SYSTEM_OVERLAY
             || layoutParamsType == TYPE_SYSTEM_ALERT
-            || layoutParamsType == TYPE_MAGNIFICATION_OVERLAY;
+            || layoutParamsType == TYPE_MAGNIFICATION_OVERLAY
+            || layoutParamsType == TYPE_STATUS_BAR_PANEL;
 }
 
 bool InputWindowInfo::supportsSplitTouch() const {
