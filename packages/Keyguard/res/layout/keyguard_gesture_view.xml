@@ -64,7 +64,6 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:contentDescription="@string/keyguard_accessibility_pattern_area"
-                android:background="@drawable/kg_bouncer_bg_white"
                 android:fadeOffset="0" />
           </FrameLayout>
           <include layout="@layout/keyguard_eca"
