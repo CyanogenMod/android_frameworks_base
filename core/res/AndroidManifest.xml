@@ -2600,6 +2600,31 @@
         android:description="@string/permdesc_accessThemeService"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to read the current theme configuration and
+         get information about the various themes currently installed
+         @hide -->
+    <permission android:name="android.permission.READ_THEMES"
+        android:label="@string/permlab_readThemes"
+        android:description="@string/permdesc_readThemesDesc"
+        android:protectionLevel="normal" />
+
+    <!-- Allows an application to write the current theme configuration and
+         write information about the various themes currently installed.
+         Changing themes should be done through the service ACCESS_THEME_MANAGER
+         @hide -->
+    <permission android:name="android.permission.WRITE_THEMES"
+        android:label="@string/permlab_writeThemes"
+        android:description="@string/permdesc_writeThemesDesc"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application access the CM hardware abstraction framework (DANGEROUS)
+         <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS"
+        android:label="@string/permlab_useHardwareFramework"
+        android:description="@string/permdesc_useHardwareFramework"
+        android:protectionLevel="signature" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
