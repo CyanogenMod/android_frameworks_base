@@ -359,15 +359,27 @@ interface ITelephonyMSim {
     int getPreferredVoiceSubscription();
 
     /**
-     * get user prefered data subscription
+     * get current prefered data subscription
      * @return subscription id
      */
     int getPreferredDataSubscription();
 
+    /**
+     * get default prefered data subscription
+     * @return subscription id
+     */
+    int getDefaultDataSubscription();
+
     /*
-     * Set user prefered data subscription
+     * Set current prefered data subscription temporarily.
      * @return true if success
      */
     boolean setPreferredDataSubscription(int subscription);
+
+    /*
+     * Set prefered data subscription and updates default data subscription.
+     * @return true if success
+     */
+    boolean setDefaultDataSubscription(int subscription);
 }
 
