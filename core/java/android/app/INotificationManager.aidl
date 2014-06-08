@@ -60,4 +60,10 @@ interface INotificationManager
     void setHaloWhitelistStatus(String pkg, boolean status);
     boolean isHaloPolicyBlack();
     boolean isPackageAllowedForHalo(String pkg);
+
+    // Peek and floating window
+    void setPeekBlacklistStatus(String pkg, boolean status);
+    void setFloatingModeBlacklistStatus(String pkg, boolean status);
+    boolean isPackageAllowedForPeek(String pkg);
+    boolean isPackageAllowedForFloatingMode(String pkg);
 }

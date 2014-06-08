@@ -377,6 +377,16 @@ public class Peek implements SensorActivityHandler.SensorChangedCallback {
         boolean shouldDisplay = shouldDisplayNotification(n) || force;
         addNotification(n);
 
+        // first check if is blacklisted
+        boolean allowed = true; // default on
+        try {
+            allowed = mStatusBar.getNotificationManager().isPackageAllowedForPeek(n.getPackageName());
+        } catch (android.os.RemoteException ex) {
+            // System is dead
+        }
+        if(!allowed) return;
+
+        // not blacklisted, process it
         if(!mEnabled /* peek is disabled */
                 || (mPowerManager.isScreenOn() && !mShowing) /* no peek when screen is on */
                 || !shouldDisplay /* notification has already been displayed */
