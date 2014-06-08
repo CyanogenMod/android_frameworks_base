@@ -957,6 +957,10 @@ public class MSimTelephonyManager {
         String p[] = null;
         String prop = SystemProperties.get(property);
 
+        if (value == null) {
+            value = "";
+        }
+
         if (prop != null) {
             p = prop.split(",");
         }
@@ -1026,11 +1030,41 @@ public class MSimTelephonyManager {
     }
 
     /**
+     * Returns the default preferred data subscription value.
+     */
+    public int getDefaultDataSubscription() {
+        try {
+            return getITelephonyMSim().getDefaultDataSubscription();
+        } catch (RemoteException ex) {
+            return MSimConstants.DEFAULT_SUBSCRIPTION;
+        } catch (NullPointerException ex) {
+            return MSimConstants.DEFAULT_SUBSCRIPTION;
+        }
+    }
+
+    /**
      * Sets the designated data subscription.
+     * This API may be used by apps which needs to switch the DDS temporarily
+     * like MMS app. Default data subscription setting will not be updated by
+     * this API.
      */
     public boolean setPreferredDataSubscription(int subscription) {
         try {
             return getITelephonyMSim().setPreferredDataSubscription(subscription);
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Sets the designated data subscription and updates the default data
+     * subscription setting.
+     */
+    public boolean setDefaultDataSubscription(int subscription) {
+        try {
+            return getITelephonyMSim().setDefaultDataSubscription(subscription);
         } catch (RemoteException ex) {
             return false;
         } catch (NullPointerException ex) {

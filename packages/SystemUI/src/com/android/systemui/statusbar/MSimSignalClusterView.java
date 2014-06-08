@@ -195,9 +195,11 @@ public class MSimSignalClusterView
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
         // Standard group layout onPopulateAccessibilityEvent() implementations
         // ignore content description, so populate manually
-        if (mWifiVisible && mWifiGroup.getContentDescription() != null)
+        if (mWifiVisible && mWifiGroup != null &&
+                mWifiGroup.getContentDescription() != null)
             event.getText().add(mWifiGroup.getContentDescription());
-        if (mMobileVisible && mMobileGroup[MSimConstants.DEFAULT_SUBSCRIPTION].
+        if (mMobileVisible && mMobileGroup[MSimConstants.DEFAULT_SUBSCRIPTION] != null
+                && mMobileGroup[MSimConstants.DEFAULT_SUBSCRIPTION].
                 getContentDescription() != null)
             event.getText().add(mMobileGroup[MSimConstants.DEFAULT_SUBSCRIPTION].
                     getContentDescription());
