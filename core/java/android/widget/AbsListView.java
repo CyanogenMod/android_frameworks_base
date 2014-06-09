@@ -2148,6 +2148,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             mRecycler.markChildrenDirty();
         }
 
+        mOverScrollMode = getOverScrollMode();
         layoutChildren();
         mInLayout = false;
 
@@ -2341,7 +2342,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         final View scrapView = mRecycler.getScrapView(position);
         View child = mAdapter.getView(position, scrapView, this);
         if (scrapView != null) {
-            if (mIsScrolling && !mIsWidget) {
+            if (mListAnimationMode != 0 && !mIsWidget) {
                 child = setAnimation(child);
             }
 
