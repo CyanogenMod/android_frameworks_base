@@ -96,4 +96,8 @@ public class QSUtils {
             return (sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
                     && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null);
         }
+
+        public static boolean deviceSupportsMicrophone(Context context) {
+            return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE);
+        }
 }

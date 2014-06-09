@@ -15,8 +15,9 @@
      limitations under the License.
 -->
 <resources>
-
-    <!-- Color for the "No recent apps" text in the recent apps list. -->
+    <!-- Color for the "No recent apps" text in the recent apps list -->
     <color name="no_recent_apps">#bebebe</color>
 
+    <!-- Color for the QS sound recorder tile's amplitude indicator -->
+    <color name="amplitude_indicator">#404040</color>
 </resources>
