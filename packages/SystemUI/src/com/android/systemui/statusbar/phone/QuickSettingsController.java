@@ -40,6 +40,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_RINGER;
 import static com.android.internal.util.cm.QSConstants.TILE_SCREENTIMEOUT;
 import static com.android.internal.util.cm.QSConstants.TILE_SETTINGS;
 import static com.android.internal.util.cm.QSConstants.TILE_SLEEP;
+import static com.android.internal.util.cm.QSConstants.TILE_SOUNDRECORDER;
 import static com.android.internal.util.cm.QSConstants.TILE_SYNC;
 import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
 import static com.android.internal.util.cm.QSConstants.TILE_USER;
@@ -92,6 +93,7 @@ import com.android.systemui.quicksettings.QuietHoursTile;
 import com.android.systemui.quicksettings.RingerModeTile;
 import com.android.systemui.quicksettings.ScreenTimeoutTile;
 import com.android.systemui.quicksettings.SleepScreenTile;
+import com.android.systemui.quicksettings.SoundRecorderTile;
 import com.android.systemui.quicksettings.SyncTile;
 import com.android.systemui.quicksettings.ToggleLockscreenTile;
 import com.android.systemui.quicksettings.TorchTile;
@@ -297,6 +299,8 @@ public class QuickSettingsController {
                 }
             } else if (tile.equals(TILE_COMPASS)) {
                 qs = new CompassTile(mContext, this);
+            } else if (tile.equals(TILE_SOUNDRECORDER)) {
+                qs = new SoundRecorderTile(mContext, this);
             }
 
             if (qs != null) {
