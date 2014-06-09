@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 
 public class LockGestureView extends GestureOverlayView implements GestureOverlayView.OnGesturingListener,
             GestureOverlayView.OnGesturePerformedListener {
-    private static final int CORRECT_COLOR = Color.GREEN;
+    private static final int CORRECT_COLOR = Color.WHITE;
     private static final int WRONG_COLOR = Color.RED;
 
     private DisplayMode mGestureDisplayMode = DisplayMode.Correct;
