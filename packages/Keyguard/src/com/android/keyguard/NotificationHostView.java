@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Team AOSPAL
+ * Copyright (C) 2014 The MoKee OpenSource Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -590,7 +591,11 @@ public class NotificationHostView extends FrameLayout {
                 if (mNotifications.size() == 0) {
                     statusBar.setButtonDrawable(0, 0);
                 } else if (mShownNotifications == mNotifications.size()) {
-                    statusBar.setButtonDrawable(0, 2);
+                    if (mNotifications.size() == getNonClearableNotificationCount()) {
+                        statusBar.setButtonDrawable(0, 0);
+                    } else {
+                        statusBar.setButtonDrawable(0, 2);
+                    }
                 } else {
                     statusBar.setButtonDrawable(0, 1);
                 }
@@ -600,6 +605,15 @@ public class NotificationHostView extends FrameLayout {
         }
     }
 
+    private int getNonClearableNotificationCount() {
+        int count = 0;
+        for (NotificationView nv : mNotifications.values()){
+            if (!nv.canBeDismissed()){
+                count++;
+            }
+        }
+        return count;
+    }
     private void animateBackgroundColor(final int targetColor) {
         if (!(getBackground() instanceof ColorDrawable)) {
             setBackgroundColor(0x0);
