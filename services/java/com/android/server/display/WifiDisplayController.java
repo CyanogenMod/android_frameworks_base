@@ -729,7 +729,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
             return; // wait for asynchronous callback
         }
 
-        // Step 6. Listen for incoming connections.
+        // Step 6. Listen for incoming RTSP connection.
         if (mConnectedDevice != null && (mRemoteDisplay == null &&
                     mExtRemoteDisplay == null)) {
             Inet4Address addr = getInterfaceAddress(mConnectedDeviceGroupInfo);

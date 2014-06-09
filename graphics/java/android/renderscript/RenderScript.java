@@ -19,6 +19,7 @@ package android.renderscript;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -102,6 +103,20 @@ public class RenderScript {
 
     static File mCacheDir;
 
+    // this should be a monotonically increasing ID
+    // used in conjunction with the API version of a device
+    static final long sMinorID = 1;
+
+    /**
+     * Returns an identifier that can be used to identify a particular
+     * minor version of RS.
+     *
+     * @hide
+     */
+    public static long getMinorID() {
+        return sMinorID;
+    }
+
      /**
      * Sets the directory to use as a persistent storage for the
      * renderscript object file cache.
@@ -151,6 +166,7 @@ public class RenderScript {
     }
 
     ContextType mContextType;
+    ReentrantReadWriteLock mRWLock;
 
     // Methods below are wrapped to protect the non-threadsafe
     // lockless fifo.
@@ -178,7 +194,18 @@ public class RenderScript {
     native void rsnContextDestroy(int con);
     synchronized void nContextDestroy() {
         validate();
-        rsnContextDestroy(mContext);
+
+        // take teardown lock
+        // teardown lock can only be taken when no objects are being destroyed
+        ReentrantReadWriteLock.WriteLock wlock = mRWLock.writeLock();
+        wlock.lock();
+
+        int curCon = mContext;
+        // context is considered dead as of this point
+        mContext = 0;
+
+        wlock.unlock();
+        rsnContextDestroy(curCon);
     }
     native void rsnContextSetSurface(int con, int w, int h, Surface sur);
     synchronized void nContextSetSurface(int w, int h, Surface sur) {
@@ -263,8 +290,9 @@ public class RenderScript {
         validate();
         return rsnGetName(mContext, obj);
     }
+    // nObjDestroy is explicitly _not_ synchronous to prevent crashes in finalizers
     native void rsnObjDestroy(int con, int id);
-    synchronized void nObjDestroy(int id) {
+    void nObjDestroy(int id) {
         // There is a race condition here.  The calling code may be run
         // by the gc while teardown is occuring.  This protects againts
         // deleting dead objects.
@@ -1144,6 +1172,7 @@ public class RenderScript {
         if (ctx != null) {
             mApplicationContext = ctx.getApplicationContext();
         }
+        mRWLock = new ReentrantReadWriteLock();
     }
 
     /**
@@ -1238,6 +1267,8 @@ public class RenderScript {
      */
     public void destroy() {
         validate();
+        nContextFinish();
+
         nContextDeinitToClient(mContext);
         mMessageThread.mRun = false;
         try {
@@ -1246,7 +1277,6 @@ public class RenderScript {
         }
 
         nContextDestroy();
-        mContext = 0;
 
         nDeviceDestroy(mDev);
         mDev = 0;

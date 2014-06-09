@@ -49,6 +49,8 @@ import android.database.ContentObserver;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
+import android.net.http.CertificateChainValidator;
+import android.net.http.SslError;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -85,6 +87,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -92,6 +95,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
@@ -123,6 +127,8 @@ public class AudioService extends IAudioService.Stub {
     protected static final boolean DEBUG_RC = false;
     /** Debug volumes */
     protected static final boolean DEBUG_VOL = false;
+    /** Debug cert verification */
+    private static final boolean DEBUG_CERTS = false;
 
     /** How long to delay before persisting a change in volume/ringer mode. */
     private static final int PERSIST_DELAY = 500;
@@ -5068,6 +5074,43 @@ public class AudioService extends IAudioService.Stub {
                 mPendingVolumeCommand = null;
             }
         }
+    }
+
+    public int verifyX509CertChain(int numcerts, byte [] chain, String domain, String authType) {
+
+        if (DEBUG_CERTS) {
+            Log.v(TAG, "java side verify for "
+                    + numcerts + " certificates (" + chain.length + " bytes"
+                            + ")for "+ domain + "/" + authType);
+        }
+
+        byte[][] certChain = new byte[numcerts][];
+
+        ByteBuffer buf = ByteBuffer.wrap(chain);
+        for (int i = 0; i < numcerts; i++) {
+            int certlen = buf.getInt();
+            if (DEBUG_CERTS) {
+                Log.i(TAG, "cert " + i +": " + certlen);
+            }
+            certChain[i] = new byte[certlen];
+            buf.get(certChain[i]);
+        }
+
+        try {
+            SslError err = CertificateChainValidator.verifyServerCertificates(certChain,
+                    domain, authType);
+            if (DEBUG_CERTS) {
+                Log.i(TAG, "verified: " + err);
+            }
+            if (err == null) {
+                return -1;
+            } else {
+                return err.getPrimaryError();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "failed to verify chain: " + e);
+        }
+        return SslError.SSL_INVALID;
     }
 
 

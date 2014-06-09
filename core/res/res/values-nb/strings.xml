@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"avinstallere snarveier"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Lar appen fjerne snarveier på startsiden uten å involvere brukeren."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"omdirigere utgående anrop"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Lar appen behandle utgående anrop og endre nummeret som skal ringes opp. Denne tillatelsen lar appen overvåke, viderekoble eller hindre utgående anrop."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Lar appen se nummeret det ringes til under en utgående samtale, med mulighet for å omdirigere anropet til et annet nummer eller avbryte samtalen fullstendig."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"motta tekstmeldinger (SMS)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Lar appen motta og behandle tekstmeldinger. Dette betyr at appen kan overvåke eller slette meldinger som er sendt til enheten din uten at du har sett dem."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"motta tekstmeldinger (MMS)"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Hjem"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Arbeid"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Annen"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Du har ingen apper som kan åpne denne kontakten."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Skriv inn PIN-kode"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Skriv inn PUK-kode og ny personlig kode"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK-kode"</string>
@@ -872,7 +873,7 @@
     <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Glemt mønsteret?"</string>
     <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Opplåsing av konto"</string>
     <string name="lockscreen_glogin_too_many_attempts" msgid="2751368605287288808">"For mange forsøk på tegning av mønster"</string>
-    <string name="lockscreen_glogin_instructions" msgid="3931816256100707784">"Logg deg på med Google-kontoen din for å låse opp."</string>
+    <string name="lockscreen_glogin_instructions" msgid="3931816256100707784">"Logg på med Google-kontoen din for å låse opp."</string>
     <string name="lockscreen_glogin_username_hint" msgid="8846881424106484447">"Brukernavn (e-post)"</string>
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"Passord"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Logg på"</string>
@@ -1189,7 +1190,7 @@
     <item quantity="other" msgid="7915895323644292768">"Åpne trådløsnett i nærheten"</item>
   </plurals>
     <string name="wifi_available_sign_in" msgid="4029489716605255386">"Pålogging til Wi-Fi-nettverk"</string>
-    <string name="network_available_sign_in" msgid="8495155593358054676">"Logg deg på nettverket"</string>
+    <string name="network_available_sign_in" msgid="8495155593358054676">"Logg på nettverket"</string>
     <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
     <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kan ikke koble til Wi-Fi"</string>
@@ -1225,7 +1226,7 @@
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Aldri tillat"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"SIM-kort er fjernet"</string>
     <string name="sim_removed_message" msgid="2333164559970958645">"Det mobile nettverket forblir utilgjengelig inntil du starter på nytt med et gyldig SIM-kort."</string>
-    <string name="sim_done_button" msgid="827949989369963775">"Fullført"</string>
+    <string name="sim_done_button" msgid="827949989369963775">"Ferdig"</string>
     <string name="sim_added_title" msgid="3719670512889674693">"SIM-kort er lagt til"</string>
     <string name="sim_added_message" msgid="6599945301141050216">"Start enheten på nytt for å få tilgang til det mobile nettverket."</string>
     <string name="sim_restart_button" msgid="4722407842815232347">"Start på nytt"</string>
@@ -1493,7 +1494,7 @@
     <string name="wireless_display_route_description" msgid="9070346425023979651">"Trådløs skjerm"</string>
     <string name="media_route_button_content_description" msgid="5758553567065145276">"Medieutgang"</string>
     <string name="media_route_chooser_title" msgid="1751618554539087622">"Koble til enheten"</string>
-    <string name="media_route_chooser_title_for_remote_display" msgid="3395541745872017583">"Send skjermen til enheten"</string>
+    <string name="media_route_chooser_title_for_remote_display" msgid="3395541745872017583">"Cast skjermen til enheten"</string>
     <string name="media_route_chooser_searching" msgid="4776236202610828706">"Søker etter enheter …"</string>
     <string name="media_route_chooser_extended_settings" msgid="87015534236701604">"Innstillinger"</string>
     <string name="media_route_controller_disconnect" msgid="8966120286374158649">"Koble fra"</string>
@@ -1532,7 +1533,7 @@
     <string name="kg_invalid_puk" msgid="3638289409676051243">"Skriv inn den korrekte PUK-koden på nytt. Gjentatte forsøk kommer til å deaktivere SIM-kortet."</string>
     <string name="kg_invalid_confirm_pin_hint" product="default" msgid="7003469261464593516">"PIN-kodene stemmer ikke overens"</string>
     <string name="kg_login_too_many_attempts" msgid="6486842094005698475">"For mange forsøk på tegning av mønster"</string>
-    <string name="kg_login_instructions" msgid="1100551261265506448">"Logg deg på med Google-kontoen din for å låse opp."</string>
+    <string name="kg_login_instructions" msgid="1100551261265506448">"Logg på med Google-kontoen din for å låse opp."</string>
     <string name="kg_login_username_hint" msgid="5718534272070920364">"Brukernavn (e-postadresse)"</string>
     <string name="kg_login_password_hint" msgid="9057289103827298549">"Passord"</string>
     <string name="kg_login_submit_button" msgid="5355904582674054702">"Logg på"</string>

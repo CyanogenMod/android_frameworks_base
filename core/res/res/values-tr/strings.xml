@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"kısayolların yüklemesini kaldırma"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Uygulamaya, kullanıcının müdahalesi olmadan kısayolları Ana Ekrandan kaldırma izni verir."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"giden çağrıları yeniden yönlendir"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Uygulamaya, yapılan çağrıları işleme ve aranacak numarayı değiştirme izni verir. Bu izin, uygulamanın yapılan çağrıları izlemesine, yönlendirmesine ve önlemesine olanak sağlar."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Uygulamaya, giden bir çağrının numarası çevrilirken çağrıyı farklı bir numaraya yönlendirme ya da tamamen kapatma seçeneğiyle birlikte numarayı görme izni verir."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"kısa mesajları al (SMS)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Uygulamaya SMS mesajlarını alma ve işleme izni verir. Bu izin, uygulamanın cihazınıza gönderilen mesajları takip edip size göstermeden silebileceği anlamına gelir."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"kısa mesajları (MMS) al"</string>
@@ -645,7 +645,7 @@
     <string name="permdesc_readDictionary" msgid="659614600338904243">"Uygulamaya, kullanıcının kullanıcı sözlüğünde depolamış olabileceği kelimeleri, adları ve kelime öbeklerini okuma izni verir."</string>
     <string name="permlab_writeDictionary" msgid="2183110402314441106">"kullanıcı tanımlı sözlüğe kelime ekle"</string>
     <string name="permdesc_writeDictionary" msgid="8185385716255065291">"Uygulamaya, kullanıcı sözlüğüne yeni kelimeler yazma izni verir."</string>
-    <string name="permlab_sdcardRead" product="nosdcard" msgid="367275095159405468">"USB belleğimin içeriğini oku"</string>
+    <string name="permlab_sdcardRead" product="nosdcard" msgid="367275095159405468">"USB belleğini okuma"</string>
     <string name="permlab_sdcardRead" product="default" msgid="2188156462934977940">"SD kartımın içeriğini oku"</string>
     <string name="permdesc_sdcardRead" product="nosdcard" msgid="3446988712598386079">"Uygulamaya, USB depolama biriminizin içeriğini okuma izni verir."</string>
     <string name="permdesc_sdcardRead" product="default" msgid="2607362473654975411">"Uygulamaya, SD kartınızın içeriğini okuma izni verir."</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Ev"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"İş"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Diğer"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Bu kişiyi görüntüleyecek uygulama bulunamadı."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"PIN kodunu yazın"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"PUK ve yeni PIN kodunu yazın"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK kodu"</string>
