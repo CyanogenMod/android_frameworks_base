@@ -705,6 +705,10 @@ public class KeyguardViewManager {
             mIsCoverflow = true;
         }
 
+        if(mCustomBackground != null) {
+                mKeyguardHost.setCustomBackground(mCustomBackground);
+        }
+
         updateUserActivityTimeoutInWindowLayoutParams();
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
 
