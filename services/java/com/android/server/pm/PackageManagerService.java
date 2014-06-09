@@ -2025,8 +2025,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             if((ps == null) || (ps.pkg == null) || (ps.pkg.applicationInfo == null)) {
                 return -1;
             }
-            p = ps.pkg;
-            return p != null ? UserHandle.getUid(userId, p.applicationInfo.uid) : -1;
+            return UserHandle.getUid(userId, ps.pkg.applicationInfo.uid);
         }
     }
 
