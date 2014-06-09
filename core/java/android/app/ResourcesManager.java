@@ -281,6 +281,12 @@ public class ResourcesManager {
             return;
         }
 
+        final CustomTheme customTheme = r.getConfiguration().customTheme;
+        if (pkgName != null && customTheme != null &&
+                pkgName.equals(customTheme.getIconPackPkgName())) {
+            return;
+        }
+
         //Map application icon
         if (pkgInfo != null && pkgInfo.applicationInfo != null) {
             appInfo = pkgInfo.applicationInfo;
