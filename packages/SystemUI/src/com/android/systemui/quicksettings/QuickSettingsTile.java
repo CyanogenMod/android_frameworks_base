@@ -97,6 +97,9 @@ public class QuickSettingsTile implements OnClickListener {
             }
         }
         View image = mTile.findViewById(R.id.image);
+        if (image == null) {
+            image = mTile.findViewById(R.id.visualizer_view);
+        }
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
             int margin = mContext.getResources().getDimensionPixelSize(
