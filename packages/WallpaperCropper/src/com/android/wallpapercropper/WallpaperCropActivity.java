@@ -38,6 +38,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -516,7 +517,6 @@ public class WallpaperCropActivity extends Activity {
                 //inPurgeable - pixels can be purged if system needs to reclaim memory
                 //inInputShareable - bitmap keeps a shallow reference to input
                 options.inJustDecodeBounds = true;
-                options.inSampleSize = 4;
                 options.inInputShareable = true;
                 options.inPurgeable = true;
                 BitmapFactory.decodeStream(is, null, options);
@@ -595,11 +595,29 @@ public class WallpaperCropActivity extends Activity {
                     return false;
                 }
 
+                // Get screen dimensions.
+                Point bounds = getImageBounds();
+                if (bounds == null) {
+                    Log.w(LOGTAG, "Cannot get bounds for image");
+                    failure = true;
+                    return false;
+                }
+                DisplayMetrics metrics = new DisplayMetrics();
+                ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                int screenWidth = metrics.widthPixels;
+                int screenHeight = metrics.heightPixels;
+
                 // See how much we're reducing the size of the image
-                //This is a hard coded optimization
-                //No apparent degradation in quality but major reduction in amt of memory consumed.
-                int scaleDownSampleSize = Math.max(4, Math.min(roundedTrueCrop.width() / mOutWidth,
+                int scaleDownSampleSize;
+                //If image is smaller than screen dimensions
+                if (bounds.x < screenWidth && bounds.y < screenHeight) {
+                    scaleDownSampleSize = 1;
+                }
+                else {
+                    scaleDownSampleSize = Math.max(2, Math.min(roundedTrueCrop.width() / mOutWidth,
                         roundedTrueCrop.height() / mOutHeight));
+                }
+
                 // Attempt to open a region decoder
                 BitmapRegionDecoder decoder = null;
                 InputStream is = null;
