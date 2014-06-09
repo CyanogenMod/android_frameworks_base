@@ -279,6 +279,9 @@ public class WifiStateMachine extends StateMachine {
     /* Tracks current frequency mode */
     private AtomicInteger mFrequencyBand = new AtomicInteger(WifiManager.WIFI_FREQUENCY_BAND_AUTO);
 
+    /* Tracks current country code */
+    private String mCountryCode = "GB";
+
     /* Tracks if we are filtering Multicast v4 packets. Default is to filter. */
     private AtomicBoolean mFilteringMulticastV4Packets = new AtomicBoolean(true);
 
@@ -1547,6 +1550,14 @@ public class WifiStateMachine extends StateMachine {
      * @param persist {@code true} if the setting should be remembered.
      */
     public void setCountryCode(String countryCode, boolean persist) {
+        String countryCodeUser = Settings.Global.getString(mContext.getContentResolver(),
+                Settings.Global.WIFI_COUNTRY_CODE_USER);
+        if (countryCodeUser != null && countryCodeUser != countryCode) {
+            persist = true;
+            countryCode = countryCodeUser;
+            mCountryCode = countryCode;
+        }
+
         // If it's a good country code, apply after the current
         // wifi connection is terminated; ignore resetting of code
         // for now (it is unclear what the chipset should do when
@@ -1557,6 +1568,13 @@ public class WifiStateMachine extends StateMachine {
         } else {
             sendMessage(CMD_SET_COUNTRY_CODE, countryCodeSequence, persist ? 1 : 0, countryCode);
         }
+    }
+
+    /**
+     * Returns the operational country code
+     */
+    public String getCountryCode() {
+        return mCountryCode;
     }
 
     public int syncIsIbssSupported(AsyncChannel channel) {
@@ -1571,13 +1589,6 @@ public class WifiStateMachine extends StateMachine {
         List<WifiChannel> result = (List<WifiChannel>) resultMsg.obj;
         resultMsg.recycle();
         return result;
-    }
-
-    /**
-     * Returns the operational country code
-     */
-    public String getCountryCode() {
-        return mLastSetCountryCode;
     }
 
     /**
