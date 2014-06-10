@@ -245,9 +245,37 @@ public class NavigationRingHelpers {
         if (intent != null) {
             ComponentName component = intent.getComponent();
             if (component != null) {
-                view.replaceTargetDrawablesIfPresent(component,
+                boolean replaced = view.replaceTargetDrawablesIfPresent(component,
                         ASSIST_ICON_METADATA_NAME,
                         com.android.internal.R.drawable.ic_action_assist_generic);
+                if (replaced) {
+                    addFocusedStateToSearchIconIfMissing(context, view);
+                }
+            }
+        }
+    }
+
+    private static void addFocusedStateToSearchIconIfMissing(Context context, GlowPadView view) {
+        for (TargetDrawable target : view.getTargetDrawables()) {
+            if (target != null && target.getResourceId() ==
+                    com.android.internal.R.drawable.ic_action_assist_generic) {
+                Drawable drawable = target.getDrawable();
+                if (drawable instanceof StateListDrawable) {
+                    StateListDrawable d = (StateListDrawable) drawable;
+                    int inActiveIndex = d.getStateDrawableIndex(TargetDrawable.STATE_INACTIVE);
+                    int activeIndex = d.getStateDrawableIndex(TargetDrawable.STATE_ACTIVE);
+                    if (inActiveIndex != -1 && activeIndex != -1) {
+                        StateListDrawable selector = new StateListDrawable();
+                        selector.addState(TargetDrawable.STATE_INACTIVE,
+                                d.getStateDrawable(inActiveIndex));
+                        selector.addState(TargetDrawable.STATE_ACTIVE,
+                                d.getStateDrawable(activeIndex));
+                        selector.addState(TargetDrawable.STATE_FOCUSED,
+                                d.getStateDrawable(activeIndex));
+                        target.setDrawable(selector);
+                    }
+                }
+                break;
             }
         }
     }
