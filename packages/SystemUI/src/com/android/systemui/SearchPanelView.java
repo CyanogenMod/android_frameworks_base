@@ -107,12 +107,16 @@ public class SearchPanelView extends FrameLayout implements
             Bundle options = null;
 
             if (isAssist) {
+                mWaitingForLaunch = true;
+                vibrate();
+                if (!mBar.isDeviceProvisioned()) {
+                    return;
+                }
+                mBar.animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_SEARCH_PANEL);
                 ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
                         R.anim.search_launch_enter, R.anim.search_launch_exit,
                         getHandler(), SearchPanelView.this);
                 options = opts.toBundle();
-                mWaitingForLaunch = true;
-                vibrate();
             }
 
             boolean result = mActionTarget.launchAction(
