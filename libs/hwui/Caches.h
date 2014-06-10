@@ -264,6 +264,16 @@ public:
     void resetBoundTextures();
 
     /**
+     * Get the mBoundTextures[mTextureUnit].
+     */
+    uint32_t getBoundTexture();
+
+    /**
+     * Clear the cache of bound textures.
+     */
+    void unbindTexture(GLuint texture);
+
+    /**
      * Sets the scissor for the current surface.
      */
     bool setScissor(GLint x, GLint y, GLint width, GLint height);
