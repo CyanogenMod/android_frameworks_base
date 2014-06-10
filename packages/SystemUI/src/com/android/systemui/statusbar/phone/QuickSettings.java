@@ -844,6 +844,42 @@ class QuickSettings {
             parent.addView(apnTile);
         }
 
+        //DDS switch tile
+        if (mContext.getResources().getBoolean(R.bool.config_showDdsSwitch)) {
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                final QuickSettingsBasicTile ddsTile = new QuickSettingsBasicTile(mContext);
+                ddsTile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mModel.switchDdsToNext();
+                    }
+                });
+
+                if (LONG_PRESS_TOGGLES) {
+                    ddsTile.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            mModel.switchMobileDataState();
+                            ddsTile.setPressed(false);
+
+                            return true;
+                        }} );
+                }
+
+                mModel.addDdsTile(ddsTile, new QuickSettingsModel.RefreshCallback() {
+                    @Override
+                    public void refreshView(QuickSettingsTileView view, State state) {
+                        QuickSettingsBasicTile ddsTileView = (QuickSettingsBasicTile)view;
+
+                        ddsTileView.setImageResource(state.iconId);
+                        ddsTileView.setText(state.label);
+                        ddsTileView.setVisibility(state.enabled ? View.VISIBLE : View.GONE);
+                    }
+                });
+                parent.addView(ddsTile);
+            }
+        }
+
         if (showRoamingSetting()) {
             // Roaming tile
             QuickSettingsBasicTile roamingTile = mModel.addRoamingTile();

@@ -64,6 +64,7 @@ import java.util.HashMap;
 
 class ExtQuickSettingsModel extends QuickSettingsModel {
 
+    private static final String DDS_TAG = "DdsSwitch";
     private final Context mContext;
 
     // Roaming Data
@@ -416,6 +417,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
         @Override
         public void onChange(boolean selfChange) {
             onMobileDataSwitchChanged();
+            updateDds();
         }
 
         public void startObserving() {
@@ -474,12 +476,19 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             RoamingDataObserver roamingDataObserver = new RoamingDataObserver(handler);
             roamingDataObserver.startObserving();
         }
+
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            if (mContext.getResources().getBoolean(R.bool.config_showDdsSwitch)) {
+                new DdsSwitchObserver(mHandler).startObserving();
+            }
+        }
     }
 
     void updateResources() {
         super.updateResources();
 
         refreshApnTile();
+        updateDds();
     }
 
     public QuickSettingsBasicTile addRoamingTile() {
@@ -621,5 +630,111 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             Settings.Global.putInt(mContext.getContentResolver(),
                     Settings.Global.DATA_ROAMING, enabled ? 1 : 0);
         }
+    }
+
+    private class DdsSwitchObserver extends ContentObserver {
+        public DdsSwitchObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            Log.d(DDS_TAG, "mobile data or data sub is changed.");
+            updateDds();
+        }
+
+        public void startObserving() {
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.Global.getUriFor(Settings.Global.MOBILE_DATA),
+                    false, this, mUserTracker.getCurrentUserId());
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.Global.getUriFor(
+                    Settings.Global.MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION),
+                    false, this, mUserTracker.getCurrentUserId());
+        }
+    }
+
+    private QuickSettingsTileView mDdsTile;
+    private RefreshCallback mDdsCallback;
+    private State mDdsState = new State();
+    protected void addDdsTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mDdsTile = view;
+        mDdsCallback = cb;
+
+        mDdsState.enabled = false;
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            MSimTelephonyManager msimTM = (MSimTelephonyManager)
+                    mContext.getSystemService(Context.MSIM_TELEPHONY_SERVICE);
+            MSimTelephonyManager.MultiSimVariants subConfig
+                    = msimTM.getMultiSimConfiguration();
+            if (subConfig == MSimTelephonyManager.MultiSimVariants.DSDA) {
+                mDdsState.enabled = true;
+            }
+        }
+
+        updateDds();
+    }
+
+    void refreshDdsTile() {
+        if (mDdsTile != null && mDdsCallback != null) {
+            mDdsCallback.refreshView(mDdsTile, mDdsState);
+        }
+    }
+
+    void switchDdsToNext() {
+        Log.d(DDS_TAG, "switchDdsToNext");
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            MSimTelephonyManager msimTM = (MSimTelephonyManager)
+                    mContext.getSystemService(Context.MSIM_TELEPHONY_SERVICE);
+            int dataSub = msimTM.getDefaultDataSubscription();
+            int phoneCount = msimTM.getPhoneCount();
+            msimTM.setDefaultDataSubscription((dataSub+1)%phoneCount);
+        }
+    }
+
+    private void updateDds() {
+        ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+
+        int dataSub = MSimConstants.SUB1;
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            MSimTelephonyManager msimTM = (MSimTelephonyManager)
+                    mContext.getSystemService(Context.MSIM_TELEPHONY_SERVICE);
+            dataSub = msimTM.getDefaultDataSubscription();
+        }
+
+        if (cm != null && cm.getMobileDataEnabled()) {
+            Log.d(DDS_TAG, "mobile data is on.");
+            switch(dataSub) {
+                case MSimConstants.SUB1:
+                    mDdsState.iconId = R.drawable.ic_qs_data_on_1;
+                    break;
+                case MSimConstants.SUB2:
+                    mDdsState.iconId = R.drawable.ic_qs_data_on_2;
+                    break;
+                case MSimConstants.SUB3:
+                default:
+                    mDdsState.iconId = 0;
+                    break;
+            }
+            mDdsState.label = mContext.getString(R.string.quick_settings_dds_sub, dataSub + 1);
+        } else {
+            Log.d(DDS_TAG, "mobile data is off.");
+            switch(dataSub) {
+                case MSimConstants.SUB1:
+                    mDdsState.iconId = R.drawable.ic_qs_data_off_1;
+                    break;
+                case MSimConstants.SUB2:
+                    mDdsState.iconId = R.drawable.ic_qs_data_off_2;
+                    break;
+                case MSimConstants.SUB3:
+                default:
+                    mDdsState.iconId = 0;
+                    break;
+            }
+            mDdsState.label = mContext.getString(R.string.quick_settings_data_off);
+        }
+
+        refreshDdsTile();
     }
 }

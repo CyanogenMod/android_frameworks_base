@@ -146,5 +146,6 @@
     </integer-array>
     <bool name="config_showRsrpSignalLevelforLTE ">false</bool>
     <bool name="config_show_battery_charging_anim">false</bool>
+    <bool name="config_showDdsSwitch">false</bool>
 </resources>
 

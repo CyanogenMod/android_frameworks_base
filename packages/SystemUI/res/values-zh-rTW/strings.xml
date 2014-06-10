@@ -208,5 +208,6 @@
     <string name="quick_settings_apn_switch_label">APN 切換</string>
     <string name="status_bar_help_title">"系統會在這裡顯示通知"</string>
     <string name="status_bar_help_text">"向下滑動即可隨時存取通知。"\n"再次向下滑動即可使用系統控制項。"</string>
+    <string name="quick_settings_dds_sub">卡 <xliff:g id="number">%d</xliff:g> 數據</string>
 
 </resources>
