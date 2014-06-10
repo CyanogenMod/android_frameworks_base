@@ -16,27 +16,27 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dip"
+    android:layout_height="40dip"
     android:orientation="horizontal"
-    android:layout_marginTop="8dip"
-    android:layout_marginBottom="8dip"
+    android:layout_marginTop="6dip"
+    android:layout_marginBottom="6dip"
     android:gravity="start|center_vertical">
 
     <ImageView
         android:id="@+id/stream_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dip"
+        android:padding="12dip"
         android:background="?attr/selectableItemBackground"
         />
 
     <SeekBar
         style="?android:attr/seekBarStyle"
         android:id="@+id/seekbar"
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="16dip"
+        android:padding="12dip"
         android:layout_marginEnd="16dip" />
 
 </LinearLayout>

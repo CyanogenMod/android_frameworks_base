@@ -73,7 +73,6 @@
   <java-symbol type="id" name="enter_pin_section" />
   <java-symbol type="id" name="expand_activities_button" />
   <java-symbol type="id" name="expand_button" />
-  <java-symbol type="id" name="expand_button_divider" />
   <java-symbol type="id" name="expires_on" />
   <java-symbol type="id" name="find_next" />
   <java-symbol type="id" name="find_prev" />
@@ -1072,6 +1071,8 @@
   <java-symbol type="drawable" name="ic_contact_picture" />
   <java-symbol type="drawable" name="ic_dialog_usb" />
   <java-symbol type="drawable" name="ic_emergency" />
+  <java-symbol type="drawable" name="ic_find_next_holo_dark" />
+  <java-symbol type="drawable" name="ic_find_previous_holo_dark" />
   <java-symbol type="drawable" name="ic_media_stop" />
   <java-symbol type="drawable" name="ic_text_dot" />
   <java-symbol type="drawable" name="ic_print" />
