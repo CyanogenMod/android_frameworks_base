@@ -62,6 +62,12 @@ public class TargetDrawable {
         setState(STATE_INACTIVE);
     }
 
+    public void setDrawable(Drawable drawable) {
+        mDrawable = drawable != null ? drawable.mutate() : null;
+        resizeDrawables();
+        setState(STATE_INACTIVE);
+    }
+
     public TargetDrawable(Resources res, Drawable drawable) {
         mResourceId = 0;
         // Mutate the drawable so we can animate shared drawable properties.
@@ -214,6 +220,10 @@ public class TargetDrawable {
 
     public int getHeight() {
         return mDrawable != null ? mDrawable.getIntrinsicHeight() : 0;
+    }
+
+    public Drawable getDrawable() {
+        return mDrawable;
     }
 
     public void draw(Canvas canvas) {

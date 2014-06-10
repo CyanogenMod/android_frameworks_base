@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 The Android Open Source Project
-     Copyright (C) 2013 The CyanogenMod Project
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
+     Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,23 +16,19 @@
      limitations under the License.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:state_enabled="true"
+    <item android:state_enabled="true"
         android:state_active="false"
         android:state_focused="false"
-        android:drawable="@drawable/ic_navigation_ring_killtask_normal" />
+        android:drawable="@drawable/ic_navigation_ring_standby_normal" />
 
-    <item
-        android:state_enabled="true"
+    <item android:state_enabled="true"
         android:state_active="true"
         android:state_focused="false"
-        android:drawable="@drawable/ic_navigation_ring_killtask_activated" />
+        android:drawable="@drawable/ic_navigation_ring_standby_activated" />
 
-    <item
-        android:state_enabled="true"
+    <item android:state_enabled="true"
         android:state_active="false"
         android:state_focused="true"
-        android:drawable="@drawable/ic_navigation_ring_killtask_activated" />
+        android:drawable="@drawable/ic_navigation_ring_standby_activated" />
 
 </selector>
