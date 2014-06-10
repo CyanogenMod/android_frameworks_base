@@ -19,6 +19,9 @@ package com.android.systemui.cm;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
+import android.app.ActivityOptions;
+import android.app.KeyguardManager;
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -51,6 +54,7 @@ import com.android.internal.util.cm.TorchConstants;
 import static com.android.internal.util.cm.NavigationRingConstants.*;
 import com.android.systemui.R;
 import com.android.systemui.screenshot.TakeScreenshotService;
+import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 
 import java.net.URISyntaxException;
 
@@ -64,7 +68,7 @@ public class ActionTarget {
     private AudioManager mAm;
     private Context mContext;
     private Handler mHandler;
-
+    private KeyguardManager mKeyguardManager;
     private int mInjectKeyCode;
 
     private final Object mScreenshotLock = new Object();
@@ -74,6 +78,7 @@ public class ActionTarget {
         mContext = context;
         mHandler = new Handler();
         mAm = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
     }
 
     public boolean launchAction(String action) {
@@ -110,9 +115,21 @@ public class ActionTarget {
             takeScreenshot();
             return true;
         } else if (action.equals(ACTION_ASSIST)) {
-            Intent intent = new Intent(Intent.ACTION_ASSIST);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            boolean isKeyguardShowing = mKeyguardManager.isKeyguardLocked();
+            if (isKeyguardShowing) {
+                // Have keyguard show the bouncer and launch the activity if the user succeeds.
+                KeyguardTouchDelegate.getInstance(mContext).showAssistant();
+                return false;
+            }
 
+            // Otherwise, keyguard isn't showing so launch it from here.
+            SearchManager searchManager = ((SearchManager) mContext
+                    .getSystemService(Context.SEARCH_SERVICE));
+            Intent intent = searchManager.getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
+            if (intent == null) {
+                return false;
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 dismissKeyguard();
                 mContext.startActivityAsUser(intent, opts, UserHandle.CURRENT);
