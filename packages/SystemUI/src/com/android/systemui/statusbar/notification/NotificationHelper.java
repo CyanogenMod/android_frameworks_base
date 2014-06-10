@@ -64,6 +64,9 @@ public class NotificationHelper {
 
     public final static String DELIMITER = "|";
 
+    private static final String PEEK_SHOWING_BROADCAST = "com.jedga.peek.PEEK_SHOWING";
+    private static final String PEEK_HIDING_BROADCAST = "com.jedga.peek.PEEK_HIDING";
+
     private BaseStatusBar mStatusBar;
     private Context mContext;
     private IntentFilter mPeekAppFilter;
