@@ -4218,6 +4218,7 @@ public class Camera {
         private static final String KEY_QC_WB_MANUAL_CCT = "wb-manual-cct";
         private static final String KEY_QC_MIN_WB_CCT = "min-wb-cct";
         private static final String KEY_QC_MAX_WB_CCT = "max-wb-cct";
+        private static final String KEY_QC_AUTO_HDR_ENABLE = "auto-hdr-enable";
 
         /** @hide
         * KEY_QC_AE_BRACKET_HDR
@@ -5145,6 +5146,15 @@ public class Camera {
          */
          public void setZSLMode(String zsl) {
             set(KEY_QC_ZSL, zsl);
+         }
+
+         /** @hide
+         * Sets the current Auto HDR Mode.
+         * @ auto_hdr auto hdr string for enable/disable
+         * @return null
+         */
+         public void setAutoHDRMode(String auto_hdr){
+             set(KEY_QC_AUTO_HDR_ENABLE,auto_hdr);
          }
 
          /** @hide
