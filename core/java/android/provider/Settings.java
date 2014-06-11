@@ -3376,27 +3376,6 @@ public final class Settings {
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
 
         /**
-         * Whether to use a separate delay for "slide to unlock" and security
-         * lock
-         * @hide
-         */
-        public static final String SCREEN_LOCK_SLIDE_DELAY_TOGGLE = "screen_lock_slide_delay_toggle";
-
-        /**
-         * How many ms to delay before enabling the "slide to unlock" screen
-         * lock when the screen goes off due to timeout
-         * @hide
-         */
-        public static final String SCREEN_LOCK_SLIDE_TIMEOUT_DELAY = "screen_lock_slide_timeout_delay";
-
-        /**
-         * How many ms to delay before enabling the "slide to unlock" screen
-         * lock when the screen is turned off by the user
-         * @hide
-         */
-        public static final String SCREEN_LOCK_SLIDE_SCREENOFF_DELAY = "screen_lock_slide_screenoff_delay";
-
-        /**
          * Whether to use the custom quick unlock screen control
          * @hide
          */
