@@ -60,4 +60,7 @@
         <item>157</item><item>334</item>
         <item>0</item>  <item>334</item>
     </array>
+    <string-array name="heads_up_pkg_whitelist">
+        <item>com.android.mms</item>
+    </string-array>
 </resources>
