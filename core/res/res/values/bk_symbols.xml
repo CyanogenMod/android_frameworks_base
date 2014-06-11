@@ -74,10 +74,14 @@
 
     <!--Setting confirmation dialog-->
     <java-symbol type="id" name="setting_confirmation_dialog_visual_hint" />
+    <java-symbol type="id" name="setting_confirmation_dialog_how_to_reset_hint_title" />
+    <java-symbol type="id" name="setting_confirmation_dialog_how_to_reset_hint_message" />
     <java-symbol type="layout" name="setting_confirmation_dialog" />
     <java-symbol type="string" name="setting_confirmation_ask_me_later" />
     <java-symbol type="string" name="setting_confirmation_yes" />
     <java-symbol type="string" name="setting_confirmation_no" />
+    <java-symbol type="string" name="setting_reset_hint_title" />
+    <java-symbol type="string" name="setting_reset_hint_message" />
 
     <!-- AOKP -->
     <java-symbol type="string" name="animation_default"/>

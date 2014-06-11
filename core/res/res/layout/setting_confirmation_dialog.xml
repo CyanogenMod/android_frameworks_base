@@ -17,9 +17,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <ImageView
-        android:id="@+id/setting_confirmation_dialog_visual_hint"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:orientation="vertical"
+        android:layout_centerInParent="true" >
+
+        <ImageView
+            android:id="@+id/setting_confirmation_dialog_visual_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/setting_confirmation_dialog_how_to_reset_hint_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|left" />
+        <TextView
+            android:id="@+id/setting_confirmation_dialog_how_to_reset_hint_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 </RelativeLayout>

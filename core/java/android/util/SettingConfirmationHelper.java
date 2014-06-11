@@ -20,12 +20,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.provider.Settings;
+import android.widget.TextView;
 
 import com.android.internal.R;
 
@@ -63,7 +66,14 @@ public class SettingConfirmationHelper {
         final ImageView visualHint = (ImageView)
                 dialogLayout.findViewById(R.id.setting_confirmation_dialog_visual_hint);
         visualHint.setImageDrawable(hint);
-        builder.setView(dialogLayout, 10, 10, 10, 20);
+        final TextView resetHintTitle =  (TextView)
+                dialogLayout.findViewById(R.id.setting_confirmation_dialog_how_to_reset_hint_title);
+        resetHintTitle.setText(mContext.getString(R.string.setting_reset_hint_title));
+        final TextView resetHintMessage =  (TextView)
+                dialogLayout.findViewById(R.id.setting_confirmation_dialog_how_to_reset_hint_message);
+        Spanned formattedResetHintMessageText = Html.fromHtml(mContext.getString(R.string.setting_reset_hint_message));
+        resetHintMessage.setText(formattedResetHintMessageText);
+        builder.setView(dialogLayout, 10, 10, 10, 10);
         builder.setTitle(title);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.setting_confirmation_yes,

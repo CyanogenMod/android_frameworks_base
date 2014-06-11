@@ -30,6 +30,13 @@
     <string name="setting_confirmation_ask_me_later">Ask later</string>
     <string name="setting_confirmation_yes">Yes</string>
     <string name="setting_confirmation_no">No</string>
+    <string name="setting_reset_hint_title">To reset preferences:</string>
+    <string name="setting_reset_hint_message">
+        <![CDATA[
+        <p>Open <b>Settings</b><br/>
+        Below Personal divider: <b>Backup & Reset</b><br/>
+        Below Personalization divider: <b>Reset preferences</b></p>
+        ]]></string>
 
     <!-- Animation Strings -->
     <string name="animation_default">Default</string>
