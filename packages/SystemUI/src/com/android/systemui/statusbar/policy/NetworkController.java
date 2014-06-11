@@ -708,11 +708,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                             + " instead of level=" + mSignalStrength.getLevel());
                 } else {
                     mLastSignalLevel = iconLevel = mSignalStrength.getLevel();
-                    if (mShowRsrpSignalLevelforLTE ) {
+                    if (mShowRsrpSignalLevelforLTE) {
                         if (mServiceState.getDataNetworkType() ==
                                 TelephonyManager.NETWORK_TYPE_LTE) {
-                            mLastSignalLevel = iconLevel =
-                                    mSignalStrength.getAlternateLteLevel();
+                            int level = mSignalStrength.getAlternateLteLevel();
+                            mLastSignalLevel = iconLevel = (level == -1 ? 0 : level);
+                            Log.d(TAG, "updateTelephonySignalStrength, data type is lte, level = "
+                                + level + " | " + mSignalStrength);
                         }
                     }
                 }
