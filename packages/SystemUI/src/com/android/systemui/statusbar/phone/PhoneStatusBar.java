@@ -3094,6 +3094,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
             mHoverButton.setVisibility(View.VISIBLE);
             mHoverButton.setAlpha(-percent);
+            mClearButton.setVisibility(View.VISIBLE);
+            mClearButton.setAlpha(-percent);
             updateCarrierAndWifiLabelVisibility(false);
             updateNotificationShortcutsVisibility(true);
         } else { // settings side
