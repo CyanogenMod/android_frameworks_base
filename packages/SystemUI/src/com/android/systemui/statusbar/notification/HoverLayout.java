@@ -173,13 +173,7 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
             mTouchOutside = false; // restart
             mHover.setLocked(userLocked);
             mHover.clearHandlerCallbacks();
-            if (mHover.isCurrentNotificationOnList()) {
-                // ignore current, Android hasn't removed it
-                mHover.processOverridingQueue(mExpanded);
-            } else {
-                // dismiss current, Android removed it
-                mHover.dismissHover(false, false);
-            }
+            mHover.processOverridingQueue(mExpanded);
         }
     }
 

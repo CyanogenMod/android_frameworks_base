@@ -670,8 +670,10 @@ public class Hover {
         // it to the status bar array before we check if we need to show it
         addStatusBarNotification(entry.notification);
 
-        // show
-        showCurrentNotification();
+        // call showCurrentNotification() only if is not showing,
+        // if not will clear all notifications, that is even safe
+        // but unneeded (@link showCurrentNotification())
+        if (!mShowing) showCurrentNotification();
     }
 
     public void processShowingQueue() {
