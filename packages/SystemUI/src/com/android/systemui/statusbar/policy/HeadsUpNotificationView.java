@@ -84,9 +84,30 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
         mContentHolder.setAlpha(1f);
         mContentHolder.removeAllViews();
         mContentHolder.addView(mHeadsUp.row);
+
+
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+
+        setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.w("TEST", "onFocusChange(): " + hasFocus);
+                if (!hasFocus) {
+                    mBar.
+                }
+            }
+        });
+        requestFocus();
         mSwipeHelper.snapChild(mContentSlider, 1f);
         mStartTouchTime = System.currentTimeMillis() + mTouchSensitivityDelay;
         return true;
+    }
+
+    @Override
+    protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+        Log.w("TEST", "onFocusChanged():");
     }
 
     public boolean isClearable() {
