@@ -260,6 +260,52 @@ public class ResourcesManager {
     }
 
     /**
+     * Creates the top level Resources for applications with the given compatibility info.
+     *
+     * @param resDir the resource directory.
+     * @param compatInfo the compability info. Must not be null.
+     * @param token the application token for determining stack bounds.
+     *
+     * @hide
+     */
+    public Resources getTopLevelThemedResources(String resDir, int displayId,
+                                                String packageName,
+                                                String themePackageName,
+                                                CompatibilityInfo compatInfo, IBinder token) {
+        Resources r;
+
+        AssetManager assets = new AssetManager();
+        assets.setAppName(packageName);
+        assets.setThemeSupport(true);
+        if (assets.addAssetPath(resDir) == 0) {
+            return null;
+        }
+
+        //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
+        DisplayMetrics dm = getDisplayMetricsLocked(displayId);
+        Configuration config;
+        boolean isDefaultDisplay = (displayId == Display.DEFAULT_DISPLAY);
+        if (!isDefaultDisplay) {
+            config = new Configuration(getConfiguration());
+            applyNonDefaultDisplayMetricsToConfigurationLocked(dm, config);
+        } else {
+            config = getConfiguration();
+        }
+
+        /* Attach theme information to the resulting AssetManager when appropriate. */
+        CustomTheme customTheme =
+                new CustomTheme(themePackageName, themePackageName, themePackageName);
+        attachThemeAssets(assets, customTheme);
+        attachCommonAssets(assets, customTheme);
+        attachIconAssets(assets, customTheme);
+
+        r = new Resources(assets, dm, config, compatInfo, token);
+        setActivityIcons(r);
+
+        return r;
+    }
+
+    /**
      * Creates a map between an activity & app's icon ids to its component info. This map
      * is then stored in the resource object.
      * When resource.getDrawable(id) is called it will check this mapping and replace
