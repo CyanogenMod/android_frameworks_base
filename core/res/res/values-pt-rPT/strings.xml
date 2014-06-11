@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"desinstalar atalhos"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Permite que a aplicação remova atalhos do Ecrã principal sem a intervenção do utilizador."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"redirecionar as chamadas efetuadas"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Permite que a aplicação processe chamadas efetuadas e mude o número a marcar. Esta autorização permite que a aplicação monitorize, redirecione ou impeça a realização de chamadas."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Permite que a aplicação veja o número que é marcado durante uma chamada efetuada, com a opção de redirecionar a chamada para um número diferente ou terminar a chamada."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"receber mensagens de texto (SMS)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Permite que a aplicação receba e processe mensagens SMS. Isto significa que a aplicação poderá monitorizar ou eliminar mensagens enviadas para o seu dispositivo sem as apresentar."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"receber mensagens de texto (MMS)"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Casa"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Emprego"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Outro"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Não foram encontradas aplicações para visualizar este contacto."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Escreva o código PIN"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Escreva o PUK e o novo código PIN"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"Código PUK"</string>

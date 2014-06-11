@@ -363,7 +363,7 @@
     <skip />
     <!-- no translation found for permlab_processOutgoingCalls (3906007831192990946) -->
     <skip />
-    <!-- no translation found for permdesc_processOutgoingCalls (5331318931937402040) -->
+    <!-- no translation found for permdesc_processOutgoingCalls (5156385005547315876) -->
     <skip />
     <!-- no translation found for permlab_receiveSms (8673471768947895082) -->
     <skip />
@@ -1329,6 +1329,8 @@
     <!-- no translation found for sipAddressTypeWork (6920725730797099047) -->
     <skip />
     <!-- no translation found for sipAddressTypeOther (4408436162950119849) -->
+    <skip />
+    <!-- no translation found for quick_contacts_not_available (746098007828579688) -->
     <skip />
     <!-- no translation found for keyguard_password_enter_pin_code (3037685796058495017) -->
     <skip />

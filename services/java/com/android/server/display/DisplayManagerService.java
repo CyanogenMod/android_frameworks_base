@@ -497,6 +497,7 @@ public final class DisplayManagerService extends IDisplayManager.Stub {
                 if (mWifiDisplayAdapter != null) {
                     mWifiDisplayAdapter.requestStartScanLocked();
                 }
+                stopWifiDisplayScanLocked(record);
             }
         }
     }

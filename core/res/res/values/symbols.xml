@@ -333,6 +333,7 @@
   <java-symbol type="integer" name="config_mobile_mtu" />
   <java-symbol type="integer" name="config_volte_replacement_rat"/>
   <java-symbol type="integer" name="config_valid_wappush_index" />
+  <java-symbol type="integer" name="config_overrideHasPermanentMenuKey" />
 
   <java-symbol type="color" name="tab_indicator_text_v4" />
 
@@ -711,6 +712,7 @@
   <java-symbol type="string" name="mobile_provisioning_url" />
   <java-symbol type="string" name="mobile_redirected_provisioning_url" />
   <java-symbol type="string" name="progress_nomediapresent" />
+  <java-symbol type="string" name="quick_contacts_not_available" />
   <java-symbol type="string" name="reboot_safemode_confirm" />
   <java-symbol type="string" name="reboot_safemode_title" />
   <java-symbol type="string" name="relationTypeAssistant" />

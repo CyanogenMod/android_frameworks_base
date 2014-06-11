@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"désinstaller des raccourcis"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Permet à l\'application de supprimer des raccourcis de la page d\'accueil sans intervention de l\'utilisateur."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"transférer les appels sortants"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Permet à l\'application de traiter les appels sortants et de modifier le numéro à composer. Cette autorisation lui permet de surveiller, rediriger ou empêcher les appels sortants."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Permet à l\'application de lire le numéro composé lors d\'un appel sortant et lui donne la possibilité de rediriger l\'appel vers un autre numéro ou d\'abandonner l\'appel."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"recevoir des messages texte"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Permet à l\'application de recevoir et de traiter les messages texte. Cette autorisation lui donne la possibilité de surveiller ou de supprimer les messages envoyés à votre appareil sans vous les montrer."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"recevoir des messages multimédias"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Domicile"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Travail"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Autre"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Aucune application permettant d\'afficher ce contact n\'a été trouvée."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Saisissez le NIP."</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Saisissez la clé PUK et le nouveau NIP."</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"Clé PUK"</string>
@@ -1119,8 +1120,8 @@
     <string name="no" msgid="5141531044935541497">"Annuler"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Attention"</string>
     <string name="loading" msgid="7933681260296021180">"Chargement en cours..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"ACTIVÉE"</string>
-    <string name="capital_off" msgid="6815870386972805832">"DÉSACTIVÉE"</string>
+    <string name="capital_on" msgid="1544682755514494298">"OUI"</string>
+    <string name="capital_off" msgid="6815870386972805832">"NON"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Continuer avec"</string>
     <string name="whichHomeApplication" msgid="4616420172727326782">"Sélectionnez une application de l\'écran d\'accueil"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Utiliser cette application par défaut pour cette action"</string>

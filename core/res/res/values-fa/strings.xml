@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"حذف نصب میان‌برها"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"به برنامه اجازه می‌دهد میان‌برهای صفحه اصلی را بدون دخالت کاربر حذف کند."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"ترسیم مجدد مسیر تماس‌های خروجی"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"‏به برنامه اجازه می‎دهد تماس‌های خروجی را پردازش کند و شماره‎هایی که باید گرفته شوند را تغییر دهد. این مجوز به برنامه امکان می‌دهد به کنترل، هدایت مجدد یا جلوگیری از تماس‌های خروجی بپردازد."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"به برنامه اجازه می‌دهد عددی را که در طی یک تماس خروجی شماره‌گیری شده، ببیند و این اختیار را دارد که تماس را به شماره دیگری هدایت کند یا کلاً تماس را قطع کند."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"دریافت پیام‌های نوشتاری (پیامک)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"به برنامه اجازه می‌دهد پیامک‌ها را دریافت و پردازش کند. این یعنی برنامه می‌تواند پیام‌های ارسالی به دستگاه شما را بدون نمایش آن‌ها به شما حذف یا کنترل کند."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"‏دریافت پیام‌های نوشتاری (MMS)"</string>
@@ -700,7 +700,7 @@
     <string name="policylab_encryptedStorage" msgid="8901326199909132915">"تنظیم رمزگذاری حافظه"</string>
     <string name="policydesc_encryptedStorage" msgid="2637732115325316992">"باید اطلاعات ذخیره شده برنامه رمزگذاری شود."</string>
     <string name="policylab_disableCamera" msgid="6395301023152297826">"غیر فعال کردن دوربین ها"</string>
-    <string name="policydesc_disableCamera" msgid="2306349042834754597">"‏از استفاده از تمام دوربین‎های دستگاه جلوگیری کنید."</string>
+    <string name="policydesc_disableCamera" msgid="2306349042834754597">"جلوگیری از استفاده از همه دوربین‌های دستگاه."</string>
     <string name="policylab_disableKeyguardFeatures" msgid="266329104542638802">"غیرفعال کردن ویژگی‌‌ها در محافظ کلید"</string>
     <string name="policydesc_disableKeyguardFeatures" msgid="3467082272186534614">"از استفاده از برخی ویژگی‌ها در محافظ کلید جلوگیری شود."</string>
   <string-array name="phoneTypes">
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"صفحهٔ اصلی"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"محل کار"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"سایر موارد"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"هیچ برنامه‌ای برای مشاهده این مخاطب پیدا نشد."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"پین کد را وارد کنید"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"‏PUK و پین کد جدید را تایپ کنید"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"‏کد PUK"</string>
