@@ -54,22 +54,7 @@ public class SensorActivityHandler {
     private boolean mGyroscopeRegistered;
 
     private boolean mInPocket;
-    private boolean mOnTable;
-
-    public class ScreenReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                mCallback.onScreenStateChaged(false);
-                registerEventListeners();
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                mCallback.onScreenStateChaged(true);
-                unregisterEventListeners();
-                mInPocket = false;
-                mOnTable = false;
-            }
-        }
-    }
+    private boolean mOnTable = true;
 
     public SensorActivityHandler(Context context, SensorChangedCallback callback) {
         mContext = context;
@@ -90,22 +75,22 @@ public class SensorActivityHandler {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
                     boolean inPocket = event.values[0] == 0;
-                    if(inPocket) {
+                    if (inPocket) {
                         mOnTable = false; // we can't have phone on table and pocket at the same time
                         unregisterGyroscopeEvent();
                     } else {
-                        if(!mGyroscopeRegistered) {
+                        if (!mGyroscopeRegistered) {
                             registerEventListeners();
                             mSensorManager.registerListener(mGyroscopeEventListener,
                                     mGyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
                         }
                     }
-                    if(Peek.DEBUG) {
-                        Log.d(TAG, "In pocket: "+inPocket+", old: "+mInPocket);
+                    if (Peek.DEBUG) {
+                        Log.d(TAG, "In pocket: "+inPocket + ", old: " + mInPocket);
                     }
                     boolean oldInPocket = mInPocket;
                     mInPocket = inPocket;
-                    if(oldInPocket != inPocket) mCallback.onPocketModeChanged(mInPocket);
+                    if (oldInPocket != inPocket) mCallback.onPocketModeChanged(mInPocket);
                 }
             };
         } else {
@@ -125,15 +110,16 @@ public class SensorActivityHandler {
                     float x = event.values[0];
                     float y = event.values[1];
                     float z = event.values[1];
+                    if (Peek.DEBUG) Log.d(TAG, "Received values: x: " + x + " y: " + y + " z: " + z);
                     boolean storeValues = false;
-                    if(mHasInitialValues) {
+                    if (mHasInitialValues) {
                         float dX = Math.abs(mLastX - x);
                         float dY = Math.abs(mLastY - y);
                         float dZ = Math.abs(mLastY - z);
-                        if(dX >= NOISE_THRESHOLD ||
+                        if (dX >= NOISE_THRESHOLD ||
                                 dY >= NOISE_THRESHOLD || dZ >= NOISE_THRESHOLD) {
                             if (mWaitingForMovement) {
-                                if(Peek.DEBUG) Log.d(TAG, "On table: false");
+                                if (Peek.DEBUG) Log.d(TAG, "On table: false");
                                 mOnTable = false;
                                 mCallback.onTableModeChanged(mOnTable);
                                 registerEventListeners();
@@ -142,11 +128,16 @@ public class SensorActivityHandler {
                             }
                             storeValues = true;
                         } else {
+                            if (mOnTable) { // we are assuming that device is on table for now.
+                                unregisterProximityEvent();
+                                mWaitingForMovement = true;
+                                return;
+                            }
                             if (mSensorIncrement < INCREMENTS_TO_DISABLE) {
-                                mSensorIncrement ++;
+                                mSensorIncrement++;
                                 if (mSensorIncrement == INCREMENTS_TO_DISABLE) {
                                     unregisterProximityEvent();
-                                    if(Peek.DEBUG) Log.d(TAG, "On table: true");
+                                    if (Peek.DEBUG) Log.d(TAG, "On table: true");
                                     mOnTable = true;
                                     mCallback.onTableModeChanged(mOnTable);
                                     mWaitingForMovement = true;
@@ -155,7 +146,7 @@ public class SensorActivityHandler {
                         }
                     }
 
-                    if(!mHasInitialValues || storeValues) {
+                    if (!mHasInitialValues || storeValues) {
                         mHasInitialValues = true;
                         mLastX = x;
                         mLastY = y;
@@ -164,7 +155,7 @@ public class SensorActivityHandler {
                 }
             };
         } else {
-            // no accelerometer? time to buy a nexus
+            // no gyroscope? time to buy a nexus
         }
     }
 
@@ -177,7 +168,7 @@ public class SensorActivityHandler {
     }
 
     public void registerScreenReceiver() {
-        if(!mScreenReceiverRegistered) {
+        if (!mScreenReceiverRegistered) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
             intentFilter.addAction(Intent.ACTION_SCREEN_ON);
@@ -187,21 +178,29 @@ public class SensorActivityHandler {
     }
 
     public void unregisterScreenReceiver() {
-        if(mScreenReceiverRegistered) {
+        if (mScreenReceiverRegistered) {
             mContext.unregisterReceiver(mScreenReceiver);
             mScreenReceiverRegistered = false;
         }
     }
 
     public void registerEventListeners() {
-        if(!mProximityRegistered) {
-            if(Peek.DEBUG) Log.d(TAG, "Registering proximity polling");
+        registerProximityEvent();
+        registerGyroscopeEvent();
+    }
+
+    public void registerProximityEvent() {
+        if (!mProximityRegistered) {
+            if (Peek.DEBUG) Log.d(TAG, "Registering proximity polling");
             mSensorManager.registerListener(mProximityEventListener, mProximitySensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
             mProximityRegistered = true;
         }
-        if(!mGyroscopeRegistered) {
-            if(Peek.DEBUG) Log.d(TAG, "Registering gyroscope polling");
+    }
+
+    public void registerGyroscopeEvent() {
+        if (!mGyroscopeRegistered) {
+            if (Peek.DEBUG) Log.d(TAG, "Registering gyroscope polling");
             mSensorManager.registerListener(mGyroscopeEventListener, mGyroscopeSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
             mGyroscopeRegistered = true;
@@ -214,16 +213,16 @@ public class SensorActivityHandler {
     }
 
     private void unregisterProximityEvent() {
-        if(mProximityRegistered) {
-            if(Peek.DEBUG) Log.d(TAG, "Unregistering proximity polling");
+        if (mProximityRegistered) {
+            if (Peek.DEBUG) Log.d(TAG, "Unregistering proximity polling");
             mSensorManager.unregisterListener(mProximityEventListener);
             mProximityRegistered = false;
         }
     }
 
     private void unregisterGyroscopeEvent() {
-        if(mGyroscopeRegistered) {
-            if(Peek.DEBUG) Log.d(TAG, "Unregistering gyroscope polling");
+        if (mGyroscopeRegistered) {
+            if (Peek.DEBUG) Log.d(TAG, "Unregistering gyroscope polling");
             mSensorManager.unregisterListener(mGyroscopeEventListener);
             mLastX = mLastY = mLastZ = 0;
             mSensorIncrement = 0;
@@ -238,4 +237,20 @@ public class SensorActivityHandler {
         public abstract void onScreenStateChaged(boolean screenOn);
     }
 
+    public class ScreenReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                if (Peek.DEBUG) Log.d(TAG, "Screen is off");
+                mCallback.onScreenStateChaged(false);
+                registerEventListeners();
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                if (Peek.DEBUG) Log.d(TAG, "Screen is on");
+                mCallback.onScreenStateChaged(true);
+                unregisterEventListeners();
+                mInPocket = false;
+                mOnTable = true; // let's assume phone is back on table
+            }
+        }
+    }
 }
