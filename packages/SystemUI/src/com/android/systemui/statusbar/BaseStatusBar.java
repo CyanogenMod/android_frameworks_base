@@ -910,13 +910,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
-    protected void recreatePie(boolean enabled) {
-        if (enabled) {
-            mPieController.constructSlices();
-            mPieController.refreshContainer();
-        }
-    }
-
     public void setOverwriteImeIsActive(boolean enabled) {
         if (mEdgeGestureManager != null) {
             mEdgeGestureManager.setOverwriteImeIsActive(enabled);

@@ -11198,8 +11198,4 @@ public class WindowManagerService extends IWindowManager.Stub
         return mLastStatusBarVisibility;
     }
 
-    public void updateStatusBarNavBarHeight() {
-        mPolicy.updateStatusBarNavBarHeight();
-    }
-
 }

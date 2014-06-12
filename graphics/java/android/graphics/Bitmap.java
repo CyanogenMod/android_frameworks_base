@@ -20,8 +20,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
 
-import com.android.internal.util.slim.DensityUtils;
-
 import java.io.OutputStream;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -81,17 +79,24 @@ public final class Bitmap implements Parcelable {
 
     private static volatile Matrix sScaleMatrix;
 
+    private static volatile int sDefaultDensity = -1;
+
     /**
      * For backwards compatibility, allows the app layer to change the default
      * density when running old apps.
      * @hide
      */
     public static void setDefaultDensity(int density) {
-        // Ignore
+        sDefaultDensity = density;
     }
 
     static int getDefaultDensity() {
-        return DensityUtils.getCurrentDensity();
+        if (sDefaultDensity >= 0) {
+            return sDefaultDensity;
+        }
+        //noinspection deprecation
+        sDefaultDensity = DisplayMetrics.DENSITY_DEVICE;
+        return sDefaultDensity;
     }
 
     /**
