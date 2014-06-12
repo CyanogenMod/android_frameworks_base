@@ -106,4 +106,7 @@
 
     <!-- First time run hover -->
     <string name="hover_cling_text">Hover is now enabled.\n\nWhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app.</string>
+
+    <!-- Title shown when app provides no interface -->
+    <string name="status_bar_floating_no_interface">App provides no interface</string>
 </resources>
