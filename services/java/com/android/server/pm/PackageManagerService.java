@@ -12471,6 +12471,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     @Override
     public ComposedIconInfo getComposedIconInfo() {
         return mIconPackHelper != null ? mIconPackHelper.getComposedIconInfo() : null;
+    }
 
     @Override
     public void setComponentProtectedSetting(ComponentName componentName, boolean newState,
