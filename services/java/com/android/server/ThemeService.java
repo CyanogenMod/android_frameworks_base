@@ -37,6 +37,7 @@ import android.content.res.CustomTheme;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -57,11 +58,13 @@ import android.webkit.URLUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -80,12 +83,16 @@ public class ThemeService extends IThemeService.Stub {
     private static final String GOOGLE_SETUPWIZARD_PACKAGE = "com.google.android.setupwizard";
     private static final String CM_SETUPWIZARD_PACKAGE = "com.cyanogenmod.account";
 
+    private static final long MAX_ICON_CACHE_SIZE = 33554432L; // 32MB
+    private static final long PURGED_ICON_CACHE_SIZE = 25165824L; // 24 MB
+
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
     private Context mContext;
     private String mPkgName;
     private int mProgress;
     private boolean mWallpaperChangedByUs = false;
+    private long mIconCacheSize = 0L;
 
     private final RemoteCallbackList<IThemeChangeListener> mClients =
             new RemoteCallbackList<IThemeChangeListener>();
@@ -139,6 +146,7 @@ public class ThemeService extends IThemeService.Stub {
         ThemeUtils.createAlarmDirIfNotExists();
         ThemeUtils.createNotificationDirIfNotExists();
         ThemeUtils.createRingtoneDirIfNotExists();
+        ThemeUtils.createIconCacheDirIfNotExists();
     }
 
     public void systemRunning() {
@@ -727,6 +735,50 @@ public class ThemeService extends IThemeService.Stub {
         }
     }
 
+    @Override
+    public boolean cacheComposedIcon(Bitmap icon, String fileName) throws RemoteException {
+        final long token = Binder.clearCallingIdentity();
+        boolean success;
+        FileOutputStream os;
+        final File cacheDir = new File(ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR);
+        if (cacheDir.listFiles().length == 0) {
+            mIconCacheSize = 0;
+        }
+        try {
+            File outFile = new File(cacheDir, fileName);
+            os = new FileOutputStream(outFile);
+            icon.compress(Bitmap.CompressFormat.PNG, 90, os);
+            os.close();
+            FileUtils.setPermissions(outFile,
+                    FileUtils.S_IRWXU | FileUtils.S_IRWXG | FileUtils.S_IROTH,
+                    -1, -1);
+            mIconCacheSize += outFile.length();
+            if (mIconCacheSize > MAX_ICON_CACHE_SIZE) {
+                purgeIconCache();
+            }
+            success = true;
+        } catch (Exception e) {
+            success = false;
+            Log.w(TAG, "Unable to cache icon " + fileName, e);
+        }
+        Binder.restoreCallingIdentity(token);
+        return success;
+    }
+
+    private void purgeIconCache() {
+        Log.d(TAG, "Purging icon cahe of size " + mIconCacheSize);
+        File cacheDir = new File(ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR);
+        File[] files = cacheDir.listFiles();
+        Arrays.sort(files, mOldestFilesFirstComparator);
+        for (File f : files) {
+            if (!f.isDirectory()) {
+                final long size = f.length();
+                if(f.delete()) mIconCacheSize -= size;
+            }
+            if (mIconCacheSize <= PURGED_ICON_CACHE_SIZE) break;
+        }
+    }
+
     private boolean applyBootAnimation(String themePath) {
         boolean success = false;
         try {
@@ -767,6 +819,13 @@ public class ThemeService extends IThemeService.Stub {
             } else {
                 mWallpaperChangedByUs = false;
             }
+        }
+    };
+
+    private Comparator<File> mOldestFilesFirstComparator = new Comparator<File>() {
+        @Override
+        public int compare(File lhs, File rhs) {
+            return (int) (lhs.lastModified() - rhs.lastModified());
         }
     };
 }

@@ -372,6 +372,7 @@ aidl_files := \
 	frameworks/base/core/java/android/accounts/IAccountManagerResponse.aidl \
 	frameworks/base/core/java/android/accounts/IAccountAuthenticator.aidl \
 	frameworks/base/core/java/android/accounts/IAccountAuthenticatorResponse.aidl \
+	frameworks/base/core/java/android/app/ComposedIconInfo.aidl \
 	frameworks/base/core/java/android/app/Notification.aidl \
 	frameworks/base/core/java/android/app/NotificationGroup.aidl \
 	frameworks/base/core/java/android/app/Profile.aidl \
