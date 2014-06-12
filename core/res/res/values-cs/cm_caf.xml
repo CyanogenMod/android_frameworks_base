@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\nZbývajících pokusů:</string>
   <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
   <string name="lockscreen_airplane_mode_on">Režim V letadle</string>

@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Orezať tapetu</string>
   <string name="wallpaper_instructions">Nastaviť tapetu</string>
   <string name="wallpaper_load_fail">Obrázok nemožno načítať ako tapetu</string>

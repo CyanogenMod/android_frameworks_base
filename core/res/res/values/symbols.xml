@@ -305,7 +305,6 @@
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
   <java-symbol type="integer" name="config_extraFreeKbytesAbsolute" />
-  <java-symbol type="integer" name="config_immersive_mode_confirmation_panic" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
   <java-symbol type="integer" name="config_lowMemoryKillerMinFreeKbytesAdjust" />
   <java-symbol type="integer" name="config_lowMemoryKillerMinFreeKbytesAbsolute" />
@@ -1400,6 +1399,7 @@
   <java-symbol type="integer" name="config_lidNavigationAccessibility" />
   <java-symbol type="integer" name="config_lidOpenRotation" />
   <java-symbol type="integer" name="config_longPressOnHomeBehavior" />
+  <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
   <java-symbol type="layout" name="global_actions_item" />
   <java-symbol type="layout" name="global_actions_silent_mode" />
   <java-symbol type="layout" name="recent_apps_dialog" />
@@ -2011,5 +2011,4 @@
 
   <!-- Array of default activities with custom power management -->
   <java-symbol type="array" name="config_auto_perf_activities" />
- 
 </resources>

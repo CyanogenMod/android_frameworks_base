@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Leidžia programai keisti telefono numerius kurie yra užblokuoti dėl įeinančių skambučių ar pranešimų.</string>
   <string name="permlab_accessThemeService">pasiekti temos paslaugą</string>
   <string name="permdesc_accessThemeService">Leidžia programai pasiekti temos paslaugą. Niekada neturėtų reikėti įprastoms programoms.</string>
+  <string name="permlab_readThemes">skaityti jūsų temos informaciją</string>
+  <string name="permdesc_readThemesDesc">Leidžia programai skaityti jūsų temas ir nustatyti kurią temą pritaikėte.</string>
+  <string name="permlab_writeThemes">pakeisti jūsų temas</string>
+  <string name="permdesc_writeThemesDesc">Leidžia programai įdiegti naujas temas ir keisti temą, kurią pritaikėte.</string>
   <string name="permlab_setKeyguardWallpaper">nustatyti klaviatūros apsaugos foną</string>
   <string name="permdesc_setKeyguardWallpaper">Leidžia programai pakeisti ekrano užrakto foną.</string>
   <string name="immersive_mode_confirmation_bottom">Braukite aukštyn iš apačios norėdami išeiti iš viso ekrano.</string>

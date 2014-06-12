@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Hiermee kan de app telefoonnummers aanpassen waarvan inkomende oproepen of berichten zijn geblokkeerd.</string>
   <string name="permlab_accessThemeService">toegang tot themaservice</string>
   <string name="permdesc_accessThemeService">Hiermee krijgt de app toegang tot de themaservice. Nooit vereist voor normale apps.</string>
+  <string name="permlab_readThemes">informatie over uw thema\'s lezen</string>
+  <string name="permdesc_readThemesDesc">Hiermee kan de app informatie lezen over uw thema\'s en bepalen welk thema u hebt toegepast.</string>
+  <string name="permlab_writeThemes">uw thema\'s aanpassen</string>
+  <string name="permdesc_writeThemesDesc">Hiermee kan de app nieuwe thema\'s invoegen en wijzigen welk thema u hebt toegepast.</string>
   <string name="permlab_setKeyguardWallpaper">achtergrond van vergrendelingsscherm instellen</string>
   <string name="permdesc_setKeyguardWallpaper">Hiermee kan een app de achtergrond van het vergrendelingsscherm aanpassen.</string>
   <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>

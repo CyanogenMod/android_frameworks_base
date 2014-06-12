@@ -142,6 +142,8 @@ import android.view.WindowManager;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -151,6 +153,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -176,6 +179,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import libcore.io.ErrnoException;
 import libcore.io.IoUtils;
@@ -2025,8 +2030,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             if((ps == null) || (ps.pkg == null) || (ps.pkg.applicationInfo == null)) {
                 return -1;
             }
-            p = ps.pkg;
-            return p != null ? UserHandle.getUid(userId, p.applicationInfo.uid) : -1;
+            return UserHandle.getUid(userId, ps.pkg.applicationInfo.uid);
         }
     }
 
@@ -5408,7 +5412,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             //Icon Packs need aapt too
             //TODO: No need to run aapt on icons for every startup...
-            if (pkg.hasIconPack) {
+            if (isIconCompileNeeded(pkg)) {
                 try {
                     ThemeUtils.createCacheDirIfNotExists();
                     ThemeUtils.createIconDirIfNotExists(pkg.packageName);
@@ -5422,6 +5426,28 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return pkg;
+    }
+
+    private boolean isIconCompileNeeded(Package pkg) {
+        if (!pkg.hasIconPack) return false;
+        // Read in the stored hash value and compare to the pkgs computed hash value
+        FileInputStream in = null;
+        DataInputStream dataInput = null;
+        try {
+            String hashFile = ThemeUtils.getIconHashFile(pkg.packageName);
+            in = new FileInputStream(hashFile);
+            dataInput = new DataInputStream(in);
+            int storedHashCode = dataInput.readInt();
+            int actualHashCode = getPackageHashCode(pkg);
+            return storedHashCode != actualHashCode;
+        } catch(IOException e) {
+            Log.e(TAG, "Could not read hash for " + pkg + "not compiling icon pack", e);
+        } finally {
+            IoUtils.closeQuietly(in);
+            IoUtils.closeQuietly(dataInput);
+        }
+
+        return true;
     }
 
     private void compileResourcesAndIdmapIfNeeded(PackageParser.Package targetPkg,
@@ -5489,10 +5515,19 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private void compileIconPack(Package pkg) throws Exception {
         if (DEBUG_PACKAGE_SCANNING) Log.d(TAG, "  Compile resource table for " + pkg.packageName);
+        OutputStream out = null;
+        DataOutputStream dataOut = null;
         try {
             createTempManifest(pkg.packageName);
+            int code = getPackageHashCode(pkg);
+            String hashFile = ThemeUtils.getIconHashFile(pkg.packageName);
+            out = new FileOutputStream(hashFile);
+            dataOut = new DataOutputStream(out);
+            dataOut.writeInt(code);
             compileIconsWithAapt(pkg);
         } finally {
+            IoUtils.closeQuietly(out);
+            IoUtils.closeQuietly(dataOut);
             cleanupTempManifest();
         }
     }
@@ -5779,21 +5814,27 @@ public class PackageManagerService extends IPackageManager.Stub {
             mPackageHashes.remove(p);
         }
 
-        byte[] md5 = getFileMd5Sum(pkg.mPath);
-        if (md5 == null) return 0;
+        byte[] crc = getFileCrC(pkg.mPath);
+        if (crc == null) return 0;
 
-        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(md5).put(IDMAP_HASH_VERSION).array()),
+        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(crc).put(IDMAP_HASH_VERSION).array()),
                 System.currentTimeMillis());
         mPackageHashes.put(pkg.packageName, p);
         return p.first;
     }
 
-    private byte[] getFileMd5Sum(String path) {
+    private byte[] getFileCrC(String path) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            DigestInputStream dis = new DigestInputStream(new FileInputStream(path), md);
-            dis.close();
-            return md.digest();
+            ZipFile zfile = new ZipFile(path);
+            ZipEntry entry = zfile.getEntry("META-INF/MANIFEST.MF");
+            if (entry == null) {
+                Log.e(TAG, "Unable to get MANIFEST.MF from " + path);
+                return null;
+            }
+
+            long crc = entry.getCrc();
+            if (crc == -1) Log.e(TAG, "Unable to get CRC for " + path);
+            return ByteBuffer.allocate(8).putLong(crc).array();
         } catch (Exception e) {
         }
         return null;

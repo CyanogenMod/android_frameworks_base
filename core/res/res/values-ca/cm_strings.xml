@@ -32,15 +32,15 @@
   <string name="global_actions_toggle_expanded_desktop_mode">Escriptori Extès</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Activat</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Desactivat</string>
-  <string name="reboot_system" product="tablet">Reinicia tauleta</string>
-  <string name="reboot_system" product="default">Reinicia telèfon</string>
+  <string name="reboot_system" product="tablet">Reinicia la tauleta</string>
+  <string name="reboot_system" product="default">Reinicia el telèfon</string>
   <string name="reboot_reboot">Reinicia</string>
   <string name="reboot_recovery">Recuperació</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Descàrrega</string>
-  <string name="reboot_progress">Reiniciant\u2026</string>
+  <string name="reboot_progress">S\'està reiniciant\u2026</string>
   <string name="reboot_confirm" product="tablet">La teva tauleta es reiniciarà.</string>
   <string name="reboot_confirm" product="default">El teu telèfon es reiniciarà.</string>
   <string name="permlab_preventpower">impedeix la tecla d\'engegada</string>
@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Permet a una app canviar els números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
   <string name="permlab_accessThemeService">accés al servei de temes</string>
   <string name="permdesc_accessThemeService">Permet a una app accedir al servei de temes. No s\'hauria de necessitar mai en les apps normals.</string>
+  <string name="permlab_readThemes">Llegeix la informació del teu tema</string>
+  <string name="permdesc_readThemesDesc">Permet a l\'app llegir els teus temes i determinar quin tema has aplicat.</string>
+  <string name="permlab_writeThemes">modifica els teus temes</string>
+  <string name="permdesc_writeThemesDesc">Permet a l\'app introduir temes nous i modificar quin tema has aplicat.</string>
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
   <string name="permdesc_setKeyguardWallpaper">Permet que una app estableixi el fons de la pantalla de bloqueig.</string>
   <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
@@ -89,7 +93,7 @@
   <string name="app_ops_modify_call_log">actualitzar el registre de trucades</string>
   <string name="app_ops_modify_clipboard">modificar el portapapers</string>
   <string name="app_ops_modify_contacts">actualitzar els teus contactes</string>
-  <string name="app_ops_modify_settings">actualitzar els ajustaments del sistema</string>
+  <string name="app_ops_modify_settings">actualitza la configuració del sistema</string>
   <string name="app_ops_play_audio">reproduir so</string>
   <string name="app_ops_post_notification">publicar una notificació</string>
   <string name="app_ops_read_calendar">llegir el teu calendari</string>

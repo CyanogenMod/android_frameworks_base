@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">壁紙をクロップ</string>
   <string name="wallpaper_instructions">壁紙に設定</string>
   <string name="wallpaper_load_fail">画像を壁紙として読み込むことができませんでした</string>

@@ -23,5 +23,5 @@
   <string name="pinpuk_attempts">\nПокушаја преостало:</string>
   <string name="lockscreen_sim_error_message_short">Неважећа картица.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM је закључан</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="број">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

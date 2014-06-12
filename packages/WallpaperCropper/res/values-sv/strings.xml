@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Beskär bakgrundsbild</string>
   <string name="wallpaper_instructions">Ställ in bakgrundsbild</string>
   <string name="wallpaper_load_fail">Kunde inte använda bilden som bakgrundsbild</string>

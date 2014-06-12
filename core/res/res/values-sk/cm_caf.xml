@@ -15,11 +15,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\nZostávajúce pokusy:</string>
   <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
   <string name="lockscreen_airplane_mode_on">Režim V lietadle</string>
-  <string name="progress_nomediapresent" product="default">K dispozícii nie sú žiadne vymeniteľné médiá\u2026</string>
+  <string name="progress_nomediapresent" product="default">K dispozícii nie je žiadne vymeniteľné médium\u2026</string>
   <string name="stk_cc_ussd_to_dial">Požiadavka USSD bola upravená na požiadavku DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Požiadavka USSD bola upravená na požiadavku SS.</string>
   <string name="stk_cc_ussd_to_ussd">Požiadavka USSD bola upravená na novú požiadavku USSD.</string>

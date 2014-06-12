@@ -3877,6 +3877,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             : R.drawable.ic_notify_halo_normal);
         }        
 
+        checkBarModes();
+        
         mRecreating = false;
     }
 

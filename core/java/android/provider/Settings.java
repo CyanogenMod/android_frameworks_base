@@ -8330,7 +8330,8 @@ public final class Settings {
           * originally. Where as MULTI_SIM_DATA_CALL_SUBSCRIPTION holds the current data call
           * subscription value, which could be different from user preferred value due to
           * temporary DDS switch for say a silent DDS switch for MMS transaction.
-          * The value may change dynamically in case of a SIM removal or de activation.* The supported values are 0 = SUB1, 1 = SUB2, 2 = SUB3, etc.
+          * The value may change dynamically in case of a SIM removal or de activation.
+          * The supported values are 0 = SUB1, 1 = SUB2, 2 = SUB3, etc.
           * @hide
           */
         public static final String MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION

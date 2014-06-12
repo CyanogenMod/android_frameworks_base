@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Permite qu\'una aplicación camude los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
   <string name="permlab_accessThemeService">Accesu al serviciu de temes</string>
   <string name="permdesc_accessThemeService">Permite l\'accesu a una aplicación al Servicio de temes. Enxamás tendría de facer falta p\'aplicaciones normales.</string>
+  <string name="permlab_readThemes">lleer información del tema</string>
+  <string name="permdesc_readThemesDesc">Permite que l\'aplicación llea los temes instalaos y determine qué tema ta aplicáu.</string>
+  <string name="permlab_writeThemes">modificar los temes</string>
+  <string name="permdesc_writeThemesDesc">Permite que l\'aplicación amieste temes nuevos y modifique\'l tema aplicáu.</string>
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
   <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>

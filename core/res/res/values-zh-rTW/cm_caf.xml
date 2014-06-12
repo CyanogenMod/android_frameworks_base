@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\n剩餘嘗試次數：</string>
   <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
   <string name="lockscreen_airplane_mode_on">飛航模式</string>

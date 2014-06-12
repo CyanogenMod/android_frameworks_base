@@ -56,6 +56,7 @@
   <string name="quick_settings_network_adb_disabled_label">Deshabilitáu</string>
   <string name="quick_settings_network_adb_enabled_label">Habilitáu</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d coneutáu</string>
+  <string name="quick_settings_equalizer">Ecualizador</string>
   <string name="location_mode_high_accuracy_title">Precisión alta</string>
   <string name="location_mode_battery_saving_title">Aforru de batería</string>
   <string name="location_mode_sensors_only_title">Namái preséu</string>

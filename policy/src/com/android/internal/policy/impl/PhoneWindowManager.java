@@ -38,6 +38,7 @@ import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ThemeUtils;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -243,6 +244,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final Object mQuickBootLock = new Object();
 
     Context mContext;
+    Context mUiContext;
     IWindowManager mWindowManager;
     WindowManagerFuncs mWindowManagerFuncs;
     PowerManager mPowerManager;
@@ -568,6 +570,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_DISPATCH_MEDIA_KEY_WITH_WAKE_LOCK = 3;
     private static final int MSG_DISPATCH_MEDIA_KEY_REPEAT_WITH_WAKE_LOCK = 4;
     private static final int MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK = 5;
+
+    boolean mWifiDisplayConnected;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -1075,7 +1079,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // Do the switch
             final AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
             final int ringerMode = am.getRingerMode();
-            final VolumePanel volumePanel = new VolumePanel(mContext,
+            final VolumePanel volumePanel = new VolumePanel(getUiContext(),
                                                               (AudioService) getAudioService());
             if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
                 boolean vibrateSetting = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -1089,6 +1093,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                           | AudioManager.FLAG_VIBRATE);
         }
     };
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
+    }
 
     Runnable mBackLongPress = new Runnable() {
         public void run() {
@@ -1360,6 +1371,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 
+        // register for WIFI Display intents
+        IntentFilter wifiDisplayFilter = new IntentFilter(
+                                                Intent.ACTION_WIFI_DISPLAY_VIDEO);
+        Intent wifidisplayIntent = context.registerReceiver(
+                                      mWifiDisplayReceiver, wifiDisplayFilter);
+
         mLongPressVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_longPressVibePattern);
         mVirtualKeyVibePattern = getLongIntArray(mContext.getResources(),
@@ -1412,20 +1429,35 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         + deviceKeyHandlerLib, e);
             }
         }
+
+        ThemeUtils.registerThemeChangeReceiver(context, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mUiContext = null;
+            }
+        });
     }
 
     private void updateKeyAssignments() {
-        final boolean hasMenu = (mDeviceHardwareKeys & KEY_MASK_MENU) != 0;
-        final boolean hasHome = (mDeviceHardwareKeys & KEY_MASK_HOME) != 0;
-        final boolean hasAssist = (mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0;
-        final boolean hasAppSwitch = (mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
+        int activeHardwareKeys = mDeviceHardwareKeys;
+
+        if (mDevForceNavbar) {
+            activeHardwareKeys = 0;
+        }
+        final boolean hasMenu = (activeHardwareKeys & KEY_MASK_MENU) != 0;
+        final boolean hasHome = (activeHardwareKeys & KEY_MASK_HOME) != 0;
+        final boolean hasAssist = (activeHardwareKeys & KEY_MASK_ASSIST) != 0;
+        final boolean hasAppSwitch = (activeHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
         final ContentResolver resolver = mContext.getContentResolver();
 
         // Initialize all assignments to sane defaults.
         mPressOnMenuBehavior = KEY_ACTION_MENU;
-        if (!hasMenu || hasAssist) {
-            mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
-        } else {
+
+        mLongPressOnMenuBehavior = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_longPressOnMenuBehavior);
+
+        if (mLongPressOnMenuBehavior == KEY_ACTION_NOTHING &&
+                (hasMenu && !hasAssist)) {
             mLongPressOnMenuBehavior = KEY_ACTION_SEARCH;
         }
         mPressOnAssistBehavior = KEY_ACTION_SEARCH;
@@ -2729,7 +2761,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
                         Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
                         mContext.sendOrderedBroadcast(intent, null);
-                        return -1;
                     } else if (SHOW_PROCESSES_ON_ALT_MENU &&
                             (metaState & KeyEvent.META_ALT_ON) == KeyEvent.META_ALT_ON) {
                         Intent service = new Intent();
@@ -2744,8 +2775,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                         Settings.System.putInt(
                                 res, Settings.System.SHOW_PROCESSES, shown ? 0 : 1);
-                        return -1;
                     }
+                    return -1;
                 } else if (longPress) {
                     if (mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
                         if (mLongPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
@@ -2759,27 +2790,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                 }
             }
-            if (mPressOnMenuBehavior != KEY_ACTION_MENU) {
-                if (!down && mMenuPressed) {
-                    mMenuPressed = false;
-                    if (mPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
-                        cancelPreloadRecentApps();
-                    }
-                    if (!canceled) {
-                        performKeyAction(mPressOnMenuBehavior);
-                    }
+            if (!down && mMenuPressed) {
+                mMenuPressed = false;
+                if (mPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
+                    cancelPreloadRecentApps();
                 }
-                return -1;
-            } else {
-                if (!down) {
-                    if (mMenuPressed) {
-                        mMenuPressed = false;
-                        cancelPreloadRecentApps();
-                    } else if (mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
-                        return -1;
-                    }
+                if (!canceled) {
+                    performKeyAction(mPressOnMenuBehavior);
                 }
             }
+            return -1;
         } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             if (down) {
                 if (repeatCount == 0) {
@@ -4731,6 +4751,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean canceled = event.isCanceled();
         int keyCode = event.getKeyCode();
         int scanCode = event.getScanCode();
+        AudioManager audioManager = (AudioManager) mContext.getSystemService(
+                Context.AUDIO_SERVICE);
 
         if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
 
@@ -4979,7 +5001,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                     && (result & ACTION_PASS_TO_USER) == 0) {
                                 // If we are in call but we decided not to pass the key to
                                 // the application, handle the volume change here.
-                                handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
+                                if(audioManager.isBluetoothScoOn()) {
+                                    handleVolumeKey(AudioManager.STREAM_BLUETOOTH_SCO, keyCode);
+                                } else {
+                                    handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
+                                }
                                 break;
                             }
                         } catch (RemoteException ex) {
@@ -5027,10 +5053,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
                 result &= ~ACTION_PASS_TO_USER;
                 if (down) {
-                    if (mExpandedDesktopStyle == 0) {
-                        mImmersiveModeConfirmation.onPowerKeyDown(isScreenOn, event.getDownTime(),
-                                isImmersiveMode(mLastSystemUiFlags));
-                    }
                     if (isScreenOn && !mPowerKeyTriggered
                             && (event.getFlags() & KeyEvent.FLAG_FALLBACK) == 0) {
                         mPowerKeyTriggered = true;
@@ -5327,6 +5349,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    BroadcastReceiver mWifiDisplayReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+            if (action.equals(Intent.ACTION_WIFI_DISPLAY_VIDEO)) {
+                int state = intent.getIntExtra("state", 0);
+                if(state == 1) {
+                    mWifiDisplayConnected = true;
+                } else {
+                    mWifiDisplayConnected = false;
+                }
+                updateRotation(true);
+            }
+        }
+    };
+
     @Override
     public void screenTurnedOff(int why) {
         EventLog.writeEvent(70000, 0);
@@ -5551,8 +5588,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // enable 180 degree rotation while docked.
                 preferredRotation = mDeskDockEnablesAccelerometer
                         ? sensorRotation : mDeskDockRotation;
-            } else if ((mHdmiPlugged) &&
-                                           mDemoHdmiRotationLock) {
+            } else if ((mHdmiPlugged || mWifiDisplayConnected) && mDemoHdmiRotationLock) {
                 // Ignore sensor when plugged into HDMI when demo HDMI rotation lock enabled.
                 // Note that the dock orientation overrides the HDMI orientation.
                 preferredRotation = mDemoHdmiRotation;

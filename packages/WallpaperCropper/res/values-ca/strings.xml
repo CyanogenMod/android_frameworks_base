@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Retalla el fons de pantalla</string>
   <string name="wallpaper_instructions">Estableix el fons de pantalla</string>
   <string name="wallpaper_load_fail">No s\'ha pogut carregar la imatge com a fons de pantalla</string>

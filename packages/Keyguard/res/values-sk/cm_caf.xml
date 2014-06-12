@@ -22,6 +22,6 @@
   <string name="keyguard_pin_accepted">Kód bol prijatý.</string>
   <string name="pinpuk_attempts">\nZostávajúce pokusy:</string>
   <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
-  <string name="keyguard_perso_locked_message">SIM/RUIM je uzamknuté pomocou Perso</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM je uzamknutá pomocou Perso</string>
+  <string name="msim_kg_sim_pin_msg_format">Poskytovateľ: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

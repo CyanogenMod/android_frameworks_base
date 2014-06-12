@@ -15,15 +15,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\nIntents restants:</string>
   <string name="lockscreen_sim_error_message_short">Targeta invàlida.</string>
   <string name="lockscreen_airplane_mode_on">Mode avió</string>
   <string name="progress_nomediapresent" product="default">No hi ha cap mitjà extraïble present\u2026</string>
-  <string name="stk_cc_ussd_to_dial">Petició USSD modificada per una petició de marcatge.</string>
-  <string name="stk_cc_ussd_to_ss">Petició USSD modificada per una petició de SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Petició USSD modificada per una petició una nova petició USSD.</string>
-  <string name="stk_cc_ss_to_dial">Petició SS modificada per una petició de marcatge.</string>
-  <string name="stk_cc_ss_to_ussd">Petició SS modificada per una petició una petició USSD.</string>
-  <string name="stk_cc_ss_to_ss">Petició SS modificada per una petició una nova petició SS.</string>
+  <string name="stk_cc_ussd_to_dial">Petició USSD modificada cap a una petició DIAL.</string>
+  <string name="stk_cc_ussd_to_ss">Petició USSD modificada cap a una petició de SS.</string>
+  <string name="stk_cc_ussd_to_ussd">Petició USSD modificada cap a una nova petició USSD.</string>
+  <string name="stk_cc_ss_to_dial">Petició SS modificada cap a una petició DIAL.</string>
+  <string name="stk_cc_ss_to_ussd">Petició SS modificada cap a una petició USSD.</string>
+  <string name="stk_cc_ss_to_ss">Petició SS modificada cap a una nova petició SS.</string>
 </resources>

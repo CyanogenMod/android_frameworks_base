@@ -75,6 +75,10 @@
   <string name="permdesc_changePhoneBlacklist">Tillader en app at ændre telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
   <string name="permlab_accessThemeService">tilgå tematjenesten</string>
   <string name="permdesc_accessThemeService">Tillader en app at tilgå tematjenesten. Bør aldrig være nødvendig for alm. apps.</string>
+  <string name="permlab_readThemes">læse din temainformation</string>
+  <string name="permdesc_readThemesDesc">Tillader appen at læse dine temaer og afgøre, hvilket tema du anvender.</string>
+  <string name="permlab_writeThemes">ændre dine temaer</string>
+  <string name="permdesc_writeThemesDesc">Tillader appen at indsætte nye temaer og ændre, hvilket tema du anvender.</string>
   <string name="permlab_setKeyguardWallpaper">angive baggrund til keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">Tillader en app at ændre baggrund for skærmlåsen.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>

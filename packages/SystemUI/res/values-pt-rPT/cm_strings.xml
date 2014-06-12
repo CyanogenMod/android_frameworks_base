@@ -56,6 +56,7 @@
   <string name="quick_settings_network_adb_disabled_label">Desativado</string>
   <string name="quick_settings_network_adb_enabled_label">Ativado</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d ligado</string>
+  <string name="quick_settings_equalizer">Equalizador</string>
   <string name="location_mode_high_accuracy_title">Alta precisão</string>
   <string name="location_mode_battery_saving_title">Poupança de bateria</string>
   <string name="location_mode_sensors_only_title">Apenas dispositivo</string>

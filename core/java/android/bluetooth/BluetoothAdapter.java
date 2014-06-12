@@ -1689,6 +1689,7 @@ public final class BluetoothAdapter {
      * @return true, if the scan was started successfully
      */
     public boolean startLeScan(LeScanCallback callback) {
+        if (getState() != STATE_ON) return false;
         return startLeScan(null, callback);
     }
 
