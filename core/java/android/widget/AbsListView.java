@@ -6730,6 +6730,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         private SparseArray<View> mTransientStateViews;
         private LongSparseArray<View> mTransientStateViewsById;
 
+        private boolean mIsActiveViewsInitialized;
+
+        boolean isActiveViewsInitialized() {
+            return mIsActiveViewsInitialized;
+        }
+
         public void setViewTypeCount(int viewTypeCount) {
             if (viewTypeCount < 1) {
                 throw new IllegalArgumentException("Can't have a viewTypeCount < 1");
@@ -6801,6 +6807,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             }
 
             clearTransientStateViews();
+
+            // We want to a refresh of mActiveViews
+            mIsActiveViewsInitialized = false;
         }
 
         /**
@@ -6811,6 +6820,11 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
          *        mActiveViews
          */
         void fillActiveViews(int childCount, int firstActivePosition) {
+            // The recyclebin is initialized when we have some active views.
+            if (childCount > 0) {
+                mIsActiveViewsInitialized = true;
+            }
+
             if (mActiveViews.length < childCount) {
                 mActiveViews = new View[childCount];
             }
