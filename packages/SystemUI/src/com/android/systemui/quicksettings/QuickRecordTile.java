@@ -200,10 +200,16 @@ public class QuickRecordTile extends QuickSettingsTile {
                 deleted = true;
             }
 
+            // The only invalid invalid characters on a Linux filesystem are
+            // '/' and '\0'. Make sure that the date and time do not contain
+            // any forward slashes.
+            String date = DateFormat.getDateTimeInstance().format(
+                    System.currentTimeMillis()).replace('/', '-');
+
             // Return the name of the new recording
             File file = new File(mContext.getFilesDir() + File.separator
                     + RECORDING_NAME + DELIMITER
-                    + DateFormat.getDateTimeInstance().format(System.currentTimeMillis())
+                    + date
                     + DELIMITER + RECORDING_TYPE);
             mQuickAudio = file.getAbsolutePath();
             mExists = true;
