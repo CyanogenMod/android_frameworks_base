@@ -5962,6 +5962,15 @@ public class Activity extends ContextThemeWrapper
             // Create our new window
             mWindow = PolicyManager.makeNewWindow(this);
             mWindow.mIsFloatingWindow = true;
+            mWindow.setCloseOnTouchOutsideIfNotSet(true);
+            mWindow.setGravity(Gravity.CENTER);
+            mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+                    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            WindowManager.LayoutParams params = mWindow.getAttributes();
+            params.alpha = 1f;
+            params.dimAmount = 0.5f;
+            mWindow.setAttributes((WindowManager.LayoutParams) params);
+            
             if (!isAlreadyAttachToWindow) {
                 isAlreadyAttachToWindow = true;
                 mWindow.setCloseOnTouchOutsideIfNotSet(true);
