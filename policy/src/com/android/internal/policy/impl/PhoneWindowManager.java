@@ -1553,22 +1553,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         UserHandle.USER_CURRENT) == 1
                 : false;
 
-        final int showByDefault = mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
-                    UserHandle.USER_CURRENT) == 1;
-
-        // Allow a system property to override this. Used by the emulator.
-        // See also hasNavigationBar().
-        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
-        if ("1".equals(navBarOverride)) {
-            mHasNavigationBar = false;
-            mOverWriteHasNavigationBar = true;
-        } else if ("0".equals(navBarOverride)) {
-            mHasNavigationBar = true;
-            mOverWriteHasNavigationBar = true;
-        }
+        setHasNavigationBar();
 
         // For demo purposes, allow the rotation of the HDMI display to be controlled.
         // By default, HDMI locks rotation to landscape.
@@ -1587,6 +1572,25 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // $ adb shell setprop config.override_forced_orient true
                 // $ adb shell wm size reset
                 !"true".equals(SystemProperties.get("config.override_forced_orient"));
+    }
+
+    private void setHasNavigationBar() {
+        final int showByDefault = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
+        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
+                    UserHandle.USER_CURRENT) == 1;
+
+        // Allow a system property to override this. Used by the emulator.
+        // See also hasNavigationBar().
+        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+        if ("1".equals(navBarOverride)) {
+            mHasNavigationBar = false;
+            mOverWriteHasNavigationBar = true;
+        } else if ("0".equals(navBarOverride)) {
+            mHasNavigationBar = true;
+            mOverWriteHasNavigationBar = true;
+        }
     }
 
     /**
@@ -1625,7 +1629,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public void updateStatusBarNavBarHeight() {
         final int showByDefault = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-        mHasNavigationBar = Settings.System.getIntForUser(resolver,
+        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
                 UserHandle.USER_CURRENT) == 1;
 
@@ -1765,6 +1769,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mUserRotationAngles = Settings.System.getIntForUser(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1,
                     UserHandle.USER_CURRENT);
+
+            setHasNavigationBar();
 
             updateStatusBarNavBarHeight();
 
