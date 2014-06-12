@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Izinkan aplikasi untuk memasukkan tema baru dan mengubah tema yang telah anda terapkan.</string>
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah wallpaper layar kunci.</string>
+  <string name="permlab_useHardwareFramework">gunakan hardware framework</string>
+  <string name="permdesc_useHardwareFramework">Izinkan app untuk mengakses framework hardware CM.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe dari bawah ke atas untuk keluar dari layar penuh.</string>
   <string name="app_ops_access_camera">mengakses kamera</string>
   <string name="app_ops_access_location">mengakses lokasi anda</string>

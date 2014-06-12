@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">อนุญาตให้แอปเปลี่ยนหมายเลขที่ถูกบล็อคข้อความหรือสายเรียกเข้า</string>
   <string name="permlab_accessThemeService">เข้าถึงธีม</string>
   <string name="permdesc_accessThemeService">อนุญาตให้แอปยี้เจ้าถึงธีมได้ ซึ่งไม่ควรจะมีในแอปปกติ</string>
+  <string name="permlab_readThemes">อ่านรายละเอียดชุดรูปแบบของคุณ</string>
+  <string name="permdesc_readThemesDesc">อนุญาตให้แอปอ่านข้อมูลชุดรูปแบบของคุณและกำหนดชุดรูปแบบที่คุณใช้ได้</string>
+  <string name="permlab_writeThemes">แก้ไขชุดรูปแบบของคุณ</string>
+  <string name="permdesc_writeThemesDesc">อณุญาตให้แอปเพิ่มชุดรูปแบบใหม่และแก้ไขชุดรูปแบบของคุณได้</string>
   <string name="permlab_setKeyguardWallpaper">ตั้งภาพล็อคหน้าจอ</string>
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
+  <string name="permlab_useHardwareFramework">ใช้ฮาร์ดแวร์เฟรมเวิร์ค</string>
+  <string name="permdesc_useHardwareFramework">อนุญาตให้แอปเข้าถึง CM ฮาร์ดแวร์เฟรมเวิร์ค</string>
   <string name="immersive_mode_confirmation_bottom">ปัดขึ้นจากด้านล่างเพื่อออกจากรูปแบบเต็มจอ</string>
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งของคุณ</string>

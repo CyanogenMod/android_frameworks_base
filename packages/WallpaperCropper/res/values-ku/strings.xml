@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="crop_wallpaper">Опсеци позадину</string>
-  <string name="wallpaper_instructions">Постави позадину</string>
-  <string name="wallpaper_load_fail">Није могуће учитати слику као позадину</string>
+  <string name="crop_wallpaper">بڕینی وێنەی پشتەوە</string>
+  <string name="wallpaper_instructions">دانانی وێنەی پشتەوە</string>
+  <string name="wallpaper_load_fail">نەتوانرا وێنەی پشتەوە دابنرێت </string>
 </resources>

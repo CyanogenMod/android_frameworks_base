@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Umožňuje vložit nové téma a změnit informaci o tom, které téma je použito.</string>
   <string name="permlab_setKeyguardWallpaper">nastavit tapetu zámku kláves</string>
   <string name="permdesc_setKeyguardWallpaper">Umožní změnit tapetu zámku obrazovky.</string>
+  <string name="permlab_useHardwareFramework">využití hardware zařízení</string>
+  <string name="permdesc_useHardwareFramework">Umožní aplikaci přistupovat přímo k hardware zařízení.</string>
   <string name="immersive_mode_confirmation_bottom">Tažením od spodního okraje nahoru opustíte režim celé obrazovky.</string>
   <string name="app_ops_access_camera">používat fotoaparát</string>
   <string name="app_ops_access_location">zjišťovat polohu</string>

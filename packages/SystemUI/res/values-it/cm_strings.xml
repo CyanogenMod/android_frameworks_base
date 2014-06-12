@@ -57,6 +57,8 @@
   <string name="quick_settings_network_adb_enabled_label">Attivato</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d connesso</string>
   <string name="quick_settings_equalizer">Equalizzatore</string>
+  <string name="quick_settings_compass_off">Bussola OFF</string>
+  <string name="quick_settings_compass_init">Inizializzazione\u2026</string>
   <string name="location_mode_high_accuracy_title">Alta precisione</string>
   <string name="location_mode_battery_saving_title">Risparmio batteria</string>
   <string name="location_mode_sensors_only_title">Solo dispositivo</string>

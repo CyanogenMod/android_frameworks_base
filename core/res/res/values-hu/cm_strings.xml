@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Lehetővé teszi az alkalmazásnak, hogy új témákat hozzon létre és módosítsa a jelenleg aktív témát.</string>
   <string name="permlab_setKeyguardWallpaper">billentyűzár háttérképének beállítása</string>
   <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára a képernyőzár hátterének módosítását.</string>
+  <string name="permlab_useHardwareFramework">hardver keretrendszert használ</string>
+  <string name="permdesc_useHardwareFramework">Lehetővé teszi az alkalmazás számára a CM hardver keretrendszerhez való a hozzáférést.</string>
   <string name="immersive_mode_confirmation_bottom">Csúsztasson lentről felfelé a teljesképernyős módból való kilépéshez.</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
   <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>

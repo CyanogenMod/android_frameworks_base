@@ -55,18 +55,18 @@
   <string name="toast_rotation_locked">Поворот экрана заблокирован</string>
   <string name="stylus_app_not_installed">«%s» не установлено</string>
   <string name="permlab_changePrivacyGuardState">Включение или выключение защищённого режима</string>
-  <string name="permdesc_changePrivacyGuardState">Приложение может выбрать, будет ли другое приложение работать в защищённом режиме. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
+  <string name="permdesc_changePrivacyGuardState">Приложение сможет изменять состояние защищённого режима для других приложений. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
   <string name="privacy_guard_notification">Защищённый режим включён</string>
-  <string name="privacy_guard_notification_detail">«<xliff:g id="app">%1$s</xliff:g>» заблокирован доступ к персональным данным</string>
+  <string name="privacy_guard_notification_detail">У «<xliff:g id="app">%1$s</xliff:g>» нет доступа к персональным данным</string>
   <string name="profile_picker_title">Профили</string>
   <string name="profile_none">Не выбран</string>
   <string name="perf_profile_pwrsv">Экономия энергии</string>
   <string name="perf_profile_bal">Сбалансиров.</string>
   <string name="perf_profile_perf">Высокая производит.</string>
   <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
-  <string name="permdesc_interceptSmsSent">Разрешить приложению перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
+  <string name="permdesc_interceptSmsSent">Приложение сможет перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
   <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
-  <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
+  <string name="permdesc_resetBatteryStats">Приложение сможет очищать данные об использовании аккумуляторной батареи устройства.</string>
   <string name="permgrouplab_security">Безопасность</string>
   <string name="permgroupdesc_security">Разрешения, относящиеся к безопасности данных на устройстве.</string>
   <string name="permlab_readPhoneBlacklist">Просмотр чёрного списка</string>
@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Приложение сможет осуществлять установку новых тем оформления и изменять текущую тему.</string>
   <string name="permlab_setKeyguardWallpaper">Установка обоев экрана блокировки</string>
   <string name="permdesc_setKeyguardWallpaper">Приложение сможет изменять обои экрана блокировки устройства.</string>
+  <string name="permlab_useHardwareFramework">Взаимодействие с оборудованием</string>
+  <string name="permdesc_useHardwareFramework">Приложение сможет получать доступ к подсистеме аппаратных абстракций CyanogenMod.</string>
   <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
   <string name="app_ops_access_camera">получить доступ к камере</string>
   <string name="app_ops_access_location">получить доступ к местоположению устройства</string>

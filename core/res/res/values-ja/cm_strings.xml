@@ -123,6 +123,6 @@
   <string name="app_ops_write_mms">MMSメッセージの書き込み</string>
   <string name="app_ops_write_sms">SMSメッセージの書き込み</string>
   <string name="privacy_guard_dialog_title">プライバシーガード</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>を試みようとしています。</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>をしようとしています。</string>
   <string name="permission_remember_choice">選択を記憶する</string>
 </resources>

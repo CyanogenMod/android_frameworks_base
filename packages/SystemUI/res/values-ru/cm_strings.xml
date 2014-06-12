@@ -57,9 +57,11 @@
   <string name="quick_settings_network_adb_enabled_label">Отладка по сети</string>
   <string name="quick_settings_bluetooth_multi_label">%1$d подключено</string>
   <string name="quick_settings_equalizer">Эквалайзер</string>
-  <string name="location_mode_high_accuracy_title">Высокая точность</string>
-  <string name="location_mode_battery_saving_title">Экономия батареи</string>
-  <string name="location_mode_sensors_only_title">По датчикам устройства</string>
+  <string name="quick_settings_compass_off">Компас выкл.</string>
+  <string name="quick_settings_compass_init">Включение\u2026</string>
+  <string name="location_mode_high_accuracy_title">По всем источникам</string>
+  <string name="location_mode_battery_saving_title">По координатам сети</string>
+  <string name="location_mode_sensors_only_title">По спутникам GPS</string>
   <string name="location_mode_location_off_title">Геоданные выкл.</string>
   <string name="quick_settings_expanded_desktop">Расширенный</string>
   <string name="quick_settings_expanded_desktop_off">Обычный</string>

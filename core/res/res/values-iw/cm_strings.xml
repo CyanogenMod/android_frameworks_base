@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">אפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות אילו הוחלו.</string>
   <string name="permlab_setKeyguardWallpaper">הגדר רקע ל-keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">אפשר ליישום לשנות את הרקע של מסך הנעילה.</string>
+  <string name="permlab_useHardwareFramework">השתמש במסגרת חומרתית</string>
+  <string name="permdesc_useHardwareFramework">אפשר ליישום לגשת למסגרת החומרתית של CM.</string>
   <string name="immersive_mode_confirmation_bottom">החלק למעלה מהתחתית כדי לצאת ממסך מלא.</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>

@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Neteisinga kortelė.</string>
   <string name="lockscreen_airplane_mode_on">Lėktuvo režimas</string>
   <string name="progress_nomediapresent" product="default">Nėra laikmenos\u2026</string>
+  <string name="storage_uicc">UICC saugykla</string>
   <string name="stk_cc_ussd_to_dial">USSD užklausa pakeista į DIAL prašymą.</string>
   <string name="stk_cc_ussd_to_ss">USSD užklausa pakeista į SS prašymą.</string>
   <string name="stk_cc_ussd_to_ussd">USSD užklausa pakeista į naują USSD prašymą.</string>

@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Permet a l\'app introduir temes nous i modificar quin tema has aplicat.</string>
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
   <string name="permdesc_setKeyguardWallpaper">Permet que una app estableixi el fons de la pantalla de bloqueig.</string>
+  <string name="permlab_useHardwareFramework">utilitza el marc de hardware</string>
+  <string name="permdesc_useHardwareFramework">Permet a una app accedir al marc de hardware de CM.</string>
   <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>

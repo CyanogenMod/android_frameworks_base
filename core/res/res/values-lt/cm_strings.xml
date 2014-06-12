@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Leidžia programai įdiegti naujas temas ir keisti temą, kurią pritaikėte.</string>
   <string name="permlab_setKeyguardWallpaper">nustatyti klaviatūros apsaugos foną</string>
   <string name="permdesc_setKeyguardWallpaper">Leidžia programai pakeisti ekrano užrakto foną.</string>
+  <string name="permlab_useHardwareFramework">naudoti aparatinės įrangos sistemą</string>
+  <string name="permdesc_useHardwareFramework">Leidžia programai pasiekti CM aparatinės įrangos sistemą.</string>
   <string name="immersive_mode_confirmation_bottom">Braukite aukštyn iš apačios norėdami išeiti iš viso ekrano.</string>
   <string name="app_ops_access_camera">pasiekti fotoaparatą</string>
   <string name="app_ops_access_location">pasiekti jūsų vietą</string>

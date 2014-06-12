@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Geçersiz kart.</string>
   <string name="lockscreen_airplane_mode_on">Uçak modu</string>
   <string name="progress_nomediapresent" product="default">Çıkarılabilir ortam yok\2026</string>
+  <string name="storage_uicc">UICC depolama</string>
   <string name="stk_cc_ussd_to_dial">USSD isteği ARAMA isteğine dönüştürüldü.</string>
   <string name="stk_cc_ussd_to_ss">USSD isteği SS isteğine dönüştürüldü.</string>
   <string name="stk_cc_ussd_to_ussd">USSD isteği yeni bir USSD isteğine dönüştürüldü.</string>

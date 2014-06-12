@@ -16,10 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">Чисто</string>
-  <string name="wallpaper_accessibility_name">Тапет %1$d oд %2$d</string>
-  <string name="announce_selection">Изабрано <xliff:g id="label" example="Тапет 3 од 10">%1$s</xliff:g></string>
+  <string name="wallpaper_accessibility_name">Позадина %1$d oд %2$d</string>
+  <string name="announce_selection">Изабрано <xliff:g id="label" example="Позадина 3 од 10">%1$s</xliff:g></string>
   <string name="wallpaper_delete">Избриши</string>
-  <string name="pick_image">Изаберите слику</string>
-  <string name="pick_wallpaper">Тапети</string>
+  <string name="pick_image">Изабери слику</string>
+  <string name="pick_wallpaper">Позадине</string>
   <string name="activity_not_found">Апликација није инсталирана.</string>
 </resources>
