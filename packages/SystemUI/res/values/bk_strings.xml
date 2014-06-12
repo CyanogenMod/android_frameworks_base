@@ -154,4 +154,7 @@
     <string name="weather_45">Thundershowers</string>
     <string name="weather_46">Snow Showers</string>
     <string name="weather_47">Isolated Thundershowers</string>
+
+    <!-- Title shown when app provides no interface -->
+    <string name="status_bar_floating_no_interface">App provides no interface</string>
 </resources>
