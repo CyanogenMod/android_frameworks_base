@@ -259,6 +259,24 @@ public class WifiStateTracker extends BaseNetworkStateTracker {
         return "net.tcp.buffersize.wifi";
     }
 
+    /**
+     * Return the system properties name associated with the tcp delayed ack settings
+     * for this network.
+     */
+    @Override
+    public String getTcpDelayedAckPropName() {
+        return "net.tcp.delack.wifi";
+    }
+
+    /**
+     * Return the system properties name associated with the tcp user config flag
+     * for this network.
+     */
+    @Override
+    public String getTcpUserConfigPropName() {
+        return "net.tcp.usercfg.wifi";
+    }
+
     private class WifiStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
