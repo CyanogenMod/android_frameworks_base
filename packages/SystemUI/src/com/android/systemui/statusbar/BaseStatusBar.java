@@ -16,11 +16,7 @@
 
 package com.android.systemui.statusbar;
 
-import android.app.ActivityManager;
-import android.app.ActivityManagerNative;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
+import android.app.*;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -99,7 +95,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
-    protected static final int INTERRUPTION_THRESHOLD = 11;
+    protected static final int INTERRUPTION_THRESHOLD = 1;
     protected static final String SETTING_HEADS_UP = "heads_up_enabled";
 
     // Should match the value in PhoneWindowManager
@@ -652,6 +648,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public abstract void resetHeadsUpDecayTimer();
+    public abstract void hideHeadsUp();
 
     protected class H extends Handler {
         public void handleMessage(Message m) {
@@ -1178,6 +1175,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected boolean shouldInterrupt(StatusBarNotification sbn) {
         Notification notification = sbn.getNotification();
+
         // some predicates to make the boolean logic legible
         boolean isNoisy = (notification.defaults & Notification.DEFAULT_SOUND) != 0
                 || (notification.defaults & Notification.DEFAULT_VIBRATE) != 0
@@ -1189,16 +1187,31 @@ public abstract class BaseStatusBar extends SystemUI implements
                 Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
 
         final KeyguardTouchDelegate keyguard = KeyguardTouchDelegate.getInstance(mContext);
+        boolean keyguardNotVisible = !keyguard.isShowingAndNotHidden() && !keyguard.isInputRestricted();
+
         boolean interrupt = (isFullscreen || (isHighPriority && isNoisy))
                 && isAllowed
-                && mPowerManager.isScreenOn()
-                && !keyguard.isShowingAndNotHidden()
-                && !keyguard.isInputRestricted();
+                && keyguardNotVisible
+                && mPowerManager.isScreenOn();
+
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
         } catch (RemoteException e) {
             Log.d(TAG, "failed to query dream manager", e);
         }
+
+        // its below our threshold priority, we might want to always display
+        // notifications from certain apps
+        if (!isHighPriority && keyguardNotVisible) {
+            String[] pkgWhitelist = mContext.getResources().getStringArray(R.array.heads_up_pkg_whitelist);
+            final String pkg = sbn.getPackageName();
+            for (String s : pkgWhitelist) {
+                if (pkg.equals(s)) {
+                    return true;
+                }
+            }
+        }
+
         if (DEBUG) Log.d(TAG, "interrupt: " + interrupt);
         return interrupt;
     }
