@@ -765,7 +765,6 @@ public class BatteryMeterView extends View implements DemoMode {
          * uses mInvalidate for delayed invalidate() callbacks
          */
         private void updateChargeAnim(BatteryTracker tracker) {
-
             // Stop animation when battery is full or after the meter
             // rotated back to 0 after unplugging.
             if (!tracker.shouldIndicateCharging() && mAnimOffset == 0

@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Permite a uma aplicação inserir novos temas e modificar o tema que têm aplicado.</string>
   <string name="permlab_setKeyguardWallpaper">Definir a imagem de fundo do ecrã de bloqueio</string>
   <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar a imagem de fundo do ecrã de bloqueio.</string>
+  <string name="permlab_useHardwareFramework">Utilizar a estrutura de hardware</string>
+  <string name="permdesc_useHardwareFramework">Permite o acesso duma aplicação à estrutura de hardware CM.</string>
   <string name="immersive_mode_confirmation_bottom">Deslize de baixo para cima para sair de ecrã inteiro.</string>
   <string name="app_ops_access_camera">aceder à câmara</string>
   <string name="app_ops_access_location">aceder à sua localização</string>

@@ -34,7 +34,7 @@
   <string name="quick_settings_ringer_normal">サウンド</string>
   <string name="quick_settings_lockscreen">ロック画面</string>
   <string name="quick_settings_network_type">ネットワークモード</string>
-  <string name="quick_settings_report_bug">バグ報告</string>
+  <string name="quick_settings_report_bug">バグレポート</string>
   <string name="quick_settings_sync">同期</string>
   <string name="quick_settings_sync_off">同期OFF</string>
   <string name="quick_settings_torch">トーチ</string>
@@ -56,6 +56,9 @@
   <string name="quick_settings_network_adb_disabled_label">無効</string>
   <string name="quick_settings_network_adb_enabled_label">有効</string>
   <string name="quick_settings_bluetooth_multi_label">%1$dが接続されました</string>
+  <string name="quick_settings_equalizer">イコライザー</string>
+  <string name="quick_settings_compass_off">コンパスOFF</string>
+  <string name="quick_settings_compass_init">初期化中\u2026</string>
   <string name="location_mode_high_accuracy_title">高精度</string>
   <string name="location_mode_battery_saving_title">バッテリー節電</string>
   <string name="location_mode_sensors_only_title">端末のみ</string>

@@ -4244,6 +4244,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     false, this, UserHandle.USER_ALL);
 
             cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QS_DYNAMIC_EQUALIZER),
+                    false, this, UserHandle.USER_ALL);
+
+            cr.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.QS_DYNAMIC_IME),
                     false, this, UserHandle.USER_ALL);
 

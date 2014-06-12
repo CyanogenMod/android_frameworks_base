@@ -281,23 +281,40 @@ public class ResourcesManager {
             return;
         }
 
+        final CustomTheme customTheme = r.getConfiguration().customTheme;
+        if (pkgName != null && customTheme != null &&
+                pkgName.equals(customTheme.getIconPackPkgName())) {
+            return;
+        }
+
         //Map application icon
         if (pkgInfo != null && pkgInfo.applicationInfo != null) {
             appInfo = pkgInfo.applicationInfo;
-            if (appInfo.themedIcon != 0) iconResources.put(appInfo.icon, appInfo);
+            if (appInfo.themedIcon != 0 || iconResources.get(appInfo.icon) == null) {
+                iconResources.put(appInfo.icon, appInfo);
+            }
         }
 
         //Map activity icons.
         if (pkgInfo != null && pkgInfo.activities != null) {
             for (ActivityInfo ai : pkgInfo.activities) {
-                if (ai.themedIcon != 0 && ai.icon != 0) {
+                if (ai.icon != 0 && (ai.themedIcon != 0 || iconResources.get(ai.icon) == null)) {
                     iconResources.put(ai.icon, ai);
-                } else if (ai.themedIcon != 0 && appInfo != null && appInfo.icon != 0) {
+                } else if (appInfo != null && appInfo.icon != 0 &&
+                        (ai.themedIcon != 0 || iconResources.get(appInfo.icon) == null)) {
                     iconResources.put(appInfo.icon, ai);
                 }
             }
         }
+
         r.setIconResources(iconResources);
+        final IPackageManager pm = getPackageManager();
+        try {
+            ComposedIconInfo iconInfo = pm.getComposedIconInfo();
+            r.setComposedIconInfo(iconInfo);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public final int applyConfigurationToResourcesLocked(Configuration config,
@@ -349,6 +366,7 @@ public class ResourcesManager {
                     AssetManager am = r.getAssets();
                     if (am.hasThemeSupport()) {
                         r.setIconResources(null);
+                        r.setComposedIconInfo(null);
                         detachThemeAssets(am);
                         if (config.customTheme != null) {
                             attachThemeAssets(am, config.customTheme);

@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu uzamykacej obrazovky</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu uzamykacej obrazovky.</string>
+  <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
+  <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>
@@ -114,7 +116,7 @@
   <string name="app_ops_use_audio_focus">ovládať zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládať hlasitosť bluetooh</string>
   <string name="app_ops_use_master_volume">ovládať hlavnú hlasitosť</string>
-  <string name="app_ops_use_media_buttons">použiť tlačidlá na ovládanie médií</string>
+  <string name="app_ops_use_media_buttons">používať tlačidlá médií</string>
   <string name="app_ops_use_media_volume">ovládať hlasitosť médií</string>
   <string name="app_ops_use_notification_volume">ovládať hlasitosť oznámení</string>
   <string name="app_ops_use_ring_volume">ovládať hlasitosť zvonenia</string>

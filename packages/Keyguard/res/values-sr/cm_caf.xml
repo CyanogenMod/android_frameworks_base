@@ -17,8 +17,8 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_password_wrong_puk_code">Нетачан PUK код.</string>
-  <string name="keyguard_password_pin_failed">PIN операција је неуспешна.</string>
-  <string name="keyguard_password_puk_failed">PUK операција је неуспешна.</string>
+  <string name="keyguard_password_pin_failed">PIN операција није успела.</string>
+  <string name="keyguard_password_puk_failed">PUK операција није успела.</string>
   <string name="keyguard_pin_accepted">Код је прихваћен.</string>
   <string name="pinpuk_attempts">\nПокушаја преостало:</string>
   <string name="lockscreen_sim_error_message_short">Неважећа картица.</string>

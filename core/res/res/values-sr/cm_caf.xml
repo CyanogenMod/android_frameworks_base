@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Неважећа картица.</string>
   <string name="lockscreen_airplane_mode_on">Режим рада у авиону</string>
   <string name="progress_nomediapresent" product="default">Нема присутних преносивих медија\u2026</string>
+  <string name="storage_uicc">UICC складиште</string>
   <string name="stk_cc_ussd_to_dial">USSD захтев је модификован на DIAL захтев.</string>
   <string name="stk_cc_ussd_to_ss">USSD захтев је модификован на SS захтев.</string>
   <string name="stk_cc_ussd_to_ussd">USSD захтев је модификован на нови USSD захтев.</string>

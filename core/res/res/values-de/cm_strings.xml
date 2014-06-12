@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Ermöglicht der App, neue Designs zu installieren und das aktive Design zu wählen.</string>
   <string name="permlab_setKeyguardWallpaper">Sperrbildschirm-Hintergrund ändern</string>
   <string name="permdesc_setKeyguardWallpaper">Ermöglicht der App, den Sperrbildschirm-Hintergrund zu ändern.</string>
+  <string name="permlab_useHardwareFramework">Hardware-Framework verwenden</string>
+  <string name="permdesc_useHardwareFramework">Ermöglicht der App, auf das CM-Hardware-Framework zuzugreifen.</string>
   <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>

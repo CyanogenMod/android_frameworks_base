@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">您的手機將會重新啟動。</string>
   <string name="permlab_preventpower">防止使用電源鍵</string>
   <string name="permdesc_preventpower">允許應用程式覆寫電源鍵的功能。</string>
-  <string name="permlab_sendMockSms">發送模擬簡訊</string>
+  <string name="permlab_sendMockSms">傳送模擬簡訊</string>
   <string name="permdesc_sendMockSms">允許應用程式傳送模擬簡訊。這會允許應用程式傳送簡訊給信任的應用程式。惡意應用程式可能會不斷地傳送訊息，妨礙裝置的通知系統以及干擾使用者。</string>
   <string name="storage_sd_dock_card">座架 SD 卡</string>
   <string name="app_killed_message">應用程式已終止</string>
@@ -104,8 +104,8 @@
   <string name="app_ops_read_sms">讀取您的簡訊</string>
   <string name="app_ops_receive_sms">接收簡訊</string>
   <string name="app_ops_record_audio">錄音</string>
-  <string name="app_ops_send_mms">發送多媒體簡訊</string>
-  <string name="app_ops_send_sms">發送簡訊</string>
+  <string name="app_ops_send_mms">傳送多媒體訊息</string>
+  <string name="app_ops_send_sms">傳送簡訊</string>
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toggle_bluetooth">切換藍牙</string>
   <string name="app_ops_toggle_mobile_data">切換行動數據</string>

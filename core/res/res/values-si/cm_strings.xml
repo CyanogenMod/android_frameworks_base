@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">අලුත් තේමා ඇතුල් කිරීමට සහ ඔබ යොදා ඇති තේමාව වෙනස් කිරීමට, යෙදුමට අවසර දෙන්න.</string>
   <string name="permlab_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය සැකසීම</string>
   <string name="permdesc_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය වෙනස්කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
+  <string name="permlab_useHardwareFramework">දෘඩාංග රාමුව භාවිතාකරන්න</string>
+  <string name="permdesc_useHardwareFramework">යෙදුමක් CM දෘඩාංග රාමුව පරිශීලනය කිරීම අනුමත කරයි.</string>
   <string name="immersive_mode_confirmation_bottom">පුන් තිරයෙන් පිටවීමට පතුලේ සිට උඩට අතුල්ලන්න.</string>
   <string name="app_ops_access_camera">කැමරාව පරිශීලනය</string>
   <string name="app_ops_access_location">ඔබගේ ස්ථානය පරිශීලනය</string>

@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
   <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran du clavier de verrouillage</string>
   <string name="permdesc_setKeyguardWallpaper">Autorise une application à changer le fond de l\'écran de verrouillage.</string>
+  <string name="permlab_useHardwareFramework">Utiliser le framework matériel</string>
+  <string name="permdesc_useHardwareFramework">Permet à une application l\'accès au framework matériel de CM.</string>
   <string name="immersive_mode_confirmation_bottom">Balayez du haut vers le bas pour quitter le mode plein écran.</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
   <string name="app_ops_access_location">accéder à votre emplacement</string>

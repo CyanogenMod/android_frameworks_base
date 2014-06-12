@@ -78,6 +78,7 @@ import com.android.systemui.quicksettings.CameraTile;
 import com.android.systemui.quicksettings.CompassTile;
 import com.android.systemui.quicksettings.CPUFreqTile;
 import com.android.systemui.quicksettings.DockBatteryTile;
+import com.android.systemui.quicksettings.EqualizerTile;
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.GPSTile;
 import com.android.systemui.quicksettings.InputMethodTile;
@@ -358,6 +359,12 @@ public class QuickSettingsController {
         if (QSUtils.deviceSupportsUsbTether(mContext) && Settings.System.getIntForUser(resolver,
                     Settings.System.QS_DYNAMIC_USBTETHER, 1, UserHandle.USER_CURRENT) == 1) {
             QuickSettingsTile qs = new UsbTetherTile(mContext, this);
+            qs.setupQuickSettingsTile(inflater, mContainerView);
+            mQuickSettingsTiles.add(qs);
+        }
+        if (Settings.System.getIntForUser(resolver,
+                Settings.System.QS_DYNAMIC_EQUALIZER, 1, UserHandle.USER_CURRENT) == 1) {
+            QuickSettingsTile qs = new EqualizerTile(mContext, this);
             qs.setupQuickSettingsTile(inflater, mContainerView);
             mQuickSettingsTiles.add(qs);
         }

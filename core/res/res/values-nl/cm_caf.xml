@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Ongeldige simkaart</string>
   <string name="lockscreen_airplane_mode_on">Vliegmodus</string>
   <string name="progress_nomediapresent" product="default">Geen verwijderbare media aanwezig\u2026</string>
+  <string name="storage_uicc">UICC-opslag</string>
   <string name="stk_cc_ussd_to_dial">USSD-verzoek veranderd naar DIAL-verzoek.</string>
   <string name="stk_cc_ussd_to_ss">USSD-verzoek veranderd naar SS-verzoek.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-verzoek veranderd naar nieuw USSD-verzoek.</string>

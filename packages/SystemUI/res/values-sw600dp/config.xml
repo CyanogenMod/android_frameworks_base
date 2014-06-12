@@ -35,5 +35,4 @@
 
     <!-- Enable the "flip settings" panel -->
     <bool name="config_hasFlipSettingsPanel">false</bool>
-
 </resources>
