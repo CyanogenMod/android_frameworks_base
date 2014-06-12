@@ -998,6 +998,12 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     private void launchFloating(PendingIntent pIntent, boolean allowed) {
+        if (pIntent == null) {
+            String text = mContext.getResources().getString(R.string.status_bar_floating_no_interface);
+            int duration = Toast.LENGTH_SHORT;
+            Toast.makeText(mContext, text, duration).show();
+            return;
+        }
         Intent overlay = new Intent();
         if (allowed) overlay.addFlags(Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         try {

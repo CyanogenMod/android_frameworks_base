@@ -60,6 +60,9 @@
     <!-- Blacklisted app for floating mode -->
     <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating mode </string>
 
+    <!-- Title shown when app provides no interface -->
+    <string name="status_bar_floating_no_interface">App provides no interface</string>
+
     <!-- First time run hover -->
     <string name="hover_cling_text">Hover is now enabled.\n\nWhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app.</string>
 
