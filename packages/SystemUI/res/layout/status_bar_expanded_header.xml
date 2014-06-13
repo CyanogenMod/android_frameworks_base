@@ -78,21 +78,12 @@
         android:padding="2dp"
         />
 
-    <ImageView android:id="@+id/clear_all_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="6dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_notify_clear"
-        android:background="@drawable/ic_notify_button_bg"
-        android:contentDescription="@string/accessibility_clear_all"
-        />
-
     <FrameLayout android:id="@+id/action_button_holder"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="12dp"
         >
+        
         <ImageView android:id="@+id/halo_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -101,6 +92,16 @@
             android:src="@drawable/ic_notify_halo"
             android:contentDescription="@string/accessibility_halo"
             />
+            
+         <ImageView android:id="@+id/clear_all_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_notify_clear"
+            android:background="@drawable/ic_notify_button_bg"
+            android:contentDescription="@string/accessibility_clear_all"
+            />             
 
         <ImageView android:id="@+id/add_tile_button"
             android:layout_width="50dp"
