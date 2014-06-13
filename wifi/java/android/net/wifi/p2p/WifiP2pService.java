@@ -178,6 +178,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
 
     // set country code
     public static final int SET_COUNTRY_CODE                =   BASE + 16;
+    public static final int P2P_MIRACAST_MODE_CHANGED       =   BASE + 17;
 
     public static final int ENABLED                         = 1;
     public static final int DISABLED                        = 0;
@@ -1048,6 +1049,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                    break;
                 case SET_MIRACAST_MODE:
                     mWifiNative.setMiracastMode(message.arg1);
+                    sendMiracastModeChanged(message.arg1);
                     break;
                 case WifiP2pManager.START_LISTEN:
                     if (DBG) logd(getName() + " start listen mode");
@@ -2093,6 +2095,11 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
         mWifiChannel.sendMessage(WifiP2pService.P2P_CONNECTION_CHANGED,
                 new NetworkInfo(mNetworkInfo));
+    }
+
+    private void sendMiracastModeChanged(int mode) {
+        mWifiChannel
+                .sendMessage(WifiP2pService.P2P_MIRACAST_MODE_CHANGED, mode);
     }
 
     private void sendP2pPersistentGroupsChangedBroadcast() {
