@@ -18,11 +18,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:focusable="true"
     android:descendantFocusability="afterDescendants"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:gravity="top|center_horizontal">
     <FrameLayout
         android:id="@+id/hover_notification"
-        android:layout_below="@+id/hover_switcher"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:foregroundGravity="top|center_horizontal" />
 
 </com.android.systemui.statusbar.notification.HoverLayout>

@@ -106,7 +106,7 @@ public class Hover {
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mHoverLayout = (HoverLayout) mInflater.inflate(R.layout.hover_container, null);
         mHoverLayout.setHoverContainer(this);
-        mHoverHeight = mContext.getResources().getDimensionPixelSize(R.dimen.hover_height);
+        mHoverHeight = mContext.getResources().getDimensionPixelSize(R.dimen.default_notification_min_height);
         mNotificationList = new ArrayList<HoverNotification>();
         mStatusBarNotifications = new ArrayList<StatusBarNotification>();
 

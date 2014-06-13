@@ -4107,7 +4107,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mHeadsUpNotificationDecay = res.getInteger(R.integer.heads_up_notification_decay);
-        mRowHeight =  res.getDimensionPixelSize(R.dimen.notification_row_min_height);
+        mRowHeight =  res.getDimensionPixelSize(R.dimen.default_notification_row_min_height);
 
         if (false) Log.v(TAG, "updateResources");
     }

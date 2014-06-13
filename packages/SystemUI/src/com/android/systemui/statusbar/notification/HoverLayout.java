@@ -57,8 +57,8 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
     public HoverLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        int minHeight = mContext.getResources().getDimensionPixelSize(R.dimen.hover_height);
-        int maxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.notification_row_max_height);
+        int minHeight = mContext.getResources().getDimensionPixelSize(R.dimen.default_notification_min_height);
+        int maxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.default_notification_row_max_height);
         mExpandHelper = new ExpandHelper(mContext, this, minHeight, maxHeight);
         float densityScale = mContext.getResources().getDisplayMetrics().density;
         float pagingTouchSlop = ViewConfiguration.get(mContext).getScaledPagingTouchSlop();
