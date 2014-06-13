@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2013 The CyanogenMod Project
+     Copyright (C) 2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,5 +15,11 @@
      limitations under the License.
 -->
 <resources>
+    <string name="keyboard_layout_arabic">Arábigo</string>
     <string name="keyboard_layout_armenian_eastern_label">Armenio oriental</string>
+    <string name="keyboard_layout_greek">Griego</string>
+    <string name="keyboard_layout_hebrew">Hebreo</string>
+    <string name="keyboard_layout_lithuanian">Lituano</string>
+    <string name="keyboard_layout_spanish_latin">Español (EE.UU.)</string>
+    <string name="keyboard_layout_latvian">Letón</string>
 </resources>
