@@ -4126,13 +4126,6 @@ public final class Settings {
         public static final String POWER_MENU_USER_ENABLED = "power_menu_user_enabled";
 
         /**
-         * Disable safe volume warning with headphones
-         *
-         * @hide
-         */
-        public static final String DISABLE_SAFE_VOLUME = "disable_safe_volume";
-
-        /**
          * Whether power menu silent mode is enabled
          * @hide
          */
