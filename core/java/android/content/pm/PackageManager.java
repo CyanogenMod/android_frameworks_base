@@ -1377,12 +1377,16 @@ public abstract class PackageManager {
     /**
      * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
      * This component or application has set to protected status
+     *
+     * @hide
      */
     public static final boolean COMPONENT_PROTECTED_STATUS = false;
 
     /**
      * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
      * This component or application has been explicitly set to visible status
+     *
+     * @hide
      */
     public static final boolean COMPONENT_VISIBLE_STATUS = true;
 
@@ -3276,6 +3280,7 @@ public abstract class PackageManager {
 
     /**
      * Update Component protection state
+     * @hide
      */
     public abstract void setComponentProtectedSetting(ComponentName componentName, boolean newState);
 }
