@@ -99,6 +99,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
         public ApnState() {
             mApnIconMap.put("ctwap", R.drawable.ic_qs_apn_ctwap);
             mApnIconMap.put("ctnet", R.drawable.ic_qs_apn_ctnet);
+            mApnIconMap.put("ctlte", R.drawable.ic_qs_apn_ctlte);
             mApnIconMap.put("cmnet", R.drawable.ic_qs_apn_cmnet);
             mApnIconMap.put("cmwap", R.drawable.ic_qs_apn_cmwap);
         }
@@ -139,7 +140,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
 
         void updateIconId() {
             String apn = getCurrentApnName();
-            Integer icon = mApnIconMap.get(apn);
+            Integer icon = mApnIconMap.get(apn.toLowerCase());
             if (icon != null) {
                 iconId = icon;
             }
@@ -223,14 +224,14 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                 // Sometimes we didn't find the default apn for example, after we reset the DUT,
                 // the selectedkey will be null.
                 // Note: As ct spec, we need set the ctwap as the default apn,
-                //          so if the selectedkey is null,
-                //          We'd like to set it as the default apn.
+                //          so if the selectedkey is null or the selected apn is not in current
+                //          available apn list, we'd like to set it as the default apn.
                 if (currentApn == null) {
-                    if (selectedKey == null) {
+                    if (selectedKey == null || !isSelectedKeyAvailable(selectedKey, apnList)) {
                         for (int i = 0; i < apnList.size(); i++) {
                             Apn apn = apnList.get(i);
                             if (apn.type != null && apn.type.contains(DEFAULT)
-                                    && apn.apn != null && apn.apn.contains(WAP)) {
+                                    && apn.apn != null && apn.apn.toLowerCase().contains(WAP)) {
                                 switchToNextApn(apn);
                             }
                         }
@@ -254,11 +255,38 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             }
         }
 
+        private boolean isSelectedKeyAvailable(String selectedKey, ArrayList<Apn> apnList) {
+            boolean ret = false;
+            if (apnList != null) {
+                for (Apn apn : apnList) {
+                    if (selectedKey.equals(apn.id)) {
+                        ret = true;
+                        break;
+                    }
+                }
+            }
+            return ret;
+        }
+
         private String getOperatorNumericSelection() {
             String[] mccmncs = getOperatorNumeric();
             String where;
             where = (mccmncs[0] != null) ? "numeric=\"" + mccmncs[0] + "\"" : "";
             where = where + ((mccmncs[1] != null) ? " or numeric=\"" + mccmncs[1] + "\"" : "");
+
+            int netType = 0;
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
+                netType = MSimTelephonyManager.getDefault().getNetworkType(dataSub);
+            } else {
+                netType = TelephonyManager.getDefault().getNetworkType();
+            }
+            Log.d(TAG, "Current RAT type is " + netType);
+
+            //UI should filter APN by bearer and enable status
+            where += "and (bearer=\"" + netType + "\" or bearer =\"" + 0 + "\")";
+            where += " and carrier_enabled = 1";
+
             if (DEBUG) Log.d(TAG, "getOperatorNumericSelection: " + where);
             return where;
         }
