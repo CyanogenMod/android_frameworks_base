@@ -58,6 +58,7 @@ import android.webkit.URLUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -146,12 +147,6 @@ public class ThemeService extends IThemeService.Stub {
         ThemeUtils.createNotificationDirIfNotExists();
         ThemeUtils.createRingtoneDirIfNotExists();
         ThemeUtils.createIconCacheDirIfNotExists();
-    }
-
-    public void systemRunning() {
-        // listen for wallpaper changes
-        IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
-        mContext.registerReceiver(mWallpaperChangeReceiver, filter);
     }
 
     public void systemRunning() {
