@@ -677,15 +677,10 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private void broadcastThemeChange(List<String> components) {
-        StringBuilder sb = new StringBuilder();
-        String delimiter = "";
-        for (String comp : components) {
-            sb.append(delimiter);
-            sb.append(comp);
-            delimiter = "|";
-        }
         final Intent intent = new Intent(ThemeUtils.ACTION_THEME_CHANGED);
-        intent.putExtra("components", sb.toString());
+        for (String comp : components) {
+            intent.addCategory(ThemeUtils.CATEGORY_THEME_COMPONENT_PREFIX + comp.toUpperCase());
+        }
         mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
     }
 

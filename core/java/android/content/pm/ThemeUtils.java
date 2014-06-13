@@ -95,6 +95,8 @@ public class ThemeUtils {
 
     public static final String ACTION_THEME_CHANGED = "org.cyanogenmod.intent.action.THEME_CHANGED";
 
+    public static final String CATEGORY_THEME_COMPONENT_PREFIX = "org.cyanogenmod.intent.category.";
+
     // Actions in manifests which identify legacy icon packs
     public static final String[] sSupportedActions = new String[] {
             "org.adw.launcher.THEMES",
