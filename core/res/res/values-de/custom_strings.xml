@@ -18,7 +18,7 @@
 ** limitations under the License.
 */
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenrecord">Bildschirmaufnahme</string>
   <string name="global_action_onthego">On-The-Go-Modus</string>
   <string name="animation_default">Standard</string>
