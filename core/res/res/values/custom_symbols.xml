@@ -59,6 +59,7 @@
     <java-symbol type="anim" name="animcontrol_slide_in_right_no_fade" />
     <java-symbol type="anim" name="animcontrol_slide_in_left_no_fade" />
     <java-symbol type="array" name="anim_controls_entries" />
+    <java-symbol type="array" name="anim_controls_values" />
     <!-- Slim recent app screen-->
     <java-symbol type="integer" name="config_recentDefaultDur" />
     <java-symbol type="integer" name="config_recentExitDur" />
@@ -66,6 +67,8 @@
     <java-symbol type="anim" name="recent_screen_enter" />
     <java-symbol type="anim" name="recent_screen_fade_out" />
     <!-- On-The-Go -->
-    <java-symbol type="string" name="global_action_onthego" />
+    <java-symbol type="string" name="onthego" />
     <java-symbol type="drawable" name="ic_lock_onthego" />
+    <!-- Screen Record -->
+    <java-symbol type="string" name="global_action_screenrecord" />
 </resources>

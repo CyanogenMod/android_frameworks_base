@@ -150,7 +150,7 @@ public class ScreenRecordService extends Service {
         final Resources r = getResources();
 
         final Notification.Builder builder = new Notification.Builder(this)
-                .setTicker(r.getString(R.string.screenrecord_notif_ticker))
+                .setTicker(r.getString(R.string.screenrecord_notif_title))
                 .setContentTitle(r.getString(R.string.screenrecord_notif_title))
                 .setSmallIcon(R.drawable.ic_sysbar_camera)
                 .setWhen(System.currentTimeMillis())

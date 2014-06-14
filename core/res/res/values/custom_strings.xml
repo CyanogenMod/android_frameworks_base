@@ -22,9 +22,6 @@
     <!-- label for item that takes screenrecord in the phone options dialog -->
     <string name="global_action_screenrecord">Screen Record</string>
 
-    <!-- label for item that takes On-The-Go in the phone options dialog -->
-    <string name="global_action_onthego">On-The-Go Mode</string>
-
     <!-- Animation Strings -->
     <string name="animation_default">Default</string>
     <string name="animation_fade">Fade</string>

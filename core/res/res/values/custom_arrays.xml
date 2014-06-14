@@ -17,7 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Animation Control - Animation Chooser List -->
-    <string-array name="anim_controls_entries">
+    <string-array name="anim_controls_entries" translatable="false">
         <item>@string/animation_default</item>
         <item>@string/animation_fade</item>
         <item>@string/animation_slide_right</item>
@@ -35,7 +35,7 @@
         <item>@string/animation_random</item>
         </string-array>
 
-    <string-array name="anim_controls_values">
+    <string-array name="anim_controls_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>

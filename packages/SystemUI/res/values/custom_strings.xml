@@ -17,11 +17,8 @@
  */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
+    <string name="screenrecord_notif_title">Screen is being recorded</string>
 
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">Stop</string>
@@ -39,10 +36,6 @@
     <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
     <string name="service_foreground_processes"><xliff:g id="memory">%1$s</xliff:g> used</string>
     <string name="service_foreground_processes_cached"><xliff:g id="memory">%1$s</xliff:g> used*</string>
-    <!-- Text to label a process entry with the process name. -->
-    <string name="service_process_name"><xliff:g id="process">%1$s</xliff:g></string>
-    <!-- Running services, description for a service in the started state -->
-    <string name="service_client_name"><xliff:g id="client_name">%1$s</xliff:g></string>
     <!-- Running services, description for a service in the started state -->
     <string name="service_started_by_app">Started by app.</string>
     <!-- Descriptive text of a running process: singular process, singular service. -->
