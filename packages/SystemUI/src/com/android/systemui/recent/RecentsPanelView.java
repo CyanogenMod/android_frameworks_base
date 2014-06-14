@@ -116,7 +116,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
 
     Handler mHandler = new Handler();
     ActivityManager mAm;
-    ActivityManager.MemoryInfo mMemInfo;
+    long SECONDARY_SERVER_MEM;
 
     final MemInfoReader mMemInfoReader = new MemInfoReader();
 
@@ -311,13 +311,17 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
 
         mAm = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        mMemInfo = new ActivityManager.MemoryInfo();
+
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecentsPanelView,
                 defStyle, 0);
 
         mRecentItemLayoutId = a.getResourceId(R.styleable.RecentsPanelView_recentItemLayout, 0);
         mRecentTasksLoader = RecentTasksLoader.getInstance(context);
         a.recycle();
+
+        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+        mAm.getMemoryInfo(memInfo);
+        SECONDARY_SERVER_MEM = memInfo.secondaryServerThreshold;
     }
 
     public int numItemsInOneScreenful() {
@@ -977,12 +981,15 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
             if (DEBUG) Log.v(TAG, "updateRamBarTask running!");
             if (!ramBarEnabled) return;
 
-            mAm.getMemoryInfo(mMemInfo);
-            final long secServerMem = mMemInfo.secondaryServerThreshold;
             mMemInfoReader.readMemInfo();
-            final long availMem = mMemInfoReader.getFreeSize()
+            long availMem = mMemInfoReader.getFreeSize()
                     + (ramBarIncludeCached ? 0 : mMemInfoReader.getCachedSize())
-                    - secServerMem;
+                    - SECONDARY_SERVER_MEM;
+
+            if (availMem < 0) {
+                availMem = 0;
+            }
+
             final long totalMem = mMemInfoReader.getTotalSize();
 
             String sizeStr = Formatter.formatShortFileSize(mContext, totalMem - availMem);
