@@ -168,7 +168,7 @@ public class BatteryCircleMeterView extends ImageView {
         // could not find the darker definition anywhere in resources
         // do not want to use static 0x404040 color value. would break theming.
         Resources res = getResources();
-        mPaintGray.setColor(res.getColor(R.color.darker_gray));
+        mPaintGray.setColor(res.getColor(com.android.systemui.R.color.batterymeter_frame_color));
         mPaintRed.setColor(res.getColor(R.color.holo_red_light));
 
         mPaintFont.setTextAlign(Align.CENTER);
@@ -375,7 +375,7 @@ public class BatteryCircleMeterView extends ImageView {
         float strokeWidth = mCircleSize / 7f;
         mPaintRed.setStrokeWidth(strokeWidth);
         mPaintSystem.setStrokeWidth(strokeWidth);
-        mPaintGray.setStrokeWidth(strokeWidth / 3.5f);
+        mPaintGray.setStrokeWidth(strokeWidth);
         // calculate rectangle for drawArc calls
         int pLeft = getPaddingLeft();
         mRectLeft = new RectF(pLeft + strokeWidth / 2.0f, 0 + strokeWidth / 2.0f, mCircleSize
