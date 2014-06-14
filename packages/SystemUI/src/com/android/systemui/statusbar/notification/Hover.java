@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.notification;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.KeyguardManager;
+import android.app.Notification;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Handler;
@@ -333,6 +334,16 @@ public class Hover {
                 Settings.System.DIALPAD_STATE, 0) != 0;
     }
 
+    public boolean excludeNonClearable() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HOVER_EXCLUDE_NON_CLEARABLE, 0) != 0;
+    }
+
+    public boolean excludeLowPriority() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HOVER_EXCLUDE_LOW_PRIORITY, 0) != 0;
+    }
+
     public boolean isInCallUINotification(Entry entry) {
         if (entry != null) return entry.notification.getPackageName().equals(IN_CALL_UI)
                 | entry.notification.getPackageName().equals(DIALER);
@@ -596,14 +607,25 @@ public class Hover {
 
     // notifications processing
     public void setNotification(Entry entry, boolean update) {
-        // first, check if current notification's package is blacklisted
+        // first, check if current notification's package is blacklisted or excluded in another way
         boolean allowed = true; // default on
+
+        //Exclude blacklisted
         try {
             final String packageName = entry.notification.getPackageName();
             allowed = mStatusBar.getNotificationManager().isPackageAllowedForHover(packageName);
         } catch (android.os.RemoteException ex) {
             // System is dead
         }
+
+        //Exclude non-clearable
+        if (!entry.notification.isClearable() && excludeNonClearable())
+            allowed = false;
+
+        //Exclude low priority
+        if (excludeLowPriority() && entry.notification.getNotification().priority < Notification.PRIORITY_LOW)
+            allowed = false;
+
         if (!allowed) {
             addStatusBarNotification(entry.notification);
             return;
