@@ -3438,6 +3438,16 @@ public final class Settings {
          */
         public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
 
+		/*
+         * Preference for the button backlight. The value is enum.
+		 * 0 for on touch
+		 * 1 for off
+		 * 2 for on
+		 * 3 for force off
+		 * 4 for force on.
+		 */
+        public static final String BUTTON_BACKLIGHT_MODE = "button_backlight_mode";
+
         /**
          * Whether quiet hours will enable or disable themselves on volume change
          * @hide
