@@ -41,9 +41,9 @@ public class QuickSettingsContainerView extends FrameLayout {
     // The gap between tiles in the QuickSettings grid
     private float mCellGap;
 
-    private float mPadding4Tiles = -8.0f;
+    private float mPadding4Tiles = -11.0f;
     private float mPadding3Tiles = 0.0f;
-    private float mSize4Tiles = 10.0f;
+    private float mSize4Tiles = 9.0f;
     private float mSize3Tiles = 12.0f;
 
     private int mTextSize;
