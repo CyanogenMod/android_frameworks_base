@@ -35,6 +35,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -557,6 +558,10 @@ public class KeyguardViewMediator {
         int lockSoundDefaultAttenuation = context.getResources().getInteger(
                 com.android.internal.R.integer.config_lockSoundVolumeDb);
         mLockSoundVolume = (float)Math.pow(10, (float)lockSoundDefaultAttenuation/20);
+    }
+
+    public void setBackgroundBitmap(final Bitmap bmp) {
+        mKeyguardViewManager.setBackgroundBitmap(bmp);
     }
 
     /**

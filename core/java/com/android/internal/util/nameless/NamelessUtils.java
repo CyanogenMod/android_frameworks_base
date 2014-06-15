@@ -23,6 +23,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 
 import java.util.List;
@@ -103,4 +109,47 @@ public class NamelessUtils {
         final PackageManager pm = context.getPackageManager();
         return pm != null && pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
     }
+
+    /**
+     * Blurs a bitmap with the given radius
+     *
+     * @param context The context
+     * @param bmp     The bitmap to blur
+     * @param radius  The radius to use for blurring
+     * @return The blurred bitmap
+     */
+    public static Bitmap blurBitmap(final Context context, final Bitmap bmp, final int radius) {
+        Bitmap out = Bitmap.createBitmap(bmp);
+        RenderScript rs = RenderScript.create(context);
+
+        Allocation input = Allocation.createFromBitmap(
+                rs, bmp, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        Allocation output = Allocation.createTyped(rs, input.getType());
+
+        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        script.setInput(input);
+        script.setRadius(radius);
+        script.forEach(output);
+
+        output.copyTo(out);
+
+        output.destroy();
+        input.destroy();
+        rs.destroy();
+        return out;
+    }
+
+    /**
+     * Rotates a bitmap by the given degrees
+     *
+     * @param bmp     The bitmap to rotate
+     * @param degrees The degrees to rotate
+     * @return The rotated bitmap
+     */
+    public static Bitmap rotateBmp(final Bitmap bmp, final int degrees) {
+        final Matrix m = new Matrix();
+        m.postRotate(degrees);
+        return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), m, true);
+    }
+
 }

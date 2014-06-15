@@ -1272,6 +1272,13 @@ public final class Settings {
          * @hide
          */
         public static final String LONG_PRESS_KILL_DELAY = "long_press_kill_delay";
+
+        /**
+         * Allows to show the background activity back the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
+
     }
 
     /**
