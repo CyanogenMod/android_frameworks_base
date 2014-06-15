@@ -166,7 +166,7 @@
         <ImageView android:id="@+id/clear_all_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="2dp"
+			android:layout_marginStart="0dp"
             android:scaleType="center"
             android:src="@drawable/ic_notify_clear"
             android:background="@drawable/ic_notify_button_bg"
@@ -176,20 +176,21 @@
         <ImageView android:id="@+id/hover_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="2dp"
             android:scaleType="center"
             android:src="@drawable/ic_notify_hover_normal"
             android:background="@drawable/ic_notify_button_bg"
-            android:contentDescription="@string/accessibility_clear_all"
+            android:contentDescription="@string/accessibility_hover"
+            android:visibility="gone"
             />
 
         <ImageView android:id="@+id/halo_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="2dp"
             android:scaleType="center"
             android:src="@drawable/ic_notify_halo"
+            android:background="@drawable/ic_notify_button_bg"
             android:contentDescription="@string/accessibility_halo"
+            android:visibility="gone"
             />
 
         <FrameLayout android:id="@+id/settings_button_holder"

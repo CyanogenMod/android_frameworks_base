@@ -156,5 +156,6 @@
     <string name="weather_47">Isolated Thundershowers</string>
 
     <!-- Title shown when app provides no interface -->
+    <string name="accessibility_hover">Turn hover notifications on or off.</string>
     <string name="status_bar_floating_no_interface">App provides no interface</string>
 </resources>
