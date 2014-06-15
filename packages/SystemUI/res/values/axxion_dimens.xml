@@ -62,6 +62,15 @@
     <dimen name="recent_text_size">20dp</dimen>
     <dimen name="recent_thumbnail_bottom_padding">3dp</dimen>
 
+    <!-- Hover dimens -->
+    <dimen name="hover_cling_width">-1px</dimen>
+    
+    <!-- Theme Engine overrides to avoid modifications that will affect hover view. -->
+    <dimen name="default_notification_min_height">64dp</dimen>
+    <dimen name="default_notification_max_height">256dp</dimen>
+    <dimen name="default_notification_row_min_height">70dp</dimen>
+    <dimen name="default_notification_row_max_height">260dp</dimen>
+
     <!-- Network stats text size -->
     <dimen name="network_stats_text_size">9dp</dimen>  
 </resources>
