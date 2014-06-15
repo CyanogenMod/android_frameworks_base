@@ -575,6 +575,9 @@ public final class PowerManagerService extends IPowerManager.Stub
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.WAKELOCK_BLOCKING_LIST),
                     false, mSettingsObserver, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Nameless.getUriFor(
+                    Settings.Nameless.HARDWARE_KEYS_DISABLE),
+                    false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
             readConfigurationLocked();
@@ -669,13 +672,23 @@ public final class PowerManagerService extends IPowerManager.Stub
         mAutoBrightnessResponsitivityFactor =
                 Math.min(Math.max(newAutoBrightnessResponsitivityFactor, 0.2f), 3.0f);
 
-        mButtonTimeout = Settings.System.getIntForUser(resolver,
-                Settings.System.BUTTON_BACKLIGHT_TIMEOUT,
-                DEFAULT_BUTTON_ON_DURATION, UserHandle.USER_CURRENT);
+        final boolean hasForceNavbar = Settings.System.getBooleanForUser(resolver,
+                Settings.System.NAVBAR_FORCE_ENABLE, false, UserHandle.USER_CURRENT);
+        final boolean hardwareKeysDisable = hasForceNavbar && Settings.Nameless.getBooleanForUser(resolver,
+                Settings.Nameless.HARDWARE_KEYS_DISABLE, false, UserHandle.USER_CURRENT);
 
-        mButtonBrightness = Settings.System.getIntForUser(resolver,
-                Settings.System.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
-                UserHandle.USER_CURRENT);
+        if (!hardwareKeysDisable) {
+            mButtonTimeout = Settings.System.getIntForUser(resolver,
+                    Settings.System.BUTTON_BACKLIGHT_TIMEOUT,
+                    DEFAULT_BUTTON_ON_DURATION, UserHandle.USER_CURRENT);
+            mButtonBrightness = Settings.System.getIntForUser(resolver,
+                    Settings.System.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
+                    UserHandle.USER_CURRENT);
+        } else {
+            mButtonTimeout = 0;
+            mButtonBrightness = 0;
+        }
+
         mKeyboardBrightness = Settings.System.getIntForUser(resolver,
                 Settings.System.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
