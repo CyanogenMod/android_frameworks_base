@@ -221,6 +221,9 @@
     <!-- Quick Settings CA Cert Warning tile geometry: gap between icon and text -->
     <dimen name="qs_cawarn_tile_margin_below_icon">3dp</dimen>
 
+    <!-- Quick Settings Small tile geometry: interior margin, above and below icon (small tiles) -->
+    <dimen name="qs_tile_small_icon_margin">14dp</dimen>
+
     <!-- The width of the notification panel window: match_parent below sw600dp -->
     <dimen name="notification_panel_width">-1dp</dimen>
 
