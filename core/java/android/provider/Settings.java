@@ -3140,6 +3140,15 @@ public final class Settings {
          */
         public static final String HOME_WAKE_SCREEN = "home_wake_screen";
 
+		/**Preference for the button backlight. The value is enum.
+		 * 0 for on touch, 
+		 * 1 for off 
+		 * 2 for on 
+		 * 3 for force off 
+		 * 4 for force on. 
+		 */
+        public static final String BUTTON_BACKLIGHT_MODE = "button_backlight_mode";
+
         /**
          * Whether to wake the screen with the volume keys, the value is boolean.
          * @hide
