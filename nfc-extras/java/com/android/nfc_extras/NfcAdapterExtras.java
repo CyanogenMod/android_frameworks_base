@@ -252,21 +252,4 @@ public final class NfcAdapterExtras {
             return "";
         }
     }
-
-    public boolean isSeEnabled(int sEID) {
-        try {
-            return sService.isSeEnabled(mPackageName, sEID);
-        } catch (RemoteException e) {
-            attemptDeadServiceRecovery(e);
-            return false;
-        }
-    }
-
-    public void deliverSeIntent(Intent seIntent) {
-        try {
-            sService.deliverSeIntent(mPackageName, seIntent);
-        } catch (RemoteException e) {
-            attemptDeadServiceRecovery(e);
-        }
-    }
 }
