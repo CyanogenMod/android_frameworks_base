@@ -20,7 +20,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenrecord">Nagrywanie Ekranu</string>
-  <string name="global_action_onthego">Tryb On-The-Go</string>
   <string name="animation_default">Domyślna</string>
   <string name="animation_fade">Zanikanie</string>
   <string name="animation_slide_right">Wjazd z prawej</string>

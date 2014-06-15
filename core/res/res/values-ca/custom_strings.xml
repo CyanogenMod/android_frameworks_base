@@ -20,7 +20,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenrecord">Gravació de pantalla</string>
-  <string name="global_action_onthego">Mode On-The-Go</string>
   <string name="animation_default">Per defecte</string>
   <string name="animation_fade">Esvaïment</string>
   <string name="animation_slide_right">Lliscar a la dreta</string>

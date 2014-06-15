@@ -18,8 +18,7 @@
  */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screenrecord_notif_ticker">Экран записывается</string>
-  <string name="screenrecord_notif_title">Запись экрана</string>
+  <string name="screenrecord_notif_title">Экран записывается</string>
   <string name="screenrecord_notif_stop">Прекратить</string>
   <string name="screenrecord_notif_pointer">Переключить показ указателя</string>
   <string name="screenrecord_notif_error">Невозможно записать экран</string>
@@ -27,8 +26,6 @@
   <string name="service_background_processes"><xliff:g id="memory">%1$s</xliff:g> свободно</string>
   <string name="service_foreground_processes"><xliff:g id="memory">%1$s</xliff:g> используется</string>
   <string name="service_foreground_processes_cached"><xliff:g id="memory">%1$s</xliff:g> используется*</string>
-  <string name="service_process_name"><xliff:g id="process">%1$s</xliff:g></string>
-  <string name="service_client_name"><xliff:g id="client_name">%1$s</xliff:g></string>
   <string name="service_started_by_app">Запущено приложением.</string>
   <string name="running_processes_item_description_s_s"><xliff:g id="numprocess">%1$d</xliff:g> процесс и <xliff:g id="numservices">%2$d</xliff:g> служба</string>
   <string name="running_processes_item_description_s_p"><xliff:g id="numprocess">%1$d</xliff:g> процесс и <xliff:g id="numservices">%2$d</xliff:g> службы</string>

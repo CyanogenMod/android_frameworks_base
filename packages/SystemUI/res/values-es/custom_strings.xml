@@ -18,8 +18,7 @@
  */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screenrecord_notif_ticker">La pantalla está siendo grabada</string>
-  <string name="screenrecord_notif_title">Grabación de pantalla</string>
+  <string name="screenrecord_notif_title">La pantalla está siendo grabada</string>
   <string name="screenrecord_notif_stop">Detener</string>
   <string name="screenrecord_notif_pointer">Habilitar puntero</string>
   <string name="screenrecord_notif_error">Incapaz de grabar la pantalla</string>
@@ -27,8 +26,6 @@
   <string name="service_background_processes"><xliff:g id="memory">%1$s</xliff:g> libre</string>
   <string name="service_foreground_processes"><xliff:g id="memory">%1$s</xliff:g> en uso</string>
   <string name="service_foreground_processes_cached"><xliff:g id="memory">%1$s</xliff:g> en uso*</string>
-  <string name="service_process_name"><xliff:g id="process">%1$s</xliff:g></string>
-  <string name="service_client_name"><xliff:g id="client_name">%1$s</xliff:g></string>
   <string name="service_started_by_app">Iniciado por la aplicación.</string>
   <string name="running_processes_item_description_s_s"><xliff:g id="numprocess">%1$d</xliff:g>
 proceso y <xliff:g id="numservices">%2$d</xliff:g> servicio</string>
