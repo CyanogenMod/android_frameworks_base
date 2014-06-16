@@ -29,7 +29,7 @@ import android.content.pm.ThemeUtils;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
+import android.content.res.ThemeConfig;
 import android.content.res.Resources;
 import android.content.res.ResourcesKey;
 import android.hardware.display.DisplayManagerGlobal;
@@ -218,19 +218,19 @@ public class ResourcesManager {
 
         /* Attach theme information to the resulting AssetManager when appropriate. */
         if (compatInfo.isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
-            if (config.customTheme == null) {
+            if (config.themeConfig == null) {
                 try {
-                    config.customTheme = CustomTheme.getBootTheme(context.getContentResolver());
+                    config.themeConfig = ThemeConfig.getBootTheme(context.getContentResolver());
                 } catch (Exception e) {
-                    Slog.d(TAG, "CustomTheme.getBootTheme failed, falling back to system theme", e);
-                    config.customTheme = CustomTheme.getSystemTheme();
+                    Slog.d(TAG, "ThemeConfig.getBootTheme failed, falling back to system theme", e);
+                    config.themeConfig = ThemeConfig.getSystemTheme();
                 }
             }
 
-            if (config.customTheme != null) {
-                attachThemeAssets(assets, config.customTheme);
-                attachCommonAssets(assets, config.customTheme);
-                attachIconAssets(assets, config.customTheme);
+            if (config.themeConfig != null) {
+                attachThemeAssets(assets, config.themeConfig);
+                attachCommonAssets(assets, config.themeConfig);
+                attachIconAssets(assets, config.themeConfig);
             }
         }
 
@@ -293,11 +293,15 @@ public class ResourcesManager {
         }
 
         /* Attach theme information to the resulting AssetManager when appropriate. */
-        CustomTheme customTheme =
-                new CustomTheme(themePackageName, themePackageName, themePackageName);
-        attachThemeAssets(assets, customTheme);
-        attachCommonAssets(assets, customTheme);
-        attachIconAssets(assets, customTheme);
+        ThemeConfig.Builder builder = new ThemeConfig.Builder();
+        builder.defaultOverlay(themePackageName);
+        builder.defaultIcon(themePackageName);
+        builder.defaultFont(themePackageName);
+
+        ThemeConfig themeConfig = builder.build();
+        attachThemeAssets(assets, themeConfig);
+        attachCommonAssets(assets, themeConfig);
+        attachIconAssets(assets, themeConfig);
 
         r = new Resources(assets, dm, config, compatInfo, token);
         setActivityIcons(r);
@@ -327,9 +331,9 @@ public class ResourcesManager {
             return;
         }
 
-        final CustomTheme customTheme = r.getConfiguration().customTheme;
-        if (pkgName != null && customTheme != null &&
-                pkgName.equals(customTheme.getIconPackPkgName())) {
+        final ThemeConfig themeConfig = r.getConfiguration().themeConfig;
+        if (pkgName != null && themeConfig != null &&
+                pkgName.equals(themeConfig.getIconPackPkgName())) {
             return;
         }
 
@@ -414,10 +418,10 @@ public class ResourcesManager {
                         r.setIconResources(null);
                         r.setComposedIconInfo(null);
                         detachThemeAssets(am);
-                        if (config.customTheme != null) {
-                            attachThemeAssets(am, config.customTheme);
-                            attachCommonAssets(am, config.customTheme);
-                            attachIconAssets(am, config.customTheme);
+                        if (config.themeConfig != null) {
+                            attachThemeAssets(am, config.themeConfig);
+                            attachCommonAssets(am, config.themeConfig);
+                            attachIconAssets(am, config.themeConfig);
                             setActivityIcons(r);
                         }
                     }
@@ -473,7 +477,7 @@ public class ResourcesManager {
      *         removed and the theme manager has yet to revert formally back to
      *         the framework default.
      */
-    private boolean attachThemeAssets(AssetManager assets, CustomTheme theme) {
+    private boolean attachThemeAssets(AssetManager assets, ThemeConfig theme) {
         PackageInfo piTheme = null;
         PackageInfo piTarget = null;
         PackageInfo piAndroid = null;
@@ -496,7 +500,7 @@ public class ResourcesManager {
 
         try {
             piTheme = getPackageManager().getPackageInfo(
-                    theme.getThemePackageNameForApp(basePackageName), 0, UserHandle.myUserId());
+                    theme.getOverlayPkgNameForApp(basePackageName), 0, UserHandle.myUserId());
             piTarget = getPackageManager().getPackageInfo(
                     basePackageName, 0, UserHandle.myUserId());
 
@@ -563,7 +567,7 @@ public class ResourcesManager {
      * @param theme
      * @return true if succes, false otherwise
      */
-    private boolean attachIconAssets(AssetManager assets, CustomTheme theme) {
+    private boolean attachIconAssets(AssetManager assets, ThemeConfig theme) {
         PackageInfo piIcon = null;
         try {
             piIcon = getPackageManager().getPackageInfo(theme.getIconPackPkgName(), 0, UserHandle.myUserId());
@@ -608,10 +612,10 @@ public class ResourcesManager {
      * @param theme
      * @return true if succes, false otherwise
      */
-    private boolean attachCommonAssets(AssetManager assets, CustomTheme theme) {
+    private boolean attachCommonAssets(AssetManager assets, ThemeConfig theme) {
         PackageInfo piTheme = null;
         try {
-            piTheme = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0,
+            piTheme = getPackageManager().getPackageInfo(theme.getOverlayPkgName(), 0,
                     UserHandle.myUserId());
         } catch (RemoteException e) {
         }
