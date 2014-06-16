@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ThemeUtils;
-import android.content.res.CustomTheme;
+import android.content.res.ThemeConfig;
 import android.content.res.ThemeManager;
 import android.os.SystemClock;
 import android.provider.ThemesContract;
@@ -66,7 +66,7 @@ public class AppsLaunchFailureReceiver extends BroadcastReceiver {
                     components.add(ThemesContract.ThemesColumns.MODIFIES_NOTIFICATIONS);
                     components.add(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS);
                     components.add(ThemesContract.ThemesColumns.MODIFIES_RINGTONES);
-                    tm.requestThemeChange(CustomTheme.HOLO_DEFAULT, components);
+                    tm.requestThemeChange(ThemeConfig.HOLO_DEFAULT, components);
                 }
             }
         } else if (action.equals(Intent.ACTION_APP_LAUNCH_FAILURE_RESET)
