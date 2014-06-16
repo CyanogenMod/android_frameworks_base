@@ -599,6 +599,11 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         cm.setMobileDataEnabled(!mRSSIState.enabled);
+        int phoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
+        for (int i = 0; i < phoneCount; i++) {
+            Settings.Global.putInt(mContext.getContentResolver(),
+                    Settings.Global.MOBILE_DATA + i, (!mRSSIState.enabled) ? 1 : 0);
+        }
     }
 
     private void onRoamingDataStateChanged() {
