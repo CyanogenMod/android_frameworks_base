@@ -52,8 +52,8 @@
     <string name="quick_settings_wifiap_off">Wi-Fi модем выкл</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE выкл</string>
-    <string name="quick_settings_shakeevents">События тряски</string>
-    <string name="quick_settings_shakeevents_off">События тряски выкл</string>
+    <string name="quick_settings_shakeevents">Встряхивание</string>
+    <string name="quick_settings_shakeevents_off">Встряхивание выкл</string>
     <string name="quick_settings_volume">Громкость</string>
     <string name="quick_settings_expanded_desktop">Расширенный</string>
     <string name="quick_settings_expanded_desktop_off">Обычный</string>
@@ -69,7 +69,7 @@
     <string name="shortcut_immersive">Обычный режим</string>
     <string name="shortcut_quiethours">\"Тихие часы\"</string>
     <string name="shortcut_rotation">Блокировка поворота</string>
-    <string name="shortcut_shakeevent">События тряски</string>
+    <string name="shortcut_shakeevent">Действия встряхивания</string>
     <string name="shortcut_torch">Фонарь</string>
     <string name="shortcut_reboot">Перезагрузка</string>
     <string name="shortcut_recovery">В рекавери</string>
