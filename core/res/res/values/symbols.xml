@@ -1839,4 +1839,6 @@
 
   <!-- config delay timer to start PPPOE -->
   <java-symbol type="integer" name="config_delay_startPPPOE_timer" />
+
+  <java-symbol type="bool" name="always_popup_usb_computer_connection" />
 </resources>

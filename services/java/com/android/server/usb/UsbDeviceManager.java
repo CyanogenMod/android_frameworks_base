@@ -698,6 +698,16 @@ public class UsbDeviceManager {
                     // Default config is false, when it is true, if find none of above, will still
                     // update USB connection notification
                     id = com.android.internal.R.string.usb_cd_installer_notification_title;
+                } else if (r.getBoolean(
+                        com.android.internal.R.bool.always_popup_usb_computer_connection)) {
+                    // Default usb function is get from the property "persist.sys.usb.config"
+                    // in device/qcom/common/rootdir/etc/init.qcom.usb.sh, which may not fall
+                    // into any case above, like "diag,serial_smd,rmnet_bam,adb" for some
+                    // device，this cause missing USB connection notification.
+
+                    // Default config is false which can be overlaid, when it is true,
+                    // it will still show USB connection notification.
+                    id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } else {
                     // There is a different notification for USB tethering so we don't need one here
                     //if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
