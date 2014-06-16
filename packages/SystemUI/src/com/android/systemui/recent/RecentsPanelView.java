@@ -357,7 +357,10 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
     public RecentsPanelView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        updateValuesFromResources();
+
+        final Resources res = context.getResources();
+        mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width));
+        mFitThumbnailToXY = res.getBoolean(R.bool.config_recents_thumbnail_image_fits_to_xy);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RecentsPanelView,
                 defStyle, 0);
@@ -421,17 +424,13 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
     }
 
-    static void sendCloseSystemWindows(Context context, String reason) {
+    private void showImpl(boolean show) {
         if (ActivityManagerNative.isSystemReady()) {
             try {
-                ActivityManagerNative.getDefault().closeSystemDialogs(reason);
+                ActivityManagerNative.getDefault().closeSystemDialogs(BaseStatusBar.SYSTEM_DIALOG_REASON_RECENT_APPS);
             } catch (RemoteException e) {
             }
         }
-    }
-
-    private void showImpl(boolean show) {
-        sendCloseSystemWindows(mContext, BaseStatusBar.SYSTEM_DIALOG_REASON_RECENT_APPS);
 
         mShowing = show;
 
@@ -609,12 +608,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRecentTasksLoader = loader;
     }
 
-    public void updateValuesFromResources() {
-        final Resources res = mContext.getResources();
-        mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width));
-        mFitThumbnailToXY = res.getBoolean(R.bool.config_recents_thumbnail_image_fits_to_xy);
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -672,7 +665,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 ((BitmapDrawable) mRecentsScrim.getBackground()).setTileModeY(TileMode.REPEAT);
             }
         }
-	updateRamBar();
+    	updateRamBar();
     }
 
     /**
