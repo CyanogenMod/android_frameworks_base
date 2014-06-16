@@ -52,6 +52,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.android.systemui.RecentsComponent;
+
 import com.android.cards.view.CardListView;
 
 import com.android.systemui.R;
@@ -67,7 +69,7 @@ import com.android.systemui.statusbar.BaseStatusBar;
  * and the remove all tasks animation/detection (#link:RecentListOnScaleGestureListener)
  * are handled here.
  */
-public class RecentController implements RecentPanelView.OnExitListener,
+public class RecentController implements RecentsComponent, RecentPanelView.OnExitListener,
         RecentPanelView.OnTasksLoadedListener {
 
     private static final String TAG = "SlimRecentsController";

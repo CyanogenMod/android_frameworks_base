@@ -4638,7 +4638,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         repositionNavigationBar();
 
-        rebuildRecentsScreen();
+        if (mCustomRecent == 1) rebuildRecentsScreen();
 
         // recreate StatusBarIconViews.
         for (int i = 0; i < nIcons; i++) {
@@ -4679,7 +4679,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (uiThemeMode != mCurrUiThemeMode) {
             mCurrUiThemeMode = uiThemeMode;
             recreateStatusBar(false);
-            rebuildRecentsScreen();
+            if (mCustomRecent == 1) rebuildRecentsScreen();
             return;
         }
 

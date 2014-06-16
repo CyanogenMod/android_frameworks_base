@@ -98,6 +98,7 @@ import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
 import com.android.systemui.statusbar.phone.Ticker;
 import com.android.internal.widget.SizeAdaptiveLayout;
+import com.android.internal.util.omni.OmniSwitchConstants;
 import com.android.internal.util.slim.ButtonConfig;
 import com.android.internal.util.slim.DeviceUtils;
 import com.android.systemui.R;
@@ -133,6 +134,8 @@ import com.android.systemui.statusbar.notification.HoverCling;
 // pa peek
 import com.android.systemui.statusbar.notification.NotificationHelper;
 import com.android.systemui.statusbar.notification.Peek;
+
+import com.vanir.util.RecentsConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -268,6 +271,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     // Peek
     protected Peek mPeek;
 
+    private SettingsObserver mSettingsObserver;
+
     // UI-specific methods
 
     /**
@@ -289,9 +294,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     // Recents Style
-    private RecentController slimRecents;
-    private RecentsComponent stockRecents;
-    private int mCustomRecent;
+    private RecentsComponent mRecents;
+    public int mCustomRecent = 0;
 
     protected ActiveDisplayView mActiveDisplayView;
 
@@ -360,7 +364,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     };
 
-     private ContentObserver mProvisioningObserver = new ContentObserver(mHandler) {
+    private ContentObserver mProvisioningObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
             final boolean provisioned = 0 != Settings.Global.getInt(
@@ -369,6 +373,62 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mDeviceProvisioned = provisioned;
                 updateNotificationIcons();
             }
+        }
+    };
+
+    private class SettingsObserver extends ContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        public void observe() {
+            final ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.RECENTS_STYLE), false, this);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.RECENTS_STYLE))) {
+                final int newCustomRecent = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.RECENTS_STYLE, 0);
+
+                switch (newCustomRecent) {
+                    // Default AOSP recents
+                    case RecentsConstants.RECENTS_AOSP:
+                    case RecentsConstants.RECENTS_HTC:
+                        if (mRecents == null || newCustomRecent != mCustomRecent) {
+                            mRecents = getComponent(RecentsComponent.class);
+                            mCustomRecent = newCustomRecent;
+                        }
+                        break;
+                    // Slim recents
+                    case RecentsConstants.RECENTS_SLIM:
+                        if (mRecents == null || newCustomRecent != mCustomRecent) {
+                            mRecents = (RecentsComponent)new RecentController(mContext, mLayoutDirection);
+                            mCustomRecent = newCustomRecent;
+                        }
+                        break;
+                    // Omniswitch recents
+                    case RecentsConstants.RECENTS_OMNI:
+                        mRecents = null;
+                        mCustomRecent = newCustomRecent;
+                        break;
+                }
+            } else {
+                update();
+            }
+        }
+
+        private void update() {
+            final ContentResolver resolver = mContext.getContentResolver();
+            return;
         }
     };
 
@@ -523,13 +583,23 @@ public abstract class BaseStatusBar extends SystemUI implements
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
 
-        int mCustomRecent = Settings.System.getIntForUser(
-                        mContext.getContentResolver(), Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
+        mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
-        if (mCustomRecent == 1) {
-            slimRecents = new RecentController(mContext, mLayoutDirection);
-        } else {
-            stockRecents = getComponent(RecentsComponent.class);
+        switch (mCustomRecent) {
+            // Default AOSP recents
+            case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_HTC:
+                mRecents = getComponent(RecentsComponent.class);
+                break;
+            // Slim recents
+            case RecentsConstants.RECENTS_SLIM:
+                mRecents = new RecentController(mContext, mLayoutDirection);
+                break;
+            // Omniswitch recents
+            case RecentsConstants.RECENTS_OMNI:
+                mRecents = null;
+                break;
         }
 
         mLocale = mContext.getResources().getConfiguration().locale;
@@ -614,6 +684,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_USER_SWITCHED);
+        filter.addAction(OmniSwitchConstants.ACTION_SERVICE_START);
+        filter.addAction(OmniSwitchConstants.ACTION_SERVICE_STOP);
         mContext.registerReceiver(mBroadcastReceiver, filter);
         SidebarObserver observer = new SidebarObserver(mHandler);
         observer.observe();
@@ -1373,54 +1445,84 @@ public abstract class BaseStatusBar extends SystemUI implements
     };
 
     protected void toggleRecentsActivity() {
-        if (stockRecents != null || slimRecents != null) {
-        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
-        if(mCustomRecent == 1)
-            slimRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
-        else
-            stockRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
+        switch (mCustomRecent) {
+            // Default, HTC & SLIM
+            case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_SLIM:
+                if (mRecents != null) {
+                    mRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
+                }
+                break;
+            // Omniswitch recents
+            case RecentsConstants.RECENTS_OMNI:
+                Intent showIntent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
+                mContext.sendBroadcast(showIntent);
+                break;
         }
     }
 
     protected void preloadRecentTasksList() {
-        if (stockRecents != null || slimRecents != null) {
-        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
-        if (mCustomRecent == 1)
-            slimRecents.preloadRecentTasksList();
-        else
-            stockRecents.preloadRecentTasksList();
+
+        switch (mCustomRecent) {
+            // Default recents && HTC
+            case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_SLIM:
+                if (mRecents != null) {
+                    mRecents.preloadRecentTasksList();
+                }
+                break;
+            // Omniswitch recents == noop
+            default:
+                break;
         }
     }
 
     protected void cancelPreloadingRecentTasksList() {
-        if (stockRecents != null || slimRecents != null) {
-        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
-        if (mCustomRecent == 1)
-            slimRecents.cancelPreloadingRecentTasksList();
-        else
-            stockRecents.cancelPreloadingRecentTasksList();
+
+        switch (mCustomRecent) {
+            // Default recents && HTC
+            case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_SLIM:
+                if (mRecents != null) {
+                    mRecents.cancelPreloadingRecentTasksList();
+                }
+                break;
+            // Omniswitch recents == noop
+            default:
+                break;
         }
     }
 
     protected void closeRecents() {
-        if (stockRecents != null || slimRecents != null) {
-        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
-        if (mCustomRecent == 1)
-            slimRecents.closeRecents();
-        else
-            stockRecents.closeRecents();
+
+        switch (mCustomRecent) {
+            // Default recents && HTC
+            case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_SLIM:
+                if (mRecents != null) {
+                    mRecents.closeRecents();
+                }
+                break;
+            // Omniswitch recents
+            case RecentsConstants.RECENTS_OMNI:
+                Intent hideIntent = new Intent(OmniSwitchConstants.ACTION_HIDE_OVERLAY);
+                mContext.sendBroadcast(hideIntent);
+                break;
         }
     }
 
     protected void rebuildRecentsScreen() {
-        int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
-        if (slimRecents != null && mCustomRecent == 1) {
-                slimRecents.rebuildRecentsScreen();
+        if (mCustomRecent == RecentsConstants.RECENTS_SLIM) {
+            try {
+                final RecentController attemptedUpcast = (RecentController)mRecents;
+                attemptedUpcast.rebuildRecentsScreen();
+            } catch(Exception ex) {
+                // merp??
+            }
         }
     }
 
