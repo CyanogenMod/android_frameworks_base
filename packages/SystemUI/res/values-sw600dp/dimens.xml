@@ -41,6 +41,10 @@
     <dimen name="status_bar_recents_thumbnail_width">200dp</dimen>
     <dimen name="status_bar_recents_thumbnail_height">177dp</dimen>
 
+    <!-- Dimensions for HTC Sense View -->
+    <dimen name="status_bar_recents_thumbnail_width_sense">157.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_height_sense">242.0dip</dimen>
+
     <!-- On tablet-sized devices, we allocate the rightmost third(ish) of the draggable status bar
          to quick settings. -->
     <item type="dimen" name="settings_panel_dragzone_fraction">35%</item>

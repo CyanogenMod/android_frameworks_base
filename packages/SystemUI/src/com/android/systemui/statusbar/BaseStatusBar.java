@@ -403,6 +403,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     // Default AOSP recents
                     case RecentsConstants.RECENTS_AOSP:
                     case RecentsConstants.RECENTS_HTC:
+                    case RecentsConstants.RECENTS_HTC_LARGE:
                         if (mRecents == null || newCustomRecent != mCustomRecent) {
                             mRecents = getComponent(RecentsComponent.class);
                             mCustomRecent = newCustomRecent;
@@ -590,6 +591,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             // Default AOSP recents
             case RecentsConstants.RECENTS_AOSP:
             case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_HTC_LARGE:
                 mRecents = getComponent(RecentsComponent.class);
                 break;
             // Slim recents
@@ -1449,6 +1451,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             // Default, HTC & SLIM
             case RecentsConstants.RECENTS_AOSP:
             case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
                 if (mRecents != null) {
                     mRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
@@ -1468,6 +1471,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             // Default recents && HTC
             case RecentsConstants.RECENTS_AOSP:
             case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
                 if (mRecents != null) {
                     mRecents.preloadRecentTasksList();
@@ -1485,6 +1489,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             // Default recents && HTC
             case RecentsConstants.RECENTS_AOSP:
             case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
                 if (mRecents != null) {
                     mRecents.cancelPreloadingRecentTasksList();
@@ -1502,6 +1507,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             // Default recents && HTC
             case RecentsConstants.RECENTS_AOSP:
             case RecentsConstants.RECENTS_HTC:
+            case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
                 if (mRecents != null) {
                     mRecents.closeRecents();

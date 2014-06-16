@@ -29,4 +29,11 @@ public class RecentsConstants {
      */
     public static final int RECENTS_HTC = 3;
 
+
+    /*
+     * System.Settings value indicating HTC-style sidebar recents
+     * @hide
+     */
+    public static final int RECENTS_HTC_LARGE = 4;
+
 }

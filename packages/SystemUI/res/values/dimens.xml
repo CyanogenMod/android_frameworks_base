@@ -30,6 +30,10 @@
     <dimen name="status_bar_recents_thumbnail_height">145dp</dimen>
     <dimen name="status_bar_recents_thumbnail_bg_padding">4dp</dimen>
 
+    <!-- Dimensions for HTC Sense View -->
+    <dimen name="status_bar_recents_thumbnail_width_sense">162.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_height_sense">385.0dip</dimen>
+
     <!-- Size of application label text -->
     <dimen name="status_bar_recents_app_label_text_size">14dip</dimen>
     <!-- Size of application description text -->
@@ -41,7 +45,9 @@
     <!-- Margin between recents container and glow on the right -->
     <dimen name="status_bar_recents_right_glow_margin">100dip</dimen>
     <!-- How far the thumbnail for a recent app appears from left edge -->
-    <dimen name="status_bar_recents_thumbnail_left_margin">20dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_left_margin">10dp</dimen>
+    <!-- How far the thumbnail for a recent app appears from right edge -->
+    <dimen name="status_bar_recents_thumbnail_right_margin">10dp</dimen>
     <!-- Padding for text descriptions -->
     <dimen name="status_bar_recents_text_description_padding">8dp</dimen>
     <!-- Width of application label text -->

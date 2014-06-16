@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* apps/common/assets/default/default/skins/StatusBar.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingTop="@dimen/status_bar_recents_item_padding"
+    android:paddingBottom="@dimen/status_bar_recents_item_padding"
+    android:clipChildren="false"
+    android:importantForAccessibility="no">
+
+    <LinearLayout android:id="@+id/recent_item"
+    android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:clipChildren="false">
+
+        <FrameLayout android:id="@+id/app_thumbnail"
+            android:layout_width="@dimen/status_bar_recents_thumbnail_width_sense"
+            android:layout_height="@dimen/status_bar_recents_thumbnail_height_sense"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/app_label"
+            android:layout_marginLeft="@dimen/status_bar_recents_thumbnail_left_margin"
+            android:layout_marginRight="@dimen/status_bar_recents_thumbnail_right_margin"
+            android:visibility="invisible">
+            <ImageView android:id="@+id/app_thumbnail_image"
+                android:layout_width="@dimen/status_bar_recents_thumbnail_width_sense"
+                android:layout_height="@dimen/status_bar_recents_thumbnail_height_sense"
+            />
+
+            <ImageView
+                android:id="@+id/locked"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_recent_app_locked"
+                android:visibility="invisible" />
+        </FrameLayout>
+        <View android:id="@+id/recents_callout_line"
+            android:layout_width="@dimen/status_bar_recents_app_label_width"
+            android:layout_height="1dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/status_bar_recents_app_label_left_margin"
+            android:layout_toLeftOf="@+id/app_thumbnail"
+            android:layout_below="@+id/app_label"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="3dip"
+            android:background="#00000000"
+        />
+
+        <LinearLayout android:id="@+id/recent_item"
+           android:orientation="horizontal"
+           android:layout_gravity="bottom|left"
+           android:layout_height="wrap_content"
+           android:layout_width="wrap_content"
+           android:clipChildren="false">
+
+        <ImageView android:id="@+id/app_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="@dimen/status_bar_recents_app_icon_top_margin"
+            android:maxWidth="@dimen/status_bar_recents_app_icon_max_width"
+            android:maxHeight="@dimen/status_bar_recents_app_icon_max_height"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
+            android:visibility="invisible"
+            android:shadowColor="#40000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="5"
+        />
+
+        <TextView android:id="@+id/app_label"
+            android:layout_width="@dimen/status_bar_recents_app_label_width"
+            android:layout_height="wrap_content"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="@dimen/status_bar_recents_text_fading_edge_length"
+            android:scrollHorizontally="true"
+            android:paddingTop="2dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="5dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:textSize="12sp"
+            android:shadowColor="#40000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="5"
+            android:importantForAccessibility="no"
+        />
+        </LinearLayout>
+
+        <TextView android:id="@+id/app_description"
+            android:layout_width="@dimen/status_bar_recents_app_label_width"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/status_bar_recents_app_description_text_size"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="@dimen/status_bar_recents_text_fading_edge_length"
+            android:scrollHorizontally="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/status_bar_recents_app_label_left_margin"
+            android:layout_below="@id/recents_callout_line"
+            android:layout_marginTop="3dip"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+        />
+
+    </LinearLayout>
+</FrameLayout>

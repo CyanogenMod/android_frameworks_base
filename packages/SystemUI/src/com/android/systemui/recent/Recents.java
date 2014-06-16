@@ -19,10 +19,14 @@ package com.android.systemui.recent;
 import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.Paint;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -99,13 +103,26 @@ public class Recents extends SystemUI implements RecentsComponent {
                 } catch (RemoteException e) {
                 }
 
-                Bitmap first = firstTask.getThumbnail();
+                Bitmap first = null;
+                if (firstTask.getThumbnail() instanceof BitmapDrawable) {
+                    first = ((BitmapDrawable) firstTask.getThumbnail()).getBitmap();
+                } else {
+                    first = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+                    Drawable d = RecentTasksLoader.getInstance(mContext).getDefaultThumbnail();
+                    d.draw(new Canvas(first));
+                }
                 final Resources res = mContext.getResources();
+                ContentResolver resolver = mContext.getContentResolver();
+                int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
+                        Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
-                float thumbWidth = res
-                        .getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width);
-                float thumbHeight = res
-                        .getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height);
+                float thumbWidth = (mCustomRecent == 4) ? 
+                                res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width_sense) :
+                                res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width);
+
+                float thumbHeight = (mCustomRecent == 4) ? 
+                                res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height_sense) :
+                                res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height);
                 if (first == null) {
                     throw new RuntimeException("Recents thumbnail is null");
                 }
@@ -141,14 +158,21 @@ public class Recents extends SystemUI implements RecentsComponent {
                             + thumbWidth
                             + 2 * thumbBgPadding;
 
+                    int getThumbHeight = (mCustomRecent == 4) ? 
+                                res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height_sense) :
+                                res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height);
+
                     x = (int) ((dm.widthPixels - width) / 2f + appLabelLeftMargin + appLabelWidth
                             + thumbBgPadding + thumbLeftMargin);
                     y = (int) (dm.heightPixels
-                            - res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height)
+                            - getThumbHeight
                             - thumbBgPadding);
                     if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-                        x = dm.widthPixels - x - res.getDimensionPixelSize(
-                                R.dimen.status_bar_recents_thumbnail_width);
+                        int getThumbWidth = (mCustomRecent == 4) ? 
+                                    res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width_sense) :
+                                    res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width);
+
+                        x = dm.widthPixels - x - getThumbWidth;
                     }
                     if (expandedDesktopHidesNavigationBar) {
                         y += getCurrentNavigationBarSize;
@@ -188,12 +212,15 @@ public class Recents extends SystemUI implements RecentsComponent {
                             + thumbHeight
                             + 2 * thumbBgPadding + textPadding + labelTextHeight
                             + recentsItemTopPadding + textPadding + descriptionTextHeight;
+
+                    int getThumbWidth = (mCustomRecent == 1) ? 
+                                    res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width_sense) :
+                                    res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width);
                     float recentsItemRightPadding = res
                             .getDimensionPixelSize(R.dimen.status_bar_recents_item_padding);
                     float recentsScrollViewRightPadding = res
                             .getDimensionPixelSize(R.dimen.status_bar_recents_right_glow_margin);
-                    x = (int) (dm.widthPixels - res
-                            .getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width)
+                    x = (int) (dm.widthPixels - getThumbWidth
                             - thumbBgPadding - recentsItemRightPadding
                             - recentsScrollViewRightPadding);
                     y = (int) ((dm.heightPixels - statusBarHeight - height) / 2f + thumbTopMargin
