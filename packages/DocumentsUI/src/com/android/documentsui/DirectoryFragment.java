@@ -654,18 +654,20 @@ public class DirectoryFragment extends Fragment {
 
         boolean hadTrouble = false;
         for (DocumentInfo doc : docs) {
-            if (!doc.isDeleteSupported()) {
+            // doc.isDeleteSupported always returned false,
+            // I don't know why and I don't know where to make it return true
+            /*if (!doc.isDeleteSupported()) {
                 Log.w(TAG, "Skipping " + doc);
                 hadTrouble = true;
                 continue;
-            }
+            }*/
 
             ContentProviderClient client = null;
             try {
                 client = DocumentsApplication.acquireUnstableProviderOrThrow(
                         resolver, doc.derivedUri.getAuthority());
 
-                if (Document.MIME_TYPE_DIR.equals(doc.mimeType)) {
+                if (doc.isDirectory()) {
                     // In order to delete a directory, we must delete its contents first. We
                     // recursively do so.
                     Uri contentsUri = DocumentsContract.buildChildDocumentsUri(
@@ -689,7 +691,6 @@ public class DirectoryFragment extends Fragment {
 
                     onDeleteDocumentsImpl(docsToDelete);
                 }
-
 
                 DocumentsContract.deleteDocument(client, doc.derivedUri);
             } catch (RemoteException e) {
