@@ -29,7 +29,7 @@ import android.content.pm.ThemeUtils;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
+import android.content.res.ThemeConfiguration;
 import android.content.res.Resources;
 import android.content.res.ResourcesKey;
 import android.hardware.display.DisplayManagerGlobal;
@@ -220,10 +220,10 @@ public class ResourcesManager {
         if (compatInfo.isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
             if (config.customTheme == null) {
                 try {
-                    config.customTheme = CustomTheme.getBootTheme(context.getContentResolver());
+                    config.customTheme = ThemeConfiguration.getBootTheme(context.getContentResolver());
                 } catch (Exception e) {
                     Slog.d(TAG, "CustomTheme.getBootTheme failed, falling back to system theme", e);
-                    config.customTheme = CustomTheme.getSystemTheme();
+                    config.customTheme = ThemeConfiguration.getSystemTheme();
                 }
             }
 
@@ -473,7 +473,7 @@ public class ResourcesManager {
      *         removed and the theme manager has yet to revert formally back to
      *         the framework default.
      */
-    private boolean attachThemeAssets(AssetManager assets, CustomTheme theme) {
+    private boolean attachThemeAssets(AssetManager assets, ThemeConfiguration theme) {
         PackageInfo piTheme = null;
         PackageInfo piTarget = null;
         PackageInfo piAndroid = null;
@@ -496,7 +496,7 @@ public class ResourcesManager {
 
         try {
             piTheme = getPackageManager().getPackageInfo(
-                    theme.getThemePackageNameForApp(basePackageName), 0, UserHandle.myUserId());
+                    theme.getStylePkgNameForApp(basePackageName), 0, UserHandle.myUserId());
             piTarget = getPackageManager().getPackageInfo(
                     basePackageName, 0, UserHandle.myUserId());
 
@@ -563,7 +563,7 @@ public class ResourcesManager {
      * @param theme
      * @return true if succes, false otherwise
      */
-    private boolean attachIconAssets(AssetManager assets, CustomTheme theme) {
+    private boolean attachIconAssets(AssetManager assets, ThemeConfiguration theme) {
         PackageInfo piIcon = null;
         try {
             piIcon = getPackageManager().getPackageInfo(theme.getIconPackPkgName(), 0, UserHandle.myUserId());
@@ -608,10 +608,10 @@ public class ResourcesManager {
      * @param theme
      * @return true if succes, false otherwise
      */
-    private boolean attachCommonAssets(AssetManager assets, CustomTheme theme) {
+    private boolean attachCommonAssets(AssetManager assets, ThemeConfiguration theme) {
         PackageInfo piTheme = null;
         try {
-            piTheme = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0,
+            piTheme = getPackageManager().getPackageInfo(theme.getStylePkgName(), 0,
                     UserHandle.myUserId());
         } catch (RemoteException e) {
         }

@@ -79,7 +79,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     /**
      * @hide
      */
-    public CustomTheme customTheme;
+    public ThemeConfiguration customTheme;
 
     /**
      * Locale should persist on setting.  This is hidden because it is really
@@ -416,28 +416,31 @@ public final class Configuration implements Parcelable, Comparable<Configuration
 
     /**
      * @hide
-     */
-    public static final int THEME_UNDEFINED = 0;
-
-    /**
-     * @hide
+     * @deprecated
      */
     public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
 
     /**
      * @hide
-     */
-    public static final String THEME_SYSTEMUI_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themeSysUiPkgName";
-
-    /**
-     * @hide
+     * @deprecated
      */
     public static final String THEME_ICONPACK_PACKAGE_NAME_PERSISTENCE_PROPERTY = "themeIconPackPkgName";
 
     /**
      * @hide
+     * @deprecated
      */
     public static final String THEME_FONT_PACKAGE_NAME_PERSISTENCE_PROPERTY = "themeFontPackPkgName";
+
+    /**
+     * @hide
+     * Serialized hashmap of app pkgnames and their set theme. An app may be installed on the device
+     * and not have a key in which case it should use the default theme.
+     * example: 'default' -> 'org.blue.theme'
+     *          'com.android.phone' -> 'com.red.theme'
+     *          'com.google.vending' -> 'com.white.theme'
+     */
+    public static final String THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY = "themePkgConfig";
 
     /**
      * Overall orientation of the screen.  May be one of
@@ -654,7 +657,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatSmallestScreenWidthDp = o.compatSmallestScreenWidthDp;
         seq = o.seq;
         if (o.customTheme != null) {
-            customTheme = (CustomTheme) o.customTheme.clone();
+            customTheme = (ThemeConfiguration) o.customTheme.clone();
         }
     }
 
@@ -966,7 +969,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (delta.customTheme != null
                 && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-            customTheme = (CustomTheme)delta.customTheme.clone();
+            customTheme = (ThemeConfiguration)delta.customTheme.clone();
         }
 
         return changed;
@@ -1201,7 +1204,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatScreenHeightDp = source.readInt();
         compatSmallestScreenWidthDp = source.readInt();
         seq = source.readInt();
-        customTheme = source.readParcelable(CustomTheme.class.getClassLoader());
+        customTheme = source.readParcelable(ThemeConfiguration.class.getClassLoader());
     }
     
     public static final Parcelable.Creator<Configuration> CREATOR
