@@ -268,14 +268,16 @@ class AppWidgetServiceImpl {
         final String action = intent.getAction();
         boolean added = false;
         boolean changed = false;
+        boolean unavailable = false;
         boolean providersModified = false;
         String pkgList[] = null;
         if (Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE.equals(action)) {
             pkgList = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_PACKAGE_LIST);
-            added = true;
+            changed = true;
         } else if (Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE.equals(action)) {
             pkgList = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_PACKAGE_LIST);
             added = false;
+            unavailable = true;
         } else {
             Uri uri = intent.getData();
             if (uri == null) {
@@ -314,7 +316,9 @@ class AppWidgetServiceImpl {
             Bundle extras = intent.getExtras();
             if (extras != null && extras.getBoolean(Intent.EXTRA_REPLACING, false)) {
                 // The package is being updated. We'll receive a PACKAGE_ADDED shortly.
-            } else {
+            } else if (!unavailable) {
+                // Do not remove packages that are in the sdcard, so it could be bound when
+                // it will be available again
                 synchronized (mAppWidgetIds) {
                     ensureStateLoadedLocked();
                     for (String pkgName : pkgList) {
@@ -1332,17 +1336,20 @@ class AppWidgetServiceImpl {
                     PackageManager.GET_META_DATA, mUserId);
 
             final int N = broadcastReceivers == null ? 0 : broadcastReceivers.size();
+            String state = Environment.getExternalStorageState();
+            final boolean externalMounted = Environment.MEDIA_MOUNTED.equals(state);
             for (int i = 0; i < N; i++) {
                 ResolveInfo ri = broadcastReceivers.get(i);
-                addProviderLocked(ri);
+                addProviderLocked(ri, externalMounted);
             }
         } catch (RemoteException re) {
             // Shouldn't happen, local call
         }
     }
 
-    boolean addProviderLocked(ResolveInfo ri) {
-        if ((ri.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
+    boolean addProviderLocked(ResolveInfo ri, boolean externalMounted) {
+        if (!externalMounted && (ri.activityInfo.applicationInfo.flags
+                & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
             return false;
         }
         if (!ri.activityInfo.isEnabled()) {
@@ -1350,7 +1357,7 @@ class AppWidgetServiceImpl {
         }
         Provider p = parseProviderInfoXml(new ComponentName(ri.activityInfo.packageName,
                 ri.activityInfo.name), ri);
-        if (p != null) {
+        if (p != null && !mInstalledProviders.contains(p)) {
             mInstalledProviders.add(p);
             return true;
         } else {
@@ -1666,6 +1673,7 @@ class AppWidgetServiceImpl {
                     out.startTag(null, "p");
                     out.attribute(null, "pkg", p.info.provider.getPackageName());
                     out.attribute(null, "cl", p.info.provider.getClassName());
+                    out.attribute(null, "uid", Integer.toHexString(p.uid));
                     out.endTag(null, "p");
                     p.tag = providerIndex;
                     providerIndex++;
@@ -1750,6 +1758,15 @@ class AppWidgetServiceImpl {
                         // as before?
                         String pkg = parser.getAttributeValue(null, "pkg");
                         String cl = parser.getAttributeValue(null, "cl");
+                        int uid = -1;
+                        try {
+                            String val = parser.getAttributeValue(null, "uid");
+                            if (val != null) {
+                                uid = Integer.parseInt(val, 16);
+                            }
+                        } catch (NumberFormatException nfe) {
+                            // Ignore
+                        }
 
                         final IPackageManager packageManager = AppGlobals.getPackageManager();
                         try {
@@ -1761,12 +1778,25 @@ class AppWidgetServiceImpl {
                         }
 
                         Provider p = lookupProviderLocked(new ComponentName(pkg, cl));
+                        String legacyPkg = null;
+                        try {
+                            legacyPkg = packageManager.getNameForUid(uid);
+                        } catch (RemoteException ex) {
+                            // Ignore
+                        }
                         if (p == null && mSafeMode) {
                             // if we're in safe mode, make a temporary one
                             p = new Provider();
                             p.info = new AppWidgetProviderInfo();
                             p.info.provider = new ComponentName(pkg, cl);
                             p.zombie = true;
+                            mInstalledProviders.add(p);
+                        } else if (p == null && (legacyPkg != null && legacyPkg.equals(pkg))) {
+                            // create a legacy widget
+                            p = new Provider();
+                            p.info = new AppWidgetProviderInfo();
+                            p.info.provider = new ComponentName(pkg, cl);
+                            p.uid = uid;
                             mInstalledProviders.add(p);
                         }
                         if (p != null) {
@@ -1971,14 +2001,17 @@ class AppWidgetServiceImpl {
             return false;
         }
         final int N = broadcastReceivers == null ? 0 : broadcastReceivers.size();
+        String state = Environment.getExternalStorageState();
+        final boolean externalMounted = Environment.MEDIA_MOUNTED.equals(state);
         for (int i = 0; i < N; i++) {
             ResolveInfo ri = broadcastReceivers.get(i);
             ActivityInfo ai = ri.activityInfo;
-            if ((ai.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
+            if (!externalMounted && (ai.applicationInfo.flags
+                    & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
                 continue;
             }
             if (pkgName.equals(ai.packageName)) {
-                addProviderLocked(ri);
+                addProviderLocked(ri, externalMounted);
                 providersAdded = true;
             }
         }
@@ -2009,17 +2042,20 @@ class AppWidgetServiceImpl {
 
         // add the missing ones and collect which ones to keep
         int N = broadcastReceivers == null ? 0 : broadcastReceivers.size();
+        String state = Environment.getExternalStorageState();
+        final boolean externalMounted = Environment.MEDIA_MOUNTED.equals(state);
         for (int i = 0; i < N; i++) {
             ResolveInfo ri = broadcastReceivers.get(i);
             ActivityInfo ai = ri.activityInfo;
-            if ((ai.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
+            if (!externalMounted && (ai.applicationInfo.flags
+                    & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
                 continue;
             }
             if (pkgName.equals(ai.packageName)) {
                 ComponentName component = new ComponentName(ai.packageName, ai.name);
                 Provider p = lookupProviderLocked(component);
                 if (p == null) {
-                    if (addProviderLocked(ri)) {
+                    if (addProviderLocked(ri, externalMounted)) {
                         keep.add(ai.name);
                         providersUpdated = true;
                     }
