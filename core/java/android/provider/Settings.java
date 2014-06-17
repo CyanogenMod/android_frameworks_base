@@ -6010,6 +6010,13 @@ public final class Settings {
         public static final String HOVER_HIDE_BUTTON = "hover_hide_button";
 
         /**
+         * Hover: long fade out delay, default is 5000ms (5s).
+         *
+         * @hide
+         */
+        public static final String HOVER_LONG_FADE_OUT_DELAY = "hover_long_fade_out_delay";
+
+        /**
          * Hover: Only show up if StatusBar is hidden, default is 1 (on).
          *
          * @hide
