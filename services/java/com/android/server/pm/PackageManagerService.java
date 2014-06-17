@@ -4043,29 +4043,28 @@ public class PackageManagerService extends IPackageManager.Stub {
             mDeferredDexOpt = null;
         }
         if (pkgs != null) {
-            final int[] i = {0};
-            final int pkgsSize = pkgs.size();
+            int i = 0;
             ExecutorService executorService = Executors.newFixedThreadPool(sNThreads);
-            final long start = System.currentTimeMillis();
             for (PackageParser.Package pkg : pkgs) {
+                if (!isFirstBoot()) {
+                    i++;
+                    try {
+                        ActivityManagerNative.getDefault().showBootMessage(
+                                mContext.getResources().getString(
+                                    com.android.internal.R.string.android_upgrading_apk,
+                                    i, pkgs.size()), true);
+                    } catch (RemoteException e) {
+                    }
+                }
                 final PackageParser.Package p = pkg;
                 synchronized (mInstallLock) {
                     if (!p.mDidDexOpt) {
                         executorService.submit(new Runnable() {
                             @Override
                             public void run() {
-                                if (!isFirstBoot()) {
-                                    i[0]++;
-                                    postBootMessageUpdate(i[0], pkgsSize);
-                                }
                                 performDexOptLI(p, false, false, true);
                             }
                         });
-                    } else {
-                        if (!isFirstBoot()) {
-                            i[0]++;
-                            postBootMessageUpdate(i[0], pkgsSize);
-                        }
                     }
                 }
             }
@@ -4075,18 +4074,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            final long time = System.currentTimeMillis() - start;
-            Slog.v("MIK", "Finished in "+time+" ms");
-        }
-    }
-
-    private void postBootMessageUpdate(int n, int total) {
-        try {
-            ActivityManagerNative.getDefault().showBootMessage(
-                    mContext.getResources().getString(
-                            com.android.internal.R.string.android_upgrading_apk,
-                            n, total), true);
-        } catch (RemoteException e) {
         }
     }
 
