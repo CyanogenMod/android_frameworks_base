@@ -175,6 +175,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -4043,30 +4044,30 @@ public class PackageManagerService extends IPackageManager.Stub {
             mDeferredDexOpt = null;
         }
         if (pkgs != null) {
-            final int[] i = {0};
+            final AtomicInteger i = new AtomicInteger(0);
             final int pkgsSize = pkgs.size();
             ExecutorService executorService = Executors.newFixedThreadPool(sNThreads);
-            final long start = System.currentTimeMillis();
             for (PackageParser.Package pkg : pkgs) {
                 final PackageParser.Package p = pkg;
                 synchronized (mInstallLock) {
-                    if (!p.mDidDexOpt) {
-                        executorService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!isFirstBoot()) {
-                                    i[0]++;
-                                    postBootMessageUpdate(i[0], pkgsSize);
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isFirstBoot()) {
+                                i.getAndIncrement();
+                                try {
+                                    ActivityManagerNative.getDefault().showBootMessage(
+                                        mContext.getResources().getString(
+                                            com.android.internal.R.string.android_upgrading_apk,
+                                            i.get(), pkgsSize), true);
+                                } catch (RemoteException e) {
                                 }
+                            }
+                            if (!p.mDidDexOpt) {
                                 performDexOptLI(p, false, false, true);
                             }
-                        });
-                    } else {
-                        if (!isFirstBoot()) {
-                            i[0]++;
-                            postBootMessageUpdate(i[0], pkgsSize);
                         }
-                    }
+                    });
                 }
             }
             executorService.shutdown();
@@ -4075,18 +4076,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            final long time = System.currentTimeMillis() - start;
-            Slog.v("MIK", "Finished in "+time+" ms");
-        }
-    }
-
-    private void postBootMessageUpdate(int n, int total) {
-        try {
-            ActivityManagerNative.getDefault().showBootMessage(
-                    mContext.getResources().getString(
-                            com.android.internal.R.string.android_upgrading_apk,
-                            n, total), true);
-        } catch (RemoteException e) {
         }
     }
 
