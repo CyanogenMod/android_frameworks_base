@@ -195,6 +195,10 @@
     <!-- Equalizer -->
     <string name="quick_settings_equalizer">Equalizer</string>
 
+    <!-- Hover Tile-->
+    <string name="quick_settings_hover">HOVER</string>
+    <string name="quick_settings_hover_off">HOVER OFF</string>
+
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Charging (<xliff:g id="percent">%d</xliff:g>%%)</string>
     <string name="pie_battery_status_full">Charged</string>
