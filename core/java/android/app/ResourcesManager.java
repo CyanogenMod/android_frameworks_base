@@ -216,6 +216,7 @@ public class ResourcesManager {
             config = getConfiguration();
         }
 
+        boolean iconsAttached = false;
         /* Attach theme information to the resulting AssetManager when appropriate. */
         if (compatInfo.isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
             if (config.customTheme == null) {
@@ -230,12 +231,12 @@ public class ResourcesManager {
             if (config.customTheme != null) {
                 attachThemeAssets(assets, config.customTheme);
                 attachCommonAssets(assets, config.customTheme);
-                attachIconAssets(assets, config.customTheme);
+                iconsAttached = attachIconAssets(assets, config.customTheme);
             }
         }
 
         r = new Resources(assets, dm, config, compatInfo, token);
-        setActivityIcons(r);
+        if (iconsAttached) setActivityIcons(r);
 
         if (false) {
             Slog.i(TAG, "Created app resources " + resDir + " " + r + ": "
@@ -321,7 +322,8 @@ public class ResourcesManager {
         ApplicationInfo appInfo = null;
 
         try {
-            pkgInfo = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES, UserHandle.myUserId());
+            pkgInfo = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES,
+                    UserHandle.getCallingUserId());
         } catch (RemoteException e1) {
             Log.e(TAG, "Unable to get pkg " + pkgName, e1);
             return;
@@ -417,8 +419,9 @@ public class ResourcesManager {
                         if (config.customTheme != null) {
                             attachThemeAssets(am, config.customTheme);
                             attachCommonAssets(am, config.customTheme);
-                            attachIconAssets(am, config.customTheme);
-                            setActivityIcons(r);
+                            if (attachIconAssets(am, config.customTheme)) {
+                                setActivityIcons(r);
+                            }
                         }
                     }
                 }
@@ -496,18 +499,20 @@ public class ResourcesManager {
 
         try {
             piTheme = getPackageManager().getPackageInfo(
-                    theme.getThemePackageNameForApp(basePackageName), 0, UserHandle.myUserId());
+                    theme.getThemePackageNameForApp(basePackageName), 0,
+                    UserHandle.getCallingUserId());
             piTarget = getPackageManager().getPackageInfo(
-                    basePackageName, 0, UserHandle.myUserId());
+                    basePackageName, 0, UserHandle.getCallingUserId());
 
             // Handle special case where a system app (ex trebuchet) may have had its pkg name
             // renamed during an upgrade. basePackageName would be the manifest value which will
             // fail on getPackageInfo(). resource pkg is assumed to have the original name
             if (piTarget == null && resourcePackageName != null) {
                 piTarget = getPackageManager().getPackageInfo(resourcePackageName,
-                        0, UserHandle.myUserId());
+                        0, UserHandle.getCallingUserId());
             }
-            piAndroid = getPackageManager().getPackageInfo("android", 0, UserHandle.myUserId());
+            piAndroid = getPackageManager().getPackageInfo("android", 0,
+                    UserHandle.getCallingUserId());
         } catch (RemoteException e) {
         }
 
@@ -566,7 +571,8 @@ public class ResourcesManager {
     private boolean attachIconAssets(AssetManager assets, CustomTheme theme) {
         PackageInfo piIcon = null;
         try {
-            piIcon = getPackageManager().getPackageInfo(theme.getIconPackPkgName(), 0, UserHandle.myUserId());
+            piIcon = getPackageManager().getPackageInfo(theme.getIconPackPkgName(), 0,
+                    UserHandle.getCallingUserId());
         } catch (RemoteException e) {
         }
 
@@ -612,7 +618,7 @@ public class ResourcesManager {
         PackageInfo piTheme = null;
         try {
             piTheme = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0,
-                    UserHandle.myUserId());
+                    UserHandle.getCallingUserId());
         } catch (RemoteException e) {
         }
 
