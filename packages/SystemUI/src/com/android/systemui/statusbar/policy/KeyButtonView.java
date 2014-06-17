@@ -116,9 +116,9 @@ public class KeyButtonView extends ImageView {
         mPm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     }
 
-    public void updateResources() {
+    public void updateResources(Resources res) {
         if (mGlowBgId != 0) {
-            mGlowBG = mContext.getResources().getDrawable(mGlowBgId);
+            mGlowBG = res.getDrawable(mGlowBgId);
         }
     }
 
