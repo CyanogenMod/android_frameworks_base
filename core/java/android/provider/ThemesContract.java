@@ -169,6 +169,20 @@ public class ThemesContract {
         public static final String MODIFIES_OVERLAYS = "mods_overlays";
 
         /**
+         * 1 if theme has an overlay for SystemUI/StatusBar
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_STATUS_BAR = "mods_status_bar";
+
+        /**
+         * 1 if theme has an overlay for SystemUI/NavBar
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_NAVIGATION_BAR = "mods_navigation_bar";
+
+        /**
          * URI to the theme's wallpaper. We should support multiple wallpaper
          * but for now we will just have 1.
          * <P>Type: TEXT</P>
@@ -247,6 +261,7 @@ public class ThemesContract {
         public static final String KEY_NOTIFICATIONS = "mixnmatch_notifications";
         public static final String KEY_RINGTONE = "mixnmatch_ringtone";
         public static final String KEY_OVERLAYS = "mixnmatch_overlays";
+        public static final String KEY_NAVIGATION_BAR = "mixnmatch_navigation_bar";
 
         public static final String[] ROWS = { KEY_HOMESCREEN,
             KEY_LOCKSCREEN,
@@ -257,7 +272,8 @@ public class ThemesContract {
             KEY_NOTIFICATIONS,
             KEY_RINGTONE,
             KEY_ALARM,
-            KEY_OVERLAYS
+            KEY_OVERLAYS,
+            KEY_NAVIGATION_BAR
         };
 
         /**
@@ -285,6 +301,12 @@ public class ThemesContract {
                 throw new IllegalArgumentException("Ringtone mixnmatch component does not have a related column");
             } else if (component.equals(MixnMatchColumns.KEY_OVERLAYS)) {
                 return ThemesColumns.OVERLAYS_URI;
+            } else if (component.equals(MixnMatchColumns.KEY_STATUS_BAR)) {
+                throw new IllegalArgumentException(
+                        "Status bar mixnmatch component does not have a related column");
+            } else if (component.equals(MixnMatchColumns.KEY_NAVIGATION_BAR)) {
+                throw new IllegalArgumentException(
+                        "Navigation bar mixnmatch component does not have a related column");
             }
             return null;
         }
@@ -312,6 +334,10 @@ public class ThemesContract {
                 return MixnMatchColumns.KEY_RINGTONE;
             } else if (component.equals(ThemesColumns.MODIFIES_OVERLAYS)) {
                 return MixnMatchColumns.KEY_OVERLAYS;
+            } else if (component.equals(ThemesColumns.MODIFIES_STATUS_BAR)) {
+                return MixnMatchColumns.KEY_STATUS_BAR;
+            } else if (component.equals(ThemesColumns.MODIFIES_NAVIGATION_BAR)) {
+                return MixnMatchColumns.KEY_NAVIGATION_BAR;
             }
             return null;
         }
@@ -339,6 +365,10 @@ public class ThemesContract {
                 return ThemesColumns.MODIFIES_RINGTONES;
             } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_OVERLAYS)) {
                 return ThemesColumns.MODIFIES_OVERLAYS;
+            } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_STATUS_BAR)) {
+                return ThemesColumns.MODIFIES_STATUS_BAR;
+            } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_NAVIGATION_BAR)) {
+                return ThemesColumns.MODIFIES_NAVIGATION_BAR;
             }
             return null;
         }
