@@ -563,10 +563,6 @@ void Caches::resetBoundTextures() {
     memset(mBoundTextures, 0, REQUIRED_TEXTURE_UNITS_COUNT * sizeof(GLuint));
 }
 
-uint32_t Caches::getBoundTexture() {
-    return mBoundTextures[mTextureUnit];
-}
-
 void Caches::unbindTexture(GLuint texture) {
     for (int i = 0; i < REQUIRED_TEXTURE_UNITS_COUNT; i++) {
         if (mBoundTextures[i] == texture) {
