@@ -45,6 +45,12 @@ import java.util.Map;
 public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfig> {
     public static final String TAG = ThemeConfig.class.getCanonicalName();
     public static final String HOLO_DEFAULT = "holo";
+
+    /**
+     * Special package name for theming the navbar separate from the rest of SystemUI
+     */
+    public static final String SYSTEMUI_NAVBAR_PKG = "com.android.systemui.navbar";
+
     // Key for any app which does not have a specific theme applied
     private static final String KEY_DEFAULT_PKG = "default";
     private static final HoloConfig mHoloConfig = new HoloConfig();
