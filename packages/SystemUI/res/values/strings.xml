@@ -485,7 +485,7 @@
     <!-- QuickSettings: Time [CHAR LIMIT=NONE] -->
     <string name="quick_settings_time_label">Time</string>
     <!-- QuickSettings: User [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_user_label">Me</string>
+    <string name="quick_settings_user_label">Owner</string>
     <!-- QuickSettings: Wifi [CHAR LIMIT=NONE] -->
     <string name="quick_settings_wifi_label">Wi-Fi</string>
     <!-- QuickSettings: Wifi (Not connected) [CHAR LIMIT=NONE] -->
