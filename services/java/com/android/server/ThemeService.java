@@ -233,10 +233,7 @@ public class ThemeService extends IThemeService.Stub {
         final ContentResolver resolver = mContext.getContentResolver();
         final String defaultThemePkg = Settings.Secure.getString(resolver,
                 Settings.Secure.DEFAULT_THEME_PACKAGE);
-        final boolean shouldApply = !TextUtils.isEmpty(defaultThemePkg) &&
-                Settings.Secure.getInt(resolver,
-                        Settings.Secure.DEFAULT_THEME_APPLIED_ON_FIRST_BOOT, 0) == 0;
-        if (shouldApply) {
+        if (!TextUtils.isEmpty(defaultThemePkg)) {
             String defaultThemeComponents = Settings.Secure.getString(resolver,
                     Settings.Secure.DEFAULT_THEME_COMPONENTS);
             List<String> components;
@@ -257,8 +254,6 @@ public class ThemeService extends IThemeService.Stub {
             }
             try {
                 requestThemeChange(defaultThemePkg, components);
-                Settings.Secure.putInt(resolver,
-                        Settings.Secure.DEFAULT_THEME_APPLIED_ON_FIRST_BOOT, 1);
             } catch (RemoteException e) {
                 Log.w(TAG, "Unable to set default theme", e);
             }
