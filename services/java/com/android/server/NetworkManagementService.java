@@ -177,6 +177,9 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     private HashMap<String, Long> mActiveQuotas = Maps.newHashMap();
     /** Set of interfaces with active alerts. */
     private HashMap<String, Long> mActiveAlerts = Maps.newHashMap();
+
+    /** Set of interfaces with interfaceAddress. */
+    private HashMap<String, NetworkInterface> mCachedAddressForNat = Maps.newHashMap();
     /** Set of UIDs with active reject rules. */
     private SparseBooleanArray mUidRejectOnQuota = new SparseBooleanArray();
 
@@ -1040,9 +1043,16 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     private void modifyNat(String action, String internalInterface, String externalInterface)
             throws SocketException {
         final Command cmd = new Command("nat", action, internalInterface, externalInterface);
+        boolean enabled = action.equals("enable");
+        NetworkInterface internalNetworkInterface = null;
+        if (enabled) {
+            internalNetworkInterface = NetworkInterface.getByName(internalInterface);
+            mCachedAddressForNat.put(internalInterface, internalNetworkInterface);
+        } else {
+            internalNetworkInterface = mCachedAddressForNat.get(internalInterface);
+            mCachedAddressForNat.remove(internalInterface);
+        }
 
-        final NetworkInterface internalNetworkInterface = NetworkInterface.getByName(
-                internalInterface);
         if (internalNetworkInterface == null) {
             cmd.appendArg("0");
         } else {
