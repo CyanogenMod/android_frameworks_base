@@ -813,6 +813,26 @@ final class ApplicationPackageManager extends PackageManager {
 
     /** @hide */
     @Override
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+                                                            String themePackageName, int userId)
+            throws NameNotFoundException {
+        if (userId < 0) {
+            throw new IllegalArgumentException(
+                    "Call does not support special user #" + userId);
+        }
+        try {
+            ApplicationInfo ai = mPM.getApplicationInfo(appPackageName, 0, userId);
+            if (ai != null) {
+                return getThemedResourcesForApplication(ai, themePackageName);
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+        throw new NameNotFoundException("Package " + appPackageName + " doesn't exist");
+    }
+
+    /** @hide */
+    @Override
     public Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
             throws NameNotFoundException {
         if (userId < 0) {
