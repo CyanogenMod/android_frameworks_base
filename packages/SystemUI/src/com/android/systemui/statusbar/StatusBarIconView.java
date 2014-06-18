@@ -195,7 +195,9 @@ public class StatusBarIconView extends AnimatedImageView {
                     userId = UserHandle.USER_OWNER;
                 }
                 r = context.getPackageManager()
-                        .getResourcesForApplicationAsUser(icon.iconPackage, userId);
+                        .getThemedResourcesForApplicationAsUser(icon.iconPackage,
+                                context.getResources().getConfiguration().themeConfig
+                                        .getOverlayPkgNameForApp(context.getPackageName()), userId);
             } catch (PackageManager.NameNotFoundException ex) {
                 Log.e(TAG, "Icon package not found: " + icon.iconPackage);
                 return null;
