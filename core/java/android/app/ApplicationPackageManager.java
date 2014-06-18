@@ -789,6 +789,28 @@ final class ApplicationPackageManager extends PackageManager {
     }
 
     /** @hide */
+    @Override
+    public Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
+            throws NameNotFoundException {
+        if (userId < 0) {
+            throw new IllegalArgumentException(
+                    "Call does not support special user #" + userId);
+        }
+        if ("system".equals(appPackageName)) {
+            return mContext.mMainThread.getSystemContext().getResources();
+        }
+        try {
+            ApplicationInfo ai = mPM.getApplicationInfo(appPackageName, 0, userId);
+            if (ai != null) {
+                return getResourcesForApplication(ai);
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+        throw new NameNotFoundException("Package " + appPackageName + " doesn't exist");
+    }
+
+    /** @hide */
     @Override public Resources getThemedResourcesForApplication(
             ApplicationInfo app, String themePkgName) throws NameNotFoundException {
         if (app.packageName.equals("system")) {
@@ -813,19 +835,16 @@ final class ApplicationPackageManager extends PackageManager {
 
     /** @hide */
     @Override
-    public Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
-            throws NameNotFoundException {
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePackageName, int userId) throws NameNotFoundException {
         if (userId < 0) {
             throw new IllegalArgumentException(
                     "Call does not support special user #" + userId);
         }
-        if ("system".equals(appPackageName)) {
-            return mContext.mMainThread.getSystemContext().getResources();
-        }
         try {
             ApplicationInfo ai = mPM.getApplicationInfo(appPackageName, 0, userId);
             if (ai != null) {
-                return getResourcesForApplication(ai);
+                return getThemedResourcesForApplication(ai, themePackageName);
             }
         } catch (RemoteException e) {
             throw new RuntimeException("Package manager has died", e);
