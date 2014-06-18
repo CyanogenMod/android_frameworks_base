@@ -2642,6 +2642,12 @@ public abstract class PackageManager {
             throws NameNotFoundException;
 
     /** @hide */
+    public abstract Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+                                                                     String themePkgName,
+                                                                     int userId)
+            throws NameNotFoundException;
+
+    /** @hide */
     public abstract Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
             throws NameNotFoundException;
 
