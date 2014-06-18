@@ -47,6 +47,7 @@ import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
+import android.telephony.ServiceState;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -81,6 +82,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
 
         private final String DEFAULT = "default";
         private final String WAP = "wap";
+        private final String LTE = "lte";
 
         private final Uri PREFERAPN_URI = Uri.parse("content://telephony/carriers/preferapn");
         private final String APN_ID = "apn_id";
@@ -144,10 +146,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             Integer icon = mApnIconMap.get(apn.toLowerCase());
             if (icon != null) {
                 iconId = icon;
-            }
-
-            //if there is no records in apn settings, show ctwap icon as default.
-            if (getSelectedApnKey() == null) {
+            } else {
                 iconId = R.drawable.ic_qs_apn_ctwap;
             }
         }
@@ -232,7 +231,8 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                         for (int i = 0; i < apnList.size(); i++) {
                             Apn apn = apnList.get(i);
                             if (apn.type != null && apn.type.contains(DEFAULT)
-                                    && apn.apn != null && apn.apn.toLowerCase().contains(WAP)) {
+                                    && apn.apn != null && (apn.apn.toLowerCase().contains(WAP)
+                                    || apn.apn.toLowerCase().contains(LTE))) {
                                 switchToNextApn(apn);
                             }
                         }
@@ -282,10 +282,11 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             } else {
                 netType = TelephonyManager.getDefault().getNetworkType();
             }
-            Log.d(TAG, "Current RAT type is " + netType);
 
             //UI should filter APN by bearer and enable status
-            where += "and (bearer=\"" + netType + "\" or bearer =\"" + 0 + "\")";
+            int radioType = convertNetworkTypeToRilRadioType(netType);
+            Log.d(TAG, "Current RAT type is " + radioType);
+            where += "and (bearer=\"" + radioType + "\" or bearer =\"" + 0 + "\")";
             where += " and carrier_enabled = 1";
 
             if (DEBUG) Log.d(TAG, "getOperatorNumericSelection: " + where);
@@ -414,6 +415,10 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                         refreshApnTile();
                     }
                 }
+            } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
+                if (mApnState.enabled) {
+                    refreshApnTile();
+                }
             } else if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)) {
                 if (intent.getBooleanExtra("state", false)) {
                     // The airplane mode is on, set the view as gone.
@@ -496,6 +501,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
             // If the new state is on, we need set the views as gone.
             IntentFilter filter = new IntentFilter(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
             filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+            filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
             context.registerReceiver(new SimStateChangedReceiver(), filter);
         }
 
@@ -817,4 +823,33 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
 
         refreshDdsTile();
     }
+
+    private int convertNetworkTypeToRilRadioType(int networkType) {
+        int ret = ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN;
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+                ret = ServiceState.RIL_RADIO_TECHNOLOGY_1xRTT;
+                break;
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                ret = ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_0;
+                break;
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                ret = ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_A;
+                break;
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                ret = ServiceState.RIL_RADIO_TECHNOLOGY_EVDO_B;
+                break;
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+                ret = ServiceState.RIL_RADIO_TECHNOLOGY_EHRPD;
+                break;
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                ret = ServiceState.RIL_RADIO_TECHNOLOGY_LTE;
+                break;
+            default:
+                ret = networkType;
+                break;
+        }
+        return ret;
+    }
+
 }
