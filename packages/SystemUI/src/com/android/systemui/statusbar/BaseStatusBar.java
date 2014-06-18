@@ -763,10 +763,14 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         View contentViewLocal = null;
         View bigContentViewLocal = null;
+        String themePackageName = mContext.getResources().getConfiguration()
+                .themeConfig.getOverlayPkgNameForApp(mContext.getPackageName());
         try {
-            contentViewLocal = contentView.apply(mContext, adaptive, mOnClickHandler);
+            contentViewLocal = contentView.apply(mContext, adaptive, mOnClickHandler,
+                    themePackageName);
             if (bigContentView != null) {
-                bigContentViewLocal = bigContentView.apply(mContext, adaptive, mOnClickHandler);
+                bigContentViewLocal = bigContentView.apply(mContext, adaptive, mOnClickHandler,
+                        themePackageName);
             }
         }
         catch (RuntimeException e) {
