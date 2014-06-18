@@ -25,6 +25,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.database.ContentObserver;
 import android.hardware.location.GeofenceHardware;
 import android.hardware.location.GeofenceHardwareImpl;
 import android.location.Criteria;
@@ -361,6 +362,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private final ConnectivityManager mConnMgr;
     private final GpsNetInitiatedHandler mNIHandler;
 
+    private String mDefaultApn;
+
     // Wakelocks
     private final static String WAKELOCK_KEY = "GpsLocationProvider";
     private final PowerManager.WakeLock mWakeLock;
@@ -642,6 +645,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
         intentFilter.addAction(ALARM_TIMEOUT);
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         mContext.registerReceiver(mBroadcastReciever, intentFilter, null, mHandler);
+        Uri uri = Uri.parse("content://telephony/carriers/preferapn");
+        mContext.getContentResolver().registerContentObserver(
+                uri, false, mDefaultApnObserver);
     }
 
     /**
@@ -697,14 +703,13 @@ public class GpsLocationProvider implements LocationProviderInterface {
             boolean dataEnabled = Settings.Global.getInt(mContext.getContentResolver(),
                                                          Settings.Global.MOBILE_DATA, 1) == 1;
             boolean networkAvailable = info.isAvailable() && dataEnabled;
-            String defaultApn = getSelectedApn();
-            if (defaultApn == null) {
-                defaultApn = "dummy-apn";
-            }
 
+            if (mDefaultApn == null) {
+                mDefaultApn = getDefaultApn();
+            }
             native_update_network_state(info.isConnected(), info.getType(),
                                         info.isRoaming(), networkAvailable,
-                                        info.getExtraInfo(), defaultApn);
+                                        info.getExtraInfo(), mDefaultApn);
         }
 
         if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE_SUPL
@@ -2041,6 +2046,14 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
     };
 
+    ContentObserver mDefaultApnObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            mDefaultApn = getDefaultApn();
+            if (DEBUG) Log.d(TAG, "Observer mDefaultApn=" + mDefaultApn);
+        }
+    };
+
     private final class NetworkLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -2057,7 +2070,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         public void onProviderDisabled(String provider) { }
     }
 
-    private String getSelectedApn() {
+    private String getDefaultApn() {
         Uri uri = Uri.parse("content://telephony/carriers/preferapn");
         String apn = null;
 
@@ -2073,6 +2086,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 cursor.close();
             }
         }
+
+        if (apn == null) {
+            apn = "dummy-apn";
+        }
+
         return apn;
     }
 
