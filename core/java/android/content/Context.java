@@ -2913,6 +2913,18 @@ public abstract class Context {
             throws PackageManager.NameNotFoundException;
 
     /**
+     * Similar to {@link #createPackageContext(String, int)}, but with a
+     * different {@link UserHandle}. For example, {@link #getContentResolver()}
+     * will open any {@link Uri} as the given user.  A theme package can be
+     * specified which will be used when adding resources to this context
+     *
+     * @hide
+     */
+    public abstract Context createPackageContextAsUser(
+            String packageName, String themePackageName, int flags, UserHandle user)
+            throws PackageManager.NameNotFoundException;
+
+    /**
      * Get the userId associated with this context
      * @return user id
      *
