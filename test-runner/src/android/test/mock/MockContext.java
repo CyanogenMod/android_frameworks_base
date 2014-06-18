@@ -559,6 +559,13 @@ public class MockContext extends Context {
 
     /** {@hide} */
     @Override
+    public Context createPackageContextAsUser(String packageName, String themePackageName,
+            int flags, UserHandle user) throws PackageManager.NameNotFoundException {
+        throw new UnsupportedOperationException();
+    }
+
+    /** {@hide} */
+    @Override
     public int getUserId() {
         throw new UnsupportedOperationException();
     }
