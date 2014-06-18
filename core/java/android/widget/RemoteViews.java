@@ -2402,11 +2402,17 @@ public class RemoteViews implements Parcelable, Filter {
 
     /** @hide */
     public View apply(Context context, ViewGroup parent, OnClickHandler handler) {
+        return apply(context, parent, handler, null);
+    }
+
+    /** @hide */
+    public View apply(Context context, ViewGroup parent, OnClickHandler handler,
+            String themePackageName) {
         RemoteViews rvToApply = getRemoteViewsToApply(context);
 
         View result;
 
-        Context c = prepareContext(context);
+        Context c = prepareContext(context, themePackageName);
 
         LayoutInflater inflater = (LayoutInflater)
                 c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -2447,7 +2453,7 @@ public class RemoteViews implements Parcelable, Filter {
             }
         }
 
-        prepareContext(context);
+        prepareContext(context, null);
         rvToApply.performApply(v, (ViewGroup) v.getParent(), handler);
     }
 
@@ -2462,14 +2468,14 @@ public class RemoteViews implements Parcelable, Filter {
         }
     }
 
-    private Context prepareContext(Context context) {
+    private Context prepareContext(Context context, String themePackageName) {
         Context c;
         String packageName = mPackage;
 
         if (packageName != null) {
             try {
-                c = context.createPackageContextAsUser(
-                        packageName, Context.CONTEXT_RESTRICTED, mUser);
+                c = context.createPackageContextAsUser(packageName, themePackageName,
+                        Context.CONTEXT_RESTRICTED, mUser);
             } catch (NameNotFoundException e) {
                 Log.e(LOG_TAG, "Package name " + packageName + " not found");
                 c = context;
