@@ -421,6 +421,7 @@ public class MSimNetworkController extends NetworkController {
             for (int i = 0; i < mMobileLabelViews.size(); i++) {
                 TextView v = mMobileLabelViews.get(i);
                 v.setText(carrierName);
+                v.setVisibility(View.VISIBLE);
             }
         }
     }
