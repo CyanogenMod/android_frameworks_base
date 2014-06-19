@@ -22,6 +22,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -42,6 +43,7 @@ import android.graphics.drawable.LevelListDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.ThemesContract;
 import android.util.Log;
 import android.util.Pair;
 import android.view.ActionMode;
@@ -122,7 +124,7 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
             boolean finishActivityWhenDone = true;
             OnBitmapCroppedHandler h = new OnBitmapCroppedHandler() {
                 public void onBitmapCropped(byte[] imageBytes) {
-                    Point thumbSize = getDefaultThumbnailSize(a.getResources());
+                    Point thumbSize = Utilities.getDefaultThumbnailSize(a.getResources());
                     // rotation is set to 0 since imageBytes has already been correctly rotated
                     Bitmap thumb = createThumbnail(
                             thumbSize, null, null, imageBytes, null, 0, 0, true);
@@ -294,6 +296,11 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
         mSavedImages = new SavedWallpaperImages(this);
         mSavedImages.loadThumbnailsAndImageIdList();
         populateWallpapersFromAdapter(mWallpapersView, mSavedImages, true, true);
+
+        // theme wallpapers
+        ArrayList<ThemeWallpaperInfo> themeWallpapers = findThemeWallpapers();
+        ThemeWallpapersAdapter twa = new ThemeWallpapersAdapter(this, themeWallpapers);
+        populateWallpapersFromAdapter(mWallpapersView, twa, false, false);
 
         // Populate the live wallpapers
         final LinearLayout liveWallpapersView =
@@ -560,12 +567,6 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
         }
     }
 
-    private static Point getDefaultThumbnailSize(Resources res) {
-        return new Point(res.getDimensionPixelSize(R.dimen.wallpaperThumbnailWidth),
-                res.getDimensionPixelSize(R.dimen.wallpaperThumbnailHeight));
-
-    }
-
     private static Bitmap createThumbnail(Point size, Context context, Uri uri, byte[] imageBytes,
             Resources res, int resId, int rotation, boolean leftAligned) {
         int width = size.x;
@@ -614,7 +615,7 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
 
         // Load the thumbnail
         ImageView image = (ImageView) pickedImageThumbnail.findViewById(R.id.wallpaper_image);
-        Point defaultSize = getDefaultThumbnailSize(this.getResources());
+        Point defaultSize = Utilities.getDefaultThumbnailSize(this.getResources());
         int rotation = WallpaperCropActivity.getRotationFromExif(this, uri);
         Bitmap thumb = createThumbnail(defaultSize, this, uri, null, null, 0, rotation, false);
         if (thumb != null) {
@@ -689,6 +690,41 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
         return bundledWallpapers;
     }
 
+    private ArrayList<ThemeWallpaperInfo> findThemeWallpapers() {
+        ArrayList<ThemeWallpaperInfo> themeWallpapers =
+                new ArrayList<ThemeWallpaperInfo>();
+        ContentResolver cr = getContentResolver();
+        String[] projection = {ThemesContract.ThemesColumns.PKG_NAME,
+                ThemesContract.ThemesColumns.IS_LEGACY_THEME};
+        String selection = ThemesContract.ThemesColumns.MODIFIES_LAUNCHER + "=? AND " +
+                ThemesContract.ThemesColumns.PKG_NAME + "!=?";
+        String[] selectoinArgs = {"1", "default"};
+        String sortOrder = null;
+        Cursor c = cr.query(ThemesContract.ThemesColumns.CONTENT_URI, projection, selection,
+                selectoinArgs, sortOrder);
+        if (c != null) {
+            Bitmap bmp;
+            while (c.moveToNext()) {
+                String pkgName = c.getString(
+                        c.getColumnIndexOrThrow(ThemesContract.ThemesColumns.PKG_NAME));
+                boolean isLegacy = c.getInt(c.getColumnIndexOrThrow(
+                        ThemesContract.ThemesColumns.IS_LEGACY_THEME)) == 1;
+                bmp = Utilities.getThemeWallpaper(this, "wallpapers", pkgName, isLegacy,
+                        true /* thumb*/);
+                if (bmp != null) {
+                    themeWallpapers.add(
+                            new ThemeWallpaperInfo(this, pkgName, isLegacy,
+                                    new BitmapDrawable(getResources(), bmp)));
+
+                    Log.d("", String.format("Loaded bitmap of size %dx%d for %s",
+                            bmp.getWidth(), bmp.getHeight(), pkgName));
+                }
+            }
+            c.close();
+        }
+        return themeWallpapers;
+    }
+
     private ResourceWallpaperInfo getDefaultWallpaperInfo() {
         Resources sysRes = Resources.getSystem();
         int resId = sysRes.getIdentifier("default_wallpaper", "drawable", "android");
@@ -701,7 +737,7 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
             defaultWallpaperExists = true;
         } else {
             Resources res = getResources();
-            Point defaultThumbSize = getDefaultThumbnailSize(res);
+            Point defaultThumbSize = Utilities.getDefaultThumbnailSize(res);
             int rotation = WallpaperCropActivity.getRotationFromExif(res, resId);
             thumb = createThumbnail(
                     defaultThumbSize, this, null, null, sysRes, resId, rotation, false);
@@ -838,5 +874,35 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
         }
 
         return view;
+    }
+
+    private static class ThemeWallpapersAdapter extends BaseAdapter implements ListAdapter {
+        private LayoutInflater mLayoutInflater;
+        private ArrayList<ThemeWallpaperInfo> mWallpapers;
+
+        ThemeWallpapersAdapter(Activity activity, ArrayList<ThemeWallpaperInfo> wallpapers) {
+            mLayoutInflater = activity.getLayoutInflater();
+            mWallpapers = wallpapers;
+        }
+
+        public int getCount() {
+            return mWallpapers.size();
+        }
+
+        public ThemeWallpaperInfo getItem(int position) {
+            return mWallpapers.get(position);
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Drawable thumb = mWallpapers.get(position).mThumb;
+            if (thumb == null) {
+                Log.e(TAG, "Error decoding thumbnail for wallpaper #" + position);
+            }
+            return createImageTileView(mLayoutInflater, position, convertView, parent, thumb);
+        }
     }
 }
