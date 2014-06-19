@@ -472,10 +472,13 @@ public class KeyguardTransportControlView extends FrameLayout {
 
         final String remoteClientPackage = mRemoteController.getRemoteControlClientPackageName();
         Drawable badgeIcon = null;
-        try {
-            badgeIcon = getContext().getPackageManager().getApplicationIcon(remoteClientPackage);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "Couldn't get remote control client package icon", e);
+        if (remoteClientPackage != null) {
+            try {
+                badgeIcon = getContext().getPackageManager()
+                        .getApplicationIcon(remoteClientPackage);
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e(TAG, "Couldn't get remote control client package icon", e);
+            }
         }
         setBadgeIcon(badgeIcon);
 
