@@ -22,6 +22,9 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -34,6 +37,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,6 +54,7 @@ import com.android.photos.BitmapRegionTileSource;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,6 +92,73 @@ public class WallpaperCropActivity extends Activity {
             if (isNamelessWallpaper()) {
                 mView.setContentDescription(label);
             }
+        }
+    }
+
+    /**
+     * For themes which have regular wallpapers
+     */
+    public static class ThemeWallpaperInfo extends WallpaperTileInfo {
+        String mPackageName;
+        boolean mIsLegacy;
+        Drawable mThumb;
+        Context mContext;
+
+        public ThemeWallpaperInfo(Context context, String packageName, boolean legacy,
+                                  Drawable thumb) {
+            this.mContext = context;
+            this.mPackageName = packageName;
+            this.mIsLegacy = legacy;
+            this.mThumb = thumb;
+        }
+
+        @Override
+        public void onClick(WallpaperCropActivity a) {
+            CropView v = a.getCropView();
+            try {
+                BitmapRegionTileSource source = null;
+                if (mIsLegacy) {
+                    final PackageManager pm = a.getPackageManager();
+                    PackageInfo pi = pm.getPackageInfo(mPackageName, 0);
+                    Resources res = a.getPackageManager().getResourcesForApplication(mPackageName);
+                    int resId = pi.legacyThemeInfos[0].wallpaperResourceId;
+
+                    int rotation = WallpaperCropActivity.getRotationFromExif(res, resId);
+                    source = new BitmapRegionTileSource(
+                            res, a, resId, 1024, rotation);
+                } else {
+                    Resources res = a.getPackageManager().getResourcesForApplication(mPackageName);
+                    if (res == null) {
+                        return;
+                    }
+
+                    int rotation = 0;
+                    source = new BitmapRegionTileSource(
+                            res, a, "wallpapers", 1024, rotation, true);
+                }
+                v.setTileSource(source, null);
+                v.setTouchEnabled(true);
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+        }
+
+        @Override
+        public void onSave(WallpaperCropActivity a) {
+            a.cropImageAndSetWallpaper(
+                    "wallpapers",
+                    mPackageName,
+                    mIsLegacy,
+                    true);
+        }
+
+        @Override
+        public boolean isNamelessWallpaper() {
+            return true;
+        }
+
+        @Override
+        public boolean isSelectable() {
+            return true;
         }
     }
 
@@ -403,6 +475,18 @@ public class WallpaperCropActivity extends Activity {
         Resources mResources;
         OnBitmapCroppedHandler mOnBitmapCroppedHandler;
         boolean mNoCrop;
+        boolean mImageFromAsset;
+
+        public BitmapCropTask(Context c, Resources res , String assetPath,
+                              RectF cropBounds, int rotation, int outWidth, int outHeight,
+                              boolean setWallpaper, boolean saveCroppedBitmap, Runnable onEndRunnable) {
+            mContext = c;
+            mResources = res;
+            mInFilePath = assetPath;
+            mImageFromAsset = true;
+            init(cropBounds, rotation,
+                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, onEndRunnable);
+        }
 
         public BitmapCropTask(Context c, String filePath,
                 RectF cropBounds, int rotation, int outWidth, int outHeight,
@@ -465,13 +549,21 @@ public class WallpaperCropActivity extends Activity {
 
         // Helper to setup input stream
         private void regenerateInputStream() {
-            if (mInUri == null && mInResId == 0 && mInFilePath == null && mInImageBytes == null) {
+            if (mInUri == null && mInResId == 0 && mInFilePath == null && mInImageBytes == null && !mImageFromAsset) {
                 Log.w(LOGTAG, "cannot read original file, no input URI, resource ID, or " +
                         "image byte array given");
             } else {
                 Utils.closeSilently(mInStream);
                 try {
-                    if (mInUri != null) {
+                    if (mImageFromAsset) {
+                        AssetManager am = mResources.getAssets();
+                        String[] pathImages = am.list(mInFilePath);
+                        if (pathImages == null || pathImages.length == 0) {
+                            throw new IOException("did not find any images in path: " + mInFilePath);
+                        }
+                        InputStream is = am.open(mInFilePath + File.separator + pathImages[0]);
+                        mInStream = new BufferedInputStream(is);
+                    } else if (mInUri != null) {
                         mInStream = new BufferedInputStream(
                                 mContext.getContentResolver().openInputStream(mInUri));
                     } else if (mInFilePath != null) {
@@ -484,6 +576,8 @@ public class WallpaperCropActivity extends Activity {
                                 mResources.openRawResource(mInResId));
                     }
                 } catch (FileNotFoundException e) {
+                    Log.w(LOGTAG, "cannot read file: " + mInUri.toString(), e);
+                } catch (IOException e) {
                     Log.w(LOGTAG, "cannot read file: " + mInUri.toString(), e);
                 }
             }
@@ -700,6 +794,49 @@ public class WallpaperCropActivity extends Activity {
             if (mOnEndRunnable != null) {
                 mOnEndRunnable.run();
             }
+        }
+    }
+
+    protected void cropImageAndSetWallpaper(String path, String packageName, final boolean legacy,
+                                            final boolean finishActivityWhenDone) {
+        Point outSize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(outSize);
+
+        final int outWidth = outSize.x;
+        final int outHeight = outSize.y;
+        Runnable onEndCrop = new Runnable() {
+            public void run() {
+                if (finishActivityWhenDone) {
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+            }
+        };
+
+        RectF cropRect = new RectF(mCropView.getCrop());
+        BitmapCropTask cropTask = null;
+        try {
+            if (legacy) {
+                final PackageManager pm = getPackageManager();
+                PackageInfo pi = pm.getPackageInfo(packageName, 0);
+                Resources res = getPackageManager().getResourcesForApplication(packageName);
+                int resId = pi.legacyThemeInfos[0].wallpaperResourceId;
+                cropTask = new BitmapCropTask(this, res, resId,
+                        cropRect, 0, outWidth, outHeight, true, false, onEndCrop);
+            } else {
+                Resources res = getPackageManager().getResourcesForApplication(packageName);
+                if (res == null) {
+                    return;
+                }
+                cropTask = new BitmapCropTask(this, res, path, cropRect,
+                        0, outWidth, outHeight, true, false, onEndCrop);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return;
+        }
+
+        if (cropTask != null) {
+            cropTask.execute();
         }
     }
 

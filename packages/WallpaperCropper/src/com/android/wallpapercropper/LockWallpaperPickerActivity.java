@@ -142,7 +142,7 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
             boolean finishActivityWhenDone = true;
             OnBitmapCroppedHandler h = new OnBitmapCroppedHandler() {
                 public void onBitmapCropped(byte[] imageBytes) {
-                    Point thumbSize = getDefaultThumbnailSize(a.getResources());
+                    Point thumbSize = Utilities.getDefaultThumbnailSize(a.getResources());
                     Bitmap thumb = createThumbnail(
                             thumbSize, null, null, imageBytes, null, 0, 0, true);
                     a.getSavedImages().writeImage(thumb, imageBytes);
@@ -156,72 +156,6 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         }
         @Override
         public boolean isNamelessWallpaper() {
-            return true;
-        }
-    }
-
-    /**
-     * For themes which have regular wallpapers
-     */
-    public static class ThemeWallpaperInfo extends WallpaperTileInfo {
-        String mPackageName;
-        boolean mIsLegacy;
-        Drawable mThumb;
-        Context mContext;
-
-        public ThemeWallpaperInfo(Context context, String packageName, boolean legacy, Drawable thumb) {
-            this.mContext = context;
-            this.mPackageName = packageName;
-            this.mIsLegacy = legacy;
-            this.mThumb = thumb;
-        }
-
-        @Override
-        public void onClick(WallpaperCropActivity a) {
-            CropView v = a.getCropView();
-            try {
-                BitmapRegionTileSource source = null;
-                if (mIsLegacy) {
-                    final PackageManager pm = a.getPackageManager();
-                    PackageInfo pi = pm.getPackageInfo(mPackageName, 0);
-                    Resources res = a.getPackageManager().getResourcesForApplication(mPackageName);
-                    int resId = pi.legacyThemeInfos[0].wallpaperResourceId;
-
-                    int rotation = WallpaperCropActivity.getRotationFromExif(res, resId);
-                    source = new BitmapRegionTileSource(
-                            res, a, resId, 1024, rotation);
-                } else {
-                    Resources res = a.getPackageManager().getResourcesForApplication(mPackageName);
-                    if (res == null) {
-                        return;
-                    }
-
-                    int rotation = 0;
-                    source = new BitmapRegionTileSource(
-                            res, a, "wallpapers", 1024, rotation, true);
-                }
-                v.setTileSource(source, null);
-                v.setTouchEnabled(true);
-            } catch (NameNotFoundException e) {
-            }
-        }
-
-        @Override
-        public void onSave(WallpaperCropActivity a) {
-            ((LockWallpaperPickerActivity)a).cropImageAndSetWallpaper(
-                    "wallpapers",
-                    mPackageName,
-                    mIsLegacy,
-                    true);
-        }
-
-        @Override
-        public boolean isNamelessWallpaper() {
-            return true;
-        }
-
-        @Override
-        public boolean isSelectable() {
             return true;
         }
     }
@@ -1224,11 +1158,6 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         }
     }
 
-    private static Point getDefaultThumbnailSize(Resources res) {
-        return new Point(res.getDimensionPixelSize(R.dimen.wallpaperThumbnailWidth),
-                res.getDimensionPixelSize(R.dimen.wallpaperThumbnailHeight));
-    }
-
     private static Bitmap createThumbnail(Point size, Context context, Uri uri, byte[] imageBytes,
             Resources res, int resId, int rotation, boolean leftAligned) {
         int width = size.x;
@@ -1277,7 +1206,7 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
 
         // Load the thumbnail
         ImageView image = (ImageView) pickedImageThumbnail.findViewById(R.id.wallpaper_image);
-        Point defaultSize = getDefaultThumbnailSize(this.getResources());
+        Point defaultSize = Utilities.getDefaultThumbnailSize(this.getResources());
         int rotation = WallpaperCropActivity.getRotationFromExif(this, uri);
         Bitmap thumb = createThumbnail(defaultSize, this, uri, null, null, 0, rotation, false);
         if (thumb != null) {
@@ -1336,7 +1265,8 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
                 String pkgName = c.getString(c.getColumnIndexOrThrow(ThemesColumns.PKG_NAME));
                 boolean isLegacy = c.getInt(c.getColumnIndexOrThrow(
                         ThemesColumns.IS_LEGACY_THEME)) == 1;
-                bmp = getThemeWallpaper(this, "wallpapers", pkgName, isLegacy, true /* thumb*/);
+                bmp = Utilities.getThemeWallpaper(this, "wallpapers", pkgName, isLegacy,
+                        true /* thumb*/);
                 if (bmp != null) {
                     themeWallpapers.add(
                             new ThemeWallpaperInfo(this, pkgName, isLegacy,
@@ -1366,7 +1296,8 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
             Bitmap bmp;
             while (c.moveToNext()) {
                 String pkgName = c.getString(c.getColumnIndexOrThrow(ThemesColumns.PKG_NAME));
-                bmp = getThemeWallpaper(this, "lockscreen", pkgName, false, true /* thumb*/);
+                bmp = Utilities.getThemeWallpaper(this, "lockscreen", pkgName, false,
+                        true /* thumb*/);
                 if (bmp != null) {
                     themeWallpapers.add(
                             new ThemeLockWallpaperInfo(this, pkgName,
@@ -1421,7 +1352,8 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         private LayoutInflater mLayoutInflater;
         private ArrayList<ThemeLockWallpaperInfo> mWallpapers;
 
-        ThemeLockWallpapersAdapter(Activity activity, ArrayList<ThemeLockWallpaperInfo> wallpapers) {
+        ThemeLockWallpapersAdapter(Activity activity, ArrayList<ThemeLockWallpaperInfo>
+                wallpapers) {
             mLayoutInflater = activity.getLayoutInflater();
             mWallpapers = wallpapers;
         }
@@ -1499,96 +1431,4 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         return view;
     }
 
-    private static Bitmap getThemeWallpaper(Context context, String path, String pkgName,
-            boolean legacyTheme, boolean thumb) {
-        if (legacyTheme) {
-            return getLegacyThemeWallpaper(context, pkgName, thumb);
-        }
-        InputStream is = null;
-        try {
-            Resources res = context.getPackageManager().getResourcesForApplication(pkgName);
-            if (res == null) {
-                return null;
-            }
-
-            AssetManager am = res.getAssets();
-            String[] wallpapers = am.list(path);
-            if (wallpapers == null || wallpapers.length == 0) {
-                return null;
-            }
-            is = am.open(path + File.separator + wallpapers[0]);
-
-            BitmapFactory.Options bounds = new BitmapFactory.Options();
-            bounds.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(is, null, bounds);
-            if ((bounds.outWidth == -1) || (bounds.outHeight == -1))
-                return null;
-
-            int originalSize = (bounds.outHeight > bounds.outWidth) ? bounds.outHeight
-                    : bounds.outWidth;
-            Point outSize;
-
-            if (thumb) {
-                outSize = getDefaultThumbnailSize(context.getResources());
-            } else {
-                outSize = getDefaultWallpaperSize(res, ((Activity) context).getWindowManager());
-            }
-            int thumbSampleSize = (outSize.y > outSize.x) ? outSize.y : outSize.x;
-
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inSampleSize = originalSize / thumbSampleSize;
-            return BitmapFactory.decodeStream(is, null, opts);
-        } catch (IOException e) {
-            return null;
-        } catch (NameNotFoundException e) {
-            return null;
-        } catch (OutOfMemoryError e) {
-            return null;
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
-        }
-    }
-
-    private static Bitmap getLegacyThemeWallpaper(Context context, String pkgName, boolean thumb) {
-        try {
-            final PackageManager pm = context.getPackageManager();
-            PackageInfo pi = pm.getPackageInfo(pkgName, 0);
-            Resources res = context.getPackageManager().getResourcesForApplication(pkgName);
-
-            if (pi == null || res == null) {
-                return null;
-            }
-            int resId = pi.legacyThemeInfos[0].wallpaperResourceId;
-
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.inJustDecodeBounds = true;
-            BitmapFactory.decodeResource(res, resId, opts);
-            if ((opts.outWidth == -1) || (opts.outHeight == -1))
-                return null;
-
-            int originalSize = (opts.outHeight > opts.outWidth) ? opts.outHeight
-                    : opts.outWidth;
-            Point outSize;
-            if (thumb) {
-                outSize = getDefaultThumbnailSize(context.getResources());
-            } else {
-                outSize = getDefaultWallpaperSize(res, ((Activity) context).getWindowManager());
-            }
-            int thumbSampleSize = (outSize.y > outSize.x) ? outSize.y : outSize.x;
-
-            opts.inJustDecodeBounds = false;
-            opts.inSampleSize = originalSize / thumbSampleSize;
-
-            return BitmapFactory.decodeResource(res, resId, opts);
-        } catch (NameNotFoundException e) {
-            return null;
-        } catch (OutOfMemoryError e1) {
-            return null;
-        }
-    }
 }
