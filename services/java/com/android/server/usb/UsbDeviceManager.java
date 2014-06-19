@@ -30,7 +30,6 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
-import android.os.Build;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.Looper;
@@ -45,6 +44,7 @@ import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.util.Pair;
 import android.util.Slog;
+import android.util.Log;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.server.FgThread;
@@ -133,8 +133,7 @@ public class UsbDeviceManager {
         @Override
         public void onChange(boolean selfChange) {
             boolean enable = (Settings.Global.getInt(mContentResolver,
-                    Settings.Global.ADB_ENABLED,
-                    "eng".equals(Build.TYPE) ? 1 : 0) > 0);
+                    Settings.Global.ADB_ENABLED, 0) > 0);
             mHandler.sendMessage(MSG_ENABLE_ADB, enable);
         }
     }
@@ -397,7 +396,6 @@ public class UsbDeviceManager {
                         Settings.Secure.getUriFor(Settings.Secure.ADB_NOTIFY),
                                 false, new ContentObserver(null) {
                             public void onChange(boolean selfChange) {
-                                updateAdbNotification();
                             }
                         }
                 );
@@ -405,7 +403,14 @@ public class UsbDeviceManager {
                 mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
                                 false, new AdbSettingsObserver());
-
+                mContentResolver.registerContentObserver(
+                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                                false, new ContentObserver(null) {
+                            public void onChange(boolean selfChange) {
+                                updateAdbNotification();
+                            }
+                        }
+                );
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
                 mUEventObserver.startObserving(ACCESSORY_START_MATCH);
@@ -763,7 +768,7 @@ public class UsbDeviceManager {
         private void updateAdbNotification() {
             if (mNotificationManager == null) return;
             final int id = com.android.internal.R.string.adb_active_notification_title;
-            if (mAdbEnabled && mConnected) {
+            if ((mAdbEnabled && mConnected) || (!"5555".equals(SystemProperties.get("service.adb.tcp.port")))) {
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))
                  || Settings.Secure.getInt(mContext.getContentResolver(),
                     Settings.Secure.ADB_NOTIFY, 1) == 0) {
