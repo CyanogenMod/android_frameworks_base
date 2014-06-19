@@ -22,6 +22,8 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -34,6 +36,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -87,6 +90,73 @@ public class WallpaperCropActivity extends Activity {
             if (isNamelessWallpaper()) {
                 mView.setContentDescription(label);
             }
+        }
+    }
+
+    /**
+     * For themes which have regular wallpapers
+     */
+    public static class ThemeWallpaperInfo extends WallpaperTileInfo {
+        String mPackageName;
+        boolean mIsLegacy;
+        Drawable mThumb;
+        Context mContext;
+
+        public ThemeWallpaperInfo(Context context, String packageName, boolean legacy,
+                                  Drawable thumb) {
+            this.mContext = context;
+            this.mPackageName = packageName;
+            this.mIsLegacy = legacy;
+            this.mThumb = thumb;
+        }
+
+        @Override
+        public void onClick(WallpaperCropActivity a) {
+            CropView v = a.getCropView();
+            try {
+                BitmapRegionTileSource source = null;
+                if (mIsLegacy) {
+                    final PackageManager pm = a.getPackageManager();
+                    PackageInfo pi = pm.getPackageInfo(mPackageName, 0);
+                    Resources res = a.getPackageManager().getResourcesForApplication(mPackageName);
+                    int resId = pi.legacyThemeInfos[0].wallpaperResourceId;
+
+                    int rotation = WallpaperCropActivity.getRotationFromExif(res, resId);
+                    source = new BitmapRegionTileSource(
+                            res, a, resId, 1024, rotation);
+                } else {
+                    Resources res = a.getPackageManager().getResourcesForApplication(mPackageName);
+                    if (res == null) {
+                        return;
+                    }
+
+                    int rotation = 0;
+                    source = new BitmapRegionTileSource(
+                            res, a, "wallpapers", 1024, rotation, true);
+                }
+                v.setTileSource(source, null);
+                v.setTouchEnabled(true);
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+        }
+
+        @Override
+        public void onSave(WallpaperCropActivity a) {
+            ((LockWallpaperPickerActivity) a).cropImageAndSetWallpaper(
+                    "wallpapers",
+                    mPackageName,
+                    mIsLegacy,
+                    true);
+        }
+
+        @Override
+        public boolean isNamelessWallpaper() {
+            return true;
+        }
+
+        @Override
+        public boolean isSelectable() {
+            return true;
         }
     }
 
