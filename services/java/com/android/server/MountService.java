@@ -755,9 +755,10 @@ class MountService extends IMountService.Stub
                             VoldResponseCode.VolumeListResult);
                     for (String volstr : vols) {
                         String[] tok = volstr.split(" ");
-                        // FMT: <label> <mountpoint> <state>
+                        // FMT: <label> <mountpoint> <state> <uuid>
                         String path = tok[1];
                         String state = Environment.MEDIA_REMOVED;
+                        String uuid = tok[3];
 
                         final StorageVolume volume;
                         synchronized (mVolumesLock) {
@@ -790,6 +791,7 @@ class MountService extends IMountService.Stub
                         if (state != null) {
                             if (DEBUG_EVENTS) Slog.i(TAG, "Updating valid state " + state);
                             updatePublicVolumeState(volume, state);
+                            volume.setUuid(uuid);
                         }
                     }
                 } catch (Exception e) {
