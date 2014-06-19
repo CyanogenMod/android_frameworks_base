@@ -35,7 +35,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.UserInfo;
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
 import android.graphics.drawable.BitmapDrawable;
@@ -277,19 +277,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
         mItems = new ArrayList<Action>();
 
-        int quickbootAvailable = 1;
-        final PackageManager pm = mContext.getPackageManager();
-        try {
-            pm.getPackageInfo("com.qapp.quickboot", PackageManager.GET_META_DATA);
-        } catch (NameNotFoundException e) {
-            quickbootAvailable = 0;
-        }
-
-        final boolean quickbootEnabled = Settings.Global.getInt(
-                mContext.getContentResolver(), Settings.Global.ENABLE_QUICKBOOT,
-                quickbootAvailable) == 1;
-
-	final ContentResolver cr = mContext.getContentResolver();
+    	final ContentResolver cr = mContext.getContentResolver();
 
         // bug report, if enabled
         if (Settings.Global.getInt(mContext.getContentResolver(),
@@ -349,8 +337,21 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             config.getClickActionDescription()) {
 
                         public void onPress() {
+                            // Check quickboot status
+                            boolean quickbootAvailable = false;
+                            final PackageManager pm = mContext.getPackageManager();
+                            try {
+                                pm.getPackageInfo("com.qapp.quickboot", PackageManager.GET_META_DATA);
+                                quickbootAvailable = true;
+                            } catch (NameNotFoundException e) {
+                                // Ignore
+                            }
+                            final boolean quickbootEnabled = Settings.Global.getInt(
+                                    mContext.getContentResolver(), Settings.Global.ENABLE_QUICKBOOT,
+                                    1) == 1;
+
                         // goto quickboot mode
-                        if (quickbootEnabled) {
+                        if (quickbootAvailable && quickbootEnabled) {
                             startQuickBoot();
                             return;
                         }
