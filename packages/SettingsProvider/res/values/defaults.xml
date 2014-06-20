@@ -183,4 +183,7 @@
 
     <!-- Default value of Settings.System.NOISE_SUPPRESSION -->
     <bool name="def_noise_suppression">false</bool>
+
+    <!-- Default values of Settings.System.HEADS_UP_NOTIFICATION -->
+    <string name="def_heads_up_notification_values"></string>
 </resources>
