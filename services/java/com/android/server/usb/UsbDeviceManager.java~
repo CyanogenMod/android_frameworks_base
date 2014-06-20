@@ -336,7 +336,6 @@ public class UsbDeviceManager {
         private UsbAccessory mCurrentAccessory;
         private int mUsbNotificationId;
         private boolean mAdbNotificationShown;
-        private String mAdbNotificationType;
         private int mCurrentUser = UserHandle.USER_NULL;
 
         private final BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
@@ -406,15 +405,6 @@ public class UsbDeviceManager {
                 mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
                                 false, new AdbSettingsObserver());
-
-                mContentResolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
-                                false, new ContentObserver(null) {
-                            public void onChange(boolean selfChange) {
-                                updateAdbNotification();
-                            }
-                        }
-                );
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -772,82 +762,21 @@ public class UsbDeviceManager {
 
         private void updateAdbNotification() {
             if (mNotificationManager == null) return;
-            final int id_all = com.android.internal.R.string.adb_both_active_notification_title;
-            final int id_usb = com.android.internal.R.string.adb_active_notification_title;
-            final int id_net = com.android.internal.R.string.adb_net_active_notification_title;
-            if ((mAdbEnabled && mConnected)
-             && Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.ADB_PORT, 1) == 5555) {
+            final int id = com.android.internal.R.string.adb_active_notification_title;
+            if (mAdbEnabled && mConnected) {
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))
                  || Settings.Secure.getInt(mContext.getContentResolver(),
                     Settings.Secure.ADB_NOTIFY, 1) == 0) {
                     if (mAdbNotificationShown) {
                         mAdbNotificationShown = false;
-                        mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
+                        mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
                     }
                     return;
                 }
 
-                if (mAdbNotificationType != "all") {
-                     mAdbNotificationShown = false;
-                     if (mAdbNotificationType == "usb") {
-                        mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
-                     } else if (mAdbNotificationType == "net") {
-                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
-                     }
-                }
-
                 if (!mAdbNotificationShown) {
-                    mAdbNotificationType = "all";
                     Resources r = mContext.getResources();
-                    CharSequence title = r.getText(id_all);
-                    CharSequence message = r.getText(
-                            com.android.internal.R.string.adb_both_active_notification_message);
-
-                    Notification notification = new Notification();
-                    notification.icon = com.android.internal.R.drawable.stat_sys_adb;
-                    notification.when = 0;
-                    notification.flags = Notification.FLAG_ONGOING_EVENT;
-                    notification.tickerText = title;
-                    notification.defaults = 0; // please be quiet
-                    notification.sound = null;
-                    notification.vibrate = null;
-                    notification.priority = Notification.PRIORITY_LOW;
-
-                    Intent intent = Intent.makeRestartActivityTask(
-                            new ComponentName("com.android.settings",
-                                    "com.android.settings.DevelopmentSettings"));
-                    PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0,
-                            intent, 0, null, UserHandle.CURRENT);
-                    notification.setLatestEventInfo(mContext, title, message, pi);
-                    mAdbNotificationShown = true;
-                    mNotificationManager.notifyAsUser(null, id_all, notification,
-                            UserHandle.ALL);
-                }
-            } else if (mAdbEnabled && mConnected) {
-                if ("0".equals(SystemProperties.get("persist.adb.notify"))
-                 || Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.ADB_NOTIFY, 1) == 0) {
-                    if (mAdbNotificationShown) {
-                        mAdbNotificationShown = false;
-                        mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
-                    }
-                    return;
-                }
-
-                if (mAdbNotificationType != "usb") {
-                     mAdbNotificationShown = false;
-                     if (mAdbNotificationType == "all") {
-                        mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
-                     } else if (mAdbNotificationType == "net") {
-                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
-                     }
-                }
-
-                if (!mAdbNotificationShown) {
-                    mAdbNotificationType = "usb";
-                    Resources r = mContext.getResources();
-                    CharSequence title = r.getText(id_usb);
+                    CharSequence title = r.getText(id);
                     CharSequence message = r.getText(
                             com.android.internal.R.string.adb_active_notification_message);
 
@@ -868,66 +797,12 @@ public class UsbDeviceManager {
                             intent, 0, null, UserHandle.CURRENT);
                     notification.setLatestEventInfo(mContext, title, message, pi);
                     mAdbNotificationShown = true;
-                    mNotificationManager.notifyAsUser(null, id_usb, notification,
-                            UserHandle.ALL);
-                }
-            } else if (Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.ADB_PORT, 1) == 5555) {
-                if ("0".equals(SystemProperties.get("persist.adb.notify"))
-                 || Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.ADB_NOTIFY, 1) == 0) {
-                    if (mAdbNotificationShown) {
-                        mAdbNotificationShown = false;
-                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
-                    }
-                    return;
-                }
-
-                if (mAdbNotificationType != "net") {
-                     mAdbNotificationShown = false;
-                     if (mAdbNotificationType == "all") {
-                        mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
-                     } else if (mAdbNotificationType == "usb") {
-                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
-                     }
-                }
-
-                if (!mAdbNotificationShown) {
-                    mAdbNotificationType = "net";
-                    Resources r = mContext.getResources();
-                    CharSequence title = r.getText(id_net);
-                    CharSequence message = r.getText(
-                            com.android.internal.R.string.adb_net_active_notification_message);
-
-                    Notification notification = new Notification();
-                    notification.icon = com.android.internal.R.drawable.stat_sys_adb;
-                    notification.when = 0;
-                    notification.flags = Notification.FLAG_ONGOING_EVENT;
-                    notification.tickerText = title;
-                    notification.defaults = 0; // please be quiet
-                    notification.sound = null;
-                    notification.vibrate = null;
-                    notification.priority = Notification.PRIORITY_LOW;
-
-                    Intent intent = Intent.makeRestartActivityTask(
-                            new ComponentName("com.android.settings",
-                                    "com.android.settings.DevelopmentSettings"));
-                    PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0,
-                            intent, 0, null, UserHandle.CURRENT);
-                    notification.setLatestEventInfo(mContext, title, message, pi);
-                    mAdbNotificationShown = true;
-                    mNotificationManager.notifyAsUser(null, id_net, notification,
+                    mNotificationManager.notifyAsUser(null, id, notification,
                             UserHandle.ALL);
                 }
             } else if (mAdbNotificationShown) {
                 mAdbNotificationShown = false;
-                if (mAdbNotificationType == "all") {
-                   mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
-                } else if (mAdbNotificationType == "usb") {
-                   mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
-                } else if (mAdbNotificationType == "net") {
-                   mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
-                }
+                mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
             }
         }
 

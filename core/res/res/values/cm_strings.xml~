@@ -215,12 +215,4 @@
     <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> would like to <xliff:g id="op">%2$s</xliff:g>.</string>
 
     <string name="permission_remember_choice">Remember my choice</string>
-
-    <!-- ADB over Network notification -->
-    <string name="adb_net_active_notification_title">Network debugging enabled</string>
-    <!-- ADB over USB and Network notification -->
-    <string name="adb_both_active_notification_title">USB and Network debugging enabled</string>
-    <!-- ADB notification message (for all combos of USB and Network) -->
-    <string name="adb_both_active_notification_message">Touch to disable debugging.</string>
-    <string name="adb_net_active_notification_message">Touch to disable network debugging.</string>
 </resources>
