@@ -1561,7 +1561,11 @@
   <java-symbol type="plurals" name="wifi_available_detailed" />
   <java-symbol type="string" name="accessibility_binding_label" />
   <java-symbol type="string" name="adb_active_notification_message" />
+  <java-symbol type="string" name="adb_both_active_notification_message" />
+  <java-symbol type="string" name="adb_net_active_notification_message" />
   <java-symbol type="string" name="adb_active_notification_title" />
+  <java-symbol type="string" name="adb_net_active_notification_title" />
+  <java-symbol type="string" name="adb_both_active_notification_title" />
   <java-symbol type="string" name="aerr_application" />
   <java-symbol type="string" name="aerr_process" />
   <java-symbol type="string" name="aerr_title" />
@@ -2013,4 +2017,9 @@
 
   <!-- Array of default activities with custom power management -->
   <java-symbol type="array" name="config_auto_perf_activities" />
+
+  <!-- ADB over Network notification -->
+  <java-symbol type="string" name="adb_net_active_notification_message" />
+  <java-symbol type="string" name="adb_net_active_notification_title" />
+
 </resources>
