@@ -2843,6 +2843,13 @@ public final class Settings {
         public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
 
         /**
+         * Heads Up Notifications
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
+
+        /**
          * Quick Settings Panel Dynamic Tiles
          *
          * @hide
