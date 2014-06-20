@@ -219,4 +219,7 @@
 
     <!-- Default value of Settings.System.QUICK_SETTINGS_RIBBON_TILES -->
     <string name="def_quick_settings_ribbon_tiles"></string>
+
+    <!-- Default values of Settings.System.HEADS_UP_NOTIFICATION -->
+    <string name="def_heads_up_notification_values"></string>
 </resources>
