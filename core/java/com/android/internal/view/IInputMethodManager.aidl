@@ -74,4 +74,5 @@ interface IInputMethodManager {
     boolean shouldOfferSwitchingToNextInputMethod(in IBinder token);
     boolean setInputMethodEnabled(String id, boolean enabled);
     void setAdditionalInputMethodSubtypes(String id, in InputMethodSubtype[] subtypes);
+    boolean isImeShowing();
 }
