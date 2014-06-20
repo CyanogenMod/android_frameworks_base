@@ -336,6 +336,7 @@ public class UsbDeviceManager {
         private UsbAccessory mCurrentAccessory;
         private int mUsbNotificationId;
         private boolean mAdbNotificationShown;
+        private boolean mAdbNetNotificationShown;
         private int mCurrentUser = UserHandle.USER_NULL;
 
         private final BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
@@ -405,6 +406,15 @@ public class UsbDeviceManager {
                 mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
                                 false, new AdbSettingsObserver());
+
+                mContentResolver.registerContentObserver(
+                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                                false, new ContentObserver(null) {
+                            public void onChange(boolean selfChange) {
+                                updateAdbNotification();
+                            }
+                        }
+                );
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -763,6 +773,7 @@ public class UsbDeviceManager {
         private void updateAdbNotification() {
             if (mNotificationManager == null) return;
             final int id = com.android.internal.R.string.adb_active_notification_title;
+            final int id_net = com.android.internal.R.string.adb_net_active_notification_title;
             if (mAdbEnabled && mConnected) {
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))
                  || Settings.Secure.getInt(mContext.getContentResolver(),
@@ -803,6 +814,51 @@ public class UsbDeviceManager {
             } else if (mAdbNotificationShown) {
                 mAdbNotificationShown = false;
                 mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
+            }
+
+            if ((!"5555".equals(SystemProperties.get("service.adb.tcp.port"))
+             && !SystemProperties.get("service.adb.tcp.port").equals(""))
+             || Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.ADB_PORT, 1) == 5555) {
+                if ("0".equals(SystemProperties.get("persist.adb.notify"))
+                 || Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.ADB_NOTIFY, 1) == 0) {
+                    if (mAdbNetNotificationShown) {
+                        mAdbNetNotificationShown = false;
+                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
+                    }
+                    return;
+                }
+
+                if (!mAdbNetNotificationShown) {
+                    Resources r = mContext.getResources();
+                    CharSequence title = r.getText(id_net);
+                    CharSequence message = r.getText(
+                            com.android.internal.R.string.adb_net_active_notification_message);
+
+                    Notification notification = new Notification();
+                    notification.icon = com.android.internal.R.drawable.stat_sys_adb;
+                    notification.when = 0;
+                    notification.flags = Notification.FLAG_ONGOING_EVENT;
+                    notification.tickerText = title;
+                    notification.defaults = 0; // please be quiet
+                    notification.sound = null;
+                    notification.vibrate = null;
+                    notification.priority = Notification.PRIORITY_LOW;
+
+                    Intent intent = Intent.makeRestartActivityTask(
+                            new ComponentName("com.android.settings",
+                                    "com.android.settings.DevelopmentSettings"));
+                    PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0,
+                            intent, 0, null, UserHandle.CURRENT);
+                    notification.setLatestEventInfo(mContext, title, message, pi);
+                    mAdbNetNotificationShown = true;
+                    mNotificationManager.notifyAsUser(null, id_net, notification,
+                            UserHandle.ALL);
+                }
+            } else if (mAdbNetNotificationShown) {
+                mAdbNetNotificationShown = false;
+                mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
             }
         }
 
