@@ -5855,6 +5855,12 @@ public final class Settings {
         public static final String HOVER_EXCLUDE_TOPMOST = "hover_exclude_topmost";
 
         /**
+         * Padding above and below dialpad keys in dialer.
+         * @hide
+         */
+        public static final String DIALKEY_PADDING = "dialkey_padding";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
