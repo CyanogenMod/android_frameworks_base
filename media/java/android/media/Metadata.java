@@ -542,4 +542,12 @@ public class Metadata
             throw new IllegalStateException("Wrong type " + expectedType + " but got " + type);
         }
     }
+
+    /**
+     * Recycle parcel object
+     */
+    public void recycleParcel() {
+        if (mParcel != null)
+            mParcel.recycle();
+    }
 }
