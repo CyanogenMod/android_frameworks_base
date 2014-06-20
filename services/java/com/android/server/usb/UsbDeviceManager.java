@@ -121,6 +121,7 @@ public class UsbDeviceManager {
     private final boolean mHasUsbAccessory;
     private boolean mUseUsbNotification;
     private boolean mAdbEnabled;
+    private int mAdbPort;
     private boolean mAudioSourceEnabled;
     private Map<String, List<Pair<String, String>>> mOemModeMap;
     private String[] mAccessoryStrings;
@@ -135,7 +136,9 @@ public class UsbDeviceManager {
             boolean enable = (Settings.Global.getInt(mContentResolver,
                     Settings.Global.ADB_ENABLED,
                     "eng".equals(Build.TYPE) ? 1 : 0) > 0);
-            mHandler.sendMessage(MSG_ENABLE_ADB, enable);
+            int port = Settings.Global.getInt(mContentResolver, Settings.Secure.ADB_PORT, -1);
+
+            mHandler.sendMessage(MSG_ENABLE_ADB, enable, port);
         }
     }
 
@@ -336,6 +339,7 @@ public class UsbDeviceManager {
         private UsbAccessory mCurrentAccessory;
         private int mUsbNotificationId;
         private boolean mAdbNotificationShown;
+        private boolean mAdbNotificationIsForNetwork;
         private int mCurrentUser = UserHandle.USER_NULL;
 
         private final BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
@@ -375,24 +379,30 @@ public class UsbDeviceManager {
                 mCurrentFunctions = mDefaultFunctions;
                 String state = FileUtils.readTextFile(new File(STATE_PATH), 0, null).trim();
                 updateState(state);
+
                 mAdbEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ADB);
+                mAdbPort = Settings.Global.getInt(mContentResolver, Settings.Secure.ADB_PORT, -1);
 
                 // Upgrade step for previous versions that used persist.service.adb.enable
                 String value = SystemProperties.get("persist.service.adb.enable", "");
                 if (value.length() > 0) {
                     char enable = value.charAt(0);
                     if (enable == '1') {
-                        setAdbEnabled(true);
+                        setAdbEnabled(true, mAdbPort);
                     } else if (enable == '0') {
-                        setAdbEnabled(false);
+                        setAdbEnabled(false, mAdbPort);
                     }
                     SystemProperties.set("persist.service.adb.enable", "");
                 }
 
                 // register observer to listen for settings changes
+                AdbSettingsObserver adbObserver = new AdbSettingsObserver();
                 mContentResolver.registerContentObserver(
                         Settings.Global.getUriFor(Settings.Global.ADB_ENABLED),
-                                false, new AdbSettingsObserver());
+                                false, adbObserver);
+                mContentResolver.registerContentObserver(
+                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                                false, adbObserver);
                 mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.ADB_NOTIFY),
                                 false, new ContentObserver(null) {
@@ -401,10 +411,6 @@ public class UsbDeviceManager {
                             }
                         }
                 );
-
-                mContentResolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
-                                false, new AdbSettingsObserver());
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -419,10 +425,11 @@ public class UsbDeviceManager {
             }
         }
 
-        public void sendMessage(int what, boolean arg) {
+        public void sendMessage(int what, boolean arg0, int arg1) {
             removeMessages(what);
             Message m = Message.obtain(this, what);
-            m.arg1 = (arg ? 1 : 0);
+            m.arg1 = (arg0 ? 1 : 0);
+            m.arg2 = arg1;
             sendMessage(m);
         }
 
@@ -484,13 +491,21 @@ public class UsbDeviceManager {
             return waitForState(config);
         }
 
-        private void setAdbEnabled(boolean enable) {
+        private void setAdbEnabled(boolean enable, int port) {
             if (DEBUG) Slog.d(TAG, "setAdbEnabled: " + enable);
+            boolean needUpdate = false;
             if (enable != mAdbEnabled) {
                 mAdbEnabled = enable;
                 // Due to the persist.sys.usb.config property trigger, changing adb state requires
                 // switching to default function
                 setEnabledFunctions(mDefaultFunctions, true);
+                needUpdate = true;
+            }
+            if (port != mAdbPort) {
+                mAdbPort = port;
+                needUpdate = true;
+            }
+            if (needUpdate) {
                 updateAdbNotification();
             }
             if (mDebuggingManager != null) {
@@ -663,7 +678,7 @@ public class UsbDeviceManager {
                     }
                     break;
                 case MSG_ENABLE_ADB:
-                    setAdbEnabled(msg.arg1 == 1);
+                    setAdbEnabled(msg.arg1 == 1, msg.arg2);
                     break;
                 case MSG_SET_CURRENT_FUNCTIONS:
                     String functions = (String)msg.obj;
@@ -762,21 +777,27 @@ public class UsbDeviceManager {
 
         private void updateAdbNotification() {
             if (mNotificationManager == null) return;
-            final int id = com.android.internal.R.string.adb_active_notification_title;
-            if (mAdbEnabled && mConnected) {
+            final int notificationId = com.android.internal.R.drawable.stat_sys_adb;
+            boolean usbAdbActive = mAdbEnabled && mConnected && mAdbPort == -1;
+            boolean netAdbActive = mAdbEnabled && mAdbPort > 0;
+
+            if (usbAdbActive || netAdbActive) {
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))
-                 || Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.ADB_NOTIFY, 1) == 0) {
+                        || Settings.Secure.getInt(mContentResolver,
+                                Settings.Secure.ADB_NOTIFY, 1) == 0) {
                     if (mAdbNotificationShown) {
                         mAdbNotificationShown = false;
-                        mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
+                        mNotificationManager.cancelAsUser(null, notificationId, UserHandle.ALL);
                     }
                     return;
                 }
 
-                if (!mAdbNotificationShown) {
+                if (!mAdbNotificationShown || mAdbNotificationIsForNetwork != netAdbActive) {
                     Resources r = mContext.getResources();
-                    CharSequence title = r.getText(id);
+                    int titleResId = netAdbActive
+                            ? com.android.internal.R.string.adb_net_active_notification_title
+                            : com.android.internal.R.string.adb_active_notification_title;
+                    CharSequence title = r.getText(titleResId);
                     CharSequence message = r.getText(
                             com.android.internal.R.string.adb_active_notification_message);
 
@@ -797,12 +818,13 @@ public class UsbDeviceManager {
                             intent, 0, null, UserHandle.CURRENT);
                     notification.setLatestEventInfo(mContext, title, message, pi);
                     mAdbNotificationShown = true;
-                    mNotificationManager.notifyAsUser(null, id, notification,
-                            UserHandle.ALL);
+                    mAdbNotificationIsForNetwork = netAdbActive;
+                    mNotificationManager.notifyAsUser(null, notificationId, notification,
+                               UserHandle.ALL);
                 }
             } else if (mAdbNotificationShown) {
                 mAdbNotificationShown = false;
-                mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
+                mNotificationManager.cancelAsUser(null, notificationId, UserHandle.ALL);
             }
         }
 
