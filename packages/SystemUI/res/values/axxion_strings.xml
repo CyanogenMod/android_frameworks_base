@@ -104,6 +104,9 @@
     <string name="quick_settings_reminder_help_message">Touch here to set a reminder. Long-press to clear the current reminder.</string>
     <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
 
+	<!-- Blacklisted app for floating mode -->
+    <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating mode</string>
+
     <!-- First time run hover -->
     <string name="hover_cling_text">Hover is now enabled.\n\nWhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app.</string>
 

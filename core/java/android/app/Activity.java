@@ -5981,7 +5981,6 @@ public class Activity extends ContextThemeWrapper
 
             mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
                     WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            WindowManager.LayoutParams params = mWindow.getAttributes();
             params.alpha = 1f;
             params.dimAmount = 0.5f;
             mWindow.setAttributes((WindowManager.LayoutParams) params);

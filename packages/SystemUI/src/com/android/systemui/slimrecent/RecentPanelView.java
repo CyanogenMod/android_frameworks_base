@@ -361,19 +361,9 @@ public class RecentPanelView {
                             | Intent.FLAG_ACTIVITY_CLEAR_TASK
                             | Intent.FLAG_FLOATING_WINDOW);
                     intent.setComponent(td.intent.getComponent());
+                    mContext.startActivity(intent);                    
                     exit();
-                    } if (allowed) {
-                        Intent intent = td.intent;
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_FLOATING_WINDOW);
-                        mContext.startActivity(intent);
-                    } else {
-                        String text = mContext.getResources().getString(R.string.floating_mode_blacklisted_app);
-                        int duration = Toast.LENGTH_LONG;
-                        Toast.makeText(mContext, text, duration).show();
-                    }
-
-                } else if (item.getItemId() == MENU_APP_STOP_ID) {
+                    } else if (item.getItemId() == MENU_APP_STOP_ID) {
                     ActivityManager am = (ActivityManager)mContext.getSystemService(
                             Context.ACTIVITY_SERVICE);
                     am.forceStopPackage(td.packageName);
@@ -390,7 +380,11 @@ public class RecentPanelView {
                 } else if (item.getItemId() == MENU_APP_AMAZON_ID) {
                     startApplicationDetailsActivity(null,
                             AMAZON_APP_URI_QUERY + td.packageName, AMAZON_REFERENCE);
-                }
+				} else {
+                        String text = mContext.getResources().getString(R.string.floating_mode_blacklisted_app);
+                        int duration = Toast.LENGTH_LONG;
+                        Toast.makeText(mContext, text, duration).show();
+					}
                 return true;
             }
         });
