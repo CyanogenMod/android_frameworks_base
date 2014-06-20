@@ -39,7 +39,6 @@ import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDebug;
@@ -125,7 +124,7 @@ import libcore.io.IoUtils;
 
 import dalvik.system.CloseGuard;
 import dalvik.system.VMRuntime;
-import android.os.SystemProperties;
+
 import java.lang.*;
 
 final class RemoteServiceException extends AndroidRuntimeException {
@@ -162,7 +161,7 @@ public final class ActivityThread {
     private static final int LOG_ON_PAUSE_CALLED = 30021;
     private static final int LOG_ON_RESUME_CALLED = 30022;
 
-    private ContextImpl mSystemContext;
+    static ContextImpl sSystemContext = null;
 
     static IPackageManager sPackageManager;
 
@@ -1716,10 +1715,10 @@ public final class ActivityThread {
 
     public ContextImpl getSystemContext() {
         synchronized (this) {
-            if (mSystemContext == null) {
-                mSystemContext = ContextImpl.createSystemContext(this);
+            if (sSystemContext == null) {
+                sSystemContext = ContextImpl.createSystemContext(this);
             }
-            return mSystemContext;
+            return sSystemContext;
         }
     }
 
