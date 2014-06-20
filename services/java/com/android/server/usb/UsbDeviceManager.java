@@ -336,6 +336,7 @@ public class UsbDeviceManager {
         private UsbAccessory mCurrentAccessory;
         private int mUsbNotificationId;
         private boolean mAdbNotificationShown;
+        private String mAdbNotificationType;
         private int mCurrentUser = UserHandle.USER_NULL;
 
         private final BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
@@ -405,6 +406,15 @@ public class UsbDeviceManager {
                 mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
                                 false, new AdbSettingsObserver());
+
+                mContentResolver.registerContentObserver(
+                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                                false, new ContentObserver(null) {
+                            public void onChange(boolean selfChange) {
+                                updateAdbNotification();
+                            }
+                        }
+                );
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -762,24 +772,91 @@ public class UsbDeviceManager {
 
         private void updateAdbNotification() {
             if (mNotificationManager == null) return;
-            final int id = com.android.internal.R.string.adb_active_notification_title;
-            if (mAdbEnabled && mConnected) {
+            final int id_all = com.android.internal.R.string.adb_both_active_notification_title;
+            final int id_usb = com.android.internal.R.string.adb_usb_active_notification_title;
+            final int id_net = com.android.internal.R.string.adb_net_active_notification_title;
+            boolean do_it = false;
+            if ((mAdbEnabled && mConnected)
+              && Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.ADB_PORT, 1) == 5555) {
+                if (mAdbNotificationType != "all") {
+                     mAdbNotificationShown = false;
+                     if (mAdbNotificationType == "usb") {
+                        mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
+                     } else if (mAdbNotificationType == "net") {
+                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
+                     }
+                }
+                mAdbNotificationType = "all";
+                do_it = true;
+            } else if (mAdbEnabled && mConnected) {
+                if (mAdbNotificationType != "usb") {
+                     mAdbNotificationShown = false;
+                     if (mAdbNotificationType == "all") {
+                        mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
+                     } else if (mAdbNotificationType == "net") {
+                        mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
+                     }
+                }
+                mAdbNotificationType = "usb";
+                do_it = true;
+            } else if (Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.ADB_PORT, 1) == 5555
+              && Settings.Global.getInt(mContentResolver,
+                    Settings.Global.ADB_ENABLED,
+                    "eng".equals(Build.TYPE) ? 1 : 0) > 0) {
+                if (mAdbNotificationType != "net") {
+                     mAdbNotificationShown = false;
+                     if (mAdbNotificationType == "all") {
+                        mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
+                     } else if (mAdbNotificationType == "usb") {
+                        mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
+                     }
+                }
+                mAdbNotificationType = "net";
+                do_it = true;
+            } else if (mAdbNotificationShown) {
+                mAdbNotificationShown = false;
+                if (mAdbNotificationType == "all") {
+                   mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
+                } else if (mAdbNotificationType == "usb") {
+                   mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
+                } else if (mAdbNotificationType == "net") {
+                   mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
+                }
+            } else {
+                do_it = false;
+            }
+
+            if (do_it) {
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))
                  || Settings.Secure.getInt(mContext.getContentResolver(),
                     Settings.Secure.ADB_NOTIFY, 1) == 0) {
                     if (mAdbNotificationShown) {
                         mAdbNotificationShown = false;
-                        mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
+                        if (mAdbNotificationType == "all") {
+                           mNotificationManager.cancelAsUser(null, id_all, UserHandle.ALL);
+                        } else if (mAdbNotificationType == "usb") {
+                           mNotificationManager.cancelAsUser(null, id_usb, UserHandle.ALL);
+                        } else if (mAdbNotificationType == "net") {
+                           mNotificationManager.cancelAsUser(null, id_net, UserHandle.ALL);
+                        }
                     }
                     return;
                 }
 
                 if (!mAdbNotificationShown) {
                     Resources r = mContext.getResources();
-                    CharSequence title = r.getText(id);
+                    CharSequence title = null;
+                    if (mAdbNotificationType == "all") {
+                       title = r.getText(id_all);
+                    } else if (mAdbNotificationType == "usb") {
+                       title = r.getText(id_usb);
+                    } else if (mAdbNotificationType == "net") {
+                       title = r.getText(id_net);
+                    }
                     CharSequence message = r.getText(
-                            com.android.internal.R.string.adb_active_notification_message);
-
+                               com.android.internal.R.string.adb_stnd_active_notification_message);
                     Notification notification = new Notification();
                     notification.icon = com.android.internal.R.drawable.stat_sys_adb;
                     notification.when = 0;
@@ -797,12 +874,17 @@ public class UsbDeviceManager {
                             intent, 0, null, UserHandle.CURRENT);
                     notification.setLatestEventInfo(mContext, title, message, pi);
                     mAdbNotificationShown = true;
-                    mNotificationManager.notifyAsUser(null, id, notification,
-                            UserHandle.ALL);
+                    if (mAdbNotificationType == "all") {
+                       mNotificationManager.notifyAsUser(null, id_all, notification,
+                               UserHandle.ALL);
+                    } else if (mAdbNotificationType == "usb") {
+                       mNotificationManager.notifyAsUser(null, id_usb, notification,
+                               UserHandle.ALL);
+                    } else if (mAdbNotificationType == "net") {
+                       mNotificationManager.notifyAsUser(null, id_net, notification,
+                               UserHandle.ALL);
+                    }
                 }
-            } else if (mAdbNotificationShown) {
-                mAdbNotificationShown = false;
-                mNotificationManager.cancelAsUser(null, id, UserHandle.ALL);
             }
         }
 
