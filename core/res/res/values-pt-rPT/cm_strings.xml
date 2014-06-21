@@ -124,6 +124,7 @@
   <string name="app_ops_use_voice_volume">controlar o volume das chamadas de voz</string>
   <string name="app_ops_write_mms">escrever uma mensagem MMS</string>
   <string name="app_ops_write_sms">escrever uma mensagem SMS</string>
+  <string name="notify_turn_wifi_off_title">Desligar Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Proteção da Privacidade</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="aplicação">%1$s</xliff:g> gostaria de <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Memorizar a minha escolha</string>

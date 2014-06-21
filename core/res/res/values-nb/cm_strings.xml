@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Lar apper installere nye temaer og endre de temaene du har valgt.</string>
   <string name="permlab_setKeyguardWallpaper">Angi tastaturbakgrunn</string>
   <string name="permdesc_setKeyguardWallpaper">Tillat en app å endre låseskjermsbakgrunn.</string>
+  <string name="permlab_useHardwareFramework">bruke maskinvare</string>
+  <string name="permdesc_useHardwareFramework">Gir en app tilgang til CM maskinvaren.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe opp fra bunn for å gå ut av fullskjerm.</string>
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>

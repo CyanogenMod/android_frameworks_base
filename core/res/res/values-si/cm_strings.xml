@@ -124,6 +124,7 @@
   <string name="app_ops_use_voice_volume">හඬ ඇමතුම් ශබ්දය පාලනය</string>
   <string name="app_ops_write_mms">MMS පණිවිඩයක් ලිවීම</string>
   <string name="app_ops_write_sms">කෙටි පණිවිඩයක් ලිවීම</string>
+  <string name="notify_turn_wifi_off_title">Wi-Fi අක්‍රීය කරන්න</string>
   <string name="privacy_guard_dialog_title">පෞද්ගලිකත්වයේ මුරකරු</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="op">%2$s</xliff:g> සඳහා <xliff:g id="app">%1$s</xliff:g>ට අවශ්‍යව ඇත.</string>
   <string name="permission_remember_choice">මගේ තේරීම මතක තබා ගන්න</string>

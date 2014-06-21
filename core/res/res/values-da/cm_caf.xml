@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Ugyldigt SIM-kort.</string>
   <string name="lockscreen_airplane_mode_on">Flytilstand</string>
   <string name="progress_nomediapresent" product="default">Intet flytbart medie til stede\u2026</string>
+  <string name="storage_uicc">UICC lager</string>
   <string name="stk_cc_ussd_to_dial">USSD-anmodning er ændret til en DIAL-anmodning.</string>
   <string name="stk_cc_ussd_to_ss">USSD-anmodning er ændret til en SS-anmodning.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-anmodning er ændret til en ny USSD-anmodning.</string>

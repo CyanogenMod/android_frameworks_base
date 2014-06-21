@@ -124,6 +124,7 @@
   <string name="app_ops_use_voice_volume">שלוט על עוצמת קול הדיבור</string>
   <string name="app_ops_write_mms">לכתוב הודעת MMS</string>
   <string name="app_ops_write_sms">לכתוב הודעת SMS</string>
+  <string name="notify_turn_wifi_off_title">כבה Wi-Fi</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">זכור את הבחירה שלי</string>

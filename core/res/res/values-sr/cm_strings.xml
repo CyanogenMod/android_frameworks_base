@@ -29,7 +29,7 @@
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">Друго</string>
   <string name="global_action_screenshot">Снимак екрана</string>
-  <string name="global_actions_toggle_expanded_desktop_mode">Проширена радна површина</string>
+  <string name="global_actions_toggle_expanded_desktop_mode">Проширен екран</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Омогућено</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Онемогућено</string>
   <string name="reboot_system" product="tablet">Рестартуј</string>

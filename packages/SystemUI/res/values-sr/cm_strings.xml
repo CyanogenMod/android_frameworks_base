@@ -33,11 +33,11 @@
 </string>
   <string name="quick_settings_label_disabled">Искључено</string>
   <string name="quick_settings_ringer_normal">Звук</string>
-  <string name="quick_settings_lockscreen">Закључавање екрана</string>
+  <string name="quick_settings_lockscreen">ЗакључаЈ екран</string>
   <string name="quick_settings_network_type">Режим мреже</string>
   <string name="quick_settings_report_bug">Пријави проблем</string>
-  <string name="quick_settings_sync">Синхронизација</string>
-  <string name="quick_settings_sync_off">Синхронизација искључено</string>
+  <string name="quick_settings_sync">Синх.</string>
+  <string name="quick_settings_sync_off">Синх. искључено</string>
   <string name="quick_settings_torch">Бакља</string>
   <string name="quick_settings_torch_off">Бакља искључено</string>
   <string name="quick_settings_nfc">NFC</string>
@@ -60,7 +60,7 @@
   <string name="quick_settings_equalizer">Еквилајзер</string>
   <string name="quick_settings_compass_off">Компас искључено</string>
   <string name="quick_settings_compass_init">Покретање\u2026</string>
-  <string name="location_mode_high_accuracy_title">Висока прецизност</string>
+  <string name="location_mode_high_accuracy_title">Велика прецизност</string>
   <string name="location_mode_battery_saving_title">Уштеда батерије</string>
   <string name="location_mode_sensors_only_title">Само уређај</string>
   <string name="location_mode_location_off_title">Локација искључено</string>

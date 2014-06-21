@@ -44,9 +44,9 @@
   <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
   <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
   <string name="permlab_preventpower">電源キーを使用しない</string>
-  <string name="permdesc_preventpower">電源キーを無効にすることをアプリに許可します。</string>
+  <string name="permdesc_preventpower">電源キーの無効化をアプリに許可します。</string>
   <string name="permlab_sendMockSms">疑似SMSメッセージの送信</string>
-  <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリケーションに許可します。これによりアプリケーションは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリケーションが連続的にメッセージを送信したり、通知を阻止したり、ユーザーを混乱させるおそれがあります。</string>
+  <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリに許可します。これによりアプリは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリが連続的にメッセージを送信したり、通知を阻止したり、ユーザーを混乱させるおそれがあります。</string>
   <string name="storage_sd_dock_card">SDカードを接続</string>
   <string name="app_killed_message">アプリを終了しました</string>
   <string name="global_action_reboot">再起動</string>
@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適応しているテーマの変更をアプリに許可します。</string>
   <string name="permlab_setKeyguardWallpaper">キーガードの壁紙の設定</string>
   <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
+  <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
+  <string name="permdesc_useHardwareFramework">CMハードウェアフレームワークへのアクセスをアプリに許可します。</string>
   <string name="immersive_mode_confirmation_bottom">全画面表示を終了するには、上から下にスワイプ</string>
   <string name="app_ops_access_camera">カメラへのアクセス</string>
   <string name="app_ops_access_location">位置情報へのアクセス</string>
