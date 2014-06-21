@@ -124,6 +124,7 @@
   <string name="app_ops_use_voice_volume">получить управление громкостью при разговоре</string>
   <string name="app_ops_write_mms">создать MMS-сообщение</string>
   <string name="app_ops_write_sms">создать SMS-сообщение</string>
+  <string name="notify_turn_wifi_off_title">Выключить Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Защищённый режим</string>
   <string name="privacy_guard_dialog_summary">Приложение «<xliff:g id="app">%1$s</xliff:g>» пытается <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Запомнить выбор</string>
