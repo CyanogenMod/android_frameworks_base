@@ -22,7 +22,12 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.app.admin.DevicePolicyManager;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.PackageManager;
@@ -1215,7 +1220,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (!isHighPriority && keyguardNotVisible && !isOngoing && !isIMEShowing) {
             // However, we don't want to interrupt if we're in an application that is
             // in Do Not Disturb
-            if(!isPackageInDnd(getTopLevelPackage())) {
+            if (!isPackageInDnd(getTopLevelPackage())) {
                 return true;
             }
         }
@@ -1227,7 +1232,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private String getTopLevelPackage() {
         final ActivityManager am = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List< ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
+        List<ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
         ComponentName componentInfo = taskInfo.get(0).topActivity;
         return componentInfo.getPackageName();
     }
