@@ -20,6 +20,8 @@
   <string name="title_save">Späicheren ënner</string>
   <string name="menu_create_dir">Dossier uleeën</string>
   <string name="menu_grid">Gitterusiicht</string>
+  <string name="menu_list">Lëschtenusiicht</string>
+  <string name="menu_sort">Zortéieren no</string>
   <string name="menu_search">Sichen</string>
   <string name="menu_settings">Astellungen</string>
   <string name="menu_open">Opmaachen</string>
@@ -38,8 +40,9 @@
   <string name="root_recent">Rezent</string>
   <string name="root_available_bytes"><xliff:g id="size" example="3GB">%1$s</xliff:g> fräi</string>
   <string name="root_type_service">Späicherservicer</string>
+  <string name="root_type_shortcut">Ofkierzungen</string>
   <string name="root_type_device">Apparater</string>
-  <string name="root_type_apps">Méi Apps</string>
+  <string name="root_type_apps">Méi Appen</string>
   <string name="pref_advanced_devices">Avancéiert Apparater uweisen</string>
   <string name="pref_file_size">Fichiersgréisst uweisen</string>
   <string name="pref_device_size">Gréisst vun den Apparater uweisen</string>

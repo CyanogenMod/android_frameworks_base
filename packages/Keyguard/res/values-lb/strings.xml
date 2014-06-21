@@ -23,6 +23,7 @@
   <string name="keyguard_password_enter_puk_prompt">SIM-PUK-Code</string>
   <string name="keyguard_password_enter_pin_prompt">Neie SIM-PIN-Code</string>
   <string name="keyguard_password_wrong_pin_code">Falsche PIN-Code.</string>
+  <string name="keyguard_charged">Opgelueden</string>
   <string name="keyguard_network_locked_message">Netzwierk gespaart</string>
   <string name="keyguard_missing_sim_message_short">Keng SIM-Kaart</string>
   <string name="keyguard_missing_sim_message" product="tablet">Keng SIM-Kaart am Tablet.</string>
@@ -30,6 +31,21 @@
   <string name="keyguard_accessibility_widget_changed">%1$s. Widget %2$d vu(n) %3$d.</string>
   <string name="keyguard_accessibility_user_selector">Benotzerauswiel</string>
   <string name="keyguard_accessibility_status">Status</string>
+  <string name="keyguard_accessibility_transport_pause_description">Paus-Knäppchen</string>
+  <string name="keyguard_accessibility_transport_play_description">Ofspill-Knäppchen</string>
+  <string name="keyguard_accessibility_transport_stop_description">Stopp-Knäppchen</string>
+  <string name="keyguard_accessibility_transport_thumbs_up_description">Daumen erop</string>
+  <string name="keyguard_accessibility_transport_thumbs_down_description">Daumen erof</string>
+  <string name="keyguard_accessibility_transport_heart_description">Häerz</string>
+  <string name="keyguard_accessibility_hide_bouncer">Start ofgebrach</string>
+  <string name="password_keyboard_label_symbol_key">\?123</string>
+  <string name="password_keyboard_label_alpha_key">ABC</string>
+  <string name="password_keyboard_label_alt_key">ALT</string>
+  <string name="keyboardview_keycode_alt">Alt</string>
+  <string name="keyboardview_keycode_delete">Läschen</string>
+  <string name="keyboardview_keycode_shift">Shift</string>
+  <string name="keyboardview_keycode_enter">Enter</string>
+  <string name="description_target_unlock">Entspären</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="keyguard_transport_pause_description">Paus-Knäppchen</string>
   <string name="keyguard_transport_play_description">Ofspill-Knäppchen</string>
