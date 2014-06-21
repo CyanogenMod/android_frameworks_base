@@ -63,6 +63,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_ONTHEGO;
 import static com.android.internal.util.slim.QSConstants.TILE_BATTERYSAVER;
 import static com.android.internal.util.slim.QSConstants.TILE_WEATHER;
 import static com.android.internal.util.slim.QSConstants.TILE_SCREENCAST;
+import static com.android.internal.util.slim.QSConstants.TILE_APPCIRCLEBAR;
 import static com.android.internal.util.slim.QSConstants.TILE_COMPASS;
 import static com.android.internal.util.slim.QSConstants.TILE_HOVER;
 import static com.android.internal.util.slim.QSConstants.TILE_HALO;
@@ -138,6 +139,7 @@ import com.android.systemui.quicksettings.OnTheGoTile;
 import com.android.systemui.quicksettings.BatterySaverTile;
 import com.android.systemui.quicksettings.WeatherTile;
 import com.android.systemui.quicksettings.ScreenCastTile;
+import com.android.systemui.quicksettings.AppcirclebarTile;
 import com.android.systemui.quicksettings.HaloTile;
 import com.android.systemui.quicksettings.HoverTile;
 
@@ -326,6 +328,8 @@ public class QuickSettingsController {
                 qs = new HaloTile(mContext, this);
             } else if (tile.equals(TILE_HOVER)) {
                 qs = new HoverTile(mContext, this);
+            } else if (tile.equals(TILE_APPCIRCLEBAR)) {
+                qs = new AppcirclebarTile(mContext, this);
             } else if (tile.equals(TILE_SHAKE)) {
                 qs = new ShakeEventTile(mContext, this);
             } else if (tile.contains(TILE_CUSTOM)) {

@@ -195,6 +195,10 @@
     <!-- Equalizer -->
     <string name="quick_settings_equalizer">Equalizer</string>
 
+    <!-- App Circle Bar Tile -->
+    <string name="quick_settings_appcirclebar_on_label">AppCircleBar On</string>
+    <string name="quick_settings_appcirclebar_off_label">AppCircleBar Off</string>
+
     <!-- Halo -->
     <string name="quick_settings_halo_on_label">On</string>
     <string name="quick_settings_halo_off_label">Off</string>
