@@ -368,4 +368,7 @@
 
     <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
     <dimen name="edge_gesture_trigger_thickness">12dp</dimen>
+
+    <!-- Margin for the Quick launch shortcut icons -->
+    <dimen name="navigation_ring_icon_margin">26dp</dimen>
 </resources>
