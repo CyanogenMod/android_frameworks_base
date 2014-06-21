@@ -35,4 +35,10 @@
   <string name="keyboard_layout_slovenian">Eslovenu</string>
   <string name="keyboard_layout_turkish">Turcu</string>
   <string name="keyboard_layout_ukrainian">Ucrainianu</string>
+  <string name="keyboard_layout_arabic">Árabe</string>
+  <string name="keyboard_layout_greek">Griegu</string>
+  <string name="keyboard_layout_hebrew">Hebréu</string>
+  <string name="keyboard_layout_lithuanian">Lituanu</string>
+  <string name="keyboard_layout_spanish_latin">Español (Llatinu)</string>
+  <string name="keyboard_layout_latvian">Letón</string>
 </resources>

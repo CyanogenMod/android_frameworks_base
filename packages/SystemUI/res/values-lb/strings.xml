@@ -21,43 +21,104 @@
   <string name="app_label">System-UI</string>
   <string name="status_bar_clear_all_button">Eidel maachen</string>
   <string name="status_bar_recent_remove_item_title">Aus der Lëscht eraushuelen</string>
-  <string name="status_bar_no_recent_apps">Keng rezent Apps</string>
+  <string name="status_bar_recent_inspect_item_title">App-Info</string>
+  <string name="status_bar_no_recent_apps">Keng rezent Appen</string>
   <string name="status_bar_accessibility_dismiss_recents">Rezent Apps verwerfen</string>
+  <plurals name="status_bar_accessibility_recent_apps">
+    <item quantity="one">1 rezent App</item>
+    <item quantity="other">%d rezent Appen</item>
+  </plurals>
   <string name="status_bar_no_notifications_title">Keng Notifikatiounen</string>
+  <string name="status_bar_ongoing_events_title">Am Gaang</string>
   <string name="status_bar_latest_events_title">Notifikatiounen</string>
+  <string name="battery_low_title">Oplueder uschléissen</string>
+  <string name="battery_low_subtitle">Den Akku gëtt eidel.</string>
+  <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> iwwreg</string>
+  <string name="invalid_charger">Oplueden iwwer USB net ënnerstëtzt.\nBenotz just de matgeliwwerten Oplueder.</string>
   <string name="battery_low_why">Akkuverbrauch</string>
   <string name="status_bar_settings_settings_button">Astellungen</string>
+  <string name="status_bar_settings_wifi_button">WLAN</string>
   <string name="status_bar_settings_airplane">Fligermodus</string>
-  <string name="status_bar_settings_auto_rotation">Schierm automatesch dréinen</string>
+  <string name="status_bar_settings_auto_rotation">Schierm automatesch rotéieren</string>
   <string name="status_bar_settings_mute_label">STOMM</string>
+  <string name="status_bar_settings_auto_brightness_label">AUTO</string>
   <string name="status_bar_settings_notifications">Notifikatiounen</string>
+  <string name="bluetooth_tethered">Bluetooth ugebonnen</string>
+  <string name="status_bar_input_method_settings_configure_input_methods">Methode fir anzeginn astellen</string>
+  <string name="status_bar_use_physical_keyboard">Physesch Tastatur</string>
+  <string name="usb_device_permission_prompt">Der App <xliff:g id="application">%1$s</xliff:g> erlaben op den USB-Apparat zouzegräifen?</string>
+  <string name="usb_accessory_permission_prompt">Der App <xliff:g id="application">%1$s</xliff:g> erlaben op den USB-Accessoire zouzegräifen?</string>
+  <string name="usb_device_confirm_prompt"><xliff:g id="activity">%1$s</xliff:g> opmaache wann dësen USB-Apparat connectéiert ass?</string>
+  <string name="usb_accessory_confirm_prompt"><xliff:g id="activity">%1$s</xliff:g> opmaache wann dësen USB-Accessoire connectéiert ass?</string>
+  <string name="usb_accessory_uri_prompt">Keng installéiert App fir dësen USB-Accessoire. Méi iwwer dësen Accessoire gewuer ginn op <xliff:g id="url">%1$s</xliff:g></string>
+  <string name="title_usb_accessory">USB-Accessoire</string>
+  <string name="label_view">Ukucken</string>
+  <string name="always_use_device">Standartméisseg fir dësen USB-Apparat benotzen</string>
+  <string name="always_use_accessory">Standartméisseg fir dësen USB-Accessoire benotzen</string>
+  <string name="usb_debugging_title">USB-Debugging erlaben?</string>
+  <string name="usb_debugging_message">Den RSA-Fangerofdrock vum Computer ass:\n<xliff:g id="fingerprint">%1$s</xliff:g></string>
+  <string name="usb_debugging_always">Ëmmer vun dësem Computer erlaben</string>
+  <string name="compat_mode_on">Zoom op d\'Schiermgréisst</string>
+  <string name="compat_mode_off">Un d\'Schiermgréisst upassen</string>
+  <string name="screenshot_saving_ticker">Schiermfoto gëtt gespäichert\u2026</string>
+  <string name="screenshot_saving_title">Schiermfoto gëtt gespäichert\u2026</string>
+  <string name="screenshot_saving_text">Schiermfoto gëtt gespäichert.</string>
+  <string name="screenshot_saved_title">Schiermfoto opgeholl.</string>
+  <string name="screenshot_saved_text">Drécke fir d\'Schiermfoto ze kucken.</string>
+  <string name="screenshot_failed_title">Schiermfoto konnt net opgeholl ginn.</string>
+  <string name="screenshot_failed_text">Schiermfoto konnt net gespäichert ginn. Eventuell gëtt de Späicher grad benotzt.</string>
+  <string name="usb_preference_title">USB-Dateiiwwerdroungsoptiounen</string>
+  <string name="use_mtp_button_title">Als Medieplayer (MTP) bereetstellen</string>
+  <string name="use_ptp_button_title">Als Kamera (PTP) bereetstellen</string>
+  <string name="installer_cd_button_title">D\'Fichiersiwwerdroungs-App fir Android um Mac installéieren</string>
   <string name="accessibility_back">Zréck</string>
   <string name="accessibility_home">Heem</string>
   <string name="accessibility_menu">Menü</string>
+  <string name="accessibility_recent">Rezent Appen</string>
   <string name="accessibility_search_light">Sichen</string>
   <string name="accessibility_camera_button">Fotoapparat</string>
+  <string name="accessibility_ime_switch_button">Knäppche fir d\'Method fir anzeginn ze wiesselen.</string>
+  <string name="accessibility_compatibility_zoom_button">Knäppche fir de Kompatibilitéitszoom.</string>
+  <string name="accessibility_compatibility_zoom_example">Zoom op ee méi grousse Schierm.</string>
+  <string name="accessibility_bluetooth_connected">Bluetooth connectéiert.</string>
+  <string name="accessibility_bluetooth_disconnected">Bluetooth deconnectéiert.</string>
   <string name="accessibility_no_battery">Keen Akku.</string>
   <string name="accessibility_battery_one_bar">Akku, ee Stréch.</string>
   <string name="accessibility_battery_two_bars">Akku, zwéi Strécher.</string>
   <string name="accessibility_battery_three_bars">Akku, dräi Strécher.</string>
+  <string name="accessibility_battery_full">Akku gelueden.</string>
   <string name="accessibility_no_phone">Keen Telefon.</string>
   <string name="accessibility_phone_one_bar">Telefonssignal, ee Stréch.</string>
   <string name="accessibility_phone_two_bars">Telefonssignal, zwéi Strécher.</string>
   <string name="accessibility_phone_three_bars">Telefonssignal, dräi Strécher.</string>
+  <string name="accessibility_phone_signal_full">Voll Telefonsignalstäerkt.</string>
   <string name="accessibility_no_data">Keng Daten.</string>
   <string name="accessibility_data_one_bar">Datesignal, ee Stréch.</string>
   <string name="accessibility_data_two_bars">Datesignal, zwéi Strécher.</string>
   <string name="accessibility_data_three_bars">Datesignal, dräi Strécher.</string>
+  <string name="accessibility_data_signal_full">Voll Datesignalstäerkt.</string>
+  <string name="accessibility_wifi_off">WLAN aus.</string>
+  <string name="accessibility_no_wifi">WLAN deconnectéiert.</string>
+  <string name="accessibility_wifi_one_bar">WLAN, ee Stréch.</string>
+  <string name="accessibility_wifi_two_bars">WLAN, zwéi Strécher.</string>
+  <string name="accessibility_wifi_three_bars">WLAN, dräi Strécher.</string>
+  <string name="accessibility_wifi_signal_full">Voll WLAN-Signalstäerkt.</string>
   <string name="accessibility_no_wimax">Kee WiMAX.</string>
+  <string name="accessibility_wimax_one_bar">WiMAX, ee Stréch.</string>
   <string name="accessibility_wimax_two_bars">WiMAX zwéi Strécher.</string>
   <string name="accessibility_wimax_three_bars">WiMAX dräi Strécher.</string>
+  <string name="accessibility_wimax_signal_full">Voll WiMAX-Signalstäerkt.</string>
+  <string name="accessibility_no_signal">Kee Signal.</string>
+  <string name="accessibility_not_connected">Net connectéiert.</string>
   <string name="accessibility_zero_bars">Null Strécher.</string>
   <string name="accessibility_one_bar">Ee Stréch.</string>
   <string name="accessibility_two_bars">Zwéi Strécher.</string>
   <string name="accessibility_three_bars">Dräi Strécher.</string>
+  <string name="accessibility_signal_full">Voll Signalstäerkt.</string>
   <string name="accessibility_desc_on">Un.</string>
   <string name="accessibility_desc_off">Aus.</string>
   <string name="accessibility_desc_connected">Verbonnen.</string>
+  <string name="accessibility_data_connection_gprs">GPRS</string>
   <string name="accessibility_data_connection_1x">1 X</string>
   <string name="accessibility_data_connection_hspa">HSPA</string>
   <string name="accessibility_data_connection_3g">3G</string>
@@ -67,6 +128,79 @@
   <string name="accessibility_data_connection_cdma">CDMA</string>
   <string name="accessibility_data_connection_roaming">Roaming</string>
   <string name="accessibility_data_connection_edge">Edge</string>
+  <string name="accessibility_data_connection_wifi">WLAN</string>
+  <string name="accessibility_no_sim">Keng SIM.</string>
+  <string name="accessibility_bluetooth_tether">Bluetooth-Tethering.</string>
+  <string name="accessibility_airplane_mode">Fligermodus.</string>
+  <string name="accessibility_battery_level">Akku <xliff:g id="number">%d</xliff:g> Prozent.</string>
+  <string name="accessibility_settings_button">Systemastellungen.</string>
+  <string name="accessibility_notifications_button">Notifikatiounen.</string>
+  <string name="accessibility_remove_notification">Notifikatioun ewechhuelen.</string>
+  <string name="accessibility_gps_enabled">GPS aktivéiert.</string>
+  <string name="accessibility_gps_acquiring">GPS-Signal gëtt ofgeruff.</string>
+  <string name="accessibility_tty_enabled">Schreiftelefonie aktivéiert.</string>
+  <string name="accessibility_ringer_vibrate">Schellmodus \"Vibratioun\".</string>
+  <string name="accessibility_ringer_silent">Schellmodus \"Roueg\".</string>
+  <string name="accessibility_recents_item_dismissed"><xliff:g id="app" example="Calendar">%s</xliff:g> verworf.</string>
+  <string name="accessibility_notification_dismissed">Notifikatioun verworf.</string>
+  <string name="accessibility_desc_notification_shade">Notifikatiounsleescht.</string>
+  <string name="accessibility_desc_quick_settings">Séier Astellungen.</string>
+  <string name="accessibility_desc_recent_apps">Rezent Appen.</string>
+  <string name="accessibility_quick_settings_user">Benotzer <xliff:g id="user" example="John Doe">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_wifi"><xliff:g id="signal" example="Three bars">%1$s</xliff:g>. <xliff:g id="network" example="MyWifiNetwork">%2$s</xliff:g></string>
+  <string name="accessibility_quick_settings_mobile">Mobil <xliff:g id="signal" example="Three bars">%1$s</xliff:g>. <xliff:g id="type" example="4G">%2$s</xliff:g>. <xliff:g id="network" example="T-Mobile">%3$s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_battery">Akku <xliff:g id="state" example="50% charging">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_airplane">Fligermodus <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_bluetooth">Bluetooth <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_location">Standuert <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_alarm">Alarm gesat fir <xliff:g id="time" example="Wed 3:30 PM">%s</xliff:g>.</string>
+  <string name="data_usage_disabled_dialog_3g_title">2G- an 3G-Daten deaktivéiert</string>
+  <string name="data_usage_disabled_dialog_4g_title">4G-Daten deaktivéiert</string>
+  <string name="data_usage_disabled_dialog_mobile_title">Mobil Daten deaktivéiert</string>
+  <string name="data_usage_disabled_dialog_title">Daten deaktivéiert</string>
+  <string name="data_usage_disabled_dialog">Du hues déi konfiguréiert Datelimit erreecht.\n\nFalls du d\'Dateniwwerdroung reaktivéiers, kéint däi Provider dat zousätzlech a Rechnung stellen.</string>
+  <string name="data_usage_disabled_dialog_enable">Date reaktivéieren</string>
+  <string name="status_bar_settings_signal_meter_disconnected">
+        Keng Internetconnectioun
+    </string>
+  <string name="status_bar_settings_signal_meter_wifi_nossid">WLAN connectéiert</string>
+  <string name="gps_notification_searching_text">GPS gëtt gesicht</string>
+  <string name="gps_notification_found_text">Standuert duerch GPS festgeluecht</string>
+  <string name="accessibility_location_active">Standuertufroen aktiv</string>
+  <string name="accessibility_clear_all">Notifikatiounen eidel maachen.</string>
+  <string name="status_bar_notification_inspect_item_title">App-Info</string>
+  <string name="accessibility_rotation_lock_off">De Schierm gëtt automatesch rotéiert.</string>
+  <string name="accessibility_rotation_lock_on_landscape">De Schierm ass am Breetformat gespaart.</string>
+  <string name="accessibility_rotation_lock_on_portrait">De Schierm ass am Héichformat gespaart.</string>
+  <string name="dessert_case">Dessertskëscht</string>
+  <string name="start_dreams">Dagesdram</string>
+  <string name="ethernet_label">Ethernet</string>
+  <string name="quick_settings_airplane_mode_label">Fligermodus</string>
+  <string name="quick_settings_battery_charging_label">Gëtt opgelueden, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="quick_settings_battery_charged_label">Opgelueden</string>
+  <string name="quick_settings_bluetooth_label">Bluetooth</string>
+  <string name="quick_settings_bluetooth_multiple_devices_label">Bluetooth (<xliff:g id="number">%d</xliff:g> Apparater)</string>
+  <string name="quick_settings_bluetooth_off_label">Bluetooth Aus</string>
+  <string name="quick_settings_brightness_label">Hellegkeet</string>
+  <string name="quick_settings_rotation_unlocked_label">Automatesch Rotéieren</string>
+  <string name="quick_settings_rotation_locked_label">Rotéierung gespaart</string>
+  <string name="quick_settings_ime_label">Method fir anzeginn</string>
+  <string name="quick_settings_location_label">Lokaliséierung</string>
+  <string name="quick_settings_location_off_label">Lokaliséierung aus</string>
+  <string name="quick_settings_media_device_label">Medienapparat</string>
+  <string name="quick_settings_rssi_label">RSSI</string>
+  <string name="quick_settings_rssi_emergency_only">Nëmmen Noutriff</string>
   <string name="quick_settings_settings_label">Astellungen</string>
+  <string name="quick_settings_time_label">Zäit</string>
   <string name="quick_settings_user_label">Ech</string>
+  <string name="quick_settings_wifi_label">WLAN</string>
+  <string name="quick_settings_wifi_not_connected">Net Connectéiert</string>
+  <string name="quick_settings_wifi_no_network">Keen Netzwierk</string>
+  <string name="quick_settings_wifi_off_label">WLAN Aus</string>
+  <string name="quick_settings_remote_display_no_connection_label">Schierm iwwerdroen</string>
+  <string name="quick_settings_brightness_dialog_title">Hellegkeet</string>
+  <string name="quick_settings_brightness_dialog_auto_brightness_label">AUTO</string>
+  <string name="battery_meter_very_low_overlay_symbol">!</string>
+  <string name="ssl_ca_cert_warning">D\'Netzwierk kéint\n
+iwwerwaacht sinn</string>
 </resources>
