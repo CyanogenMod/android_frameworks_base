@@ -431,5 +431,4 @@
     <!-- Size of the icons/inner icons of the Quick launch shortcuts -->
     <dimen name="navigation_ring_icon_size">88dp</dimen>
     <dimen name="navigation_ring_activity_icon_size">36dp</dimen>
-
 </resources>
