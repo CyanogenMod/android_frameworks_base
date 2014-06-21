@@ -1914,11 +1914,11 @@
   <java-symbol type="drawable" name="ic_navigation_ring_blank_activated" />
   <java-symbol type="drawable" name="ic_navigation_ring_empty" />
   <java-symbol type="drawable" name="ic_navigation_ring_ime_switcher" />
-  <java-symbol type="drawable" name="ic_navigation_ring_killtask" />
-  <java-symbol type="drawable" name="ic_navigation_ring_power" />
+  <java-symbol type="drawable" name="ic_navigation_ring_kill_task" />
   <java-symbol type="drawable" name="ic_navigation_ring_screenshot" />
   <java-symbol type="drawable" name="ic_navigation_ring_silent" />
   <java-symbol type="drawable" name="ic_navigation_ring_sound_on" />
+  <java-symbol type="drawable" name="ic_navigation_ring_standby" />
   <java-symbol type="drawable" name="ic_navigation_ring_torch_on" />
   <java-symbol type="drawable" name="ic_navigation_ring_torch_off" />
   <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
@@ -2018,5 +2018,4 @@
   <java-symbol type="string" name="adb_net_active_notification_title" />
   <java-symbol type="string" name="adb_both_active_notification_title" />
   <java-symbol type="string" name="adb_active_generic_notification_message" />
-
 </resources>
