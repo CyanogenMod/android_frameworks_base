@@ -2435,12 +2435,15 @@ final class ActivityStack {
         final ArrayList<ActivityRecord> activities = r.task.mActivities;
         final int index = activities.indexOf(r);
         if (index < (activities.size() - 1)) {
-            r.task.setFrontOfTask();
+            ActivityRecord next = activities.get(index+1);
+            if (r.frontOfTask) {
+                // The next activity is now the front of the task.
+                next.frontOfTask = true;
+            }
             if ((r.intent.getFlags()&Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET) != 0) {
                 // If the caller asked that this activity (and all above it)
                 // be cleared when the task is reset, don't lose that information,
                 // but propagate it up to the next activity.
-                ActivityRecord next = activities.get(index+1);
                 next.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             }
         }
