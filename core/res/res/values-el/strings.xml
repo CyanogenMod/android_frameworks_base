@@ -1268,8 +1268,8 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"Όλα τα αρχεία που είναι αποθηκευμένα στον αποθηκευτικό σας χώρο USB (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!"</string>
     <string name="extmedia_format_message" product="default" msgid="14131895027543830">"Όλα τα δεδομένα που υπάρχουν στην κάρτα σας (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!"</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Διαμόρφωση"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"Συνδέθηκε ο εντοπισμός σφαλμάτων"</string>
-    <string name="adb_active_notification_message" msgid="1016654627626476142">"Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων."</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"Συνδέθηκε ο εντοπισμός σφαλμάτων USB"</string>
+    <string name="adb_active_notification_message" msgid="1016654627626476142">"Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων USB."</string>
     <string name="select_input_method" msgid="4653387336791222978">"Επιλογή μεθόδου εισόδου"</string>
     <string name="configure_input_methods" msgid="9091652157722495116">"Ρύθμιση μεθόδων εισαγωγής"</string>
     <string name="use_physical_keyboard" msgid="6203112478095117625">"Φυσικό πληκτρολόγιο"</string>
