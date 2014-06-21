@@ -82,6 +82,8 @@
   <string name="permdesc_writeThemesDesc">允许程序修改您已经使用的主题，并插入新的主题。</string>
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
+  <string name="permlab_useHardwareFramework">使用硬件框架</string>
+  <string name="permdesc_useHardwareFramework">允许应用访问 CM 硬件框架。</string>
   <string name="immersive_mode_confirmation_bottom">从底部上划以退出全屏模式。</string>
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>

@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
   <string name="lockscreen_airplane_mode_on">飛航模式</string>
   <string name="progress_nomediapresent" product="default">沒有卸除式媒體存在\u2026</string>
+  <string name="storage_uicc">UICC 卡儲存</string>
   <string name="stk_cc_ussd_to_dial">USSD 請求被修改為 DIAL 請求。</string>
   <string name="stk_cc_ussd_to_ss">USSD 請求被修改為 SS 請求。</string>
   <string name="stk_cc_ussd_to_ussd">USSD 請求被修改為新的 USSD 請求。</string>

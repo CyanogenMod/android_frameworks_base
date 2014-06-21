@@ -108,7 +108,7 @@
   <string name="app_ops_record_audio">registrare audio</string>
   <string name="app_ops_send_mms">inviare un messaggio MMS</string>
   <string name="app_ops_send_sms">inviare un messaggio SMS</string>
-  <string name="app_ops_start_at_bootup">avviaresi all\'accensione</string>
+  <string name="app_ops_start_at_bootup">avviarsi all\'accensione</string>
   <string name="app_ops_toggle_bluetooth">cambiare stato del Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">cambiare stato dei dati mobili</string>
   <string name="app_ops_toggle_wifi">cambiare stato del Wi-Fi</string>

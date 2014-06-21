@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Default</string>
+  <string name="profileNameDefault">Standar</string>
   <string name="profileNameWork">Kerja</string>
   <string name="profileNameHome">Home</string>
   <string name="profileNameSilent">Diam</string>
