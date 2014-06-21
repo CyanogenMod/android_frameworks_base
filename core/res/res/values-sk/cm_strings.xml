@@ -124,6 +124,7 @@
   <string name="app_ops_use_voice_volume">ovládať hlasitosť hovoru</string>
   <string name="app_ops_write_mms">napísať správu MMS</string>
   <string name="app_ops_write_sms">napísať správu SMS</string>
+  <string name="notify_turn_wifi_off_title">Vypnúť Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Ochrana súkromia</string>
   <string name="privacy_guard_dialog_summary">Aplikácia <xliff:g id="app">%1$s</xliff:g> požaduje <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Zapamätať si výber</string>

@@ -34,7 +34,7 @@
   <string name="quick_settings_ringer_normal">サウンド</string>
   <string name="quick_settings_lockscreen">ロック画面</string>
   <string name="quick_settings_network_type">ネットワークモード</string>
-  <string name="quick_settings_report_bug">バグレポート</string>
+  <string name="quick_settings_report_bug">バグをレポート</string>
   <string name="quick_settings_sync">同期</string>
   <string name="quick_settings_sync_off">同期OFF</string>
   <string name="quick_settings_torch">トーチ</string>

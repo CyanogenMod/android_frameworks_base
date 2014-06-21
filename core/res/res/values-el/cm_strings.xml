@@ -124,6 +124,7 @@
   <string name="app_ops_use_voice_volume">έλεγχο της έντασης φωνητικής κλήσης</string>
   <string name="app_ops_write_mms">εγγραφή ενός μηνύματος MMS</string>
   <string name="app_ops_write_sms">εγγραφή ενός μηνύματος SMS</string>
+  <string name="notify_turn_wifi_off_title">Απενεργοποίηση Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Προστασία Απορρήτου</string>
   <string name="privacy_guard_dialog_summary">Το <xliff:g id="app">%1$s</xliff:g> ζητά: <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Απομνημόνευση της επιλογής μου</string>
