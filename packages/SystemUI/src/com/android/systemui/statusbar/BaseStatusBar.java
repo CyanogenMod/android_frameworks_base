@@ -402,6 +402,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 switch (newCustomRecent) {
                     // Default AOSP recents
                     case RecentsConstants.RECENTS_AOSP:
+                    case RecentsConstants.RECENTS_AOSB:
                     case RecentsConstants.RECENTS_HTC:
                     case RecentsConstants.RECENTS_HTC_LARGE:
                         if (mRecents == null || newCustomRecent != mCustomRecent) {
@@ -590,6 +591,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         switch (mCustomRecent) {
             // Default AOSP recents
             case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_AOSB:
             case RecentsConstants.RECENTS_HTC:
             case RecentsConstants.RECENTS_HTC_LARGE:
                 mRecents = getComponent(RecentsComponent.class);
@@ -1450,6 +1452,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         switch (mCustomRecent) {
             // Default, HTC & SLIM
             case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_AOSB:
             case RecentsConstants.RECENTS_HTC:
             case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
@@ -1470,6 +1473,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         switch (mCustomRecent) {
             // Default recents && HTC
             case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_AOSB:
             case RecentsConstants.RECENTS_HTC:
             case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
@@ -1488,6 +1492,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         switch (mCustomRecent) {
             // Default recents && HTC
             case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_AOSB:
             case RecentsConstants.RECENTS_HTC:
             case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:
@@ -1506,6 +1511,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         switch (mCustomRecent) {
             // Default recents && HTC
             case RecentsConstants.RECENTS_AOSP:
+            case RecentsConstants.RECENTS_AOSB:
             case RecentsConstants.RECENTS_HTC:
             case RecentsConstants.RECENTS_HTC_LARGE:
             case RecentsConstants.RECENTS_SLIM:

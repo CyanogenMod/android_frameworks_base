@@ -52,4 +52,10 @@
 
     <!-- THEMEABLE PIE PIE PIE PIE PIE? -->
 
+    <!-- iOS Recents -->
+    <color name="whos_going_out">#999EAE</color>	
+    <color name="person_bubble_bg">#434E6A</color>
+    <color name="person_bubble_name">#FFFFFF</color>
+    <color name="person_bubble_status">#C7CAD3</color>
+    <color name="person_bubble_shadow">#363F56</color>
 </resources>

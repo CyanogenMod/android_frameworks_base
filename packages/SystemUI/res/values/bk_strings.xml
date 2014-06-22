@@ -158,4 +158,9 @@
     <!-- Title shown when app provides no interface -->
     <string name="accessibility_hover">Turn hover notifications on or off.</string>
     <string name="status_bar_floating_no_interface">App provides no interface</string>
+
+    <!-- Recent Apps -->
+    <string name="recent_title_txt">Recent Apps</string>
+    <!-- iOS Recents -->
+    <string name="whos_going_out">Favorites</string>
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/person_bubble"
+	android:layout_width="@dimen/person_bubble_width"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:padding="@dimen/person_bubble_corner"
+	>
+	<TextView
+		android:id="@+id/person_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/person_bubble_corner"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="@color/person_bubble_name"
+		android:textStyle="bold"
+		style="@style/PersonBubbleText"
+		android:ellipsize="end"
+		android:singleLine = "true"
+		/>
+	<TextView
+		android:id="@+id/person_status"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="@color/person_bubble_status"
+		style="@style/PersonBubbleText"
+		/>
+</LinearLayout>

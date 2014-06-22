@@ -116,11 +116,11 @@ public class Recents extends SystemUI implements RecentsComponent {
                 int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
-                float thumbWidth = (mCustomRecent == 4) ? 
+                float thumbWidth = (mCustomRecent == 4 || mCustomRecent == 5) ? 
                                 res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width_sense) :
                                 res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_width);
 
-                float thumbHeight = (mCustomRecent == 4) ? 
+                float thumbHeight = (mCustomRecent == 4 || mCustomRecent == 5) ? 
                                 res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height_sense) :
                                 res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height);
                 if (first == null) {
@@ -158,7 +158,7 @@ public class Recents extends SystemUI implements RecentsComponent {
                             + thumbWidth
                             + 2 * thumbBgPadding;
 
-                    int getThumbHeight = (mCustomRecent == 4) ? 
+                    int getThumbHeight = (mCustomRecent == 4 || mCustomRecent == 5) ? 
                                 res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height_sense) :
                                 res.getDimensionPixelSize(R.dimen.status_bar_recents_thumbnail_height);
 

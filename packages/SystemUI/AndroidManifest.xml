@@ -104,6 +104,9 @@
     <!-- DownloadProvider -->
     <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
 
+    <!-- Recents Peoples View Support-->
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+
     <!-- WeatherTile -->
     <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 
@@ -190,6 +193,10 @@
             <action android:name="com.android.systemui.TOGGLE_RECENTS" />
           </intent-filter>
         </activity>
+
+	<activity android:name=".recent.PersonBubbleActivity"
+		android:theme="@android:style/Theme.Translucent.NoTitleBar"
+		/>
 
         <receiver
             android:name=".recent.RecentsPreloadReceiver"

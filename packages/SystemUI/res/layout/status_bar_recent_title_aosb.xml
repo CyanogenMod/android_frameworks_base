@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/status_recent_title"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:gravity="top"
+    android:orientation="horizontal" 
+    android:src="#00000000">
+
+    <TextView
+        android:id="@+id/recent_title"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+	android:layout_weight="1"
+        android:text="@string/recent_title_txt"
+        android:shadowColor="#40000000"
+        android:shadowDx="0"
+        android:shadowDy="2"
+	android:shadowRadius="5"
+        android:textColor="#FFFFFF"
+	android:layout_gravity="center"
+	android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="1dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>

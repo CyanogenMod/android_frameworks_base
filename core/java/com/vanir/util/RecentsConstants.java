@@ -36,4 +36,10 @@ public class RecentsConstants {
      */
     public static final int RECENTS_HTC_LARGE = 4;
 
+   /*
+     * System.Settings value indicating AOSB Mod sidebar recents
+     * @hide
+     */
+    public static final int RECENTS_AOSB = 5;
+
 }

@@ -139,4 +139,8 @@
     <dimen name="default_notification_max_height">256dp</dimen>
     <dimen name="default_notification_row_min_height">70dp</dimen>
     <dimen name="default_notification_row_max_height">260dp</dimen>
+
+    <!-- iOS Recents -->
+    <dimen name="person_bubble_width">162dp</dimen>
+    <dimen name="person_bubble_corner">8dp</dimen>
 </resources>

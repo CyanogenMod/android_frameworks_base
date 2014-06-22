@@ -29,10 +29,12 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.StatusBarPanel;
+import com.android.systemui.recent.model.*;
 
 import java.lang.Exception;
 import java.util.List;
@@ -48,6 +50,7 @@ public class RecentsActivity extends Activity {
     private static final String WAS_SHOWING = "was_showing";
 
     private RecentsPanelView mRecentsPanel;
+    private ViewGroup people;
     private IntentFilter mIntentFilter;
     private boolean mShowing;
     private boolean mForeground;
@@ -156,6 +159,7 @@ public class RecentsActivity extends Activity {
         mBackPressed = true;
         try {
             dismissAndGoBack();
+            dismissiOSView();
         } finally {
             mBackPressed = false;
         }
@@ -169,6 +173,7 @@ public class RecentsActivity extends Activity {
                     | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivityAsUser(homeIntent, new UserHandle(UserHandle.USER_CURRENT));
             mRecentsPanel.show(false);
+            dismissiOSView();
             RecentTasksLoader.getInstance(this).cancelPreloadingFirstTask();
         }
     }
@@ -197,6 +202,14 @@ public class RecentsActivity extends Activity {
         finish();
     }
 
+    public void dismissiOSView() {
+        if(people != null && people.getChildCount() > 0){
+            people.removeAllViews();
+            people.setOnClickListener(null);
+        }
+        //finish();// Finish Current Activity
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
@@ -208,8 +221,31 @@ public class RecentsActivity extends Activity {
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
         if (mCustomRecent == 4) {
             setContentView(R.layout.status_bar_recent_panel_htc);
+        } else if (mCustomRecent == 5) {
+            setContentView(R.layout.status_bar_recent_panel_aosb);
         } else {
             setContentView(R.layout.status_bar_recent_panel);
+        }
+
+        // 1 is for Potrait and 2 for Landscape.
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == 1) {
+            int IOS_RECENT_TYPE = 2;
+            List<Person> mPeople;
+        if (IOS_RECENT_TYPE == 1) {
+            mPeople = People.PEOPLE_STARRED(this);
+        } else {
+            mPeople = People.PEOPLE_LOGS(this);
+        }
+        people = (ViewGroup) findViewById(R.id.people);
+        for (int i = 0; i < mPeople.size(); i++) {
+            Person person = mPeople.get(i);
+            if (people != null) {
+                people.addView(People.inflatePersonView(this, people, person));
+                }
+            }
+        } else {
+            people = null;
         }
 
         mRecentsPanel = (RecentsPanelView) findViewById(R.id.recents_root);
@@ -245,6 +281,7 @@ public class RecentsActivity extends Activity {
         try {
             unregisterReceiver(mIntentReceiver);
         } catch (Exception ignored) { }
+        dismissiOSView();
         super.onDestroy();
     }
 
@@ -260,6 +297,7 @@ public class RecentsActivity extends Activity {
             if (mRecentsPanel != null) {
                 if (mRecentsPanel.isShowing()) {
                     dismissAndGoBack();
+                    dismissiOSView();
                 } else {
                     final RecentTasksLoader recentTasksLoader = RecentTasksLoader.getInstance(this);
                     boolean waitingForWindowAnimation = checkWaitingForAnimationParam &&

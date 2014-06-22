@@ -99,4 +99,25 @@
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingEnd">5dp</item>
     </style>
+
+    <style name="RecentsAppsLabel">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@color/status_bar_recents_app_label_color</item>
+    </style>
+
+    <!-- iOS Recents -->
+    <style name="AppBaseTheme"
+        parent="android:Theme.Light">
+    </style>
+
+    <style name="AppTheme"
+        parent="AppBaseTheme">
+    </style>
+
+    <style name="PersonBubbleText">
+    	<item name="android:shadowColor">@color/person_bubble_shadow</item>
+    	<item name="android:shadowRadius">2</item>
+    	<item name="android:shadowDx">0</item>
+    	<item name="android:shadowDy">-4</item>
+    </style>
 </resources>

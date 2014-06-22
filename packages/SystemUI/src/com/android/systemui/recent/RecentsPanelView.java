@@ -363,7 +363,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
-        if (mCustomRecent == 4) {
+        if (mCustomRecent == 4 || mCustomRecent == 5) {
             mFitThumbnailToXY = res.getBoolean(R.bool.config_recents_thumbnail_image_fits_to_xy_sense);
             mThumbnailWidth = Math.round(res.getDimension(R.dimen.status_bar_recents_thumbnail_width_sense));
         } else {
@@ -740,11 +740,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     }
 
     /**
-* Convert drawable to bitmap.
-*
-* @param drawable Drawable object to be converted.
-* @return converted bitmap.
-*/
+     * Convert drawable to bitmap.
+     *
+     * @param drawable Drawable object to be converted.
+     * @return converted bitmap.
+     */
     private Bitmap drawableToBitmap(Drawable drawable) {
 
             Bitmap thumbnail;
@@ -795,7 +795,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             int mCustomRecent = Settings.System.getIntForUser(mContext.getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
 
-            if(mCustomRecent == 3 || mCustomRecent == 4) {
+            if(mCustomRecent == 3 || mCustomRecent == 4 || mCustomRecent == 5) {
                 h.thumbnailDrawable = new BitmapDrawable(drawableToBitmap(thumbnail));
                 if (h.thumbnailDrawable != null)
                     thumbnail = h.thumbnailDrawable; 
@@ -810,11 +810,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 h.thumbnailViewDrawable.getIntrinsicHeight() != thumbnail.getIntrinsicHeight()) {
                 if (mFitThumbnailToXY) {
                     h.thumbnailViewImage.setScaleType(ScaleType.FIT_XY);
-                    if(mCustomRecent == 3 || mCustomRecent == 4) {
+                    if(mCustomRecent == 3 || mCustomRecent == 4 || mCustomRecent == 5) {
                         h.thumbnailViewImage.setRotationY(25.0f);
                     }
                 } else {
-                    if(mCustomRecent == 3 || mCustomRecent == 4) {
+                    if(mCustomRecent == 3 || mCustomRecent == 4 || mCustomRecent == 5) {
                         h.thumbnailViewImage.setScaleType(ScaleType.FIT_CENTER);
                         h.thumbnailViewImage.setRotationY(25.0f);
                         if (DEBUG) Log.d(TAG, "thumbnail.getHeight(): " + thumbnail.getIntrinsicHeight());
