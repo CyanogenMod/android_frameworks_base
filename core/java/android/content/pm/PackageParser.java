@@ -1241,6 +1241,9 @@ public class PackageParser {
         // Only search the tree when the tag is directly below <manifest>
         final int searchDepth = parser.getDepth() + 1;
 
+        // Search for category and actions inside <intent-filter>
+        final int iconPackSearchDepth = parser.getDepth() + 4;
+
         final List<VerifierInfo> verifiers = new ArrayList<VerifierInfo>();
         boolean isTheme = false;
 
@@ -1272,9 +1275,35 @@ public class PackageParser {
                 isTheme = true;
                 installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
             }
+
+            if (parser.getDepth() == iconPackSearchDepth && isLegacyIconPack(parser)) {
+                isTheme = true;
+                installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
+            }
         }
 
         return new PackageLite(pkgName.intern(), versionCode, installLocation, verifiers, isTheme);
+    }
+
+    private static boolean isLegacyIconPack(XmlPullParser parser) {
+        boolean isAction = "action".equals(parser.getName());
+        boolean isCategory = "category".equals(parser.getName());
+        String[] items = isAction ? ThemeUtils.sSupportedActions :
+                (isCategory ? ThemeUtils.sSupportedCategories : null);
+
+        if (items != null) {
+            for (int i = 0; i < parser.getAttributeCount(); i++) {
+                if ("name".equals(parser.getAttributeName(i))) {
+                    final String value = parser.getAttributeValue(i);
+                    for (String item : items) {
+                        if (item.equals(value)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
