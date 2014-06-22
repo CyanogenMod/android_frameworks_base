@@ -53,6 +53,7 @@ import android.widget.TextView;
 
 import com.android.internal.widget.SizeAdaptiveLayout;
 import com.android.systemui.R;
+
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.BaseStatusBar.NotificationClicker;
 import com.android.systemui.statusbar.NotificationData.Entry;
@@ -87,7 +88,7 @@ public class NotificationHelper {
     private ActivityManager mActivityManager;
 
     public boolean mRingingOrConnected = false;
-
+    
     /**
      * Creates a new instance
      * @Param context the current Context
