@@ -3009,6 +3009,20 @@ public final class Settings {
         public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
 
         /**
+         * Heads Up Timeout
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_TIMEOUT = "heads_up_timeout";
+
+        /**
+         * Heads Up Fullscreen Timeout
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_FS_TIMEOUT = "heads_up_fs_timeout";
+
+        /**
          * Quick Settings Panel Dynamic Tiles
          *
          * @hide
