@@ -60,6 +60,7 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
         int minHeight = mContext.getResources().getDimensionPixelSize(R.dimen.default_notification_min_height);
         int maxHeight = mContext.getResources().getDimensionPixelSize(R.dimen.default_notification_row_max_height);
         mExpandHelper = new ExpandHelper(mContext, this, minHeight, maxHeight);
+        mExpandHelper.setForceOneFinger(true);
         float densityScale = mContext.getResources().getDisplayMetrics().density;
         float pagingTouchSlop = ViewConfiguration.get(mContext).getScaledPagingTouchSlop();
         mSwipeHelper = new SwipeHelper(SwipeHelper.X, this, densityScale, pagingTouchSlop);
@@ -223,6 +224,7 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
 
         @Override
         public void onBeginDrag(View v) {
+            requestDisallowInterceptTouchEvent(true);
             mHover.setLocked(true);
             mHover.clearHandlerCallbacks();
         }
