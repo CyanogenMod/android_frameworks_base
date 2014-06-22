@@ -1046,8 +1046,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             mContext.unbindService(info.connection);
         }
     }
-
-    /**
+     /*
      * Removes a listener from the list but does not unbind from the listener's service.
      *
      * @return the removed listener.

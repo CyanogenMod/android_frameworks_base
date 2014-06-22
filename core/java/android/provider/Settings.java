@@ -4081,13 +4081,6 @@ public final class Settings {
          * @hide
          */
         public static final String WAKELOCK_BLOCKING_LIST = "wakelock_blocking_list";
-
-        /**
-         * Performance profile
-         * @see config_perf_profile_prop in frameworks/base/core/res/res/values/config.xml
-         * @hide
-         */
-        public static final String PERFORMANCE_PROFILE = "performance_profile";
         
         /**  
          * Enable Menu key
@@ -4235,14 +4228,14 @@ public final class Settings {
         public static final String HOVER_EXCLUDE_LOW_PRIORITY = "hover_exclude_low_priority";
 
         /**
-         * Hover: Only show up if StatusBar is hidden, default is 1 (on).
+         * Hover: Only show up if StatusBar is hidden, default is 0 (off).
          *
          * @hide
          */
         public static final String HOVER_REQUIRE_FULLSCREEN_MODE = "hover_require_fullscreen_mode";
 
         /**
-         * Hover: Option to exclude topmost app, default is 1 (on).
+         * Hover: Option to exclude topmost app, default is 0 (off).
          *
          * @hide
          */
@@ -6443,13 +6436,6 @@ public final class Settings {
         public static final String DEFAULT_THEME_COMPONENTS = "default_theme_components";
 
         /**
-         * Whether the default theme was applied on the first boot.
-         * @hide
-         */
-        public static final String DEFAULT_THEME_APPLIED_ON_FIRST_BOOT =
-                "default_theme_applied_on_first_boot";
-
-        /**
          * Performance profile
          * @see config_perf_profile_prop in frameworks/base/core/res/res/values/config.xml
          * @hide
@@ -6464,6 +6450,7 @@ public final class Settings {
 
         /**
          * Protected Components
+         * @hide
          */
         public static final String PROTECTED_COMPONENTS = "protected_components";
 

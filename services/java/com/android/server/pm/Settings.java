@@ -2714,8 +2714,10 @@ final class Settings {
         FileUtils.setPermissions(path.toString(), FileUtils.S_IRWXU | FileUtils.S_IRWXG
                 | FileUtils.S_IXOTH, -1, -1);
         for (PackageSetting ps : mPackages.values()) {
+            boolean installed = ((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0) ||
+                    (ps.pkg.mIsThemeApk || ps.pkg.mIsLegacyThemeApk || ps.pkg.mIsLegacyIconPackApk);
             // Only system apps are initially installed.
-            ps.setInstalled((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0, userHandle);
+            ps.setInstalled(installed, userHandle);
             // Need to create a data directory for all apps under this user.
             installer.createUserData(ps.name,
                     UserHandle.getUid(userHandle, ps.appId), userHandle,

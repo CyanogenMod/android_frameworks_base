@@ -372,16 +372,6 @@ public class Vpn extends BaseNetworkStateTracker {
             if (jniSetAddresses(interfaze, builder.toString()) < 1) {
                 throw new IllegalArgumentException("At least one address must be specified");
             }
-
-            if (config.routes != null) {
-                builder = new StringBuilder();
-                for (RouteInfo route : config.routes) {
-                    String[] split = route.toString().split("->");
-                    builder.append(" " + split[0].trim());
-                }
-                jniSetRoutes(interfaze, builder.toString());
-            }
-
             Connection connection = new Connection();
             if (!mContext.bindServiceAsUser(intent, connection, Context.BIND_AUTO_CREATE,
                         new UserHandle(mUserId))) {
@@ -1141,13 +1131,6 @@ public class Vpn extends BaseNetworkStateTracker {
                 }
 
                 // Set the routes.
-                StringBuilder builder = new StringBuilder();
-                for (RouteInfo route : mConfig.routes) {
-                    String[] split = route.toString().split("->");
-                    builder.append(" " + split[0].trim());
-                }
-                jniSetRoutes(mConfig.interfaze, builder.toString());
-
                 long token = Binder.clearCallingIdentity();
                 try {
                     mCallback.setMarkedForwarding(mConfig.interfaze);

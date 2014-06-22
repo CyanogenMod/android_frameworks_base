@@ -77,11 +77,34 @@
         android:textColor="#00A040"
         android:padding="2dp"
         />
-
-        <FrameLayout android:id="@+id/action_button_holder"
+        
+        <FrameLayout android:id="@+id/aospa_button_holder"
             android:layout_width="50dp"
             android:layout_height="50dp"
             >
+            <ImageView android:id="@+id/halo_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_notify_halo_normal"
+                android:contentDescription="@string/accessibility_halo"
+                />
+            <ImageView android:id="@+id/hover_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_notify_hover_normal"
+                android:background="@drawable/ic_notify_button_bg"
+                android:contentDescription="@string/accessibility_clear_all"
+                />
+        </FrameLayout>
+        
+    <FrameLayout android:id="@+id/action_button_holder"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        >
+        
             <ImageView android:id="@+id/clear_all_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -98,28 +121,6 @@
                 android:background="@drawable/ic_notify_button_bg"
                 android:visibility="gone"
                 android:contentDescription="@string/accessibility_desc_add_quick_settings"
-                />
-        </FrameLayout>
-
-        <FrameLayout android:id="@+id/aospa_button_holder"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            >
-            <ImageView android:id="@+id/halo_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_notify_halo_normal"
-                android:background="@drawable/ic_notify_button_bg"
-                android:contentDescription="@string/accessibility_halo"
-                />
-            <ImageView android:id="@+id/hover_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_notify_hover_normal"
-                android:background="@drawable/ic_notify_button_bg"
-                android:contentDescription="@string/accessibility_clear_all"
                 />
         </FrameLayout>
 

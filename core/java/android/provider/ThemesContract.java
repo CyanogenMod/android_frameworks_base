@@ -169,6 +169,20 @@ public class ThemesContract {
         public static final String MODIFIES_OVERLAYS = "mods_overlays";
 
         /**
+         * 1 if theme has an overlay for SystemUI/StatusBar
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_STATUS_BAR = "mods_status_bar";
+
+        /**
+         * 1 if theme has an overlay for SystemUI/NavBar
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_NAVIGATION_BAR = "mods_navigation_bar";
+
+        /**
          * URI to the theme's wallpaper. We should support multiple wallpaper
          * but for now we will just have 1.
          * <P>Type: TEXT</P>
@@ -247,6 +261,7 @@ public class ThemesContract {
         public static final String KEY_NOTIFICATIONS = "mixnmatch_notifications";
         public static final String KEY_RINGTONE = "mixnmatch_ringtone";
         public static final String KEY_OVERLAYS = "mixnmatch_overlays";
+        public static final String KEY_NAVIGATION_BAR = "mixnmatch_navigation_bar";
 
         public static final String[] ROWS = { KEY_HOMESCREEN,
             KEY_LOCKSCREEN,
@@ -257,7 +272,8 @@ public class ThemesContract {
             KEY_NOTIFICATIONS,
             KEY_RINGTONE,
             KEY_ALARM,
-            KEY_OVERLAYS
+            KEY_OVERLAYS,
+            KEY_NAVIGATION_BAR
         };
 
         /**
@@ -285,6 +301,12 @@ public class ThemesContract {
                 throw new IllegalArgumentException("Ringtone mixnmatch component does not have a related column");
             } else if (component.equals(MixnMatchColumns.KEY_OVERLAYS)) {
                 return ThemesColumns.OVERLAYS_URI;
+            } else if (component.equals(MixnMatchColumns.KEY_STATUS_BAR)) {
+                throw new IllegalArgumentException(
+                        "Status bar mixnmatch component does not have a related column");
+            } else if (component.equals(MixnMatchColumns.KEY_NAVIGATION_BAR)) {
+                throw new IllegalArgumentException(
+                        "Navigation bar mixnmatch component does not have a related column");
             }
             return null;
         }
@@ -312,6 +334,10 @@ public class ThemesContract {
                 return MixnMatchColumns.KEY_RINGTONE;
             } else if (component.equals(ThemesColumns.MODIFIES_OVERLAYS)) {
                 return MixnMatchColumns.KEY_OVERLAYS;
+            } else if (component.equals(ThemesColumns.MODIFIES_STATUS_BAR)) {
+                return MixnMatchColumns.KEY_STATUS_BAR;
+            } else if (component.equals(ThemesColumns.MODIFIES_NAVIGATION_BAR)) {
+                return MixnMatchColumns.KEY_NAVIGATION_BAR;
             }
             return null;
         }
@@ -339,8 +365,103 @@ public class ThemesContract {
                 return ThemesColumns.MODIFIES_RINGTONES;
             } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_OVERLAYS)) {
                 return ThemesColumns.MODIFIES_OVERLAYS;
+            } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_STATUS_BAR)) {
+                return ThemesColumns.MODIFIES_STATUS_BAR;
+            } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_NAVIGATION_BAR)) {
+                return ThemesColumns.MODIFIES_NAVIGATION_BAR;
             }
             return null;
         }
+    }
+
+    /**
+     * Table containing cached preview blobs for a given theme
+     */
+    public static class PreviewColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "previews");
+
+        /**
+         * The unique ID for a row.
+         * <P>Type: INTEGER (long)</P>
+         */
+        public static final String _ID = "_id";
+
+        /**
+         * The unique ID for the theme these previews belong to.
+         * <P>Type: INTEGER (long)</P>
+         */
+        public static final String THEME_ID = "theme_id";
+
+        /**
+         * Cached image of the themed status bar background.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_BACKGROUND = "statusbar_background";
+
+        /**
+         * Cached image of the themed bluetooth status icon.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_BLUETOOTH_ICON = "statusbar_bluetooth_icon";
+
+        /**
+         * Cached image of the themed wifi status icon.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_WIFI_ICON = "statusbar_wifi_icon";
+
+        /**
+         * Cached image of the themed cellular signal status icon.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_SIGNAL_ICON = "statusbar_signal_icon";
+
+        /**
+         * Cached image of the themed battery using portrait style.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_BATTERY_PORTRAIT = "statusbar_battery_portrait";
+
+        /**
+         * Cached image of the themed battery using landscape style.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_BATTERY_LANDSCAPE = "statusbar_battery_landscape";
+
+        /**
+         * Cached image of the themed battery using circle style.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STATUSBAR_BATTERY_CIRCLE = "statusbar_battery_circle";
+
+        /**
+         * The themed margin value between the wifi and rssi signal icons.
+         * <P>Type: INTEGER (int)</P>
+         */
+        public static final String STATUSBAR_WIFI_COMBO_MARGIN_END = "wifi_combo_margin_end";
+
+        /**
+         * The themed color used for clock text in the status bar.
+         * <P>Type: INTEGER (int)</P>
+         */
+        public static final String STATUSBAR_CLOCK_TEXT_COLOR = "statusbar_clock_text_color";
+
+        /**
+         * Cached image of the themed back button.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String NAVBAR_BACK_BUTTON = "navbar_back_button";
+
+        /**
+         * Cached image of the themed home button.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String NAVBAR_HOME_BUTTON = "navbar_home_button";
+
+        /**
+         * Cached image of the themed recents button.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String NAVBAR_RECENT_BUTTON = "navbar_recent_button";
     }
 }

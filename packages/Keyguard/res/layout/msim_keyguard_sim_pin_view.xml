@@ -54,7 +54,7 @@
            android:orientation="horizontal"
            android:layout_weight="1"
            >
-           <TextView android:id="@+id/pinEntry"
+           <TextView android:id="@+id/simPinEntry"
                android:editable="true"
                android:layout_width="0dip"
                android:layout_height="match_parent"
@@ -98,7 +98,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="1"
                />
            <view class="com.android.keyguard.NumPadKey"
@@ -107,7 +107,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="2"
                />
            <view class="com.android.keyguard.NumPadKey"
@@ -116,7 +116,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="3"
                />
        </LinearLayout>
@@ -132,7 +132,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="4"
                />
            <view class="com.android.keyguard.NumPadKey"
@@ -141,7 +141,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="5"
                />
            <view class="com.android.keyguard.NumPadKey"
@@ -150,7 +150,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="6"
                />
        </LinearLayout>
@@ -166,7 +166,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="7"
                />
            <view class="com.android.keyguard.NumPadKey"
@@ -175,7 +175,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="8"
                />
            <view class="com.android.keyguard.NumPadKey"
@@ -184,7 +184,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="9"
                />
        </LinearLayout>
@@ -210,7 +210,7 @@
                android:layout_width="0px"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               androidprv:textView="@+id/pinEntry"
+               androidprv:textView="@+id/simPinEntry"
                androidprv:digit="0"
                />
            <ImageButton

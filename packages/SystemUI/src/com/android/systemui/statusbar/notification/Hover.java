@@ -290,8 +290,8 @@ public class Hover {
         return mStatusBar.isExpandedVisible();
     }
 
-    public boolean isKeyguardSecureShowing() {
-        return mKeyguardManager.isKeyguardLocked() && mKeyguardManager.isKeyguardSecure();
+    public boolean isKeyguardShowing() {
+        return mKeyguardManager.isKeyguardLocked();
     }
 
     public boolean isShowing() {
@@ -337,7 +337,7 @@ public class Hover {
 
     public boolean requireFullscreenMode() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HOVER_REQUIRE_FULLSCREEN_MODE, 1) != 0;
+                Settings.System.HOVER_REQUIRE_FULLSCREEN_MODE, 0) != 0;
     }
 
     public boolean excludeNonClearable() {
@@ -357,7 +357,7 @@ public class Hover {
 
     public boolean excludeTopmost() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HOVER_EXCLUDE_TOPMOST, 1) != 0;
+                Settings.System.HOVER_EXCLUDE_TOPMOST, 0) != 0;
     }
 
     public boolean isInCallUINotification(Entry entry) {
@@ -388,7 +388,7 @@ public class Hover {
 
     public void showCurrentNotification() {
         final HoverNotification currentNotification = getHoverNotification(INDEX_CURRENT);
-        if (currentNotification != null && !isKeyguardSecureShowing() && !isStatusBarExpanded()
+        if (currentNotification != null && !isKeyguardShowing() && !isStatusBarExpanded()
                 && mHoverActive && !mShowing && isScreenOn() && !isSimPanelShowing()) {
             if (isRingingOrConnected() && isDialpadShowing()) {
                 // incoming call notification has been already processed,
@@ -425,7 +425,7 @@ public class Hover {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     if (isStatusBarExpanded() | (isRingingOrConnected() && isDialpadShowing())
-                            | isKeyguardSecureShowing() | !isScreenOn() | isSimPanelShowing()) {
+                            | isKeyguardShowing() | !isScreenOn() | isSimPanelShowing()) {
                         clearHandlerCallbacks();
                         setAnimatingVisibility(false);
                         dismissHover(true, true);
@@ -435,7 +435,7 @@ public class Hover {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (isStatusBarExpanded() | (isRingingOrConnected() && isDialpadShowing())
-                            | isKeyguardSecureShowing() | !isScreenOn() | isSimPanelShowing()) {
+                            | isKeyguardShowing() | !isScreenOn() | isSimPanelShowing()) {
                         clearHandlerCallbacks();
                         setAnimatingVisibility(false);
                         dismissHover(false, true);
@@ -461,7 +461,7 @@ public class Hover {
         clearHandlerCallbacks();
 
         // just to be safe if something bad happened that satisfy these cases
-        if (!isScreenOn() | isKeyguardSecureShowing() | isStatusBarExpanded()
+        if (!isScreenOn() | isKeyguardShowing() | isStatusBarExpanded()
                 | isRingingOrConnected() | isDialpadShowing() | isSimPanelShowing()) {
             dismissHover(true, true);
             return;
@@ -626,7 +626,8 @@ public class Hover {
         //Exclude blacklisted
         try {
             final String packageName = entry.notification.getPackageName();
-            allowed = mStatusBar.getNotificationManager().isPackageAllowedForHover(packageName);
+            allowed = mStatusBar.getNotificationManager().isPackageAllowedForHover(packageName)
+                || mNotificationHelper.isNotificationBlacklisted(packageName);
         } catch (android.os.RemoteException ex) {
             // System is dead
         }
@@ -664,7 +665,7 @@ public class Hover {
         }
 
         // second, if we've just expanded statusbar or turned screen off return
-        if (!isScreenOn() | isStatusBarExpanded() | isKeyguardSecureShowing()) {
+        if (!isScreenOn() | isStatusBarExpanded() | isKeyguardShowing()) {
             if (mShowing) {
                 dismissHover(true, true);
             } else {
