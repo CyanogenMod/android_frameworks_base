@@ -1232,7 +1232,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private String getTopLevelPackage() {
         final ActivityManager am = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
         ComponentName componentInfo = taskInfo.get(0).topActivity;
         return componentInfo.getPackageName();
     }

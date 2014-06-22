@@ -74,6 +74,10 @@
         <item>0</item><item>286</item>
     </array>
 
+    <string-array name="heads_up_pkg_whitelist" translatable="false">
+        <item>com.android.mms</item>
+    </string-array>
+
     <!-- Cardinal directions for the compass tile -->
     <string-array name="cardinal_directions">
         <item>N</item>  <!-- North -->
