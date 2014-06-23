@@ -82,6 +82,29 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private final static boolean DBG = true;
     private final static boolean VDBG = false;
 
+    /* Intent to indicate change in upstream interface change */
+    public static final String UPSTREAM_IFACE_CHANGED_ACTION =
+                         "com.android.server.connectivity.UPSTREAM_IFACE_CHANGED";
+
+    // Upstream Interface Name i.e rmnet_data0, wlan0 etc
+    public static final String EXTRA_UPSTREAM_IFACE = "tetheringUpstreamIface";
+
+    // Upstream Interface IP Type i.e IPV6 or IPV4
+    public static final String EXTRA_UPSTREAM_IP_TYPE = "tetheringUpstreamIpType";
+
+    // Update Type i.e Add upstream interface or delete upstream interface
+    public static final String EXTRA_UPSTREAM_UPDATE_TYPE = "tetheringUpstreamUpdateType";
+
+    // Default Value for Extra Infomration
+    public static final int EXTRA_UPSTREAM_INFO_DEFAULT = -1;
+
+    private enum IPAddrType { V4, V6 }
+
+    private enum UpstreamInfoUpdateType {
+        UPSTREAM_IFACE_REMOVED,
+        UPSTREAM_IFACE_ADDED
+    }
+
     // TODO - remove both of these - should be part of interface inspection/selection stuff
     private String[] mTetherableUsbRegexs;
     private String[] mTetherableWifiRegexs;
@@ -135,7 +158,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private boolean mRndisEnabled;       // track the RNDIS function enabled state
     private boolean mUsbTetherRequested; // true if USB tethering should be started
                                          // when RNDIS is enabled
-
     public Tethering(Context context, INetworkManagementService nmService,
             INetworkStatsService statsService, IConnectivityManager connService, Looper looper) {
         mContext = context;
@@ -473,6 +495,18 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
     }
 
+    private void sendUpstreamIfaceChangeBroadcast( String upstreamIface,
+                                                   IPAddrType ip_type, UpstreamInfoUpdateType update_type) {
+        if (DBG) Log.d(TAG, "sendUpstreamIfaceChangeBroadcast upstreamIface:" + upstreamIface +
+                            " IP Type: "+ ip_type + " update_type" + update_type);
+        Intent intent = new Intent(UPSTREAM_IFACE_CHANGED_ACTION);
+        intent.putExtra(EXTRA_UPSTREAM_IFACE, upstreamIface);
+        intent.putExtra(EXTRA_UPSTREAM_IP_TYPE, ip_type.ordinal());
+        intent.putExtra(EXTRA_UPSTREAM_UPDATE_TYPE, update_type.ordinal());
+
+        mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        if (VDBG) Log.d(TAG, "sendUpstreamIfaceChangeBroadcast: Intent broadcasted");
+    }
     private void showTetheredNotification(int icon) {
         NotificationManager notificationManager =
                 (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1021,6 +1055,9 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                     }
                     try {
                         mNMService.disableNat(mIfaceName, mMyUpstreamIfaceName);
+                        // Send intent to CNE Service
+                        sendUpstreamIfaceChangeBroadcast( mMyUpstreamIfaceName, IPAddrType.V4,
+                                                          UpstreamInfoUpdateType.UPSTREAM_IFACE_REMOVED);
                     } catch (Exception e) {
                         if (VDBG) Log.e(TAG, "Exception in disableNat: " + e.toString());
                     }
@@ -1072,6 +1109,9 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                         if (newUpstreamIfaceName != null) {
                             try {
                                 mNMService.enableNat(mIfaceName, newUpstreamIfaceName);
+                                // Send intent to CNE Service
+                                sendUpstreamIfaceChangeBroadcast( newUpstreamIfaceName, IPAddrType.V4,
+                                                                  UpstreamInfoUpdateType.UPSTREAM_IFACE_ADDED);
                             } catch (Exception e) {
                                 Log.e(TAG, "Exception enabling Nat: " + e.toString());
                                 try {
@@ -1325,6 +1365,8 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 Log.d(TAG, "adding v6 interface " + iface);
                 try {
                     service.addUpstreamV6Interface(iface);
+                    sendUpstreamIfaceChangeBroadcast( iface, IPAddrType.V6,
+                                                      UpstreamInfoUpdateType.UPSTREAM_IFACE_ADDED);
                 } catch (RemoteException e) {
                     Log.e(TAG, "Unable to append v6 upstream interface");
                 }
@@ -1337,6 +1379,8 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 Log.d(TAG, "removing v6 interface " + iface);
                 try {
                     service.removeUpstreamV6Interface(iface);
+                    sendUpstreamIfaceChangeBroadcast( iface, IPAddrType.V6,
+                                                      UpstreamInfoUpdateType.UPSTREAM_IFACE_REMOVED);
                 } catch (RemoteException e) {
                     Log.e(TAG, "Unable to remove v6 upstream interface");
                 }
