@@ -5384,6 +5384,15 @@ public final class Settings {
         public static final String RECENT_PANEL_FAVORITES = "recent_panel_favorites";
 
         /**
+         * iOS8 Bubble Recentes 
+         * 0 = Disabled 
+         * 1 = Favourite contacts
+         * 2 = Recent call contacts
+         * @hide
+         */
+        public static final String BUBBLE_RECENT = "bubble_recent";
+
+        /**
          * The alpha value of the On-The-Go overlay.
          *
          * @hide

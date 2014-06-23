@@ -229,8 +229,8 @@ public class RecentsActivity extends Activity {
 
         // 1 is for Potrait and 2 for Landscape.
         int orientation = this.getResources().getConfiguration().orientation;
+        int IOS_RECENT_TYPE = Settings.System.getInt(getContentResolver(), Settings.System.BUBBLE_RECENT, 0);
         mBubbleRecents = findViewById(R.id.bubble_recent_contacts);
-        int IOS_RECENT_TYPE = 2;
 
         if(orientation == 1 && IOS_RECENT_TYPE != 0){
             List<Person> mPeople;
@@ -250,7 +250,7 @@ public class RecentsActivity extends Activity {
                 }
             }
         } else {
-            mBubbleRecents.setVisibility(View.GONE);
+            if (orientation == 1) mBubbleRecents.setVisibility(View.GONE);
             people = null;
         }
 
