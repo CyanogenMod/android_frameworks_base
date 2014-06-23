@@ -3162,6 +3162,13 @@ public final class Settings {
         public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
 
         /**
+         * Heads Up in Floating Window
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_FLOATING_WINDOW = "heads_up_floating_window";
+
+        /**
          * Which applications to disable heads up notifications in
          *
          * @hide
