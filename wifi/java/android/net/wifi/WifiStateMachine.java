@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2014 The CyanogenMod Project
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1916,6 +1917,7 @@ public class WifiStateMachine extends StateMachine {
     private static final String FLAGS_STR = "flags=";
     private static final String SSID_STR = "ssid=";
     private static final String DELIMITER_STR = "====";
+    private static final String AGE_STR = "age=";
     private static final String END_STR = "####";
 
     /**
@@ -1987,6 +1989,8 @@ public class WifiStateMachine extends StateMachine {
             final int bssidStrLen = BSSID_STR.length();
             final int flagLen = FLAGS_STR.length();
 
+            final long now = SystemClock.elapsedRealtime();
+
             for (String line : lines) {
                 if (line.startsWith(BSSID_STR)) {
                     bssid = new String(line.getBytes(), bssidStrLen, line.length() - bssidStrLen);
@@ -2010,6 +2014,14 @@ public class WifiStateMachine extends StateMachine {
                     try {
                         tsf = Long.parseLong(line.substring(TSF_STR.length()));
                     } catch (NumberFormatException e) {
+                        tsf = 0;
+                    }
+                } else if (line.startsWith(AGE_STR)) {
+                    try {
+                        tsf = now - Long.parseLong(line.substring(AGE_STR.length()));
+                        tsf *= 1000; // Convert mS -> uS
+                    } catch (NumberFormatException e) {
+                        loge("Invalid timestamp: " + line);
                         tsf = 0;
                     }
                 } else if (line.startsWith(FLAGS_STR)) {
