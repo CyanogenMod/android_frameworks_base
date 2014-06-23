@@ -21,6 +21,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.method.SingleLineTransformationMethod;
 import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -83,6 +84,13 @@ public class CarrierText extends TextView {
     public CarrierText(Context context, AttributeSet attrs) {
         super(context, attrs);
         mLockPatternUtils = new LockPatternUtils(mContext);
+
+        // Force marquee effect
+        setSelected(true);
+        setEllipsize(TruncateAt.MARQUEE);
+        setMarqueeRepeatLimit(-1);
+        setSingleLine(true);
+
         boolean useAllCaps = mContext.getResources().getBoolean(R.bool.kg_use_all_caps);
         setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
         int textColor = Settings.Secure.getIntForUser(
