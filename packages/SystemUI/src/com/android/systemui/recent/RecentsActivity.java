@@ -51,6 +51,7 @@ public class RecentsActivity extends Activity {
 
     private RecentsPanelView mRecentsPanel;
     private ViewGroup people;
+    private View mBubbleRecents;
     private IntentFilter mIntentFilter;
     private boolean mShowing;
     private boolean mForeground;
@@ -159,7 +160,6 @@ public class RecentsActivity extends Activity {
         mBackPressed = true;
         try {
             dismissAndGoBack();
-            dismissiOSView();
         } finally {
             mBackPressed = false;
         }
@@ -173,7 +173,6 @@ public class RecentsActivity extends Activity {
                     | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             startActivityAsUser(homeIntent, new UserHandle(UserHandle.USER_CURRENT));
             mRecentsPanel.show(false);
-            dismissiOSView();
             RecentTasksLoader.getInstance(this).cancelPreloadingFirstTask();
         }
     }
@@ -203,7 +202,8 @@ public class RecentsActivity extends Activity {
     }
 
     public void dismissiOSView() {
-        if(people != null && people.getChildCount() > 0){
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == 1 && people != null && people.getChildCount() > 0) {
             people.removeAllViews();
             people.setOnClickListener(null);
         }
@@ -229,14 +229,19 @@ public class RecentsActivity extends Activity {
 
         // 1 is for Potrait and 2 for Landscape.
         int orientation = this.getResources().getConfiguration().orientation;
-        if (orientation == 1) {
-            int IOS_RECENT_TYPE = 2;
+        mBubbleRecents = findViewById(R.id.bubble_recent_contacts);
+        int IOS_RECENT_TYPE = 2;
+
+        if(orientation == 1 && IOS_RECENT_TYPE != 0){
             List<Person> mPeople;
         if (IOS_RECENT_TYPE == 1) {
             mPeople = People.PEOPLE_STARRED(this);
         } else {
             mPeople = People.PEOPLE_LOGS(this);
         }
+
+        mBubbleRecents.setVisibility(View.VISIBLE);
+
         people = (ViewGroup) findViewById(R.id.people);
         for (int i = 0; i < mPeople.size(); i++) {
             Person person = mPeople.get(i);
@@ -245,6 +250,7 @@ public class RecentsActivity extends Activity {
                 }
             }
         } else {
+            mBubbleRecents.setVisibility(View.GONE);
             people = null;
         }
 
@@ -281,7 +287,6 @@ public class RecentsActivity extends Activity {
         try {
             unregisterReceiver(mIntentReceiver);
         } catch (Exception ignored) { }
-        dismissiOSView();
         super.onDestroy();
     }
 
@@ -297,7 +302,6 @@ public class RecentsActivity extends Activity {
             if (mRecentsPanel != null) {
                 if (mRecentsPanel.isShowing()) {
                     dismissAndGoBack();
-                    dismissiOSView();
                 } else {
                     final RecentTasksLoader recentTasksLoader = RecentTasksLoader.getInstance(this);
                     boolean waitingForWindowAnimation = checkWaitingForAnimationParam &&

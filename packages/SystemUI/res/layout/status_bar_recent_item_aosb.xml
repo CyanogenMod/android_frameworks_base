@@ -28,7 +28,7 @@
     android:importantForAccessibility="no">
 
     <LinearLayout android:id="@+id/recent_item"
-    android:orientation="vertical"
+        android:orientation="vertical"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
             android:shadowDx="0"
             android:shadowDy="2"
             android:shadowRadius="5"
-            android:textAppearance="@style/RecentsAppsLabel"
+            android:textColor="@color/status_bar_recents_app_label_color"
             android:importantForAccessibility="no"
         />
         </LinearLayout>

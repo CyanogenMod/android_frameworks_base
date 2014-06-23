@@ -31,8 +31,8 @@
     <dimen name="status_bar_recents_thumbnail_bg_padding">4dp</dimen>
 
     <!-- Dimensions for HTC Sense View -->
-    <dimen name="status_bar_recents_thumbnail_width_sense">162.0dip</dimen>
-    <dimen name="status_bar_recents_thumbnail_height_sense">385.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_width_sense">150.0dip</dimen>
+    <dimen name="status_bar_recents_thumbnail_height_sense">356.0dip</dimen>
 
     <!-- Size of application label text -->
     <dimen name="status_bar_recents_app_label_text_size">14dip</dimen>
