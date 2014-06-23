@@ -2707,7 +2707,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                             com.android.internal.R.styleable.DialogPreference_dialogTitle));
             a.recycle();
             final LayoutInflater inflater =
-                    (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View tv = inflater.inflate(
                     com.android.internal.R.layout.input_method_switch_dialog_title, null);
             mDialogBuilder.setCustomTitle(tv);
