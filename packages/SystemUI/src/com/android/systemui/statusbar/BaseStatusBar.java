@@ -1201,12 +1201,15 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         boolean isIMEShowing = inputMethodManager.isImeShowing();
+        // filter out system uid applications
+        boolean isSystemUid = (getUidForPackage(sbn.getPackageName()) == getUidForPackage("com.android.settings"));
 
         boolean interrupt = (isFullscreen || (isHighPriority && isNoisy))
                 && isAllowed
                 && keyguardNotVisible
                 && !isOngoing
                 && !isIMEShowing
+                && !isSystemUid
                 && mPowerManager.isScreenOn();
 
         try {
@@ -1215,9 +1218,15 @@ public abstract class BaseStatusBar extends SystemUI implements
             Log.d(TAG, "failed to query dream manager", e);
         }
 
+        boolean permissiveInterrupt = !isHighPriority
+                && keyguardNotVisible
+                && !isOngoing
+                && !isIMEShowing
+                && !isSystemUid;
+
         // its below our threshold priority, we might want to always display
         // notifications from certain apps
-        if (!isHighPriority && keyguardNotVisible && !isOngoing && !isIMEShowing) {
+        if (permissiveInterrupt) {
             // However, we don't want to interrupt if we're in an application that is
             // in Do Not Disturb
             if (!isPackageInDnd(getTopLevelPackage())) {
@@ -1229,10 +1238,20 @@ public abstract class BaseStatusBar extends SystemUI implements
         return interrupt;
     }
 
+    private int getUidForPackage(String packageName) {
+        int packageUid = -1;
+        try {
+            packageUid = mContext.getPackageManager().getApplicationInfo(packageName, 0).uid;
+        } catch (NameNotFoundException e) {
+            Log.d(TAG, "Unable to get uid for " + packageName);
+        }
+        return packageUid;
+    }
+
     private String getTopLevelPackage() {
         final ActivityManager am = (ActivityManager)
                 mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
         ComponentName componentInfo = taskInfo.get(0).topActivity;
         return componentInfo.getPackageName();
     }
