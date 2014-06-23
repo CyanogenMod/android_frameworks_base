@@ -447,6 +447,12 @@ public class ThemesContract {
         public static final String STATUSBAR_CLOCK_TEXT_COLOR = "statusbar_clock_text_color";
 
         /**
+         * Cached image of the themed status bar background.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String NAVBAR_BACKGROUND = "navbar_background";
+
+        /**
          * Cached image of the themed back button.
          * <P>Type: BLOB (bitmap)</P>
          */
@@ -463,5 +469,29 @@ public class ThemesContract {
          * <P>Type: BLOB (bitmap)</P>
          */
         public static final String NAVBAR_RECENT_BUTTON = "navbar_recent_button";
+
+        /**
+         * Cached image of the 1/4 icons
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String ICON_PREVIEW_1 = "icon_preview_1";
+
+        /**
+         * Cached image of the 2/4 icons
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String ICON_PREVIEW_2 = "icon_preview_2";
+
+        /**
+         * Cached image of the 3/4 icons
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String ICON_PREVIEW_3 = "icon_preview_3";
+
+        /**
+         * Cached image of the 4/4 icons
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String ICON_PREVIEW_4 = "icon_preview_4";
     }
 }
