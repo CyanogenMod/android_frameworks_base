@@ -279,7 +279,7 @@ public class WifiNative {
      * MASK=<N> see wpa_supplicant/src/common/wpa_ctrl.h for details
      */
     public String scanResults(int sid) {
-        return doStringCommandWithoutLogging("BSS RANGE=" + sid + "- MASK=0x21987");
+        return doStringCommandWithoutLogging("BSS RANGE=" + sid + "- MASK=0x21B87");
     }
 
     /**
