@@ -729,6 +729,7 @@ public class Hover {
                 HoverNotification current = getCurrentNotification();
                 if (current != null && getEntryDescription(current.getEntry()).equals(getEntryDescription(entry))) {
                     current.setEntry(entry);
+                    current.setContent(entry.notification);
                     View child = mNotificationView.getChildAt(0);
                     if (child != null) {
                         child.setTag(getContentDescription(entry.notification));
