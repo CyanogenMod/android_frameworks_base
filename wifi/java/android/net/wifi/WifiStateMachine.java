@@ -1916,6 +1916,7 @@ public class WifiStateMachine extends StateMachine {
     private static final String FLAGS_STR = "flags=";
     private static final String SSID_STR = "ssid=";
     private static final String DELIMITER_STR = "====";
+    private static final String AGE = "age=";
     private static final String END_STR = "####";
 
     /**
@@ -1987,6 +1988,8 @@ public class WifiStateMachine extends StateMachine {
             final int bssidStrLen = BSSID_STR.length();
             final int flagLen = FLAGS_STR.length();
 
+            final long now = SystemClock.elapsedRealtime();
+
             for (String line : lines) {
                 if (line.startsWith(BSSID_STR)) {
                     bssid = new String(line.getBytes(), bssidStrLen, line.length() - bssidStrLen);
@@ -2012,7 +2015,15 @@ public class WifiStateMachine extends StateMachine {
                     } catch (NumberFormatException e) {
                         tsf = 0;
                     }
-                } else if (line.startsWith(FLAGS_STR)) {
+                }else if (line.startsWith(AGE)) {
+                    try {
+                        tsf = now - Long.parseLong(line.substring(AGE.length()));
+                        tsf *= 1000; // convert mS -> uS
+                    } catch (NumberFormatException e) {
+                        loge("Invalid timestamp: " + line);
+                        tsf = 0;
+                    }
+                }else if (line.startsWith(FLAGS_STR)) {
                     flags = new String(line.getBytes(), flagLen, line.length() - flagLen);
                 } else if (line.startsWith(SSID_STR)) {
                     wifiSsid = WifiSsid.createFromAsciiEncoded(
