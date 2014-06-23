@@ -395,7 +395,7 @@ public class Hover {
 
         if (currentNotification != null && !isKeyguardSecureShowing() && !isStatusBarExpanded()
                 && mHoverActive && !mShowing && isScreenOn() && !isSimPanelShowing()
-                && !mNotificationHelper.isPeekShowing() && !mNotificationHelper.isPeekAppShowing()) {
+                && !mNotificationHelper.isPeekShowing()) {
             if (isRingingOrConnected() && isDialpadShowing()) {
                 // incoming call notification has been already processed,
                 // and since we don't want to show other ones, clear and return.
@@ -432,7 +432,7 @@ public class Hover {
                 public void onAnimationStart(Animator animation) {
                     if (isStatusBarExpanded() | (isRingingOrConnected() && isDialpadShowing())
                             | isKeyguardSecureShowing() | mNotificationHelper.isPeekShowing()
-                            | !isScreenOn() | isSimPanelShowing() | mNotificationHelper.isPeekAppShowing()) {
+                            | !isScreenOn() | isSimPanelShowing()) {
                         clearHandlerCallbacks();
                         setAnimatingVisibility(false);
                         dismissHover(true, true);
@@ -443,7 +443,7 @@ public class Hover {
                 public void onAnimationEnd(Animator animation) {
                     if (isStatusBarExpanded() | (isRingingOrConnected() && isDialpadShowing())
                             | isKeyguardSecureShowing() | mNotificationHelper.isPeekShowing()
-                            | !isScreenOn() | isSimPanelShowing() | mNotificationHelper.isPeekAppShowing()) {
+                            | !isScreenOn() | isSimPanelShowing()) {
                         clearHandlerCallbacks();
                         setAnimatingVisibility(false);
                         dismissHover(false, true);

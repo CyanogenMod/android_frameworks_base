@@ -34,7 +34,7 @@ import com.android.systemui.SwipeHelper;
  * Hover container
  * Handles touch eventing for hover.
  */
-public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback {
+public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback, SwipeHelper.Callback {
 
     private ExpandHelper mExpandHelper; /* Y axis (expander) */
     private SwipeHelper mSwipeHelper; /* X axis (swiper, to dismiss) */
@@ -62,7 +62,7 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
         mExpandHelper = new ExpandHelper(mContext, this, minHeight, maxHeight);
         float densityScale = mContext.getResources().getDisplayMetrics().density;
         float pagingTouchSlop = ViewConfiguration.get(mContext).getScaledPagingTouchSlop();
-        mSwipeHelper = new SwipeHelper(SwipeHelper.X, new SwipeHelperCallbackX(), densityScale, pagingTouchSlop);
+        mSwipeHelper = new SwipeHelper(SwipeHelper.X, this, densityScale, pagingTouchSlop);
     }
 
     public void setHoverContainer(Hover hover) {
@@ -179,7 +179,10 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
 
     // SwipeHelper.Callback methods
 
-    private class SwipeHelperCallbackX implements SwipeHelper.Callback {
+        @Override
+        public void onChildTriggered(View v) {
+        }
+
         @Override
         public View getChildAtPosition(MotionEvent ev) {
             return getChildContentView(null);
@@ -219,10 +222,6 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
         }
 
         @Override
-        public void onChildTriggered(View v) {
-        }
-
-        @Override
         public void onBeginDrag(View v) {
             mHover.setLocked(true);
             mHover.clearHandlerCallbacks();
@@ -236,5 +235,4 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
             mHover.processOverridingQueue(mExpanded);
         }
     }
-}
 

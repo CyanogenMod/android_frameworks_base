@@ -609,8 +609,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         mLocale = mContext.getResources().getConfiguration().locale;
         mLayoutDirection = TextUtils.getLayoutDirectionFromLocale(mLocale);
 
-        mStatusBarContainer = new FrameLayout(mContext);
-
         mPeek = new Peek(this, mContext);
         mHover = new Hover(this, mContext);
         mHoverCling = new HoverCling(mContext);
@@ -618,6 +616,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mPeek.setNotificationHelper(mNotificationHelper);
         mHover.setNotificationHelper(mNotificationHelper);
+
+        mStatusBarContainer = new FrameLayout(mContext);
 
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
@@ -1148,9 +1148,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                 null, UserHandle.CURRENT);
     }
 
-    private void launchFloating(PendingIntent pIntent) {
+    private void launchFloating(PendingIntent pIntent, boolean allowed) {
         Intent overlay = new Intent();
-        overlay.addFlags(Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if (allowed) overlay.addFlags(Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         try {
             ActivityManagerNative.getDefault().resumeAppSwitches();
             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
@@ -1180,7 +1180,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 if (v.getWindowToken() == null) return false;
 
                 if (expanded) {
-                    launchFloating(contentIntent);
+                    launchFloating(contentIntent, true);
                     animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
                     return true;
                 }
@@ -1258,7 +1258,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                                     animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
                                     Toast.makeText(mContext, text, duration).show();
                                 } else {
-                                    launchFloating(contentIntent);
+                                    launchFloating(contentIntent, true);
                                     animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
                                 }
                             } else {
@@ -1793,7 +1793,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
             if (mPile.launchNextNotificationFloating()) {
                 if (mPendingIntent != null) {
-                    launchFloating(mPendingIntent);
+                    launchFloating(mPendingIntent, allowed);
                 }
             } else if (mPendingIntent != null) {
                 int[] pos = new int[2];
