@@ -15510,9 +15510,9 @@ private ArrayList<Integer> mIgnoreSplitViewUpdate = new ArrayList<Integer>();
             app.setRawAdj = app.curRawAdj;
         }
 
-        if ( (mPenaliseLargeApps == true) && ((app.curAdj == ProcessList.PREVIOUS_APP_ADJ)
-                || ((app.curAdj >= ProcessList.CACHED_APP_MIN_ADJ)
-                && (app.curAdj < ProcessList.CACHED_APP_MAX_ADJ))) ) {
+        if ( (mPenaliseLargeApps == true) &&
+                (app.curAdj >= ProcessList.CACHED_APP_MIN_ADJ) &&
+                (app.curAdj < ProcessList.CACHED_APP_MAX_ADJ) ) {
 
             // Validate the PSS to be compared against for penalisation
             if (app.lastCachedPss == 0) {
