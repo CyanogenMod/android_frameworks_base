@@ -5846,6 +5846,13 @@ public final class Settings {
         public static final String HOVER_EXCLUDE_LOW_PRIORITY = "hover_exclude_low_priority";
 
         /**
+         * Hover: Option to exclude from insecure lockscreen, default is 0 (off).
+         *
+         * @hide
+         */
+        public static final String HOVER_EXCLUDE_FROM_INSECURE_LOCK_SCREEN = "hover_exclude_from_insecure_lock_screen";
+
+        /**
          * Padding above and below dialpad keys in dialer.
          * @hide
          */
