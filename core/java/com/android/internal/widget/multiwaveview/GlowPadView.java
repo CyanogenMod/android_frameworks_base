@@ -31,10 +31,15 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -46,6 +51,7 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.android.internal.R;
 
+import java.lang.Math;
 import java.util.ArrayList;
 
 /**
@@ -127,6 +133,8 @@ public class GlowPadView extends View {
     private static final float TARGET_SCALE_COLLAPSED = 0.8f;
     private static final float RING_SCALE_EXPANDED = 1.0f;
     private static final float RING_SCALE_COLLAPSED = 0.5f;
+    private static final float HANDLE_TEXT_RADIUS = 120f;
+    private static final float MAX_TEXT_ARC_RADIANS = (float) (270.0 / 170.0 * Math.PI);
 
     private ArrayList<TargetDrawable> mTargetDrawables = new ArrayList<TargetDrawable>();
     private AnimationBundle mWaveAnimations = new AnimationBundle();
@@ -139,6 +147,8 @@ public class GlowPadView extends View {
     private TargetDrawable mOuterRing;
     private Vibrator mVibrator;
 
+	private TargetDrawable mCenterDrawable; 
+	
     private int mFeedbackCount = 3;
     private int mVibrationDuration = 0;
     private int mGrabbedState;
@@ -150,6 +160,12 @@ public class GlowPadView extends View {
     private int mMaxTargetWidth;
     private float mRingScaleFactor = 1f;
     private boolean mAllowScaling;
+    private boolean mDrawOuterRing = true;
+
+    private Paint mPaintText;
+    private String mHandleText = "";
+    private int mTextRadius;
+    private float mMaxTextArcLength;
 
     private float mOuterRadius = 0.0f;
     private float mSnapMargin = 0.0f;
@@ -267,6 +283,8 @@ public class GlowPadView extends View {
         TypedValue handle = a.peekValue(R.styleable.GlowPadView_handleDrawable);
         mHandleDrawable = new TargetDrawable(res, handle != null ? handle.resourceId : 0);
         mHandleDrawable.setState(TargetDrawable.STATE_INACTIVE);
+		mCenterDrawable = new TargetDrawable(res, 0);
+        mCenterDrawable.setState(TargetDrawable.STATE_INACTIVE); 
         mOuterRing = new TargetDrawable(res,
                 getResourceId(a, R.styleable.GlowPadView_outerRingDrawable));
 
@@ -318,6 +336,16 @@ public class GlowPadView extends View {
         mPointCloud = new PointCloud(pointDrawable);
         mPointCloud.makePointCloud(mInnerRadius, mOuterRadius);
         mPointCloud.glowManager.setRadius(mGlowRadius);
+
+        mPaintText = new Paint();
+        mPaintText.setAntiAlias(true);
+        mPaintText.setColor(res.getColor(android.R.color.white));
+        mPaintText.setTextAlign(Align.CENTER);
+        mPaintText.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaintText.setFakeBoldText(true);
+        mPaintText.setTextSize(res.getDimensionPixelSize(R.dimen.glowpad_notification_font_size));
+        mTextRadius = res.getDimensionPixelSize(R.dimen.glowpad_notification_text_radius);
+        mMaxTextArcLength = mTextRadius * MAX_TEXT_ARC_RADIANS;
     }
 
     private int getResourceId(TypedArray a, int id) {
@@ -406,6 +434,9 @@ public class GlowPadView extends View {
                 startBackgroundAnimation(0, 0.0f);
                 mHandleDrawable.setState(TargetDrawable.STATE_INACTIVE);
                 mHandleDrawable.setAlpha(1.0f);
+				mCenterDrawable.setState(TargetDrawable.STATE_INACTIVE);
+                mCenterDrawable.setAlpha(1.0f); 
+                mPaintText.setAlpha(255);
                 break;
 
             case STATE_START:
@@ -413,7 +444,9 @@ public class GlowPadView extends View {
                 break;
 
             case STATE_FIRST_TOUCH:
+                mPaintText.setAlpha(0);
                 mHandleDrawable.setAlpha(0.0f);
+				mCenterDrawable.setAlpha(0.0f); 
                 deactivateTargets();
                 showTargets(true);
                 startBackgroundAnimation(INITIAL_SHOW_HANDLE_DURATION, 1.0f);
@@ -424,13 +457,17 @@ public class GlowPadView extends View {
                 break;
 
             case STATE_TRACKING:
+                mPaintText.setAlpha(0);
                 mHandleDrawable.setAlpha(0.0f);
+				mCenterDrawable.setAlpha(0.0f); 
                 showGlow(REVEAL_GLOW_DURATION , REVEAL_GLOW_DELAY, 1.0f, null);
                 break;
 
             case STATE_SNAP:
                 // TODO: Add transition states (see list_selector_background_transition.xml)
+                mPaintText.setAlpha(0);
                 mHandleDrawable.setAlpha(0.0f);
+				mCenterDrawable.setAlpha(0.0f); 
                 showGlow(REVEAL_GLOW_DURATION , REVEAL_GLOW_DELAY, 0.0f, null);
                 break;
 
@@ -1203,6 +1240,8 @@ public class GlowPadView extends View {
 
         mHandleDrawable.setPositionX(newWaveCenterX);
         mHandleDrawable.setPositionY(newWaveCenterY);
+		mCenterDrawable.setPositionX(newWaveCenterX);
+        mCenterDrawable.setPositionY(newWaveCenterY); 
 
         updateTargetPositions(newWaveCenterX, newWaveCenterY);
         updatePointCloudPosition(newWaveCenterX, newWaveCenterY);
@@ -1262,7 +1301,7 @@ public class GlowPadView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         mPointCloud.draw(canvas);
-        mOuterRing.draw(canvas);
+        if (mDrawOuterRing) mOuterRing.draw(canvas);
         final int ntargets = mTargetDrawables.size();
         for (int i = 0; i < ntargets; i++) {
             TargetDrawable target = mTargetDrawables.get(i);
@@ -1270,7 +1309,41 @@ public class GlowPadView extends View {
                 target.draw(canvas);
             }
         }
+		mCenterDrawable.draw(canvas); 
         mHandleDrawable.draw(canvas);
+
+        if (!TextUtils.isEmpty(mHandleText) && mPaintText.getAlpha() != 0) {
+            float x = mHandleDrawable.getPositionX();
+            float y = mHandleDrawable.getPositionY();
+            Path circle = new Path();
+            circle.addCircle(x, y, mTextRadius, Path.Direction.CW);
+            canvas.rotate(90f, x, y);
+            canvas.drawTextOnPath(mHandleText, circle, 0, 0, mPaintText);
+        }
+    }
+
+    public void setHandleDrawable(TargetDrawable d) {
+        float x = mHandleDrawable.getPositionX();
+        float y = mHandleDrawable.getPositionY();
+        mHandleDrawable = new TargetDrawable(d);
+        mHandleDrawable.setPositionX(x);
+        mHandleDrawable.setPositionY(y);
+    }
+
+    public void setHandleText(String text) {
+        mHandleText = TextUtils.ellipsize(
+                text, new TextPaint(mPaintText), mMaxTextArcLength,
+                TextUtils.TruncateAt.END).toString();
+    }
+ 
+	public void setCenterDrawable(TargetDrawable d) {
+		mCenterDrawable = new TargetDrawable(d);
+		mCenterDrawable.setPositionX(mWaveCenterX);
+		mCenterDrawable.setPositionY(mWaveCenterY);
+	}
+ 
+    public void setDrawOuterRing(boolean drawOuterRing) {
+        mDrawOuterRing = drawOuterRing;
     }
 
     public void setOnTriggerListener(OnTriggerListener listener) {

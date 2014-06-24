@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.systemui.screenshot;
 
-import com.android.systemui.tests.R;
+package com.android.systemui.statusbar.policy.activedisplay;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
-/**
- * A stub activity used in {@link ScreenshotTest}.
- */
-public class ScreenshotStubActivity extends Activity {
+public class DummyActivity extends Activity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        setContentView(new View(this));
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            finish();
     }
 }
