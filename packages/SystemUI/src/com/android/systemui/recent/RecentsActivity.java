@@ -57,6 +57,7 @@ public class RecentsActivity extends Activity {
     private boolean mForeground;
     protected boolean mBackPressed;
     final int mCustomRecent = 0; // ID for custom recent current is slim
+    int IOS_RECENT_TYPE = 0;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -219,20 +220,21 @@ public class RecentsActivity extends Activity {
 
         int mCustomRecent = Settings.System.getIntForUser(getContentResolver(), 
                         Settings.System.RECENTS_STYLE, 0, UserHandle.USER_CURRENT);
+        // 1 is for Potrait and 2 for Landscape.
+        int orientation = this.getResources().getConfiguration().orientation;
+
         if (mCustomRecent == 4) {
             setContentView(R.layout.status_bar_recent_panel_htc);
         } else if (mCustomRecent == 5) {
             setContentView(R.layout.status_bar_recent_panel_aosb);
+            IOS_RECENT_TYPE = Settings.System.getIntForUser(getContentResolver(),
+                        Settings.System.BUBBLE_RECENT, 0, UserHandle.USER_CURRENT);
+            mBubbleRecents = findViewById(R.id.bubble_recent_contacts);
         } else {
             setContentView(R.layout.status_bar_recent_panel);
         }
 
-        // 1 is for Potrait and 2 for Landscape.
-        int orientation = this.getResources().getConfiguration().orientation;
-        int IOS_RECENT_TYPE = Settings.System.getInt(getContentResolver(), Settings.System.BUBBLE_RECENT, 0);
-        mBubbleRecents = findViewById(R.id.bubble_recent_contacts);
-
-        if(orientation == 1 && IOS_RECENT_TYPE != 0){
+        if (mCustomRecent == 5 && orientation == 1 && IOS_RECENT_TYPE != 0) {
             List<Person> mPeople;
         if (IOS_RECENT_TYPE == 1) {
             mPeople = People.PEOPLE_STARRED(this);
@@ -250,7 +252,7 @@ public class RecentsActivity extends Activity {
                 }
             }
         } else {
-            if (orientation == 1) mBubbleRecents.setVisibility(View.GONE);
+            if (mCustomRecent == 5 && orientation == 1) mBubbleRecents.setVisibility(View.GONE);
             people = null;
         }
 
