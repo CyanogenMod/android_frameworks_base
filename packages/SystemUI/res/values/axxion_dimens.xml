@@ -64,6 +64,7 @@
 
     <!-- Hover dimens -->
     <dimen name="hover_cling_width">-1px</dimen>
+    <dimen name="hover_tablet_width">478dp</dimen>
     
     <!-- Theme Engine overrides to avoid modifications that will affect hover view. -->
     <dimen name="default_notification_min_height">64dp</dimen>
