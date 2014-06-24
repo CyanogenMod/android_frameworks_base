@@ -5338,6 +5338,12 @@ public class WindowManagerService extends IWindowManager.Stub
         ShutdownThread.rebootSafeMode(getUiContext(), confirm);
     }
 
+    // Called by window manager policy.  Not exposed externally.
+    @Override
+    public boolean isShutdownSequenceStarted() {
+        return ShutdownThread.isStarted();
+    }
+
     @Override
     public void setInputFilter(IInputFilter filter) {
         if (!checkCallingPermission(android.Manifest.permission.FILTER_EVENTS, "setInputFilter()")) {
