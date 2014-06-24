@@ -1728,7 +1728,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             final boolean sbVisible = (mSystemUiVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0
                     || (mStatusBarMode & View.STATUS_BAR_TRANSIENT) != 0;
-            if (!sbVisible) {
+            final boolean userForcedExpandedDesktop =
+                    mExpandedDesktopStyle == 1 || mExpandedDesktopStyle == 2;
+            if (!sbVisible && !userForcedExpandedDesktop) {
                 mHandler.removeMessages(MSG_HIDE_HEADS_UP);
                 mHandler.sendEmptyMessageDelayed(MSG_HIDE_HEADS_UP, 700);
             } else {

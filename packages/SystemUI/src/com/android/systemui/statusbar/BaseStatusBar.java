@@ -264,7 +264,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private ArrayList<String> mDndList;
     private ArrayList<String> mBlacklist;
 
-    private int mExpandedDesktopStyle = 0;
+    protected int mExpandedDesktopStyle = 0;
 
     private boolean mCustomRecent = false;
 
