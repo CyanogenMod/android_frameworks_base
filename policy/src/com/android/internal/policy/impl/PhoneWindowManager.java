@@ -5126,12 +5126,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                     }
                 }
-                if (isScreenOn || !mVolumeWakeScreen) {
-                    break;
-                } else {
+                if (!isScreenOn || mVolumeWakeScreen) {
                     result |= ACTION_WAKE_UP;
-                    break;
                 }
+                break;
             }
 
             case KeyEvent.KEYCODE_POWER: {
