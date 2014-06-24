@@ -406,6 +406,14 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         updateStates();
     }
 
+    public void setTheme() {
+        // Force reload the background (to do not get the old cached one)
+        // and update the states.
+        mPanel.setBackgroundResource(R.color.transparent);
+        mPanel.setBackgroundResource(R.drawable.dialog_full_holo_dark);
+        updateStates();
+    }
+
     private void listenToRingerMode() {
         final IntentFilter filter = new IntentFilter();
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);

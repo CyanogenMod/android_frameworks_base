@@ -431,6 +431,7 @@ public class AudioService extends IAudioService.Stub {
 
     private int mDeviceOrientation = Configuration.ORIENTATION_UNDEFINED;
     private int mDeviceRotation = Surface.ROTATION_0;
+    private int mUiThemeMode = Configuration.UI_THEME_MODE_NORMAL;
 
     // Request to override default use of A2DP for media.
     private boolean mBluetoothA2dpEnabled;
@@ -4822,6 +4823,13 @@ public class AudioService extends IAudioService.Stub {
             // reading new orientation "safely" (i.e. under try catch) in case anything
             // goes wrong when obtaining resources and configuration
             Configuration config = context.getResources().getConfiguration();
+
+            // UI theme mode has changed....set the theme of the volume panel
+            if (mUiThemeMode != config.uiThemeMode) {
+                mUiThemeMode = config.uiThemeMode;
+                mVolumePanel.setTheme();
+            }
+
             // TODO merge rotation and orientation
             if (mMonitorOrientation) {
                 int newOrientation = config.orientation;
