@@ -1183,6 +1183,11 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected boolean shouldInterrupt(StatusBarNotification sbn) {
         Notification notification = sbn.getNotification();
 
+        // check if notification from the package is blacklisted first
+        if (isPackageBlacklisted(sbn.getPackageName())) {
+            return false;
+        }
+
         // some predicates to make the boolean logic legible
         boolean isNoisy = (notification.defaults & Notification.DEFAULT_SOUND) != 0
                 || (notification.defaults & Notification.DEFAULT_VIBRATE) != 0
@@ -1260,7 +1265,16 @@ public abstract class BaseStatusBar extends SystemUI implements
     private boolean isPackageInDnd(String packageName) {
         final String baseString = Settings.System.getString(mContext.getContentResolver(),
                 Settings.System.HEADS_UP_CUSTOM_VALUES);
+        return isPackageInString(baseString, packageName);
+    }
 
+    private boolean isPackageBlacklisted(String packageName) {
+        final String baseString = Settings.System.getString(mContext.getContentResolver(),
+                Settings.System.HEADS_UP_BLACKLIST_VALUES);
+        return isPackageInString(baseString, packageName);
+    }
+
+    private boolean isPackageInString(String baseString, String packageName) {
         if (baseString != null) {
             final String[] array = TextUtils.split(baseString, "\\|");
             for (String item : array) {
@@ -1272,7 +1286,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                 }
             }
         }
-
         return false;
     }
 
