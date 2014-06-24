@@ -336,6 +336,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     private ArrayList<String> mDndList;
     private ArrayList<String> mBlacklist;
 
+    protected int mExpandedDesktopStyle = 2;
+
     public IStatusBarService getStatusBarService() {
         return mBarService;
     }
@@ -395,6 +397,10 @@ public abstract class BaseStatusBar extends SystemUI implements
             resolver.registerContentObserver(
                 Settings.System.getUriFor(Settings.System.HEADS_UP_BLACKLIST_VALUES),
                 false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STATE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.EXPANDED_DESKTOP_STYLE), false, this);
             update();
         }
 
@@ -440,6 +446,12 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         private void update() {
             final ContentResolver resolver = mContext.getContentResolver();
+            mExpandedDesktopStyle = 2;
+            if (Settings.System.getIntForUser(resolver,
+                    Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) != 0) {
+                mExpandedDesktopStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 2, UserHandle.USER_CURRENT);
+            }
             final String dndString = Settings.System.getString(mContext.getContentResolver(),
                     Settings.System.HEADS_UP_CUSTOM_VALUES);
             final String blackString = Settings.System.getString(mContext.getContentResolver(),
