@@ -675,9 +675,8 @@ public class ThemeService extends IThemeService.Stub {
 
     private void broadcastThemeChange(List<String> components) {
         final Intent intent = new Intent(ThemeUtils.ACTION_THEME_CHANGED);
-        for (String comp : components) {
-            intent.addCategory(ThemeUtils.CATEGORY_THEME_COMPONENT_PREFIX + comp.toUpperCase());
-        }
+        ArrayList componentsArrayList = new ArrayList(components);
+        intent.putStringArrayListExtra("components", componentsArrayList);
         mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
     }
 
