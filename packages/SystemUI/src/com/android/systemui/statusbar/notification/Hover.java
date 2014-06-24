@@ -862,14 +862,15 @@ public class Hover {
 
     public void clearNotificationList() {
         reparentAllNotifications();
-        mNotificationList.clear();
     }
 
     public void reparentAllNotifications() {
-        // force reparenting all temp stored notifications to status bar
+        // force reparenting all temp stored notifications to status bar,
+        // then clear them
         for (HoverNotification stored : mNotificationList) {
             mNotificationHelper.reparentNotificationToStatusBar(stored);
         }
+        mNotificationList.clear();
         mStatusBar.updateExpansionStates();
     }
 
