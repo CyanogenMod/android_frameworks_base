@@ -51,7 +51,7 @@ enabled.
     <View android:id="@+id/titleDivider"
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="@android:color/default_dialog_divider_holo_dark" />
+            android:background="@android:color/white" />
 
     <FrameLayout
         android:layout_width="match_parent" android:layout_height="wrap_content"

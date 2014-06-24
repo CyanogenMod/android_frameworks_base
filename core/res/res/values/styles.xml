@@ -361,7 +361,7 @@ please see styles_device_defaults.xml.
     </style>
 
     <style name="TextAppearance.AutoCorrectionSuggestion" parent="TextAppearance.Suggestion">
-        <item name="android:textUnderlineColor">@color/holo_blue_light</item>
+        <item name="android:textUnderlineColor">@color/white</item>
     </style>
 
     <!-- Widget Styles -->
@@ -1646,8 +1646,8 @@ please see styles_device_defaults.xml.
     </style>
 
     <style name="Widget.Holo.StackView">
-        <item name="android:resOutColor">@android:color/holo_blue_light</item>
-        <item name="android:clickColor">@android:color/holo_blue_light</item>
+        <item name="android:resOutColor">@android:color/white</item>
+        <item name="android:clickColor">@android:color/white</item>
     </style>
 
     <style name="Widget.Holo.Button.Borderless">

@@ -52,7 +52,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dip"
-            android:background="@android:color/holo_blue_light" />
+            android:background="@android:color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
