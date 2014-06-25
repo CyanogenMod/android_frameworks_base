@@ -357,6 +357,7 @@ public class KeyguardViewManager {
         }
 
         public void setCustomBackground(Drawable d) {
+            if (!isLaidOut()) return;
             if (!mAudioManager.isMusicActive()) {
                 switch (mBackgroundStyle) {
                     case 0:
