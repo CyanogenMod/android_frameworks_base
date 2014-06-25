@@ -73,7 +73,8 @@
     <string name="quick_settings_compass_off">Compass off</string>
     <string name="quick_settings_compass_init">Initializing\u2026</string>
     <string name="quick_settings_compass_value" translatable="false"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-
+    <string name="quick_settings_heads_up_on">Heads up enabled</string>
+    <string name="quick_settings_heads_up_off">No interruptions</string>
     <!-- [CHAR LIMIT=30] Location settings screen, high accuracy location mode -->
     <string name="location_mode_high_accuracy_title">High accuracy</string>
     <!-- [CHAR LIMIT=30] Location settings screen, battery saving location mode -->
