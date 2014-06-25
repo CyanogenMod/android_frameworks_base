@@ -403,12 +403,17 @@ class WifiConfigStore {
     boolean forgetNetwork(int netId) {
         if (VDBG) localLog("forgetNetwork", netId);
         if (mWifiNative.removeNetwork(netId)) {
-            for(WifiConfiguration config : mConfiguredNetworks.values()) {
-                if(config != null && config.status == Status.DISABLED) {
-                    if(mWifiNative.enableNetwork(config.networkId, false)) {
-                        config.status = Status.ENABLED;
-                    } else {
-                        loge("Enable network failed on " + config.networkId);
+            if (mContext.getResources().getBoolean(R.bool.wifi_autocon)
+                && !shouldAutoConnect()) {
+                // do not enable networks to avoid auto connect
+            } else {
+                for(WifiConfiguration config : mConfiguredNetworks.values()) {
+                    if(config != null && config.status == Status.DISABLED) {
+                        if(mWifiNative.enableNetwork(config.networkId, false)) {
+                            config.status = Status.ENABLED;
+                        } else {
+                            loge("Enable network failed on " + config.networkId);
+                        }
                     }
                 }
             }
