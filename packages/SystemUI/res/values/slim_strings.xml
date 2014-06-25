@@ -195,6 +195,10 @@
     <!-- Equalizer -->
     <string name="quick_settings_equalizer">Equalizer</string>
 
+    <!-- Halo -->
+    <string name="quick_settings_halo_on_label">On</string>
+    <string name="quick_settings_halo_off_label">Off</string>
+
     <!-- Hover Tile-->
     <string name="quick_settings_hover">HOVER</string>
     <string name="quick_settings_hover_off">HOVER OFF</string>
