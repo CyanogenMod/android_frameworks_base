@@ -52,8 +52,6 @@ public class RecentCard extends Card {
 
         // Construct card header view.
         mHeader = new RecentHeader(mContext, (String) td.getLabel(), scaleFactor);
-        // Set visible the expand/collapse button.
-        mHeader.setButtonExpandVisible(true);
 
         // Construct app icon view.
         mRecentIcon = new RecentAppIcon(
@@ -95,6 +93,9 @@ public class RecentCard extends Card {
     // Set initial expanded state of our card.
     private void initExpandedState(TaskDescription td) {
         // Read flags and set accordingly initial expanded state.
+        final boolean isTopTask =
+                (td.getExpandedState() & RecentPanelView.EXPANDED_STATE_TOPTASK) != 0;
+
         final boolean isSystemExpanded =
                 (td.getExpandedState() & RecentPanelView.EXPANDED_STATE_BY_SYSTEM) != 0;
 
@@ -104,7 +105,13 @@ public class RecentCard extends Card {
         final boolean isUserCollapsed =
                 (td.getExpandedState() & RecentPanelView.EXPANDED_STATE_COLLAPSED) != 0;
 
-        final boolean isExpanded = (isSystemExpanded && !isUserCollapsed) || isUserExpanded;
+        final boolean isExpanded =
+                ((isSystemExpanded && !isUserCollapsed) || isUserExpanded) && !isTopTask;
+
+        if (mHeader != null) {
+            // Set visible the expand/collapse button.
+            mHeader.setButtonExpandVisible(!isTopTask);
+        }
 
         setExpanded(isExpanded);
     }
