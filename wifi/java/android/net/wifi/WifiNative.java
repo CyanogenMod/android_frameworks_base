@@ -179,11 +179,11 @@ public class WifiNative {
         return (pong != null && pong.equals("PONG"));
     }
 
-    public boolean scan(int type) {
+    public boolean scan(int type, String disabledHiddenAP) {
         if (type == SCAN_WITHOUT_CONNECTION_SETUP) {
-            return doBooleanCommand("SCAN TYPE=ONLY");
+            return doBooleanCommand("SCAN TYPE=ONLY" + disabledHiddenAP);
         } else if (type == SCAN_WITH_CONNECTION_SETUP) {
-            return doBooleanCommand("SCAN");
+            return doBooleanCommand("SCAN" + disabledHiddenAP);
         } else {
             throw new IllegalArgumentException("Invalid scan type");
         }

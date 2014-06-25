@@ -1243,7 +1243,10 @@ public class WifiStateMachine extends StateMachine {
     }
 
     private void startScanNative(int type) {
-        mWifiNative.scan(type);
+        String disabledHiddenAP = "";
+
+        disabledHiddenAP = mWifiConfigStore.getDisabledHiddenAPList();
+        mWifiNative.scan(type, disabledHiddenAP);
         mScanResultIsPending = true;
     }
 
