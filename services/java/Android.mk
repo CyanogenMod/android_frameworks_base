@@ -11,7 +11,8 @@ LOCAL_SRC_FILES := \
 
 LOCAL_MODULE:= services
 
-LOCAL_JAVA_LIBRARIES := android.policy conscrypt telephony-common
+LOCAL_JAVA_LIBRARIES := android.policy conscrypt telephony-common \
+                        org.cyanogenmod.hardware
 
 include $(BUILD_JAVA_LIBRARY)
 
