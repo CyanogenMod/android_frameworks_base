@@ -84,47 +84,50 @@ public final class People extends PersonUtils{
 		int callContactID;
 		String callDuration;
 		String callNumber;
-		String callName;
+		String callName = null;
 		Bitmap callContactIcon;
-		try {
-			while (cursor.moveToNext()) {
 
-				if(i == PERSON_LOGS_LIMIT) break;
+		while(cursor.moveToNext()) {
 
+			if(i == PERSON_LOGS_LIMIT) break;
+
+			try {
 				callName = cursor.getString( cursor.getColumnIndex(Calls.CACHED_NAME) );
-				callNumber = cursor.getString( cursor.getColumnIndex(Calls.NUMBER) );
-				callContactID = getContactIDFromNumber(callNumber, ctx);
-				callDuration = calculateTime( cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) );
-				callContactIcon = getContactIcon(Long.valueOf(callContactID), ctx);
-				// if caller does name have name , set number
-				if(callName.isEmpty()) callName = callNumber;
-
-				String dir = null;
-				int dircode = cursor.getInt( cursor.getColumnIndex(Calls.TYPE) );
-				switch (dircode) {
-				case Calls.OUTGOING_TYPE:
-					dir = "OUTGOING";
-					break;
-
-				case Calls.INCOMING_TYPE:
-					dir = "INCOMING";
-					break;
-
-				case Calls.MISSED_TYPE:
-					dir = "MISSED";
-					break;
-				}
-				String callInfo = "Type: " + dir + "\nDuration: " + callDuration;
-				
-				people_logs.add( new Person(i, callContactIcon, callName, callInfo, callContactID) );
-				i++;
+			} catch (Exception e) {
+				//e.printStackTrace();
+				callName = null;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			callNumber = cursor.getString( cursor.getColumnIndex(Calls.NUMBER) );
+			callContactID = getContactIDFromNumber(callNumber, ctx);
+			callDuration = (cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) != 0) ? 
+					calculateTime( cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) ) : "0";
+			callContactIcon = getContactIcon(Long.valueOf(callContactID), ctx);
+			// if caller does name have name , set number
+			if(callName == null){ callName = callNumber; }
+
+			String dir = null;
+			int dircode = cursor.getInt( cursor.getColumnIndex(Calls.TYPE) );
+			switch (dircode) {
+			case Calls.OUTGOING_TYPE:
+				dir = "OUTGOING";
+				break;
+
+			case Calls.INCOMING_TYPE:
+				dir = "INCOMING";
+				break;
+
+			case Calls.MISSED_TYPE:
+				dir = "MISSED";
+				break;
+			}
+			String callInfo = "Type: " + dir + "\nDuration: " + callDuration;
+			
+			people_logs.add( new Person(i, callContactIcon, callName, callInfo, callContactID) );
+
+			i++;
 		}
-		finally {
-			cursor.close();
-		}
+
+		cursor.close();
 
 		return people_logs;
 	}

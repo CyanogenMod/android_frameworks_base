@@ -23,6 +23,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.media.ThumbnailUtils;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -51,8 +52,14 @@ public class PersonUtils {
 
 	public static Bitmap getContactIcon(long contactID, Context ctx){
 
-		Bitmap contactThumb = loadContactPhoto(ctx, Long.valueOf(contactID));
-		Bitmap contactIcon;
+		Bitmap contactThumb = null;
+		Bitmap contactIcon = null;
+
+		try {
+			contactThumb = loadContactPhoto(ctx, Long.valueOf(contactID));
+		} catch (Exception e) {
+			//e.printStackTrace();
+		}
 
 		if (contactThumb != null) {
 			final int width = contactThumb.getWidth();
@@ -61,23 +68,33 @@ public class PersonUtils {
 			Bitmap resizedProfile = ThumbnailUtils.extractThumbnail(contactThumb, (THUMBNAIL_SIZE * ratio), THUMBNAIL_SIZE);
 			contactIcon = GetRounded(resizedProfile);
 			//if (resizedProfile != null && !resizedProfile.isRecycled()) resizedProfile.recycle();
-		} else {
+		}
+		else {
 			Drawable myDrawable = ctx.getResources().getDrawable(com.android.systemui.R.drawable.no_person);
 			Bitmap resizedNoProfile = ((BitmapDrawable) myDrawable).getBitmap();
 			contactIcon = GetRounded(resizedNoProfile);
 		}
+
 		return contactIcon;
 	}
 
 	public static int getContactIDFromNumber(String contactNumber,Context context) {
 		int phoneContactID = new Random().nextInt();
-		Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactNumber)),new String[] {PhoneLookup.DISPLAY_NAME, PhoneLookup._ID}, null, null, null);
-		while(contactLookupCursor.moveToNext()) {
-			phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(PhoneLookup._ID));
-		}
-		contactLookupCursor.close();
+		Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactNumber)),new String[] {PhoneLookup.DISPLAY_NAME, PhoneLookup._ID}, null, null, null);		
 
-		return phoneContactID;
+		if (contactLookupCursor == null) {
+			return 0;
+		}
+		try {
+			while(contactLookupCursor.moveToNext()) {
+				phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(PhoneLookup._ID));
+			}
+		}
+		finally {
+			contactLookupCursor.close();
+		}
+
+		return (phoneContactID > 0) ? phoneContactID : 0;
 	}
 
 	public static Bitmap GetRounded(final Bitmap bitmap) {
@@ -129,10 +146,16 @@ public class PersonUtils {
 	}
 
 	public static void OpenContact(Context ctx, Person mPerson){
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mPerson.getContactID()));
-		intent.setData(uri);
-		ctx.startActivity(intent);
+		if(mPerson.getContactID() != 0){
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mPerson.getContactID()));
+			intent.setData(uri);
+			ctx.startActivity(intent);
+		}else{
+			Toast.makeText(ctx,
+					"Does not has valid contact card for " + mPerson.getName(),
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public static String calculateTime(int seconds) {
