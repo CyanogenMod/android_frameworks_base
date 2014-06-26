@@ -422,5 +422,16 @@ interface ITelephonyMSim {
      * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
      */
     byte[] getATR(int subscription);
+
+    /**
+     * Enable a specific APN type on a subscription.
+     */
+    int enableApnTypeOnSubscription(String type, int subId);
+
+    /**
+     * Disable a specific APN type.
+     */
+    int disableApnTypeOnSubscription(String type, int subId);
+
 }
 

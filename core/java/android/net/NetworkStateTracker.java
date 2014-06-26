@@ -104,12 +104,23 @@ public interface NetworkStateTracker {
     public NetworkInfo getNetworkInfo();
 
     /**
+     * Fetch NetworkInfo for the network
+     */
+    public NetworkInfo getNetworkInfo(int subId);
+
+    /**
      * Return the LinkProperties for the connection.
      *
      * @return a copy of the LinkProperties, is never null.
      */
     public LinkProperties getLinkProperties();
 
+    /**
+     * Return the LinkProperties for the connection.
+     *
+     * @return a copy of the LinkProperties, is never null.
+     */
+    public LinkProperties getLinkProperties(int subId);
     /**
      * A capability is an Integer/String pair, the capabilities
      * are defined in the class LinkSocket#Key.
@@ -119,11 +130,24 @@ public interface NetworkStateTracker {
     public LinkCapabilities getLinkCapabilities();
 
     /**
+     * A capability is an Integer/String pair, the capabilities
+     * are defined in the class LinkSocket#Key.
+     *
+     * @return a copy of this connections capabilities, may be empty but never null.
+     */
+    public LinkCapabilities getLinkCapabilities(int subId);
+
+    /**
      * Get interesting information about this network link
      * @return a copy of link information, null if not available
      */
     public LinkQualityInfo getLinkQualityInfo();
 
+    /**
+     * Get interesting information about this network link
+     * @return a copy of link information, null if not available
+     */
+    public LinkQualityInfo getLinkQualityInfo(int subId);
     /**
      * Return the system properties name associated with the tcp buffer sizes
      * for this network.
@@ -160,12 +184,14 @@ public interface NetworkStateTracker {
      * teardown did not occur.
      */
     public boolean teardown();
+    public boolean teardown(int subId);
 
     /**
      * Reenable connectivity to a network after a {@link #teardown()}.
      * @return {@code true} if we're connected or expect to be connected
      */
     public boolean reconnect();
+    public boolean reconnect(int subId);
 
     /**
      * Ready to switch on to the network after captive portal check
@@ -194,10 +220,21 @@ public interface NetworkStateTracker {
     public boolean isAvailable();
 
     /**
+     * Returns an indication of whether this network is available for
+     * connections. A value of {@code false} means that some quasi-permanent
+     * condition prevents connectivity to this network.
+     *
+     * NOTE that this is broken on multi-connection devices.  Should be fixed in J release
+     * TODO - fix on multi-pdp devices
+     */
+
+    public boolean isAvailable(int subId);
+    /**
      * User control of data connection through this network, typically persisted
      * internally.
      */
     public void setUserDataEnable(boolean enabled);
+    public void setUserDataEnable(boolean enabled, int subId);
 
     /**
      * Policy control of data connection through this network, typically not
@@ -206,6 +243,12 @@ public interface NetworkStateTracker {
      */
     public void setPolicyDataEnable(boolean enabled);
 
+    /**
+     * Policy control of data connection through this network, typically not
+     * persisted internally. Usually used when {@link NetworkPolicy#limitBytes}
+     * is passed.
+     */
+    public void setPolicyDataEnable(boolean enabled, int subId);
     /**
      * -------------------------------------------------------------
      * Storage API used by ConnectivityService for saving
@@ -219,9 +262,19 @@ public interface NetworkStateTracker {
     public boolean isPrivateDnsRouteSet();
 
     /**
+     * Check if private DNS route is set for the network
+     */
+    public boolean isPrivateDnsRouteSet(int subId);
+
+    /**
      * Set a flag indicating private DNS route is set
      */
     public void privateDnsRouteSet(boolean enabled);
+
+    /**
+     * Set a flag indicating private DNS route is set
+     */
+    public void privateDnsRouteSet(boolean enabled, int subId);
 
     /**
      * Check if default route is set
@@ -229,9 +282,19 @@ public interface NetworkStateTracker {
     public boolean isDefaultRouteSet();
 
     /**
+     * Check if default route is set
+     */
+    public boolean isDefaultRouteSet(int subId);
+
+    /**
      * Set a flag indicating default route is set for the network
      */
     public void defaultRouteSet(boolean enabled);
+
+    /**
+     * Set a flag indicating default route is set for the network
+     */
+    public void defaultRouteSet(boolean enabled, int subId);
 
     /**
      * Check if tear down was requested
@@ -239,9 +302,19 @@ public interface NetworkStateTracker {
     public boolean isTeardownRequested();
 
     /**
+     * Check if tear down was requested
+     */
+    public boolean isTeardownRequested(int subId);
+
+    /**
      * Indicate tear down requested from connectivity
      */
     public void setTeardownRequested(boolean isRequested);
+
+    /**
+     * Indicate tear down requested from connectivity
+     */
+    public void setTeardownRequested(boolean isRequested, int subId);
 
     /**
      * An external dependency has been met/unmet
@@ -249,14 +322,29 @@ public interface NetworkStateTracker {
     public void setDependencyMet(boolean met);
 
     /**
+     * An external dependency has been met/unmet
+     */
+    public void setDependencyMet(boolean met, int subId);
+
+    /**
      * Informs the state tracker that another interface is stacked on top of it.
      **/
     public void addStackedLink(LinkProperties link);
 
     /**
+     * Informs the state tracker that another interface is stacked on top of it.
+     **/
+    public void addStackedLink(LinkProperties link, int subId);
+
+    /**
      * Informs the state tracker that a stacked interface has been removed.
      **/
     public void removeStackedLink(LinkProperties link);
+
+    /**
+     * Informs the state tracker that a stacked interface has been removed.
+     **/
+    public void removeStackedLink(LinkProperties link, int subId);
 
     /*
      * Called once to setup async channel between this and
@@ -265,9 +353,21 @@ public interface NetworkStateTracker {
     public void supplyMessenger(Messenger messenger);
 
     /*
+     * Called once to setup async channel between this and
+     * the underlying network specific code.
+     */
+    public void supplyMessengerForSubscription(Messenger messenger, int subId);
+
+
+    /*
      * Network interface name that we'll lookup for sampling data
      */
     public String getNetworkInterfaceName();
+
+    /*
+     * Network interface name that we'll lookup for sampling data
+     */
+    public String getNetworkInterfaceName(int subId);
 
     /*
      * Save the starting sample
@@ -275,8 +375,18 @@ public interface NetworkStateTracker {
     public void startSampling(SamplingDataTracker.SamplingSnapshot s);
 
     /*
+     * Save the starting sample
+     */
+    public void startSampling(SamplingDataTracker.SamplingSnapshot s, int subId);
+
+    /*
      * Save the ending sample
      */
     public void stopSampling(SamplingDataTracker.SamplingSnapshot s);
+
+    /*
+     * Save the ending sample
+     */
+    public void stopSampling(SamplingDataTracker.SamplingSnapshot s, int subId);
 
 }

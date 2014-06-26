@@ -121,6 +121,7 @@ public class NetworkInfo implements Parcelable {
     private boolean mIsFailover;
     private boolean mIsRoaming;
     private boolean mIsConnectedToProvisioningNetwork;
+    private int mSubscription;
 
     /**
      * Indicates whether network connectivity is possible:
@@ -153,6 +154,24 @@ public class NetworkInfo implements Parcelable {
         mIsConnectedToProvisioningNetwork = false;
     }
 
+    /**
+     * @hide
+     */
+    public NetworkInfo(int type, int subtype, String typeName, String subtypeName, int subId) {
+        if (!ConnectivityManager.isNetworkTypeValid(type)) {
+            throw new IllegalArgumentException("Invalid network type: " + type);
+        }
+        mNetworkType = type;
+        mSubtype = subtype;
+        mTypeName = typeName;
+        mSubtypeName = subtypeName;
+        setDetailedState(DetailedState.IDLE, null, null);
+        mState = State.UNKNOWN;
+        mIsAvailable = false; // until we're told otherwise, assume unavailable
+        mIsRoaming = false;
+        mIsConnectedToProvisioningNetwork = false;
+        mSubscription = subId;
+    }
     /** {@hide} */
     public NetworkInfo(NetworkInfo source) {
         if (source != null) {
@@ -168,6 +187,7 @@ public class NetworkInfo implements Parcelable {
             mIsRoaming = source.mIsRoaming;
             mIsAvailable = source.mIsAvailable;
             mIsConnectedToProvisioningNetwork = source.mIsConnectedToProvisioningNetwork;
+            mSubscription = source.mSubscription;
         }
     }
 
@@ -363,6 +383,16 @@ public class NetworkInfo implements Parcelable {
     }
 
     /**
+     * Get the associated subscription with this networkInfo..
+     * @return the int subscription id.
+     * {@hide}
+     */
+    public int getSubscription() {
+        synchronized (this) {
+            return mSubscription;
+        }
+    }
+    /**
      * Sets the fine-grained state of the network.
      * @param detailedState the {@link DetailedState}.
      * @param reason a {@code String} indicating the reason for the state change,
@@ -427,7 +457,8 @@ public class NetworkInfo implements Parcelable {
             append(", failover: ").append(mIsFailover).
             append(", isAvailable: ").append(mIsAvailable).
             append(", isConnectedToProvisioningNetwork: ").
-                    append(mIsConnectedToProvisioningNetwork);
+                    append(mIsConnectedToProvisioningNetwork).
+            append(", subscription: ").append(mSubscription);
             return builder.toString();
         }
     }
@@ -458,6 +489,7 @@ public class NetworkInfo implements Parcelable {
             dest.writeInt(mIsConnectedToProvisioningNetwork ? 1 : 0);
             dest.writeString(mReason);
             dest.writeString(mExtraInfo);
+            dest.writeInt(mSubscription);
         }
     }
 
@@ -481,6 +513,7 @@ public class NetworkInfo implements Parcelable {
                 netInfo.mIsConnectedToProvisioningNetwork = in.readInt() != 0;
                 netInfo.mReason = in.readString();
                 netInfo.mExtraInfo = in.readString();
+                netInfo.mSubscription = in.readInt();
                 return netInfo;
             }
 

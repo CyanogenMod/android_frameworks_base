@@ -36,6 +36,10 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Slog;
+import android.database.ContentObserver;
+import android.content.ContentResolver;
+import android.provider.Settings;
+
 
 import com.android.internal.telephony.DctConstants;
 import com.android.internal.telephony.ITelephony;
@@ -60,39 +64,47 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     private static final String TAG = "MobileDataStateTracker";
     private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = true;
 
-    private PhoneConstants.DataState mMobileDataState;
+    private int mPhoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
+    private PhoneConstants.DataState[] mMobileDataState
+            = new  PhoneConstants.DataState[mPhoneCount];
     private ITelephony mPhoneService;
     private ITelephonyMSim mMSimPhoneService;
 
     private String mApnType;
-    private NetworkInfo mNetworkInfo;
-    private boolean mTeardownRequested = false;
+    private NetworkInfo[] mNetworkInfo = new NetworkInfo[mPhoneCount];
+    private boolean[] mTeardownRequested = new boolean[mPhoneCount];
     private Handler mTarget;
     private Context mContext;
-    private LinkProperties mLinkProperties;
-    private LinkCapabilities mLinkCapabilities;
-    private boolean mPrivateDnsRouteSet = false;
-    private boolean mDefaultRouteSet = false;
+    private LinkProperties[] mLinkProperties = new LinkProperties[mPhoneCount];
+    private LinkCapabilities[] mLinkCapabilities = new LinkCapabilities[mPhoneCount];
+    private boolean[] mPrivateDnsRouteSet = new boolean[mPhoneCount];
+    private boolean[] mDefaultRouteSet = new boolean[mPhoneCount];
 
     // NOTE: these are only kept for debugging output; actual values are
     // maintained in DataConnectionTracker.
-    protected boolean mUserDataEnabled = true;
-    protected boolean mPolicyDataEnabled = true;
+    protected boolean[] mUserDataEnabled = new boolean[mPhoneCount];
+    protected boolean[] mPolicyDataEnabled = new boolean[mPhoneCount];
 
     private Handler mHandler;
-    private AsyncChannel mDataConnectionTrackerAc;
+    private AsyncChannel[] mDataConnectionTrackerAc = new AsyncChannel[mPhoneCount];
 
     private AtomicBoolean mIsCaptivePortal = new AtomicBoolean(false);
 
-    private SignalStrength mSignalStrength;
+    private SignalStrength[] mSignalStrength = new SignalStrength[mPhoneCount];
 
-    private SamplingDataTracker mSamplingDataTracker = new SamplingDataTracker();
+    private SamplingDataTracker[] mSamplingDataTracker = new SamplingDataTracker[mPhoneCount];
 
     private static final int UNKNOWN = LinkQualityInfo.UNKNOWN_INT;
 
     private static int mSubscription;
+    private final PhoneStateListener[] mPhoneStateListener = new PhoneStateListener[mPhoneCount];
+
+    ContentResolver contentResolver = null;
+
+
+    private Messenger[] mMessengerList = new Messenger[mPhoneCount];
 
     /**
      * Create a new MobileDataStateTracker
@@ -100,10 +112,22 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      * @param tag the name of this network
      */
     public MobileDataStateTracker(int netType, String tag) {
-        mNetworkInfo = new NetworkInfo(netType,
-                TelephonyManager.getDefault().getNetworkType(), tag,
-                TelephonyManager.getDefault().getNetworkTypeName());
+
+        for (int i = 0; i < mPhoneCount; i++) {
+            mNetworkInfo[i] = new NetworkInfo(netType,
+                    MSimTelephonyManager.getDefault().getNetworkType(i), tag,
+                    MSimTelephonyManager.getDefault().getNetworkTypeName(i), i);
+
+            mTeardownRequested[i] = false;
+            mPrivateDnsRouteSet[i] = false;
+            mDefaultRouteSet[i] = false;
+            mUserDataEnabled[i] = true;
+            mPolicyDataEnabled[i] = true;
+            mSamplingDataTracker[i] = new SamplingDataTracker();
+        }
+
         mApnType = networkTypeToApnType(netType);
+
     }
 
     /**
@@ -124,21 +148,73 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
         filter.addAction(TelephonyIntents.ACTION_DATA_CONNECTION_FAILED);
 
         mContext.registerReceiver(new MobileDataStateReceiver(), filter);
-        mMobileDataState = PhoneConstants.DataState.DISCONNECTED;
 
-        TelephonyManager tm = (TelephonyManager)mContext.getSystemService(
-                Context.TELEPHONY_SERVICE);
-        tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        MSimTelephonyManager tm = (MSimTelephonyManager)mContext.getSystemService(
+                Context.MSIM_TELEPHONY_SERVICE);
+
+        for(int i = 0; i < mPhoneCount; i++) {
+            mMobileDataState[i] = PhoneConstants.DataState.DISCONNECTED;
+
+            mPhoneStateListener[i] = getPhoneStateListner(i);
+            tm.listen(mPhoneStateListener[i], PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        }
+
+        if (contentResolver == null && mApnType == PhoneConstants.APN_TYPE_DEFAULT) {
+            log("Register contentobserver");
+            contentResolver = mContext.getContentResolver();
+            Uri defaultDataUri = Settings.Global
+                .getUriFor(Settings.Global.MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION);
+            Uri tempDataUri = Settings.Global
+                .getUriFor(Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION);
+            contentResolver.registerContentObserver(defaultDataUri, false,
+                    new MultiSimObserver(mHandler));
+            contentResolver.registerContentObserver(tempDataUri, false,
+                    new MultiSimObserver(mHandler));
+        }
+
     }
 
-    private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            mSignalStrength = signalStrength;
-        }
-    };
 
-    static class MdstHandler extends Handler {
+    private PhoneStateListener getPhoneStateListner(final int i) {
+        return (new PhoneStateListener(i) {
+            @Override
+            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+                mSignalStrength[i] = signalStrength;
+            }
+        });
+    }
+
+    private class MultiSimObserver extends ContentObserver{
+
+        public MultiSimObserver(Handler handler) {
+            super(handler);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            onChange(selfChange,null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            //super.onChange(selfChange, uri);
+            try {
+                log("onChange hit, uri = "+uri);
+                log("onChange hit, new Default DDS = "+Settings .Global
+                        .getInt(mContext.getContentResolver()
+                            , Settings.Global.MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION));
+                log("onChange hit, new temp DDS = "+Settings.Global
+                        .getInt(mContext.getContentResolver()
+                            , Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION));
+            } catch (Exception e) {
+                log("Exception = "+e);
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    class MdstHandler extends Handler {
         private MobileDataStateTracker mMdst;
 
         MdstHandler(Looper looper, MobileDataStateTracker mdst) {
@@ -154,16 +230,34 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                         if (VDBG) {
                             mMdst.log("MdstHandler connected");
                         }
-                        mMdst.mDataConnectionTrackerAc = (AsyncChannel) msg.obj;
+                        AsyncChannel tracker = (AsyncChannel) msg.obj;
+                        int subId = 0;
+                        mMdst.log("MDST AsyncChannel="+tracker);
+
+                        for(int i =0; i < mPhoneCount; i++) {
+                            if( mMdst.mMessengerList[i] == msg.replyTo) {
+                                mMdst.log("This tracker is connected to sub=" + i);
+                                mMdst.mDataConnectionTrackerAc[i] = tracker;
+                            }
+                        }
+
                     } else {
                         if (VDBG) {
                             mMdst.log("MdstHandler %s NOT connected error=" + msg.arg1);
                         }
                     }
                     break;
+
                 case AsyncChannel.CMD_CHANNEL_DISCONNECTED:
                     if (VDBG) mMdst.log("Disconnected from DataStateTracker");
-                    mMdst.mDataConnectionTrackerAc = null;
+                    mMdst.log("CMD_CHANNEL_DISCONNECTED = " + msg);
+
+                    for(int i = 0; i < mPhoneCount; i++) {
+                        if (msg.obj == mMdst.mDataConnectionTrackerAc[i]) {
+                            mMdst.mDataConnectionTrackerAc[i] = null;
+                            mMdst.log("CMD_CHANNEL_DISCONNECTED for subId = " + i);
+                        }
+                    }
                     break;
                 default: {
                     if (VDBG) mMdst.log("Ignorning unknown message=" + msg);
@@ -174,23 +268,47 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
     }
 
     public boolean isPrivateDnsRouteSet() {
-        return mPrivateDnsRouteSet;
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        return mPrivateDnsRouteSet[defaultDataSub];
+    }
+
+    public boolean isPrivateDnsRouteSet(int subId) {
+        return mPrivateDnsRouteSet[subId];
     }
 
     public void privateDnsRouteSet(boolean enabled) {
-        mPrivateDnsRouteSet = enabled;
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        mPrivateDnsRouteSet[defaultDataSub] = enabled;
+    }
+
+    public void privateDnsRouteSet(boolean enabled, int subId) {
+        mPrivateDnsRouteSet[subId] = enabled;
     }
 
     public NetworkInfo getNetworkInfo() {
-        return mNetworkInfo;
+        return mNetworkInfo[MSimTelephonyManager.getDefault().getDefaultDataSubscription()];
+    }
+
+    public NetworkInfo getNetworkInfo(int subId) {
+        return mNetworkInfo[subId];
     }
 
     public boolean isDefaultRouteSet() {
-        return mDefaultRouteSet;
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        return mDefaultRouteSet[defaultDataSub];
+    }
+
+    public boolean isDefaultRouteSet(int subId) {
+        return mDefaultRouteSet[subId];
     }
 
     public void defaultRouteSet(boolean enabled) {
-        mDefaultRouteSet = enabled;
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        mDefaultRouteSet[defaultDataSub] = enabled;
+    }
+
+    public void defaultRouteSet(boolean enabled, int subId) {
+        mDefaultRouteSet[subId] = enabled;
     }
 
     /**
@@ -200,25 +318,29 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
     }
 
     private void updateLinkProperitesAndCapatilities(Intent intent) {
-        mLinkProperties = intent.getParcelableExtra(
+        int index = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+
+        mLinkProperties[index] = intent.getParcelableExtra(
                 PhoneConstants.DATA_LINK_PROPERTIES_KEY);
-        if (mLinkProperties == null) {
+        if (mLinkProperties[index] == null) {
             loge("CONNECTED event did not supply link properties.");
-            mLinkProperties = new LinkProperties();
+            mLinkProperties[index] = new LinkProperties();
         }
-        mLinkProperties.setMtu(mContext.getResources().getInteger(
+        mLinkProperties[index].setMtu(mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_mobile_mtu));
-        mLinkCapabilities = intent.getParcelableExtra(
+        mLinkCapabilities[index] = intent.getParcelableExtra(
                 PhoneConstants.DATA_LINK_CAPABILITIES_KEY);
-        if (mLinkCapabilities == null) {
+        if (mLinkCapabilities[index] == null) {
             loge("CONNECTED event did not supply link capabilities.");
-            mLinkCapabilities = new LinkCapabilities();
+            mLinkCapabilities[index] = new LinkCapabilities();
         }
     }
 
     private class MobileDataStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+
             if (intent.getAction().equals(TelephonyIntents.
                     ACTION_DATA_CONNECTION_CONNECTED_TO_PROVISIONING_APN)) {
                 String apnName = intent.getStringExtra(PhoneConstants.DATA_APN_KEY);
@@ -232,16 +354,20 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                 }
 
                 // Make us in the connecting state until we make a new TYPE_MOBILE_PROVISIONING
-                mMobileDataState = PhoneConstants.DataState.CONNECTING;
+                mMobileDataState[defaultDataSub] = PhoneConstants.DataState.CONNECTING;
                 updateLinkProperitesAndCapatilities(intent);
-                mNetworkInfo.setIsConnectedToProvisioningNetwork(true);
+                mNetworkInfo[defaultDataSub].setIsConnectedToProvisioningNetwork(true);
 
                 // Change state to SUSPENDED so setDetailedState
                 // sends EVENT_STATE_CHANGED to connectivityService
-                setDetailedState(DetailedState.SUSPENDED, "", apnName);
+                setDetailedState(DetailedState.SUSPENDED, "", apnName, 0);
             } else if (intent.getAction().equals(TelephonyIntents.
                     ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
                 String apnType = intent.getStringExtra(PhoneConstants.DATA_APN_TYPE_KEY);
+                final int subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
+                        MSimConstants.DEFAULT_SUBSCRIPTION);
+                String reason = intent.getStringExtra(PhoneConstants.STATE_CHANGE_REASON_KEY);
+                String apnName = intent.getStringExtra(PhoneConstants.DATA_APN_KEY);
                 if (VDBG) {
                     log(String.format("Broadcast received: ACTION_ANY_DATA_CONNECTION_STATE_CHANGED"
                         + "mApnType=%s %s received apnType=%s", mApnType,
@@ -251,16 +377,14 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                     return;
                 }
                 // Assume this isn't a provisioning network.
-                mNetworkInfo.setIsConnectedToProvisioningNetwork(false);
+                mNetworkInfo[MSimTelephonyManager.getDefault()
+                    .getDefaultDataSubscription()].setIsConnectedToProvisioningNetwork(false);
                 if (DBG) {
                     log("Broadcast received: " + intent.getAction() + " apnType=" + apnType);
                 }
 
-                int subscription = 0;
                 if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                     int dds = 0;
-                    subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
-                            MSimConstants.DEFAULT_SUBSCRIPTION);
                     getPhoneService(false);
 
                    /*
@@ -280,50 +404,50 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                             if (retry == 0) getPhoneService(true);
                         }
                     }
-                    log(String.format("subscription=%s, dds=%s", subscription, dds));
-                    if (subscription != dds) {
-                        log("ignore data connection state as sub:" + subscription +
-                                " is not current dds: " + dds);
-                        return;
-                    }
+                    log(String.format(
+                                "ACTION_ANY_DATA_CONNECTION_STATE_CHANGED"
+                                + ", subscription=%s, dds=%s, reason=%s", subscription
+                                , dds, reason));
+
                 }
 
-                int oldSubtype = mNetworkInfo.getSubtype();
-                int newSubType = TelephonyManager.getDefault().getNetworkType();
+                int oldSubtype = mNetworkInfo[subscription].getSubtype();
+                int newSubType = MSimTelephonyManager.getDefault().getNetworkType(subscription);
                 String subTypeName = TelephonyManager.getDefault().getNetworkTypeName();
-                mNetworkInfo.setSubtype(newSubType, subTypeName);
-                if (newSubType != oldSubtype && mNetworkInfo.isConnected()) {
+                mNetworkInfo[subscription].setSubtype(newSubType, subTypeName);
+                if (newSubType != oldSubtype && mNetworkInfo[subscription].isConnected()) {
                     Message msg = mTarget.obtainMessage(EVENT_NETWORK_SUBTYPE_CHANGED,
-                                                        oldSubtype, 0, mNetworkInfo);
+                            oldSubtype, subscription,
+                            mNetworkInfo[subscription]);
                     msg.sendToTarget();
                 }
 
                 PhoneConstants.DataState state = Enum.valueOf(PhoneConstants.DataState.class,
                         intent.getStringExtra(PhoneConstants.STATE_KEY));
-                String reason = intent.getStringExtra(PhoneConstants.STATE_CHANGE_REASON_KEY);
-                String apnName = intent.getStringExtra(PhoneConstants.DATA_APN_KEY);
-                mNetworkInfo.setRoaming(intent.getBooleanExtra(
+
+                mNetworkInfo[subscription].setRoaming(intent.getBooleanExtra(
                         PhoneConstants.DATA_NETWORK_ROAMING_KEY, false));
                 if (VDBG) {
                     log(mApnType + " setting isAvailable to " +
                             intent.getBooleanExtra(PhoneConstants.NETWORK_UNAVAILABLE_KEY,false));
                 }
-                mNetworkInfo.setIsAvailable(!intent.getBooleanExtra(
+                mNetworkInfo[subscription].setIsAvailable(!intent.getBooleanExtra(
                         PhoneConstants.NETWORK_UNAVAILABLE_KEY, false));
 
                 if (DBG) {
-                    log("Received state=" + state + ", old=" + mMobileDataState +
+                    log("Received state=" + state + ", old=" + mMobileDataState[subscription] +
                         ", reason=" + (reason == null ? "(unspecified)" : reason));
                 }
-                if (mMobileDataState != state) {
-                    mMobileDataState = state;
+                if (mMobileDataState[subscription] != state) {
+                    mMobileDataState[subscription] = state;
                     switch (state) {
                         case DISCONNECTED:
                             if(isTeardownRequested()) {
                                 setTeardownRequested(false);
                             }
 
-                            setDetailedState(DetailedState.DISCONNECTED, reason, apnName);
+                            setDetailedState(DetailedState.DISCONNECTED, reason, apnName,
+                                    subscription);
                             // can't do this here - ConnectivityService needs it to clear stuff
                             // it's ok though - just leave it to be refreshed next time
                             // we connect.
@@ -332,33 +456,41 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                             //mInterfaceName = null;
                             break;
                         case CONNECTING:
-                            setDetailedState(DetailedState.CONNECTING, reason, apnName);
+                            setDetailedState(DetailedState.CONNECTING, reason, apnName,
+                                    subscription);
                             break;
                         case SUSPENDED:
-                            setDetailedState(DetailedState.SUSPENDED, reason, apnName);
+                            setDetailedState(DetailedState.SUSPENDED, reason, apnName,
+                                    subscription);
                             break;
                         case CONNECTED:
                             mSubscription = subscription;
                             updateLinkProperitesAndCapatilities(intent);
-                            setDetailedState(DetailedState.CONNECTED, reason, apnName);
+                            setDetailedState(DetailedState.CONNECTED, reason, apnName,
+                                    subscription);
                             break;
                     }
 
                     if (VDBG) {
                         Slog.d(TAG, "TelephonyMgr.DataConnectionStateChanged");
-                        if (mNetworkInfo != null) {
-                            Slog.d(TAG, "NetworkInfo = " + mNetworkInfo.toString());
-                            Slog.d(TAG, "subType = " + String.valueOf(mNetworkInfo.getSubtype()));
-                            Slog.d(TAG, "subType = " + mNetworkInfo.getSubtypeName());
+                        if (mNetworkInfo[subscription] != null) {
+                            Slog.d(TAG, "NetworkInfo["+subscription+"] = "
+                                    + mNetworkInfo[subscription].toString());
+                            Slog.d(TAG, "subType = "
+                                    + String.valueOf(mNetworkInfo[subscription].getSubtype()));
+                            Slog.d(TAG, "subType = "
+                                    + mNetworkInfo[subscription].getSubtypeName());
                         }
-                        if (mLinkProperties != null) {
-                            Slog.d(TAG, "LinkProperties = " + mLinkProperties.toString());
+                        if (mLinkProperties[subscription] != null) {
+                            Slog.d(TAG, "LinkProperties = "
+                                    + mLinkProperties[subscription].toString());
                         } else {
                             Slog.d(TAG, "LinkProperties = " );
                         }
 
-                        if (mLinkCapabilities != null) {
-                            Slog.d(TAG, "LinkCapabilities = " + mLinkCapabilities.toString());
+                        if (mLinkCapabilities[subscription] != null) {
+                            Slog.d(TAG, "LinkCapabilities = "
+                                    + mLinkCapabilities[subscription].toString());
                         } else {
                             Slog.d(TAG, "LinkCapabilities = " );
                         }
@@ -366,27 +498,32 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
 
                     /* lets not sample traffic data across state changes */
-                    mSamplingDataTracker.resetSamplingData();
+                    mSamplingDataTracker[subscription].resetSamplingData();
                 } else {
                     // There was no state change. Check if LinkProperties has been updated.
                     if (TextUtils.equals(reason, PhoneConstants.REASON_LINK_PROPERTIES_CHANGED)) {
-                        mLinkProperties = intent.getParcelableExtra(
+                        mLinkProperties[subscription] = intent.getParcelableExtra(
                                 PhoneConstants.DATA_LINK_PROPERTIES_KEY);
-                        if (mLinkProperties == null) {
+                        if (mLinkProperties[subscription] == null) {
                             loge("No link property in LINK_PROPERTIES change event.");
-                            mLinkProperties = new LinkProperties();
+                            mLinkProperties[subscription] = new LinkProperties();
                         }
                         // Just update reason field in this NetworkInfo
-                        mNetworkInfo.setDetailedState(mNetworkInfo.getDetailedState(), reason,
-                                                      mNetworkInfo.getExtraInfo());
+                        mNetworkInfo[subscription]
+                            .setDetailedState(mNetworkInfo[subscription].getDetailedState(), reason,
+                                                      mNetworkInfo[subscription].getExtraInfo());
                         Message msg = mTarget.obtainMessage(EVENT_CONFIGURATION_CHANGED,
-                                                            mNetworkInfo);
+                                                            0, subscription,
+                                                            mNetworkInfo[subscription]);
                         msg.sendToTarget();
                     }
                 }
             } else if (intent.getAction().
                     equals(TelephonyIntents.ACTION_DATA_CONNECTION_FAILED)) {
                 String apnType = intent.getStringExtra(PhoneConstants.DATA_APN_TYPE_KEY);
+                final int subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
+                        MSimConstants.DEFAULT_SUBSCRIPTION);
+
                 if (!TextUtils.equals(apnType, mApnType)) {
                     if (DBG) {
                         log(String.format(
@@ -396,14 +533,14 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                     return;
                 }
                 // Assume this isn't a provisioning network.
-                mNetworkInfo.setIsConnectedToProvisioningNetwork(false);
+                mNetworkInfo[subscription].setIsConnectedToProvisioningNetwork(false);
                 String reason = intent.getStringExtra(PhoneConstants.FAILURE_REASON_KEY);
                 String apnName = intent.getStringExtra(PhoneConstants.DATA_APN_KEY);
                 if (DBG) {
                     log("Broadcast received: " + intent.getAction() +
                                 " reason=" + reason == null ? "null" : reason);
                 }
-                setDetailedState(DetailedState.FAILED, reason, apnName);
+                setDetailedState(DetailedState.FAILED, reason, apnName, subscription);
             } else {
                 if (DBG) log("Broadcast received: ignore " + intent.getAction());
             }
@@ -427,9 +564,16 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      * Report whether data connectivity is possible.
      */
     public boolean isAvailable() {
-        return mNetworkInfo.isAvailable();
+        return mNetworkInfo[MSimTelephonyManager
+            .getDefault().getDefaultDataSubscription()].isAvailable();
     }
 
+    /**
+     * Report whether data connectivity is possible.
+     */
+    public boolean isAvailable(int subId) {
+        return mNetworkInfo[subId].isAvailable();
+    }
     /**
      * Return the system properties name associated with the tcp buffer sizes
      * for this network.
@@ -548,15 +692,22 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      * TODO - make async and return nothing?
      */
     public boolean teardown() {
+        log("teardown on "+this);
         setTeardownRequested(true);
         return (setEnableApn(mApnType, false) != PhoneConstants.APN_REQUEST_FAILED);
     }
 
+    public boolean teardown(int subId) {
+        log("teardown on "+this +" subId="+subId);
+        setTeardownRequested(true);
+        return (setEnableApn(mApnType, false, subId) != PhoneConstants.APN_REQUEST_FAILED);
+    }
     /**
      * @return true if this is ready to operate
      */
     public boolean isReady() {
-        return mDataConnectionTrackerAc != null;
+        return mDataConnectionTrackerAc[MSimTelephonyManager
+            .getDefault().getDefaultDataSubscription()] != null;
     }
 
     @Override
@@ -583,12 +734,13 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      * @param extraInfo optional {@code String} providing extra information about the state change
      */
     private void setDetailedState(NetworkInfo.DetailedState state, String reason,
-            String extraInfo) {
+            String extraInfo, int subId) {
         if (DBG) log("setDetailed state, old ="
-                + mNetworkInfo.getDetailedState() + " and new state=" + state);
-        if (state != mNetworkInfo.getDetailedState()) {
-            boolean wasConnecting = (mNetworkInfo.getState() == NetworkInfo.State.CONNECTING);
-            String lastReason = mNetworkInfo.getReason();
+                + mNetworkInfo[subId].getDetailedState() + " and new state=" + state);
+        if (state != mNetworkInfo[subId].getDetailedState()) {
+            boolean wasConnecting = (mNetworkInfo[subId].getState()
+                    == NetworkInfo.State.CONNECTING);
+            String lastReason = mNetworkInfo[subId].getReason();
             /*
              * If a reason was supplied when the CONNECTING state was entered, and no
              * reason was supplied for entering the CONNECTED state, then retain the
@@ -597,25 +749,36 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             if (wasConnecting && state == NetworkInfo.DetailedState.CONNECTED && reason == null
                     && lastReason != null)
                 reason = lastReason;
-            mNetworkInfo.setDetailedState(state, reason, extraInfo);
-            Message msg = mTarget.obtainMessage(EVENT_STATE_CHANGED, new NetworkInfo(mNetworkInfo));
+            mNetworkInfo[subId].setDetailedState(state, reason, extraInfo);
+            Message msg = mTarget.obtainMessage(EVENT_STATE_CHANGED
+                    , 0, subId, new NetworkInfo(mNetworkInfo[subId]));
             msg.sendToTarget();
         }
     }
 
     public void setTeardownRequested(boolean isRequested) {
-        mTeardownRequested = isRequested;
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        mTeardownRequested[defaultDataSub] = isRequested;
+    }
+
+    public void setTeardownRequested(boolean isRequested, int subId) {
+        mTeardownRequested[subId] = isRequested;
     }
 
     public boolean isTeardownRequested() {
-        return mTeardownRequested;
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        return mTeardownRequested[defaultDataSub];
     }
 
+    public boolean isTeardownRequested(int subId) {
+        return mTeardownRequested[subId];
+    }
     /**
      * Re-enable mobile data connectivity after a {@link #teardown()}.
      * TODO - make async and always get a notification?
      */
     public boolean reconnect() {
+        log("reconnect on "+this);
         boolean retValue = false; //connected or expect to be?
         setTeardownRequested(false);
         switch (setEnableApn(mApnType, true)) {
@@ -625,7 +788,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                 break;
             case PhoneConstants.APN_REQUEST_STARTED:
                 // set IDLE here , avoid the following second FAILED not sent out
-                mNetworkInfo.setDetailedState(DetailedState.IDLE, null, null);
+                mNetworkInfo[MSimTelephonyManager .getDefault().getDefaultDataSubscription()]
+                    .setDetailedState(DetailedState.IDLE, null, null);
                 retValue = true;
                 break;
             case PhoneConstants.APN_REQUEST_FAILED:
@@ -638,6 +802,29 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
         return retValue;
     }
 
+    public boolean reconnect(int subId) {
+        log("reconnect on "+this+" subId="+subId);
+        boolean retValue = false; //connected or expect to be?
+        setTeardownRequested(false);
+        switch (setEnableApn(mApnType, true, subId)) {
+            case PhoneConstants.APN_ALREADY_ACTIVE:
+                // need to set self to CONNECTING so the below message is handled.
+                retValue = true;
+                break;
+            case PhoneConstants.APN_REQUEST_STARTED:
+                // set IDLE here , avoid the following second FAILED not sent out
+                mNetworkInfo[subId].setDetailedState(DetailedState.IDLE, null, null);
+                retValue = true;
+                break;
+            case PhoneConstants.APN_REQUEST_FAILED:
+            case PhoneConstants.APN_TYPE_NOT_AVAILABLE:
+                break;
+            default:
+                loge("Error in reconnect - unexpected response.");
+                break;
+        }
+        return retValue;
+    }
     /**
      * Turn on or off the mobile radio. No connectivity will be possible while the
      * radio is off. The operation is a no-op if the radio is already in the desired state.
@@ -687,7 +874,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     public void setInternalDataEnable(boolean enabled) {
         if (DBG) log("setInternalDataEnable: E enabled=" + enabled);
-        final AsyncChannel channel = mDataConnectionTrackerAc;
+        int index = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        final AsyncChannel channel = mDataConnectionTrackerAc[index];
         if (channel != null) {
             channel.sendMessage(DctConstants.EVENT_SET_INTERNAL_DATA_ENABLE,
                     enabled ? DctConstants.ENABLED : DctConstants.DISABLED);
@@ -698,26 +886,50 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
     @Override
     public void setUserDataEnable(boolean enabled) {
         if (DBG) log("setUserDataEnable: E enabled=" + enabled);
-        final AsyncChannel channel = mDataConnectionTrackerAc;
+        int index = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        final AsyncChannel channel = mDataConnectionTrackerAc[index];
         if (channel != null) {
             channel.sendMessage(DctConstants.CMD_SET_USER_DATA_ENABLE,
                     enabled ? DctConstants.ENABLED : DctConstants.DISABLED);
-            mUserDataEnabled = enabled;
+            mUserDataEnabled[index] = enabled;
+        }
+        if (VDBG) log("setUserDataEnable: X enabled=" + enabled);
+    }
+
+    @Override
+    public void setUserDataEnable(boolean enabled, int subId) {
+        if (DBG) log("setUserDataEnable: E enabled=" + enabled + "subId = "+subId);
+        final AsyncChannel channel = mDataConnectionTrackerAc[subId];
+        if (channel != null) {
+            channel.sendMessage(DctConstants.CMD_SET_USER_DATA_ENABLE,
+                    enabled ? DctConstants.ENABLED : DctConstants.DISABLED);
+            mUserDataEnabled[subId] = enabled;
         }
         if (VDBG) log("setUserDataEnable: X enabled=" + enabled);
     }
 
     @Override
     public void setPolicyDataEnable(boolean enabled) {
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
         if (DBG) log("setPolicyDataEnable(enabled=" + enabled + ")");
-        final AsyncChannel channel = mDataConnectionTrackerAc;
+        final AsyncChannel channel = mDataConnectionTrackerAc[defaultDataSub];
         if (channel != null) {
             channel.sendMessage(DctConstants.CMD_SET_POLICY_DATA_ENABLE,
                     enabled ? DctConstants.ENABLED : DctConstants.DISABLED);
-            mPolicyDataEnabled = enabled;
+            mPolicyDataEnabled[defaultDataSub] = enabled;
         }
     }
 
+    @Override
+    public void setPolicyDataEnable(boolean enabled, int subId) {
+        if (DBG) log("setPolicyDataEnable(enabled=" + enabled + ")");
+        final AsyncChannel channel = mDataConnectionTrackerAc[subId];
+        if (channel != null) {
+            channel.sendMessage(DctConstants.CMD_SET_POLICY_DATA_ENABLE,
+                    enabled ? DctConstants.ENABLED : DctConstants.DISABLED);
+            mPolicyDataEnabled[subId] = enabled;
+        }
+    }
     /**
      * Eanble/disable FailFast
      *
@@ -725,7 +937,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      */
     public void setEnableFailFastMobileData(int enabled) {
         if (DBG) log("setEnableFailFastMobileData(enabled=" + enabled + ")");
-        final AsyncChannel channel = mDataConnectionTrackerAc;
+        final AsyncChannel channel = mDataConnectionTrackerAc[MSimTelephonyManager
+            .getDefault().getDefaultDataSubscription()];
         if (channel != null) {
             channel.sendMessage(DctConstants.CMD_SET_ENABLE_FAIL_FAST_MOBILE_DATA, enabled);
         }
@@ -743,7 +956,27 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             msg.what = DctConstants.CMD_SET_DEPENDENCY_MET;
             msg.arg1 = (met ? DctConstants.ENABLED : DctConstants.DISABLED);
             msg.setData(bundle);
-            mDataConnectionTrackerAc.sendMessage(msg);
+            mDataConnectionTrackerAc[MSimTelephonyManager
+                .getDefault().getDefaultDataSubscription()].sendMessage(msg);
+            if (VDBG) log("setDependencyMet: X met=" + met);
+        } catch (NullPointerException e) {
+            loge("setDependencyMet: X mAc was null" + e);
+        }
+    }
+
+    /**
+     * carrier dependency is met/unmet
+     * @param met
+     */
+    public void setDependencyMet(boolean met, int subId) {
+        Bundle bundle = Bundle.forPair(DctConstants.APN_TYPE_KEY, mApnType);
+        try {
+            if (DBG) log("setDependencyMet: E met=" + met);
+            Message msg = Message.obtain();
+            msg.what = DctConstants.CMD_SET_DEPENDENCY_MET;
+            msg.arg1 = (met ? DctConstants.ENABLED : DctConstants.DISABLED);
+            msg.setData(bundle);
+            mDataConnectionTrackerAc[subId].sendMessage(msg);
             if (VDBG) log("setDependencyMet: X met=" + met);
         } catch (NullPointerException e) {
             loge("setDependencyMet: X mAc was null" + e);
@@ -755,7 +988,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      */
     public void enableMobileProvisioning(String url) {
         if (DBG) log("enableMobileProvisioning(url=" + url + ")");
-        final AsyncChannel channel = mDataConnectionTrackerAc;
+        final AsyncChannel channel = mDataConnectionTrackerAc[MSimTelephonyManager
+            .getDefault().getDefaultDataSubscription()];
         if (channel != null) {
             Message msg = Message.obtain();
             msg.what = DctConstants.CMD_ENABLE_MOBILE_PROVISIONING;
@@ -774,7 +1008,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             Message msg = Message.obtain();
             msg.what = DctConstants.CMD_IS_PROVISIONING_APN;
             msg.setData(Bundle.forPair(DctConstants.APN_TYPE_KEY, mApnType));
-            Message result = mDataConnectionTrackerAc.sendMessageSynchronously(msg);
+            Message result = mDataConnectionTrackerAc[MSimTelephonyManager
+                .getDefault().getDefaultDataSubscription()].sendMessageSynchronously(msg);
             retVal = result.arg1 == DctConstants.ENABLED;
         } catch (NullPointerException e) {
             loge("isProvisioningNetwork: X " + e);
@@ -786,21 +1021,35 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     @Override
     public void addStackedLink(LinkProperties link) {
-        mLinkProperties.addStackedLink(link);
+        mLinkProperties[MSimTelephonyManager
+            .getDefault().getDefaultDataSubscription()].addStackedLink(link);
+    }
+
+    @Override
+    public void addStackedLink(LinkProperties link, int subId) {
+        mLinkProperties[subId].addStackedLink(link);
     }
 
     @Override
     public void removeStackedLink(LinkProperties link) {
-        mLinkProperties.removeStackedLink(link);
+        mLinkProperties[MSimTelephonyManager
+            .getDefault().getDefaultDataSubscription()].removeStackedLink(link);
+    }
+
+    @Override
+    public void removeStackedLink(LinkProperties link, int subId) {
+        mLinkProperties[subId].removeStackedLink(link);
     }
 
     @Override
     public String toString() {
         final CharArrayWriter writer = new CharArrayWriter();
         final PrintWriter pw = new PrintWriter(writer);
-        pw.print("Mobile data state: "); pw.println(mMobileDataState);
-        pw.print("Data enabled: user="); pw.print(mUserDataEnabled);
-        pw.print(", policy="); pw.println(mPolicyDataEnabled);
+        for( int i = 0; i < mPhoneCount; i++) {
+            pw.print("Mobile data state, sub" + i + ": "); pw.println(mMobileDataState[i]);
+            pw.print("Data enabled sub" + i + ": user="); pw.print(mUserDataEnabled[i]);
+            pw.print(", policy, sub" + i + "= "); pw.println(mPolicyDataEnabled[0]);
+        }
         return writer.toString();
     }
 
@@ -829,6 +1078,56 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                         return mMSimPhoneService.enableApnType(apnType);
                     } else {
                         return mMSimPhoneService.disableApnType(apnType);
+                    }
+                } catch (RemoteException e) {
+                    if (retry == 0) getPhoneService(true);
+                }
+            } else {
+                if (mPhoneService == null) {
+                    loge("Ignoring feature request because could not acquire PhoneService");
+                    break;
+                }
+
+                try {
+                    if (enable) {
+                        return mPhoneService.enableApnType(apnType);
+                    } else {
+                        return mPhoneService.disableApnType(apnType);
+                    }
+                } catch (RemoteException e) {
+                    if (retry == 0) getPhoneService(true);
+                }
+            }
+        }
+
+        loge("Could not " + (enable ? "enable" : "disable") + " APN type \"" + apnType + "\"");
+        return PhoneConstants.APN_REQUEST_FAILED;
+    }
+    /**
+     * Internal method supporting the ENABLE_MMS feature.
+     * @param apnType the type of APN to be enabled or disabled (e.g., mms)
+     * @param enable {@code true} to enable the specified APN type,
+     * {@code false} to disable it.
+     * @return an integer value representing the outcome of the request.
+     */
+    private int setEnableApn(String apnType, boolean enable, int subId) {
+        getPhoneService(false);
+        /*
+         * If the phone process has crashed in the past, we'll get a
+         * RemoteException and need to re-reference the service.
+         */
+        for (int retry = 0; retry < 2; retry++) {
+            if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+                if (mMSimPhoneService == null) {
+                    loge("Ignoring feature request because could not acquire MSim Phone Service");
+                    break;
+                }
+
+                try {
+                    if (enable) {
+                        return mMSimPhoneService.enableApnTypeOnSubscription(apnType, subId);
+                    } else {
+                        return mMSimPhoneService.disableApnTypeOnSubscription(apnType, subId);
                     }
                 } catch (RemoteException e) {
                     if (retry == 0) getPhoneService(true);
@@ -887,7 +1186,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      */
     @Override
     public LinkProperties getLinkProperties() {
-        return new LinkProperties(mLinkProperties);
+        return new LinkProperties(mLinkProperties[MSimTelephonyManager
+                .getDefault().getDefaultDataSubscription()]);
     }
 
     /**
@@ -895,11 +1195,25 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      */
     @Override
     public LinkCapabilities getLinkCapabilities() {
-        return new LinkCapabilities(mLinkCapabilities);
+        return new LinkCapabilities(mLinkCapabilities[MSimTelephonyManager
+                .getDefault().getDefaultDataSubscription()]);
+    }
+
+    @Override
+    public LinkCapabilities getLinkCapabilities(int subId) {
+        return new LinkCapabilities(mLinkCapabilities[subId]);
     }
 
     public void supplyMessenger(Messenger messenger) {
         if (VDBG) log(mApnType + " got supplyMessenger");
+        AsyncChannel ac = new AsyncChannel();
+        ac.connect(mContext, MobileDataStateTracker.this.mHandler, messenger);
+    }
+
+    public void supplyMessengerForSubscription(Messenger messenger, int subId) {
+        if (VDBG) log(mApnType + " got supplyMessenger for subId="+subId);
+        mMessengerList[subId]= messenger;
+
         AsyncChannel ac = new AsyncChannel();
         ac.connect(mContext, MobileDataStateTracker.this.mHandler, messenger);
     }
@@ -918,34 +1232,99 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     @Override
     public LinkQualityInfo getLinkQualityInfo() {
-        if (mNetworkInfo == null || mNetworkInfo.getType() == ConnectivityManager.TYPE_NONE) {
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+
+        if (mNetworkInfo[defaultDataSub] == null
+                || mNetworkInfo[defaultDataSub].getType() == ConnectivityManager.TYPE_NONE) {
             // no data available yet; just return
             return null;
         }
 
         MobileLinkQualityInfo li = new MobileLinkQualityInfo();
 
-        li.setNetworkType(mNetworkInfo.getType());
+        li.setNetworkType(mNetworkInfo[defaultDataSub].getType());
 
-        mSamplingDataTracker.setCommonLinkQualityInfoFields(li);
+        mSamplingDataTracker[defaultDataSub].setCommonLinkQualityInfoFields(li);
 
-        if (mNetworkInfo.getSubtype() != TelephonyManager.NETWORK_TYPE_UNKNOWN) {
-            li.setMobileNetworkType(mNetworkInfo.getSubtype());
+        if (mNetworkInfo[defaultDataSub].getSubtype() != TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+            li.setMobileNetworkType(mNetworkInfo[defaultDataSub].getSubtype());
 
-            NetworkDataEntry entry = getNetworkDataEntry(mNetworkInfo.getSubtype());
+            NetworkDataEntry entry = getNetworkDataEntry(
+                    mNetworkInfo[defaultDataSub].getSubtype());
             if (entry != null) {
                 li.setTheoreticalRxBandwidth(entry.downloadBandwidth);
                 li.setTheoreticalRxBandwidth(entry.uploadBandwidth);
                 li.setTheoreticalLatency(entry.latency);
             }
 
-            if (mSignalStrength != null) {
+            if (mSignalStrength[defaultDataSub] != null) {
                 li.setNormalizedSignalStrength(getNormalizedSignalStrength(
-                        li.getMobileNetworkType(), mSignalStrength));
+                        li.getMobileNetworkType(), mSignalStrength[defaultDataSub]));
             }
         }
 
-        SignalStrength ss = mSignalStrength;
+        SignalStrength ss = mSignalStrength[defaultDataSub];
+        if (ss != null) {
+
+            li.setRssi(ss.getGsmSignalStrength());
+            li.setGsmErrorRate(ss.getGsmBitErrorRate());
+            li.setCdmaDbm(ss.getCdmaDbm());
+            li.setCdmaEcio(ss.getCdmaEcio());
+            li.setEvdoDbm(ss.getEvdoDbm());
+            li.setEvdoEcio(ss.getEvdoEcio());
+            li.setEvdoSnr(ss.getEvdoSnr());
+            li.setLteSignalStrength(ss.getLteSignalStrength());
+            li.setLteRsrp(ss.getLteRsrp());
+            li.setLteRsrq(ss.getLteRsrq());
+            li.setLteRssnr(ss.getLteRssnr());
+            li.setLteCqi(ss.getLteCqi());
+        }
+
+        if (VDBG) {
+            Slog.d(TAG, "Returning LinkQualityInfo with"
+                    + " MobileNetworkType = " + String.valueOf(li.getMobileNetworkType())
+                    + " Theoretical Rx BW = " + String.valueOf(li.getTheoreticalRxBandwidth())
+                    + " gsm Signal Strength = " + String.valueOf(li.getRssi())
+                    + " cdma Signal Strength = " + String.valueOf(li.getCdmaDbm())
+                    + " evdo Signal Strength = " + String.valueOf(li.getEvdoDbm())
+                    + " Lte Signal Strength = " + String.valueOf(li.getLteSignalStrength()));
+        }
+
+        return li;
+    }
+
+    @Override
+    public LinkQualityInfo getLinkQualityInfo(int subId) {
+
+        if (mNetworkInfo[subId] == null
+                || mNetworkInfo[subId].getType() == ConnectivityManager.TYPE_NONE) {
+            // no data available yet; just return
+            return null;
+        }
+
+        MobileLinkQualityInfo li = new MobileLinkQualityInfo();
+
+        li.setNetworkType(mNetworkInfo[subId].getType());
+
+        mSamplingDataTracker[subId].setCommonLinkQualityInfoFields(li);
+
+        if (mNetworkInfo[subId].getSubtype() != TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+            li.setMobileNetworkType(mNetworkInfo[subId].getSubtype());
+
+            NetworkDataEntry entry = getNetworkDataEntry(mNetworkInfo[subId].getSubtype());
+            if (entry != null) {
+                li.setTheoreticalRxBandwidth(entry.downloadBandwidth);
+                li.setTheoreticalRxBandwidth(entry.uploadBandwidth);
+                li.setTheoreticalLatency(entry.latency);
+            }
+
+            if (mSignalStrength[subId] != null) {
+                li.setNormalizedSignalStrength(getNormalizedSignalStrength(
+                        li.getMobileNetworkType(), mSignalStrength[subId]));
+            }
+        }
+
+        SignalStrength ss = mSignalStrength[subId];
         if (ss != null) {
 
             li.setRssi(ss.getGsmSignalStrength());
@@ -1056,11 +1435,34 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     @Override
     public void startSampling(SamplingDataTracker.SamplingSnapshot s) {
-        mSamplingDataTracker.startSampling(s);
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        mSamplingDataTracker[defaultDataSub].startSampling(s);
+    }
+
+    @Override
+    public void startSampling(SamplingDataTracker.SamplingSnapshot s, int subId) {
+        mSamplingDataTracker[subId].startSampling(s);
     }
 
     @Override
     public void stopSampling(SamplingDataTracker.SamplingSnapshot s) {
-        mSamplingDataTracker.stopSampling(s);
+        int defaultDataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        mSamplingDataTracker[defaultDataSub].stopSampling(s);
     }
+
+    @Override
+    public void stopSampling(SamplingDataTracker.SamplingSnapshot s, int subId) {
+        mSamplingDataTracker[subId].stopSampling(s);
+    }
+
+    @Override
+    public String getNetworkInterfaceName(int subId) {
+        if (mLinkProperties[subId] != null) {
+            return mLinkProperties[subId].getInterfaceName();
+        } else {
+            return null;
+        }
+    }
+
+
 }
