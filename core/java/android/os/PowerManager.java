@@ -521,6 +521,18 @@ public final class PowerManager {
     }
 
     /**
+     * Forces the device to wake up from sleep from a key event.
+     * @see #wakeUp
+     * @hide
+     */
+    public void wakeUpFromKeyEvent(long time) {
+        try {
+            mService.wakeUpFromKeyEvent(time);
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
      * Forces the device to start napping.
      * <p>
      * If the device is currently awake, starts dreaming, otherwise does nothing.
