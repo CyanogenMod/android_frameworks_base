@@ -485,9 +485,10 @@ class QuickSettings {
 
                     if (mModel.dataSwitchEnabled()) {
                         Resources r = mContext.getResources();
-                        rssiState.signalIconId = rssiState.enabled && !mModel.isAirplaneModeOn()
-                                ? R.drawable.ic_qs_data_on
-                                : R.drawable.ic_qs_data_off;
+                        rssiState.signalIconId = rssiState.enabled
+                                && !mModel.isAirplaneModeOn() && mModel.hasIccCard()
+                                        ? R.drawable.ic_qs_data_on
+                                        : R.drawable.ic_qs_data_off;
                         rssiState.label = rssiState.enabled
                                 ? r.getString(R.string.quick_settings_data_on)
                                 : r.getString(R.string.quick_settings_data_off);
