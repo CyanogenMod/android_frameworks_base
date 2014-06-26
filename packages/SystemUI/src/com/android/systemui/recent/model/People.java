@@ -40,7 +40,8 @@ import com.android.systemui.recent.PersonBubbleActivity;
 
 public final class People extends PersonUtils{
 
-	private static int PERSON_LOGS_LIMIT = 5;
+	private static int PERSON_LOGS_LIMIT = 6;
+	private static int PERSON_STAR_LIMIT = 6;
 
 	public static List<Person> PEOPLE_STARRED(Context ctx) {
 
@@ -48,17 +49,19 @@ public final class People extends PersonUtils{
 
 		Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, "starred=?", new String[] {"1"}, null);
 
-		int i=0;
+		int i=1;
 		int contactID;
 		String contactName;
 		Bitmap contactIcon;
 
 		try {
 			while (cursor.moveToNext()) {
+				if(i == PERSON_STAR_LIMIT) break;
 				contactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 				contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				contactIcon = getContactIcon(contactID, ctx);
 				people.add( new Person(i, contactIcon, contactName, contactName,contactID) );
+				i++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,7 +79,7 @@ public final class People extends PersonUtils{
 
 		Cursor cursor = ctx.getContentResolver().query(Calls.CONTENT_URI, null, null, null, Calls.DATE + " DESC");
 
-		int i=0;
+		int i=1;
 		int contactID;
 		int callContactID;
 		String callDuration;
