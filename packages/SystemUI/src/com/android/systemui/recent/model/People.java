@@ -78,8 +78,8 @@ public final class People extends PersonUtils{
 
 		int i=0;
 		int contactID;
-		int callDuration;
 		int callContactID;
+		String callDuration;
 		String callNumber;
 		String callName;
 		Bitmap callContactIcon;
@@ -91,8 +91,10 @@ public final class People extends PersonUtils{
 				callName = cursor.getString( cursor.getColumnIndex(Calls.CACHED_NAME) );
 				callNumber = cursor.getString( cursor.getColumnIndex(Calls.NUMBER) );
 				callContactID = getContactIDFromNumber(callNumber, ctx);
-				callDuration = cursor.getInt( cursor.getColumnIndex(Calls.DURATION) );
+				callDuration = calculateTime( cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) );
 				callContactIcon = getContactIcon(Long.valueOf(callContactID), ctx);
+				// if caller does name have name , set number
+				if(callName.isEmpty()) callName = callNumber;
 
 				String dir = null;
 				int dircode = cursor.getInt( cursor.getColumnIndex(Calls.TYPE) );

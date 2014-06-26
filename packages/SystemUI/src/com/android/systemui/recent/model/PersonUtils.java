@@ -42,6 +42,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 
 import java.io.ByteArrayInputStream;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import android.util.Log;
 
 public class PersonUtils {
@@ -132,5 +133,17 @@ public class PersonUtils {
 		Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mPerson.getContactID()));
 		intent.setData(uri);
 		ctx.startActivity(intent);
+	}
+
+	public static String calculateTime(int seconds) {
+	    int day = (int) TimeUnit.SECONDS.toDays(seconds);
+	    long hours = TimeUnit.SECONDS.toHours(seconds) -
+		         TimeUnit.DAYS.toHours(day);
+	    long minute = TimeUnit.SECONDS.toMinutes(seconds) -
+		          TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(seconds));
+	    long second = TimeUnit.SECONDS.toSeconds(seconds) -
+		          TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(seconds));
+	    String total = "H:" + hours + " M:" + minute + " S:" + second;
+	    return total;
 	}
 }
