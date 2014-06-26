@@ -30,4 +30,14 @@
     <!-- Used by selector -->
     <color name="card_pressed">#7ef5f5f5</color>
 
+    <!-- iOS Recents -->
+    <color name="whos_going_out">#FFFFFF</color>	
+    <color name="person_bubble_bg">#3a3a3a</color>
+    <color name="person_bubble_name">#e7501e</color>
+    <color name="person_bubble_status">#C7CAD3</color>
+    <color name="person_bubble_shadow">#000000</color>
+
+    <!-- Recent Item -->
+    <color name="status_bar_recents_app_label_color">#FFFFFF</color>
+
 </resources>

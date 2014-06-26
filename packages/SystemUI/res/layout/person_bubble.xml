@@ -18,6 +18,9 @@
 		style="@style/PersonBubbleText"
 		android:ellipsize="end"
 		android:singleLine = "true"
+		android:shadowDx="0"
+		android:shadowDy="2"
+		android:shadowRadius="5"
 		/>
 	<TextView
 		android:id="@+id/person_status"
@@ -25,6 +28,9 @@
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textColor="@color/person_bubble_status"
+		android:shadowDx="0"
+		android:shadowDy="2"
+		android:shadowRadius="5"
 		style="@style/PersonBubbleText"
 		/>
 </LinearLayout>

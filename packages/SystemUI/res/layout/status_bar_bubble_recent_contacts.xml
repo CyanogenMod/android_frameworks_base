@@ -11,8 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:padding="5dp"
+        android:padding="8dp"
         android:text="@string/whos_going_out"
+        android:textColor="@color/whos_going_out"
+	android:shadowColor="#000000"
+	android:shadowDx="0"
+	android:shadowDy="2"
+	android:shadowRadius="5"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <LinearLayout
