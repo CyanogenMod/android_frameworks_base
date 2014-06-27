@@ -136,7 +136,7 @@ public class FloatingWindowView extends RelativeLayout {
                               activity.forceSnap(SNAP_LEFT);
                           } else if (item.getTitle().equals(menu_item4)) {
                               activity.forceSnap(SNAP_RIGHT);
-                          }
+						  }
                           return false;
                       }
                 });

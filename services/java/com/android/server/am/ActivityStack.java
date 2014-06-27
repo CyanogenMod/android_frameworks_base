@@ -1295,11 +1295,12 @@ final class ActivityStack {
 
         final TaskRecord nextTask = next.task;
         final TaskRecord prevTask = prev != null ? prev.task : null;
+        boolean isFloatingWindow = prev != null ? prev.floatingWindow : false;
         if (prevTask != null && prevTask.mOnTopOfHome && prev.finishing && prev.frontOfTask) {
             if (DEBUG_STACK)  mStackSupervisor.validateTopActivitiesLocked();
             if (prevTask == nextTask) {
                 prevTask.setFrontOfTask();
-            } else if (prevTask != topTask()) {
+            } else if (prevTask != topTask() && !isFloatingWindow) {
                 // This task is going away but it was supposed to return to the home task.
                 // Now the task above it has to return to the home task instead.
                 final int taskNdx = mTaskHistory.indexOf(prevTask) + 1;
@@ -2653,6 +2654,9 @@ final class ActivityStack {
             boolean setState) {
         if (mResumedActivity == r) {
             mResumedActivity = null;
+        }
+        if (mPausingActivity == r) {
+            mPausingActivity = null;
         }
         if (mService.mFocusedActivity == r) {
             mService.mFocusedActivity = null;

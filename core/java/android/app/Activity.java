@@ -41,7 +41,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -65,13 +64,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.util.PrintWriterPrinter;
+import android.util.TypedValue;
 import android.util.Slog;
 import android.util.SparseArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.ContextThemeWrapper;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.IWindowManager;
 import android.view.KeyEvent;
@@ -682,6 +681,7 @@ public class Activity extends ContextThemeWrapper
         Dialog mDialog;
         Bundle mArgs;
     }
+
     private SparseArray<ManagedDialog> mManagedDialogs;
 
     // set by the thread after the constructor and before onCreate(Bundle savedInstanceState) is called.
@@ -888,7 +888,7 @@ public class Activity extends ContextThemeWrapper
         mLoaderManager = getLoaderManager("(root)", mLoadersStarted, true);
         return mLoaderManager;
     }
-    
+
     LoaderManagerImpl getLoaderManager(String who, boolean started, boolean create) {
         if (mAllLoaderManagers == null) {
             mAllLoaderManagers = new ArrayMap<String, LoaderManagerImpl>();
@@ -965,7 +965,6 @@ public class Activity extends ContextThemeWrapper
         getApplication().dispatchActivityCreated(this, savedInstanceState);
         mCalled = true;
         mPreviousOrientation = getResources().getConfiguration().orientation;
-        sendAppLaunchBroadcast();
         mScaleGestureDetector = new ScaleGestureDetector(getApplicationContext(), mScaleGestureListener);
         mScaleGestureDetector.setQuickScaleEnabled(false);
     }
@@ -1183,6 +1182,7 @@ public class Activity extends ContextThemeWrapper
         }
         if (!reload) {
             decorFloatingView.setFitsSystemWindows(true);
+            decorFloatingView.hackTurnOffWindowResizeAnim(true);
             mFloatingWindowView = new FloatingWindowView(this, getActionBarHeight(true));
             decorFloatingView.addView(mFloatingWindowView, -1, FloatingWindowView.getParams());
             decorFloatingView.setTagInternal(android.R.id.extractArea, mFloatingWindowView);
@@ -1660,11 +1660,11 @@ public class Activity extends ContextThemeWrapper
      * by that attribute, then instead of reporting it the system will stop
      * and restart the activity (to have it launched with the new
      * configuration).
-     * 
+     *
      * <p>At the time that this function has been called, your Resources
      * object will have been updated to return resource values matching the
      * new configuration.
-     * 
+     *
      * @param newConfig The new device configuration.
      */
     public void onConfigurationChanged(Configuration newConfig) {
@@ -1680,13 +1680,43 @@ public class Activity extends ContextThemeWrapper
                 refreshAppLayoutSize();
                 Configuration config = getResources().getConfiguration();
                 if (config.orientation != mPreviousOrientation) {
+                    mWindow.setGravity(Gravity.LEFT | Gravity.TOP);
+                    if (!isUnSnap()) {
+                        requestChangingFlagsLayout();
+                    }
                     WindowManager.LayoutParams params = mWindow.getAttributes();
-                    final int old_x = params.x;
-                    final int old_y = params.y;
-                    params.x = old_y;
-                    params.y = old_x;
-                    params.width = mAppFloatViewWidth;
-                    params.height = mAppFloatViewHeight;
+                    switch (mSnap) {
+                        case SNAP_LEFT:
+                             params.width = (mCurrentScreenWidth / 2);
+                             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+	                     params.x = 0;
+	                     params.y = 0;
+                             break;
+                        case SNAP_RIGHT:
+                             params.width = (mCurrentScreenWidth / 2);
+                             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+	                     params.x = (mCurrentScreenWidth / 2);
+	                     params.y = 0;
+                             break;
+                        case SNAP_TOP:
+                             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                             params.height = (mCurrentScreenHeight / 2);
+	                     params.x = 0;
+	                     params.y = 0;
+                             break;
+                        case SNAP_BOTTOM:
+                             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                             params.height = (mCurrentScreenHeight / 2);
+	                     params.x = 0;
+	                     params.y = (mCurrentScreenHeight / 2);
+                             break;
+                        case SNAP_NONE:
+                             int width = params.width;
+                             int height = params.height;
+                             params.width = height;
+                             params.height = width;
+                             break;
+                    }
                     mWindow.setAttributes(params);
                     mPreviousOrientation = config.orientation;
                 }
@@ -2071,7 +2101,7 @@ public class Activity extends ContextThemeWrapper
     public View findViewById(int id) {
         return getWindow().findViewById(id);
     }
-    
+
     /**
      * Retrieve a reference to this activity's ActionBar.
      *
@@ -2081,7 +2111,7 @@ public class Activity extends ContextThemeWrapper
         initActionBar();
         return mActionBar;
     }
-    
+
     /**
      * Creates a new ActionBar, locates the inflated ActionBarView,
      * initializes the ActionBar with the view, and sets mActionBar.
@@ -2103,7 +2133,7 @@ public class Activity extends ContextThemeWrapper
         mWindow.setDefaultIcon(mActivityInfo.getIconResource());
         mWindow.setDefaultLogo(mActivityInfo.getLogoResource());
     }
-    
+
     /**
      * Set the activity content from a layout resource.  The resource will be
      * inflated, adding all top-level views to the activity.
@@ -2173,7 +2203,7 @@ public class Activity extends ContextThemeWrapper
     public void setFinishOnTouchOutside(boolean finish) {
         mWindow.setCloseOnTouchOutside(finish);
     }
-    
+
     /**
      * Use with {@link #setDefaultKeyMode} to turn off default handling of
      * keys.
@@ -2680,6 +2710,7 @@ public class Activity extends ContextThemeWrapper
                  onUserInteraction();
              }
         }
+
         if (getWindow().superDispatchTouchEvent(ev)) {
             return true;
         }
@@ -2761,12 +2792,16 @@ public class Activity extends ContextThemeWrapper
         mWindow.setGravity(Gravity.LEFT | Gravity.TOP);
         if (!mChangedFlags) {
             mChangedFlags = true;
-            mWindow.setCloseOnTouchOutside(false);
-            mWindow.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-            mWindow.addFlags(WindowManager.LayoutParams.FLAG_SPLIT_TOUCH);
-            if (ActivityManager.isHighEndGfx()) {
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
-            }
+            requestChangingFlagsLayout();
+        }
+    }
+
+    private void requestChangingFlagsLayout() {
+        mWindow.setCloseOnTouchOutside(false);
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        mWindow.addFlags(WindowManager.LayoutParams.FLAG_SPLIT_TOUCH);
+        if (ActivityManager.isHighEndGfx()) {
+            mWindow.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         }
     }
 
@@ -3048,12 +3083,17 @@ public class Activity extends ContextThemeWrapper
         }
     }
 
-    private void sendAppLaunchBroadcast() {
+    /**
+     * @hide
+     */
+    public void sendAppLaunchBroadcast() {
         Intent appIntent = new Intent(Intent.ACTION_ACTIVITY_LAUNCH_DETECTOR);
         appIntent.putExtra("packagename", getPackageName());
+        appIntent.putExtra("packagetoken", mToken);
         appIntent.addFlags(
                 Intent.FLAG_RECEIVER_REGISTERED_ONLY | Intent.FLAG_RECEIVER_FOREGROUND);
         sendBroadcast(appIntent);
+        moveTaskToBack(true);
     }
 
     private void sendAppEndBroadcast() {
@@ -3349,7 +3389,7 @@ public class Activity extends ContextThemeWrapper
                 mFragments.dispatchOptionsMenuClosed(menu);
                 onOptionsMenuClosed(menu);
                 break;
-                
+
             case Window.FEATURE_CONTEXT_MENU:
                 onContextMenuClosed(menu);
                 break;
@@ -3579,7 +3619,7 @@ public class Activity extends ContextThemeWrapper
     public void openOptionsMenu() {
         mWindow.openPanel(Window.FEATURE_OPTIONS_PANEL, null);
     }
-    
+
     /**
      * Progammatically closes the options menu. If the options menu is already
      * closed, this method does nothing.
@@ -4932,12 +4972,7 @@ public class Activity extends ContextThemeWrapper
         }
     }
 
-    /**
-     * Hide from public api
-     * @hide
-     */
     public void finishFloating() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         mMainThread.performFinishFloating();
     }
 
@@ -5880,7 +5915,7 @@ public class Activity extends ContextThemeWrapper
     }
 
     // ------------------ Internal API ------------------
-    
+
     final void setParent(Activity parent) {
         mParent = parent;
     }
@@ -5902,7 +5937,7 @@ public class Activity extends ContextThemeWrapper
         attachBaseContext(context);
 
         mFragments.attachActivity(this, mContainer, null);
-        
+
         if (makeNewWindow(context, intent, info)) {
             parent = null;
         }
@@ -5916,7 +5951,7 @@ public class Activity extends ContextThemeWrapper
             mWindow.setUiOptions(info.uiOptions);
         }
         mUiThread = Thread.currentThread();
-        
+
         mMainThread = aThread;
         mInstrumentation = instr;
         mToken = token;
@@ -5943,8 +5978,7 @@ public class Activity extends ContextThemeWrapper
 
     private boolean makeNewWindow(Context context, Intent intent, ActivityInfo info) {
         boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
-        boolean history = (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
-        if (intent != null && floating && !history) {
+        if (intent != null && floating) {
 
             TypedArray styleArray = context.obtainStyledAttributes(info.theme, com.android.internal.R.styleable.Window);
             TypedValue backgroundValue = styleArray.peekValue(com.android.internal.R.styleable.Window_windowBackground);
@@ -5962,15 +5996,6 @@ public class Activity extends ContextThemeWrapper
             // Create our new window
             mWindow = PolicyManager.makeNewWindow(this);
             mWindow.mIsFloatingWindow = true;
-            mWindow.setCloseOnTouchOutsideIfNotSet(true);
-            mWindow.setGravity(Gravity.CENTER);
-            mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-                    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            WindowManager.LayoutParams params = mWindow.getAttributes();
-            params.alpha = 1f;
-            params.dimAmount = 0.5f;
-            mWindow.setAttributes((WindowManager.LayoutParams) params);
-            
             if (!isAlreadyAttachToWindow) {
                 isAlreadyAttachToWindow = true;
                 mWindow.setCloseOnTouchOutsideIfNotSet(true);
@@ -5979,11 +6004,15 @@ public class Activity extends ContextThemeWrapper
                 scaleFloatingWindow();
             }
 
-            mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-                    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            params.alpha = 1f;
-            params.dimAmount = 0.5f;
-            mWindow.setAttributes((WindowManager.LayoutParams) params);
+            WindowManager.LayoutParams params = mWindow.getAttributes();
+            params.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
+            if (android.os.Process.myUid() == android.os.Process.SYSTEM_UID) {
+                mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                params.alpha = 1f;
+                params.dimAmount = 0.25f;
+            }
+            mWindow.setAttributes(params);
 
             refreshAppLayoutSize();
             return true;
@@ -6130,7 +6159,7 @@ public class Activity extends ContextThemeWrapper
         onUserInteraction();
         onUserLeaveHint();
     }
-    
+
     final void performStop() {
         mDoReportFullyDrawn = false;
         if (mLoadersStarted) {

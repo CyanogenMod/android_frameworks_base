@@ -514,6 +514,13 @@ easier.
 
     </style>
 
+    <!-- DeviceDefault light theme for panel windows. This removes all extraneous window
+    decorations, so you basically have an empty rectangle in which to place your content. It makes
+    the window floating, with a transparent background, and turns off dimming behind the window. -->
+    <style name="Theme.DeviceDefault.Light.Panel" parent="Theme.Holo.Light.Panel" >
+
+    </style>
+
     <style name="Theme.DeviceDefault.FloatingWindow">
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -537,13 +544,6 @@ easier.
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowSoftInputMode">stateAlwaysHidden|adjustPan</item>
      </style>
-
-    <!-- DeviceDefault light theme for panel windows. This removes all extraneous window
-    decorations, so you basically have an empty rectangle in which to place your content. It makes
-    the window floating, with a transparent background, and turns off dimming behind the window. -->
-    <style name="Theme.DeviceDefault.Light.Panel" parent="Theme.Holo.Light.Panel" >
-
-    </style>
 
     <!-- DeviceDefault theme for windows that want to have the user's selected wallpaper appear
     behind them. -->

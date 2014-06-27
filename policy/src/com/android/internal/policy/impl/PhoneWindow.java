@@ -2922,7 +2922,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         void updateWindowResizeState() {
             Drawable bg = getBackground();
             hackTurnOffWindowResizeAnim(bg == null || bg.getOpacity()
-                    != PixelFormat.OPAQUE);
+                    != PixelFormat.OPAQUE || mIsFloatingWindow);
         }
         
         @Override
