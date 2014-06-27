@@ -45,9 +45,7 @@ import android.util.Log;
 
 import libcore.io.IoUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * Base class for a document provider. A document provider offers read and write
@@ -176,19 +174,10 @@ public abstract class DocumentsProvider extends ContentProvider {
      *            alter this name to meet any internal constraints, such as
      *            conflicting names.
      */
+    @SuppressWarnings("unused")
     public String createDocument(String parentDocumentId, String mimeType, String displayName)
             throws FileNotFoundException {
-        if (Document.MIME_TYPE_DIR.equals(mimeType)) {
-            File f = new File(parentDocumentId, displayName);
-            if (!f.exists()) {
-                f.mkdir();
-            } else {
-                throw new FileNotFoundException("File: " + f.getAbsolutePath() + " already exists");
-            }
-            return f.getAbsolutePath();
-        } else {
-            throw new UnsupportedOperationException("Create not supported");
-        }
+        throw new UnsupportedOperationException("Create not supported");
     }
 
     /**
@@ -199,11 +188,9 @@ public abstract class DocumentsProvider extends ContentProvider {
      *
      * @param documentId the document to delete.
      */
-    public void deleteDocument(String documentId) throws IOException {
-        File f = new File(documentId);
-        if (!f.delete()) {
-            throw new IOException("Couldn't delete file: " + f.getAbsolutePath());
-        }
+    @SuppressWarnings("unused")
+    public void deleteDocument(String documentId) throws FileNotFoundException {
+        throw new UnsupportedOperationException("Delete not supported");
     }
 
     /**
@@ -562,8 +549,6 @@ public abstract class DocumentsProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Method not supported " + method);
             }
         } catch (FileNotFoundException e) {
-            throw new IllegalStateException("Failed call " + method, e);
-        } catch (IOException e) {
             throw new IllegalStateException("Failed call " + method, e);
         }
         return out;
