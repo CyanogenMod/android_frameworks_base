@@ -29,6 +29,10 @@ import android.provider.Settings;
 
 import com.android.internal.R;
 
+/**
+ * Hide from public API
+ * @hide
+ */
 public class SettingConfirmationHelper {
 
     private static final int NOT_SET = 0;
@@ -36,6 +40,10 @@ public class SettingConfirmationHelper {
     private static final int DISABLED = 2;
     private static final int ASK_LATER = 3;
 
+    /**
+     * Hide from public API
+     * @hide
+     */
     public static void showConfirmationDialogForSetting(final Context mContext, String title, String msg, Drawable hint, final String setting) {
         int mCurrentStatus = Settings.System.getInt(mContext.getContentResolver(), setting, NOT_SET);
         if (mCurrentStatus == ENABLED || mCurrentStatus == DISABLED) return;
