@@ -363,11 +363,6 @@ public class Hover {
                 Settings.System.HOVER_EXCLUDE_LOW_PRIORITY, 0) != 0;
     }
 
-    public boolean excludeTopmost() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HOVER_EXCLUDE_TOPMOST, 1) != 0;
-    }
-
     public boolean isInCallUINotification(Entry entry) {
         if (entry != null) return entry.notification.getPackageName().equals(IN_CALL_UI)
                 | entry.notification.getPackageName().equals(DIALER);
@@ -667,11 +662,6 @@ public class Hover {
 
         //Exclude low priority
         if (excludeLowPriority() && entry.notification.getNotification().priority < Notification.PRIORITY_LOW)
-            allowed = false;
-
-        //Exclude topmost app
-        if (excludeTopmost() && entry.notification.getPackageName().equals(
-                mNotificationHelper.getForegroundPackageName()))
             allowed = false;
 
         if (!allowed) {
