@@ -83,7 +83,7 @@ public class HaloTile extends QuickSettingsTile {
 
     private synchronized void updateTile() {
         mEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HALO_ENABLED, 0,
+                Settings.System.HALO_ACTIVE, 0,
                 UserHandle.USER_CURRENT) == 1;
         if (mEnabled) {
             mDrawable = R.drawable.ic_qs_halo_on;
