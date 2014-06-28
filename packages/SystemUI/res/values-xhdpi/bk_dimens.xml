@@ -18,10 +18,10 @@
 <resources>
 
     <!-- iOS Recents -->
-    <dimen name="person_bubble_width">160dp</dimen>
+    <dimen name="person_bubble_width">162dp</dimen>
     <dimen name="person_bubble_corner">8dp</dimen>
 
     <!-- Dimensions for HTC Sense View -->
-    <dimen name="status_bar_recents_thumbnail_width_sense">150dp</dimen>
-    <dimen name="status_bar_recents_thumbnail_height_sense">270dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_width_sense">192dp</dimen>
+    <dimen name="status_bar_recents_thumbnail_height_sense">305dp</dimen>
 </resources>
