@@ -1842,4 +1842,6 @@
   <java-symbol type="integer" name="config_delay_startPPPOE_timer" />
 
   <java-symbol type="bool" name="always_popup_usb_computer_connection" />
+  <!-- config network mode to operator specific -->
+  <java-symbol type="bool" name="config_network_mode_overriden" />
 </resources>
