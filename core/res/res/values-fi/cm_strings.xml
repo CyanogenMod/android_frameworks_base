@@ -124,7 +124,11 @@
   <string name="app_ops_use_voice_volume">säädä puhelun äänenvoimakkuutta</string>
   <string name="app_ops_write_mms">kirjoita multimediaviesti</string>
   <string name="app_ops_write_sms">kirjoita tekstiviesti</string>
+  <string name="notify_turn_wifi_off_title">Poista Wi-Fi käytöstä</string>
   <string name="privacy_guard_dialog_title">Yksityisyyden suojaus</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> haluaa <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Muista valinta</string>
+  <string name="adb_net_active_notification_title">ADB verkon yli käytössä</string>
+  <string name="adb_both_active_notification_title">ADB verkon &amp; USB:n kautta käytössä</string>
+  <string name="adb_active_generic_notification_message">Paina poistaaksesi vianetsinnän käytöstä.</string>
 </resources>

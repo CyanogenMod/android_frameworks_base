@@ -124,7 +124,11 @@
   <string name="app_ops_use_voice_volume">ควบคุมเสียงสนทนา</string>
   <string name="app_ops_write_mms">เขียนข้อความ MMS</string>
   <string name="app_ops_write_sms">เขียนข้อความ SMS</string>
+  <string name="notify_turn_wifi_off_title">ปิด Wi-Fi</string>
   <string name="privacy_guard_dialog_title">ป้องกันความเป็นส่วนตัว</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ต้องการ <xliff:g id="op">%2$s</xliff:g></string>
   <string name="permission_remember_choice">จำค่าตัวเลือกของฉัน</string>
+  <string name="adb_net_active_notification_title">ADB บนเครือข่ายถูกเปิดใช้งาน</string>
+  <string name="adb_both_active_notification_title">ADB บน USB และ &amp; เครือข่ายถูกเปิดใช้งาน</string>
+  <string name="adb_active_generic_notification_message">แตะเพื่อปิดใช้งานการแก้ไขข้อบกพร่อง</string>
 </resources>

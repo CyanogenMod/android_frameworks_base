@@ -124,7 +124,11 @@
   <string name="app_ops_use_voice_volume">controlar el volum de la veu de la trucada</string>
   <string name="app_ops_write_mms">escriure un missatge MMS</string>
   <string name="app_ops_write_sms">escriure un missatge SMS</string>
+  <string name="notify_turn_wifi_off_title">Apaga Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Guarda de privacitat</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> voldria <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Recorda la meva elecció</string>
+  <string name="adb_net_active_notification_title">ADB sobre xarxa habilitat</string>
+  <string name="adb_both_active_notification_title">ADB sobre USB i xarxa habilitat</string>
+  <string name="adb_active_generic_notification_message">Toca per deshabilitar la depuració.</string>
 </resources>

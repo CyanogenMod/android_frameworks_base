@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Zezwala aplikacji na dodawanie nowych motywów i modyfikowanie tego, którego używasz.</string>
   <string name="permlab_setKeyguardWallpaper">Ustawianie tła ekranu blokady</string>
   <string name="permdesc_setKeyguardWallpaper">Umożliwia aplikacji zmianę tła ekranu blokady.</string>
+  <string name="permlab_useHardwareFramework">Użyj sprzętowego frameworka</string>
+  <string name="permdesc_useHardwareFramework">Umożliwia aplikacji na dostęp do frameworka CM.</string>
   <string name="immersive_mode_confirmation_bottom">Przeciągnij palcem w górę od spodu ekranu, aby wyjść z trybu maksymalizacji.</string>
   <string name="app_ops_access_camera">dostęp do kamery</string>
   <string name="app_ops_access_location">dostęp do lokalizacji</string>
@@ -122,7 +124,11 @@
   <string name="app_ops_use_voice_volume">kontrolowanie głośności rozmów</string>
   <string name="app_ops_write_mms">pisanie MMS-ów</string>
   <string name="app_ops_write_sms">pisanie SMS-ów</string>
+  <string name="notify_turn_wifi_off_title">Wyłącz Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Ochrona prywatności</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> czy chciałbyś <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Zapamiętaj mój wybór</string>
+  <string name="adb_net_active_notification_title">ADB przez sieć włączone</string>
+  <string name="adb_both_active_notification_title">ADB przez USB &amp; sieć włączone</string>
+  <string name="adb_active_generic_notification_message">Dotknij, aby wyłączyć debugowanie.</string>
 </resources>
