@@ -90,7 +90,9 @@ public class KeyButtonView extends ImageView {
                 performLongClick();
                 if (mLongpressAction != null
                         && (mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_UP)
-                        || mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_DOWN))) {
+                        || mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_DOWN)
+                        || mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_HOME)
+                        || mLongpressAction.equals(ButtonsConstants.ACTION_IME_NAVIGATION_END))) {
                     removeCallbacks(mCheckLongPress);
                     postDelayed(mCheckLongPress, ViewConfiguration.getDoubleTapTimeout());
                     return;

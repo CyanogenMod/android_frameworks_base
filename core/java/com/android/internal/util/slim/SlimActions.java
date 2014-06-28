@@ -129,6 +129,12 @@ public class SlimActions {
             } else if (action.equals(ButtonsConstants.ACTION_IME_NAVIGATION_DOWN)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_DOWN, isLongpress);
                 return;
+            } else if (action.equals(ButtonsConstants.ACTION_IME_NAVIGATION_HOME)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_MOVE_HOME, isLongpress);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_IME_NAVIGATION_END)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_MOVE_END, isLongpress);
+                return;
             } else if (action.equals(ButtonsConstants.ACTION_POWER_MENU)) {
                 try {
                     windowManagerService.toggleGlobalMenu();
@@ -500,6 +506,8 @@ public class SlimActions {
             || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
             || keyCode == KeyEvent.KEYCODE_DPAD_UP
             || keyCode == KeyEvent.KEYCODE_DPAD_DOWN
+            || keyCode == KeyEvent.KEYCODE_MOVE_HOME
+            || keyCode == KeyEvent.KEYCODE_MOVE_END
             || keyCode == KeyEvent.KEYCODE_VOLUME_UP
             || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             downflags = upflags = KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE;

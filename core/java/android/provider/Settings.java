@@ -6068,6 +6068,13 @@ public final class Settings {
         public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
 
         /**
+         * Use HOME/END instead of UP/DOWN as longpress action for NavBar IME Cursors
+         *
+         * @hide
+         */
+        public static final String IME_CURSOR_LONGPRESS_ACTION = "ime_cursor_longpress_action";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
