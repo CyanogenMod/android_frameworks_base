@@ -171,15 +171,12 @@ public class TvStatusBar extends BaseStatusBar {
     }
 
     @Override
-    public void animateExpandSettingsPanel(boolean flip) {
-	}
-	
-    @Override
     public void hideHeadsUp() {
     }
-
-    public void animateExpandSettingsPanel() {
-    }
+    
+    @Override
+    public void animateExpandSettingsPanel(boolean flip) {
+	}    
 
     @Override
     protected void refreshLayout(int layoutDirection) {
