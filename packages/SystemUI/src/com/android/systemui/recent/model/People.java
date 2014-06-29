@@ -45,111 +45,105 @@ public final class People extends PersonUtils{
 
 	public static List<Person> PEOPLE_STARRED(Context ctx) {
 
-		ArrayList<Person> people = new ArrayList<Person>();
+        ArrayList<Person> people = new ArrayList<Person>();
 
-		Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, "starred=?", new String[] {"1"}, null);
+        Cursor cursor = ctx.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, "starred=?", new String[] {"1"}, null);
 
-		int i=1;
-		int contactID;
-		String contactName;
-		Bitmap contactIcon;
+        int i=1;
+        int contactID;
+        String contactName;
+        Bitmap contactIcon;
 
-		try {
-			while (cursor.moveToNext()) {
-				if(i == PERSON_STAR_LIMIT) break;
-				contactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-				contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-				contactIcon = getContactIcon(contactID, ctx);
-				people.add( new Person(i, contactIcon, contactName, contactName,contactID) );
-				i++;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			cursor.close();
-		}
+        try {
+            while (cursor.moveToNext()) {
+                if(i == PERSON_STAR_LIMIT) break;
+                contactID = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                contactIcon = getContactIcon(contactID, ctx);
+                people.add( new Person(i, contactIcon, contactName, contactName,contactID) );
+                i++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return people;
+    }
 
-		return people;
-	}
+    public static List<Person> PEOPLE_LOGS(Context ctx) {
 
-	public static List<Person> PEOPLE_LOGS(Context ctx) {
+        ArrayList<Person> people_logs = new ArrayList<Person>();
 
-		ArrayList<Person> people_logs = new ArrayList<Person>();
+        Cursor cursor = ctx.getContentResolver().query(Calls.CONTENT_URI, null, null, null, Calls.DATE + " DESC");
 
-		Cursor cursor = ctx.getContentResolver().query(Calls.CONTENT_URI, null, null, null, Calls.DATE + " DESC");
+        int i=1;
+        int contactID;
+        int callContactID;
+        String callDuration;
+        String callNumber;
+        String callName = null;
+        Bitmap callContactIcon;
 
-		int i=1;
-		int contactID;
-		int callContactID;
-		String callDuration;
-		String callNumber;
-		String callName = null;
-		Bitmap callContactIcon;
+        while(cursor.moveToNext()) {
 
-		while(cursor.moveToNext()) {
+            if(i == PERSON_LOGS_LIMIT) break;
 
-			if(i == PERSON_LOGS_LIMIT) break;
+            try {
+                callName = cursor.getString( cursor.getColumnIndex(Calls.CACHED_NAME) );
+            } catch (Exception e) {
+                //e.printStackTrace();
+                callName = null;
+            }
+            callNumber = cursor.getString( cursor.getColumnIndex(Calls.NUMBER) );
+            callContactID = getContactIDFromNumber(callNumber, ctx);
+            callDuration = (cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) != 0) ? 
+            calculateTime( cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) ) : "0";
+            callContactIcon = getContactIcon(Long.valueOf(callContactID), ctx);
+            // if caller does name have name , set number
+            if(callName == null){ callName = callNumber; }
 
-			try {
-				callName = cursor.getString( cursor.getColumnIndex(Calls.CACHED_NAME) );
-			} catch (Exception e) {
-				//e.printStackTrace();
-				callName = null;
-			}
-			callNumber = cursor.getString( cursor.getColumnIndex(Calls.NUMBER) );
-			callContactID = getContactIDFromNumber(callNumber, ctx);
-			callDuration = (cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) != 0) ? 
-					calculateTime( cursor.getInt( cursor.getColumnIndex(Calls.DURATION) ) ) : "0";
-			callContactIcon = getContactIcon(Long.valueOf(callContactID), ctx);
-			// if caller does name have name , set number
-			if(callName == null){ callName = callNumber; }
+            String dir = null;
+            int dircode = cursor.getInt( cursor.getColumnIndex(Calls.TYPE) );
+            switch (dircode) {
+                case Calls.OUTGOING_TYPE:
+                    dir = "OUTGOING";
+                    break;
 
-			String dir = null;
-			int dircode = cursor.getInt( cursor.getColumnIndex(Calls.TYPE) );
-			switch (dircode) {
-			case Calls.OUTGOING_TYPE:
-				dir = "OUTGOING";
-				break;
+                case Calls.INCOMING_TYPE:
+                    dir = "INCOMING";
+                    break;
 
-			case Calls.INCOMING_TYPE:
-				dir = "INCOMING";
-				break;
-
-			case Calls.MISSED_TYPE:
-				dir = "MISSED";
-				break;
-			}
-			String callInfo = "Type: " + dir + "\nDuration: " + callDuration;
-			
+                case Calls.MISSED_TYPE:
+                    dir = "MISSED";
+                    break;
+            }
+            String callInfo = "Type: " + dir + "\nDuration: " + callDuration;
 			people_logs.add( new Person(i, callContactIcon, callName, callInfo, callContactID) );
-
 			i++;
-		}
-
-		cursor.close();
-
+        }
+        cursor.close();
 		return people_logs;
-	}
+    }
 
-	public static View inflatePersonView(Context context, ViewGroup parent, Person person) {
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		ImageButton personView = (ImageButton)inflater.inflate(com.android.systemui.R.layout.button_person, parent, false);
-		personView.setImageBitmap(person.getIcon());
-		personView.setContentDescription(person.getName());
-		personView.setTag(person);
-		personView.setOnClickListener(new iOSDoubleClick() {
-			@Override
-			public void onSingleClick(View v) {
-				Context context = v.getContext();
-				context.startActivity(PersonBubbleActivity.createIntent(context, v, (Person)v.getTag()));
-			}
-			@Override
-			public void onDoubleClick(View v) {
-				Context context = v.getContext();
-				PersonUtils.OpenContact(context,(Person)v.getTag());
-			}
-		});
-		return personView;
-	}
+    public static View inflatePersonView(Context context, ViewGroup parent, Person person) {
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ImageButton personView = (ImageButton)inflater.inflate(com.android.systemui.R.layout.button_person, parent, false);
+        personView.setImageBitmap(person.getIcon());
+        personView.setContentDescription(person.getName());
+        personView.setTag(person);
+        personView.setOnClickListener(new iOSDoubleClick() {
+            @Override
+            public void onSingleClick(View v) {
+                Context context = v.getContext();
+                context.startActivity(PersonBubbleActivity.createIntent(context, v, (Person)v.getTag()));
+            }
+            @Override
+            public void onDoubleClick(View v) {
+                Context context = v.getContext();
+                PersonUtils.OpenContact(context,(Person)v.getTag());
+            }
+        });
+        return personView;
+    }
 }

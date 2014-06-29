@@ -48,118 +48,114 @@ import android.util.Log;
 
 public class PersonUtils {
 
-	public static int THUMBNAIL_SIZE = 100;
+    public static int THUMBNAIL_SIZE = 100;
 
-	public static Bitmap getContactIcon(long contactID, Context ctx){
+    public static Bitmap getContactIcon(long contactID, Context ctx){
 
-		Bitmap contactThumb = null;
-		Bitmap contactIcon = null;
+        Bitmap contactThumb = null;
+        Bitmap contactIcon = null;
 
-		try {
-			contactThumb = loadContactPhoto(ctx, Long.valueOf(contactID));
-		} catch (Exception e) {
-			//e.printStackTrace();
-		}
+        try {
+            contactThumb = loadContactPhoto(ctx, Long.valueOf(contactID));
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
 
-		if (contactThumb != null) {
-			final int width = contactThumb.getWidth();
-			final int height = contactThumb.getHeight();
-			final int ratio = width / height;
-			Bitmap resizedProfile = ThumbnailUtils.extractThumbnail(contactThumb, (THUMBNAIL_SIZE * ratio), THUMBNAIL_SIZE);
+        if (contactThumb != null) {
+            final int width = contactThumb.getWidth();
+            final int height = contactThumb.getHeight();
+            final int ratio = width / height;
+            Bitmap resizedProfile = ThumbnailUtils.extractThumbnail(contactThumb, (THUMBNAIL_SIZE * ratio), THUMBNAIL_SIZE);
 			contactIcon = GetRounded(resizedProfile);
-			//if (resizedProfile != null && !resizedProfile.isRecycled()) resizedProfile.recycle();
-		}
-		else {
-			Drawable myDrawable = ctx.getResources().getDrawable(com.android.systemui.R.drawable.no_person);
-			Bitmap resizedNoProfile = ((BitmapDrawable) myDrawable).getBitmap();
-			contactIcon = GetRounded(resizedNoProfile);
-		}
-
+            //if (resizedProfile != null && !resizedProfile.isRecycled()) resizedProfile.recycle();
+        } else {
+            Drawable myDrawable = ctx.getResources().getDrawable(com.android.systemui.R.drawable.no_person);
+            Bitmap resizedNoProfile = ((BitmapDrawable) myDrawable).getBitmap();
+            contactIcon = GetRounded(resizedNoProfile);
+        }
 		return contactIcon;
-	}
+    }
 
-	public static int getContactIDFromNumber(String contactNumber,Context context) {
-		int phoneContactID = new Random().nextInt();
-		Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactNumber)),new String[] {PhoneLookup.DISPLAY_NAME, PhoneLookup._ID}, null, null, null);		
+    public static int getContactIDFromNumber(String contactNumber,Context context) {
+        int phoneContactID = new Random().nextInt();
+        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactNumber)),new String[] {PhoneLookup.DISPLAY_NAME, PhoneLookup._ID}, null, null, null);		
 
-		if (contactLookupCursor == null) {
+        if (contactLookupCursor == null) {
 			return 0;
-		}
-		try {
-			while(contactLookupCursor.moveToNext()) {
-				phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(PhoneLookup._ID));
-			}
-		}
-		finally {
-			contactLookupCursor.close();
-		}
+        }
+        try {
+            while(contactLookupCursor.moveToNext()) {
+                phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(PhoneLookup._ID));
+            }
+        }
+        finally {
+            contactLookupCursor.close();
+        }
+        return (phoneContactID > 0) ? phoneContactID : 0;
+    }
 
-		return (phoneContactID > 0) ? phoneContactID : 0;
-	}
-
-	public static Bitmap GetRounded(final Bitmap bitmap) {
+    public static Bitmap GetRounded(final Bitmap bitmap) {
 		
-		int w = bitmap.getWidth();
-		int h = bitmap.getHeight();
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        int radius = Math.min(h / 2, w / 2);
 
-		int radius = Math.min(h / 2, w / 2);
-		Bitmap output = Bitmap.createBitmap(w + 8, h + 8, Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(w + 8, h + 8, Config.ARGB_8888);
+        Paint p = new Paint();
+        p.setAntiAlias(true);
+        Canvas c = new Canvas(output);
 
-		Paint p = new Paint();
-		p.setAntiAlias(true);
-		Canvas c = new Canvas(output);
+        c.drawARGB(0, 0, 0, 0);
+        p.setStyle(Style.FILL);
+        c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+        p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 
-		c.drawARGB(0, 0, 0, 0);
-		p.setStyle(Style.FILL);
-		c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
-		p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        c.drawBitmap(bitmap, 4, 4, p);
+        p.setXfermode(null);
+        p.setStyle(Style.STROKE);
+        p.setColor(Color.WHITE);
+        p.setStrokeWidth(2);
+        c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
+        return output;
+    }
 
-		c.drawBitmap(bitmap, 4, 4, p);
-		p.setXfermode(null);
-		p.setStyle(Style.STROKE);
-		p.setColor(Color.WHITE);
-		p.setStrokeWidth(2);
-		c.drawCircle((w / 2) + 4, (h / 2) + 4, radius, p);
-		return output;
-	}
+    public static Bitmap loadContactPhoto(Context ctx, long contactId) {
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(contactId));
+        Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+        Cursor cursor = ctx.getContentResolver().query(photoUri,
+                        new String[] {ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
+        if (cursor == null) {
+            return null;
+        }
+        try {
+            if (cursor.moveToFirst()) {
+                byte[] data = cursor.getBlob(0);
+                if (data != null) {
+                    return BitmapFactory.decodeStream(new ByteArrayInputStream(data));
+                }
+            }
+        }
+        finally {
+            cursor.close();
+        }
+        return null;
+    }
 
-	public static Bitmap loadContactPhoto(Context ctx, long contactId) {
-		Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(contactId));
-		Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-		Cursor cursor = ctx.getContentResolver().query(photoUri,
-		                new String[] {ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
-		if (cursor == null) {
-			return null;
-		}
-		try {
-			if (cursor.moveToFirst()) {
-				byte[] data = cursor.getBlob(0);
-				if (data != null) {
-					return BitmapFactory.decodeStream(new ByteArrayInputStream(data));
-				}
-			}
-		}
-		finally {
-			cursor.close();
-		}
-		return null;
-	}
+    public static void OpenContact(Context ctx, Person mPerson){
+        if (mPerson.getContactID() != 0) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mPerson.getContactID()));
+            intent.setData(uri);
+            ctx.startActivity(intent);
+        } else {
+            Toast.makeText(ctx,
+                    "Does not has valid contact card for " + mPerson.getName(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	public static void OpenContact(Context ctx, Person mPerson){
-		if(mPerson.getContactID() != 0){
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(mPerson.getContactID()));
-			intent.setData(uri);
-			ctx.startActivity(intent);
-		}else{
-			Toast.makeText(ctx,
-					"Does not has valid contact card for " + mPerson.getName(),
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	public static String calculateTime(int seconds) {
-	    int day = (int) TimeUnit.SECONDS.toDays(seconds);
+    public static String calculateTime(int seconds) {
+        int day = (int) TimeUnit.SECONDS.toDays(seconds);
 	    long hours = TimeUnit.SECONDS.toHours(seconds) -
 		         TimeUnit.DAYS.toHours(day);
 	    long minute = TimeUnit.SECONDS.toMinutes(seconds) -

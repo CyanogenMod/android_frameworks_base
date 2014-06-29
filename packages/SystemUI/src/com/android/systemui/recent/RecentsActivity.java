@@ -115,6 +115,7 @@ public class RecentsActivity extends Activity {
         if (mRecentsPanel != null) {
             mRecentsPanel.onUiHidden();
         }
+        dismissiOSView();
         super.onStop();
     }
 
@@ -205,10 +206,14 @@ public class RecentsActivity extends Activity {
     public void dismissiOSView() {
         int orientation = this.getResources().getConfiguration().orientation;
         if (orientation == 1 && people != null && people.getChildCount() > 0) {
+            if (people instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) people).getChildCount(); i++) {
+                View innerView = ((ViewGroup) people).getChildAt(i);
+                innerView.setOnClickListener(null);
+                }
             people.removeAllViews();
-            people.setOnClickListener(null);
+            }
         }
-        //finish();// Finish Current Activity
     }
 
     @Override
@@ -236,23 +241,26 @@ public class RecentsActivity extends Activity {
 
         if (mCustomRecent == 5 && orientation == 1 && IOS_RECENT_TYPE != 0) {
             List<Person> mPeople;
-        if (IOS_RECENT_TYPE == 1) {
-            mPeople = People.PEOPLE_STARRED(this);
-        } else {
-            mPeople = People.PEOPLE_LOGS(this);
-        }
 
-        mBubbleRecents.setVisibility(View.VISIBLE);
+            if (IOS_RECENT_TYPE == 1) {
+                mPeople = People.PEOPLE_STARRED(this);
+            } else {
+                mPeople = People.PEOPLE_LOGS(this);
+            }
 
-        people = (ViewGroup) findViewById(R.id.people);
-        for (int i = 0; i < mPeople.size(); i++) {
-            Person person = mPeople.get(i);
-            if (people != null) {
-                people.addView(People.inflatePersonView(this, people, person));
+            mBubbleRecents.setVisibility(View.VISIBLE);
+            people = (ViewGroup) findViewById(R.id.people);
+
+            for (int i = 0; i < mPeople.size(); i++) {
+                Person person = mPeople.get(i);
+                if (people != null) {
+                    people.addView(People.inflatePersonView(this, people, person));
                 }
             }
         } else {
-            if (mCustomRecent == 5 && orientation == 1) mBubbleRecents.setVisibility(View.GONE);
+            if (mBubbleRecents != null) {
+                if (orientation == 1) mBubbleRecents.setVisibility(View.GONE);
+            }
             people = null;
         }
 
@@ -304,6 +312,7 @@ public class RecentsActivity extends Activity {
             if (mRecentsPanel != null) {
                 if (mRecentsPanel.isShowing()) {
                     dismissAndGoBack();
+                    dismissiOSView();
                 } else {
                     final RecentTasksLoader recentTasksLoader = RecentTasksLoader.getInstance(this);
                     boolean waitingForWindowAnimation = checkWaitingForAnimationParam &&

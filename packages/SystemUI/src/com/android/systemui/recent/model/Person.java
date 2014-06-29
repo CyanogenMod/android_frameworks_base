@@ -21,88 +21,75 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.graphics.Bitmap;
 
-public class Person implements Parcelable
-{
-	private final int    mId;
-	private final int    mContactID;
-	private final Bitmap mIcon;
-	private final String mName;
-	private final String mStatus;
+public class Person implements Parcelable {
+    private final int    mId;
+    private final int    mContactID;
+    private final Bitmap mIcon;
+    private final String mName;
+    private final String mStatus;
 	
+	public Person(int id, Bitmap icon, String name, String status, int ContactID) {
+        mId     = id;
+        mIcon   = icon;
+        mName   = name;
+        mStatus = status;
+        mContactID = ContactID;
+    }
 	
-	public Person(int id, Bitmap icon, String name, String status, int ContactID)
-	{
-		mId     = id;
-		mIcon   = icon;
-		mName   = name;
-		mStatus = status;
-		mContactID = ContactID;
-	}
-	
-	public int getId()
-	{
-		return mId;
-	}
+    public int getId() {
+        return mId;
+    }
 
-	public int getContactID()
-	{
-		return mContactID;
-	}
+    public int getContactID() {
+        return mContactID;
+    }
 	
-	public Bitmap getIcon()
-	{
-		return mIcon;
-	}
+	public Bitmap getIcon() {
+        return mIcon;
+    }
 	
-	public String getName()
-	{
-		return mName;
-	}
+    public String getName() {
+        return mName;
+    }
 	
-	public String getStatus()
-	{
-		return mStatus;
-	}
+    public String getStatus() {
+        return mStatus;
+    }
 	
-	// -- Parcel
+    // -- Parcel
 	
-	private Person(Parcel in)
-	{
-		mId     = in.readInt();
-		mContactID = in.readInt();
-		mIcon   = in.readParcelable(getClass().getClassLoader());
-		mName   = in.readString();
-		mStatus = in.readString();
-	}
+    private Person(Parcel in) {
+
+        mId     = in.readInt();
+        mContactID = in.readInt();
+        mIcon   = in.readParcelable(getClass().getClassLoader());
+        mName   = in.readString();
+        mStatus = in.readString();
+    }
 	
-	@Override
-	public void writeToParcel(Parcel dest, int flags)
-	{
-		dest.writeInt(mId);
-		dest.writeInt(mContactID);
-		if ( mIcon != null ) dest.writeParcelable(mIcon, flags);
-		dest.writeString(mName);
-		dest.writeString(mStatus);
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeInt(mContactID);
+        if ( mIcon != null ) dest.writeParcelable(mIcon, flags);
+        dest.writeString(mName);
+        dest.writeString(mStatus);
+    }
 	
 	// -- Parcelable
 	
-	@Override
-	public int describeContents()
-	{
-		return 0;
-	}
+    @Override
+	public int describeContents() {
+        return 0;
+    }
 	
-	public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>()
-	{
-		public Person createFromParcel(Parcel in)
-		{
-			return new Person(in);
-		}
+    public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {
+        public Person createFromParcel(Parcel in) {
+            return new Person(in);
+        }
 		
-		public Person[] newArray(int size)
-		{
-			return new Person[size];
-		}
-	};
+		public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
 }
