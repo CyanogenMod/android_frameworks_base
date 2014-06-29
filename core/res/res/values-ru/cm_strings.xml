@@ -128,4 +128,7 @@
   <string name="privacy_guard_dialog_title">Защищённый режим</string>
   <string name="privacy_guard_dialog_summary">Приложение «<xliff:g id="app">%1$s</xliff:g>» пытается <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Запомнить выбор</string>
+  <string name="adb_net_active_notification_title">Отладка по сети разрешена</string>
+  <string name="adb_both_active_notification_title">Отладка по сети и USB разрешена</string>
+  <string name="adb_active_generic_notification_message">Нажмите, чтобы отключить отладку.</string>
 </resources>

@@ -21,6 +21,7 @@
   <string name="lockscreen_airplane_mode_on">باری فڕۆکه‌</string>
   <string name="progress_nomediapresent" product="default">ناتوانرێت بسڕێته‌وه‌ میدیا\u2026
 </string>
+  <string name="storage_uicc">UICC بیرگه‌</string>
   <string name="stk_cc_ussd_to_dial">USSDداواکه‌ لابراوه‌ بۆ لێدانی داواکردن.</string>
   <string name="stk_cc_ussd_to_ss">USSDداواکه‌ لابراوه‌ بۆ لێدانی داواکردنss.</string>
   <string name="stk_cc_ussd_to_ussd">USSDداواکه‌ لابراوه‌ بۆ لێدانی داواکردنssd.</string>

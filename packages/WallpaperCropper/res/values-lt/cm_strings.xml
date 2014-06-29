@@ -21,10 +21,10 @@
     <item quantity="few">%1$d pasirinkti</item>
     <item quantity="other">%1$d pasirinkta</item>
   </plurals>
-  <string name="wallpaper_accessibility_name">Ekrano fonas %1$d iš %2$d</string>
+  <string name="wallpaper_accessibility_name">Darbalaukio fonas %1$d iš %2$d</string>
   <string name="announce_selection">Pasirinktas <xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g></string>
   <string name="wallpaper_delete">Ištrinti</string>
   <string name="pick_image">Pasirinkti vaizdą</string>
-  <string name="pick_wallpaper">Ekrano fonai</string>
+  <string name="pick_wallpaper">Darbalaukio fonai</string>
   <string name="activity_not_found">Programa neįdiegta.</string>
 </resources>

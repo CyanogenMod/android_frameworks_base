@@ -128,4 +128,7 @@
   <string name="privacy_guard_dialog_title">පෞද්ගලිකත්වයේ මුරකරු</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="op">%2$s</xliff:g> සඳහා <xliff:g id="app">%1$s</xliff:g>ට අවශ්‍යව ඇත.</string>
   <string name="permission_remember_choice">මගේ තේරීම මතක තබා ගන්න</string>
+  <string name="adb_net_active_notification_title">ජාලය හරහා ADB සබලයි</string>
+  <string name="adb_both_active_notification_title">ජාලය &amp; USB හරහා ADB සබලයි</string>
+  <string name="adb_active_generic_notification_message">නිදොස් කරණය අබල කිරීමට ස්පර්ශ කරන්න.</string>
 </resources>

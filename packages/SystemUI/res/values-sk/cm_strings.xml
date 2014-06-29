@@ -26,7 +26,7 @@
   <string name="quick_settings_gps_off">GPS vyp.</string>
   <string name="quick_settings_screen_sleep">Prejsť do spánku</string>
   <string name="quick_settings_ringer_on">Zvuk zap.</string>
-  <string name="quick_settings_ringer_off">Zvuk vyp,</string>
+  <string name="quick_settings_ringer_off">Zvuk vyp.</string>
   <string name="quick_settings_vibration_on">Vibrácie zap.</string>
   <string name="quick_settings_vibration_off">Vibrácie vyp.</string>
   <string name="quick_settings_label_enabled">Zap.</string>
@@ -59,10 +59,12 @@
   <string name="quick_settings_equalizer">Ekvalizér</string>
   <string name="quick_settings_compass_off">Kompas vyp.</string>
   <string name="quick_settings_compass_init">Inicializácia\u2026</string>
+  <string name="quick_settings_heads_up_on">Plávajúce oznámenia sú povolené</string>
+  <string name="quick_settings_heads_up_off">Žiadne prerušenia</string>
   <string name="location_mode_high_accuracy_title">Vysoká presnosť</string>
   <string name="location_mode_battery_saving_title">Šetrenie batérie</string>
   <string name="location_mode_sensors_only_title">Iba zariadenie</string>
-  <string name="location_mode_location_off_title">Poloha vypnutá</string>
+  <string name="location_mode_location_off_title">Poloha vyp.</string>
   <string name="quick_settings_expanded_desktop">Rozšírené</string>
   <string name="quick_settings_expanded_desktop_off">Normálne</string>
   <string name="quick_settings_camera_error_connect">Nedá sa pripojiť k fotoaparátu</string>
