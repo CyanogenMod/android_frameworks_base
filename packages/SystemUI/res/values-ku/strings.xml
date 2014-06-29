@@ -34,6 +34,7 @@
   <string name="battery_low_why">بەکارهێنانی باتری</string>
   <string name="status_bar_settings_settings_button">ڕێکخستن</string>
   <string name="status_bar_settings_wifi_button">Wi-Fi</string>
+  <string name="status_bar_settings_airplane">باری فڕۆکه‌</string>
   <string name="status_bar_settings_auto_rotation">خۆکارانە-سوڕانەوەی شاشە</string>
   <string name="status_bar_settings_mute_label">کپکردن</string>
   <string name="status_bar_settings_auto_brightness_label">خۆکارانە</string>
@@ -71,6 +72,7 @@
   <string name="accessibility_menu">پێڕست</string>
   <string name="accessibility_recent">بەرنامەی تازە</string>
   <string name="accessibility_search_light">گەڕان</string>
+  <string name="accessibility_camera_button">کامێرا</string>
   <string name="accessibility_ime_switch_button">دوگمەی کلیلی تێكردن.</string>
   <string name="accessibility_compatibility_zoom_button">دوگمەی زومی توانای.</string>
   <string name="accessibility_compatibility_zoom_example">زومکردن لە بچوکەوە بۆ شاشەی گەورە.</string>
