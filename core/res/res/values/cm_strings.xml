@@ -222,4 +222,7 @@
     <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
     <!-- ADB notification message-->
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
+
+    <!-- Wifi tethering-->
+    <string name="tethered_clients_connected">Clients connected:</string>
 </resources>
