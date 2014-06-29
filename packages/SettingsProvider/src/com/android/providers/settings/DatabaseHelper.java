@@ -2344,8 +2344,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Set the preferred network mode to target desired value or Default
             // value defined in RILConstants
             int type;
-            type = SystemProperties.getInt("ro.telephony.default_network",
+            boolean nwModeOverride = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_network_mode_overriden);
+            Log.d(TAG, "Network mode override " + nwModeOverride);
+            if (!nwModeOverride) {
+                type = SystemProperties.getInt("ro.telephony.default_network",
                         RILConstants.PREFERRED_NETWORK_MODE);
+            } else {
+                type = RILConstants.NETWORK_MODE_GSM_ONLY;
+            }
             String val = Integer.toString(type);
             if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                 val = type + "," + type;
