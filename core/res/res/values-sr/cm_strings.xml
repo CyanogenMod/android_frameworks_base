@@ -128,4 +128,7 @@
   <string name="privacy_guard_dialog_title">Заштита приватности</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> жели да <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Запамти мој избор</string>
+  <string name="adb_net_active_notification_title">ADB преко мреже омогућено</string>
+  <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућено</string>
+  <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
 </resources>

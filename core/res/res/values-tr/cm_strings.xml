@@ -126,7 +126,11 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="app_ops_use_voice_volume">Sesli arama sesini kontrol et</string>
   <string name="app_ops_write_mms">MMS mesajı yaz</string>
   <string name="app_ops_write_sms">SMS mesajı yaz</string>
+  <string name="notify_turn_wifi_off_title">Wi-Fi\'yi kapat</string>
   <string name="privacy_guard_dialog_title">Gizlilik Koruması</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>  <xliff:g id="op">%2$s</xliff:g> iznini kullanmak istiyor.</string>
   <string name="permission_remember_choice">Seçimimi hatırla</string>
+  <string name="adb_net_active_notification_title">Ağ üzerinden ADB etkin</string>
+  <string name="adb_both_active_notification_title">USB &amp; Ağ üzerinden ADB etkin</string>
+  <string name="adb_active_generic_notification_message">Hata ayıklamayı devre dışı bırakmak için dokunun.</string>
 </resources>

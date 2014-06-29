@@ -73,12 +73,12 @@
   <string name="permdesc_readPhoneBlacklist">Umožňuje čtení informací o telefonních číslech, která jsou blokována pro příjem hovorů nebo zpráv.</string>
   <string name="permlab_changePhoneBlacklist">změnit černou listinu telefonu</string>
   <string name="permdesc_changePhoneBlacklist">Umožňuje změnit telefonní čísla, která jsou blokována pro příjem hovorů nebo zpráv.</string>
-  <string name="permlab_accessThemeService">přístup ke službě témat</string>
-  <string name="permdesc_accessThemeService">Umožňuje přistupovat ke službě služby témat. Toto oprávnění by neměla vyžadovat žádná normální aplikace.</string>
-  <string name="permlab_readThemes">čtení informace o tématu</string>
-  <string name="permdesc_readThemesDesc">Umožňuje načíst témata a určit, které téma je použité.</string>
-  <string name="permlab_writeThemes">změnit téma</string>
-  <string name="permdesc_writeThemesDesc">Umožňuje vložit nové téma a změnit informaci o tom, které téma je použito.</string>
+  <string name="permlab_accessThemeService">přístup ke službě motivu</string>
+  <string name="permdesc_accessThemeService">Umožňuje přistupovat ke službě motivu. Toto oprávnění by neměla vyžadovat žádná normální aplikace.</string>
+  <string name="permlab_readThemes">čtení informace o motivu</string>
+  <string name="permdesc_readThemesDesc">Umožňuje načíst motivy a určit, který motiv je použit.</string>
+  <string name="permlab_writeThemes">změnit motiv</string>
+  <string name="permdesc_writeThemesDesc">Umožňuje vložit nový motiv a změnit informaci o tom, který motiv je použit.</string>
   <string name="permlab_setKeyguardWallpaper">nastavit tapetu zámku kláves</string>
   <string name="permdesc_setKeyguardWallpaper">Umožní změnit tapetu zámku obrazovky.</string>
   <string name="permlab_useHardwareFramework">využití hardware zařízení</string>
@@ -124,7 +124,11 @@
   <string name="app_ops_use_voice_volume">ovládat hlasitost hovoru</string>
   <string name="app_ops_write_mms">zapsat zprávu MMS</string>
   <string name="app_ops_write_sms">zapsat zprávu SMS</string>
+  <string name="notify_turn_wifi_off_title">Vypnout Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Ochrana soukromí</string>
   <string name="privacy_guard_dialog_summary">Aplikace <xliff:g id="app">%1$s</xliff:g> se pokouší <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Pamatovat volbu</string>
+  <string name="adb_net_active_notification_title">ADB po síti povoleno</string>
+  <string name="adb_both_active_notification_title">ADB přes USB a po síti povoleno</string>
+  <string name="adb_active_generic_notification_message">Dotykem zakázat ladění.</string>
 </resources>

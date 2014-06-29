@@ -124,7 +124,11 @@
   <string name="app_ops_use_voice_volume">hívás közbeni hang vezérlése</string>
   <string name="app_ops_write_mms">MMS írása</string>
   <string name="app_ops_write_sms">SMS írása</string>
+  <string name="notify_turn_wifi_off_title">Wi-Fi kikapcsolása</string>
   <string name="privacy_guard_dialog_title">Adatvédelmi beállítások</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> a következő műveletet szeretné végrehajtani: <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Jegyezze meg a választást</string>
+  <string name="adb_net_active_notification_title">ADB hálózaton keresztül engedélyezve</string>
+  <string name="adb_both_active_notification_title">ADB USB-n keresztül &amp; hálózat engedélyezve</string>
+  <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
 </resources>

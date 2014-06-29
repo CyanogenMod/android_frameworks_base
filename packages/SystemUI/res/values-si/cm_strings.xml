@@ -59,6 +59,8 @@
   <string name="quick_settings_equalizer">සමකරකය</string>
   <string name="quick_settings_compass_off">කොම්පාසුව අක්‍රීයයි</string>
   <string name="quick_settings_compass_init">අරඹමින්\u2026</string>
+  <string name="quick_settings_heads_up_on">හිස් එසවීම සබලයි</string>
+  <string name="quick_settings_heads_up_off">බාධා නොමැත</string>
   <string name="location_mode_high_accuracy_title">ඉහළ නිරවද්‍යතාව</string>
   <string name="location_mode_battery_saving_title">බැටරි සුරැකීම</string>
   <string name="location_mode_sensors_only_title">සංවේදක පමණි</string>

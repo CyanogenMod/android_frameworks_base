@@ -81,6 +81,8 @@
   <string name="permdesc_writeThemesDesc">Laat die program toe om nuwe temas by te voeg en verander die tema wat jy toegepas het.</string>
   <string name="permlab_setKeyguardWallpaper">Stel slotskerm agtergrond in</string>
   <string name="permdesc_setKeyguardWallpaper">Laat \'n program toe om die slotskerm agtergrond te verander.</string>
+  <string name="permlab_useHardwareFramework">gebruik hardeware raamwerk</string>
+  <string name="permdesc_useHardwareFramework">Laat program toegang tot die CM hardeware raamwerk.</string>
   <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>
   <string name="app_ops_access_camera">toegang tot die kamera</string>
   <string name="app_ops_access_location">toegang tot jou ligging</string>
@@ -122,6 +124,7 @@
   <string name="app_ops_use_voice_volume">beheer stem oproep volume</string>
   <string name="app_ops_write_mms">skryf \'n MMS boodskap</string>
   <string name="app_ops_write_sms">Skryf \'n SMS boodskap</string>
+  <string name="notify_turn_wifi_off_title">Skakel Wi-Fi af</string>
   <string name="privacy_guard_dialog_title">Privaatheidswag</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> wil <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Onthou my keuse</string>

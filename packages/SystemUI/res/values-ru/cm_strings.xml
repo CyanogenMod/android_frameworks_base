@@ -59,6 +59,8 @@
   <string name="quick_settings_equalizer">Эквалайзер</string>
   <string name="quick_settings_compass_off">Компас выкл.</string>
   <string name="quick_settings_compass_init">Включение\u2026</string>
+  <string name="quick_settings_heads_up_on">Всплыв. уведомл.</string>
+  <string name="quick_settings_heads_up_off">Уведомления выкл.</string>
   <string name="location_mode_high_accuracy_title">По всем источникам</string>
   <string name="location_mode_battery_saving_title">По координатам сети</string>
   <string name="location_mode_sensors_only_title">По спутникам GPS</string>

@@ -59,6 +59,8 @@
   <string name="quick_settings_equalizer">Equalizzatore</string>
   <string name="quick_settings_compass_off">Bussola OFF</string>
   <string name="quick_settings_compass_init">Inizializzazione\u2026</string>
+  <string name="quick_settings_heads_up_on">Heads up attivato</string>
+  <string name="quick_settings_heads_up_off">No interruzioni</string>
   <string name="location_mode_high_accuracy_title">Alta precisione</string>
   <string name="location_mode_battery_saving_title">Risparmio batteria</string>
   <string name="location_mode_sensors_only_title">Solo dispositivo</string>

@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Ongeldige kaart.</string>
   <string name="lockscreen_airplane_mode_on">Vliegtuigmodus</string>
   <string name="progress_nomediapresent" product="default">Geen verwyderbare media beskikbaar nie\u2026</string>
+  <string name="storage_uicc">UICC stoor spasie</string>
   <string name="stk_cc_ussd_to_dial">USSD versoek is verander om te skakel.</string>
   <string name="stk_cc_ussd_to_ss">USSD versoek verander om SS te versoek.</string>
   <string name="stk_cc_ussd_to_ussd">USSD versoek verander vir nuwe USSD versoek.</string>
