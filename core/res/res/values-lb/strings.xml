@@ -82,6 +82,7 @@
   <string name="contentServiceTooManyDeletesNotificationDesc">Ze vill <xliff:g id="content_type">%s</xliff:g> geläscht.</string>
   <string name="low_memory" product="tablet">Den Tabletsspäicher ass voll. Läsch Dateien, fir Späicherplaz fräizeginn.</string>
   <string name="low_memory" product="default">Den Telefonsspäicher ass voll. Läsch Dateien, fir Späicherplaz fräizeginn.</string>
+  <string name="ssl_ca_cert_warning">D\'Netzwierk kéint iwwerwaacht sinn</string>
   <string name="ssl_ca_cert_noti_by_unknown">Vun engem onbekannten Drëtten</string>
   <string name="ssl_ca_cert_noti_managed">Vu(n) <xliff:g id="managing_domain">%s</xliff:g></string>
   <string name="me">Ech</string>
@@ -102,6 +103,7 @@
   <string name="no_recent_tasks">Keng rezent Apps.</string>
   <string name="global_actions" product="tablet">Tabletoptiounen</string>
   <string name="global_actions" product="default">Telefonsoptiounen</string>
+  <string name="global_action_power_off">Ausmaachen</string>
   <string name="global_action_bug_report">Feelerbericht</string>
   <string name="bugreport_title">Feelerbericht maachen</string>
   <string name="global_actions_toggle_airplane_mode">Fligermodus</string>

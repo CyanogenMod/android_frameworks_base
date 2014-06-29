@@ -15,5 +15,52 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="advanced_settings_button">رێکخستنی چاپکەر</string>
+  <string name="print_button">چاپکردن</string>
   <string name="save_button">پاشەکەوتکردن</string>
+  <string name="label_copies">لەبەرگرتنەوەکان</string>
+  <string name="label_paper_size">قەبارەی کاغەز</string>
+  <string name="label_color">رەنگ</string>
+  <string name="label_orientation">ئاراستە</string>
+  <string name="label_pages">پەڕەکان(<xliff:g id="page_count" example="5">%1$s</xliff:g>)</string>
+  <string name="pages_range_example">بۆ نموونە 1—5,8,11—13</string>
+  <string name="print_preview">بینین پێش چاپکردن</string>
+  <string name="page_count_unknown">پەڕەکان</string>
+  <string name="all_printers">هەموو چاپکەرەکان&#8230;</string>
+  <string name="search">گەڕان</string>
+  <string name="all_printers_label">هەموو چاپکەرەکان</string>
+  <string name="add_print_service_label">زیادکردنی ڕاژە</string>
+  <string name="print_add_printer">زۆرکردنی چاپکەرەکان</string>
+  <string name="print_select_printer">دەست نیشانکردنی چاپکەر</string>
+  <string name="print_forget_printer">لە یادکردنی چاپکەر</string>
+  <plurals name="print_search_result_count_utterance">
+    <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> چاپکەری دۆزراوە</item>
+    <item quantity="other"><xliff:g id="count" example="2">%1$s</xliff:g> چاپکەرەکانی دۆزراوە</item>
+  </plurals>
+  <string name="print_searching_for_printers">بەدواگەڕان بۆ چاپکەرەکان</string>
+  <string name="print_no_printers">هیچ چاپکەرەکانی نەدۆزیەوە</string>
+  <string name="cancelling_notification_title_template">هەڵوەشاندنەوە<xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <string name="failed_notification_title_template">هەڵەی چاپکەر <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <string name="blocked_notification_title_template">چاپکەر بڵۆککراوە <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <plurals name="composite_notification_title_template">
+    <item quantity="one"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g>کاری چاپکردن</item>
+    <item quantity="other"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g> کارەکانی چاپکردن</item>
+  </plurals>
+  <string name="cancel">هەڵوەشانەوە</string>
+  <string name="restart">دەستپێکردنەوە</string>
+  <string name="no_connection_to_printer">پەیوەندی نیە لەگەڵ چاپکەر</string>
+  <string name="reason_unknown">نەناسراو</string>
+  <string name="printer_unavailable"><xliff:g id="print_job_name" example="Canon-123GHT">%1$s</xliff:g> – لە بەردەست دا نیە</string>
+  <string-array name="color_mode_labels">
+    <item>رەش &amp; سپی</item>
+    <item>ڕەنگ</item>
+  </string-array>
+  <string-array name="orientation_labels">
+    <item>Portrait</item>
+    <item>ئاسۆیی</item>
+  </string-array>
+  <string-array name="page_options_labels">
+    <item>هەموو</item>
+    <item>مەودا</item>
+  </string-array>
 </resources>
