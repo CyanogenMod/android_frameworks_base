@@ -33,6 +33,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.android.systemui.R;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -104,21 +106,26 @@ public final class People extends PersonUtils{
             if(callName == null){ callName = callNumber; }
 
             String dir = null;
+            String outgoing = ctx.getResources().getString(R.string.outgoing);
+            String incoming = ctx.getResources().getString(R.string.incoming);
+            String missed = ctx.getResources().getString(R.string.missed);
+            String type = ctx.getResources().getString(R.string.type);
+            String duration = ctx.getResources().getString(R.string.duration);
             int dircode = cursor.getInt( cursor.getColumnIndex(Calls.TYPE) );
             switch (dircode) {
                 case Calls.OUTGOING_TYPE:
-                    dir = "OUTGOING";
+                    dir = outgoing;
                     break;
 
                 case Calls.INCOMING_TYPE:
-                    dir = "INCOMING";
+                    dir = incoming;
                     break;
 
                 case Calls.MISSED_TYPE:
-                    dir = "MISSED";
+                    dir = missed;
                     break;
             }
-            String callInfo = "Type: " + dir + "\nDuration: " + callDuration;
+            String callInfo = type + dir + "\n" + duration + callDuration;
 			people_logs.add( new Person(i, callContactIcon, callName, callInfo, callContactID) );
 			i++;
         }

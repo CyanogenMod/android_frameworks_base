@@ -163,4 +163,9 @@
     <string name="recent_title_txt">Recent Apps</string>
     <!-- iOS Recents -->
     <string name="whos_going_out">Favorites</string>
+    <string name="type">Type :</string>
+    <string name="duration">Duration :</string>
+    <string name="missed">MISSED</string>
+    <string name="incoming">IN</string>
+    <string name="outgoing">OUT</string>
 </resources>
