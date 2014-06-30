@@ -3276,6 +3276,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         makeStatusBarView();
         repositionNavigationBar();
+        addHeadsUpView();
         if (mNavigationBarView != null) {
             mNavigationBarView.updateResources();
         }
