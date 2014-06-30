@@ -16,34 +16,28 @@
 -->
 <com.android.systemui.statusbar.SignalClusterTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
+    android:id="@+id/mobile_signal_text_combo"
     android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
-    >
-    <LinearLayout
-        android:id="@+id/mobile_signal_text_combo"
+    android:gravity="center"
+    android:layout_marginEnd="-3dip"
+    android:visibility="gone">
+    <TextView
+        android:id="@+id/mobile_signal_text"
+        android:textAppearance="@style/TextAppearance.StatusBar.Signal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:singleLine="true"
         android:layout_marginEnd="-3dip"
-        >
-        <TextView
-            android:id="@+id/mobile_signal_text"
-            android:textAppearance="@style/TextAppearance.StatusBar.Signal"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:singleLine="true"
-            android:layout_marginEnd="-3dip"
-            android:gravity="center_vertical|start"
-            />
-        <ImageView
-            android:id="@+id/mobile_signal_text_icon"
-            android:src="@drawable/stat_sys_signal_min"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="1dip"
-            android:paddingEnd="2dip"
-            />
-    </LinearLayout>
+        android:gravity="center_vertical|start"
+        />
+    <ImageView
+        android:id="@+id/mobile_signal_text_icon"
+        android:src="@drawable/stat_sys_signal_min"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="1dip"
+        android:paddingEnd="2dip"
+        />
 </com.android.systemui.statusbar.SignalClusterTextView>
