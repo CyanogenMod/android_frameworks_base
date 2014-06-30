@@ -55,6 +55,9 @@ public class PowerUI extends SystemUI {
 
     static final boolean DEBUG = false;
 
+    private static final String UPDATE_QUIET_HOURS_MODES =
+            "com.android.settings.slim.service.UPDATE_QUIET_HOURS_MODES";
+
     Handler mHandler = new Handler();
 
     int mBatteryLevel = 100;
@@ -279,6 +282,22 @@ public class PowerUI extends SystemUI {
                     || action.equals(Intent.ACTION_POWER_DISCONNECTED)) {
                 final ContentResolver cr = mContext.getContentResolver();
 
+                final int quietHoursCharge = Settings.System.getInt(cr,
+                        Settings.System.QUIET_HOURS_REQUIRE_CHARGING, 0);
+                if (quietHoursCharge != 0 &&
+                        action.equals(Intent.ACTION_POWER_CONNECTED)) {
+                    Settings.System.putInt(cr,
+                            Settings.System.QUIET_HOURS_REQUIRE_CHARGING, 2);
+                    sendUpdateIntent();
+                } else if (quietHoursCharge != 0 &&
+                        action.equals(Intent.ACTION_POWER_DISCONNECTED)){
+                    if (!mIgnoreFirstPowerEvent) {
+                        Settings.System.putInt(cr,
+                                Settings.System.QUIET_HOURS_REQUIRE_CHARGING, 1);
+                        sendUpdateIntent();
+                    }
+                }
+
                 if (mIgnoreFirstPowerEvent) {
                     mIgnoreFirstPowerEvent = false;
                 } else {
@@ -292,6 +311,12 @@ public class PowerUI extends SystemUI {
             }
         }
     };
+
+    private void sendUpdateIntent() {
+        Intent intent = new Intent();
+        intent.setAction(UPDATE_QUIET_HOURS_MODES);
+        mContext.sendBroadcast(intent);
+    }
 
     void dismissLowBatteryWarning() {
         if (mLowBatteryDialog != null) {

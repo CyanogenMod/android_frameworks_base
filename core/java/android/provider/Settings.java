@@ -3432,12 +3432,6 @@ public final class Settings {
          */
         public static final String MVNO_ROAMING = "mvno_roaming";
 
-        /**
-         * Whether to enable quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
-
 		/*
          * Preference for the button backlight. The value is enum.
 		 * 0 for on touch
@@ -3449,22 +3443,104 @@ public final class Settings {
         public static final String BUTTON_BACKLIGHT_MODE = "button_backlight_mode";
 
         /**
+         * Whether to enable quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Timout ignored and active
+         * 3 = Timeout enabled and active
+         * 4 = Timeout enabled and waiting on charging/wifi connected
+         * @hide
+         */
+        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
+
+        /**
          * Whether quiet hours will enable or disable themselves on volume change
+         * 0 = Setting disabled
+         * 1 = When device is silenced
+         * 2 = When device is set to vibrate or silent
          * @hide
          */
         public static final String QUIET_HOURS_AUTOMATIC = "quiet_hours_automatic";
 
         /**
-         * Sets when quiet hours starts. This is stored in minutes from the start of the day.
+         * Whether to enable quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and power connected
+         * @hide
+         */
+        public static final String QUIET_HOURS_REQUIRE_CHARGING = "quiet_hours_require_charging";
+
+        /**
+         * Whether to enable quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and wifi connected
+         * @hide
+         */
+        public static final String QUIET_HOURS_REQUIRE_WIFI = "quiet_hours_require_wifi";
+
+        /**
+         * If we do or do not use daily time-range preferences
+         * @hide
+         */
+        public static final String QUIET_HOURS_DAILY = "quiet_hours_daily";
+
+        /**
+         * Holding cartridge for start times if single day preference is enabled
          * @hide
          */
         public static final String QUIET_HOURS_START = "quiet_hours_start";
 
         /**
-         * Sets when quiet hours end. This is stored in minutes from the start of the day.
+         * Holding cartridge for end times if single day preference is enabled
          * @hide
          */
         public static final String QUIET_HOURS_END = "quiet_hours_end";
+
+        /**
+         * Sets when quiet hours starts for each day.  Parsed as a split string
+         * by a single controller to update all settings values simultaneiously.
+         * This is stored in minutes from the start of the day.
+         * 0 - 6 are parsed and compared to Sunday (1) through Saturday (7)
+         * @hide
+         */
+        public static final String[] QUIET_HOURS_START_TIMES = new String[] {
+            "quiet_hours_start_times_sun",
+            "quiet_hours_start_times_mon",
+            "quiet_hours_start_times_tues",
+            "quiet_hours_start_times_wed",
+            "quiet_hours_start_times_thurs",
+            "quiet_hours_start_times_fri",
+            "quiet_hours_start_times_sat"
+        };
+
+        /**
+         * Sets when quiet hours end for each day.  Parsed as a split string
+         * by a single controller to update all settings values simultaneiously.
+         * This is stored in minutes from the start of the day.
+         * 0 - 6 are parsed and compared to Sunday (1) through Saturday (7)
+         * @hide
+         */
+        public static final String[] QUIET_HOURS_END_TIMES = new String[] {
+            "quiet_hours_end_times_sun",
+            "quiet_hours_end_times_mon",
+            "quiet_hours_end_times_tues",
+            "quiet_hours_end_times_wed",
+            "quiet_hours_end_times_thurs",
+            "quiet_hours_end_times_fri",
+            "quiet_hours_end_times_sat"
+        };
+
+        /**
+         * Whether to remove the sound from phone ringing during quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and active
+         * @hide
+         */
+        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
+
 
         /**
          * Constant: Keep ringer on for all numbers during quiet hours
@@ -3491,31 +3567,37 @@ public final class Settings {
         public static final int QUIET_HOURS_RINGER_DISABLED = 3;
 
         /**
-         * Whether to remove the sound from phone ringing during quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
-
-        /**
          * Whether to remove the sound from outgoing notifications during quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and active
          * @hide
          */
         public static final String QUIET_HOURS_MUTE = "quiet_hours_mute";
 
         /**
          * Whether to disable haptic feedback during quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and active
          * @hide
          */
         public static final String QUIET_HOURS_HAPTIC = "quiet_hours_haptic";
 
         /**
          * Whether to remove the vibration from outgoing notifications during quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and active
          * @hide
          */
         public static final String QUIET_HOURS_STILL = "quiet_hours_still";
 
         /**
          * Whether to attempt to dim the LED color during quiet hours.
+         * 0 = Setting disabled
+         * 1 = Setting enabled but inactive
+         * 2 = Setting enabled and active
          * @hide
          */
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";

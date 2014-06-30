@@ -24,9 +24,6 @@ import android.provider.Settings;
 
 public class QuietHours extends Activity  {
 
-    private static final String SCHEDULE_SERVICE_COMMAND =
-            "com.android.settings.slim.service.SCHEDULE_SERVICE_COMMAND";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,22 +35,24 @@ public class QuietHours extends Activity  {
         int value = getIntent().getIntExtra("value", 2);
 
         if (value == 2) {
-            value = Settings.System.getIntForUser(
+            final int current = Settings.System.getIntForUser(
                     getContentResolver(),
                     Settings.System.QUIET_HOURS_ENABLED,
-                    0, UserHandle.USER_CURRENT_OR_SELF) == 1 ? 0 : 1;
+                    0, UserHandle.USER_CURRENT_OR_SELF);
+            if (current == 0 || current == 1 || current == 4) {
+                value = 2;
+            } else {
+                value = 0;
+            }
+        } else if (value == 1) {
+            value = 2;
+        } else if (value == 0) {
+            value = 0;
         }
 
         Settings.System.putIntForUser(getContentResolver(),
                 Settings.System.QUIET_HOURS_ENABLED, value,
                 UserHandle.USER_CURRENT_OR_SELF);
-        autoSmsIntentBroadcast();
         this.finish();
-    }
-
-    private void autoSmsIntentBroadcast() {
-        Intent scheduleSms = new Intent();
-        scheduleSms.setAction(SCHEDULE_SERVICE_COMMAND);
-        this.sendBroadcast(scheduleSms);
     }
 }

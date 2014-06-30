@@ -53,9 +53,6 @@ public class PhoneStatusBarPolicy {
 
     private static final int INET_CONDITION_THRESHOLD = 50;
 
-    private static final String SCHEDULE_SERVICE_COMMAND =
-            "com.android.settings.slim.service.SCHEDULE_SERVICE_COMMAND";
-
     private static final boolean SHOW_SYNC_ICON = false;
 
     private final Context mContext;
@@ -211,9 +208,9 @@ public class PhoneStatusBarPolicy {
         String contentDescription = null;
         if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
             if (quietHoursAuto == 2) {
-                updateQuietHours(1);
+                updateQuietHours(2);
             } else if (quietHoursAuto == 1) {
-                updateQuietHours(0);
+                updateQuietHours(1);
             }
             iconId = R.drawable.stat_sys_ringer_vibrate;
             mContext.getResources().getDrawable(R.drawable.stat_sys_ringer_vibrate).setColorFilter(iconcolor , Mode.MULTIPLY);
@@ -221,11 +218,11 @@ public class PhoneStatusBarPolicy {
         } else {
             if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
                 if (quietHoursAuto == 1 || quietHoursAuto == 2) {
-                    updateQuietHours(1);
+                    updateQuietHours(2);
                 }
             } else {
                 if (quietHoursAuto != 0) {
-                    updateQuietHours(0);
+                    updateQuietHours(1);
                 }
             }
             iconId =  R.drawable.stat_sys_ringer_silent;
@@ -287,16 +284,13 @@ public class PhoneStatusBarPolicy {
     }
 
     private final void updateQuietHours(int enabled) {
-        int quietHours = Settings.System.getIntForUser(
+        final int quietHours = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.QUIET_HOURS_ENABLED,
                 0, UserHandle.USER_CURRENT);
-        if (quietHours != enabled) {
+        if (quietHours != 0 && quietHours != enabled) {
             Settings.System.putIntForUser(mContext.getContentResolver(),
                     Settings.System.QUIET_HOURS_ENABLED,
                     enabled, UserHandle.USER_CURRENT);
-            Intent scheduleSms = new Intent();
-            scheduleSms.setAction(SCHEDULE_SERVICE_COMMAND);
-            mContext.sendBroadcast(scheduleSms);
         }
     }
 }

@@ -22,10 +22,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
@@ -33,10 +35,10 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class QuietHoursTile extends QuickSettingsTile {
 
-    private static final String SCHEDULE_SERVICE_COMMAND =
-            "com.android.settings.slim.service.SCHEDULE_SERVICE_COMMAND";
+    private int mMode;
+    private int mTaps = 0;
 
-    private boolean mEnabled;
+    private Handler mHandler = new Handler();
 
     public QuietHoursTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
@@ -44,10 +46,19 @@ public class QuietHoursTile extends QuickSettingsTile {
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Settings.System.putIntForUser(mContext.getContentResolver(),
-                        Settings.System.QUIET_HOURS_ENABLED,
-                        mEnabled ? 0 : 1, UserHandle.USER_CURRENT);
-                autoSmsIntentBroadcast(mContext);
+                mHandler.removeCallbacks(checkDouble);
+                if (mTaps > 0) {
+                    // Set to timed mode and get update from controller to
+                    // put us in the correct visual state
+                    Settings.System.putIntForUser(mContext.getContentResolver(),
+                            Settings.System.QUIET_HOURS_ENABLED,
+                            1, UserHandle.USER_CURRENT);
+                    mTaps = 0;
+                } else {
+                    mTaps += 1;
+                    mHandler.postDelayed(checkDouble,
+                            ViewConfiguration.getDoubleTapTimeout());
+                }
             }
         };
         mOnLongClick = new View.OnLongClickListener() {
@@ -71,26 +82,68 @@ public class QuietHoursTile extends QuickSettingsTile {
     }
 
     @Override
+    public void onReceive(Context context, Intent intent) {
+        updateResources();
+    }
+
+    @Override
     public void updateResources() {
         updateTile();
         super.updateResources();
     }
 
-    private void autoSmsIntentBroadcast(Context context) {
-        Intent scheduleSms = new Intent();
-        scheduleSms.setAction(SCHEDULE_SERVICE_COMMAND);
-        context.sendBroadcast(scheduleSms);
-    }
+    final Runnable checkDouble = new Runnable () {
+        public void run() {
+            mTaps = 0;
+            int newVal = 0;
+            switch (mMode) {
+                case 0: // Quiet hours disabled completely set to on
+                    newVal = 2;
+                    break;
+                case 1: // Quiet hours timer enabled but not active - set to on
+                    newVal = 2;
+                    break;
+                case 2: // Quiet hours timer disabled and forced active - set to off
+                    newVal = 0;
+                    break;
+                case 3: // Quiet hours timer enabled and active - set to off
+                    newVal = 0;
+                    break;
+                case 4: // Quiet hours timer enabled and waiting - set to on
+                    newVal = 2;
+                    break;
+            }
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.QUIET_HOURS_ENABLED,
+                    newVal, UserHandle.USER_CURRENT);
+        }
+    };
 
     private synchronized void updateTile() {
-        mEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
-        if (mEnabled) {
-            mDrawable = R.drawable.ic_qs_quiet_hours_on;
-            mLabel = mContext.getString(R.string.quick_settings_quiethours);
-        } else {
-            mDrawable = R.drawable.ic_qs_quiet_hours_off;
-            mLabel = mContext.getString(R.string.quick_settings_quiethours_off);
+        mMode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT);
+
+        switch (mMode) {
+            case 0: // Quiet hours disabled completely
+                mDrawable = R.drawable.ic_qs_quiet_hours_off;
+                mLabel = mContext.getString(R.string.quick_settings_quiethours_off);
+                break;
+            case 1: // Quiet hours timer enabled but not active
+                mDrawable = R.drawable.ic_qs_quiet_hours_timed_off;
+                mLabel = mContext.getString(R.string.quick_settings_quiethours_off);
+                break;
+            case 2: // Quiet hours timer disabled and forced active
+                mDrawable = R.drawable.ic_qs_quiet_hours_on;
+                mLabel = mContext.getString(R.string.quick_settings_quiethours);
+                break;
+            case 3: // Quiet hours timer enabled and active
+                mDrawable = R.drawable.ic_qs_quiet_hours_timed_on;
+                mLabel = mContext.getString(R.string.quick_settings_quiethours);
+                break;
+            case 4: // Quiet hours timer enabled and active - but waiting on requirements
+                mDrawable = R.drawable.ic_qs_quiet_hours_waiting;
+                mLabel = mContext.getString(R.string.quick_settings_quiethours_off);
+                break;
         }
     }
 
