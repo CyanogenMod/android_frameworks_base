@@ -44,7 +44,16 @@ public class SettingConfirmationHelper {
      * Hide from public API
      * @hide
      */
-    public static void showConfirmationDialogForSetting(final Context mContext, String title, String msg, Drawable hint, final String setting) {
+    public static interface OnSelectListener {
+        void onSelect(boolean enabled);
+    }
+
+    /**
+     * Hide from public API
+     * @hide
+     */
+    public static void showConfirmationDialogForSetting(final Context mContext, String title, String msg, Drawable hint,
+                                                        final String setting, final OnSelectListener mListener) {
         int mCurrentStatus = Settings.System.getInt(mContext.getContentResolver(), setting, NOT_SET);
         if (mCurrentStatus == ENABLED || mCurrentStatus == DISABLED) return;
 
@@ -61,6 +70,8 @@ public class SettingConfirmationHelper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Settings.System.putInt(mContext.getContentResolver(), setting, ENABLED);
+                        if (mListener == null) return;
+                        mListener.onSelect(true);
                     }
                 }
         );
@@ -68,6 +79,8 @@ public class SettingConfirmationHelper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Settings.System.putInt(mContext.getContentResolver(), setting, ASK_LATER);
+                        if (mListener == null) return;
+                        mListener.onSelect(false);
                     }
                 }
         );
@@ -75,6 +88,8 @@ public class SettingConfirmationHelper {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Settings.System.putInt(mContext.getContentResolver(), setting, DISABLED);
+                        if (mListener == null) return;
+                        mListener.onSelect(false);
                     }
                 }
         );
