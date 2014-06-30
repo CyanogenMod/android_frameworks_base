@@ -298,25 +298,6 @@ class QuickSettings {
         mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
         collapsePanels();
     }
-<<<<<<< HEAD
-=======
-    
-    public void updateBattery() {
-        if (mBattery == null || mModel == null) {
-            return;
-        }
-        mBatteryStyle = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
-        mCircleBattery.updateSettings();
-        mBattery.updateSettings();
-        mModel.refreshBatteryTile();
-    }
-
-    private boolean immersiveEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.IMMERSIVE_MODE, 0) == 1;
-    }
->>>>>>> 177a89d... [1/2] Frameworks: Add in-the-spot user preference dialog
 
     private void addUserTiles(ViewGroup parent, LayoutInflater inflater) {
         QuickSettingsTileView userTile = (QuickSettingsTileView)
