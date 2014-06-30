@@ -64,6 +64,8 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_TOGGLE_KILL_APP            = 22 << MSG_SHIFT;
     private static final int MSG_SET_PIE_TRIGGER_MASK       = 23 << MSG_SHIFT;
     private static final int MSG_SMART_PULLDOWN             = 24 << MSG_SHIFT;
+    private static final int MSG_HIDE_HEADS_UP              = 25 << MSG_SHIFT;
+    private static final int MSG_UPDATE_HEADS_UP_POSITION   = 26 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -97,6 +99,8 @@ public class CommandQueue extends IStatusBar.Stub {
         public void animateCollapsePanels(int flags);
         public void animateExpandSettingsPanel(boolean flip);
         public void setSystemUiVisibility(int vis, int mask);
+        public void hideHeadsUp();
+        public void updateHeadsUpPosition(boolean statusBarShows);
         public void topAppWindowChanged(boolean visible);
         public void setImeWindowStatus(IBinder token, int vis, int backDisposition);
         public void setHardKeyboardStatus(boolean available, boolean enabled);
@@ -198,6 +202,21 @@ public class CommandQueue extends IStatusBar.Stub {
         synchronized (mList) {
             mHandler.removeMessages(MSG_SET_SYSTEMUI_VISIBILITY);
             mHandler.obtainMessage(MSG_SET_SYSTEMUI_VISIBILITY, vis, mask, null).sendToTarget();
+        }
+    }
+
+    public void hideHeadsUp() {
+        synchronized (mList) {
+            mHandler.removeMessages(MSG_HIDE_HEADS_UP);
+            mHandler.sendEmptyMessage(MSG_HIDE_HEADS_UP);
+        }
+    }
+
+    public void updateHeadsUpPosition(boolean statusBarShows) {
+        synchronized (mList) {
+            mHandler.removeMessages(MSG_UPDATE_HEADS_UP_POSITION);
+            mHandler.obtainMessage(MSG_UPDATE_HEADS_UP_POSITION,
+                    statusBarShows ? 1 : 0, 0, null).sendToTarget();
         }
     }
 
@@ -369,6 +388,12 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_SET_SYSTEMUI_VISIBILITY:
                     mCallbacks.setSystemUiVisibility(msg.arg1, msg.arg2);
+                    break;
+                case MSG_HIDE_HEADS_UP:
+                    mCallbacks.hideHeadsUp();
+                    break;
+                case MSG_UPDATE_HEADS_UP_POSITION:
+                    mCallbacks.updateHeadsUpPosition(msg.arg1 != 0);
                     break;
                 case MSG_TOP_APP_WINDOW_CHANGED:
                     mCallbacks.topAppWindowChanged(msg.arg1 != 0);

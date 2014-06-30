@@ -24,6 +24,7 @@ import android.view.WindowManager;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.statusbar.BaseStatusBar;
+import com.android.systemui.statusbar.NotificationData;
 
 /*
  * Status bar implementation for "large screen" products that mostly present no on-screen nav
@@ -166,6 +167,20 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override
     public void hideHeadsUp() {
+    }
+
+    @Override
+    public boolean panelsEnabled() {
+        return false;
+    }
+
+    @Override
+    public void populateHeadsUp(IBinder key,
+            StatusBarNotification notification, NotificationData.Entry shadeEntry) {
+    }
+
+    @Override
+    public void updateHeadsUpPosition(boolean statusBarShows) {
     }
 
     @Override

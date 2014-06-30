@@ -256,7 +256,7 @@ public class RecentsVerticalScrollView extends ScrollView
         mSwipeHelper.dismissChild(v, 0);
     }
 
-    public void onChildDismissed(View v) {
+    public void onChildDismissed(View v, boolean direction) {
         addToRecycledViews(v);
         mLinearLayout.removeView(v);
         mCallback.handleSwipe(v);

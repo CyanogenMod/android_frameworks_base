@@ -25,7 +25,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     >
-    <FrameLayout
+    <RelativeLayout
             android:layout_height="wrap_content"
             android:layout_width="@dimen/notification_panel_width"
             android:id="@+id/content_slider"
@@ -37,5 +37,16 @@
                 android:id="@+id/content_holder"
                 android:background="@drawable/heads_up_window_bg"
                 />
-    </FrameLayout>
+       <ImageButton
+                android:id="@+id/heads_up_snooze_button"
+                android:background="@android:color/transparent"
+                android:layout_height="25dp"
+                android:layout_width="25dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="2dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/heads_up_snooze" />
+    </RelativeLayout>
 </com.android.systemui.statusbar.policy.HeadsUpNotificationView>

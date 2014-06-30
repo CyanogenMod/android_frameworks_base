@@ -32,6 +32,8 @@ oneway interface IStatusBar
     void animateExpandSettingsPanel(boolean flip);
     void animateCollapsePanels();
     void setSystemUiVisibility(int vis, int mask);
+    void hideHeadsUp();
+    void updateHeadsUpPosition(boolean statusBarShows);
     void topAppWindowChanged(boolean menuVisible);
     void setImeWindowStatus(in IBinder token, int vis, int backDisposition);
     void setHardKeyboardStatus(boolean available, boolean enabled);

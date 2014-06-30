@@ -349,6 +349,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // for heads up notifications
     private HeadsUpNotificationView mHeadsUpNotificationView;
     private int mHeadsUpNotificationDecay;
+    private boolean mHeadsUpExpandedByDefault;
 
     // on-screen navigation buttons
     private NavigationBarView mNavigationBarView = null;
@@ -615,6 +616,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_EXPANDED), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_SNOOZE_TIME), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_NOTIFCATION_DECAY), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_SHOW_UPDATE), false, this,
+                    UserHandle.USER_ALL);
             update();
         }
 
@@ -737,6 +750,37 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SHAKE_SENSITIVITY))) {
                 updateShakeSensitivity();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_EXPANDED))) {
+                    mHeadsUpExpandedByDefault = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.HEADS_UP_EXPANDED, 0,
+                            UserHandle.USER_CURRENT) == 1;
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_SNOOZE_TIME))) {
+                    final int snoozeTime = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.HEADS_UP_SNOOZE_TIME,
+                            DEFAULT_TIME_HEADS_UP_SNOOZE,
+                            UserHandle.USER_CURRENT);
+                    setHeadsUpSnoozeTime(snoozeTime);
+                    if (mHeadsUpNotificationView != null) {
+                        mHeadsUpNotificationView.setSnoozeVisibility(snoozeTime != 0);
+                    }
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_NOTIFCATION_DECAY))) {
+                    mHeadsUpNotificationDecay = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.HEADS_UP_NOTIFCATION_DECAY,
+                            mContext.getResources().getInteger(
+                            R.integer.heads_up_notification_decay),
+                            UserHandle.USER_CURRENT);
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_SHOW_UPDATE))) {
+                    mShowHeadsUpUpdates = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.HEADS_UP_SHOW_UPDATE, 0,
+                            UserHandle.USER_CURRENT) == 1;
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS))) {
                 final ContentResolver resolver = mContext.getContentResolver();
@@ -1264,10 +1308,31 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (ENABLE_HEADS_UP) {
             mHeadsUpNotificationView =
                     (HeadsUpNotificationView) View.inflate(context, R.layout.heads_up, null);
-            mHeadsUpNotificationView.setVisibility(View.GONE);
-            mHeadsUpNotificationView.setBar(this);
-            mHeadsUpNotificationView.setNotificationHelper(mNotificationHelper);
         }
+        mHeadsUpNotificationView.setVisibility(View.GONE);
+        mHeadsUpNotificationView.setBar(this);
+        mHeadsUpNotificationView.setNotificationHelper(mNotificationHelper);
+        mHeadsUpNotificationDecay = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.HEADS_UP_NOTIFCATION_DECAY,
+                res.getInteger(R.integer.heads_up_notification_decay),
+                UserHandle.USER_CURRENT);
+        mHeadsUpExpandedByDefault = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.HEADS_UP_EXPANDED, 0,
+                UserHandle.USER_CURRENT) == 1;
+         final int snoozeTime = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.HEADS_UP_SNOOZE_TIME,
+                DEFAULT_TIME_HEADS_UP_SNOOZE,
+                UserHandle.USER_CURRENT);
+        setHeadsUpSnoozeTime(snoozeTime);
+        mHeadsUpNotificationView.setSnoozeVisibility(snoozeTime != 0);
+        mShowHeadsUpUpdates = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.HEADS_UP_SHOW_UPDATE, 0,
+                UserHandle.USER_CURRENT) == 1;
+
         if (MULTIUSER_DEBUG) {
             mNotificationPanelDebugText = (TextView) mNotificationPanel.findViewById(R.id.header_debug_info);
             mNotificationPanelDebugText.setVisibility(View.VISIBLE);
@@ -2015,9 +2080,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL, // above the status bar!
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
                         | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                PixelFormat.TRANSPARENT);
+                    PixelFormat.TRANSPARENT);
 
         // this will allow HeadsUp to run in an overlay on devices that support this
         if (ActivityManager.isHighEndGfx()) {
@@ -2079,23 +2145,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (shadeEntry == null) {
             return;
         }
-        if (mUseHeadsUp && shouldInterrupt(notification) && mStatusBarView.panelsEnabled()) {
-            if (DEBUG) Log.d(TAG, "launching notification in heads up mode");
-            Entry interruptionCandidate = new Entry(key, notification, null);
-            if (inflateViews(interruptionCandidate, mHeadsUpNotificationView.getHolder())) {
-                mInterruptingNotificationTime = System.currentTimeMillis();
-                mInterruptingNotificationEntry = interruptionCandidate;
-                shadeEntry.setInterruption();
-
-                // 1. Populate mHeadsUpNotificationView
-                mHeadsUpNotificationView.setNotification(mInterruptingNotificationEntry);
-
-                // 2. Animate mHeadsUpNotificationView in
-                mHandler.sendEmptyMessage(MSG_SHOW_HEADS_UP);
-
-                // 3. Set alarm to age the notification off
-                resetHeadsUpDecayTimer();
-            }
+        if (mUseHeadsUp && shouldInterrupt(notification) && panelsEnabled() && !isHeadsUpInSnooze()) {
+            populateHeadsUp(key, notification, shadeEntry);
         } else if (notification.getNotification().fullScreenIntent != null) {
             // Stop screensaver if the notification has a full-screen intent.
             // (like an incoming phone call)
@@ -2124,26 +2175,65 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     public void resetHeadsUpDecayTimer() {
         if (mUseHeadsUp && mHeadsUpNotificationDecay > 0
-                && mHeadsUpNotificationView.isClearable()) {
-
-            final boolean sbVisible = (mSystemUiVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0
-                    || (mStatusBarMode & View.STATUS_BAR_TRANSIENT) != 0;
-            final boolean userForcedExpandedDesktop =
-                    mExpandedDesktopStyle == 1 || mExpandedDesktopStyle == 2;
-            if (!sbVisible && !userForcedExpandedDesktop) {
-                mHandler.removeMessages(MSG_HIDE_HEADS_UP);
-                mHandler.sendEmptyMessageDelayed(MSG_HIDE_HEADS_UP, 700);
-            } else {
-                mHandler.removeMessages(MSG_HIDE_HEADS_UP);
-                mHandler.sendEmptyMessageDelayed(MSG_HIDE_HEADS_UP, mHeadsUpNotificationDecay);
+                  && mHeadsUpNotificationView.isClearable()) {
+              mHandler.removeMessages(MSG_HIDE_HEADS_UP);
+              mHandler.sendEmptyMessageDelayed(MSG_HIDE_HEADS_UP, mHeadsUpNotificationDecay);
+          }
+      }
+  
+    @Override
+    public void populateHeadsUp(IBinder key,
+            StatusBarNotification notification, Entry shadeEntry) {
+        if (DEBUG) Log.d(TAG, "launching notification in heads up mode");
+        Entry interruptionCandidate = new Entry(key, notification, null);
+        if (inflateViews(interruptionCandidate, mHeadsUpNotificationView.getHolder())) {
+            mInterruptingNotificationTime = System.currentTimeMillis();
+            mInterruptingNotificationEntry = interruptionCandidate;
+            if (shadeEntry != null) {
+                shadeEntry.setInterruption();
             }
+
+            // Either the user want to see every heads up expanded....or the app which
+            // requests the heads up force it to show as expanded.
+            final boolean isExpanded = notification.getNotification().extras.getInt(
+                        Notification.EXTRA_HEADS_UP_EXPANDED,
+                        Notification.HEADS_UP_NOT_EXPANDED) == Notification.HEADS_UP_EXPANDED
+                        || mHeadsUpExpandedByDefault;
+
+            // 1. Populate mHeadsUpNotificationView
+            mHeadsUpNotificationView.setNotification(
+                    mInterruptingNotificationEntry, isExpanded);
+
+            // 2. Animate mHeadsUpNotificationView in
+            mHandler.sendEmptyMessage(MSG_SHOW_HEADS_UP);
+
+            // 3. Set alarm to age the notification off
+            resetHeadsUpDecayTimer();
         }
     }
 
-    @Override
+    @Override // CommandQueue
     public void hideHeadsUp() {
         mHandler.removeMessages(MSG_HIDE_HEADS_UP);
         mHandler.sendEmptyMessage(MSG_HIDE_HEADS_UP);
+    }
+
+    @Override // CommandQueue
+    public void updateHeadsUpPosition(boolean statusBarShows) {
+        // Change y layoutparams of heads up view when statusbar
+        // visibility changes.
+        // ToDo: We may want to animate this in future in the rare
+        // case a heads up is showing and the statusbar visbility
+        // changes to avoid a feeling that it is more jumping then animating.
+        // With current aosp code we can only do it with
+        // dirty workarounds. Lets see to integrate a native implementation
+        // which allows transition anymations on y or x changes on layoutparams.
+        if (mUseHeadsUp && mHeadsUpNotificationView != null) {
+            WindowManager.LayoutParams lp = (WindowManager.LayoutParams)
+                    mHeadsUpNotificationView.getLayoutParams();
+            lp.y = statusBarShows ? getStatusBarHeight() : 0;
+            mWindowManager.updateViewLayout(mHeadsUpNotificationView, lp);
+        }
     }
 
     public void removeNotification(IBinder key) {
@@ -2805,7 +2895,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    boolean panelsEnabled() {
+    @Override
+    public boolean panelsEnabled() {
         return (mDisabled & StatusBarManager.DISABLE_EXPAND) == 0;
     }
 
@@ -4630,10 +4721,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mHeadsUpNotificationView.setY(offset);
     }
 
-    public void onHeadsUpDismissed() {
+    public void onHeadsUpDismissed(boolean direction) {
         if (mInterruptingNotificationEntry == null) return;
-        mHandler.sendEmptyMessage(MSG_HIDE_HEADS_UP);
-        if (mHeadsUpNotificationView.isClearable()) {
+        hideHeadsUp();
+        // If direction == true we know that the notification
+        // was dismissed to the right. So we just hide it that
+        // the notification will stay in our notification
+        // drawer. Left swipe as usual dismisses the notification
+        // completely if the notification is clearable.
+        if (mHeadsUpNotificationView.isClearable() && !direction) {
             try {
                 mBarService.onNotificationClear(
                         mInterruptingNotificationEntry.notification.getPackageName(),
@@ -4658,6 +4754,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mRecreating = true;
 
         mStatusBarContainer.removeAllViews();
+        removeHeadsUpView();
 
         // extract icons from the soon-to-be recreated viewgroup.
         int nIcons = mStatusIcons.getChildCount();
@@ -4829,8 +4926,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationPanelMinHeightFrac = 0f;
         }
 
-        mHeadsUpNotificationDecay = res.getInteger(R.integer.heads_up_notification_decay);
-        mRowHeight =  res.getDimensionPixelSize(R.dimen.default_notification_row_min_height);
+        mRowHeight =  res.getDimensionPixelSize(R.dimen.notification_row_min_height);
 
         if (false) Log.v(TAG, "updateResources");
     }
@@ -5079,3 +5175,4 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
 }
+

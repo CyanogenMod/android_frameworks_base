@@ -183,6 +183,8 @@ public class PhoneStatusBarView extends PanelBar {
     @Override
     public void startOpeningPanel(PanelView panel) {
         super.startOpeningPanel(panel);
+        // First we hide heads up notification if present.
+        mBar.hideHeadsUp();
         // we only want to start fading if this is the "first" or "last" panel,
         // which is kind of tricky to determine
         mShouldFade = (mFadingPanel == null || mFadingPanel.isFullyExpanded());

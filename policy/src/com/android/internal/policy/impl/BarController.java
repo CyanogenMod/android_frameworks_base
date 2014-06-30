@@ -131,7 +131,29 @@ public class BarController {
         final boolean change = show ? mWin.showLw(true) : mWin.hideLw(true);
         final int state = computeStateLw(wasVis, wasAnim, mWin, change);
         final boolean stateChanged = updateStateLw(state);
-        return change || stateChanged;
+        final boolean isChanging = change || stateChanged;
+        if (mTag.equals("BarController.StatusBar") && isChanging) {
+            updateHeadsUpPosition(show);
+        }
+        return isChanging;
+    }
+
+    private void updateHeadsUpPosition(final boolean statusBarShows) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    IStatusBarService statusbar = getStatusBarService();
+                    if (statusbar != null) {
+                        statusbar.updateHeadsUpPosition(statusBarShows);
+                    }
+                } catch (RemoteException e) {
+                    if (DEBUG) Slog.w(mTag, "Error updatinge heads up position", e);
+                    // re-acquire status bar service next time it is needed.
+                    mStatusBarService = null;
+                }
+            }
+        });
     }
 
     private int computeStateLw(boolean wasVis, boolean wasAnim, WindowState win, boolean change) {

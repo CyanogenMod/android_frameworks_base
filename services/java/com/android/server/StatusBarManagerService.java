@@ -373,6 +373,24 @@ public class StatusBarManagerService extends IStatusBarService.Stub
     }
 
     @Override
+    public void hideHeadsUp() {
+        if (mBar != null) {
+            try {
+                mBar.hideHeadsUp();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void updateHeadsUpPosition(boolean statusBarShows) {
+        if (mBar != null) {
+            try {
+                mBar.updateHeadsUpPosition(statusBarShows);
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
     public void toggleRecentApps() {
         if (mBar != null) {
             try {

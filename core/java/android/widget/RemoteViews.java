@@ -34,6 +34,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.StrictMode;
 import android.os.UserHandle;
 import android.text.TextUtils;
@@ -55,6 +57,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.android.internal.statusbar.IStatusBarService;
 
 /**
  * A class that describes a view hierarchy that can be displayed in
@@ -663,6 +667,13 @@ public class RemoteViews implements Parcelable, Filter {
         public SetOnClickPendingIntent(int id, PendingIntent pendingIntent) {
             this.viewId = id;
             this.pendingIntent = pendingIntent;
+            this.clearHeadsUp = false;
+        }
+
+        public SetOnClickPendingIntent(int id, PendingIntent pendingIntent, boolean clearHeadsUp) {
+            this.viewId = id;
+            this.pendingIntent = pendingIntent;
+            this.clearHeadsUp = clearHeadsUp;
         }
 
         public SetOnClickPendingIntent(Parcel parcel) {
@@ -672,6 +683,8 @@ public class RemoteViews implements Parcelable, Filter {
             if (parcel.readInt() != 0) {
                 pendingIntent = PendingIntent.readPendingIntentOrNullFromParcel(parcel);
             }
+            // Read possible clearHeadsUp state from parcel
+            clearHeadsUp = parcel.readInt() != 0;
         }
 
         public void writeToParcel(Parcel dest, int flags) {
@@ -683,6 +696,8 @@ public class RemoteViews implements Parcelable, Filter {
             if (pendingIntent != null) {
                 pendingIntent.writeToParcel(dest, 0 /* no flags */);
             }
+            // Write possible clearHeadsUp state to parcel
+            dest.writeInt(clearHeadsUp ? 1 : 0);
         }
 
         @Override
@@ -710,6 +725,24 @@ public class RemoteViews implements Parcelable, Filter {
             if (pendingIntent != null) {
                 listener = new OnClickListener() {
                     public void onClick(View v) {
+                        // If clearHeadsUp == true we know that we are a notification button.
+                        // A lot apps do not directly dismiss the notification
+                        // if the user pressed an action button. This is ok for normal
+                        // notifications. But with heads up the notficiation stays and
+                        // disturbes the workflow for the user. So we hide the heads up view, push
+                        // the notification into background and let the app handle everything else.
+                        if (clearHeadsUp) {
+                            final IStatusBarService barService =
+                                    IStatusBarService.Stub.asInterface(
+                                    ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+                            try {
+                                if (barService != null) {
+                                    barService.hideHeadsUp();
+                                }
+                            } catch (RemoteException e) {
+                                // Ooops that should never happen.
+                            }
+                        }
                         // Find target view location in screen coordinates and
                         // fill into PendingIntent before sending.
                         final Rect rect = getSourceBounds(v);
@@ -728,6 +761,8 @@ public class RemoteViews implements Parcelable, Filter {
         }
 
         PendingIntent pendingIntent;
+
+        boolean clearHeadsUp;
 
         public final static int TAG = 1;
     }
@@ -2019,6 +2054,27 @@ public class RemoteViews implements Parcelable, Filter {
      */
     public void setOnClickPendingIntent(int viewId, PendingIntent pendingIntent) {
         addAction(new SetOnClickPendingIntent(viewId, pendingIntent));
+    }
+
+    /**
+     * Equivalent to calling
+     * {@link android.view.View#setOnClickListener(android.view.View.OnClickListener)}
+     * to launch the provided {@link PendingIntent}.
+     *
+     * This method is only called by notifications when adding an action button
+     * {@link android.app.Notification}
+     *
+     * @param viewId The id of the view that will trigger the {@link PendingIntent} when clicked
+     * @param pendingIntent The {@link PendingIntent} to send when user clicks
+     * @param whether notification is tombstone, but mainly used to indicate that the new
+     *        SetOnClickPendingIntent knows that a notification is calling.
+     *
+     * @hide
+     */
+    public void setOnClickPendingIntent(int viewId,
+            PendingIntent pendingIntent, boolean tombstone) {
+        if (tombstone) return;
+        addAction(new SetOnClickPendingIntent(viewId, pendingIntent, true));
     }
 
     /**
