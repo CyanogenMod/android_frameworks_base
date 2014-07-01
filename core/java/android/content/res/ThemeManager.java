@@ -16,6 +16,7 @@
 package android.content.res;
 
 import android.content.Context;
+import android.content.pm.ThemeUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -113,6 +114,18 @@ public class ThemeManager {
 
     public void onClientDestroyed(String pkgName) {
         removeClient(pkgName);
+    }
+
+    /**
+     * Convenience method. Applies the entire theme.
+     */
+    public void requestThemeChange(String pkgName) {
+        try {
+            List<String> components = ThemeUtils.getSupportedComponents(mContext, pkgName);
+            mService.requestThemeChange(pkgName, components);
+        } catch (RemoteException e) {
+            Log.w(TAG, "Unable to access ThemeService", e);
+        }
     }
 
     public void requestThemeChange(String pkgName, List<String> components) {
