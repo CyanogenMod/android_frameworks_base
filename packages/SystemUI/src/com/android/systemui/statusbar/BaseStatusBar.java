@@ -698,6 +698,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                  }
                  break;
              case MSG_CLOSE_SEARCH_PANEL:
+                 if (DEBUG) Log.d(TAG, "Dismissing heads up");
+                 hideHeadsUp();
                  if (DEBUG) Log.d(TAG, "closing search panel");
                  if (mSearchPanelView != null && mSearchPanelView.isShowing()) {
                      mSearchPanelView.show(false, true);
