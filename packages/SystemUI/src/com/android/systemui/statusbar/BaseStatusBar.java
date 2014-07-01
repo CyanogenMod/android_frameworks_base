@@ -1406,8 +1406,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                 // System is dead
             }
             if (mPile.launchNextNotificationFloating()) {
-                if (mPendingIntent != null) {
-                    launchFloating(mPendingIntent);
+                if (mIntent != null) {
+                    launchFloating(mIntent);
                 }
             } else if (mIntent != null) {
                 int[] pos = new int[2];

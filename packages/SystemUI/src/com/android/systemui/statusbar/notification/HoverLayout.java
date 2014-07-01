@@ -219,6 +219,10 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
         }
 
         @Override
+        public void onChildTriggered(View v) {
+        }        
+
+        @Override
         public void onBeginDrag(View v) {
             mHover.setLocked(true);
             mHover.clearHandlerCallbacks();
