@@ -59,6 +59,8 @@
   <string name="quick_settings_equalizer">Ισοσταθμιστής</string>
   <string name="quick_settings_compass_off">Πυξίδα ανενεργή</string>
   <string name="quick_settings_compass_init">Προετοιμασία\u2026</string>
+  <string name="quick_settings_heads_up_on">Αναδυόμενες ειδοποιήσεις ενεργές</string>
+  <string name="quick_settings_heads_up_off">Αναδυόμενες ειδοποιήσεις ανενεργές</string>
   <string name="location_mode_high_accuracy_title">Υψηλή ακρίβεια</string>
   <string name="location_mode_battery_saving_title">Εξοικονόμηση μπαταρίας</string>
   <string name="location_mode_sensors_only_title">Μόνο στη συσκευή</string>

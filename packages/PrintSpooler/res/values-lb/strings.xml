@@ -22,6 +22,7 @@
   <string name="label_copies">Kopien</string>
   <string name="label_paper_size">Pabeiergréisst</string>
   <string name="label_color">Faarf</string>
+  <string name="label_orientation">Orientéierung</string>
   <string name="label_pages">Säiten (<xliff:g id="page_count" example="5">%1$s</xliff:g>)</string>
   <string name="pages_range_example">z. B. 1-5,8,11-13</string>
   <string name="print_preview">Drockvirschau</string>
@@ -45,6 +46,7 @@
   </plurals>
   <string name="choose_print_service">Drockservice auswielen</string>
   <string name="print_searching_for_printers">Et gëtt no Drécker gesicht</string>
+  <string name="print_no_printers">Keen Drécker fonnt</string>
   <string name="printing_notification_title_template"><xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g> gëtt gedréckt</string>
   <string name="cancelling_notification_title_template"><xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g> gëtt ofgebrach</string>
   <string name="failed_notification_title_template">Dréckerfeeler <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
@@ -56,11 +58,16 @@
   <string name="cancel">Ofbriechen</string>
   <string name="restart">Nei starten</string>
   <string name="no_connection_to_printer">Keng Connectioun mam Drécker</string>
+  <string name="reason_unknown">onbekannt</string>
   <string name="printer_unavailable"><xliff:g id="print_job_name" example="Canon-123GHT">%1$s</xliff:g> – net verfügbar</string>
   <string name="print_error_default_message">Drockoptrag konnt net generéiert ginn</string>
   <string-array name="color_mode_labels">
     <item>Schwaarz &amp; Wäiss</item>
     <item>Faarf</item>
+  </string-array>
+  <string-array name="orientation_labels">
+    <item>Héichformat</item>
+    <item>Landscape</item>
   </string-array>
   <string-array name="page_options_labels">
     <item>All</item>

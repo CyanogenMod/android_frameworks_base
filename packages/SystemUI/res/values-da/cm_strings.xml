@@ -59,6 +59,8 @@
   <string name="quick_settings_equalizer">Equalizer</string>
   <string name="quick_settings_compass_off">Kompas fra</string>
   <string name="quick_settings_compass_init">Initialisere\u2026</string>
+  <string name="quick_settings_heads_up_on">Heads up aktiveret</string>
+  <string name="quick_settings_heads_up_off">Ingen afbrydelser</string>
   <string name="location_mode_high_accuracy_title">Høj præcision</string>
   <string name="location_mode_battery_saving_title">Batteribesparelse</string>
   <string name="location_mode_sensors_only_title">Kun enhed</string>

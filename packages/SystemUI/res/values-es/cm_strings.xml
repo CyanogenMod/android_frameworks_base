@@ -59,6 +59,8 @@
   <string name="quick_settings_equalizer">Ecualizador</string>
   <string name="quick_settings_compass_off">Brújula desactivada</string>
   <string name="quick_settings_compass_init">Inicializando\u2026</string>
+  <string name="quick_settings_heads_up_on">Notificaciones emergentes</string>
+  <string name="quick_settings_heads_up_off">Notificaciones emergentes</string>
   <string name="location_mode_high_accuracy_title">Alta precisión</string>
   <string name="location_mode_battery_saving_title">Ahorro de batería</string>
   <string name="location_mode_sensors_only_title">Solo en dispositivo</string>

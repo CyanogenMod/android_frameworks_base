@@ -35,7 +35,7 @@
   <string name="reboot_system" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ</string>
   <string name="reboot_system" product="default">سه‌رله‌نوێ خستنه‌ڕی تەلەفۆن</string>
   <string name="reboot_reboot">سه‌رله‌نوێ خستنه‌ڕێ</string>
-  <string name="reboot_recovery">ڕیکەڤەری دیلان بەی</string>
+  <string name="reboot_recovery">ڕیکەڤەری</string>
   <string name="reboot_bootloader">بووتلەودەر</string>
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>

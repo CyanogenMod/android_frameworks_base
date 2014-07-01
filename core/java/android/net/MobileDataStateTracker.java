@@ -92,6 +92,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     private static final int UNKNOWN = LinkQualityInfo.UNKNOWN_INT;
 
+    private static int mSubscription;
+
     /**
      * Create a new MobileDataStateTracker
      * @param netType the ConnectivityManager network type
@@ -256,9 +258,10 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                     log("Broadcast received: " + intent.getAction() + " apnType=" + apnType);
                 }
 
+                int subscription = 0;
                 if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                     int dds = 0;
-                    final int subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
+                    subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
                             MSimConstants.DEFAULT_SUBSCRIPTION);
                     getPhoneService(false);
 
@@ -337,6 +340,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                             setDetailedState(DetailedState.SUSPENDED, reason, apnName);
                             break;
                         case CONNECTED:
+                            mSubscription = subscription;
                             updateLinkProperitesAndCapatilities(intent);
                             setDetailedState(DetailedState.CONNECTED, reason, apnName);
                             break;
@@ -434,9 +438,17 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      */
     public String getTcpBufferSizesPropName() {
         String networkTypeStr = "unknown";
-        TelephonyManager tm = new TelephonyManager(mContext);
+        int dataNetworkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            MSimTelephonyManager mSimTm = new MSimTelephonyManager(mContext);
+            dataNetworkType = mSimTm.getNetworkType(mSubscription);
+        } else {
+            TelephonyManager tm = new TelephonyManager(mContext);
+            dataNetworkType = tm.getNetworkType();
+        }
+
         //TODO We have to edit the parameter for getNetworkType regarding CDMA
-        switch(tm.getNetworkType()) {
+        switch(dataNetworkType) {
         case TelephonyManager.NETWORK_TYPE_GPRS:
             networkTypeStr = "gprs";
             break;
@@ -488,7 +500,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             networkTypeStr = "ehrpd";
             break;
         default:
-            loge("unknown network type: " + tm.getNetworkType());
+            loge("unknown network type: " + dataNetworkType);
         }
         return "net.tcp.buffersize." + networkTypeStr;
     }

@@ -258,7 +258,7 @@
   <string name="permlab_uninstall_shortcut">desinstalar accesos direutos</string>
   <string name="permdesc_uninstall_shortcut">Permite que l\'aplicación desanicie accesos direutos de la pantalla d\'aniciu ensin la intervención del usuariu.</string>
   <string name="permlab_processOutgoingCalls">redireicionar llamaes salientes</string>
-  <string name="permdesc_processOutgoingCalls">Permite que l\'aplicación procese les llamaes salientes y cambie\'l númberu que se va a marcar. L\'aplicación pue usar esti permisu pa remanar, esviar o torgar que se faigan llamaes salientes.</string>
+  <string name="permdesc_processOutgoingCalls">Permite que l\'aplicación vea\'l númberu que se ta marcando mientres una llamada saliente cola opción de redirixila a otro númberu o albortar dafechu la llamada.</string>
   <string name="permlab_receiveSms">recibir mensaxes de testu (SMS)</string>
   <string name="permdesc_receiveSms">Permite que l\'aplicación reciba y procese mensaxes MMS, lo que significa que podría usar esti permisu pa remanar o desaniciar mensaxes unviaos al preséu ensin amosá-ylos al usuariu.</string>
   <string name="permlab_receiveMms">recibir mensaxes de testu (MMS)</string>
@@ -818,6 +818,7 @@
   <string name="sipAddressTypeHome">Casa</string>
   <string name="sipAddressTypeWork">Trabayu</string>
   <string name="sipAddressTypeOther">Otru</string>
+  <string name="quick_contacts_not_available">Nun s\'atopó nenguna aplicación pa ver esti contautu.</string>
   <string name="keyguard_password_enter_pin_code">Introduz el códigu PIN.</string>
   <string name="keyguard_password_enter_puk_code">Introduz el códigu PUK y un nuevu códigu PIN.</string>
   <string name="keyguard_password_enter_puk_prompt">Códigu PUK</string>
@@ -963,7 +964,7 @@
   <string name="autofill_middle_initial_re">middle.*initial|m\\.i\\.|mi$</string>
   <string name="autofill_middle_name_re">middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
   <string name="autofill_last_name_re">last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
-  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfonu<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
   <string name="autofill_area_code_re">area.*code|acode|area</string>
   <string name="autofill_phone_prefix_re">prefix<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
   <string name="autofill_phone_suffix_re">sufixu</string>
@@ -1192,7 +1193,7 @@
   <string name="android_upgrading_title">Anovando Android</string>
   <string name="android_upgrading_apk">Optimizando aplicación <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>\u2026</string>
   <string name="android_upgrading_starting_apps">Aniciando aplicaciones</string>
-  <string name="android_upgrading_complete">Finando aniciu\u2026</string>
+  <string name="android_upgrading_complete">Finando arranque\u2026</string>
   <string name="heavy_weight_notification"><xliff:g id="APP">%1$s</xliff:g> n\'execución</string>
   <string name="heavy_weight_notification_detail">Toca esta opción pa cambiar a l\'aplicación.</string>
   <string name="heavy_weight_switcher_title">¿Cambiar aplicaciones?</string>
@@ -1307,8 +1308,8 @@
   <string name="extmedia_format_message" product="nosdcard">Van desaniciase tolos ficheros almacenaos nel almacenamientu USB. Esta aición nun pue desfacese.</string>
   <string name="extmedia_format_message" product="default">Van desaniciase tolos datos de la to tarxeta.</string>
   <string name="extmedia_format_button_format">Formatu</string>
-  <string name="adb_active_notification_title">Depuración USB habilitada</string>
-  <string name="adb_active_notification_message">Toca pa inhabilitar la depuración USB</string>
+  <string name="adb_active_notification_title">Depuración USB coneutada</string>
+  <string name="adb_active_notification_message">Toca pa desactivar la depuración USB.</string>
   <string name="select_input_method">Seleiciona un métodu d\'entrada</string>
   <string name="configure_input_methods">Configurar métodos d\'entrada</string>
   <string name="use_physical_keyboard">Tecláu físicu</string>

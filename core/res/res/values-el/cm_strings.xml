@@ -128,4 +128,7 @@
   <string name="privacy_guard_dialog_title">Προστασία Απορρήτου</string>
   <string name="privacy_guard_dialog_summary">Το <xliff:g id="app">%1$s</xliff:g> ζητά: <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Απομνημόνευση της επιλογής μου</string>
+  <string name="adb_net_active_notification_title">ADB μέσω δικτύου ενεργοποιημένο</string>
+  <string name="adb_both_active_notification_title">ADB μέσω USB &amp; δικτύου ενεργοποιημένο</string>
+  <string name="adb_active_generic_notification_message">Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων.</string>
 </resources>

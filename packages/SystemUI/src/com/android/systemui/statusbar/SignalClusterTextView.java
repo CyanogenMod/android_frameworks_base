@@ -19,7 +19,6 @@ package com.android.systemui.statusbar;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,7 +33,6 @@ public class SignalClusterTextView extends LinearLayout implements
     private int mDBm = 0;
     private int mSignalClusterStyle = SignalClusterView.STYLE_NORMAL;
 
-    private ViewGroup mMobileGroup;
     private TextView mMobileSignalText;
 
     public SignalClusterTextView(Context context) {
@@ -52,8 +50,8 @@ public class SignalClusterTextView extends LinearLayout implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mMobileGroup = (ViewGroup) findViewById(R.id.mobile_signal_text_combo);
         mMobileSignalText = (TextView) findViewById(R.id.mobile_signal_text);
+        updateSignalText();
     }
 
     public void setStyle(int style) {
@@ -69,16 +67,13 @@ public class SignalClusterTextView extends LinearLayout implements
     }
 
     private void updateSignalText() {
-        if (mMobileGroup == null) {
-            return;
-        }
         if (mAirplaneMode || mDBm == 0) {
-            mMobileGroup.setVisibility(View.GONE);
+            setVisibility(View.GONE);
         } else if (mSignalClusterStyle == SignalClusterView.STYLE_TEXT) {
-            mMobileGroup.setVisibility(View.VISIBLE);
+            setVisibility(View.VISIBLE);
             mMobileSignalText.setText(getSignalLevelString(mDBm));
         } else {
-            mMobileGroup.setVisibility(View.GONE);
+            setVisibility(View.GONE);
         }
     }
 
