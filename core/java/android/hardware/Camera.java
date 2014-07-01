@@ -20,6 +20,7 @@ import android.app.ActivityThread;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
+import android.hardware.ITorchService;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -326,6 +327,7 @@ public class Camera {
      * @see android.app.admin.DevicePolicyManager#getCameraDisabled(android.content.ComponentName)
      */
     public static Camera open(int cameraId) {
+        disableTorch();
         return new Camera(cameraId);
     }
 
@@ -336,6 +338,7 @@ public class Camera {
      * @see #open(int)
      */
     public static Camera open() {
+        disableTorch();
         int numberOfCameras = getNumberOfCameras();
         CameraInfo cameraInfo = new CameraInfo();
         for (int i = 0; i < numberOfCameras; i++) {
@@ -345,6 +348,16 @@ public class Camera {
             }
         }
         return null;
+    }
+
+    private static void disableTorch() {
+        IBinder b = ServiceManager.getService(Context.TORCH_SERVICE);
+        ITorchService torchService = ITorchService.Stub.asInterface(b);
+        try {
+            torchService.onCameraOpened();
+        } catch (RemoteException e) {
+            // Ignore
+        }
     }
 
     Camera(int cameraId) {
