@@ -29,6 +29,7 @@ import android.os.FileUtils;
 import android.os.SystemProperties;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.provider.ThemesContract;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,6 +45,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -555,5 +558,20 @@ public class ThemeUtils {
         public String getPackageName() {
             return mPackageName;
         }
+    }
+
+    // Returns a mutable list of all the theme components
+    public static List<String> getAllComponents() {
+        List<String> components = new ArrayList<String>(9);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_FONTS);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_LAUNCHER);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_ALARMS);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_BOOT_ANIM);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_ICONS);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_LOCKSCREEN);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_NOTIFICATIONS);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS);
+        components.add(ThemesContract.ThemesColumns.MODIFIES_RINGTONES);
+        return components;
     }
 }
