@@ -449,8 +449,15 @@ public class WindowManagerService extends IWindowManager.Stub
     int mRotation = 0;
     int mForcedAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mAltOrientation = false;
-    ArrayList<IRotationWatcher> mRotationWatchers
-            = new ArrayList<IRotationWatcher>();
+    class RotationWatcher {
+        IRotationWatcher watcher;
+        IBinder.DeathRecipient dr;
+        RotationWatcher(IRotationWatcher w, IBinder.DeathRecipient d) {
+            watcher = w;
+            dr = d;
+        }
+    }
+    ArrayList<RotationWatcher> mRotationWatchers = new ArrayList<RotationWatcher>();
     int mDeferredRotationPauseCount;
 
     int mSystemDecorLayer = 0;
@@ -2483,6 +2490,11 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     public void removeWindowLocked(Session session, WindowState win) {
+        removeWindowLocked(session, win, false);
+    }
+
+    private void removeWindowLocked(Session session, WindowState win,
+            boolean forceRemove) {
         if (win.mAttrs.type == TYPE_APPLICATION_STARTING) {
             if (DEBUG_STARTING_WINDOW) Slog.d(TAG, "Starting window removed " + win);
             removeStartingWindowTimeout(win.mAppToken);
@@ -2533,7 +2545,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     mDisplayMagnifier.onWindowTransitionLocked(win, transit);
                 }
             }
-            if (win.mExiting || win.mWinAnimator.isAnimating()) {
+            if (!forceRemove && (win.mExiting || win.mWinAnimator.isAnimating())) {
                 // The exit animation is running... wait for it!
                 //Slog.i(TAG, "*** Running exit animation...");
                 win.mExiting = true;
@@ -5324,6 +5336,12 @@ public class WindowManagerService extends IWindowManager.Stub
         ShutdownThread.rebootSafeMode(getUiContext(), confirm);
     }
 
+    // Called by window manager policy.  Not exposed externally.
+    @Override
+    public boolean isShutdownSequenceStarted() {
+        return ShutdownThread.isStarted();
+    }
+
     @Override
     public void setInputFilter(IInputFilter filter) {
         if (!checkCallingPermission(android.Manifest.permission.FILTER_EVENTS, "setInputFilter()")) {
@@ -6150,7 +6168,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         for (int i=mRotationWatchers.size()-1; i>=0; i--) {
             try {
-                mRotationWatchers.get(i).onRotationChanged(rotation);
+                mRotationWatchers.get(i).watcher.onRotationChanged(rotation);
             } catch (RemoteException e) {
             }
         }
@@ -6182,10 +6200,10 @@ public class WindowManagerService extends IWindowManager.Stub
             public void binderDied() {
                 synchronized (mWindowMap) {
                     for (int i=0; i<mRotationWatchers.size(); i++) {
-                        if (watcherBinder == mRotationWatchers.get(i).asBinder()) {
-                            IRotationWatcher removed = mRotationWatchers.remove(i);
+                        if (watcherBinder == mRotationWatchers.get(i).watcher.asBinder()) {
+                            RotationWatcher removed = mRotationWatchers.remove(i);
                             if (removed != null) {
-                                removed.asBinder().unlinkToDeath(this, 0);
+                                removed.watcher.asBinder().unlinkToDeath(this, 0);
                             }
                             i--;
                         }
@@ -6197,7 +6215,7 @@ public class WindowManagerService extends IWindowManager.Stub
         synchronized (mWindowMap) {
             try {
                 watcher.asBinder().linkToDeath(dr, 0);
-                mRotationWatchers.add(watcher);
+                mRotationWatchers.add(new RotationWatcher(watcher, dr));
             } catch (RemoteException e) {
                 // Client died, no cleanup needed.
             }
@@ -6211,9 +6229,13 @@ public class WindowManagerService extends IWindowManager.Stub
         final IBinder watcherBinder = watcher.asBinder();
         synchronized (mWindowMap) {
             for (int i=0; i<mRotationWatchers.size(); i++) {
-                if (watcherBinder == mRotationWatchers.get(i).asBinder()) {
-                    mRotationWatchers.remove(i);
-                    i--;
+                RotationWatcher rotationWatcher = mRotationWatchers.get(i);
+                if (watcherBinder == rotationWatcher.watcher.asBinder()) {
+                    RotationWatcher removed = mRotationWatchers.remove(i);
+                    if (removed != null) {
+                        removed.watcher.asBinder().unlinkToDeath(removed.dr, 0);
+                        i--;
+                    }
                 }
             }
         }
@@ -11019,7 +11041,7 @@ public class WindowManagerService extends IWindowManager.Stub
             WindowList windows = displayContent.getWindowList();
             while (!windows.isEmpty()) {
                 final WindowState win = windows.get(windows.size() - 1);
-                removeWindowLocked(win.mSession, win);
+                removeWindowLocked(win.mSession, win, true);
             }
         }
         mAnimator.removeDisplayLocked(displayId);

@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">אפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, שעבורם נחסמות הודעות ושיחות נכנסות.</string>
   <string name="permlab_accessThemeService">גישה לשירות ערכת הצבעים</string>
   <string name="permdesc_accessThemeService">אפשר ליישום לגשת לשירות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
+  <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב</string>
+  <string name="permdesc_readThemesDesc">אפשר ליישום לקרוא את ערכות העיצוב ולקבוע איזו ערכה קבעת.</string>
+  <string name="permlab_writeThemes">שינוי ערכות העיצוב</string>
+  <string name="permdesc_writeThemesDesc">אפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות אילו הוחלו.</string>
   <string name="permlab_setKeyguardWallpaper">הגדר רקע ל-keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">אפשר ליישום לשנות את הרקע של מסך הנעילה.</string>
+  <string name="permlab_useHardwareFramework">השתמש במסגרת חומרתית</string>
+  <string name="permdesc_useHardwareFramework">אפשר ליישום לגשת למסגרת החומרתית של CM.</string>
   <string name="immersive_mode_confirmation_bottom">החלק למעלה מהתחתית כדי לצאת ממסך מלא.</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">שלוט על עוצמת קול הדיבור</string>
   <string name="app_ops_write_mms">לכתוב הודעת MMS</string>
   <string name="app_ops_write_sms">לכתוב הודעת SMS</string>
+  <string name="notify_turn_wifi_off_title">כבה Wi-Fi</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">זכור את הבחירה שלי</string>
+  <string name="adb_net_active_notification_title">ADB דרך הרשת מופעל</string>
+  <string name="adb_both_active_notification_title">ADB דרך USB &amp; רשת מופעל</string>
+  <string name="adb_active_generic_notification_message">הקש לביטול ADB.</string>
 </resources>

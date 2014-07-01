@@ -789,6 +789,29 @@ final class ApplicationPackageManager extends PackageManager {
     }
 
     /** @hide */
+    @Override public Resources getThemedResourcesForApplication(
+            ApplicationInfo app, String themePkgName) throws NameNotFoundException {
+        if (app.packageName.equals("system")) {
+            return mContext.mMainThread.getSystemContext().getResources();
+        }
+
+        Resources r = mContext.mMainThread.getTopLevelThemedResources(
+                app.uid == Process.myUid() ? app.sourceDir : app.publicSourceDir,
+                Display.DEFAULT_DISPLAY, mContext.mPackageInfo, app.packageName, themePkgName);
+        if (r != null) {
+            return r;
+        }
+        throw new NameNotFoundException("Unable to open " + app.publicSourceDir);
+    }
+
+    /** @hide */
+    @Override public Resources getThemedResourcesForApplication(
+            String appPackageName, String themePkgName) throws NameNotFoundException {
+        return getThemedResourcesForApplication(
+                getApplicationInfo(appPackageName, 0), themePkgName);
+    }
+
+    /** @hide */
     @Override
     public Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
             throws NameNotFoundException {
@@ -1371,6 +1394,15 @@ final class ApplicationPackageManager extends PackageManager {
             mPM.updateIconMapping(pkgName);
         } catch (RemoteException re) {
             Log.e(TAG, "Failed to update icon maps", re);
+        }
+    }
+
+    @Override
+    public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
+        try {
+            mPM.setComponentProtectedSetting(componentName, newState, mContext.getUserId());
+        } catch (RemoteException re) {
+            Log.e(TAG, "Failed to set component protected setting", re);
         }
     }
 }

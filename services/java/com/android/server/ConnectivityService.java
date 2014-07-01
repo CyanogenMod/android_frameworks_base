@@ -2388,9 +2388,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
             // Update TCP delayed ACK settings
             updateTcpDelayedAckSettings(thisNet);
+            updateNetworkSettings(thisNet);
         }
         thisNet.setTeardownRequested(false);
-        updateNetworkSettings(thisNet);
         updateMtuSizeSettings(thisNet);
         handleConnectivityChange(newNetType, false);
         sendConnectedBroadcastDelayed(info, getConnectivityChangeDelay());
@@ -2774,6 +2774,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         + "] which comes from [" + key + "]");
             }
             setBufferSize(bufferSizes);
+        }
+
+        final String defaultRwndKey = "net.tcp.default_init_rwnd";
+        int defaultRwndValue = SystemProperties.getInt(defaultRwndKey, 0);
+        Integer rwndValue = Settings.Global.getInt(mContext.getContentResolver(),
+            Settings.Global.TCP_DEFAULT_INIT_RWND, defaultRwndValue);
+        final String sysctlKey = "sys.sysctl.tcp_def_init_rwnd";
+        if (rwndValue != 0) {
+            SystemProperties.set(sysctlKey, rwndValue.toString());
         }
     }
 
@@ -3793,8 +3802,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             int user = UserHandle.getUserId(Binder.getCallingUid());
             if (ConnectivityManager.isNetworkTypeValid(type) && mNetTrackers[type] != null) {
                 synchronized(mVpns) {
-                    mVpns.get(user).protect(socket,
-                            mNetTrackers[type].getLinkProperties().getInterfaceName());
+                    mVpns.get(user).protect(socket);
                 }
                 return true;
             }
@@ -4034,7 +4042,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 boolean forwardDns) {
             try {
                 mNetd.clearUidRangeRoute(interfaze, uidStart, uidEnd);
-                if (forwardDns) mNetd.clearDnsInterfaceForUidRange(uidStart, uidEnd);
+                if (forwardDns) mNetd.clearDnsInterfaceForUidRange(interfaze, uidStart, uidEnd);
             } catch (RemoteException e) {
             }
 
@@ -4206,6 +4214,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      */
     private static final int CMP_RESULT_CODE_PROVISIONING_NETWORK = 5;
 
+    /**
+     * The mobile network is provisioning
+     */
+    private static final int CMP_RESULT_CODE_IS_PROVISIONING = 6;
+
+    private AtomicBoolean mIsProvisioningNetwork = new AtomicBoolean(false);
+    private AtomicBoolean mIsStartingProvisioning = new AtomicBoolean(false);
+
     private AtomicBoolean mIsCheckingMobileProvisioning = new AtomicBoolean(false);
 
     @Override
@@ -4276,9 +4292,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                 setProvNotificationVisible(true,
                                         ConnectivityManager.TYPE_MOBILE_HIPRI, ni.getExtraInfo(),
                                         url);
+                                // Mark that we've got a provisioning network and
+                                // Disable Mobile Data until user actually starts provisioning.
+                                mIsProvisioningNetwork.set(true);
+                                MobileDataStateTracker mdst = (MobileDataStateTracker)
+                                        mNetTrackers[ConnectivityManager.TYPE_MOBILE];
+                                mdst.setInternalDataEnable(false);
                             } else {
                                 if (DBG) log("CheckMp.onComplete: warm (no dns/tcp), no url");
                             }
+                            break;
+                        }
+                        case CMP_RESULT_CODE_IS_PROVISIONING: {
+                            // FIXME: Need to know when provisioning is done. Probably we can
+                            // check the completion status if successful we're done if we
+                            // "timedout" or still connected to provisioning APN turn off data?
+                            if (DBG) log("CheckMp.onComplete: provisioning started");
+                            mIsStartingProvisioning.set(false);
                             break;
                         }
                         default: {
@@ -4427,6 +4457,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             if (mCs.isNetworkSupported(ConnectivityManager.TYPE_MOBILE) == false) {
                 result = CMP_RESULT_CODE_NO_CONNECTION;
                 log("isMobileOk: X not mobile capable result=" + result);
+                return result;
+            }
+
+            if (mCs.mIsStartingProvisioning.get()) {
+                result = CMP_RESULT_CODE_IS_PROVISIONING;
+                log("isMobileOk: X is provisioning result=" + result);
                 return result;
             }
 
@@ -4764,19 +4800,20 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     };
 
     private void handleMobileProvisioningAction(String url) {
-        // Notication mark notification as not visible
+        // Mark notification as not visible
         setProvNotificationVisible(false, ConnectivityManager.TYPE_MOBILE_HIPRI, null, null);
 
         // If provisioning network handle as a special case,
         // otherwise launch browser with the intent directly.
-        NetworkInfo ni = getProvisioningNetworkInfo();
-        if ((ni != null) && ni.isConnectedToProvisioningNetwork()) {
-            if (DBG) log("handleMobileProvisioningAction: on provisioning network");
+        if (mIsProvisioningNetwork.get()) {
+            if (DBG) log("handleMobileProvisioningAction: on prov network enable then launch");
+            mIsStartingProvisioning.set(true);
             MobileDataStateTracker mdst = (MobileDataStateTracker)
                     mNetTrackers[ConnectivityManager.TYPE_MOBILE];
+            mdst.setEnableFailFastMobileData(DctConstants.ENABLED);
             mdst.enableMobileProvisioning(url);
         } else {
-            if (DBG) log("handleMobileProvisioningAction: on default network");
+            if (DBG) log("handleMobileProvisioningAction: not prov network, launch browser directly");
             Intent newIntent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
                     Intent.CATEGORY_APP_BROWSER);
             newIntent.setData(Uri.parse(url));

@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">Dopušta aplikaciji promjenu telefonskih brojeva čije su dolazne poruke ili pozivi blokirani.</string>
   <string name="permlab_accessThemeService">pristupiti servisu tema</string>
   <string name="permdesc_accessThemeService">Dopušta aplikaciji pristup servisu tema. Za obične aplikacije nikada ne bi trebao biti potreban.</string>
+  <string name="permlab_readThemes">pročitati informacije vaše teme</string>
+  <string name="permdesc_readThemesDesc">Dopušta aplikaciji čitanje vaših tema i određivanje teme koju koristite.</string>
+  <string name="permlab_writeThemes">urediti vaše teme</string>
+  <string name="permdesc_writeThemesDesc">Dopušta aplikaciji dodavati nove teme i urediti temu koju ste primjenili.</string>
   <string name="permlab_setKeyguardWallpaper">postaviti pozadinu zaslona zaključavanja</string>
   <string name="permdesc_setKeyguardWallpaper">Dozvoljava aplikaciji promjenu pozadine zaslona zaključavanja.</string>
+  <string name="permlab_useHardwareFramework">koristiti hardware framework</string>
+  <string name="permdesc_useHardwareFramework">Dopušta aplikaciji pristupiti CM hardware framework.</string>
   <string name="immersive_mode_confirmation_bottom">Klizni gore od dna za izlaz iz punog zaslona.</string>
   <string name="app_ops_access_camera">pristupiti kameri</string>
   <string name="app_ops_access_location">pristupiti vašoj lokaciji</string>

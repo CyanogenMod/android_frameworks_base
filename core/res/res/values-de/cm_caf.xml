@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Ungültige Karte</string>
   <string name="lockscreen_airplane_mode_on">Flugmodus</string>
   <string name="progress_nomediapresent" product="default">Keine SD-Karte vorhanden.</string>
+  <string name="storage_uicc">UICC-Speicher</string>
   <string name="stk_cc_ussd_to_dial">USSD-Anfrage wurde in DIAL-Anfrage umgewandelt</string>
   <string name="stk_cc_ussd_to_ss">USSD-Anfrage wurde in SS-Anfrage umgewandelt</string>
   <string name="stk_cc_ussd_to_ussd">USSD-Anfrage wurde in neue USSD-Anfrage umgewandelt</string>

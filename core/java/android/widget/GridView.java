@@ -1207,7 +1207,7 @@ public class GridView extends AbsListView {
             final int firstPosition = mFirstPosition;
             final RecycleBin recycleBin = mRecycler;
 
-            if (dataChanged) {
+            if (mRecycler.isActiveViewsInitialized() && dataChanged) {
                 for (int i = 0; i < childCount; i++) {
                     recycleBin.addScrapView(getChildAt(i), firstPosition+i);
                 }

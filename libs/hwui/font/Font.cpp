@@ -23,6 +23,7 @@
 #include <utils/Trace.h>
 
 #include <SkGlyph.h>
+#include <SkGlyphCache.h>
 #include <SkUtils.h>
 
 #include "FontUtil.h"
@@ -212,18 +213,29 @@ void Font::drawCachedGlyphBitmap(CachedGlyphInfo* glyph, int x, int y, uint8_t* 
     int dstY = y + glyph->mBitmapTop;
 
     CacheTexture* cacheTexture = glyph->mCacheTexture;
-
-    uint32_t cacheWidth = cacheTexture->getWidth();
-    uint32_t startY = glyph->mStartY * cacheWidth;
-    uint32_t endY = startY + (glyph->mBitmapHeight * cacheWidth);
-
     PixelBuffer* pixelBuffer = cacheTexture->getPixelBuffer();
+
+    uint32_t formatSize = PixelBuffer::formatSize(pixelBuffer->getFormat());
+    uint32_t alpha_channel_offset = PixelBuffer::formatAlphaOffset(pixelBuffer->getFormat());
+    uint32_t cacheWidth = cacheTexture->getWidth();
+    uint32_t srcStride = formatSize * cacheWidth;
+    uint32_t startY = glyph->mStartY * srcStride;
+    uint32_t endY = startY + (glyph->mBitmapHeight * srcStride);
+
     const uint8_t* cacheBuffer = pixelBuffer->map();
 
     for (uint32_t cacheY = startY, bitmapY = dstY * bitmapWidth; cacheY < endY;
-            cacheY += cacheWidth, bitmapY += bitmapWidth) {
-        memcpy(&bitmap[bitmapY + dstX], &cacheBuffer[cacheY + glyph->mStartX], glyph->mBitmapWidth);
+            cacheY += srcStride, bitmapY += bitmapWidth) {
+
+        if (formatSize == 1) {
+            memcpy(&bitmap[bitmapY + dstX], &cacheBuffer[cacheY + glyph->mStartX], glyph->mBitmapWidth);
+        } else {
+            for (uint32_t i = 0; i < glyph->mBitmapWidth; ++i) {
+                bitmap[bitmapY + dstX + i] = cacheBuffer[cacheY + (glyph->mStartX + i)*formatSize + alpha_channel_offset];
+            }
+        }
     }
+
 }
 
 void Font::drawCachedGlyph(CachedGlyphInfo* glyph, float x, float hOffset, float vOffset,
@@ -271,9 +283,9 @@ CachedGlyphInfo* Font::getCachedGlyph(SkPaint* paint, glyph_t textUnit, bool pre
     if (cachedGlyph) {
         // Is the glyph still in texture cache?
         if (!cachedGlyph->mIsValid) {
-            const SkGlyph& skiaGlyph = GET_METRICS(paint, textUnit,
-                    &mDescription.mLookupTransform);
-            updateGlyphCache(paint, skiaGlyph, cachedGlyph, precaching);
+            SkAutoGlyphCache autoCache(*paint, NULL, &mDescription.mLookupTransform);
+            const SkGlyph& skiaGlyph = GET_METRICS(autoCache.getCache(), textUnit);
+            updateGlyphCache(paint, skiaGlyph, autoCache.getCache(), cachedGlyph, precaching);
         }
     } else {
         cachedGlyph = cacheGlyph(paint, textUnit, precaching);
@@ -415,8 +427,8 @@ void Font::render(SkPaint* paint, const char* text, uint32_t start, uint32_t len
     }
 }
 
-void Font::updateGlyphCache(SkPaint* paint, const SkGlyph& skiaGlyph, CachedGlyphInfo* glyph,
-        bool precaching) {
+void Font::updateGlyphCache(SkPaint* paint, const SkGlyph& skiaGlyph, SkGlyphCache* skiaGlyphCache,
+        CachedGlyphInfo* glyph, bool precaching) {
     glyph->mAdvanceX = skiaGlyph.fAdvanceX;
     glyph->mAdvanceY = skiaGlyph.fAdvanceY;
     glyph->mBitmapLeft = skiaGlyph.fLeft;
@@ -429,7 +441,7 @@ void Font::updateGlyphCache(SkPaint* paint, const SkGlyph& skiaGlyph, CachedGlyp
 
     // Get the bitmap for the glyph
     if (!skiaGlyph.fImage) {
-        paint->findImage(skiaGlyph, &mDescription.mLookupTransform);
+        skiaGlyphCache->findImage(skiaGlyph);
     }
     mState->cacheBitmap(skiaGlyph, glyph, &startX, &startY, precaching);
 
@@ -463,11 +475,12 @@ CachedGlyphInfo* Font::cacheGlyph(SkPaint* paint, glyph_t glyph, bool precaching
     CachedGlyphInfo* newGlyph = new CachedGlyphInfo();
     mCachedGlyphs.add(glyph, newGlyph);
 
-    const SkGlyph& skiaGlyph = GET_METRICS(paint, glyph, &mDescription.mLookupTransform);
+    SkAutoGlyphCache autoCache(*paint, NULL, &mDescription.mLookupTransform);
+    const SkGlyph& skiaGlyph = GET_METRICS(autoCache.getCache(), glyph);
     newGlyph->mIsValid = false;
     newGlyph->mGlyphIndex = skiaGlyph.fID;
 
-    updateGlyphCache(paint, skiaGlyph, newGlyph, precaching);
+    updateGlyphCache(paint, skiaGlyph, autoCache.getCache(), newGlyph, precaching);
 
     return newGlyph;
 }

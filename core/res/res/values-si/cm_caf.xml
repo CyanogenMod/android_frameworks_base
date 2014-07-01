@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">අවලංගු කාඩ් පතකි.</string>
   <string name="lockscreen_airplane_mode_on">අහස්යානා ප්‍රකාරය</string>
   <string name="progress_nomediapresent" product="default">ඉවත් කළ හැකි මාධ්‍ය කිසිවක් නැත\u2026</string>
+  <string name="storage_uicc">UICC ආචයනය</string>
   <string name="stk_cc_ussd_to_dial">USSD ආයාචනය DIAL ආයාචනයක් බවට වෙනස් කර ඇත.</string>
   <string name="stk_cc_ussd_to_ss">USSD ආයාචනය SS ආයාචනයක් බවට වෙනස් කර ඇත.</string>
   <string name="stk_cc_ussd_to_ussd">USSD ආයාචනය නව USSD ආයාචනයක් බවට වෙනස් කර ඇත.</string>

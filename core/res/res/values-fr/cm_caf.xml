@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Carte non valide.</string>
   <string name="lockscreen_airplane_mode_on">Mode Avion</string>
   <string name="progress_nomediapresent" product="default">Aucun support amovible présent\u2026</string>
+  <string name="storage_uicc">Stockage de l\'UICC</string>
   <string name="stk_cc_ussd_to_dial">Requête USSD modifiée pour une requête d\'appel.</string>
   <string name="stk_cc_ussd_to_ss">Requête USSD modifiée pour une requête SS.</string>
   <string name="stk_cc_ussd_to_ussd">Requête USSD modifiée pour une nouvelle requête USSD.</string>

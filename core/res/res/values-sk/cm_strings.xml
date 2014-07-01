@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">Umožňuje aplikácii zmeniť telefónne čísla, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
   <string name="permlab_accessThemeService">prístup k službe tém</string>
   <string name="permdesc_accessThemeService">Umožňuje aplikácii prístup k službe na správu tém. Toto povolenie nie je bežné pre štandardné aplikácie.</string>
+  <string name="permlab_readThemes">čítať informácie vašej témy</string>
+  <string name="permdesc_readThemesDesc">Umožňuje aplikácii čítať vaše témy a určiť, ktorú tému ste použili.</string>
+  <string name="permlab_writeThemes">upraviť vaše témy</string>
+  <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu uzamykacej obrazovky</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu uzamykacej obrazovky.</string>
+  <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
+  <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>
@@ -110,7 +116,7 @@
   <string name="app_ops_use_audio_focus">ovládať zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládať hlasitosť bluetooh</string>
   <string name="app_ops_use_master_volume">ovládať hlavnú hlasitosť</string>
-  <string name="app_ops_use_media_buttons">použiť tlačidlá na ovládanie médií</string>
+  <string name="app_ops_use_media_buttons">používať tlačidlá médií</string>
   <string name="app_ops_use_media_volume">ovládať hlasitosť médií</string>
   <string name="app_ops_use_notification_volume">ovládať hlasitosť oznámení</string>
   <string name="app_ops_use_ring_volume">ovládať hlasitosť zvonenia</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">ovládať hlasitosť hovoru</string>
   <string name="app_ops_write_mms">napísať správu MMS</string>
   <string name="app_ops_write_sms">napísať správu SMS</string>
+  <string name="notify_turn_wifi_off_title">Vypnúť Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Ochrana súkromia</string>
   <string name="privacy_guard_dialog_summary">Aplikácia <xliff:g id="app">%1$s</xliff:g> požaduje <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Zapamätať si výber</string>
+  <string name="adb_net_active_notification_title">ADB cez sieť povolené</string>
+  <string name="adb_both_active_notification_title">ADB cez USB a sieť povolené</string>
+  <string name="adb_active_generic_notification_message">Dotykom zakážate ladenie.</string>
 </resources>

@@ -309,9 +309,11 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
 
     @Override
     public void childDrawableStateChanged(View child) {
-        if (getTabCount() > 0 && child == getChildTabViewAt(mSelectedTab)) {
-            // To make sure that the bottom strip is redrawn
-            invalidate();
+        if (mSelectedTab != -1) {
+            if (getTabCount() > 0 && child == getChildTabViewAt(mSelectedTab)) {
+                // To make sure that the bottom strip is redrawn
+                invalidate();
+            }
         }
         super.childDrawableStateChanged(child);
     }
@@ -387,7 +389,6 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
         if (index < 0 || index >= getTabCount() || index == mSelectedTab) {
             return;
         }
-
         if (mSelectedTab != -1) {
             getChildTabViewAt(mSelectedTab).setSelected(false);
         }
@@ -512,7 +513,7 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
 
     /** {@inheritDoc} */
     public void onFocusChange(View v, boolean hasFocus) {
-        if (v == this && hasFocus && getTabCount() > 0) {
+        if (v == this && hasFocus && getTabCount() > 0 && (mSelectedTab != -1)) {
             getChildTabViewAt(mSelectedTab).requestFocus();
             return;
         }

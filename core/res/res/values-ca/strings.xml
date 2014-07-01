@@ -136,7 +136,7 @@
     <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Massa supressions de <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
     <string name="low_memory" product="tablet" msgid="6494019234102154896">"L\'emmagatzematge de la tauleta és ple. Suprimeix uns quants fitxers per alliberar espai."</string>
     <string name="low_memory" product="default" msgid="3475999286680000541">"L\'emmagatzematge del telèfon és ple. Suprimeix uns quants fitxers per alliberar espai."</string>
-    <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"Pot ser que la xarxa se supervisi."</string>
+    <string name="ssl_ca_cert_warning" msgid="5848402127455021714">"És possible que la xarxa estigui supervisada"</string>
     <string name="ssl_ca_cert_noti_by_unknown" msgid="4475437862189850602">"Per un tercer desconegut"</string>
     <string name="ssl_ca_cert_noti_managed" msgid="4030263497686867141">"Per <xliff:g id="MANAGING_DOMAIN">%s</xliff:g>"</string>
     <string name="me" msgid="6545696007631404292">"Mi"</string>
@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"desinstal·la dreceres"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Permet que l\'aplicació suprimeixi les dreceres de la pantalla d\'inici sense la intervenció de l\'usuari."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"desviació de les trucades sortints"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Permet que l\'aplicació processi les trucades sortints i que canviï el número que es marcarà. Aquest permís permet que l\'aplicació supervisi, redirigeixi o bloquegi les trucades sortints."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Permet que l\'aplicació vegi el número que s\'està marcant durant una trucada sortint, amb l\'opció de redirigir la trucada a un altre número o bé de cancel·lar-la completament."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"recepció de missatges de text (SMS)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Permet que l\'aplicació rebi i processi missatges SMS. Això vol dir que l\'aplicació pot controlar o suprimir missatges que s\'han enviat al teu dispositiu sense mostrar-te\'ls."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"recepció de missatges de text (MMS)"</string>
@@ -675,8 +675,8 @@
     <string name="permdesc_markNetworkSocket" msgid="7655568433696356578">"Permet que l\'aplicació modifiqui les marques de sòcols per a l\'encaminament"</string>
     <string name="permlab_accessNotifications" msgid="7673416487873432268">"accedeix a les notificacions"</string>
     <string name="permdesc_accessNotifications" msgid="458457742683431387">"Permet que l\'aplicació recuperi, examini i esborri les notificacions, incloses les que han publicat altres aplicacions."</string>
-    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"vincula a un servei de processament de notificacions"</string>
-    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Permet que el titular vinculi la interfície de nivell superior d\'un servei de processament de notificacions. No s\'hauria de necessitar mai per a les aplicacions normals."</string>
+    <string name="permlab_bindNotificationListenerService" msgid="7057764742211656654">"vincula a un servei oient de notificacions"</string>
+    <string name="permdesc_bindNotificationListenerService" msgid="985697918576902986">"Permet que el titular vinculi la interfície de nivell superior d\'un servei oient de notificacions. No s\'hauria de necessitar mai per a les aplicacions normals."</string>
     <string name="permlab_invokeCarrierSetup" msgid="3699600833975117478">"invoca l\'aplicació de configuració proporcionada per l\'operador"</string>
     <string name="permdesc_invokeCarrierSetup" msgid="4159549152529111920">"Permet que el titular invoqui l\'aplicació de configuració proporcionada per l\'operador. No s\'hauria de necessitar mai per a les aplicacions normals."</string>
     <string name="permlab_accessNetworkConditions" msgid="8206077447838909516">"conèixer les observacions sobre les condicions de la xarxa"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Casa"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Feina"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Altres"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"No hem trobat cap aplicació per mostrar aquest contacte."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Introdueix el codi PIN"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Introdueix el codi PUK i el codi PIN nou"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"Codi PUK"</string>
@@ -988,10 +989,10 @@
     <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> vol activar l\'exploració tàctil. Quan l\'exploració tàctil està activada, pots escoltar o veure les descripcions del contingut seleccionat o utilitzar gestos per interactuar amb la tauleta."</string>
     <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> vol activar l\'exploració tàctil. Quan l\'exploració per tàctil està activada, pots escoltar o veure les descripcions del contingut seleccionat o utilitzar gestos per interactuar amb el telèfon."</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"Fa 1 mes"</string>
-    <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Fa menys d\'1 mes"</string>
+    <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Fa més d\'1 mes"</string>
   <plurals name="num_seconds_ago">
     <item quantity="one" msgid="4869870056547896011">"Fa 1 segon"</item>
-    <item quantity="other" msgid="3903706804349556379">"fa <xliff:g id="COUNT">%d</xliff:g> segons"</item>
+    <item quantity="other" msgid="3903706804349556379">"Fa <xliff:g id="COUNT">%d</xliff:g> segons"</item>
   </plurals>
   <plurals name="num_minutes_ago">
     <item quantity="one" msgid="3306787433088810191">"Fa 1 minut"</item>
@@ -1007,7 +1008,7 @@
     <string name="last_month" msgid="3959346739979055432">"El mes passat"</string>
     <string name="older" msgid="5211975022815554840">"Més antigues"</string>
   <plurals name="num_days_ago">
-    <item quantity="one" msgid="861358534398115820">"ahir"</item>
+    <item quantity="one" msgid="861358534398115820">"Ahir"</item>
     <item quantity="other" msgid="2479586466153314633">"Fa <xliff:g id="COUNT">%d</xliff:g> dies"</item>
   </plurals>
   <plurals name="in_num_seconds">
@@ -1335,7 +1336,7 @@
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Accessibilitat"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Fons de pantalla"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Canvia el fons de pantalla"</string>
-    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Processador de notificacions"</string>
+    <string name="notification_listener_binding_label" msgid="2014162835481906429">"Oient de notificacions"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN activada"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"<xliff:g id="APP">%s</xliff:g> ha activat VPN"</string>
     <string name="vpn_text" msgid="3011306607126450322">"Toca per gestionar la xarxa."</string>

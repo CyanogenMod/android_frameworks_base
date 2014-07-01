@@ -111,6 +111,7 @@ public class AccountManagerService
     private static final int DATABASE_VERSION = 5;
 
     private final Context mContext;
+    private boolean mSafeMode;
 
     private final PackageManager mPackageManager;
     private UserManager mUserManager;
@@ -283,6 +284,10 @@ public class AccountManagerService
         }
     }
 
+    public void setSafeMode(boolean safeMode) {
+        mSafeMode = safeMode;
+    }
+
     public void systemReady() {
     }
 
@@ -381,10 +386,15 @@ public class AccountManagerService
                     final String accountName = cursor.getString(2);
 
                     if (!knownAuth.contains(AuthenticatorDescription.newKey(accountType))) {
-                        Slog.w(TAG, "deleting account " + accountName + " because type "
-                                + accountType + " no longer has a registered authenticator");
-                        db.delete(TABLE_ACCOUNTS, ACCOUNTS_ID + "=" + accountId, null);
-                        accountDeleted = true;
+                        if (mSafeMode) {
+                            Slog.w(TAG, "ignoring account " + accountName + " because type "
+                                    + accountType + " has not registered authenticator (safemode)");
+                        } else {
+                            Slog.w(TAG, "deleting account " + accountName + " because type "
+                                    + accountType + " no longer has a registered authenticator");
+                            db.delete(TABLE_ACCOUNTS, ACCOUNTS_ID + "=" + accountId, null);
+                            accountDeleted = true;
+                        }
                         final Account account = new Account(accountName, accountType);
                         accounts.userDataCache.remove(account);
                         accounts.authTokenCache.remove(account);

@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Карта недействительна.</string>
   <string name="lockscreen_airplane_mode_on">Режим полёта</string>
   <string name="progress_nomediapresent" product="default">Отсутствует внешний накопитель</string>
+  <string name="storage_uicc">Хранилище UICC</string>
   <string name="stk_cc_ussd_to_dial">USSD-запрос преобразован в DIAL-запрос.</string>
   <string name="stk_cc_ussd_to_ss">USSD-запрос преобразован в SS-запрос.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-запрос преобразован в новый USSD-запрос.</string>

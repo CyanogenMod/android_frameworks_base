@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="crop_wallpaper">裁剪牆紙</string>
-  <string name="wallpaper_instructions">設定牆紙</string>
-  <string name="wallpaper_load_fail">無法載入圖片作為牆紙</string>
+  <string name="crop_wallpaper">裁剪桌布</string>
+  <string name="wallpaper_instructions">設定桌布</string>
+  <string name="wallpaper_load_fail">無法載入圖片作為桌布</string>
 </resources>

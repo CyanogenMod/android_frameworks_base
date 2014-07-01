@@ -175,10 +175,11 @@ interface ISms {
      *  broadcast when the message is delivered to the recipient.  The
      *  raw pdu of the status report is in the extended data ("pdu").
      * @param priority Priority level of the message
+     * @param validityPeriod Validity Period of the message in Minutes.
      */
     void sendTextWithOptions(String callingPkg, in String destAddr, in String scAddr,
             in String text, in PendingIntent sentIntent, in PendingIntent deliveryIntent,
-            in int priority);
+            in int priority, in boolean isExpectMore, in int validityPeriod);
 
     /**
      * Send a multi-part text based SMS.
@@ -228,10 +229,12 @@ interface ISms {
      *   to the recipient.  The raw pdu of the status report is in the
      *   extended data ("pdu").
      * @param priority Priority level of the message
+     * @param validityPeriod Validity Period of the message in Minutes.
      */
     void sendMultipartTextWithOptions(String callingPkg, in String destinationAddress,
             in String scAddress, in List<String> parts, in List<PendingIntent> sentIntents,
-            in List<PendingIntent> deliveryIntents, in int priority);
+            in List<PendingIntent> deliveryIntents, in int priority, in boolean isExpectMore,
+            in int validityPeriod);
 
     /**
      * Enable reception of cell broadcast (SMS-CB) messages with the given

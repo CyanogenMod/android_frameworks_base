@@ -1046,7 +1046,12 @@ void OpenGLRenderer::composeLayer(sp<Snapshot> current, sp<Snapshot> previous) {
 
     bool clipRequired = false;
     quickRejectNoScissor(rect, &clipRequired); // safely ignore return, should never be rejected
+#ifdef QCOM_HARDWARE
+    //Always enabling the scissor
+    mCaches.setScissorEnabled(true);
+#else
     mCaches.setScissorEnabled(mScissorOptimizationDisabled || clipRequired);
+#endif
 
     if (fboLayer) {
         endTiling();

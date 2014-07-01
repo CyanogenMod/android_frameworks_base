@@ -1375,6 +1375,22 @@ public abstract class PackageManager {
             = "android.content.pm.extra.PERMISSION_LIST";
 
     /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has set to protected status
+     *
+     * @hide
+     */
+    public static final boolean COMPONENT_PROTECTED_STATUS = false;
+
+    /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has been explicitly set to visible status
+     *
+     * @hide
+     */
+    public static final boolean COMPONENT_VISIBLE_STATUS = true;
+
+    /**
      * Retrieve overall information about an application package that is
      * installed on the system.
      * <p>
@@ -2616,6 +2632,16 @@ public abstract class PackageManager {
             throws NameNotFoundException;
 
     /** @hide */
+    public abstract Resources getThemedResourcesForApplication(ApplicationInfo app,
+                                                               String themePkgName)
+            throws NameNotFoundException;
+
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplication(String appPackageName,
+                                                               String themePkgName)
+            throws NameNotFoundException;
+
+    /** @hide */
     public abstract Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
             throws NameNotFoundException;
 
@@ -3261,4 +3287,10 @@ public abstract class PackageManager {
      * @hide
      */
     public abstract void updateIconMaps(String pkgName);
+
+    /**
+     * Update Component protection state
+     * @hide
+     */
+    public abstract void setComponentProtectedSetting(ComponentName componentName, boolean newState);
 }

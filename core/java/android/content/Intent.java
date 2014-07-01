@@ -2191,6 +2191,19 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.HEADSET_PLUG";
 
     /**
+     * Broadcast Action: WiFi Display video is enabled or disabled
+     *
+     * <p>The intent will have the following extra values:
+     * <ul>
+     *   <li><em>state</em> - 0 for disabled, 1 for enabled. </li>
+     * </ul>
+     * @hide
+     */
+
+    public static final String ACTION_WIFI_DISPLAY_VIDEO =
+            "org.codeaurora.intent.action.WIFI_DISPLAY_VIDEO";
+
+    /**
      * Broadcast Action: An analog audio speaker/headset plugged in or unplugged.
      *
      * <p>The intent will have the following extra values:
@@ -2660,14 +2673,6 @@ public class Intent implements Parcelable, Cloneable {
      * @hide
      */
     public static final String ACTION_GLOBAL_BUTTON = "android.intent.action.GLOBAL_BUTTON";
-
-    /**
-     * Broadcast Action: let apps know when a package is going to be removed.  This is useful
-     * for switching to default theme if the package being removed is the current applied theme.
-     * @hide
-     */
-    public static final String ACTION_PACKAGE_BEING_REMOVED =
-            "android.intent.action.PACKAGE_BEING_REMOVED";
 
     /**
      * Activity Action: Allow the user to select and return one or more existing

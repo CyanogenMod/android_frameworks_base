@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">Επιτρέπει σε μια εφαρμογή την αλλαγή των αριθμών τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
   <string name="permlab_accessThemeService">πρόσβαση στην υπηρεσία θεμάτων</string>
   <string name="permdesc_accessThemeService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία θεμάτων. Δεν πρέπει να απαιτείται από κανονικές εφαρμογές.</string>
+  <string name="permlab_readThemes">ανάγνωση πληροφοριών του θέματος σας</string>
+  <string name="permdesc_readThemesDesc">Επιτρέπει στην εφαρμογή να διαβάζει τα θέματα σας και να προσδιορίσει ποιο θέμα έχετε εφαρμόσει.</string>
+  <string name="permlab_writeThemes">τροποποίηση των θεμάτων σας</string>
+  <string name="permdesc_writeThemesDesc">Επιτρέπει στην εφαρμογή να εισάγει νέα θέματα και να τροποποιήσει το θέμα που έχετε εφαρμόσει.</string>
   <string name="permlab_setKeyguardWallpaper">ορισμός ταπετσαρίας οθόνης κλειδώματος</string>
   <string name="permdesc_setKeyguardWallpaper">Επιτρέπει σε μια εφαρμογή την αλλαγή της ταπετσαρίας της οθόνης κλειδώματος.</string>
+  <string name="permlab_useHardwareFramework">χρήση του πλαισίου υλικού</string>
+  <string name="permdesc_useHardwareFramework">Επιτρέπει σε μια εφαρμογή την πρόσβαση στο πλαίσιο υλικού του CM.</string>
   <string name="immersive_mode_confirmation_bottom">Σύρετε από το κάτω μέρος προς τα πάνω για να βγείτε από την πλήρη οθόνη</string>
   <string name="app_ops_access_camera">πρόσβαση στην φωτογρ. μηχανή</string>
   <string name="app_ops_access_location">πρόσβαση στην τοποθεσία σας</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">έλεγχο της έντασης φωνητικής κλήσης</string>
   <string name="app_ops_write_mms">εγγραφή ενός μηνύματος MMS</string>
   <string name="app_ops_write_sms">εγγραφή ενός μηνύματος SMS</string>
+  <string name="notify_turn_wifi_off_title">Απενεργοποίηση Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Προστασία Απορρήτου</string>
   <string name="privacy_guard_dialog_summary">Το <xliff:g id="app">%1$s</xliff:g> ζητά: <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Απομνημόνευση της επιλογής μου</string>
+  <string name="adb_net_active_notification_title">ADB μέσω δικτύου ενεργοποιημένο</string>
+  <string name="adb_both_active_notification_title">ADB μέσω USB &amp; δικτύου ενεργοποιημένο</string>
+  <string name="adb_active_generic_notification_message">Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων.</string>
 </resources>

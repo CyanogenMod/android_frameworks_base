@@ -50,6 +50,8 @@ import android.database.ContentObserver;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
+import android.net.http.CertificateChainValidator;
+import android.net.http.SslError;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -83,10 +85,12 @@ import com.android.internal.util.XmlUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
@@ -118,6 +122,8 @@ public class AudioService extends IAudioService.Stub {
     protected static final boolean DEBUG_RC = false;
     /** Debug volumes */
     protected static final boolean DEBUG_VOL = false;
+    /** Debug cert verification */
+    private static final boolean DEBUG_CERTS = false;
 
     /** How long to delay before persisting a change in volume/ringer mode. */
     private static final int PERSIST_DELAY = 500;
@@ -457,6 +463,8 @@ public class AudioService extends IAudioService.Stub {
 
     private PowerManager.WakeLock mAudioEventWakeLock;
 
+    private TelephonyManager mTelephonyManager;
+
     private final MediaFocusControl mMediaFocusControl;
 
     // Reference to BluetoothA2dp to query for AbsoluteVolume.
@@ -482,7 +490,6 @@ public class AudioService extends IAudioService.Stub {
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mAudioEventWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "handleAudioEvent");
-
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = vibrator == null ? false : vibrator.hasVibrator();
 
@@ -495,6 +502,9 @@ public class AudioService extends IAudioService.Stub {
                 com.android.internal.R.integer.config_soundEffectVolumeDb);
 
         mVolumePanel = new VolumePanel(context, this);
+
+        mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
         mForcedUseForComm = AudioSystem.FORCE_NONE;
 
         createAudioSystemThread();
@@ -1644,6 +1654,11 @@ public class AudioService extends IAudioService.Stub {
         synchronized(mSetModeDeathHandlers) {
             if (mode == AudioSystem.MODE_CURRENT) {
                 mode = mMode;
+            }
+
+            if ((mode == AudioSystem.MODE_IN_CALL) &&
+                (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE)) {
+                 AudioSystem.setParameters("in_call=true");
             }
             newModeOwnerPid = setModeInt(mode, cb, Binder.getCallingPid());
         }
@@ -3055,7 +3070,7 @@ public class AudioService extends IAudioService.Stub {
                             device);
         }
 
-        public synchronized boolean setIndex(int index, int device) {
+        public boolean setIndex(int index, int device) {
             int oldIndex = getIndex(device);
             index = getValidIndex(index);
             synchronized (mCameraSoundForced) {
@@ -3063,8 +3078,9 @@ public class AudioService extends IAudioService.Stub {
                     index = mIndexMax;
                 }
             }
-            mIndex.put(device, index);
-
+            synchronized (this) {
+                mIndex.put(device, index);
+            }
             if (oldIndex != index) {
                 // Apply change to all streams using this one as alias
                 // if changing volume of current device, also change volume of current
@@ -4844,6 +4860,43 @@ public class AudioService extends IAudioService.Stub {
                 mPendingVolumeCommand = null;
             }
         }
+    }
+
+    public int verifyX509CertChain(int numcerts, byte [] chain, String domain, String authType) {
+
+        if (DEBUG_CERTS) {
+            Log.v(TAG, "java side verify for "
+                    + numcerts + " certificates (" + chain.length + " bytes"
+                            + ")for "+ domain + "/" + authType);
+        }
+
+        byte[][] certChain = new byte[numcerts][];
+
+        ByteBuffer buf = ByteBuffer.wrap(chain);
+        for (int i = 0; i < numcerts; i++) {
+            int certlen = buf.getInt();
+            if (DEBUG_CERTS) {
+                Log.i(TAG, "cert " + i +": " + certlen);
+            }
+            certChain[i] = new byte[certlen];
+            buf.get(certChain[i]);
+        }
+
+        try {
+            SslError err = CertificateChainValidator.verifyServerCertificates(certChain,
+                    domain, authType);
+            if (DEBUG_CERTS) {
+                Log.i(TAG, "verified: " + err);
+            }
+            if (err == null) {
+                return -1;
+            } else {
+                return err.getPrimaryError();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "failed to verify chain: " + e);
+        }
+        return SslError.SSL_INVALID;
     }
 
 

@@ -76,8 +76,14 @@
   <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
   <string name="permlab_accessThemeService">访问主题服务</string>
   <string name="permdesc_accessThemeService">允许应用访问主题服务。正常应用不应需要此权限。</string>
+  <string name="permlab_readThemes">读取您的主题信息</string>
+  <string name="permdesc_readThemesDesc">允许程序读取您的主题并确定您已使用的主题。</string>
+  <string name="permlab_writeThemes">修改您的主题</string>
+  <string name="permdesc_writeThemesDesc">允许程序修改您已经使用的主题，并插入新的主题。</string>
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
+  <string name="permlab_useHardwareFramework">使用硬件框架</string>
+  <string name="permdesc_useHardwareFramework">允许应用访问 CM 硬件框架。</string>
   <string name="immersive_mode_confirmation_bottom">从底部上划以退出全屏模式。</string>
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>
@@ -119,7 +125,11 @@
   <string name="app_ops_use_voice_volume">控制语音通话音量</string>
   <string name="app_ops_write_mms">编写彩信</string>
   <string name="app_ops_write_sms">编写短信</string>
+  <string name="notify_turn_wifi_off_title">关闭 WLAN</string>
   <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
   <string name="permission_remember_choice">记住我的选择</string>
+  <string name="adb_net_active_notification_title">网络 ADB 调试已启用</string>
+  <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
+  <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
 </resources>

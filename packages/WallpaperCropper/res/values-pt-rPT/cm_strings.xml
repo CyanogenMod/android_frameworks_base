@@ -20,10 +20,10 @@
     <item quantity="one">%1$d selecionado</item>
     <item quantity="other">%1$d selecionados</item>
   </plurals>
-  <string name="wallpaper_accessibility_name">Papel de parede %1$d de %2$d</string>
-  <string name="announce_selection">Selecionado <xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g></string>
+  <string name="wallpaper_accessibility_name">Imagem de fundo %1$d de %2$d</string>
+  <string name="announce_selection">Selecionada <xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g></string>
   <string name="wallpaper_delete">Eliminar</string>
   <string name="pick_image">Escolher imagem</string>
-  <string name="pick_wallpaper">Papéis de parede</string>
+  <string name="pick_wallpaper">Imagens de fundo</string>
   <string name="activity_not_found">A aplicação não está instalada.</string>
 </resources>

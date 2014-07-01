@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">Memungkinkan aplikasi untuk mengubah nomor telepon yang diblokir untuk panggilan atau pesan.</string>
   <string name="permlab_accessThemeService">mengakses layanan tema</string>
   <string name="permdesc_accessThemeService">Memungkinkan aplikasi untuk mengakses layanan tema. Seharusnya tidak diperlukan oleh aplikasi biasa.</string>
+  <string name="permlab_readThemes">baca info tema Anda</string>
+  <string name="permdesc_readThemesDesc">Izinkan aplikasi untuk membaca tema anda dan menentukan tema yang telah anda terapkan.</string>
+  <string name="permlab_writeThemes">modifikasi tema anda</string>
+  <string name="permdesc_writeThemesDesc">Izinkan aplikasi untuk memasukkan tema baru dan mengubah tema yang telah anda terapkan.</string>
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah wallpaper layar kunci.</string>
+  <string name="permlab_useHardwareFramework">gunakan hardware framework</string>
+  <string name="permdesc_useHardwareFramework">Izinkan app untuk mengakses framework hardware CM.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe dari bawah ke atas untuk keluar dari layar penuh.</string>
   <string name="app_ops_access_camera">mengakses kamera</string>
   <string name="app_ops_access_location">mengakses lokasi anda</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">mengatur volume panggilan suara</string>
   <string name="app_ops_write_mms">tulis pesan MMS</string>
   <string name="app_ops_write_sms">tulis pesan SMS</string>
+  <string name="notify_turn_wifi_off_title">Nonaktifkan Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Penjaga Privasi</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ingin <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Ingat pilihan saya</string>
+  <string name="adb_net_active_notification_title">ADB melalui jaringan diaktifkan</string>
+  <string name="adb_both_active_notification_title">ADB melalui USB &amp; jaringan diaktifkan</string>
+  <string name="adb_active_generic_notification_message">Sentuh untuk menonaktifkan debug.</string>
 </resources>

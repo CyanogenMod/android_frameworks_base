@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">البطاقة غير صالحة.</string>
   <string name="lockscreen_airplane_mode_on">نمط الطيران</string>
   <string name="progress_nomediapresent" product="default">لاتوجد وسائط قابلة للإزالة في الوقت الحالى \u2026</string>
+  <string name="storage_uicc">تخزين UICC</string>
   <string name="stk_cc_ussd_to_dial">يتم تعديل الطلب USSD لطلب الاتصال الهاتفي.</string>
   <string name="stk_cc_ussd_to_ss">يتم تعديل الطلب USSD لطلب الاتصال الهاتفي.</string>
   <string name="stk_cc_ussd_to_ussd">يتم تعديل الطلب USSD لطلب جديد (ussd).</string>

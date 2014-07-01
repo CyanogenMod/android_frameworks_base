@@ -255,6 +255,8 @@
     <protected-broadcast
         android:name="com.android.server.connectivityservice.CONNECTED_TO_PROVISIONING_NETWORK_ACTION" />
 
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
     <!-- ====================================== -->
@@ -1073,8 +1075,9 @@
         android:permissionGroupFlags="personalInfo"
         android:priority="370" />
 
-    <!-- Allows an application to monitor, modify, or abort outgoing
-         calls. -->
+    <!-- Allows an application to see the number being dialed during an outgoing
+         call with the option to redirect the call to a different number or
+         abort the call altogether. -->
     <permission android:name="android.permission.PROCESS_OUTGOING_CALLS"
         android:permissionGroup="android.permission-group.PHONE_CALLS"
         android:protectionLevel="dangerous"
@@ -1208,7 +1211,7 @@
         android:permissionGroup="android.permission-group.STORAGE"
         android:label="@string/permlab_manageDocs"
         android:description="@string/permdesc_manageDocs"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature" />
 
     <!-- ================================== -->
     <!-- Permissions for screenlock         -->
@@ -1551,7 +1554,7 @@
         @hide -->
     <permission android:name="android.permission.FORCE_STOP_PACKAGES"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="signature"
+        android:protectionLevel="signature|system"
         android:label="@string/permlab_forceStopPackages"
         android:description="@string/permdesc_forceStopPackages" />
 
@@ -1889,7 +1892,7 @@
     <permission android:name="android.permission.INJECT_EVENTS"
         android:label="@string/permlab_injectEvents"
         android:description="@string/permdesc_injectEvents"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signatureOrSystem" />
 
     <!-- @hide Allows an application to register an input filter which filters the stream
          of user events (keys, touch, trackball) before they are dispatched to any window. -->
@@ -2587,6 +2590,23 @@
     <permission android:name="android.permission.ACCESS_THEME_MANAGER"
         android:label="@string/permlab_accessThemeService"
         android:description="@string/permdesc_accessThemeService"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to read the current theme configuration and
+         get information about the various themes currently installed
+         @hide -->
+    <permission android:name="android.permission.READ_THEMES"
+        android:label="@string/permlab_readThemes"
+        android:description="@string/permdesc_readThemesDesc"
+        android:protectionLevel="normal" />
+
+    <!-- Allows an application to write the current theme configuration and
+         write information about the various themes currently installed.
+         Changing themes should be done through the service ACCESS_THEME_MANAGER
+         @hide -->
+    <permission android:name="android.permission.WRITE_THEMES"
+        android:label="@string/permlab_writeThemes"
+        android:description="@string/permdesc_writeThemesDesc"
         android:protectionLevel="signature" />
 
     <!-- Allows an application access the CM hardware abstraction framework (DANGEROUS)

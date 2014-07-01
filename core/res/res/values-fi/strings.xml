@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"poista pikakuvakkeita"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Antaa sovelluksen poistaa aloitusruudun pikakuvakkeita ilman käyttäjän toimia."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"ohjaa uudelleen lähtevät puhelut"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Antaa sovelluksen käsitellä lähteviä puheluita ja muuttaa kohdenumeroita. Sovellus voi valvoa, uudelleenohjata tai estää lähteviä puheluita."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Sallii sovelluksen nähdä numeron, joka valitaan lähtevää puhelua soitettaessa, ja antaa mahdollisuuden ohjata puhelun eri numeroon tai keskeyttää puhelun kokonaan."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"vastaanota tekstiviestejä (teksti)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Antaa sovelluksen vastaanottaa ja käsitellä tekstiviestejä. Sovellus voi valvoa tai poistaa laitteeseesi lähetettyjä viestejä näyttämättä niitä sinulle."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"vastaanota tekstiviestejä (multimedia)"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Koti"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Työ"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Muu"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Tämän kontaktin katselemiseen ei löydy sovellusta."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Anna PIN-koodi"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Anna PUK-koodi ja uusi PIN-koodi"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK-koodi"</string>

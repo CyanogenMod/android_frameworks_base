@@ -17,7 +17,7 @@
 <resources>
   <string name="app_label">Shell</string>
   <string name="bugreport_finished_title">Feelerbericht opgefaangen</string>
-  <string name="bugreport_finished_text">Dréck fir de Feelerbericht ze deelen</string>
+  <string name="bugreport_finished_text">Drécke fir de Feelerbericht ze deelen</string>
   <string name="bugreport_confirm">Feelerberichter enthalen Daten aus de verschiddene Protokollfichiere vum System, dorënner perséinlech a privat Informatiounen. Deel just Feelerberichter mat Appen a Leit deenen s du traus.</string>
   <string name="bugreport_confirm_repeat">Weis dëse Message déi nächst Kéier un</string>
 </resources>

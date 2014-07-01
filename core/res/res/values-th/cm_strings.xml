@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">อนุญาตให้แอปเปลี่ยนหมายเลขที่ถูกบล็อคข้อความหรือสายเรียกเข้า</string>
   <string name="permlab_accessThemeService">เข้าถึงธีม</string>
   <string name="permdesc_accessThemeService">อนุญาตให้แอปยี้เจ้าถึงธีมได้ ซึ่งไม่ควรจะมีในแอปปกติ</string>
+  <string name="permlab_readThemes">อ่านรายละเอียดชุดรูปแบบของคุณ</string>
+  <string name="permdesc_readThemesDesc">อนุญาตให้แอปอ่านข้อมูลชุดรูปแบบของคุณและกำหนดชุดรูปแบบที่คุณใช้ได้</string>
+  <string name="permlab_writeThemes">แก้ไขชุดรูปแบบของคุณ</string>
+  <string name="permdesc_writeThemesDesc">อณุญาตให้แอปเพิ่มชุดรูปแบบใหม่และแก้ไขชุดรูปแบบของคุณได้</string>
   <string name="permlab_setKeyguardWallpaper">ตั้งภาพล็อคหน้าจอ</string>
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
+  <string name="permlab_useHardwareFramework">ใช้ฮาร์ดแวร์เฟรมเวิร์ค</string>
+  <string name="permdesc_useHardwareFramework">อนุญาตให้แอปเข้าถึง CM ฮาร์ดแวร์เฟรมเวิร์ค</string>
   <string name="immersive_mode_confirmation_bottom">ปัดขึ้นจากด้านล่างเพื่อออกจากรูปแบบเต็มจอ</string>
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งของคุณ</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">ควบคุมเสียงสนทนา</string>
   <string name="app_ops_write_mms">เขียนข้อความ MMS</string>
   <string name="app_ops_write_sms">เขียนข้อความ SMS</string>
+  <string name="notify_turn_wifi_off_title">ปิด Wi-Fi</string>
   <string name="privacy_guard_dialog_title">ป้องกันความเป็นส่วนตัว</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ต้องการ <xliff:g id="op">%2$s</xliff:g></string>
   <string name="permission_remember_choice">จำค่าตัวเลือกของฉัน</string>
+  <string name="adb_net_active_notification_title">ADB บนเครือข่ายถูกเปิดใช้งาน</string>
+  <string name="adb_both_active_notification_title">ADB บน USB และ &amp; เครือข่ายถูกเปิดใช้งาน</string>
+  <string name="adb_active_generic_notification_message">แตะเพื่อปิดใช้งานการแก้ไขข้อบกพร่อง</string>
 </resources>

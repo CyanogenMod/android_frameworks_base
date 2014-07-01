@@ -43,10 +43,10 @@
   <string name="reboot_progress">再起動中\u2026</string>
   <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
   <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
-  <string name="permlab_preventpower">電源キーを使用しない</string>
-  <string name="permdesc_preventpower">電源キーを無効にすることをアプリに許可します。</string>
+  <string name="permlab_preventpower">電源キーを無効にする</string>
+  <string name="permdesc_preventpower">電源キーの無効化をアプリに許可します。</string>
   <string name="permlab_sendMockSms">疑似SMSメッセージの送信</string>
-  <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリケーションに許可します。これによりアプリケーションは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリケーションが連続的にメッセージを送信したり、通知を阻止したり、ユーザーを混乱させるおそれがあります。</string>
+  <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリに許可します。これによりアプリは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリが連続的にメッセージを送信したり、通知を阻止したり、ユーザーを混乱させるおそれがあります。</string>
   <string name="storage_sd_dock_card">SDカードを接続</string>
   <string name="app_killed_message">アプリを終了しました</string>
   <string name="global_action_reboot">再起動</string>
@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">着信やメッセージをブロックしている電話番号の変更をアプリに許可します。</string>
   <string name="permlab_accessThemeService">テーマサービスへのアクセス</string>
   <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリでは使用しません。</string>
+  <string name="permlab_readThemes">テーマ情報の読み取り</string>
+  <string name="permdesc_readThemesDesc">テーマの読み取りや適応しているテーマの特定をアプリに許可します。</string>
+  <string name="permlab_writeThemes">テーマの変更</string>
+  <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適応しているテーマの変更をアプリに許可します。</string>
   <string name="permlab_setKeyguardWallpaper">キーガードの壁紙の設定</string>
   <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
+  <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
+  <string name="permdesc_useHardwareFramework">CMハードウェアフレームワークへのアクセスをアプリに許可します。</string>
   <string name="immersive_mode_confirmation_bottom">全画面表示を終了するには、上から下にスワイプ</string>
   <string name="app_ops_access_camera">カメラへのアクセス</string>
   <string name="app_ops_access_location">位置情報へのアクセス</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">音声の音量の制御</string>
   <string name="app_ops_write_mms">MMSメッセージの書き込み</string>
   <string name="app_ops_write_sms">SMSメッセージの書き込み</string>
+  <string name="notify_turn_wifi_off_title">Wi-FiをOFFにする</string>
   <string name="privacy_guard_dialog_title">プライバシーガード</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>を試みようとしています。</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>をしようとしています。</string>
   <string name="permission_remember_choice">選択を記憶する</string>
+  <string name="adb_net_active_notification_title">ネットワーク経由のADBが有効です</string>
+  <string name="adb_both_active_notification_title">USBとネットワーク経由のADBが有効です。</string>
+  <string name="adb_active_generic_notification_message">タップしてデバッグを無効にします。</string>
 </resources>

@@ -74,9 +74,15 @@
   <string name="permlab_changePhoneBlacklist">zwarte lijst aanpassen</string>
   <string name="permdesc_changePhoneBlacklist">Hiermee kan de app telefoonnummers aanpassen waarvan inkomende oproepen of berichten zijn geblokkeerd.</string>
   <string name="permlab_accessThemeService">toegang tot themaservice</string>
-  <string name="permdesc_accessThemeService">Hiermee krijgt de app toegang tot de themaservice. Nooit vereist voor normale apps.</string>
+  <string name="permdesc_accessThemeService">Hiermee kan de app toegang krijgen tot de themaservice. Nooit vereist voor normale apps.</string>
+  <string name="permlab_readThemes">informatie over uw thema\'s lezen</string>
+  <string name="permdesc_readThemesDesc">Hiermee kan de app informatie lezen over uw thema\'s en bepalen welk thema u hebt toegepast.</string>
+  <string name="permlab_writeThemes">uw thema\'s aanpassen</string>
+  <string name="permdesc_writeThemesDesc">Hiermee kan de app nieuwe thema\'s invoegen en wijzigen welk thema u hebt toegepast.</string>
   <string name="permlab_setKeyguardWallpaper">achtergrond van vergrendelingsscherm instellen</string>
   <string name="permdesc_setKeyguardWallpaper">Hiermee kan een app de achtergrond van het vergrendelingsscherm aanpassen.</string>
+  <string name="permlab_useHardwareFramework">hardware-framework gebruiken</string>
+  <string name="permdesc_useHardwareFramework">Hiermee kan de app toegang krijgen tot het hardware-framework van CyanogenMod.</string>
   <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
   <string name="app_ops_access_camera">toegang tot camera</string>
   <string name="app_ops_access_location">toegang tot uw locatie</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">stemvolume beheren</string>
   <string name="app_ops_write_mms">mms-bericht schrijven</string>
   <string name="app_ops_write_sms">sms-bericht schrijven</string>
+  <string name="notify_turn_wifi_off_title">Wifi uitschakelen</string>
   <string name="privacy_guard_dialog_title">Privacybescherming</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> wil <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Keuze onthouden</string>
+  <string name="adb_net_active_notification_title">ADB over netwerk ingeschakeld</string>
+  <string name="adb_both_active_notification_title">ADB over USB &amp; netwerk ingeschakeld</string>
+  <string name="adb_active_generic_notification_message">Tik om foutopsporing uit te schakelen.</string>
 </resources>

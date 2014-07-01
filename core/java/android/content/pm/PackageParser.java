@@ -53,7 +53,6 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -659,15 +658,19 @@ public class PackageParser {
 
         try {
             final ZipFile privateZip = new ZipFile(originalFile.getPath());
-            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
-            while (privateZipEntries.hasMoreElements()) {
-                final ZipEntry zipEntry = privateZipEntries.nextElement();
-                final String zipEntryName = zipEntry.getName();
+            try {
+                final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+                while (privateZipEntries.hasMoreElements()) {
+                    final ZipEntry zipEntry = privateZipEntries.nextElement();
+                    final String zipEntryName = zipEntry.getName();
 
-                if (zipEntryName.startsWith(OVERLAY_PATH) && zipEntryName.length() > 16) {
-                    String[] subdirs = zipEntryName.split("/");
-                    overlayTargets.add(subdirs[2]);
+                    if (zipEntryName.startsWith(OVERLAY_PATH) && zipEntryName.length() > 16) {
+                        String[] subdirs = zipEntryName.split("/");
+                        overlayTargets.add(subdirs[2]);
+                    }
                 }
+            } finally {
+                privateZip.close();
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -682,14 +685,19 @@ public class PackageParser {
     private boolean packageHasIconPack(File originalFile) {
         try {
             final ZipFile privateZip = new ZipFile(originalFile.getPath());
-            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
-            while (privateZipEntries.hasMoreElements()) {
-                final ZipEntry zipEntry = privateZipEntries.nextElement();
-                final String zipEntryName = zipEntry.getName();
+            try {
+                final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+                while (privateZipEntries.hasMoreElements()) {
+                    final ZipEntry zipEntry = privateZipEntries.nextElement();
+                    final String zipEntryName = zipEntry.getName();
 
-                if (zipEntryName.startsWith(ICON_PATH) && zipEntryName.length() > ICON_PATH.length()) {
-                    return true;
+                    if (zipEntryName.startsWith(ICON_PATH)
+                            && zipEntryName.length() > ICON_PATH.length()) {
+                        return true;
+                    }
                 }
+            } finally {
+                privateZip.close();
             }
         } catch(Exception e) {
             Log.e(TAG, "Could not read zip entries while checking if apk has icon pack", e);
@@ -798,7 +806,6 @@ public class PackageParser {
      * @return True if the asset was successfully processed
      */
     private Map<String, String> getResourceRedirections(String name, String pkg, Resources themeResources, String themePkgName) {
-        AssetManager am = themeResources.getAssets();
         if (!name.startsWith("res/"))
             name = "res/" + name;
         if (!name.endsWith(".xml"))
@@ -1234,6 +1241,9 @@ public class PackageParser {
         // Only search the tree when the tag is directly below <manifest>
         final int searchDepth = parser.getDepth() + 1;
 
+        // Search for category and actions inside <intent-filter>
+        final int iconPackSearchDepth = parser.getDepth() + 4;
+
         final List<VerifierInfo> verifiers = new ArrayList<VerifierInfo>();
         boolean isTheme = false;
 
@@ -1265,9 +1275,35 @@ public class PackageParser {
                 isTheme = true;
                 installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
             }
+
+            if (parser.getDepth() == iconPackSearchDepth && isLegacyIconPack(parser)) {
+                isTheme = true;
+                installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
+            }
         }
 
         return new PackageLite(pkgName.intern(), versionCode, installLocation, verifiers, isTheme);
+    }
+
+    private static boolean isLegacyIconPack(XmlPullParser parser) {
+        boolean isAction = "action".equals(parser.getName());
+        boolean isCategory = "category".equals(parser.getName());
+        String[] items = isAction ? ThemeUtils.sSupportedActions :
+                (isCategory ? ThemeUtils.sSupportedCategories : null);
+
+        if (items != null) {
+            for (int i = 0; i < parser.getAttributeCount(); i++) {
+                if ("name".equals(parser.getAttributeName(i))) {
+                    final String value = parser.getAttributeValue(i);
+                    for (String item : items) {
+                        if (item.equals(value)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -4244,6 +4280,12 @@ public class PackageParser {
                 && p.usesLibraryFiles != null) {
             return true;
         }
+        if (state.protectedComponents != null) {
+            boolean protect = state.protectedComponents.size() > 0;
+            if (p.applicationInfo.protect != protect) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -4277,6 +4319,9 @@ public class PackageParser {
             ai.enabled = false;
         }
         ai.enabledSetting = state.enabled;
+        if (state.protectedComponents != null) {
+            ai.protect = state.protectedComponents.size() > 0;
+        }
     }
 
     public static ApplicationInfo generateApplicationInfo(Package p, int flags,

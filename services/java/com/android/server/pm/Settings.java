@@ -101,6 +101,8 @@ final class Settings {
     private static final String TAG_ITEM = "item";
     private static final String TAG_DISABLED_COMPONENTS = "disabled-components";
     private static final String TAG_ENABLED_COMPONENTS = "enabled-components";
+    private static final String TAG_PROTECTED_COMPONENTS = "protected-components";
+    private static final String TAG_VISIBLE_COMPONENTS = "visible-components";
     private static final String TAG_PACKAGE_RESTRICTIONS = "package-restrictions";
     private static final String TAG_PACKAGE = "pkg";
 
@@ -482,7 +484,7 @@ final class Settings {
                                     true, // stopped,
                                     true, // notLaunched
                                     false, // blocked
-                                    null, null, null);
+                                    null, null, null, null, null);
                             writePackageRestrictionsLPr(user.id);
                         }
                     }
@@ -881,7 +883,7 @@ final class Settings {
                                 false,  // stopped
                                 false,  // notLaunched
                                 false,  // blocked
-                                null, null, null);
+                                null, null, null, null, null);
                     }
                     return;
                 }
@@ -943,6 +945,8 @@ final class Settings {
 
                     HashSet<String> enabledComponents = null;
                     HashSet<String> disabledComponents = null;
+                    HashSet<String> protectedComponents = null;
+                    HashSet<String> visibleComponents = null;
 
                     int packageDepth = parser.getDepth();
                     while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
@@ -957,11 +961,16 @@ final class Settings {
                             enabledComponents = readComponentsLPr(parser);
                         } else if (tagName.equals(TAG_DISABLED_COMPONENTS)) {
                             disabledComponents = readComponentsLPr(parser);
+                        } else if (tagName.equals(TAG_PROTECTED_COMPONENTS)) {
+                            protectedComponents = readComponentsLPr(parser);
+                        } else if (tagName.equals(TAG_VISIBLE_COMPONENTS)) {
+                            visibleComponents = readComponentsLPr(parser);
                         }
                     }
 
                     ps.setUserState(userId, enabled, installed, stopped, notLaunched, blocked,
-                            enabledCaller, enabledComponents, disabledComponents);
+                            enabledCaller, enabledComponents, disabledComponents,
+                            protectedComponents, visibleComponents);
                 } else if (tagName.equals("preferred-activities")) {
                     readPreferredActivitiesLPw(parser, userId);
                 } else {
@@ -1072,7 +1081,11 @@ final class Settings {
                         || (ustate.enabledComponents != null
                                 && ustate.enabledComponents.size() > 0)
                         || (ustate.disabledComponents != null
-                                && ustate.disabledComponents.size() > 0)) {
+                                && ustate.disabledComponents.size() > 0)
+                        || (ustate.protectedComponents != null
+                                && ustate.protectedComponents.size() > 0)
+                        || (ustate.visibleComponents != null
+                                && ustate.visibleComponents.size() > 0)) {
                     serializer.startTag(null, TAG_PACKAGE);
                     serializer.attribute(null, ATTR_NAME, pkg.name);
                     if (DEBUG_MU) Log.i(TAG, "  pkg=" + pkg.name + ", state=" + ustate.enabled);
@@ -1116,6 +1129,26 @@ final class Settings {
                             serializer.endTag(null, TAG_ITEM);
                         }
                         serializer.endTag(null, TAG_DISABLED_COMPONENTS);
+                    }
+                    if (ustate.protectedComponents != null
+                            && ustate.protectedComponents.size() > 0) {
+                        serializer.startTag(null, TAG_PROTECTED_COMPONENTS);
+                        for (final String name : ustate.protectedComponents) {
+                            serializer.startTag(null, TAG_ITEM);
+                            serializer.attribute(null, ATTR_NAME, name);
+                            serializer.endTag(null, TAG_ITEM);
+                        }
+                        serializer.endTag(null, TAG_PROTECTED_COMPONENTS);
+                    }
+                    if (ustate.visibleComponents != null
+                            && ustate.visibleComponents.size() > 0) {
+                        serializer.startTag(null, TAG_VISIBLE_COMPONENTS);
+                        for (final String name : ustate.visibleComponents) {
+                            serializer.startTag(null, TAG_ITEM);
+                            serializer.attribute(null, ATTR_NAME, name);
+                            serializer.endTag(null, TAG_ITEM);
+                        }
+                        serializer.endTag(null, TAG_VISIBLE_COMPONENTS);
                     }
                     serializer.endTag(null, TAG_PACKAGE);
                 }
@@ -2681,8 +2714,10 @@ final class Settings {
         FileUtils.setPermissions(path.toString(), FileUtils.S_IRWXU | FileUtils.S_IRWXG
                 | FileUtils.S_IXOTH, -1, -1);
         for (PackageSetting ps : mPackages.values()) {
+            boolean installed = ((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0) ||
+                    (ps.pkg.mIsThemeApk || ps.pkg.mIsLegacyThemeApk || ps.pkg.mIsLegacyIconPackApk);
             // Only system apps are initially installed.
-            ps.setInstalled((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0, userHandle);
+            ps.setInstalled(installed, userHandle);
             // Need to create a data directory for all apps under this user.
             installer.createUserData(ps.name,
                     UserHandle.getUid(userHandle, ps.appId), userHandle,
@@ -2898,8 +2933,44 @@ final class Settings {
         ApplicationInfo.FLAG_CANT_SAVE_STATE, "CANT_SAVE_STATE",
     };
 
-    void dumpPackageLPr(PrintWriter pw, String prefix, PackageSetting ps, SimpleDateFormat sdf,
-            Date date, List<UserInfo> users) {
+    void dumpPackageLPr(PrintWriter pw, String prefix, String checkinTag, PackageSetting ps,
+            SimpleDateFormat sdf, Date date, List<UserInfo> users) {
+        if (checkinTag != null) {
+            pw.print(checkinTag);
+            pw.print(",");
+            pw.print(ps.realName != null ? ps.realName : ps.name);
+            pw.print(",");
+            pw.print(ps.appId);
+            pw.print(",");
+            pw.print(ps.versionCode);
+            pw.print(",");
+            pw.print(ps.firstInstallTime);
+            pw.print(",");
+            pw.print(ps.lastUpdateTime);
+            pw.print(",");
+            pw.print(ps.installerPackageName != null ? ps.installerPackageName : "?");
+            pw.println();
+            for (UserInfo user : users) {
+                pw.print(checkinTag);
+                pw.print("-");
+                pw.print("usr");
+                pw.print(",");
+                pw.print(user.id);
+                pw.print(",");
+                pw.print(ps.getInstalled(user.id) ? "I" : "i");
+                pw.print(ps.getBlocked(user.id) ? "B" : "b");
+                pw.print(ps.getStopped(user.id) ? "S" : "s");
+                pw.print(ps.getNotLaunched(user.id) ? "l" : "L");
+                pw.print(",");
+                pw.print(ps.getEnabled(user.id));
+                String lastDisabledAppCaller = ps.getLastDisabledAppCaller(user.id);
+                pw.print(",");
+                pw.print(lastDisabledAppCaller != null ? lastDisabledAppCaller : "?");
+                pw.println();
+            }
+            return;
+        }
+
         pw.print(prefix); pw.print("Package [");
             pw.print(ps.realName != null ? ps.realName : ps.name);
             pw.print("] (");
@@ -3061,7 +3132,7 @@ final class Settings {
         }
     }
 
-    void dumpPackagesLPr(PrintWriter pw, String packageName, DumpState dumpState) {
+    void dumpPackagesLPr(PrintWriter pw, String packageName, DumpState dumpState, boolean checkin) {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Date date = new Date();
         boolean printedSomething = false;
@@ -3072,35 +3143,39 @@ final class Settings {
                 continue;
             }
 
-            if (packageName != null) {
+            if (!checkin && packageName != null) {
                 dumpState.setSharedUser(ps.sharedUser);
             }
 
-            if (!printedSomething) {
+            if (!checkin && !printedSomething) {
                 if (dumpState.onTitlePrinted())
                     pw.println();
                 pw.println("Packages:");
                 printedSomething = true;
             }
-            dumpPackageLPr(pw, "  ", ps, sdf, date, users);
+            dumpPackageLPr(pw, "  ", checkin ? "pkg" : null, ps, sdf, date, users);
         }
 
         printedSomething = false;
-        if (mRenamedPackages.size() > 0) {
+        if (!checkin && mRenamedPackages.size() > 0) {
             for (final Map.Entry<String, String> e : mRenamedPackages.entrySet()) {
                 if (packageName != null && !packageName.equals(e.getKey())
                         && !packageName.equals(e.getValue())) {
                     continue;
                 }
-                if (!printedSomething) {
-                    if (dumpState.onTitlePrinted())
-                        pw.println();
-                    pw.println("Renamed packages:");
-                    printedSomething = true;
+                if (!checkin) {
+                    if (!printedSomething) {
+                        if (dumpState.onTitlePrinted())
+                            pw.println();
+                        pw.println("Renamed packages:");
+                        printedSomething = true;
+                    }
+                    pw.print("  ");
+                } else {
+                    pw.print("ren,");
                 }
-                pw.print("  ");
                 pw.print(e.getKey());
-                pw.print(" -> ");
+                pw.print(checkin ? " -> " : ",");
                 pw.println(e.getValue());
             }
         }
@@ -3112,13 +3187,13 @@ final class Settings {
                         && !packageName.equals(ps.name)) {
                     continue;
                 }
-                if (!printedSomething) {
+                if (!checkin && !printedSomething) {
                     if (dumpState.onTitlePrinted())
                         pw.println();
                     pw.println("Hidden system packages:");
                     printedSomething = true;
                 }
-                dumpPackageLPr(pw, "  ", ps, sdf, date, users);
+                dumpPackageLPr(pw, "  ", checkin ? "dis" : null, ps, sdf, date, users);
             }
         }
     }

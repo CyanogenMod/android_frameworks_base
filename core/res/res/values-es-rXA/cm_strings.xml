@@ -75,8 +75,14 @@
   <string name="permdesc_changePhoneBlacklist">Permite qu\'una aplicación camude los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
   <string name="permlab_accessThemeService">Accesu al serviciu de temes</string>
   <string name="permdesc_accessThemeService">Permite l\'accesu a una aplicación al Servicio de temes. Enxamás tendría de facer falta p\'aplicaciones normales.</string>
+  <string name="permlab_readThemes">lleer información del tema</string>
+  <string name="permdesc_readThemesDesc">Permite que l\'aplicación llea los temes instalaos y determine qué tema ta aplicáu.</string>
+  <string name="permlab_writeThemes">modificar los temes</string>
+  <string name="permdesc_writeThemesDesc">Permite que l\'aplicación amieste temes nuevos y modifique\'l tema aplicáu.</string>
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
+  <string name="permlab_useHardwareFramework">usar marcu de hardware</string>
+  <string name="permdesc_useHardwareFramework">Permite que l\'aplicación acceda al marcu de hardware de CM.</string>
   <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>
@@ -118,7 +124,11 @@
   <string name="app_ops_use_voice_volume">remanar el volume de la llamada</string>
   <string name="app_ops_write_mms">escribir un mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir un mensaxe SMS</string>
+  <string name="notify_turn_wifi_off_title">Desactivar Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Privacidá</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> quies <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Recordar la mio eleición</string>
+  <string name="adb_net_active_notification_title">ADB sobre rede habilitáu</string>
+  <string name="adb_both_active_notification_title">ADB sobre USB y rede habilitáu</string>
+  <string name="adb_active_generic_notification_message">Toca pa deshabilitar la depuración.</string>
 </resources>

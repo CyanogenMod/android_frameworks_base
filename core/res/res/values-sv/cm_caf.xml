@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Ogiltigt SIM.</string>
   <string name="lockscreen_airplane_mode_on">Flygplansläge</string>
   <string name="progress_nomediapresent" product="default">Inget flyttbart media tillgängligt\u2026</string>
+  <string name="storage_uicc">UICC-lagring</string>
   <string name="stk_cc_ussd_to_dial">USSD-begäran ändras till DIAL-begäran.</string>
   <string name="stk_cc_ussd_to_ss">USSD-begäran ändras till SS-begäran.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-begäran ändras till ny USSD-begäran.</string>

@@ -161,8 +161,8 @@
     <string name="data_usage_disabled_dialog_title" msgid="2086815304858964954">"Duomenys neleidžiami"</string>
     <string name="data_usage_disabled_dialog" msgid="3853117269051806280">"Pasiekėte nurodytą duomenų naudojimo apribojimą.\n\nJei iš naujo įgalinsite duomenis, jus gali apmokestinti operatorius."</string>
     <string name="data_usage_disabled_dialog_enable" msgid="7729772039208664606">"Iš naujo įgalinti duomenis"</string>
-    <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Nėra interneto ryš."</string>
-    <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Prisij. prie „Wi-Fi“"</string>
+    <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Nėra interneto ryšio"</string>
+    <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Prisijungta prie „Wi-Fi“"</string>
     <string name="gps_notification_searching_text" msgid="8574247005642736060">"Ieškoma GPS"</string>
     <string name="gps_notification_found_text" msgid="4619274244146446464">"GPS nustatyta vieta"</string>
     <string name="accessibility_location_active" msgid="2427290146138169014">"Vietovės užklausos aktyvios"</string>

@@ -67,6 +67,7 @@ public class ThemeUtils {
     public static final String IDMAP_SUFFIX = "@idmap";
     public static final String COMMON_RES_SUFFIX = ".common";
     public static final String COMMON_RES_TARGET = "common";
+    public static final String ICON_HASH_FILENAME = "hash";
 
     // path to external theme resources, i.e. bootanimation.zip
     public static final String SYSTEM_THEME_PATH = "/data/system/theme";
@@ -77,6 +78,8 @@ public class ThemeUtils {
             + File.separator + "notifications";
     public static final String SYSTEM_THEME_ALARM_PATH = SYSTEM_THEME_PATH
             + File.separator + "alarms";
+    public static final String SYSTEM_THEME_ICON_CACHE_DIR = SYSTEM_THEME_PATH
+            + File.separator + "icons";
     // internal path to bootanimation.zip inside theme apk
     public static final String THEME_BOOTANIMATION_PATH = "assets/bootanimation/bootanimation.zip";
 
@@ -91,6 +94,8 @@ public class ThemeUtils {
     private static final String MEDIA_CONTENT_URI = "content://media/internal/audio/media";
 
     public static final String ACTION_THEME_CHANGED = "org.cyanogenmod.intent.action.THEME_CHANGED";
+
+    public static final String CATEGORY_THEME_COMPONENT_PREFIX = "org.cyanogenmod.intent.category.";
 
     // Actions in manifests which identify legacy icon packs
     public static final String[] sSupportedActions = new String[] {
@@ -147,6 +152,10 @@ public class ThemeUtils {
 
     public static String getIconPackDir(String pkgName) {
       return IDMAP_PREFIX + pkgName;
+    }
+
+    public static String getIconHashFile(String pkgName) {
+        return getIconPackDir(pkgName) + File.separator  +  ICON_HASH_FILENAME;
     }
 
     public static String getIconPackApkPath(String pkgName) {
@@ -244,6 +253,17 @@ public class ThemeUtils {
      */
     public static void createAlarmDirIfNotExists() {
         createDirIfNotExists(SYSTEM_THEME_ALARM_PATH);
+    }
+
+    /**
+     * Create SYSTEM_THEME_ICON_CACHE_DIR directory if it does not exist
+     */
+    public static void createIconCacheDirIfNotExists() {
+        createDirIfNotExists(SYSTEM_THEME_ICON_CACHE_DIR);
+    }
+
+    public static void clearIconCache() {
+        deleteFilesInDir(SYSTEM_THEME_ICON_CACHE_DIR);
     }
 
     //Note: will not delete populated subdirs
@@ -493,19 +513,10 @@ public class ThemeUtils {
     }
 
     public static String getLockscreenWallpaperPath(AssetManager assetManager) throws IOException {
-        final String WALLPAPER_JPG = "wallpaper.jpg";
-        final String WALLPAPER_PNG = "wallpaper.png";
-
         String[] assets = assetManager.list("lockscreen");
         if (assets == null || assets.length == 0) return null;
-        for (String asset : assets) {
-            if (WALLPAPER_JPG.equals(asset)) {
-                return "lockscreen/" + WALLPAPER_JPG;
-            } else if (WALLPAPER_PNG.equals(asset)) {
-                return "lockscreen/" + WALLPAPER_PNG;
-            }
-        }
-        return null;
+
+        return "lockscreen/" + assets[0];
     }
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {

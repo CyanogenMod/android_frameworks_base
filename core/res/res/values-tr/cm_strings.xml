@@ -75,8 +75,16 @@
   <string name="permdesc_changePhoneBlacklist">Bir uygulamanın gelen çağrıları ya da mesajları engellenmiş telefon numaralarını değiştirmesine izin verir.</string>
   <string name="permlab_accessThemeService">tema hizmetine erişim</string>
   <string name="permdesc_accessThemeService">Bir uygulamanın tema hizmetine erişimine izin verir. Normal uygulamalar için gerekli değildir.</string>
+  <string name="permlab_readThemes">tema bilgisini oku</string>
+  <string name="permdesc_readThemesDesc">Uygulamanın temalarınızı okumasına ve hangi
+temayı uyguladığınızı belirlemesine izin verir.</string>
+  <string name="permlab_writeThemes">temaları değiştir</string>
+  <string name="permdesc_writeThemesDesc">Uygulamanın yeni temalar eklemesine ve
+uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permlab_setKeyguardWallpaper">tuş kilidi duvar kağıdını ayarla</string>
   <string name="permdesc_setKeyguardWallpaper">Bir uygulamanın kilit ekranı duvar kağıdını değiştirmesine izin verir.</string>
+  <string name="permlab_useHardwareFramework">donanım sistemini kullan</string>
+  <string name="permdesc_useHardwareFramework">Uygulamanın CM donanım sistemi erişimine izin verir.</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıkmak için aşağıdan yukarı kaydırın.</string>
   <string name="app_ops_access_camera">kameraya eriş</string>
   <string name="app_ops_access_location">konuma erişim</string>
@@ -118,7 +126,11 @@
   <string name="app_ops_use_voice_volume">Sesli arama sesini kontrol et</string>
   <string name="app_ops_write_mms">MMS mesajı yaz</string>
   <string name="app_ops_write_sms">SMS mesajı yaz</string>
+  <string name="notify_turn_wifi_off_title">Wi-Fi\'yi kapat</string>
   <string name="privacy_guard_dialog_title">Gizlilik Koruması</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>  <xliff:g id="op">%2$s</xliff:g> iznini kullanmak istiyor.</string>
   <string name="permission_remember_choice">Seçimimi hatırla</string>
+  <string name="adb_net_active_notification_title">Ağ üzerinden ADB etkin</string>
+  <string name="adb_both_active_notification_title">USB &amp; Ağ üzerinden ADB etkin</string>
+  <string name="adb_active_generic_notification_message">Hata ayıklamayı devre dışı bırakmak için dokunun.</string>
 </resources>
