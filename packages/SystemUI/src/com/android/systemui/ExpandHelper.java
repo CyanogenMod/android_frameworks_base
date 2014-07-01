@@ -533,10 +533,6 @@ public class ExpandHelper implements Gefingerpoken, OnClickListener {
         return mNaturalHeight;
     }
 
-    public float getNaturalHeight() {
-        return mNaturalHeight;
-    }
-
     private void finishExpanding(boolean force) {
         if (!mExpanding) return;
 

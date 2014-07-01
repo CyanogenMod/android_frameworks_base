@@ -1151,18 +1151,10 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             }
         } else if (v instanceof ImageView) {
             Intent volumeSettings = new Intent(android.provider.Settings.ACTION_SOUND_SETTINGS);
-            volumeSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            volumeSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             forceTimeout();
             mContext.startActivity(volumeSettings);
             return;
-        }
-
-        if (mTranslucentDialog && mShouldRunDropTranslucentAnimation) {
-            startRemoveTranslucentAnimation();
-        }
-        if (moreButton) {
-            expand();
         }
         resetTimeout();
     }
