@@ -87,7 +87,7 @@ import java.util.Locale;
 public abstract class BaseStatusBar extends SystemUI implements
         CommandQueue.Callbacks {
     public static final String TAG = "StatusBar";
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = false
     public static final boolean MULTIUSER_DEBUG = false;
 
     protected static final int MSG_TOGGLE_RECENTS_PANEL = 1020;
@@ -698,6 +698,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                  }
                  break;
              case MSG_CLOSE_SEARCH_PANEL:
+                 if (DEBUG) Log.d(TAG, "Dismissing heads up");
+                 hideHeadsUp();
                  if (DEBUG) Log.d(TAG, "closing search panel");
                  if (mSearchPanelView != null && mSearchPanelView.isShowing()) {
                      mSearchPanelView.show(false, true);
