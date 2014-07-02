@@ -85,7 +85,7 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
         final AlertController.AlertParams p = mAlertParams;
         p.mTitle = getString(com.android.internal.R.string.extmedia_format_title);
         p.mMessage = String.format(
-                getString(com.android.internal.R.string.extmedia_format_message),
+                getString(com.android.internal.R.string.extmedia_format_message_cm),
                 mStorageVolume.getPath());
         p.mPositiveButtonText = getString(com.android.internal.R.string.extmedia_format_button_format);
         p.mPositiveButtonListener = this;
