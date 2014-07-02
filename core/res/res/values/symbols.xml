@@ -2019,4 +2019,6 @@
   <java-symbol type="string" name="adb_both_active_notification_title" />
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
+  <!-- External media format -->
+  <java-symbol type="string" name="extmedia_format_message_cm" />
 </resources>
