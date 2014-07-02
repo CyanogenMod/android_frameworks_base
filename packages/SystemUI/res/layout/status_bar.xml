@@ -157,6 +157,25 @@
              android:visibility="gone"
              android:singleLine="true" />
      </LinearLayout>
+     <com.android.systemui.statusbar.phone.TickerView android:id="@+id/tickerText"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dip"
+            android:paddingEnd="10dip">
+            <TextView
+                android:textAppearance="@style/TextAppearance.StatusBar.PhoneTicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                />
+            <TextView
+                android:textAppearance="@style/TextAppearance.StatusBar.PhoneTicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                />
+        </com.android.systemui.statusbar.phone.TickerView>
         
     <LinearLayout android:id="@+id/ticker"
         android:layout_width="match_parent"
@@ -180,24 +199,5 @@
                 android:scaleType="center"
                 />
         </ImageSwitcher>
-        <com.android.systemui.statusbar.phone.TickerView android:id="@+id/tickerText"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:paddingTop="2dip"
-            android:paddingEnd="10dip">
-            <TextView
-                android:textAppearance="@style/TextAppearance.StatusBar.PhoneTicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                />
-            <TextView
-                android:textAppearance="@style/TextAppearance.StatusBar.PhoneTicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                />
-        </com.android.systemui.statusbar.phone.TickerView>
     </LinearLayout>
 </com.android.systemui.statusbar.phone.PhoneStatusBarView>
