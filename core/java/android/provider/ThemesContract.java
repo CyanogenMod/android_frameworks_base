@@ -487,5 +487,30 @@ public class ThemesContract {
          * <P>Type: BLOB (bitmap)</P>
          */
         public static final String ICON_PREVIEW_4 = "icon_preview_4";
+
+        /**
+         * Cached preview of UI controls representing the theme's style
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STYLE_PREVIEW = "style_preview";
+
+        /**
+         * Cached thumbnail of the theme's boot animation
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String BOOTANIMATION_THUMBNAIL = "bootanimation_thumbnail";
+
+        /**
+         * Cached thumbnail of the theme's wallpaper
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String WALLPAPER_THUMBNAIL = "wallpaper_thumbnail";
+
+        /**
+         * Cached preview of the theme's wallpaper which is larger than the thumbnail
+         * but smaller than the full sized wallpaper.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String WALLPAPER_PREVIEW = "wallpaper_preview";
     }
 }
