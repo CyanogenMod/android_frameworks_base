@@ -2396,9 +2396,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
-
-        //lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-
+        if (ActivityManager.isHighEndGfx()){
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        }
         lp.gravity = getStatusBarGravity();
         lp.setTitle("StatusBar");
         lp.packageName = mContext.getPackageName();
