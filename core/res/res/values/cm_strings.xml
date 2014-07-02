@@ -278,4 +278,8 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_preventpower">Allows an app to override the power key.</string>
 
+    <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
+    <string name="extmedia_format_message_cm" product="nosdcard">All data on your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <!-- See EXTMEDIA_FORMAT.   This is the message. -->
+    <string name="extmedia_format_message_cm" product="default">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
 </resources>
