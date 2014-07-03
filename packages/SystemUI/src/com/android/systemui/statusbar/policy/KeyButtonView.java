@@ -52,7 +52,7 @@ public class KeyButtonView extends ImageView {
 
     final float GLOW_MAX_SCALE_FACTOR = 1.8f;
     public static final float DEFAULT_QUIESCENT_ALPHA = 0.70f;
-    public static final int CURSOR_FLAGS = KeyEvent.FLAG_SOFT_KEYBOARD
+    public static final int CURSOR_REPEAT_FLAGS = KeyEvent.FLAG_SOFT_KEYBOARD
             | KeyEvent.FLAG_KEEP_TOUCH_MODE;
 
     long mDownTime;
@@ -80,8 +80,10 @@ public class KeyButtonView extends ImageView {
             if (isPressed()) {
                 // Log.d("KeyButtonView", "longpressed: " + this);
                 if (mCode == KeyEvent.KEYCODE_DPAD_LEFT || mCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                    sendEvent(KeyEvent.ACTION_UP, CURSOR_FLAGS, System.currentTimeMillis(), false);
-                    sendEvent(KeyEvent.ACTION_DOWN, CURSOR_FLAGS, System.currentTimeMillis(), false);
+                    sendEvent(KeyEvent.ACTION_UP, CURSOR_REPEAT_FLAGS,
+                            System.currentTimeMillis(), false);
+                    sendEvent(KeyEvent.ACTION_DOWN, CURSOR_REPEAT_FLAGS,
+                            System.currentTimeMillis(), false);
                     postDelayed(mCheckLongPress, ViewConfiguration.getKeyRepeatDelay());
                 } else if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.FLAG_LONG_PRESS);
@@ -320,7 +322,10 @@ public class KeyButtonView extends ImageView {
                 //Log.d("KeyButtonView", "press");
                 mDownTime = SystemClock.uptimeMillis();
                 setPressed(true);
-                if (mCode != 0) {
+                if (mCode == KeyEvent.KEYCODE_DPAD_LEFT || mCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                    sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.FLAG_VIRTUAL_HARD_KEY
+                            | KeyEvent.FLAG_KEEP_TOUCH_MODE, mDownTime, false);
+                } else if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_DOWN, 0, mDownTime);
                 } else {
                     // Provide the same haptic feedback that the system offers for virtual keys.
