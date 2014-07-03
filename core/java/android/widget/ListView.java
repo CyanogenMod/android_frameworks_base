@@ -1584,7 +1584,7 @@ public class ListView extends AbsListView {
             // These views will be reused if possible
             final int firstPosition = mFirstPosition;
             final RecycleBin recycleBin = mRecycler;
-            if (mRecycler.isActiveViewsInitialized() && dataChanged) {
+            if (dataChanged) {
                 for (int i = 0; i < childCount; i++) {
                     recycleBin.addScrapView(getChildAt(i), firstPosition+i);
                 }
