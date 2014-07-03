@@ -54,8 +54,7 @@ public class ContactTile extends QuickSettingsTile {
 
     private String mKey;
     private String mSetting;
-
-    private Drawable mContactIcon = null;
+    private Drawable mContactIcon;
 
     public ContactTile(Context context, QuickSettingsController qsc, String key) {
         super(context, qsc, R.layout.quick_settings_tile_user);
@@ -163,7 +162,7 @@ public class ContactTile extends QuickSettingsTile {
                     super.onPostExecute(result);
                     mLabel = result.first;
                     mContactIcon = result.second;
-                    updateQuickSettings();
+                    updateQuickSettings(mContactIcon);
                     mInfoTask = null;
                 }
             };
@@ -175,18 +174,21 @@ public class ContactTile extends QuickSettingsTile {
         }
     }
 
-    @Override
-    void updateQuickSettings() {
+    void updateQuickSettings(Drawable updateIcon) {
         ImageView iv = (ImageView) mTile.findViewById(R.id.user_imageview);
         TextView tv = (TextView) mTile.findViewById(R.id.user_textview);
         if (tv != null) {
-            tv.setText(mLabel);
+            if (mLabel != null) {
+                tv.setText(mLabel);
+            }
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTileTextSize);
             if (mTileTextColor != -2) {
                 tv.setTextColor(mTileTextColor);
             }
         }
-        iv.setImageDrawable(mContactIcon);
+        if (iv != null) {
+            iv.setImageDrawable(updateIcon);
+        }
     }
 
     @Override
