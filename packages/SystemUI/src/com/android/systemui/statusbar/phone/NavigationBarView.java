@@ -941,8 +941,25 @@ public class NavigationBarView extends LinearLayout {
                     Settings.System.LOCKSCREEN_MODLOCK_ENABLED, 1) == 0;
             mShowDpadArrowKeys = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 1) != 0;
+
+            // hide dpad keys
+            setVisibleOrGone(getCurrentView().findViewById(R.id.dpad_left), false);
+            setVisibleOrGone(getCurrentView().findViewById(R.id.dpad_right), false);
+
+            // restore previous views in case the cursor keys WERE showing and
+            // are should now be hidden while the IME is up.
+            View one = getCurrentView().findViewById(mVertical ? R.id.six : R.id.one);
+            View capricaSix = getCurrentView().findViewById(mVertical ? R.id.one : R.id.six);
+            if (mSlotOneVisibility != -1 && one != null) {
+                one.setVisibility(mSlotOneVisibility);
+            }
+            if (mSlotSixVisibility != -1 && capricaSix != null) {
+                capricaSix.setVisibility(mSlotSixVisibility);
+            }
             mSlotOneVisibility = -1;
             mSlotSixVisibility = -1;
+
+            // propogate settings
             setNavigationIconHints(mNavigationIconHints, true);
         }
     }
