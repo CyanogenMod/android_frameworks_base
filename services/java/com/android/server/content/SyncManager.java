@@ -1812,10 +1812,12 @@ public class SyncManager {
             doDatabaseCleanup();
             synchronized(this) {
                 // Dispatch any stashed messages.
-                for (Message message : mBootQueue) {
-                    sendMessage(message);
+                if (mBootQueue != null) {
+                    for (Message message : mBootQueue) {
+                        sendMessage(message);
+                    }
+                    mBootQueue = null;
                 }
-                mBootQueue = null;
                 mBootCompleted = true;
             }
         }
