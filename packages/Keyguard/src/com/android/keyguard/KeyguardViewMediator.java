@@ -259,6 +259,8 @@ public class KeyguardViewMediator {
 
     private ProfileManager mProfileManager;
 
+    private int mLidState = WindowManagerPolicy.WindowManagerFuncs.LID_ABSENT;
+
     /**
      * The volume applied to the lock/unlock sounds.
      */
@@ -538,6 +540,8 @@ public class KeyguardViewMediator {
         mShowKeyguardWakeLock = mPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "show keyguard");
         mShowKeyguardWakeLock.setReferenceCounted(false);
 
+        mContext.registerReceiver(mBroadcastReceiver,
+                new IntentFilter(WindowManagerPolicy.ACTION_LID_STATE_CHANGED));
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DISMISS_KEYGUARD_SECURELY_ACTION),
                 android.Manifest.permission.CONTROL_KEYGUARD, null);
 
@@ -1105,6 +1109,15 @@ public class KeyguardViewMediator {
                     if (mDelayedShowingSequence == sequence) {
                         mSuppressNextLockSound = !intent.getBooleanExtra("sound", true);
                         doKeyguardLocked(null);
+                    }
+                }
+            } else if (WindowManagerPolicy.ACTION_LID_STATE_CHANGED.equals(intent.getAction())) {
+                final int state = intent.getIntExtra(WindowManagerPolicy.EXTRA_LID_STATE,
+                        WindowManagerPolicy.WindowManagerFuncs.LID_ABSENT);
+                synchronized (KeyguardViewMediator.this) {
+                    if(state != mLidState) {
+                        mLidState = state;
+                        mUpdateMonitor.dispatchLidStateChange(state);
                     }
                 }
             } else if (DISMISS_KEYGUARD_SECURELY_ACTION.equals(intent.getAction())) {

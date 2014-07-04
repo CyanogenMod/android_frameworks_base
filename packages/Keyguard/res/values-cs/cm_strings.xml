@@ -15,5 +15,19 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="keyguard_discharging">Vybíjení, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <!--<string name="app_name">Zámek obrazovky</string>
+  <string name="keyguard_discharging">Vybíjení, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>-->
+  <plurals name="missed_calls">
+    <item quantity="one">%d zmeškaný hovor</item>
+    <item quantity="few">%d zmeškané hovory</item>
+    <item quantity="other">%d zmeškaných hovorů</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d nepřečtená zpráva</item>
+    <item quantity="few">%d nepřečtené zprávy</item>
+    <item quantity="other">%d nepřečtených zpráv</item>
+  </plurals>
+  <string name="missed_call">zmeškaný hovor</string>
+  <string name="message_from">zpráva od</string>
+  <string name="message_from_person">zpráva od %1$s</string>
 </resources>

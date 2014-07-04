@@ -1,0 +1,17 @@
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:maxLevel="24"
+        android:drawable="@drawable/kg_smartcover_bat_low" />
+    <item
+        android:maxLevel="49"
+        android:drawable="@drawable/kg_smartcover_bat_25" />
+    <item
+        android:maxLevel="74"
+        android:drawable="@drawable/kg_smartcover_bat_50" />
+    <item
+        android:maxLevel="89"
+        android:drawable="@drawable/kg_smartcover_bat_75" />
+    <item
+        android:maxLevel="100"
+        android:drawable="@drawable/kg_smartcover_bat_full" />
+</level-list>

@@ -15,5 +15,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="keyguard_discharging">Lemerítés (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+  <!--<string name="app_name">képernyőzár</string>
+  <string name="keyguard_discharging">Lemerítés <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>-->
+  <plurals name="missed_calls">
+    <item quantity="one">%d nem fogadott hívás</item>
+    <item quantity="other">%d nem fogadott hívás</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d olvasatlan üzenet</item>
+    <item quantity="other">%d olvasatlan üzenet</item>
+  </plurals>
+  <string name="missed_call">nem fogadott hívás</string>
+  <string name="message_from">üzenet a következőtől:</string>
+  <string name="message_from_person">üzenet a következőtől: %1$s</string>
 </resources>

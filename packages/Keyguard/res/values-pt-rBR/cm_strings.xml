@@ -15,5 +15,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="keyguard_discharging">Descarregando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <!--<string name="app_name">Tela de bloqueio</string>
+  <string name="keyguard_discharging">Descarregando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>-->
+  <plurals name="missed_calls">
+    <item quantity="one">%d chamada perdida</item>
+    <item quantity="other">%d chamadas perdidas</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d mensagem não lida</item>
+    <item quantity="other">%d mensagens não lidas</item>
+  </plurals>
+  <string name="missed_call">chamada perdida</string>
+  <string name="message_from">mensagem de</string>
+  <string name="message_from_person">mensagem de %1$s</string>
 </resources>

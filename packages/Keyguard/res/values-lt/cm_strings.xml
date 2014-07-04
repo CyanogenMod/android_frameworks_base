@@ -15,5 +15,19 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="keyguard_discharging">Iškraunama, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <!--<string name="app_name">ekrano užraktas</string>
+  <string name="keyguard_discharging">Iškraunama, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>-->
+  <plurals name="missed_calls">
+    <item quantity="one">%d praleistas skambutis</item>
+    <item quantity="few">%d praleisti skambučiai</item>
+    <item quantity="other">%d praleistų skambučių</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d neperskaitytas pranešimas</item>
+    <item quantity="few">%d neperskaityti pranešimai</item>
+    <item quantity="other">%d neperskaitytų pranešimų</item>
+  </plurals>
+  <string name="missed_call">praleistas skambutis</string>
+  <string name="message_from">pranešimas iš</string>
+  <string name="message_from_person">pranešimas iš %1$s</string>
 </resources>

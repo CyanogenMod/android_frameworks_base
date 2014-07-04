@@ -172,4 +172,13 @@ class KeyguardUpdateMonitorCallback {
      *   {@link WindowManagerPolicy#OFF_BECAUSE_OF_PROX_SENSOR}.
      */
     public void onScreenTurnedOff(int why) { }
+
+    /**
+     * Called when the lid state changes. Default value is
+     * {@link  WindowManagerPolicy#LID_ABSENT}
+     * @param the new lid state, either
+     *    {@link WindowManagerPolicy#LID_OPEN} or
+     *    {@link WindowManagerPolicy#LID_CLOSED}
+     */
+    public void onLidStateChanged(int state) { }
 }
