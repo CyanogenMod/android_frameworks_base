@@ -2401,6 +2401,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     }
 
     private View setAnimation(View view) {
+        if (view == null) return view;
         if (mExcludedApps.contains(mContext.getApplicationInfo().packageName)) {
             mListAnimationMode = 0;
         } else {
@@ -2410,25 +2411,21 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                         0);
         }
 
-        int listAnimationInterpolatorMode = Settings.System.getInt(
-                mContext.getContentResolver(),
-                Settings.System.LISTVIEW_INTERPOLATOR,
-                0);
+        if (mListAnimationMode == 0) {
+            return view;
+        }
 
-        if (mListAnimationMode == 0
-            || view == null) {
+        final int listAnimationDuration = Settings.System.getInt(
+                mContext.getContentResolver(),
+                Settings.System.LISTVIEW_DURATION, 0) * 15;
+
+        if (listAnimationDuration <= 0) {
             return view;
         }
 
         int scrollY = 0;
         boolean down = false;
         Animation anim = null;
-
-        int temp = Settings.System.getInt(
-                mContext.getContentResolver(),
-                Settings.System.LISTVIEW_DURATION,
-                0);
-        int listAnimationDuration = temp * 15;
 
         try {
             scrollY = getChildAt(0).getTop();
@@ -2489,13 +2486,19 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 return view;
         }
 
+        int listAnimationInterpolatorMode = Settings.System.getInt(
+                mContext.getContentResolver(),
+                Settings.System.LISTVIEW_INTERPOLATOR,
+                0);
+
         Interpolator itplr = AwesomeAnimationHelper.getInterpolator(mContext, listAnimationInterpolatorMode);
         if (itplr != null) {
             anim.setInterpolator(itplr);
         }
-        if (listAnimationDuration > 0) {
-            anim.setDuration(listAnimationDuration);
-        }
+
+        // duration is bigger than 0, else we would have returned way up
+        anim.setDuration(listAnimationDuration);
+
         view.startAnimation(anim);
         return view;
     }
