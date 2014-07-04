@@ -86,6 +86,11 @@
             android:layout_height="wrap_content"
             />
 
+        <include layout="@layout/weather_header"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            />
+
         <com.android.systemui.statusbar.powerwidget.PowerWidget
             android:id="@+id/exp_power_stat"
             android:layout_width="match_parent"
