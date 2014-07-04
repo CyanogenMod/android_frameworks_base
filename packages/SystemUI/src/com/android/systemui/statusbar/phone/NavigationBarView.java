@@ -266,7 +266,7 @@ public class NavigationBarView extends LinearLayout {
                 com.android.internal.R.string.config_keyguardPackage);
         final Bundle keyguardMetadata = getApplicationMetadata(mContext, keyguardPackage);
         mHasCmKeyguard = keyguardMetadata != null &&
-                keyguardMetadata.getBoolean("com.cyngn.keyguard", false);
+                keyguardMetadata.getBoolean("com.cyanogenmod.keyguard", false);
      }
 
     private void watchForDevicePolicyChanges() {
