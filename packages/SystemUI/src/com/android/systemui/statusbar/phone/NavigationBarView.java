@@ -108,6 +108,7 @@ public class NavigationBarView extends LinearLayout {
     private DeadZone mDeadZone;
     private final NavigationBarTransitions mBarTransitions;
 
+    private boolean mHasCmKeyguard = false;
     private boolean mModLockDisabled = true;
     private boolean mShowDpadArrowKeys = true;
     private SettingsObserver mObserver;
@@ -260,7 +261,13 @@ public class NavigationBarView extends LinearLayout {
         mLockUtils = new LockPatternUtils(context);
 
         mObserver = new SettingsObserver(new Handler());
-    }
+
+        final String keyguardPackage = mContext.getString(
+                com.android.internal.R.string.config_keyguardPackage);
+        final Bundle keyguardMetadata = getApplicationMetadata(mContext, keyguardPackage);
+        mHasCmKeyguard = keyguardMetadata != null &&
+                keyguardMetadata.getBoolean("com.cyanogenmod.keyguard", false);
+     }
 
     private void watchForDevicePolicyChanges() {
         final IntentFilter filter = new IntentFilter();
@@ -649,15 +656,7 @@ public class NavigationBarView extends LinearLayout {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        final String keyguardPackage = mContext.getString(
-                com.android.internal.R.string.config_keyguardPackage);
-        final Bundle keyguard_metadata = NavigationBarView
-                .getApplicationMetadata(mContext, keyguardPackage);
-        if (null != keyguard_metadata &&
-                keyguard_metadata.getBoolean("com.cyanogenmod.keyguard", false)) {
-            mObserver.observe();
-        }
+        mObserver.observe();
     }
 
     @Override
@@ -893,8 +892,8 @@ public class NavigationBarView extends LinearLayout {
     private static Bundle getApplicationMetadata(Context context, String pkg) {
         if (pkg != null) {
             try {
-                ApplicationInfo ai = context.getPackageManager().
-                    getApplicationInfo(pkg, PackageManager.GET_META_DATA);
+                PackageManager pm = context.getPackageManager();
+                ApplicationInfo ai = pm.getApplicationInfo(pkg, PackageManager.GET_META_DATA);
                 return ai.metaData;
             } catch (NameNotFoundException e) {
                 return null;
@@ -937,8 +936,12 @@ public class NavigationBarView extends LinearLayout {
 
         @Override
         public void onChange(boolean selfChange) {
-            mModLockDisabled = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_MODLOCK_ENABLED, 1) == 0;
+            if (mHasCmKeyguard) {
+                mModLockDisabled = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.LOCKSCREEN_MODLOCK_ENABLED, 1) == 0;
+            } else {
+                mModLockDisabled = true;
+            }
             mShowDpadArrowKeys = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 1) != 0;
 
