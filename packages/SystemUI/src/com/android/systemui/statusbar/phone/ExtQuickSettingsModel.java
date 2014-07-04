@@ -429,7 +429,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
         }
     }
 
-    private boolean hasIccCard() {
+    public boolean hasIccCard() {
         if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
             MSimTelephonyManager msimTM =
                 (MSimTelephonyManager) mContext.getSystemService(Context.MSIM_TELEPHONY_SERVICE);
@@ -644,7 +644,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
     void switchMobileDataState() {
         // Do not make mobile data on/off if airplane mode on.
         if (Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.AIRPLANE_MODE_ON, 0) != 0) {
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0 || !hasIccCard()) {
             return;
         }
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
