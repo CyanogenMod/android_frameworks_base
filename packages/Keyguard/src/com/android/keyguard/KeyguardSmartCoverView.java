@@ -48,22 +48,23 @@ import android.widget.TextView;
 import com.android.internal.widget.LockPatternUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 public class KeyguardSmartCoverView extends LinearLayout {
     private static final boolean DEBUG = KeyguardViewMediator.DEBUG;
-    private static final String TAG = "KeyguardStatusView";
+    private static final String  TAG   = "KeyguardStatusView";
 
     private LockPatternUtils mLockPatternUtils;
 
-    private TextView mAlarmStatusView;
+    private TextView  mAlarmStatusView;
     private TextClock mDateView;
     private TextClock mClockView;
-    private TextView mAmPm;
-    private TextView mWeatherStatus;
+    private TextView  mAmPm;
+    private TextView  mWeatherImage, mWeatherStatus;
     private TextView mLine1, mLine2, mLine3;
-    private ImageView mBatteryImage, mWeatherImage;
+    private ImageView mBatteryImage;
 
     private int mMissedCalls, mUnreadMessages;
     // On the first boot, keygard will start to receiver TIME_TICK intent.
@@ -73,11 +74,12 @@ public class KeyguardSmartCoverView extends LinearLayout {
     private boolean mEnableRefresh = false;
     private boolean mFadeInWeather = false;
 
-    private TextView mBatteryStatusView;
+    private TextView                            mBatteryStatusView;
     private KeyguardUpdateMonitor.BatteryStatus mBatteryStatus;
 
     // sysui flags to apply when showing the cover
-    public static final int SYSTEM_UI_FLAGS = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+    public static final int SYSTEM_UI_FLAGS =
+            View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 
     // how long to wait before sending the screen to sleep
     public static final int SMART_COVER_TIMEOUT = 8000;
@@ -104,8 +106,7 @@ public class KeyguardSmartCoverView extends LinearLayout {
             mEnableRefresh = false;
         }
 
-        @Override
-        void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
+        @Override void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
             mBatteryStatus = status;
             if (mEnableRefresh) {
                 refreshBatteryStatus();
@@ -145,7 +146,7 @@ public class KeyguardSmartCoverView extends LinearLayout {
             } else if (uri.equals(Uri.parse("content://sms/inbox"))) {
                 refreshStatusLines();
             }
-        };
+        }
     };
 
     public KeyguardSmartCoverView(Context context) {
@@ -159,24 +160,24 @@ public class KeyguardSmartCoverView extends LinearLayout {
     public KeyguardSmartCoverView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setBackgroundColor(0xFF000000);
-        mContext.sendBroadcast(new Intent("com.cyanogenmod.lockclock.action.REQUEST_WEATHER_UPDATE"));
+        mContext.sendBroadcast(
+                new Intent("com.cyanogenmod.lockclock.action.REQUEST_WEATHER_UPDATE"));
     }
 
     private void setEnableMarquee(boolean enabled) {
-        if (DEBUG)
-            Log.v(TAG, (enabled ? "Enable" : "Disable") + " transport text marquee");
-        if (mAlarmStatusView != null)
-            mAlarmStatusView.setSelected(enabled);
+        if (DEBUG) { Log.v(TAG, (enabled ? "Enable" : "Disable") + " transport text marquee"); }
+        if (mAlarmStatusView != null) { mAlarmStatusView.setSelected(enabled); }
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        Typeface typeFaceLato, typeFaceLatoBlack, typeFaceLatoLight;
+        Typeface typeFaceLato, typeFaceLatoBlack, typeFaceLatoLight, typeFaceWeather;
 
         typeFaceLato = Typeface.createFromAsset(mContext.getAssets(), "fonts/Lato-Reg.otf");
         typeFaceLatoBlack = Typeface.createFromAsset(mContext.getAssets(), "fonts/Lato-Bla.otf");
         typeFaceLatoLight = Typeface.createFromAsset(mContext.getAssets(), "fonts/Lato-Lig.otf");
+        typeFaceWeather = Typeface.createFromAsset(mContext.getAssets(), "fonts/Weather.otf");
 
         mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
 
@@ -205,7 +206,8 @@ public class KeyguardSmartCoverView extends LinearLayout {
         mWeatherStatus.setTypeface(typeFaceLatoBlack);
         mWeatherStatus.setAlpha(0f);
 
-        mWeatherImage = (ImageView) findViewById(R.id.weather_image);
+        mWeatherImage = (TextView) findViewById(R.id.weather_image);
+        mWeatherImage.setTypeface(typeFaceWeather);
         mWeatherImage.setAlpha(0f);
 
         mBatteryImage = (ImageView) findViewById(R.id.battery_image);
@@ -235,7 +237,7 @@ public class KeyguardSmartCoverView extends LinearLayout {
         mClockView.setFormat12Hour(Patterns.clockView12);
         mClockView.setFormat24Hour(Patterns.clockView24);
 
-        if(!mClockView.is24HourModeEnabled()) {
+        if (!mClockView.is24HourModeEnabled()) {
             String amPm = new SimpleDateFormat("aa").format(new Date());
             mAmPm.setText(amPm);
         } else {
@@ -272,17 +274,21 @@ public class KeyguardSmartCoverView extends LinearLayout {
         if (mWeatherStatus == null || mWeatherImage == null) {
             return;
         }
-        String weather = getCurrentTemperature();
+        final ArrayList<String> weatherInfo = getWeatherInfo();
 
-        if (weather != null) {
-            SpannableStringBuilder formatted = new SpannableStringBuilder(weather);
+        if (weatherInfo != null) {
+            final String temperature = weatherInfo.get(0);
+            final String condition = weatherInfo.get(1);
+
+            SpannableStringBuilder formatted = new SpannableStringBuilder(temperature);
             CharacterStyle style = new RelativeSizeSpan(0.7f);
-            formatted.setSpan(style, weather.length() - 1, weather.length(),
+            formatted.setSpan(style, temperature.length() - 1, temperature.length(),
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
             mWeatherStatus.setText(formatted);
+            mWeatherImage.setText(condition);
 
-            if(mFadeInWeather) {
+            if (mFadeInWeather) {
                 mWeatherStatus.animate().alpha(1f).setDuration(500);
                 mWeatherImage.animate().alpha(1f).setDuration(500);
                 mFadeInWeather = false;
@@ -333,27 +339,37 @@ public class KeyguardSmartCoverView extends LinearLayout {
         }
     }
 
-    private String getCurrentTemperature() {
-        String[] projection = {
-                "temperature"
+    private ArrayList<String> getWeatherInfo() {
+        final ArrayList<String> weatherInfo = new ArrayList<String>(2);
+        final String[] projection = {
+                "temperature",
+                "condition"
         };
 
-        Cursor c = mContext.getContentResolver().query(
+        final Cursor c = mContext.getContentResolver().query(
                 Uri.parse("content://com.cyanogenmod.lockclock.weather.provider/weather/current"),
                 projection, null, null, null);
         if (c == null) {
             mFadeInWeather = true;
-            mContext.sendBroadcast(new Intent("com.cyanogenmod.lockclock.action.FORCE_WEATHER_UPDATE"));
+            mContext.sendBroadcast(
+                    new Intent("com.cyanogenmod.lockclock.action.FORCE_WEATHER_UPDATE"));
             if(DEBUG) Log.e(TAG, "cursor was null for temperature");
             return null;
         }
         try {
             c.moveToFirst();
-            String weather = c.getString(0);
-            if (weather == null) {
-                weather = "";
+            String temperature = c.getString(0);
+            if (temperature == null) {
+                temperature = "";
             }
-            return weather;
+            weatherInfo.add(temperature);
+
+            String condition = c.getString(1);
+            if (condition == null) {
+                condition = "";
+            }
+            weatherInfo.add(condition);
+            return weatherInfo;
         } finally {
             c.close();
         }
@@ -367,18 +383,20 @@ public class KeyguardSmartCoverView extends LinearLayout {
                     Calls.CONTENT_URI,
                     null,
                     Calls.TYPE + " = ? AND " + Calls.NEW + " = ?",
-                    new String[] {
+                    new String[]{
                             Integer.toString(Calls.MISSED_TYPE), "1"
                     },
-                    Calls.DATE + " DESC ");
-            if(c != null) {
+                    Calls.DATE + " DESC "
+            );
+            if (c != null) {
                 c.moveToFirst();
                 int count = mMissedCalls = c.getCount();
                 if (count == 1) {
                     if (mLockPatternUtils.isSecure()) {
                         result[0] = "";
-                        result[1] =  mContext.getResources().getQuantityString(R.plurals.missed_calls,
-                                mMissedCalls, mMissedCalls);
+                        result[1] =
+                                mContext.getResources().getQuantityString(R.plurals.missed_calls,
+                                        mMissedCalls, mMissedCalls);
                     } else {
                         String name = c.getString(c.getColumnIndex(Calls.CACHED_NAME));
                         result[0] = mContext.getString(R.string.missed_call);
@@ -477,8 +495,7 @@ public class KeyguardSmartCoverView extends LinearLayout {
             final String clockView12Skel = res.getString(R.string.clock_12hr_format);
             final String clockView24Skel = res.getString(R.string.clock_24hr_format);
             final String key = locale.toString() + dateViewSkel + clockView12Skel + clockView24Skel;
-            if (key.equals(cacheKey))
-                return;
+            if (key.equals(cacheKey)) { return; }
 
             dateView = DateFormat.getBestDateTimePattern(locale, dateViewSkel);
 
@@ -503,7 +520,7 @@ public class KeyguardSmartCoverView extends LinearLayout {
         String name = "?";
 
         ContentResolver contentResolver = mContext.getContentResolver();
-        Cursor contactLookup = contentResolver.query(uri, new String[] {
+        Cursor contactLookup = contentResolver.query(uri, new String[]{
                 BaseColumns._ID,
                 ContactsContract.PhoneLookup.DISPLAY_NAME
         }, null, null, null);

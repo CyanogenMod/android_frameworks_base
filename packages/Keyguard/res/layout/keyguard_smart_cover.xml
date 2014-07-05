@@ -106,14 +106,15 @@
             <Space
                 android:layout_width="30dp"
                 android:layout_height="match_parent" />
-            <ImageView
+            <TextView
                 android:id="@+id/weather_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/kg_smartcover_weather_default"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:paddingEnd="5dp" />
+                android:paddingEnd="5dp"
+                android:textSize="30sp"
+                android:textColor="@android:color/white" />
             <TextView
                 android:id="@+id/weather_text"
                 android:layout_width="wrap_content"
