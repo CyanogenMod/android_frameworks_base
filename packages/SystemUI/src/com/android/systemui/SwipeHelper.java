@@ -447,8 +447,12 @@ public class SwipeHelper implements Gefingerpoken {
                             dismissChild = false;
                         }
                     } else {
-                        dismissChild = mCallback.canChildBeDismissed(mCurrView)
+                        dismissChild = canChildBeDismissed(mCurrView)
                                 && (childSwipedFastEnough || childSwipedFarEnough);
+
+                        mTriggerChild = mTriggerEnabled &&
+                            mSwipeDirectionDetail == mTriggerDirection &&
+                            (childSwipedFastEnough || childSwipedFarEnough);
 
                         if (dismissChild) {
                             // flingadingy
@@ -481,3 +485,4 @@ public class SwipeHelper implements Gefingerpoken {
         void onDragCancelled(View v);
     }
 }
+
