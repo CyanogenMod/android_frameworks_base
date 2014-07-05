@@ -6388,6 +6388,18 @@ public final class Settings {
         public static final String HEADS_UP_BG_COLOR = "heads_up_bg_color";
 
         /**
+         * Whether lid wakes the device
+         * @hide
+         */
+        public static final String LOCKSCREEN_LID_WAKE = "lockscreen_lid_wake";
+
+        /**
+         * Whether lid puts the device to sleep
+         * @hide
+         */
+        public static final String LOCKSCREEN_LID_SLEEP = "lockscreen_lid_sleep";
+
+        /**
          * Whether the smart cover is activated or not
          * @hide
          */
