@@ -44,6 +44,13 @@ public class QSUtils {
         public static boolean deviceSupportsBluetooth() {
             return (BluetoothAdapter.getDefaultAdapter() != null);
         }
+        
+        public static boolean deviceSupportsBluetoothTethering(Context ctx) {
+            ConnectivityManager cm = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+            String[] mBluetoothRegexs = cm.getTetherableBluetoothRegexs();
+            boolean bluetoothTetheringAvailable = mBluetoothRegexs.length != 0;
+            return (bluetoothTetheringAvailable);
+        }
 
         public static boolean systemProfilesEnabled(ContentResolver resolver) {
             return (Settings.System.getInt(resolver, Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 1);
