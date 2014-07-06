@@ -21,6 +21,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_AIRPLANE;
 import static com.android.internal.util.cm.QSConstants.TILE_AUTOROTATE;
 import static com.android.internal.util.cm.QSConstants.TILE_BATTERY;
 import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
+import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH_TETHERING;
 import static com.android.internal.util.cm.QSConstants.TILE_BRIGHTNESS;
 import static com.android.internal.util.cm.QSConstants.TILE_CAMERA;
 import static com.android.internal.util.cm.QSConstants.TILE_COMPASS;
@@ -71,6 +72,7 @@ import com.android.systemui.quicksettings.AlarmTile;
 import com.android.systemui.quicksettings.AutoRotateTile;
 import com.android.systemui.quicksettings.BatteryTile;
 import com.android.systemui.quicksettings.BluetoothTile;
+import com.android.systemui.quicksettings.BluetoothTetheringTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
 import com.android.systemui.quicksettings.CameraTile;
@@ -169,6 +171,7 @@ public class QuickSettingsController {
         // Filter items not compatible with device
         boolean cameraSupported = QSUtils.deviceSupportsCamera();
         boolean bluetoothSupported = QSUtils.deviceSupportsBluetooth();
+        boolean bluetoothTetheringSupported = QSUtils.deviceSupportsBluetoothTethering(mContext);
         boolean mobileDataSupported = QSUtils.deviceSupportsMobileData(mContext);
         boolean lteSupported = QSUtils.deviceSupportsLte(mContext);
         boolean gpsSupported = QSUtils.deviceSupportsGps(mContext);
@@ -176,6 +179,10 @@ public class QuickSettingsController {
 
         if (!bluetoothSupported) {
             TILES_DEFAULT.remove(TILE_BLUETOOTH);
+        }
+        
+        if (!bluetoothSupported) {
+            TILES_DEFAULT.remove(TILE_BLUETOOTH_TETHERING);
         }
 
         if (!mobileDataSupported) {
@@ -228,6 +235,8 @@ public class QuickSettingsController {
                 qs = new GPSTile(mContext, this, mStatusBarService.mLocationController);
             } else if (tile.equals(TILE_BLUETOOTH) && bluetoothSupported) {
                 qs = new BluetoothTile(mContext, this, mStatusBarService.mBluetoothController);
+            } else if (tile.equals(TILE_BLUETOOTH_TETHERING) && bluetoothTetheringSupported) {
+                qs = new BluetoothTetheringTile(mContext, this);
             } else if (tile.equals(TILE_BRIGHTNESS)) {
                 qs = new BrightnessTile(mContext, this);
             } else if (tile.equals(TILE_CAMERA) && cameraSupported) {
