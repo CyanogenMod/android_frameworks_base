@@ -39,8 +39,8 @@
     <string name="quick_settings_reboot_recovery">В рекавери</string>
     <string name="quick_settings_sync">Синхро</string>
     <string name="quick_settings_sync_off">Синхро выкл</string>
-    <string name="quick_settings_torch">Фонарь</string>
-    <string name="quick_settings_torch_off">Фонарь выкл</string>
+    <string name="quick_settings_torch">Фонарик</string>
+    <string name="quick_settings_torch_off">Фонарик выкл</string>
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC Выкл</string>
     <string name="quick_settings_screen_timeout">Задержка</string>
@@ -70,7 +70,7 @@
     <string name="shortcut_quiethours">\"Тихие часы\"</string>
     <string name="shortcut_rotation">Блокировка поворота</string>
     <string name="shortcut_shakeevent">Действия встряхивания</string>
-    <string name="shortcut_torch">Фонарь</string>
+    <string name="shortcut_torch">Фонарик</string>
     <string name="shortcut_reboot">Перезагрузка</string>
     <string name="shortcut_recovery">В рекавери</string>
     <string name="shortcut_last_app">Предыдущее приложение</string>
