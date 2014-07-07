@@ -343,7 +343,7 @@ public class Hover {
 
     public boolean isCallUiInBackground() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.NON_INTRUSIVE_INCALL, 0) != 0;
+                Settings.System.CALL_UI_IN_BACKGROUND, 0) != 0;
     }
 
     public boolean isDialpadShowing() {
