@@ -553,8 +553,25 @@ public class ThemeService extends IThemeService.Stub {
             final long token = Binder.clearCallingIdentity();
             try {
                 Configuration config = am.getConfiguration();
-                ThemeConfig.Builder themeBuilder = createBuilderFrom(config, components);
-                config.themeConfig = themeBuilder.build();
+                ThemeConfig.Builder themeBuilder = createBuilderFrom(config, components, mPkgName);
+                ThemeConfig newConfig = themeBuilder.build();
+
+                // If this is a theme upgrade then new config equals existing config. The result
+                // is that the config is not considered changed and therefore not propagated,
+                // which can be problem if the APK path changes (ex theme-1.apk -> theme-2.apk)
+                if (newConfig.equals(config.themeConfig)) {
+                    // We can't just use null for the themeConfig, it won't be registered as
+                    // a changed config value because of the way equals in config had to be written.
+                    final String defaultThemePkg =
+                            Settings.Secure.getString(mContext.getContentResolver(),
+                            Settings.Secure.DEFAULT_THEME_PACKAGE);
+                    ThemeConfig.Builder defaultBuilder =
+                            createBuilderFrom(config, components, defaultThemePkg);
+                    config.themeConfig = defaultBuilder.build();
+                    am.updateConfiguration(config);
+                }
+
+                config.themeConfig = newConfig;
                 am.updateConfiguration(config);
             } catch (RemoteException e) {
                 return false;
@@ -565,27 +582,28 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private ThemeConfig.Builder createBuilderFrom(Configuration config, List<String> components) {
+    private static ThemeConfig.Builder createBuilderFrom(Configuration config,
+                                                         List<String> components, String pkgName) {
         ThemeConfig.Builder builder = new ThemeConfig.Builder(config.themeConfig);
 
         if (components.contains(ThemesContract.ThemesColumns.MODIFIES_ICONS)) {
-            builder.defaultIcon(mPkgName);
+            builder.defaultIcon(pkgName);
         }
 
         if (components.contains(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS)) {
-            builder.defaultOverlay(mPkgName);
+            builder.defaultOverlay(pkgName);
         }
 
         if (components.contains(ThemesContract.ThemesColumns.MODIFIES_FONTS)) {
-            builder.defaultFont(mPkgName);
+            builder.defaultFont(pkgName);
         }
 
         if (components.contains(ThemesContract.ThemesColumns.MODIFIES_STATUS_BAR)) {
-            builder.overlay("com.android.systemui", mPkgName);
+            builder.overlay("com.android.systemui", pkgName);
         }
 
         if (components.contains(ThemesContract.ThemesColumns.MODIFIES_NAVIGATION_BAR)) {
-            builder.overlay(ThemeConfig.SYSTEMUI_NAVBAR_PKG, mPkgName);
+            builder.overlay(ThemeConfig.SYSTEMUI_NAVBAR_PKG, pkgName);
         }
 
         return builder;
