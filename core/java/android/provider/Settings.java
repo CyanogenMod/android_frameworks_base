@@ -4016,6 +4016,21 @@ public final class Settings {
          */
         public static final String KEY_MENU_LONG_PRESS_ACTION = "key_menu_long_press_action";
 
+       /**
+         * Whether to display the gesture anywhere trigger region or not.
+         * @hide
+         */
+        @ChaosLab(name="Identicons", classification=Classification.NEW_FIELD)
+        public static final String IDENTICONS_ENABLED = "identicons_enabled";
+
+        /**
+         * Identicons style setting.
+         * @hide
+         */
+        @ChaosLab(name="Identicons", classification=Classification.NEW_FIELD)
+        public static final String IDENTICONS_STYLE = "identicons_style";
+
+
         /**
          * Action to perform when the assistant (search) key is pressed. (Default is 3)
          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
