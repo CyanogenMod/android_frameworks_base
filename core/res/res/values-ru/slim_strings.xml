@@ -19,4 +19,12 @@
     <string name="accessibility_target_direction">Проведите по экрану для выбора действия</string>
     <string name="theme_auto_switch_mode_error">Автоматические переключение в зависимости от освещения включено. Ручное переключение невозможно.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this.
+    <string name="permlab_preventpower">переопределять кнопку питания</string> -->
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this.
+    <string name="permdesc_preventpower">Разрешает приложению переопределять работу кнопки питания</string> -->
+
+    <!-- Heads up -->
+    <string name="permlab_changeHeadsUpState">Включить/выключить уведомления \"поверх\"</string>
+    <string name="permdesc_changeHeadsUpState">Разрешает приложению показывать уведомления \"поверх\" вместо обычных уведомлений.</string>
 </resources>
