@@ -27,4 +27,19 @@
     <!-- Description of accessibility direction for targets [CHAR LIMIT=NONE] -->
     <string name="accessibility_target_direction">Desliza para activar un acceso directo</string>
 
+    <!-- stylus gestures support
+    <string name="stylus_app_not_installed">%s no está instalado</string> -->
+    
+    <!-- Error description on theme switch with ligtsensor mode enabled
+    <string name="theme_auto_switch_mode_error">El cambio automático de condiciones de luz está activado. El cambio manual no se puede usar.</string> -->
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this.
+    <string name="permlab_preventpower">Prevenir pulsación de botón de encendido</string> -->
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this.
+    <string name="permdesc_preventpower">Permite a una aplicación utilizar el botón de encendido</string> -->
+
+    <!-- Heads up -->
+    <string name="permlab_changeHeadsUpState">habilitar o deshabilitar "heads up"</string>
+    <string name="permdesc_changeHeadsUpState">Permite a la aplicación cambiar si tiene permisos para mostrar notificaciones normales como "heads up".</string>
+
 </resources>
