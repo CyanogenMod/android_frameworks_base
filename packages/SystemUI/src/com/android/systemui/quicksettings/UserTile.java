@@ -108,8 +108,13 @@ public class UserTile extends QuickSettingsTile {
     void updateQuickSettings() {
         ImageView iv = (ImageView) mTile.findViewById(R.id.user_imageview);
         TextView tv = (TextView) mTile.findViewById(R.id.user_textview);
-        tv.setText(mLabel);
-        iv.setImageDrawable(userAvatar);
+        if (tv != null) {
+            tv.setText(mLabel);
+        }
+
+        if (iv != null) {
+            iv.setImageDrawable(userAvatar);
+        }
     }
 
     private void queryForUserInformation() {
