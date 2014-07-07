@@ -50,6 +50,8 @@ public abstract class KeyguardActivityLauncher {
                     .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
     private static final Intent INSECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+    private static final Intent CALL_INTENT = new Intent(Intent.ACTION_DIAL);
+    private static final Intent SMS_INTENT = new Intent(Intent.ACTION_MAIN);
 
     abstract Context getContext();
 
@@ -119,6 +121,15 @@ public abstract class KeyguardActivityLauncher {
             // Launch the normal camera
             launchActivity(INSECURE_CAMERA_INTENT, false, false, null, null);
         }
+    }
+
+    public void launchCall() {
+        launchActivity(CALL_INTENT, false, false, null, null);
+    }
+
+    public void launchMessage() {
+        SMS_INTENT.setType("vnd.android-dir/mms-sms");
+        launchActivity(SMS_INTENT, false, false, null, null);
     }
 
     public void launchWidgetPicker(int appWidgetId) {

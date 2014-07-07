@@ -53,6 +53,8 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     private boolean mIsBouncing;
     private boolean mCameraDisabled;
     private boolean mSearchDisabled;
+    private boolean mCallTargetPresent;
+    private boolean mMessageTargetPresent;
     private LockPatternUtils mLockPatternUtils;
     private SecurityMessageDisplay mSecurityMessageDisplay;
     private Drawable mBouncerFrame;
@@ -79,6 +81,16 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                     mActivityLauncher.launchCamera(null, null);
                     mCallback.userActivity(0);
                     break;
+
+                case R.drawable.ic_lockscreen_call:
+                    mActivityLauncher.launchCall();
+                    mCallback.userActivity(0);
+                break;
+
+                case R.drawable.ic_lockscreen_message:
+                    mActivityLauncher.launchMessage();
+                    mCallback.userActivity(0);
+                break;
 
                 case R.drawable.ic_lockscreen_unlock_phantom:
                 case R.drawable.ic_lockscreen_unlock:
@@ -153,6 +165,11 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
         super.onFinishInflate();
         mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
         mGlowPadView.setOnTriggerListener(mOnTriggerListener);
+        if (mContext.getResources().getBoolean(R.bool.config_show_lockscreen_custom_targets)) {
+            mGlowPadView.setTargetResources(R.array.lockscreen_targets_with_custom);
+            mGlowPadView.setTargetDescriptionsResourceId(
+                    R.array.lockscreen_target_descriptions_with_custom);
+        }
         updateTargets();
 
         mSecurityMessageDisplay = new KeyguardMessageArea.Helper(this);
@@ -187,6 +204,10 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
             isTargetPresent(R.drawable.ic_lockscreen_camera);
         boolean searchTargetPresent =
             isTargetPresent(R.drawable.ic_action_assist_generic);
+        mCallTargetPresent =
+            isTargetPresent(R.drawable.ic_lockscreen_call);
+        mMessageTargetPresent =
+            isTargetPresent(R.drawable.ic_lockscreen_message);
 
         if (cameraDisabledByAdmin) {
             Log.v(TAG, "Camera disabled by Device Policy");
@@ -230,6 +251,8 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
 
         mGlowPadView.setEnableTarget(R.drawable.ic_lockscreen_camera, !mCameraDisabled);
         mGlowPadView.setEnableTarget(R.drawable.ic_action_assist_generic, !mSearchDisabled);
+        mGlowPadView.setEnableTarget(R.drawable.ic_lockscreen_call, mCallTargetPresent);
+        mGlowPadView.setEnableTarget(R.drawable.ic_lockscreen_message, mMessageTargetPresent);
     }
 
     void doTransition(View view, float to) {
