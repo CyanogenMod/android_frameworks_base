@@ -21,6 +21,7 @@ package android.hardware;
  * {@hide}
  */
 interface ITorchService {
-    void onCameraOpened();
-    void onStartingTorch();
+    void onCameraOpened(IBinder token, int cameraId);
+    void onCameraClosed(int cameraId);
+    boolean onStartingTorch(int cameraId);
 }
