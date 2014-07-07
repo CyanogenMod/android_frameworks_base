@@ -24,33 +24,95 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
-         android:id="@+id/content"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:paddingLeft="26dp"
-         android:paddingRight="26dp"
-         android:orientation="vertical">
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="26dp"
+        android:paddingRight="26dp"
+        android:orientation="vertical">
+
         <Space
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
-        <TextClock
-            android:id="@+id/date_view"
+            android:layout_height="26dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:textColor="@color/clock_white"
-            android:gravity="left|bottom" />
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextClock
+                android:id="@+id/date_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/clock_white"
+                android:gravity="left|center_vertical" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="right|bottom">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/battery_image"
+                    android:src="@drawable/kg_smartcover_bat_75"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="5dp" />
+
+                <TextView
+                    android:id="@+id/battery_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:textColor="#ffffff"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/weather_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="5dp"
+                    android:textSize="30sp"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/weather_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-           <TextClock
+
+            <TextClock
                 android:id="@+id/clock_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/clock_white"
                 android:singleLine="true"
                 android:textSize="60sp" />
+
             <TextView
                 android:id="@+id/am_pm_text"
                 android:layout_width="wrap_content"
@@ -60,6 +122,7 @@
                 android:textSize="26sp"
                 android:textAllCaps="true" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/line_1"
             android:layout_width="match_parent"
@@ -68,6 +131,7 @@
             android:textSize="10sp"
             android:textAllCaps="true"
             android:gravity="left|bottom" />
+
         <TextView
             android:id="@+id/line_2"
             android:layout_width="match_parent"
@@ -75,6 +139,7 @@
             android:textColor="@color/clock_white"
             android:gravity="left"
             android:textSize="18sp" />
+
         <TextView
             android:id="@+id/line_3"
             android:layout_width="match_parent"
@@ -82,47 +147,5 @@
             android:textColor="@color/clock_white"
             android:textSize="18sp"
             android:gravity="left" />
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="left|bottom" >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/battery_image"
-                android:src="@drawable/kg_smartcover_bat_75"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:paddingEnd="5dp" />
-            <TextView
-                android:id="@+id/battery_text"
-                android:layout_width="wrap_content"
-                android:layout_height="27dp"
-                android:textColor="#ffffff"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:textSize="14sp" />
-            <Space
-                android:layout_width="30dp"
-                android:layout_height="match_parent" />
-            <TextView
-                android:id="@+id/weather_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:paddingEnd="5dp"
-                android:textSize="30sp"
-                android:textColor="@android:color/white" />
-            <TextView
-                android:id="@+id/weather_text"
-                android:layout_width="wrap_content"
-                android:layout_height="27dp"
-                android:textColor="#ffffff"
-                android:textSize="14sp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical" />
-        </LinearLayout>
     </LinearLayout>
 </com.android.keyguard.KeyguardSmartCoverView>
