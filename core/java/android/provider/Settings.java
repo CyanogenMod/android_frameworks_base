@@ -5723,6 +5723,12 @@ public final class Settings {
         public static final String ANIMATION_IME_INTERPOLATOR = "animation_ime_interpolator";
 
         /**
+         * Determine custom touch slop.
+         * @hide
+         */
+        public static final String CUSTOM_TOUCH_SLOP = "custom_touch_slop";
+
+        /**
          * Determine custom scroll friction.
          * @hide
          */

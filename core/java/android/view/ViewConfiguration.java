@@ -141,7 +141,13 @@ public class ViewConfiguration {
      * It may be appropriate to tweak this on a device-specific basis in an overlay based on
      * the characteristics of the touch panel and firmware.
      */
-    private static final int TOUCH_SLOP = 8;
+    private static int TOUCH_SLOP = 8;
+
+    /**
+     * Maximum velocity to initiate a fling, as measured in dips per second
+     * @hide
+     */
+    public static final int DEFAULT_TOUCH_SLOP = 8;
 
     /**
      * Distance the first touch can wander before we stop considering this event a double tap
@@ -308,6 +314,7 @@ public class ViewConfiguration {
                           Settings.System.ANIMATION_CONTROLS_NO_SCROLL, 0) != 1) {
             SCROLL_FRICTION = DEFAULT_SCROLL_FRICTION;
             MAXIMUM_FLING_VELOCITY = DEFAULT_MAXIMUM_FLING_VELOCITY;
+            TOUCH_SLOP = DEFAULT_TOUCH_SLOP;
             OVERSCROLL_DISTANCE = DEFAULT_OVERSCROLL_DISTANCE;
             OVERFLING_DISTANCE = DEFAULT_OVERFLING_DISTANCE;
         } else {
@@ -319,6 +326,13 @@ public class ViewConfiguration {
                 MAXIMUM_FLING_VELOCITY = DEFAULT_MAXIMUM_FLING_VELOCITY;
             } else {
                 MAXIMUM_FLING_VELOCITY = maximumFlingVelocity;
+            }
+            int touchSlop = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_TOUCH_SLOP, DEFAULT_TOUCH_SLOP);
+            if (touchSlop == 0) {
+                TOUCH_SLOP = DEFAULT_TOUCH_SLOP;
+            } else {
+                TOUCH_SLOP = touchSlop;
             }
             int overScrollDistance = Settings.System.getInt(resolver,
                           Settings.System.CUSTOM_OVERSCROLL_DISTANCE, DEFAULT_OVERSCROLL_DISTANCE);
