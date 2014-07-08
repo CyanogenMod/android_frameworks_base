@@ -875,20 +875,41 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         setWallpaperItemPaddingToZero(clearImageTile);
         masterWallpaperList.addView(clearImageTile, 0);
 
-        // theme LOCKSCREEN wallpapers
-        ArrayList<ThemeLockWallpaperInfo> themeLockWallpapers = findThemeLockWallpapers();
-        ThemeLockWallpapersAdapter tla = new ThemeLockWallpapersAdapter(this, themeLockWallpapers);
-        populateWallpapersFromAdapter(mWallpapersView, tla, false, true);
-
-        // theme wallpapers
-        ArrayList<ThemeWallpaperInfo> themeWallpapers = findThemeWallpapers();
-        ThemeWallpapersAdapter ta = new ThemeWallpapersAdapter(this, themeWallpapers);
-        populateWallpapersFromAdapter(mWallpapersView, ta, false, true);
-
         // Populate the saved wallpapers
         mSavedImages = new SavedWallpaperImages(this);
         mSavedImages.loadThumbnailsAndImageIdList();
-        populateWallpapersFromAdapter(mWallpapersView, mSavedImages, true, true);
+        populateWallpapersFromAdapter(mWallpapersView, mSavedImages, true, false);
+
+        // populate lockscreen wallpapers
+        new AsyncTask<Void, Void, ArrayList<ThemeLockWallpaperInfo>>() {
+            @Override
+            protected ArrayList<ThemeLockWallpaperInfo> doInBackground(Void... params) {
+                return findThemeLockWallpapers();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<ThemeLockWallpaperInfo>
+                                                 themeLockWallpaperInfos) {
+                ThemeLockWallpapersAdapter tla = new ThemeLockWallpapersAdapter(
+                        LockWallpaperPickerActivity.this, themeLockWallpaperInfos);
+                populateWallpapersFromAdapter(mWallpapersView, tla, false, true);
+            }
+        }.execute((Void) null);
+
+        // populate wallpapers
+        new AsyncTask<Void, Void, ArrayList<ThemeWallpaperInfo>>() {
+            @Override
+            protected ArrayList<ThemeWallpaperInfo> doInBackground(Void... params) {
+                return findThemeWallpapers();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<ThemeWallpaperInfo> themeWallpaperInfos) {
+                ThemeWallpapersAdapter ta = new ThemeWallpapersAdapter(
+                        LockWallpaperPickerActivity.this, themeWallpaperInfos);
+                populateWallpapersFromAdapter(mWallpapersView, ta, false, false);
+            }
+        }.execute((Void) null);
 
         // Make its background the last photo taken on external storage
         Bitmap lastPhoto = getThumbnailOfLastPhoto();
@@ -1103,7 +1124,7 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
             boolean addLongPressHandler, boolean selectFirstTile) {
         for (int i = 0; i < adapter.getCount(); i++) {
             FrameLayout thumbnail = (FrameLayout) adapter.getView(i, null, parent);
-            parent.addView(thumbnail, i);
+            parent.addView(thumbnail);
             WallpaperTileInfo info = (WallpaperTileInfo) adapter.getItem(i);
             thumbnail.setTag(info);
             info.setView(thumbnail);
