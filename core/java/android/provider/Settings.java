@@ -3080,6 +3080,15 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to center the clock in status bar
+         * 0: don't center the clock
+         * 1: center the clock
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_CENTERED = "status_bar_clock_centered";
+
+        /**
          * Whether to show the signal text or signal bars.
          * default: 0
          * 0: show signal bars
