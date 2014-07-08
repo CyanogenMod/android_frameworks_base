@@ -1004,7 +1004,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
                 sConfirmSafeVolumeDialog.setOnDismissListener(warning);
                 sConfirmSafeVolumeDialog.getWindow().setType(
-                                                WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+                                                WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY);
                 sConfirmSafeVolumeDialog.show();
             }
             updateStates();
