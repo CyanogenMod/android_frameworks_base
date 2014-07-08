@@ -5879,6 +5879,12 @@ public final class Settings {
         public static final String PROTECTED_COMPONENTS = "protected_components";
 
         /**
+         * Hidden (from launcher) Components
+         * @hide
+         */
+        public static final String HIDDEN_COMPONENTS = "hidden_components";
+
+        /**
          * The global recents long press activity chosen by the user.
          * This setting is stored as a flattened component name as
          * per {@link ComponentName#flattenToString()}.
