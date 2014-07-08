@@ -1221,7 +1221,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void removeHeadsUpView() {
-        mWindowManager.removeView(mHeadsUpNotificationView);
+        if (mHeadsUpNotificationView != null && mHeadsUpNotificationView.isAttachedToWindow()) {
+            mWindowManager.removeView(mHeadsUpNotificationView);
+        }
     }
 
     public void refreshAllStatusBarIcons() {
@@ -3264,10 +3266,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private void recreateStatusBar() {
         mRecreating = true;
 
-        if (mHeadsUpNotificationView != null) {
-            removeHeadsUpView();
-            mHeadsUpNotificationView = null;
-        }
+        removeHeadsUpView();
 
         mStatusBarContainer.removeAllViews();
         mStatusBarContainer.clearDisappearingChildren();
