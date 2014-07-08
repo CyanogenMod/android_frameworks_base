@@ -65,6 +65,7 @@ public class VibratorService extends IVibratorService.Stub
     private final IBatteryStats mBatteryStatsService;
     private InputManager mIm;
 
+    float vibrationMultiplier = 1;
     volatile VibrateThread mThread;
 
     // mInputDeviceVibrators lock should be acquired after mVibrations lock, if both are
@@ -167,14 +168,29 @@ public class VibratorService extends IVibratorService.Stub
                     }
                 }, UserHandle.USER_ALL);
 
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.VIBRATION_MULTIPLIER), true,
+                new ContentObserver(mH) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateVibrationMultiplier();
+                    }
+                }, UserHandle.USER_ALL);
         mContext.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateInputDeviceVibrators();
+                updateVibrationMultiplier();
             }
         }, new IntentFilter(Intent.ACTION_USER_SWITCHED), null, mH);
 
         updateInputDeviceVibrators();
+    }
+
+    void updateVibrationMultiplier() {
+        vibrationMultiplier = Settings.System.getFloat(
+                            mContext.getContentResolver(),
+                            Settings.System.VIBRATION_MULTIPLIER, 1);
     }
 
     public boolean hasVibrator() {
@@ -192,11 +208,12 @@ public class VibratorService extends IVibratorService.Stub
                 Binder.getCallingPid(), Binder.getCallingUid(), null);
     }
 
-    public void vibrate(int uid, String packageName, long milliseconds, IBinder token) {
+    public void vibrate(int uid, String packageName, long millis, IBinder token) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.VIBRATE)
                 != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException("Requires VIBRATE permission");
         }
+        long milliseconds = (long)(millis * vibrationMultiplier);
         verifyIncomingUid(uid);
         // We're running in the system server so we cannot crash. Check for a
         // timeout of 0 or negative. This will ensure that a vibration has
@@ -208,6 +225,8 @@ public class VibratorService extends IVibratorService.Stub
             // longer than milliseconds.
             return;
         }
+
+        milliseconds = userDuration(milliseconds);
 
         Vibration vib = new Vibration(token, milliseconds, uid, packageName);
 
@@ -234,7 +253,19 @@ public class VibratorService extends IVibratorService.Stub
         return true;
     }
 
-    public void vibratePattern(int uid, String packageName, long[] pattern, int repeat,
+    private long userDuration(long millis) {
+        int userMillis = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.MINIMUM_VIBRATION_DURATION,
+                0, UserHandle.USER_CURRENT_OR_SELF);
+        // Set length if <= userMillis && not default
+        if (userMillis != 0 && millis <= userMillis) {
+            millis = userMillis;
+        }
+        return millis;
+    }
+
+    public void vibratePattern(int uid, String packageName, long[] pattern2, int repeat,
             IBinder token) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.VIBRATE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -247,6 +278,11 @@ public class VibratorService extends IVibratorService.Stub
         // so wakelock calls will succeed
         long identity = Binder.clearCallingIdentity();
         try {
+            int NQ = pattern2.length;
+            long[] pattern = new long[NQ];
+                for (int i=0; i<NQ; i++) {
+                    pattern[i] = (long)(pattern2[i] * vibrationMultiplier);
+                }
             if (false) {
                 String s = "";
                 int N = pattern.length;
@@ -479,6 +515,8 @@ public class VibratorService extends IVibratorService.Stub
     }
 
     private void doVibratorOn(long millis, int uid) {
+        millis = userDuration(millis);
+
         synchronized (mInputDeviceVibrators) {
             try {
                 mBatteryStatsService.noteVibratorOn(uid, millis);
