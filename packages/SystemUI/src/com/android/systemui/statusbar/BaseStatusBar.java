@@ -233,7 +233,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (Settings.System.getIntForUser(resolver,
                     Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) != 0) {
                 mExpandedDesktopStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
+                        Settings.System.EXPANDED_DESKTOP_STYLE, 2, UserHandle.USER_CURRENT);
             }
             final String dndString = Settings.System.getString(mContext.getContentResolver(),
                     Settings.System.HEADS_UP_CUSTOM_VALUES);
