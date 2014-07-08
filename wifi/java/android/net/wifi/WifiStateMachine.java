@@ -151,6 +151,7 @@ public class WifiStateMachine extends StateMachine {
     private int mLastNetworkId;
     private boolean mEnableRssiPolling = false;
     private boolean mEnableBackgroundScan = false;
+    private boolean mDisabled5GhzFrequencies = false;
     private int mRssiPollToken = 0;
     private int mReconnectCount = 0;
     /* 3 operational states for STA operation: CONNECT_MODE, SCAN_ONLY_MODE, SCAN_ONLY_WIFI_OFF_MODE
@@ -3222,6 +3223,14 @@ public class WifiStateMachine extends StateMachine {
                         mFrequencyBand.set(band);
                         // flush old data - like scan results
                         mWifiNative.bssFlush();
+                        if (mFrequencyBand.get() == WifiManager.WIFI_FREQUENCY_BAND_2GHZ) {
+                            mWifiNative.disable5GHzFrequencies(true);
+                            mDisabled5GhzFrequencies = true;
+                        } else if ((mFrequencyBand.get() != WifiManager.WIFI_FREQUENCY_BAND_2GHZ)
+                                && (mDisabled5GhzFrequencies)) {
+                            mWifiNative.disable5GHzFrequencies(false);
+                            mDisabled5GhzFrequencies = false;
+                        }
                         //Fetch the latest scan results when frequency band is set
                         startScanNative(WifiNative.SCAN_WITH_CONNECTION_SETUP);
                     } else {
