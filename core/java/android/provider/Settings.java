@@ -5741,11 +5741,16 @@ public final class Settings {
         public static final String PROTECTED_COMPONENTS = "protected_components";
 
         /**
-         * This are the settings to be backed up.
-         *
-         * NOTE: Settings are backed up and restored in the order they appear
-         *       in this array. If you have one setting depending on another,
-         *       make sure that they are ordered appropriately.
+         * Hidden (from launcher) Components
+         * @hide
+         */
+        public static final String HIDDEN_COMPONENTS = "hidden_components";
+
+        /**
+         * This are the settings to be backed up. NOTE: Settings are backed up
+         * and restored in the order they appear in this array. If you have one
+         * setting depending on another, make sure that they are ordered
+         * appropriately.
          *
          * @hide
          */
