@@ -27,8 +27,11 @@ public class IconMerger extends LinearLayout {
     private static final String TAG = "IconMerger";
     private static final boolean DEBUG = false;
 
+    private static final int CENTER_CLOCK_MAX_ICONS = 5;
+
     private int mIconSize;
     private View mMoreView;
+    private boolean mCenteredClock = false;
 
     public IconMerger(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -49,7 +52,10 @@ public class IconMerger extends LinearLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         // we need to constrain this to an integral multiple of our children
-        int width = getMeasuredWidth();
+        int width = getMeasuredWidth();;
+        if (mCenteredClock) {
+             width = mIconSize * CENTER_CLOCK_MAX_ICONS;
+        }
         setMeasuredDimension(width - (width % mIconSize), getMeasuredHeight());
     }
 
@@ -69,7 +75,11 @@ public class IconMerger extends LinearLayout {
         }
         final boolean overflowShown = (mMoreView.getVisibility() == View.VISIBLE);
         // let's assume we have one more slot if the more icon is already showing
-        if (overflowShown) visibleChildren --;
+        if ((mCenteredClock && (visibleChildren != CENTER_CLOCK_MAX_ICONS + 1)) && overflowShown) {
+            visibleChildren --;
+        } else if (!mCenteredClock && overflowShown) {
+            visibleChildren --;
+        }
         final boolean moreRequired = visibleChildren * mIconSize > width;
         if (moreRequired != overflowShown) {
             post(new Runnable() {
@@ -79,5 +89,9 @@ public class IconMerger extends LinearLayout {
                 }
             });
         }
+    }
+
+    public void setCenteredClock(boolean b) {
+        mCenteredClock = b;
     }
 }
