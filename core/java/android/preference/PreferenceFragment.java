@@ -324,7 +324,8 @@ public abstract class PreferenceFragment extends Fragment implements
         mHandler.obtainMessage(MSG_BIND_PREFERENCES).sendToTarget();
     }
 
-    private void bindPreferences() {
+    /** @hide */
+    protected void bindPreferences() {
         final PreferenceScreen preferenceScreen = getPreferenceScreen();
         if (preferenceScreen != null) {
             preferenceScreen.bind(getListView());

@@ -2045,4 +2045,8 @@
   <java-symbol type="color" name="holo_green_dark" />
   <java-symbol type="color" name="holo_purple_dark" />
   <java-symbol type="color" name="holo_red_dark" />
+  
+  <!-- External media format -->
+  <java-symbol type="string" name="extmedia_format_message_cm" />
+  
 </resources>

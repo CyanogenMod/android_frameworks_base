@@ -19,6 +19,8 @@
 
 package android.provider;
 
+import android.annotation.ChaosLab;
+import android.annotation.ChaosLab.Classification;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.SearchManager;
