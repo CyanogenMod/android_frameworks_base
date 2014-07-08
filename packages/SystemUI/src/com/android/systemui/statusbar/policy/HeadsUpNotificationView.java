@@ -22,7 +22,6 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -189,19 +188,6 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
         return mSwipeHelper.onInterceptTouchEvent(ev)
                 || mExpandHelper.onInterceptTouchEvent(ev)
                 || super.onInterceptTouchEvent(ev);
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
-        switch (event.getKeyCode()) {
-        case KeyEvent.KEYCODE_BACK:
-            if (!down) {
-                mBar.hideHeadsUp();
-            }
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
     }
 
     // View methods
