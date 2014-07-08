@@ -411,8 +411,12 @@ public class ExpandHelper implements Gefingerpoken, OnClickListener {
             }
 
             case MotionEvent.ACTION_DOWN:
-                mWatchingForPull = (isInside(mScrollView, x, y) || mForcedOneFinger);
+                final boolean inside = isInside(mScrollView, x, y);
+                mWatchingForPull = (inside || mForcedOneFinger);
                 mLastMotionY = y;
+                if (inside) {
+                    mInitialTouchY = y;
+                }
                 break;
 
             case MotionEvent.ACTION_CANCEL:
