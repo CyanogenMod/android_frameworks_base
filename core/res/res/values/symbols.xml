@@ -714,8 +714,10 @@
   <java-symbol type="string" name="mobile_redirected_provisioning_url" />
   <java-symbol type="string" name="progress_nomediapresent" />
   <java-symbol type="string" name="quick_contacts_not_available" />
+  <java-symbol type="string" name="reboot_confirm" />
   <java-symbol type="string" name="reboot_safemode_confirm" />
   <java-symbol type="string" name="reboot_safemode_title" />
+  <java-symbol type="string" name="reboot_title" />
   <java-symbol type="string" name="relationTypeAssistant" />
   <java-symbol type="string" name="relationTypeBrother" />
   <java-symbol type="string" name="relationTypeChild" />
@@ -1136,6 +1138,7 @@
   <java-symbol type="drawable" name="cling_button" />
   <java-symbol type="drawable" name="cling_arrow_up" />
   <java-symbol type="drawable" name="cling_bg" />
+  <java-symbol type="drawable" name="ic_lock_power_reboot" />
 
   <java-symbol type="layout" name="action_bar_home" />
   <java-symbol type="layout" name="action_bar_title_item" />
@@ -1337,6 +1340,7 @@
   <java-symbol type="bool" name="config_enableTranslucentDecor" />
   <java-symbol type="bool" name="config_lidControlsSleep" />
   <java-symbol type="bool" name="config_reverseDefaultRotation" />
+  <java-symbol type="bool" name="config_showRebootOption" />
   <java-symbol type="bool" name="config_showNavigationBar" />
   <java-symbol type="bool" name="config_forceSupportRotationLockToggle" />
   <java-symbol type="bool" name="target_honeycomb_needs_options_menu" />
@@ -1414,6 +1418,7 @@
   <java-symbol type="string" name="bugreport_message" />
   <java-symbol type="string" name="faceunlock_multiple_failures" />
   <java-symbol type="string" name="global_action_power_off" />
+  <java-symbol type="string" name="global_action_reboot" />
   <java-symbol type="string" name="global_actions_airplane_mode_off_status" />
   <java-symbol type="string" name="global_actions_airplane_mode_on_status" />
   <java-symbol type="string" name="global_actions_toggle_airplane_mode" />

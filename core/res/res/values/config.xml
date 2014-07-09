@@ -1488,4 +1488,6 @@
 
     <!-- Configuration to support rotation lock toggle -->
     <bool name="config_forceSupportRotationLockToggle">false</bool>
+    <!-- Should the device show reboot option when long press the power key -->
+    <bool name="config_showRebootOption">false</bool>
 </resources>
