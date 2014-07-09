@@ -522,7 +522,13 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                                 String.format("Invalid event from daemon (%s)", raw));
                     }
                     boolean isActive = cooked[2].equals("active");
-                    notifyInterfaceClassActivity(cooked[3], isActive);
+
+                    Slog.d(TAG, "onEvent: "+ raw);
+                    if(cooked[4] != null) {
+                        notifyInterfaceClassActivity(cooked[3] + " " + cooked[4], isActive);
+                    } else {
+                        notifyInterfaceClassActivity(cooked[3], isActive);
+                    }
                     return true;
                     // break;
             case NetdResponseCode.InterfaceAddressChange:
