@@ -2331,11 +2331,21 @@ public class LocationManagerService extends ILocationManager.Stub {
 
     private Location screenLocationLocked(Location location, String provider) {
 
-        if (mComboNlpPackageName == null || false == provider.equals(LocationManager.NETWORK_PROVIDER)) {
+        LocationProviderProxy providerProxy =
+                (LocationProviderProxy)mProvidersByName.get(LocationManager.NETWORK_PROVIDER);
+        if (mComboNlpPackageName == null || providerProxy == null ||
+            false == provider.equals(LocationManager.NETWORK_PROVIDER) ||
+            isMockProvider(LocationManager.NETWORK_PROVIDER)) {
+            return location;
+        }
+
+        String connectedNlpPackage = providerProxy.getConnectedPackageName();
+        if (connectedNlpPackage == null || !connectedNlpPackage.equals(mComboNlpPackageName)) {
             return location;
         }
 
         Bundle extras = location.getExtras();
+        boolean isBeingScreened = false;
         if (extras == null) {
             extras = new Bundle();
         }
@@ -2347,8 +2357,11 @@ public class LocationManagerService extends ILocationManager.Stub {
             if (records != null) {
                 for (UpdateRecord r : records) {
                     if (r.mReceiver.mPackageName.equals(mComboNlpPackageName)) {
-                        extras.putBoolean(mComboNlpScreenMarker, true);
-                        // send location Combo Nlp for screening
+                        if (!isBeingScreened) {
+                            isBeingScreened = true;
+                            extras.putBoolean(mComboNlpScreenMarker, true);
+                        }
+                        // send location to Combo Nlp for screening
                         if (!r.mReceiver.callLocationChangedLocked(location)) {
                             Slog.w(TAG, "RemoteException calling onLocationChanged on "
                                    + r.mReceiver);
@@ -2357,9 +2370,11 @@ public class LocationManagerService extends ILocationManager.Stub {
                                 Log.d(TAG, "Sending location for screening");
                             }
                         }
-                        return null;
                     }
                 }
+            }
+            if (isBeingScreened) {
+                return null;
             }
             if (D) {
                 Log.d(TAG, "Not screening locations");
