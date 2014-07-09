@@ -19,6 +19,7 @@ package com.android.keyguard;
 
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.os.SystemClock;
@@ -203,4 +204,9 @@ class KeyguardUpdateMonitorCallback {
      * Called when the sevice state changes.
      */
     void onServiceStateChanged(ServiceState state, int sub) { }
+
+    /**
+     * Called when the unread state changes.
+     */
+    void onUnreadStateChanged(ComponentName componentName, int number) { }
 }
