@@ -5290,17 +5290,14 @@ public class Activity extends ContextThemeWrapper
             // Create our new window
             mWindow = PolicyManager.makeNewWindow(this);
             mWindow.mIsFloatingWindow = true;
-            mWindow.setCloseOnTouchOutsideIfNotSet(true);
+            mWindow.setCloseOnTouchOutsideIfNotSet(false);
             mWindow.setGravity(Gravity.CENTER);
 
-            if (this instanceof LayerActivity || android.os.Process.myUid() == android.os.Process.SYSTEM_UID) {
-                mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                WindowManager.LayoutParams params = mWindow.getAttributes();
-                params.alpha = 1f;
-                params.dimAmount = 0.25f;
-                mWindow.setAttributes((android.view.WindowManager.LayoutParams) params);
-            }
+            int flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+                mWindow.setFlags(flags, flags);
+            WindowManager.LayoutParams params = mWindow.getAttributes();
+            params.alpha = 1f;
+            mWindow.setAttributes(params);
 
             // Scale it
             scaleFloatingWindow(context);
