@@ -502,7 +502,10 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label">AUTO</string>
     <!-- QuickSettings: Apn switcher button label [CHAR LIMIT=NONE] -->
     <string name="quick_settings_apn_switch_label">APN switch</string>
-
+    <!-- QuickSettings: Ringer mode [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_ringer_mode_silent_label">Silent</string>
+    <string name="quick_settings_ringer_mode_vibrate_label">Vibrate</string>
+    <string name="quick_settings_ringer_mode_normal_label">Ring</string>
 
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
