@@ -1480,4 +1480,7 @@
     <integer name="config_overrideHasPermanentMenuKey">0</integer>
     <!-- config network mode to operator specific -->
     <bool name="config_network_mode_overriden">false</bool>
+
+    <!-- Configuration to support rotation lock toggle -->
+    <bool name="config_forceSupportRotationLockToggle">false</bool>
 </resources>

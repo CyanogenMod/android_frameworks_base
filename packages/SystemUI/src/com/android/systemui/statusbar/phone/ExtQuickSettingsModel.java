@@ -36,13 +36,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemProperties;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.MSimTelephonyManager;
@@ -520,6 +523,12 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                 new DdsSwitchObserver(mHandler).startObserving();
             }
         }
+
+        if (mContext.getResources().getBoolean(R.bool.config_showRingerModeSwitch)) {
+            IntentFilter ringerIntentFilter = new IntentFilter();
+            ringerIntentFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+            context.registerReceiver(mRingerModeReceiver, ringerIntentFilter);
+        }
     }
 
     void updateResources() {
@@ -527,6 +536,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
 
         refreshApnTile();
         updateDds();
+        refreshRingerModeTile();
     }
 
     public QuickSettingsBasicTile addRoamingTile() {
@@ -852,4 +862,66 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
         return ret;
     }
 
+    /** Broadcast receive to get ringer mode. */
+    private BroadcastReceiver mRingerModeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+                onRingerModeChanged();
+            }
+        }
+    };
+
+    //Ringer Mode
+    private QuickSettingsTileView mRingerModeTile;
+    private RefreshCallback mRingerModeCallback;
+    private State mRingerModeState = new State();
+    private ArrayList<Integer> mRingerModes = new ArrayList<Integer>();
+
+    void addRingerModeTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mRingerModeTile = view;
+        mRingerModeCallback = cb;
+
+        // Load ringer modes
+        Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        mRingerModes.clear();
+        mRingerModes.add(AudioManager.RINGER_MODE_SILENT);
+        if (vibrator != null && vibrator.hasVibrator()) {
+            mRingerModes.add(AudioManager.RINGER_MODE_VIBRATE);
+        }
+        mRingerModes.add(AudioManager.RINGER_MODE_NORMAL);
+
+        onRingerModeChanged();
+    }
+
+    public void onRingerModeChanged() {
+        AudioManager mAudioManager =
+                (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        final int ringerMode = mAudioManager.getRingerMode();
+        Resources r = mContext.getResources();
+        TypedArray iconsTypedArray = r.obtainTypedArray(R.array.ringer_mode_icon);
+        mRingerModeState.iconId = iconsTypedArray.getResourceId(ringerMode, 0);
+        TypedArray labelsTypedArray = r.obtainTypedArray(R.array.ringer_mode_label);
+        mRingerModeState.label = labelsTypedArray.getString(ringerMode);
+
+        if (mRingerModeCallback != null) {
+            mRingerModeCallback.refreshView(mRingerModeTile, mRingerModeState);
+        }
+    }
+
+    public void refreshRingerModeTile() {
+        if (mRingerModeTile != null) {
+            onRingerModeChanged();
+        }
+    }
+
+    public void switchNextRingerMode() {
+        AudioManager mAudioManager =
+                (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        final int currentIndex = mRingerModes.indexOf(mAudioManager.getRingerMode());
+        final int nextRingerMode =
+                mRingerModes.get((currentIndex + 1) % mRingerModes.size());
+        mAudioManager.setRingerMode(nextRingerMode);
+    }
 }
