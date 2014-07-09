@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Lyd <xliff:g id="state" example="av"> %s </xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Vibrasjon <xliff:g id="state" example="av"> %s </xliff:g>.</string>
+  <string name="accessibility_dpad_left">Markør til venstre</string>
+  <string name="accessibility_dpad_right">Markør til høyre</string>
   <string name="dessert_case_settings_cm_title">Vis CM maskoter</string>
   <string name="dessert_case_settings_cm_summary">Vis CM maskoter sammen med Android er desserter i drømmen</string>
   <string name="quick_settings_profile_label">Profil</string>
@@ -59,6 +61,8 @@
   <string name="quick_settings_equalizer">Equalizer</string>
   <string name="quick_settings_compass_off">Kompass av</string>
   <string name="quick_settings_compass_init">Initialiserer\u2026</string>
+  <string name="quick_settings_heads_up_on">Heads-up aktivert</string>
+  <string name="quick_settings_heads_up_off">Ingen forstyrrelser</string>
   <string name="location_mode_high_accuracy_title">Høy nøyaktighet</string>
   <string name="location_mode_battery_saving_title">Batterisparing</string>
   <string name="location_mode_sensors_only_title">Kun enhet</string>

@@ -75,8 +75,15 @@
   <string name="permdesc_changePhoneBlacklist">ڕێگەدان بە بەرنامەکە بۆ ئەو ژمارانەی بلۆک کراون بۆ نامەو تەلەفۆن.</string>
   <string name="permlab_accessThemeService">ڕاژەی ڕێگەی تێم</string>
   <string name="permdesc_accessThemeService">ڕێگەدان بە بارنامە بۆ ڕاژەی تێم. کە پێویست ناکا بۆ بەرنامەی ئاسای.</string>
+  <string name="permlab_readThemes">خوێندنه‌وه‌ی زانیاری له‌باره‌ی باکگراوه‌نده‌که‌ت</string>
+  <string name="permdesc_readThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ خوێندنه‌وه‌ی باکگراوه‌نده‌کانت وه‌ بڕیاردانی باکگراوه‌ندێک که‌ خۆت په‌سه‌ندته‌.</string>
+  <string name="permlab_writeThemes">گۆڕینی باکگراوه‌نده‌کانت</string>
+  <string name="permdesc_writeThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ هێنانی باکگراوه‌ندی نوێ و
+ گۆڕینی باکگراوه‌ندێک که‌ خۆت لات په‌سه‌نده‌.</string>
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی شاشەی دیوارپۆش.</string>
+  <string name="permlab_useHardwareFramework">به‌کارهێنانی هاردوێر بۆ کاری چوارچێوه‌</string>
+  <string name="permdesc_useHardwareFramework">ڕێگه‌دان به‌ به‌رنامه‌یه‌ک بۆ ده‌سته‌ڵاتی چوارچێوه‌ کاری CM.</string>
   <string name="immersive_mode_confirmation_bottom">ساوین بەرەو خوارەوە بۆ دەرچوون لە پڕ شاشە.</string>
   <string name="app_ops_access_camera">ڕێگەدان بەکامێرا</string>
   <string name="app_ops_access_location">ڕێگەی ناوچەی</string>
@@ -118,7 +125,13 @@
   <string name="app_ops_use_voice_volume">کۆنترۆڵی دەنگی تەلەفۆن</string>
   <string name="app_ops_write_mms">نوسنی نامەی MMS</string>
   <string name="app_ops_write_sms">نوسینی نامەی SMS</string>
+  <string name="notify_turn_wifi_off_title">کوژاندنه‌وه‌ی وایفای</string>
   <string name="privacy_guard_dialog_title">پاسەوانی تایبەتی</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="بەرنامە">%1$s</xliff:g> حەز ئەکەی بۆ <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">بیرم بهێنەوە هەڵبژاردەکەم</string>
+  <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
+  <string name="adb_both_active_notification_title">ABD سه‌روو USB &amp; هێڵ کارده‌کات</string>
+  <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی USB (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
+  <string name="extmedia_format_message_cm" product="default">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی ناوه‌کی (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
 </resources>

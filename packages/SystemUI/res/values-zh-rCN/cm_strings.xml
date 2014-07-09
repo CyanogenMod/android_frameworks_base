@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">声音 <xliff:g id="state" example="Off">%s</xliff:g>。</string>
   <string name="accessibility_quick_settings_vibration">振动 <xliff:g id="state" example="Off">%s</xliff:g>。</string>
+  <string name="accessibility_dpad_left">光标左移</string>
+  <string name="accessibility_dpad_right">光标右移</string>
   <string name="dessert_case_settings_cm_title">显示 CM 的吉祥物</string>
   <string name="dessert_case_settings_cm_summary">显示 CM 的吉祥物及 Android 的甜品</string>
   <string name="quick_settings_profile_label">情景模式</string>

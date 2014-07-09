@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB hálózaton keresztül engedélyezve</string>
   <string name="adb_both_active_notification_title">ADB USB-n keresztül &amp; hálózat engedélyezve</string>
   <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Minden adat az USB tárolóról (ezen az útvonalon: %1$s) el fog veszni. A műveletet nem lehet visszavonni!</string>
+  <string name="extmedia_format_message_cm" product="default">Minden adat a kártyájáról (ezen az útvonalon: %1$s) el fog veszni. A műveletet nem lehet visszavonni!</string>
 </resources>
