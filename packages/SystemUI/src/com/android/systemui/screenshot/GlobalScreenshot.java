@@ -44,6 +44,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Process;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -56,6 +57,7 @@ import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 
+import com.android.internal.util.cm.QuietHoursUtils;
 import com.android.systemui.R;
 import com.android.systemui.screenshot.DeleteScreenshot;
 
@@ -538,8 +540,14 @@ class GlobalScreenshot {
         mScreenshotLayout.post(new Runnable() {
             @Override
             public void run() {
-                // Play the shutter sound to notify that we've taken a screenshot
-                mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                // Play the shutter sound to notify that we've taken a screenshot, but only if
+                // we aren't in quiet hours
+                // The reason behind this code is added here and not in MediaActionSound is for
+                // legal considerations (take a photo or record with the camera cannot be silence),
+                // but take a screenshot of the current has no legal considerations.
+                if (!QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_SYSTEM)) {
+                    mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                }
 
                 mScreenshotView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 mScreenshotView.buildLayer();
