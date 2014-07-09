@@ -234,6 +234,8 @@
     <string name="description_target_soundon">Sound on</string>
     <!-- Description of the unlock target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
     <string name="description_target_search">Search</string>
+    <string name="description_target_call">Call</string>
+    <string name="description_target_message">Message</string>
 
     <!-- Description of the up direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
     <string name="description_direction_up">Slide up for <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
