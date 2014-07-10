@@ -103,4 +103,6 @@
 
     <!-- Content description for the add quick settings tile button. [CHAR LIMIT=NONE]
     <string name="accessibility_desc_add_quick_settings">Add Quick settings.</string> -->
+
+    <string name="status_bar_notification_spam_item_title">Block messages like these</string>
 </resources>
