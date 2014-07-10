@@ -19,6 +19,7 @@
         <item>@string/reboot_reboot</item>
         <item>@string/reboot_recovery</item>
         <item>@string/hot_reboot</item>
+        <item>@string/reboot_soft</item>
         <item>@string/reboot_bootloader</item>
     </array>
 
@@ -28,6 +29,7 @@
         <item></item>
         <item>recovery</item>
         <item>hot</item>
+        <item>soft_reboot</item>
         <item>bootloader</item>
     </string-array>
 
