@@ -679,7 +679,6 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* conte
         // We cannot shape an empty run.
         return;
     }
-    size_t startAdvances = outAdvances->size();
 
     // To be filled in later
     for (size_t i = 0; i < count; i++) {
@@ -747,7 +746,7 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* conte
         for (size_t i = 0; i < numGlyphs; i++) {
             size_t cluster = info[i].cluster - start;
             float xAdvance = HBFixedToFloat(positions[i].x_advance);
-            outAdvances->replaceAt(outAdvances->itemAt(cluster) + xAdvance, startAdvances + cluster);
+            outAdvances->replaceAt(outAdvances->itemAt(cluster) + xAdvance, cluster);
             jchar glyphId = info[i].codepoint + glyphBaseCount;
             outGlyphs->add(glyphId);
             float xo = HBFixedToFloat(positions[i].x_offset);
