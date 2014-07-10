@@ -280,5 +280,11 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
+
+        <provider android:name=".cm.SpamMessageProvider"
+                  android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
+                  android:exported="true"
+                  android:authorities="com.cyanogenmod.spam" />
+
     </application>
 </manifest>
