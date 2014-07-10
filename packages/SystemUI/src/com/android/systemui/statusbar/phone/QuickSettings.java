@@ -549,6 +549,25 @@ class QuickSettings {
             parent.addView(rotationLockTile);
         }
 
+        // Ringer Mode
+        if (mContext.getResources().getBoolean(R.bool.config_showRingerModeSwitch)) {
+            final QuickSettingsBasicTile ringerModeTile = new QuickSettingsBasicTile(mContext);
+            ringerModeTile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mModel.switchNextRingerMode();
+                }
+            });
+            mModel.addRingerModeTile(ringerModeTile,new QuickSettingsModel.RefreshCallback() {
+                @Override
+                public void refreshView(QuickSettingsTileView unused, State state) {
+                    ringerModeTile.setImageResource(state.iconId);
+                    ringerModeTile.setText(state.label);
+                }
+            });
+            parent.addView(ringerModeTile);
+        }
+
         // Battery
         final QuickSettingsTileView batteryTile = (QuickSettingsTileView)
                 inflater.inflate(R.layout.quick_settings_tile, parent, false);

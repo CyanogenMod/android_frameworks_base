@@ -44,4 +44,6 @@
 
     <!-- show cancel button on SIM PIN lock screen-->
     <bool name="config_show_cancel_button">false</bool>
+
+    <bool name="config_show_lockscreen_custom_targets">false</bool>
 </resources>
