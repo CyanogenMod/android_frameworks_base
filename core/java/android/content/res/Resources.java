@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable.ConstantState;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.Trace;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -40,6 +41,8 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.util.LongSparseArray;
+import android.view.IWindowManager;
+import android.view.WindowManagerGlobal;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -912,12 +915,17 @@ public class Resources {
      * @return Returns the boolean value contained in the resource.
      */
     public boolean getBoolean(int id) throws NotFoundException {
+        return getBoolean(id, true);
+    }
+
+    /** @hide */
+    public boolean getBoolean(int id, boolean override) throws NotFoundException {
         synchronized (mAccessLock) {
             TypedValue value = mTmpValue;
             if (value == null) {
                 mTmpValue = value = new TypedValue();
             }
-            getValue(id, value, true);
+            getValue(id, value, true, override);
             if (value.type >= TypedValue.TYPE_FIRST_INT
                 && value.type <= TypedValue.TYPE_LAST_INT) {
                 return value.data != 0;
@@ -1157,11 +1165,24 @@ public class Resources {
      */
     public void getValue(int id, TypedValue outValue, boolean resolveRefs)
             throws NotFoundException {
-        getValue(id, outValue, resolveRefs, true);
+        getValue(id, outValue, resolveRefs, true, false);
     }
+
+    /** @hide */
+    public void getValue(int id, TypedValue outValue, boolean resolveRefs, boolean override)
+            throws NotFoundException {
+        getValue(id, outValue, resolveRefs, true, override);
+    }
+
     /** @hide */
     public void getValue(int id, TypedValue outValue, boolean resolveRefs,
-                         boolean supportComposedIcons) throws NotFoundException {
+                         boolean supportComposedIcons, boolean override) throws NotFoundException {
+        if (override) {
+            boolean isOverriden = isOverridenId(id, outValue);
+            if (isOverriden) {
+                return;
+            }
+        }
         //Check if an icon was themed
         PackageItemInfo info = mIcons != null ? mIcons.get(id) : null;
         if (info != null && info.themedIcon != 0) {
@@ -1178,6 +1199,33 @@ public class Resources {
         }
         throw new NotFoundException("Resource ID #0x"
                                     + Integer.toHexString(id));
+    }
+
+    /**
+     * Override any resource id's here that are necessary
+     * Ensure the outValue is populated with the right attributes
+     * @param id
+     * @param outValue
+     * @return true to use the values in outValue, otherwise false
+     * to fallback to the resources original value
+     */
+    private boolean isOverridenId(int id, TypedValue outValue) {
+        switch (id) {
+            case com.android.internal.R.bool.config_showNavigationBar:
+                IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+                try {
+                    boolean hasNavbar = wm.hasNavigationBar();
+                    outValue.type = TypedValue.TYPE_INT_BOOLEAN;
+                    outValue.data = hasNavbar ? 1 : 0;
+                    outValue.resourceId = id;
+                    return true;
+                } catch (RemoteException ex) {
+                    // Fallback to the original resource value
+                    return false;
+                }
+            default:
+                return false;
+        }
     }
 
     /**
