@@ -38,6 +38,7 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IPowerManager;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -269,6 +270,34 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     return true;
                 }
             });
+
+        if (mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showRebootOption)) {
+            mItems.add(
+                new SinglePressAction(
+                        com.android.internal.R.drawable.ic_lock_power_reboot,
+                        R.string.global_action_reboot) {
+
+                    public void onPress() {
+                        try {
+                            IPowerManager pm = IPowerManager.Stub.asInterface(ServiceManager
+                                    .getService(Context.POWER_SERVICE));
+                            pm.reboot(true, null, false);
+                        } catch (RemoteException e) {
+                            Log.e(TAG, "PowerManager service died!", e);
+                            return;
+                        }
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
 
         // next: airplane mode
         mItems.add(mAirplaneModeOn);
