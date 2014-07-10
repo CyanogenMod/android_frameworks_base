@@ -1728,5 +1728,10 @@
         <item>试图读取彩信</item>
         <item>试图修改彩信</item>
         <item>试图自启动</item>
+        <item>试图开关NFC</item>
+        <item>试图删除短信</item>
+        <item>试图删除彩信</item>
+        <item>试图删除联系人</item>
+        <item>试图删除通话记录</item>
     </string-array>
 </resources>

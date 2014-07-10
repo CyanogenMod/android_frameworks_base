@@ -1388,6 +1388,11 @@
         <item>Trying to read MMS</item>
         <item>Trying to write MMS</item>
         <item>Trying to start at bootup</item>
+        <item>Trying to turn on/off NFC</item>
+        <item>Trying to delete SMS</item>
+        <item>Trying to delete MMS</item>
+        <item>Trying to delete contacts</item>
+        <item>Trying to delete call log</item>
     </string-array>
 
     <!-- Configuration to restart radio upon PDP_DEACTIVATE with
@@ -1480,4 +1485,7 @@
     <integer name="config_overrideHasPermanentMenuKey">0</integer>
     <!-- config network mode to operator specific -->
     <bool name="config_network_mode_overriden">false</bool>
+
+    <!-- Configuration to support rotation lock toggle -->
+    <bool name="config_forceSupportRotationLockToggle">false</bool>
 </resources>

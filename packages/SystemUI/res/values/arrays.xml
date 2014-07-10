@@ -1132,4 +1132,16 @@
         <item>China_Telecom</item>
         <item>roamingTextSearching</item>
     </string-array>
+
+    <string-array name="ringer_mode_icon">
+        <item>@*android:drawable/ic_audio_vol_mute_am</item>
+        <item>@*android:drawable/ic_audio_ring_notif_vibrate_am</item>
+        <item>@*android:drawable/ic_audio_vol_am</item>
+    </string-array>
+
+    <string-array name="ringer_mode_label">
+        <item>@string/quick_settings_ringer_mode_silent_label</item>
+        <item>@string/quick_settings_ringer_mode_vibrate_label</item>
+        <item>@string/quick_settings_ringer_mode_normal_label</item>
+    </string-array>
 </resources>
