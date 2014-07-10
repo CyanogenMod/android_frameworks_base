@@ -1968,7 +1968,7 @@
 
   <public type="string" name="status_bar_notification_info_overflow" id="0x01040017" />
 
-  <public type="string" name="default_string" id="0x01040018" />
+  <public type="string" name="default_string" id="0x0104001b" />
 
   <public type="color" name="holo_blue_light" id="0x01060012" />
   <public type="color" name="holo_blue_dark" id="0x01060013" />
