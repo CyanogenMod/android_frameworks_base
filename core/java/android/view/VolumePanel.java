@@ -908,11 +908,13 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             onStopSounds();
         }
 
-        synchronized (this) {
-            ToneGenerator toneGen = getOrCreateToneGenerator(streamType);
-            if (toneGen != null) {
-                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
-                sendMessageDelayed(obtainMessage(MSG_STOP_SOUNDS), BEEP_DURATION);
+        if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.QUIET_HOURS_SYSTEM, 0) != 2) {
+            synchronized (this) {
+                ToneGenerator toneGen = getOrCreateToneGenerator(streamType);
+                if (toneGen != null) {
+                    toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
+                    sendMessageDelayed(obtainMessage(MSG_STOP_SOUNDS), BEEP_DURATION);
+                }
             }
         }
     }
