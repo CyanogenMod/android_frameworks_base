@@ -23,6 +23,7 @@ import android.app.IUserSwitchObserver;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -101,6 +102,7 @@ public class KeyguardUpdateMonitor {
     private static final int MSG_SCREEN_TURNED_OFF = 320;
     private static final int MSG_AIRPLANE_MODE_CHANGED = 321;
     private static final int MSG_SERVICE_STATE_CHANGED = 322;
+    private static final int MSG_UNREAD_STATE_CHANGED = 323;
 
     private static KeyguardUpdateMonitor sInstance;
 
@@ -144,6 +146,20 @@ public class KeyguardUpdateMonitor {
     private boolean mScreenOn;
     public static final boolean
             sIsMultiSimEnabled = MSimTelephonyManager.getDefault().isMultiSimEnabled();
+
+    // Unread event state
+    private static final String ACTION_UNREAD_CHANGED =
+            "com.android.launcher.action.UNREAD_CHANGED";
+    private static final ComponentName MMS_COMPONENTNAME = new
+            ComponentName("com.android.mms", "com.android.mms.ui.ConversationList");
+    private static final ComponentName DIALER_COMPONENTNAME = new
+            ComponentName("com.android.dialer", "com.android.dialer.DialtactsActivity");
+    private static final int MESSAGE_UNREAD = 0;
+    private static final int DIALER_UNREAD = 1;
+    private static final int UNREAD_EVENT_TOTAL = DIALER_UNREAD + 1;
+    private int []mUnreadNum;
+    private ComponentName []mComponentName;
+    private boolean mShowLockscreenCustomTargets;
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -214,6 +230,9 @@ public class KeyguardUpdateMonitor {
                     break;
                 case MSG_SERVICE_STATE_CHANGED:
                     handleServiceStateChanged((ServiceState) msg.obj, msg.arg1);
+                    break;
+                case MSG_UNREAD_STATE_CHANGED:
+                    handleUnreadStateChanged((ComponentName) msg.obj, msg.arg1);
                     break;
             }
         }
@@ -360,6 +379,23 @@ public class KeyguardUpdateMonitor {
                         msg.arg1 = i;
                         mHandler.sendMessage(msg);
                     }
+                }
+            } else if (ACTION_UNREAD_CHANGED.equals(action)) {
+                Log.d(TAG, "Received ACTION_UNREAD_CHANGED intent");
+                if (mShowLockscreenCustomTargets) {
+                    ComponentName componentName = intent.getParcelableExtra("component_name");
+                    int unreadNum = intent.getIntExtra("unread_number", 0);
+                    if (componentName.equals(MMS_COMPONENTNAME)) {
+                        mUnreadNum[MESSAGE_UNREAD] = unreadNum;
+                        mComponentName[MESSAGE_UNREAD] = componentName;
+                    } else if (componentName.equals(DIALER_COMPONENTNAME)) {
+                        mUnreadNum[DIALER_UNREAD] = unreadNum;
+                        mComponentName[DIALER_UNREAD] = componentName;
+                    }
+                    final Message msg =
+                            mHandler.obtainMessage(MSG_UNREAD_STATE_CHANGED, componentName);
+                    msg.arg1 = unreadNum;
+                    mHandler.sendMessage(msg);
                 }
             }
         }
@@ -629,6 +665,12 @@ public class KeyguardUpdateMonitor {
         mOriginalTelephonySpn = new CharSequence[numPhones];
         mServiceState = new ServiceState[numPhones];
         mSimState = new IccCardConstants.State[numPhones];
+        mShowLockscreenCustomTargets =
+                mContext.getResources().getBoolean(R.bool.config_show_lockscreen_custom_targets);
+        if (mShowLockscreenCustomTargets) {
+            mUnreadNum = new int[UNREAD_EVENT_TOTAL];
+            mComponentName = new ComponentName[UNREAD_EVENT_TOTAL];
+        }
         for (int i = 0; i < numPhones; i++) {
             mTelephonyPlmn[i] = getDefaultPlmn();
             mTelephonySpn[i] = null;
@@ -653,6 +695,9 @@ public class KeyguardUpdateMonitor {
         filter.addAction(Intent.ACTION_USER_REMOVED);
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
+        if (mShowLockscreenCustomTargets) {
+            filter.addAction(ACTION_UNREAD_CHANGED);
+        }
         context.registerReceiver(mBroadcastReceiver, filter);
 
         final IntentFilter bootCompleteFilter = new IntentFilter();
@@ -972,6 +1017,15 @@ public class KeyguardUpdateMonitor {
         }
     }
 
+    private void handleUnreadStateChanged(ComponentName componentName, int number) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onUnreadStateChanged(componentName, number);
+            }
+        }
+    }
+
     /**
      * Handle {@link #MSG_CLOCK_VISIBILITY_CHANGED}
      */
@@ -1146,6 +1200,11 @@ public class KeyguardUpdateMonitor {
         boolean airplaneModeOn = Settings.System.getInt(
             mContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
         callback.onAirplaneModeChanged(airplaneModeOn);
+        if (mShowLockscreenCustomTargets) {
+            for (int i = 0; i < UNREAD_EVENT_TOTAL; i++) {
+                callback.onUnreadStateChanged(mComponentName[i], mUnreadNum[i]);
+            }
+        }
     }
 
     public void sendKeyguardVisibilityChanged(boolean showing) {

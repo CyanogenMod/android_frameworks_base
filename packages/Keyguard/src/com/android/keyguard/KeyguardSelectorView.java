@@ -46,6 +46,11 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     private static final String ASSIST_ICON_METADATA_NAME =
         "com.android.systemui.action_assist_icon";
 
+    private static final ComponentName MMS_COMPONENTNAME = new
+            ComponentName("com.android.mms", "com.android.mms.ui.ConversationList");
+    private static final ComponentName DIALER_COMPONENTNAME = new
+            ComponentName("com.android.dialer", "com.android.dialer.DialtactsActivity");
+
     private KeyguardSecurityCallback mCallback;
     private GlowPadView mGlowPadView;
     private ObjectAnimator mAnim;
@@ -131,6 +136,29 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
         @Override
         public void onSimStateChanged(State simState) {
             updateTargets();
+        }
+
+        @Override
+        public void onUnreadStateChanged(ComponentName componentName, int unreadNum) {
+            int resIdNormal = 0;
+            int pos = -1;
+            if (componentName != null) {
+                if (MMS_COMPONENTNAME.equals(componentName)) {
+                    resIdNormal = R.drawable.ic_lockscreen_message_normal;
+                    pos = mGlowPadView.getTargetPosition(R.drawable.ic_lockscreen_message);
+                    if (pos >= 0) {
+                        mGlowPadView.onReplaceTargetDrawables(mContext.getResources(),
+                                unreadNum, resIdNormal, pos);
+                    }
+                } else if (DIALER_COMPONENTNAME.equals(componentName)) {
+                    resIdNormal = R.drawable.ic_lockscreen_call_normal;
+                    pos = mGlowPadView.getTargetPosition(R.drawable.ic_lockscreen_call);
+                    if (pos >= 0) {
+                        mGlowPadView.onReplaceTargetDrawables(mContext.getResources(),
+                                unreadNum, resIdNormal, pos);
+                    }
+                }
+            }
         }
     };
 
