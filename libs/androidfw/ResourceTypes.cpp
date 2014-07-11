@@ -1148,21 +1148,58 @@ ssize_t ResXMLParser::indexOfAttribute(const char16_t* ns, size_t nsLen,
             return NAME_NOT_FOUND;
         }
         const size_t N = getAttributeCount();
-        for (size_t i=0; i<N; i++) {
-            size_t curNsLen, curAttrLen;
-            const char16_t* curNs = (const char16_t*)getAttributeNamespace(i, &curNsLen);
-            const char16_t* curAttr = (const char16_t*)getAttributeName(i, &curAttrLen);
-            //printf("%d: ns=%p attr=%p curNs=%p curAttr=%p\n",
-            //       i, ns, attr, curNs, curAttr);
-            //printf(" --> attr=%s, curAttr=%s\n",
-            //       String8(attr).string(), String8(curAttr).string());
-            if (attr && curAttr && (strzcmp16(attr, attrLen, curAttr, curAttrLen) == 0)) {
-                if (ns == NULL) {
-                    if (curNs == NULL) return i;
-                } else if (curNs != NULL) {
-                    //printf(" --> ns=%s, curNs=%s\n",
-                    //       String8(ns).string(), String8(curNs).string());
-                    if (strzcmp16(ns, nsLen, curNs, curNsLen) == 0) return i;
+        if (mTree.mStrings.isUTF8()) {
+            String8 ns8, attr8;
+            if (ns != NULL) {
+                ns8 = String8(ns, nsLen);
+            }
+            attr8 = String8(attr, attrLen);
+            STRING_POOL_NOISY(ALOGI("indexOfAttribute UTF8 %s (%d) / %s (%d)", ns8.string(), nsLen,
+                    attr8.string(), attrLen));
+            for (size_t i=0; i<N; i++) {
+                size_t curNsLen = 0, curAttrLen = 0;
+                const char* curNs = getAttributeNamespace8(i, &curNsLen);
+                const char* curAttr = getAttributeName8(i, &curAttrLen);
+                STRING_POOL_NOISY(ALOGI("  curNs=%s (%d), curAttr=%s (%d)", curNs, curNsLen,
+                        curAttr, curAttrLen));
+                if (curAttr != NULL && curNsLen == nsLen && curAttrLen == attrLen
+                        && memcmp(attr8.string(), curAttr, attrLen) == 0) {
+                    if (ns == NULL) {
+                        if (curNs == NULL) {
+                            STRING_POOL_NOISY(ALOGI("  FOUND!"));
+                            return i;
+                        }
+                    } else if (curNs != NULL) {
+                        //printf(" --> ns=%s, curNs=%s\n",
+                        //       String8(ns).string(), String8(curNs).string());
+                        if (memcmp(ns8.string(), curNs, nsLen) == 0) {
+                            STRING_POOL_NOISY(ALOGI("  FOUND!"));
+                            return i;
+                        }
+                    }
+                }
+            }
+        } else {
+            STRING_POOL_NOISY(ALOGI("indexOfAttribute UTF16 %s (%d) / %s (%d)",
+                    String8(ns, nsLen).string(), nsLen,
+                    String8(attr, attrLen).string(), attrLen));
+            for (size_t i=0; i<N; i++) {
+                size_t curNsLen = 0, curAttrLen = 0;
+                const char16_t* curNs = (const char16_t*)getAttributeNamespace(i, &curNsLen);
+                const char16_t* curAttr = (const char16_t*)getAttributeName(i, &curAttrLen);
+                STRING_POOL_NOISY(ALOGI("  curNs=%s (%d), curAttr=%s (%d)",
+                        String8(curNs, curNsLen).string(), curNsLen,
+                        String8(curAttr, curAttrLen).string(), curAttrLen));
+                if (attr && curAttr && (strzcmp16(attr, attrLen, curAttr, curAttrLen) == 0)) {
+                    if (ns == NULL) {
+                        STRING_POOL_NOISY(ALOGI("  FOUND!"));
+                        return i;
+                    } else if (curNs != NULL) {
+                        if (strzcmp16(ns, nsLen, curNs, curNsLen) == 0) {
+                            STRING_POOL_NOISY(ALOGI("  FOUND!"));
+                            return i;
+                        }
+                    }
                 }
             }
         }
