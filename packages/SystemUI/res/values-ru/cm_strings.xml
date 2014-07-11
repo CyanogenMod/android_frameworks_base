@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Звук <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Вибрация <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Курсор влево</string>
+  <string name="accessibility_dpad_right">Курсор вправо</string>
   <string name="dessert_case_settings_cm_title">Значки CyanogenMod</string>
   <string name="dessert_case_settings_cm_summary">Показывать Сида вместе с «десертами» в заставке</string>
   <string name="quick_settings_profile_label">Профиль</string>
