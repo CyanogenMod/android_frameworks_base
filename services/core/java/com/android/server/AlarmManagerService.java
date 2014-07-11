@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,6 +114,9 @@ class AlarmManagerService extends SystemService {
     final LocalLog mLog = new LocalLog(TAG);
 
     final Object mLock = new Object();
+
+    private final ArrayList<Integer> mTriggeredUids = new ArrayList<Integer>();
+    private final ArrayList<Integer> mBlockedUids = new ArrayList<Integer>();
 
     long mNativeData;
     private long mNextWakeup;
@@ -560,9 +564,10 @@ class AlarmManagerService extends SystemService {
         final BroadcastStats mBroadcastStats;
         final FilterStats mFilterStats;
         final int mAlarmType;
+        final int mUid;
 
         InFlight(AlarmManagerService service, PendingIntent pendingIntent, WorkSource workSource,
-                int alarmType, String tag) {
+                int alarmType, String tag, int uid) {
             mPendingIntent = pendingIntent;
             mWorkSource = workSource;
             mTag = tag;
@@ -574,6 +579,7 @@ class AlarmManagerService extends SystemService {
             }
             mFilterStats = fs;
             mAlarmType = alarmType;
+            mUid = uid;
         }
     }
 
@@ -1280,6 +1286,44 @@ class AlarmManagerService extends SystemService {
         }
     }
 
+    /* updates the blocked uids, so if a wake lock is acquired to only fire
+     * alarm for it, it can be released.
+     */
+    void updateBlockedUids(int uid, boolean isBlocked) {
+        if (localLOGV) Slog.v(TAG, "UpdateBlockedUids: uid = "+uid +" isBlocked = "+isBlocked);
+        synchronized(mLock) {
+            if(isBlocked) {
+                mBlockedUids.add(new Integer(uid));
+                if (checkReleaseWakeLock()) {
+                    /* all the uids for which the alarms are triggered
+                     * are either blocked or have called onSendFinished.
+                     */
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                        if (localLOGV)
+                            Slog.v(TAG, "AM WakeLock Released Internally in updateBlockedUids");
+                    }
+                }
+            } else {
+               mBlockedUids.clear();
+            }
+        }
+    }
+
+    boolean checkReleaseWakeLock() {
+        if (mTriggeredUids.size() == 0 || mBlockedUids.size() == 0)
+            return false;
+
+        int uid;
+        for (int i = 0; i <  mTriggeredUids.size(); i++) {
+            uid = mTriggeredUids.get(i);
+            if (!mBlockedUids.contains(uid)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void removeLocked(PendingIntent operation) {
         boolean didRemove = false;
         for (int i = mAlarmBatches.size() - 1; i >= 0; i--) {
@@ -1555,6 +1599,8 @@ class AlarmManagerService extends SystemService {
         public final AlarmManager.AlarmClockInfo alarmClock;
         public final int userId;
         public PriorityClass priorityClass;
+        public int uid;
+        public int pid;
 
         public Alarm(int _type, long _when, long _whenElapsed, long _windowLength, long _maxWhen,
                 long _interval, PendingIntent _op, WorkSource _ws,
@@ -1573,6 +1619,8 @@ class AlarmManagerService extends SystemService {
             workSource = _ws;
             alarmClock = _info;
             userId = _userId;
+            uid = Binder.getCallingUid();
+            pid = Binder.getCallingPid();
         }
 
         public static String makeTag(PendingIntent pi, int type) {
@@ -1680,15 +1728,16 @@ class AlarmManagerService extends SystemService {
                         mResultReceiver, mHandler);
 
                 // we have an active broadcast so stay awake.
-                if (mBroadcastRefCount == 0) {
+                if (mBroadcastRefCount == 0 || !mWakeLock.isHeld()) {
                     setWakelockWorkSource(alarm.operation, alarm.workSource,
                             alarm.type, alarm.tag, true);
                     mWakeLock.acquire();
                 }
                 final InFlight inflight = new InFlight(AlarmManagerService.this,
-                        alarm.operation, alarm.workSource, alarm.type, alarm.tag);
+                        alarm.operation, alarm.workSource, alarm.type, alarm.tag, alarm.uid);
                 mInFlight.add(inflight);
                 mBroadcastRefCount++;
+                mTriggeredUids.add(new Integer(alarm.uid));
 
                 final BroadcastStats bs = inflight.mBroadcastStats;
                 bs.count++;
@@ -1876,11 +1925,10 @@ class AlarmManagerService extends SystemService {
                 mWakeLock.setWorkSource(new WorkSource(uid));
                 return;
             }
+            // Something went wrong; fall back to attributing the lock to the OS
+            mWakeLock.setWorkSource(null);
         } catch (Exception e) {
         }
-
-        // Something went wrong; fall back to attributing the lock to the OS
-        mWakeLock.setWorkSource(null);
     }
 
     private class AlarmHandler extends Handler {
@@ -2113,9 +2161,11 @@ class AlarmManagerService extends SystemService {
         public void onSendFinished(PendingIntent pi, Intent intent, int resultCode,
                 String resultData, Bundle resultExtras) {
             synchronized (mLock) {
+                int uid = 0;
                 InFlight inflight = null;
                 for (int i=0; i<mInFlight.size(); i++) {
                     if (mInFlight.get(i).mPendingIntent == pi) {
+                        uid = mInFlight.get(i).mUid;
                         inflight = mInFlight.remove(i);
                         break;
                     }
@@ -2138,8 +2188,19 @@ class AlarmManagerService extends SystemService {
                     mLog.w("No in-flight alarm for " + pi + " " + intent);
                 }
                 mBroadcastRefCount--;
+                mTriggeredUids.remove(new Integer(uid));
+
+                if (checkReleaseWakeLock()) {
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                        if (localLOGV) Slog.v(TAG, "AM WakeLock Released Internally onSendFinish");
+                    }
+                }
+
                 if (mBroadcastRefCount == 0) {
-                    mWakeLock.release();
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                    }
                     if (mInFlight.size() > 0) {
                         mLog.w("Finished all broadcasts with " + mInFlight.size()
                                 + " remaining inflights");
