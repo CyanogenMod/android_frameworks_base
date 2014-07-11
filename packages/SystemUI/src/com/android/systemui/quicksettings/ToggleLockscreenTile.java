@@ -2,7 +2,9 @@ package com.android.systemui.quicksettings;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.view.LayoutInflater;
@@ -45,18 +47,22 @@ public class ToggleLockscreenTile extends QuickSettingsTile
                 return true;
             }
         };
+        qsc.registerAction(DevicePolicyManager.ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED, this);
+        mPrefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    void onPostCreate() {
-        mPrefs.registerOnSharedPreferenceChangeListener(this);
+    public void onReceive(Context context, Intent intent) {
+        updateTileState();
+    }
+
+    private void updateTileState() {
         if (sLockTileCount == 0) {
             sDisabledLockscreen = mPrefs.getBoolean(KEY_DISABLED, false);
             updateLockscreenState();
         }
         sLockTileCount++;
-        updateTile();
-        super.onPostCreate();
+        updateResources();
     }
 
     @Override
