@@ -5244,6 +5244,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String SYSTEMUI_WEATHER_ICON = "cfx_weather_icon";
+
+        /**
+         * @hide
+         */
         public static final String GESTURE_ONE = "gesture_one";
 
         /**

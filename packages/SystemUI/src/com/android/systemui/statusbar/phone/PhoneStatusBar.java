@@ -581,6 +581,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.USE_WEATHER),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SYSTEMUI_WEATHER_ICON),
+                    false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SPIE_CONTROLS),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
