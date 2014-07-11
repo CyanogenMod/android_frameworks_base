@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -156,6 +157,9 @@ public final class PowerManagerService extends SystemService
     private static final int POWER_HINT_LOW_POWER = 5;
 
     private static final int BUTTON_ON_DURATION = 5 * 1000;
+
+    // Config value for NSRM
+    private static final int DPM_CONFIG_FEATURE_MASK_NSRM = 0x00000004;
 
     private final Context mContext;
     private final ServiceThread mHandlerThread;
@@ -427,6 +431,9 @@ public final class PowerManagerService extends SystemService
 
     private final ArrayList<PowerManagerInternal.LowPowerModeListener> mLowPowerModeListeners
             = new ArrayList<PowerManagerInternal.LowPowerModeListener>();
+
+    //track the blocked uids.
+    private final ArrayList<Integer> mBlockedUids = new ArrayList<Integer>();
 
     private native void nativeInit();
 
@@ -726,6 +733,15 @@ public final class PowerManagerService extends SystemService
     private void acquireWakeLockInternal(IBinder lock, int flags, String tag, String packageName,
             WorkSource ws, String historyTag, int uid, int pid) {
         synchronized (mLock) {
+            if(mBlockedUids.contains(new Integer(uid)) && uid != Process.myUid()) {
+                //wakelock acquisition for blocked uid, do not acquire.
+                if (DEBUG_SPEW) {
+                    Slog.d(TAG, "uid is blocked not acquiring wakeLock flags=0x" +
+                            Integer.toHexString(flags) + " tag=" + tag + " uid=" + uid +
+                            " pid =" + pid);
+                }
+                return;
+            }
             if (DEBUG_SPEW) {
                 Slog.d(TAG, "acquireWakeLockInternal: lock=" + Objects.hashCode(lock)
                         + ", flags=0x" + Integer.toHexString(flags)
@@ -852,13 +868,23 @@ public final class PowerManagerService extends SystemService
             int callingUid) {
         synchronized (mLock) {
             int index = findWakeLockIndexLocked(lock);
+            int value = SystemProperties.getInt("persist.dpm.feature", 0);
+            boolean isNsrmEnabled = false;
+
+            if ((value & DPM_CONFIG_FEATURE_MASK_NSRM) == DPM_CONFIG_FEATURE_MASK_NSRM)
+                isNsrmEnabled = true;
+
             if (index < 0) {
                 if (DEBUG_SPEW) {
                     Slog.d(TAG, "updateWakeLockWorkSourceInternal: lock=" + Objects.hashCode(lock)
                             + " [not found], ws=" + ws);
                 }
+                if (!isNsrmEnabled) {
                 throw new IllegalArgumentException("Wake lock not active: " + lock
                         + " from uid " + callingUid);
+                } else {
+                    return;
+                }
             }
 
             WakeLock wakeLock = mWakeLocks.get(index);
@@ -875,6 +901,54 @@ public final class PowerManagerService extends SystemService
                 wakeLock.updateWorkSource(ws);
             }
         }
+    }
+
+    /* updates the blocked uids, so if a wake lock is acquired for it
+     * can be released.
+     */
+    public void updateBlockedUids(int uid, boolean isBlocked) {
+        synchronized(mLock) {
+            if (DEBUG_SPEW) Slog.v(TAG, "updateBlockedUids: uid = "+uid +"isBlocked = "+isBlocked);
+            if(isBlocked) {
+                mBlockedUids.add(new Integer(uid));
+                for (int index = 0; index < mWakeLocks.size(); index++) {
+                    WakeLock wl = mWakeLocks.get(index);
+                    if(wl != null) {
+                        if(wl.mTag.startsWith("*sync*") && wl.mOwnerUid == Process.SYSTEM_UID) {
+                            releaseWakeLockInternal(wl.mLock, wl.mFlags);
+                            index--;
+                            if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing the wakelock"
+                                    + "acquired by SyncManager");
+                            continue;
+                        }
+                        // release the wakelock for the blocked uid
+                        if (wl.mOwnerUid == uid || checkWorkSourceObjectId(uid, wl)) {
+                            releaseWakeLockInternal(wl.mLock, wl.mFlags);
+                            index--;
+                            if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing it");
+                        }
+                    }
+                }
+            }
+            else {
+                mBlockedUids.remove(new Integer(uid));
+            }
+        }
+    }
+
+    private boolean checkWorkSourceObjectId(int uid, WakeLock wl) {
+        try {
+            for (int index = 0; index < wl.mWorkSource.size(); index++) {
+                if (uid == wl.mWorkSource.get(index)) {
+                    if (DEBUG_SPEW) Slog.v(TAG, "WS uid matched");
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
     private int findWakeLockIndexLocked(IBinder lock) {
