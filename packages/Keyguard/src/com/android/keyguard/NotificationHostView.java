@@ -428,6 +428,8 @@ public class NotificationHostView extends FrameLayout {
 
         RemoteViews rv = bigContentView ? sbn.getNotification().bigContentView : sbn.getNotification().contentView;
 
+        if (rv == null) return;
+
         final View remoteView = rv.apply(mContext, null);
         remoteView.setLayoutParams(new LayoutParams(mDynamicWidth ? LayoutParams.WRAP_CONTENT : LayoutParams.MATCH_PARENT,
                     LayoutParams.WRAP_CONTENT));
