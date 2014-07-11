@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB บนเครือข่ายถูกเปิดใช้งาน</string>
   <string name="adb_both_active_notification_title">ADB บน USB และ &amp; เครือข่ายถูกเปิดใช้งาน</string>
   <string name="adb_active_generic_notification_message">แตะเพื่อปิดใช้งานการแก้ไขข้อบกพร่อง</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">จะลบข้อมูลทั้งหมดในที่เก็บ USB ของคุณ (ในพาธ \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
+  <string name="extmedia_format_message_cm" product="default">จะลบข้อมูลทั้งหมดในที่เก็บการ์ดของคุณ (ในพาธ \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
 </resources>

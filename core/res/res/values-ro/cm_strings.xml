@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB prin rețea activ</string>
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Toate datele de pe dispozitivul de stocare USB (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
+  <string name="extmedia_format_message_cm" product="default">Toate datele de pe pe card-ul (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
 </resources>

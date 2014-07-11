@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Ήχος <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Δόνηση <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Κέρσορας αριστερά</string>
+  <string name="accessibility_dpad_right">Κέρσορας δεξιά</string>
   <string name="dessert_case_settings_cm_title">Εμφάνιση μασκότ του CM</string>
   <string name="dessert_case_settings_cm_summary">Εμφάνιση των μασκότ του CM μαζί με τα επιδόρπια του Android μέσα στο dream</string>
   <string name="quick_settings_profile_label">Προφίλ</string>

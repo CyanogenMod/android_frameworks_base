@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Hang <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Rezgés <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Kurzor balra</string>
+  <string name="accessibility_dpad_right">Kurzor jobbra</string>
   <string name="dessert_case_settings_cm_title">CM kabaláinak megjelenítése</string>
   <string name="dessert_case_settings_cm_summary">CM és Android kabalák megjelenítése az álmodozás módban</string>
   <string name="quick_settings_profile_label">Profil</string>

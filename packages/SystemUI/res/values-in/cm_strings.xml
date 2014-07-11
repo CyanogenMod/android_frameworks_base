@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Suara <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Getaran <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Kursor kiri</string>
+  <string name="accessibility_dpad_right">Kursor kanan</string>
   <string name="dessert_case_settings_cm_title">Tampilkan maskot CM</string>
   <string name="dessert_case_settings_cm_summary">Tampilkan maskot CM bersama Android desserts dalam mimpi</string>
   <string name="quick_settings_profile_label">Profil</string>

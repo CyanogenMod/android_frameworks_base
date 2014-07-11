@@ -19,6 +19,8 @@
   <string name="accessibility_quick_settings_ringer">دەنگە <xliff:g id="قسەکردن" نمونە="کوژانەوە">%s</xliff:g>
 </string>
   <string name="accessibility_quick_settings_vibration">لەرینەوە <xliff:g id="state" نمونە="کوژانەوە">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">جێنیشانده‌ر بۆ لای چه‌پ</string>
+  <string name="accessibility_dpad_right">جێنیشانده‌ر بۆ لای ڕاست</string>
   <string name="dessert_case_settings_cm_title">نیشاندانی بەختێکی باشی ساینۆجنمۆد</string>
   <string name="dessert_case_settings_cm_summary">نیشاندانی بەختێکی باشی CM لەگەڵ ئارەزوەکانی خەونی ئەندرۆید</string>
   <string name="quick_settings_profile_label">پرۆفایل</string>
@@ -60,6 +62,10 @@
   <string name="quick_settings_network_adb_enabled_label">کارا</string>
   <string name="quick_settings_bluetooth_multi_label">%1$dی پەیوەستە</string>
   <string name="quick_settings_equalizer">یه‌کسانکه‌ری ده‌نگ</string>
+  <string name="quick_settings_compass_off">له‌کارخستنی قیبله‌نما</string>
+  <string name="quick_settings_compass_init">سه‌ره‌تایکردن\u2026</string>
+  <string name="quick_settings_heads_up_on">سه‌رکار کارده‌کات</string>
+  <string name="quick_settings_heads_up_off">هیچ له‌جێچوونێک نییه‌</string>
   <string name="location_mode_high_accuracy_title">تێبینی زۆر</string>
   <string name="location_mode_battery_saving_title">پاشەکەوتی وزە</string>
   <string name="location_mode_sensors_only_title">تەنها ئامێر</string>
