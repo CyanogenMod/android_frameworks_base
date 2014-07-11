@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Vibracija <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Kursor lijevo</string>
+  <string name="accessibility_dpad_right">Kursor desno</string>
   <string name="dessert_case_settings_cm_title">Prikaži CM maskotu</string>
   <string name="dessert_case_settings_cm_summary">Prikaži CM maskotu skupa sa Android desertima u snu</string>
   <string name="quick_settings_profile_label">Profil</string>
@@ -59,6 +61,8 @@
   <string name="quick_settings_equalizer">Ekvilajzer</string>
   <string name="quick_settings_compass_off">Kompas ugašen</string>
   <string name="quick_settings_compass_init">Inicijalizacija\u2026</string>
+  <string name="quick_settings_heads_up_on">Heads up omogućen</string>
+  <string name="quick_settings_heads_up_off">Bez ometanja</string>
   <string name="location_mode_high_accuracy_title">Visoka preciznost</string>
   <string name="location_mode_battery_saving_title">Štednja baterije</string>
   <string name="location_mode_sensors_only_title">Samo uređaj</string>

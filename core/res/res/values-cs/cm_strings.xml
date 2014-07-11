@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB po síti povoleno</string>
   <string name="adb_both_active_notification_title">ADB přes USB a po síti povoleno</string>
   <string name="adb_active_generic_notification_message">Dotykem zakázat ladění.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Všechna data na úložišti USB (v cestě „%1$s“) budou smazána! Tuto akci nelze vzít zpět!</string>
+  <string name="extmedia_format_message_cm" product="default">Všechna data na kartě (v cestě „%1$s“) budou smazána! Tuto akci nelze vzít zpět!</string>
 </resources>

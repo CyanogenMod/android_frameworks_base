@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB melalui jaringan diaktifkan</string>
   <string name="adb_both_active_notification_title">ADB melalui USB &amp; jaringan diaktifkan</string>
   <string name="adb_active_generic_notification_message">Sentuh untuk menonaktifkan debug.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Semua data pada penyimpanan USB Anda (di bawah jalur \'%1$s\') akan dihapus. Tindakan ini tidak dapat dikembalikan!</string>
+  <string name="extmedia_format_message_cm" product="default">Semua data pada kartu Anda (di bawah jalur \'%1$s\') akan dihapus. Tindakan ini tidak dapat dikembalikan!</string>
 </resources>

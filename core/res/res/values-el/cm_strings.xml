@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB μέσω δικτύου ενεργοποιημένο</string>
   <string name="adb_both_active_notification_title">ADB μέσω USB &amp; δικτύου ενεργοποιημένο</string>
   <string name="adb_active_generic_notification_message">Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Όλα τα αρχεία στον αποθηκευτικό σας χώρο USB (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
+  <string name="extmedia_format_message_cm" product="default">Όλα τα δεδομένα στην κάρτα σας (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
 </resources>

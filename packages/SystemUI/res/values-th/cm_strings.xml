@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">เสียง <xliff:g id="state" example="Off">%s</xliff:g></string>
   <string name="accessibility_quick_settings_vibration">สั่น <xliff:g id="state" example="Off">%s</xliff:g></string>
+  <string name="accessibility_dpad_left">เคอร์เซอร์ซ้าย</string>
+  <string name="accessibility_dpad_right">เคอร์เซอร์ขวา</string>
   <string name="dessert_case_settings_cm_title">แสดงมาสค็อต CM</string>
   <string name="dessert_case_settings_cm_summary">แสดง มาสค็อต CM กับของหวานแอนดรอยปกติใน dream</string>
   <string name="quick_settings_profile_label">โปรไฟล์</string>
