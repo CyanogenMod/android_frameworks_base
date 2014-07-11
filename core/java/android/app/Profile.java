@@ -106,6 +106,8 @@ public final class Profile implements Parcelable, Comparable {
         public static final int ON_CONNECT = 0;
         public static final int ON_DISCONNECT = 1;
         public static final int DISABLED = 2;
+        public static final int ON_A2DP_CONNECT = 3;
+        public static final int ON_A2DP_DISCONNECT = 4;
     }
 
     public static class ProfileTrigger implements Parcelable {
@@ -264,7 +266,7 @@ public final class Profile implements Parcelable, Comparable {
     public void setTrigger(int type, String id, int state, String name) {
         if (id == null
                 || type < TriggerType.WIFI || type > TriggerType.BLUETOOTH
-                || state < TriggerState.ON_CONNECT || state > TriggerState.DISABLED) {
+                || state < TriggerState.ON_CONNECT || state > TriggerState.ON_A2DP_DISCONNECT) {
             return;
         }
 
