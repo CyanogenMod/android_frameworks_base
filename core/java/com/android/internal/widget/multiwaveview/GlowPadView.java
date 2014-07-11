@@ -29,7 +29,15 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.Bitmap;
+import android.graphics.RectF;
+import android.graphics.Bitmap.Config;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.Vibrator;
@@ -1373,5 +1381,94 @@ public class GlowPadView extends View {
             replaceTargetDrawables(mContext.getResources(), existingResId, existingResId);
         }
         return replaced;
+    }
+
+    public boolean onReplaceTargetDrawables(Resources res, int count, int resId, int which) {
+        if (DEBUG) Log.d(TAG,"onReplaceTargetDrawables count =" + count);
+        if (resId == 0 || count <= 0) {
+            return false;
+        }
+        boolean replaced = false;
+        Bitmap baseIcon = getResIcon(res, resId);
+        if (baseIcon == null) return false;
+        Bitmap newIcon = generatorCountIcon(baseIcon, count);
+        BitmapDrawable drawable = new BitmapDrawable(newIcon);
+        drawable.setTargetDensity(res.getDisplayMetrics());
+        replaced = replaceTargetDrawables(drawable, which);
+        if (!replaced) {
+            Log.w(TAG, "onReplaceTargetDrawables: replaced failed!");
+        }
+        return replaced;
+    }
+
+    private Bitmap generatorCountIcon(Bitmap icon, int count) {
+        // Init Canvas
+        int iconW = icon.getWidth();
+        int iconH = icon.getHeight();
+        Bitmap newBitmap = Bitmap.createBitmap(iconW, iconH, Config.ARGB_8888);
+        Canvas canvas = new Canvas(newBitmap);
+
+        // Draw base icon
+        Paint iconPaint = new Paint();
+        iconPaint.setDither(true);
+        iconPaint.setFilterBitmap(true);
+        canvas.drawBitmap(icon, 0, 0, iconPaint);
+
+        // Calculate count text width
+        final float textSize = 21.0f;
+        final int textPadding = 4;
+        Paint countPaint = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.DEV_KERN_TEXT_FLAG);
+        countPaint.setColor(Color.WHITE);
+        countPaint.setTextSize(textSize);
+        countPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        int textWidth = (int) countPaint.measureText(String.valueOf(count));
+        int countWidth = Math.max(textWidth, 24);
+
+        // Draw background
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.RED);
+        RectF rect = new RectF(2 * iconW / 3 - countWidth / 2 - textPadding,
+                iconH / 3 - textSize / 2 - textPadding,
+                2 * iconW / 3 + countWidth / 2 + textPadding,
+                iconH / 3 + textSize / 2 + textPadding);
+        canvas.drawRoundRect(rect , 10, 10, paint);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Style.STROKE);
+        paint.setStrokeWidth(2);
+        canvas.drawRoundRect(rect , 10, 10, paint);
+
+        // Draw count text
+        float textX = 2 * iconW/ 3 - textWidth / 2;
+        float textBaseY = iconH / 3 + textSize / 2 - textPadding;
+        canvas.drawText(String.valueOf(count), textX, textBaseY, countPaint);
+
+        return newBitmap;
+    }
+
+    private Bitmap getResIcon(Resources res, int resId){
+        Drawable icon = res.getDrawable(resId);
+        if (icon instanceof BitmapDrawable) {
+            BitmapDrawable bd = (BitmapDrawable) icon;
+            return bd.getBitmap();
+        } else {
+            return null;
+        }
+    }
+
+    private boolean replaceTargetDrawables(Drawable bd, int which) {
+        if (bd == null) {
+            return false;
+        }
+        final ArrayList<TargetDrawable> drawables = mTargetDrawables;
+        final int size = drawables.size();
+        for (int i = 0; i < size; i++) {
+            final TargetDrawable target = drawables.get(i);
+            if (target != null && i == which) {
+                target.setDrawable(bd);
+                return true;
+            }
+        }
+        return false;
     }
 }

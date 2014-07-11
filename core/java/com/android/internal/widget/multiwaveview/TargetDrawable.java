@@ -61,6 +61,12 @@ public class TargetDrawable {
         setState(STATE_INACTIVE);
     }
 
+    public void setDrawable(Drawable bd) {
+        mDrawable = bd != null ? bd.mutate() : null;
+        resizeDrawables();
+        setState(STATE_INACTIVE);
+    }
+
     public TargetDrawable(TargetDrawable other) {
         mResourceId = other.mResourceId;
         // Mutate the drawable so we can animate shared drawable properties.
