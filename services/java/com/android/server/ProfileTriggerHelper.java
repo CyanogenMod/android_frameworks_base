@@ -18,11 +18,13 @@ package com.android.server;
 
 import android.app.Profile;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
+import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiSsid;
 import android.net.wifi.WifiInfo;
@@ -62,6 +64,7 @@ public class ProfileTriggerHelper extends BroadcastReceiver {
         mIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        mIntentFilter.addAction(AudioManager.A2DP_ROUTE_CHANGED_ACTION);
         updateEnabled();
 
         mContext.getContentResolver().registerContentObserver(
@@ -103,6 +106,15 @@ public class ProfileTriggerHelper extends BroadcastReceiver {
             int triggerState = action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)
                     ? Profile.TriggerState.ON_CONNECT : Profile.TriggerState.ON_DISCONNECT;
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+            checkTriggers(Profile.TriggerType.BLUETOOTH, device.getAddress(), triggerState);
+        } else if (action.equals(AudioManager.A2DP_ROUTE_CHANGED_ACTION)) {
+            BluetoothDevice device = intent
+                    .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, 0);
+            int triggerState = (state == BluetoothProfile.STATE_CONNECTED)
+                    ? Profile.TriggerState.ON_A2DP_CONNECT :
+                    Profile.TriggerState.ON_A2DP_DISCONNECT;
 
             checkTriggers(Profile.TriggerType.BLUETOOTH, device.getAddress(), triggerState);
         }

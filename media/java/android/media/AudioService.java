@@ -3740,7 +3740,7 @@ public class AudioService extends IAudioService.Stub {
                 case MSG_BTA2DP_DOCK_TIMEOUT:
                     // msg.obj  == address of BTA2DP device
                     synchronized (mConnectedDevices) {
-                        makeA2dpDeviceUnavailableNow( (String) msg.obj );
+                        makeA2dpDeviceUnavailableNow( (BluetoothDevice) msg.obj );
                     }
                     break;
 
@@ -3883,7 +3883,7 @@ public class AudioService extends IAudioService.Stub {
     }
 
     // must be called synchronized on mConnectedDevices
-    private void makeA2dpDeviceAvailable(String address) {
+    private void makeA2dpDeviceAvailable(BluetoothDevice device) {
         // enable A2DP before notifying A2DP connection to avoid unecessary processing in
         // audio policy manager
         VolumeStreamState streamState = mStreamStates[AudioSystem.STREAM_MUSIC];
@@ -3892,11 +3892,12 @@ public class AudioService extends IAudioService.Stub {
         setBluetoothA2dpOnInt(true);
         AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP,
                 AudioSystem.DEVICE_STATE_AVAILABLE,
-                address);
+                device.getAddress());
         // Reset A2DP suspend state each time a new sink is connected
         AudioSystem.setParameters("A2dpSuspended=false");
         mConnectedDevices.put( new Integer(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP),
-                address);
+                device.getAddress());
+        sendA2dpRouteChangedIntent(device, BluetoothProfile.STATE_CONNECTED);
     }
 
     private void onSendBecomingNoisyIntent() {
@@ -3904,25 +3905,33 @@ public class AudioService extends IAudioService.Stub {
     }
 
     // must be called synchronized on mConnectedDevices
-    private void makeA2dpDeviceUnavailableNow(String address) {
+    private void makeA2dpDeviceUnavailableNow(BluetoothDevice device) {
         synchronized (mA2dpAvrcpLock) {
             mAvrcpAbsVolSupported = false;
         }
         AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP,
                 AudioSystem.DEVICE_STATE_UNAVAILABLE,
-                address);
+                device.getAddress());
         mConnectedDevices.remove(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP);
+        sendA2dpRouteChangedIntent(device, BluetoothProfile.STATE_DISCONNECTED);
+    }
+
+    private void sendA2dpRouteChangedIntent(BluetoothDevice device, int state) {
+        Intent intent = new Intent(AudioManager.A2DP_ROUTE_CHANGED_ACTION);
+        intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
+        intent.putExtra(BluetoothProfile.EXTRA_STATE, state);
+        mContext.sendBroadcast(intent);
     }
 
     // must be called synchronized on mConnectedDevices
-    private void makeA2dpDeviceUnavailableLater(String address) {
+    private void makeA2dpDeviceUnavailableLater(BluetoothDevice device) {
         // prevent any activity on the A2DP audio output to avoid unwanted
         // reconnection of the sink.
         AudioSystem.setParameters("A2dpSuspended=true");
         // the device will be made unavailable later, so consider it disconnected right away
         mConnectedDevices.remove(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP);
         // send the delayed message to make the device unavailable later
-        Message msg = mAudioHandler.obtainMessage(MSG_BTA2DP_DOCK_TIMEOUT, address);
+        Message msg = mAudioHandler.obtainMessage(MSG_BTA2DP_DOCK_TIMEOUT, device);
         mAudioHandler.sendMessageDelayed(msg, BTA2DP_DOCK_TIMEOUT_MILLIS);
 
     }
@@ -3959,11 +3968,11 @@ public class AudioService extends IAudioService.Stub {
                         // introduction of a delay for transient disconnections of docks when
                         // power is rapidly turned off/on, this message will be canceled if
                         // we reconnect the dock under a preset delay
-                        makeA2dpDeviceUnavailableLater(address);
+                        makeA2dpDeviceUnavailableLater(btDevice);
                         // the next time isConnected is evaluated, it will be false for the dock
                     }
                 } else {
-                    makeA2dpDeviceUnavailableNow(address);
+                    makeA2dpDeviceUnavailableNow(btDevice);
                 }
                 synchronized (mCurAudioRoutes) {
                     if (mCurAudioRoutes.mBluetoothName != null) {
@@ -3982,10 +3991,10 @@ public class AudioService extends IAudioService.Stub {
                     // a dock: cancel the dock timeout, and make the dock unavailable now
                     if(hasScheduledA2dpDockTimeout()) {
                         cancelA2dpDeviceTimeout();
-                        makeA2dpDeviceUnavailableNow(mDockAddress);
+                        makeA2dpDeviceUnavailableNow(btDevice);
                     }
                 }
-                makeA2dpDeviceAvailable(address);
+                makeA2dpDeviceAvailable(btDevice);
                 synchronized (mCurAudioRoutes) {
                     String name = btDevice.getAliasName();
                     if (!TextUtils.equals(mCurAudioRoutes.mBluetoothName, name)) {
