@@ -137,7 +137,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 class BackupManagerService extends IBackupManager.Stub {
     private static final String TAG = "BackupManagerService";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final boolean MORE_DEBUG = false;
 
     // Historical and current algorithm names
