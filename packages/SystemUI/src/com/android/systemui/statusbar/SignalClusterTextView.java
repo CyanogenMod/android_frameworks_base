@@ -67,6 +67,9 @@ public class SignalClusterTextView extends LinearLayout implements
     }
 
     private void updateSignalText() {
+        if (mMobileSignalText == null) {
+            return;
+        }
         if (mAirplaneMode || mDBm == 0) {
             setVisibility(View.GONE);
         } else if (mSignalClusterStyle == SignalClusterView.STYLE_TEXT) {
