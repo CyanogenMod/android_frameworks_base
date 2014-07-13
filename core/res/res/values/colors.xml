@@ -202,5 +202,8 @@
     <color name="keyguard_avatar_frame_pressed_color">#ff35b5e5</color>
 
     <color name="accessibility_focus_highlight">#80ffff00</color>
+
+    <!-- Theme Engine additional resources -->
+    <color name="notification_action_list_bg">#00000000</color>
 </resources>
 
