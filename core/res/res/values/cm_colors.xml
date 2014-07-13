@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<!--
+     Copyright (C) 2013-2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,19 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/actions"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:visibility="gone"
-    android:layout_marginBottom="8dp"
-    android:showDividers="middle"
-    android:divider="?android:attr/listDivider"
-    android:dividerPadding="12dp"
-    android:background="@drawable/notification_action_list_bg"
-    >
-    <!-- actions will be added here -->
-</LinearLayout>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Action(s) list background used on expanded notifications -->
+    <drawable name="notification_action_list_bg">#00000000</drawable>
+</resources>
