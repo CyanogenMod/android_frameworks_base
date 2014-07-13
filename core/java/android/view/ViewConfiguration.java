@@ -21,7 +21,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Point;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -32,6 +34,64 @@ import android.util.SparseArray;
  * Contains methods to standard constants used in the UI for timeouts, sizes, and distances.
  */
 public class ViewConfiguration {
+
+    private static SettingsObserver mInstance;
+
+    private SettingsObserver getInstance(final Context ctx) {
+        if (mInstance == null) {
+            mInstance = new SettingsObserver(new Handler(),ctx.getContentResolver());
+            mInstance.observe();
+        }
+        return mInstance;
+    }
+
+    /**
+     * Singleton observer to remove all settings gets from common execution paths
+     * @hide
+     */
+    class SettingsObserver extends ContentObserver {
+
+        boolean controls_no_scroll;
+        float scroll_friction;
+        int max_fling_velocity;
+        int overscroll_distance;
+        int overfling_distance;
+        int touch_slop;
+
+        private ContentResolver resolver;
+
+        SettingsObserver(Handler handler, ContentResolver res) {
+            super(handler);
+            resolver = res;
+        }
+
+        private void observe() {
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.ANIMATION_CONTROLS_NO_SCROLL), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.CUSTOM_SCROLL_FRICTION), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.CUSTOM_FLING_VELOCITY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.CUSTOM_OVERSCROLL_DISTANCE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.CUSTOM_OVERFLING_DISTANCE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(Settings.System.CUSTOM_TOUCH_SLOP), false, this);
+            onChange(true);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            controls_no_scroll = Settings.System.getInt(resolver,
+                    Settings.System.ANIMATION_CONTROLS_NO_SCROLL, 0) != 1;
+            scroll_friction = Settings.System.getFloat(resolver,
+                          Settings.System.CUSTOM_SCROLL_FRICTION, DEFAULT_SCROLL_FRICTION);
+            max_fling_velocity = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_FLING_VELOCITY, DEFAULT_MAXIMUM_FLING_VELOCITY);
+            overscroll_distance = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_OVERSCROLL_DISTANCE, DEFAULT_OVERSCROLL_DISTANCE);
+            overfling_distance = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_OVERFLING_DISTANCE, DEFAULT_OVERFLING_DISTANCE);
+            touch_slop = Settings.System.getInt(resolver,
+                          Settings.System.CUSTOM_TOUCH_SLOP, DEFAULT_TOUCH_SLOP);
+        }
+    }
+
     /**
      * Defines the width of the horizontal scrollbar and the height of the vertical scrollbar in
      * dips
@@ -309,40 +369,34 @@ public class ViewConfiguration {
      */
     private ViewConfiguration(Context context) {
 
-        final ContentResolver resolver = context.getContentResolver();
-        if (Settings.System.getInt(resolver,
-                          Settings.System.ANIMATION_CONTROLS_NO_SCROLL, 0) != 1) {
+        final SettingsObserver settings = getInstance(context);
+        if (settings.controls_no_scroll) {
             SCROLL_FRICTION = DEFAULT_SCROLL_FRICTION;
             MAXIMUM_FLING_VELOCITY = DEFAULT_MAXIMUM_FLING_VELOCITY;
             TOUCH_SLOP = DEFAULT_TOUCH_SLOP;
             OVERSCROLL_DISTANCE = DEFAULT_OVERSCROLL_DISTANCE;
             OVERFLING_DISTANCE = DEFAULT_OVERFLING_DISTANCE;
         } else {
-            SCROLL_FRICTION = Settings.System.getFloat(resolver,
-                          Settings.System.CUSTOM_SCROLL_FRICTION, DEFAULT_SCROLL_FRICTION);
-            int maximumFlingVelocity = Settings.System.getInt(resolver,
-                          Settings.System.CUSTOM_FLING_VELOCITY, DEFAULT_MAXIMUM_FLING_VELOCITY);
+            SCROLL_FRICTION = settings.scroll_friction;
+            int maximumFlingVelocity = settings.max_fling_velocity;
             if (maximumFlingVelocity == 0) {
                 MAXIMUM_FLING_VELOCITY = DEFAULT_MAXIMUM_FLING_VELOCITY;
             } else {
                 MAXIMUM_FLING_VELOCITY = maximumFlingVelocity;
             }
-            int touchSlop = Settings.System.getInt(resolver,
-                          Settings.System.CUSTOM_TOUCH_SLOP, DEFAULT_TOUCH_SLOP);
+            int touchSlop = settings.touch_slop;
             if (touchSlop == 0) {
                 TOUCH_SLOP = DEFAULT_TOUCH_SLOP;
             } else {
                 TOUCH_SLOP = touchSlop;
             }
-            int overScrollDistance = Settings.System.getInt(resolver,
-                          Settings.System.CUSTOM_OVERSCROLL_DISTANCE, DEFAULT_OVERSCROLL_DISTANCE);
+            int overScrollDistance = settings.overscroll_distance;
             if (overScrollDistance > 100) {
                 OVERSCROLL_DISTANCE = DEFAULT_OVERSCROLL_DISTANCE;
             } else {
                 OVERSCROLL_DISTANCE = overScrollDistance;
             }
-            int overFlingDistance = Settings.System.getInt(resolver,
-                          Settings.System.CUSTOM_OVERFLING_DISTANCE, DEFAULT_OVERFLING_DISTANCE);
+            int overFlingDistance = settings.overfling_distance;
             if (overFlingDistance > 100 || overFlingDistance == 0) {
                 OVERFLING_DISTANCE = DEFAULT_OVERFLING_DISTANCE;
             } else {
