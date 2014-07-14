@@ -147,6 +147,7 @@ public class SlimActions {
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_TORCH)) {
                 Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+                i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 context.sendBroadcastAsUser(i, new UserHandle(UserHandle.USER_CURRENT));
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_IME)) {
