@@ -1088,14 +1088,11 @@ public class DocumentsActivity extends Activity {
                 startActivity(view);
             } catch (ActivityNotFoundException ex2) {
                 File file = null;
-                int idx = doc.documentId.indexOf(":");
-                if (idx >= 0) {
-                    String id = doc.documentId.substring(0, idx);
-                    File volume = mIdToPath.get(id);
-                    if (volume != null) {
-                        String fileName = doc.documentId.substring(idx + 1);
-                        file = new File(volume, fileName);
-                    }
+                String id = doc.documentId.substring(0, doc.documentId.indexOf(":"));
+                File volume = mIdToPath.get(id);
+                if (volume != null) {
+                    String fileName = doc.documentId.substring(doc.documentId.indexOf(":") + 1);
+                    file = new File(volume, fileName);
                 }
                 if (file != null) {
                     view.setDataAndType(Uri.fromFile(file), doc.mimeType);
