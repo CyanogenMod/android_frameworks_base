@@ -596,7 +596,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.REMINDER_ALERT_INTERVAL),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_ACTIVE_DISPLAY),
+                    Settings.System.ACTIVE_NOTIFICATIONS_MODE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_KEY_CURSOR_CONTROL),
@@ -753,7 +753,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 Settings.System.EXPANDED_DESKTOP_STATE))) {
                 mNavigationBarOverlay.setIsExpanded(isExpanded());
             } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.ENABLE_ACTIVE_DISPLAY))) {
+                    Settings.System.ACTIVE_NOTIFICATIONS_MODE))) {
                 updateActiveDisplayViewState();
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SHAKE_LISTENER_ENABLED))) {
@@ -918,7 +918,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         final ContentResolver resolver = mContext.getContentResolver();
 
         boolean enabled = Settings.System.getInt(
-                    resolver, Settings.System.ENABLE_ACTIVE_DISPLAY, 0) == 1;
+                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_MODE, 0) == 1;
 
         if (enabled) {
             addActiveDisplayView();

@@ -131,8 +131,8 @@ public class Peek implements SensorActivityHandler.SensorChangedCallback {
 
     private void updateStatus() {
         mEnabled = Settings.System.getIntForUser(
-                mContext.getContentResolver(), Settings.System.PEEK_STATE,
-                0, UserHandle.USER_CURRENT) == 1 && !isPeekAppInstalled();
+                mContext.getContentResolver(), Settings.System.ACTIVE_NOTIFICATIONS_MODE,
+                0, UserHandle.USER_CURRENT) == 3 && !isPeekAppInstalled();
         if (mEnabled) {
             mSensorHandler.registerScreenReceiver();
         } else {
@@ -154,7 +154,7 @@ public class Peek implements SensorActivityHandler.SensorChangedCallback {
         mWakeLockHandler = new Handler();
 
         mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.PEEK_STATE),
+                Settings.System.getUriFor(Settings.System.ACTIVE_NOTIFICATIONS_MODE),
                         false, new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {

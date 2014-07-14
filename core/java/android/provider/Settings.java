@@ -2742,12 +2742,6 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_DISABLED = "lockscreen.disabled";
 
-    	/**
-         * Whether to display notifications on screen when screen is off
-         * @hide
-         */
-        public static final String ENABLE_ACTIVE_DISPLAY = "enable_active_display";
-
         /**
          * Whether to display notification messages around ring
          * @hide
@@ -2801,6 +2795,13 @@ public final class Settings {
          *@hide
          */
         public static final String ACTIVE_NOTIFICATIONS = "active_notifications";
+
+        /**
+         * active notifications mode
+         * Listpreference handle for Active display, Lockscreen Notification and Peek
+         *@hide
+         */
+        public static final String ACTIVE_NOTIFICATIONS_MODE = "active_notifications_mode";
 
         /**
          * Threshold of the proximity sensor to turn on the device.
@@ -5897,14 +5898,6 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_VOLUME_COLOR = "status_bar_volume_color";
-
-        /**
-         * Either if notification peek is enabled of disabled
-         * 0 = disabled (default)
-         * 1 = enabled
-         * @hide
-         */
-        public static final String PEEK_STATE = "peek_state";
 
         /**
          * Whether to not showing active display when there is annoying notifications.

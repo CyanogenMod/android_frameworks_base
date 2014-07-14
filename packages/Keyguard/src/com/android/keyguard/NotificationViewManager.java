@@ -91,7 +91,7 @@ public class NotificationViewManager {
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_ACTIVE_DISPLAY), false, this);
+                    Settings.System.ACTIVE_NOTIFICATIONS_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_NOTIFICATIONS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -130,7 +130,7 @@ public class NotificationViewManager {
 
         private void updateSettings() {
             activeD = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.ENABLE_ACTIVE_DISPLAY, 0) == 1;
+                    Settings.System.ACTIVE_NOTIFICATIONS_MODE, 0) == 1;
             pocketMode = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.ACTIVE_NOTIFICATIONS_POCKET_MODE, 2);
             hideLowPriority = Settings.System.getInt(mContext.getContentResolver(),

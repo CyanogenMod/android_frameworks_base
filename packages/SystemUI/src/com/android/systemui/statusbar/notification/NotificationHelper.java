@@ -146,7 +146,8 @@ public class NotificationHelper {
     }
     
     public boolean isPeekEnabled() {
-        return mPeek.mEnabled;
+        return Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.ACTIVE_NOTIFICATIONS_MODE, 0) == 3;
     }
 
     public boolean isPeekShowing() {

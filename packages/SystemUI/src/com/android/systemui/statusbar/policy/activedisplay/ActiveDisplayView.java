@@ -212,7 +212,7 @@ public class ActiveDisplayView extends FrameLayout
     private boolean mScreenOnState = false;
 
     // user customizable settings
-    private boolean mActiveDisplayEnabled = false;
+    private boolean mActiveDisplayEnabled;
     private boolean mDisplayNotificationText = false;
     private boolean mShowAllNotifications = false;
     private boolean mHideLowPriorityNotifications = false;
@@ -346,9 +346,9 @@ public class ActiveDisplayView extends FrameLayout
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_ACTIVE_DISPLAY), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACTIVE_NOTIFICATIONS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACTIVE_NOTIFICATIONS_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HIDE_NON_CLEARABLE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -425,7 +425,7 @@ public class ActiveDisplayView extends FrameLayout
             mQuietTime = Settings.System.getInt(
                     resolver, Settings.System.ACTIVE_NOTIFICATIONS_QUIET_HOURS, 0) == 1;
             mActiveDisplayEnabled = Settings.System.getIntForUser(
-                    resolver, Settings.System.ENABLE_ACTIVE_DISPLAY, 0,
+                    resolver, Settings.System.ACTIVE_NOTIFICATIONS_MODE, 0,
                     UserHandle.USER_CURRENT_OR_SELF) == 1;
             mDisplayNotificationText = Settings.System.getIntForUser(
                     resolver, Settings.System.ACTIVE_DISPLAY_TEXT, 0,

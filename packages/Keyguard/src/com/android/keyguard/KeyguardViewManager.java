@@ -113,7 +113,7 @@ public class KeyguardViewManager {
     private WindowManager.LayoutParams mWindowLayoutParams;
     private AudioManager mAudioManager;
 
-    private boolean mLockscreenNotifications = false;
+    private boolean mLockscreenNotifications;
     private boolean mIsCoverflow = true;
     private boolean mNeedsInput = false;
     private boolean mScreenOn = false;
@@ -153,7 +153,7 @@ public class KeyguardViewManager {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_BLUR_RADIUS), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS), false, this, UserHandle.USER_ALL);
+                    Settings.System.ACTIVE_NOTIFICATIONS_MODE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_BACKGROUND_STYLE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -180,7 +180,7 @@ public class KeyguardViewManager {
         mNotOverridden = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.ACTIVE_NOTIFICATIONS, 0, UserHandle.USER_CURRENT) == 1;
         mLockscreenNotifications = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_NOTIFICATIONS, mLockscreenNotifications ? 1 : 0, UserHandle.USER_CURRENT) == 1;
+                Settings.System.ACTIVE_NOTIFICATIONS_MODE, 0, UserHandle.USER_CURRENT) == 2;
         mBackgroundStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_BACKGROUND_STYLE, 2, UserHandle.USER_CURRENT);
         mBackgroundColor = Settings.System.getIntForUser(mContext.getContentResolver(),
