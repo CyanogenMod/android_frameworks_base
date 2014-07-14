@@ -26,6 +26,7 @@ public class TorchTile extends QuickSettingsTile {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+                i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 mContext.sendBroadcast(i);
             }
         };
