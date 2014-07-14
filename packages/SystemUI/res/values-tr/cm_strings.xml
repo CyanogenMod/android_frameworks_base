@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Ses <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Titreşim <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Sol imleç</string>
+  <string name="accessibility_dpad_right">Sağ imleç</string>
   <string name="dessert_case_settings_cm_title">CM\'nin maskotlarını göster</string>
   <string name="dessert_case_settings_cm_summary">Android\'in rüyalardaki tatlıları ile CM\'nin maskotlarını göster</string>
   <string name="quick_settings_profile_label">Profil</string>

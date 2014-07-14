@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB over netwerk ingeschakeld</string>
   <string name="adb_both_active_notification_title">ADB over USB &amp; netwerk ingeschakeld</string>
   <string name="adb_active_generic_notification_message">Tik om foutopsporing uit te schakelen.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Alle gegevens op uw USB-opslag (pad \'%1$s\') worden gewist. Deze actie kan niet ongedaan worden gemaakt!</string>
+  <string name="extmedia_format_message_cm" product="default">Alle gegevens op uw kaart (pad \'%1$s\') worden gewist. Deze actie kan niet ongedaan worden gemaakt!</string>
 </resources>

@@ -20,11 +20,13 @@ import android.app.ActivityThread;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
+import android.hardware.ITorchService;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.media.IAudioService;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -156,6 +158,7 @@ public class Camera {
     private static final int CAMERA_MSG_META_DATA        = 0x2000;
     /* ### QC ADD-ONS: END */
 
+    private int mCameraId;
     private int mNativeContext; // accessed by native methods
     private EventHandler mEventHandler;
     private ShutterCallback mShutterCallback;
@@ -326,6 +329,7 @@ public class Camera {
      * @see android.app.admin.DevicePolicyManager#getCameraDisabled(android.content.ComponentName)
      */
     public static Camera open(int cameraId) {
+        notifyTorch(cameraId, true);
         return new Camera(cameraId);
     }
 
@@ -341,13 +345,29 @@ public class Camera {
         for (int i = 0; i < numberOfCameras; i++) {
             getCameraInfo(i, cameraInfo);
             if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                notifyTorch(i, true);
                 return new Camera(i);
             }
         }
         return null;
     }
 
+    private static void notifyTorch(int cameraId, boolean inUse) {
+        IBinder b = ServiceManager.getService(Context.TORCH_SERVICE);
+        ITorchService torchService = ITorchService.Stub.asInterface(b);
+        try {
+            if (inUse) {
+                torchService.onCameraOpened(new Binder(), cameraId);
+            } else {
+                torchService.onCameraClosed(cameraId);
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+    }
+
     Camera(int cameraId) {
+        mCameraId = cameraId;
         mShutterCallback = null;
         mRawImageCallback = null;
         mJpegCallback = null;
@@ -398,6 +418,7 @@ public class Camera {
     public final void release() {
         native_release();
         mFaceDetectionRunning = false;
+        notifyTorch(mCameraId, false);
     }
 
     /**

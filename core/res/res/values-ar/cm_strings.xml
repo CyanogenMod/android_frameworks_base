@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB تمكين عبر الشبكة</string>
   <string name="adb_both_active_notification_title">ADB عبر USB &amp; network ممكن</string>
   <string name="adb_active_generic_notification_message">إللمس لتعطيل التصحيح.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">سيتم مسح كافة البيانات الموجودة على جهاز تخزين USB (في إطار المسار \'%1$s). لا يمكن التراجع عن هذا الإجراء!</string>
+  <string name="extmedia_format_message_cm" product="default">سيتم مسح كافة البيانات الموجودة في الذاكرة (في إطار المسار\'%1$s\'). لا يمكن التراجع عن هذا الإجراء!</string>
 </resources>

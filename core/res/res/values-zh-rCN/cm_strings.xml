@@ -132,4 +132,6 @@
   <string name="adb_net_active_notification_title">网络 ADB 调试已启用</string>
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <string name="extmedia_format_message_cm" product="default">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
 </resources>

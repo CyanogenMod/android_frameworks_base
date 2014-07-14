@@ -381,6 +381,14 @@ public class ThemesContract {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "previews");
 
         /**
+         * Uri for retrieving the previews for the currently applied components.
+         * Querying the themes provider using this URI will return a cursor with a single row
+         * containing all the previews for the components that are currently applied.
+         */
+        public static final Uri APPLIED_URI = Uri.withAppendedPath(AUTHORITY_URI,
+                "applied_previews");
+
+        /**
          * The unique ID for a row.
          * <P>Type: INTEGER (long)</P>
          */

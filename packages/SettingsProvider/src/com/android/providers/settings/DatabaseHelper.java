@@ -1618,25 +1618,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 99;
         }
 
-        if (upgradeVersion == 99) {
-            if (mUserHandle == UserHandle.USER_OWNER) {
-                loadScreenAnimationStyle(db);
-            }
-            upgradeVersion = 100;
-        }
-
-        if (upgradeVersion == 100) {
-            // We're setting some new defaults on these for certain devices, and adding
-            // a default for animator duration. Load them if the user hasn't set them.
-            db.beginTransaction();
-            SQLiteStatement stmt = null;
-            try {
-                stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value) VALUES(?,?);");
-                loadDefaultAnimationSettings(stmt);
-                    db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
-            }
+        if (upgradeVersion == 99 || upgradeVersion == 100) {
             upgradeVersion = 101;
         }
 
@@ -2073,21 +2055,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void loadScreenAnimationStyle(SQLiteDatabase db) {
-        db.beginTransaction();
-        SQLiteStatement stmt = null;
-        try {
-            stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
-                    + " VALUES(?,?);");
-            loadIntegerSetting(stmt, Settings.System.SCREEN_ANIMATION_STYLE,
-                    R.integer.def_screen_animation_style);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            if (stmt != null) stmt.close();
-        }
-    }
-
     private void loadRibbonSetting(SQLiteStatement stmt) {
         String tiles = mContext.getResources().getString(R.string.def_quick_settings_ribbon_tiles);
         if (!TextUtils.isEmpty(tiles)) {
@@ -2186,6 +2153,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.System.DOUBLE_TAP_SLEEP_GESTURE,
                     R.integer.def_double_tap_sleep_gesture);
+
+            loadIntegerSetting(stmt, Settings.System.SCREEN_ANIMATION_STYLE,
+                    R.integer.def_screen_animation_style);
+
+            loadDefaultAnimationSettings(stmt);
 
             loadRibbonSetting(stmt);
 

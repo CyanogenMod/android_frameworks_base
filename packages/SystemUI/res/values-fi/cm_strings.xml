@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Ääni <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Värinä <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Kohdistin vasemmalle</string>
+  <string name="accessibility_dpad_right">Kohdistin oikealle</string>
   <string name="dessert_case_settings_cm_title">Näytä CM:n maskotit</string>
   <string name="dessert_case_settings_cm_summary">Näytä CM:n maskotit unelmassa Androidin jälkiruokien kanssa</string>
   <string name="quick_settings_profile_label">Profiili</string>

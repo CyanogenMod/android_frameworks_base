@@ -55,10 +55,10 @@ public class QuietHoursUtils {
 
             if (quietHoursEnd < quietHoursStart) {
                 // Starts at night, ends in the morning.
-                return (minutes > quietHoursStart) || (minutes < quietHoursEnd);
+                return (minutes >= quietHoursStart) || (minutes < quietHoursEnd);
             } else {
                 // Starts in the morning, ends at night.
-                return (minutes > quietHoursStart) && (minutes < quietHoursEnd);
+                return (minutes >= quietHoursStart) && (minutes < quietHoursEnd);
             }
         }
         return false;
