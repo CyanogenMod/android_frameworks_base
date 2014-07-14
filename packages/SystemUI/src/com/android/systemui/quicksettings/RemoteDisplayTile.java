@@ -88,7 +88,6 @@ public class RemoteDisplayTile extends QuickSettingsTile{
                 mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY,
                         mRemoteDisplayRouteCallback,
                         MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-                updateRemoteDisplays();
             }
             @Override
             public void onUnprepare() {
