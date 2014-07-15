@@ -19,12 +19,15 @@ package com.android.systemui.power;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -34,6 +37,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.provider.Settings;
 import android.util.Slog;
 import android.view.View;
@@ -62,6 +66,12 @@ public class PowerUI extends SystemUI {
     int mLowBatteryAlertCloseLevel;
     int[] mLowBatteryReminderLevels = new int[2];
 
+    private boolean mShowLowBatteryDialogWarning;
+    private boolean mShowLowBatteryNotificationWarning;
+    private boolean mPlayLowBatterySound;
+
+    private static final int NOTIFICATION_ID = 10000002;
+
     AlertDialog mInvalidChargerDialog;
     AlertDialog mLowBatteryDialog;
     TextView mBatteryLevelTextView;
@@ -83,6 +93,11 @@ public class PowerUI extends SystemUI {
         final PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mScreenOffTime = pm.isScreenOn() ? -1 : SystemClock.elapsedRealtime();
 
+        // Register settings observer and set initial preferences
+        SettingsObserver settingsObserver = new SettingsObserver(new Handler());
+        settingsObserver.observe();
+        setPreferences();
+
         // Register for Intent broadcasts for...
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -91,6 +106,76 @@ public class PowerUI extends SystemUI {
         filter.addAction(Intent.ACTION_POWER_CONNECTED);
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
+    }
+
+    private final class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            setPreferences();
+        }
+    }
+
+    /**
+     * Set battery warning preferences
+     *
+     * 0 = show dialog + play sound (default)
+     * 1 = fire notification + play sound
+     * 2 = show dialog only
+     * 3 = fire notification only
+     * 4 = play sound only
+     * 5 = none
+     *
+     */
+
+    private void setPreferences() {
+        int currentPref = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY,
+                    0, UserHandle.USER_CURRENT);
+
+        switch (currentPref) {
+            case 5:
+                mShowLowBatteryDialogWarning = false;
+                mShowLowBatteryNotificationWarning = false;
+                mPlayLowBatterySound = false;
+                break;
+            case 4:
+                mShowLowBatteryDialogWarning = false;
+                mShowLowBatteryNotificationWarning = false;
+                mPlayLowBatterySound = true;
+                break;
+            case 3:
+                mShowLowBatteryDialogWarning = false;
+                mShowLowBatteryNotificationWarning = true;
+                mPlayLowBatterySound = false;
+                break;
+            case 2:
+                mShowLowBatteryDialogWarning = true;
+                mShowLowBatteryNotificationWarning = false;
+                mPlayLowBatterySound = false;
+                break;
+            case 1:
+                mShowLowBatteryDialogWarning = false;
+                mShowLowBatteryNotificationWarning = true;
+                mPlayLowBatterySound = true;
+                break;
+            case 0:
+            default:
+                mShowLowBatteryDialogWarning = true;
+                mShowLowBatteryNotificationWarning = false;
+                mPlayLowBatterySound = true;
+                break;
+        }
     }
 
     /**
@@ -171,15 +256,23 @@ public class PowerUI extends SystemUI {
                         && (bucket < oldBucket || oldPlugged)
                         && mBatteryStatus != BatteryManager.BATTERY_STATUS_UNKNOWN
                         && bucket < 0) {
-                    showLowBatteryWarning();
+
+                    if(mShowLowBatteryDialogWarning) {
+                        showLowBatteryWarning();
+                    }
+                    if(mShowLowBatteryNotificationWarning) {
+                        showLowBatteryNotificationWarning();
+                    }
 
                     // only play SFX when the dialog comes up or the bucket changes
-                    if (bucket != oldBucket || oldPlugged) {
+                    if (mPlayLowBatterySound && (bucket != oldBucket || oldPlugged)) {
                         playLowBatterySound();
                     }
+
                 } else if (plugged || (bucket > oldBucket && bucket > 0)) {
                     dismissLowBatteryWarning();
-                } else if (mBatteryLevelTextView != null) {
+                    dismissLowBatteryNotificationWarning();
+                } else if (mShowLowBatteryDialogWarning && mBatteryLevelTextView != null) {
                     showLowBatteryWarning();
                 }
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
@@ -209,6 +302,12 @@ public class PowerUI extends SystemUI {
             Slog.i(TAG, "closing low battery warning: level=" + mBatteryLevel);
             mLowBatteryDialog.dismiss();
         }
+    }
+
+    void dismissLowBatteryNotificationWarning() {
+        NotificationManager notificationManager = (NotificationManager) mContext
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(NOTIFICATION_ID);
     }
 
     void showLowBatteryWarning() {
@@ -299,6 +398,41 @@ public class PowerUI extends SystemUI {
                 }
             }
         }
+    }
+
+    void showLowBatteryNotificationWarning() {
+        if (DEBUG) {
+            Slog.i(TAG, "fire low battery notification!");
+        }
+
+        CharSequence levelText = mContext.getString(
+                R.string.battery_low_percent_format, mBatteryLevel);
+
+        CharSequence tickerText = mContext.getString(
+                R.string.battery_low_title) + ":  " + levelText;
+
+        Notification.Builder mBuilder = new Notification.Builder(mContext)
+            .setContentTitle(mContext.getString(R.string.battery_low_title))
+            .setContentText(levelText)
+            .setSmallIcon(R.drawable.battery_low)
+            .setTicker(tickerText);
+
+        final Intent intent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
+                    0, intent, PendingIntent.FLAG_ONE_SHOT);
+        mBuilder.setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+            (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notif = mBuilder.build();
+        notif.defaults |= Notification.DEFAULT_VIBRATE;
+        notif.flags    |= Notification.FLAG_AUTO_CANCEL;
+        notif.priority  = Notification.PRIORITY_HIGH;
+        notificationManager.notify(NOTIFICATION_ID, notif);
     }
 
     void dismissInvalidChargerDialog() {

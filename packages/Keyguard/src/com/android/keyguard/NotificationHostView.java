@@ -398,7 +398,7 @@ public class NotificationHostView extends FrameLayout {
                     }
                 });
             }
-        }
+        };
 
         if (mNotifications.containsKey(describeNotification(sbn))){
             //The notification already exists, so it was just changed. Remove the old view and add the new one

@@ -450,10 +450,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_BACKGROUND), false, this);                                                
-                    Settings.System.HEADS_UP_TIMEOUT), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HEADS_UP_FS_TIMEOUT), false, this);                    
+                    Settings.System.NOTIFICATION_BACKGROUND), false, this);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+					Settings.System.HEADS_UP_TIMEOUT), false, this);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+					Settings.System.HEADS_UP_FS_TIMEOUT), false, this);             
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_BACKGROUND_LANDSCAPE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -496,9 +497,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             
         @Override
         public void onChange(boolean selfChange) {
-=======
-
->>>>>>> ce232f9... HeadsUp: User configurable timeout (1/2)
             updateSettings();
         }
         
@@ -3875,6 +3873,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void recentsLongPress() {
+		ContentResolver resolver = mContext.getContentResolver();
         int navbarRecentLongPress = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.NAVBAR_RECENT_LONG_PRESS, 0, mCurrentUserId);
         switch(navbarRecentLongPress) {
