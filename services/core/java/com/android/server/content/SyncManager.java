@@ -224,6 +224,9 @@ public class SyncManager {
     private BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            boolean fromQuickBoot = intent.getBooleanExtra("from_quickboot", false);
+            if (fromQuickBoot) return;
+
             mSyncHandler.onBootCompleted();
         }
     };
@@ -328,6 +331,9 @@ public class SyncManager {
             new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            boolean fromQuickBoot = intent.getBooleanExtra("from_quickboot", false);
+            if (fromQuickBoot) return;
+
             Log.w(TAG, "Writing sync state before shutdown...");
             getSyncStorageEngine().writeAllState();
         }
