@@ -517,10 +517,12 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
                     if (mImageFromAsset) {
                         AssetManager am = mResources.getAssets();
                         String[] pathImages = am.list(mInFilePath);
-                        if (pathImages == null || pathImages.length == 0) {
-                            throw new IOException("did not find any images in path: " + mInFilePath);
+                        String pathImage = Utilities.getFirstNonEmptyString(pathImages);
+                        if (pathImage == null) {
+                            throw new IOException("did not find any images in path: "
+                                    + mInFilePath);
                         }
-                        InputStream is = am.open(mInFilePath + File.separator + pathImages[0]);
+                        InputStream is = am.open(mInFilePath + File.separator + pathImage);
                         mInStream = new BufferedInputStream(is);
                     } else if (mInUri != null) {
                         mInStream = new BufferedInputStream(
