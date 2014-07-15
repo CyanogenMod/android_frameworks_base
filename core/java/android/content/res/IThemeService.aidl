@@ -19,16 +19,17 @@ import android.content.res.IThemeChangeListener;
 import android.graphics.Bitmap;
 
 import java.util.List;
+import java.util.Map;
 
 /** {@hide} */
 interface IThemeService {
     void requestThemeChangeUpdates(in IThemeChangeListener listener);
     void removeUpdates(in IThemeChangeListener listener);
 
-    void requestThemeChange(String pkgName, in List<String> components);
+    void requestThemeChange(in Map componentToThemeMap);
     void applyDefaultTheme();
-    boolean isThemeApplying(String pkgName);
-    int getProgress(String pkgName);
+    boolean isThemeApplying();
+    int getProgress();
 
     boolean cacheComposedIcon(in Bitmap icon, String path);
 }
