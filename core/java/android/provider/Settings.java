@@ -2772,6 +2772,13 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
+         * Global stats collection
+         *
+         * @hide
+         */
+        public static final String STATS_COLLECTION = "stats_collection";
+
+        /**
          * Quick Settings Panel Tiles to Use
          *
          * @hide
