@@ -16,7 +16,7 @@ public class WeatherView extends TextView implements WeatherListener {
 	private static final String TAG = "WeatherView";
 
 	boolean mServiceEnabled = false;
-	boolean mViewEnabled = false;
+	int mViewEnabled = 0;
 
 	Context mContext;
 	Handler mHandler;
@@ -56,22 +56,22 @@ public class WeatherView extends TextView implements WeatherListener {
 		void observe() {
 			ContentResolver resolver = mContext.getContentResolver();
 			resolver.registerContentObserver(Settings.System
-					.getUriFor(Settings.System.SYSTEMUI_WEATHER_HEADER_VIEW),
+					.getUriFor(Settings.System.STATUSBAR_WEATHER_STYLE),
 					false, this);
 			onChange(true);
 		}
 
 		@Override
 		public void onChange(boolean selfChange) {
-			ContentResolver resolver = mContext.getContentResolver();
-			mViewEnabled = Settings.System.getBoolean(resolver,
-					Settings.System.SYSTEMUI_WEATHER_HEADER_VIEW, false);
+            ContentResolver resolver = mContext.getContentResolver();
+            mViewEnabled = Settings.System.getInt(resolver,
+					Settings.System.STATUSBAR_WEATHER_STYLE, 0);
 			updateVisibility();
 		}
 	}
 
 	private void updateVisibility() {
-		setVisibility((mServiceEnabled && mViewEnabled) ? VISIBLE : INVISIBLE);
+		setVisibility((mServiceEnabled && (mViewEnabled == 3 || mViewEnabled == 5)) ? VISIBLE : INVISIBLE);
 	}
 
 	private void updateWeather() {

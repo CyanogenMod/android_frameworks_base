@@ -98,7 +98,7 @@ public class WeatherText extends TextView {
     protected void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
         boolean useWeather = (Settings.System.getBoolean(resolver, Settings.System.USE_WEATHER, false)
-                && Settings.System.getInt(resolver, Settings.System.STATUSBAR_WEATHER_STYLE, 2) == 0);
+                && Settings.System.getInt(resolver, Settings.System.STATUSBAR_WEATHER_STYLE, 0) == 1);
         mShowLocation = Settings.System.getBoolean(resolver, Settings.System.WEATHER_SHOW_LOCATION, true);
         
         this.setVisibility(useWeather ? View.VISIBLE : View.GONE);

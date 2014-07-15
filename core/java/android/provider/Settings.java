@@ -5217,7 +5217,11 @@ public final class Settings {
 
         /**
          * How to show weather on the statusbar
-         *
+         * 0 = off
+         * 1 = AOKP info above carrier
+         * 2 = AOKP weather panel
+         * 3 = AICP info
+         * 4 = AICP notification
          * @hide
          */
         public static final String STATUSBAR_WEATHER_STYLE = "statusbar_weather_style";
@@ -5231,6 +5235,11 @@ public final class Settings {
          * @hide
          */
         public static final String WEATHER_SHOW_LOCATION = "weather_show_location";
+
+        /**
+         * @hide
+         */
+        public static final String SYSTEMUI_WEATHER_NOTIFICATION = "cfx_weather_notification";
 
         /**
          * @hide
@@ -6015,16 +6024,6 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_NOTIFICATION_SWIPE_FLOATING = "status_bar_notification_swipe_floating";
-
-        /**
-         * @hide
-         */
-        public static final String SYSTEMUI_WEATHER_HEADER_VIEW = "cfx_systemui_header_weather_view";
-
-        /**
-         * @hide
-         */
-        public static final String SYSTEMUI_WEATHER_NOTIFICATION = "cfx_weather_notification";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

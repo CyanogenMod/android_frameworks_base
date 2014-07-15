@@ -303,6 +303,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     boolean mWeatherPanelEnabled;
     WeatherPanel mWeatherPanel;
 
+    // cfx weather header
+    private View mWeatherHeader;
+    private boolean mWeatherEnabled;
+    private int mWeatherPanelStyle;
+
     // carrier/wifi label
     private TextView mCarrierLabel;
     private TextView mWifiLabel;
@@ -370,10 +375,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private FrameLayout.LayoutParams lpCarrierLabel;
     private int mShortcutsDrawerMargin;
     private int mShortcutsSpacingHeight;
-
-    // cfx weather header
-    private View mWeatherHeader;
-    private boolean mWeatherEnabled;
 
     private boolean mShakeEnabled;
     private boolean mUserPresent;
@@ -633,16 +634,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_SHOW_UPDATE), false, this,
                     UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SYSTEMUI_WEATHER_HEADER_VIEW), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SYSTEMUI_WEATHER_NOTIFICATION), false, this);
 
             update();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
+            final ContentResolver resolver = mContext.getContentResolver();
             super.onChange(selfChange, uri);
             if (uri.equals(Settings.System.getUriFor(
                     Settings.System.QUICK_SETTINGS_TILES))
@@ -793,7 +791,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             UserHandle.USER_CURRENT) == 1;
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS))) {
-                final ContentResolver resolver = mContext.getContentResolver();
                 mHasQuickAccessSettings = Settings.System.getIntForUser(resolver,
                         Settings.System.QS_QUICK_ACCESS, 0, UserHandle.USER_CURRENT) == 1;
                 if (mHasQuickAccessSettings) {
@@ -804,7 +801,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS_LINKED))) {
-                final ContentResolver resolver = mContext.getContentResolver();
                 boolean layoutLinked = Settings.System.getIntForUser(resolver,
                         Settings.System.QS_QUICK_ACCESS_LINKED, 1, UserHandle.USER_CURRENT) == 1;
                 if (mQuickAccessLayoutLinked != layoutLinked) {
@@ -823,6 +819,35 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mQS.setupQuickSettings();
             }
 
+            mWeatherPanelEnabled = (Settings.System.getInt(resolver,
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 0) == 2
+                    && mWeatherEnabled);
+
+            mWeatherPanelStyle = Settings.System.getInt(resolver,
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 0);
+
+            if (mWeatherEnabled) {
+                switch (mWeatherPanelStyle) {
+                    case 0:
+                    case 1:
+                    case 4:
+                        mWeatherHeader.setVisibility(View.GONE);
+                        mWeatherHeader.setEnabled(false);
+                        mWeatherPanel.setVisibility(View.GONE);
+                        break;
+                    case 2:
+                        mWeatherHeader.setVisibility(View.GONE);
+                        mWeatherHeader.setEnabled(false);
+                        mWeatherPanel.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                    case 5:
+                        mWeatherHeader.setVisibility(View.VISIBLE);
+                        mWeatherHeader.setEnabled(true);
+                        mWeatherPanel.setVisibility(View.GONE);
+                        break;
+                }
+            }
             update();
         }
 
@@ -844,18 +869,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 resolver, Settings.System.STATUS_BAR_CARRIER, 0, UserHandle.USER_CURRENT) == 1;
             showStatusBarCarrierLabel(mShowStatusBarCarrier);
 
-            mWeatherPanelEnabled = (Settings.System.getIntForUser(resolver,
-                    Settings.System.STATUSBAR_WEATHER_STYLE, 2 , UserHandle.USER_CURRENT) == 1)
-                    && (Settings.System.getBoolean(resolver, Settings.System.USE_WEATHER, false));
-            mWeatherPanel.setVisibility(mWeatherPanelEnabled ? View.VISIBLE : View.GONE);
-
-            boolean weatherHolder = Settings.System.getBoolean(resolver,
-                    Settings.System.SYSTEMUI_WEATHER_HEADER_VIEW, false);
-            if (weatherHolder != mWeatherEnabled) {
-                mWeatherEnabled = weatherHolder;
-                enableOrDisableWeather();
-            }
-
             if (mCarrierLabel != null) {
                 mHideLabels = Settings.System.getIntForUser(resolver,
                         Settings.System.NOTIFICATION_HIDE_LABELS, 0, UserHandle.USER_CURRENT);
@@ -868,7 +881,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
             updateBatteryIcons();
             updateCustomHeaderStatus();
-            enableOrDisableWeather();
 
             mFlipInterval = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.REMINDER_ALERT_INTERVAL, 1500, UserHandle.USER_CURRENT);
@@ -1003,16 +1015,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mReminderPortraitWidth = mReminderLandscapeWidth;
         }
         enableOrDisableReminder();
-    }
-
-    private void enableOrDisableWeather() {
-        if (mWeatherEnabled) {
-            mWeatherHeader.setVisibility(View.VISIBLE);
-            mWeatherHeader.setEnabled(true);
-        } else {
-            mWeatherHeader.setVisibility(View.GONE);
-            mWeatherHeader.setEnabled(false);
-        }
     }
 
     private ArrayList<String>splitString(String message, int maxWidth) {
@@ -1305,9 +1307,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         final ContentResolver cr = mContext.getContentResolver();
         mWeatherPanel = (WeatherPanel) mStatusBarWindow.findViewById(R.id.weatherpanel);
         mWeatherPanel.setOnClickListener(mWeatherPanelListener);
-        mWeatherPanelEnabled = (Settings.System.getIntForUser(cr,
-                Settings.System.STATUSBAR_WEATHER_STYLE, 2 , UserHandle.USER_CURRENT) == 1)
-                && (Settings.System.getBoolean(cr, Settings.System.USE_WEATHER, false));
+        mWeatherPanelEnabled = (Settings.System.getInt(cr,
+                Settings.System.STATUSBAR_WEATHER_STYLE, 0) == 2
+                && mWeatherEnabled);
         mWeatherPanel.setVisibility(mWeatherPanelEnabled ? View.VISIBLE : View.GONE);
 
         PanelHolder holder = (PanelHolder) mStatusBarWindow.findViewById(R.id.panel_holder);
@@ -1447,7 +1449,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mFlipperLand.setSelfMaintained(true);
 
         mWeatherEnabled = Settings.System.getBoolean(mContext.getContentResolver(),
-                    Settings.System.SYSTEMUI_WEATHER_HEADER_VIEW, false);
+                    Settings.System.USE_WEATHER, false);
+
+        mWeatherPanelStyle = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 2);
 
         mReminderEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.REMINDER_ALERT_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
