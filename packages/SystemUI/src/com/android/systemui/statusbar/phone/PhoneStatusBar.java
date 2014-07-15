@@ -437,6 +437,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private Float mPropFactor;
 
     private int mNavigationIconHints = 0;
+    private int mInitialHeadsUpDecay;
+
     private final Animator.AnimatorListener mMakeIconsInvisible = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(Animator animation) {
@@ -457,8 +459,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mLinger = BRIGHTNESS_CONTROL_LINGER_THRESHOLD + 1;
         }
     };
-
-    private int mInitialHeadsUpDecay;
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -1286,6 +1286,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mScreenWidth = (float) context.getResources().getDisplayMetrics().widthPixels;
         mMinBrightness = context.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDim);
+
         mInitialHeadsUpDecay = mContext.getResources().getInteger(R.integer.heads_up_sensitivity_delay);
 
         mCurrOrientation = res.getConfiguration().orientation;

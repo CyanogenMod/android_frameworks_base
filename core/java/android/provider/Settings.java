@@ -5022,13 +5022,6 @@ public final class Settings {
          */
         public static final String ENABLE_FAST_TORCH = "enable_fast_torch";
 
-       /**
-         * Whether to enable swiping your finger across the statusbar to change the brightness.
-         * Boolean value. Defaults to true.
-         * @hide
-         */
-        public static final String STATUSBAR_BRIGHTNESS_SLIDER = "statusbar_brightness_slider";
-
         /**
          * Width and height of output vide expressed in WxH
          * @hide
@@ -6074,6 +6067,18 @@ public final class Settings {
          */
         public static final String IME_CURSOR_LONGPRESS_ACTION = "ime_cursor_longpress_action";
 
+       /**
+         * Whether to enable swiping your finger across the statusbar to change the brightness.
+         * Boolean value. Defaults to true.
+         * @hide
+         */
+        public static final String STATUSBAR_BRIGHTNESS_SLIDER = "statusbar_brightness_slider";
+
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_TOGGLES_BRIGHTNESS_LOC = "statusbar_toggles_brightness_loc";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
@@ -6428,17 +6433,6 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
-
-	/**
-         * @hide
-         */
-        public static final String STATUS_BAR_BRIGHTNESS_SLIDER = "statusbar_brightness_slider";
-
-        /**
-         * @hide
-         */
-        public static final String STATUSBAR_TOGGLES_BRIGHTNESS_LOC = "statusbar_toggles_brightness_loc";
-
     }
 
     /**
