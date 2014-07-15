@@ -35,6 +35,7 @@ import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.glrenderer.BasicTexture;
 import com.android.gallery3d.glrenderer.BitmapTexture;
 import com.android.photos.views.TiledImageRenderer;
+import com.android.wallpapercropper.Utilities;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -97,10 +98,12 @@ public class BitmapRegionTileSource implements TiledImageRenderer.TileSource {
             } else if (path != null  && res != null && assetPath) {
                 AssetManager am = res.getAssets();
                 String[] pathImages = am.list(path);
-                if (pathImages == null || pathImages.length == 0) {
+                String pathImage = Utilities.getFirstNonEmptyString(pathImages);
+                if (pathImage == null) {
                     throw new IOException("did not find any images in path: " + path);
                 }
-                InputStream is = am.open(path + File.separator + pathImages[0]);
+
+                InputStream is = am.open(path + File.separator + pathImage);
                 BufferedInputStream bis = new BufferedInputStream(is);
                 mDecoder = BitmapRegionDecoder.newInstance(bis, true);
             } else if (uri != null) {
@@ -241,10 +244,12 @@ public class BitmapRegionTileSource implements TiledImageRenderer.TileSource {
             try {
                 AssetManager am = res.getAssets();
                 String[] pathImages = am.list(file);
-                if (pathImages == null || pathImages.length == 0) {
+                String pathImage = Utilities.getFirstNonEmptyString(pathImages);
+                if (pathImage == null) {
                     throw new IOException("did not find any images in path: " + file);
                 }
-                InputStream is = am.open(file + File.separator + pathImages[0]);
+
+                InputStream is = am.open(file + File.separator + pathImage);
                 BufferedInputStream bis = new BufferedInputStream(is);
                 result = BitmapFactory.decodeStream(bis, null, mOptions);
             } catch (IOException e) {

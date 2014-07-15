@@ -518,15 +518,31 @@ public class ThemeUtils {
 
     public static String getLockscreenWallpaperPath(AssetManager assetManager) throws IOException {
         String[] assets = assetManager.list("lockscreen");
-        if (assets == null || assets.length == 0) return null;
-
-        return "lockscreen/" + assets[0];
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "lockscreen/" + asset;
     }
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {
         String[] assets = assetManager.list("wallpapers");
-        if (assets == null || assets.length == 0) return null;
-        return "wallpapers/" + assets[0];
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "wallpapers/" + asset;
+    }
+
+    // Returns the first non-empty asset name. Empty assets can occur if the APK is built
+    // with folders included as zip entries in the APK. Searching for files inside "folderName" via
+    // assetManager.list("folderName") can cause these entries to be included as empty strings.
+    private static String getFirstNonEmptyAsset(String[] assets) {
+        if (assets == null) return null;
+        String filename = null;
+        for(String asset : assets) {
+            if (!asset.isEmpty()) {
+                filename = asset;
+                break;
+            }
+        }
+        return filename;
     }
 
     public static String getDefaultThemePackageName(Context context) {
