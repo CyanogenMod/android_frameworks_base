@@ -133,12 +133,8 @@ public class NotificationManager
         }
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
-            if (pkg == null) {
-                Log.e(TAG, "PackageName is NULL");
-            } else {
-                service.enqueueNotificationWithTag(pkg, mContext.getOpPackageName(), tag, id,
-                        notification, idOut, UserHandle.myUserId());
-            }
+            service.enqueueNotificationWithTag(pkg, mContext.getOpPackageName(), tag, id,
+                    notification, idOut, UserHandle.myUserId());
             if (id != idOut[0]) {
                 Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
             }
@@ -192,11 +188,7 @@ public class NotificationManager
         String pkg = mContext.getPackageName();
         if (localLOGV) Log.v(TAG, pkg + ": cancel(" + id + ")");
         try {
-            if (pkg == null) {
-                Log.e(TAG, "PackageName is NULL");
-            } else {
-                service.cancelNotificationWithTag(pkg, tag, id, UserHandle.myUserId());
-            }
+            service.cancelNotificationWithTag(pkg, tag, id, UserHandle.myUserId());
         } catch (RemoteException e) {
         }
     }
