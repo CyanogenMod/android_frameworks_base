@@ -71,7 +71,7 @@ public class WeatherView extends TextView implements WeatherListener {
 	}
 
 	private void updateVisibility() {
-		setVisibility((mServiceEnabled && (mViewEnabled == 3 || mViewEnabled == 5)) ? VISIBLE : INVISIBLE);
+		setVisibility((mServiceEnabled && (mViewEnabled == 3 || mViewEnabled == 5)) ? VISIBLE : GONE);
 	}
 
 	private void updateWeather() {

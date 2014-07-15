@@ -86,9 +86,21 @@
             android:layout_height="wrap_content"
             />
 
-        <include layout="@layout/weather_header"
+        <ViewStub android:id="@+id/weather_header"
             android:layout_width="match_parent"
             android:layout_height="28dp"
+            />
+
+        <com.android.systemui.statusbar.policy.WeatherView
+            android:id="@+id/weather_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textSize="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:visibility="gone"
             />
 
         <com.android.systemui.statusbar.powerwidget.PowerWidget
