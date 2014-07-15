@@ -40,6 +40,7 @@ public final class NavigationBarTransitions extends BarTransitions {
 
     private boolean mLightsOut;
     private boolean mVertical;
+    private boolean mLeftIfVertical;
     private int mRequestedMode;
     private boolean mStickyTransparent;
 
@@ -58,17 +59,34 @@ public final class NavigationBarTransitions extends BarTransitions {
     }
 
     public void setVertical(boolean isVertical) {
-        mVertical = isVertical;
+        if (mVertical != isVertical) {
+            mVertical = isVertical;
+            updateBackgroundResource();
+        }
+    }
+
+    public void setLeftIfVertical(boolean leftIfVertical) {
+        if (mLeftIfVertical != leftIfVertical) {
+            mLeftIfVertical = leftIfVertical;
+            updateBackgroundResource();
+        }
+    }
+
+    private void updateBackgroundResource() {
+        if (mVertical && mLeftIfVertical) {
+            setGradientResourceId(R.drawable.nav_background_land_left);
+        } else if (mVertical) {
+            setGradientResourceId(R.drawable.nav_background_land);
+        } else {
+            setGradientResourceId(R.drawable.nav_background);
+        }
         transitionTo(mRequestedMode, false /*animate*/);
     }
 
     @Override
     public void transitionTo(int mode, boolean animate) {
         mRequestedMode = mode;
-        if (mVertical && mode == MODE_TRANSLUCENT) {
-            // translucent mode not allowed when vertical
-            mode = MODE_OPAQUE;
-        } else if (mStickyTransparent) {
+        if (mStickyTransparent) {
             mode = MODE_TRANSPARENT;
         }
         super.transitionTo(mode, animate);
