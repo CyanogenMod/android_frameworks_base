@@ -1664,6 +1664,22 @@ class AlarmManagerService extends SystemService {
         }
     }
 
+    private void filtQuickBootAlarms(ArrayList<Alarm> triggerList) {
+
+        ArrayList<String> whiteList = new ArrayList();
+        whiteList.add("android");
+        whiteList.add("com.android.deskclock");
+
+        for (int i = triggerList.size() - 1; i >= 0; i--) {
+            Alarm alarm = triggerList.get(i);
+
+            if (!whiteList.contains(alarm.operation.getTargetPackage())) {
+                triggerList.remove(i);
+                Slog.v(TAG, "ignore -> " + alarm.operation.getTargetPackage());
+            }
+        }
+    }
+
     private class AlarmThread extends Thread
     {
         public AlarmThread()
@@ -1721,6 +1737,11 @@ class AlarmManagerService extends SystemService {
                     }
 
                     boolean hasWakeup = triggerAlarmsLocked(triggerList, nowELAPSED, nowRTC);
+
+                    if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
+                        filtQuickBootAlarms(triggerList);
+                    }
+
                     if (!hasWakeup && checkAllowNonWakeupDelayLocked(nowELAPSED)) {
                         // if there are no wakeup alarms and the screen is off, we can
                         // delay what we have so far until the future.
