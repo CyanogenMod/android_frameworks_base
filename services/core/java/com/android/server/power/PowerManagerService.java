@@ -28,6 +28,7 @@ import com.android.server.lights.LightsManager;
 import com.android.server.Watchdog;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -70,6 +71,7 @@ import android.view.WindowManagerPolicy;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import libcore.util.Objects;
 
@@ -930,6 +932,24 @@ public final class PowerManagerService extends SystemService
                     return false;
             }
         }
+    }
+
+    private boolean isQuickBootCall() {
+
+        ActivityManager activityManager = (ActivityManager) mContext
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        List<ActivityManager.RunningAppProcessInfo> runningList = activityManager
+                .getRunningAppProcesses();
+        int callingPid = Binder.getCallingPid();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningList) {
+            if (processInfo.pid == callingPid) {
+                String process = processInfo.processName;
+                if ("com.qapp.quickboot".equals(process))
+                    return true;
+            }
+        }
+        return false;
     }
 
     // Called from native code.
@@ -2888,6 +2908,14 @@ public final class PowerManagerService extends SystemService
         public void wakeUp(long eventTime) {
             if (eventTime > SystemClock.uptimeMillis()) {
                 throw new IllegalArgumentException("event time must not be in the future");
+            }
+
+            // check wakeup caller under QuickBoot mode
+            if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
+                if (!isQuickBootCall()) {
+                    Slog.d(TAG, "ignore wakeup request under QuickBoot");
+                    return;
+                }
             }
 
             mContext.enforceCallingOrSelfPermission(
