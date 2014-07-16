@@ -2374,27 +2374,9 @@ public class WifiStateMachine extends StateMachine {
 
     void handlePreDhcpSetup() {
         mDhcpActive = true;
-        if (!mBluetoothConnectionActive) {
-            /*
-             * There are problems setting the Wi-Fi driver's power
-             * mode to active when bluetooth coexistence mode is
-             * enabled or sense.
-             * <p>
-             * We set Wi-Fi to active mode when
-             * obtaining an IP address because we've found
-             * compatibility issues with some routers with low power
-             * mode.
-             * <p>
-             * In order for this active power mode to properly be set,
-             * we disable coexistence mode until we're done with
-             * obtaining an IP address.  One exception is if we
-             * are currently connected to a headset, since disabling
-             * coexistence would interrupt that connection.
-             */
             // Disable the coexistence mode
             mWifiNative.setBluetoothCoexistenceMode(
                     mWifiNative.BLUETOOTH_COEXISTENCE_MODE_DISABLED);
-        }
 
         /* Disable power save and suspend optimizations during DHCP */
         // Note: The order here is important for now. Brcm driver changes
