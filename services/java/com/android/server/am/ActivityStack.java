@@ -1907,6 +1907,8 @@ final class ActivityStack {
         final int numActivities = activities.size();
         for (int i = numActivities - 1; i > 0; --i ) {
             ActivityRecord target = activities.get(i);
+            if (target.frontOfTask)
+                break;
 
             final int flags = target.info.flags;
             final boolean finishOnTaskLaunch =
@@ -2074,6 +2076,8 @@ final class ActivityStack {
         // Do not operate on the root Activity.
         for (int i = numActivities - 1; i > 0; --i) {
             ActivityRecord target = activities.get(i);
+            if (target.frontOfTask)
+                break;
 
             final int flags = target.info.flags;
             boolean finishOnTaskLaunch = (flags & ActivityInfo.FLAG_FINISH_ON_TASK_LAUNCH) != 0;
