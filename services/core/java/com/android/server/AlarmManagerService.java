@@ -119,6 +119,7 @@ class AlarmManagerService extends SystemService {
     ClockReceiver mClockReceiver;
     InteractiveStateReceiver mInteractiveStateReceiver;
     private UninstallReceiver mUninstallReceiver;
+    private QuickBootReceiver mQuickBootReceiver;
     final ResultReceiver mResultReceiver = new ResultReceiver();
     PendingIntent mTimeTickSender;
     PendingIntent mDateChangeSender;
@@ -616,6 +617,7 @@ class AlarmManagerService extends SystemService {
         mClockReceiver.scheduleDateChangedEvent();
         mInteractiveStateReceiver = new InteractiveStateReceiver();
         mUninstallReceiver = new UninstallReceiver();
+        mQuickBootReceiver = new QuickBootReceiver();
         
         if (mNativeData != 0) {
             AlarmThread waitThread = new AlarmThread();
@@ -1850,7 +1852,39 @@ class AlarmManagerService extends SystemService {
             }
         }
     }
-    
+
+    private class QuickBootReceiver extends BroadcastReceiver {
+        static final String ACTION_APP_KILL = "org.codeaurora.quickboot.appkilled";
+
+        public QuickBootReceiver() {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_APP_KILL);
+            getContext().registerReceiver(this, filter,
+                    "android.permission.DEVICE_POWER", null);
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            String pkgList[] = null;
+            if (ACTION_APP_KILL.equals(action)) {
+                pkgList = intent.getStringArrayExtra(Intent.EXTRA_PACKAGES);
+                if (pkgList != null && (pkgList.length > 0)) {
+                    for (String pkg : pkgList) {
+                        removeLocked(pkg);
+                        for (int i=mBroadcastStats.size()-1; i>=0; i--) {
+                            ArrayMap<String, BroadcastStats> uidStats = mBroadcastStats.valueAt(i);
+                            if (uidStats.remove(pkg) != null) {
+                                if (uidStats.size() <= 0) {
+                                    mBroadcastStats.removeAt(i);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     class ClockReceiver extends BroadcastReceiver {
         public ClockReceiver() {
             IntentFilter filter = new IntentFilter();
