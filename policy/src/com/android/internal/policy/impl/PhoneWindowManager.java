@@ -5309,6 +5309,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     };
 
+    private void disableQbCharger() {
+        if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
+            SystemProperties.set("sys.qbcharger.enable", "false");
+        }
+    }
+
     // Called on the PowerManager's Notifier thread.
     @Override
     public void goingToSleep(int why) {
@@ -5335,6 +5341,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public void wakingUp() {
         EventLog.writeEvent(70000, 1);
         if (DEBUG_WAKEUP) Slog.i(TAG, "Waking up...");
+
+        // To disable qbcharger process when screen turning on
+        disableQbCharger();
 
         // Since goToSleep performs these functions synchronously, we must
         // do the same here.  We cannot post this work to a handler because
