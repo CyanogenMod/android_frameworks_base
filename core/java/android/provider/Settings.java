@@ -19,8 +19,6 @@
 
 package android.provider;
 
-import android.annotation.ChaosLab;
-import android.annotation.ChaosLab.Classification;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.SearchManager;
@@ -4038,21 +4036,6 @@ public final class Settings {
          * @hide
          */
         public static final String KEY_MENU_LONG_PRESS_ACTION = "key_menu_long_press_action";
-
-       /**
-         * Whether to display the gesture anywhere trigger region or not.
-         * @hide
-         */
-        @ChaosLab(name="Identicons", classification=Classification.NEW_FIELD)
-        public static final String IDENTICONS_ENABLED = "identicons_enabled";
-
-        /**
-         * Identicons style setting.
-         * @hide
-         */
-        @ChaosLab(name="Identicons", classification=Classification.NEW_FIELD)
-        public static final String IDENTICONS_STYLE = "identicons_style";
-
 
         /**
          * Action to perform when the assistant (search) key is pressed. (Default is 3)
