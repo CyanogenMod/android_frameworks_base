@@ -27,5 +27,21 @@
         <attr name="is_oval" format="boolean" />
         <attr name="android:scaleType" />
     </declare-styleable>
+
+    <declare-styleable name="SlidingLayer">
+        <attr name="shadowDrawable" format="boolean"/>
+        <attr name="shadowWidth" format="dimension"/>
+        <attr name="closeOnTapEnabled" format="boolean"/>
+        <attr name="openOnTapEnabled" format="boolean"/>
+        <attr name="offsetWidth" format="dimension" />
+        <attr name="stickTo" format="enum">
+            <enum name="auto" value="0"/>
+            <enum name="right" value="-1"/>
+            <enum name="left" value="-2"/>
+            <enum name="middle" value="-3"/>
+            <enum name="top" value="-4"/>
+            <enum name="bottom" value="-5"/>
+        </attr>
+    </declare-styleable>
 </resources>
 

@@ -198,6 +198,10 @@
 		android:theme="@android:style/Theme.Translucent.NoTitleBar"
 		/>
 
+	<activity android:name=".recent.PersonSlideActivity"
+		android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+		/>
+
         <receiver
             android:name=".recent.RecentsPreloadReceiver"
             android:exported="false">

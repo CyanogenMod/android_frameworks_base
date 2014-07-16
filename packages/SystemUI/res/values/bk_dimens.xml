@@ -144,4 +144,9 @@
     <!-- iOS Recents -->
     <dimen name="person_bubble_width">162dp</dimen>
     <dimen name="person_bubble_corner">8dp</dimen>
+
+    <!-- LIB: SlidingLayer -->
+    <dimen name="shadow_width">8dp</dimen>
+    <dimen name="layer_width">300dp</dimen>
+    <dimen name="offset_width">48dp</dimen>
 </resources>
