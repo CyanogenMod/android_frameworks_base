@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +31,7 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.os.SystemProperties;
 import android.os.UserManager;
 import android.util.ArrayMap;
 
@@ -103,9 +107,17 @@ public class AppOpsManager {
      */
     public static final int MODE_DEFAULT = 3;
 
+    /**
+     * @hide Result from {@link #checkOp}, {@link #noteOp}, {@link #startOp}:
+     * AppOps Service should show a dialog box on screen to get user
+     * permission.
+     */
+    public static final int MODE_ASK = 4;
+
     // when adding one of these:
     //  - increment _NUM_OP
-    //  - add rows to sOpToSwitch, sOpToString, sOpNames, sOpPerms, sOpDefaultMode
+    //  - add rows to sOpToSwitch, sOpToString, sOpNames, sOpPerms, sOpDefaultMode, sOpDefaultStrictMode
+    //  - add descriptive strings to frameworks/base/core/res/res/values/config.xml
     //  - add descriptive strings to Settings/res/values/arrays.xml
     //  - add the op to the appropriate template in AppOpsState.OpsTemplate (settings app)
 
@@ -832,6 +844,76 @@ public class AppOpsManager {
     };
 
     /**
+     * This specifies the default mode for each strict operation.
+     */
+
+    private static int[] sOpDefaultStrictMode = new int[] {
+            AppOpsManager.MODE_ASK,     // OP_COARSE_LOCATION
+            AppOpsManager.MODE_ASK,     // OP_FINE_LOCATION
+            AppOpsManager.MODE_ASK,     // OP_GPS
+            AppOpsManager.MODE_ALLOWED, // OP_VIBRATE
+            AppOpsManager.MODE_ASK,     // OP_READ_CONTACTS
+            AppOpsManager.MODE_ASK,     // OP_WRITE_CONTACTS
+            AppOpsManager.MODE_ASK,     // OP_READ_CALL_LOG
+            AppOpsManager.MODE_ASK,     // OP_WRITE_CALL_LOG
+            AppOpsManager.MODE_ALLOWED, // OP_READ_CALENDAR
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_CALENDAR
+            AppOpsManager.MODE_ASK,     // OP_WIFI_SCAN
+            AppOpsManager.MODE_ALLOWED, // OP_POST_NOTIFICATION
+            AppOpsManager.MODE_ALLOWED, // OP_NEIGHBORING_CELLS
+            AppOpsManager.MODE_ASK,     // OP_CALL_PHONE
+            AppOpsManager.MODE_ASK,     // OP_READ_SMS
+            AppOpsManager.MODE_ASK,     // OP_WRITE_SMS
+            AppOpsManager.MODE_ASK,     // OP_RECEIVE_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_EMERGECY_SMS
+            AppOpsManager.MODE_ASK,     // OP_RECEIVE_MMS
+            AppOpsManager.MODE_ALLOWED, // OP_RECEIVE_WAP_PUSH
+            AppOpsManager.MODE_ASK,     // OP_SEND_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_READ_ICC_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_ICC_SMS
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_SETTINGS
+            AppOpsManager.MODE_ALLOWED, // OP_SYSTEM_ALERT_WINDOW
+            AppOpsManager.MODE_ALLOWED, // OP_ACCESS_NOTIFICATIONS
+            AppOpsManager.MODE_ASK,     // OP_CAMERA
+            AppOpsManager.MODE_ASK,     // OP_RECORD_AUDIO
+            AppOpsManager.MODE_ALLOWED, // OP_PLAY_AUDIO
+            AppOpsManager.MODE_ALLOWED, // OP_READ_CLIPBOARD
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_CLIPBOARD
+            AppOpsManager.MODE_ALLOWED, // OP_TAKE_MEDIA_BUTTONS
+            AppOpsManager.MODE_ALLOWED, // OP_TAKE_AUDIO_FOCUS
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_MASTER_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_VOICE_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_RING_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_MEDIA_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_ALARM_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_NOTIFICATION_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_AUDIO_BLUETOOTH_VOLUME
+            AppOpsManager.MODE_ALLOWED, // OP_WAKE_LOCK
+            AppOpsManager.MODE_ALLOWED, // OP_MONITOR_LOCATION
+            AppOpsManager.MODE_ASK,     // OP_MONITOR_HIGH_POWER_LOCATION
+            AppOpsManager.MODE_DEFAULT, // OP_GET_USAGE_STATS
+            AppOpsManager.MODE_ALLOWED, // OP_MUTE_MICROPHONE
+            AppOpsManager.MODE_ALLOWED, // OP_TOAST_WINDOW
+            AppOpsManager.MODE_IGNORED, // OP_PROJECT_MEDIA
+            AppOpsManager.MODE_IGNORED, // OP_ACTIVATE_VPN
+            AppOpsManager.MODE_ALLOWED, // OP WALLPAPER
+            AppOpsManager.MODE_ALLOWED, // OP_ASSIST_STRUCTURE
+            AppOpsManager.MODE_ALLOWED, // OP_ASSIST_SCREENSHOT
+            AppOpsManager.MODE_ALLOWED, // OP_READ_PHONE_STATE
+            AppOpsManager.MODE_ALLOWED, // OP_ADD_VOICEMAIL
+            AppOpsManager.MODE_ALLOWED, // OP_USE_SIP
+            AppOpsManager.MODE_ALLOWED, // OP_PROCESS_OUTGOING_CALLS
+            AppOpsManager.MODE_ALLOWED, // OP_USE_FINGERPRINT
+            AppOpsManager.MODE_ALLOWED, // OP_BODY_SENSORS
+            AppOpsManager.MODE_ALLOWED, // OP_READ_CELL_BROADCASTS
+            AppOpsManager.MODE_ERRORED, // OP_MOCK_LOCATION
+            AppOpsManager.MODE_ALLOWED, // OP_READ_EXTERNAL_STORAGE
+            AppOpsManager.MODE_ALLOWED, // OP_WRITE_EXTERNAL_STORAGE
+            AppOpsManager.MODE_ALLOWED, // OP_TURN_ON_SCREEN
+            AppOpsManager.MODE_ALLOWED, // OP_GET_ACCOUNTS
+    };
+
+    /**
      * This specifies whether each option is allowed to be reset
      * when resetting all app preferences.  Disable reset for
      * app ops that are under strong control of some part of the
@@ -937,6 +1019,10 @@ public class AppOpsManager {
             throw new IllegalStateException("sOpDefaultMode length " + sOpDefaultMode.length
                     + " should be " + _NUM_OP);
         }
+        if (sOpDefaultStrictMode.length != _NUM_OP) {
+            throw new IllegalStateException("sOpDefaultStrictMode length " + sOpDefaultStrictMode.length
+                    + " should be " + _NUM_OP);
+        }
         if (sOpDisableReset.length != _NUM_OP) {
             throw new IllegalStateException("sOpDisableReset length " + sOpDisableReset.length
                     + " should be " + _NUM_OP);
@@ -1040,7 +1126,9 @@ public class AppOpsManager {
      * Retrieve the default mode for the operation.
      * @hide
      */
-    public static int opToDefaultMode(int op) {
+    public static int opToDefaultMode(int op, boolean isStrict) {
+        if (isStrict)
+            return sOpDefaultStrictMode[op];
         return sOpDefaultMode[op];
     }
 
@@ -1766,5 +1854,10 @@ public class AppOpsManager {
     /** @hide */
     public void finishOp(int op) {
         finishOp(op, Process.myUid(), mContext.getOpPackageName());
+    }
+
+    /** @hide */
+    public static boolean isStrictEnable() {
+        return SystemProperties.getBoolean("persist.sys.strict_op_enable", false);
     }
 }
