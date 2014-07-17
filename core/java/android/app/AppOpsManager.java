@@ -114,7 +114,8 @@ public class AppOpsManager {
 
     // when adding one of these:
     //  - increment _NUM_OP
-    //  - add rows to sOpToSwitch, sOpToString, sOpNames, sOpPerms, sOpDefaultMode, sOpDefaultStrictMode
+    //  - add rows to sOpToSwitch, sOpToString, sOpNames, sOpPerms, sOpDefaultMode, sOpDefaultStrictMode,
+    //    sOpToOpString, sOpStrictMode.
     //  - add descriptive strings to frameworks/base/core/res/res/values/config.xml
     //  - add descriptive strings to Settings/res/values/arrays.xml
     //  - add the op to the appropriate template in AppOpsState.OpsTemplate (settings app)
@@ -239,6 +240,91 @@ public class AppOpsManager {
     @SystemApi
     public static final String OPSTR_ACTIVATE_VPN = "android:activate_vpn";
 
+    private static final String OPSTR_GPS =
+            "android:gps";
+    private static final String OPSTR_VIBRATE =
+            "android:vibrate";
+    private static final String OPSTR_READ_CONTACTS =
+            "android:read_contacts";
+    private static final String OPSTR_WRITE_CONTACTS =
+            "android:write_contacts";
+    private static final String OPSTR_READ_CALL_LOG =
+            "android:read_call_log";
+    private static final String OPSTR_WRITE_CALL_LOG =
+            "android:write_call_log";
+    private static final String OPSTR_READ_CALENDAR =
+            "android:read_calendar";
+    private static final String OPSTR_WRITE_CALENDAR =
+            "android:write_calendar";
+    private static final String OPSTR_WIFI_SCAN =
+            "android:wifi_scan";
+    private static final String OPSTR_POST_NOTIFICATION =
+            "android:post_notification";
+    private static final String OPSTR_NEIGHBORING_CELLS =
+            "android:neighboring_cells";
+    private static final String OPSTR_CALL_PHONE =
+            "android:call_phone";
+    private static final String OPSTR_READ_SMS =
+            "android:read_sms";
+    private static final String OPSTR_WRITE_SMS =
+            "android:write_sms";
+    private static final String OPSTR_RECEIVE_SMS =
+            "android:receive_sms";
+    private static final String OPSTR_RECEIVE_EMERGECY_SMS =
+            "android:receive_emergecy_sms";
+    private static final String OPSTR_RECEIVE_MMS =
+            "android:receive_mms";
+    private static final String OPSTR_RECEIVE_WAP_PUSH =
+            "android:receive_wap_push";
+    private static final String OPSTR_SEND_SMS =
+            "android:send_sms";
+    private static final String OPSTR_READ_ICC_SMS =
+            "android:read_icc_sms";
+    private static final String OPSTR_WRITE_ICC_SMS =
+            "android:write_icc_sms";
+    private static final String OPSTR_WRITE_SETTINGS =
+            "android:write_settings";
+    private static final String OPSTR_SYSTEM_ALERT_WINDOW =
+            "android:system_alert_window";
+    private static final String OPSTR_ACCESS_NOTIFICATIONS =
+            "android:access_notifications";
+    private static final String OPSTR_CAMERA =
+            "android:camera";
+    private static final String OPSTR_RECORD_AUDIO =
+            "android:record_audio";
+    private static final String OPSTR_PLAY_AUDIO =
+            "android:play_audio";
+    private static final String OPSTR_READ_CLIPBOARD =
+            "android:read_clipboard";
+    private static final String OPSTR_WRITE_CLIPBOARD =
+            "android:write_clipboard";
+    private static final String OPSTR_TAKE_MEDIA_BUTTONS =
+            "android:take_media_buttons";
+    private static final String OPSTR_TAKE_AUDIO_FOCUS =
+            "android:take_audio_focus";
+    private static final String OPSTR_AUDIO_MASTER_VOLUME =
+            "android:audio_master_volume";
+    private static final String OPSTR_AUDIO_VOICE_VOLUME =
+            "android:audio_voice_volume";
+    private static final String OPSTR_AUDIO_RING_VOLUME =
+            "android:audio_ring_volume";
+    private static final String OPSTR_AUDIO_MEDIA_VOLUME =
+            "android:audio_media_volume";
+    private static final String OPSTR_AUDIO_ALARM_VOLUME =
+            "android:audio_alarm_volume";
+    private static final String OPSTR_AUDIO_NOTIFICATION_VOLUME =
+            "android:audio_notification_volume";
+    private static final String OPSTR_AUDIO_BLUETOOTH_VOLUME =
+            "android:audio_bluetooth_volume";
+    private static final String OPSTR_WAKE_LOCK =
+            "android:wake_lock";
+    private static final String OPSTR_MUTE_MICROPHONE =
+            "android:mute_microphone";
+    private static final String OPSTR_TOAST_WINDOW =
+            "android:toast_window";
+    private static final String OPSTR_PROJECT_MEDIA =
+            "android:project_media";
+
     /**
      * This maps each operation to the operation that serves as the
      * switch to determine whether it is allowed.  Generally this is
@@ -351,6 +437,61 @@ public class AppOpsManager {
             null,
             null,
             OPSTR_ACTIVATE_VPN,
+    };
+
+    /**
+     * This maps each operation to the public string constant for it.
+     * If it doesn't have a public string constant, it maps to null.
+     */
+    private static String[] sOpToOpString = new String[] {
+        OPSTR_COARSE_LOCATION,
+        OPSTR_FINE_LOCATION,
+        OPSTR_GPS,
+        OPSTR_VIBRATE,
+        OPSTR_READ_CONTACTS,
+        OPSTR_WRITE_CONTACTS,
+        OPSTR_READ_CALL_LOG,
+        OPSTR_WRITE_CALL_LOG,
+        OPSTR_READ_CALENDAR,
+        OPSTR_WRITE_CALENDAR,
+        OPSTR_WIFI_SCAN,
+        OPSTR_POST_NOTIFICATION,
+        OPSTR_NEIGHBORING_CELLS,
+        OPSTR_CALL_PHONE,
+        OPSTR_READ_SMS,
+        OPSTR_WRITE_SMS,
+        OPSTR_RECEIVE_SMS,
+        OPSTR_RECEIVE_EMERGECY_SMS,
+        OPSTR_RECEIVE_MMS,
+        OPSTR_RECEIVE_WAP_PUSH,
+        OPSTR_SEND_SMS,
+        OPSTR_READ_ICC_SMS,
+        OPSTR_WRITE_ICC_SMS,
+        OPSTR_WRITE_SETTINGS,
+        OPSTR_SYSTEM_ALERT_WINDOW,
+        OPSTR_ACCESS_NOTIFICATIONS,
+        OPSTR_CAMERA,
+        OPSTR_RECORD_AUDIO,
+        OPSTR_PLAY_AUDIO,
+        OPSTR_READ_CLIPBOARD,
+        OPSTR_WRITE_CLIPBOARD,
+        OPSTR_TAKE_MEDIA_BUTTONS,
+        OPSTR_TAKE_AUDIO_FOCUS,
+        OPSTR_AUDIO_MASTER_VOLUME,
+        OPSTR_AUDIO_VOICE_VOLUME,
+        OPSTR_AUDIO_RING_VOLUME,
+        OPSTR_AUDIO_MEDIA_VOLUME,
+        OPSTR_AUDIO_ALARM_VOLUME,
+        OPSTR_AUDIO_NOTIFICATION_VOLUME,
+        OPSTR_AUDIO_BLUETOOTH_VOLUME,
+        OPSTR_WAKE_LOCK,
+        OPSTR_MONITOR_LOCATION,
+        OPSTR_MONITOR_HIGH_POWER_LOCATION,
+        OPSTR_GET_USAGE_STATS,
+        OPSTR_MUTE_MICROPHONE,
+        OPSTR_TOAST_WINDOW,
+        OPSTR_PROJECT_MEDIA,
+        OPSTR_ACTIVATE_VPN,
     };
 
     /**
@@ -684,6 +825,60 @@ public class AppOpsManager {
     };
 
     /**
+     * This specifies if operation is in strict mode.
+     */
+    private final static boolean[] sOpStrictMode = new boolean[] {
+        true,     // OP_COARSE_LOCATION
+        true,     // OP_FINE_LOCATION
+        true,     // OP_GPS
+        false,    // OP_VIBRATE
+        true,     // OP_READ_CONTACTS
+        true,     // OP_WRITE_CONTACTS
+        true,     // OP_READ_CALL_LOG
+        true,     // OP_WRITE_CALL_LOG
+        false,    // OP_READ_CALENDAR
+        false,    // OP_WRITE_CALENDAR
+        true,     // OP_WIFI_SCAN
+        false,    // OP_POST_NOTIFICATION
+        false,    // OP_NEIGHBORING_CELLS
+        true,     // OP_CALL_PHONE
+        true,     // OP_READ_SMS
+        true,     // OP_WRITE_SMS
+        false,    // OP_RECEIVE_SMS
+        false,    // OP_RECEIVE_EMERGECY_SMS
+        true,     // OP_RECEIVE_MMS
+        false,    // OP_RECEIVE_WAP_PUSH
+        true,     // OP_SEND_SMS
+        false,    // OP_READ_ICC_SMS
+        false,    // OP_WRITE_ICC_SMS
+        false,    // OP_WRITE_SETTINGS
+        false,    // OP_SYSTEM_ALERT_WINDOW
+        false,    // OP_ACCESS_NOTIFICATIONS
+        true,     // OP_CAMERA
+        true,     // OP_RECORD_AUDIO
+        false,    // OP_PLAY_AUDIO
+        false,    // OP_READ_CLIPBOARD
+        false,    // OP_WRITE_CLIPBOARD
+        false,    // OP_TAKE_MEDIA_BUTTONS
+        false,    // OP_TAKE_AUDIO_FOCUS
+        false,    // OP_AUDIO_MASTER_VOLUME
+        false,    // OP_AUDIO_VOICE_VOLUME
+        false,    // OP_AUDIO_RING_VOLUME
+        false,    // OP_AUDIO_MEDIA_VOLUME
+        false,    // OP_AUDIO_ALARM_VOLUME
+        false,    // OP_AUDIO_NOTIFICATION_VOLUME
+        false,    // OP_AUDIO_BLUETOOTH_VOLUME
+        false,    // OP_WAKE_LOCK
+        false,    // OP_MONITOR_LOCATION
+        true,     // OP_MONITOR_HIGH_POWER_LOCATION
+        false,    // OP_GET_USAGE_STATS
+        false,    // OP_MUTE_MICROPHONE
+        false,    // OP_TOAST_WINDOW
+        false,    // OP_PROJECT_MEDIA
+        false,    // OP_ACTIVATE_VPN
+    };
+
+    /**
      * This specifies whether each option is allowed to be reset
      * when resetting all app preferences.  Disable reset for
      * app ops that are under strong control of some part of the
@@ -742,6 +937,7 @@ public class AppOpsManager {
     };
 
     private static HashMap<String, Integer> sOpStrToOp = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> sOpStringToOp = new HashMap<String, Integer>();
 
     static {
         if (sOpToSwitch.length != _NUM_OP) {
@@ -750,6 +946,10 @@ public class AppOpsManager {
         }
         if (sOpToString.length != _NUM_OP) {
             throw new IllegalStateException("sOpToString length " + sOpToString.length
+                    + " should be " + _NUM_OP);
+        }
+        if (sOpToOpString.length != _NUM_OP) {
+            throw new IllegalStateException("sOpToOpString length " + sOpToOpString.length
                     + " should be " + _NUM_OP);
         }
         if (sOpNames.length != _NUM_OP) {
@@ -780,9 +980,16 @@ public class AppOpsManager {
             throw new IllegalStateException("sOpAllowSYstemRestrictionsBypass length "
                     + sOpRestrictions.length + " should be " + _NUM_OP);
         }
+        if (sOpStrictMode.length != _NUM_OP) {
+            throw new IllegalStateException("sOpStrictMode length "
+                    + sOpStrictMode.length + " should be " + _NUM_OP);
+        }
         for (int i=0; i<_NUM_OP; i++) {
             if (sOpToString[i] != null) {
                 sOpStrToOp.put(sOpToString[i], i);
+            }
+            if (sOpToOpString[i] != null) {
+                sOpStringToOp.put(sOpToOpString[i], i);
             }
         }
     }
@@ -1455,5 +1662,45 @@ public class AppOpsManager {
     /** @hide */
     public static boolean isStrictEnable() {
         return SystemProperties.getBoolean("persist.sys.strict_op_enable", false);
+    }
+
+    /**
+     * Check if op in strict mode
+     * @hide
+     */
+    public static boolean isStrictOp(int code) {
+        return sOpStrictMode[code];
+    }
+
+
+    /** @hide */
+    public static int stringToMode(String permission) {
+        if ("allowed".equalsIgnoreCase(permission)) {
+            return AppOpsManager.MODE_ALLOWED;
+        } else if ("ignored".equalsIgnoreCase(permission)) {
+            return AppOpsManager.MODE_IGNORED;
+        } else if ("ask".equalsIgnoreCase(permission)) {
+            return AppOpsManager.MODE_ASK;
+        }
+        return AppOpsManager.MODE_ERRORED;
+    }
+
+    /** @hide */
+    public static int stringOpToOp (String op) {
+        Integer val = sOpStringToOp.get(op);
+        if (val == null) {
+            val = OP_NONE;
+        }
+        return val;
+    }
+
+    /** @hide */
+    public boolean isControlAllowed(int op, String packageName) {
+        boolean isShow = true;
+        try {
+            isShow = mService.isControlAllowed(op, packageName);
+        } catch (RemoteException e) {
+        }
+        return isShow;
     }
 }
