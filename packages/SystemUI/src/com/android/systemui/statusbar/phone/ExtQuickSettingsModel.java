@@ -230,7 +230,7 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                 //          so if the selectedkey is null or the selected apn is not in current
                 //          available apn list, we'd like to set it as the default apn.
                 if (currentApn == null) {
-                    if (selectedKey == null || !isSelectedKeyAvailable(selectedKey, apnList)) {
+                    if (selectedKey == null) {
                         for (int i = 0; i < apnList.size(); i++) {
                             Apn apn = apnList.get(i);
                             if (apn.type != null && apn.type.contains(DEFAULT)
@@ -257,19 +257,6 @@ class ExtQuickSettingsModel extends QuickSettingsModel {
                     cursor = null;
                 }
             }
-        }
-
-        private boolean isSelectedKeyAvailable(String selectedKey, ArrayList<Apn> apnList) {
-            boolean ret = false;
-            if (apnList != null) {
-                for (Apn apn : apnList) {
-                    if (selectedKey.equals(apn.id)) {
-                        ret = true;
-                        break;
-                    }
-                }
-            }
-            return ret;
         }
 
         private String getOperatorNumericSelection() {
