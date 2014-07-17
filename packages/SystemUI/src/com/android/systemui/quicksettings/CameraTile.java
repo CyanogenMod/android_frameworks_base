@@ -245,7 +245,6 @@ public class CameraTile extends QuickSettingsTile {
     public CameraTile(Context context, QuickSettingsController qsc, Handler handler) {
         super(context, qsc, R.layout.quick_settings_tile_camera);
         mHandler = handler;
-        mLabel = mContext.getString(R.string.quick_settings_camera_label);
         mDrawable = R.drawable.ic_qs_camera;
 
         String imageFileNameFormat = DEFAULT_IMAGE_FILE_NAME_FORMAT;
@@ -266,6 +265,7 @@ public class CameraTile extends QuickSettingsTile {
 
     @Override
     void onPostCreate() {
+        updateTile();
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -305,6 +305,12 @@ public class CameraTile extends QuickSettingsTile {
         }
     }
 
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
     private PanelView getContainingPanel() {
         ViewParent parent = mContainer;
         while (parent != null) {
@@ -314,6 +320,10 @@ public class CameraTile extends QuickSettingsTile {
             parent = parent.getParent();
         }
         return null;
+    }
+
+    private synchronized void updateTile() {
+        mLabel = mContext.getString(R.string.quick_settings_camera_label);
     }
 
     private void updateOrientation() {
