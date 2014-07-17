@@ -50,7 +50,7 @@ public final class ConnectionSettings implements Parcelable {
     public static final int PROFILE_CONNECTION_SYNC = 5;
     public static final int PROFILE_CONNECTION_BLUETOOTH = 7;
     public static final int PROFILE_CONNECTION_NFC = 8;
-    public static final int PROFILE_CONNECTION_2G3G = 9;
+    public static final int PROFILE_CONNECTION_2G3G4G = 9;
 
     // retrieved from Phone.apk
     private static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
@@ -58,7 +58,9 @@ public final class ConnectionSettings implements Parcelable {
 
     private static final int CM_MODE_2G = 0;
     private static final int CM_MODE_3G = 1;
-    private static final int CM_MODE_BOTH = 2;
+    private static final int CM_MODE_4G = 2;
+    private static final int CM_MODE_2G3G = 3;
+    private static final int CM_MODE_ALL = 4;
 
     /** @hide */
     public static final Parcelable.Creator<ConnectionSettings> CREATOR = new Parcelable.Creator<ConnectionSettings>() {
@@ -137,7 +139,7 @@ public final class ConnectionSettings implements Parcelable {
 // hharte                    cm.setMobileDataEnabled(forcedState);
                 }
                 break;
-            case PROFILE_CONNECTION_2G3G:
+            case PROFILE_CONNECTION_2G3G4G:
                 Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
                 switch(getValue()) {
                     case CM_MODE_2G:
@@ -146,8 +148,14 @@ public final class ConnectionSettings implements Parcelable {
                     case CM_MODE_3G:
                         intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_WCDMA_ONLY);
                         break;
-                    case CM_MODE_BOTH:
+                    case CM_MODE_4G:
+                        intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_LTE_ONLY);
+                        break;
+                    case CM_MODE_2G3G:
                         intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_WCDMA_PREF);
+                        break;
+                    case CM_MODE_ALL:
+                        intent.putExtra(EXTRA_NETWORK_MODE, RILConstants.NETWORK_MODE_LTE_GSM_WCDMA);
                         break;
                     default:
                         return;
