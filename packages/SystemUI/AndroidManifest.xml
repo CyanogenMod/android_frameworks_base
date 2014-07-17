@@ -110,6 +110,9 @@
     <!-- WeatherTile -->
     <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 
+    <!-- WallpaperManager -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
