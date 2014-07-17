@@ -892,6 +892,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             String ratString = tm.networkTypeToString(chosenNetType);
             opeartorName = new StringBuilder().append(operator).append(" ").append(ratString).
                     toString();
+        } else {
+            opeartorName = operator;
         }
         return opeartorName;
     }
