@@ -364,8 +364,8 @@ public class ResourcesManager {
         try {
             ComposedIconInfo iconInfo = pm.getComposedIconInfo();
             r.setComposedIconInfo(iconInfo);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.wtf(TAG, "Failed to retrieve ComposedIconInfo", e);
         }
     }
 
