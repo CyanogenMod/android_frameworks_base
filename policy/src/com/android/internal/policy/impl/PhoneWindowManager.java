@@ -4962,9 +4962,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // When the screen is off and the key is not injected, determine whether
             // to wake the device but don't pass the key to the application.
             result = 0;
-            if (down && isWakeKey && isWakeKeyWhenScreenOff(keyCode)) {
-                mPowerManager.cpuBoost(750000);
-                result |= ACTION_WAKE_UP;
+            if (down && isWakeKey) {
+                if (keyguardActive) {
+                    mPowerManager.wakeUp(SystemClock.uptimeMillis());
+                } else {
+                    // Otherwise, wake the device ourselves.
+                    result |= ACTION_WAKE_UP;
+                }
             }
         }
 
