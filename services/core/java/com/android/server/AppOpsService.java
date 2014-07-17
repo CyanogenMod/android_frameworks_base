@@ -79,11 +79,15 @@ public class AppOpsService extends IAppOpsService.Stub {
     // Write at most every 30 minutes.
     static final long WRITE_DELAY = DEBUG ? 1000 : 30*60*1000;
 
+    // Location of policy file.
+    static final String DEFAULT_POLICY_FILE = "/system/etc/appops_policy.xml";
+
     Context mContext;
     final AtomicFile mFile;
     final Handler mHandler;
     final Looper mLooper;
     final boolean mStrictEnable;
+    AppOpsPolicy mPolicy;
 
     boolean mWriteScheduled;
     final Runnable mWriteRunner = new Runnable() {
@@ -223,6 +227,7 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     public void publish(Context context) {
         mContext = context;
+        readPolicy();
         ServiceManager.addService(Context.APP_OPS_SERVICE, asBinder());
     }
 
@@ -411,7 +416,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                         }
                         repCbs.addAll(cbs);
                     }
-                    if (mode == this.getDefaultMode(code, uid, packageName)) {
+                    if (mode == getDefaultMode(code, uid, packageName)) {
                         // If going into the default mode, prune this op
                         // if there is nothing else interesting in it.
                         pruneOp(op, uid, packageName);
@@ -1077,11 +1082,19 @@ public class AppOpsService extends IAppOpsService.Stub {
             if (tagName.equals("op")) {
                 int code = Integer
                         .parseInt(parser.getAttributeValue(null, "n"));
-                int defaultMode = getDefaultMode(code, uid, pkgName);
-                Op op = new Op(uid, pkgName, code, defaultMode);
+                Op op = new Op(uid, pkgName, code, AppOpsManager.MODE_ERRORED);
                 String mode = parser.getAttributeValue(null, "m");
                 if (mode != null) {
                     op.mode = Integer.parseInt(mode);
+                } else {
+                    String sDefualtMode = parser.getAttributeValue(null, "dm");
+                    int defaultMode;
+                    if (sDefualtMode != null) {
+                        defaultMode = Integer.parseInt(sDefualtMode);
+                    } else {
+                        defaultMode = getDefaultMode(code, uid, pkgName);
+                    }
+                    op.mode = defaultMode;
                 }
                 String time = parser.getAttributeValue(null, "t");
                 if (time != null) {
@@ -1161,9 +1174,12 @@ public class AppOpsService extends IAppOpsService.Stub {
                             AppOpsManager.OpEntry op = ops.get(j);
                             out.startTag(null, "op");
                             out.attribute(null, "n", Integer.toString(op.getOp()));
-                            if (op.getMode() != this.getDefaultMode(op.getOp(),
-                                    pkg.getUid(), pkg.getPackageName())) {
+                            int defaultMode = getDefaultMode(op.getOp(),
+                                    pkg.getUid(), pkg.getPackageName());
+                            if (op.getMode() != defaultMode) {
                                 out.attribute(null, "m", Integer.toString(op.getMode()));
+                            } else {
+                                out.attribute(null, "dm", Integer.toString(defaultMode));
                             }
                             long time = op.getTime();
                             if (time != 0) {
@@ -1398,8 +1414,15 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     private int getDefaultMode(int code, int uid, String packageName) {
-        return AppOpsManager.opToDefaultMode(code,
+        int mode = AppOpsManager.opToDefaultMode(code,
                 isStrict(code, uid, packageName));
+        if (AppOpsManager.isStrictOp(code) && mPolicy != null) {
+            int policyMode = mPolicy.getDefualtMode(code, packageName);
+            if (policyMode != AppOpsManager.MODE_ERRORED) {
+                mode = policyMode;
+            }
+        }
+        return mode;
     }
 
     private boolean isStrict(int code, int uid, String packageName) {
@@ -1514,4 +1537,21 @@ public class AppOpsService extends IAppOpsService.Stub {
         }
     }
 
+    private void readPolicy() {
+        if (mStrictEnable) {
+            mPolicy = new AppOpsPolicy(new File(DEFAULT_POLICY_FILE), mContext);
+            mPolicy.readPolicy();
+            mPolicy.debugPoilcy();
+        } else {
+            mPolicy = null;
+        }
+    }
+
+    public boolean isControlAllowed(int code, String packageName) {
+        boolean isShow = true;
+        if (mPolicy != null) {
+            isShow = mPolicy.isControlAllowed(code, packageName);
+        }
+        return isShow;
+    }
 }
