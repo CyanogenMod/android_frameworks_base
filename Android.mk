@@ -94,6 +94,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/backup/IRestoreObserver.aidl \
 	core/java/android/app/backup/IRestoreSession.aidl \
 	core/java/android/app/usage/IUsageStatsManager.aidl \
+	core/java/android/wipower/IWipower.aidl \
+	core/java/android/wipower/IWipowerManagerCallback.aidl \
 	core/java/android/bluetooth/IBluetooth.aidl \
 	core/java/android/bluetooth/IBluetoothA2dp.aidl \
 	core/java/android/bluetooth/IBluetoothA2dpSink.aidl \
