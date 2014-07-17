@@ -479,10 +479,15 @@ public class IconPackHelper {
             canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG,
                     Paint.FILTER_BITMAP_FLAG));
 
+            int width = 0, height = 0;
             if (icon instanceof PaintDrawable) {
                 PaintDrawable painter = (PaintDrawable) icon;
                 painter.setIntrinsicWidth(iconSize);
                 painter.setIntrinsicHeight(iconSize);
+
+                // A PaintDrawable does not have an exact size
+                width = iconSize;
+                height = iconSize;
             } else if (icon instanceof BitmapDrawable) {
                 // Ensure the bitmap has a density.
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) icon;
@@ -491,18 +496,24 @@ public class IconPackHelper {
                     bitmapDrawable.setTargetDensity(res.getDisplayMetrics());
                 }
                 canvas.setDensity(bitmap.getDensity());
+
+                // Respect the original size of an icon
+                width = bitmap.getWidth();
+                height = bitmap.getHeight();
             }
 
-            Bitmap bitmap = Bitmap.createBitmap(iconSize, iconSize,
+            if (width <= 0 || height <= 0) return null;
+
+            Bitmap bitmap = Bitmap.createBitmap(width, height,
                     Bitmap.Config.ARGB_8888);
             canvas.setBitmap(bitmap);
 
             // Scale the original
             Rect oldBounds = new Rect();
             oldBounds.set(icon.getBounds());
-            icon.setBounds(0, 0, iconSize, iconSize);
+            icon.setBounds(0, 0, width, height);
             canvas.save();
-            canvas.scale(scale, scale, iconSize / 2, iconSize / 2);
+            canvas.scale(scale, scale, width / 2, height / 2);
             icon.draw(canvas);
             canvas.restore();
 

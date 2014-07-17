@@ -154,7 +154,12 @@ public class BarTransitions {
         public void updateResources(Resources res)  {
             mOpaque = res.getColor(R.color.system_bar_background_opaque);
             mSemiTransparent = res.getColor(R.color.system_bar_background_semi_transparent);
+            // Retrieve the current bounds for mGradient so they can be set to
+            // the new drawable being loaded, otherwise the bounds will be (0, 0, 0, 0)
+            // and the gradient will not be drawn.
+            Rect bounds = mGradient.getBounds();
             mGradient = res.getDrawable(mGradientResourceId);
+            mGradient.setBounds(bounds);
         }
 
         @Override
