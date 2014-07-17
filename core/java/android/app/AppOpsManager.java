@@ -116,7 +116,8 @@ public class AppOpsManager {
 
     // when adding one of these:
     //  - increment _NUM_OP
-    //  - add rows to sOpToSwitch, sOpToString, sOpNames, sOpPerms, sOpDefaultMode, sOpDefaultStrictMode
+    //  - add rows to sOpToSwitch, sOpToString, sOpNames, sOpPerms, sOpDefaultMode, sOpDefaultStrictMode,
+    //    sOpToOpString, sOpStrictMode.
     //  - add descriptive strings to frameworks/base/core/res/res/values/config.xml
     //  - add descriptive strings to Settings/res/values/arrays.xml
     //  - add the op to the appropriate template in AppOpsState.OpsTemplate (settings app)
@@ -914,6 +915,75 @@ public class AppOpsManager {
     };
 
     /**
+     * This specifies if operation is in strict mode.
+     */
+    private final static boolean[] sOpStrictMode = new boolean[] {
+        true,     // OP_COARSE_LOCATION
+        true,     // OP_FINE_LOCATION
+        true,     // OP_GPS
+        false,    // OP_VIBRATE
+        true,     // OP_READ_CONTACTS
+        true,     // OP_WRITE_CONTACTS
+        true,     // OP_READ_CALL_LOG
+        true,     // OP_WRITE_CALL_LOG
+        false,    // OP_READ_CALENDAR
+        false,    // OP_WRITE_CALENDAR
+        true,     // OP_WIFI_SCAN
+        false,    // OP_POST_NOTIFICATION
+        false,    // OP_NEIGHBORING_CELLS
+        true,     // OP_CALL_PHONE
+        true,     // OP_READ_SMS
+        true,     // OP_WRITE_SMS
+        false,    // OP_RECEIVE_SMS
+        false,    // OP_RECEIVE_EMERGECY_SMS
+        true,     // OP_RECEIVE_MMS
+        false,    // OP_RECEIVE_WAP_PUSH
+        true,     // OP_SEND_SMS
+        false,    // OP_READ_ICC_SMS
+        false,    // OP_WRITE_ICC_SMS
+        false,    // OP_WRITE_SETTINGS
+        false,    // OP_SYSTEM_ALERT_WINDOW
+        false,    // OP_ACCESS_NOTIFICATIONS
+        true,     // OP_CAMERA
+        true,     // OP_RECORD_AUDIO
+        false,    // OP_PLAY_AUDIO
+        false,    // OP_READ_CLIPBOARD
+        false,    // OP_WRITE_CLIPBOARD
+        false,    // OP_TAKE_MEDIA_BUTTONS
+        false,    // OP_TAKE_AUDIO_FOCUS
+        false,    // OP_AUDIO_MASTER_VOLUME
+        false,    // OP_AUDIO_VOICE_VOLUME
+        false,    // OP_AUDIO_RING_VOLUME
+        false,    // OP_AUDIO_MEDIA_VOLUME
+        false,    // OP_AUDIO_ALARM_VOLUME
+        false,    // OP_AUDIO_NOTIFICATION_VOLUME
+        false,    // OP_AUDIO_BLUETOOTH_VOLUME
+        false,    // OP_WAKE_LOCK
+        false,    // OP_MONITOR_LOCATION
+        true,     // OP_MONITOR_HIGH_POWER_LOCATION
+        false,    // OP_GET_USAGE_STATS
+        false,    // OP_MUTE_MICROPHONE
+        false,    // OP_TOAST_WINDOW
+        false,    // OP_PROJECT_MEDIA
+        false,    // OP_ACTIVATE_VPN
+        true,     // OP WALLPAPER
+        false,    //ASSIST_STRUCTURE
+        false,    //ASSIST_SCREENSHOT
+        false,    //READ_PHONE_STATE
+        false,    //ADD_VOICEMAIL
+        false,    // USE_SIP
+        false,    // PROCESS_OUTGOING_CALLS
+        false,    // USE_FINGERPRINT
+        false,    // BODY_SENSORS
+        false,    // READ_CELL_BROADCASTS
+        false,    // MOCK_LOCATION
+        true,     // READ_EXTERNAL_STORAGE
+        true,     // WRITE_EXTERNAL_STORAGE
+        false,    // TURN_ON_SCREEN
+        false,    // GET_ACCOUNTS
+    };
+
+    /**
      * This specifies whether each option is allowed to be reset
      * when resetting all app preferences.  Disable reset for
      * app ops that are under strong control of some part of the
@@ -1034,6 +1104,10 @@ public class AppOpsManager {
         if (sOpAllowSystemRestrictionBypass.length != _NUM_OP) {
             throw new IllegalStateException("sOpAllowSYstemRestrictionsBypass length "
                     + sOpRestrictions.length + " should be " + _NUM_OP);
+        }
+        if (sOpStrictMode.length != _NUM_OP) {
+            throw new IllegalStateException("sOpStrictMode length "
+                    + sOpStrictMode.length + " should be " + _NUM_OP);
         }
         for (int i=0; i<_NUM_OP; i++) {
             if (sOpToString[i] != null) {
@@ -1859,5 +1933,45 @@ public class AppOpsManager {
     /** @hide */
     public static boolean isStrictEnable() {
         return SystemProperties.getBoolean("persist.sys.strict_op_enable", false);
+    }
+
+    /**
+     * Check if op in strict mode
+     * @hide
+     */
+    public static boolean isStrictOp(int code) {
+        return sOpStrictMode[code];
+    }
+
+
+    /** @hide */
+    public static int stringToMode(String permission) {
+        if ("allowed".equalsIgnoreCase(permission)) {
+            return AppOpsManager.MODE_ALLOWED;
+        } else if ("ignored".equalsIgnoreCase(permission)) {
+            return AppOpsManager.MODE_IGNORED;
+        } else if ("ask".equalsIgnoreCase(permission)) {
+            return AppOpsManager.MODE_ASK;
+        }
+        return AppOpsManager.MODE_ERRORED;
+    }
+
+    /** @hide */
+    public static int stringOpToOp (String op) {
+        Integer val = sOpStrToOp.get(op);
+        if (val == null) {
+            val = OP_NONE;
+        }
+        return val;
+    }
+
+    /** @hide */
+    public boolean isControlAllowed(int op, String packageName) {
+        boolean isShow = true;
+        try {
+            isShow = mService.isControlAllowed(op, packageName);
+        } catch (RemoteException e) {
+        }
+        return isShow;
     }
 }
