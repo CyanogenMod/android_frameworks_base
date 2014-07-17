@@ -46,7 +46,6 @@ public class PerformanceProfileTile extends QuickSettingsTile {
         mPm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
         Resources res = context.getResources();
-        mEntries = res.getStringArray(com.android.internal.R.array.perf_profile_entries);
         mTypedArrayDrawables = res.obtainTypedArray(R.array.perf_profile_drawables);
 
         mPerfProfileDefaultEntry = mPm.getDefaultPowerProfile();
@@ -107,6 +106,8 @@ public class PerformanceProfileTile extends QuickSettingsTile {
 
     private synchronized void updateTile() {
         mDrawable = mTypedArrayDrawables.getResourceId(mCurrentValue, -1);
+        Resources res = mContext.getResources();
+        mEntries = res.getStringArray(com.android.internal.R.array.perf_profile_entries);
         mLabel = mEntries[mCurrentValue];
     }
 
