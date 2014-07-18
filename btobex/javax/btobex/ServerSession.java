@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2014 The Linux Foundation. All rights reserved.
  * Copyright (c) 2008-2009, Motorola, Inc.
  *
  * All rights reserved.
@@ -30,7 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package javax.obex;
+package javax.btobex;
 
 import android.util.Log;
 
@@ -46,6 +47,8 @@ public final class ServerSession extends ObexSession implements Runnable {
 
     private static final String TAG = "Obex ServerSession";
 
+    private static final boolean VERBOSE = ObexHelper.VERBOSE;
+
     private ObexTransport mTransport;
 
     private InputStream mInput;
@@ -60,6 +63,7 @@ public final class ServerSession extends ObexSession implements Runnable {
 
     private boolean mClosed;
 
+    public ObexHelper mSrmServer;
     /**
      * Creates new ServerSession.
      * @param trans the connection to the client
@@ -76,10 +80,19 @@ public final class ServerSession extends ObexSession implements Runnable {
         mOutput = mTransport.openOutputStream();
         mListener = handler;
         mMaxPacketLength = 256;
-
+        mSrmServer = new ObexHelper();
         mClosed = false;
         mProcessThread = new Thread(this);
         mProcessThread.start();
+    }
+
+    public void setMaxPacketSize(int size) {
+        if (VERBOSE)  Log.v(TAG, "setMaxPacketSize" + size);
+        mMaxPacketLength = size;
+    }
+
+    public int getMaxPacketSize() {
+        return mMaxPacketLength;
     }
 
     /**
@@ -92,6 +105,7 @@ public final class ServerSession extends ObexSession implements Runnable {
             boolean done = false;
             while (!done && !mClosed) {
                 int requestType = mInput.read();
+                if (VERBOSE)  Log.v(TAG, "run requestType "+requestType);
                 switch (requestType) {
                     case ObexHelper.OBEX_OPCODE_CONNECT:
                         handleConnectRequest();
@@ -118,7 +132,9 @@ public final class ServerSession extends ObexSession implements Runnable {
                     case ObexHelper.OBEX_OPCODE_ABORT:
                         handleAbortRequest();
                         break;
-
+                    case ObexHelper.OBEX_OPCODE_ACTION:
+                        handleActionRequest();
+                        break;
                     case -1:
                         done = true;
                         break;
@@ -163,7 +179,7 @@ public final class ServerSession extends ObexSession implements Runnable {
 
         int length = mInput.read();
         length = (length << 8) + mInput.read();
-        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if (length > mMaxPacketLength) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
         } else {
             for (int i = 3; i < length; i++) {
@@ -171,6 +187,51 @@ public final class ServerSession extends ObexSession implements Runnable {
             }
             code = mListener.onAbort(request, reply);
             Log.v(TAG, "onAbort request handler return value- " + code);
+            code = validateResponseCode(code);
+        }
+        sendResponse(code, null);
+    }
+
+    /**
+     * Handles a ACTION request from a client. This method will read the rest of
+     * the request from the client. Assuming the request is valid, it will
+     * create a <code>HeaderSet</code> object to pass to the
+     * <code>ServerRequestHandler</code> object. After the handler processes the
+     * request, this method will create a reply message to send to the server.
+     *
+     * @throws IOException if an error occurred at the transport layer
+     */
+    private void handleActionRequest() throws IOException {
+        int code = ResponseCodes.OBEX_HTTP_OK;
+        HeaderSet request = new HeaderSet();
+        HeaderSet reply = new HeaderSet();
+        int length = mInput.read();
+        int bytesReceived;
+
+        length = (length << 8) + mInput.read();
+
+        if (length > mMaxPacketLength) {
+            code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
+        } else {
+            byte[] headers = new byte[length - 3];
+            bytesReceived = mInput.read(headers);
+
+            while (bytesReceived != headers.length) {
+                 bytesReceived += mInput.read(headers, bytesReceived, headers.length
+                                                                    - bytesReceived);
+            }
+            if (VERBOSE)  Log.v(TAG,"onAction headers.length = " + headers.length);
+            ObexHelper.updateHeaderSet(request, headers);
+
+            Byte actionId = (Byte)request.getHeader(HeaderSet.ACTION_ID);
+            if (actionId == ObexHelper.OBEX_ACTION_COPY) {
+                code = mListener.onCopy(request, reply);
+            } else if (actionId == ObexHelper.OBEX_ACTION_MOVE_RENAME) {
+                code = mListener.onRename(request, reply);
+            } else if (actionId == ObexHelper.OBEX_ACTION_SET_PERM) {
+                code = mListener.onSetPermissions(request, reply);
+            }
+            if (VERBOSE)  Log.v(TAG, "onAction request handler return value- " + code);
             code = validateResponseCode(code);
         }
         sendResponse(code, null);
@@ -190,9 +251,29 @@ public final class ServerSession extends ObexSession implements Runnable {
      * @throws IOException if an error occurred at the transport layer
      */
     private void handlePutRequest(int type) throws IOException {
+        if (VERBOSE)  Log.v(TAG, "handlePutRequest");
+
         ServerOperation op = new ServerOperation(this, mInput, type, mMaxPacketLength, mListener);
         try {
             int response = -1;
+
+            Byte srm = (Byte)op.requestHeader.getHeader(HeaderSet.SINGLE_RESPONSE_MODE);
+            if (srm == ObexHelper.OBEX_SRM_ENABLED) {
+                if (VERBOSE)  Log.v(TAG, "handlePutRequest srm == ObexHelper.OBEX_SRM_ENABLED");
+                if (mSrmServer.getLocalSrmCapability() == ObexHelper.SRM_CAPABLE) {
+                    if (VERBOSE)  Log.v(TAG, "ObexHelper.SRM_CAPABLE");
+                    op.replyHeader.setHeader(HeaderSet.SINGLE_RESPONSE_MODE, ObexHelper.OBEX_SRM_ENABLED);
+                    if (mSrmServer.getLocalSrmpWait()) {
+                        if (VERBOSE)  Log.v(TAG, "handlePutRequest: Server SRMP header set to WAIT");
+                        op.replyHeader.setHeader(HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER,
+                            ObexHelper.OBEX_SRM_PARAM_WAIT);
+                    }
+                } else {
+                    if (VERBOSE)  Log.v(TAG, "ObexHelper.SRM_INCAPABLE");
+                    op.replyHeader.setHeader(HeaderSet.SINGLE_RESPONSE_MODE,
+                        ObexHelper.OBEX_SRM_DISABLED);
+                }
+            }
 
             if ((op.finalBitSet) && !op.isValidBody()) {
                 response = validateResponseCode(mListener
@@ -201,13 +282,15 @@ public final class ServerSession extends ObexSession implements Runnable {
                 response = validateResponseCode(mListener.onPut(op));
             }
             if (response != ResponseCodes.OBEX_HTTP_OK && !op.isAborted) {
-                op.sendReply(response);
+                if (VERBOSE) Log.v(TAG, "handlePutRequest pre != HTTP_OK sendReply");
+                op.sendReply(response, false, false);
             } else if (!op.isAborted) {
                 // wait for the final bit
                 while (!op.finalBitSet) {
-                    op.sendReply(ResponseCodes.OBEX_HTTP_CONTINUE);
+                    if (VERBOSE) Log.v(TAG, "handlePutRequest pre looped sendReply");
+                    op.sendReply(ResponseCodes.OBEX_HTTP_CONTINUE, op.mSingleResponseActive, false);
                 }
-                op.sendReply(response);
+                op.sendReply(response, false,false);
             }
         } catch (Exception e) {
             /*To fix bugs in aborted cases,
@@ -235,12 +318,40 @@ public final class ServerSession extends ObexSession implements Runnable {
      * @throws IOException if an error occurred at the transport layer
      */
     private void handleGetRequest(int type) throws IOException {
+        if (VERBOSE)  Log.v(TAG, "handleGetRequest");
+
         ServerOperation op = new ServerOperation(this, mInput, type, mMaxPacketLength, mListener);
         try {
+            Byte srm = (Byte)op.requestHeader.getHeader(HeaderSet.SINGLE_RESPONSE_MODE);
+            if (VERBOSE)  Log.v(TAG, "handleGetRequest srm status" + srm );
+            if (srm == ObexHelper.OBEX_SRM_ENABLED) {
+                if (VERBOSE)  Log.v(TAG, "handleGetRequest srm == ObexHelper.OBEX_SRM_ENABLED");
+                if (mSrmServer.getLocalSrmCapability() == ObexHelper.SRM_CAPABLE) {
+                    if (VERBOSE)  Log.v(TAG, "ObexHelper.getLocalSrmCapability()" +
+                                                                       "=ObexHelper.SRM_CAPABLE");
+                    op.replyHeader.setHeader(HeaderSet.SINGLE_RESPONSE_MODE,
+                                                                     ObexHelper.OBEX_SRM_ENABLED);
+                    if (mSrmServer.getLocalSrmpWait()) {
+                        if (VERBOSE)  Log.v(TAG, "GetRequest:Server SRMP header set to WAIT");
+                        op.replyHeader.setHeader(HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER,
+                                                                  ObexHelper.OBEX_SRM_PARAM_WAIT);
+                    }
+                } else {
+                    if (VERBOSE)  Log.v(TAG, "ObexHelper.getLocalSrmCapability() == "+
+                                                                      "ObexHelper.SRM_INCAPABLE");
+                    op.replyHeader.setHeader(HeaderSet.SINGLE_RESPONSE_MODE,
+                                                                    ObexHelper.OBEX_SRM_DISABLED);
+                }
+            }
+
             int response = validateResponseCode(mListener.onGet(op));
 
             if (!op.isAborted) {
-                op.sendReply(response);
+                op.sendReply(response, false,false);
+            } else {
+                if(mSrmServer.getLocalSrmStatus() == ObexHelper.LOCAL_SRM_ENABLED) {
+                  sendResponse(ResponseCodes.OBEX_HTTP_OK, null);
+                }
             }
         } catch (Exception e) {
             sendResponse(ResponseCodes.OBEX_HTTP_INTERNAL_ERROR, null);
@@ -256,6 +367,7 @@ public final class ServerSession extends ObexSession implements Runnable {
     public void sendResponse(int code, byte[] header) throws IOException {
         int totalLength = 3;
         byte[] data = null;
+        if (VERBOSE) Log.v(TAG,"sendResponse code "+code+" header : "+header);
         OutputStream op = mOutput;
         if (op == null) {
             return;
@@ -263,6 +375,7 @@ public final class ServerSession extends ObexSession implements Runnable {
 
         if (header != null) {
             totalLength += header.length;
+            if (VERBOSE) Log.v(TAG,"header != null totalLength = "+totalLength);
             data = new byte[totalLength];
             data[0] = (byte)code;
             data[1] = (byte)(totalLength >> 8);
@@ -304,7 +417,7 @@ public final class ServerSession extends ObexSession implements Runnable {
         flags = mInput.read();
         constants = mInput.read();
 
-        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if (length > mMaxPacketLength) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
             totalLength = 3;
         } else {
@@ -425,7 +538,7 @@ public final class ServerSession extends ObexSession implements Runnable {
         length = mInput.read();
         length = (length << 8) + mInput.read();
 
-        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if (length > mMaxPacketLength) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
             totalLength = 3;
         } else {
@@ -547,7 +660,7 @@ public final class ServerSession extends ObexSession implements Runnable {
             mMaxPacketLength = ObexHelper.MAX_PACKET_SIZE_INT;
         }
 
-        if (packetLength > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if (packetLength > mMaxPacketLength) {
             code = ResponseCodes.OBEX_HTTP_REQ_TOO_LARGE;
             totalLength = 7;
         } else {
@@ -561,6 +674,26 @@ public final class ServerSession extends ObexSession implements Runnable {
                 }
 
                 ObexHelper.updateHeaderSet(request, headers);
+            }
+
+            if (mSrmServer.getLocalSrmCapability() == ObexHelper.SRM_CAPABLE) {
+                /*
+                 * As per GOEP TS Spec the Server should ignore the SRM header sent in Connect
+                 */
+                Byte byteHeader = (Byte)request.getHeader(HeaderSet.SINGLE_RESPONSE_MODE);
+                if((byteHeader == ObexHelper.OBEX_SRM_SUPPORTED) ||
+                    (byteHeader == ObexHelper.OBEX_SRM_DISABLED)
+                      || (byteHeader == ObexHelper.OBEX_SRM_ENABLED)) {
+                    if (VERBOSE) Log.v(TAG,
+                        "handleConnectRequest: SRM Header received in Connect.. Ignored");
+                }
+                if (mSrmServer.getLocalSrmParamStatus()) {
+                    if (VERBOSE) Log.v(TAG, "handleConnectRequest: Enabled the SRMP WAIT");
+                    mSrmServer.setLocalSrmpWait(ObexHelper.SRMP_ENABLED);
+                } else {
+                      if (VERBOSE) Log.v(TAG, "handleConnectRequest: Disabled the SRMP WAIT");
+                      mSrmServer.setLocalSrmpWait(ObexHelper.SRMP_DISABLED);
+                }
             }
 
             if (mListener.getConnectionId() != -1 && request.mConnectionID != null) {
@@ -630,7 +763,7 @@ public final class ServerSession extends ObexSession implements Runnable {
          * Write the OBEX CONNECT packet to the server. Byte 0: response code
          * Byte 1&2: Connect Packet Length Byte 3: OBEX Version Number
          * (Presently, 0x10) Byte 4: Flags (For TCP 0x00) Byte 5&6: Max OBEX
-         * Packet Length (Defined in MAX_PACKET_SIZE) Byte 7 to n: headers
+         * Packet Length Byte 7 to n: headers
          */
         byte[] sendData = new byte[totalLength];
         sendData[0] = (byte)code;
@@ -638,8 +771,8 @@ public final class ServerSession extends ObexSession implements Runnable {
         sendData[2] = length[3];
         sendData[3] = (byte)0x10;
         sendData[4] = (byte)0x00;
-        sendData[5] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT >> 8);
-        sendData[6] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT & 0xFF);
+        sendData[5] = (byte)(mMaxPacketLength >> 8);
+        sendData[6] = (byte)(mMaxPacketLength & 0xFF);
 
         if (head != null) {
             System.arraycopy(head, 0, sendData, 7, head.length);

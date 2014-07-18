@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  * Copyright (c) 2008-2009, Motorola, Inc.
  *
  * All rights reserved.
@@ -30,18 +31,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package javax.obex;
+package javax.btobex;
+
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Looper;
+import android.os.HandlerThread;
 
 /**
  * This class in an implementation of the OBEX ClientSession.
  * @hide
  */
 public final class ClientSession extends ObexSession {
+    private static final String TAG = "Obex ClientSession";
+
+    private static final boolean VERBOSE = ObexHelper.VERBOSE;
 
     private boolean mOpen;
 
@@ -56,17 +66,40 @@ public final class ClientSession extends ObexSession {
      */
     private int maxPacketSize = 256;
 
+    private static final int OBEX_RESPONSE_TIME_OUT = 1;
+
+    /* Response timeout for OBEX request sent */
+    private static final int OBEX_RESPONSE_TIME_OUT_VALUE = 30000;
+
     private boolean mRequestActive;
+
+    private boolean setMTU = false;
 
     private final InputStream mInput;
 
     private final OutputStream mOutput;
+
+    private long mTotalSize = 0;
+    public ObexHelper mSrmClient;
+
+    private ClientSessionHandler mClientSessionHandler = null;
+
+    private HandlerThread mHandlerThread = null;
 
     public ClientSession(final ObexTransport trans) throws IOException {
         mInput = trans.openInputStream();
         mOutput = trans.openOutputStream();
         mOpen = true;
         mRequestActive = false;
+        mSrmClient = new ObexHelper();
+        mHandlerThread = new HandlerThread("OBEX Time Out Handler");
+        mHandlerThread.start();
+        mClientSessionHandler = new ClientSessionHandler(mHandlerThread.getLooper());
+    }
+
+    public void setMaxPacketSize(int size) {
+        if (VERBOSE) Log.v(TAG, "setMaxPacketSize" + size);
+        maxPacketSize = size;
     }
 
     public HeaderSet connect(final HeaderSet header) throws IOException {
@@ -94,7 +127,7 @@ public final class ClientSession extends ObexSession {
         * Byte 1&2: Connect Packet Length
         * Byte 3: OBEX Version Number (Presently, 0x10)
         * Byte 4: Flags (For TCP 0x00)
-        * Byte 5&6: Max OBEX Packet Length (Defined in MAX_PACKET_SIZE)
+        * Byte 5&6: Max OBEX Packet Length
         * Byte 7 to n: headers
         */
         byte[] requestPacket = new byte[totalLength];
@@ -102,19 +135,20 @@ public final class ClientSession extends ObexSession {
         // handle the length and 0x80.
         requestPacket[0] = (byte)0x10;
         requestPacket[1] = (byte)0x00;
-        requestPacket[2] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT >> 8);
-        requestPacket[3] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT & 0xFF);
+        requestPacket[2] = (byte)(maxPacketSize >> 8);
+        requestPacket[3] = (byte)(maxPacketSize & 0xFF);
         if (head != null) {
             System.arraycopy(head, 0, requestPacket, 4, head.length);
         }
 
         // check with local max packet size
-        if ((requestPacket.length + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if ((requestPacket.length + 3) > maxPacketSize) {
             throw new IOException("Packet size exceeds max packet size");
         }
 
         HeaderSet returnHeaderSet = new HeaderSet();
-        sendRequest(ObexHelper.OBEX_OPCODE_CONNECT, requestPacket, returnHeaderSet, null);
+        sendRequest(ObexHelper.OBEX_OPCODE_CONNECT, requestPacket, returnHeaderSet, null, false,
+                       false);
 
         /*
         * Read the response from the OBEX server.
@@ -126,7 +160,19 @@ public final class ClientSession extends ObexSession {
         * Byte 7 to n: Optional HeaderSet
         */
         if (returnHeaderSet.responseCode == ResponseCodes.OBEX_HTTP_OK) {
+            if(returnHeaderSet.mConnectionID != null ){
+                System.arraycopy(returnHeaderSet.mConnectionID, 0, mConnectionId, 0, 4);
+            }
             mObexConnected = true;
+
+            Byte srm = (Byte)returnHeaderSet.getHeader(HeaderSet.SINGLE_RESPONSE_MODE);
+            if (srm == ObexHelper.OBEX_SRM_SUPPORTED) {
+                mSrmClient.setRemoteSrmStatus(ObexHelper.SRM_CAPABLE);
+                if (VERBOSE) Log.v(TAG, "SRM status: Enabled by Server response");
+            } else {
+                mSrmClient.setRemoteSrmStatus(ObexHelper.SRM_INCAPABLE);
+                if (VERBOSE) Log.v(TAG, "SRM status: Disabled by Server response");
+            }
         }
         setRequestInactive();
 
@@ -215,7 +261,7 @@ public final class ClientSession extends ObexSession {
         }
 
         HeaderSet returnHeaderSet = new HeaderSet();
-        sendRequest(ObexHelper.OBEX_OPCODE_DISCONNECT, head, returnHeaderSet, null);
+        sendRequest(ObexHelper.OBEX_OPCODE_DISCONNECT, head, returnHeaderSet, null, false, false);
 
         /*
          * An OBEX DISCONNECT reply from the server:
@@ -232,6 +278,12 @@ public final class ClientSession extends ObexSession {
             setRequestInactive();
         }
 
+        /* OBEX disconnect from app.  Stop the handler thread */
+        if (mHandlerThread != null ) {
+          mHandlerThread.quit();
+          mHandlerThread = null;
+          mClientSessionHandler = null;
+        }
         return returnHeaderSet;
     }
 
@@ -241,6 +293,10 @@ public final class ClientSession extends ObexSession {
             return -1;
         }
         return ObexHelper.convertToLong(mConnectionId);
+    }
+
+    public void reduceMTU(boolean enable) {
+        setMTU = enable;
     }
 
     public Operation put(HeaderSet header) throws IOException {
@@ -348,7 +404,7 @@ public final class ClientSession extends ObexSession {
         }
 
         HeaderSet returnHeaderSet = new HeaderSet();
-        sendRequest(ObexHelper.OBEX_OPCODE_SETPATH, packet, returnHeaderSet, null);
+        sendRequest(ObexHelper.OBEX_OPCODE_SETPATH, packet, returnHeaderSet, null, false, false);
 
         /*
          * An OBEX SETPATH reply from the server:
@@ -392,10 +448,15 @@ public final class ClientSession extends ObexSession {
     }
 
     /**
-     * Sends a standard request to the client. It will then wait for the reply
-     * and update the header set object provided. If any authentication headers
-     * (i.e. authentication challenge or authentication response) are received,
-     * they will be processed.
+     * Sends a standard request to the client. If ignoreResponse is not set, it
+     * will then wait for the reply and update the header set object provided.
+     * If any authentication headers (i.e. authentication challenge or
+     * authentication response) are received, they will be processed.
+     *
+     * If ignoreResponse is set, this will not wait for a reply and the header
+     * set object will not be updated.  This is intended for use during Single
+     * Response Mode operation.
+     *
      * @param opCode the type of request to send to the client
      * @param head the headers to send to the client
      * @param header the header object to update with the response
@@ -403,13 +464,22 @@ public final class ClientSession extends ObexSession {
      *        if this is called on a CONNECT, SETPATH or DISCONNECT return
      *        <code>true</code> if the operation completed successfully;
      *        <code>false</code> if an authentication response failed to pass
+     * @param ignoreResponse true if a response shouldn't be received (e.g.,
+     *        when operating under Single Response Mode (SRM).  false otherwise.
      * @throws IOException if an IO error occurs
      */
     public boolean sendRequest(int opCode, byte[] head, HeaderSet header,
-            PrivateInputStream privateInput) throws IOException {
+            PrivateInputStream privateInput,
+            boolean ignoreResponse,
+            boolean supressSend) throws IOException {
+
+        if (VERBOSE) Log.v(TAG, "sendRequest ignore: " + ignoreResponse
+                                   + ", SRMP WAIT: " + mSrmClient.getLocalSrmpWait()
+                                   + " supressSend : "+supressSend);
+
         //check header length with local max size
         if (head != null) {
-            if ((head.length + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
+            if ((head.length  + 3) > maxPacketSize) {
                 throw new IOException("header too large ");
             }
         }
@@ -417,6 +487,7 @@ public final class ClientSession extends ObexSession {
         int bytesReceived;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         out.write((byte)opCode);
+        if (VERBOSE) Log.v(TAG, "sendRequest opCode = "+opCode);
 
         // Determine if there are any headers to send
         if (head == null) {
@@ -426,74 +497,102 @@ public final class ClientSession extends ObexSession {
             out.write((byte)((head.length + 3) >> 8));
             out.write((byte)(head.length + 3));
             out.write(head);
+            if (VERBOSE) Log.v(TAG, "sendRequest head.length = "+head.length);
         }
 
-        // Write the request to the output stream and flush the stream
-        mOutput.write(out.toByteArray());
-        mOutput.flush();
-
-        header.responseCode = mInput.read();
-
-        int length = ((mInput.read() << 8) | (mInput.read()));
-
-        if (length > ObexHelper.MAX_PACKET_SIZE_INT) {
-            throw new IOException("Packet received exceeds packet size limit");
+        if(!supressSend) {
+            // Write the request to the output stream and flush the stream
+            mOutput.write(out.toByteArray());
+            mOutput.flush();
         }
-        if (length > ObexHelper.BASE_PACKET_LENGTH) {
-            byte[] data = null;
-            if (opCode == ObexHelper.OBEX_OPCODE_CONNECT) {
-                @SuppressWarnings("unused")
-                int version = mInput.read();
-                @SuppressWarnings("unused")
-                int flags = mInput.read();
-                maxPacketSize = (mInput.read() << 8) + mInput.read();
 
-                //check with local max size
-                if (maxPacketSize > ObexHelper.MAX_CLIENT_PACKET_SIZE) {
-                    maxPacketSize = ObexHelper.MAX_CLIENT_PACKET_SIZE;
+        if ( (!ignoreResponse) || (mSrmClient.getLocalSrmpWait()) ) {
+            startResponseTimer();
+            try {
+              header.responseCode = mInput.read();
+              if (VERBOSE) Log.v(TAG, "sendRequest responseCode "+header.responseCode);
+            } catch (IOException e) {
+                Log.v(TAG, "Response timed out. Clean up the handler: " + e);
+                if (mHandlerThread != null ) {
+                  mHandlerThread.quit();
+                  mHandlerThread = null;
+                  mClientSessionHandler = null;
                 }
+            }
 
-                if (length > 7) {
-                    data = new byte[length - 7];
+            if (mClientSessionHandler != null) stopResponseTimer();
 
-                    bytesReceived = mInput.read(data);
-                    while (bytesReceived != (length - 7)) {
-                        bytesReceived += mInput.read(data, bytesReceived, data.length
+            int length = ((mInput.read() << 8) | (mInput.read()));
+            if (VERBOSE) Log.v(TAG, "sendRequest response length "+length);
+
+            if (length > maxPacketSize) {
+                throw new IOException("Packet received exceeds packet size limit");
+            }
+            if (length > ObexHelper.BASE_PACKET_LENGTH) {
+                byte[] data = null;
+                if (opCode == ObexHelper.OBEX_OPCODE_CONNECT) {
+                    @SuppressWarnings("unused")
+                    int version = mInput.read();
+                    @SuppressWarnings("unused")
+                    int flags = mInput.read();
+                    maxPacketSize = (mInput.read() << 8) + mInput.read();
+
+                    //check with local max size
+                    if (setMTU) {
+                        maxPacketSize = ObexHelper.A2DP_SCO_OBEX_MAX_CLIENT_PACKET_SIZE;
+                    setMTU = false;
+                    } else if (maxPacketSize > ObexHelper.MAX_CLIENT_PACKET_SIZE) {
+                        maxPacketSize = ObexHelper.MAX_CLIENT_PACKET_SIZE;
+                    }
+
+                    if (length > 7) {
+                       data = new byte[length - 7];
+                       bytesReceived = mInput.read(data);
+                       while (bytesReceived != (length - 7)) {
+                           bytesReceived += mInput.read(data, bytesReceived, data.length
                                 - bytesReceived);
+                       }
+                    } else {
+                        return true;
                     }
                 } else {
-                    return true;
+                    data = new byte[length - 3];
+                    bytesReceived = mInput.read(data);
+
+                    while (bytesReceived != (length - 3)) {
+                        bytesReceived += mInput.read(data, bytesReceived, data.length - bytesReceived);
+                    }
+                    if (opCode == ObexHelper.OBEX_OPCODE_ABORT) {
+                        return true;
+                    }
                 }
-            } else {
-                data = new byte[length - 3];
-                bytesReceived = mInput.read(data);
 
-                while (bytesReceived != (length - 3)) {
-                    bytesReceived += mInput.read(data, bytesReceived, data.length - bytesReceived);
+                byte[] body = ObexHelper.updateHeaderSet(header, data);
+                if ((privateInput != null) && (body != null)) {
+                    privateInput.writeBytes(body, 1);
+                    mTotalSize += (long)(body.length - 1);
+                    if((body[0] == HeaderSet.END_OF_BODY) &&
+                                            (header.getHeader(HeaderSet.LENGTH) == null)){
+                        header.setHeader(HeaderSet.LENGTH, mTotalSize);
+                        if (VERBOSE) Log.v(TAG, " header.mLength : "
+                                                + header.getHeader(HeaderSet.LENGTH));
+                        mTotalSize = 0;
+                    }
                 }
-                if (opCode == ObexHelper.OBEX_OPCODE_ABORT) {
-                    return true;
+
+                if (header.mConnectionID != null) {
+                    mConnectionId = new byte[4];
+                    System.arraycopy(header.mConnectionID, 0, mConnectionId, 0, 4);
                 }
-            }
 
-            byte[] body = ObexHelper.updateHeaderSet(header, data);
-            if ((privateInput != null) && (body != null)) {
-                privateInput.writeBytes(body, 1);
-            }
-
-            if (header.mConnectionID != null) {
-                mConnectionId = new byte[4];
-                System.arraycopy(header.mConnectionID, 0, mConnectionId, 0, 4);
-            }
-
-            if (header.mAuthResp != null) {
-                if (!handleAuthResp(header.mAuthResp)) {
-                    setRequestInactive();
-                    throw new IOException("Authentication Failed");
+                if (header.mAuthResp != null) {
+                    if (!handleAuthResp(header.mAuthResp)) {
+                        setRequestInactive();
+                        throw new IOException("Authentication Failed");
+                   }
                 }
-            }
 
-            if ((header.responseCode == ResponseCodes.OBEX_HTTP_UNAUTHORIZED)
+                if ((header.responseCode == ResponseCodes.OBEX_HTTP_UNAUTHORIZED)
                     && (header.mAuthChall != null)) {
 
                 if (handleAuthChall(header)) {
@@ -507,7 +606,8 @@ public final class ClientSession extends ObexSession {
                     byte[] sendHeaders = new byte[out.size() - 3];
                     System.arraycopy(out.toByteArray(), 3, sendHeaders, 0, sendHeaders.length);
 
-                    return sendRequest(opCode, sendHeaders, header, privateInput);
+                        return sendRequest(opCode, sendHeaders, header, privateInput, false, false);
+                    }
                 }
             }
         }
@@ -515,9 +615,108 @@ public final class ClientSession extends ObexSession {
         return true;
     }
 
+    public HeaderSet action(HeaderSet header,int action) throws IOException {
+        if (!mObexConnected) {
+            throw new IOException("Not connected to the server");
+        }
+        setRequestActive();
+        ensureOpen();
+
+        int totalLength = 2;
+        byte[] head = null;
+        HeaderSet headset;
+        if (header == null) {
+            headset = new HeaderSet();
+        } else {
+            headset = header;
+            if (headset.nonce != null) {
+                mChallengeDigest = new byte[16];
+                System.arraycopy(headset.nonce, 0, mChallengeDigest, 0, 16);
+            }
+        }
+
+        // when auth is initiated by client ,save the digest
+        if (headset.nonce != null) {
+            mChallengeDigest = new byte[16];
+            System.arraycopy(headset.nonce, 0, mChallengeDigest, 0, 16);
+        }
+
+        // Add the connection ID if one exists
+        if (mConnectionId != null) {
+            headset.mConnectionID = new byte[4];
+            System.arraycopy(mConnectionId, 0, headset.mConnectionID, 0, 4);
+        }
+
+        head = ObexHelper.createHeader(headset, false);
+        totalLength += head.length;
+
+        if (totalLength > maxPacketSize) {
+            throw new IOException("Packet size exceeds max packet size");
+        }
+
+        /*
+         * An OBEX ACTION packet to the server:
+         * Byte 1: 0x86
+         * Byte 2 & 3: packet size
+         * Byte 4: 0x94
+         * Byte 5: action
+         * Byte 6 & up: headers
+         */
+        byte[] packet = new byte[totalLength];
+        packet[0] = (byte)0x94;
+        packet[1] = (byte)action;
+
+        if (headset != null) {
+            System.arraycopy(head, 0, packet, 2, head.length);
+        }
+
+        HeaderSet returnHeaderSet = new HeaderSet();
+        sendRequest(ObexHelper.OBEX_OPCODE_ACTION, packet, returnHeaderSet, null, false, false);
+
+        setRequestInactive();
+
+        return returnHeaderSet;
+    }
+
     public void close() throws IOException {
         mOpen = false;
         mInput.close();
         mOutput.close();
+    }
+    private final class ClientSessionHandler extends Handler {
+        public ClientSessionHandler (Looper looper) {
+          super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+           if (VERBOSE) Log.v(TAG, "Handler(): Response Time out. Close the socket");
+           switch (msg.what) {
+              case OBEX_RESPONSE_TIME_OUT:
+                try {
+                  close();
+                } catch (IOException e) {
+                    if (VERBOSE) Log.v(TAG, "Response time out: "  + e);
+                }
+                break;
+           }
+        }
+    }
+
+    private void startResponseTimer() {
+        if (VERBOSE) Log.v(TAG, "OBEX: Start response timer");
+        if (mClientSessionHandler != null) {
+           mClientSessionHandler.sendMessageDelayed(mClientSessionHandler
+              .obtainMessage(OBEX_RESPONSE_TIME_OUT), OBEX_RESPONSE_TIME_OUT_VALUE);
+        }
+        return;
+    }
+
+    private void stopResponseTimer() {
+        if (VERBOSE) Log.v(TAG, "OBEX: Stop response timer");
+        if (mClientSessionHandler != null) {
+          mClientSessionHandler.removeMessages(OBEX_RESPONSE_TIME_OUT);
+        }
+        return;
     }
 }
