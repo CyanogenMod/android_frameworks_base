@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.content.Context;
@@ -6,15 +22,12 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.android.internal.telephony.Phone;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-import com.android.systemui.statusbar.policy.MSimNetworkController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
@@ -27,6 +40,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
     private static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
     private static final String EXTRA_NETWORK_MODE = "networkMode";
 
+    private static final int STATE_4G_AND_ELSE = 0;
     private static final int STATE_2G_AND_3G = 1;
     private static final int STATE_2G_ONLY = 2;
     private static final int STATE_TURNING_ON = 3;
@@ -58,9 +72,16 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
 
                 Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
                 switch (mMode) {
+                    case Phone.NT_MODE_LTE_ONLY:
+                    case Phone.NT_MODE_LTE_GSM_WCDMA:
+                    case Phone.NT_MODE_LTE_WCDMA:
+                        intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
+                        mInternalState = STATE_TURNING_OFF;
+                        mIntendedMode = Phone.NT_MODE_GSM_ONLY;
+                        break;
                     case Phone.NT_MODE_WCDMA_PREF:
                     case Phone.NT_MODE_GSM_UMTS:
-                        intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
+                        intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_LTE_GSM_WCDMA);
                         mInternalState = STATE_TURNING_OFF;
                         mIntendedMode = Phone.NT_MODE_GSM_ONLY;
                         break;
@@ -155,6 +176,10 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                 } else {
                     mDrawable = R.drawable.ic_qs_2g3g_on;
                 }
+            case STATE_4G_AND_ELSE:
+                if (isLte() || isLteOnly()) {
+                    mDrawable = R.drawable.ic_qs_signal_4g;
+                }
                 break;
             case STATE_INTERMEDIATE:
                 if (mInternalState == STATE_TURNING_ON) {
@@ -168,6 +193,20 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                 }
                 break;
         }
+    }
+
+    private boolean isLte() {
+        switch (mMode) {
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_WCDMA:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isLteOnly() {
+        return (mMode == Phone.NT_MODE_LTE_ONLY);
     }
 
     private static int get2G3G(Context context) {
@@ -193,6 +232,10 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                 return STATE_2G_AND_3G;
             case Phone.NT_MODE_GSM_ONLY:
                 return STATE_2G_ONLY;
+            case Phone.NT_MODE_LTE_ONLY:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:
+            case Phone.NT_MODE_LTE_WCDMA:
+                return STATE_4G_AND_ELSE;
             case Phone.NT_MODE_CDMA:
             case Phone.NT_MODE_CDMA_NO_EVDO:
             case Phone.NT_MODE_EVDO_NO_CDMA:
