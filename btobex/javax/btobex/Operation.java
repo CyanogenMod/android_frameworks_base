@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  * Copyright (c) 2008-2009, Motorola, Inc.
  *
  * All rights reserved.
@@ -30,7 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package javax.obex;
+package javax.btobex;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -176,6 +177,8 @@ public interface Operation {
     DataOutputStream openDataOutputStream() throws IOException;
 
     void close() throws IOException;
+
+    void noEndofBody();
 
     int getMaxPacketSize();
 

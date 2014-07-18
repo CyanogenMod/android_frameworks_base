@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  * Copyright (c) 2008-2009, Motorola, Inc.
  *
  * All rights reserved.
@@ -30,7 +31,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package javax.obex;
+package javax.btobex;
 
 /**
  * The <code>ServerRequestHandler</code> class defines an event listener that
@@ -195,6 +196,76 @@ public class ServerRequestHandler {
     public int onDelete(HeaderSet request, HeaderSet reply) {
         return ResponseCodes.OBEX_HTTP_NOT_IMPLEMENTED;
     }
+
+    /**
+     * Called when a COPY request is received.
+     * <P>
+     * If this method is not implemented by the class that extends this class,
+     * <code>onCopy()</code> will always return an
+     * <code>OBEX_HTTP_NOT_IMPLEMENTED</code> response code.
+     * <P>
+     * The headers received in the request can be retrieved from the
+     * <code>request</code> argument. The headers that should be sent in the
+     * reply must be specified in the <code>reply</code> argument.
+     * @param request contains the headers sent by the client;
+     *        <code>request</code> will never be <code>null</code>
+     * @param reply the headers that should be sent in the reply;
+     *        <code>reply</code> will never be <code>null</code>
+     * @return a response code defined in <code>ResponseCodes</code> that will
+     *         be returned to the client; if an invalid response code is
+     *         provided, the <code>OBEX_HTTP_INTERNAL_ERROR</code> response code
+     *         will be used
+     */
+    public int onCopy(HeaderSet request, HeaderSet reply) {
+        return ResponseCodes.OBEX_HTTP_NOT_IMPLEMENTED;
+    }
+
+    /**
+     * Called when a RENAME request is received.
+     * <P>
+     * If this method is not implemented by the class that extends this class,
+     * <code>onRename()</code> will always return an
+     * <code>OBEX_HTTP_NOT_IMPLEMENTED</code> response code.
+     * <P>
+     * The headers received in the request can be retrieved from the
+     * <code>request</code> argument. The headers that should be sent in the
+     * reply must be specified in the <code>reply</code> argument.
+     * @param request contains the headers sent by the client;
+     *        <code>request</code> will never be <code>null</code>
+     * @param reply the headers that should be sent in the reply;
+     *        <code>reply</code> will never be <code>null</code>
+     * @return a response code defined in <code>ResponseCodes</code> that will
+     *         be returned to the client; if an invalid response code is
+     *         provided, the <code>OBEX_HTTP_INTERNAL_ERROR</code> response code
+     *         will be used
+     */
+    public int onRename(HeaderSet request, HeaderSet reply) {
+        return ResponseCodes.OBEX_HTTP_NOT_IMPLEMENTED;
+    }
+
+    /**
+     * Called when a SET Permission request is received.
+     * <P>
+     * If this method is not implemented by the class that extends this class,
+     * <code>onSetPermissions()</code> will always return an
+     * <code>OBEX_HTTP_NOT_IMPLEMENTED</code> response code.
+     * <P>
+     * The headers received in the request can be retrieved from the
+     * <code>request</code> argument. The headers that should be sent in the
+     * reply must be specified in the <code>reply</code> argument.
+     * @param request contains the headers sent by the client;
+     *        <code>request</code> will never be <code>null</code>
+     * @param reply the headers that should be sent in the reply;
+     *        <code>reply</code> will never be <code>null</code>
+     * @return a response code defined in <code>ResponseCodes</code> that will
+     *         be returned to the client; if an invalid response code is
+     *         provided, the <code>OBEX_HTTP_INTERNAL_ERROR</code> response code
+     *         will be used
+     */
+    public int onSetPermissions(HeaderSet request, HeaderSet reply) {
+        return ResponseCodes.OBEX_HTTP_NOT_IMPLEMENTED;
+    }
+
 
     /**
      * Called when a ABORT request is received.

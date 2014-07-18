@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2013 The Linux Foundation. All rights reserved.
  * Copyright (c) 2008-2009, Motorola, Inc.
  *
  * All rights reserved.
@@ -30,8 +31,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package javax.obex;
+package javax.btobex;
 
+import android.os.SystemProperties;
+import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -46,6 +49,12 @@ import java.util.TimeZone;
  * @hide
  */
 public final class ObexHelper {
+    private static final String TAG = "ObexHelper";
+    public static final boolean VERBOSE = true;
+
+    /* Debugging hooks to control AMP-related operations */
+    private static final String DEBUG_FORCE_SRM = "debug.obex.force_srm_capable";
+    private static final String DEBUG_FORCE_SRMP = "debug.obex.force_srmp_enabled";
 
     /**
      * Defines the basic packet length used by OBEX. Every OBEX packet has the
@@ -54,8 +63,8 @@ public final class ObexHelper {
      */
     public static final int BASE_PACKET_LENGTH = 3;
 
-    /** Prevent object construction of helper class */
-    private ObexHelper() {
+    /** Object construction of helper class */
+    public ObexHelper() {
     }
 
     /**
@@ -68,13 +77,15 @@ public final class ObexHelper {
     /*
      * android note set as 0xFFFE to match remote MPS
      */
-    public static final int MAX_PACKET_SIZE_INT = 0xFFFE;
+     public static final int MAX_PACKET_SIZE_INT = 0xFDE8;
 
     /**
      * Temporary workaround to be able to push files to Windows 7.
      * TODO: Should be removed as soon as Microsoft updates their driver.
      */
     public static final int MAX_CLIENT_PACKET_SIZE = 0xFC00;
+
+    public static final int A2DP_SCO_OBEX_MAX_CLIENT_PACKET_SIZE = 0x2000;
 
     public static final int OBEX_OPCODE_CONNECT = 0x80;
 
@@ -93,6 +104,8 @@ public final class ObexHelper {
     public static final int OBEX_OPCODE_RESERVED_FINAL = 0x84;
 
     public static final int OBEX_OPCODE_SETPATH = 0x85;
+
+    public static final int OBEX_OPCODE_ACTION = 0x86;
 
     public static final int OBEX_OPCODE_ABORT = 0xFF;
 
@@ -117,6 +130,166 @@ public final class ObexHelper {
     public static final int OBEX_AUTH_REALM_CHARSET_ISO_8859_9 = 0x09;
 
     public static final int OBEX_AUTH_REALM_CHARSET_UNICODE = 0xFF;
+
+    /**
+     * The values used for various ACTION commands
+     */
+    public static final Byte OBEX_ACTION_COPY = 0x0;
+
+    public static final Byte OBEX_ACTION_MOVE_RENAME = 0x1;
+
+    public static final Byte OBEX_ACTION_SET_PERM = 0x2;
+
+    /**
+     * The value that is used for the OBEX Single Response Mode (SRM)
+     */
+    public static final Byte OBEX_SRM_DISABLED = 0x0;
+
+    public static final Byte OBEX_SRM_ENABLED = 0x1;
+
+    public static final Byte OBEX_SRM_SUPPORTED = 0x2;
+
+    /**
+     * The value that is used for the OBEX Single Response Mode (SRM) Parameters
+     */
+    public static final Byte OBEX_SRM_PARAM_RSVP = 0x0;
+
+    public static final Byte OBEX_SRM_PARAM_WAIT = 0x1;
+
+    public static final Byte OBEX_SRM_PARAM_RSVP_AND_WAIT = 0x2;
+
+    /** An invalid SRM parameter value to indicate no parameter set */
+    public static final Byte OBEX_SRM_PARAM_NONE = 0xF;
+
+    /**
+     * The value that is used for the SRM capability of Bluetooth device
+     */
+    public static final boolean SRM_INCAPABLE = false;
+
+    public static final boolean SRM_CAPABLE = true;
+
+    private boolean mLocalSingleResponseCapability = SRM_INCAPABLE;
+
+    public boolean getLocalSrmCapability() {
+        if (VERBOSE) Log.v(TAG, "getLocalSrmCapability: " + mLocalSingleResponseCapability);
+        return mLocalSingleResponseCapability;
+    }
+
+    public void setLocalSrmCapability(boolean SrmCapable) {
+        if (!SystemProperties.get(DEBUG_FORCE_SRM).equals("")) {
+            if (SystemProperties.getBoolean(DEBUG_FORCE_SRM, false)) {
+                if (VERBOSE) Log.v(TAG, "DEBUG: Forcing SRM on");
+                mLocalSingleResponseCapability = SRM_CAPABLE;
+            } else {
+                if (VERBOSE) Log.v(TAG, "DEBUG: Forcing SRM off");
+                mLocalSingleResponseCapability = SRM_INCAPABLE;
+            }
+        } else {
+            mLocalSingleResponseCapability = SrmCapable ? SRM_CAPABLE : SRM_INCAPABLE;
+        }
+
+        Log.d(TAG, "setLocalSrmCapability: " + mLocalSingleResponseCapability);
+    }
+
+    /**
+     * The value that is used for the SRM status of current operation
+     */
+    public static final boolean LOCAL_SRM_DISABLED = false;
+
+    public static final boolean LOCAL_SRM_ENABLED = true;
+
+    /**
+     * This is used for the SRM status of local device
+     */
+    private boolean mLocalSingleResponseActive;
+
+    public boolean getLocalSrmStatus() {
+        if (VERBOSE) Log.v(TAG, "getLocalSrmStatus: " + mLocalSingleResponseActive);
+        return mLocalSingleResponseActive;
+    }
+
+    public void setLocalSrmStatus(boolean SrmEnabled) {
+        mLocalSingleResponseActive = SrmEnabled ? LOCAL_SRM_ENABLED : LOCAL_SRM_DISABLED;
+        if (VERBOSE) Log.v(TAG, "setLocalSrmStatus: " + mLocalSingleResponseActive);
+    }
+
+    /**
+     * This is used for the SRM status of remote device
+     */
+    private boolean mRemoteSingleResponseActive;
+
+    public boolean getRemoteSrmStatus() {
+        if (VERBOSE) Log.v(TAG, "getRemoteSrmStatus: " + mRemoteSingleResponseActive);
+        return mRemoteSingleResponseActive;
+    }
+
+    public void setRemoteSrmStatus(boolean SrmCapable) {
+        mRemoteSingleResponseActive = SrmCapable ? SRM_CAPABLE : SRM_INCAPABLE;
+        if (VERBOSE) Log.v(TAG, "setRemoteSrmStatus: " + mRemoteSingleResponseActive);
+    }
+
+    /**
+     * This is used for the Single Response Mode Parameters (SRMP) value
+     */
+    private boolean mLocalSrmpWait;
+
+    public boolean getLocalSrmpWait() {
+        if (VERBOSE) Log.v(TAG, "getLocalSrmpWait: " + mLocalSrmpWait);
+        return mLocalSrmpWait;
+    }
+
+    public void setLocalSrmpWait(boolean SrmpWait) {
+        if (VERBOSE) Log.v(TAG, "setLocalSrmpWait: " + SrmpWait);
+        mLocalSrmpWait = SrmpWait;
+    }
+
+    /**
+     * The value that is used for the SRMP status of local device
+     */
+    public static final boolean SRMP_DISABLED = false;
+
+    public static final boolean SRMP_ENABLED = true;
+
+    private boolean mLocalSrmpActive = SRMP_DISABLED;
+
+    public boolean getLocalSrmParamStatus() {
+        if (!SystemProperties.get(DEBUG_FORCE_SRMP).equals("")) {
+            if (SystemProperties.getBoolean(DEBUG_FORCE_SRMP, false)) {
+                if (VERBOSE) Log.v(TAG, "DEBUG: Forcing SRMP on");
+                mLocalSrmpActive = SRMP_ENABLED;
+            } else {
+                if (VERBOSE) Log.v(TAG, "DEBUG: Forcing SRMP off");
+                mLocalSrmpActive = SRMP_DISABLED;
+            }
+        }
+        if (VERBOSE) Log.v(TAG, "getLocalSrmParamStatus: " + mLocalSrmpActive);
+        return mLocalSrmpActive;
+    }
+
+    public void setLocalSrmParamStatus(boolean SrmpEnabled) {
+        if (!SystemProperties.get(DEBUG_FORCE_SRMP).equals("")) {
+            if (SystemProperties.getBoolean(DEBUG_FORCE_SRMP, false)) {
+                if (VERBOSE) Log.v(TAG, "DEBUG: Forcing SRMP on");
+                mLocalSrmpActive = SRMP_ENABLED;
+            } else {
+                if (VERBOSE) Log.v(TAG, "DEBUG: Forcing SRMP off");
+                mLocalSrmpActive = SRMP_DISABLED;
+            }
+        } else {
+            mLocalSrmpActive = SrmpEnabled ? SRMP_ENABLED : SRMP_DISABLED;
+        }
+        if (VERBOSE) Log.v(TAG, "setLocalSrmParamStatus: " + mLocalSrmpActive);
+    }
+
+    /**
+     * This is used to reset the SRM status to default
+     */
+    public void resetSrmStatus() {
+        if (VERBOSE) Log.v(TAG, "resetSrmStatus");
+        setLocalSrmStatus(LOCAL_SRM_DISABLED);
+        setLocalSrmpWait(false);
+        setRemoteSrmStatus(SRM_INCAPABLE);
+    }
 
     /**
      * Updates the HeaderSet with the headers received in the byte array
@@ -172,6 +345,7 @@ public final class ObexHelper {
         try {
             while (index < headerArray.length) {
                 headerID = 0xFF & headerArray[index];
+                if (VERBOSE) Log.e(TAG,"updateHeaderSet headerID = "+ headerID);
                 switch (headerID & (0xC0)) {
 
                     /*
@@ -357,8 +531,9 @@ public final class ObexHelper {
              * Determine if there is a connection ID to send.  If there is,
              * then it should be the first header in the packet.
              */
+            if (VERBOSE) Log.e(TAG,"createHeader = "+ head);
             if ((headImpl.mConnectionID != null) && (headImpl.getHeader(HeaderSet.TARGET) == null)) {
-
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.CONNECTION_ID);
                 out.write((byte)HeaderSet.CONNECTION_ID);
                 out.write(headImpl.mConnectionID);
             }
@@ -366,6 +541,7 @@ public final class ObexHelper {
             // Count Header
             intHeader = (Long)headImpl.getHeader(HeaderSet.COUNT);
             if (intHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.COUNT);
                 out.write((byte)HeaderSet.COUNT);
                 value = ObexHelper.convertToByteArray(intHeader.longValue());
                 out.write(value);
@@ -377,6 +553,7 @@ public final class ObexHelper {
             // Name Header
             stringHeader = (String)headImpl.getHeader(HeaderSet.NAME);
             if (stringHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.NAME);
                 out.write((byte)HeaderSet.NAME);
                 value = ObexHelper.convertToUnicodeByteArray(stringHeader);
                 length = value.length + 3;
@@ -387,11 +564,31 @@ public final class ObexHelper {
                 if (nullOut) {
                     headImpl.setHeader(HeaderSet.NAME, null);
                 }
+            } else if (headImpl.getEmptyNameHeader()) {
+                out.write((byte) HeaderSet.NAME);
+                lengthArray[0] = (byte) 0x00;
+                lengthArray[1] = (byte) 0x03;
+                out.write(lengthArray);
             }
-
+          // Dest Name Header
+            stringHeader = (String)headImpl.getHeader(HeaderSet.DEST_NAME);
+            if (stringHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.DEST_NAME);
+                out.write((byte)HeaderSet.DEST_NAME);
+                value = ObexHelper.convertToUnicodeByteArray(stringHeader);
+                length = value.length + 3;
+                lengthArray[0] = (byte)(0xFF & (length >> 8));
+                lengthArray[1] = (byte)(0xFF & length);
+                out.write(lengthArray);
+                out.write(value);
+                if (nullOut) {
+                    headImpl.setHeader(HeaderSet.DEST_NAME, null);
+                }
+            }
             // Type Header
             stringHeader = (String)headImpl.getHeader(HeaderSet.TYPE);
             if (stringHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.TYPE);
                 out.write((byte)HeaderSet.TYPE);
                 try {
                     value = stringHeader.getBytes("ISO8859_1");
@@ -413,6 +610,7 @@ public final class ObexHelper {
             // Length Header
             intHeader = (Long)headImpl.getHeader(HeaderSet.LENGTH);
             if (intHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.LENGTH);
                 out.write((byte)HeaderSet.LENGTH);
                 value = ObexHelper.convertToByteArray(intHeader.longValue());
                 out.write(value);
@@ -520,6 +718,7 @@ public final class ObexHelper {
             // Target Header
             value = (byte[])headImpl.getHeader(HeaderSet.TARGET);
             if (value != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.TARGET);
                 out.write((byte)HeaderSet.TARGET);
                 length = value.length + 3;
                 lengthArray[0] = (byte)(255 & (length >> 8));
@@ -548,6 +747,7 @@ public final class ObexHelper {
             // Who Header
             value = (byte[])headImpl.getHeader(HeaderSet.WHO);
             if (value != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.WHO);
                 out.write((byte)HeaderSet.WHO);
                 length = value.length + 3;
                 lengthArray[0] = (byte)(255 & (length >> 8));
@@ -559,7 +759,7 @@ public final class ObexHelper {
                 }
             }
 
-            // Connection ID Header
+            // Application Parameter Header
             value = (byte[])headImpl.getHeader(HeaderSet.APPLICATION_PARAMETER);
             if (value != null) {
                 out.write((byte)HeaderSet.APPLICATION_PARAMETER);
@@ -584,6 +784,29 @@ public final class ObexHelper {
                 out.write(value);
                 if (nullOut) {
                     headImpl.setHeader(HeaderSet.OBJECT_CLASS, null);
+                }
+            }
+
+            // Single Response Mode (SRM) Header
+            byteHeader = (Byte)headImpl.getHeader(HeaderSet.SINGLE_RESPONSE_MODE);
+            if (byteHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.SINGLE_RESPONSE_MODE);
+                out.write((byte)HeaderSet.SINGLE_RESPONSE_MODE);
+                out.write(byteHeader.byteValue());
+                if (VERBOSE) Log.v(TAG," Add SRM value = "+ byteHeader.byteValue());
+                if (nullOut) {
+                    headImpl.setHeader(HeaderSet.SINGLE_RESPONSE_MODE, null);
+                }
+            }
+
+            // Single Response Mode (SRM) Parameter Header
+            byteHeader = (Byte)headImpl.getHeader(HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER);
+            if (byteHeader != null) {
+                if (VERBOSE) Log.v(TAG," Add Header = "+ HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER);
+                out.write((byte)HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER);
+                out.write(byteHeader.byteValue());
+                if (nullOut) {
+                    headImpl.setHeader(HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER, null);
                 }
             }
 
