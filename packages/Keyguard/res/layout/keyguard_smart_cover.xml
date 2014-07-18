@@ -18,8 +18,7 @@
 -->
 
 <!-- This is a view that shows general status information in Keyguard. -->
-<com.android.keyguard.KeyguardSmartCoverView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.keyguard.KeyguardSmartCoverView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/keyguard_cover_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,7 +52,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right|bottom">
 
@@ -111,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/clock_white"
                 android:singleLine="true"
-                android:textSize="60sp" />
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/am_pm_text"
@@ -138,14 +137,14 @@
             android:layout_height="20dp"
             android:textColor="@color/clock_white"
             android:gravity="left"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/line_3"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textColor="@color/clock_white"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:gravity="left" />
     </LinearLayout>
 </com.android.keyguard.KeyguardSmartCoverView>
