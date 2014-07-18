@@ -1240,6 +1240,9 @@ final class ActivityStack {
             final TaskRecord task = mTaskHistory.get(taskNdx);
             final ArrayList<ActivityRecord> activities = task.mActivities;
             for (int activityNdx = activities.size() - 1; activityNdx >= 0; --activityNdx) {
+                if(activityNdx >= activities.size()) {
+                    continue;
+                }
                 final ActivityRecord r = activities.get(activityNdx);
                 if (r.finishing) {
                     continue;
