@@ -104,6 +104,9 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import dalvik.system.PathClassLoader;
+import java.lang.reflect.Constructor;
+
 public final class SystemServer {
     private static final String TAG = "SystemServer";
 
@@ -945,6 +948,28 @@ public final class SystemServer {
             }
 
             mSystemServiceManager.startService(LauncherAppsService.class);
+
+            boolean isWipowerEnabled = SystemProperties.getBoolean("ro.bluetooth.wipower", false);
+
+            if (isWipowerEnabled) {
+                try {
+                    final String WBC_SERVICE_NAME = "wbc_service";
+                    Slog.i(TAG, "WipowerBatteryControl Service");
+
+                    PathClassLoader wbcClassLoader =
+                        new PathClassLoader("system/framework/com.quicinc.wbc.jar:system/framework/com.quicinc.wbcservice.jar",
+                                            ClassLoader.getSystemClassLoader());
+                    Class wbcClass = wbcClassLoader.loadClass("com.quicinc.wbcservice.WbcService");
+                    Constructor<Class> ctor = wbcClass.getConstructor(Context.class);
+                    Object wbcObject = ctor.newInstance(context);
+                    Slog.d(TAG, "Successfully loaded WbcService class");
+                    ServiceManager.addService(WBC_SERVICE_NAME, (IBinder) wbcObject);
+                } catch (Throwable e) {
+                    reportWtf("starting WipowerBatteryControl Service", e);
+                }
+            } else {
+                Slog.d(TAG, "Wipower not supported");
+            }
         }
 
         if (!disableNonCoreServices) {
