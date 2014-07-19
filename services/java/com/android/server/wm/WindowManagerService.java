@@ -5318,6 +5318,23 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
+    // Called by window manager policy. Not exposed externally.
+    @Override
+    public int getFlipState() {
+        int sw = mInputManager.getSwitchState(-1, InputDevice.SOURCE_ANY,
+                InputManagerService.SW_FLIP);
+        if (sw > 0) {
+            // Switch state: AKEY_STATE_DOWN or AKEY_STATE_VIRTUAL.
+            return FLIP_OPEN;
+        } else if (sw == 0) {
+            // Switch state: AKEY_STATE_UP.
+            return FLIP_CLOSED;
+        } else {
+            // Switch state: AKEY_STATE_UNKNOWN.
+            return FLIP_ABSENT;
+        }
+    }
+
     // Called by window manager policy.  Not exposed externally.
     @Override
     public void switchKeyboardLayout(int deviceId, int direction) {

@@ -1337,6 +1337,7 @@
   <java-symbol type="bool" name="config_forceAnalogCarDock" />
   <java-symbol type="bool" name="config_forceAnalogDeskDock" />
   <java-symbol type="bool" name="config_lidControlsSleep" />
+  <java-symbol type="bool" name="config_flipControlsSleep" />
   <java-symbol type="bool" name="config_reverseDefaultRotation" />
   <java-symbol type="bool" name="config_showNavigationBar" />
   <java-symbol type="bool" name="target_honeycomb_needs_options_menu" />

@@ -349,6 +349,12 @@ final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
         mService.mPolicy.notifyLidSwitchChanged(whenNanos, lidOpen);
     }
 
+    /* Notifies that the flip switch changed state. */
+    @Override
+    public void notifyFlipSwitchChanged(long whenNanos, boolean flipOpen) {
+        mService.mPolicy.notifyFlipSwitchChanged(whenNanos, flipOpen);
+    }
+
     /* Provides an opportunity for the window manager policy to intercept early key
      * processing as soon as the key has been read from the device. */
     @Override

@@ -140,6 +140,17 @@ public interface WindowManagerPolicy {
     public final static String EXTRA_LID_STATE = "state";
 
     /**
+     * Sticky broadcast of the current flip state
+     */
+    public final static String ACTION_FLIP_STATE_CHANGED = "android.intent.action.FLIP_STATE_CHANGED";
+
+    /**
+     * Extra in {@link #ACTION_FLIP_STATE_CHANGED} indicating the state:
+     * See {@link #FLIP_ABSENT}, {@link #FLIP_CLOSED}, and {@link #FLIP_OPEN}.
+     */
+    public final static String EXTRA_FLIP_STATE = "state";
+
+    /**
      * Interface to the Window Manager state associated with a particular
      * window.  You can hold on to an instance of this interface from the call
      * to prepareAddWindow() until removeWindow().
@@ -401,6 +412,10 @@ public interface WindowManagerPolicy {
         public static final int LID_CLOSED = 0;
         public static final int LID_OPEN = 1;
 
+        public static final int FLIP_ABSENT = -1;
+        public static final int FLIP_CLOSED = 0;
+        public static final int FLIP_OPEN = 1;
+
         /**
          * Ask the window manager to re-evaluate the system UI flags.
          */
@@ -419,6 +434,11 @@ public interface WindowManagerPolicy {
          * Returns a code that describes the current state of the lid switch.
          */
         public int getLidState();
+
+        /**
+         * Returns a code that describes the current state of the flip switch.
+         */
+        public int getFlipState();
 
         /**
          * Switch the keyboard layout for the given device.
@@ -966,6 +986,13 @@ public interface WindowManagerPolicy {
      * @param lidOpen True if the lid is now open.
      */
     public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen);
+
+    /**
+     * Tell the policy that the flip switch has changed state.
+     * @param whenNanos The time when the change occurred in uptime nanoseconds.
+     * @param flipOpen True if the flip is now open.
+     */
+    public void notifyFlipSwitchChanged(long whenNanos, boolean flipOpen);
     
     /**
      * Tell the policy if anyone is requesting that keyguard not come on.

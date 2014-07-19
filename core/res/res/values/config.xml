@@ -473,6 +473,11 @@
          The default is false. -->
     <bool name="config_lidControlsSleep">false</bool>
 
+    <!-- Indicate whether closing the flip causes the device to go to sleep and opening
+         it causes the device to wake up.
+         The default is false. -->
+    <bool name="config_flipControlsSleep">false</bool>
+
     <!-- Indicate the device's Smart Cover coordinates.
          If none are provided, then the feature will be disabled.
          The array should contain 4 values, in pixels, (sample values provided):
