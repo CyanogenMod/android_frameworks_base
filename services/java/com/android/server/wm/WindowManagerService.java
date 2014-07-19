@@ -5308,13 +5308,13 @@ public class WindowManagerService extends IWindowManager.Stub
                 InputManagerService.SW_LID);
         if (sw > 0) {
             // Switch state: AKEY_STATE_DOWN or AKEY_STATE_VIRTUAL.
-            return LID_CLOSED;
+            return SWITCH_CLOSED;
         } else if (sw == 0) {
             // Switch state: AKEY_STATE_UP.
-            return LID_OPEN;
+            return SWITCH_OPEN;
         } else {
             // Switch state: AKEY_STATE_UNKNOWN.
-            return LID_ABSENT;
+            return SWITCH_ABSENT;
         }
     }
 

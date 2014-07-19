@@ -57,6 +57,12 @@
 #define MSC_ANDROID_TIME_SEC 0x6
 #define MSC_ANDROID_TIME_USEC 0x7
 
+// Override kernel header SW_MAX to prevent EventHub filter out SW_FLIP event
+#ifdef FLIP_COVER_SUPPORT
+#undef SW_MAX
+#define SW_MAX 0x20
+#endif
+
 namespace android {
 
 enum {

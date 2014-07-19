@@ -135,9 +135,14 @@ public interface WindowManagerPolicy {
 
     /**
      * Extra in {@link #ACTION_LID_STATE_CHANGED} indicating the state:
-     * See {@link #LID_ABSENT}, {@link #LID_CLOSED}, and {@link #LID_OPEN}.
+     * See {@link #SWITCH_ABSENT}, {@link #SWITCH_CLOSED}, and {@link #SWITCH_OPEN}.
      */
-    public final static String EXTRA_LID_STATE = "state";
+    public final static String EXTRA_SWITCH_STATE = "state";
+
+    /**
+     * Sticky broadcast of the current flip state
+     */
+    public final static String ACTION_FLIP_STATE_CHANGED = "android.intent.action.FLIP_STATE_CHANGED";
 
     /**
      * Interface to the Window Manager state associated with a particular
@@ -397,9 +402,9 @@ public interface WindowManagerPolicy {
      * between it and the policy.
      */
     public interface WindowManagerFuncs {
-        public static final int LID_ABSENT = -1;
-        public static final int LID_CLOSED = 0;
-        public static final int LID_OPEN = 1;
+        public static final int SWITCH_ABSENT = -1;
+        public static final int SWITCH_CLOSED = 0;
+        public static final int SWITCH_OPEN = 1;
 
         /**
          * Ask the window manager to re-evaluate the system UI flags.
@@ -966,6 +971,13 @@ public interface WindowManagerPolicy {
      * @param lidOpen True if the lid is now open.
      */
     public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen);
+
+    /**
+     * Tell the policy that the flip switch has changed state.
+     * @param whenNanos The time when the change occurred in uptime nanoseconds.
+     * @param flipOpen True if the flip is now open.
+     */
+    public void notifyFlipSwitchChanged(long whenNanos, boolean flipOpen);
     
     /**
      * Tell the policy if anyone is requesting that keyguard not come on.
