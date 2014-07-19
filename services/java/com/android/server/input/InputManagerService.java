@@ -90,6 +90,8 @@ import java.util.HashSet;
 import libcore.io.Streams;
 import libcore.util.Objects;
 
+import android.os.SystemProperties;
+
 /*
  * Wraps the C++ InputManager and provides its callbacks.
  */
@@ -220,7 +222,9 @@ public class InputManagerService extends IInputManager.Stub
 
     // Switch code values must match bionic/libc/kernel/common/linux/input.h
     /** Switch code: Lid switch.  When set, lid is shut. */
-    public static final int SW_LID = 0x00;
+    public static final int SW_LID = SystemProperties.getInt("ro.switch_code.sw_lid", 0x00);
+    public static final boolean SW_LID_INVERT =
+            SystemProperties.getBoolean("ro.switch_code.sw_lid_invert", false);
 
     /** Switch code: Keypad slide.  When set, keyboard is exposed. */
     public static final int SW_KEYPAD_SLIDE = 0x0a;
@@ -1374,7 +1378,12 @@ public class InputManagerService extends IInputManager.Stub
         }
 
         if ((switchMask & SW_LID_BIT) != 0) {
-            final boolean lidOpen = ((switchValues & SW_LID_BIT) == 0);
+            final boolean lidOpen;
+            if (SW_LID_INVERT) {
+                lidOpen = ((switchValues & SW_LID_BIT) != 0);
+            } else {
+                lidOpen = ((switchValues & SW_LID_BIT) == 0);
+            }
             mWindowManagerCallbacks.notifyLidSwitchChanged(whenNanos, lidOpen);
         }
 

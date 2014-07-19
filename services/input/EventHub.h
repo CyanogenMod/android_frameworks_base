@@ -57,6 +57,15 @@
 #define MSC_ANDROID_TIME_SEC 0x6
 #define MSC_ANDROID_TIME_USEC 0x7
 
+/*
+ * Override kernel header SW_MAX to prevent EventHub filter out
+ * extended switch event
+ */
+#ifdef EXTENDED_SWITCH
+#undef SW_MAX
+#define SW_MAX 0x20
+#endif
+
 namespace android {
 
 enum {
