@@ -5008,12 +5008,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             result = 0;
             if (down && isWakeKey) {
                 if (keyguardActive) {
-                    mPowerManager.cpuBoost(750000);
                     mPowerManager.wakeUp(SystemClock.uptimeMillis());
                 } else {
                     // Otherwise, wake the device ourselves.
-                    mPowerManager.cpuBoost(750000);
-                    mPowerManager.wakeUp(SystemClock.uptimeMillis());
+                    result |= ACTION_WAKE_UP;
                 }
             }
         }
