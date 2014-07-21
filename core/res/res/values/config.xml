@@ -1878,4 +1878,7 @@
 
     <!-- Is the device LTE capable -->
     <bool name="config_lte_capable">true</bool>
+
+    <!-- set this value to true to set network mode as global during boot up -->
+    <bool name="config_global_phone_enabled">false</bool>
 </resources>
