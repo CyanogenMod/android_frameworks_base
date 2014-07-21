@@ -363,6 +363,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mVolBtnMusicControls;
     private boolean mIsLongPress;
 
+    // Behavior of home wake
+    private boolean mHomeWakeScreen;
+
     private final class PointerLocationPointerEventListener implements PointerEventListener {
         @Override
         public void onPointerEvent(MotionEvent motionEvent) {
@@ -629,6 +632,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLBTN_MUSIC_CONTROLS), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HOME_WAKE_SCREEN), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION), false, this,
@@ -1748,7 +1754,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
-
+            mHomeWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.HOME_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1);
             mExpandedDesktopStyle = Settings.System.getIntForUser(resolver,
                     Settings.System.EXPANDED_DESKTOP_STYLE, 2, UserHandle.USER_CURRENT);
             mShowSystemBarOnKeyguard = Settings.System.getIntForUser(resolver,
@@ -5046,6 +5053,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
                 break;
             }
+            case KeyEvent.KEYCODE_HOME:
+                if (down && !isScreenOn && isWakeKey && mHomeWakeScreen) {
+                    if ((keyCode != KeyEvent.KEYCODE_VOLUME_UP) && (keyCode != KeyEvent.KEYCODE_VOLUME_DOWN)) {
+                        // Otherwise, wake the device ourselves.
+                        result |= ACTION_WAKE_UP;
+                    }
+                }
+            break;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_MUTE: {
@@ -5321,6 +5336,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_CAMERA:
                 return false;
 
+            // home wake can be configurable so default to no here
+            case KeyEvent.KEYCODE_HOME:
+                return false;
         }
         return true;
     }
