@@ -587,7 +587,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 mSimState = IccCardConstants.State.PUK_REQUIRED;
             }
             else {
-                mSimState = IccCardConstants.State.NETWORK_LOCKED;
+                mSimState = IccCardConstants.State.PERSO_LOCKED;
             }
         } else {
             mSimState = IccCardConstants.State.UNKNOWN;
