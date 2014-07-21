@@ -565,7 +565,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     simState = IccCardConstants.State.PUK_REQUIRED;
                 }
                 else {
-                    simState = IccCardConstants.State.NETWORK_LOCKED;
+                    simState = IccCardConstants.State.PERSO_LOCKED;
                 }
             } else {
                 simState = IccCardConstants.State.UNKNOWN;
