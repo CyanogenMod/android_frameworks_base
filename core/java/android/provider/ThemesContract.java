@@ -503,6 +503,12 @@ public class ThemesContract {
         public static final String STYLE_PREVIEW = "style_preview";
 
         /**
+         * Cached thumbnail preview of UI controls representing the theme's style
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String STYLE_THUMBNAIL = "style_thumbnail";
+
+        /**
          * Cached thumbnail of the theme's boot animation
          * <P>Type: BLOB (bitmap)</P>
          */
