@@ -220,6 +220,7 @@ void Caches::terminate() {
     glDeleteBuffers(1, &mMeshIndices);
     delete[] mRegionMesh;
     mMeshIndices = 0;
+    mCurrentIndicesBuffer = 0;
     mRegionMesh = NULL;
 
     fboCache.clear();
