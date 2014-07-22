@@ -135,15 +135,16 @@
     <color name="bright_foreground_disabled_holo_light">#ffb2b2b2</color>
     <color name="bright_foreground_inverse_holo_dark">@android:color/bright_foreground_holo_light</color>
     <color name="bright_foreground_inverse_holo_light">@android:color/bright_foreground_holo_dark</color>
+    <color name="dialog_divider_holo">@android:color/holo_blue_light</color>
     <color name="dim_foreground_holo_dark">#bebebe</color>
     <color name="dim_foreground_disabled_holo_dark">#80bebebe</color>
     <color name="dim_foreground_inverse_holo_dark">#323232</color>
     <color name="dim_foreground_inverse_disabled_holo_dark">#80323232</color>
-    <color name="hint_foreground_holo_dark">#808080</color>
     <color name="dim_foreground_holo_light">#323232</color>
     <color name="dim_foreground_disabled_holo_light">#80323232</color>
     <color name="dim_foreground_inverse_holo_light">#bebebe</color>
     <color name="dim_foreground_inverse_disabled_holo_light">#80bebebe</color>
+    <color name="hint_foreground_holo_dark">#808080</color>
     <color name="hint_foreground_holo_light">#808080</color>
     <color name="highlighted_text_holo_dark">#6633b5e5</color>
     <color name="highlighted_text_holo_light">#6633b5e5</color>
