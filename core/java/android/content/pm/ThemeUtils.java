@@ -47,7 +47,9 @@ import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -617,5 +619,53 @@ public class ThemeUtils {
             }
         }
         return supportedComponents;
+    }
+
+    /**
+     * Get the components from the default theme.  If the default theme is not HOLO then any
+     * components that are not in the default theme will come from HOLO to create a complete
+     * component map.
+     * @param context
+     * @return
+     */
+    public static Map<String, String> getDefaultComponents(Context context) {
+        String defaultThemePkg = getDefaultThemePackageName(context);
+        List<String> defaultComponents = null;
+        List<String> holoComponents = getSupportedComponents(context, HOLO_DEFAULT);
+        if (!HOLO_DEFAULT.equals(defaultThemePkg)) {
+            defaultComponents = getSupportedComponents(context, defaultThemePkg);
+        }
+
+        Map<String, String> componentMap = new HashMap<String, String>(holoComponents.size());
+        if (defaultComponents != null) {
+            for (String component : defaultComponents) {
+                componentMap.put(component, defaultThemePkg);
+            }
+        }
+        for (String component : holoComponents) {
+            if (!componentMap.containsKey(component)) {
+                componentMap.put(component, HOLO_DEFAULT);
+            }
+        }
+
+        return componentMap;
+    }
+
+    /**
+     * Takes an existing component map and adds any missing components from the default
+     * map of components.
+     * @param context
+     * @param componentMap An existing component map
+     */
+    public static void completeComponentMap(Context context,
+            Map<String, String> componentMap) {
+        if (componentMap == null) return;
+
+        Map<String, String> defaultComponents = getDefaultComponents(context);
+        for (String component : defaultComponents.keySet()) {
+            if (!componentMap.containsKey(component)) {
+                componentMap.put(component, defaultComponents.get(component));
+            }
+        }
     }
 }
