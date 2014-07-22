@@ -36,7 +36,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ThemeUtils;
 import android.content.res.CompatibilityInfo;
@@ -75,10 +77,10 @@ import com.android.internal.util.cm.DevUtils;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
 import android.service.gesture.EdgeGestureManager;
+
 import com.android.internal.os.DeviceKeyHandler;
 
 import dalvik.system.DexClassLoader;
-
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
@@ -252,6 +254,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mPreloadedRecentApps;
     final Object mServiceAquireLock = new Object();
     Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
+    private PackageManager mPackageManager;
     SearchManager mSearchManager;
 
     // Vibrator pattern for haptic feedback of a long press.
@@ -1324,6 +1327,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mImmersiveModeConfirmation = new ImmersiveModeConfirmation(mContext);
         mWindowManagerFuncs.registerPointerEventListener(mSystemGestures);
 
+        mPackageManager = context.getPackageManager();
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 
         // register for WIFI Display intents
@@ -5881,7 +5885,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         ActivityInfo ai = null;
-        ResolveInfo info = mContext.getPackageManager().resolveActivityAsUser(
+        ResolveInfo info = mPackageManager.resolveActivityAsUser(
                 intent,
                 PackageManager.MATCH_DEFAULT_ONLY | PackageManager.GET_META_DATA,
                 mCurrentUserId);
@@ -6058,6 +6062,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    boolean isPackageSystem(String packageName) {
+        ApplicationInfo appInfo;
+        try {
+            appInfo = mPackageManager.getApplicationInfo(packageName, 0);
+            return (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        } catch (NameNotFoundException e) {
+            return true;
+        }
+    }
+
     private int updateSystemUiVisibilityLw() {
         // If there is no window focused, there will be nobody to handle the events
         // anyway, so just hang on in whatever state we're in until things settle down.
@@ -6080,6 +6094,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 & ~mResettingSystemUiFlags
                 & ~mForceClearedSystemUiFlags;
         tmpVisibility = updateSystemUiVisibilityFlagsForExpandedDesktop(tmpVisibility);
+
+        if (!isPackageSystem(win.getOwningPackage())) {
+            tmpVisibility &= ~View.SYSTEM_UI_FLAG_SHOW_DRAWER_BUTTON;
+        }
 
         final boolean subWindowInExpandedMode = expandedDesktopHidesNavigationBar()
                 && (windowType >= WindowManager.LayoutParams.FIRST_SUB_WINDOW

@@ -2496,6 +2496,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (diff != 0) {
             mSystemUiVisibility = newVal;
 
+            // update drawer button
+            if ((diff & View.SYSTEM_UI_FLAG_SHOW_DRAWER_BUTTON) != 0) {
+                final boolean showAllApps = (vis & View.SYSTEM_UI_FLAG_SHOW_DRAWER_BUTTON) != 0;
+                mNavigationBarView.showAllAppsButton(showAllApps);
+            }
+
             // update low profile
             if ((diff & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
                 final boolean lightsOut = (vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0;

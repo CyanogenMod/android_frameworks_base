@@ -2466,6 +2466,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     /**
      * @hide
      *
+     * Flag to show drawer button in the navigation bar.
+     * Mainly used by launchers since back button has no purpose there.
+     */
+    public static final int SYSTEM_UI_FLAG_SHOW_DRAWER_BUTTON = 0x00004000;
+
+    /**
+     * @hide
+     *
      * Flag to force showing the navigation bar even in expanded desktop mode.
      */
     public static final int SYSTEM_UI_FLAG_SHOW_NAVIGATION_IN_EXPANDED_DESKTOP = 0x00008000;

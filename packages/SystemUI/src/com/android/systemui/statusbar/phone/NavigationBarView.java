@@ -99,7 +99,8 @@ public class NavigationBarView extends LinearLayout {
     int mDisabledFlags = 0;
     int mNavigationIconHints = 0;
 
-    private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
+    private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon,
+        mAllAppsIcon;
     private Drawable mRecentIcon;
     private Drawable mRecentLandIcon;
     private Drawable mHomeIcon, mHomeLandIcon;
@@ -112,6 +113,7 @@ public class NavigationBarView extends LinearLayout {
     private boolean mModLockDisabled = true;
     private boolean mShowDpadArrowKeys = true;
     private SettingsObserver mObserver;
+    private boolean mShowAllApps;
 
     // Visibility of R.id.one view prior to swapping it for a left arrow key
     public int mSlotOneVisibility = -1;
@@ -381,6 +383,7 @@ public class NavigationBarView extends LinearLayout {
         mRecentLandIcon = res.getDrawable(R.drawable.ic_sysbar_recent_land);
         mHomeIcon = res.getDrawable(R.drawable.ic_sysbar_home);
         mHomeLandIcon = res.getDrawable(R.drawable.ic_sysbar_home_land);
+        mAllAppsIcon = res.getDrawable(R.drawable.ic_home_all_apps_holo_dark);
     }
 
     public void updateResources(Resources res) {
@@ -499,9 +502,13 @@ public class NavigationBarView extends LinearLayout {
         ImageView homeView = (ImageView) findButton(NavbarEditor.NAVBAR_HOME);
 
         if (backView != null) {
-            backView.setImageDrawable(backAlt
-                    ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
-                    : (mVertical ? mBackLandIcon : mBackIcon));
+            if (!mShowAllApps || backAlt) {
+                backView.setImageDrawable(backAlt
+                        ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
+                                : (mVertical ? mBackLandIcon : mBackIcon));
+            } else {
+                backView.setImageDrawable(mAllAppsIcon);
+            }
         }
 
         if (recentView != null) {
@@ -966,5 +973,13 @@ public class NavigationBarView extends LinearLayout {
             // propogate settings
             setNavigationIconHints(mNavigationIconHints, true);
         }
+    }
+
+    public void showAllAppsButton(boolean showAllApps) {
+        if (showAllApps == mShowAllApps) {
+            return;
+        }
+        mShowAllApps = showAllApps;
+        setNavigationIconHints(mNavigationIconHints, true);
     }
 }
