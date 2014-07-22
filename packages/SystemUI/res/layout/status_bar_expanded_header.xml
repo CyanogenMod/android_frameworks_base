@@ -80,6 +80,15 @@
         android:layout_height="50dp"
         android:layout_marginStart="12dp"
         >
+        
+        <ImageView android:id="@+id/halo_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_notify_halo"
+            android:contentDescription="@string/accessibility_halo"
+            />    
                   
         <ImageView android:id="@+id/clear_all_button"
             android:layout_width="50dp"
