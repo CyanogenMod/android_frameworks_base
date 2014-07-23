@@ -21,7 +21,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,10 +55,6 @@ public class OnTheGoService extends Service {
 
     private static final int CAMERA_BACK  = 0;
     private static final int CAMERA_FRONT = 1;
-
-    private static final int NOTIFICATION_STARTED = 0;
-    private static final int NOTIFICATION_RESTART = 1;
-    private static final int NOTIFICATION_ERROR   = 2;
 
     private final Handler mHandler = new Handler();
 
@@ -115,8 +110,8 @@ public class OnTheGoService extends Service {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-            // Stop and restart
-            stopOnTheGo(true);
+            // Reset views once changed
+            restartOnTheGo();
         }
     }
 
@@ -128,7 +123,7 @@ public class OnTheGoService extends Service {
             if (action.equals(ACTION_START)) {
                 startOnTheGo();
             } else if (action.equals(ACTION_STOP)) {
-                stopOnTheGo(false);
+                stopOnTheGo();
             } else if (action.equals(ACTION_TOGGLE_OPTIONS)) {
                 new OnTheGoDialog(this).show();
             }
@@ -141,7 +136,7 @@ public class OnTheGoService extends Service {
 
     private void startOnTheGo() {
         if (mNotificationManager != null) {
-            stopOnTheGo(false);
+            stopOnTheGo();
             return;
         }
 
@@ -151,10 +146,38 @@ public class OnTheGoService extends Service {
         final SettingsObserver mObserver = new SettingsObserver(mHandler);
         mObserver.observe();
 
-        createNotification(NOTIFICATION_STARTED);
+        // Display a notification
+        final Resources r = getResources();
+        final Notification.Builder builder = new Notification.Builder(this)
+                .setTicker(r.getString(R.string.onthego_notif_ticker))
+                .setContentTitle(r.getString(R.string.onthego_notif_title))
+                .setSmallIcon(com.android.internal.R.drawable.ic_lock_onthego)
+                .setWhen(System.currentTimeMillis())
+                .setOngoing(true);
+
+        final Intent stopIntent = new Intent(this, OnTheGoService.class)
+                .setAction(OnTheGoService.ACTION_STOP);
+        final PendingIntent stopPendIntent = PendingIntent.getService(this, 0, stopIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final Intent optionsIntent = new Intent(this, OnTheGoService.class)
+                .setAction(OnTheGoService.ACTION_TOGGLE_OPTIONS);
+        final PendingIntent optionsPendIntent = PendingIntent.getService(this, 0, optionsIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder
+                .addAction(com.android.internal.R.drawable.ic_media_stop,
+                        r.getString(R.string.onthego_notif_stop), stopPendIntent)
+                .addAction(com.android.internal.R.drawable.ic_text_dot,
+                        r.getString(R.string.onthego_notif_options), optionsPendIntent);
+
+        final Notification notif = builder.build();
+
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(ONTHEGO_NOTIFICATION_ID, notif);
     }
 
-    private void stopOnTheGo(boolean shouldRestart) {
+    private void stopOnTheGo() {
         unregisterAlphaReceiver();
         resetViews();
 
@@ -163,12 +186,12 @@ public class OnTheGoService extends Service {
             mNotificationManager.cancel(ONTHEGO_NOTIFICATION_ID);
             mNotificationManager = null;
         }
-
-        if (shouldRestart) {
-            createNotification(NOTIFICATION_RESTART);
-        }
-
         stopSelf();
+    }
+
+    private void restartOnTheGo() {
+        resetViews();
+        setupViews();
     }
 
     private void toggleOnTheGoAlpha() {
@@ -188,18 +211,14 @@ public class OnTheGoService extends Service {
         }
     }
 
-    private void getCameraInstance(int type) throws RuntimeException {
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
+    private Camera getCameraInstance(int type) throws RuntimeException {
+        Camera camera = null;
 
         switch (type) {
             // Get hold of the back facing camera
             default:
             case CAMERA_BACK:
-                mCamera = Camera.open(0);
+                camera = Camera.open(0);
                 break;
             // Get hold of the front facing camera
             case CAMERA_FRONT:
@@ -209,23 +228,33 @@ public class OnTheGoService extends Service {
                 for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
                     Camera.getCameraInfo(camIdx, cameraInfo);
                     if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                        mCamera = Camera.open(camIdx);
+                        camera = Camera.open(camIdx);
                     }
                 }
                 break;
         }
+
+        return camera;
     }
 
     private void setupViews() {
-        final int cameraType = Settings.System.getInt(getContentResolver(),
-                Settings.System.ON_THE_GO_CAMERA,
-                0);
-        try {
-            getCameraInstance(cameraType);
-        } catch (RuntimeException exc) {
-            // Well, you cant have all in this life..
-            createNotification(NOTIFICATION_ERROR);
-            stopOnTheGo(true);
+        if (mCamera == null) {
+            final int cameraType = Settings.System.getInt(getContentResolver(),
+                    Settings.System.ON_THE_GO_CAMERA,
+                    0);
+            try {
+                mCamera = getCameraInstance(cameraType);
+            } catch (RuntimeException exc) {
+                // Try to open any camera
+                if (mCamera == null) {
+                    mCamera = Camera.open();
+                }
+            }
+        }
+
+        // Camera is still null? DIE :(
+        if (mCamera == null) {
+            stopSelf();
         }
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
@@ -244,12 +273,10 @@ public class OnTheGoService extends Service {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
                 try {
-                    if (mCamera != null) {
-                        mCamera.setDisplayOrientation(90);
-                        mCamera.setPreviewTexture(surfaceTexture);
-                        mCamera.startPreview();
-                    }
-                } catch (IOException ignored) {
+                    mCamera.setDisplayOrientation(90);
+                    mCamera.setPreviewTexture(surfaceTexture);
+                    mCamera.startPreview();
+                } catch (IOException ioe) {
                     // ignored
                 }
             }
@@ -292,57 +319,5 @@ public class OnTheGoService extends Service {
             wm.removeView(mOverlay);
             mOverlay = null;
         }
-    }
-
-    private void createNotification(final int type) {
-        final Resources r = getResources();
-        final Notification.Builder builder = new Notification.Builder(this)
-                .setTicker(r.getString(
-                        (type == 1 ? R.string.onthego_notif_camera_changed :
-                                (type == 2 ? R.string.onthego_notif_error
-                                        : R.string.onthego_notif_ticker))
-                ))
-                .setContentTitle(r.getString(
-                        (type == 1 ? R.string.onthego_notif_camera_changed :
-                                (type == 2 ? R.string.onthego_notif_error
-                                        : R.string.onthego_notif_title))
-                ))
-                .setSmallIcon(com.android.internal.R.drawable.ic_lock_onthego)
-                .setWhen(System.currentTimeMillis())
-                .setOngoing(!(type == 1 || type == 2));
-
-        if (type == 1 || type == 2) {
-            final ComponentName cn = new ComponentName("com.android.systemui",
-                    "com.android.systemui.nameless.onthego.OnTheGoService");
-            final Intent startIntent = new Intent();
-            startIntent.setComponent(cn);
-            startIntent.setAction(ACTION_START);
-            final PendingIntent startPendIntent = PendingIntent.getService(this, 0, startIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder.addAction(com.android.internal.R.drawable.ic_media_play,
-                    r.getString(R.string.onthego_notif_restart), startPendIntent);
-        } else {
-            final Intent stopIntent = new Intent(this, OnTheGoService.class)
-                    .setAction(OnTheGoService.ACTION_STOP);
-            final PendingIntent stopPendIntent = PendingIntent.getService(this, 0, stopIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            final Intent optionsIntent = new Intent(this, OnTheGoService.class)
-                    .setAction(OnTheGoService.ACTION_TOGGLE_OPTIONS);
-            final PendingIntent optionsPendIntent = PendingIntent.getService(this, 0, optionsIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder
-                    .addAction(com.android.internal.R.drawable.ic_media_stop,
-                            r.getString(R.string.onthego_notif_stop), stopPendIntent)
-                    .addAction(com.android.internal.R.drawable.ic_text_dot,
-                            r.getString(R.string.onthego_notif_options), optionsPendIntent);
-        }
-
-        final Notification notif = builder.build();
-
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(ONTHEGO_NOTIFICATION_ID, notif);
     }
 }

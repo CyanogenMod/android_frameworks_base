@@ -107,7 +107,7 @@ public class OnTheGoDialog extends Dialog {
                 Settings.System.putInt(resolver,
                         Settings.System.ON_THE_GO_CAMERA,
                         (b ? 1 : 0));
-                mHandler.post(mDismissDialogRunnable);
+                dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
             }
         });
     }
