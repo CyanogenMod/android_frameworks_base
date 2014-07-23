@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="quick_settings_onthego_dialog_short_timeout">3000</integer>
-    <integer name="quick_settings_onthego_dialog_long_timeout">6000</integer>
-</resources>

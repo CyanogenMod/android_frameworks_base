@@ -49,30 +49,4 @@
         android:layout_below="@+id/onthego_divider_0"
         android:text="@string/onthego_front_camera"
         android:layout_alignParentRight="true" />
-
-    <View
-        android:id="@+id/onthego_divider_1"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@+id/onthego_camera_toggle" />
-
-    <Switch
-        android:id="@+id/onthego_service_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/onthego_divider_1"
-        android:text="@string/onthego_service_toggle"
-        android:layout_alignParentRight="true" />
-
-    <View
-        android:id="@+id/onthego_divider_2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/white"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@+id/onthego_service_toggle" />
 </RelativeLayout>

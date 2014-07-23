@@ -4497,13 +4497,6 @@ public final class Settings {
         public static final String ON_THE_GO_CAMERA = "on_the_go_camera";
 
         /**
-         * Whether the service should restart itself or not.
-         *
-         * @hide
-         */
-        public static final String ON_THE_GO_SERVICE_RESTART = "on_the_go_service_restart";
-
-        /**
          * Battery warning preferences
          *
          * 0 = show dialog + play sound (default)
@@ -4516,7 +4509,7 @@ public final class Settings {
          */
         public static final String POWER_UI_LOW_BATTERY_WARNING_POLICY = "power_ui_low_battery_warning_policy";
 
-        /*
+        /**
          * Holds the text for the Carrier label. An empty string
          * will bring the default text back.
          * @hide

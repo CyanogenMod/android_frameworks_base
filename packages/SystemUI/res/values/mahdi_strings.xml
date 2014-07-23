@@ -201,5 +201,4 @@
     <string name="onthego_notif_camera_changed">Camera mode changed</string>
     <string name="onthego_transparency">Transparency</string>
     <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
 </resources>

@@ -53,9 +53,9 @@ public class OnTheGoDialog extends Dialog {
         mContext = ctx;
         final Resources r = mContext.getResources();
         mOnTheGoDialogLongTimeout =
-                r.getInteger(R.integer.quick_settings_onthego_dialog_long_timeout);
+                r.getInteger(R.integer.quick_settings_brightness_dialog_long_timeout);
         mOnTheGoDialogShortTimeout =
-                r.getInteger(R.integer.quick_settings_onthego_dialog_short_timeout);
+                r.getInteger(R.integer.quick_settings_brightness_dialog_short_timeout);
     }
 
     @Override
@@ -96,21 +96,6 @@ public class OnTheGoDialog extends Dialog {
             }
         });
 
-        final Switch mServiceToggle = (Switch) findViewById(R.id.onthego_service_toggle);
-        final boolean restartService = Settings.System.getBoolean(resolver,
-                Settings.System.ON_THE_GO_SERVICE_RESTART,
-                false);
-        mServiceToggle.setChecked(restartService);
-        mServiceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Settings.System.putBoolean(resolver,
-                        Settings.System.ON_THE_GO_SERVICE_RESTART,
-                        b);
-                dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
-            }
-        });
-
         final Switch mCamSwitch = (Switch) findViewById(R.id.onthego_camera_toggle);
         final boolean useFrontCam = (Settings.System.getInt(resolver,
                 Settings.System.ON_THE_GO_CAMERA,
@@ -122,7 +107,7 @@ public class OnTheGoDialog extends Dialog {
                 Settings.System.putInt(resolver,
                         Settings.System.ON_THE_GO_CAMERA,
                         (b ? 1 : 0));
-                dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
+                mHandler.post(mDismissDialogRunnable);
             }
         });
     }
