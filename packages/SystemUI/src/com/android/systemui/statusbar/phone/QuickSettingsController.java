@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.phone;
 
+<<<<<<< HEAD
 import static com.android.internal.util.cm.QSConstants.TILES_DEFAULT;
 import static com.android.internal.util.cm.QSConstants.TILE_AIRPLANE;
 import static com.android.internal.util.cm.QSConstants.TILE_AUTOROTATE;
@@ -50,7 +51,46 @@ import static com.android.internal.util.cm.QSConstants.TILE_WIFI;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.cm.QSConstants.TILE_WIMAX;
 import static com.android.internal.util.cm.QSConstants.TILE_POWER;
-import static com.android.internal.util.cm.QSConstants.TILE_ONTHEGO;
+=======
+import static com.android.internal.util.mahdi.QSConstants.TILES_DEFAULT;
+import static com.android.internal.util.mahdi.QSConstants.TILE_AIRPLANE;
+import static com.android.internal.util.mahdi.QSConstants.TILE_AUTOROTATE;
+import static com.android.internal.util.mahdi.QSConstants.TILE_BATTERY;
+import static com.android.internal.util.mahdi.QSConstants.TILE_BLUETOOTH;
+import static com.android.internal.util.mahdi.QSConstants.TILE_BRIGHTNESS;
+import static com.android.internal.util.mahdi.QSConstants.TILE_CAMERA;
+import static com.android.internal.util.mahdi.QSConstants.TILE_CONTACT;
+import static com.android.internal.util.mahdi.QSConstants.TILE_CUSTOM;
+import static com.android.internal.util.mahdi.QSConstants.TILE_CUSTOM_KEY;
+import static com.android.internal.util.mahdi.QSConstants.TILE_DELIMITER;
+import static com.android.internal.util.mahdi.QSConstants.TILE_IMMERSIVEMODE;
+import static com.android.internal.util.mahdi.QSConstants.TILE_LOCATION;
+import static com.android.internal.util.mahdi.QSConstants.TILE_LOCKSCREEN;
+import static com.android.internal.util.mahdi.QSConstants.TILE_LTE;
+import static com.android.internal.util.mahdi.QSConstants.TILE_MOBILEDATA;
+import static com.android.internal.util.mahdi.QSConstants.TILE_MUSIC;
+import static com.android.internal.util.mahdi.QSConstants.TILE_NETWORKADB;
+import static com.android.internal.util.mahdi.QSConstants.TILE_NETWORKMODE;
+import static com.android.internal.util.mahdi.QSConstants.TILE_NFC;
+import static com.android.internal.util.mahdi.QSConstants.TILE_ONTHEGO;
+import static com.android.internal.util.mahdi.QSConstants.TILE_PROFILE;
+import static com.android.internal.util.mahdi.QSConstants.TILE_QUICKRECORD;
+import static com.android.internal.util.mahdi.QSConstants.TILE_QUIETHOURS;
+import static com.android.internal.util.mahdi.QSConstants.TILE_RINGER;
+import static com.android.internal.util.mahdi.QSConstants.TILE_SCREENTIMEOUT;
+import static com.android.internal.util.mahdi.QSConstants.TILE_SETTINGS;
+import static com.android.internal.util.mahdi.QSConstants.TILE_SLEEP;
+import static com.android.internal.util.mahdi.QSConstants.TILE_SYNC;
+import static com.android.internal.util.mahdi.QSConstants.TILE_THEME;
+import static com.android.internal.util.mahdi.QSConstants.TILE_TORCH;
+import static com.android.internal.util.mahdi.QSConstants.TILE_USER;
+import static com.android.internal.util.mahdi.QSConstants.TILE_VOLUME;
+import static com.android.internal.util.mahdi.QSConstants.TILE_WIFI;
+import static com.android.internal.util.mahdi.QSConstants.TILE_WIFIAP;
+import static com.android.internal.util.mahdi.QSConstants.TILE_WIMAX;
+import static com.android.internal.util.mahdi.QSConstants.TILE_NAVBAR;
+import static com.android.internal.util.mahdi.QSConstants.TILE_NETWORKTRAFFIC;
+>>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -90,8 +130,11 @@ import com.android.systemui.quicksettings.MobileNetworkTile;
 import com.android.systemui.quicksettings.MobileNetworkTypeTile;
 import com.android.systemui.quicksettings.NetworkAdbTile;
 import com.android.systemui.quicksettings.NfcTile;
+<<<<<<< HEAD
 import com.android.systemui.quicksettings.PerformanceProfileTile;
+=======
 import com.android.systemui.quicksettings.OnTheGoTile;
+>>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
 import com.android.systemui.quicksettings.PreferencesTile;
 import com.android.systemui.quicksettings.ProfileTile;
 import com.android.systemui.quicksettings.QuickSettingsTile;
@@ -310,12 +353,15 @@ public class QuickSettingsController {
                 if (cpufreqSupported) {
                   qs = new CPUFreqTile(mContext, this);
                 }
+<<<<<<< HEAD
             } else if (tile.equals(TILE_COMPASS)) {
                 qs = new CompassTile(mContext, this);
             } else if (tile.equals(TILE_HEADS_UP)) {
                 qs = new HeadsUpTile(mContext, this);
+=======
             } else if (tile.equals(TILE_ONTHEGO)) {
                 qs = new OnTheGoTile(mContext, this);
+>>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
             }
 
             if (qs != null) {

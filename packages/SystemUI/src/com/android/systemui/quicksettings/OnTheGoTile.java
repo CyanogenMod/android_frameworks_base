@@ -57,6 +57,18 @@ public class OnTheGoTile extends QuickSettingsTile {
                 Settings.System.ON_THE_GO_CAMERA), this);
     }
 
+    @Override
+    public void onFlingRight() {
+        toggleCamera();
+        super.onFlingRight();
+    }
+
+    @Override
+    public void onFlingLeft() {
+        toggleCamera();
+        super.onFlingLeft();
+    }
+
     private void toggleCamera() {
         final ContentResolver resolver = mContext.getContentResolver();
         final int camera = Settings.System.getInt(resolver,

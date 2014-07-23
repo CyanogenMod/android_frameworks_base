@@ -78,8 +78,12 @@ import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
+<<<<<<< HEAD
+=======
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.util.nameless.NamelessActions;
 
+>>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -430,6 +434,27 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 });
         }
 
+        // next: screenrecord
+        // only shown if enabled, disabled by default
+        boolean showScreenrecord = Settings.System.getIntForUser(cr,
+                Settings.System.POWER_MENU_SCREENRECORD_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+        if (showScreenrecord) {
+            mItems.add(
+                new SinglePressAction(R.drawable.ic_lock_screen_record, R.string.global_action_screen_record) {
+                    public void onPress() {
+                        toggleScreenRecord();
+                    }
+
+                    public boolean showDuringKeyguard() {
+                        return true;
+                    }
+
+                    public boolean showBeforeProvisioning() {
+                        return true;
+                    }
+                });
+        }
+
         // next: On-The-Go, if enabled
         boolean showOnTheGo = Settings.System.getBoolean(cr,
                 Settings.System.POWER_MENU_ONTHEGO_ENABLED, false);
@@ -735,6 +760,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     }
 
+<<<<<<< HEAD
     private void startOnTheGo() {
         final ComponentName cn = new ComponentName("com.android.systemui",
                 "com.android.systemui.nameless.onthego.OnTheGoService");
@@ -742,6 +768,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         startIntent.setComponent(cn);
         startIntent.setAction("start");
         mContext.startService(startIntent);
+=======
+    private void toggleScreenRecord() {
+        final Intent recordIntent = new Intent("org.chameleonos.action.NOTIFY_RECORD_SERVICE");
+        mContext.sendBroadcast(recordIntent, Manifest.permission.RECORD_SCREEN);
+>>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
     }
 
     private void prepareDialog() {
