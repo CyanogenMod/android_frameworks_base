@@ -137,6 +137,10 @@ final class WifiDisplayController implements DumpUtils.Dump {
     // Number of connection retries remaining.
     private int mConnectionRetriesLeft;
 
+    // The Extended remote display that is listening on the connection.
+    // Created after the Wifi P2P network is connected.
+    private Object mExtRemoteDisplay;
+
     // The remote display that is listening on the connection.
     // Created after the Wifi P2P network is connected.
     private RemoteDisplay mRemoteDisplay;
@@ -565,11 +569,19 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
         // Step 1. Before we try to connect to a new device, tell the system we
         // have disconnected from the old one.
-        if (mRemoteDisplay != null && mConnectedDevice != mDesiredDevice) {
-            Slog.i(TAG, "Stopped listening for RTSP connection on " + mRemoteDisplayInterface
+        if ((mRemoteDisplay != null || mExtRemoteDisplay != null) &&
+                mConnectedDevice != mDesiredDevice) {
+            Slog.i(TAG, "Stopped listening for RTSP connection on "
+                    + mRemoteDisplayInterface
                     + " from Wifi display: " + mConnectedDevice.deviceName);
 
-            mRemoteDisplay.dispose();
+            if(mRemoteDisplay != null) {
+                mRemoteDisplay.dispose();
+            } else if(mExtRemoteDisplay != null) {
+                ExtendedRemoteDisplayHelper.dispose(mExtRemoteDisplay);
+            }
+
+            mExtRemoteDisplay = null;
             mRemoteDisplay = null;
             mRemoteDisplayInterface = null;
             mRemoteDisplayConnected = false;
@@ -717,7 +729,8 @@ final class WifiDisplayController implements DumpUtils.Dump {
         }
 
         // Step 6. Listen for incoming RTSP connection.
-        if (mConnectedDevice != null && mRemoteDisplay == null) {
+        if (mConnectedDevice != null && mRemoteDisplay == null &&
+                                        mExtRemoteDisplay== null) {
             Inet4Address addr = getInterfaceAddress(mConnectedDeviceGroupInfo);
             if (addr == null) {
                 Slog.i(TAG, "Failed to get local interface address for communicating "
@@ -736,7 +749,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
             Slog.i(TAG, "Listening for RTSP connection on " + iface
                     + " from Wifi display: " + mConnectedDevice.deviceName);
 
-            mRemoteDisplay = RemoteDisplay.listen(iface, new RemoteDisplay.Listener() {
+            RemoteDisplay.Listener listener = new RemoteDisplay.Listener() {
                 @Override
                 public void onDisplayConnected(Surface surface,
                         int width, int height, int flags, int session) {
@@ -775,7 +788,14 @@ final class WifiDisplayController implements DumpUtils.Dump {
                         handleConnectionFailure(false);
                     }
                 }
-            }, mHandler);
+            };
+            if(ExtendedRemoteDisplayHelper.isAvailable()){
+                mExtRemoteDisplay = ExtendedRemoteDisplayHelper.listen(iface,
+                        listener, mHandler, mContext);
+            } else {
+                mRemoteDisplay = RemoteDisplay.listen(iface, listener,
+                        mHandler);
+            }
 
             // Use extended timeout value for certification, as some tests require user inputs
             int rtspTimeout = mWifiDisplayCertMode ?
@@ -910,7 +930,8 @@ final class WifiDisplayController implements DumpUtils.Dump {
         @Override
         public void run() {
             if (mConnectedDevice != null
-                    && mRemoteDisplay != null && !mRemoteDisplayConnected) {
+                    && (mRemoteDisplay != null || mExtRemoteDisplay != null)
+                    && !mRemoteDisplayConnected) {
                 Slog.i(TAG, "Timed out waiting for Wifi display RTSP connection after "
                         + RTSP_TIMEOUT_SECONDS + " seconds: "
                         + mConnectedDevice.deviceName);
