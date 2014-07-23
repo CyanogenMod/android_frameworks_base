@@ -428,54 +428,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 });
         }
 
-        // next: screenrecord
-        // only shown if enabled, disabled by default
-        boolean showScreenrecord = Settings.System.getIntForUser(cr,
-                Settings.System.POWER_MENU_SCREENRECORD_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
-        if (showScreenrecord) {
-            mItems.add(
-                new SinglePressAction(R.drawable.ic_lock_screen_record, R.string.global_action_screen_record) {
-                    public void onPress() {
-                        toggleScreenRecord();
-                    }
-
-                    public boolean showDuringKeyguard() {
-                        return true;
-                    }
-
-                    public boolean showBeforeProvisioning() {
-                        return true;
-                    }
-                });
-        }
-
-        // next: On-The-Go, if enabled
-        boolean showOnTheGo = Settings.System.getBoolean(cr,
-                Settings.System.POWER_MENU_ONTHEGO_ENABLED, false);
-        if (showOnTheGo) {
-            mItems.add(
-                    new SinglePressAction(R.drawable.ic_lock_onthego,
-                            R.string.global_action_onthego) {
-
-                        public void onPress() {
-                            startOnTheGo();
-                        }
-
-                        public boolean onLongPress() {
-                            return false;
-                        }
-
-                        public boolean showDuringKeyguard() {
-                            return true;
-                        }
-
-                        public boolean showBeforeProvisioning() {
-                            return true;
-                        }
-                    }
-            );
-        }
-
         // next: expanded desktop toggle
         // only shown if enabled and expanded desktop is enabled, disabled by default
         boolean showExpandedDesktop =
@@ -751,15 +703,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mHandler.postDelayed(mScreenshotTimeout, 10000);
             }
         }
-    }
-
-    private void startOnTheGo() {
-        final ComponentName cn = new ComponentName("com.android.systemui",
-                "com.android.systemui.nameless.onthego.OnTheGoService");
-        final Intent startIntent = new Intent();
-        startIntent.setComponent(cn);
-        startIntent.setAction("start");
-        mContext.startService(startIntent);
     }
 
     private void prepareDialog() {
