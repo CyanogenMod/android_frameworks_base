@@ -5460,7 +5460,9 @@ public class Activity extends ContextThemeWrapper
     
     final void performRestart() {
         mFragments.noteStateNotSaved();
-        updateSplitViewMetrics(false);
+        if (!mWindow.mIsFloatingWindow) {
+            updateSplitViewMetrics(false);
+        }
 
         if (mStopped) {
             mStopped = false;

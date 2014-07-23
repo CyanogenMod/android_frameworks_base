@@ -1165,18 +1165,14 @@ final class ActivityStack {
                     configChanges |= r.configChangeFlags;
 
                     boolean isSplitView = false;
-
-                    boolean isFloating = r.floatingWindow;
-                    if (!isFloating) {
-                        try {
-                            IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-                            isSplitView = wm.isTaskSplitView(r.task.taskId);
-                        } catch (RemoteException e) {
-                            Slog.e(TAG, "Cannot get split view status", e);
-                        }
+                    try {
+                        IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
+                        isSplitView = wm.isTaskSplitView(r.task.taskId);
+                    } catch (RemoteException e) {
+                        Slog.e(TAG, "Cannot get split view status", e);
                     }
 
-                    if (r.fullscreen && (!isSplitView || !isFloating)) {
+                    if (r.fullscreen && !isSplitView) {
                         // At this point, nothing else needs to be shown
                         if (DEBUG_VISBILITY) Slog.v(TAG, "Fullscreen: at " + r);
                         behindFullscreen = true;
@@ -1325,12 +1321,11 @@ final class ActivityStack {
 
         final TaskRecord nextTask = next.task;
         final TaskRecord prevTask = prev != null ? prev.task : null;
-        boolean isFloatingWindow = prev != null ? prev.floatingWindow : false;
         if (prevTask != null && prevTask.mOnTopOfHome && prev.finishing && prev.frontOfTask) {
             if (DEBUG_STACK)  mStackSupervisor.validateTopActivitiesLocked();
             if (prevTask == nextTask) {
                 prevTask.setFrontOfTask();
-            } else if (prevTask != topTask() && !isFloatingWindow) {
+            } else if (prevTask != topTask() && !prev.floatingWindow) {
                 // This task is going away but it was supposed to return to the home task.
                 // Now the task above it has to return to the home task instead.
                 final int taskNdx = mTaskHistory.indexOf(prevTask) + 1;
@@ -3233,7 +3228,6 @@ final class ActivityStack {
         final TaskRecord task = mResumedActivity != null ? mResumedActivity.task : null;
         if (task == tr && task.mOnTopOfHome || numTasks <= 1) {
             tr.mOnTopOfHome = false;
-
             return mStackSupervisor.resumeHomeActivity(null);
         }
 
