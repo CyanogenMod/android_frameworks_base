@@ -17,7 +17,6 @@
 package com.android.systemui.nameless.onthego;
 
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,9 +25,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
-import android.widget.Switch;
 
 import com.android.systemui.R;
 
@@ -46,6 +43,8 @@ public class OnTheGoDialog extends Dialog {
                 OnTheGoDialog.this.dismiss();
             }
         }
+
+        ;
     };
 
     public OnTheGoDialog(Context ctx) {
@@ -71,10 +70,8 @@ public class OnTheGoDialog extends Dialog {
         setContentView(R.layout.quick_settings_onthego_dialog);
         setCanceledOnTouchOutside(true);
 
-        final ContentResolver resolver = mContext.getContentResolver();
-
         final SeekBar mSlider = (SeekBar) findViewById(R.id.alpha_slider);
-        final float value = Settings.System.getFloat(resolver,
+        final float value = Settings.System.getFloat(mContext.getContentResolver(),
                 Settings.System.ON_THE_GO_ALPHA,
                 0.5f);
         final int progress = ((int) (value * 100));
@@ -93,21 +90,6 @@ public class OnTheGoDialog extends Dialog {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
-            }
-        });
-
-        final Switch mCamSwitch = (Switch) findViewById(R.id.onthego_camera_toggle);
-        final boolean useFrontCam = (Settings.System.getInt(resolver,
-                Settings.System.ON_THE_GO_CAMERA,
-                0) == 1);
-        mCamSwitch.setChecked(useFrontCam);
-        mCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Settings.System.putInt(resolver,
-                        Settings.System.ON_THE_GO_CAMERA,
-                        (b ? 1 : 0));
-
             }
         });
     }
