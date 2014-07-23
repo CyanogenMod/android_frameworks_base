@@ -57,6 +57,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
 
                 Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
                 switch (mMode) {
+                    case Phone.NT_MODE_LTE_GSM_WCDMA:/*since 10.2(jira:2098), add case NT_MODE_LTE_GSM_WCDMA*/
                     case Phone.NT_MODE_WCDMA_PREF:
                     case Phone.NT_MODE_GSM_UMTS:
                         intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
@@ -71,7 +72,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                         } else {
                             intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_WCDMA_PREF);
                             mInternalState = STATE_TURNING_ON;
-                            mIntendedMode = Phone.NT_MODE_WCDMA_PREF;
+                            mIntendedMode = Phone.NT_MODE_LTE_GSM_WCDMA;
                         }
                         break;
                     case Phone.NT_MODE_GSM_ONLY:
@@ -82,7 +83,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                         } else {
                             intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_WCDMA_PREF);
                             mInternalState = STATE_TURNING_ON;
-                            mIntendedMode = Phone.NT_MODE_WCDMA_PREF;
+                            mIntendedMode = Phone.NT_MODE_LTE_GSM_WCDMA;/*since 10.2(jira:2098), change NT_MODE_WCDMA_PREF->NT_MODE_LTE_GSM_WCDMA*/
                         }
                         break;
                 }
@@ -192,6 +193,7 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
             case Phone.NT_MODE_WCDMA_PREF:
             case Phone.NT_MODE_WCDMA_ONLY:
             case Phone.NT_MODE_GSM_UMTS:
+            case Phone.NT_MODE_LTE_GSM_WCDMA:/*since 10.2, 2098*/
                 return STATE_2G_AND_3G;
             case Phone.NT_MODE_GSM_ONLY:
                 return STATE_2G_ONLY;
