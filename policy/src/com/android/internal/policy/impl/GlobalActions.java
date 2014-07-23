@@ -78,12 +78,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
-<<<<<<< HEAD
-=======
-import com.android.internal.app.ThemeUtils;
-import com.android.internal.util.nameless.NamelessActions;
-
->>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -464,8 +458,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             R.string.global_action_onthego) {
 
                         public void onPress() {
-                            NamelessActions.processAction(mContext,
-                                    NamelessActions.ACTION_ONTHEGO_TOGGLE);
+                            startOnTheGo();
                         }
 
                         public boolean onLongPress() {
@@ -760,7 +753,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     }
 
-<<<<<<< HEAD
     private void startOnTheGo() {
         final ComponentName cn = new ComponentName("com.android.systemui",
                 "com.android.systemui.nameless.onthego.OnTheGoService");
@@ -768,11 +760,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         startIntent.setComponent(cn);
         startIntent.setAction("start");
         mContext.startService(startIntent);
-=======
-    private void toggleScreenRecord() {
-        final Intent recordIntent = new Intent("org.chameleonos.action.NOTIFY_RECORD_SERVICE");
-        mContext.sendBroadcast(recordIntent, Manifest.permission.RECORD_SCREEN);
->>>>>>> 3571f40... [1/2] Base: On-The-Go: Add quicktile
     }
 
     private void prepareDialog() {

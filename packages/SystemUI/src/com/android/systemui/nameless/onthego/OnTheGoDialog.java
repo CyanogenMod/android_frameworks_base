@@ -122,7 +122,6 @@ public class OnTheGoDialog extends Dialog {
                 Settings.System.putInt(resolver,
                         Settings.System.ON_THE_GO_CAMERA,
                         (b ? 1 : 0));
-                sendCameraBroadcast();
                 dismissOnTheGoDialog(mOnTheGoDialogShortTimeout);
             }
         });
@@ -155,12 +154,6 @@ public class OnTheGoDialog extends Dialog {
         alphaBroadcast.setAction(OnTheGoService.ACTION_TOGGLE_ALPHA);
         alphaBroadcast.putExtra(OnTheGoService.EXTRA_ALPHA, value);
         mContext.sendBroadcast(alphaBroadcast);
-    }
-
-    private void sendCameraBroadcast() {
-        final Intent cameraBroadcast = new Intent();
-        cameraBroadcast.setAction(OnTheGoService.ACTION_TOGGLE_CAMERA);
-        mContext.sendBroadcast(cameraBroadcast);
     }
 
 }

@@ -47,8 +47,4 @@
   <java-symbol type="string" name="setting_confirmation_ask_me_later" />
   <java-symbol type="string" name="setting_confirmation_yes" />
   <java-symbol type="string" name="setting_confirmation_no" />  
-  
-  <!-- On-The-Go -->
-  <java-symbol type="string" name="global_action_onthego" />
-  <java-symbol type="drawable" name="ic_lock_onthego" /> 
 </resources>

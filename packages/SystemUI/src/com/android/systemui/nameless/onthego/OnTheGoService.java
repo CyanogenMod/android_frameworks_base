@@ -27,13 +27,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -45,15 +46,11 @@ import java.io.IOException;
 
 public class OnTheGoService extends Service {
 
-    private static final String  TAG   = "OnTheGoService";
-    private static final boolean DEBUG = false;
-
     private static final int ONTHEGO_NOTIFICATION_ID = 81333378;
 
     public static final String ACTION_START          = "start";
     public static final String ACTION_STOP           = "stop";
     public static final String ACTION_TOGGLE_ALPHA   = "toggle_alpha";
-    public static final String ACTION_TOGGLE_CAMERA  = "toggle_camera";
     public static final String ACTION_TOGGLE_OPTIONS = "toggle_options";
     public static final String EXTRA_ALPHA           = "extra_alpha";
 
@@ -64,8 +61,7 @@ public class OnTheGoService extends Service {
     private static final int NOTIFICATION_RESTART = 1;
     private static final int NOTIFICATION_ERROR   = 2;
 
-    private final Handler mHandler       = new Handler();
-    private final Object  mRestartObject = new Object();
+    private final Handler mHandler = new Handler();
 
     private FrameLayout         mOverlay;
     private Camera              mCamera;
@@ -79,24 +75,21 @@ public class OnTheGoService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceivers();
+        unregisterAlphaReceiver();
         resetViews();
     }
 
-    private void registerReceivers() {
+    private void registerAlphaReceiver() {
         final IntentFilter alphaFilter = new IntentFilter(ACTION_TOGGLE_ALPHA);
         registerReceiver(mAlphaReceiver, alphaFilter);
-        final IntentFilter cameraFilter = new IntentFilter(ACTION_TOGGLE_CAMERA);
-        registerReceiver(mCameraReceiver, cameraFilter);
     }
 
-    private void unregisterReceivers() {
+    private void unregisterAlphaReceiver() {
         try {
             unregisterReceiver(mAlphaReceiver);
-        } catch (Exception ignored) { }
-        try {
-            unregisterReceiver(mCameraReceiver);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+            // ignored
+        }
     }
 
     private final BroadcastReceiver mAlphaReceiver = new BroadcastReceiver() {
@@ -107,36 +100,38 @@ public class OnTheGoService extends Service {
         }
     };
 
-    private final BroadcastReceiver mCameraReceiver = new BroadcastReceiver() {
+    private class SettingsObserver extends ContentObserver {
+
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            final ContentResolver resolver = getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ON_THE_GO_CAMERA), false, this);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            synchronized (mRestartObject) {
-                final ContentResolver resolver = getContentResolver();
-                final boolean restartService = Settings.System.getBoolean(resolver,
-                        Settings.System.ON_THE_GO_SERVICE_RESTART,
-                        false);
-                if (restartService) {
-                    restartOnTheGo();
-                } else {
-                    stopOnTheGo(true);
-                }
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+            final ContentResolver resolver = getContentResolver();
+            final boolean restartService = Settings.System.getBoolean(resolver,
+                    Settings.System.ON_THE_GO_SERVICE_RESTART,
+                    false);
+            if (restartService) {
+                restartOnTheGo();
+            } else {
+                stopOnTheGo(true);
             }
         }
-    };
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        logDebug("onStartCommand called");
-
-        if (intent == null) {
-            stopSelf();
-            return START_NOT_STICKY;
-        }
-
         final String action = intent.getAction();
 
         if (action != null && !action.isEmpty()) {
-            logDebug("Action: " + action);
             if (action.equals(ACTION_START)) {
                 startOnTheGo();
             } else if (action.equals(ACTION_STOP)) {
@@ -145,29 +140,29 @@ public class OnTheGoService extends Service {
                 new OnTheGoDialog(this).show();
             }
         } else {
-            logDebug("Action is NULL or EMPTY!");
             stopSelf();
         }
 
-        return START_NOT_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     private void startOnTheGo() {
         if (mNotificationManager != null) {
-            logDebug("Starting while active, stopping.");
             stopOnTheGo(false);
             return;
         }
 
         resetViews();
-        registerReceivers();
+        registerAlphaReceiver();
         setupViews(false);
+        final SettingsObserver mObserver = new SettingsObserver(mHandler);
+        mObserver.observe();
 
         createNotification(NOTIFICATION_STARTED);
     }
 
     private void stopOnTheGo(boolean shouldRestart) {
-        unregisterReceivers();
+        unregisterAlphaReceiver();
         resetViews();
 
         // Cancel notification
@@ -186,15 +181,13 @@ public class OnTheGoService extends Service {
     private void restartOnTheGo() {
         resetViews();
         mHandler.removeCallbacks(mRestartRunnable);
-        mHandler.postDelayed(mRestartRunnable, 750);
+        mHandler.postDelayed(mRestartRunnable, 500);
     }
 
     private final Runnable mRestartRunnable = new Runnable() {
         @Override
         public void run() {
-            synchronized (mRestartObject) {
-                setupViews(true);
-            }
+            setupViews(true);
         }
     };
 
@@ -215,8 +208,12 @@ public class OnTheGoService extends Service {
         }
     }
 
-    private void getCameraInstance(int type) throws RuntimeException, IOException {
-        releaseCamera();
+    private void getCameraInstance(int type) throws RuntimeException {
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
 
         switch (type) {
             // Get hold of the back facing camera
@@ -239,21 +236,30 @@ public class OnTheGoService extends Service {
         }
     }
 
-    private void setupViews(final boolean isRestarting) {
-        logDebug("Setup Views, restarting: " + (isRestarting ? "true" : "false"));
-
+    private void setupViews(boolean isRestarting) {
         final int cameraType = Settings.System.getInt(getContentResolver(),
                 Settings.System.ON_THE_GO_CAMERA,
                 0);
-
         try {
             getCameraInstance(cameraType);
-        } catch (Exception exc) {
+        } catch (RuntimeException exc) {
             // Well, you cant have all in this life..
-            logDebug("Exception: " + exc.getMessage());
-            createNotification(NOTIFICATION_ERROR);
-            stopOnTheGo(true);
+            if (!isRestarting) {
+                createNotification(NOTIFICATION_ERROR);
+                stopOnTheGo(true);
+            }
         }
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                PixelFormat.TRANSLUCENT
+        );
 
         final TextureView mTextureView = new TextureView(this);
         mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -265,8 +271,8 @@ public class OnTheGoService extends Service {
                         mCamera.setPreviewTexture(surfaceTexture);
                         mCamera.startPreview();
                     }
-                } catch (IOException io) {
-                    logDebug("IOException: " + io.getMessage());
+                } catch (IOException ignored) {
+                    // ignored
                 }
             }
 
@@ -276,7 +282,11 @@ public class OnTheGoService extends Service {
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                releaseCamera();
+                if (mCamera != null) {
+                    mCamera.stopPreview();
+                    mCamera.release();
+                    mCamera = null;
+                }
                 return true;
             }
 
@@ -292,36 +302,17 @@ public class OnTheGoService extends Service {
         mOverlay.addView(mTextureView);
 
         final WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION |
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                PixelFormat.TRANSLUCENT
-        );
         wm.addView(mOverlay, params);
 
         toggleOnTheGoAlpha();
     }
 
     private void resetViews() {
-        releaseCamera();
         final WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         if (mOverlay != null) {
             mOverlay.removeAllViews();
             wm.removeView(mOverlay);
             mOverlay = null;
-        }
-    }
-
-    private void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
         }
     }
 
@@ -375,11 +366,5 @@ public class OnTheGoService extends Service {
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(ONTHEGO_NOTIFICATION_ID, notif);
-    }
-
-    private void logDebug(String msg) {
-        if (DEBUG) {
-            Log.e(TAG, msg);
-        }
     }
 }
