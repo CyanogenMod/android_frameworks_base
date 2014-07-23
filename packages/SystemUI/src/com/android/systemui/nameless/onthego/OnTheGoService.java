@@ -61,6 +61,7 @@ public class OnTheGoService extends Service {
     private FrameLayout         mOverlay;
     private Camera              mCamera;
     private NotificationManager mNotificationManager;
+    private SettingsObserver    mObserver;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -143,7 +144,7 @@ public class OnTheGoService extends Service {
         resetViews();
         registerAlphaReceiver();
         setupViews();
-        final SettingsObserver mObserver = new SettingsObserver(mHandler);
+        mObserver = new SettingsObserver(mHandler);
         mObserver.observe();
 
         // Display a notification
@@ -182,10 +183,8 @@ public class OnTheGoService extends Service {
         resetViews();
 
         // Cancel notification
-        if (mNotificationManager != null) {
-            mNotificationManager.cancel(ONTHEGO_NOTIFICATION_ID);
-            mNotificationManager = null;
-        }
+        mNotificationManager.cancel(ONTHEGO_NOTIFICATION_ID);
+        mNotificationManager = null;
         stopSelf();
     }
 
@@ -285,16 +284,13 @@ public class OnTheGoService extends Service {
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                if (mCamera != null) {
-                    mCamera.stopPreview();
-                    mCamera.release();
-                    mCamera = null;
-                }
                 return true;
             }
 
             @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) { }
+            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+
+            }
         });
 
         mOverlay = new FrameLayout(this);
@@ -312,10 +308,19 @@ public class OnTheGoService extends Service {
 
     private void resetViews() {
         final WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        if (mOverlay != null) {
-            mOverlay.removeAllViews();
-            wm.removeView(mOverlay);
-            mOverlay = null;
+        try {
+            if (mCamera != null) {
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+            }
+            if (mOverlay != null) {
+                mOverlay.removeAllViews();
+                wm.removeView(mOverlay);
+                mOverlay = null;
+            }
+        } catch (Exception ignored) {
+            // ignored
         }
     }
 }
