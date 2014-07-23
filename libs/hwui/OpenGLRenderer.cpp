@@ -2255,7 +2255,7 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     float right = FLT_MIN;
     float bottom = FLT_MIN;
 
-    const uint32_t count = meshWidth * meshHeight * 6;
+    const uint32_t count = meshWidth * meshHeight * 2 + meshHeight * 4;
 
     ColorTextureVertex* mesh=new ColorTextureVertex[count];
     ColorTextureVertex* vertex = mesh;
@@ -2272,39 +2272,54 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     Texture* texture = mCaches.assetAtlas.getEntryTexture(bitmap);
     const UvMapper& mapper(getMapper(texture));
 
-    for (int32_t y = 0; y < meshHeight; y++) {
-        for (int32_t x = 0; x < meshWidth; x++) {
-            uint32_t i = (y * (meshWidth + 1) + x) * 2;
+    int deltaWidth = (meshWidth + 1) * 2;
+    for (int y = 0; y < meshHeight; y++) {
+        // init bx, by, cx, cy, ax, ay, dx, dy
+        int bx = y * deltaWidth;
+        int by = bx + 1;
+        int cx = by + 1;
+        int cy = cx + 1;
+        int ax = bx + deltaWidth;
+        int ay = ax + 1;
+        int dx = ay + 1;
+        int dy = dx + 1;
 
-            float u1 = float(x) / meshWidth;
-            float u2 = float(x + 1) / meshWidth;
-            float v1 = float(y) / meshHeight;
-            float v2 = float(y + 1) / meshHeight;
+        // init u1, v1, u2, v2
+        float u1 = 0.0f;
+        float u2 = 0.0f;
+        float v1 = float(y) / meshHeight;
+        float v2 = float(y + 1) / meshHeight;
+        mapper.map(u1, v1, u2, v2);
 
-            mapper.map(u1, v1, u2, v2);
+        // add an extra vertex at the start of row
+        ColorTextureVertex::set(vertex++, vertices[bx], vertices[by], u1, v1, colors[bx / 2]);
+        ColorTextureVertex::set(vertex++, vertices[bx], vertices[by], u1, v1, colors[bx / 2]);
+        ColorTextureVertex::set(vertex++, vertices[ax], vertices[ay], u1, v2, colors[ax / 2]);
+        for (int x = 0; x < meshWidth; x++) {
+            // update u2
+            u2 = float(x + 1) / meshWidth;
+            mapper.mapU(u2);
 
-            int ax = i + (meshWidth + 1) * 2;
-            int ay = ax + 1;
-            int bx = i;
-            int by = bx + 1;
-            int cx = i + 2;
-            int cy = cx + 1;
-            int dx = i + (meshWidth + 1) * 2 + 2;
-            int dy = dx + 1;
-
-            ColorTextureVertex::set(vertex++, vertices[dx], vertices[dy], u2, v2, colors[dx / 2]);
-            ColorTextureVertex::set(vertex++, vertices[ax], vertices[ay], u1, v2, colors[ax / 2]);
-            ColorTextureVertex::set(vertex++, vertices[bx], vertices[by], u1, v1, colors[bx / 2]);
-
-            ColorTextureVertex::set(vertex++, vertices[dx], vertices[dy], u2, v2, colors[dx / 2]);
-            ColorTextureVertex::set(vertex++, vertices[bx], vertices[by], u1, v1, colors[bx / 2]);
             ColorTextureVertex::set(vertex++, vertices[cx], vertices[cy], u2, v1, colors[cx / 2]);
+            ColorTextureVertex::set(vertex++, vertices[dx], vertices[dy], u2, v2, colors[dx / 2]);
 
             left = fminf(left, fminf(vertices[ax], fminf(vertices[bx], vertices[cx])));
             top = fminf(top, fminf(vertices[ay], fminf(vertices[by], vertices[cy])));
             right = fmaxf(right, fmaxf(vertices[ax], fmaxf(vertices[bx], vertices[cx])));
             bottom = fmaxf(bottom, fmaxf(vertices[ay], fmaxf(vertices[by], vertices[cy])));
+
+            // move right, update by, cx, cy, ax, ay, dx, dy
+            bx = cx;
+            by = cy;
+            ax = dx;
+            ay = dy;
+            cx = by + 1;
+            cy = cx + 1;
+            dx = ay + 1;
+            dy = dx + 1;
         }
+        // add an extra vertex at the end of row
+        ColorTextureVertex::set(vertex++, vertices[ax], vertices[ay], u2, v2, colors[ax / 2]);
     }
 
     if (quickReject(left, top, right, bottom)) {
@@ -2349,7 +2364,7 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     setupDrawColorFilterUniforms();
     setupDrawMesh(&mesh[0].position[0], &mesh[0].texture[0], &mesh[0].color[0]);
 
-    glDrawArrays(GL_TRIANGLES, 0, count);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, count);
 
     int slot = mCaches.currentProgram->getAttrib("colors");
     if (slot >= 0) {
