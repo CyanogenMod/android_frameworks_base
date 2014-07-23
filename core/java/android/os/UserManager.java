@@ -150,12 +150,11 @@ public class UserManager {
 
     private static UserManager sInstance = null;
 
+    private static Object padlock = new Object();
+
     /** @hide */
     public synchronized static UserManager get(Context context) {
-        if (sInstance == null) {
-            sInstance = (UserManager) context.getSystemService(Context.USER_SERVICE);
-        }
-        return sInstance;
+        return (UserManager) context.getSystemService(Context.USER_SERVICE);
     }
 
     /** @hide */
@@ -165,16 +164,13 @@ public class UserManager {
 
     /** @hide */
     public UserManager(Context context, IUserManager service) {
-        if (service != null)
-            mService = service;
-        else if (sInstance.mService != null)
-            mService = sInstance.mService;
-        else
-            mService = null;
-
+        mService = service;
         mContext = context;
-        if (sInstance == null)
-            sInstance = this;
+        if (service != null) {
+            synchronized(padlock) {
+                sInstance = this;
+            }
+        }
     }
 
     /**
@@ -573,9 +569,11 @@ public class UserManager {
      */
     public static int getMaxSupportedUsers() {
         // check for forced multi-user
-        if (sInstance != null && Settings.System.getIntForUser(sInstance.mContext.getContentResolver(),
-                Settings.System.ALLOW_MULTIUSER, 0, UserHandle.USER_OWNER) == 1) {
-            return 3;
+        synchronized(padlock) {
+            if (sInstance != null && Settings.System.getIntForUser(sInstance.mContext.getContentResolver(),
+                    Settings.System.ALLOW_MULTIUSER, 0, UserHandle.USER_OWNER) == 1) {
+                return 3;
+            }
         }
 
         // Don't allow multiple users on certain builds
