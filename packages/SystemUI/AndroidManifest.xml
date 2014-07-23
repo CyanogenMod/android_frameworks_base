@@ -97,6 +97,9 @@
     <!-- Wifi Display -->
     <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
 
+    <!-- WallpaperManager -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"

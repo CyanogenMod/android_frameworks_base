@@ -47,7 +47,9 @@ import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -518,15 +520,31 @@ public class ThemeUtils {
 
     public static String getLockscreenWallpaperPath(AssetManager assetManager) throws IOException {
         String[] assets = assetManager.list("lockscreen");
-        if (assets == null || assets.length == 0) return null;
-
-        return "lockscreen/" + assets[0];
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "lockscreen/" + asset;
     }
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {
         String[] assets = assetManager.list("wallpapers");
-        if (assets == null || assets.length == 0) return null;
-        return "wallpapers/" + assets[0];
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "wallpapers/" + asset;
+    }
+
+    // Returns the first non-empty asset name. Empty assets can occur if the APK is built
+    // with folders included as zip entries in the APK. Searching for files inside "folderName" via
+    // assetManager.list("folderName") can cause these entries to be included as empty strings.
+    private static String getFirstNonEmptyAsset(String[] assets) {
+        if (assets == null) return null;
+        String filename = null;
+        for(String asset : assets) {
+            if (!asset.isEmpty()) {
+                filename = asset;
+                break;
+            }
+        }
+        return filename;
     }
 
     public static String getDefaultThemePackageName(Context context) {
@@ -601,5 +619,53 @@ public class ThemeUtils {
             }
         }
         return supportedComponents;
+    }
+
+    /**
+     * Get the components from the default theme.  If the default theme is not HOLO then any
+     * components that are not in the default theme will come from HOLO to create a complete
+     * component map.
+     * @param context
+     * @return
+     */
+    public static Map<String, String> getDefaultComponents(Context context) {
+        String defaultThemePkg = getDefaultThemePackageName(context);
+        List<String> defaultComponents = null;
+        List<String> holoComponents = getSupportedComponents(context, HOLO_DEFAULT);
+        if (!HOLO_DEFAULT.equals(defaultThemePkg)) {
+            defaultComponents = getSupportedComponents(context, defaultThemePkg);
+        }
+
+        Map<String, String> componentMap = new HashMap<String, String>(holoComponents.size());
+        if (defaultComponents != null) {
+            for (String component : defaultComponents) {
+                componentMap.put(component, defaultThemePkg);
+            }
+        }
+        for (String component : holoComponents) {
+            if (!componentMap.containsKey(component)) {
+                componentMap.put(component, HOLO_DEFAULT);
+            }
+        }
+
+        return componentMap;
+    }
+
+    /**
+     * Takes an existing component map and adds any missing components from the default
+     * map of components.
+     * @param context
+     * @param componentMap An existing component map
+     */
+    public static void completeComponentMap(Context context,
+            Map<String, String> componentMap) {
+        if (componentMap == null) return;
+
+        Map<String, String> defaultComponents = getDefaultComponents(context);
+        for (String component : defaultComponents.keySet()) {
+            if (!componentMap.containsKey(component)) {
+                componentMap.put(component, defaultComponents.get(component));
+            }
+        }
     }
 }
