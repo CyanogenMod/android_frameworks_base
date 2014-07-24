@@ -65,8 +65,8 @@ public class Hover {
     private static final int INDEX_CURRENT = 0; // first array object
     private static final int INDEX_NEXT = 1; // second array object
     private static final int INSTANT_FADE_OUT_DELAY = 0; // 0 seconds
-    private static final int MICRO_FADE_OUT_DELAY = 1250; // 1.25 seconds, enough
-    //private static final int LONG_FADE_OUT_DELAY = 5000; // 5 seconds, default show time
+    //private static final int MICRO_FADE_OUT_DELAY = 1250; // 1.25 seconds, enough
+    private static final int LONG_FADE_OUT_DELAY = 5000; // 5 seconds, default show time
     private static final int SHORT_FADE_OUT_DELAY = 2500; // 2.5 seconds to show next one
 
     private static final int OVERLAY_NOTIFICATION_OFFSET = 125; // special purpose
@@ -366,14 +366,19 @@ public class Hover {
                 Settings.System.HOVER_EXCLUDE_LOW_PRIORITY, 0) != 0;
     }
 
-    public boolean excludeFromInsecureLockScreen() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HOVER_EXCLUDE_FROM_INSECURE_LOCK_SCREEN, 0) != 0;
-    }
-
     public int longFadeOutDelay() {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.HOVER_LONG_FADE_OUT_DELAY, 5000);
+    }
+
+    public int microFadeOutDelay() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HOVER_MICRO_FADE_OUT_DELAY, 1250);
+    }
+
+    public boolean excludeFromInsecureLockScreen() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HOVER_EXCLUDE_FROM_INSECURE_LOCK_SCREEN, 0) != 0;
     }
 
     public boolean isInCallUINotification(Entry entry) {
@@ -614,12 +619,21 @@ public class Hover {
         startHideCountdown(longFadeOutDelay());
     }
 
+    // Since we have HOVER custom notif timeout
+    // this method will be used in HoverLayout.java
+    // to set 5 seconds as the maximun hide time (as stock HOVER does)
+    // or the time will be always set equals our longFadeOutDelay()
+    // 3, 5, 7, 10 or 15 seconds (some are too much time to wait until HOVER hide)
+    public void startFiveSecHideCountdown() {
+        startHideCountdown(LONG_FADE_OUT_DELAY);
+    }
+
     public void startShortHideCountdown() {
         startHideCountdown(SHORT_FADE_OUT_DELAY);
     }
 
     public void startMicroHideCountdown() {
-        startHideCountdown(MICRO_FADE_OUT_DELAY);
+        startHideCountdown(microFadeOutDelay());
     }
 
     public void startLongOverrideCountdown() {
@@ -780,7 +794,7 @@ public class Hover {
         if (!mShowing) {
             showCurrentNotification();
         } else if (hasMultipleNotifications()) { // proced
-            startOverrideCountdown(expanded ? longFadeOutDelay() : SHORT_FADE_OUT_DELAY);
+            startOverrideCountdown(expanded ? LONG_FADE_OUT_DELAY : SHORT_FADE_OUT_DELAY);
         } else if (!mHiding) {
             startLongHideCountdown();
         }

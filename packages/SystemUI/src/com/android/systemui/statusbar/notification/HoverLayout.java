@@ -109,8 +109,17 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
                 if (!mTouchOutside && !mHover.isAnimatingVisibility()) {
                     mHover.clearHandlerCallbacks();
                     if (mExpanded) {
-                        // 5 seconds if is expanded, user has time to pause gaming
-                        mHover.startLongHideCountdown();
+                        // Check if normal micro fade out delay is the one
+                        if (mHover.microFadeOutDelay() == 1250) {
+                            // 5 seconds if is expanded, user has time to pause gaming
+                            // See explanation in Hover.java startFiveSecHideCountdown()
+                            mHover.startFiveSecHideCountdown();
+                        // Check if instant micro fade out delay is the one
+                        } else if (mHover.microFadeOutDelay() == 200) {
+                            // Normal or instant micro fade out delay will be seted
+                            // depends on Hover.java class
+                            mHover.startMicroHideCountdown();
+                        }
                     } else {
                         // 1.25 if not expanded, user ignores it
                         mHover.startMicroHideCountdown();
