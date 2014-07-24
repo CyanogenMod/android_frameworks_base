@@ -52,6 +52,7 @@ public class StorageVolume implements Parcelable {
     private String mUuid;
     private String mUserLabel;
     private String mState;
+    private boolean mIsFormatting;
 
     // StorageVolume extra for ACTION_MEDIA_REMOVED, ACTION_MEDIA_UNMOUNTED, ACTION_MEDIA_CHECKING,
     // ACTION_MEDIA_NOFS, ACTION_MEDIA_MOUNTED, ACTION_MEDIA_SHARED, ACTION_MEDIA_UNSHARED,
@@ -236,6 +237,14 @@ public class StorageVolume implements Parcelable {
 
     public String getState() {
         return mState;
+    }
+
+    public void setIsFormatting(boolean isFormatting) {
+        mIsFormatting = isFormatting;
+    }
+
+    public boolean getIsFormatting() {
+        return mIsFormatting;
     }
 
     @Override
