@@ -28,8 +28,8 @@
   <string name="profileGroupEmail">Email</string>
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">هی تر</string>
-  <string name="global_action_screenshot">وێنەی شاشە</string>
-  <string name="global_actions_toggle_expanded_desktop_mode">بڵاوکردنەوەی دیسکتۆپ</string>
+  <string name="global_action_screenshot">وێنەگرتنی ڕوونما</string>
+  <string name="global_actions_toggle_expanded_desktop_mode">بڵاوچالاکردنیی دیسکتۆپ</string>
   <string name="global_actions_expanded_desktop_mode_on_status">چالاکرا</string>
   <string name="global_actions_expanded_desktop_mode_off_status">لەکارخرا</string>
   <string name="reboot_system" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ</string>
@@ -43,7 +43,7 @@
   <string name="reboot_progress">سه‌رله‌نوێ خستنه‌ڕێ\u2026</string>
   <string name="reboot_confirm" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ دەبێت.</string>
   <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ خستنه‌ڕی.</string>
-  <string name="permlab_preventpower">بەرگری لە کلیلی پاوەر</string>
+  <string name="permlab_preventpower">بەرگری لە کلیلی هێز</string>
   <string name="permdesc_preventpower">ڕێگە دان بە بەرنامەکە</string>
   <string name="permlab_sendMockSms">ناردنی نامە</string>
   <string name="permdesc_sendMockSms">ڕێگە دان بە بەرنامەکە بۆ ناردنی نامە.ئەمە ڕێگە ئەدات بە ناردنی نامە بۆ ئەو بەرنامانەی کە باوەڕپێکراون.ئەوەی خراپ بن پێ ئەچێت بینێرێت.</string>
@@ -81,10 +81,10 @@
   <string name="permdesc_writeThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ هێنانی باکگراوه‌ندی نوێ و
  گۆڕینی باکگراوه‌ندێک که‌ خۆت لات په‌سه‌نده‌.</string>
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
-  <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی شاشەی دیوارپۆش.</string>
+  <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
   <string name="permlab_useHardwareFramework">به‌کارهێنانی هاردوێر بۆ کاری چوارچێوه‌</string>
   <string name="permdesc_useHardwareFramework">ڕێگه‌دان به‌ به‌رنامه‌یه‌ک بۆ ده‌سته‌ڵاتی چوارچێوه‌ کاری CM.</string>
-  <string name="immersive_mode_confirmation_bottom">ساوین بەرەو خوارەوە بۆ دەرچوون لە پڕ شاشە.</string>
+  <string name="immersive_mode_confirmation_bottom">بیسووە بەرەو خوارەوە بۆ دەرچوون لە پڕ ڕوونما.</string>
   <string name="app_ops_access_camera">ڕێگەدان بەکامێرا</string>
   <string name="app_ops_access_location">ڕێگەی ناوچەی</string>
   <string name="app_ops_access_notifications">تێبنینیەکانت بخوێنەوە</string>
@@ -92,11 +92,11 @@
   <string name="app_ops_draw_on_top">ڕاکێشان لەسەرەوە</string>
   <string name="app_ops_keep_device_awake">دانانی ئامێرەکە بە کراوەی</string>
   <string name="app_ops_make_phone_call">تەلەفۆن بکە</string>
-  <string name="app_ops_modify_calendar">تازەکردنەوەی ڕۆژمێرەکەت</string>
-  <string name="app_ops_modify_call_log">تازەکردنەوەی تۆماری تەلەفۆن</string>
+  <string name="app_ops_modify_calendar">تازەچالاکردنیی ڕۆژمێرەکەت</string>
+  <string name="app_ops_modify_call_log">تازەچالاکردنیی تۆماری تەلەفۆن</string>
   <string name="app_ops_modify_clipboard">سڕینەوەی وێنە</string>
-  <string name="app_ops_modify_contacts">تازەکردنەوەی ناوەکانت</string>
-  <string name="app_ops_modify_settings">تازەکردنەوەی ڕێکخستنی سیستەم</string>
+  <string name="app_ops_modify_contacts">تازەچالاکردنیی ناوەکانت</string>
+  <string name="app_ops_modify_settings">تازەچالاکردنیی ڕێکخستنی سیستەم</string>
   <string name="app_ops_play_audio">لێدانی دەنگ</string>
   <string name="app_ops_post_notification">ناردنی تێبینی</string>
   <string name="app_ops_read_calendar">خوێندنەوەی ڕۆژمێر</string>
@@ -109,7 +109,7 @@
   <string name="app_ops_record_audio">تۆمارکردنی دەنگ</string>
   <string name="app_ops_send_mms">ناردنی نامەی MMS</string>
   <string name="app_ops_send_sms">ناردنی نامەی SMS</string>
-  <string name="app_ops_start_at_bootup">دەستپێکردنی کردنەوەی پاوەر</string>
+  <string name="app_ops_start_at_bootup">دەستپێکردنی چالاکردنیی هێز</string>
   <string name="app_ops_toggle_bluetooth">گۆڕینی بلوتوس</string>
   <string name="app_ops_toggle_mobile_data">گۆڕینی داتای مۆبایل</string>
   <string name="app_ops_toggle_wifi">گۆڕینی WI-FI</string>

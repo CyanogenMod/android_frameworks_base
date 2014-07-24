@@ -84,5 +84,5 @@
   <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
   <string name="screenshot_delete_action">Supprimer</string>
   <string name="screenshot_delete_confirmation">Capture d\'écran supprimée.</string>
-  <string name="accessibility_desc_add_quick_settings">Ajouter des réglages rapides.</string>
+  <string name="accessibility_desc_add_quick_settings">Ajouter des raccourcis.</string>
 </resources>
