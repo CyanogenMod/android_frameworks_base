@@ -20,7 +20,7 @@
   <string name="accessibility_quick_settings_vibration">진동 <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_dpad_left">커서 왼쪽</string>
   <string name="accessibility_dpad_right">커서 오른쪽</string>
-  <string name="dessert_case_settings_cm_title">CM 마스코트를 표시</string>
+  <string name="dessert_case_settings_cm_title">CM 마스코트 표시</string>
   <string name="dessert_case_settings_cm_summary">Android의 디저트 화면 보호기에 CM의 마스코트도 같이 표시</string>
   <string name="quick_settings_profile_label">프로필</string>
   <string name="powerwidget_screen_timeout_toast">화면 시간 제한이 %1$d %2$s으로 설정되었습니다</string>

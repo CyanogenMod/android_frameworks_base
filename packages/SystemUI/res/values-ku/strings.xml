@@ -19,7 +19,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_label">سیستەم UI</string>
-  <string name="status_bar_clear_all_button">پاکردنەوە</string>
+  <string name="status_bar_clear_all_button">پاچالاکردن</string>
   <string name="status_bar_recent_remove_item_title">لە لیستەکە بیسڕەوە</string>
   <string name="status_bar_recent_inspect_item_title">زانیاری دەربارەی بەرنامە</string>
   <string name="status_bar_no_recent_apps">بەرنامەی تازە نیە</string>
@@ -44,7 +44,7 @@
   <string name="status_bar_use_physical_keyboard">تەختەکلیلی فیزیکی</string>
   <string name="usb_device_permission_prompt">ڕێگەدان بە بەرنامەکە <xliff:g id="application">%1$s</xliff:g> بۆ بەکارهێنانیUSB?</string>
   <string name="usb_accessory_permission_prompt">ڕێگەدان بەبەرنامەکە <xliff:g id="application">%1$s</xliff:g> بەکارهێنانیUSB ?</string>
-  <string name="usb_device_confirm_prompt">کردنەوە <xliff:g id="activity">%1$s</xliff:g>کاتێک ئامێرەکە پەیوەندە بە USB?</string>
+  <string name="usb_device_confirm_prompt">چالاکردن <xliff:g id="activity">%1$s</xliff:g>کاتێک ئامێرەکە پەیوەندە بە USB?</string>
   <string name="usb_accessory_confirm_prompt">کراوە <xliff:g id="activity">%1$s</xliff:g> کاتێک ئەو USB yیە پەیوەندکراوە?</string>
   <string name="usb_accessory_uri_prompt">هیچ بەرنامەیەک دانەمەزراوە ئیش بکات لەسەر USB  زیاتر فێربە دەربارەی <xliff:g id="url">%1$s</xliff:g></string>
   <string name="title_usb_accessory">USB</string>
@@ -111,8 +111,8 @@
   <string name="accessibility_two_bars">دوو شریت.</string>
   <string name="accessibility_three_bars">سێ شریت.</string>
   <string name="accessibility_signal_full">پڕ نیشانە.</string>
-  <string name="accessibility_desc_on">کردنەوە.</string>
-  <string name="accessibility_desc_off">کوژانەوە.</string>
+  <string name="accessibility_desc_on">چالاکردن.</string>
+  <string name="accessibility_desc_off">ناچالاکردن.</string>
   <string name="accessibility_desc_connected">پەیوەندکرا.</string>
   <string name="accessibility_data_connection_gprs">GPRS</string>
   <string name="accessibility_data_connection_1x">1 X</string>
@@ -190,7 +190,7 @@
   <string name="quick_settings_wifi_label">Wi-Fi</string>
   <string name="quick_settings_wifi_not_connected">نەبەستراوە</string>
   <string name="quick_settings_wifi_no_network">تۆڕ نیە</string>
-  <string name="quick_settings_wifi_off_label">Wi-Fi کوژانەوە</string>
+  <string name="quick_settings_wifi_off_label">Wi-Fi ناچالاکردن</string>
   <string name="quick_settings_remote_display_no_connection_label">پەخشی شاشە</string>
   <string name="quick_settings_brightness_dialog_title">ڕوناکی</string>
   <string name="quick_settings_brightness_dialog_auto_brightness_label">خۆکارانە</string>

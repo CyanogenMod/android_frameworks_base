@@ -64,7 +64,7 @@
   <string name="quick_settings_heads_up_on">Felugró értesítések</string>
   <string name="quick_settings_heads_up_off">Felugró értesítések ki</string>
   <string name="location_mode_high_accuracy_title">Nagy pontosság</string>
-  <string name="location_mode_battery_saving_title">Energiatakarékosság</string>
+  <string name="location_mode_battery_saving_title">Energiatakarékos</string>
   <string name="location_mode_sensors_only_title">Csak készülék</string>
   <string name="location_mode_location_off_title">Helymeghatározás kikapcsolása</string>
   <string name="quick_settings_expanded_desktop">Kiterjesztett</string>
