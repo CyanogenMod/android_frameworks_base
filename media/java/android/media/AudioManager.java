@@ -41,12 +41,14 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -65,7 +67,7 @@ public class AudioManager {
     private final Binder mToken = new Binder();
     private static String TAG = "AudioManager";
     AudioPortEventHandler mAudioPortEventHandler;
-
+    private static ArrayList<MediaPlayerInfo> mMediaPlayers;
     /**
      * Broadcast intent, a hint for applications that audio is about to become
      * 'noisy' due to a change in audio outputs. For example, this intent may
@@ -326,6 +328,32 @@ public class AudioManager {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_USB_AUDIO_DEVICE_PLUG =
             "android.media.action.USB_AUDIO_DEVICE_PLUG";
+
+    /**
+     * @hide Broadcast intent when RemoteControlClient list is updated.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String RCC_CHANGED_ACTION =
+                "org.codeaurora.bluetooth.RCC_CHANGED_ACTION";
+
+    /**
+     * @hide Used for sharing the calling package name
+     */
+    public static final String EXTRA_CALLING_PACKAGE_NAME =
+            "org.codeaurora.bluetooth.EXTRA_CALLING_PACKAGE_NAME";
+
+    /**
+     * @hide Used for sharing the focus changed value
+     */
+    public static final String EXTRA_FOCUS_CHANGED_VALUE =
+            "org.codeaurora.bluetooth.EXTRA_FOCUS_CHANGED_VALUE";
+
+    /**
+     * @hide Used for sharing the availability changed value
+     */
+    public static final String EXTRA_AVAILABLITY_CHANGED_VALUE =
+            "org.codeaurora.bluetooth.EXTRA_AVAILABLITY_CHANGED_VALUE";
+
 
     /** The audio stream for phone calls */
     public static final int STREAM_VOICE_CALL = AudioSystem.STREAM_VOICE_CALL;
@@ -591,6 +619,8 @@ public class AudioManager {
         mAudioPortEventHandler = new AudioPortEventHandler(this);
         mUseFixedVolume = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
+        mMediaPlayers = new ArrayList<MediaPlayerInfo>(1);
+
     }
 
     private static IAudioService getService()
@@ -2375,6 +2405,25 @@ public class AudioManager {
 
     //====================================================================
     // Remote Control
+
+    private class MediaPlayerInfo {
+        private String mPackageName;
+        private boolean mIsfocussed;
+        public MediaPlayerInfo(String packageName, boolean isfocussed) {
+            mPackageName = packageName;
+            mIsfocussed = isfocussed;
+        }
+        public boolean isFocussed() {
+            return mIsfocussed;
+        }
+        public void setFocus(boolean focus) {
+            mIsfocussed = focus;
+        }
+        public String getPackageName() {
+            return mPackageName;
+        }
+    }
+
     /**
      * Register a component to be the sole receiver of MEDIA_BUTTON intents.
      * @param eventReceiver identifier of a {@link android.content.BroadcastReceiver}
@@ -2385,6 +2434,7 @@ public class AudioManager {
      */
     @Deprecated
     public void registerMediaButtonEventReceiver(ComponentName eventReceiver) {
+        boolean playerToAdd = true;
         if (eventReceiver == null) {
             return;
         }
@@ -2393,6 +2443,42 @@ public class AudioManager {
                     "receiver and context package names don't match");
             return;
         }
+        if (mMediaPlayers.size() > 0) {
+            final Iterator<MediaPlayerInfo> rccIterator = mMediaPlayers.iterator();
+            while (rccIterator.hasNext()) {
+                final MediaPlayerInfo player = rccIterator.next();
+                if (eventReceiver.getPackageName().equals(player.getPackageName())) {
+                    Log.e(TAG, "Player entry present, no need to add");
+                    playerToAdd = false;
+                    player.setFocus(true);
+                } else {
+                    Log.e(TAG, "Player: " + player.getPackageName()+ "Lost Focus");
+                    player.setFocus(false);
+                }
+            }
+        }
+        if (playerToAdd) {
+            Log.e(TAG, "Adding Player: " + eventReceiver.getPackageName() +
+                                                    " to available player list");
+            mMediaPlayers.add(new MediaPlayerInfo(eventReceiver.getPackageName(), true));
+        }
+        IAudioService service = getService();
+        Intent intent = new Intent(AudioManager.RCC_CHANGED_ACTION);
+        intent.putExtra(AudioManager.EXTRA_CALLING_PACKAGE_NAME,
+                                   eventReceiver.getPackageName());
+        intent.putExtra(AudioManager.EXTRA_FOCUS_CHANGED_VALUE, true);
+        intent.putExtra(AudioManager.EXTRA_AVAILABLITY_CHANGED_VALUE, true);
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            mContext.sendBroadcast(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "Error while updating focussed RCC change",e);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+        Log.v(TAG, "updating focussed RCC change to RCD: CallingPackageName:"
+                + eventReceiver.getPackageName());
+
         // construct a PendingIntent for the media button and register it
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.addFlags(mediaButtonIntent.FLAG_RECEIVER_FOREGROUND);
@@ -2528,10 +2614,36 @@ public class AudioManager {
      */
     @Deprecated
     public boolean registerRemoteController(RemoteController rctlr) {
+        Log.v(TAG, "registerRemoteController: size of Media player list: " +
+                                                                mMediaPlayers.size());
         if (rctlr == null) {
             return false;
         }
         rctlr.startListeningToSessions();
+        if (mMediaPlayers.size() > 0) {
+            Log.v(TAG, "Inform RemoteController regarding existing RCC entry");
+            final Iterator<MediaPlayerInfo> rccIterator = mMediaPlayers.iterator();
+            while (rccIterator.hasNext()) {
+                final MediaPlayerInfo player = rccIterator.next();
+                IAudioService service = getService();
+                Intent intent = new Intent(AudioManager.RCC_CHANGED_ACTION);
+                intent.putExtra(AudioManager.EXTRA_CALLING_PACKAGE_NAME,
+                                                    player.getPackageName());
+                intent.putExtra(AudioManager.EXTRA_FOCUS_CHANGED_VALUE, player.isFocussed());
+                intent.putExtra(AudioManager.EXTRA_AVAILABLITY_CHANGED_VALUE, true);
+                final long identity = Binder.clearCallingIdentity();
+                try {
+                    mContext.sendBroadcast(intent);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error while updating RCC change", e);
+                } finally {
+                    Binder.restoreCallingIdentity(identity);
+                }
+                Log.v(TAG, "updating RCC change: CallingPackageName:" + player.getPackageName());
+            }
+        } else {
+            Log.e(TAG, "No RCC entry present to update");
+        }
         return true;
     }
 
@@ -2700,6 +2812,52 @@ public class AudioManager {
         }
     }
 
+    /**
+     * @hide
+     * Request the user of a RemoteControlClient to play the requested item.
+     * @param generationId the RemoteControlClient generation counter for which this request is
+     *     issued.
+     * @param uid uid of the song to be played.
+     * @scope scope of the file system to use
+     */
+    public void setRemoteControlClientPlayItem(long uid, int scope) {
+        IAudioService service = getService();
+        try {
+            service.setRemoteControlClientPlayItem(uid, scope);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in setRemoteControlClientPlayItem(" +
+                                                    uid + ", " + scope + ")", e);
+        }
+    }
+
+    /**
+     * @hide
+     * Request the user of a RemoteControlClient to provide with the now playing list entries.
+     * @param generationId the RemoteControlClient generation counter for which this request is
+     *     issued.
+     */
+    public void getRemoteControlClientNowPlayingEntries() {
+        IAudioService service = getService();
+        try {
+            service.getRemoteControlClientNowPlayingEntries();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in getRemoteControlClientNowPlayingEntries(" + ")", e);
+        }
+    }
+
+    /**
+     * @hide
+     * Request the user of a RemoteControlClient to set the music player as current browsed player.
+     */
+    public void setRemoteControlClientBrowsedPlayer() {
+        Log.d(TAG, "setRemoteControlClientBrowsedPlayer: ");
+        IAudioService service = getService();
+        try {
+            service.setRemoteControlClientBrowsedPlayer();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in setRemoteControlClientBrowsedPlayer(" + ")", e);
+        }
+    }
 
     /**
      *  @hide

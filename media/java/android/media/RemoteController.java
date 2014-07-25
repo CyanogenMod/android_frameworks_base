@@ -205,6 +205,27 @@ import java.util.List;
          * @param metadataEditor the container of the new metadata.
          */
         public void onClientMetadataUpdate(MetadataEditor metadataEditor);
+
+        /**
+         * @hide
+         */
+        public void onClientFolderInfoBrowsedPlayer(String stringUri);
+
+        /**
+         * @hide
+         */
+        public void onClientUpdateNowPlayingEntries(long[] playList);
+
+        /**
+         * @hide
+         */
+        public void onClientNowPlayingContentChange();
+
+        /**
+         * @hide
+         */
+        public void onClientPlayItemResponse(boolean success);
+
     };
 
 
@@ -355,6 +376,7 @@ import java.util.List;
      * @throws IllegalArgumentException
      */
     public boolean seekTo(long timeMs) throws IllegalArgumentException {
+        Log.e(TAG, "seekTo() in RemoteController");
         if (!mEnabled) {
             Log.e(TAG, "Cannot use seekTo() from a disabled RemoteController");
             return false;
@@ -370,6 +392,69 @@ import java.util.List;
         return true;
     }
 
+    /**
+     * @hide
+     * Request the user of a RemoteControlClient to play the requested item.
+     * @param generationId the RemoteControlClient generation counter for which this request is
+     *     issued.
+     * @param uid uid of the song to be played.
+     * @scope scope of the file system to use
+     */
+    public void setRemoteControlClientPlayItem(long uid, int scope) {
+        Log.e(TAG, "setRemoteControlClientPlayItem()");
+        if (!mEnabled) {
+            Log.e(TAG, "Cannot use setRemoteControlClientPlayItem()" +
+                                            " from a disabled RemoteController");
+            return;
+        }
+        synchronized (mInfoLock) {
+            if (mCurrentSession != null) {
+                mCurrentSession.getTransportControls().setRemoteControlClientPlayItem(uid, scope);
+            }
+        }
+        return;
+    }
+
+    /**
+     * @hide
+     * Request the user of a RemoteControlClient to provide with the now playing list entries.
+     * @param generationId the RemoteControlClient generation counter for which this request is
+     *     issued.
+     */
+    public void getRemoteControlClientNowPlayingEntries() {
+        Log.e(TAG, "getRemoteControlClientNowPlayingEntries()");
+        if (!mEnabled) {
+            Log.e(TAG, "Cannot use getRemoteControlClientNowPlayingEntries()" +
+                                            " from a disabled RemoteController");
+            return;
+        }
+        synchronized (mInfoLock) {
+            if (mCurrentSession != null) {
+                mCurrentSession.getTransportControls().getRemoteControlClientNowPlayingEntries();
+            }
+        }
+        return;
+    }
+
+    /**
+     * @hide
+     * Request the user of a RemoteControlClient to set the music player as current browsed player.
+     * @param packageName package name of the targeted media player.
+     */
+    public void setRemoteControlClientBrowsedPlayer() {
+        Log.e(TAG, "setRemoteControlClientBrowsedPlayer()");
+        if (!mEnabled) {
+            Log.e(TAG, "Cannot use setRemoteControlClientBrowsedPlayer()" +
+                                            " from a disabled RemoteController");
+            return;
+        }
+        synchronized (mInfoLock) {
+            if (mCurrentSession != null) {
+                mCurrentSession.getTransportControls().setRemoteControlClientBrowsedPlayer();
+            }
+        }
+        return;
+    }
 
     /**
      * @hide
@@ -703,6 +788,30 @@ import java.util.List;
         @Override
         public void onMetadataChanged(MediaMetadata metadata) {
             onNewMediaMetadata(metadata);
+        }
+
+        @Override
+        public void onUpdateFolderInfoBrowsedPlayer(String stringUri) {
+            Log.d(TAG, "MediaControllerCallback: onUpdateFolderInfoBrowsedPlayer");
+            onFolderInfoBrowsedPlayer(stringUri);
+        }
+
+        @Override
+        public void onUpdateNowPlayingEntries(long[] playList) {
+            Log.d(TAG, "MediaControllerCallback: onUpdateNowPlayingEntries");
+            onNowPlayingEntriesUpdate(playList);
+        }
+
+        @Override
+        public void onUpdateNowPlayingContentChange() {
+            Log.d(TAG, "MediaControllerCallback: onUpdateNowPlayingContentChange");
+            onNowPlayingContentChange();
+        }
+
+        @Override
+        public void onPlayItemResponse(boolean success) {
+            Log.d(TAG, "MediaControllerCallback: onPlayItemResponse");
+            onSetPlayItemResponse(success);
         }
     }
 
@@ -1049,6 +1158,69 @@ import java.util.List;
         }
         if (l != null) {
             l.onClientMetadataUpdate(metadataEditor);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void onFolderInfoBrowsedPlayer(String stringUri) {
+        Log.d(TAG, "RemoteController: onFolderInfoBrowsedPlayer");
+        final OnClientUpdateListener l;
+
+        synchronized(mInfoLock) {
+            l = mOnClientUpdateListener;
+        }
+
+        if (l != null) {
+            l.onClientFolderInfoBrowsedPlayer(stringUri);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void onNowPlayingEntriesUpdate(long[] playList) {
+        Log.d(TAG, "RemoteController: onUpdateNowPlayingEntries");
+        final OnClientUpdateListener l;
+
+        synchronized(mInfoLock) {
+            l = mOnClientUpdateListener;
+        }
+        if (l != null) {
+            l.onClientUpdateNowPlayingEntries(playList);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void onNowPlayingContentChange() {
+        Log.d(TAG, "RemoteController: onNowPlayingContentChange");
+        final OnClientUpdateListener l;
+
+        synchronized(mInfoLock) {
+            l = mOnClientUpdateListener;
+        }
+
+        if (l != null) {
+            l.onClientNowPlayingContentChange();
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void onSetPlayItemResponse(boolean success) {
+        Log.d(TAG, "RemoteController: onPlayItemResponse");
+        final OnClientUpdateListener l;
+
+        synchronized(mInfoLock) {
+            l = mOnClientUpdateListener;
+        }
+
+        if (l != null) {
+            l.onClientPlayItemResponse(success);
         }
     }
 

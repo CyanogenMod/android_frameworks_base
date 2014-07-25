@@ -223,6 +223,26 @@ public class Media extends BaseCommand {
             System.out.println("onVolumeInfoChanged " + info);
         }
 
+        @Override
+        public void onPlayItemResponse(boolean success) throws RemoteException {
+            System.out.println("onPlayItemResponse ");
+        }
+
+        @Override
+        public void onUpdateNowPlayingEntries(long[] playList) throws RemoteException {
+            System.out.println("onUpdateNowPlayingEntries ");
+        }
+
+        @Override
+        public void onUpdateFolderInfoBrowsedPlayer(String stringUri) throws RemoteException {
+            System.out.println("onUpdateFolderInfoBrowsedPlayer ");
+        }
+
+        @Override
+        public void onUpdateNowPlayingContentChange() throws RemoteException {
+            System.out.println("onUpdateNowPlayingContentChange ");
+        }
+
         void printUsageMessage() {
             try {
                 System.out.println("V2Monitoring session " + mController.getTag()
