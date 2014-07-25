@@ -23,7 +23,7 @@
     xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@drawable/system_bar_background"
+    android:background="@drawable/navigation_bar_background"
     >
 
     <FrameLayout android:id="@+id/rot0"
