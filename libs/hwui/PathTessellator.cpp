@@ -54,6 +54,7 @@ namespace android {
 namespace uirenderer {
 
 #define THRESHOLD 0.5f
+#define THRESHOLD_MIN 0.0005f
 #define ROUND_CAP_THRESH 0.25f
 #define PI 3.1415926535897932f
 
@@ -1004,7 +1005,11 @@ void PathTessellator::recursiveQuadraticBezierVertices(
     float dy = by - ay;
     float d = (cx - bx) * dy - (cy - by) * dx;
 
-    if (d * d < THRESHOLD * THRESHOLD * (dx * dx * sqrInvScaleY + dy * dy * sqrInvScaleX)) {
+    // In some cases like the distance between the calculating point is very small, the recursion may not terminate.
+    // If the calculated dx and dy are 0, d is 0 too. Then the termination condition(d*d < TH*TH*(dx*dx*sq + dy*dy*sq))
+    // will never be met. Infinite recursion will cause stack-overflow.
+    // We added one more threshold to terminate the recursion when d is very small (possibly 0).
+    if (d * d < THRESHOLD * THRESHOLD * (dx * dx * sqrInvScaleY + dy * dy * sqrInvScaleX) || d < THRESHOLD_MIN) {
         // below thresh, draw line by adding endpoint
         pushToVector(outputVertices, bx, by);
     } else {
