@@ -497,9 +497,19 @@ public class IconPackHelper {
                 }
                 canvas.setDensity(bitmap.getDensity());
 
-                // Respect the original size of an icon
-                width = bitmap.getWidth();
-                height = bitmap.getHeight();
+                // If the original size of the icon isn't greater
+                // than twice the size of recommended large icons
+                // respect the original size of the icon
+                // otherwise enormous icons can easily create
+                // OOM situations.
+                if ((bitmap.getWidth() < (iconSize * 2))
+                        && (bitmap.getHeight() < (iconSize * 2))) {
+                    width = bitmap.getWidth();
+                    height = bitmap.getHeight();
+                } else {
+                    width = iconSize;
+                    height = iconSize;
+                }
             }
 
             if (width <= 0 || height <= 0) return null;
