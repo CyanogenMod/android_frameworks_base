@@ -19,11 +19,14 @@ package com.android.systemui.statusbar.phone;
 import android.app.StatusBarManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -105,6 +108,51 @@ public class PhoneStatusBarPolicy {
         }
     };
 
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_ENABLED),
+                    false, this, UserHandle.USER_ALL);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+            updateSettings();
+        }
+
+        private void updateSettings() {
+
+            // Setup quiet hours icon.
+            final int quietHoursMode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT);
+
+            final int drawableResource;
+            switch (quietHoursMode) {
+                case 4: // Quiet hours timer enabled and active - but waiting on requirements
+                    drawableResource = R.drawable.stat_sys_quiet_hours_waiting;
+                    break;
+                case 3: // Quiet hours timer enabled and active
+                    drawableResource = R.drawable.stat_sys_quiet_hours_timed_on;
+                    break;
+                case 2: // Quiet hours timer disabled and forced active
+                default:
+                    drawableResource = R.drawable.stat_sys_quiet_hours;
+                    break;
+
+            }
+            mService.setIcon("quiet_hours", drawableResource, 0, null);
+            mService.setIconVisibility("quiet_hours", quietHoursMode > 1);
+        }
+
+    }
+
     public PhoneStatusBarPolicy(Context context) {
         mContext = context;
         mService = (StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE);
@@ -157,6 +205,11 @@ public class PhoneStatusBarPolicy {
         mService.setIcon("volume", R.drawable.stat_sys_ringer_silent, 0, null);
         mService.setIconVisibility("volume", false);
         updateVolume();
+
+        // Listen to quiet hours changes and update accordingly the icon.
+        // NOTE: This is not controled anymore over broadcasts.
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe();
     }
 
     private final void updateAlarm(Intent intent) {

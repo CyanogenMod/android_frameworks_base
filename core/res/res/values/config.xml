@@ -43,6 +43,7 @@
        <item><xliff:g id="id">alarm_clock</xliff:g></item>
        <item><xliff:g id="id">secure</xliff:g></item>
        <item><xliff:g id="id">clock</xliff:g></item>
+       <item><xliff:g id="id">quiet_hours</xliff:g></item>
     </string-array>
 
     <!-- Flag indicating whether the surface flinger has limited
