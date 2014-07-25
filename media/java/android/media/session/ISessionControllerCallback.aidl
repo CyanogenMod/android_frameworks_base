@@ -36,4 +36,8 @@ oneway interface ISessionControllerCallback {
     void onQueueTitleChanged(CharSequence title);
     void onExtrasChanged(in Bundle extras);
     void onVolumeInfoChanged(in ParcelableVolumeInfo info);
+    void onPlayItemResponse(boolean success);
+    void onUpdateNowPlayingEntries(in long[] playList);
+    void onUpdateFolderInfoBrowsedPlayer(String stringUri);
+    void onUpdateNowPlayingContentChange();
 }

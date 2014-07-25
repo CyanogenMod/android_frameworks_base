@@ -69,7 +69,6 @@ public class AudioManager {
     private final boolean mUseFixedVolume;
     private static String TAG = "AudioManager";
     private static final AudioPortEventHandler sAudioPortEventHandler = new AudioPortEventHandler();
-
     /**
      * Broadcast intent, a hint for applications that audio is about to become
      * 'noisy' due to a change in audio outputs. For example, this intent may
@@ -311,6 +310,32 @@ public class AudioManager {
      * {@link android.content.Intent#getIntArrayExtra(String)} to retrieve the encoding values.
      */
     public static final String EXTRA_ENCODINGS = "android.media.extra.ENCODINGS";
+
+    /**
+     * @hide Broadcast intent when RemoteControlClient list is updated.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String RCC_CHANGED_ACTION =
+                "org.codeaurora.bluetooth.RCC_CHANGED_ACTION";
+
+    /**
+     * @hide Used for sharing the calling package name
+     */
+    public static final String EXTRA_CALLING_PACKAGE_NAME =
+            "org.codeaurora.bluetooth.EXTRA_CALLING_PACKAGE_NAME";
+
+    /**
+     * @hide Used for sharing the focus changed value
+     */
+    public static final String EXTRA_FOCUS_CHANGED_VALUE =
+            "org.codeaurora.bluetooth.EXTRA_FOCUS_CHANGED_VALUE";
+
+    /**
+     * @hide Used for sharing the availability changed value
+     */
+    public static final String EXTRA_AVAILABLITY_CHANGED_VALUE =
+            "org.codeaurora.bluetooth.EXTRA_AVAILABLITY_CHANGED_VALUE";
+
 
     /** The audio stream for phone calls */
     public static final int STREAM_VOICE_CALL = AudioSystem.STREAM_VOICE_CALL;
@@ -2504,6 +2529,7 @@ public class AudioManager {
 
     //====================================================================
     // Remote Control
+
     /**
      * Register a component to be the sole receiver of MEDIA_BUTTON intents.
      * @param eventReceiver identifier of a {@link android.content.BroadcastReceiver}
@@ -2522,6 +2548,7 @@ public class AudioManager {
                     "receiver and context package names don't match");
             return;
         }
+
         // construct a PendingIntent for the media button and register it
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         //     the associated intent will be handled by the component being registered
@@ -2530,6 +2557,7 @@ public class AudioManager {
                 0/*requestCode, ignored*/, mediaButtonIntent, 0/*flags*/);
         registerMediaButtonIntent(pi, eventReceiver);
     }
+
 
     /**
      * Register a component to be the sole receiver of MEDIA_BUTTON intents.  This is like
@@ -2660,6 +2688,13 @@ public class AudioManager {
             return false;
         }
         rctlr.startListeningToSessions();
+        IAudioService service = getService();
+        try {
+            service.updateRemoteControllerOnExistingMediaPlayers();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error in calling Audio service interface" +
+                "updateRemoteControllerOnExistingMediaPlayers() due to " + e);
+        }
         return true;
     }
 
@@ -2679,6 +2714,24 @@ public class AudioManager {
             return;
         }
         rctlr.stopListeningToSessions();
+    }
+
+    /**
+     * @hide
+     */
+    public void updateMediaPlayerList(String packageName, boolean toAdd) {
+        IAudioService service = getService();
+        try {
+            if (toAdd) {
+                Log.d(TAG, "updateMediaPlayerList: Add RCC " + packageName + " to List");
+                service.addMediaPlayerAndUpdateRemoteController(packageName);
+            } else {
+                Log.d(TAG, "updateMediaPlayerList: Remove RCC " + packageName + " from List");
+                service.removeMediaPlayerAndUpdateRemoteController(packageName);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Exception while executing updateMediaPlayerList: " + e);
+        }
     }
 
 
@@ -2733,7 +2786,6 @@ public class AudioManager {
             throw e.rethrowFromSystemServer();
         }
     }
-
 
     //====================================================================
     // Recording configuration
