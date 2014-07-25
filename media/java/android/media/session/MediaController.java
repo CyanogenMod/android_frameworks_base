@@ -63,7 +63,11 @@ public final class MediaController {
     private static final int MSG_UPDATE_QUEUE = 5;
     private static final int MSG_UPDATE_QUEUE_TITLE = 6;
     private static final int MSG_UPDATE_EXTRAS = 7;
-    private static final int MSG_DESTROYED = 8;
+    private static final int MSG_FOLDER_INFO_BROWSED_PLAYER = 8;
+    private static final int MSG_UPDATE_NOWPLAYING_ENTRIES = 9;
+    private static final int MSG_UPDATE_NOWPLAYING_CONTENT_CHANGE = 10;
+    private static final int MSG_PLAY_ITEM_RESPONSE = 11;
+    private static final int MSG_DESTROYED = 12;
 
     private final ISessionController mSessionBinder;
 
@@ -577,6 +581,31 @@ public final class MediaController {
          */
         public void onAudioInfoChanged(PlaybackInfo info) {
         }
+
+        /**
+         * @hide
+         */
+        public void onUpdateFolderInfoBrowsedPlayer(String stringUri) {
+        }
+
+        /**
+         * @hide
+         */
+        public void onUpdateNowPlayingEntries(long[] playList) {
+        }
+
+        /**
+         * @hide
+         */
+        public void onUpdateNowPlayingContentChange() {
+        }
+
+        /**
+         * @hide
+         */
+        public void onPlayItemResponse(boolean success) {
+        }
+
     }
 
     /**
@@ -683,10 +712,47 @@ public final class MediaController {
          * @param pos Position to move to, in milliseconds.
          */
         public void seekTo(long pos) {
+            Log.d(TAG, "seekTo in TransportControls");
             try {
                 mSessionBinder.seekTo(pos);
             } catch (RemoteException e) {
                 Log.wtf(TAG, "Error calling seekTo.", e);
+            }
+        }
+
+        /**
+         * @hide
+         */
+        public void setRemoteControlClientBrowsedPlayer() {
+            Log.d(TAG, "setRemoteControlClientBrowsedPlayer in TransportControls");
+            try {
+                mSessionBinder.setRemoteControlClientBrowsedPlayer();
+            } catch (RemoteException e) {
+                Log.wtf(TAG, "Error calling setRemoteControlClientBrowsedPlayer.", e);
+            }
+        }
+
+        /**
+         * @hide
+         */
+        public void setRemoteControlClientPlayItem(long uid, int scope) {
+            Log.d(TAG, "setRemoteControlClientPlayItem in TransportControls");
+            try {
+                mSessionBinder.setRemoteControlClientPlayItem(uid, scope);
+            } catch (RemoteException e) {
+                Log.wtf(TAG, "Error calling setRemoteControlClientPlayItem.", e);
+            }
+        }
+
+        /**
+         * @hide
+         */
+        public void getRemoteControlClientNowPlayingEntries() {
+            Log.d(TAG, "getRemoteControlClientNowPlayingEntries in TransportControls");
+            try {
+                mSessionBinder.getRemoteControlClientNowPlayingEntries();
+            } catch (RemoteException e) {
+                Log.wtf(TAG, "Error calling getRemoteControlClientNowPlayingEntries.", e);
             }
         }
 
@@ -952,6 +1018,42 @@ public final class MediaController {
             }
         }
 
+        @Override
+        public void onUpdateFolderInfoBrowsedPlayer(String stringUri) {
+            Log.d(TAG, "CallBackStub: onUpdateFolderInfoBrowsedPlayer");
+            MediaController controller = mController.get();
+            if (controller != null) {
+                controller.postMessage(MSG_FOLDER_INFO_BROWSED_PLAYER, stringUri, null);
+            }
+        }
+
+        @Override
+        public void onUpdateNowPlayingEntries(long[] playList) {
+            Log.d(TAG, "CallBackStub: onUpdateNowPlayingEntries");
+            MediaController controller = mController.get();
+            if (controller != null) {
+                controller.postMessage(MSG_UPDATE_NOWPLAYING_ENTRIES, playList, null);
+            }
+        }
+
+        @Override
+        public void onUpdateNowPlayingContentChange() {
+            Log.d(TAG, "CallBackStub: onUpdateNowPlayingContentChange");
+            MediaController controller = mController.get();
+            if (controller != null) {
+                controller.postMessage(MSG_UPDATE_NOWPLAYING_CONTENT_CHANGE, null, null);
+            }
+        }
+
+        @Override
+        public void onPlayItemResponse(boolean success) {
+            Log.d(TAG, "CallBackStub: onPlayItemResponse");
+            MediaController controller = mController.get();
+            if (controller != null) {
+                controller.postMessage(MSG_PLAY_ITEM_RESPONSE, new Boolean(success), null);
+            }
+        }
+
     }
 
     private final static class MessageHandler extends Handler {
@@ -988,6 +1090,18 @@ public final class MediaController {
                     break;
                 case MSG_DESTROYED:
                     mCallback.onSessionDestroyed();
+                    break;
+                case MSG_FOLDER_INFO_BROWSED_PLAYER:
+                    mCallback.onUpdateFolderInfoBrowsedPlayer((String) msg.obj);
+                    break;
+                case MSG_UPDATE_NOWPLAYING_ENTRIES:
+                    mCallback.onUpdateNowPlayingEntries((long[]) msg.obj);
+                    break;
+                case MSG_UPDATE_NOWPLAYING_CONTENT_CHANGE:
+                    mCallback.onUpdateNowPlayingContentChange();
+                    break;
+                case MSG_PLAY_ITEM_RESPONSE:
+                    mCallback.onPlayItemResponse(((Boolean)(msg.obj)).booleanValue());
                     break;
             }
         }

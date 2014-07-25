@@ -61,6 +61,9 @@ interface ISessionController {
     void fastForward();
     void rewind();
     void seekTo(long pos);
+    void setRemoteControlClientBrowsedPlayer();
+    void setRemoteControlClientPlayItem(long uid, int scope);
+    void getRemoteControlClientNowPlayingEntries();
     void rate(in Rating rating);
     void sendCustomAction(String action, in Bundle args);
     MediaMetadata getMetadata();
