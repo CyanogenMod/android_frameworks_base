@@ -171,6 +171,27 @@ public class AudioService extends IAudioService.Stub {
     // the platform type affects volume and silent mode behavior
     private final int mPlatformType;
 
+    private static final ArrayList<MediaPlayerInfo> mMediaPlayers =
+                                        new ArrayList<MediaPlayerInfo>();
+
+    private class MediaPlayerInfo {
+        private String mPackageName;
+        private boolean mIsfocussed;
+        public MediaPlayerInfo(String packageName, boolean isfocussed) {
+            mPackageName = packageName;
+            mIsfocussed = isfocussed;
+        }
+        public boolean isFocussed() {
+            return mIsfocussed;
+        }
+        public void setFocus(boolean focus) {
+            mIsfocussed = focus;
+        }
+        public String getPackageName() {
+            return mPackageName;
+        }
+    }
+
     private boolean isPlatformVoice() {
         return mPlatformType == AudioSystem.PLATFORM_VOICE;
     }
@@ -859,6 +880,100 @@ public class AudioService extends IAudioService.Stub {
                 }
             }
         }
+    }
+
+    /**
+     * @hide
+     */
+    public void addMediaPlayerAndUpdateRemoteController (String packageName) {
+        Log.v(TAG, "addMediaPlayerAndUpdateRemoteController: size of existing list: " +
+                mMediaPlayers.size());
+        boolean playerToAdd = true;
+        if (mMediaPlayers.size() > 0) {
+            final Iterator<MediaPlayerInfo> rccIterator = mMediaPlayers.iterator();
+            while (rccIterator.hasNext()) {
+                final MediaPlayerInfo player = rccIterator.next();
+                if (packageName.equals(player.getPackageName())) {
+                    Log.e(TAG, "Player entry present, no need to add");
+                    playerToAdd = false;
+                    player.setFocus(true);
+                } else {
+                    Log.e(TAG, "Player: " + player.getPackageName()+ "Lost Focus");
+                    player.setFocus(false);
+                }
+            }
+        }
+        if (playerToAdd) {
+            Log.e(TAG, "Adding Player: " + packageName + " to available player list");
+            mMediaPlayers.add(new MediaPlayerInfo(packageName, true));
+        }
+        Intent intent = new Intent(AudioManager.RCC_CHANGED_ACTION);
+        intent.putExtra(AudioManager.EXTRA_CALLING_PACKAGE_NAME, packageName);
+        intent.putExtra(AudioManager.EXTRA_FOCUS_CHANGED_VALUE, true);
+        intent.putExtra(AudioManager.EXTRA_AVAILABLITY_CHANGED_VALUE, true);
+        sendBroadcastToAll(intent);
+        Log.v(TAG, "updating focussed RCC change to RCD: CallingPackageName:"
+                + packageName);
+    }
+
+    /**
+     * @hide
+     */
+    public void updateRemoteControllerOnExistingMediaPlayers() {
+        Log.v(TAG, "updateRemoteControllerOnExistingMediaPlayers: size of Player list: " +
+                                                                mMediaPlayers.size());
+        if (mMediaPlayers.size() > 0) {
+            Log.v(TAG, "Inform RemoteController regarding existing RCC entry");
+            final Iterator<MediaPlayerInfo> rccIterator = mMediaPlayers.iterator();
+            while (rccIterator.hasNext()) {
+                final MediaPlayerInfo player = rccIterator.next();
+                Intent intent = new Intent(AudioManager.RCC_CHANGED_ACTION);
+                intent.putExtra(AudioManager.EXTRA_CALLING_PACKAGE_NAME,
+                                                    player.getPackageName());
+                intent.putExtra(AudioManager.EXTRA_FOCUS_CHANGED_VALUE,
+                                                    player.isFocussed());
+                intent.putExtra(AudioManager.EXTRA_AVAILABLITY_CHANGED_VALUE, true);
+                sendBroadcastToAll(intent);
+                Log.v(TAG, "updating RCC change: CallingPackageName:" +
+                                                    player.getPackageName());
+            }
+        } else {
+            Log.e(TAG, "No RCC entry present to update");
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void removeMediaPlayerAndUpdateRemoteController (String packageName) {
+        Log.v(TAG, "removeMediaPlayerAndUpdateRemoteController: size of existing list: " +
+                                                                mMediaPlayers.size());
+        boolean playerToRemove = false;
+        int index = -1;
+        if (mMediaPlayers.size() > 0) {
+            final Iterator<MediaPlayerInfo> rccIterator = mMediaPlayers.iterator();
+            while (rccIterator.hasNext()) {
+                index++;
+                final MediaPlayerInfo player = rccIterator.next();
+                if (packageName.equals(player.getPackageName())) {
+                    Log.v(TAG, "Player entry present remove and update RemoteController");
+                    playerToRemove = true;
+                    break;
+                } else {
+                    Log.v(TAG, "Player entry for " + player.getPackageName()+ " is not present");
+                }
+            }
+        }
+        if (playerToRemove) {
+            Log.e(TAG, "Removing Player: " + packageName + " from index" + index);
+            mMediaPlayers.remove(index);
+        }
+        Intent intent = new Intent(AudioManager.RCC_CHANGED_ACTION);
+        intent.putExtra(AudioManager.EXTRA_CALLING_PACKAGE_NAME, packageName);
+        intent.putExtra(AudioManager.EXTRA_FOCUS_CHANGED_VALUE, false);
+        intent.putExtra(AudioManager.EXTRA_AVAILABLITY_CHANGED_VALUE, false);
+        sendBroadcastToAll(intent);
+        Log.v(TAG, "Updated List size: " + mMediaPlayers.size());
     }
 
     private void checkAllAliasStreamVolumes() {
@@ -5183,6 +5298,18 @@ public class AudioService extends IAudioService.Stub {
     public void remoteControlDisplayWantsPlaybackPositionSync(IRemoteControlDisplay rcd,
             boolean wantsSync) {
         mMediaFocusControl.remoteControlDisplayWantsPlaybackPositionSync(rcd, wantsSync);
+    }
+
+    public void setRemoteControlClientPlayItem(long uid, int scope) {
+        mMediaFocusControl.setRemoteControlClientPlayItem(uid, scope);
+    }
+
+    public void getRemoteControlClientNowPlayingEntries() {
+        mMediaFocusControl.getRemoteControlClientNowPlayingEntries();
+    }
+
+    public void setRemoteControlClientBrowsedPlayer() {
+        mMediaFocusControl.setRemoteControlClientBrowsedPlayer();
     }
 
     @Override

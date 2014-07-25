@@ -52,11 +52,14 @@ oneway interface IRemoteControlClient
      */
     void setCurrentClientGenerationId(int clientGeneration);
 
-    void   plugRemoteControlDisplay(IRemoteControlDisplay rcd, int w, int h);
+    void plugRemoteControlDisplay(IRemoteControlDisplay rcd, int w, int h);
     void unplugRemoteControlDisplay(IRemoteControlDisplay rcd);
     void setBitmapSizeForDisplay(IRemoteControlDisplay rcd, int w, int h);
     void setWantsSyncForDisplay(IRemoteControlDisplay rcd, boolean wantsSync);
     void enableRemoteControlDisplay(IRemoteControlDisplay rcd, boolean enabled);
     void seekTo(int clientGeneration, long timeMs);
     void updateMetadata(int clientGeneration, int key, in Rating value);
+    void setPlayItem(int scope, long uid);
+    void setBrowsedPlayer();
+    void getNowPlayingEntries();
 }

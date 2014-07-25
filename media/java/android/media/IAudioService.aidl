@@ -215,4 +215,16 @@ interface IAudioService {
     int setFocusPropertiesForPolicy(int duckingBehavior, in IAudioPolicyCallback pcb);
 
     void setVolumePolicy(in VolumePolicy policy);
+
+    void setRemoteControlClientBrowsedPlayer();
+
+    void getRemoteControlClientNowPlayingEntries();
+
+    void setRemoteControlClientPlayItem(long uid, int scope);
+
+    void updateRemoteControllerOnExistingMediaPlayers();
+
+    void addMediaPlayerAndUpdateRemoteController(String packageName);
+
+    void removeMediaPlayerAndUpdateRemoteController(String packageName);
 }

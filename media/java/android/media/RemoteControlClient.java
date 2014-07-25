@@ -707,6 +707,79 @@ import java.lang.IllegalArgumentException;
         }
     }
 
+    /**
+     * @hide
+     */
+    public void playItemResponse(boolean success) {
+        Log.e(TAG, "playItemResponse");
+        playItemResponseInt(success);
+    }
+
+    private void playItemResponseInt(boolean success) {
+        Log.d(TAG, "playItemResponseInt");
+        Log.v(TAG, "success: " + success);
+
+        // USE_SESSIONS
+        if (mSession != null) {
+            mSession.playItemResponse(success);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void updateNowPlayingEntries(long[] playList) {
+        Log.e(TAG, "updateNowPlayingEntries: Item numbers: " + playList.length);
+        updateNowPlayingEntriesInt(playList);
+    }
+
+    private void updateNowPlayingEntriesInt(long[] playList) {
+        Log.d(TAG, "updateNowPlayingEntriesInt");
+
+        // USE_SESSIONS
+        if (mSession != null) {
+            mSession.updateNowPlayingEntries(playList);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void updateFolderInfoBrowsedPlayer(String stringUri) {
+        Log.e(TAG, "updateFolderInfoBrowsedPlayer");
+        synchronized(mCacheLock) {
+            updateFolderInfoBrowsedPlayerInt(stringUri);
+        }
+    }
+
+    private void updateFolderInfoBrowsedPlayerInt(String stringUri) {
+        Log.d(TAG, "updateFolderInfoBrowsedPlayerInt");
+
+        // USE_SESSIONS
+        if (mSession != null) {
+            mSession.updateFolderInfoBrowsedPlayer(stringUri);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void updateNowPlayingContentChange() {
+        Log.e(TAG, "updateNowPlayingContentChange");
+        synchronized(mCacheLock) {
+            updateNowPlayingContentChangeInt();
+        }
+    }
+
+    private void updateNowPlayingContentChangeInt() {
+        Log.d(TAG, "updateNowPlayingContentChangeInt");
+
+        // USE_SESSIONS
+        if (mSession != null) {
+            mSession.updateNowPlayingContentChange();
+        }
+    }
+
     // TODO investigate if we still need position drift checking
     private void onPositionDriftCheck() {
         if (DEBUG) { Log.d(TAG, "onPositionDriftCheck()"); }
@@ -798,6 +871,56 @@ import java.lang.IllegalArgumentException;
         }
     }
 
+    /**
+     * @hide
+     */
+    public interface OnGetNowPlayingEntriesListener {
+        public abstract void onGetNowPlayingEntries();
+    }
+
+    /**
+     * @hide
+     */
+    public void setNowPlayingEntriesUpdateListener(OnGetNowPlayingEntriesListener l) {
+        Log.d(TAG, "setNowPlayingEntriesUpdateListener");
+        synchronized(mCacheLock) {
+            mGetNowPlayingEntriesListener = l;
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public interface OnSetBrowsedPlayerListener {
+        public abstract void onSetBrowsedPlayer();
+    }
+
+    /**
+     * @hide
+     */
+    public void setBrowsedPlayerUpdateListener(OnSetBrowsedPlayerListener l) {
+        Log.d(TAG, "setBrowsedPlayerUpdateListener");
+        synchronized(mCacheLock) {
+            mSetBrowsedPlayerListener = l;
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public interface OnSetPlayItemListener {
+        public abstract void onSetPlayItem(int scope, long uid);
+    }
+
+    /**
+     * @hide
+     */
+    public void setPlayItemListener(OnSetPlayItemListener l) {
+        Log.d(TAG, "setPlayItemListener");
+        synchronized(mCacheLock) {
+            mSetPlayItemListener = l;
+        }
+    }
 
     /**
      * Interface definition for a callback to be invoked when the media playback position is
@@ -946,6 +1069,13 @@ import java.lang.IllegalArgumentException;
     /**
      * The current remote control client generation ID across the system, as known by this object
      */
+
+    private OnSetBrowsedPlayerListener mSetBrowsedPlayerListener;
+
+    private OnSetPlayItemListener mSetPlayItemListener;
+
+    private OnGetNowPlayingEntriesListener mGetNowPlayingEntriesListener;
+
     private int mCurrentClientGenId = -1;
 
     /**
@@ -999,10 +1129,43 @@ import java.lang.IllegalArgumentException;
                 onUpdateMetadata(mCurrentClientGenId, MetadataEditor.RATING_KEY_BY_USER, rating);
             }
         }
+
+        @Override
+        public void setPlayItem(int scope, long uid) {
+            // only post messages, we can't block here
+            if (mEventHandler != null) {
+                mEventHandler.removeMessages(MSG_SET_PLAY_ITEM);
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_SET_PLAY_ITEM, 0 /* arg1 */, scope /* arg2, ignored */,
+                        new Long(uid)));
+            }
+        }
+
+        @Override
+        public void getNowPlayingEntries() {
+            // only post messages, we can't block here
+            if (mEventHandler != null) {
+                mEventHandler.removeMessages(MSG_GET_NOW_PLAYING_ENTRIES);
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_GET_NOW_PLAYING_ENTRIES, 0, 0, null));
+            }
+        }
+
+        @Override
+        public void setBrowsedPlayer() {
+            Log.d(TAG, "setBrowsedPlayer in RemoteControlClient");
+            if (mEventHandler != null) {
+                mEventHandler.sendMessage(mEventHandler.obtainMessage(
+                        MSG_SET_BROWSED_PLAYER, 0 /* arg1 */, 0 /* arg2*/, null));
+            }
+        }
     };
 
     private EventHandler mEventHandler;
     private final static int MSG_POSITION_DRIFT_CHECK = 11;
+    private final static int MSG_SET_BROWSED_PLAYER = 12;
+    private final static int MSG_SET_PLAY_ITEM = 13;
+    private final static int MSG_GET_NOW_PLAYING_ENTRIES = 14;
 
     private class EventHandler extends Handler {
         public EventHandler(RemoteControlClient rcc, Looper looper) {
@@ -1014,6 +1177,16 @@ import java.lang.IllegalArgumentException;
             switch(msg.what) {
                 case MSG_POSITION_DRIFT_CHECK:
                     onPositionDriftCheck();
+                    break;
+                case MSG_SET_BROWSED_PLAYER:
+                    Log.d(TAG, "MSG_SET_BROWSED_PLAYER in RemoteControlClient");
+                    onSetBrowsedPlayer();
+                    break;
+                case MSG_SET_PLAY_ITEM:
+                    onSetPlayItem(msg.arg2, ((Long)msg.obj).longValue());
+                    break;
+                case MSG_GET_NOW_PLAYING_ENTRIES:
+                    onGetNowPlayingEntries();
                     break;
                 default:
                     Log.e(TAG, "Unknown event " + msg.what + " in RemoteControlClient handler");
@@ -1036,6 +1209,36 @@ import java.lang.IllegalArgumentException;
         synchronized (mCacheLock) {
             if ((mCurrentClientGenId == generationId) && (mMetadataUpdateListener != null)) {
                 mMetadataUpdateListener.onMetadataUpdate(key, value);
+            }
+        }
+    }
+
+    private void onSetPlayItem(int scope, long uid) {
+        Log.d(TAG, "onSetPlayItem");
+        synchronized (mCacheLock) {
+            if (mSetPlayItemListener != null) {
+                Log.d(TAG, "mSetPlayItemListener.onSetPlayItem");
+                mSetPlayItemListener.onSetPlayItem(scope, uid);
+            }
+        }
+    }
+
+    private void onSetBrowsedPlayer() {
+        Log.d(TAG, "onSetBrowsedPlayer");
+        synchronized (mCacheLock) {
+            if (mSetBrowsedPlayerListener != null) {
+                Log.d(TAG, "mSetBrowsedPlayerListener.onSetBrowsedPlayer");
+                mSetBrowsedPlayerListener.onSetBrowsedPlayer();
+            }
+        }
+    }
+
+    private void onGetNowPlayingEntries() {
+        Log.d(TAG, "onGetNowPlayingEntries");
+        synchronized (mCacheLock) {
+            if (mGetNowPlayingEntriesListener != null) {
+                Log.d(TAG, "mGetNowPlayingEntriesListener.onGetNowPlayingEntries");
+                mGetNowPlayingEntriesListener.onGetNowPlayingEntries();
             }
         }
     }
