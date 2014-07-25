@@ -1105,6 +1105,7 @@
 
     <string-array name="origin_carrier_names" translateable="false">
         <item>CHINA\u0020\u0020MOBILE</item>
+        <item>CMCC</item>
         <item>CHN-UNICOM</item>
         <item>China Mobile</item>
         <item>China Unicom</item>
@@ -1119,6 +1120,7 @@
     </string-array>
 
     <string-array name="locale_carrier_names" translatable="false">
+        <item>China_Mobile</item>
         <item>China_Mobile</item>
         <item>China_Unicom</item>
         <item>China_Mobile</item>
