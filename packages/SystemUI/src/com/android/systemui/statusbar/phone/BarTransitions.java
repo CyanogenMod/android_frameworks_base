@@ -55,10 +55,12 @@ public class BarTransitions {
 
     private int mMode;
 
-    public BarTransitions(View view, int gradientResourceId) {
+    public BarTransitions(View view, int gradientResourceId, int opaqueColorResourceId,
+            int semiTransparentColorResourceId) {
         mTag = "BarTransitions." + view.getClass().getSimpleName();
         mView = view;
-        mBarBackground = new BarBackgroundDrawable(mView.getContext(), gradientResourceId);
+        mBarBackground = new BarBackgroundDrawable(mView.getContext(), gradientResourceId,
+                opaqueColorResourceId, semiTransparentColorResourceId);
         if (HIGH_END) {
             mView.setBackground(mBarBackground);
         }
@@ -121,8 +123,12 @@ public class BarTransitions {
 
     private static class BarBackgroundDrawable extends Drawable {
         private final int mGradientResourceId;
+        private final int mOpaqueColorResourceId;
+        private final int mSemiTransparentColorResourceId;
         private final TimeInterpolator mInterpolator;
 
+        private int mOpaqueLegacy;
+        private int mSemiTransparentLegacy;
         private int mOpaque;
         private int mSemiTransparent;
         private Drawable mGradient;
@@ -137,23 +143,33 @@ public class BarTransitions {
         private int mGradientAlphaStart;
         private int mColorStart;
 
-        public BarBackgroundDrawable(Context context, int gradientResourceId) {
+        public BarBackgroundDrawable(Context context, int gradientResourceId,
+                int opaqueColorResourceId, int semiTransparentColorResourceId) {
             final Resources res = context.getResources();
             if (DEBUG_COLORS) {
+                mOpaqueLegacy = 0xff0000ff;
+                mSemiTransparentLegacy = 0x7f0000ff;
                 mOpaque = 0xff0000ff;
                 mSemiTransparent = 0x7f0000ff;
             } else {
-                mOpaque = res.getColor(R.color.system_bar_background_opaque);
-                mSemiTransparent = res.getColor(R.color.system_bar_background_semi_transparent);
+                mOpaqueLegacy = res.getColor(R.color.system_bar_background_opaque);
+                mSemiTransparentLegacy = res.getColor(
+                        R.color.system_bar_background_semi_transparent);
+                mOpaque = res.getColor(opaqueColorResourceId);
+                mSemiTransparent = res.getColor(semiTransparentColorResourceId);
             }
             mGradient = res.getDrawable(gradientResourceId);
             mInterpolator = new LinearInterpolator();
             mGradientResourceId = gradientResourceId;
+            mOpaqueColorResourceId = opaqueColorResourceId;
+            mSemiTransparentColorResourceId = semiTransparentColorResourceId;
         }
 
         public void updateResources(Resources res)  {
-            mOpaque = res.getColor(R.color.system_bar_background_opaque);
-            mSemiTransparent = res.getColor(R.color.system_bar_background_semi_transparent);
+            mOpaqueLegacy = res.getColor(R.color.system_bar_background_opaque);
+            mSemiTransparentLegacy = res.getColor(R.color.system_bar_background_semi_transparent);
+            mOpaque = res.getColor(mOpaqueColorResourceId);
+            mSemiTransparent = res.getColor(mSemiTransparentColorResourceId);
             // Retrieve the current bounds for mGradient so they can be set to
             // the new drawable being loaded, otherwise the bounds will be (0, 0, 0, 0)
             // and the gradient will not be drawn.
@@ -210,11 +226,19 @@ public class BarTransitions {
             if (mMode == MODE_TRANSLUCENT) {
                 targetGradientAlpha = 0xff;
             } else if (mMode == MODE_SEMI_TRANSPARENT) {
-                targetColor = mSemiTransparent;
+                targetColor = mSemiTransparent == 0x66000000 ?
+                        mSemiTransparentLegacy == 0x66000000 ?
+                                0x66000000 :
+                                mSemiTransparentLegacy :
+                        mSemiTransparent;
             } else if (mMode == MODE_TRANSPARENT) {
                 targetGradientAlpha = 0;
             } else {
-                targetColor = mOpaque;
+                targetColor = mOpaque == 0xff000000 ?
+                        mOpaqueLegacy == 0xff000000 ?
+                                0xff000000 :
+                                mOpaqueLegacy :
+                        mOpaque;
             }
             if (!mAnimating) {
                 mColor = targetColor;
