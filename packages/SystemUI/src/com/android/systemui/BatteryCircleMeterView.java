@@ -93,6 +93,10 @@ public class BatteryCircleMeterView extends ImageView {
     private int mCircleTextColor;
     private int mCircleTextChargingColor;
     private int mCircleAnimSpeed;
+    private boolean mIsCircleDotted = false;
+    private int mDotLength;
+    private int mDotInterval;
+    private int mDotOffset;
 
     // runnable to invalidate view via mHandler.postDelayed() call
     private final Runnable mInvalidate = new Runnable() {
@@ -226,6 +230,12 @@ public class BatteryCircleMeterView extends ImageView {
         } else {
             usePaint.setPathEffect(null);
         }
+        if (mIsCircleDotted) {
+            // change usePaint from solid to dashed
+            usePaint.setPathEffect(new DashPathEffect(new float[]{mDotLength,mDotInterval},mDotOffset));
+        }else {
+            usePaint.setPathEffect(null);
+        }
 
         // pad circle percentage to 100% once it reaches 97%
         // for one, the circle looks odd with a too small gap,
@@ -287,6 +297,15 @@ public class BatteryCircleMeterView extends ImageView {
 
         mBatteryStyle = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_BATTERY, 0, UserHandle.USER_CURRENT);
+
+        mIsCircleDotted = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CIRCLE_DOTTED, 0, UserHandle.USER_CURRENT) == 1;
+        mDotLength = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CIRCLE_DOT_LENGTH, 3, UserHandle.USER_CURRENT);
+        mDotInterval = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CIRCLE_DOT_INTERVAL, 2, UserHandle.USER_CURRENT);
+        mDotOffset = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CIRCLE_DOT_OFFSET, 0, UserHandle.USER_CURRENT);
 
         mCircleColor = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_BATTERY_COLOR, -2, UserHandle.USER_CURRENT);
