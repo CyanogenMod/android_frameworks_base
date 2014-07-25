@@ -143,8 +143,15 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
         for (int i = 0; i < count; i++) {
             final Bitmap bitmap = drawables.valueAt(i).getBitmap();
             if (bitmap != null && bitmap.getConfig() == Bitmap.Config.ARGB_8888) {
-                bitmaps.add(bitmap);
-                totalPixelCount += bitmap.getWidth() * bitmap.getHeight();
+                // For preloaded asset which has 1-pixel width (or 1-pixel height), sampling the atlas texture
+                // will get a color mixed with the surrounding pixels' color.
+                // If we have padding in the atlas texture , sampling will mix the padding's black color and
+                // result in a obvious defect.
+                // We avoid packing 1-pixel width (or 1-pixel height) asset into AssetAtlas.
+                if(bitmap.getWidth() != 1 && bitmap.getHeight() != 1) {
+                    bitmaps.add(bitmap);
+                    totalPixelCount += bitmap.getWidth() * bitmap.getHeight();
+                }
             }
         }
 
