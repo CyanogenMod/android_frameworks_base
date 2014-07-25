@@ -38,9 +38,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.SystemSensorManager;
 import android.net.Uri;
@@ -431,10 +428,6 @@ public final class PowerManagerService extends IPowerManager.Stub
     private static native void nativeCpuBoost(int duration);
     private boolean mKeyboardVisible = false;
 
-    private SensorManager mSensorManager;
-    private Sensor mProximitySensor;
-    private boolean mProximityWake;
-
     public PowerManagerService() {
         synchronized (mLock) {
             mWakeLockSuspendBlocker = createSuspendBlockerLocked("PowerManagerService.WakeLocks");
@@ -467,8 +460,6 @@ public final class PowerManagerService extends IPowerManager.Stub
         mHandlerThread = new HandlerThread(TAG);
         mHandlerThread.start();
         mHandler = new PowerManagerHandler(mHandlerThread.getLooper());
-        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-        mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         Watchdog.getInstance().addMonitor(this);
         Watchdog.getInstance().addThread(mHandler, mHandlerThread.getName());
@@ -601,9 +592,6 @@ public final class PowerManagerService extends IPowerManager.Stub
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.WAKELOCK_BLOCKING_LIST),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.PROXIMITY_ON_WAKE),
-                    false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
             readConfigurationLocked();
@@ -656,17 +644,19 @@ public final class PowerManagerService extends IPowerManager.Stub
         mElectronBeamMode = Settings.System.getIntForUser(resolver,
                 Settings.System.SYSTEM_POWER_CRT_MODE,
                 1, UserHandle.USER_CURRENT);
+
         mWakeLockBlockingEnabled = Settings.System.getIntForUser(resolver,
                 Settings.System.WAKELOCK_BLOCKING_ENABLED,
                 0, UserHandle.USER_CURRENT);
+
         String blockedWakelockList = Settings.System.getStringForUser(resolver,
                 Settings.System.WAKELOCK_BLOCKING_LIST,
                 UserHandle.USER_CURRENT);
         setBlockedWakeLocks(blockedWakelockList);
+
         Slog.d(TAG, "mWakeLockBlockingEnabled=" + mWakeLockBlockingEnabled +
                      " blockedWakelockList=" + blockedWakelockList);
-        mProximityWake = Settings.System.getInt(resolver,
-                Settings.System.PROXIMITY_ON_WAKE, 0) == 1;
+
         final int oldScreenBrightnessSetting = mScreenBrightnessSetting;
         mScreenBrightnessSetting = Settings.System.getIntForUser(resolver,
                 Settings.System.SCREEN_BRIGHTNESS, mScreenBrightnessSettingDefault,
@@ -1213,70 +1203,25 @@ public final class PowerManagerService extends IPowerManager.Stub
         }
     }
 
-    /**
-     * @hide
-     */
-    private void wakeUp(final long eventTime, boolean wakeupFromKeyEvent) {
+    @Override // Binder call
+    public void wakeUp(long eventTime) {
         if (eventTime > SystemClock.uptimeMillis()) {
             throw new IllegalArgumentException("event time must not be in the future");
         }
 
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER, null);
 
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                final long ident = Binder.clearCallingIdentity();
-                try {
-                    wakeUpInternal(eventTime);
-                } finally {
-                    Binder.restoreCallingIdentity(ident);
-                }
-            }
-        };
-
-        if (mProximityWake && wakeupFromKeyEvent && mProximitySensor != null) {
-            runPostProximityCheck(r);
-        } else {
-            r.run();
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            wakeUpInternal(eventTime);
+        } finally {
+            Binder.restoreCallingIdentity(ident);
         }
     }
 
-    @Override // Binder call
-    public void wakeUpFromKeyEvent(long eventTime) {
-        wakeUp(eventTime, true);
-    }
-
-    @Override // Binder call
-    public void wakeUp(long eventTime) {
-        wakeUp(eventTime, false);
-    }
-
-    private void runPostProximityCheck(final Runnable r) {
-        mSensorManager.registerListener(new SensorEventListener() {
-
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                if (event.values[0] == mProximitySensor.getMaximumRange()) {
-                    r.run();
-                }
-                mSensorManager.unregisterListener(this);
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-
-        }, mProximitySensor, SensorManager.SENSOR_DELAY_FASTEST);
-    }
-
     // Called from native code.
-    private void wakeUpFromNative(final long eventTime) {
-        runPostProximityCheck(new Runnable() {
-            @Override
-            public void run() {
-                wakeUpInternal(eventTime);
-            }
-        });
+    private void wakeUpFromNative(long eventTime) {
+        wakeUpInternal(eventTime);
     }
 
     private void wakeUpInternal(long eventTime) {

@@ -6062,11 +6062,6 @@ public final class Settings {
         public static final String DISABLE_IMMERSIVE_MESSAGE = "disable_immersive_message";
 
         /**
-         * @hide
-         */
-        public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
-
-        /**
          * Use HOME/END instead of UP/DOWN as longpress action for NavBar IME Cursors
          *
          * @hide
