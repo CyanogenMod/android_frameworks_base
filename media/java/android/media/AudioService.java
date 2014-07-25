@@ -4951,6 +4951,18 @@ public class AudioService extends IAudioService.Stub {
         mMediaFocusControl.remoteControlDisplayWantsPlaybackPositionSync(rcd, wantsSync);
     }
 
+    public void setRemoteControlClientPlayItem(long uid, int scope) {
+        mMediaFocusControl.setRemoteControlClientPlayItem(uid, scope);
+    }
+
+    public void getRemoteControlClientNowPlayingEntries() {
+        mMediaFocusControl.getRemoteControlClientNowPlayingEntries();
+    }
+
+    public void setRemoteControlClientBrowsedPlayer() {
+        mMediaFocusControl.setRemoteControlClientBrowsedPlayer();
+    }
+
     @Override
     public void setRemoteStreamVolume(int index) {
         enforceSelfOrSystemUI("set the remote stream volume");

@@ -40,6 +40,9 @@ oneway interface ISessionCallback {
     void onFastForward();
     void onRewind();
     void onSeekTo(long pos);
+    void setRemoteControlClientBrowsedPlayer();
+    void setRemoteControlClientPlayItem(long uid, int scope);
+    void getRemoteControlClientNowPlayingEntries();
     void onRate(in Rating rating);
     void onCustomAction(String action, in Bundle args);
 
