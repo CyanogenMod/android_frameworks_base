@@ -4920,6 +4920,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStatusBarContainer.addView(mStatusBarWindow);
 
         updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
+
+        // Workaround to update drawable
+        // resources of pie on theme changes
+        attachPieContainer(!isPieEnabled());
+        attachPieContainer(isPieEnabled());
+
         restorePieTriggerMask();
 
         mRecreating = false;
