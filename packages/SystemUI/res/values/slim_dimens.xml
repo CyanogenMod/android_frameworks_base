@@ -22,4 +22,7 @@
     <dimen name="notification_shortcuts_spacing_height">88dp</dimen>
     <dimen name="notification_shortcuts_drawer_margin">56dp</dimen>
 
+    <!-- Heads up -->
+    <dimen name="heads_up_bottom_gap">5dp</dimen>
+
 </resources>

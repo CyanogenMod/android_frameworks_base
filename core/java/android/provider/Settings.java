@@ -3184,6 +3184,13 @@ public final class Settings {
         public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
 
         /**
+         * Whether heads up notification is shown on the bottom of the screen (default = disabled)
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_GRAVITY_BOTTOM = "heads_up_gravity_bottom";
+
+        /**
          * Whether heads up notification is expanded by default (default = disabled)
          *
          * @hide
