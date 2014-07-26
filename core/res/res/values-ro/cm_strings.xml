@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Telefonul dvs. va reporni.</string>
   <string name="permlab_preventpower">Împiedica tasta de pornire</string>
   <string name="permdesc_preventpower">Permite aplicației să ignore tasta de pornire</string>
-  <string name="permlab_sendMockSms">Trimite mesaje SMS false</string>
   <string name="permdesc_sendMockSms">Permite aplicației să trimită mesaje SMS false. Aceasta permite unei aplicații să trimită mesaje SMS către aplicații de încredere. Aplicațiile rău intenționate pot trimite mesaje continuu, blocând sistemul de notificări al sistemului și întrerupând utilizatorul.</string>
   <string name="storage_sd_dock_card">Dock card SD</string>
   <string name="app_killed_message">Aplicație oprită</string>

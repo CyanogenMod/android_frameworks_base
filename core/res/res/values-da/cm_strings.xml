@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Din telefon vil genstarte.</string>
   <string name="permlab_preventpower">undgå tænd/sluk-knappen</string>
   <string name="permdesc_preventpower">Tillader app\'en at tilsidesætte tænd/sluk-knappen</string>
-  <string name="permlab_sendMockSms">Send imiterede SMS-beskeder</string>
   <string name="permdesc_sendMockSms">Tillader app\'en at sende imiterede SMS-beskeder. Dette tillader betroede apps at sende SMS-beskeder. Ondsindede apps kan sende beskeder uafbrudt, som blokerer enhedens underretningssystem og forstyrrer brugeren.</string>
   <string name="storage_sd_dock_card">Dock SD-kort</string>
   <string name="app_killed_message">App lukket</string>

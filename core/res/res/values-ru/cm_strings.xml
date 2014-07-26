@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
   <string name="permlab_preventpower">Блокировка кнопки питания</string>
   <string name="permdesc_preventpower">Приложение сможет переопределять кнопку питания.</string>
-  <string name="permlab_sendMockSms">Показ фиктивных SMS-сообщений</string>
   <string name="permdesc_sendMockSms">Приложение сможет показывать фиктивные SMS. Вредоносные приложения могут посылать сообщения циклически, блокируя систему уведомлений и раздражая пользователя.</string>
   <string name="storage_sd_dock_card">SD-карта док-станции</string>
   <string name="app_killed_message">Приложение закрыто</string>

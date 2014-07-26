@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Seu telefone irá reiniciar.</string>
   <string name="permlab_preventpower">substituir tecla de energia</string>
   <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
-  <string name="permlab_sendMockSms">Simular envio de mensagens SMS</string>
   <string name="permdesc_sendMockSms">Permite ao aplicativo simular envio de mensagens SMS.\n        Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
   <string name="storage_sd_dock_card">Dock cartão SD</string>
   <string name="app_killed_message">Aplicativo terminado</string>

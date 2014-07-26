@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ خستنه‌ڕی.</string>
   <string name="permlab_preventpower">بەرگری لە کلیلی هێز</string>
   <string name="permdesc_preventpower">ڕێگە دان بە بەرنامەکە</string>
-  <string name="permlab_sendMockSms">ناردنی نامە</string>
   <string name="permdesc_sendMockSms">ڕێگە دان بە بەرنامەکە بۆ ناردنی نامە.ئەمە ڕێگە ئەدات بە ناردنی نامە بۆ ئەو بەرنامانەی کە باوەڕپێکراون.ئەوەی خراپ بن پێ ئەچێت بینێرێت.</string>
   <string name="storage_sd_dock_card">Dock بیرگەی دەرەکی</string>
   <string name="app_killed_message">بەرنامەکە کوژرا</string>

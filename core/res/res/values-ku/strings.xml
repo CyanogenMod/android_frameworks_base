@@ -1433,6 +1433,9 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="smv_process">ئەرکی <xliff:g id="process">%1$s</xliff:g> has
       بە شێوەی خۆسەپاو لە دۆخێکی دژواری پاراستن سەرپێچی کردووە.</string>
   <string name="android_upgrading_title">ئەندرۆید لە نوێکاریدایە\u2026</string>
+  <string name="android_upgrading_apk">باشینەسازی بەرنامە
+        <xliff:g id="number" example="123">%1$d</xliff:g> ی
+        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
   <string name="android_upgrading_starting_apps">دەستپێکردنی بەرنامەکان.</string>
   <string name="android_upgrading_complete">تەواوبوونی بووت.</string>
   <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> کارکردن</string>

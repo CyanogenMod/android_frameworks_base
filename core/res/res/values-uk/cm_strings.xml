@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Ваш телефон перезавантажиться.</string>
   <string name="permlab_preventpower">блокування кнопки живлення</string>
   <string name="permdesc_preventpower">Дозволити програмі використовувати кнопку живлення</string>
-  <string name="permlab_sendMockSms">Надсилати фіктивні SMS-повідомлення</string>
   <string name="permdesc_sendMockSms">Дозволити програмі показувати фіктивні SMS. Небезпечні програми можуть надсилати повідомлення циклічно, блокуючи систему сповіщень і мішати роботі користувача.</string>
   <string name="storage_sd_dock_card">SD-карта док-станції</string>
   <string name="app_killed_message">Програма закрита</string>

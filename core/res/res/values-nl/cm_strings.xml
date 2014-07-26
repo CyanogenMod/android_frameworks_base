@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Uw telefoon wordt herstart.</string>
   <string name="permlab_preventpower">aan/uit-knop beheren</string>
   <string name="permdesc_preventpower">Hiermee kan de app het gedrag van de aan/uit-knop wijzigen</string>
-  <string name="permlab_sendMockSms">nep-sms verzenden</string>
   <string name="permdesc_sendMockSms">Hiermee kan de app nep-sms-berichten verzenden. Met deze machtiging kan een app sms-berichten verzenden naar vertrouwde apps. Schadelijke apps zouden continu berichten kunnen verzenden, waardoor het meldingensysteem wordt geblokkeerd en de gebruiker wordt verstoord.</string>
   <string name="storage_sd_dock_card">SD-kaart in dock</string>
   <string name="app_killed_message">App afgesloten</string>

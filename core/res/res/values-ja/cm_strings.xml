@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
   <string name="permlab_preventpower">電源キーを無効にする</string>
   <string name="permdesc_preventpower">電源キーの無効化をアプリに許可します。</string>
-  <string name="permlab_sendMockSms">疑似SMSメッセージの送信</string>
   <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリに許可します。これによりアプリは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリが連続的にメッセージを送信したり、通知を阻止したり、ユーザーを混乱させるおそれがあります。</string>
   <string name="storage_sd_dock_card">SDカードを接続</string>
   <string name="app_killed_message">アプリを終了しました</string>

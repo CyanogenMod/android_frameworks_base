@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Votre téléphone va redémarrer</string>
   <string name="permlab_preventpower">outrepasser le bouton d\'alimentation</string>
   <string name="permdesc_preventpower">Autoriser une application à outrepasser le bouton d\'alimentation</string>
-  <string name="permlab_sendMockSms">envoyer des messages simulés</string>
   <string name="permdesc_sendMockSms">Permettre à l\'application d\'envoyer des messages simulés. Cela permet à une application d\'envoyer des SMS à des applications de confiance. Des applications malveillantes peuvent envoyer des messages en permanence, bloquer le système de notification de l\'appareil et perturber l\'utilisateur</string>
   <string name="storage_sd_dock_card">Dock carte SD</string>
   <string name="app_killed_message">Application arrêtée</string>

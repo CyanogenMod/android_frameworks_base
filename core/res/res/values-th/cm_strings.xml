@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">โทรศัพท์ของคุณ จะเริ่มระบบใหม่</string>
   <string name="permlab_preventpower">ป้องกันไม่ให้ใช้ปุ่มเพาเวอร์</string>
   <string name="permdesc_preventpower">อนุญาตให้แอปเขียนทับปุ่มเพาเวอร์?</string>
-  <string name="permlab_sendMockSms">ส่งข้อความ SMS จำลอง</string>
   <string name="permdesc_sendMockSms">อนุญาติให้แอปส่งข้อความ SMS จำลอง\nการอนุญาตให้แอปส่ง SMS จำลอง แอปที่เป็นอันตรายอาจส่งข้อความอย่างต่อเนื่อง\nและอาจปิดกั้นระบบแจ้งเตือนของอุปกรณ์และอาจมีผลกระทบต่อผู้ใช้</string>
   <string name="storage_sd_dock_card">แท่น SD card</string>
   <string name="app_killed_message">ปิดแอป</string>

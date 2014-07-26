@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Jou foon gaan herlaai.</string>
   <string name="permlab_preventpower">Verhoed krag knoppie</string>
   <string name="permdesc_preventpower">Laat die program toe om die krag knoppie se gebruik te verander.</string>
-  <string name="permlab_sendMockSms">Stuur skyn-SMS boodskappe</string>
   <string name="permdesc_sendMockSms">Laat die program skyn-SMS boodskappe stuur. Dit laat \'n program toe om SMS te stuur na betroubare programme. Kwaadwillige programme kan boodskappe voortdurend stuur, dan dit sal die kennisgewings stelsel blokkeer en die gebruiker ontwrig.</string>
   <string name="storage_sd_dock_card">Dok SD-kaart</string>
   <string name="app_killed_message">Program beëindig</string>

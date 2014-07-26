@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">El teléfono se reiniciará.</string>
   <string name="permlab_preventpower">anular tecla encendido</string>
   <string name="permdesc_preventpower">Permite que la aplicación cambie el comportamiento de la tecla de encendido.</string>
-  <string name="permlab_sendMockSms">enviar mensajes SMS simulados</string>
   <string name="permdesc_sendMockSms">Permite que la aplicación envíe mensajes SMS simulados a aplicaciones de confianza. Las aplicaciones maliciosas pueden enviar mensajes SMS continuamente, bloqueando la barra de notificaciones e interrumpiendo al usuario.</string>
   <string name="storage_sd_dock_card">Tarjeta SD de la base</string>
   <string name="app_killed_message">Aplicación finalizada</string>

@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">உங்கள் தொலைபேசி மீண்டும் துவக்கபடும்.</string>
   <string name="permlab_preventpower">ஆற்றல் பொத்தானை தடுக்க</string>
   <string name="permdesc_preventpower">பயன்பாட்டை ஆற்றல் பொத்தானை புறக்கணிக்க அனுமதிக்கும்</string>
-  <string name="permlab_sendMockSms">போலி எஸ்எம்எஸ் அனுப்பவும்</string>
   <string name="permdesc_sendMockSms">பயன்பாட்டை போலி எஸ்எம்எஸ் அனுப்ப அனுமதிக்கிறது. இந்த ஒரு பயன்பாட்டை நம்பகமான பயன்பாடுகள் எஸ்எம்எஸ் அனுப்ப அனுமதிக்கிறது. தீங்கிழைக்கும் பயன்பாடுகள் தொடர்ந்து செய்திகளை அனுப்பி சாதனம் அறிவித்தல் அமைப்பை பூட்ட மற்றும் பயனரை இடையூறு செய்ய  முடியும்.</string>
   <string name="storage_sd_dock_card">எஸ்டி அட்டையை இணைக்கவும்</string>
   <string name="app_killed_message">பயன்பாடு கொல்லப்பட்டது</string>
