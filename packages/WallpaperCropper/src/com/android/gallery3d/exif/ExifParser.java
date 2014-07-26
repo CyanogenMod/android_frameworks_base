@@ -556,7 +556,8 @@ class ExifParser {
             }
             // Some invalid images put some undefined data before IFD0.
             // Read the data here.
-            if ((offset < mIfd0Position) && (dataFormat == ExifTag.TYPE_UNDEFINED)) {
+            if ((offset < mIfd0Position) && (dataFormat == ExifTag.TYPE_UNDEFINED)
+                    && (mDataAboveIfd0 != null) && ((int) offset >= DEFAULT_IFD0_OFFSET)) {
                 byte[] buf = new byte[(int) numOfComp];
                 System.arraycopy(mDataAboveIfd0, (int) offset - DEFAULT_IFD0_OFFSET,
                         buf, 0, (int) numOfComp);
