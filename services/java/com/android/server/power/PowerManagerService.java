@@ -1239,7 +1239,7 @@ public final class PowerManagerService extends IPowerManager.Stub
                     return;
                 }
                 mHandler.removeMessages(MSG_WAKE_UP);
-                if (event.values[0] == mProximitySensor.getMaximumRange()) {
+                if (event.values[0] >= mProximitySensor.getMaximumRange()) {
                     r.run();
                 }
                 mSensorManager.unregisterListener(this);
