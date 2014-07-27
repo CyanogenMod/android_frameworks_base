@@ -6,14 +6,8 @@ import java.util.List;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
-import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-
-import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 
 @SuppressWarnings("deprecation")
 public class LockscreenStateChanger {
@@ -38,14 +32,10 @@ public class LockscreenStateChanger {
         return sInstance;
     }
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mContext.unregisterReceiver(this);
-            mInitialized = true;
-            updateForCurrentState();
-        }
-    };
+    public synchronized void setInitialized(boolean initialized) {
+        mInitialized = initialized;
+        updateForCurrentState();
+    }
 
     private LockscreenStateChanger(Context context) {
         mListeners = Collections.synchronizedList(new ArrayList<LockStateChangeListener>());
@@ -57,17 +47,12 @@ public class LockscreenStateChanger {
         // Fetch last state
         mPrefs = mContext.getSharedPreferences("quicksettings", Context.MODE_PRIVATE);
         mLockscreenDisabled = mPrefs.getBoolean(KEY_DISABLED, false);
-        if (!isInitialized()) {
-            // Register receiver
-            IntentFilter filter = new IntentFilter(DevicePolicyManager
-                    .ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED);
-            mContext.registerReceiver(mReceiver, filter);
-        } else {
-            updateForCurrentState();
-        }
     }
 
     public synchronized void addListener(LockStateChangeListener listener) {
+        if (mListeners.isEmpty()) {
+            updateForCurrentState();
+        }
         mListeners.add(listener);
     }
 
@@ -80,13 +65,15 @@ public class LockscreenStateChanger {
     }
 
     public synchronized void toggleState() {
+        if (!mInitialized) {
+            return;
+        }
         mLockscreenDisabled = !mLockscreenDisabled;
         updateForCurrentState();
     }
 
     private synchronized void updateForCurrentState() {
-        boolean dpmInitialized = isInitialized();
-        if (dpmInitialized) {
+        if (mInitialized) {
             mPrefs.edit().putBoolean(KEY_DISABLED, mLockscreenDisabled).apply();
             if (mLockscreenDisabled) {
                 mLock.disableKeyguard();
@@ -95,16 +82,6 @@ public class LockscreenStateChanger {
             }
             informListeners();
         }
-    }
-
-    private boolean isInitialized() {
-        if (!mInitialized) {
-            KeyguardTouchDelegate keyguard = KeyguardTouchDelegate.getInstance(mContext);
-            if (keyguard.isServiceInitialized()) {
-                mInitialized = true;
-            }
-        }
-        return mInitialized;
     }
 
     private void informListeners() {
