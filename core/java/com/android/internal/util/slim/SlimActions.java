@@ -252,6 +252,12 @@ public class SlimActions {
                     return;
                 }
                 try {
+                    // Perform all related with recent
+                    // in a attempt to fix blank slimroms
+                    // recent panel sometimes preloading
+                    // with PIE
+                    barService.cancelPreloadRecentApps();
+                    barService.preloadRecentApps();
                     barService.toggleRecentApps();
                 } catch (RemoteException e) {
                 }
