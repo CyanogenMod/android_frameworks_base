@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.policy.IKeyguardService;
+import com.android.systemui.quicksettings.LockscreenStateChanger;
 
 
 /**
@@ -44,13 +45,14 @@ public class KeyguardTouchDelegate {
 
     protected static final boolean DEBUG = false;
     protected static final String TAG = "KeyguardTouchDelegate";
+    private Context mContext;
 
     private final ServiceConnection mKeyguardConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Slog.v(TAG, "Connected to keyguard");
             mService = IKeyguardService.Stub.asInterface(service);
-
+            LockscreenStateChanger.getInstance(mContext).setInitialized(true);
         }
 
         @Override
@@ -58,6 +60,7 @@ public class KeyguardTouchDelegate {
             Slog.v(TAG, "Disconnected from keyguard");
             mService = null;
             sInstance = null; // force reconnection if this goes away
+            LockscreenStateChanger.getInstance(mContext).setInitialized(false);
         }
 
     };
@@ -68,6 +71,7 @@ public class KeyguardTouchDelegate {
         final String keyguardClass = context.getString(
                 com.android.internal.R.string.config_keyguardService);
 
+        mContext = context;
         Intent intent = new Intent();
         intent.setClassName(keyguardPackage, keyguardClass);
         if (!context.bindServiceAsUser(intent, mKeyguardConnection,
@@ -186,7 +190,4 @@ public class KeyguardTouchDelegate {
         }
     }
 
-    public boolean isServiceInitialized() {
-        return mService != null;
-    }
 }
