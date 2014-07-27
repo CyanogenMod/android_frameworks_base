@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
+import android.media.IAudioService;
 import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Message;
@@ -36,6 +37,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.InputDevice;
@@ -315,7 +317,7 @@ public class SlimActions {
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_VIB)) {
                 AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                if(am != null){
+                if(am != null && ActivityManagerNative.isSystemReady()) {
                     if(am.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE) {
                         am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                         Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -335,7 +337,7 @@ public class SlimActions {
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_SILENT)) {
                 AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                if(am != null){
+                if(am != null && ActivityManagerNative.isSystemReady()) {
                     if(am.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                         am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                     }else{
@@ -351,7 +353,7 @@ public class SlimActions {
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_VIB_SILENT)) {
                 AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                if(am != null){
+                if(am != null && ActivityManagerNative.isSystemReady()) {
                     if(am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                         am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                         Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -370,6 +372,7 @@ public class SlimActions {
                         }
                     }
                 }
+                return;
             } else if (action.equals(ButtonsConstants.ACTION_OMNISWITCH)) {
                 Intent intent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
                 context.sendBroadcast(intent);
@@ -381,6 +384,28 @@ public class SlimActions {
                         "com.android.systemui.nameless.onthego.OnTheGoService"));
                 startIntent.setAction("start");
                 context.startService(startIntent);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_CAMERA)) {
+                // ToDo: Send for secure keyguard secure camera intent.
+                // We need to add support for it first.
+                Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA, null);
+                startActivity(context, windowManagerService, isKeyguardShowing, intent);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_MEDIA_PREVIOUS)) {
+                dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_MEDIA_NEXT)) {
+                dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.KEYCODE_MEDIA_NEXT);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_MEDIA_PLAY_PAUSE)) {
+                dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                return;
+            } else if (action.equals(ButtonsConstants.ACTION_WAKE_DEVICE)) {
+                PowerManager powerManager =
+                        (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+                if (!powerManager.isScreenOn()) {
+                    powerManager.wakeUp(SystemClock.uptimeMillis());
+                }
                 return;
             } else {
                 // we must have a custom uri
@@ -420,6 +445,18 @@ public class SlimActions {
                 com.android.internal.R.bool.config_showNavigationBar);
     }
 
+    public static boolean isActionKeyEvent(String action) {
+        if (action.equals(ButtonsConstants.ACTION_HOME)
+                || action.equals(ButtonsConstants.ACTION_BACK)
+                || action.equals(ButtonsConstants.ACTION_SEARCH)
+                || action.equals(ButtonsConstants.ACTION_MENU)
+                || action.equals(ButtonsConstants.ACTION_MENU_BIG)
+                || action.equals(ButtonsConstants.ACTION_NULL)) {
+            return true;
+        }
+        return false;
+    }
+
     private static void startActivity(Context context, IWindowManager windowManagerService,
                 boolean isKeyguardShowing, Intent intent) {
         if (intent == null) {
@@ -438,7 +475,10 @@ public class SlimActions {
             } catch (RemoteException e) {
                 // too bad, so sad...
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             context.startActivityAsUser(intent,
                     new UserHandle(UserHandle.USER_CURRENT));
         }
@@ -466,36 +506,29 @@ public class SlimActions {
             } catch (RemoteException ex) {
             }
         }
-
-        if (isKeyguardShowing) {
-            // Have keyguard show the bouncer and launch the activity if the user succeeds.
-            try {
-                windowManagerService.showCustomIntentOnKeyguard(intent);
-            } catch (RemoteException e) {
-            }
-        } else {
-            // otherwise let us do it here
-            try {
-                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
-            } catch (RemoteException e) {
-                // too bad, so sad...
-            }
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivityAsUser(intent,
-                    new UserHandle(UserHandle.USER_CURRENT));
-        }
+        startActivity(context, windowManagerService, isKeyguardShowing, intent);
     }
 
-    public static boolean isActionKeyEvent(String action) {
-        if (action.equals(ButtonsConstants.ACTION_HOME)
-                || action.equals(ButtonsConstants.ACTION_BACK)
-                || action.equals(ButtonsConstants.ACTION_SEARCH)
-                || action.equals(ButtonsConstants.ACTION_MENU)
-                || action.equals(ButtonsConstants.ACTION_MENU_BIG)
-                || action.equals(ButtonsConstants.ACTION_NULL)) {
-            return true;
+    private static IAudioService getAudioService() {
+        IAudioService audioService = IAudioService.Stub.asInterface(
+                ServiceManager.checkService(Context.AUDIO_SERVICE));
+        return audioService;
+    }
+
+    private static void dispatchMediaKeyWithWakeLockToAudioService(int keycode) {
+        if (ActivityManagerNative.isSystemReady()) {
+            IAudioService audioService = getAudioService();
+            if (audioService != null) {
+                try {
+                    KeyEvent event = new KeyEvent(SystemClock.uptimeMillis(),
+                            SystemClock.uptimeMillis(), KeyEvent.ACTION_DOWN, keycode, 0);
+                    audioService.dispatchMediaKeyEventUnderWakelock(event);
+                    event = KeyEvent.changeAction(event, KeyEvent.ACTION_UP);
+                    audioService.dispatchMediaKeyEventUnderWakelock(event);
+                } catch (RemoteException e) {
+                }
+            }
         }
-        return false;
     }
 
     public static void triggerVirtualKeypress(final int keyCode, boolean longpress) {
