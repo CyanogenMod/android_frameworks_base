@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (c) 2013 SlimRoms Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- QS Battery Tile -->
+    <string name="quick_settings_battery_charging">In carica</string>
+    <string name="quick_settings_battery_discharging">Non in carica</string>
+
+    <!-- Kill app toast -->
+    <string name="app_killed_message">App terminata</string>
+
+    <!--ScreenShot Trash-->
+    <string name="screenshot_notification_delete">Elimina</string>
+    <string name="screenshot_delete_confirmation">Screenshot eliminato</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+
+    <!-- Dialog Cancel/OK -->
+    <string name="cancel">Cancella</string>
+    <string name="dlg_ok">Ok</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+
+    <!-- Off/On/Toggle -->
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="toggle">Toggle</string>
+
+    <!-- Slim Shortcut Actions -->
+    <string name="shortcut_picker">Slim - collegamenti</string>
+    <string name="shortcut_immersive">Schermo pieno (Immersive)</string>
+    <string name="shortcut_quiethours">Ore di quiete (ignora vincoli temporali)</string>
+    <string name="shortcut_rotation">Rotazione</string>
+    <string name="shortcut_shakeevent">Eventi Shake</string>
+    <string name="shortcut_torch">Torcia</string>
+    <string name="shortcut_reboot">Riavvio</string>
+    <string name="shortcut_recovery">Recovery</string>
+    <string name="shortcut_last_app">Ultima App</string>
+    <string name="shortcut_screenshot">Screenshot</string>
+    <string name="shortcut_volume">Volume</string>
+    <string name="shortcut_toggle_title">Azione da eseguire</string>
+    <string name="shortcut_chamber">Camera dei segreti</string>
+    <string name="chamber_disabled">La camera dei segreti è chiusa</string>
+    <string name="chamber_title">Input stringa di impostazione</string>
+    <string name="chamber_message">Inserisci una stringa di impostazione, sia essa una checkbox on off o una lista di preferenze. Per esempio, quiet_hours_ringer o simili. Le impostazioni possono essere trovate nel file Settings.java. Attenzione: è una procedura pericolosa!</string>
+    <string name="chamber_invalid">Questo è un input non valido. Attenzione.</string>
+    <string name="chamber_invalid_setting">Prova a commutare manualmente il settaggio per assicurarti che esista il database per questa azione.</string>
+    <string name="chamber_checkbox">Checkbox</string>
+    <string name="chamber_chk_message">Questo è un settaggio a casella di selezione?</string>
+    <string name="chamber_int">Input valori</string>
+    <string name="chamber_int_message">Inserisci i valori che vorresti commutare. Separa ognuno di essi con una virgola. Le impostazioni colore accettano valori hex come #FF00aacc o nomi base come red, green, e yellow.</string>
+    <string name="chamber_name_title">Nome collegamentoShortcut name</string>
+    <string name="chamber_name_message">Dai un nome al collegamento da visualizzare con l\'icona.</string>
+    <string name="chamber_name_toast">Using default name</string>
+
+    <!-- Quick Settings -->
+    <string name="quick_settings_gps">GPS</string>
+    <string name="quick_settings_gps_off">GPS OFF</string>
+    <string name="quick_settings_screen_sleep">Addormenta</string>
+    <string name="quick_settings_ringer_on">Suono ON</string>
+    <string name="quick_settings_ringer_off">Suono OFF</string>
+    <string name="quick_settings_vibration_on">Vibrazione ON</string>
+    <string name="quick_settings_vibration_off">Vibrazione OFF</string>
+    <string name="quick_settings_label_enabled">ON</string>
+    <string name="quick_settings_label_disabled">OFF</string>
+    <string name="quick_settings_ringer_normal">Suono</string>
+    <string name="quick_settings_lockscreen">Lock screen</string>
+    <string name="quick_settings_network_type">Modo rete</string>
+    <string name="quick_settings_report_bug">Riporta bug</string>
+    <string name="quick_settings_sync">Sincronizza</string>
+    <string name="quick_settings_sync_off">Sinc OFF</string>
+    <string name="quick_settings_torch">Torcia</string>
+    <string name="quick_settings_torch_off">Torcia OFF</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC OFF</string>
+    <string name="quick_settings_screen_timeout">Timeout</string>
+    <string name="quick_settings_screen_timeout_summary" translatable="false">%1$d %2$s</string>
+    <string name="quick_settings_screen_timeout_summary_never">Mai</string>
+    <string name="quick_settings_usb_tether_off_label">Disconnesso</string>
+    <string name="quick_settings_usb_tether_connected_label">Tethering OFF</string>
+    <string name="quick_settings_usb_tether_on_label">Tethering</string>
+    <string name="quick_settings_wifiap">Wi-Fi AP</string>
+    <string name="quick_settings_wifiap_off">Wi-Fi AP off</string>
+    <string name="quick_settings_quiethours">Ore quiete ON</string>
+    <string name="quick_settings_quiethours_off">Ore quiete OFF</string>
+    <string name="quick_settings_lte">LTE</string>
+    <string name="quick_settings_lte_off">LTE OFF</string>
+    <string name="quick_settings_shakeevents">Eventi Shake</string>
+    <string name="quick_settings_shakeevents_off">Eventi Shake OFF</string>
+    <string name="quick_settings_volume">Volume</string>
+    <string name="quick_settings_expanded_desktop">Espanso</string>
+    <string name="quick_settings_expanded_desktop_off">Normale</string>
+    <string name="quick_settings_music_play">Play</string>
+    <string name="quick_settings_music_pause">Pausa</string>
+    <string name="quick_settings_music_schedule_title">Timer sleep</string>
+    <string name="quick_settings_music_schedule_in_progress">Timer attivo</string>
+    <string name="quick_settings_music_schedule_start">Avvia timer</string>
+    <string name="quick_settings_music_schedule_cancel">Resetta timer</string>
+    <string name="quick_settings_music_schedule_update">Aggiorna timer</string>
+    <string name="quick_settings_reboot_recovery">Recovery</string>
+    <string name="quick_settings_reboot">Riavvio</string>
+    <string name="quick_settings_theme_switch_dark">Tema dark</string>
+    <string name="quick_settings_theme_switch_light">Tema chiaro</string>
+    <string name="quick_settings_quick_record_deleted">Eliminato...</string>
+    <string name="quick_settings_quick_record_nofile">Premere</string>
+    <string name="quick_settings_quick_record_def">Registrazione rapida</string>
+    <string name="quick_settings_quick_record_rec">Registrazione...</string>
+    <string name="quick_settings_quick_record_save">Salvato</string>
+    <string name="quick_settings_quick_record_play">Riproduzione...</string>
+    <string name="quick_settings_quick_record_dialog_cancel">Chiudi</string>
+    <string name="quick_settings_quick_record_dialog">Riproduci\nPremi per canc.</string>
+    <string name="quick_settings_custom_toggle">Personalizzato</string>
+    <string name="quick_settings_contact_toggle">Contatto</string>
+    <string name="quick_settings_reminder">Promemoria</string>
+    <string name="quick_settings_reminder_title">Titolo:</string>
+    <string name="quick_settings_reminder_message">Messaggio:</string>
+    <string name="quick_settings_reminder_time">Orario promemoria</string>
+    <string name="quick_settings_reminder_set">Imposta orario</string>
+    <string name="quick_settings_reminder_update">Aggiorna orario</string>
+    <string name="quick_settings_reminder_no_expire">No notifica</string>
+    <string name="quick_settings_reminder_dismiss">Cancella promemoria</string>
+    <string name="quick_settings_reminder_dismiss_message">Cancellare il promemoria corrente?</string>
+    <string name="quick_settings_reminder_help_title">Tocca</string>
+    <string name="quick_settings_reminder_noti_dismiss">Disattiva</string>
+    <string name="quick_settings_reminder_noti_later">Posponi</string>
+    <string name="quick_settings_reminder_help_message">Tocca lo spazio vuoto per impostare o cambiare il promemoria. Premi a lungo per cancellare il promemoria corrente.</string>
+
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">In carica (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Carico</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% rimanente</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">Nessun servizio</string>
+    <string name="pie_phone_status_airplane_mode">Modalità aereo ON</string>
+    <string name="pie_phone_status_emergency_only">Solo chiamate emergenza</string>
+
+    <!-- Smart PullDown Warning -->
+    <string name="smart_pulldown_disabled">L\'apertura intelligente dei QS è disattivata</string>
+
+    <!-- Navigation bar IME navigation -->
+    <string name="accessibility_ime_navigation_left">Cursore a sinistra</string>
+    <string name="accessibility_ime_navigation_right">Cursore a destra</string>
+
+    <!-- Heads up -->
+    <string name="status_bar_notification_heads_up_enable_title">Attiva heads up</string>
+    <string name="status_bar_notification_heads_up_disable_title">Disattiva heads up</string>
+    <string name="heads_up_snooze_message">Le heads up sono disattivate per <xliff:g id="number">%d</xliff:g> minuti.</string>
+
+</resources>
