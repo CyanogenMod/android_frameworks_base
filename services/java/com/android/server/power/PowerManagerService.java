@@ -182,6 +182,8 @@ public final class PowerManagerService extends IPowerManager.Stub
     // Max time allowed for proximity check
     private static final int MAX_PROXIMITY_WAIT = 200;
 
+    private static final float PROXIMITY_NEAR_THRESHOLD = 5.0f;
+
     private Context mContext;
     private LightsService mLightsService;
     private BatteryService mBatteryService;
@@ -1239,7 +1241,10 @@ public final class PowerManagerService extends IPowerManager.Stub
                     return;
                 }
                 mHandler.removeMessages(MSG_WAKE_UP);
-                if (event.values[0] == mProximitySensor.getMaximumRange()) {
+
+                float distance = event.values[0];
+                if (distance >= PROXIMITY_NEAR_THRESHOLD
+                        || distance >= mProximitySensor.getMaximumRange()) {
                     r.run();
                 }
                 mSensorManager.unregisterListener(this);
