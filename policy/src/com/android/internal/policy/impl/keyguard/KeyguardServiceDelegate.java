@@ -31,6 +31,8 @@ import com.android.internal.widget.LockPatternUtils;
 public class KeyguardServiceDelegate {
 
     private static final String TAG = "KeyguardServiceDelegate";
+    public static final String KEYGUARD_SERVICE_BROADCAST = "com.android.action.KEYGUARD_SERVICE";
+    public static final String KEYGUARD_SERVICE_STATE_EXTRA = "service_state";
     private static final boolean DEBUG = false;
     protected KeyguardServiceWrapper mKeyguardService;
     private View mScrim; // shown if keyguard crashes
@@ -116,6 +118,12 @@ public class KeyguardServiceDelegate {
         }
     }
 
+    private void sendKeyguardServiceBroadcast(boolean bound) {
+        Intent i = new Intent(KEYGUARD_SERVICE_BROADCAST);
+        i.putExtra(KEYGUARD_SERVICE_STATE_EXTRA, bound);
+        mScrim.getContext().sendStickyBroadcast(i);
+    }
+
     private final ServiceConnection mKeyguardConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -131,12 +139,14 @@ public class KeyguardServiceDelegate {
             if (mKeyguardState.bootCompleted) {
                 mKeyguardService.onBootCompleted();
             }
+            sendKeyguardServiceBroadcast(true);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             if (DEBUG) Log.v(TAG, "*** Keyguard disconnected (boo!)");
             mKeyguardService = null;
+            sendKeyguardServiceBroadcast(false);
         }
 
     };
