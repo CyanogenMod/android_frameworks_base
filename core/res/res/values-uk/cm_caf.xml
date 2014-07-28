@@ -20,6 +20,7 @@
   <string name="lockscreen_sim_error_message_short">Невірна карта.</string>
   <string name="lockscreen_airplane_mode_on">Режим польоту</string>
   <string name="progress_nomediapresent" product="default">Немає зовнішнього носія\u2026</string>
+  <string name="storage_uicc">Сховище UICC</string>
   <string name="stk_cc_ussd_to_dial">USSD-запит перетворено в DIAL-запит.</string>
   <string name="stk_cc_ussd_to_ss">USSD-запит перетворено в SS-запит.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-запит перетворено в новий USSD-запит.</string>

@@ -41,6 +41,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.ThemesContract;
@@ -286,21 +287,32 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
             }
         };
 
+        mWallpapersView = (LinearLayout) findViewById(R.id.wallpaper_list);
+
         // Populate the built-in wallpapers
         ArrayList<ResourceWallpaperInfo> wallpapers = findBundledWallpapers();
-        mWallpapersView = (LinearLayout) findViewById(R.id.wallpaper_list);
         BuiltInWallpapersAdapter ia = new BuiltInWallpapersAdapter(this, wallpapers);
         populateWallpapersFromAdapter(mWallpapersView, ia, false, true);
 
         // Populate the saved wallpapers
         mSavedImages = new SavedWallpaperImages(this);
         mSavedImages.loadThumbnailsAndImageIdList();
-        populateWallpapersFromAdapter(mWallpapersView, mSavedImages, true, true);
+        populateWallpapersFromAdapter(mWallpapersView, mSavedImages, true, false);
 
         // theme wallpapers
-        ArrayList<ThemeWallpaperInfo> themeWallpapers = findThemeWallpapers();
-        ThemeWallpapersAdapter twa = new ThemeWallpapersAdapter(this, themeWallpapers);
-        populateWallpapersFromAdapter(mWallpapersView, twa, false, false);
+        new AsyncTask<Void, Void, ArrayList<ThemeWallpaperInfo>>() {
+            @Override
+            protected ArrayList<ThemeWallpaperInfo> doInBackground(Void... params) {
+                return findThemeWallpapers();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<ThemeWallpaperInfo> themeWallpaperInfos) {
+                ThemeWallpapersAdapter ta = new ThemeWallpapersAdapter(
+                        WallpaperPickerActivity.this, themeWallpaperInfos);
+                populateWallpapersFromAdapter(mWallpapersView, ta, false, false);
+            }
+        }.execute((Void) null);
 
         // Populate the live wallpapers
         final LinearLayout liveWallpapersView =
@@ -512,7 +524,7 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
             boolean addLongPressHandler, boolean selectFirstTile) {
         for (int i = 0; i < adapter.getCount(); i++) {
             FrameLayout thumbnail = (FrameLayout) adapter.getView(i, null, parent);
-            parent.addView(thumbnail, i);
+            parent.addView(thumbnail);
             WallpaperTileInfo info = (WallpaperTileInfo) adapter.getItem(i);
             thumbnail.setTag(info);
             info.setView(thumbnail);

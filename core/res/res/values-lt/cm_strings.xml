@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">USB derinimas per tinklą įjungtas</string>
   <string name="adb_both_active_notification_title">USB derinimas per USB / tinklą įjungtas</string>
   <string name="adb_active_generic_notification_message">Palieskite norėdami išjungti derinimą.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Visi („%1$s“) USB saugyklos duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
+  <string name="extmedia_format_message_cm" product="default">Visi („%1$s“) kortelės duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
 </resources>

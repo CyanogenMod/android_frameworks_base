@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB przez sieć włączone</string>
   <string name="adb_both_active_notification_title">ADB przez USB &amp; sieć włączone</string>
   <string name="adb_active_generic_notification_message">Dotknij, aby wyłączyć debugowanie.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Wszystkie dane z pamięci USB (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
+  <string name="extmedia_format_message_cm" product="default">Wszystkie dane z karty pamięci (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
 </resources>

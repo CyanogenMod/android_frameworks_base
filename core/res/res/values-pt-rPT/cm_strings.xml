@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB sobre rede ativado</string>
   <string name="adb_both_active_notification_title">ABD sobre USB e rede ativado</string>
   <string name="adb_active_generic_notification_message">Toque para desativar a depuração.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Todos os dados do teu armazenamento USB (na diretoria \'%1$s\') vão ser eliminados. Esta ação não é reversível!</string>
+  <string name="extmedia_format_message_cm" product="default">Todos os dados do teu cartão de memória (na diretoria \'%1$s\') vão ser eliminados. Esta ação não é reversível!</string>
 </resources>

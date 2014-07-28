@@ -294,21 +294,34 @@ void OpenGLRenderer::syncState() {
     }
 }
 
-void OpenGLRenderer::startTiling(const sp<Snapshot>& s, bool opaque) {
+void OpenGLRenderer::startTiling(const sp<Snapshot>& s, bool opaque, bool expand) {
     if (!mSuppressTiling) {
         Rect* clip = &mTilingClip;
         if (s->flags & Snapshot::kFlagFboTarget) {
             clip = &(s->layer->clipRect);
         }
 
-        startTiling(*clip, s->height, opaque);
+        startTiling(*clip, s->height, opaque, expand);
     }
 }
 
-void OpenGLRenderer::startTiling(const Rect& clip, int windowHeight, bool opaque) {
+void OpenGLRenderer::startTiling(const Rect& clip, int windowHeight, bool opaque, bool expand) {
     if (!mSuppressTiling) {
-        mCaches.startTiling(clip.left, windowHeight - clip.bottom,
+        if(expand) {
+            // Expand the startTiling region by 1
+            int leftNotZero = (clip.left > 0) ? 1 : 0;
+            int topNotZero = (windowHeight - clip.bottom > 0) ? 1 : 0;
+
+            mCaches.startTiling(
+                clip.left - leftNotZero,
+                windowHeight - clip.bottom - topNotZero,
+                clip.right - clip.left + leftNotZero + 1,
+                clip.bottom - clip.top + topNotZero + 1,
+                opaque);
+        } else {
+            mCaches.startTiling(clip.left, windowHeight - clip.bottom,
                 clip.right - clip.left, clip.bottom - clip.top, opaque);
+        }
     }
 }
 
@@ -1014,7 +1027,8 @@ bool OpenGLRenderer::createFboLayer(Layer* layer, Rect& bounds, Rect& clip, GLui
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
             layer->getTexture(), 0);
 
-    startTiling(mSnapshot, true);
+    // Expand the startTiling region by 1
+    startTiling(mSnapshot, true, true);
 
     // Clear the FBO, expand the clear region by 1 to get nice bilinear filtering
     mCaches.enableScissor();
@@ -2077,7 +2091,9 @@ status_t OpenGLRenderer::drawDisplayList(DisplayList* displayList, Rect& dirty,
         return status | deferredList.flush(*this, dirty);
     }
 
-    return DrawGlInfo::kStatusDone;
+    // Even if there is no drawing command(Ex: invisible),
+    // it still needs startFrame to clear buffer and start tiling.
+    return startFrame();
 }
 
 void OpenGLRenderer::outputDisplayList(DisplayList* displayList) {

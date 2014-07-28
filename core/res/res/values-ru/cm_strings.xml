@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">Отладка по сети разрешена</string>
   <string name="adb_both_active_notification_title">Отладка по сети и USB разрешена</string>
   <string name="adb_active_generic_notification_message">Нажмите, чтобы отключить отладку.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Все данные на USB-накопителе (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
+  <string name="extmedia_format_message_cm" product="default">Все данные на карте (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
 </resources>

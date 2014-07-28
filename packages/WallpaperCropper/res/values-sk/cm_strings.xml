@@ -16,6 +16,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">Vymazať</string>
+  <plurals name="number_of_items_selected">
+    <item quantity="one">%1$d vybraná</item>
+    <item quantity="few">%1$d vybrané</item>
+    <item quantity="other">%1$d vybraných</item>
+  </plurals>
   <string name="wallpaper_accessibility_name">Tapeta %1$d z %2$d</string>
   <string name="announce_selection"><xliff:g id="label" example="Tapeta 3 z 10">%1$s</xliff:g> vybraná</string>
   <string name="wallpaper_delete">Vymazať</string>

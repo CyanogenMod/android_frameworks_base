@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Son <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Vibreur <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Curseur gauche</string>
+  <string name="accessibility_dpad_right">Curseur droit</string>
   <string name="dessert_case_settings_cm_title">Montrer les mascottes de CM</string>
   <string name="dessert_case_settings_cm_summary">Montrer dans un rêve les mascottes de CM ainsi que les desserts d\'Android</string>
   <string name="quick_settings_profile_label">Profil</string>
@@ -32,7 +34,7 @@
   <string name="quick_settings_label_enabled">Activé</string>
   <string name="quick_settings_label_disabled">Désactivé</string>
   <string name="quick_settings_ringer_normal">Son</string>
-  <string name="quick_settings_lockscreen">Écran de verrouillage</string>
+  <string name="quick_settings_lockscreen">Verrouillage écran</string>
   <string name="quick_settings_network_type">Mode réseau</string>
   <string name="quick_settings_report_bug">Rapporter un bogue</string>
   <string name="quick_settings_sync">Synchronisation</string>
@@ -82,5 +84,5 @@
   <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
   <string name="screenshot_delete_action">Supprimer</string>
   <string name="screenshot_delete_confirmation">Capture d\'écran supprimée.</string>
-  <string name="accessibility_desc_add_quick_settings">Ajouter des réglages rapides.</string>
+  <string name="accessibility_desc_add_quick_settings">Ajouter des raccourcis.</string>
 </resources>

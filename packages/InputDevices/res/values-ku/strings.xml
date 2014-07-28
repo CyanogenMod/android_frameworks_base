@@ -16,7 +16,6 @@
   <string name="keyboard_layout_spanish_label">ئیسپانی</string>
   <string name="keyboard_layout_swiss_french_label">فه‌ڕه‌نسی سوێس</string>
   <string name="keyboard_layout_swiss_german_label">ئه‌ڵمانی سوێس</string>
-  <string name="keyboard_layout_armenian_eastern_label">ئه‌رمینیای ڕۆژهه‌ڵاتی</string>
   <string name="keyboard_layout_belgian">به‌لجیکی</string>
   <string name="keyboard_layout_bulgarian">بولگاری</string>
   <string name="keyboard_layout_italian">ئیتاڵی</string>
@@ -35,10 +34,4 @@
   <string name="keyboard_layout_slovenian">سلۆڤینیایی</string>
   <string name="keyboard_layout_turkish">تورکی</string>
   <string name="keyboard_layout_ukrainian">ئۆکرانی</string>
-  <string name="keyboard_layout_arabic">عەرەبی</string>
-  <string name="keyboard_layout_greek">یۆنانی</string>
-  <string name="keyboard_layout_hebrew">یەهودی</string>
-  <string name="keyboard_layout_lithuanian">لیتوانی</string>
-  <string name="keyboard_layout_spanish_latin">ئیسپانی (لاتینی)</string>
-  <string name="keyboard_layout_latvian">لاتڤی</string>
 </resources>

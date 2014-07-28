@@ -16,32 +16,34 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="accessibility_quick_settings_ringer">دەنگە <xliff:g id="قسەکردن" نمونە="کوژانەوە">%s</xliff:g>
+  <string name="accessibility_quick_settings_ringer">دەنگە <xliff:g id="قسەکردن" نمونە="ناچالاکردن">%s</xliff:g>
 </string>
   <string name="accessibility_quick_settings_vibration">لەرینەوە <xliff:g id="state" نمونە="کوژانەوە">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">جێنیشانده‌ر بۆ لای چه‌پ</string>
+  <string name="accessibility_dpad_right">جێنیشانده‌ر بۆ لای ڕاست</string>
   <string name="dessert_case_settings_cm_title">نیشاندانی بەختێکی باشی ساینۆجنمۆد</string>
   <string name="dessert_case_settings_cm_summary">نیشاندانی بەختێکی باشی CM لەگەڵ ئارەزوەکانی خەونی ئەندرۆید</string>
   <string name="quick_settings_profile_label">پرۆفایل</string>
-  <string name="powerwidget_screen_timeout_toast">دانانی کات بۆ سەرشاشە %1$d %2$s</string>
+  <string name="powerwidget_screen_timeout_toast">دانانی کات بۆ سەر ڕوونما %1$d %2$s</string>
   <string name="quick_settings_gps">GPS</string>
-  <string name="quick_settings_gps_off">کوژانەوەی GPS </string>
+  <string name="quick_settings_gps_off">ناچالاکردنی GPS </string>
   <string name="quick_settings_screen_sleep">بڕۆ بۆ خەوتن</string>
-  <string name="quick_settings_ringer_on">کردنەوەی دەنگ</string>
-  <string name="quick_settings_ringer_off">کوژانەوەی دەنگ</string>
-  <string name="quick_settings_vibration_on">کردنەوەی لەرینەوە</string>
-  <string name="quick_settings_vibration_off">کوژانەوەی لەرینەوە</string>
-  <string name="quick_settings_label_enabled">کردنەوە</string>
-  <string name="quick_settings_label_disabled">کوژانەوە</string>
+  <string name="quick_settings_ringer_on">چالاکردنیی دەنگ</string>
+  <string name="quick_settings_ringer_off">ناچالاکردنی دەنگ</string>
+  <string name="quick_settings_vibration_on">چالاکردنیی لەرینەوە</string>
+  <string name="quick_settings_vibration_off">ناچالاکردنی لەرینەوە</string>
+  <string name="quick_settings_label_enabled">چالاکردن</string>
+  <string name="quick_settings_label_disabled">ناچالاکردن</string>
   <string name="quick_settings_ringer_normal">دەنگ</string>
-  <string name="quick_settings_lockscreen">قوفڵکردنی شاشە</string>
+  <string name="quick_settings_lockscreen">داخستنی ڕوونما</string>
   <string name="quick_settings_network_type">خستنە باری تۆڕ</string>
   <string name="quick_settings_report_bug">راپۆرتکردنی کەموکورتیەکان</string>
   <string name="quick_settings_sync">ناردنی</string>
-  <string name="quick_settings_sync_off">کوژانەوەی ناردن</string>
+  <string name="quick_settings_sync_off">ناچالاکردنی ناردن</string>
   <string name="quick_settings_torch">مەشخەڵ</string>
-  <string name="quick_settings_torch_off">کوژانەوەی مەشخەڵ</string>
+  <string name="quick_settings_torch_off">ناچالاکردنی مەشخەڵ</string>
   <string name="quick_settings_nfc">NFC</string>
-  <string name="quick_settings_nfc_off">کوژانەوەی NFC  </string>
+  <string name="quick_settings_nfc_off">ناچالاکردنی NFC  </string>
   <string name="quick_settings_screen_timeout">کاتخستنەسەر</string>
   <string name="quick_settings_usb_tether_off_label">بێ پەیوەندکردنی</string>
   <string name="quick_settings_usb_tether_connected_label">پەیوەندی ئینتەرنێت بە تەلەفوون</string>
@@ -60,6 +62,10 @@
   <string name="quick_settings_network_adb_enabled_label">کارا</string>
   <string name="quick_settings_bluetooth_multi_label">%1$dی پەیوەستە</string>
   <string name="quick_settings_equalizer">یه‌کسانکه‌ری ده‌نگ</string>
+  <string name="quick_settings_compass_off">له‌کارخستنی قیبله‌نما</string>
+  <string name="quick_settings_compass_init">سه‌ره‌تایکردن\u2026</string>
+  <string name="quick_settings_heads_up_on">سه‌رکار کارده‌کات</string>
+  <string name="quick_settings_heads_up_off">هیچ له‌جێچوونێک نییه‌</string>
   <string name="location_mode_high_accuracy_title">تێبینی زۆر</string>
   <string name="location_mode_battery_saving_title">پاشەکەوتی وزە</string>
   <string name="location_mode_sensors_only_title">تەنها ئامێر</string>
@@ -80,6 +86,6 @@
   <string name="advanced_dev_option_force_stop">وەستاندی بێهۆکار</string>
   <string name="accessibility_dock_battery_level">وزەی نیشاندراو <xliff:g id="number">%d</xliff:g> ڕێژەی</string>
   <string name="screenshot_delete_action">سڕینەوە</string>
-  <string name="screenshot_delete_confirmation">وێنەی شاشەی گیراو سڕدرایەوە</string>
+  <string name="screenshot_delete_confirmation">وێنەی ڕوونمای گیراو سڕدرایەوە.</string>
   <string name="accessibility_desc_add_quick_settings">زیادکردنی کاری خێرا</string>
 </resources>

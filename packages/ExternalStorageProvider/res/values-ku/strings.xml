@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources>
-  <string name="app_label">میمۆری ده‌ره‌کی</string>
-  <string name="root_internal_storage">میمۆری ناوه‌کی</string>
+  <string name="app_label">بیرگەی ده‌ره‌کی</string>
+  <string name="root_internal_storage">بیرگەی ناوه‌کی</string>
   <string name="root_documents">دۆکیۆمێنته‌کان</string>
 </resources>

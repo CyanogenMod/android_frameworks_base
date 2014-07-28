@@ -24,15 +24,15 @@
   <string name="keyguard_password_enter_puk_prompt">کۆدیPUK سیمکارت</string>
   <string name="keyguard_password_enter_pin_prompt">کۆدی نوێی سیمکارت</string>
   <string name="keyguard_password_entry_touch_hint"><font size="17">ساوین بۆ نوسینی تێپەڕە وشە</font></string>
-  <string name="keyguard_password_enter_password_code">نوسینی تێپەڕە وشە بۆ کردنەوە</string>
-  <string name="keyguard_password_enter_pin_password_code">نوسنینی PIN بۆ کردنەوە</string>
+  <string name="keyguard_password_enter_password_code">نوسینی تێپەڕە وشە بۆ چالاکردن</string>
+  <string name="keyguard_password_enter_pin_password_code">نوسنینی PIN بۆ چالاکردن</string>
   <string name="keyguard_password_wrong_pin_code">PIN هەڵە بوو.</string>
-  <string name="keyguard_label_text">بۆ کردنەوە. دەست بنە بە پێڕست و ئنجا 0.</string>
-  <string name="faceunlock_multiple_failures">کردنەوەی قوفڵ بە ڕوخسار هەوڵ زۆر دراوە</string>
+  <string name="keyguard_label_text">بۆ چالاکردن. دەست بنە بە پێڕست و ئنجا 0.</string>
+  <string name="faceunlock_multiple_failures">چالاکردنی قوفڵ بە ڕوخسار هەوڵ زۆر دراوە</string>
   <string name="keyguard_charged">بارگه‌کراو</string>
   <string name="keyguard_plugged_in">بارگه‌کراوی, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="keyguard_low_battery">بیبەستە بە بارگەکەر, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="keyguard_instructions_when_pattern_disabled">دەست بنە بە پێڕست بۆ کردنەوە.</string>
+  <string name="keyguard_instructions_when_pattern_disabled">دەست بنە بە پێڕست بۆ چالاکردن.</string>
   <string name="keyguard_network_locked_message">تۆڕ قوفڵکراوە</string>
   <string name="keyguard_missing_sim_message_short">سیمکارتی تیا نیە</string>
   <string name="keyguard_missing_sim_message" product="tablet">سیمکارت نیە لە تاتەبژمێر</string>
@@ -48,7 +48,7 @@
   <string name="keyguard_accessibility_add_widget">زیادکردنی ویجیت.</string>
   <string name="keyguard_accessibility_widget_empty_slot">بەتاڵ</string>
   <string name="keyguard_accessibility_unlock_area_expanded">کردنەوی ناوچە بڵاوکرایەوە.</string>
-  <string name="keyguard_accessibility_unlock_area_collapsed">ناوچەی کردنەوە لەناوچوون.</string>
+  <string name="keyguard_accessibility_unlock_area_collapsed">ناوچەی چالاکردن لەناوچوون.</string>
   <string name="keyguard_accessibility_widget"><xliff:g id="ویجیت_index">%1$s</xliff:g> widget.</string>
   <string name="keyguard_accessibility_user_selector">هەڵبژاردەی بەکارهێنەر</string>
   <string name="keyguard_accessibility_status">ئاست</string>
@@ -58,12 +58,12 @@
   <string name="keyguard_accessibility_widget_reorder_end">داواکردنی وێدجەکان کۆتایهات.</string>
   <string name="keyguard_accessibility_widget_deleted">ویجیت <xliff:g id="widget_index">%1$s</xliff:g> سڕایەوە.</string>
   <string name="keyguard_accessibility_expand_lock_area">بڵاوکردنەوەی ناوچەی کردنەوە.</string>
-  <string name="keyguard_accessibility_slide_unlock">کردنەوە بە لادان.</string>
-  <string name="keyguard_accessibility_pattern_unlock">کردنەوە بە چنراو.</string>
-  <string name="keyguard_accessibility_face_unlock">کردنەوە بە دەموچاو.</string>
-  <string name="keyguard_accessibility_pin_unlock">کردنەوە بە کۆد.</string>
-  <string name="keyguard_accessibility_password_unlock">کردنەوە بە تێپەڕەوشە.</string>
-  <string name="keyguard_accessibility_pattern_area">ناوچەی چنین.</string>
+  <string name="keyguard_accessibility_slide_unlock">چالاکردن بە لادان.</string>
+  <string name="keyguard_accessibility_pattern_unlock">چالاکردن بە چنراو.</string>
+  <string name="keyguard_accessibility_face_unlock">چالاکردن بە دەموچاو.</string>
+  <string name="keyguard_accessibility_pin_unlock">چالاکردن بە کۆد.</string>
+  <string name="keyguard_accessibility_password_unlock">چالاکردن بە تێپەڕەوشە.</string>
+  <string name="keyguard_accessibility_pattern_area">ناوچەی کێشان.</string>
   <string name="keyguard_accessibility_slide_area">ناوچەی لادان.</string>
   <string name="keyguard_accessibility_transport_prev_description">دوگمەی تراکی پێشوو</string>
   <string name="keyguard_accessibility_transport_next_description">دوگمەی تراکی داهاتوو</string>
@@ -73,7 +73,7 @@
   <string name="keyguard_accessibility_transport_thumbs_up_description">پەنجە گەورە بۆ سەرەوە</string>
   <string name="keyguard_accessibility_transport_thumbs_down_description">پەنچە گەورە بۆ خوارەوە</string>
   <string name="keyguard_accessibility_transport_heart_description">دڵ</string>
-  <string name="keyguard_accessibility_show_bouncer">کردنەوە بۆ بەردەوام بوون</string>
+  <string name="keyguard_accessibility_show_bouncer">چالاکردن بۆ بەردەوام بوون</string>
   <string name="keyguard_accessibility_hide_bouncer">داگیرساندن پوچەڵکرایەوە</string>
   <string name="keyguard_accessibility_delete_widget_start">دڵۆپەکەر<xliff:g id="widget_index">%1$s</xliff:g>بۆ سڕینەوە.</string>
   <string name="keyguard_accessibility_delete_widget_end"><xliff:g id="widget_index">%1$s</xliff:g>ناسڕێتەوە.</string>
@@ -87,10 +87,10 @@
   <string name="keyboardview_keycode_mode_change">گۆڕینی جۆر</string>
   <string name="keyboardview_keycode_shift">شوێنگۆڕین</string>
   <string name="keyboardview_keycode_enter">دانان</string>
-  <string name="description_target_unlock">کردنەوە</string>
+  <string name="description_target_unlock">چالاکردن</string>
   <string name="description_target_camera">کامێرا</string>
   <string name="description_target_silent">بێدەنگ</string>
-  <string name="description_target_soundon">کردنەوەی دەنگ</string>
+  <string name="description_target_soundon">چالاکردنی دەنگ</string>
   <string name="description_target_search">گەڕان</string>
   <string name="description_direction_up">درووستە بۆ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
   <string name="description_direction_down">درووستە بۆ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
@@ -98,24 +98,24 @@
   <string name="description_direction_right">لادانی ڕاست بۆ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
   <string name="user_switched">بەکارهێنەری ئێستا <xliff:g id="name" example="Bob">%1$s</xliff:g>.</string>
   <string name="kg_emergency_call_label">تەلەفۆنی فریاگوزاری</string>
-  <string name="kg_forgot_pattern_button_text">بیرچونی چنینەکە</string>
-  <string name="kg_wrong_pattern">چنین هەڵە</string>
+  <string name="kg_forgot_pattern_button_text">بیرچونی کێشانەکە</string>
+  <string name="kg_wrong_pattern">کێشان هەڵە</string>
   <string name="kg_wrong_password">تێپەڕەوشەی هەڵە</string>
   <string name="kg_wrong_pin">PIN هەڵەیە</string>
   <string name="kg_too_many_failed_attempts_countdown">دوبارە هەوڵبدەرەوە <xliff:g id="number">%d</xliff:g> دووەم.</string>
-  <string name="kg_pattern_instructions">قوفڵی چنین بکێشە</string>
+  <string name="kg_pattern_instructions">قوفڵی کێشان بکێشە</string>
   <string name="kg_sim_pin_instructions">دانانی کۆدی سیمکارت</string>
   <string name="kg_pin_instructions">دانانی PIN</string>
   <string name="kg_password_instructions">دانانی تێپەڕە وشە</string>
   <string name="kg_puk_enter_puk_hint">سیمکارتەکە لە کارکەوت ئێستا.PUK لێ بدە بۆ بەردەوام بوو.یان پەیوەدنی بکە بە کۆمپانیاوە بۆ زانیاری.</string>
   <string name="kg_puk_enter_pin_hint">دانانی PIN کۆد بە ئارەزوی خۆت</string>
   <string name="kg_enter_confirm_pin_hint">دڵنیاکردنەوەی کۆدی PIN</string>
-  <string name="kg_sim_unlock_progress_dialog_message">کردنەوەی قوفڵی سیمکارت\u2026</string>
-  <string name="kg_invalid_sim_pin_hint">نوسینی PIN لە ٤-٨ ژمارەیە.</string>
-  <string name="kg_invalid_sim_puk_hint">PUK ئەبێ ٨ ژمارە یان زیاتر بێت.</string>
+  <string name="kg_sim_unlock_progress_dialog_message">چالاکردنی قوفڵی سیمکارت\u2026</string>
+  <string name="kg_invalid_sim_pin_hint">نوسینی PIN لە 4-8 ژمارەیە.</string>
+  <string name="kg_invalid_sim_puk_hint">PUK ئەبێ 8 ژمارە یان زیاتر بێت.</string>
   <string name="kg_invalid_puk">دوبارە کۆدی PUK لێدەرەوە. زۆر هەڵە لێدانی سیمکارتەکەت لە کار ئەخات.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">PIN یەکسان نیە</string>
-  <string name="kg_login_too_many_attempts">زۆر هەوڵت داوە قوفڵە چنین دانێیت</string>
+  <string name="kg_login_too_many_attempts">زۆر هەوڵت داوە قوفڵە کێشان دانێیت</string>
   <string name="kg_login_instructions">بۆ کردنەوە.بچۆ ژورەوە بە هەژماری گووگڵەکەت.</string>
   <string name="kg_login_username_hint">ناو(ئیمەیڵ)</string>
   <string name="kg_login_password_hint">تێپەڕەوشە</string>
@@ -132,7 +132,7 @@
         \n\nدوبارە هەوڵبدەرەوە <xliff:g id="number">%d</xliff:g> دوەم.
     </string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">
-        تۆ قوفڵی چنینەکەت بە هەڵە لێداوە <xliff:g id="number">%d</xliff:g> جار.
+        تۆ قوفڵی کێشانەکەت بە هەڵە لێداوە <xliff:g id="number">%d</xliff:g> جار.
         \n\nدوبارە هەوڵبدەروەە <xliff:g id="number">%d</xliff:g> دوەم.
     </string>
   <string name="kg_failed_attempts_almost_at_wipe" product="tablet">
@@ -149,12 +149,12 @@
       تەلەفۆنەکە ئێستا ئەجیتەوە باری بنەڕەتی.
     </string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">
-       بەهەڵە هەوڵی کردنەوەی چنینەکەت داوە بۆ کردنەوە <xliff:g id="number">%d</xliff:g> times.
+       بەهەڵە هەوڵی کردنەوەی کێشانەکەت داوە بۆ کردنەوە <xliff:g id="number">%d</xliff:g> times.
        After <xliff:g id="number">%d</xliff:g>زۆر هەوڵدان زیاتر ئەوە پرسیارت لێ ئەکەت بە بەکارهیانی هەژمارەکەت بچیتە ژورەوە.\n\n
        Try again in <xliff:g id="number">%d</xliff:g> دوەم.
     </string>
   <string name="kg_failed_attempts_almost_at_login" product="default">
-       بەهەڵە چنینەکەت کێشا بۆ کردنەوە <xliff:g id="number">%d</xliff:g> times.
+       بەهەڵە کێشانەکەت کێشا بۆ کردنەوە <xliff:g id="number">%d</xliff:g> times.
        After <xliff:g id="number">%d</xliff:g> زیاتر هەوڵی هەڵە بدەیت هەوە پرسیاری جیمەیڵەکەت لێ دەکات.\n\n
        دوبارە هەوڵ بدەرەوە <xliff:g id="number">%d</xliff:g> دوەم.
     </string>

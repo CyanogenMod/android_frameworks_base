@@ -1776,6 +1776,30 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                         loge("Disconnect on unknown device: " + device);
                     }
                     break;
+                case WifiMonitor.P2P_REMOVE_AND_REFORM_GROUP_EVENT:
+                    /* First remove p2p group and then restart only if
+                     * autonoums group formation is set to true
+                     */
+                    Slog.d(TAG, "Received event P2P_REMOVE_AND_REFORM_GROUP, remove P2P group");
+                    if (mWifiNative.p2pGroupRemove(mGroup.getInterface())) {
+                        Slog.d(TAG, "Removed P2P group successfully");
+                        transitionTo(mOngoingGroupRemovalState);
+                        replyToMessage(message, WifiP2pManager.REMOVE_GROUP_SUCCEEDED);
+                    } else {
+                        Slog.d(TAG, "Failed to remove the P2P group");
+                        handleGroupRemoved();
+                        transitionTo(mInactiveState);
+                        replyToMessage(message,
+                                       WifiP2pManager.REMOVE_GROUP_FAILED,
+                                       WifiP2pManager.ERROR);
+                    }
+                    if (mAutonomousGroup) {
+                        Slog.d(TAG, "AutonomousGroup is set, reform P2P Group");
+                        sendMessage(WifiP2pManager.CREATE_GROUP);
+                    } else {
+                        Slog.d(TAG, "AutonomousGroup is not set, will not reform P2P Group");
+                    }
+                    break;
                 case DhcpStateMachine.CMD_POST_DHCP_ACTION:
                     DhcpResults dhcpResults = (DhcpResults) message.obj;
                     if (message.arg1 == DhcpStateMachine.DHCP_SUCCESS &&
@@ -2645,6 +2669,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
             boolean peersChanged = mPeers.remove(mPeersLostDuringConnection);
             if (mPeers.remove(mSavedPeerConfig.deviceAddress) != null) {
                 peersChanged = true;
+                mWifiNative.p2pFlush();
             }
             if (peersChanged) {
                 sendPeersChangedBroadcast();

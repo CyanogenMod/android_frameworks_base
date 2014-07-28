@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB sobre xarxa habilitat</string>
   <string name="adb_both_active_notification_title">ADB sobre USB i xarxa habilitat</string>
   <string name="adb_active_generic_notification_message">Toca per deshabilitar la depuració.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">S\'esborraran totes les dades del teu emmagatzematge USB (a la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
+  <string name="extmedia_format_message_cm" product="default">S\'esborraran totes les dades de la teva targeta (a la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
 </resources>

@@ -39,8 +39,8 @@
   <string name="query_error">داواکاری دۆکیومێنت سه‌رکه‌وتوونه‌بوو</string>
   <string name="root_recent">تازه‌کان</string>
   <string name="root_available_bytes"><xliff:g id="size" example="3GB">%1$s</xliff:g> به‌تاڵه‌</string>
-  <string name="root_type_service">خزمه‌تگوزاری میمۆری</string>
-  <string name="root_type_shortcut">کورتەئایکۆنەکان </string>
+  <string name="root_type_service">خزمه‌تگوزاری بیرگەی</string>
+  <string name="root_type_shortcut">کورتەوێنۆچکەکان </string>
   <string name="root_type_device">ئامێره‌کان</string>
   <string name="root_type_apps">به‌رنامه‌ی زیاتر</string>
   <string name="pref_advanced_devices">نیشاندانی ئامێره‌ پێشکه‌وتووه‌کان</string>

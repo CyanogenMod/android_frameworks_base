@@ -44,19 +44,19 @@
   <string name="reboot_confirm" product="tablet">您的平板电脑将会重启。</string>
   <string name="reboot_confirm" product="default">您的手机将会重启。</string>
   <string name="permlab_preventpower">阻止电源键</string>
-  <string name="permdesc_preventpower">允许应用程序完全掌控电源键</string>
+  <string name="permdesc_preventpower">允许应用完全掌控电源键</string>
   <string name="permlab_sendMockSms">发送模拟短信</string>
   <string name="permdesc_sendMockSms">允许应用发送模拟短信.
         这允许应用发送短信到受信任的应用. 恶意应用可能连续发送短信, 阻断设备通知系统并扰乱用户.</string>
   <string name="storage_sd_dock_card">底座 SD 卡</string>
-  <string name="app_killed_message">应用程序已被终止</string>
+  <string name="app_killed_message">应用已被终止</string>
   <string name="global_action_reboot">重启</string>
   <string name="global_action_choose_profile">情景模式</string>
   <string name="toast_rotation_unlocked">屏幕方向已解锁</string>
   <string name="toast_rotation_locked">屏幕方向已锁定</string>
   <string name="stylus_app_not_installed">%s 尚未被安装</string>
   <string name="permlab_changePrivacyGuardState">启用或禁用隐私防护</string>
-  <string name="permdesc_changePrivacyGuardState">允许应用更改其他应用是否启用隐私防护. 当一个应用程序运行时启了用隐私防护, 它将不能访问个人数据, 如联系人, 通话记录或者短信.</string>
+  <string name="permdesc_changePrivacyGuardState">允许应用更改其他应用是否启用隐私防护。当一个应用运行时启用了隐私防护，它将不能访问个人数据，如联系人、通话记录、短信。</string>
   <string name="privacy_guard_notification">隐私防护激活</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>
   <string name="profile_picker_title">情景模式</string>
@@ -67,19 +67,19 @@
   <string name="permlab_interceptSmsSent">拦截传出的短信</string>
   <string name="permdesc_interceptSmsSent">允许应用拦截传出的短信。恶意程序可能用这种方法阻止发送短信。</string>
   <string name="permlab_resetBatteryStats">重置电池统计信息</string>
-  <string name="permdesc_resetBatteryStats">允许应用程序重置当前低电量电池使用数据。</string>
+  <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
   <string name="permgrouplab_security">安全</string>
   <string name="permgroupdesc_security">与设备安全信息相关的权限。</string>
   <string name="permlab_readPhoneBlacklist">读取手机黑名单</string>
-  <string name="permdesc_readPhoneBlacklist">允许应用程序读取有关被阻止来电或信息的电话号码的信息。</string>
+  <string name="permdesc_readPhoneBlacklist">允许应用读取有关被阻止来电或信息的电话号码的信息。</string>
   <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
   <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
   <string name="permlab_accessThemeService">访问主题服务</string>
   <string name="permdesc_accessThemeService">允许应用访问主题服务。正常应用不应需要此权限。</string>
   <string name="permlab_readThemes">读取您的主题信息</string>
-  <string name="permdesc_readThemesDesc">允许程序读取您的主题并确定您已使用的主题。</string>
+  <string name="permdesc_readThemesDesc">允许应用读取您的主题并确定已应用的主题。</string>
   <string name="permlab_writeThemes">修改您的主题</string>
-  <string name="permdesc_writeThemesDesc">允许程序修改您已经使用的主题，并插入新的主题。</string>
+  <string name="permdesc_writeThemesDesc">允许应用插入新的主题和修改已应用的主题。</string>
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
   <string name="permlab_useHardwareFramework">使用硬件框架</string>
@@ -132,4 +132,6 @@
   <string name="adb_net_active_notification_title">网络 ADB 调试已启用</string>
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <string name="extmedia_format_message_cm" product="default">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
 </resources>

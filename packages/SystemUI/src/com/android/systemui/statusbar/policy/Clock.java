@@ -52,6 +52,7 @@ import libcore.icu.LocaleData;
  */
 public class Clock extends TextView implements DemoMode, OnClickListener, OnLongClickListener {
     private boolean mAttached;
+    private boolean mReceiverRegistered;
     private Calendar mCalendar;
     private String mClockFormatString;
     private SimpleDateFormat mClockFormat;
@@ -80,12 +81,9 @@ public class Clock extends TextView implements DemoMode, OnClickListener, OnLong
         }
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        if (!mAttached) {
-            mAttached = true;
+    private void updateReceiverState() {
+        boolean shouldBeRegistered = mAttached && getVisibility() != GONE;
+        if (shouldBeRegistered && !mReceiverRegistered) {
             IntentFilter filter = new IntentFilter();
 
             filter.addAction(Intent.ACTION_TIME_TICK);
@@ -95,7 +93,19 @@ public class Clock extends TextView implements DemoMode, OnClickListener, OnLong
             filter.addAction(Intent.ACTION_USER_SWITCHED);
 
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+            mReceiverRegistered = true;
+        } else if (!shouldBeRegistered && mReceiverRegistered) {
+            getContext().unregisterReceiver(mIntentReceiver);
+            mReceiverRegistered = false;
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        mAttached = true;
+        updateReceiverState();
 
         // NOTE: It's safe to do these after registering the receiver since the receiver always runs
         // in the main thread, therefore the receiver can't run before this method returns.
@@ -110,9 +120,18 @@ public class Clock extends TextView implements DemoMode, OnClickListener, OnLong
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mAttached) {
-            getContext().unregisterReceiver(mIntentReceiver);
-            mAttached = false;
+        mAttached = false;
+        updateReceiverState();
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        boolean wasRegistered = mReceiverRegistered;
+        updateReceiverState();
+        if (!wasRegistered && mReceiverRegistered) {
+            mCalendar = Calendar.getInstance(TimeZone.getDefault());
+            updateClock();
         }
     }
 

@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">الصوت <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">الاهتزاز <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">المؤشر إلى اليسار</string>
+  <string name="accessibility_dpad_right">المؤشر الى اليمين</string>
   <string name="dessert_case_settings_cm_title">اظهار تميمة CM</string>
   <string name="dessert_case_settings_cm_summary">إظهار تمائم CM جنبا إلى جنب مع الحلويات Android داخل الحلم</string>
   <string name="quick_settings_profile_label">الشخصية</string>

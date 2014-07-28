@@ -130,5 +130,7 @@
   <string name="permission_remember_choice">Ricorda la scelta</string>
   <string name="adb_net_active_notification_title">ADB attraverso la rete attivato</string>
   <string name="adb_both_active_notification_title">ADB attraverso USB &amp; rete attivato</string>
-  <string name="adb_active_generic_notification_message">Tocca per disattivare il debugging.</string>
+  <string name="adb_active_generic_notification_message">Tocca per disattivare il debug.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Tutti i dati sulla memoria USB (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
+  <string name="extmedia_format_message_cm" product="default">Tutti i dati sulla scheda (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
 </resources>

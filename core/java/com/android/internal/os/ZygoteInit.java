@@ -514,7 +514,8 @@ public class ZygoteInit {
             OsConstants.CAP_SYS_NICE,
             OsConstants.CAP_SYS_RESOURCE,
             OsConstants.CAP_SYS_TIME,
-            OsConstants.CAP_SYS_TTY_CONFIG
+            OsConstants.CAP_SYS_TTY_CONFIG,
+            OsConstants.CAP_BLOCK_SUSPEND
         );
         /* Hardcoded command line to start the system server */
         String args[] = {

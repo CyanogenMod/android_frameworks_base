@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Garsas <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Vibracija <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Žymeklis kairėje</string>
+  <string name="accessibility_dpad_right">Žymeklis dešinėje</string>
   <string name="dessert_case_settings_cm_title">Rodyti CM talismanus</string>
   <string name="dessert_case_settings_cm_summary">Rodyti CM talismanus kartu su „Android“ desertais svajonėje</string>
   <string name="quick_settings_profile_label">Profilis</string>

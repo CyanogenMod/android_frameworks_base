@@ -17,6 +17,6 @@ package android.content.res;
 
 /** {@hide} */
 oneway interface IThemeChangeListener {
-    void onProgress(int progress, String pkgName);
-    void onFinish(boolean isSuccess, String pkgName);
+    void onProgress(int progress);
+    void onFinish(boolean isSuccess);
 }

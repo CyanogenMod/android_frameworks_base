@@ -35,7 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-final class Utilities {
+public final class Utilities {
     private static final String TAG = "WallpaperCropper.Utilities";
 
     public static void scaleRect(Rect r, float scale) {
@@ -83,10 +83,13 @@ final class Utilities {
 
             AssetManager am = res.getAssets();
             String[] wallpapers = am.list(path);
-            if (wallpapers == null || wallpapers.length == 0) {
+            String wallpaper = getFirstNonEmptyString(wallpapers);
+            if (wallpaper == null) {
                 return null;
             }
-            is = am.open(path + File.separator + wallpapers[0]);
+
+
+            is = am.open(path + File.separator + wallpaper);
 
             BitmapFactory.Options bounds = new BitmapFactory.Options();
             bounds.inJustDecodeBounds = true;
@@ -123,6 +126,18 @@ final class Utilities {
                 }
             }
         }
+    }
+
+    public static String getFirstNonEmptyString(String[] strings) {
+        if (strings == null) return null;
+        String firstNonEmptyString = null;
+        for(String astring : strings) {
+            if (!astring.isEmpty()) {
+                firstNonEmptyString = astring;
+                break;
+            }
+        }
+        return firstNonEmptyString;
     }
 
     public static Bitmap getLegacyThemeWallpaper(Context context, String pkgName, boolean thumb) {

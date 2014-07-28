@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB over nettverk aktivert</string>
   <string name="adb_both_active_notification_title">ADB over USB &amp; nettverk aktivert</string>
   <string name="adb_active_generic_notification_message">Trykk for å deaktivere feilsøking.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Alle data på USB Lagringen (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
+  <string name="extmedia_format_message_cm" product="default">Alle data på kortet (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
 </resources>

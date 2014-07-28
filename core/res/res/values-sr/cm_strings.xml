@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB преко мреже омогућено</string>
   <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућено</string>
   <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Сви подаци са твог USB складишта (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
+  <string name="extmedia_format_message_cm" product="default">Сви подаци са твоје картице (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
 </resources>

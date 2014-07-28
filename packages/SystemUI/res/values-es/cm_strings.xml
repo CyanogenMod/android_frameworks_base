@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_quick_settings_ringer">Sonido <xliff:g id="state" example="Apagado">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_vibration">Vibración <xliff:g id="state" example="Apagada">%s</xliff:g>.</string>
+  <string name="accessibility_dpad_left">Cursor izquierda</string>
+  <string name="accessibility_dpad_right">Cursor derecha</string>
   <string name="dessert_case_settings_cm_title">Mostrar mascotas de CM</string>
   <string name="dessert_case_settings_cm_summary">Mostrar las mascotas de CyanogenMod junto a los postres de Android</string>
   <string name="quick_settings_profile_label">Perfil</string>

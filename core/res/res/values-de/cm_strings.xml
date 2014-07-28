@@ -43,8 +43,8 @@
   <string name="reboot_progress">Neu starten\u2026</string>
   <string name="reboot_confirm" product="tablet">Tablet wird neu gestartet</string>
   <string name="reboot_confirm" product="default">Telefon wird neu gestartet</string>
-  <string name="permlab_preventpower">Ein/Aus-Taste umbelegen</string>
-  <string name="permdesc_preventpower">Ermöglicht der App, der Ein/Aus-Taste eine andere Funktion zuzuweisen</string>
+  <string name="permlab_preventpower">Ein-/Aus-Taste umbelegen</string>
+  <string name="permdesc_preventpower">Ermöglicht der App, der Ein-/Aus-Taste eine andere Funktion zuzuweisen</string>
   <string name="permlab_sendMockSms">Simulierte SMS senden</string>
   <string name="permdesc_sendMockSms">Ermöglicht der App, simulierte SMS zu vertrauenswürdigen Apps zu senden. Schädliche Apps könnten kontinuierlich SMS versenden, was das Benachrichtigungssystem blockieren oder anderweitig störend sein könnte.</string>
   <string name="storage_sd_dock_card">SD-Karte des Docks</string>
@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB über Netzwerk aktiviert</string>
   <string name="adb_both_active_notification_title">ADB über USB &amp; Netzwerk aktiviert</string>
   <string name="adb_active_generic_notification_message">Berühren, um Debugging zu deaktivieren.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Alle auf Ihrem USB-Speicher im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
+  <string name="extmedia_format_message_cm" product="default">Alle auf Ihrer SD-Karte im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
 </resources>

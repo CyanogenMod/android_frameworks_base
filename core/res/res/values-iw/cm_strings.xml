@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB דרך הרשת מופעל</string>
   <string name="adb_both_active_notification_title">ADB דרך USB &amp; רשת מופעל</string>
   <string name="adb_active_generic_notification_message">הקש לביטול ADB.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">כל המידע על אחסון ה-USB (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
+  <string name="extmedia_format_message_cm" product="default">כל המידע על הכרטיס (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
 </resources>

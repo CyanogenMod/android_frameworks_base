@@ -25,6 +25,7 @@
     android:showDividers="middle"
     android:divider="?android:attr/listDivider"
     android:dividerPadding="12dp"
+    android:background="@drawable/notification_action_list_bg"
     >
     <!-- actions will be added here -->
 </LinearLayout>

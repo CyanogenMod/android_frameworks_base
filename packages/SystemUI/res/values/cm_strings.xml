@@ -23,6 +23,8 @@
 
     <string name="accessibility_quick_settings_ringer">Sound <xliff:g id="state" example="Off">%s</xliff:g>.</string>
     <string name="accessibility_quick_settings_vibration">Vibration <xliff:g id="state" example="Off">%s</xliff:g>.</string>
+    <string name="accessibility_dpad_left">Cursor left</string>
+    <string name="accessibility_dpad_right">Cursor right</string>
 
     <string name="dessert_case_settings_cm_title">Show CM\'s mascots</string>
     <string name="dessert_case_settings_cm_summary">Show CM\'s mascots together with Android\'s desserts inside the dream</string>
@@ -123,4 +125,6 @@
     <string name="sim_slot" translatable="false">1</string>
     <string name="sim_slot_2" translatable="false">2</string>
     <string name="sim_slot_3" translatable="false">3</string>
+
+    <string name="status_bar_notification_spam_item_title">Block messages like these</string>
 </resources>

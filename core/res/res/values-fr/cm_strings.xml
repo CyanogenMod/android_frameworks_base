@@ -79,7 +79,7 @@
   <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
   <string name="permlab_writeThemes">modifier vos thèmes</string>
   <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
-  <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran du clavier de verrouillage</string>
+  <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran de verrouillage</string>
   <string name="permdesc_setKeyguardWallpaper">Autorise une application à changer le fond de l\'écran de verrouillage.</string>
   <string name="permlab_useHardwareFramework">Utiliser le framework matériel</string>
   <string name="permdesc_useHardwareFramework">Permet à une application l\'accès au framework matériel de CM.</string>
@@ -88,7 +88,7 @@
   <string name="app_ops_access_location">accéder à votre emplacement</string>
   <string name="app_ops_access_notifications">lire vos notifications</string>
   <string name="app_ops_alarm_wakeup">réveiller l\'appareil</string>
-  <string name="app_ops_draw_on_top">déplacer au dessus</string>
+  <string name="app_ops_draw_on_top">déplacer au-dessus</string>
   <string name="app_ops_keep_device_awake">garder votre appareil allumé</string>
   <string name="app_ops_make_phone_call">passer un appel téléphonique</string>
   <string name="app_ops_modify_calendar">mettre à jour votre agenda</string>
@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB sur réseau activé</string>
   <string name="adb_both_active_notification_title">ADB sur USB et réseau activé</string>
   <string name="adb_active_generic_notification_message">Appuyez pour désactiver le débogage.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Toutes les données sur votre espace de stockage USB (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
+  <string name="extmedia_format_message_cm" product="default">Toutes les données sur votre carte (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
 </resources>

@@ -89,6 +89,9 @@
     <!-- Wifi Display -->
     <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
 
+    <!-- WallpaperManager -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
@@ -277,5 +280,11 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
+
+        <provider android:name=".cm.SpamMessageProvider"
+                  android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
+                  android:exported="true"
+                  android:authorities="com.cyanogenmod.spam" />
+
     </application>
 </manifest>

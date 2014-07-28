@@ -126,7 +126,13 @@ modifiera det tema som du har tillämpat.</string>
   <string name="app_ops_use_voice_volume">kontrollera samtalsvolymen</string>
   <string name="app_ops_write_mms">skriva ett MMS</string>
   <string name="app_ops_write_sms">skriva ett SMS</string>
+  <string name="notify_turn_wifi_off_title">Inaktivera Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Integritetsskydd</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> skulle vilja <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Kom ihåg mitt val</string>
+  <string name="adb_net_active_notification_title">ADB över nätverk aktiverat</string>
+  <string name="adb_both_active_notification_title">ADB över USB och nätverk aktiverat</string>
+  <string name="adb_active_generic_notification_message">Tryck på för att inaktivera felsökning.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Alla data på din USB-lagring (under sökvägen \'%1$s\') kommer att tas bort. Denna åtgärd kan inte ångras!</string>
+  <string name="extmedia_format_message_cm" product="default">All data på ditt minneskort (under sökvägen \'%1$s\') kommer att tas bort. Denna åtgärd kan inte ångras!</string>
 </resources>

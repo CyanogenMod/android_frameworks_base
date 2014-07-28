@@ -38,22 +38,101 @@
   <string name="reboot_recovery">Taastus</string>
   <string name="reboot_bootloader">Algkäivitus</string>
   <string name="reboot_bootmenu">Algkäivituse menüü</string>
+  <string name="reboot_fastboot">Fastboot režiim</string>
+  <string name="reboot_download">Download režiim</string>
   <string name="reboot_progress">Taaskäivitamine\u2026</string>
   <string name="reboot_confirm" product="tablet">Teie tahvelarvuti taaskäivitub.</string>
   <string name="reboot_confirm" product="default">Teie telefon taaskäivitub.</string>
+  <string name="permlab_preventpower">vältida toitenuppu</string>
+  <string name="permdesc_preventpower">Lubab rakendusel toitenuppu eirata</string>
+  <string name="permlab_sendMockSms">Saata võlts SMS-e</string>
+  <string name="permdesc_sendMockSms">Lubab rakendusel saata võlts-SMS\'e. See annab rakendusele loa saata SMS-e usaldatud rakendustele. Pahavaralised rakendused võivad saata sõnumeid pidevalt, takistades seadme teavitussüsteemi ja häirida kasutajat.</string>
+  <string name="storage_sd_dock_card">Doki SD-kaart</string>
+  <string name="app_killed_message">Rakendus lõpetatud</string>
   <string name="global_action_reboot">Taaskäivitamine</string>
   <string name="global_action_choose_profile">Profiil</string>
+  <string name="toast_rotation_unlocked">Ekraanipööre lubatud</string>
+  <string name="toast_rotation_locked">Ekraanipööre keelatud</string>
+  <string name="stylus_app_not_installed">%s ei ole installitud</string>
+  <string name="permlab_changePrivacyGuardState">lubada või keelata privaatsuskaitse</string>
+  <string name="permdesc_changePrivacyGuardState">Sellega lubate muuta mõne muu rakenduse käivitumist Privaatsuskaitsega. Kui rakendus töötab sisselülitatud Privaatsuskaitsega, puudub rakendusel ligipääs isiklikele andmetele nagu kontaktid, kõnelogid või sõnumid.</string>
+  <string name="privacy_guard_notification">Privaatsuskaitse aktiveeritud</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ei pääse ligi isiklikele andmetele</string>
   <string name="profile_picker_title">Profiilid</string>
   <string name="profile_none">Puudub</string>
   <string name="perf_profile_pwrsv">Energiasäästmine</string>
   <string name="perf_profile_bal">Tasakaalustatud</string>
   <string name="perf_profile_perf">Jõudlus</string>
+  <string name="permlab_interceptSmsSent">keelata väljuv SMS</string>
+  <string name="permdesc_interceptSmsSent">Lubab rakendusel keelata väljaminev SMS. Pahavara võib kasutada seda takistamaks väljuvaid SMS-e.</string>
+  <string name="permlab_resetBatteryStats">nullida aku statistika</string>
+  <string name="permdesc_resetBatteryStats">Lubab rakendusel nullida aku praeguse madala-tasemelise kasutuse andmed.</string>
   <string name="permgrouplab_security">Turvalisus</string>
   <string name="permgroupdesc_security">Õigused on seotud seadme turvalisuse teabega.</string>
+  <string name="permlab_readPhoneBlacklist">lugeda telefoni musta nimekirja</string>
+  <string name="permdesc_readPhoneBlacklist">Lubab rakendusel lugeda teavet telefoninumbrite kohta, mis on sissetulevate kõnede ja sõnumite jaoks blokeeritud.</string>
+  <string name="permlab_changePhoneBlacklist">muuta telefoni musta nimekirja</string>
+  <string name="permdesc_changePhoneBlacklist">Annab rakendusele õiguse muuta sissetulevate kõnede ja sõnumite jaoks blokeeritud numbreid.</string>
+  <string name="permlab_accessThemeService">pääseda ligi teema teenusele</string>
+  <string name="permdesc_accessThemeService">Annab rakendusele ligipääsu teema teenusele. Tavarakenduste puhul ei peaks kunagi vaja minema.</string>
+  <string name="permlab_readThemes">lugeda teavet teema kohta</string>
+  <string name="permdesc_readThemesDesc">Lubab rakendusel lugeda teemasid ja
+kindlaks teha, millise teema sa oled lubanud.</string>
+  <string name="permlab_writeThemes">muuta teie teemasid</string>
+  <string name="permdesc_writeThemesDesc">Lubab rakendusel lisada uusi teemasid ja
+muuta juba olemasolevaid.</string>
+  <string name="permlab_setKeyguardWallpaper">muuta lukuekraani pilti</string>
+  <string name="permdesc_setKeyguardWallpaper">Lubab rakendusel muuta lukustusekraani taustapilti.</string>
+  <string name="permlab_useHardwareFramework">kasutada riistvara raamistikku</string>
+  <string name="permdesc_useHardwareFramework">Annab rakendusele ligipääsu CM riistvara raamistikule.</string>
+  <string name="immersive_mode_confirmation_bottom">Libista alumisest servast üles, et väljuda täisekraanilt.</string>
+  <string name="app_ops_access_camera">kontrollida kaamerat</string>
+  <string name="app_ops_access_location">kontrollida asukohta</string>
+  <string name="app_ops_access_notifications">lugeda teateid</string>
+  <string name="app_ops_alarm_wakeup">äratada seade</string>
+  <string name="app_ops_draw_on_top">joonistada kõige peale</string>
+  <string name="app_ops_keep_device_awake">hoida seade ärkvel</string>
+  <string name="app_ops_make_phone_call">teha kõne</string>
+  <string name="app_ops_modify_calendar">uuendada kalendrit</string>
+  <string name="app_ops_modify_call_log">uuendada kõnelogi</string>
+  <string name="app_ops_modify_clipboard">muuta lõikelauda</string>
+  <string name="app_ops_modify_contacts">värskendada kontakte</string>
+  <string name="app_ops_modify_settings">värskendada süsteemiseadeid</string>
+  <string name="app_ops_play_audio">mängida heli</string>
+  <string name="app_ops_post_notification">postitada teade</string>
+  <string name="app_ops_read_calendar">vaadata kalendrit</string>
+  <string name="app_ops_read_call_log">vaadata kõnelogi</string>
+  <string name="app_ops_read_clipboard">vaadata lõikelauda</string>
+  <string name="app_ops_read_contacts">vaadata kontakte</string>
+  <string name="app_ops_read_mms">lugeda MMS sõnumeid</string>
+  <string name="app_ops_read_sms">lugeda SMS sõnumeid</string>
+  <string name="app_ops_receive_sms">võtta vastu SMS sõnum</string>
+  <string name="app_ops_record_audio">salvestada heli</string>
+  <string name="app_ops_send_mms">saata MMS sõnum</string>
+  <string name="app_ops_send_sms">saata SMS sõnum</string>
+  <string name="app_ops_start_at_bootup">käivitada sisselülitamisel</string>
+  <string name="app_ops_toggle_bluetooth">lülitada Bluetooth\'i</string>
+  <string name="app_ops_toggle_mobile_data">lülitada andmeside</string>
+  <string name="app_ops_toggle_wifi">lülitada WiFi\'t</string>
+  <string name="app_ops_use_alarm_volume">muuta häireheli tugevust</string>
+  <string name="app_ops_use_audio_focus">muuta audio fookust</string>
+  <string name="app_ops_use_bluetooth_volume">muuta Bluetooth heli tugevust</string>
+  <string name="app_ops_use_master_volume">muuta üldise heli tugevust</string>
+  <string name="app_ops_use_media_buttons">kasutada meedia nuppe</string>
+  <string name="app_ops_use_media_volume">muuta meedia heli tugevust</string>
+  <string name="app_ops_use_notification_volume">muuta infoheli tugevust</string>
+  <string name="app_ops_use_ring_volume">muuta helina tugevust</string>
+  <string name="app_ops_use_vibrate">kasutada vibratsiooni</string>
+  <string name="app_ops_use_voice_volume">muuta telefoni kõne tugevust</string>
+  <string name="app_ops_write_mms">kirjutada MMS-i</string>
+  <string name="app_ops_write_sms">kirjutada SMS-i</string>
+  <string name="notify_turn_wifi_off_title">Lülitada Wi-Fi välja</string>
   <string name="privacy_guard_dialog_title">Privaatsuskaitse</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> tahab <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Jäta meelde minu valik</string>
   <string name="adb_net_active_notification_title">ADB üle võrgu aktiveeritud</string>
   <string name="adb_both_active_notification_title">ADB üle USB &amp; võrgu aktiveeritud</string>
   <string name="adb_active_generic_notification_message">Puuduta debuggimise lõpetamiseks.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Kõik andmed sinu USB mälul (\'%1$s\' all) kustutatakse. Seda toimingut ei saa tagasi võtta!</string>
+  <string name="extmedia_format_message_cm" product="default">Kõik andmed sinu kaardil (\'%1$s\' all) kustutatakse. Seda toimingut ei saa tagasi võtta!</string>
 </resources>

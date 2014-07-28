@@ -646,6 +646,13 @@ public class ContextWrapper extends Context {
 
     /** @hide */
     @Override
+    public Context createPackageContextAsUser(String packageName, String themePackageName,
+            int flags, UserHandle user) throws PackageManager.NameNotFoundException {
+        return mBase.createPackageContextAsUser(packageName, themePackageName, flags, user);
+    }
+
+    /** @hide */
+    @Override
     public int getUserId() {
         return mBase.getUserId();
     }

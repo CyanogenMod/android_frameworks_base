@@ -54,9 +54,9 @@
   <string name="toast_rotation_unlocked">Näytön asento avattu</string>
   <string name="toast_rotation_locked">Näytön asento lukittu</string>
   <string name="stylus_app_not_installed">%s ei ole asennettu</string>
-  <string name="permlab_changePrivacyGuardState">ota yksityisyyden suoja käyttöön tai poista se käytöstä</string>
+  <string name="permlab_changePrivacyGuardState">ota yksityisyyden suojaus käyttöön tai poista se käytöstä</string>
   <string name="permdesc_changePrivacyGuardState">Sallii sovelluksen valita, milloin muut sovellukset käyttävät yksityisyyden suojausta. Kun sovellus käyttää yksityisyyden suojausta, sillä ei ole pääsyä henkilökohtaisiin tietoihin kuten yhteystietoihin, puhelulokeihin tai viesteihin.</string>
-  <string name="privacy_guard_notification">Yksityisyyden suojaus aktiivinen</string>
+  <string name="privacy_guard_notification">Yksityisyyden suojaus käytössä</string>
   <string name="privacy_guard_notification_detail">Sovelluksella <xliff:g id="app">%1$s</xliff:g> ei ole pääsyä henkilökohtaisiin tietoihin</string>
   <string name="profile_picker_title">Profiilit</string>
   <string name="profile_none">Ei mitään</string>
@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB verkon yli käytössä</string>
   <string name="adb_both_active_notification_title">ADB verkon &amp; USB:n kautta käytössä</string>
   <string name="adb_active_generic_notification_message">Paina poistaaksesi vianetsinnän käytöstä.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Kaikki tiedot USB-muistiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
+  <string name="extmedia_format_message_cm" product="default">Kaikki tiedot muistikortiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
 </resources>

@@ -402,22 +402,29 @@ public class MockPackageManager extends PackageManager {
 
     /** @hide */
     @Override
+    public Resources getResourcesForApplicationAsUser(String appPackageName, int userId) {
+        throw new UnsupportedOperationException();
+    }
+
+    /** @hide */
+    @Override
     public Resources getThemedResourcesForApplication(ApplicationInfo app, String themePkgName)
-    throws NameNotFoundException {
+            throws NameNotFoundException {
         return null;
     }
 
     /** @hide */
     @Override
     public Resources getThemedResourcesForApplication(String appPackageName, String themePkgName)
-    throws NameNotFoundException {
+            throws NameNotFoundException {
         return null;
     }
 
     /** @hide */
     @Override
-    public Resources getResourcesForApplicationAsUser(String appPackageName, int userId) {
-        throw new UnsupportedOperationException();
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePkgName, int userId) throws NameNotFoundException {
+        return null;
     }
 
     @Override

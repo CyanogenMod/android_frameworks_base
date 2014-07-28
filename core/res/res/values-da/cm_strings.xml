@@ -131,4 +131,6 @@
   <string name="adb_net_active_notification_title">ADB via netværk aktiveret</string>
   <string name="adb_both_active_notification_title">ADB via USB &amp; netværk aktiveret</string>
   <string name="adb_active_generic_notification_message">Tryk for at deaktivere fejlretning.</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">Alle data på dit USB-lager (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
+  <string name="extmedia_format_message_cm" product="default">Alle data på dit kort (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
 </resources>
