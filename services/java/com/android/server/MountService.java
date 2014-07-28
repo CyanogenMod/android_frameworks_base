@@ -1263,8 +1263,20 @@ class MountService extends IMountService.Stub
                     boolean allowMassStorage = a.getBoolean(
                             com.android.internal.R.styleable.Storage_allowMassStorage, false);
                     // resource parser does not support longs, so XML value is in megabytes
-                    long maxFileSize = a.getInt(
-                            com.android.internal.R.styleable.Storage_maxFileSize, 0) * 1024L * 1024L;
+                    int maxFileMbs = a.getInt(
+                            com.android.internal.R.styleable.Storage_maxFileSize, 0);
+                    long maxFileSize = maxFileMbs * 1024L * 1024L;
+                    String runtimeConfigurable = a.getString(
+                            com.android.internal.R.styleable.Storage_runtimeConfigurable);
+
+                    if (runtimeConfigurable != null) {
+                        String prefix = "ro.mnt." + runtimeConfigurable;
+                        removable = SystemProperties.getBoolean(prefix + ".removable", removable);
+                        emulated = SystemProperties.getBoolean(prefix + ".emulated", emulated);
+                        allowMassStorage = SystemProperties.getBoolean(prefix + ".allowUMS", allowMassStorage);
+                        mtpReserve = SystemProperties.getInt(prefix + ".mtpReserve", mtpReserve);
+                        maxFileSize = SystemProperties.getInt(prefix + ".maxFileSize", maxFileMbs) * 1024L * 1024L;
+                    }
 
                     Slog.d(TAG, "got storage path: " + path + " description: " + description +
                             " primary: " + primary + " removable: " + removable +
