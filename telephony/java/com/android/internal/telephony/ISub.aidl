@@ -159,4 +159,12 @@ interface ISub {
     boolean isVoicePromptEnabled();
 
     void setVoicePromptEnabled(boolean enabled);
+
+    void activateSubId(long subId);
+
+    void deactivateSubId(long subId);
+
+    int setSubState(long subId, int subStatus);
+
+    int getSubState(long subId);
 }
