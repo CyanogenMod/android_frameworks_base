@@ -727,7 +727,22 @@ public class Resources {
             }
             getValue(id, value, true, supportComposedIcons);
         }
-        Drawable res = loadDrawable(value, id);
+        Drawable res = null;
+        try {
+            res = loadDrawable(value, id);
+        } catch (NotFoundException e) {
+            // The below statement will be true if we were trying to load a composed icon.
+            // Since we received a NotFoundException, try to load the original if this
+            // condition is true, otherwise throw the original exception.
+            if (supportComposedIcons && mComposedIconInfo != null && info != null &&
+                    info.themedIcon == 0) {
+                Log.e(TAG, "Failed to retrieve composed icon.", e);
+                getValue(id, value, true, false);
+                res = loadDrawable(value, id);
+            } else {
+                throw e;
+            }
+        }
         synchronized (mAccessLock) {
             if (mTmpValue == null) {
                 mTmpValue = value;
