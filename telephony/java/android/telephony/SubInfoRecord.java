@@ -75,6 +75,7 @@ public class SubInfoRecord implements Parcelable {
      * Mobile Network Code
      */
     public int mnc;
+    public int mStatus;
 
     public SubInfoRecord() {
         this.subId = SubscriptionManager.INVALID_SUB_ID;
@@ -89,11 +90,12 @@ public class SubInfoRecord implements Parcelable {
         this.simIconRes = new int[2];
         this.mcc = 0;
         this.mnc = 0;
+        this.mStatus = SubscriptionManager.INACTIVE;
     }
 
     public SubInfoRecord(long subId, String iccId, int slotId, String displayName, int nameSource,
             int color, String number, int displayFormat, int roaming, int[] iconRes,
-            int mcc, int mnc) {
+            int mcc, int mnc, int status) {
         this.subId = subId;
         this.iccId = iccId;
         this.slotId = slotId;
@@ -106,6 +108,7 @@ public class SubInfoRecord implements Parcelable {
         this.simIconRes = iconRes;
         this.mcc = mcc;
         this.mnc = mnc;
+        this.mStatus = status;
     }
 
     public static final Parcelable.Creator<SubInfoRecord> CREATOR = new Parcelable.Creator<SubInfoRecord>() {
@@ -124,9 +127,10 @@ public class SubInfoRecord implements Parcelable {
             source.readIntArray(iconRes);
             int mcc = source.readInt();
             int mnc = source.readInt();
+            int status = source.readInt();
 
             return new SubInfoRecord(subId, iccId, slotId, displayName, nameSource, color, number,
-                displayNumberFormat, dataRoaming, iconRes, mcc, mnc);
+                displayNumberFormat, dataRoaming, iconRes, mcc, mnc, status);
         }
 
         @Override
@@ -149,6 +153,7 @@ public class SubInfoRecord implements Parcelable {
         dest.writeIntArray(simIconRes);
         dest.writeInt(mcc);
         dest.writeInt(mnc);
+        dest.writeInt(mStatus);
     }
 
     @Override
@@ -162,6 +167,7 @@ public class SubInfoRecord implements Parcelable {
                 + " mDisplayName=" + displayName + " mNameSource=" + nameSource
                 + " mColor=" + color + " mNumber=" + number
                 + " mDisplayNumberFormat=" + displayNumberFormat + " mDataRoaming=" + dataRoaming
-                + " mSimIconRes=" + simIconRes + " mMcc " + mcc + " mMnc " + mnc + "}";
+                + " mSimIconRes=" + simIconRes + " mMcc " + mcc + " mMnc " + mnc
+                + " mStatus=" + mStatus + "}";
     }
 }
