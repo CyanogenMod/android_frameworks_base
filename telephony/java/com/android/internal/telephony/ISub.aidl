@@ -183,4 +183,12 @@ interface ISub {
     int getSimStateForSlotIdx(int slotIdx);
 
     boolean isActiveSubId(int subId);
+
+    void activateSubId(long subId);
+
+    void deactivateSubId(long subId);
+
+    int setSubState(long subId, int subStatus);
+
+    int getSubState(long subId);
 }
