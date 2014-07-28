@@ -31,6 +31,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Style;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
@@ -1415,33 +1416,38 @@ public class GlowPadView extends View {
         canvas.drawBitmap(icon, 0, 0, iconPaint);
 
         // Calculate count text width
-        final float textSize = 21.0f;
-        final int textPadding = 4;
+        String countText = String.valueOf(count);
+        if (count >= 1000) {
+           countText = "999+";
+        }
+        final float density = mContext.getResources().getDisplayMetrics().density;
+        final float textSize = 11 * density;
+        final float textPadding = 4 * density;
+        final float countHeight = 14 * density;
+        final float radius = 7 * density;
+        final int backgroundColor = 0xFFF44336;
         Paint countPaint = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.DEV_KERN_TEXT_FLAG);
         countPaint.setColor(Color.WHITE);
         countPaint.setTextSize(textSize);
         countPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        int textWidth = (int) countPaint.measureText(String.valueOf(count));
-        int countWidth = Math.max(textWidth, 24);
+        float textWidth = countPaint.measureText(countText);
 
         // Draw background
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.RED);
-        RectF rect = new RectF(2 * iconW / 3 - countWidth / 2 - textPadding,
-                iconH / 3 - textSize / 2 - textPadding,
-                2 * iconW / 3 + countWidth / 2 + textPadding,
-                iconH / 3 + textSize / 2 + textPadding);
-        canvas.drawRoundRect(rect , 10, 10, paint);
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Style.STROKE);
-        paint.setStrokeWidth(2);
-        canvas.drawRoundRect(rect , 10, 10, paint);
+        paint.setColor(backgroundColor);
+        RectF rect = new RectF(3 * iconW / 4 - textWidth - 2 * textPadding,
+                iconH / 3 - countHeight / 2,
+                3 * iconW / 4,
+                iconH / 3 + countHeight / 2);
+        canvas.drawRoundRect(rect, radius, radius, paint);
 
         // Draw count text
-        float textX = 2 * iconW/ 3 - textWidth / 2;
-        float textBaseY = iconH / 3 + textSize / 2 - textPadding;
-        canvas.drawText(String.valueOf(count), textX, textBaseY, countPaint);
+        FontMetrics fontMetrics = countPaint.getFontMetrics();
+        float textX = 3 * iconW / 4 - textWidth - textPadding;
+        float textBaseY = (float) (rect.top + (rect.bottom - rect.top) / 2
+                - (fontMetrics.descent - fontMetrics.ascent) / 2 - fontMetrics.ascent);
+        canvas.drawText(countText, textX, textBaseY, countPaint);
 
         return newBitmap;
     }
