@@ -180,7 +180,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     private static final int MAX_CPU_BOOST_TIME = 5000000;
 
     // Max time allowed for proximity check
-    private static final int MAX_PROXIMITY_WAIT = 200;
+    private static final int MAX_PROXIMITY_WAIT = 750;
 
     private Context mContext;
     private LightsService mLightsService;
@@ -1236,6 +1236,10 @@ public final class PowerManagerService extends IPowerManager.Stub
                 if (!mHandler.hasMessages(MSG_WAKE_UP)) {
                     // The sensor took too long to return and
                     // the wake event already triggered.
+                    Slog.w(TAG, "The proximity sensor took too long, wake event already triggered!");
+                    if (mSensorManager != null) {
+                        mSensorManager.unregisterListener(this);
+                    }
                     return;
                 }
                 mHandler.removeMessages(MSG_WAKE_UP);
