@@ -634,6 +634,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         + " dataState=" + state.getDataRegState());
             }
             mServiceState = state;
+            if (mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_combined_signal)) {
+                /*
+                 * if combined_signal is set to true only then consider data
+                 * service state for signal display
+                 */
+                mDataServiceState = mServiceState.getDataRegState();
+                if (DEBUG) {
+                    Log.d(TAG, "Combining data service state " + mDataServiceState + " for signal");
+                }
+            }
             updateIconSet();
             updateTelephonySignalStrength();
             updateDataNetType();
@@ -833,15 +844,16 @@ public class NetworkControllerImpl extends BroadcastReceiver
             Log.d(TAG, "updateTelephonySignalStrength: hasService=" + hasService()
                     + " ss=" + mSignalStrength);
         }
-        if (!hasService()) {
-            if (CHATTY) Log.d(TAG, "updateTelephonySignalStrength: !hasService()");
+        if (!hasService() &&
+              (mDataServiceState != ServiceState.STATE_IN_SERVICE)) {
+            if (CHATTY) Log.d(TAG, "updateTelephonySignalStrength: No Service");
             mPhoneSignalIconId = TelephonyIcons.getSignalNullIcon();
             mQSPhoneSignalIconId = R.drawable.ic_qs_signal_no_signal;
             mDataSignalIconId = mPhoneSignalIconId;
             mContentDescriptionPhoneSignal = TelephonyIcons.getSignalStrengthDes(0);
         } else {
             if (mSignalStrength == null || (mServiceState == null)) {
-                if (CHATTY) Log.d(TAG, "updateTelephonySignalStrength: mSignalStrength == null");
+                if (CHATTY) Log.d(TAG, "updateTelephonySignalStrength: mSignalStrength == null mServiceState == null");
                 mPhoneSignalIconId = TelephonyIcons.getSignalNullIcon();
                 mQSPhoneSignalIconId = R.drawable.ic_qs_signal_no_signal;
                 mDataSignalIconId = mPhoneSignalIconId;
@@ -907,7 +919,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
             mContentDescriptionDataType = TelephonyIcons.getDataTypeDesc();
             mQSDataTypeIconId = TelephonyIcons.getQSDataTypeIcon();
         }
-
         if (isCdma()) {
             if (isCdmaEri()) {
                 mDataTypeIconId = TelephonyIcons.ROAMING_ICON;
@@ -926,7 +937,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
     }
 
     boolean isCdmaEri() {
-        if (mServiceState != null) {
+        if ((mServiceState != null)
+                && (hasService() || (mDataServiceState == ServiceState.STATE_IN_SERVICE))) {
             final int iconIndex = mServiceState.getCdmaEriIconIndex();
             if (iconIndex != EriInfo.ROAMING_INDICATOR_OFF) {
                 final int iconMode = mServiceState.getCdmaEriIconMode();
@@ -960,12 +972,15 @@ public class NetworkControllerImpl extends BroadcastReceiver
     private final void updateDataIcon() {
         int iconId = 0;
         boolean visible = true;
-        if (!isCdma()) {
+        if (mDataNetType == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
+            // If data network type is unknown do not display data icon
+            visible = false;
+        } else if (!isCdma()) {
             // GSM case, we have to check also the sim state
             if (mSimState == IccCardConstants.State.READY ||
                     mSimState == IccCardConstants.State.UNKNOWN) {
                 mNoSim = false;
-                if (hasService() && mDataState == TelephonyManager.DATA_CONNECTED) {
+                if (mDataState == TelephonyManager.DATA_CONNECTED) {
                     iconId = TelephonyIcons.getDataActivity(mDataActivity);
                 } else {
                     iconId = 0;
@@ -978,7 +993,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             }
         } else {
             // CDMA case, mDataActivity can be also DATA_ACTIVITY_DORMANT
-            if (hasService() && mDataState == TelephonyManager.DATA_CONNECTED) {
+            if (mDataState == TelephonyManager.DATA_CONNECTED) {
                 iconId = TelephonyIcons.getDataActivity(mDataActivity);
             } else {
                 iconId = 0;
