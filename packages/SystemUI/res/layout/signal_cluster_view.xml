@@ -42,6 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             />
+        <ImageView
+            android:id="@+id/wifi_inout"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center|bottom"
+            />
     </FrameLayout>
     <View
         android:id="@+id/wifi_signal_spacer"
@@ -72,6 +78,12 @@
                 android:id="@+id/no_sim"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                />
+             <ImageView
+                android:id="@+id/mobile_inout"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end|bottom"
                 />
         </FrameLayout>
     </FrameLayout>
