@@ -152,6 +152,7 @@ public class DirectoryFragment extends Fragment {
     private static final String EXTRA_IGNORE_STATE = "ignoreState";
 
     private final int mLoaderId = 42;
+    private DirectoryLoader mLoader;
 
     public static void showNormal(FragmentManager fm, RootInfo root, DocumentInfo doc, int anim) {
         show(fm, TYPE_NORMAL, root, doc, null, anim);
@@ -345,6 +346,8 @@ public class DirectoryFragment extends Fragment {
         getLoaderManager().restartLoader(mLoaderId, null, mCallbacks);
 
         updateDisplayState();
+
+        mLoader = new DirectoryLoader(context);
     }
 
     @Override
@@ -673,10 +676,9 @@ public class DirectoryFragment extends Fragment {
                     final RootInfo root = getArguments().getParcelable(EXTRA_ROOT);
 
                     // We get the contents of the directory
-                    DirectoryLoader loader = new DirectoryLoader(
-                            context, mType, root, doc, contentsUri, SORT_ORDER_UNKNOWN);
+                    mLoader.init(mType, root, doc, contentsUri, SORT_ORDER_UNKNOWN);
 
-                    DirectoryResult result = loader.loadInBackground();
+                    DirectoryResult result = mLoader.loadInBackground();
                     Cursor cursor = result.cursor;
 
                     // Build a list of the docs to delete, and delete them
