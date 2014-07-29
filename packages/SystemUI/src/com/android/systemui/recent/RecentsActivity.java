@@ -214,6 +214,8 @@ public class RecentsActivity extends Activity {
                 }
             people.removeAllViews();
             }
+            SlidingLayer slidinglayer = (SlidingLayer) findViewById(R.id.sliding_layer);
+            people.removeView(slidinglayer);
         }
     }
 
