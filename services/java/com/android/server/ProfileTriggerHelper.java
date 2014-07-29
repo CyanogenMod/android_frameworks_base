@@ -113,10 +113,10 @@ public class ProfileTriggerHelper extends BroadcastReceiver {
                     .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, 0);
             int triggerState = (state == BluetoothProfile.STATE_CONNECTED)
-                    ? Profile.TriggerState.ON_A2DP_CONNECT :
-                    Profile.TriggerState.ON_A2DP_DISCONNECT;
+                    ? Profile.TriggerState.ON_CONNECT :
+                    Profile.TriggerState.ON_DISCONNECT;
 
-            checkTriggers(Profile.TriggerType.BLUETOOTH, device.getAddress(), triggerState);
+            checkTriggers(Profile.TriggerType.BLUETOOTH_A2DP, device.getAddress(), triggerState);
         }
     }
 
