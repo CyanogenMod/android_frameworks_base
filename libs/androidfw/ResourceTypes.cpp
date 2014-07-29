@@ -5727,7 +5727,7 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
 bool ResTable::isResTypeAllowed(const char* type) const
 {
     if (type == NULL) return false;
-    const char* allowedResources[] = { "color", "dimen", "drawable", "mipmap", "style" };
+    const char* allowedResources[] = { "color", "dimen", "drawable", "mipmap", "style", "anim" };
     // ALLOWED_RESOURCE_COUNT should match the number of elements in allowedResources
     const uint32_t ALLOWED_RESOURCE_COUNT = 5;
     for (int i = 0; i < ALLOWED_RESOURCE_COUNT; i++) {
