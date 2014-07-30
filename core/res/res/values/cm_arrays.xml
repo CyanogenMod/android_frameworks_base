@@ -40,7 +40,7 @@
 
     <!-- Performance profiles -->
     <string-array name="perf_profile_entries" translatable="false">
-        <item>@string/perf_profile_pwrsv</item>
+        <item>@string/perf_profile_bs</item>
         <item>@string/perf_profile_bal</item>
         <item>@string/perf_profile_perf</item>
     </string-array>

@@ -1930,7 +1930,7 @@
   <java-symbol type="string" name="config_perf_profile_default_entry" />
   <java-symbol type="array" name="perf_profile_entries" />
   <java-symbol type="array" name="perf_profile_values" />
-  <java-symbol type="string" name="perf_profile_pwrsv" />
+  <java-symbol type="string" name="perf_profile_bs" />
   <java-symbol type="string" name="perf_profile_bal" />
   <java-symbol type="string" name="perf_profile_perf" />
 
