@@ -455,6 +455,12 @@ public class ThemesContract {
         public static final String STATUSBAR_CLOCK_TEXT_COLOR = "statusbar_clock_text_color";
 
         /**
+         * Cached image of the themed navigation bar background.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String NAVBAR_BACKGROUND = "navbar_background";
+
+        /**
          * Cached image of the themed back button.
          * <P>Type: BLOB (bitmap)</P>
          */
