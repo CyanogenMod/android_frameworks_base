@@ -950,7 +950,7 @@ public class LockWallpaperPickerActivity extends WallpaperCropActivity {
         // Action bar
         // Show the custom action bar view
         final ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.actionbar_set_wallpaper);
+        actionBar.setCustomView(R.layout.actionbar_set_lockscreen_wallpaper);
         actionBar.getCustomView().setOnClickListener(
                 new OnClickListener() {
                     @Override
