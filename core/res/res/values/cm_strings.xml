@@ -108,7 +108,7 @@
     <string name="profile_none">None</string>
 
     <!-- Performance profile modes -->
-    <string name="perf_profile_pwrsv">Power save</string>
+    <string name="perf_profile_bs">Battery saving</string>
     <string name="perf_profile_bal">Balanced</string>
     <string name="perf_profile_perf">Performance</string>
 
