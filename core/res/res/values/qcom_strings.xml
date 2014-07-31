@@ -88,5 +88,6 @@
         <item>Trying to trun on/off Bluetooth</item>
         <item>Trying to start at bootup</item>
         <item>Trying to turn on/off NFC</item>
+        <item>Trying to turn on mobile data</item>
     </string-array>
 </resources>
