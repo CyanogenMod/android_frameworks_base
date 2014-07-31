@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +22,7 @@ package android.telephony;
 import android.annotation.SystemApi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -3415,9 +3419,16 @@ public class TelephonyManager {
     @SystemApi
     public void setDataEnabledUsingSubId(long subId, boolean enable) {
         try {
+            AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
+            if (enable) {
+                if (appOps.noteOp(AppOpsManager.OP_DATA_CONNECT_CHANGE) != AppOpsManager.MODE_ALLOWED) {
+                    Log.w(TAG, "Permission denied by user.");
+                    return;
+                }
+            }
             getITelephony().setDataEnabledUsingSubId(subId, enable);
         } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelephony#setDataEnabled", e);
+            Log.e(TAG, "Error calling setDataEnabled", e);
         }
     }
 

@@ -1962,5 +1962,6 @@
         <item>Trying to delete MMS</item>
         <item>Trying to delete contacts</item>
         <item>Trying to delete call log</item>
+        <item>Trying to turn on mobile data</item>
     </string-array>
 </resources>
