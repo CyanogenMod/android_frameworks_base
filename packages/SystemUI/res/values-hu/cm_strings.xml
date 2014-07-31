@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Törlés</string>
   <string name="screenshot_delete_confirmation">Képernyőmentés törölve.</string>
   <string name="accessibility_desc_add_quick_settings">Hozzáadás a gyors beállításokhoz.</string>
+  <string name="status_bar_notification_spam_item_title">Hasonló üzenetek blokkolása</string>
 </resources>

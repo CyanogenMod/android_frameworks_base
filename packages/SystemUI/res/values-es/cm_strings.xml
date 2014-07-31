@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Eliminar</string>
   <string name="screenshot_delete_confirmation">Captura eliminada.</string>
   <string name="accessibility_desc_add_quick_settings">Añadir controles rápidos.</string>
+  <string name="status_bar_notification_spam_item_title">Bloquear notificaciones como estas</string>
 </resources>

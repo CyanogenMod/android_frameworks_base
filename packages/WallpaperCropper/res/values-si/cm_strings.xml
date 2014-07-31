@@ -17,8 +17,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">හිස් කරන්න</string>
   <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d තෝරා ඇත</item>
-    <item quantity="other">%1$d තෝරා ඇත</item>
+    <item quantity="one">%1$d ක් තෝරාගැනුණි</item>
+    <item quantity="other">%1$d ක් තෝරාගැනුණි</item>
   </plurals>
   <string name="wallpaper_accessibility_name">වෝල්පේපර %2$d න් %1$d ක්</string>
   <string name="announce_selection"><xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g> තෝරාගන්නා ලදී</string>
@@ -26,4 +26,5 @@
   <string name="pick_image">පින්තූරයක් තෝරන්න</string>
   <string name="pick_wallpaper">වෝල්පේපර</string>
   <string name="activity_not_found">යෙදුම ස්ථාපනය කර නැත.</string>
+  <string name="lockscreen_wallpaper_instructions">අගුළු තිරයේ වෝල්පේපරය සකසන්න</string>
 </resources>

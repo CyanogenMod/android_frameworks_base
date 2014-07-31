@@ -26,4 +26,5 @@
   <string name="pick_image">Afbeelding kiezen</string>
   <string name="pick_wallpaper">Achtergronden</string>
   <string name="activity_not_found">App is niet geïnstalleerd.</string>
+  <string name="lockscreen_wallpaper_instructions">Achtergrond vergrendelingsscherm instellen</string>
 </resources>

@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">Telefon zostanie uruchomiony ponownie.</string>
   <string name="permlab_preventpower">zastępowanie przycisku zasilania</string>
   <string name="permdesc_preventpower">Pozwala aplikacji na zastępowanie przycisku zasilania</string>
-  <string name="permlab_sendMockSms">wysyłanie pozorowanych SMS-ów</string>
+  <string name="permlab_sendMockSms">wysyłanie pozorowanych wiadomości SMS</string>
   <string name="permdesc_sendMockSms">Pozwala aplikacji na wysyłanie pozorowanych wiadomości SMS. W rezultacie umożliwi to wysyłanie SMS-ów do zaufanych aplikacji. Złośliwe aplikacje mogą wysyłać wiadomości w sposób ciągły, blokując system powiadomień urządzenia i zakłócając spokój użytkownika.</string>
   <string name="storage_sd_dock_card">Karta pamięci stacji dokującej</string>
   <string name="app_killed_message">Aplikacja została zabita</string>
@@ -60,7 +60,7 @@
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nie będzie mieć dostępu do osobistych danych</string>
   <string name="profile_picker_title">Profile</string>
   <string name="profile_none">Brak</string>
-  <string name="perf_profile_pwrsv">Profil zasilania</string>
+  <string name="perf_profile_pwrsv">Oszczędny</string>
   <string name="perf_profile_bal">Zbalansowany</string>
   <string name="perf_profile_perf">Wydajny</string>
   <string name="permlab_interceptSmsSent">przechwytywanie SMS-ów przychodzących</string>

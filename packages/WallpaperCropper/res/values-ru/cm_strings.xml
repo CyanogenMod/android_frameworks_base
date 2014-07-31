@@ -27,4 +27,5 @@
   <string name="pick_image">Выбрать изображение</string>
   <string name="pick_wallpaper">Обои</string>
   <string name="activity_not_found">Приложение удалено.</string>
+  <string name="lockscreen_wallpaper_instructions">Установить обои экрана блок.</string>
 </resources>

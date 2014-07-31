@@ -26,4 +26,5 @@
   <string name="pick_image">Kép kiválasztása</string>
   <string name="pick_wallpaper">Háttérképek</string>
   <string name="activity_not_found">Alkalmazás nincs telepítve.</string>
+  <string name="lockscreen_wallpaper_instructions">Képernyőzár hátterének beállítása</string>
 </resources>

@@ -25,4 +25,5 @@
   <string name="pick_image">画像を選択</string>
   <string name="pick_wallpaper">壁紙</string>
   <string name="activity_not_found">アプリがインストールされていません。</string>
+  <string name="lockscreen_wallpaper_instructions">ロック画面の壁紙を設定</string>
 </resources>

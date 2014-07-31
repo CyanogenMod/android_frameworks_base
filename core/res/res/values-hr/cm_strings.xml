@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Telefon će ponovno biti pokrenut.</string>
   <string name="permlab_preventpower">spriječiti \"power\" tipku</string>
   <string name="permdesc_preventpower">Dopušta aplikaciji nadvladati \"power\" tipku</string>
-  <string name="permlab_sendMockSms">Pošalji lažne SMS poruke</string>
   <string name="permdesc_sendMockSms">Dopušta aplikaciji slanje lažnih SMS poruka. Ovo dopušta aplikacije slanje SMS poruka povjerljivim aplikacijama. Zlonamjerne aplikacije mogu poslati poruke kontinuirano, sprječavajući  sistem obavijesti uređaja uz ometanje korisnika.</string>
   <string name="storage_sd_dock_card">Dock SD kartica</string>
   <string name="app_killed_message">Aplikacija prisilno zaustavljena</string>

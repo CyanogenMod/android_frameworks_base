@@ -26,4 +26,5 @@
   <string name="pick_image">Valitse kuva</string>
   <string name="pick_wallpaper">Taustakuvat</string>
   <string name="activity_not_found">Sovellusta ei ole asennettu.</string>
+  <string name="lockscreen_wallpaper_instructions">Aseta lukitusnäytön taustakuva</string>
 </resources>

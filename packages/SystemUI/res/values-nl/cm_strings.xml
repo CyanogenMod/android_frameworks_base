@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Verwijderen</string>
   <string name="screenshot_delete_confirmation">Screenshot verwijderd.</string>
   <string name="accessibility_desc_add_quick_settings">Snelle instellingen toevoegen.</string>
+  <string name="status_bar_notification_spam_item_title">Dit soort berichten blokkeren</string>
 </resources>

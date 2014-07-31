@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">Váš telefón bude reštartovaný.</string>
   <string name="permlab_preventpower">zabránenie klávesy napájania</string>
   <string name="permdesc_preventpower">Povolí aplikácii prepísať klávesu napájania</string>
-  <string name="permlab_sendMockSms">posielať falošné SMS správ</string>
+  <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
   <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. To umožňuje aplikácii odosielať SMS do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite na blokovanie oznamovacieho systému zariadenia a obťažovať používateľa.</string>
   <string name="storage_sd_dock_card">Karta SD v doku</string>
   <string name="app_killed_message">Aplikácia bola ukončená</string>

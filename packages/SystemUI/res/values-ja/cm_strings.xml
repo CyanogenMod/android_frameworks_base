@@ -27,13 +27,13 @@
   <string name="quick_settings_gps">GPS</string>
   <string name="quick_settings_gps_off">GPS OFF</string>
   <string name="quick_settings_screen_sleep">スリープ</string>
-  <string name="quick_settings_ringer_on">サウンドON</string>
-  <string name="quick_settings_ringer_off">サウンドOFF</string>
+  <string name="quick_settings_ringer_on">音ON</string>
+  <string name="quick_settings_ringer_off">音OFF</string>
   <string name="quick_settings_vibration_on">バイブレーションON</string>
   <string name="quick_settings_vibration_off">バイブレーションOFF</string>
   <string name="quick_settings_label_enabled">ON</string>
   <string name="quick_settings_label_disabled">OFF</string>
-  <string name="quick_settings_ringer_normal">サウンド</string>
+  <string name="quick_settings_ringer_normal">音</string>
   <string name="quick_settings_lockscreen">ロック画面</string>
   <string name="quick_settings_network_type">ネットワークモード</string>
   <string name="quick_settings_report_bug">バグをレポート</string>
@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">削除</string>
   <string name="screenshot_delete_confirmation">スクリーンショットを削除しました。</string>
   <string name="accessibility_desc_add_quick_settings">クイック設定を追加します。</string>
+  <string name="status_bar_notification_spam_item_title">このようなメッセージをブロックする</string>
 </resources>

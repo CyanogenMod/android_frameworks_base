@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Odstrániť</string>
   <string name="screenshot_delete_confirmation">Snímka obrazovky bola vymazaná.</string>
   <string name="accessibility_desc_add_quick_settings">Pridať Rýchle nastavenia.</string>
+  <string name="status_bar_notification_spam_item_title">Blokovať podobné správy</string>
 </resources>

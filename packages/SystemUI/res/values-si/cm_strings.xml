@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">මකන්න</string>
   <string name="screenshot_delete_confirmation">තිර සේයාව මකා දැමුණි.</string>
   <string name="accessibility_desc_add_quick_settings">ඉක්මන් සැකසීම් එකතු කරන්න.</string>
+  <string name="status_bar_notification_spam_item_title">මෙවැනි පණිවිඩ අවහිර කරන්න</string>
 </resources>

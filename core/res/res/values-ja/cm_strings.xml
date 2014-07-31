@@ -60,7 +60,7 @@
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>は個人データにアクセスできません</string>
   <string name="profile_picker_title">プロファイル</string>
   <string name="profile_none">なし</string>
-  <string name="perf_profile_pwrsv">省電力</string>
+  <string name="perf_profile_pwrsv">節電</string>
   <string name="perf_profile_bal">バランス</string>
   <string name="perf_profile_perf">パフォーマンス</string>
   <string name="permlab_interceptSmsSent">送信するSMSの傍受</string>
@@ -74,11 +74,11 @@
   <string name="permlab_changePhoneBlacklist">携帯電話のブラックリストの変更</string>
   <string name="permdesc_changePhoneBlacklist">着信やメッセージをブロックしている電話番号の変更をアプリに許可します。</string>
   <string name="permlab_accessThemeService">テーマサービスへのアクセス</string>
-  <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリでは使用しません。</string>
+  <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリでは必要とされることはないはずです。</string>
   <string name="permlab_readThemes">テーマ情報の読み取り</string>
-  <string name="permdesc_readThemesDesc">テーマの読み取りや適応しているテーマの特定をアプリに許可します。</string>
+  <string name="permdesc_readThemesDesc">テーマの読み取りや適用しているテーマの特定をアプリに許可します。</string>
   <string name="permlab_writeThemes">テーマの変更</string>
-  <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適応しているテーマの変更をアプリに許可します。</string>
+  <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適用しているテーマの変更をアプリに許可します。</string>
   <string name="permlab_setKeyguardWallpaper">キーガードの壁紙の設定</string>
   <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
   <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
@@ -129,7 +129,7 @@
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>をしようとしています。</string>
   <string name="permission_remember_choice">選択を記憶する</string>
   <string name="adb_net_active_notification_title">ネットワーク経由のADBが有効です</string>
-  <string name="adb_both_active_notification_title">USBとネットワーク経由のADBが有効です。</string>
+  <string name="adb_both_active_notification_title">USBとネットワーク経由のADBが有効です</string>
   <string name="adb_active_generic_notification_message">タップしてデバッグを無効にします。</string>
   <string name="extmedia_format_message_cm" product="nosdcard">USBストレージ上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
   <string name="extmedia_format_message_cm" product="default">カード上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>

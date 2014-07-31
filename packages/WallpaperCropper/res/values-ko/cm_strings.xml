@@ -25,4 +25,5 @@
   <string name="pick_image">이미지 선택</string>
   <string name="pick_wallpaper">배경화면</string>
   <string name="activity_not_found">앱이 설치되지 않았습니다.</string>
+  <string name="lockscreen_wallpaper_instructions">잠금화면 배경 설정</string>
 </resources>

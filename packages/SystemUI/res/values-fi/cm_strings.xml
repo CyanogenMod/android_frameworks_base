@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Poista</string>
   <string name="screenshot_delete_confirmation">Kuvakaappaus poistettu.</string>
   <string name="accessibility_desc_add_quick_settings">Lisää pika-asetukset.</string>
+  <string name="status_bar_notification_spam_item_title">Estä tämänlaiset viestit</string>
 </resources>

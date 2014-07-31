@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Desaniciar</string>
   <string name="screenshot_delete_confirmation">Captura desaniciada.</string>
   <string name="accessibility_desc_add_quick_settings">Amestar controles rápidos.</string>
+  <string name="status_bar_notification_spam_item_title">Bloquiar mensaxes como esti</string>
 </resources>

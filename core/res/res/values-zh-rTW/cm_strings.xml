@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">您的手機將會重新啟動。</string>
   <string name="permlab_preventpower">防止使用電源鍵</string>
   <string name="permdesc_preventpower">允許應用程式覆寫電源鍵的功能。</string>
-  <string name="permlab_sendMockSms">傳送模擬簡訊</string>
   <string name="permdesc_sendMockSms">允許應用程式傳送模擬簡訊。這會允許應用程式傳送簡訊給信任的應用程式。惡意應用程式可能會不斷地傳送訊息，妨礙裝置的通知系統以及干擾使用者。</string>
   <string name="storage_sd_dock_card">座架 SD 卡</string>
   <string name="app_killed_message">應用程式已終止</string>

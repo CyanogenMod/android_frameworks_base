@@ -26,4 +26,5 @@
   <string name="pick_image">Επιλέξετε εικόνα</string>
   <string name="pick_wallpaper">Ταπετσαρίες</string>
   <string name="activity_not_found">Η εφαρμογή δεν είναι εγκατεστημένη.</string>
+  <string name="lockscreen_wallpaper_instructions">Ορισμός ταπετσαρίας οθόνης κλειδώματος</string>
 </resources>

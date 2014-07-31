@@ -38,7 +38,6 @@
   <string name="reboot_progress">Gëtt nei gestart\u2026</string>
   <string name="reboot_confirm" product="tablet">Däin Tablet gëtt nei gestart.</string>
   <string name="reboot_confirm" product="default">Däin Telefon gëtt nei gestart.</string>
-  <string name="permlab_sendMockSms">Simuléiert SMSe schécken</string>
   <string name="storage_sd_dock_card">SD-Kaart vum Dock</string>
   <string name="app_killed_message">App gekillt</string>
   <string name="global_action_reboot">Nei starten</string>

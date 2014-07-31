@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">El teléfonu va reaniciase.</string>
   <string name="permlab_preventpower">anular tecla encendíu</string>
   <string name="permdesc_preventpower">permite que l\'aplicación cambie\'l comportamientu de la tecla d\'encendíu.</string>
-  <string name="permlab_sendMockSms">Unviar mensaxes SMS simulaos</string>
+  <string name="permlab_sendMockSms">unviar mensaxes SMS simulaos</string>
   <string name="permdesc_sendMockSms">Permite que l\'aplicación unvie mensaxes SMS simulaos a aplicaciones de confianza. Les aplicaciones malicioses puen unviar mensaxes SMS continuamente, bloquiando la barra de notificaciones ya interrumpiendo al usuariu.</string>
   <string name="storage_sd_dock_card">Tarxeta SD de la base</string>
   <string name="app_killed_message">Aplicación finada</string>

@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Ištrinti</string>
   <string name="screenshot_delete_confirmation">Ekranvaizdis ištrintas.</string>
   <string name="accessibility_desc_add_quick_settings">Pridėti greituosius nustatymus.</string>
+  <string name="status_bar_notification_spam_item_title">Blokuoti panašius pranešimus</string>
 </resources>

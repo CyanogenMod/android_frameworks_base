@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">Telefonoa berrabiarazi egingo da.</string>
   <string name="permlab_preventpower">Pizteko tekla ezgaitu</string>
   <string name="permdesc_preventpower">Aplikazioak pizteko teklaren jokabidea aldatzea ahalbidetzen du</string>
-  <string name="permlab_sendMockSms">Itxurazko SMS-ak bidali </string>
+  <string name="permlab_sendMockSms">Itxurazko SMS-ak bidali</string>
   <string name="permdesc_sendMockSms">Aplikazioa konfidantzazko beste aplikazioei itxurazko SMS-ak bidaltzera baimentzen du. Aplikazio maltzurrek SMS mezuak etengabe bidali ditzakete, jakinarazpen barra blokeatzen eta erabiltzailea eteten.</string>
   <string name="storage_sd_dock_card">Oinarriaren SD txartela</string>
   <string name="app_killed_message">Aplikazioa eten da</string>

@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="pinpuk_attempts">\n残り試行回数:</string>
-  <string name="lockscreen_sim_error_message_short">無効なSIMカードです。</string>
+  <string name="lockscreen_sim_error_message_short">無効なカードです。</string>
   <string name="lockscreen_airplane_mode_on">機内モード</string>
   <string name="progress_nomediapresent" product="default">取り外し可能なメディアが挿入されていません\u2026</string>
   <string name="storage_uicc">UICCストレージ</string>

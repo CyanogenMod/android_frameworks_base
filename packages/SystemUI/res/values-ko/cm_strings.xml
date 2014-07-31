@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">삭제</string>
   <string name="screenshot_delete_confirmation">스크린샷이 삭제되었습니다.</string>
   <string name="accessibility_desc_add_quick_settings">빠른 설정을 추가합니다.</string>
+  <string name="status_bar_notification_spam_item_title">이와 같은 메시지 차단</string>
 </resources>
