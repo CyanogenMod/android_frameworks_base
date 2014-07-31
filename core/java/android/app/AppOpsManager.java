@@ -259,7 +259,9 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_NFC_CHANGE = 66;
     /** @hide */
-    public static final int _NUM_OP = 67;
+    public static final int OP_DATA_CONNECT_CHANGE = 67;
+    /** @hide */
+    public static final int _NUM_OP = 68;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -366,6 +368,8 @@ public class AppOpsManager {
             "android:boot_completed";
     private static final String OPSTR_NFC_CHANGE =
             "android:nfc_change";
+    private static final String OPSTR_DATA_CONNECT_CHANGE =
+            "android:data_connect_change";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -443,6 +447,7 @@ public class AppOpsManager {
             OP_BLUETOOTH_CHANGE,
             OP_BOOT_COMPLETED,
             OP_NFC_CHANGE,
+            OP_DATA_CONNECT_CHANGE,
     };
 
     /**
@@ -517,6 +522,7 @@ public class AppOpsManager {
             OPSTR_BLUETOOTH_CHANGE,
             OPSTR_BOOT_COMPLETED,
             OPSTR_NFC_CHANGE,
+            OPSTR_DATA_CONNECT_CHANGE,
     };
 
     /**
@@ -591,6 +597,7 @@ public class AppOpsManager {
             "BLUETOOTH_CHANGE",
             "BOOT_COMPLETED",
             "NFC_CHANGE",
+            "DATA_CONNECT_CHANGE",
     };
 
     /**
@@ -665,6 +672,7 @@ public class AppOpsManager {
             Manifest.permission.BLUETOOTH,
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
             Manifest.permission.NFC,
+            Manifest.permission.MODIFY_PHONE_STATE,
     };
 
     /**
@@ -740,6 +748,7 @@ public class AppOpsManager {
             null, //BLUETOOTH_CHANGE
             null, //BOOT_COMPLETED
             null, //NFC_CHANGE
+            null, //DATA_CONNECT_CHANGE
     };
 
     /**
@@ -814,6 +823,7 @@ public class AppOpsManager {
             false, // BLUETOOTH_CHANGE
             false, // BOOT_COMPLETED
             false, // NFC_CHANGE
+            false, //DATA_CONNECT_CHANGE
     };
 
     /**
@@ -887,6 +897,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ASK,     // OP_BLUETOOTH_CHANGE
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
             AppOpsManager.MODE_ALLOWED, // OP_NFC_CHANGE
+            AppOpsManager.MODE_ALLOWED,
     };
 
     /**
@@ -961,6 +972,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ASK,     // OP_BLUETOOTH_CHANGE
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
             AppOpsManager.MODE_ASK,     // OP_NFC_CHANGE
+            AppOpsManager.MODE_ASK,     // OP_DATA_CONNECT_CHANGE
     };
 
     /**
@@ -1034,6 +1046,7 @@ public class AppOpsManager {
         true,     // OP_BLUETOOTH_CHANGE
         false,    // OP_BOOT_COMPLETED
         true,     // OP_NFC_CHANGE
+        true,     // OP_DATA_CONNECT_CHANGE
     };
 
     /**
@@ -1111,6 +1124,7 @@ public class AppOpsManager {
             false,     // OP_BLUETOOTH_CHANGE
             false,     // OP_BOOT_COMPLETED
             false,     // OP_NFC_CHANGE
+            false,     // OP_DATA_CONNECT_CHANGE
     };
 
     /**
