@@ -475,7 +475,8 @@ public class UsbDeviceManager {
             // with OEM specific mode.
             if (functions != null && makeDefault && !needsOemUsbOverride()) {
 
-                if (mAdbEnabled) {
+                if (!UsbManager.USB_FUNCTION_CHARGING.equals(functions)
+                        && mAdbEnabled) {
                     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
@@ -507,7 +508,8 @@ public class UsbDeviceManager {
                 // Override with bootmode specific usb mode if needed
                 functions = processOemUsbOverride(functions);
 
-                if (mAdbEnabled) {
+                if (!UsbManager.USB_FUNCTION_CHARGING.equals(functions)
+                        && mAdbEnabled) {
                     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
