@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +23,12 @@ import android.annotation.Nullable;
 import android.annotation.SystemApi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
+<<<<<<< HEAD
 import android.app.ActivityThread;
 import android.content.ContentResolver;
+=======
+import android.app.AppOpsManager;
+>>>>>>> 97085f4... AppOps: Add data connect control into AppOps
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
@@ -4183,12 +4190,23 @@ public class TelephonyManager {
     @SystemApi
     public void setDataEnabled(int subId, boolean enable) {
         try {
+<<<<<<< HEAD
             Log.d(TAG, "setDataEnabled: enabled=" + enable);
             ITelephony telephony = getITelephony();
             if (telephony != null)
                 telephony.setDataEnabled(subId, enable);
+=======
+            AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
+            if (enable) {
+                if (appOps.noteOp(AppOpsManager.OP_DATA_CONNECT_CHANGE) != AppOpsManager.MODE_ALLOWED) {
+                    Log.w(TAG, "Permission denied by user.");
+                    return;
+                }
+            }
+            getITelephony().setDataEnabledUsingSubId(subId, enable);
+>>>>>>> 97085f4... AppOps: Add data connect control into AppOps
         } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelephony#setDataEnabled", e);
+            Log.e(TAG, "Error calling setDataEnabled", e);
         }
     }
 
