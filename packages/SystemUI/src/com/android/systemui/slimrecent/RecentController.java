@@ -102,6 +102,8 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
     private int mLayoutDirection;
     private int mMainGravity;
     private int mUserGravity;
+    private int defaultColor;
+    private int mPanelColor;
 
     private float mScaleFactor = DEFAULT_SCALE_FACTOR;
 
@@ -269,6 +271,9 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
         // Notify panel view about new main gravity.
         if (mRecentPanelView != null) {
             mRecentPanelView.setMainGravity(mMainGravity);
+        }
+        if (mRecentContent != null) {
+            mRecentContent.setBackgroundColor(mPanelColor);
         }
     }
 
@@ -565,10 +570,19 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
                     UserHandle.USER_CURRENT) == 1);
             }
 
-            //Update colors in RecentPanelView
-            final int color = Settings.System.getIntForUser(resolver,
-                Settings.System.RECENT_PANEL_BG_COLOR, 0, UserHandle.USER_CURRENT);
-            mRecentContent.setBackgroundColor(color);
+            // Update colors in RecentPanelView
+            defaultColor = Settings.System.getIntForUser(resolver,
+                Settings.System.RECENT_PANEL_BG_COLOR, 0x80f5f5f5, UserHandle.USER_CURRENT);
+
+            mPanelColor = Settings.System.getIntForUser(resolver,
+                    Settings.System.RECENT_PANEL_BG_COLOR, -2, UserHandle.USER_CURRENT);
+
+            if (mPanelColor == Integer.MIN_VALUE
+                || mPanelColor == -2) {
+                // flag to reset the color
+                mPanelColor = defaultColor;
+            }
+            mRecentContent.setBackgroundColor(mPanelColor);
         }
     }
 
