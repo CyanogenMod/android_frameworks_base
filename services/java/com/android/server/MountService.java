@@ -665,6 +665,9 @@ class MountService extends IMountService.Stub
         synchronized (mVolumesLock) {
             oldState = mVolumeStates.put(path, state);
             volume.setState(state);
+            if (!Environment.MEDIA_FORMATTING.equals(state)) {
+                volume.setIsFormatting(false);
+            }
         }
 
         if (state.equals(oldState)) {
@@ -957,6 +960,9 @@ class MountService extends IMountService.Stub
             action = Intent.ACTION_MEDIA_EJECT;
             updatePublicVolumeState(volume, Environment.MEDIA_UNMOUNTING);
         } else if (newState == VolumeState.Formatting) {
+            synchronized (mVolumesLock) {
+                volume.setIsFormatting(true);
+            }
         } else if (newState == VolumeState.Shared) {
             if (DEBUG_EVENTS) Slog.i(TAG, "Updating volume state media mounted");
             /* Send the media unmounted event first */
@@ -985,6 +991,9 @@ class MountService extends IMountService.Stub
         final StorageVolume volume;
         synchronized (mVolumesLock) {
             volume = mVolumesByPath.get(path);
+            if (volume.getIsFormatting()) {
+                return StorageResultCode.OperationFailedStorageBusy;
+            }
         }
 
         if (DEBUG_EVENTS) Slog.i(TAG, "doMountVolume: Mouting " + path);
