@@ -853,15 +853,22 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             something = true;
         }
         if (showSpn && spn != null) {
-            if (something) {
-                str.append(mNetworkNameSeparator);
+            if(mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_spn_display_control)
+                    && something){
+                Log.d(TAG,"Do not display spn string when showPlmn and showSpn are both true"
+                       + "and plmn string is not null");
+            } else {
+                if (something) {
+                    str.append(mNetworkNameSeparator);
+                }
+                if(mContext.getResources().getBoolean(R.bool.config_display_rat) &&
+                        mServiceState != null) {
+                    spn = appendRatToNetworkName(spn, mServiceState);
+                }
+                str.append(spn);
+                something = true;
             }
-            if(mContext.getResources().getBoolean(R.bool.config_display_rat) &&
-                    mServiceState != null) {
-                spn = appendRatToNetworkName(spn, mServiceState);
-            }
-            str.append(spn);
-            something = true;
         }
         if (something) {
             mNetworkName = str.toString();
