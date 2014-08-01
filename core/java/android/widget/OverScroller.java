@@ -786,7 +786,7 @@ public class OverScroller {
 
                 if (mPerf != null) {
                     mIsPerfLockAcquired = true;
-                    mPerf.perfLockAcquire(mDuration, mPerf.CPUS_ON_2, 0x20B, 0x30B,0x1C00);
+                    mPerf.perfLockAcquire(mDuration, mPerf.CPUS_ON_2, 0x1E01, 0x20B, 0x30B,0x1C00);
                 }
             }
 
