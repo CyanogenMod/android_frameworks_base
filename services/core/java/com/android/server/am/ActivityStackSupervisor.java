@@ -1322,7 +1322,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
             }
         }
-        ActivityStack resultStack = resultRecord == null ? null : resultRecord.task.stack;
 
         final int launchFlags = intent.getFlags();
 
@@ -1398,6 +1397,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 err = ActivityManager.START_NOT_VOICE_COMPATIBLE;
             }
         }
+
+        final ActivityStack resultStack = resultRecord == null ? null : resultRecord.task.stack;
 
         if (err != ActivityManager.START_SUCCESS) {
             if (resultRecord != null) {
