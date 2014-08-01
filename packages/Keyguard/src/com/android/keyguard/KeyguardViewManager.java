@@ -854,17 +854,12 @@ public class KeyguardViewManager {
         if (DEBUG) Log.d(TAG, "onScreenTurnedOn()");
         mScreenOn = true;
 
-        final IBinder token;
-
-        // If keyguard is disabled or not showing, we need to inform PhoneWindowManager with a null
+        // If keyguard is not showing, we need to inform PhoneWindowManager with a null
         // token so it doesn't wait for us to draw...
-        final boolean disabled =
-                mLockPatternUtils.isLockScreenDisabled() && !mLockPatternUtils.isSecure();
-        if (!isShowing() || disabled) {
-            token = null;
-        } else {
-            token = mKeyguardHost.getWindowToken();
-        }
+        final IBinder token = isShowing() ? mKeyguardHost.getWindowToken() : null;
+
+        if (DEBUG && token == null) Slog.v(TAG, "send wm null token: "
+                + (mKeyguardHost == null ? "host was null" : "not showing"));
 
         if (mKeyguardView != null) {
             mKeyguardView.onScreenTurnedOn();
