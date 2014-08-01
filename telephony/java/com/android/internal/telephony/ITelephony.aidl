@@ -490,6 +490,9 @@ interface ITelephony {
      */
     List<CellInfo> getAllCellInfo();
 
+
+    List<CellInfo> getAllCellInfoUsingSubId(long subId);
+
     /**
      * Sets minimum time in milli-seconds between onCellInfoChanged
      */

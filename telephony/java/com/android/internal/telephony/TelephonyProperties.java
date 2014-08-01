@@ -200,7 +200,7 @@ public interface TelephonyProperties
      */
     static final String PROPERTY_IGNORE_NITZ = "telephony.test.ignore.nitz";
 
-     /**
+    /**
      * Property to set multi sim feature.
      * Type:  String(dsds, dsda)
      */
