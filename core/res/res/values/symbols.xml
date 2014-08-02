@@ -1853,4 +1853,8 @@
   <java-symbol type="bool" name="always_popup_usb_computer_connection" />
   <!-- config network mode to operator specific -->
   <java-symbol type="bool" name="config_network_mode_overriden" />
+
+  <!-- spn display control -->
+  <java-symbol type="bool" name="config_spn_display_control" />
+
 </resources>

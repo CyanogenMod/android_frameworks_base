@@ -846,15 +846,22 @@ public class MSimNetworkController extends NetworkController {
             something = true;
         }
         if (showSpn && spn != null) {
-            if (something) {
-                str.append(mNetworkNameSeparator);
+            if(mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_spn_display_control)
+                    && something){
+               Slog.d(TAG,"Do not display spn string when showPlmn and showSpn are both true"
+                       + "and plmn string is not null");
+            } else {
+                if (something) {
+                    str.append(mNetworkNameSeparator);
+                }
+                if(mContext.getResources().getBoolean(R.bool.config_display_rat) &&
+                        mMSimServiceState[subscription] != null) {
+                    spn = appendRatToNetworkName(spn, mMSimServiceState[subscription]);
+                }
+                str.append(spn);
+                something = true;
             }
-            if(mContext.getResources().getBoolean(R.bool.config_display_rat) &&
-                    mMSimServiceState[subscription] != null) {
-                spn = appendRatToNetworkName(spn, mMSimServiceState[subscription]);
-            }
-            str.append(spn);
-            something = true;
         }
         if (something) {
             mMSimNetworkName[subscription] = str.toString();

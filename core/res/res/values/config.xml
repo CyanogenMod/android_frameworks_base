@@ -1490,4 +1490,8 @@
     <bool name="config_forceSupportRotationLockToggle">false</bool>
     <!-- Should the device show reboot option when long press the power key -->
     <bool name="config_showRebootOption">false</bool>
+
+    <!-- spn display control -->
+    <bool name="config_spn_display_control">false</bool>
+
 </resources>
