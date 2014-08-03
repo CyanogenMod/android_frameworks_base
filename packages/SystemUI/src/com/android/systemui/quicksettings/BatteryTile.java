@@ -18,12 +18,18 @@
 
 package com.android.systemui.quicksettings;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.BatteryStats;
+import android.os.IPowerManager;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.TypedValue;
@@ -48,6 +54,41 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     private int mBatteryLevel = 0;
     private boolean mPluggedIn;
 
+    private String plugText = "";
+
+   /**
+    *Listens for intent broadcasts
+    */
+    private IntentFilter   mIntentFilter;
+
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+                int plugType = intent.getIntExtra("plugged", 0);
+
+                switch (plugType) {
+                    case BatteryManager.BATTERY_PLUGGED_AC:
+                        plugText = context.getString(R.string.power_ac);
+                        break;
+                    case BatteryManager.BATTERY_PLUGGED_USB:
+                        plugText = context.getString(R.string.power_usb);
+                        break;
+                    case BatteryManager.BATTERY_PLUGGED_WIRELESS:
+                        plugText = context.getString(R.string.power_wireless);
+                        break;
+                    case (BatteryManager.BATTERY_PLUGGED_AC|BatteryManager.BATTERY_PLUGGED_USB):
+                        plugText = context.getString(R.string.power_ac_usb);
+                        break;
+                    default:
+                        plugText = "";
+                        break;
+                }
+            }
+        }
+    };
+
     public BatteryTile(Context context, QuickSettingsController qsc, BatteryController controller) {
         super(context, qsc, R.layout.quick_settings_tile_battery);
 
@@ -55,6 +96,11 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
 
         mBatteryLevel = mController.getBatteryLevel();
         mPluggedIn = mController.isBatteryStatusCharging();
+
+        // create the IntentFilter that will be used to listen
+        // to battery status broadcasts
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
 
         mOnClick = new OnClickListener() {
             @Override
@@ -83,6 +129,7 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
                 Settings.System.STATUS_BAR_BATTERY_TEXT_CHARGING_COLOR), this);
         qsc.registerObservedContent(Settings.System.getUriFor(
                 Settings.System.STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED), this);
+        context.registerReceiver(mIntentReceiver, mIntentFilter);
     }
 
     @Override
@@ -159,7 +206,7 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
     void updateQuickSettings() {
         TextView tv = (TextView) mTile.findViewById(R.id.text);
         if (tv != null) {
-            tv.setText(mLabel);
+            tv.setText(mLabel + plugText);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTileTextSize);
             tv.setPadding(0, mTileTextPadding, 0, 0);
             if (mTileTextColor != -2) {
