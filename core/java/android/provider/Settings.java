@@ -6010,13 +6010,6 @@ public final class Settings {
         public static final String HOVER_HIDE_BUTTON = "hover_hide_button";
 
         /**
-         * Time to show hover notification
-         * 5000ms = default
-         * @hide
-         */
-        public static final String SHOW_HOVER_TIME = "show_hover_time";
-
-        /**
          * Hover: Only show up if StatusBar is hidden, default is 1 (on).
          *
          * @hide
