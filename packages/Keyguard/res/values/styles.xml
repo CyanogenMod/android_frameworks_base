@@ -70,6 +70,18 @@
     <style name="BouncerSecurityContainer">
         <item name="android:layout_gravity">center_horizontal|bottom</item>
     </style>
+    <!-- Keyguard PIN dimsiss button styles -->
+    <style name="DismissPadKey"
+            parent="@*android:style/Widget.Button">
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:paddingLeft">20dp</item>
+    </style>
 
     <style name="PasswordTheme" parent="@android:style/Theme.DeviceDefault">
         <item name="android:colorControlNormal">#80ffffff</item>

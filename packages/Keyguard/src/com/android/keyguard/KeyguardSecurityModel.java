@@ -76,8 +76,17 @@ public class KeyguardSecurityModel {
 
     SecurityMode getSecurityMode() {
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
-        final IccCardConstants.State simState = updateMonitor.getSimState();
+        IccCardConstants.State simState = IccCardConstants.State.UNKNOWN;
         SecurityMode mode = SecurityMode.None;
+        for (int i = 0; i < updateMonitor.getNumPhones(); i++) {
+            long subId = updateMonitor.getSubIdByPhoneId(i);
+            simState = updateMonitor.getSimState(subId);
+            if (simState == IccCardConstants.State.PIN_REQUIRED
+                || simState == IccCardConstants.State.PUK_REQUIRED) {
+                break;
+            }
+        }
+
         if (simState == IccCardConstants.State.PIN_REQUIRED) {
             mode = SecurityMode.SimPin;
         } else if (simState == IccCardConstants.State.PUK_REQUIRED

@@ -53,8 +53,9 @@ public class KeyguardUpdateMonitorCallback {
      * @param plmn The operator name of the registered network.  May be null if it shouldn't
      *   be displayed.
      * @param spn The service provider name.  May be null if it shouldn't be displayed.
+     * @param subId The subscription id which PLMN or SPN changed.
      */
-    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) { }
+    void onRefreshCarrierInfo(long subId, CharSequence plmn, CharSequence spn) { }
 
     /**
      * Called when the ringer mode changes.
@@ -120,10 +121,11 @@ public class KeyguardUpdateMonitorCallback {
     public void onUserSwitchComplete(int userId) { }
 
     /**
-     * Called when the SIM state changes.
+     * Called when the SIM state of a subscription changes.
      * @param simState
+     * @param subId The subscription id which SIM state changed.
      */
-    public void onSimStateChanged(IccCardConstants.State simState) { }
+    public void onSimStateChanged(long subId, IccCardConstants.State simState) {}
 
     /**
      * Called when a user is removed.
@@ -197,5 +199,23 @@ public class KeyguardUpdateMonitorCallback {
     /**
      * Called when the state of face unlock changed.
      */
-    public void onFaceUnlockStateChanged(boolean running, int userId) { }
+    public void onFaceUnlockStateChanged(boolean running, int userid) { }
+
+    /**
+     * Called when a subId for the slot is changed.
+     * @param oldSubId.
+     * @param newSubId.
+     */
+    public void onSubIdUpdated(long oldSubId, long newSubId) { }
+
+    /**
+     * Called when the SubInfo content changed
+     * @param subId The subscription id which subscription info record is updated
+     * @param column The column name which is updated
+     * @param sValue The new string if the colum value is string
+     * @param iValue The new integer value if the colum value is integer
+     */
+    public void onSubInfoContentChanged(long subId, String column,
+                                String sValue, int iValue) { }
+
 }
