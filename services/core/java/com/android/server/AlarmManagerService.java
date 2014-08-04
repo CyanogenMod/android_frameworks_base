@@ -1284,6 +1284,20 @@ class AlarmManagerService extends SystemService {
         boolean didRemove = false;
         for (int i = mAlarmBatches.size() - 1; i >= 0; i--) {
             Batch b = mAlarmBatches.get(i);
+            ArrayList<Alarm> alarmList = b.alarms;
+            Alarm alarm = null;
+            for (int j = alarmList.size() - 1; j >= 0; j--) {
+                alarm = alarmList.get(j);
+                if (alarm.type == RTC_POWEROFF_WAKEUP && alarm.operation.equals(operation)) {
+                    long alarmSeconds, alarmNanoseconds;
+                    alarmSeconds = alarm.when / 1000;
+                    alarmNanoseconds = (alarm.when % 1000) * 1000 * 1000;
+                    Slog.w(TAG,"Clear alarm type=" + alarm.type + ",alarmSeconds=" +
+                       alarmSeconds);
+                    clear(mNativeData, alarm.type, alarmSeconds, alarmNanoseconds);
+                    mNextRtcWakeup = 0;
+                }
+            }
             didRemove |= b.remove(operation);
             if (b.size() == 0) {
                 mAlarmBatches.remove(i);
@@ -1436,6 +1450,7 @@ class AlarmManagerService extends SystemService {
     private native long init();
     private native void close(long nativeData);
     private native void set(long nativeData, int type, long seconds, long nanoseconds);
+    private native void clear(long nativeData, int type, long seconds, long nanoseconds);
     private native int waitForAlarm(long nativeData);
     private native int setKernelTime(long nativeData, long millis);
     private native int setKernelTimezone(long nativeData, int minuteswest);
