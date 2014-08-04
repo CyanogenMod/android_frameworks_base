@@ -51,6 +51,7 @@ interface IConnectivityManager
     NetworkInfo getActiveNetworkInfo();
     NetworkInfo getActiveNetworkInfoForUid(int uid);
     NetworkInfo getNetworkInfo(int networkType);
+    NetworkInfo getNetworkInfoForSubscription(int networkType, int subId);
     NetworkInfo[] getAllNetworkInfo();
 
     NetworkInfo getProvisioningOrActiveNetworkInfo();
@@ -73,6 +74,10 @@ interface IConnectivityManager
             in IBinder binder);
 
     int stopUsingNetworkFeature(int networkType, in String feature);
+
+    int startUsingNetworkFeatureForSubscription(int networkType, in String feature, int subId, in IBinder binder);
+
+    int stopUsingNetworkFeatureForSubscription(int networkType, in String feature, int subId);
 
     boolean requestRouteToHost(int networkType, int hostAddress, String packageName);
 
@@ -157,4 +162,8 @@ interface IConnectivityManager
     void setProvisioningNotificationVisible(boolean visible, int networkType, in String extraInfo, in String url);
 
     void setAirplaneMode(boolean enable);
+
+     void setMobileDataEnabledOnSubscription(String callingPackage, boolean enabled, int subId);
+
+     void supplyMessengerForSubscription(int networkType, in Messenger messenger, int subId);
 }
