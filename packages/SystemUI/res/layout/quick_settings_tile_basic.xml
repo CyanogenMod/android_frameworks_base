@@ -24,7 +24,7 @@
         android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
         android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
         android:layout_width="@dimen/qs_tile_icon_size"
-        android:layout_height="@dimen/qs_tile_icon_size"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:scaleType="centerInside"
         />

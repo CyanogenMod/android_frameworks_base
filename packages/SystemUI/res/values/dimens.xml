@@ -227,14 +227,4 @@
 
     <!-- Padding under status bar battery icon -->
     <dimen name="status_bar_battery_bottom_padding">1px</dimen>
-
-    <!-- Quick Settings tile geometry: width and height (ribbon mode) -->
-    <dimen name="qs_ribbon_width_min">40dp</dimen>
-    <dimen name="qs_ribbon_width_max">128dp</dimen>
-    <dimen name="qs_ribbon_width_big">64dp</dimen>
-    <dimen name="qs_ribbon_height_small">40dp</dimen>
-    <dimen name="qs_ribbon_height_big">64dp</dimen>
-    <!-- Quick Settings tile geometry: interior margin, above and below icon (ribbon mode) -->
-    <dimen name="qs_tile_ribbon_icon_margin_small">4dp</dimen>
-    <dimen name="qs_tile_ribbon_icon_margin_big">16dp</dimen>
 </resources>
