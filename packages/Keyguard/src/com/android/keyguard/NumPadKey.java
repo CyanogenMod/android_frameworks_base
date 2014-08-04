@@ -77,7 +77,6 @@ public class NumPadKey extends ViewGroup {
     protected NumPadKey(Context context, AttributeSet attrs, int defStyle, int contentResource) {
         super(context, attrs, defStyle);
         setFocusable(true);
-
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NumPadKey);
 
         try {
@@ -92,7 +91,6 @@ public class NumPadKey extends ViewGroup {
         setAccessibilityDelegate(new ObscureSpeechDelegate(context));
 
         mEnableHaptics = new LockPatternUtils(context).isTactileFeedbackEnabled();
-
         mPM = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
@@ -102,7 +100,27 @@ public class NumPadKey extends ViewGroup {
         mDigitText.setText(Integer.toString(mDigit));
         mKlondikeText = (TextView) findViewById(R.id.klondike_text);
 
+        updateText();
+        setBackground(mContext.getDrawable(R.drawable.ripple_drawable));
+        setContentDescription(mDigitText.getText().toString());
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        // Reset the "announced headset" flag when detached.
+        ObscureSpeechDelegate.sAnnouncedHeadset = false;
+    }
+
+    public void setDigit(int digit) {
+        mDigit = digit;
+        updateText();
+    }
+
+    private void updateText() {
         if (mDigit >= 0) {
+            mDigitText.setText(Integer.toString(mDigit));
             if (sKlondike == null) {
                 sKlondike = getResources().getStringArray(R.array.lockscreen_num_pad_klondike);
             }
@@ -116,22 +134,8 @@ public class NumPadKey extends ViewGroup {
                 }
             }
         }
-
-        a = context.obtainStyledAttributes(attrs, android.R.styleable.View);
-        if (!a.hasValueOrEmpty(android.R.styleable.View_background)) {
-            setBackground(mContext.getDrawable(R.drawable.ripple_drawable));
-        }
-        a.recycle();
-        setContentDescription(mDigitText.getText().toString());
     }
 
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-
-        // Reset the "announced headset" flag when detached.
-        ObscureSpeechDelegate.sAnnouncedHeadset = false;
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
