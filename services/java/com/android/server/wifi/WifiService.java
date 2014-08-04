@@ -966,6 +966,7 @@ public final class WifiService extends IWifiManager.Stub {
      * @deprecated
      */
     public DhcpInfo getDhcpInfo() {
+        int prefixLength = -1;
         enforceAccessPermission();
         DhcpResults dhcpResults = mWifiStateMachine.syncGetDhcpResults();
         if (dhcpResults.linkProperties == null) return null;
@@ -975,6 +976,7 @@ public final class WifiService extends IWifiManager.Stub {
             InetAddress addr = la.getAddress();
             if (addr instanceof Inet4Address) {
                 info.ipAddress = NetworkUtils.inetAddressToInt((Inet4Address)addr);
+                prefixLength = la.getNetworkPrefixLength();
                 break;
             }
         }
@@ -983,6 +985,10 @@ public final class WifiService extends IWifiManager.Stub {
                 InetAddress gateway = r.getGateway();
                 if (gateway instanceof Inet4Address) {
                     info.gateway = NetworkUtils.inetAddressToInt((Inet4Address)gateway);
+                    // in case of using the static IP,
+                    // let's get the prefix length to generate the netmask
+                    if(info.netmask == 0 && prefixLength != -1)
+                        info.netmask = NetworkUtils.prefixLengthToNetmaskInt(prefixLength);
                 }
             } else if (r.hasGateway() == false) {
                 LinkAddress dest = r.getDestination();
