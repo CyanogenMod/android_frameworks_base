@@ -34,8 +34,8 @@ import static com.android.internal.util.cm.QSConstants.TILE_MOBILEDATA;
 import static com.android.internal.util.cm.QSConstants.TILE_NETWORKADB;
 import static com.android.internal.util.cm.QSConstants.TILE_NETWORKMODE;
 import static com.android.internal.util.cm.QSConstants.TILE_NFC;
-import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
 import static com.android.internal.util.cm.QSConstants.TILE_PERFORMANCE_PROFILE;
+import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
 import static com.android.internal.util.cm.QSConstants.TILE_QUIETHOURS;
 import static com.android.internal.util.cm.QSConstants.TILE_RINGER;
 import static com.android.internal.util.cm.QSConstants.TILE_SCREENTIMEOUT;
@@ -95,6 +95,7 @@ import com.android.systemui.quicksettings.PreferencesTile;
 import com.android.systemui.quicksettings.ProfileTile;
 import com.android.systemui.quicksettings.QuickSettingsTile;
 import com.android.systemui.quicksettings.QuietHoursTile;
+import com.android.systemui.quicksettings.RemoteDisplayTile;
 import com.android.systemui.quicksettings.RingerModeTile;
 import com.android.systemui.quicksettings.ScreenTimeoutTile;
 import com.android.systemui.quicksettings.SleepScreenTile;
@@ -104,7 +105,6 @@ import com.android.systemui.quicksettings.TorchTile;
 import com.android.systemui.quicksettings.UsbTetherTile;
 import com.android.systemui.quicksettings.UserTile;
 import com.android.systemui.quicksettings.VolumeTile;
-import com.android.systemui.quicksettings.RemoteDisplayTile;
 import com.android.systemui.quicksettings.WiFiTile;
 import com.android.systemui.quicksettings.WifiAPTile;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView.QSSize;
@@ -522,15 +522,23 @@ public class QuickSettingsController {
             return;
 
         QSSize size = mContainerView.getRibbonSize();
+        Resources res = mContext.getResources();
         int height, margin;
         if (size == QSSize.AutoNarrow || size == QSSize.Narrow) {
             height = R.dimen.qs_ribbon_height_small;
             margin = R.dimen.qs_tile_ribbon_icon_margin_small;
         } else {
-            height = R.dimen.qs_ribbon_height_big;
-            margin = R.dimen.qs_tile_ribbon_icon_margin_big;
+            // Compatibility hack for old themes:
+            // Check if the height was modified (Original value=64dp)
+            if (res.getString(R.dimen.notification_min_height).equals("64dp")) {
+                height = R.dimen.qs_ribbon_height_big;
+                margin = R.dimen.qs_tile_ribbon_icon_margin_big;
+            } else{
+                // Fallback for old themes
+                height = R.dimen.notification_min_height;
+                margin = R.dimen.qs_tile_ribbon_icon_margin;
+            }
         }
-        Resources res = mContext.getResources();
         height = res.getDimensionPixelSize(height);
         margin = res.getDimensionPixelSize(margin);
 
