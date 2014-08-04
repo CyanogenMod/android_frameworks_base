@@ -44,7 +44,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile implements
     public void updateResources() {
         mLabel = mContext.getString(R.string.quick_settings_lockscreen);
         mDrawable = mLockscreenChanger.isDisabled() ?
-                R.drawable.ic_qs_lock_screen_on : R.drawable.ic_qs_lock_screen_off;
+                R.drawable.ic_qs_lock_screen_off : R.drawable.ic_qs_lock_screen_on;
         super.updateResources();
     }
 

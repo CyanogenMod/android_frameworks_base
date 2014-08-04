@@ -41,6 +41,8 @@ public class LockscreenStateChanger {
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            System.out.println("onreceive: " + intent.getAction());
+            
             mContext.unregisterReceiver(this);
             mInitialized = true;
             updateForCurrentState();
@@ -57,10 +59,10 @@ public class LockscreenStateChanger {
         // Fetch last state
         mPrefs = mContext.getSharedPreferences("quicksettings", Context.MODE_PRIVATE);
         mLockscreenDisabled = mPrefs.getBoolean(KEY_DISABLED, false);
+        System.out.println("intialized " + isInitialized());
         if (!isInitialized()) {
             // Register receiver
-            IntentFilter filter = new IntentFilter(DevicePolicyManager
-                    .ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED);
+            IntentFilter filter = new IntentFilter();
             mContext.registerReceiver(mReceiver, filter);
         } else {
             updateForCurrentState();
