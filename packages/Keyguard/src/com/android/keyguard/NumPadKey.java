@@ -31,6 +31,7 @@ import com.android.internal.widget.LockPatternUtils;
 public class NumPadKey extends Button {
     // list of "ABC", etc per digit, starting with '0'
     static String sKlondike[];
+    private Context mContext;
 
     int mDigit = -1;
     int mTextViewResId;
@@ -66,7 +67,7 @@ public class NumPadKey extends Button {
 
     public NumPadKey(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
+        mContext = context;
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NumPadKey);
         mDigit = a.getInt(R.styleable.NumPadKey_digit, mDigit);
         setTextViewResId(a.getResourceId(R.styleable.NumPadKey_textView, 0));
@@ -76,27 +77,7 @@ public class NumPadKey extends Button {
         setAccessibilityDelegate(new ObscureSpeechDelegate(context));
 
         mEnableHaptics = new LockPatternUtils(context).isTactileFeedbackEnabled();
-
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(String.valueOf(mDigit));
-        if (mDigit >= 0) {
-            if (sKlondike == null) {
-                sKlondike = context.getResources().getStringArray(
-                        R.array.lockscreen_num_pad_klondike);
-            }
-            if (sKlondike != null && sKlondike.length > mDigit) {
-                final String extra = sKlondike[mDigit];
-                final int extraLen = extra.length();
-                if (extraLen > 0) {
-                    builder.append(" ");
-                    builder.append(extra);
-                    builder.setSpan(
-                        new TextAppearanceSpan(context, R.style.TextAppearance_NumPadKey_Klondike),
-                        builder.length()-extraLen, builder.length(), 0);
-                }
-            }
-        }
-        setText(builder);
+        setText(createSpannableStringBuilder());
     }
 
     @Override
@@ -106,6 +87,38 @@ public class NumPadKey extends Button {
         // Reset the "announced headset" flag when detached.
         ObscureSpeechDelegate.sAnnouncedHeadset = false;
     }
+
+    public void setDigit(int digit) {
+        mDigit = digit;
+    }
+
+    public void showNewDigit() {
+        setText(createSpannableStringBuilder());
+    }
+
+    private SpannableStringBuilder createSpannableStringBuilder() {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(String.valueOf(mDigit));
+        if (mDigit >= 0) {
+            if (sKlondike == null) {
+                sKlondike = mContext.getResources().getStringArray(
+                        R.array.lockscreen_num_pad_klondike);
+            }
+            if (sKlondike != null && sKlondike.length > mDigit) {
+                final String extra = sKlondike[mDigit];
+                final int extraLen = extra.length();
+                if (extraLen > 0) {
+                    builder.append(" ");
+                    builder.append(extra);
+                    builder.setSpan(
+                            new TextAppearanceSpan(mContext, R.style.TextAppearance_NumPadKey_Klondike),
+                            builder.length()-extraLen, builder.length(), 0);
+                }
+            }
+        }
+        return builder;
+    }
+
 
     public void setTextView(TextView tv) {
         mTextView = tv;

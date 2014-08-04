@@ -17,6 +17,7 @@
 package com.android.keyguard;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -25,11 +26,21 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView.OnEditorActionListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Displays a PIN pad for unlocking.
  */
 public class KeyguardPINView extends KeyguardAbsKeyInputView
         implements KeyguardSecurityView, OnEditorActionListener, TextWatcher {
+
+    private static List<Integer> sNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
+
+    private Context mContext;
+    private boolean mScramblePin;
 
     public KeyguardPINView(Context context) {
         this(context, null);
@@ -37,6 +48,7 @@ public class KeyguardPINView extends KeyguardAbsKeyInputView
 
     public KeyguardPINView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
     }
 
     protected void resetState() {
@@ -56,7 +68,6 @@ public class KeyguardPINView extends KeyguardAbsKeyInputView
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
         final View ok = findViewById(R.id.key_enter);
         if (ok != null) {
             ok.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +80,28 @@ public class KeyguardPINView extends KeyguardAbsKeyInputView
                 }
             });
             ok.setOnHoverListener(new LiftToActivateListener(getContext()));
+        }
+
+        mScramblePin = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
+
+        if (mScramblePin) {
+            Collections.shuffle(sNumbers);
+            // get all children who are NumPadKey's
+            List<NumPadKey> views = new ArrayList<NumPadKey>();
+            for (int i = 0; i < this.getChildCount(); i++) {
+                View view = this.getChildAt(i);
+                if (view instanceof NumPadKey) {
+                    views.add((NumPadKey) view);
+                }
+            }
+
+            // reset the digits in the views
+            for (int i = 0; i < sNumbers.size(); i++) {
+                NumPadKey view = views.get(i);
+                view.setDigit(i);
+                view.showNewDigit();
+            }
         }
 
         // The delete button is of the PIN keyboard itself in some (e.g. tablet) layouts,
