@@ -73,6 +73,7 @@ public:
     AlarmImplAlarmDriver(int fd) : AlarmImpl(&fd, 1) { }
 
     int set(int type, struct timespec *ts);
+    int clear(int type, struct timespec *ts);
     int setTime(struct timeval *tv);
     int waitForAlarm();
 };
@@ -109,6 +110,11 @@ AlarmImpl::~AlarmImpl()
 int AlarmImplAlarmDriver::set(int type, struct timespec *ts)
 {
     return ioctl(fds[0], ANDROID_ALARM_SET(type), ts);
+}
+
+int AlarmImplAlarmDriver::clear(int type, struct timespec *ts)
+{
+    return ioctl(fds[0], ANDROID_ALARM_CLEAR(type), ts);
 }
 
 int AlarmImplAlarmDriver::setTime(struct timeval *tv)
@@ -371,6 +377,22 @@ static void android_server_AlarmManagerService_set(JNIEnv*, jobject, jlong nativ
     }
 }
 
+static void android_server_AlarmManagerService_clear(JNIEnv*, jobject, jlong nativeData, jint type, jlong seconds, jlong nanoseconds)
+{
+    AlarmImplAlarmDriver *impl = reinterpret_cast<AlarmImplAlarmDriver *>(nativeData);
+    struct timespec ts;
+    ts.tv_sec = seconds;
+    ts.tv_nsec = nanoseconds;
+
+    int result = impl->clear(type, &ts);
+    if (result < 0)
+    {
+        ALOGE("Unable to clear alarm  %lld.%09lld: %s\n",
+              static_cast<long long>(seconds),
+              static_cast<long long>(nanoseconds), strerror(errno));
+    }
+}
+
 static jint android_server_AlarmManagerService_waitForAlarm(JNIEnv*, jobject, jlong nativeData)
 {
     AlarmImpl *impl = reinterpret_cast<AlarmImpl *>(nativeData);
@@ -395,6 +417,7 @@ static JNINativeMethod sMethods[] = {
     {"init", "()J", (void*)android_server_AlarmManagerService_init},
     {"close", "(J)V", (void*)android_server_AlarmManagerService_close},
     {"set", "(JIJJ)V", (void*)android_server_AlarmManagerService_set},
+    {"clear", "(JIJJ)V", (void*)android_server_AlarmManagerService_clear},
     {"waitForAlarm", "(J)I", (void*)android_server_AlarmManagerService_waitForAlarm},
     {"setKernelTime", "(JJ)I", (void*)android_server_AlarmManagerService_setKernelTime},
     {"setKernelTimezone", "(JI)I", (void*)android_server_AlarmManagerService_setKernelTimezone},
