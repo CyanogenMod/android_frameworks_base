@@ -43,15 +43,14 @@ public class EmergencyButton extends Button {
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
-        public void onSimStateChanged(State simState) {
+        public void onSimStateChanged(long subId, State simState) {
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
-            updateEmergencyCallButton(simState, phoneState);
+            updateEmergencyCallButton(phoneState);
         }
 
         @Override
         public void onPhoneStateChanged(int phoneState) {
-            State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
-            updateEmergencyCallButton(simState, phoneState);
+            updateEmergencyCallButton(phoneState);
         }
     };
     private LockPatternUtils mLockPatternUtils;
@@ -88,8 +87,7 @@ public class EmergencyButton extends Button {
             }
         });
         int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
-        State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
-        updateEmergencyCallButton(simState, phoneState);
+        updateEmergencyCallButton(phoneState);
     }
 
     /**
@@ -112,7 +110,7 @@ public class EmergencyButton extends Button {
         }
     }
 
-    private void updateEmergencyCallButton(State simState, int phoneState) {
+    private void updateEmergencyCallButton(int phoneState) {
         boolean enabled = false;
         if (mLockPatternUtils.isInCall()) {
             enabled = true; // always show "return to call" if phone is off-hook
