@@ -1077,7 +1077,7 @@ public class LockPatternView extends View {
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         return new SavedState(superState,
-                mLockPatternUtils.patternToString(mPattern),
+                mLockPatternUtils == null ? "" : mLockPatternUtils.patternToString(mPattern),
                 mPatternDisplayMode.ordinal(), mPatternSize,
                 mInputEnabled, mInStealthMode, mEnableHapticFeedback, mVisibleDots, mShowErrorPath);
     }
@@ -1086,9 +1086,11 @@ public class LockPatternView extends View {
     protected void onRestoreInstanceState(Parcelable state) {
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setPattern(
-                DisplayMode.Correct,
-                mLockPatternUtils.stringToPattern(ss.getSerializedPattern()));
+        if (mLockPatternUtils != null) {
+            setPattern(
+                    DisplayMode.Correct,
+                    mLockPatternUtils.stringToPattern(ss.getSerializedPattern()));
+        }
         mPatternDisplayMode = DisplayMode.values()[ss.getDisplayMode()];
         mPatternSize = ss.getPatternSize();
         mInputEnabled = ss.isInputEnabled();
