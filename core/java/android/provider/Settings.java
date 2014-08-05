@@ -6113,6 +6113,12 @@ public final class Settings {
         public static final String RECENT_PANEL_BG_COLOR = "recent_panel_bg_color";
 
         /**
+         * Recents Panel Custom Color for Stock View
+         * @hide
+         */
+        public static final String RECENTS_PANEL_STOCK_COLOR = "recents_panel_stock_color";
+
+        /**
          * Detailed incall info
          *
          * @hide

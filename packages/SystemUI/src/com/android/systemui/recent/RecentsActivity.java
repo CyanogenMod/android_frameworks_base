@@ -147,6 +147,7 @@ public class RecentsActivity extends Activity {
             // or in case we don't get an onNewIntent
             mRecentsPanel.refreshRecentTasksList();
             mRecentsPanel.refreshViews();
+            mRecentsPanel.setColor();
         }
         super.onStart();
     }
