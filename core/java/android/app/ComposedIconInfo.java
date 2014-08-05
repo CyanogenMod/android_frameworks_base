@@ -25,6 +25,7 @@ public class ComposedIconInfo implements Parcelable {
     public float iconScale;
     public int iconDensity;
     public int iconSize;
+    public float[] colorFilter;
 
     public ComposedIconInfo() {
         super();
@@ -43,6 +44,13 @@ public class ComposedIconInfo implements Parcelable {
         }
         iconMask = source.readInt();
         iconUpon = source.readInt();
+        int colorFilterSize = source.readInt();
+        if (colorFilterSize > 0) {
+            colorFilter = new float[colorFilterSize];
+            for (int i = 0; i < colorFilterSize; i++) {
+                colorFilter[i] = source.readFloat();
+            }
+        }
     }
 
     @Override
@@ -63,6 +71,14 @@ public class ComposedIconInfo implements Parcelable {
         }
         dest.writeInt(iconMask);
         dest.writeInt(iconUpon);
+        if (colorFilter != null) {
+            dest.writeInt(colorFilter.length);
+            for (float val : colorFilter) {
+                dest.writeFloat(val);
+            }
+        } else {
+            dest.writeInt(0);
+        }
     }
 
     public static final Creator<ComposedIconInfo> CREATOR
