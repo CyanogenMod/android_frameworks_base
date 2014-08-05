@@ -970,7 +970,7 @@ public class SignalStrength implements Parcelable {
         final int tdScdmaDbm = getTdScdmaDbm();
         int tdScdmaAsuLevel;
 
-        if (tdScdmaDbm == INVALID) tdScdmaAsuLevel = 255;
+        if (tdScdmaDbm == INVALID) tdScdmaAsuLevel = 99;
         else tdScdmaAsuLevel = tdScdmaDbm + 120;
         if (DBG) log("TD-SCDMA Asu level: " + tdScdmaAsuLevel);
         return tdScdmaAsuLevel;
