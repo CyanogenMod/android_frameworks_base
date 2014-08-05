@@ -16,10 +16,7 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.app.ActivityManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -73,8 +70,6 @@ public class NotificationPanelView extends PanelView {
     private float mSwipeDirection;
     private boolean mTrackingSwipe;
     private boolean mSwipeTriggered;
-
-    private int mCurrentUserId = 0;
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
