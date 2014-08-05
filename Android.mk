@@ -313,6 +313,10 @@ LOCAL_MODULE := framework-base
 
 LOCAL_JAR_EXCLUDE_FILES := none
 
+LOCAL_MAVEN_ARTIFACT := framework-base
+LOCAL_MAVEN_GROUPID := com.cyngn
+LOCAL_MAVEN_VERSION := 11.0.0-SNAPSHOT
+
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
 # Make sure that R.java and Manifest.java are built before we build
