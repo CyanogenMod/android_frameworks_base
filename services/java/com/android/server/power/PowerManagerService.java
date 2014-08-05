@@ -179,8 +179,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     // Max time (microseconds) to allow a CPU boost for
     private static final int MAX_CPU_BOOST_TIME = 5000000;
 
-    // Max time allowed for proximity check
-    private static final int MAX_PROXIMITY_WAIT = 200;
+    private static final float PROXIMITY_NEAR_THRESHOLD = 5.0f;
 
     private Context mContext;
     private LightsService mLightsService;
@@ -422,7 +421,9 @@ public final class PowerManagerService extends IPowerManager.Stub
     private PerformanceManager mPerformanceManager;
     private SensorManager mSensorManager;
     private Sensor mProximitySensor;
-    private boolean mProximityWake;
+    private boolean mProximityWakeEnabled;
+    private int mProximityTimeOut;
+    private boolean mProximityWakeSupported;
 
     public PowerManagerService() {
         synchronized (mLock) {
@@ -607,6 +608,10 @@ public final class PowerManagerService extends IPowerManager.Stub
                 com.android.internal.R.bool.config_dreamsActivatedOnSleepByDefault);
         mDreamsActivatedOnDockByDefaultConfig = resources.getBoolean(
                 com.android.internal.R.bool.config_dreamsActivatedOnDockByDefault);
+        mProximityTimeOut = resources.getInteger(
+                com.android.internal.R.integer.config_proximityCheckTimeout);
+        mProximityWakeSupported = resources.getBoolean(
+                com.android.internal.R.bool.config_proximityCheckOnWake);
     }
 
     private void updateSettingsLocked() {
@@ -632,7 +637,7 @@ public final class PowerManagerService extends IPowerManager.Stub
         mWakeUpWhenPluggedOrUnpluggedSetting = Settings.Global.getInt(resolver,
                 Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                 (mWakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0));
-        mProximityWake = Settings.System.getInt(resolver,
+        mProximityWakeEnabled = Settings.System.getInt(resolver,
                 Settings.System.PROXIMITY_ON_WAKE, 0) == 1;
 
         final int oldScreenBrightnessSetting = mScreenBrightnessSetting;
@@ -1219,10 +1224,10 @@ public final class PowerManagerService extends IPowerManager.Stub
             // There is already a message queued;
             return;
         }
-        if (mProximityWake && mProximitySensor != null) {
+        if (mProximityWakeSupported && mProximityWakeEnabled && mProximitySensor != null) {
             Message msg = mHandler.obtainMessage(MSG_WAKE_UP);
             msg.obj = r;
-            mHandler.sendMessageDelayed(msg, MAX_PROXIMITY_WAIT);
+            mHandler.sendMessageDelayed(msg, mProximityTimeOut);
             runPostProximityCheck(r);
         } else {
             r.run();
@@ -1243,7 +1248,9 @@ public final class PowerManagerService extends IPowerManager.Stub
                     return;
                 }
                 mHandler.removeMessages(MSG_WAKE_UP);
-                if (event.values[0] == mProximitySensor.getMaximumRange()) {
+                float distance = event.values[0];
+                if (distance >= PROXIMITY_NEAR_THRESHOLD ||
+                        distance >= mProximitySensor.getMaximumRange()) {
                     r.run();
                 }
             }
