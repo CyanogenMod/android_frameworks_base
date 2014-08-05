@@ -179,8 +179,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     // Max time (microseconds) to allow a CPU boost for
     private static final int MAX_CPU_BOOST_TIME = 5000000;
 
-    // Max time allowed for proximity check
-    private static final int MAX_PROXIMITY_WAIT = 200;
+    private static final float PROXIMITY_NEAR_THRESHOLD = 5.0f;
 
     private Context mContext;
     private LightsService mLightsService;
@@ -423,6 +422,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     private SensorManager mSensorManager;
     private Sensor mProximitySensor;
     private boolean mProximityWake;
+    private int mProximityTimeOut;
 
     public PowerManagerService() {
         synchronized (mLock) {
@@ -458,6 +458,9 @@ public final class PowerManagerService extends IPowerManager.Stub
         mHandler = new PowerManagerHandler(mHandlerThread.getLooper());
         mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         mProximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        final Resources resources = mContext.getResources();
+        mProximityTimeOut = resources.getInteger(
+                com.android.internal.R.integer.config_proximityCheckTimeout);
 
         Watchdog.getInstance().addMonitor(this);
         Watchdog.getInstance().addThread(mHandler, mHandlerThread.getName());
@@ -1222,7 +1225,7 @@ public final class PowerManagerService extends IPowerManager.Stub
         if (mProximityWake && mProximitySensor != null) {
             Message msg = mHandler.obtainMessage(MSG_WAKE_UP);
             msg.obj = r;
-            mHandler.sendMessageDelayed(msg, MAX_PROXIMITY_WAIT);
+            mHandler.sendMessageDelayed(msg, mProximityTimeOut);
             runPostProximityCheck(r);
         } else {
             r.run();
@@ -1243,7 +1246,9 @@ public final class PowerManagerService extends IPowerManager.Stub
                     return;
                 }
                 mHandler.removeMessages(MSG_WAKE_UP);
-                if (event.values[0] == mProximitySensor.getMaximumRange()) {
+                float distance = event.values[0];
+                if (distance >= PROXIMITY_NEAR_THRESHOLD ||
+                        distance >= mProximitySensor.getMaximumRange()) {
                     r.run();
                 }
             }
