@@ -90,7 +90,7 @@ public class HoverCling {
         Settings.Secure.putIntForUser(mContext.getContentResolver(),
                 Settings.Secure.HOVER_FIRST_TIME,
                 mFirstRun ? 0 : 1,
-                UserHandle.USER_CURRENT);
+                ActivityManager.getCurrentUser());
         if (DEBUG) Slog.d(TAG, "Saved firsttime=" + mFirstRun);
     }
 
@@ -123,8 +123,8 @@ public class HoverCling {
         final WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_TOAST,
-                0
+                WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
+                WindowManager.LayoutParams.FLAG_DIM_BEHIND
                         | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                         | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
