@@ -26,6 +26,7 @@ import android.content.pm.PackageInfo;
 import android.content.res.IThemeService;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff;
@@ -569,6 +570,163 @@ public class IconPackHelper {
 
         private static String getCachedIconName(String pkgName, int resId, int density) {
             return String.format("%s_%08x_%d.png", pkgName, resId, density);
+        }
+    }
+
+    public static class ColorFilterUtils {
+        public static ColorMatrix adjustHue(float value) {
+            ColorMatrix cm = new ColorMatrix();
+            adjustHue(cm, value);
+            return cm;
+        }
+
+        /**
+         * @see http://groups.google.com/group/android-developers/browse_thread/thread/9e215c83c3819953
+         * @see http://gskinner.com/blog/archives/2007/12/colormatrix_cla.html
+         * @param cm
+         * @param value
+         */
+        public static void adjustHue(ColorMatrix cm, float value) {
+            value = clampValue(value, -180f, 180f) / 180f * (float) Math.PI;
+            if (value == 0) {
+                return;
+            }
+            float cosVal = (float) Math.cos(value);
+            float sinVal = (float) Math.sin(value);
+            float lumR = 0.213f;
+            float lumG = 0.715f;
+            float lumB = 0.072f;
+            float[] mat = new float[] {
+                    lumR + cosVal * (1 - lumR) + sinVal * (-lumR),
+                    lumG + cosVal * (-lumG) + sinVal * (-lumG),
+                    lumB + cosVal * (-lumB) + sinVal * (1 - lumB), 0, 0,
+                    lumR + cosVal * (-lumR) + sinVal * (0.143f),
+                    lumG + cosVal * (1 - lumG) + sinVal * (0.140f),
+                    lumB + cosVal * (-lumB) + sinVal * (-0.283f), 0, 0,
+                    lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR)),
+                    lumG + cosVal * (-lumG) + sinVal * (lumG),
+                    lumB + cosVal * (1 - lumB) + sinVal * (lumB), 0, 0,
+                    0f, 0f, 0f, 1f, 0f,
+                    0f, 0f, 0f, 0f, 1f };
+            cm.postConcat(new ColorMatrix(mat));
+        }
+
+        private static float clampValue(float value, float min, float max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        public static ColorMatrix adjustSaturation(float saturation) {
+            saturation = Math.min(Math.max(saturation / 100f, 0f), 2f);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setSaturation(saturation);
+
+            return cm;
+        }
+
+        public static ColorMatrix invertColors() {
+            float[] colorMatrix_Negative = {
+                    -1.0f, 0, 0, 0, 255, //red
+                    0, -1.0f, 0, 0, 255, //green
+                    0, 0, -1.0f, 0, 255, //blue
+                    0, 0, 0, 1.0f, 0 //alpha
+            };
+
+            return new ColorMatrix(colorMatrix_Negative);
+        }
+
+        public static ColorMatrix adjustBrightness(float brightness) {
+            brightness = Math.min(Math.max(brightness / 100f, 0f), 1f);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setScale(brightness, brightness, brightness, 1f);
+
+            return cm;
+        }
+
+        public static ColorMatrix adjustContrast(float contrast) {
+            contrast = Math.min(Math.max(contrast / 100f, 0f), 1f) + 1f;
+            float o = (-0.5f * contrast + 0.5f) * 255f;
+            float[] colorMatrix_Contrast = {
+                    contrast, 0, 0, 0, o, //red
+                    0, contrast, 0, 0, o, //green
+                    0, 0, contrast, 0, o, //blue
+                    0, 0, 0, 1.0f, 0 //alpha
+            };
+
+            return new ColorMatrix(colorMatrix_Contrast);
+        }
+
+        public static ColorMatrix adjustAlpha(float alpha) {
+            alpha = Math.min(Math.max(alpha / 100f, 0f), 1f);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setScale(1f, 1f, 1f, alpha);
+
+            return cm;
+        }
+
+        public static ColorMatrix applyTint(int color) {
+            float alpha = ((color >> 24) & 0xff) / 255f;
+            float red = ((color >> 16) & 0xff) * alpha;
+            float green = ((color >> 8) & 0xff) * alpha;
+            float blue = (color & 0xff) * alpha;
+            float rscale = red / 255f;
+            float gscale = green / 255f;
+            float bscale = blue / 255f;
+
+            float[] colorMatrix_Tint = {
+                    1f + rscale, 0, 0, 0, red, //red
+                    0, 1f + gscale, 0, 0, green, //green
+                    0, 0, 1f + bscale, 0, blue, //blue
+                    0, 0, 0, 1.0f, 0 //alpha
+            };
+
+            return new ColorMatrix(colorMatrix_Tint);
+        }
+
+        public class Builder {
+            private ColorMatrix mColorMatrix;
+
+            public Builder() {
+                mColorMatrix = new ColorMatrix();
+            }
+
+            public Builder hue(float value) {
+                mColorMatrix.postConcat(adjustHue(value));
+                return this;
+            }
+
+            public Builder saturate(float saturation) {
+                mColorMatrix.postConcat(adjustSaturation(saturation));
+                return this;
+            }
+
+            public Builder brightness(float brightness) {
+                mColorMatrix.postConcat(adjustBrightness(brightness));
+                return this;
+            }
+
+            public Builder contrast(float contrast) {
+                mColorMatrix.postConcat(adjustContrast(contrast));
+                return this;
+            }
+
+            public Builder alpha(float alpha) {
+                mColorMatrix.postConcat(adjustAlpha(alpha));
+                return this;
+            }
+
+            public Builder invert(boolean invert) {
+                if (invert) mColorMatrix.postConcat(invertColors());
+                return this;
+            }
+
+            public Builder tint(int color) {
+                mColorMatrix.postConcat(applyTint(color));
+                return this;
+            }
+
+            public ColorMatrix build() {
+                return mColorMatrix;
+            }
         }
     }
 }
