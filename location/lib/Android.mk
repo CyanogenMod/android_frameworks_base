@@ -26,6 +26,10 @@ LOCAL_SRC_FILES := \
             $(call all-subdir-java-files) \
             $(call all-aidl-files-under, java)
 
+LOCAL_MAVEN_ARTIFACT := framework-location
+LOCAL_MAVEN_GROUPID := com.cyngn
+LOCAL_MAVEN_VERSION := 11.0.0-SNAPSHOT            
+
 include $(BUILD_JAVA_LIBRARY)
 
 
