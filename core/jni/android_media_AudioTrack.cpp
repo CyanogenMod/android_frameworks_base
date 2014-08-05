@@ -912,6 +912,7 @@ static jint android_media_AudioTrack_get_output_sample_rate(JNIEnv *env,  jobjec
     case AUDIO_STREAM_NOTIFICATION:
     case AUDIO_STREAM_BLUETOOTH_SCO:
     case AUDIO_STREAM_DTMF:
+    case AUDIO_STREAM_INCALL_MUSIC:
         nativeStreamType = (audio_stream_type_t) javaStreamType;
         break;
     default:
