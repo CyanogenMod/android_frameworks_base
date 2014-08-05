@@ -18,7 +18,9 @@ package android.app;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -26,6 +28,9 @@ import android.content.pm.PackageInfo;
 import android.content.res.IThemeService;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff;
@@ -77,6 +82,7 @@ public class IconPackHelper {
     private Resources mLoadedIconPackResource;
     private ComposedIconInfo mComposedIconInfo;
     private int mIconBackCount = 0;
+    private ColorFilterUtils.Builder mFilterBuilder;
 
     static {
         ICON_BACK_COMPONENT = new ComponentName(ICON_BACK_TAG, "");
@@ -92,6 +98,7 @@ public class IconPackHelper {
         mComposedIconInfo = new ComposedIconInfo();
         mComposedIconInfo.iconSize = am.getLauncherLargeIconSize();
         mComposedIconInfo.iconDensity = am.getLauncherLargeIconDensity();
+        mFilterBuilder = new ColorFilterUtils.Builder();
     }
 
     private void loadResourcesFromXmlParser(XmlPullParser parser,
@@ -105,6 +112,10 @@ public class IconPackHelper {
             }
 
             if (parseComposedIconComponent(parser, iconPackResources)) {
+                continue;
+            }
+
+            if (ColorFilterUtils.parseIconFilter(parser, mFilterBuilder)) {
                 continue;
             }
 
@@ -194,6 +205,7 @@ public class IconPackHelper {
             mComposedIconInfo.iconBacks = null;
             mComposedIconInfo.iconMask = mComposedIconInfo.iconUpon = 0;
             mComposedIconInfo.iconScale = 0;
+            mComposedIconInfo.colorFilter = null;
         } else {
             mIconBackCount = 0;
             Resources res = createIconResource(mContext, packageName);
@@ -201,6 +213,10 @@ public class IconPackHelper {
             mLoadedIconPackResource = res;
             mLoadedIconPackName = packageName;
             loadComposedIconComponents();
+            ColorMatrix cm = mFilterBuilder.build();
+            if (cm != null) {
+                mComposedIconInfo.colorFilter = cm.getArray().clone();
+            }
         }
     }
 
@@ -432,7 +448,7 @@ public class IconPackHelper {
                 back = iconInfo.iconBacks[sRandom.nextInt(iconInfo.iconBacks.length)];
             }
             Bitmap bmp = createIconBitmap(icon, res, back, iconInfo.iconMask, iconInfo.iconUpon,
-                    iconInfo.iconScale, iconInfo.iconSize);
+                    iconInfo.iconScale, iconInfo.iconSize, iconInfo.colorFilter);
             return bmp != null ? new BitmapDrawable(res, bmp): null;
         }
 
@@ -456,7 +472,8 @@ public class IconPackHelper {
                             % iconInfo.iconBacks.length];
                 }
                 Bitmap bmp = createIconBitmap(baseIcon, res, back, iconInfo.iconMask,
-                        iconInfo.iconUpon, iconInfo.iconScale, iconInfo.iconSize);
+                        iconInfo.iconUpon, iconInfo.iconScale, iconInfo.iconSize,
+                        iconInfo.colorFilter);
                 if (!cacheComposedIcon(bmp, getCachedIconName(pkgName, resId, outValue.density))) {
                     Log.w(TAG, "Unable to cache icon " + outValue.string);
                     // restore the original TypedValue
@@ -467,7 +484,7 @@ public class IconPackHelper {
 
         private static Bitmap createIconBitmap(Drawable icon, Resources res, int iconBack,
                                                int iconMask, int iconUpon, float scale,
-                                               int iconSize) {
+                                               int iconSize, float[] colorFilter) {
             if (iconSize <= 0) return null;
 
             final Canvas canvas = new Canvas();
@@ -519,6 +536,15 @@ public class IconPackHelper {
             icon.setBounds(0, 0, width, height);
             canvas.save();
             canvas.scale(scale, scale, width / 2, height / 2);
+            if (colorFilter != null) {
+                Paint p = null;
+                if (icon instanceof BitmapDrawable) {
+                    p = ((BitmapDrawable) icon).getPaint();
+                } else if (icon instanceof PaintDrawable) {
+                    p = ((PaintDrawable) icon).getPaint();
+                }
+                p.setColorFilter(new ColorMatrixColorFilter(colorFilter));
+            }
             icon.draw(canvas);
             canvas.restore();
 
@@ -573,6 +599,241 @@ public class IconPackHelper {
 
         private static String getCachedIconName(String pkgName, int resId, int density) {
             return String.format("%s_%08x_%d.png", pkgName, resId, density);
+        }
+    }
+
+    public static class ColorFilterUtils {
+        private static final String TAG_FILTER = "filter";
+        private static final String FILTER_HUE = "hue";
+        private static final String FILTER_SATURATION = "saturation";
+        private static final String FILTER_INVERT = "invert";
+        private static final String FILTER_BRIGHTNESS = "brightness";
+        private static final String FILTER_CONTRAST = "contrast";
+        private static final String FILTER_ALPHA = "alpha";
+        private static final String FILTER_TINT = "tint";
+
+        private static final int MIN_HUE = -180;
+        private static final int MAX_HUE = 180;
+        private static final int MIN_SATURATION = 0;
+        private static final int MAX_SATURATION = 200;
+        private static final int MIN_BRIGHTNESS = 0;
+        private static final int MAX_BRIGHTNESS = 200;
+        private static final int MIN_CONTRAST = -100;
+        private static final int MAX_CONTRAST = 100;
+        private static final int MIN_ALPHA = 0;
+        private static final int MAX_ALPHA = 100;
+
+        public static boolean parseIconFilter(XmlPullParser parser, Builder builder)
+                throws IOException, XmlPullParserException {
+            String tag = parser.getName();
+            if (!TAG_FILTER.equals(tag)) return false;
+
+            int attrCount = parser.getAttributeCount();
+            String attrName;
+            String attr = null;
+            int intValue;
+            while (attrCount-- > 0) {
+                attrName = parser.getAttributeName(attrCount);
+                if (attrName.equals("name")) {
+                    attr = parser.getAttributeValue(attrCount);
+                }
+            }
+            String content = parser.nextText();
+            if (attr != null && content != null && content.length() > 0) {
+                content = content.trim();
+                if (FILTER_HUE.equalsIgnoreCase(attr)) {
+                    intValue = clampValue(getInt(content, 0),MIN_HUE, MAX_HUE);
+                    builder.hue(intValue);
+                } else if (FILTER_SATURATION.equalsIgnoreCase(attr)) {
+                    intValue = clampValue(getInt(content, 100),
+                            MIN_SATURATION, MAX_SATURATION);
+                    builder.saturate(intValue);
+                } else if (FILTER_INVERT.equalsIgnoreCase(attr)) {
+                    if ("true".equalsIgnoreCase(content)) {
+                        builder.invertColors();
+                    }
+                } else if (FILTER_BRIGHTNESS.equalsIgnoreCase(attr)) {
+                    intValue = clampValue(getInt(content, 100),
+                            MIN_BRIGHTNESS, MAX_BRIGHTNESS);
+                    builder.brightness(intValue);
+                } else if (FILTER_CONTRAST.equalsIgnoreCase(attr)) {
+                    intValue = clampValue(getInt(content, 0),
+                            MIN_CONTRAST, MAX_CONTRAST);
+                    builder.contrast(intValue);
+                } else if (FILTER_ALPHA.equalsIgnoreCase(attr)) {
+                    intValue = clampValue(getInt(content, 100), MIN_ALPHA, MAX_ALPHA);
+                    builder.alpha(intValue);
+                } else if (FILTER_TINT.equalsIgnoreCase(attr)) {
+                    try {
+                        intValue = Color.parseColor(content);
+                        builder.tint(intValue);
+                    } catch (IllegalArgumentException e) {
+                        Log.w(TAG, "Cannot apply tint, invalid argument: " + content);
+                    }
+                }
+            }
+            return true;
+        }
+
+        private static int getInt(String value, int defaultValue) {
+            try {
+                return Integer.valueOf(value);
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
+        }
+
+        private static int clampValue(int value, int min, int max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        /**
+         * See the following links for reference
+         * http://groups.google.com/group/android-developers/browse_thread/thread/9e215c83c3819953
+         * http://gskinner.com/blog/archives/2007/12/colormatrix_cla.html
+         * @param value
+         */
+        public static ColorMatrix adjustHue(float value) {
+            ColorMatrix cm = new ColorMatrix();
+            value = value / 180 * (float) Math.PI;
+            if (value != 0) {
+                float cosVal = (float) Math.cos(value);
+                float sinVal = (float) Math.sin(value);
+                float lumR = 0.213f;
+                float lumG = 0.715f;
+                float lumB = 0.072f;
+                float[] mat = new float[]{
+                        lumR + cosVal * (1 - lumR) + sinVal * (-lumR),
+                        lumG + cosVal * (-lumG) + sinVal * (-lumG),
+                        lumB + cosVal * (-lumB) + sinVal * (1 - lumB), 0, 0,
+                        lumR + cosVal * (-lumR) + sinVal * (0.143f),
+                        lumG + cosVal * (1 - lumG) + sinVal * (0.140f),
+                        lumB + cosVal * (-lumB) + sinVal * (-0.283f), 0, 0,
+                        lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR)),
+                        lumG + cosVal * (-lumG) + sinVal * (lumG),
+                        lumB + cosVal * (1 - lumB) + sinVal * (lumB), 0, 0,
+                        0, 0, 0, 1, 0,
+                        0, 0, 0, 0, 1};
+                cm.set(mat);
+            }
+            return cm;
+        }
+
+        public static ColorMatrix adjustSaturation(float saturation) {
+            saturation = Math.min(Math.max(saturation / 100, 0), 2);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setSaturation(saturation);
+
+            return cm;
+        }
+
+        public static ColorMatrix invertColors() {
+            float[] matrix = {
+                    -1, 0, 0, 0, 255, //red
+                    0, -1, 0, 0, 255, //green
+                    0, 0, -1, 0, 255, //blue
+                    0, 0, 0, 1, 0 //alpha
+            };
+
+            return new ColorMatrix(matrix);
+        }
+
+        public static ColorMatrix adjustBrightness(float brightness) {
+            brightness = Math.min(Math.max(brightness / 100, 0), 1);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setScale(brightness, brightness, brightness, 1);
+
+            return cm;
+        }
+
+        public static ColorMatrix adjustContrast(float contrast) {
+            contrast = Math.min(Math.max(contrast / 100, 0), 1) + 1;
+            float o = (-0.5f * contrast + 0.5f) * 255;
+            float[] matrix = {
+                    contrast, 0, 0, 0, o, //red
+                    0, contrast, 0, 0, o, //green
+                    0, 0, contrast, 0, o, //blue
+                    0, 0, 0, 1, 0 //alpha
+            };
+
+            return new ColorMatrix(matrix);
+        }
+
+        public static ColorMatrix adjustAlpha(float alpha) {
+            alpha = Math.min(Math.max(alpha / 100, 0), 1);
+            ColorMatrix cm = new ColorMatrix();
+            cm.setScale(1, 1, 1, alpha);
+
+            return cm;
+        }
+
+        public static ColorMatrix applyTint(int color) {
+            float alpha = Color.alpha(color) / 255f;
+            float red = Color.red(color) * alpha;
+            float green = Color.green(color) * alpha;
+            float blue = Color.blue(color) * alpha;
+
+            float[] matrix = {
+                    1, 0, 0, 0, red, //red
+                    0, 1, 0, 0, green, //green
+                    0, 0, 1, 0, blue, //blue
+                    0, 0, 0, 1, 0 //alpha
+            };
+
+            return new ColorMatrix(matrix);
+        }
+
+        public static class Builder {
+            private List<ColorMatrix> mMatrixList;
+
+            public Builder() {
+                mMatrixList = new ArrayList<ColorMatrix>();
+            }
+
+            public Builder hue(float value) {
+                mMatrixList.add(adjustHue(value));
+                return this;
+            }
+
+            public Builder saturate(float saturation) {
+                mMatrixList.add(adjustSaturation(saturation));
+                return this;
+            }
+
+            public Builder brightness(float brightness) {
+                mMatrixList.add(adjustBrightness(brightness));
+                return this;
+            }
+
+            public Builder contrast(float contrast) {
+                mMatrixList.add(adjustContrast(contrast));
+                return this;
+            }
+
+            public Builder alpha(float alpha) {
+                mMatrixList.add(adjustAlpha(alpha));
+                return this;
+            }
+
+            public Builder invertColors() {
+                mMatrixList.add(ColorFilterUtils.invertColors());
+                return this;
+            }
+
+            public Builder tint(int color) {
+                mMatrixList.add(applyTint(color));
+                return this;
+            }
+
+            public ColorMatrix build() {
+                if (mMatrixList == null || mMatrixList.size() == 0) return null;
+
+                ColorMatrix colorMatrix = new ColorMatrix();
+                for (ColorMatrix cm : mMatrixList) {
+                    colorMatrix.postConcat(cm);
+                }
+                return colorMatrix;
+            }
         }
     }
 }
