@@ -735,6 +735,10 @@ public final class Profile implements Parcelable, Comparable {
         // Set stream volumes
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         for (StreamSettings sd : streams.values()) {
+            if (am.isMusicActive() && sd.getStreamId() == am.STREAM_MUSIC) {
+                // music is playing, skip stream
+                continue;
+            }
             if (sd.isOverride()) {
                 am.setStreamVolume(sd.getStreamId(), sd.getValue(), 0);
             }
