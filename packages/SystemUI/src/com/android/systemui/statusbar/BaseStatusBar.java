@@ -500,15 +500,13 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         @Override
         public void onChange(boolean selfChange) {
-            updatePieControls();
             if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_CONTROLS, 0, UserHandle.USER_CURRENT) == 0) {
                     PieStatusPanel.ResetPanels(true);
             }
+            updatePieControls();
         }
     };
-
-    private PieSettingsObserver mPieSettingsObserver = new PieSettingsObserver(mHandler);
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
         @Override
@@ -630,8 +628,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                 Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED), true,
                 mProvisioningObserver);
 
-        mPieSettingsObserver.observe();
-
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
 
@@ -743,22 +739,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mContext.registerReceiver(mBroadcastReceiver, filter);
         SidebarObserver observer = new SidebarObserver(mHandler);
         observer.observe();
-
-        // Listen for HALO enabled switch
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.HALO_ENABLED), false, new ContentObserver(new Handler()) {
-            @Override
-            public void onChange(boolean selfChange) {
-                updateHalo();
-            }});
-
-        // Listen for HALO state
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.HALO_ACTIVE), false, new ContentObserver(new Handler()) {
-            @Override
-            public void onChange(boolean selfChange) {
-                updateHalo();
-            }});
+        PieSettingsObserver mPieSettingsObserver = new PieSettingsObserver(mHandler);
+        mPieSettingsObserver.observe();
 
         IntentFilter switchFilter = new IntentFilter();
         switchFilter.addAction("com.android.systemui.APP_SWITCH");
@@ -771,24 +753,46 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }, switchFilter);
 
+        // Listen for HALO enabled switch
         mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.HALO_SIZE), false, new ContentObserver(new Handler()) {
+                Settings.System.getUriFor(Settings.System.HALO_ENABLED),
+                        false, new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateHalo();
+            }
+        });
+
+        // Listen for HALO state
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.HALO_ACTIVE),
+                        false, new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateHalo();
+            }
+        });
+
+        mContext.getContentResolver().registerContentObserver(
+            Settings.System.getUriFor(Settings.System.HALO_SIZE),
+                        false, new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {
                 restartHalo();
-            }});
-
+            }
+        });
         updateHalo();
 
         // Listen for PIE gravity
         mContext.getContentResolver().registerContentObserver(
-            Settings.System.getUriFor(Settings.System.PIE_GRAVITY), false, new ContentObserver(new Handler()) {
-                @Override
-                public void onChange(boolean selfChange) {
-                    updatePieControls();
-                }
-            });
-            attachPie();
+            Settings.System.getUriFor(Settings.System.PIE_GRAVITY),
+                    false, new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updatePieControls();
+            }
+        });
+        attachPie();
 
         // Listen for HOVER enabled
         mContext.getContentResolver().registerContentObserver(
@@ -924,7 +928,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         for (int i = 0; i < 4; i++) {
             if (mPieDummyTrigger[i] != null) mWindowManager.removeView(mPieDummyTrigger[i]);
         }
-
         attachPie();
     }
 
