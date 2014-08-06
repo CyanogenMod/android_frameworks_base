@@ -821,6 +821,17 @@ public class AppOpsService extends IAppOpsService.Stub {
                             pkgUid = Process.MEDIA_UID;
                         }
                     }
+                    // On shared-uid packages, getNameForUid() will return the suid string
+                    // instead of the package name. Try to resolve that string format to
+                    // a real uid
+                    if (pkgUid == -1 && packageName.endsWith(":"+uid)) {
+                        try {
+                            pkgUid = mContext.getPackageManager().getUidForSharedUser(
+                                    packageName.substring(0,(packageName.indexOf(':')))
+                                    );
+                        } catch (NameNotFoundException e) {
+                        }
+                    }
                     if (pkgUid != uid) {
                         // Oops!  The package name is not valid for the uid they are calling
                         // under.  Abort.
