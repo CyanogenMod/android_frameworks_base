@@ -227,6 +227,14 @@ public class ThemesContract {
          * <P>Default: 0</P>
          */
         public static final String LAST_UPDATE_TIME = "updateTime";
+
+        /**
+         * install time in millisecs. When the row is inserted this column
+         * is populated by the PackageInfo.
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String INSTALL_TIME = "install_time";
     }
 
     /**
