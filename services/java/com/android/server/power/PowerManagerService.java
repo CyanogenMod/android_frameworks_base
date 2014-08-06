@@ -1273,13 +1273,9 @@ public final class PowerManagerService extends IPowerManager.Stub
         mSensorManager.registerListener(new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
+                mSensorManager.unregisterListener(this);
                 if (!mHandler.hasMessages(MSG_WAKE_UP)) {
-                    // The sensor took too long to return and
-                    // the wake event already triggered.
                     Slog.w(TAG, "The proximity sensor took too long, wake event already triggered!");
-                    if (mSensorManager != null) {
-                        mSensorManager.unregisterListener(this);
-                    }
                     return;
                 }
                 mHandler.removeMessages(MSG_WAKE_UP);
@@ -1288,7 +1284,6 @@ public final class PowerManagerService extends IPowerManager.Stub
                         distance >= mProximitySensor.getMaximumRange()) {
                     r.run();
                 }
-                mSensorManager.unregisterListener(this);
             }
 
             @Override
