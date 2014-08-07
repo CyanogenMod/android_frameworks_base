@@ -197,7 +197,6 @@ public class Hover {
                 }
                 mShowing = false;
                 mHiding = false;
-                setTouchOutside(false);
                 setAnimatingVisibility(false);
                 clearHandlerCallbacks();
                 clearNotificationList();
@@ -890,7 +889,8 @@ public class Hover {
     public void clearForegroundAppNotifications() {
         for (int i = 0; i < mNotificationList.size(); i++) {
             if (mNotificationList.get(i).getContent().getPackageName()
-                    .equals(mNotificationHelper.getForegroundPackageName())) {
+                    .equals(mNotificationHelper.getForegroundPackageName())
+                            && i > 0) {
                 mNotificationList.remove(i);
             }
         }
