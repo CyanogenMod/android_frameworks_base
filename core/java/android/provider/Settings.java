@@ -3530,7 +3530,8 @@ public final class Settings {
          * @hide
          */
         public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
-
+        public static final String QUIET_HOURS_STATE = "quiet_hours_state";
+ 
         /**
          * Whether quiet hours will enable or disable themselves on volume change
          * 0 = Setting disabled
@@ -3636,7 +3637,6 @@ public final class Settings {
          * @hide
          */
         public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
-
 
         /**
          * Constant: Keep ringer on for all numbers during quiet hours
