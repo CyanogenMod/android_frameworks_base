@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.text.method.AllCapsTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,8 @@ public class PlatLogoActivity extends Activity {
         final TextView letter = new TextView(this);
 
         letter.setTypeface(bold);
-        letter.setTextSize(300);
+        letter.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().
+                            getDimension(com.android.internal.R.dimen.plat_logo_alphabet_size));
         letter.setTextColor(0xFFFFFFFF);
         letter.setGravity(Gravity.CENTER);
         letter.setText(String.valueOf(Build.ID).substring(0, 1));
