@@ -71,6 +71,7 @@
                 android:layout_gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:ellipsize="end"
                 />
 
