@@ -46,7 +46,6 @@
   <string name="permlab_preventpower">anular tecla encendíu</string>
   <string name="permdesc_preventpower">permite que l\'aplicación cambie\'l comportamientu de la tecla d\'encendíu.</string>
   <string name="permlab_sendMockSms">unviar mensaxes SMS simulaos</string>
-  <string name="permdesc_sendMockSms">Permite que l\'aplicación unvie mensaxes SMS simulaos a aplicaciones de confianza. Les aplicaciones malicioses puen unviar mensaxes SMS continuamente, bloquiando la barra de notificaciones ya interrumpiendo al usuariu.</string>
   <string name="storage_sd_dock_card">Tarxeta SD de la base</string>
   <string name="app_killed_message">Aplicación finada</string>
   <string name="global_action_reboot">Reaniciar</string>
@@ -54,7 +53,6 @@
   <string name="toast_rotation_unlocked">Xiru de pantalla desbloquiáu</string>
   <string name="toast_rotation_locked">Xiru de pantalla bloquiáu</string>
   <string name="stylus_app_not_installed">%s nun ta instalada</string>
-  <string name="permlab_changePrivacyGuardState">habilitar o deshabilitar la privacidá</string>
   <string name="permdesc_changePrivacyGuardState">Permite que l\'aplicación cambie l\'estáu de privacidá d\'otra. Cuando una aplicación s\'executa cola privacidá habilitada, nun va poder acceder a los datos personales, talos como contautos, mensaxes o rexistros de llamaes.</string>
   <string name="privacy_guard_notification">Privacidá activada</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nun va poder acceder a los datos personales</string>

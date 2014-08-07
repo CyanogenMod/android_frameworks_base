@@ -46,7 +46,6 @@
   <string name="permlab_preventpower">outrepasser le bouton d\'alimentation</string>
   <string name="permdesc_preventpower">Autoriser une application à outrepasser le bouton d\'alimentation</string>
   <string name="permlab_sendMockSms">envoyer des SMS simulés</string>
-  <string name="permdesc_sendMockSms">Permettre à l\'application d\'envoyer des messages simulés. Cela permet à une application d\'envoyer des SMS à des applications de confiance. Des applications malveillantes peuvent envoyer des messages en permanence, bloquer le système de notification de l\'appareil et perturber l\'utilisateur</string>
   <string name="storage_sd_dock_card">Dock carte SD</string>
   <string name="app_killed_message">Application arrêtée</string>
   <string name="global_action_reboot">Redémarrer</string>
@@ -54,7 +53,6 @@
   <string name="toast_rotation_unlocked">Rotation de l\'écran déverrouillée</string>
   <string name="toast_rotation_locked">Rotation de l\'écran verrouillée</string>
   <string name="stylus_app_not_installed">%s n\'est pas installé</string>
-  <string name="permlab_changePrivacyGuardState">active ou désactive la protection des données</string>
   <string name="permdesc_changePrivacyGuardState">Permet à l\'application d\'en exécuter une autre avec la protection des données. Lorsqu\'une application est exécutée avec la protection des données, elle n\'aura pas accès aux données personnelles telles que les contacts, les journaux d\'appels ou les messages.</string>
   <string name="privacy_guard_notification">Protection des données activée</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne sera pas en mesure d\'accéder aux données personnelles</string>

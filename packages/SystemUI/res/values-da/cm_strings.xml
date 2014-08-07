@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Slet</string>
   <string name="screenshot_delete_confirmation">Screenshot slettet.</string>
   <string name="accessibility_desc_add_quick_settings">Tilføj Kvikindstillinger.</string>
+  <string name="status_bar_notification_spam_item_title">Blokér beskeder som disse</string>
 </resources>

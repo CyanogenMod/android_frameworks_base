@@ -26,4 +26,5 @@
   <string name="pick_image">Vælg billede</string>
   <string name="pick_wallpaper">Baggrunde</string>
   <string name="activity_not_found">App er ikke installeret.</string>
+  <string name="lockscreen_wallpaper_instructions">Vælg baggrund for skærmlås</string>
 </resources>

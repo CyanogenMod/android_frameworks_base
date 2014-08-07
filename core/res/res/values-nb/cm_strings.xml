@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Telefonen startes på nytt.</string>
   <string name="permlab_preventpower">forhindre på/av knapp</string>
   <string name="permdesc_preventpower">Lar appen overstyre av/på knappen</string>
-  <string name="permdesc_sendMockSms">Lar programmet sende falske SMS-meldinger. Dette tillater en app å sende SMS til klarerte programmer. Skadelige programmer kan sende meldinger kontinuerlig, blokkerer enhetens varslingssystem og forstyrrer brukeren.</string>
   <string name="storage_sd_dock_card">SD-kort i dokkingstasjon</string>
   <string name="app_killed_message">Appen ble drept</string>
   <string name="global_action_reboot">Start på nytt</string>
@@ -53,7 +52,6 @@
   <string name="toast_rotation_unlocked">Skjermrotasjon er ulåst</string>
   <string name="toast_rotation_locked">Skjermrotasjon er låst</string>
   <string name="stylus_app_not_installed">%s er ikke installert</string>
-  <string name="permlab_changePrivacyGuardState">aktivere eller deaktivere personvernvakt</string>
   <string name="permdesc_changePrivacyGuardState">Lar appen endre om en annen app kjører med personlighetsvern. Når en app kjører med personlighetsvern vil den ikke ha tilgang til personlig data som kontakter, samtalelogg eller meldinger.</string>
   <string name="privacy_guard_notification">Personvernvakt aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> vil ikke få tilgang til personlige data</string>

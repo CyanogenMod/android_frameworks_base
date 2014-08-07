@@ -46,8 +46,6 @@
   <string name="permlab_preventpower">阻止电源键</string>
   <string name="permdesc_preventpower">允许应用完全掌控电源键</string>
   <string name="permlab_sendMockSms">发送模拟短信</string>
-  <string name="permdesc_sendMockSms">允许应用发送模拟短信.
-        这允许应用发送短信到受信任的应用. 恶意应用可能连续发送短信, 阻断设备通知系统并扰乱用户.</string>
   <string name="storage_sd_dock_card">底座 SD 卡</string>
   <string name="app_killed_message">应用已被终止</string>
   <string name="global_action_reboot">重启</string>
@@ -55,7 +53,6 @@
   <string name="toast_rotation_unlocked">屏幕方向已解锁</string>
   <string name="toast_rotation_locked">屏幕方向已锁定</string>
   <string name="stylus_app_not_installed">%s 尚未被安装</string>
-  <string name="permlab_changePrivacyGuardState">启用或禁用隐私防护</string>
   <string name="permdesc_changePrivacyGuardState">允许应用更改其他应用是否启用隐私防护。当一个应用运行时启用了隐私防护，它将不能访问个人数据，如联系人、通话记录、短信。</string>
   <string name="privacy_guard_notification">隐私防护激活</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>

@@ -18,6 +18,12 @@
   <string name="prompt"><xliff:g id="app">%s</xliff:g>
         Versich fir eng VPN-Connectioun opzebauen.
     </string>
+  <string name="warning">Wann s du weiderméchs, gëss du dëser Applikatioun
+        d\'Recht de ganzen Netzwierktrafic ofzefänken.
+        <b>Acceptéier dat NET wann s de der Applikatioun net traus.</b>
+        Anerefalls riskéiers de, datt deng Date vun enger béiswëlleger
+        Software kompromettéiert ginn.
+    </string>
   <string name="accept">Ech trauen dëser Applikatioun.</string>
   <string name="legacy_title">VPN connectéiert</string>
   <string name="configure">Astellen</string>

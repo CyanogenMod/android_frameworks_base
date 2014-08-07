@@ -46,7 +46,6 @@
   <string name="permlab_preventpower">බල යතුර වලක්වන්න</string>
   <string name="permdesc_preventpower">බල යතුර අතික්‍රමණය සඳහා යෙදුමට අවසර දෙන්න</string>
   <string name="permlab_sendMockSms">විහිළු කෙටි පනිවිඩ යවන්න</string>
-  <string name="permdesc_sendMockSms">විහිළු කෙටි පනිවිඩ යැවීම සඳහා යෙදුමට අවසර ලැබේ. මෙමගින් විශ්වාසී යෙදුම් වෙත කෙටි පණිවිඩ යැවීම සඳහා යෙදුමට අවසර ලැබේ. උපාංගයේ දැනුම්දීමේ පද්දතිය අවහිර කරමින් සහ පරිශීලකට භේද ඇතිකරමින් නොනවත්වා පණිවිඩ යැවීමට ද්වේෂසහගත යෙදුම් වලට පුළුවනි.</string>
   <string name="storage_sd_dock_card">SD කාඩ්පත ඈඳන්න</string>
   <string name="app_killed_message">යෙදුම නසන ලදී</string>
   <string name="global_action_reboot">නැවත පනගන්වන්න</string>
@@ -54,7 +53,6 @@
   <string name="toast_rotation_unlocked">දර්ශනයේ භ්‍රමණය අගුළු ඇර ඇත</string>
   <string name="toast_rotation_locked">දර්ශනයේ භ්‍රමණය අගුළු දමා ඇත</string>
   <string name="stylus_app_not_installed">%s පිහිටුවා නැත</string>
-  <string name="permlab_changePrivacyGuardState">පෞද්ගලිකත්වයේ මුරකරු සබලනය හෝ අබලනය</string>
   <string name="permdesc_changePrivacyGuardState">තවත් යෙදුමක් පෞද්ගලිකත්වයේ මුරකරු සමග ධාවනය විය යුතුද නැද්ද යන්න වෙනස් කිරීම සඳහා යෙදුමට අවසර දෙන්න. යෙදුමක් පෞද්ගලිකත්වයේ මුරකරු සමග ධාවනය වන විට, එයට සම්බන්ධතා, ඇමතුම් ලොග හෝ පණිවිඩ පරිශීලනය කල නොහැක.</string>
   <string name="privacy_guard_notification">පෞද්ගලිකත්වයේ මුරකරු සක්‍රීයයි</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>ට පුද්ගලික දත්ත පරිශීලනය කල නොහැක</string>

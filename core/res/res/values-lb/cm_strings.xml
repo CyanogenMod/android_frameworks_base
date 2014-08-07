@@ -45,7 +45,6 @@
   <string name="toast_rotation_unlocked">Schiermrotéierung entspaart</string>
   <string name="toast_rotation_locked">Schiermrotéierung gespaart</string>
   <string name="stylus_app_not_installed">%s ass net installéiert</string>
-  <string name="permlab_changePrivacyGuardState">Privatsphärschutz aktivéieren oder deaktivéieren</string>
   <string name="profile_none">Keen</string>
   <string name="perf_profile_pwrsv">Energie spueren</string>
   <string name="perf_profile_bal">Ausgeglach</string>

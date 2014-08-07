@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Supprimer</string>
   <string name="screenshot_delete_confirmation">Capture d\'écran supprimée.</string>
   <string name="accessibility_desc_add_quick_settings">Ajouter des raccourcis.</string>
+  <string name="status_bar_notification_spam_item_title">Bloquer les messages similaires</string>
 </resources>

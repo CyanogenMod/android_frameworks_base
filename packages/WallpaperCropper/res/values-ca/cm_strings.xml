@@ -26,4 +26,5 @@
   <string name="pick_image">Tria una imatge</string>
   <string name="pick_wallpaper">Fons de pantalla</string>
   <string name="activity_not_found">L\'app no està instal·lada.</string>
+  <string name="lockscreen_wallpaper_instructions">Estableix el fons de la pantalla de bloqueig</string>
 </resources>

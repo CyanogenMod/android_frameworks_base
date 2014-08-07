@@ -46,7 +46,6 @@
   <string name="permlab_preventpower">vältida toitenuppu</string>
   <string name="permdesc_preventpower">Lubab rakendusel toitenuppu eirata</string>
   <string name="permlab_sendMockSms">saata võlts SMS sõnumeid</string>
-  <string name="permdesc_sendMockSms">Lubab rakendusel saata võlts-SMS\'e. See annab rakendusele loa saata SMS-e usaldatud rakendustele. Pahavaralised rakendused võivad saata sõnumeid pidevalt, takistades seadme teavitussüsteemi ja häirida kasutajat.</string>
   <string name="storage_sd_dock_card">Doki SD-kaart</string>
   <string name="app_killed_message">Rakendus lõpetatud</string>
   <string name="global_action_reboot">Taaskäivitamine</string>
@@ -54,7 +53,6 @@
   <string name="toast_rotation_unlocked">Ekraanipööre lubatud</string>
   <string name="toast_rotation_locked">Ekraanipööre keelatud</string>
   <string name="stylus_app_not_installed">%s ei ole installitud</string>
-  <string name="permlab_changePrivacyGuardState">lubada või keelata privaatsuskaitse</string>
   <string name="permdesc_changePrivacyGuardState">Sellega lubate muuta mõne muu rakenduse käivitumist Privaatsuskaitsega. Kui rakendus töötab sisselülitatud Privaatsuskaitsega, puudub rakendusel ligipääs isiklikele andmetele nagu kontaktid, kõnelogid või sõnumid.</string>
   <string name="privacy_guard_notification">Privaatsuskaitse aktiveeritud</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ei pääse ligi isiklikele andmetele</string>

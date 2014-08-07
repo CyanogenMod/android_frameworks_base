@@ -45,7 +45,7 @@
   <string name="reboot_confirm" product="default">Telefonul dvs. va reporni.</string>
   <string name="permlab_preventpower">Împiedica tasta de pornire</string>
   <string name="permdesc_preventpower">Permite aplicației să ignore tasta de pornire</string>
-  <string name="permdesc_sendMockSms">Permite aplicației să trimită mesaje SMS false. Aceasta permite unei aplicații să trimită mesaje SMS către aplicații de încredere. Aplicațiile rău intenționate pot trimite mesaje continuu, blocând sistemul de notificări al sistemului și întrerupând utilizatorul.</string>
+  <string name="permlab_sendMockSms">Trimite mesaje SMS false</string>
   <string name="storage_sd_dock_card">Dock card SD</string>
   <string name="app_killed_message">Aplicație oprită</string>
   <string name="global_action_reboot">Repornire</string>
@@ -53,7 +53,6 @@
   <string name="toast_rotation_unlocked">Rotire Ecran Deblocată</string>
   <string name="toast_rotation_locked">Rotire Ecran Blocată</string>
   <string name="stylus_app_not_installed">%s nu este instalată</string>
-  <string name="permlab_changePrivacyGuardState">activează sau dezactivează garda de confidențialitate</string>
   <string name="permdesc_changePrivacyGuardState">Permite aplicației să stabilească dacă o altă aplicație rulează cu garda de confidențialitate. Când o aplicație rulează cu garda de confidențialitate, nu va avea acces la date personale, cum ar fi contacte, jurnalul de apeluri sau mesaje.</string>
   <string name="privacy_guard_notification">Garda de confidențialitate activă</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nu va putea accesa datele personale</string>
