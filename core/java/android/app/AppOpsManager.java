@@ -223,7 +223,13 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_BLUETOOTH_CHANGE = 49;
     /** @hide */
-    public static final int _NUM_OP = 50;
+    public static final int OP_SEND_MMS = 50;
+    /** @hide */
+    public static final int OP_READ_MMS = 51;
+    /** @hide */
+    public static final int OP_WRITE_MMS = 52;
+    /** @hide */
+    public static final int _NUM_OP = 53;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION =
@@ -332,6 +338,12 @@ public class AppOpsManager {
             "android:wifi_change";
     private static final String OPSTR_BLUETOOTH_CHANGE =
             "android:bluetooth_change";
+    private static final String OPSTR_SEND_MMS =
+            "android:send_mms";
+    private static final String OPSTR_READ_MMS =
+            "android:read_mms";
+    private static final String OPSTR_WRITE_MMS =
+            "android:write_mms";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -392,6 +404,9 @@ public class AppOpsManager {
             OP_ACTIVATE_VPN,
             OP_WIFI_CHANGE,
             OP_BLUETOOTH_CHANGE,
+            OP_SEND_MMS,
+            OP_READ_MMS,
+            OP_WRITE_MMS,
     };
 
     /**
@@ -448,6 +463,9 @@ public class AppOpsManager {
             null,
             null,
             OPSTR_ACTIVATE_VPN,
+            null,
+            null,
+            null,
             null,
     };
 
@@ -506,6 +524,9 @@ public class AppOpsManager {
         OPSTR_ACTIVATE_VPN,
         OPSTR_WIFI_CHANGE,
         OPSTR_BLUETOOTH_CHANGE,
+        OPSTR_SEND_MMS,
+        OPSTR_READ_MMS,
+        OPSTR_WRITE_MMS,
     };
 
     /**
@@ -563,6 +584,9 @@ public class AppOpsManager {
             "ACTIVATE_VPN",
             "WIFI_CHANGE",
             "BLUETOOTH_CHANGE",
+            "SEND_MMS",
+            "READ_MMS",
+            "WRITE_MMS",
     };
 
     /**
@@ -620,6 +644,9 @@ public class AppOpsManager {
             null, // no permission for activating vpn
             android.Manifest.permission.CHANGE_WIFI_STATE,
             android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.SEND_SMS,
+            android.Manifest.permission.READ_SMS,
+            android.Manifest.permission.WRITE_SMS,
     };
 
     /**
@@ -678,6 +705,9 @@ public class AppOpsManager {
             UserManager.DISALLOW_CONFIG_VPN, // ACTIVATE_VPN
             null, //WIFI_CHANGE
             null, //BLUETOOTH_CHANGE
+            null, //SEND_MMS
+            null, //READ_MMS
+            null, //WRITE_MMS
     };
 
     /**
@@ -735,6 +765,9 @@ public class AppOpsManager {
             false, //ACTIVATE_VPN
             false, // WIFI_CHANGE
             false, // BLUETOOTH_CHANGE
+            false, // SEND_MMS
+            false, // READ_MMS
+            false, // WRITE_MMS
     };
 
     /**
@@ -789,6 +822,9 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_IGNORED, // OP_PROJECT_MEDIA
             AppOpsManager.MODE_IGNORED, // OP_ACTIVATE_VPN
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
     };
@@ -848,6 +884,9 @@ public class AppOpsManager {
             AppOpsManager.MODE_IGNORED, // OP_ACTIVATE_VPN
             AppOpsManager.MODE_ASK,     // OP_WIFI_CHANGE
             AppOpsManager.MODE_ASK,     // OP_BLUETOOTH_CHANGE
+            AppOpsManager.MODE_ASK,     // OP_SEND_MMS
+            AppOpsManager.MODE_ASK,     // OP_READ_MMS
+            AppOpsManager.MODE_ASK,     // OP_WRITE_MMS
     };
 
     /**
@@ -904,6 +943,9 @@ public class AppOpsManager {
         false,    // OP_ACTIVATE_VPN
         true,     // OP_WIFI_CHANGE
         true,     // OP_BLUETOOTH_CHANGE
+        true,     // OP_SEND_MMS
+        true,     // OP_READ_MMS
+        true,     // OP_WRITE_MMS
     };
 
     /**
@@ -964,6 +1006,9 @@ public class AppOpsManager {
             false,
             false,     // OP_WIFI_CHANGE
             false,     // OP_BLUETOOTH_CHANGE
+            false,     // OP_SEND_MMS
+            false,     // OP_READ_MMS
+            false,     // OP_WRITE_MMS
     };
 
     private static HashMap<String, Integer> sOpStrToOp = new HashMap<String, Integer>();
