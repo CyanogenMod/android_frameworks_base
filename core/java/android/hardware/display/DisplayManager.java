@@ -175,28 +175,6 @@ public final class DisplayManager {
      * @see #createVirtualDisplay
      */
     public static final int VIRTUAL_DISPLAY_FLAG_SECURE = 1 << 2;
-    /**
-     * Virtual display flag: Create a secure display that uses HWC secure
-     * blending.
-     *
-     * <h3>Secure virtual displays that use HWC secure blending</h3>
-     * <p>
-     * When this flag is set, the virtual display is considered secure and uses
-     * HWC secure blending for composing the surfaces. The caller promises to take
-     * reasonable measures, such as over-the-air encryption, to prevent the contents
-     * of the display from being intercepted or recorded on a persistent medium.
-     * </p>
-     *
-     * <h3>Secure virtual displays that don't use HWC secure blending</h3>
-     * <p>
-     * When this flag is not set, HWC secure blending is not supported for this
-     * virtual display.
-     * </p>
-     *
-     * @see Display#FLAG_SUPPORTS_PROTECTED_BUFFERS
-     * @hide
-     */
-    public static final int VIRTUAL_DISPLAY_FLAG_SUPPORTS_PROTECTED_BUFFERS = 1 << 3;
 
     /**
      * Virtual display flag: Only show this display's own content; do not mirror
@@ -255,6 +233,29 @@ public final class DisplayManager {
      * @see #createVirtualDisplay
      */
     public static final int VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR = 1 << 4;
+
+    /**
+     * Virtual display flag: Create a secure display that uses HWC secure
+     * blending.
+     *
+     * <h3>Secure virtual displays that use HWC secure blending</h3>
+     * <p>
+     * When this flag is set, the virtual display is considered secure and uses
+     * HWC secure blending for composing the surfaces. The caller promises to take
+     * reasonable measures, such as over-the-air encryption, to prevent the contents
+     * of the display from being intercepted or recorded on a persistent medium.
+     * </p>
+     *
+     * <h3>Secure virtual displays that don't use HWC secure blending</h3>
+     * <p>
+     * When this flag is not set, HWC secure blending is not supported for this
+     * virtual display.
+     * </p>
+     *
+     * @see Display#FLAG_SUPPORTS_PROTECTED_BUFFERS
+     * @hide
+     */
+    public static final int VIRTUAL_DISPLAY_FLAG_SUPPORTS_PROTECTED_BUFFERS = 1 << 5;
 
     /** @hide */
     public DisplayManager(Context context) {
