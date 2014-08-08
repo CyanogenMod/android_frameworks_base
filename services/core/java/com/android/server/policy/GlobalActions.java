@@ -402,8 +402,41 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     }
 
-    private class BugReportAction extends SinglePressAction implements LongPressAction {
+    private final class RebootAction extends SinglePressAction {
+        private RebootAction() {
+            super(com.android.internal.R.drawable.ic_lock_power_reboot,
+                    R.string.global_action_reboot);
+        }
 
+        @Override
+        public boolean showDuringKeyguard() {
+            return true;
+        }
+
+        @Override
+        public boolean showBeforeProvisioning() {
+            return true;
+        }
+
+        @Override
+        public void onPress() {
+            try {
+                IPowerManager pm = IPowerManager.Stub.asInterface(ServiceManager
+                        .getService(Context.POWER_SERVICE));
+                pm.reboot(true, null, false);
+            } catch (RemoteException e) {
+                Log.e(TAG, "PowerManager service died!", e);
+                return;
+            }
+        }
+    }
+
+    private Action getBugReportAction() {
+        return new SinglePressAction(com.android.internal.R.drawable.ic_lock_bugreport,
+                R.string.bugreport_title) {
+    }
+
+    private class BugReportAction extends SinglePressAction implements LongPressAction {
         public BugReportAction() {
             super(com.android.internal.R.drawable.ic_lock_bugreport, R.string.bugreport_title);
         }
