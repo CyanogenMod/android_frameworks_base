@@ -1258,6 +1258,7 @@
   <java-symbol type="xml" name="sms_short_codes" />
   <java-symbol type="xml" name="audio_assets" />
   <java-symbol type="xml" name="global_keys" />
+  <java-symbol type="xml" name="vendors" />
 
   <java-symbol type="raw" name="accessibility_gestures" />
   <java-symbol type="raw" name="incognito_mode_start_page" />
@@ -2023,4 +2024,7 @@
 
   <!-- External media format -->
   <java-symbol type="string" name="extmedia_format_message_cm" />
+
+  <!-- Wifi tethering-->
+  <java-symbol type="plurals" name="tethered_clients_connected" />
 </resources>
