@@ -233,7 +233,15 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_NFC_CHANGE = 54;
     /** @hide */
-    public static final int _NUM_OP = 55;
+    public static final int OP_DELETE_SMS = 55;
+    /** @hide */
+    public static final int OP_DELETE_MMS = 56;
+    /** @hide */
+    public static final int OP_DELETE_CONTACTS = 57;
+    /** @hide */
+    public static final int OP_DELETE_CALL_LOG = 58;
+    /** @hide */
+    public static final int _NUM_OP = 59;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION =
@@ -352,6 +360,14 @@ public class AppOpsManager {
             "android:boot_completed";
     private static final String OPSTR_NFC_CHANGE =
             "android:nfc_change";
+    private static final String OPSTR_DELETE_SMS =
+            "android:delete_sms";
+    private static final String OPSTR_DELETE_MMS =
+            "android:delete_mms";
+    private static final String OPSTR_DELETE_CONTACTS =
+            "android:delete_contacts";
+    private static final String OPSTR_DELETE_CALL_LOG =
+            "android:delete_call_log";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -417,6 +433,10 @@ public class AppOpsManager {
             OP_WRITE_MMS,
             OP_BOOT_COMPLETED,
             OP_NFC_CHANGE,
+            OP_DELETE_SMS,
+            OP_DELETE_MMS,
+            OP_DELETE_CONTACTS,
+            OP_DELETE_CALL_LOG,
     };
 
     /**
@@ -473,6 +493,10 @@ public class AppOpsManager {
             null,
             null,
             OPSTR_ACTIVATE_VPN,
+            null,
+            null,
+            null,
+            null,
             null,
             null,
             null,
@@ -541,6 +565,10 @@ public class AppOpsManager {
         OPSTR_WRITE_MMS,
         OPSTR_BOOT_COMPLETED,
         OPSTR_NFC_CHANGE,
+        OPSTR_DELETE_SMS,
+        OPSTR_DELETE_MMS,
+        OPSTR_DELETE_CONTACTS,
+        OPSTR_DELETE_CALL_LOG,
     };
 
     /**
@@ -603,6 +631,10 @@ public class AppOpsManager {
             "WRITE_MMS",
             "BOOT_COMPLETED",
             "NFC_CHANGE",
+            "DELETE_SMS",
+            "DELETE_MMS",
+            "DELETE_CONTACTS",
+            "DELETE_CALL_LOG",
     };
 
     /**
@@ -665,6 +697,10 @@ public class AppOpsManager {
             android.Manifest.permission.WRITE_SMS,
             android.Manifest.permission.RECEIVE_BOOT_COMPLETED,
             android.Manifest.permission.NFC,
+            android.Manifest.permission.WRITE_SMS,
+            android.Manifest.permission.WRITE_SMS,
+            android.Manifest.permission.WRITE_CONTACTS,
+            android.Manifest.permission.WRITE_CALL_LOG,
     };
 
     /**
@@ -728,6 +764,10 @@ public class AppOpsManager {
             null, //WRITE_MMS
             null, //BOOT_COMPLETED
             null, //NFC_CHANGE
+            null, //DELETE_SMS
+            null, //DELETE_MMS
+            null, //DELETE_CONTACTS
+            null, //DELETE_CALL_LOG
     };
 
     /**
@@ -790,6 +830,10 @@ public class AppOpsManager {
             false, // WRITE_MMS
             false, // BOOT_COMPLETED
             false, // NFC_CHANGE
+            false, //DELETE_SMS
+            false, //DELETE_MMS
+            false, //DELETE_CONTACTS
+            false, //DELETE_CALL_LOG
     };
 
     /**
@@ -844,6 +888,10 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_IGNORED, // OP_PROJECT_MEDIA
             AppOpsManager.MODE_IGNORED, // OP_ACTIVATE_VPN
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,
@@ -913,6 +961,10 @@ public class AppOpsManager {
             AppOpsManager.MODE_ASK,     // OP_WRITE_MMS
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
             AppOpsManager.MODE_ASK,     // OP_NFC_CHANGE
+            AppOpsManager.MODE_ASK,     // OP_DELETE_SMS
+            AppOpsManager.MODE_ASK,     // OP_DELETE_MMS
+            AppOpsManager.MODE_ASK,     // OP_DELETE_CONTACTS
+            AppOpsManager.MODE_ASK,     // OP_DELETE_CALL_LOG
     };
 
     /**
@@ -974,6 +1026,10 @@ public class AppOpsManager {
         true,     // OP_WRITE_MMS
         false,    // OP_BOOT_COMPLETED
         true,     // OP_NFC_CHANGE
+        true,     // OP_DELETE_SMS
+        true,     // OP_DELETE_MMS
+        true,     // OP_DELETE_CONTACTS
+        true,     // OP_DELETE_CALL_LOG
     };
 
     /**
@@ -1039,6 +1095,10 @@ public class AppOpsManager {
             false,     // OP_WRITE_MMS
             false,     // OP_BOOT_COMPLETED
             false,     // OP_NFC_CHANGE
+            false,     // OP_DELETE_SMS
+            false,     // OP_DELETE_MMS
+            false,     // OP_DELETE_CONTACTS
+            false,     // OP_DELETE_CALL_LOG
     };
 
     private static HashMap<String, Integer> sOpStrToOp = new HashMap<String, Integer>();
