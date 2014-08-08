@@ -59,6 +59,8 @@ public class QuickSettingsContainerView extends FrameLayout {
     private int mCellWidth = -1;
     private int mMinCellWidth = 0;
     private int mMaxCellWidth = 0;
+    private int mMinMargin = 0;
+    private int mMaxMargin = 0;
 
     public QuickSettingsContainerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -96,6 +98,13 @@ public class QuickSettingsContainerView extends FrameLayout {
         mMaxCellWidth = r.getDimensionPixelSize(R.dimen.qs_ribbon_width_max);
         if (size == QSSize.Auto || size == QSSize.AutoNarrow) {
             mCellWidth = -1;
+            if (size == QSSize.Auto) {
+                mMaxMargin = r.getDimensionPixelSize(R.dimen.qs_tile_ribbon_icon_margin_big_max);
+                mMinMargin = r.getDimensionPixelSize(R.dimen.qs_tile_ribbon_icon_margin_big_min);
+            } else {
+                mMaxMargin = r.getDimensionPixelSize(R.dimen.qs_tile_ribbon_icon_margin_small_max);
+                mMinMargin = r.getDimensionPixelSize(R.dimen.qs_tile_ribbon_icon_margin_small_min);
+            }
         } else {
             mCellWidth = r.getDimensionPixelSize(R.dimen.qs_ribbon_width_big);
         }
@@ -139,6 +148,14 @@ public class QuickSettingsContainerView extends FrameLayout {
                         cellWidth = mMinCellWidth;
                     else if (cellWidth > mMaxCellWidth)
                         cellWidth = mMaxCellWidth;
+                    // Calculate the margin based on a linear interpolation
+                    int widthDiff = mMaxCellWidth - mMinCellWidth;
+                    float factor = widthDiff > 0 ? (cellWidth - mMinCellWidth) / widthDiff : 0.5f;
+                    int margin = Math.round(mMaxMargin - factor * (mMaxMargin - mMinMargin));
+                    for (int i = 0; i < N; ++i) {
+                        QuickSettingsTileView v = (QuickSettingsTileView) getChildAt(i);
+                        v.getTile().setImageMargins(margin);
+                    }
                 }
             }
         } else {
