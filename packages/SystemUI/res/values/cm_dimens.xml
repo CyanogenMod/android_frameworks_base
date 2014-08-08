@@ -18,12 +18,17 @@
     <dimen name="wifi_combo_margin_end">-6dp</dimen>
 
     <!-- Quick Settings tile geometry: width and height (ribbon mode) -->
-    <dimen name="qs_ribbon_width_min">40dp</dimen>
+    <dimen name="qs_ribbon_width_min">44dp</dimen>
     <dimen name="qs_ribbon_width_max">128dp</dimen>
     <dimen name="qs_ribbon_width_big">64dp</dimen>
-    <dimen name="qs_ribbon_height_small">40dp</dimen>
+    <dimen name="qs_ribbon_height_small">48dp</dimen>
     <dimen name="qs_ribbon_height_big">64dp</dimen>
     <!-- Quick Settings tile geometry: interior margin, above and below icon (ribbon mode) -->
-    <dimen name="qs_tile_ribbon_icon_margin_small">4dp</dimen>
+    <!-- Min/Max are used for automatic, the other ones for fixed settings -->
+    <dimen name="qs_tile_ribbon_icon_margin_small">6dp</dimen>
+    <dimen name="qs_tile_ribbon_icon_margin_small_min">4dp</dimen>
+    <dimen name="qs_tile_ribbon_icon_margin_small_max">8dp</dimen>
     <dimen name="qs_tile_ribbon_icon_margin_big">16dp</dimen>
+    <dimen name="qs_tile_ribbon_icon_margin_big_min">14dp</dimen>
+    <dimen name="qs_tile_ribbon_icon_margin_big_max">17dp</dimen>
 </resources>
