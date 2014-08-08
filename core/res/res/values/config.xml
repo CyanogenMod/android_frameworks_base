@@ -1958,5 +1958,9 @@
         <item>Trying to write MMS</item>
         <item>Trying to start at bootup</item>
         <item>Trying to turn on/off NFC</item>
+        <item>Trying to delete SMS</item>
+        <item>Trying to delete MMS</item>
+        <item>Trying to delete contacts</item>
+        <item>Trying to delete call log</item>
     </string-array>
 </resources>
