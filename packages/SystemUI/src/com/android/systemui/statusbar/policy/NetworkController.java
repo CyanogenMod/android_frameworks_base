@@ -742,7 +742,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     }
 
     private boolean isRoaming() {
-        return (isCdma() && isCdmaEri()) || mPhone.isNetworkRoaming();
+        return (isCdma() ? isCdmaEri() : mPhone.isNetworkRoaming());
     }
 
     private final void updateDataNetType() {
