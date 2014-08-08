@@ -28,9 +28,12 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings.Global;
 import android.telecom.TelecomManager;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.CastController;
@@ -63,7 +66,7 @@ public class PhoneStatusBarPolicy {
 
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
-    IccCardConstants.State mSimState = IccCardConstants.State.READY;
+    IccCardConstants.State[] mSimState;
 
     private boolean mZenVisible;
     private boolean mVolumeVisible;
@@ -119,6 +122,12 @@ public class PhoneStatusBarPolicy {
         filter.addAction(Intent.ACTION_USER_SWITCHED);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
+        int numPhones = TelephonyManager.getDefault().getPhoneCount();
+        mSimState = new IccCardConstants.State[numPhones];
+        for (int i = 0; i < numPhones; i++) {
+            mSimState[i] = IccCardConstants.State.READY;
+        }
+
         // TTY status
         mService.setIcon(SLOT_TTY,  R.drawable.stat_sys_tty_mode, 0, null);
         mService.setIconVisibility(SLOT_TTY, false);
@@ -172,30 +181,41 @@ public class PhoneStatusBarPolicy {
     }
 
     private final void updateSimState(Intent intent) {
+        IccCardConstants.State simState;
         String stateExtra = intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE);
-        if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
-            mSimState = IccCardConstants.State.ABSENT;
-        }
-        else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
-            mSimState = IccCardConstants.State.CARD_IO_ERROR;
-        }
-        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
-            mSimState = IccCardConstants.State.READY;
-        }
-        else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
-            final String lockedReason =
-                    intent.getStringExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON);
-            if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PIN.equals(lockedReason)) {
-                mSimState = IccCardConstants.State.PIN_REQUIRED;
+
+        // Obtain the subscription info from intent
+        long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, 0);
+        Log.d(TAG, "updateSimState for subId :" + subId);
+        int phoneId = SubscriptionManager.getPhoneId(subId);
+        Log.d(TAG, "updateSimState for phoneId :" + phoneId);
+        Log.d(TAG, "updateSimState for Slot :" + SubscriptionManager.getSlotId(subId));
+        if (phoneId >= 0 ) {
+            if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
+                simState = IccCardConstants.State.ABSENT;
             }
-            else if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
-                mSimState = IccCardConstants.State.PUK_REQUIRED;
+            else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
+                simState = IccCardConstants.State.CARD_IO_ERROR;
             }
-            else {
-                mSimState = IccCardConstants.State.NETWORK_LOCKED;
+            else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+                simState = IccCardConstants.State.READY;
             }
-        } else {
-            mSimState = IccCardConstants.State.UNKNOWN;
+            else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
+                final String lockedReason =
+                        intent.getStringExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON);
+                if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PIN.equals(lockedReason)) {
+                    simState = IccCardConstants.State.PIN_REQUIRED;
+                }
+                else if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
+                    simState = IccCardConstants.State.PUK_REQUIRED;
+                }
+                else {
+                    simState = IccCardConstants.State.NETWORK_LOCKED;
+                }
+            } else {
+                simState = IccCardConstants.State.UNKNOWN;
+            }
+            mSimState[phoneId] = simState;
         }
     }
 
