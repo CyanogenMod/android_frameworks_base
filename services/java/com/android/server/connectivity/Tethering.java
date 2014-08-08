@@ -38,6 +38,8 @@ import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.net.RouteInfo;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.Looper;
@@ -54,6 +56,7 @@ import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.util.IState;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+import com.android.internal.util.wifi.ClientsList;
 import com.android.server.IoThread;
 import com.google.android.collect.Lists;
 
@@ -158,6 +161,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private boolean mRndisEnabled;       // track the RNDIS function enabled state
     private boolean mUsbTetherRequested; // true if USB tethering should be started
                                          // when RNDIS is enabled
+    private int mLastWifiClientCount = -1;
+    private HandlerThread mScanThread;
+    private Handler mScanHandler;
+
     public Tethering(Context context, INetworkManagementService nmService,
             INetworkStatsService statsService, IConnectivityManager connService, Looper looper) {
         mContext = context;
@@ -493,6 +500,19 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         } else {
             clearTetheredNotification();
         }
+
+        mScanThread = new HandlerThread("WifiClientScanner");
+        if (wifiTethered && !bluetoothTethered) {
+            if (!mScanThread.isAlive()) {
+                mScanThread.start();
+                mScanHandler = new WifiClientScanner(mScanThread.getLooper());
+                mScanHandler.sendEmptyMessage(0);
+            }
+        } else {
+            if (mScanThread.isAlive()) {
+                mScanThread.quit();
+            }
+        }
     }
 
     private void sendUpstreamIfaceChangeBroadcast( String upstreamIface,
@@ -507,6 +527,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
         if (VDBG) Log.d(TAG, "sendUpstreamIfaceChangeBroadcast: Intent broadcasted");
     }
+
     private void showTetheredNotification(int icon) {
         NotificationManager notificationManager =
                 (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -538,6 +559,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
             mTetheredNotification = new Notification();
             mTetheredNotification.when = 0;
         }
+
         mTetheredNotification.icon = icon;
         mTetheredNotification.defaults &= ~Notification.DEFAULT_SOUND;
         mTetheredNotification.flags = Notification.FLAG_ONGOING_EVENT;
@@ -546,6 +568,48 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
         notificationManager.notifyAsUser(null, mTetheredNotification.icon,
                 mTetheredNotification, UserHandle.ALL);
+    }
+
+    private class WifiClientScanner extends Handler {
+
+        public WifiClientScanner(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ArrayList<ClientsList.ClientScanResult> currentClientList
+                               = ClientsList.get(true);
+            int currentClientCount = currentClientList.size();
+            NotificationManager notificationManager =
+                    (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            if ((mLastWifiClientCount != currentClientCount
+                 || mLastWifiClientCount == -1)
+                 && mTetheredNotification != null) {
+                mLastWifiClientCount = currentClientCount;
+                Intent intent = new Intent();
+                intent.setClassName("com.android.settings",
+                        "com.android.settings.TetheringSettings");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0, intent, 0,
+                        null, UserHandle.CURRENT);
+
+                Resources r = Resources.getSystem();
+
+                CharSequence title =
+                            r.getText(com.android.internal.R.string.tethered_notification_title);
+                CharSequence message = r.getQuantityString(
+                        com.android.internal.R.plurals.tethered_clients_connected,
+                        currentClientCount, currentClientCount);
+                mTetheredNotification.setLatestEventInfo(getUiContext(),
+                        title, message, pi);
+                notificationManager.notifyAsUser(null, mTetheredNotification.icon,
+                        mTetheredNotification, UserHandle.ALL);
+            }
+
+            sendEmptyMessageDelayed(0, 10000);
+        }
     }
 
     private Context getUiContext() {
