@@ -1860,4 +1860,6 @@
   <!-- platform logo font size -->
   <java-symbol type="dimen" name="plat_logo_alphabet_size" />
 
+  <!-- config switching DDS switch back to the default sub -->
+  <java-symbol type="bool" name="config_dds_switch_back" />
 </resources>
