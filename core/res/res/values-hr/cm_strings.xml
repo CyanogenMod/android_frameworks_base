@@ -45,7 +45,6 @@
   <string name="reboot_confirm" product="default">Telefon će ponovno biti pokrenut.</string>
   <string name="permlab_preventpower">spriječiti \"power\" tipku</string>
   <string name="permdesc_preventpower">Dopušta aplikaciji nadvladati \"power\" tipku</string>
-  <string name="permdesc_sendMockSms">Dopušta aplikaciji slanje lažnih SMS poruka. Ovo dopušta aplikacije slanje SMS poruka povjerljivim aplikacijama. Zlonamjerne aplikacije mogu poslati poruke kontinuirano, sprječavajući  sistem obavijesti uređaja uz ometanje korisnika.</string>
   <string name="storage_sd_dock_card">Dock SD kartica</string>
   <string name="app_killed_message">Aplikacija prisilno zaustavljena</string>
   <string name="global_action_reboot">Ponovno pokreni</string>
@@ -53,7 +52,6 @@
   <string name="toast_rotation_unlocked">Rotacija zaslona otključana</string>
   <string name="toast_rotation_locked">Rotacija zaslona zaključana</string>
   <string name="stylus_app_not_installed">%s nije instalirano</string>
-  <string name="permlab_changePrivacyGuardState">omogući ili onemogući nadzor privatnosti</string>
   <string name="permdesc_changePrivacyGuardState">Dopušta aplikaciji odrediti hoće li druga aplikacija biti pokrenuta pod Nadzorom Privatnosti. Kada ja aplikacija pod Nadzorom Privatnosti, neće imati pristup osobnim podacima kao što su kontakti, zapisi poziva ili poruke.</string>
   <string name="privacy_guard_notification">Nadzor privatnosti aktivan</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> neće moći pristupiti osobnim podacima</string>

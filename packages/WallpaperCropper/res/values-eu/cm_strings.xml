@@ -26,4 +26,5 @@
   <string name="pick_image">Irudia aukeratu</string>
   <string name="pick_wallpaper">Hormairudiak</string>
   <string name="activity_not_found">Aplikazioa ez dago instalatuta.</string>
+  <string name="lockscreen_wallpaper_instructions">Ezarri lokatze-pantailako hormairudia</string>
 </resources>

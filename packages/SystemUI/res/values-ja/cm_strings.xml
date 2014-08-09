@@ -67,10 +67,10 @@
   <string name="location_mode_battery_saving_title">バッテリー節約</string>
   <string name="location_mode_sensors_only_title">端末のみ</string>
   <string name="location_mode_location_off_title">現在地OFF</string>
-  <string name="quick_settings_expanded_desktop">拡張デスクトップ</string>
+  <string name="quick_settings_expanded_desktop">拡張</string>
   <string name="quick_settings_expanded_desktop_off">通常</string>
   <string name="quick_settings_camera_error_connect">カメラに接続できません</string>
-  <string name="navbar_dialog_title">割り当てるアクションを選択</string>
+  <string name="navbar_dialog_title">割り当てる動作を選択</string>
   <string name="navbar_home_button">ホームボタン</string>
   <string name="navbar_recent_button">履歴ボタン</string>
   <string name="navbar_search_button">検索ボタン</string>
@@ -85,5 +85,5 @@
   <string name="screenshot_delete_action">削除</string>
   <string name="screenshot_delete_confirmation">スクリーンショットを削除しました。</string>
   <string name="accessibility_desc_add_quick_settings">クイック設定を追加します。</string>
-  <string name="status_bar_notification_spam_item_title">このようなメッセージをブロックする</string>
+  <string name="status_bar_notification_spam_item_title">このようなメッセージをブロック</string>
 </resources>

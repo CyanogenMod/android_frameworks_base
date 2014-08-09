@@ -27,4 +27,5 @@
   <string name="pick_image">Alege imaginea</string>
   <string name="pick_wallpaper">Fundaluri</string>
   <string name="activity_not_found">Aplicația nu este instalată.</string>
+  <string name="lockscreen_wallpaper_instructions">Setează fundalul ecranului de blocare</string>
 </resources>

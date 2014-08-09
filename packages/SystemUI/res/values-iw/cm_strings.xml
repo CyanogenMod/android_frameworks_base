@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">מחק</string>
   <string name="screenshot_delete_confirmation">תמונת מסך נמחקה.</string>
   <string name="accessibility_desc_add_quick_settings">הוסף הגדרות מהירות.</string>
+  <string name="status_bar_notification_spam_item_title">חסום הודעות הדומות לאלו</string>
 </resources>

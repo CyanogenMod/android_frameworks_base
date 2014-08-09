@@ -17,9 +17,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">削除</string>
   <plurals name="number_of_items_selected">
-    <item quantity="other">%1$d個を選択しています</item>
+    <item quantity="other">%1$d枚を選択しています</item>
   </plurals>
-  <string name="wallpaper_accessibility_name">%2$d個のうち%1$d個の壁紙</string>
+  <string name="wallpaper_accessibility_name">%2$d枚のうち%1$d枚の壁紙</string>
   <string name="announce_selection"><xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g>を選択しています</string>
   <string name="wallpaper_delete">削除</string>
   <string name="pick_image">画像を選択</string>

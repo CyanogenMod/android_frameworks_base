@@ -23,24 +23,14 @@
   <string name="keyguard_password_enter_puk_code">PUK سیمکارتەکە بنوسە و  PIN تازە بنوسەرەوە</string>
   <string name="keyguard_password_enter_puk_prompt">کۆدیPUK سیمکارت</string>
   <string name="keyguard_password_enter_pin_prompt">کۆدی نوێی سیمکارت</string>
-  <string name="keyguard_password_entry_touch_hint"><font size="17">ساوین بۆ نوسینی تێپەڕە وشە</font></string>
+  <string name="keyguard_password_entry_touch_hint"><font size="17">سوین بۆ نوسینی تێپەڕە وشە</font></string>
   <string name="keyguard_password_enter_password_code">نوسینی تێپەڕە وشە بۆ چالاکردن</string>
-  <string name="keyguard_password_enter_pin_password_code">نوسنینی PIN بۆ چالاکردن</string>
   <string name="keyguard_password_wrong_pin_code">PIN هەڵە بوو.</string>
-  <string name="keyguard_label_text">بۆ چالاکردن. دەست بنە بە پێڕست و ئنجا 0.</string>
-  <string name="faceunlock_multiple_failures">چالاکردنی قوفڵ بە ڕوخسار هەوڵ زۆر دراوە</string>
-  <string name="keyguard_charged">بارگه‌کراو</string>
-  <string name="keyguard_plugged_in">بارگه‌کراوی, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="keyguard_low_battery">بیبەستە بە بارگەکەر, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="keyguard_instructions_when_pattern_disabled">دەست بنە بە پێڕست بۆ چالاکردن.</string>
   <string name="keyguard_network_locked_message">تۆڕ قوفڵکراوە</string>
   <string name="keyguard_missing_sim_message_short">سیمکارتی تیا نیە</string>
   <string name="keyguard_missing_sim_message" product="tablet">سیمکارت نیە لە تاتەبژمێر</string>
-  <string name="keyguard_missing_sim_message" product="default">سیمکارت نیە لە تەلەفۆن.</string>
-  <string name="keyguard_missing_sim_instructions">سیمکارتی تیا بکە.</string>
   <string name="keyguard_missing_sim_instructions_long">سیمکارتەکە تیایە نیە یان نایخوێنێتەوە. سیمکارتی تێبکە.</string>
   <string name="keyguard_permanent_disabled_sim_message_short">سیمکارتەکە بەکارنایەت.</string>
-  <string name="keyguard_permanent_disabled_sim_instructions">سیمکارتەکە لە کارخرا .\n پەیوەندی بکە بە کۆمپانیای بێ تەلەوە بۆ سیمێکی تر.</string>
   <string name="keyguard_sim_locked_message">سیمکارتەکە قوفڵکراوە.</string>
   <string name="keyguard_sim_puk_locked_message">سیمکارتەکە PUK-قوفڵکراوە.</string>
   <string name="keyguard_sim_unlock_progress_dialog_message">کردنەوەی سیمکارت\u2026</string>
@@ -58,11 +48,6 @@
   <string name="keyguard_accessibility_widget_reorder_end">داواکردنی وێدجەکان کۆتایهات.</string>
   <string name="keyguard_accessibility_widget_deleted">ویجیت <xliff:g id="widget_index">%1$s</xliff:g> سڕایەوە.</string>
   <string name="keyguard_accessibility_expand_lock_area">بڵاوکردنەوەی ناوچەی کردنەوە.</string>
-  <string name="keyguard_accessibility_slide_unlock">چالاکردن بە لادان.</string>
-  <string name="keyguard_accessibility_pattern_unlock">چالاکردن بە چنراو.</string>
-  <string name="keyguard_accessibility_face_unlock">چالاکردن بە دەموچاو.</string>
-  <string name="keyguard_accessibility_pin_unlock">چالاکردن بە کۆد.</string>
-  <string name="keyguard_accessibility_password_unlock">چالاکردن بە تێپەڕەوشە.</string>
   <string name="keyguard_accessibility_pattern_area">ناوچەی کێشان.</string>
   <string name="keyguard_accessibility_slide_area">ناوچەی لادان.</string>
   <string name="keyguard_accessibility_transport_prev_description">دوگمەی تراکی پێشوو</string>

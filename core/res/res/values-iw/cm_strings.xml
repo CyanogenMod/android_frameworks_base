@@ -46,7 +46,6 @@
   <string name="permlab_preventpower">מניעת כפתור הכיבוי</string>
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
   <string name="permlab_sendMockSms">שליחת הודעות SMS מדומות</string>
-  <string name="permdesc_sendMockSms">אפשר ליישום לשלוח הודעות SMS מזויפות. זה מאפשר ליישום לשלוח SMS ליישומים מורשים. יישומים זדוניים יכולים להשתמש בכך שישלחו הודעות ללא הפסקה, יעצרו את שירות ההודעות במערכת ויפריע למשתמש.</string>
   <string name="storage_sd_dock_card">כרטיס SD של תחנת עגינה</string>
   <string name="app_killed_message">התהליך נסגר</string>
   <string name="global_action_reboot">הפעלה מחדש</string>
@@ -54,7 +53,6 @@
   <string name="toast_rotation_unlocked">סיבוב אוטומטי</string>
   <string name="toast_rotation_locked">סיבוב נעול</string>
   <string name="stylus_app_not_installed">%s לא מותקן</string>
-  <string name="permlab_changePrivacyGuardState">אפשר או נטרל את שומר הפרטיות</string>
   <string name="permdesc_changePrivacyGuardState">אפשר ליישום לשנות אם יישום אחר פועל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא יהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
   <string name="privacy_guard_notification">שומר הפרטיות פועל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>

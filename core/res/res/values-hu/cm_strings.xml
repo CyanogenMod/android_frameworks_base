@@ -46,7 +46,6 @@
   <string name="permlab_preventpower">kikapcsológomb felülbírálata</string>
   <string name="permdesc_preventpower">Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát</string>
   <string name="permlab_sendMockSms">SMS utánzatok küldése</string>
-  <string name="permdesc_sendMockSms">Lehetővé teszi az alkalmazás számára, hogy SMS utánzatokat hozzon létre. A rosszindulatú alkalmazások folyamatos üzenet-létrehozással zavarhatják a felhasználót, és megbéníthatják az eszköz értesítési felületét.</string>
   <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
   <string name="app_killed_message">Alkalmazás leállítva</string>
   <string name="global_action_reboot">Újraindítás</string>

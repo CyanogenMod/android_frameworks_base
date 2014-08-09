@@ -56,10 +56,10 @@
   <string name="usb_debugging_always">هەمیشە ڕێگە بدە لەسەر ئەم کۆمپیوتەرە</string>
   <string name="compat_mode_on">زوومکردن بۆ پڕ شاشە</string>
   <string name="compat_mode_off">درێژبونەوە بۆ پڕشاشە</string>
-  <string name="screenshot_saving_ticker">پاشەکەوتکردنی وێبەت شاشە\u2026ە</string>
+  <string name="screenshot_saving_ticker">پاشەکەوتکردنی وێنه‌ی شاشە\u2026</string>
   <string name="screenshot_saving_title">پاشەکەوتکردنی شاشەوێنە\u2026</string>
   <string name="screenshot_saving_text">وێنەی شاشەکە پاشەکەوتکرا.</string>
-  <string name="screenshot_saved_title">وێنەی شاشە گرا.</string>
+  <string name="screenshot_saved_title">وێنەی شاشە گیرا.</string>
   <string name="screenshot_saved_text">دەست لێدە بۆ پیشاندانی وێنەی شاشە.</string>
   <string name="screenshot_failed_title">ناتوانێت وێنەی شاشەبگرێت.</string>
   <string name="screenshot_failed_text">ناتوانرێت وێنەی شاشە پاشەکەوتبکرێت. بیرگە لەوە دەچێت لەکارەبێت.</string>
@@ -165,7 +165,7 @@
   <string name="status_bar_notification_inspect_item_title">زانیاری دەربارەی بەرنامە</string>
   <string name="accessibility_rotation_lock_off">شاشەکە خۆکارانە ئەخولێتەوە.</string>
   <string name="accessibility_rotation_lock_on_landscape">شاشەکە بە لایە قوفڵ ئەبێت.</string>
-  <string name="accessibility_rotation_lock_on_portrait">شاشەکە بە ڕآستە قوفڵ ئەبێت.</string>
+  <string name="accessibility_rotation_lock_on_portrait">شاشەکە بە ڕاستە قوفڵ ئەبێت.</string>
   <string name="dessert_case">شیرینی بابەت</string>
   <string name="start_dreams">ڕۆژی خەون</string>
   <string name="ethernet_label">ئێسه‌رنێت</string>
