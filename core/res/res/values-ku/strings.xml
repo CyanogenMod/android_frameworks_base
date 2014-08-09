@@ -136,8 +136,8 @@
   <string name="contentServiceSync">ناردنی</string>
   <string name="contentServiceSyncNotificationTitle">هاوتا کردن</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">زۆر <xliff:g id="content_type">%s</xliff:g> deletes.</string>
-  <string name="low_memory" product="tablet">بیرگه‌ی تاتەبژمێره‌که‌ پڕبوه‌. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئه‌وه‌ی بۆشای هه‌بێت.</string>
-  <string name="low_memory" product="default">بیرگه‌ی ته‌له‌فۆنه‌که‌  پڕبوه‌. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئه‌وه‌ی بۆشای هه‌بێت.</string>
+  <string name="low_memory" product="tablet">بیرگه‌ی تاتەبژمێره‌که‌ پڕبوه‌. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئه‌وه‌ی بۆشایی هه‌بێت.</string>
+  <string name="low_memory" product="default">بیرگه‌ی ته‌له‌فۆنه‌که‌  پڕبوه‌. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئه‌وه‌ی بۆشایی هه‌بێت.</string>
   <string name="ssl_ca_cert_warning">تۆڕه‌که‌ مۆنیته‌ر کراوه‌</string>
   <string name="ssl_ca_cert_noti_by_unknown">له‌لایه‌ن به‌شی نه‌ناسراوی سێیه‌مه‌وه‌</string>
   <string name="ssl_ca_cert_noti_managed">له‌لایه‌ن <xliff:g id="managing_domain">%s</xliff:g></string>
@@ -501,7 +501,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permlab_setAnimationScale">گۆرینی خێرایی وێنەی جوڵاو</string>
   <string name="permdesc_setAnimationScale">رێگە بە بەرنامەکە دەدات کە خێرایی وێنە جوڵاوەکان بگۆڕیت لە هەر کاتێک.</string>
   <string name="permlab_manageAppTokens">سەرپەرشتی کردنی گیراوی بەرنامەکان</string>
-  <string name="permdesc_manageAppTokens">رێگە بە بەرنامەکە دەدات کە سەرپەرشتتی گیراوەکانی خۆی بکا.کە زنجیرەی-z ی ئاسایی بەرنامەکە تێپەر دەکا</string>
+  <string name="permdesc_manageAppTokens">رێگە بە بەرنامەکە دەدات کە سەرپەرشتتی گیراوەکانی خۆی بکا.کە زنجیرەی-z ی ئاساییی بەرنامەکە تێپەر دەکا</string>
   <string name="permlab_freezeScreen">وەستانی شاشە</string>
   <string name="permdesc_freezeScreen">رێگە بە بەرنامەکە دەدا کە بەشێوەیەکی کاتی ،شاشەکە بوەستێنێ</string>
   <string name="permlab_injectEvents">دوکمەی کلیل و کۆنترۆلەکان دابگرە</string>
@@ -590,7 +590,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permlab_getPackageSize">مامه‌ڵه‌کردن له‌گه‌ڵ قه‌باره‌ی به‌کارنه‌هێنراو</string>
   <string name="permdesc_getPackageSize">ڕێگه‌دان به‌ به‌رنامه‌ بۆ وه‌رگرتنی کۆد ، زانیاری ، و قه‌باره‌ی فایله‌ زیاده‌کان</string>
   <string name="permlab_installPackages">دابه‌زاندی ڕاسته‌وخۆی پرۆگرام</string>
-  <string name="permdesc_installPackages">ڕێگه‌دان به‌ به‌رنامه‌ بۆ دابه‌زاندنی تازه‌ یان تازه‌کردنه‌وه‌ی پاکه‌ته‌کانی ئه‌ندرۆید.به‌رنامه‌ به‌دخووه‌کان له‌وانه‌یه‌ ئه‌مه‌ به‌کاربهێنن بۆ زیادکردنی به‌رنامه‌ یان وه‌رگرتنی ده‌سته‌ڵاتی مۆبایله‌که‌ت.</string>
+  <string name="permdesc_installPackages">ڕێگه‌دان به‌ به‌رنامه‌ بۆ داگرتنی تازه‌ یان تازه‌کردنه‌وه‌ی پاکه‌ته‌کانی ئه‌ندرۆید.به‌رنامه‌ به‌دخووه‌کان له‌وانه‌یه‌ ئه‌مه‌ به‌کاربهێنن بۆ زیادکردنی به‌رنامه‌ یان وه‌رگرتنی ده‌سته‌ڵاتی مۆبایله‌که‌ت.</string>
   <string name="permlab_clearAppCache">سڕینه‌وه‌ی هه‌موو فایله‌ زیاده‌کانی داتا</string>
   <string name="permdesc_clearAppCache" product="tablet">ڕێگه‌دان به‌ به‌رنامه‌ بۆ سڕینه‌وه‌ی فایله‌ زیاده‌کان بۆ زیادکردنی قه‌باره‌ی به‌کارنه‌هێنراو بۆ به‌رنامه‌کانی تر. له‌وانه‌یه‌ ئه‌مه‌ هۆکاربێت بۆ خاو کردنه‌وه‌ی به‌رنامه‌کانی تر کاتێک داتایان ئه‌وێت.</string>
   <string name="permdesc_clearAppCache" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ سڕینه‌وه‌ی فایله‌ زیاده‌کان بۆ زیادکردنی قه‌باره‌ی به‌کارنه‌هێنراو بۆ به‌رنامه‌کانی تر. له‌وانه‌یه‌ ئه‌مه‌ هۆکاربێت بۆ خاو کردنه‌وه‌ی به‌رنامه‌کانی تر کاتێک داتایان ئه‌وێت.</string>
@@ -602,7 +602,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permlab_anyCodecForPlayback">به‌کارهێنانی هه‌ر کارپێکه‌ری ڕه‌نگاڵه‌یی</string>
   <string name="permdesc_anyCodecForPlayback">ڕێگه‌دان به‌ به‌رنامه‌ بۆ به‌کارهێنانی هه‌ر کارپێکه‌رێکی ڕه‌نگاڵه‌یی.</string>
   <string name="permlab_manageCaCertificates">به‌ڕێوه‌بردنی به‌ڵگه‌نامه‌ باوڕپێکراوه‌کان</string>
-  <string name="permdesc_manageCaCertificates">ڕێگه‌دان به‌ به‌رنامه‌ بۆ دابه‌زاندن یان سڕینه‌وه‌ی بڕوانامه‌کان وه‌ک به‌ڵگه‌.</string>
+  <string name="permdesc_manageCaCertificates">ڕێگه‌دان به‌ به‌رنامه‌ بۆ داگرتن یان سڕینه‌وه‌ی بڕوانامه‌کان وه‌ک به‌ڵگه‌.</string>
   <string name="permlab_diagnostic">خوێندنه‌وه‌/نوسین بۆ سه‌رچاوه‌ی خۆکردی له‌لایه‌ن دایه‌لۆگه‌وه‌</string>
   <string name="permdesc_diagnostic">ڕێگه‌دان به‌ به‌رنامه‌ بۆ خوێندنه‌وه‌ و نوسین بۆ هه‌ر سه‌رچاوه‌یه‌کی خۆ کردی له‌لایه‌ن گروپ دایه‌لۆگه‌وه‌؛ بۆ نموونه‌، په‌ڕگه‌ له‌ /dev.ئه‌مه‌ کاریگه‌ری ته‌واوی هه‌یه‌ له‌سه‌ر سیسته‌م و پارێزگارییه‌که‌ی. ته‌نیا ئه‌بێ به‌کاربهێنرێ بۆ پارچه‌ ڕه‌قه‌کان له‌لایه‌ن به‌ڕێوه‌به‌ر یان دروستکه‌ر.</string>
   <string name="permlab_changeComponentState">له‌کارخستن یان کارپێکردنی توخمه‌کانی به‌رنامه‌کان</string>
@@ -659,7 +659,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permdesc_accessMockLocation">دروستکردنی سەرچاوەی شوێندۆزینی خەیالی بۆ تاقیکردنەوە.ئەمە ڕێگە بە بەرنامەکە دەدات کە زانیاری دەربارەی شوێن کە لە GPS وەری دەگرێت،پشتگوێ بخا</string>
   <string name="permlab_accessLocationExtraCommands">ده‌سته‌ڵاتی شوێنی زیاتر بۆ فرمانی دابینکردن</string>
   <string name="permdesc_accessLocationExtraCommands">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ده‌سته‌ڵاتی زانیاری زیاتری شوێن.ئه‌مه‌ ڕێگه‌ به‌ به‌رنامه‌ ده‌دات بۆ ده‌ستتێوه‌ردان له‌ کار و باری GPS.</string>
-  <string name="permlab_installLocationProvider">ده‌سته‌ڵات بۆ دابه‌زاندنی شوێنی دابینکه‌ر</string>
+  <string name="permlab_installLocationProvider">ده‌سته‌ڵات بۆ داگرتنی شوێنی دابینکه‌ر</string>
   <string name="permdesc_installLocationProvider">دروستکردنی سەرچاوەی شوێندۆزینی خەیالی بۆ تاقیکردنەوە.ئەمە ڕێگە بە بەرنامەکە دەدات کە زانیاری دەربارەی شوێن کە لە GPS وەری دەگرێت،پشتگوێ بخا</string>
   <string name="permlab_accessFineLocation">شوێنی ورد(GPS و دامه‌زراو له‌سه‌ر خه‌ت)</string>
   <string name="permdesc_accessFineLocation">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ده‌ستکه‌وتنی شوێنی ته‌واوی تۆ به‌ GPS یان خه‌ته‌که‌ت وه‌ک وایه‌رلێس و هێڵ.خزمه‌تگوزاری شوێن پێویسته‌ کاربکات بۆ ئه‌وه‌ی به‌رنامه‌کان شوێن بدۆزنه‌وه‌.به‌رنامه‌کان ده‌توانن بزانن له‌ کوێیت به‌ GPS ، ئه‌م کاره‌ باتری مۆبایله‌که‌ت که‌م ده‌کات.</string>
@@ -757,7 +757,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permlab_devicePower" product="default">کوژانه‌وه‌ی مۆبایل یان داگیرساندن</string>
   <string name="permdesc_devicePower" product="tablet">ڕێگه‌دان به‌ به‌رنامه‌ بۆ کوژانه‌وه‌ یان داگیرساندنه‌وه‌ی ئامێر.</string>
   <string name="permdesc_devicePower" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ کوژانه‌وه‌ یان داگیرساندنه‌وه‌ی ئامێر.</string>
-  <string name="permlab_factoryTest">کارپێکردن به‌ شێوه‌ی تاقیکردنه‌وه‌ بۆ بنه‌ڕه‌ت</string>
+  <string name="permlab_factoryTest">کارپێکردن به‌ شێوه‌ی تاقیکردنه‌وه‌ بۆ بنێڕه‌ت</string>
   <string name="permdesc_factoryTest" product="tablet">ڕادان وەکو تاقیکاری ئاست-نزمی بەرهەمهێنەر,
         ڕێگە ئەدات تاکو بە تەواوی دەست بخەیتە سەر رەقەواڵاکانی تابلێت. تەنها کاتێک بەردەستە
         کە تابلێت لە باری تاقیکاری بەرهەمهێنەردایە.</string>
@@ -766,7 +766,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permdesc_setWallpaper">ڕێگەدانی بەرنامە بۆ دانانی دیوارپۆشی سیستەم.</string>
   <string name="permlab_setWallpaperHints">گونجاندنی قەبارەی دیوارپۆش</string>
   <string name="permdesc_setWallpaperHints">ڕێگه‌دان به‌ به‌رنامه‌ بۆ دانانی قه‌باره‌ی سه‌رشاشه‌.</string>
-  <string name="permlab_masterClear">گه‌ڕانه‌وه‌ی سیسته‌م بۆ بنه‌ڕه‌ته‌کانی کارگه‌</string>
+  <string name="permlab_masterClear">گه‌ڕانه‌وه‌ی سیسته‌م بۆ بنێڕه‌ته‌کانی کارگه‌</string>
   <string name="permdesc_masterClear">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ته‌واوکردنی گه‌ڕانه‌وه‌ی سیسته‌م بۆ کارگه‌.سڕینه‌وه‌ی هه‌موو داتاکان.ڕێکخستنه‌کان..به‌رنامه‌ دابه‌زێنراوه‌کان.</string>
   <string name="permlab_setTime">کات دابنێ</string>
   <string name="permdesc_setTime" product="tablet">ڕێگە بە نمواڵەکە بدە کاژێری تاتەبژمێرەکە بگۆرێت.</string>
@@ -1022,7 +1022,6 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="keyguard_password_enter_pin_prompt">PIN کۆدی نوێ</string>
   <string name="keyguard_password_entry_touch_hint"><font size="17">دەست لێدان بۆ نووسینی تێپه‌ڕوشه‌</font></string>
   <string name="keyguard_password_enter_password_code">نوسینی تێپەڕە وشە بۆ چالاکردن</string>
-  <string name="keyguard_password_enter_pin_password_code">نوسنینی PIN بۆ چالاکردن</string>
   <string name="keyguard_password_wrong_pin_code">کۆدی PIN هەڵەیە.</string>
   <string name="keyguard_label_text">بۆ چالاکردن، پەنجە بنێ بە لیست و ئینجا 0.</string>
   <string name="emergency_call_dialog_number_for_display">ژمارەی فریاگوزاری</string>
@@ -1038,7 +1037,6 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="lockscreen_password_wrong">دوبارە هەوڵبدەرەوە</string>
   <string name="faceunlock_multiple_failures">چالاکردنی قوفڵ بە ڕوخسار هەوڵ زۆر دراوە</string>
   <string name="lockscreen_plugged_in">بارگاوی کردن, <xliff:g id="ژمارە">%d</xliff:g><xliff:g id="لەسەدا">%%</xliff:g></string>
-  <string name="lockscreen_charged">بارگاوی بوە</string>
   <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="lockscreen_low_battery">بیبەستە بە بارگاویکه‌ر.</string>
   <string name="lockscreen_missing_sim_message_short">سیمکارتی تیا نیە</string>
@@ -1136,11 +1134,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="keyguard_accessibility_widget_reorder_end">داواکردنی وێدجەکان کۆتایهات.</string>
   <string name="keyguard_accessibility_widget_deleted">ویجیت <xliff:g id="widget_index">%1$s</xliff:g> سڕایەوە.</string>
   <string name="keyguard_accessibility_expand_lock_area">بڵاوکردنەوەی ناوچەی کردنەوە.</string>
-  <string name="keyguard_accessibility_slide_unlock">چالاکردن بە لادان.</string>
-  <string name="keyguard_accessibility_pattern_unlock">چالاکردن بە چنراو.</string>
   <string name="keyguard_accessibility_face_unlock">چالاکردن بە دەموچاو.</string>
-  <string name="keyguard_accessibility_pin_unlock">چالاکردن بە کۆد.</string>
-  <string name="keyguard_accessibility_password_unlock">چالاکردن بە تێپەڕەوشە.</string>
   <string name="keyguard_accessibility_pattern_area">ناوچەی کێشان.</string>
   <string name="keyguard_accessibility_slide_area">ناوچەی لادان.</string>
   <string name="password_keyboard_label_symbol_key">\?123</string>
@@ -1152,7 +1146,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="granularity_label_line">هێڵ</string>
   <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
   <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
-  <string name="factorytest_failed">گەڕانەوە بۆ باری ئاسای سەرنەکەوت</string>
+  <string name="factorytest_failed">گەڕانەوە بۆ باری ئاسایی سەرنەکەوت</string>
   <string name="factorytest_not_system">چالاکی بۆ باری بنەڕەتی
 تەنها پاڵپشتی ئەوانە دەکات کە دامەزراون لە سیستەم/بەرنامە.</string>
   <string name="factorytest_no_action">هیچ گورزەیەک نەدۆرایەوە کە
@@ -1274,7 +1268,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="text_copied">دەقەکە لەبەریگیرایەوە بۆ پارێزەر.</string>
   <string name="more_item_label">زیاتر</string>
   <string name="prepend_shortcut_label">پێڕست+</string>
-  <string name="menu_space_shortcut_label">بۆشای</string>
+  <string name="menu_space_shortcut_label">بۆشایی</string>
   <string name="menu_enter_shortcut_label">دانان</string>
   <string name="menu_delete_shortcut_label">سڕینەوە</string>
   <string name="search_go">گەڕان</string>
@@ -1391,7 +1385,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="deleteText">سڕینه‌وه‌</string>
   <string name="inputMethod">تێكردن ڕێگە</string>
   <string name="editTextMenuTitle">چالاکی دەق</string>
-  <string name="low_internal_storage_view_title">بیرگەی بۆشای خەریکە نامێنێت</string>
+  <string name="low_internal_storage_view_title">بیرگەی بۆشایی خەریکە نامێنێت</string>
   <string name="low_internal_storage_view_text">هەمان کرداری سیستەم لەوانەیە ئیش نەکات</string>
   <string name="app_running_notification_title"><xliff:g id="app_name">%1$s</xliff:g>
         لە کارە</string>
@@ -1484,7 +1478,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="wifi_p2p_turnon_message">دەستپێکردنی Wi-Fi. ئەمە Wi-Fi زبوون/هۆتسپۆت ئەکوژێنێتەوە.</string>
   <string name="wifi_p2p_failed_message">ناتوانرێت Wi-Fi یەکسەر بکەوێتە کار.</string>
   <string name="wifi_p2p_enabled_notification_title">Wi-Fi ڕاستەوخۆ لە کارە</string>
-  <string name="wifi_p2p_enabled_notification_message">ساوین بۆ ڕێکخستن</string>
+  <string name="wifi_p2p_enabled_notification_message">سوین بۆ ڕێکخستن</string>
   <string name="accept">پەسەند کردن</string>
   <string name="decline">ڕەتکردنەوە</string>
   <string name="wifi_p2p_invitation_sent_title">بانگەشەکردنەکە نێردرا</string>
@@ -1729,7 +1723,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="action_menu_overflow_description">بەربژاردەی زیاتر</string>
   <string name="action_bar_home_description_format">%1$s, %2$s</string>
   <string name="action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
-  <string name="storage_internal">هەڵگری ناوەکی</string>
+  <string name="storage_internal">بیرگەی ناوەکی</string>
   <string name="storage_sd_card">بیرەگەی دەرەکی</string>
   <string name="storage_usb">هەڵگری USB</string>
   <string name="extract_edit_menu_button">دەستکاری</string>
@@ -1780,7 +1774,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="wireless_display_route_description">نیشاندانی وایه‌رلێسی</string>
   <string name="media_route_button_content_description">ده‌رچوێنراوی ڕه‌نگاڵه‌</string>
   <string name="media_route_chooser_title">په‌یوه‌ندی کردن به‌ ئامێر</string>
-  <string name="media_route_chooser_title_for_remote_display">کاسکردنی شاشه‌ بۆ ئامێر</string>
+  <string name="media_route_chooser_title_for_remote_display">ڕێگه‌گرتنی شاشه‌ بۆ ئامێر</string>
   <string name="media_route_chooser_searching">گه‌ڕان به‌دوای ئامێر\u2026</string>
   <string name="media_route_chooser_extended_settings">ڕێکخستنه‌کان</string>
   <string name="media_route_controller_disconnect">په‌یوه‌ندی پچڕان</string>

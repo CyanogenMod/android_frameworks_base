@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_password_wrong_puk_code">PUKコードが正しくありません。</string>
-  <string name="keyguard_password_pin_failed">PIN操作に失敗しました。</string>
+  <string name="keyguard_password_pin_failed">PIN操作を完了できませんでした。</string>
   <string name="keyguard_password_puk_failed">PUK操作を完了できませんでした。</string>
   <string name="keyguard_pin_accepted">コードが認証されました。</string>
   <string name="pinpuk_attempts">\n残り試行回数:</string>

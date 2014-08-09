@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Hapus</string>
   <string name="screenshot_delete_confirmation">Tangkapan layar dihapus.</string>
   <string name="accessibility_desc_add_quick_settings">Tambah pengaturan cepat.</string>
+  <string name="status_bar_notification_spam_item_title">Blokir pesan seperti ini</string>
 </resources>

@@ -46,7 +46,7 @@
   <string name="permlab_preventpower">substituir tecla de energia</string>
   <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
   <string name="permlab_sendMockSms">simular envio de mensagens SMS</string>
-  <string name="permdesc_sendMockSms">Permite ao aplicativo simular envio de mensagens SMS.\n        Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
+  <string name="permdesc_sendMockSms">Permite ao aplicativo simular o envio de mensagens SMS.\n Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
   <string name="storage_sd_dock_card">Dock cartão SD</string>
   <string name="app_killed_message">Aplicativo terminado</string>
   <string name="global_action_reboot">Reiniciar</string>
@@ -54,7 +54,7 @@
   <string name="toast_rotation_unlocked">Rotação da tela está destravada</string>
   <string name="toast_rotation_locked">Rotação da tela está travada</string>
   <string name="stylus_app_not_installed">%s não está instalado</string>
-  <string name="permlab_changePrivacyGuardState">ativar ou desativar proteção à privacidade</string>
+  <string name="permlab_changePrivacyGuardState">ativar ou desativar a Proteção da Privacidade</string>
   <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outra aplicação executa com Proteção à Privacidade. Quando um aplicativo estiver executando com Proteção à Privacidade, ela será capaz de acessar dados pessoais como contatos, registro de chamadas, ou mensagens.</string>
   <string name="privacy_guard_notification">Proteção à Privacidade ativa</string>
   <string name="privacy_guard_notification_detail"><xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="app">%1$s</xliff:g> não será capaz de acessar dados pessoais</string>

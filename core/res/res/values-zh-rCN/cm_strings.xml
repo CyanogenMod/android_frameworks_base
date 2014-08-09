@@ -46,8 +46,7 @@
   <string name="permlab_preventpower">阻止电源键</string>
   <string name="permdesc_preventpower">允许应用完全掌控电源键</string>
   <string name="permlab_sendMockSms">发送模拟短信</string>
-  <string name="permdesc_sendMockSms">允许应用发送模拟短信.
-        这允许应用发送短信到受信任的应用. 恶意应用可能连续发送短信, 阻断设备通知系统并扰乱用户.</string>
+  <string name="permdesc_sendMockSms">允许应用发送模拟短信息。这将允许应用发送信息到受信任的应用。恶意应用可能连续发送短信，阻碍设备通知系统并骚扰用户。</string>
   <string name="storage_sd_dock_card">底座 SD 卡</string>
   <string name="app_killed_message">应用已被终止</string>
   <string name="global_action_reboot">重启</string>

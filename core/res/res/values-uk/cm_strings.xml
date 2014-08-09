@@ -32,8 +32,8 @@
   <string name="global_actions_toggle_expanded_desktop_mode">Розширений екран</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Увімкнено</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Вимкнено</string>
-  <string name="reboot_system" product="tablet">Перезавантажити планшет</string>
-  <string name="reboot_system" product="default">Перезавантажити телефон</string>
+  <string name="reboot_system" product="tablet">Перезавантаження планшету</string>
+  <string name="reboot_system" product="default">Перезавантаження телефону</string>
   <string name="reboot_reboot">Перезавантаження</string>
   <string name="reboot_recovery">Відновлення</string>
   <string name="reboot_bootloader">Завантажувач</string>
@@ -46,7 +46,7 @@
   <string name="permlab_preventpower">блокування кнопки живлення</string>
   <string name="permdesc_preventpower">Дозволити програмі використовувати кнопку живлення</string>
   <string name="permlab_sendMockSms">надсилати фіктивні SMS-повідомлення</string>
-  <string name="permdesc_sendMockSms">Дозволити програмі показувати фіктивні SMS. Небезпечні програми можуть надсилати повідомлення циклічно, блокуючи систему сповіщень і мішати роботі користувача.</string>
+  <string name="permdesc_sendMockSms">Дозволити програмі надсилати фіктивні SMS. Дозволяє надсилати повідомлення довіреним програмам. Небезпечні програми можуть надсилати повідомлення циклічно, блокуючи систему сповіщень і мішати роботі користувача.</string>
   <string name="storage_sd_dock_card">SD-карта док-станції</string>
   <string name="app_killed_message">Програма закрита</string>
   <string name="global_action_reboot">Перезавантаження</string>
@@ -54,7 +54,7 @@
   <string name="toast_rotation_unlocked">Повертання екрану розблоковано</string>
   <string name="toast_rotation_locked">Повертання екрану заблоковано</string>
   <string name="stylus_app_not_installed">%s не встановлено</string>
-  <string name="permlab_changePrivacyGuardState">Увімк. або вимк. Сторожа Приватності</string>
+  <string name="permlab_changePrivacyGuardState">увімк. або вимк. Сторожа Приватності</string>
   <string name="permdesc_changePrivacyGuardState">Програма може вибрати, чи буде друга програма працювати в захищеному режимі. Коли програму запущено в захищеному режимі, вона не отримає доступ до персональних даних, таких як контакти, повідомлення чи журнал дзвінків.</string>
   <string name="privacy_guard_notification">Сторож Приватності активний</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> буде заборонено доступ до персональних даних</string>

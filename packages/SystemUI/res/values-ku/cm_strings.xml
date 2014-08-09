@@ -88,4 +88,5 @@
   <string name="screenshot_delete_action">سڕینەوە</string>
   <string name="screenshot_delete_confirmation">وێنەی ڕوونمای گیراو سڕدرایەوە.</string>
   <string name="accessibility_desc_add_quick_settings">زیادکردنی کاری خێرا</string>
+  <string name="status_bar_notification_spam_item_title">ڕاگرتنی نامه‌ وه‌ک ئه‌مانه‌</string>
 </resources>

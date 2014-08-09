@@ -46,7 +46,7 @@
   <string name="permlab_preventpower">電源キーを無効にする</string>
   <string name="permdesc_preventpower">電源キーの無効化をアプリに許可します。</string>
   <string name="permlab_sendMockSms">疑似SMSメッセージの送信</string>
-  <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリに許可します。これによりアプリは、信頼されたアプリケーションへメッセージを送信できます。悪意のあるアプリが連続的にメッセージを送信したり、通知を阻止したり、ユーザーを混乱させるおそれがあります。</string>
+  <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリに許可します。これによりアプリは、信頼されたアプリケーションにメッセージを送信できるようになります。悪意のあるアプリが連続的にメッセージを送信したり、端末の通知システムをブロックしたり、ユーザーを混乱させるおそれがあります。</string>
   <string name="storage_sd_dock_card">SDカードを接続</string>
   <string name="app_killed_message">アプリを終了しました</string>
   <string name="global_action_reboot">再起動</string>
@@ -54,7 +54,7 @@
   <string name="toast_rotation_unlocked">画面の回転をロック解除しました</string>
   <string name="toast_rotation_locked">画面の回転をロックしました</string>
   <string name="stylus_app_not_installed">%sはインストールされていません</string>
-  <string name="permlab_changePrivacyGuardState">プライバシーガードを有効/無効にする</string>
+  <string name="permlab_changePrivacyGuardState">プライバシー保護を有効/無効にする</string>
   <string name="permdesc_changePrivacyGuardState">他のアプリでプライバシーガードを有効にするかどうかの変更をアプリに許可します。プライバシーガードを有効にしてアプリを実行すると、そのアプリは連絡先、通話履歴、メッセージなどの個人データにアクセスできなくなります。</string>
   <string name="privacy_guard_notification">プライバシーガードが有効です</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>は個人データにアクセスできません</string>
@@ -74,7 +74,7 @@
   <string name="permlab_changePhoneBlacklist">携帯電話のブラックリストの変更</string>
   <string name="permdesc_changePhoneBlacklist">着信やメッセージをブロックしている電話番号の変更をアプリに許可します。</string>
   <string name="permlab_accessThemeService">テーマサービスへのアクセス</string>
-  <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリでは必要とされることはないはずです。</string>
+  <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリで必要とされることはないはずです。</string>
   <string name="permlab_readThemes">テーマ情報の読み取り</string>
   <string name="permdesc_readThemesDesc">テーマの読み取りや適用しているテーマの特定をアプリに許可します。</string>
   <string name="permlab_writeThemes">テーマの変更</string>

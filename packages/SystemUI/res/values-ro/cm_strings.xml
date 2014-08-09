@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Șterge</string>
   <string name="screenshot_delete_confirmation">Captură ecran ștearsă.</string>
   <string name="accessibility_desc_add_quick_settings">Setări Adăugare Rapidă.</string>
+  <string name="status_bar_notification_spam_item_title">Blochează mesaje ca acestea</string>
 </resources>

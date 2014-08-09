@@ -26,4 +26,5 @@
   <string name="pick_image">בחר תמונה</string>
   <string name="pick_wallpaper">רקעים</string>
   <string name="activity_not_found">היישום אינו מותקן.</string>
+  <string name="lockscreen_wallpaper_instructions">הגדר רקע למסך הנעילה</string>
 </resources>

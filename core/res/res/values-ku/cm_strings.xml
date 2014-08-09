@@ -42,10 +42,11 @@
   <string name="reboot_download">داگرتن</string>
   <string name="reboot_progress">سه‌رله‌نوێ خستنه‌ڕێ\u2026</string>
   <string name="reboot_confirm" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ دەبێت.</string>
-  <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ خستنه‌ڕی.</string>
+  <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ ده‌کوژێته‌وه‌ و داده‌گیرسێته‌وه‌.</string>
   <string name="permlab_preventpower">بەرگری لە کلیلی هێز</string>
   <string name="permdesc_preventpower">ڕێگە دان بە بەرنامەکە</string>
-  <string name="permdesc_sendMockSms">ڕێگە دان بە بەرنامەکە بۆ ناردنی نامە.ئەمە ڕێگە ئەدات بە ناردنی نامە بۆ ئەو بەرنامانەی کە باوەڕپێکراون.ئەوەی خراپ بن پێ ئەچێت بینێرێت.</string>
+  <string name="permlab_sendMockSms">ناردنی په‌یام پۆش</string>
+  <string name="permdesc_sendMockSms">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ناردنی په‌یام پۆش. ئه‌مه‌ ڕێگه‌ به‌ به‌رنامه‌کان ده‌دات بۆ ناردنی نامه‌ بۆ به‌رنامه‌ باوه‌ڕپێکراوه‌کان.ئاگاداربه‌ به‌رنامه‌ ناحه‌زه‌کان بۆ کاری خراپ به‌کاری نه‌هێنن، وه‌ک ڕاگرتنی ئاگاداری ئامێر و بێزارکردنی به‌کارهێنه‌ر.</string>
   <string name="storage_sd_dock_card">Dock بیرگەی دەرەکی</string>
   <string name="app_killed_message">بەرنامەکە کوژرا</string>
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>

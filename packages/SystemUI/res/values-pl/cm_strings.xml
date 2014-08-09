@@ -85,4 +85,5 @@
   <string name="screenshot_delete_action">Usuń</string>
   <string name="screenshot_delete_confirmation">Zrzut ekranu został usunięty.</string>
   <string name="accessibility_desc_add_quick_settings">Dodaj szybkie ustawienia.</string>
+  <string name="status_bar_notification_spam_item_title">Blokuj wiadomości tego typu</string>
 </resources>
