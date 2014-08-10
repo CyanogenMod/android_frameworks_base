@@ -192,7 +192,7 @@ public class IconPackHelper {
             mLoadedIconPackResource = null;
             mLoadedIconPackName = null;
             mComposedIconInfo.iconBacks = null;
-            mComposedIconInfo.iconMask = mComposedIconInfo.iconUpon = null;
+            mComposedIconInfo.iconMask = mComposedIconInfo.iconUpon = 0;
             mComposedIconInfo.iconScale = 0;
         } else {
             mIconBackCount = 0;
@@ -209,15 +209,15 @@ public class IconPackHelper {
     }
 
     private void loadComposedIconComponents() {
-        mComposedIconInfo.iconMask = (BitmapDrawable) getDrawableForName(ICON_MASK_COMPONENT);
-        mComposedIconInfo.iconUpon = (BitmapDrawable) getDrawableForName(ICON_UPON_COMPONENT);
+        mComposedIconInfo.iconMask = getResourceIdForName(ICON_MASK_COMPONENT);
+        mComposedIconInfo.iconUpon = getResourceIdForName(ICON_UPON_COMPONENT);
 
         // Take care of loading iconback which can have multiple images
         if (mIconBackCount > 0) {
-            mComposedIconInfo.iconBacks = new BitmapDrawable[mIconBackCount];
+            mComposedIconInfo.iconBacks = new int[mIconBackCount];
             for (int i = 0; i < mIconBackCount; i++) {
                 mComposedIconInfo.iconBacks[i] =
-                        (BitmapDrawable) getDrawableForName(
+                        getResourceIdForName(
                                 new ComponentName(String.format(ICON_BACK_FORMAT, i), ""));
             }
         }
@@ -235,17 +235,12 @@ public class IconPackHelper {
         }
     }
 
-    private Drawable getDrawableForName(ComponentName component) {
-        if (isIconPackLoaded()) {
-            String item = mIconPackResourceMap.get(component);
-            if (!TextUtils.isEmpty(item)) {
-                int id = getResourceIdForDrawable(item);
-                if (id != 0) {
-                    return mLoadedIconPackResource.getDrawable(id);
-                }
-            }
+    private int getResourceIdForName(ComponentName component) {
+        String item = mIconPackResourceMap.get(component);
+        if (!TextUtils.isEmpty(item)) {
+            return getResourceIdForDrawable(item);
         }
-        return null;
+        return 0;
     }
 
     public static Resources createIconResource(Context context, String packageName) throws NameNotFoundException {
@@ -432,7 +427,7 @@ public class IconPackHelper {
         public static Drawable getComposedIconDrawable(Drawable icon, Resources res,
                                                        ComposedIconInfo iconInfo) {
             if (iconInfo == null) return icon;
-            Drawable back = null;
+            int back = 0;
             if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
                 back = iconInfo.iconBacks[sRandom.nextInt(iconInfo.iconBacks.length)];
             }
@@ -455,7 +450,7 @@ public class IconPackHelper {
             if (!(new File(outValue.string.toString()).exists())) {
                 // compose the icon and cache it
                 final ComposedIconInfo iconInfo = res.getComposedIconInfo();
-                Drawable back = null;
+                int back = 0;
                 if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
                     back = iconInfo.iconBacks[(outValue.string.hashCode() & 0x7fffffff)
                             % iconInfo.iconBacks.length];
@@ -470,8 +465,8 @@ public class IconPackHelper {
             }
         }
 
-        private static Bitmap createIconBitmap(Drawable icon, Resources res, Drawable iconBack,
-                                               Drawable iconMask, Drawable iconUpon, float scale,
+        private static Bitmap createIconBitmap(Drawable icon, Resources res, int iconBack,
+                                               int iconMask, int iconUpon, float scale,
                                                int iconSize) {
             if (iconSize <= 0) return null;
 
@@ -528,23 +523,32 @@ public class IconPackHelper {
             canvas.restore();
 
             // Mask off the original if iconMask is not null
-            if (iconMask != null) {
-                iconMask.setBounds(icon.getBounds());
-                ((BitmapDrawable) iconMask).getPaint().setXfermode(
-                        new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-                iconMask.draw(canvas);
+            if (iconMask != 0) {
+                Drawable mask = res.getDrawable(iconMask);
+                if (mask != null) {
+                    mask.setBounds(icon.getBounds());
+                    ((BitmapDrawable) mask).getPaint().setXfermode(
+                            new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+                    mask.draw(canvas);
+                }
             }
             // Draw the iconBacks if not null and then the original (scaled and masked) icon on top
-            if (iconBack != null) {
-                iconBack.setBounds(icon.getBounds());
-                ((BitmapDrawable) iconBack).getPaint().setXfermode(
-                        new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
-                iconBack.draw(canvas);
+            if (iconBack != 0) {
+                Drawable back = res.getDrawable(iconBack);
+                if (back != null) {
+                    back.setBounds(icon.getBounds());
+                    ((BitmapDrawable) back).getPaint().setXfermode(
+                            new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+                    back.draw(canvas);
+                }
             }
             // Finally draw the foreground if one was supplied
-            if (iconUpon != null) {
-                iconUpon.setBounds(icon.getBounds());
-                iconUpon.draw(canvas);
+            if (iconUpon != 0) {
+                Drawable upon = res.getDrawable(iconUpon);
+                if (upon != null) {
+                    upon.setBounds(icon.getBounds());
+                    upon.draw(canvas);
+                }
             }
             icon.setBounds(oldBounds);
             bitmap.setDensity(canvas.getDensity());
