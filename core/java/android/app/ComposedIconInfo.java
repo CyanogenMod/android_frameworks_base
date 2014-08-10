@@ -15,15 +15,13 @@
  */
 package android.app;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /** @hide */
 public class ComposedIconInfo implements Parcelable {
-    public BitmapDrawable iconUpon, iconMask;
-    public BitmapDrawable[] iconBacks;
+    public int iconUpon, iconMask;
+    public int[] iconBacks;
     public float iconScale;
     public int iconDensity;
     public int iconSize;
@@ -33,19 +31,18 @@ public class ComposedIconInfo implements Parcelable {
     }
 
     private ComposedIconInfo(Parcel source) {
-        ClassLoader bmpClassLoader = Bitmap.class.getClassLoader();
         iconScale = source.readFloat();
         iconDensity = source.readInt();
         iconSize = source.readInt();
         int backCount = source.readInt();
         if (backCount > 0) {
-            iconBacks = new BitmapDrawable[backCount];
+            iconBacks = new int[backCount];
             for (int i = 0; i < backCount; i++) {
-                iconBacks[i] = new BitmapDrawable((Bitmap) source.readParcelable(bmpClassLoader));
+                iconBacks[i] = source.readInt();
             }
         }
-        iconMask = new BitmapDrawable((Bitmap) source.readParcelable(bmpClassLoader));
-        iconUpon = new BitmapDrawable((Bitmap) source.readParcelable(bmpClassLoader));
+        iconMask = source.readInt();
+        iconUpon = source.readInt();
     }
 
     @Override
@@ -60,12 +57,12 @@ public class ComposedIconInfo implements Parcelable {
         dest.writeInt(iconSize);
         dest.writeInt(iconBacks != null ? iconBacks.length : 0);
         if (iconBacks != null) {
-            for (BitmapDrawable d : iconBacks) {
-                dest.writeParcelable(d != null ? d.getBitmap() : null, flags);
+            for (int resId : iconBacks) {
+                dest.writeInt(resId);
             }
         }
-        dest.writeParcelable(iconMask != null ? iconMask.getBitmap() : null, flags);
-        dest.writeParcelable(iconUpon != null ? iconUpon.getBitmap() : null, flags);
+        dest.writeInt(iconMask);
+        dest.writeInt(iconUpon);
     }
 
     public static final Creator<ComposedIconInfo> CREATOR
