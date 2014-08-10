@@ -418,11 +418,7 @@ public class CallLog {
                 }
             }
 
-            Uri result = resolver.insert(CONTENT_URI, values);
-
-            removeExpiredEntries(context);
-
-            return result;
+            return resolver.insert(CONTENT_URI, values);
         }
 
         /**
@@ -448,13 +444,6 @@ public class CallLog {
             } finally {
                 if (c != null) c.close();
             }
-        }
-
-        private static void removeExpiredEntries(Context context) {
-            final ContentResolver resolver = context.getContentResolver();
-            resolver.delete(CONTENT_URI, "_id IN " +
-                    "(SELECT _id FROM calls ORDER BY " + DEFAULT_SORT_ORDER
-                    + " LIMIT -1 OFFSET 500)", null);
         }
     }
 }
