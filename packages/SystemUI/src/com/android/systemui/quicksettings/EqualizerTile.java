@@ -25,6 +25,7 @@ import android.media.AudioManager;
 import android.media.RemoteControlClient;
 import android.media.RemoteController;
 import android.media.audiofx.AudioEffect;
+import android.os.Handler;
 import android.view.View;
 
 import com.android.systemui.R;
@@ -41,6 +42,7 @@ public class EqualizerTile extends QuickSettingsTile {
     private AudioManager mAudioManager;
     private RemoteController mRemoteController;
     private QuickTileVisualizer mVisualizer;
+    private Handler mHandler;
 
     private RemoteController.OnClientUpdateListener mRCClientUpdateListener =
             new RemoteController.OnClientUpdateListener() {
@@ -127,6 +129,7 @@ public class EqualizerTile extends QuickSettingsTile {
         super(context, qsc, R.layout.quick_settings_tile_equalizer);
         mLabel = context.getString(R.string.quick_settings_equalizer);
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mHandler = new Handler();
 
         // Until we get a callback
         mCurrentPlayState = RemoteControlClient.PLAYSTATE_NONE;
@@ -169,12 +172,15 @@ public class EqualizerTile extends QuickSettingsTile {
         mTile.setOnPrepareListener(new QuickSettingsTileView.OnPrepareListener() {
             @Override
             public void onPrepare() {
-                mLinkVisualizer.run();
+                mHandler.removeCallbacks(mLinkVisualizer);
+                mHandler.postDelayed(mLinkVisualizer, 200);
             }
 
             @Override
             public void onUnprepare() {
-                mUnlinkVisualizer.run();
+                // we don't need to update this as quickly..
+                mHandler.removeCallbacks(mUnlinkVisualizer);
+                mHandler.postDelayed(mUnlinkVisualizer, 200);
             }
         });
 
