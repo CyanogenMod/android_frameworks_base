@@ -129,6 +129,7 @@ public class KeyguardViewManager {
     private int mBackgroundColor;
 
     private boolean mUnlockKeyDown = false;
+    private boolean mSmartCoverActivated;
 
     private static final String WALLPAPER_IMAGE_PATH =
             "/data/data/com.android.settings/files/lockscreen_wallpaper";
@@ -202,6 +203,8 @@ public class KeyguardViewManager {
                     Settings.System.LOCKSCREEN_BACKGROUND_STYLE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_BACKGROUND_COLOR), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SMART_COVER_ACTIVATED), false, this, UserHandle.USER_ALL);
         }
 
     @Override
@@ -240,6 +243,8 @@ public class KeyguardViewManager {
                 mNotificationViewManager = null;
             }
         }
+        mSmartCoverActivated = Settings.System.getBooleanForUser(mContext.getContentResolver(),
+            Settings.System.SMART_COVER_ACTIVATED, false, UserHandle.USER_CURRENT);
     }
 
     public void onUserSwitched() {
@@ -1106,6 +1111,11 @@ public class KeyguardViewManager {
             return;
         }
 
+        // return if smart cover is disabled by the user
+        if (!mSmartCoverActivated) {
+            return;
+        }
+
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
         if (!updateMonitor.isDeviceProvisioned() || !updateMonitor.hasBootCompleted()) {
             // don't start the cover if the device hasn't booted, or completed
@@ -1128,6 +1138,11 @@ public class KeyguardViewManager {
             return;
         }
 
+        // return if smart cover is disabled by the user
+        if (!mSmartCoverActivated) {
+            return;
+        }
+
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
         if (!updateMonitor.isDeviceProvisioned() || !updateMonitor.hasBootCompleted()) {
             return;
@@ -1147,6 +1162,9 @@ public class KeyguardViewManager {
     private void resetSmartCoverState() {
         if(DEBUG) Log.v(TAG, "resetSmartCoverState()");
         if(mSmartCoverCoords == null) return;
+
+        // return if smart cover is disabled by the user
+        if (!mSmartCoverActivated) return;
 
         if(DEBUG) Log.v(TAG, "resetCoverRunnable run()");
         mHandler.removeCallbacks(mSmartCoverTimeout);
