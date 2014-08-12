@@ -161,6 +161,13 @@ public class KeyguardUpdateMonitor {
     private ComponentName []mComponentName;
     private boolean mShowLockscreenCustomTargets;
 
+    public int getUnreadCallCount() {
+        if (mShowLockscreenCustomTargets) {
+            return mUnreadNum[DIALER_UNREAD];
+        }
+        return -1;
+    }
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
