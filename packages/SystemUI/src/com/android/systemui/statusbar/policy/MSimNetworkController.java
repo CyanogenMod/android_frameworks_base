@@ -60,7 +60,7 @@ public class MSimNetworkController extends NetworkController {
     // debug
     static final String TAG = "StatusBar.MSimNetworkController";
     static final boolean DEBUG = false;
-    static final boolean CHATTY = true; // additional diagnostics, but not logspew
+    static final boolean CHATTY = false; // additional diagnostics, but not logspew
 
     // telephony
     private MSimTelephonyManager mPhone;
