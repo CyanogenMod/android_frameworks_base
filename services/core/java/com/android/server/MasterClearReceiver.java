@@ -28,6 +28,9 @@ import java.io.IOException;
 public class MasterClearReceiver extends BroadcastReceiver {
     private static final String TAG = "MasterClear";
 
+    /* {@hide} */
+    public static final String EXTRA_WIPE_MEDIA = "wipe_media";
+
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_REMOTE_INTENT)) {
@@ -46,7 +49,8 @@ public class MasterClearReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 try {
-                    RecoverySystem.rebootWipeUserData(context, shutdown, reason);
+                    boolean wipeMedia = intent.getBooleanExtra(EXTRA_WIPE_MEDIA, false);
+                    RecoverySystem.rebootWipeUserData(context, shutdown, reason, wipeMedia);
                     Log.wtf(TAG, "Still running after master clear?!");
                 } catch (IOException e) {
                     Slog.e(TAG, "Can't perform master clear/factory reset", e);
