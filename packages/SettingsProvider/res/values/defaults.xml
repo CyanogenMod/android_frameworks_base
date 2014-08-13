@@ -198,6 +198,9 @@
     <!-- Default for Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS -->
     <bool name="def_lock_screen_allow_private_notifications">true</bool>
 
+    <!-- Default for Settings.Global.SEND_ACTION_APP_ERROR -->
+    <integer name="def_send_action_app_error">0</integer>
+
     <!-- Default for Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 1==on -->
     <integer name="def_heads_up_enabled">1</integer>
 
