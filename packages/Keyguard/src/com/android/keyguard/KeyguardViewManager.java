@@ -383,10 +383,10 @@ public class KeyguardViewManager {
             }
 
             if (!ActivityManager.isHighEndGfx() || !mScreenOn) {
-                mCustomBackground = d;
                 if (d != null) {
                     d.setColorFilter(BACKGROUND_COLOR, PorterDuff.Mode.SRC_OVER);
                 }
+                mCustomBackground = d;
                 computeCustomBackgroundBounds(mCustomBackground);
                 setBackground(mBackgroundDrawable);
             } else {
