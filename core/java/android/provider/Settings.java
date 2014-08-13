@@ -3561,7 +3561,8 @@ public final class Settings {
          * 4 - Voice search
          * 5 - In-app search
          * 6 - Launch Camera
-         * 7 - Last app
+         * 7 - Action Sleep
+         * 8 - Last app
          * @hide
          */
         public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
