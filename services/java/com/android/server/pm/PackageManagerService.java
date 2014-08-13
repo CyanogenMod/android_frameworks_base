@@ -296,7 +296,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     private static final String APK_PATH_TO_ICONS = "assets/icons/";
 
     private static final String COMMON_OVERLAY = ThemeUtils.COMMON_RES_TARGET;
-    private static final String APK_PATH_TO_COMMON_OVERLAY = APK_PATH_TO_OVERLAY + COMMON_OVERLAY;
 
     // Where package redirections are stored for legacy themes
     private static final String REDIRECTIONS_PATH = "/data/app/redirections";
@@ -1955,7 +1954,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     PackageInfo generatePackageInfo(PackageParser.Package p, int flags, int userId) {
         if (!sUserManager.exists(userId)) return null;
-        PackageInfo pi;
         final PackageSetting ps = (PackageSetting) p.mExtras;
         if (ps == null) {
             return null;
@@ -2660,7 +2658,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             // We changed the perm on someone, kill its processes.
             IActivityManager am = ActivityManagerNative.getDefault();
             if (am != null) {
-                final int callingUserId = UserHandle.getCallingUserId();
+                // final int callingUserId = UserHandle.getCallingUserId();
                 final long ident = Binder.clearCallingIdentity();
                 try {
                     //XXX we should only revoke for the calling user's app permissions,
@@ -4201,7 +4199,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     private int performDexOptLI(PackageParser.Package pkg, boolean forceDex, boolean defer,
             boolean inclDependencies) {
         HashSet<String> done;
-        boolean performed = false;
         if (inclDependencies && (pkg.usesLibraries != null || pkg.usesOptionalLibraries != null)) {
             done = new HashSet<String>();
             done.add(pkg.packageName);
@@ -4855,65 +4852,61 @@ public class PackageManagerService extends IPackageManager.Stub {
          *        only for non-system apps and system app upgrades.
          */
         if (pkg.applicationInfo.nativeLibraryDir != null) {
-            try {
-                File nativeLibraryDir = new File(pkg.applicationInfo.nativeLibraryDir);
-                final String dataPathString = dataPath.getCanonicalPath();
+            File nativeLibraryDir = new File(pkg.applicationInfo.nativeLibraryDir);
 
-                if (isSystemApp(pkg) && !isUpdatedSystemApp(pkg)) {
+            if (isSystemApp(pkg) && !isUpdatedSystemApp(pkg)) {
+                /*
+                 * Upgrading from a previous version of the OS sometimes leaves
+                 * native libraries in the /data/data/<app>/lib directory for
+                 * system apps even when they shouldn't be. Recent changes in
+                 * the JNI library search path necessitates we remove those to
+                 * match previous behavior.
+                 */
+                if (NativeLibraryHelper.removeNativeBinariesFromDirLI(nativeLibraryDir)) {
+                    Log.i(TAG, "removed obsolete native libraries for system package "
+                            + path);
+                }
+            } else {
+                if (!isForwardLocked(pkg) && !isExternal(pkg)) {
                     /*
-                     * Upgrading from a previous version of the OS sometimes
-                     * leaves native libraries in the /data/data/<app>/lib
-                     * directory for system apps even when they shouldn't be.
-                     * Recent changes in the JNI library search path
-                     * necessitates we remove those to match previous behavior.
+                     * Update native library dir if it starts with /data/data
                      */
-                    if (NativeLibraryHelper.removeNativeBinariesFromDirLI(nativeLibraryDir)) {
-                        Log.i(TAG, "removed obsolete native libraries for system package "
-                                + path);
+                    // For devices using /datadata, dataPathString will point
+                    // to /datadata while nativeLibraryDir will point to
+                    // /data/data.
+                    // Thus, compare to /data/data directly to avoid problems.
+                    if (nativeLibraryDir.getPath().startsWith("/data/data")) {
+                        setInternalAppNativeLibraryPath(pkg, pkgSetting);
+                        nativeLibraryDir = new File(pkg.applicationInfo.nativeLibraryDir);
                     }
-                } else {
-                    if (!isForwardLocked(pkg) && !isExternal(pkg)) {
-                        /*
-                         * Update native library dir if it starts with
-                         * /data/data
-                         */
-                        // For devices using /datadata, dataPathString will point
-                        // to /datadata while nativeLibraryDir will point to /data/data.
-                        // Thus, compare to /data/data directly to avoid problems.
-                        if (nativeLibraryDir.getPath().startsWith("/data/data")) {
-                            setInternalAppNativeLibraryPath(pkg, pkgSetting);
-                            nativeLibraryDir = new File(pkg.applicationInfo.nativeLibraryDir);
-                        }
 
-                        try {
-                            if (copyNativeLibrariesForInternalApp(scanFile, nativeLibraryDir) != PackageManager.INSTALL_SUCCEEDED) {
-                                Slog.e(TAG, "Unable to copy native libraries");
-                                mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
-                                return null;
-                            }
-                        } catch (IOException e) {
-                            Slog.e(TAG, "Unable to copy native libraries", e);
+                    try {
+                        if (copyNativeLibrariesForInternalApp(scanFile, nativeLibraryDir) != PackageManager.INSTALL_SUCCEEDED) {
+                            Slog.e(TAG, "Unable to copy native libraries");
+                            mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
+                            return null;
+                        }
+                    } catch (IOException e) {
+                        Slog.e(TAG, "Unable to copy native libraries", e);
+                        mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
+                        return null;
+                    }
+                }
+
+                if (DEBUG_INSTALL)
+                    Slog.i(TAG, "Linking native library dir for " + path);
+                final int[] userIds = sUserManager.getUserIds();
+                synchronized (mInstallLock) {
+                    for (int userId : userIds) {
+                        if (mInstaller.linkNativeLibraryDirectory(pkg.packageName,
+                                pkg.applicationInfo.nativeLibraryDir, userId) < 0) {
+                            Slog.w(TAG, "Failed linking native library dir (user=" + userId
+                                    + ")");
                             mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
                             return null;
                         }
                     }
-
-                    if (DEBUG_INSTALL) Slog.i(TAG, "Linking native library dir for " + path);
-                    final int[] userIds = sUserManager.getUserIds();
-                    synchronized (mInstallLock) {
-                        for (int userId : userIds) {
-                            if (mInstaller.linkNativeLibraryDirectory(pkg.packageName,
-                                    pkg.applicationInfo.nativeLibraryDir, userId) < 0) {
-                                Slog.w(TAG, "Failed linking native library dir (user=" + userId
-                                        + ")");
-                                mLastScanError = PackageManager.INSTALL_FAILED_INTERNAL_ERROR;
-                                return null;
-                            }
-                        }
-                    }
                 }
-            } catch (IOException ioe) {
-                Slog.e(TAG, "Unable to get canonical file " + ioe.toString());
             }
         }
         pkg.mScanPath = path;
@@ -5843,15 +5836,17 @@ public class PackageManagerService extends IPackageManager.Stub {
         byte[] crc = getFileCrC(pkg.mPath);
         if (crc == null) return 0;
 
-        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(crc).put(IDMAP_HASH_VERSION).array()),
+        p = new Pair<Integer, Long>(Arrays.hashCode(ByteBuffer.wrap(crc).put(IDMAP_HASH_VERSION)
+                .array()),
                 System.currentTimeMillis());
         mPackageHashes.put(pkg.packageName, p);
         return p.first;
     }
 
     private byte[] getFileCrC(String path) {
+        ZipFile zfile = null;
         try {
-            ZipFile zfile = new ZipFile(path);
+            zfile = new ZipFile(path);
             ZipEntry entry = zfile.getEntry("META-INF/MANIFEST.MF");
             if (entry == null) {
                 Log.e(TAG, "Unable to get MANIFEST.MF from " + path);
@@ -5862,6 +5857,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (crc == -1) Log.e(TAG, "Unable to get CRC for " + path);
             return ByteBuffer.allocate(8).putLong(crc).array();
         } catch (Exception e) {
+        } finally {
+            IoUtils.closeQuietly(zfile);
         }
         return null;
     }
@@ -7521,7 +7518,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         long callingId = Binder.clearCallingIdentity();
         try {
             boolean sendAdded = false;
-            Bundle extras = new Bundle(1);
 
             // writer
             synchronized (mPackages) {
