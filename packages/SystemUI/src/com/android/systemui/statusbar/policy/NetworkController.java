@@ -59,8 +59,8 @@ import java.util.Locale;
 public class NetworkController extends BroadcastReceiver implements DemoMode {
     // debug
     static final String TAG = "StatusBar.NetworkController";
-    static final boolean DEBUG = true;
-    static final boolean CHATTY = true; // additional diagnostics, but not logspew
+    static final boolean DEBUG = false;
+    static final boolean CHATTY = false; // additional diagnostics, but not logspew
 
     private static final int FLIGHT_MODE_ICON = R.drawable.stat_sys_signal_flightmode;
 
@@ -346,13 +346,15 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     mContentDescriptionPhoneSignal,
                     mContentDescriptionDataType,
                     mNoSimIconId);
-            Log.d(TAG, "refreshSignalCluster - setMobileDataIndicators: "
-                    + " mHasMobileDataFeature = " + String.valueOf(mHasMobileDataFeature)
-                    + " mPhoneSignalIconId = " + getResourceName(mPhoneSignalIconId)
-                    + " mDataSignalIconId = " + getResourceName(mDataSignalIconId)
-                    + " mMobileActivityIconId = " + getResourceName(mMobileActivityIconId)
-                    + " mDataTypeIconId = " + getResourceName(mDataTypeIconId)
-                    + " mNoSimIconId = " + getResourceName(mNoSimIconId));
+            if (DEBUG) {
+                Log.d(TAG, "refreshSignalCluster - setMobileDataIndicators: "
+                        + " mHasMobileDataFeature = " + String.valueOf(mHasMobileDataFeature)
+                        + " mPhoneSignalIconId = " + getResourceName(mPhoneSignalIconId)
+                        + " mDataSignalIconId = " + getResourceName(mDataSignalIconId)
+                        + " mMobileActivityIconId = " + getResourceName(mMobileActivityIconId)
+                        + " mDataTypeIconId = " + getResourceName(mDataTypeIconId)
+                        + " mNoSimIconId = " + getResourceName(mNoSimIconId));
+            }
         }
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
     }
@@ -603,10 +605,12 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             ((dataNetworkType == TelephonyManager.NETWORK_TYPE_UNKNOWN)
             ? voiceNetworkType : dataNetworkType);
 
-        Log.d(TAG, " chosenNetworkType=" + chosenNetworkType
-            + " hspaDataDistinguishable=" + String.valueOf(mHspaDataDistinguishable)
-            + " hspapDistinguishable=" + "false"
-            + " showAtLeastThreeGees=" + String.valueOf(mShowAtLeastThreeGees));
+        if (DEBUG) {
+            Log.d(TAG, " chosenNetworkType=" + chosenNetworkType
+                + " hspaDataDistinguishable=" + String.valueOf(mHspaDataDistinguishable)
+                + " hspapDistinguishable=" + "false"
+                + " showAtLeastThreeGees=" + String.valueOf(mShowAtLeastThreeGees));
+        }
 
         TelephonyIcons.updateDataType(chosenNetworkType, mShowAtLeastThreeGees,
             mShow4GforLTE, mHspaDataDistinguishable, mInetCondition);
@@ -787,7 +791,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     }
 
     private final void updateSimIcon() {
-        Log.d(TAG,"In updateSimIcon simState= " + mSimState);
+        if (DEBUG) Log.d(TAG,"In updateSimIcon simState= " + mSimState);
         if (mSimState ==  IccCardConstants.State.ABSENT) {
             mNoSimIconId = TelephonyIcons.getNoSimIcon();
         } else {
