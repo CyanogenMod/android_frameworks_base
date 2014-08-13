@@ -368,21 +368,21 @@ public class RecoverySystem {
      * @throws SecurityException if the current user is not allowed to wipe data.
      */
     public static void rebootWipeUserData(Context context) throws IOException {
-        rebootWipeUserData(context, false, context.getPackageName());
+        rebootWipeUserData(context, false, context.getPackageName(), false);
     }
 
     /** {@hide} */
     public static void rebootWipeUserData(Context context, String reason) throws IOException {
-        rebootWipeUserData(context, false, reason);
+        rebootWipeUserData(context, false, reason, false);
     }
 
     /** {@hide} */
     public static void rebootWipeUserData(Context context, boolean shutdown)
             throws IOException {
-        rebootWipeUserData(context, shutdown, context.getPackageName());
+        rebootWipeUserData(context, shutdown, context.getPackageName(), false);
     }
 
-    /**
+   /**
      * Reboots the device and wipes the user data and cache
      * partitions.  This is sometimes called a "factory reset", which
      * is something of a misnomer because the system partition is not
@@ -400,8 +400,8 @@ public class RecoverySystem {
      *
      * @hide
      */
-    public static void rebootWipeUserData(Context context, boolean shutdown, String reason)
-            throws IOException {
+    public static void rebootWipeUserData(Context context, boolean shutdown, String reason,
+            boolean wipeMedia) throws IOException {
         UserManager um = (UserManager) context.getSystemService(Context.USER_SERVICE);
         if (um.hasUserRestriction(UserManager.DISALLOW_FACTORY_RESET)) {
             throw new SecurityException("Wiping data is not allowed for this user.");
@@ -433,7 +433,13 @@ public class RecoverySystem {
         }
 
         final String localeArg = "--locale=" + Locale.getDefault().toString();
-        bootCommand(context, shutdownArg, "--wipe_data", reasonArg, localeArg);
+
+        String cmd = "--wipe_data\n";
+        if (wipeMedia) {
+            cmd += "--wipe_media\n";
+        }
+
+        bootCommand(context, shutdownArg, cmd, reasonArg, localeArg);
     }
 
     /**
