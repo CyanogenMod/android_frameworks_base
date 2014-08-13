@@ -161,6 +161,13 @@ public class KeyguardUpdateMonitor {
     private ComponentName []mComponentName;
     private boolean mShowLockscreenCustomTargets;
 
+    public int getUnreadCallCount() {
+        if (mShowLockscreenCustomTargets) {
+            return mUnreadNum[DIALER_UNREAD];
+        }
+        return -1;
+    }
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -1120,11 +1127,25 @@ public class KeyguardUpdateMonitor {
                     R.bool.config_showEmergencyCallOnlyInLockScreen)
                 && plmn.equalsIgnoreCase(strEmergencyCallOnly)) {
                     return getDefaultPlmn();
+            } else if (mContext.getResources().getBoolean(R.bool.config_showEmergencyButton)
+                    && plmn.equalsIgnoreCase(strEmergencyCallOnly)
+                    && !canMakeEmergencyCall()) {
+                return getDefaultPlmn();
             } else {
                 return (plmn != null) ? plmn : getDefaultPlmn();
             }
         }
         return null;
+    }
+
+    private boolean canMakeEmergencyCall() {
+        for (ServiceState state : mServiceState) {
+            if ((state != null) && (state.isEmergencyOnly() ||
+                    state.getVoiceRegState() != ServiceState.STATE_OUT_OF_SERVICE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

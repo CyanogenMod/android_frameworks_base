@@ -33,6 +33,8 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.CallLog;
+import android.provider.CallLog.Calls;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.WindowManager;
@@ -51,6 +53,7 @@ public abstract class KeyguardActivityLauncher {
     private static final Intent INSECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
     private static final Intent CALL_INTENT = new Intent(Intent.ACTION_DIAL);
+    private static final Intent CALL_LOG_LIST_INTENT = new Intent(Intent.ACTION_VIEW);
     private static final Intent SMS_INTENT = new Intent(Intent.ACTION_MAIN);
 
     abstract Context getContext();
@@ -124,7 +127,16 @@ public abstract class KeyguardActivityLauncher {
     }
 
     public void launchCall() {
-        launchActivity(CALL_INTENT, false, false, null, null);
+        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(getContext());
+        final int missedCount = monitor.getUnreadCallCount();
+        if (missedCount > 0) {
+            // Go to call log list
+            CALL_LOG_LIST_INTENT.setType(CallLog.Calls.CONTENT_TYPE);
+            launchActivity(CALL_LOG_LIST_INTENT, false, false, null, null);
+        } else {
+            // Go to dialer by default
+            launchActivity(CALL_INTENT, false, false, null, null);
+        }
     }
 
     public void launchMessage() {

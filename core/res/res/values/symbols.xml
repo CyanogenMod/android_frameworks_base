@@ -1857,4 +1857,7 @@
   <!-- spn display control -->
   <java-symbol type="bool" name="config_spn_display_control" />
 
+  <!-- platform logo font size -->
+  <java-symbol type="dimen" name="plat_logo_alphabet_size" />
+
 </resources>
