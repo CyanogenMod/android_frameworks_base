@@ -368,6 +368,12 @@ public class RecoverySystem {
         rebootWipeUserData(context, shutdown, context.getPackageName());
     }
 
+    /** {@hide} */
+    public static void rebootWipeUserData(Context context, boolean shutdown, String reason)
+            throws IOException {
+        rebootWipeUserData(context, shutdown, reason, false);
+    }
+
     /**
      * Reboots the device and wipes the user data and cache
      * partitions.  This is sometimes called a "factory reset", which
@@ -386,7 +392,7 @@ public class RecoverySystem {
      *
      * @hide
      */
-    public static void rebootWipeUserData(Context context, boolean shutdown, String reason)
+    public static void rebootWipeUserData(Context context, boolean shutdown, String reason, boolean wipeMedia)
             throws IOException {
         UserManager um = (UserManager) context.getSystemService(Context.USER_SERVICE);
         if (um.hasUserRestriction(UserManager.DISALLOW_FACTORY_RESET)) {
@@ -419,7 +425,13 @@ public class RecoverySystem {
         }
 
         final String localeArg = "--locale=" + Locale.getDefault().toString();
-        bootCommand(context, shutdownArg, "--wipe_data", reasonArg, localeArg);
+
+        String cmd = "--wipe_data\n";
+        if (wipeMedia) {
+            cmd += "--wipe_media\n";
+        }
+
+        bootCommand(context, shutdownArg, cmd, reasonArg, localeArg);
     }
 
     /**
