@@ -58,6 +58,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.util.slim.ButtonConfig;
 import com.android.internal.util.slim.ButtonsConstants;
 import com.android.internal.util.slim.ButtonsHelper;
@@ -123,6 +124,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     private Drawable mBackIcon, mBackAltIcon;
 
     boolean mWasNotifsButtonVisible = false;
+    private static LockPatternUtils mLockPatternUtils;
     protected DelegateViewHelper mDelegateHelper;
     private DeadZone mDeadZone;
     private final NavigationBarTransitions mBarTransitions;
@@ -830,7 +832,8 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
             && Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.ACTIVE_NOTIFICATIONS, 0) == 1
             && Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, 0) == 0;
+                    Settings.System.ACTIVE_NOTIFICATIONS_PRIVACY_MODE, 0) == 0
+            && !mLockPatternUtils.isSecure();
 
         final View notifsButton = getNotifsButton();
         if (notifsButton != null) {
