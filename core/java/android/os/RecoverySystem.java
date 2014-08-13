@@ -419,7 +419,14 @@ public class RecoverySystem {
         }
 
         final String localeArg = "--locale=" + Locale.getDefault().toString();
-        bootCommand(context, shutdownArg, "--wipe_data", reasonArg, localeArg);
+        final boolean wipeMedia = intent.getBooleanExtra("wipe_media", false);
+
+        String cmd = "--wipe_data\n";
+        if (wipeMedia) {
+            cmd += "--wipe_media\n";
+        }
+
+        bootCommand(context, shutdownArg, cmd, reasonArg, localeArg);
     }
 
     /**
