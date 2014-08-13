@@ -147,8 +147,13 @@ public class PhoneStatusBarPolicy {
                     break;
 
             }
-            mService.setIcon("quiet_hours", drawableResource, 0, null);
-            mService.setIconVisibility("quiet_hours", quietHoursMode > 1);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mService.setIcon("quiet_hours", drawableResource, 0, null);
+                    mService.setIconVisibility("quiet_hours", quietHoursMode > 1);
+                }
+            });
         }
 
     }
