@@ -43,6 +43,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -196,6 +197,7 @@ public class ThemeService extends IThemeService.Stub {
             incrementProgress(progressIncrement);
         }
 
+        Environment.setUserRequired(false);
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ALARMS)) {
             updateAlarms(componentMap.get(ThemesColumns.MODIFIES_ALARMS));
             incrementProgress(progressIncrement);
@@ -210,6 +212,7 @@ public class ThemeService extends IThemeService.Stub {
             updateBootAnim(componentMap.get(ThemesColumns.MODIFIES_BOOT_ANIM));
             incrementProgress(progressIncrement);
         }
+        Environment.setUserRequired(true);
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_FONTS)) {
             updateFonts(componentMap.get(ThemesColumns.MODIFIES_FONTS));
