@@ -37,7 +37,8 @@ public class BarTransitions {
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_COLORS = false;
 
-    public static final boolean HIGH_END = ActivityManager.isHighEndGfx();
+    //enable transparent for status bar only, not for other apps. won't waste ram
+    public static final boolean HIGH_END = true;
 
     public static final int MODE_OPAQUE = 0;
     public static final int MODE_SEMI_TRANSPARENT = 1;
@@ -81,9 +82,11 @@ public class BarTransitions {
 
     public void transitionTo(int mode, boolean animate) {
         // low-end devices do not support translucent modes, fallback to opaque
+        /* remove
         if (!HIGH_END && (mode == MODE_SEMI_TRANSPARENT || mode == MODE_TRANSLUCENT)) {
             mode = MODE_OPAQUE;
         }
+        */
         if (mMode == mode) return;
         int oldMode = mMode;
         mMode = mode;
