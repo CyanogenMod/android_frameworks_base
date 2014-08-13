@@ -5060,7 +5060,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     public void setButtonDrawable(int buttonId, int iconId) {
-        mNavigationBarView.setButtonDrawable(buttonId, iconId);
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setButtonDrawable(buttonId, iconId);
+        }
     }
     //
     // tracing
