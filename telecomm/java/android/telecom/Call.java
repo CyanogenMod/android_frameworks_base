@@ -422,6 +422,15 @@ public final class Call {
     }
 
     /**
+     * Instructs this {@link #STATE_RINGING} {@code Call} to deflect.
+     * @param number The number to which the call will be deflected.
+     */
+    /** @hide */
+    public void deflectCall(String number) {
+        mInCallAdapter.deflectCall(mTelecommCallId, number);
+    }
+
+    /**
      * Instructs this {@link #STATE_RINGING} {@code Call} to reject.
      *
      * @param rejectWithMessage Whether to reject with a text message.

@@ -48,6 +48,8 @@ oneway interface IConnectionService {
 
     void answer(String callId);
 
+    void deflect(String callId, String number);
+
     void reject(String callId);
 
     void disconnect(String callId);

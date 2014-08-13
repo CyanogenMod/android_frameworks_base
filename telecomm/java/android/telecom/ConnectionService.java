@@ -76,6 +76,7 @@ public abstract class ConnectionService extends Service {
     private static final int MSG_SWAP_CONFERENCE = 19;
     private static final int MSG_SET_LOCAL_HOLD = 20;
     private static final int MSG_SET_ACTIVE_SUB = 21;
+    private static final int MSG_DEFLECT = 22;
 
     private static Connection sNullConnection;
 
@@ -136,6 +137,14 @@ public abstract class ConnectionService extends Service {
         @Override
         public void answer(String callId) {
             mHandler.obtainMessage(MSG_ANSWER, callId).sendToTarget();
+        }
+
+        @Override
+        public void deflect(String callId, String number) {
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = callId;
+            args.arg2 = number;
+            mHandler.obtainMessage(MSG_DEFLECT, args).sendToTarget();
         }
 
         @Override
@@ -354,6 +363,17 @@ public abstract class ConnectionService extends Service {
                         String callId = (String) args.arg1;
                         boolean proceed = (args.argi1 == 1);
                         onPostDialContinue(callId, proceed);
+                    } finally {
+                        args.recycle();
+                    }
+                    break;
+                }
+                case MSG_DEFLECT: {
+                    SomeArgs args = (SomeArgs) msg.obj;
+                    try {
+                        String callId = (String) args.arg1;
+                        String number = (String) args.arg2;
+                        deflect(callId, number);
                     } finally {
                         args.recycle();
                     }
@@ -654,6 +674,11 @@ public abstract class ConnectionService extends Service {
     private void answer(String callId) {
         Log.d(this, "answer %s", callId);
         findConnectionForAction(callId, "answer").onAnswer();
+    }
+
+    private void deflect(String callId, String number) {
+        Log.d(this, "deflect %s - %s", callId, number);
+        findConnectionForAction(callId, "deflect").onDeflect(number);
     }
 
     private void reject(String callId) {
