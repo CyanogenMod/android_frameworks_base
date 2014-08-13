@@ -114,4 +114,10 @@ interface IImsCallSessionListener {
      * - {@link com.android.internal.telephony.Phone#TTY_MODE_VCO}
      */
     void callSessionTtyModeReceived(in IImsCallSession session, in int mode);
+
+    /**
+     * Notifies the result of deflect request.
+     */
+    void callSessionDeflected(in IImsCallSession session);
+    void callSessionDeflectFailed(in IImsCallSession session, in ImsReasonInfo reasonInfo);
 }

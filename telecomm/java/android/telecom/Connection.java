@@ -1050,6 +1050,13 @@ public abstract class Connection {
 
     /**
      * Notifies this Connection, which is in {@link #STATE_RINGING}, of
+     * a request to deflect.
+     */
+    /** @hide */
+    public void onDeflect(String number) {}
+
+    /**
+     * Notifies this Connection, which is in {@link State#RINGING}, of
      * a request to reject.
      */
     public void onReject() {}
