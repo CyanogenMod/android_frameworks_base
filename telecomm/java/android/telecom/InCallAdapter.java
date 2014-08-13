@@ -57,6 +57,22 @@ public final class InCallAdapter {
     }
 
     /**
+     * Instructs Telecomm to deflect the specified call.
+     *
+     * @param callId The identifier of the call to deflect.
+     * @param deflectNumber The number to deflect.
+     */
+    /**
+     * {@hide}
+     */
+    public void deflectCall(String callId, String deflectNumber) {
+        try {
+            mAdapter.deflectCall(callId, deflectNumber);
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
      * Instructs Telecom to reject the specified call.
      *
      * @param callId The identifier of the call to reject.
