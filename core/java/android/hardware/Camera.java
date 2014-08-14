@@ -180,6 +180,7 @@ public class Camera {
     private CameraDataCallback mCameraDataCallback;
     private CameraMetaDataCallback mCameraMetaDataCallback;
     /* ### QC ADD-ONS: END */
+    private Binder mTorchToken;
 
     /**
      * Broadcast Action:  A new picture is taken by the camera, and the entry of
@@ -329,7 +330,6 @@ public class Camera {
      * @see android.app.admin.DevicePolicyManager#getCameraDisabled(android.content.ComponentName)
      */
     public static Camera open(int cameraId) {
-        notifyTorch(cameraId, true);
         return new Camera(cameraId);
     }
 
@@ -345,25 +345,10 @@ public class Camera {
         for (int i = 0; i < numberOfCameras; i++) {
             getCameraInfo(i, cameraInfo);
             if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                notifyTorch(i, true);
                 return new Camera(i);
             }
         }
         return null;
-    }
-
-    private static void notifyTorch(int cameraId, boolean inUse) {
-        IBinder b = ServiceManager.getService(Context.TORCH_SERVICE);
-        ITorchService torchService = ITorchService.Stub.asInterface(b);
-        try {
-            if (inUse) {
-                torchService.onCameraOpened(new Binder(), cameraId);
-            } else {
-                torchService.onCameraClosed(cameraId);
-            }
-        } catch (RemoteException e) {
-            // Ignore
-        }
     }
 
     Camera(int cameraId) {
@@ -379,6 +364,7 @@ public class Camera {
         mCameraDataCallback = null;
         mCameraMetaDataCallback = null;
         /* ### QC ADD-ONS: END */
+        mTorchToken = new Binder();
 
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
@@ -391,6 +377,7 @@ public class Camera {
 
         String packageName = ActivityThread.currentPackageName();
 
+        notifyTorch(true);
         native_setup(new WeakReference<Camera>(this), cameraId, packageName);
     }
 
@@ -398,6 +385,20 @@ public class Camera {
      * An empty Camera for testing purpose.
      */
     Camera() {
+    }
+
+    private void notifyTorch(boolean inUse) {
+        IBinder b = ServiceManager.getService(Context.TORCH_SERVICE);
+        ITorchService torchService = ITorchService.Stub.asInterface(b);
+        try {
+            if (inUse) {
+                torchService.onCameraOpened(mTorchToken, mCameraId);
+            } else {
+                torchService.onCameraClosed(mTorchToken, mCameraId);
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
     }
 
     protected void finalize() {
@@ -418,7 +419,7 @@ public class Camera {
     public final void release() {
         native_release();
         mFaceDetectionRunning = false;
-        notifyTorch(mCameraId, false);
+        notifyTorch(false);
     }
 
     /**
