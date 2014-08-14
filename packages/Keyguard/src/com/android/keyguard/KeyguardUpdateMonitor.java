@@ -160,6 +160,11 @@ public class KeyguardUpdateMonitor {
     private int []mUnreadNum;
     private ComponentName []mComponentName;
     private boolean mShowLockscreenCustomTargets;
+    private Bundle mMessageBundle = new Bundle();
+
+    public Bundle getMessageBundle() {
+        return mMessageBundle;
+    }
 
     public int getUnreadCallCount() {
         if (mShowLockscreenCustomTargets) {
@@ -395,6 +400,14 @@ public class KeyguardUpdateMonitor {
                     if (componentName.equals(MMS_COMPONENTNAME)) {
                         mUnreadNum[MESSAGE_UNREAD] = unreadNum;
                         mComponentName[MESSAGE_UNREAD] = componentName;
+                        mMessageBundle.putInt("unread_number", unreadNum);
+                        Log.v(TAG, "onReceive(): unreadNum = " + unreadNum);
+                        if (unreadNum > 0) {
+                            mMessageBundle.putLong("thread_id",
+                                    intent.getLongExtra("thread_id", -1));
+                            mMessageBundle.putLong("_id", intent.getLongExtra("_id", -1));
+                            mMessageBundle.putString("type", intent.getStringExtra("type"));
+                        }
                     } else if (componentName.equals(DIALER_COMPONENTNAME)) {
                         mUnreadNum[DIALER_UNREAD] = unreadNum;
                         mComponentName[DIALER_UNREAD] = componentName;
