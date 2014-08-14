@@ -909,7 +909,64 @@ public class ConnectivityManager {
             return PhoneConstants.APN_REQUEST_FAILED;
         }
     }
+    /**
+     * Tells the underlying networking system that the caller wants to
+     * begin using the named feature. The interpretation of {@code feature}
+     * is completely up to each networking implementation.
+     * <p>This method requires the caller to hold the permission
+     * {@link android.Manifest.permission#CHANGE_NETWORK_STATE}.
+     * @param networkType specifies which network the request pertains to
+     * @param feature the name of the feature to be used
+     * @param subId the subscription the network is requested
+     * @return an integer value representing the outcome of the request.
+     * The interpretation of this value is specific to each networking
+     * implementation+feature combination, except that the value {@code -1}
+     * always indicates failure.
+     *
+     * @hide
+     */
+    public int startUsingNetworkFeatureForSubscription(int networkType, String feature,
+                                                       String subId) {
+        Log.d(TAG, "startUsingNetworkFeatureForSubscription: for " + networkType
+                +" feature = " + feature + " subId = " + subId);
+        NetworkCapabilities netCap = networkCapabilitiesForFeature(networkType, feature);
+        if (netCap == null) {
+            Log.d(TAG, "Can't satisfy startUsingNetworkFeature for " + networkType + ", " +
+                    feature);
+            return PhoneConstants.APN_REQUEST_FAILED;
+        }
+        netCap.setNetworkSpecifier(subId);
+        NetworkRequest request = null;
+        synchronized (sLegacyRequests) {
+            if (LEGACY_DBG) {
+                Log.d(TAG, "Looking for legacyRequest for netCap with hash: " + netCap + " (" +
+                        netCap.hashCode() + ")");
+                Log.d(TAG, "sLegacyRequests has:");
+                for (NetworkCapabilities nc : sLegacyRequests.keySet()) {
+                    Log.d(TAG, "  " + nc + " (" + nc.hashCode() + ")");
+                }
+            }
+            LegacyRequest l = sLegacyRequests.get(netCap);
+            if (l != null) {
+                Log.d(TAG, "renewing startUsingNetworkFeature request " + l.networkRequest);
+                renewRequestLocked(l);
+                if (l.currentNetwork != null) {
+                    return PhoneConstants.APN_ALREADY_ACTIVE;
+                } else {
+                    return PhoneConstants.APN_REQUEST_STARTED;
+                }
+            }
 
+            request = requestNetworkForFeatureLocked(netCap);
+        }
+        if (request != null) {
+            Log.d(TAG, "starting startUsingNetworkFeature for request " + request);
+            return PhoneConstants.APN_REQUEST_STARTED;
+        } else {
+            Log.d(TAG, " request Failed");
+            return PhoneConstants.APN_REQUEST_FAILED;
+        }
+    }
     /**
      * Tells the underlying networking system that the caller is finished
      * using the named feature. The interpretation of {@code feature}
@@ -933,6 +990,40 @@ public class ConnectivityManager {
             return -1;
         }
 
+        NetworkCallback networkCallback = removeRequestForFeature(netCap);
+        if (networkCallback != null) {
+            Log.d(TAG, "stopUsingNetworkFeature for " + networkType + ", " + feature);
+            unregisterNetworkCallback(networkCallback);
+        }
+        return 1;
+    }
+    /**
+     * Tells the underlying networking system that the caller is finished
+     * using the named feature. The interpretation of {@code feature}
+     * is completely up to each networking implementation.
+     * <p>This method requires the caller to hold the permission
+     * {@link android.Manifest.permission#CHANGE_NETWORK_STATE}.
+     * @param networkType specifies which network the request pertains to
+     * @param feature the name of the feature that is no longer needed
+     * @param subId the subscription the network is requested
+     * @return an integer value representing the outcome of the request.
+     * The interpretation of this value is specific to each networking
+     * implementation+feature combination, except that the value {@code -1}
+     * always indicates failure.
+     *
+     * @hide
+     */
+    public int stopUsingNetworkFeatureForSubscription(int networkType, String feature,
+                                                      String subId) {
+        Log.d(TAG, "stopUsingNetworkFeatureForSubscription: for " + networkType +" feature = "
+          + feature + " subId = " + subId);
+        NetworkCapabilities netCap = networkCapabilitiesForFeature(networkType, feature);
+        if (netCap == null) {
+            Log.d(TAG, "Can't satisfy stopUsingNetworkFeature for " + networkType + ", " +
+                    feature);
+            return -1;
+        }
+        netCap.setNetworkSpecifier(subId);
         NetworkCallback networkCallback = removeRequestForFeature(netCap);
         if (networkCallback != null) {
             Log.d(TAG, "stopUsingNetworkFeature for " + networkType + ", " + feature);
