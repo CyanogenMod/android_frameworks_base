@@ -2160,33 +2160,36 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 }
             }
         }
-        if (bestNetwork != null) {
-            if (DBG) log("using " + bestNetwork.name());
-            if (bestNetwork.networkInfo.isConnected()) {
-                // Cancel any lingering so the linger timeout doesn't teardown this network
-                // even though we have a request for it.
-                bestNetwork.networkLingered.clear();
-                bestNetwork.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_CONNECTED);
+        if (mNetworkForRequestId.get(nri.request.requestId)!=null) {
+            if (DBG) log("ignoring duplicate request");
+        } else {
+            if (bestNetwork != null) {
+                if (VDBG) log("using " + bestNetwork.name());
+                if (nri.isRequest && bestNetwork.networkInfo.isConnected()) {
+                    // Cancel any lingering so the linger timeout doesn't teardown this network
+                    // even though we have a request for it.
+                    bestNetwork.networkLingered.clear();
+                    bestNetwork.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_CONNECTED);
+                }
+                bestNetwork.addRequest(nri.request);
+                mNetworkForRequestId.put(nri.request.requestId, bestNetwork);
+                notifyNetworkCallback(bestNetwork, nri);
+                score = bestNetwork.currentScore;
+                if (nri.isRequest && nri.request.legacyType != TYPE_NONE) {
+                    //To support legacy calls for network request
+                    mLegacyTypeTracker.add(nri.request.legacyType, bestNetwork);
+                }
             }
-            // TODO: This logic may be better replaced with a call to rematchNetworkAndRequests
-            bestNetwork.addRequest(nri.request);
-            mNetworkForRequestId.put(nri.request.requestId, bestNetwork);
-            notifyNetworkCallback(bestNetwork, nri);
-            score = bestNetwork.getCurrentScore();
-            if (nri.request.legacyType != TYPE_NONE) {
-                mLegacyTypeTracker.add(nri.request.legacyType, bestNetwork);
-            }
-        }
-        mNetworkRequests.put(nri.request, nri);
-        if (nri.isRequest) {
-            if (DBG) log("sending new NetworkRequest to factories");
-            for (NetworkFactoryInfo nfi : mNetworkFactoryInfos.values()) {
-                nfi.asyncChannel.sendMessage(android.net.NetworkFactory.CMD_REQUEST_NETWORK, score,
-                        0, nri.request);
+            mNetworkRequests.put(nri.request, nri);
+            if (nri.isRequest) {
+                if (DBG) log("sending new NetworkRequest to factories");
+                for (NetworkFactoryInfo nfi : mNetworkFactoryInfos.values()) {
+                    nfi.asyncChannel.sendMessage(android.net.NetworkFactory.CMD_REQUEST_NETWORK,
+                            score, 0, nri.request);
+                }
             }
         }
     }
-
     private void handleReleaseNetworkRequest(NetworkRequest request, int callingUid) {
         NetworkRequestInfo nri = mNetworkRequests.get(request);
         if (nri != null) {
