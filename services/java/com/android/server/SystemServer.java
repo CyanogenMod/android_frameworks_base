@@ -957,7 +957,7 @@ public final class SystemServer {
                     Slog.i(TAG, "WipowerBatteryControl Service");
 
                     PathClassLoader wbcClassLoader =
-                        new PathClassLoader("system/framework/com.quicinc.wbc.jar:system/framework/com.quicinc.wbcservice.jar",
+                        new PathClassLoader("/system/framework/com.quicinc.wbc.jar:/system/framework/com.quicinc.wbcservice.jar",
                                             ClassLoader.getSystemClassLoader());
                     Class wbcClass = wbcClassLoader.loadClass("com.quicinc.wbcservice.WbcService");
                     Constructor<Class> ctor = wbcClass.getConstructor(Context.class);
