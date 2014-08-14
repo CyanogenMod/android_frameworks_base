@@ -6174,6 +6174,12 @@ public final class Settings {
         public static final String STATUSBAR_SIGNAL_SHOW_4G_FOR_LTE = "statusbar_signal_show_4g_for_lte";
 
         /**
+         * Show call recording button in incallui (default = 0)
+         * @hide
+         */
+        public static final String ALLOW_CALL_RECORDING = "allow_call_recording";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
