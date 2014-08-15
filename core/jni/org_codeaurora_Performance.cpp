@@ -39,13 +39,10 @@
 #include <cutils/properties.h>
 #include <utils/Log.h>
 
-#define LIBRARY_PATH_PREFIX	"/vendor/lib/"
-
 namespace android
 {
 
 // ----------------------------------------------------------------------------
-static int  (*cpu_setoptions)(int, int)             = NULL;
 static int  (*perf_lock_acq)(int, int, int[], int)  = NULL;
 static int  (*perf_lock_rel)(int)                   = NULL;
 static void *dlhandle                               = NULL;
@@ -56,7 +53,6 @@ static void
 org_codeaurora_performance_native_init()
 {
     const char *rc;
-    void (*init)(void);
     char buf[PROPERTY_VALUE_MAX];
     int len;
 
@@ -67,22 +63,15 @@ org_codeaurora_performance_native_init()
 
     /* Sanity check - ensure */
     buf[PROPERTY_VALUE_MAX-1] = '\0';
-    if ((strncmp(buf, LIBRARY_PATH_PREFIX, sizeof(LIBRARY_PATH_PREFIX) - 1) != 0)
-        ||
-        (strstr(buf, "..") != NULL)) {
+    if (strstr(buf, "/") != NULL) {
         return;
     }
+
 
     dlhandle = dlopen(buf, RTLD_NOW | RTLD_LOCAL);
+
     if (dlhandle == NULL) {
         return;
-    }
-
-    dlerror();
-
-    cpu_setoptions = (int (*) (int, int))dlsym(dlhandle, "perf_cpu_setoptions");
-    if ((rc = dlerror()) != NULL) {
-        goto cleanup;
     }
 
     perf_lock_acq = (int (*) (int, int, int[], int))dlsym(dlhandle, "perf_lock_acq");
@@ -95,15 +84,9 @@ org_codeaurora_performance_native_init()
         goto cleanup;
     }
 
-    init = (void (*) ())dlsym(dlhandle, "libqc_opt_init");
-    if ((rc = dlerror()) != NULL) {
-        goto cleanup;
-    }
-    (*init)();
     return;
 
 cleanup:
-    cpu_setoptions = NULL;
     perf_lock_acq  = NULL;
     perf_lock_rel  = NULL;
     if (dlhandle) {
@@ -115,31 +98,13 @@ cleanup:
 static void
 org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
 {
-    void (*deinit)(void);
-
     if (dlhandle) {
-        cpu_setoptions = NULL;
         perf_lock_acq  = NULL;
         perf_lock_rel  = NULL;
-
-        deinit = (void (*) ())dlsym(dlhandle, "libqc_opt_deinit");
-        if (deinit) {
-            (*deinit)();
-        }
 
         dlclose(dlhandle);
         dlhandle       = NULL;
     }
-}
-
-static jint
-org_codeaurora_performance_native_cpu_setoptions(JNIEnv *env, jobject clazz,
-                                                 jint reqtype, jint reqvalue)
-{
-    if (cpu_setoptions) {
-        return (*cpu_setoptions)(reqtype, reqvalue);
-    }
-    return 0;
 }
 
 static jint
@@ -173,10 +138,8 @@ org_codeaurora_performance_native_perf_lock_rel(JNIEnv *env, jobject clazz, jint
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
-    {"native_cpu_setoptions", "(II)I",                 (int *)org_codeaurora_performance_native_cpu_setoptions},
     {"native_perf_lock_acq",  "(II[I)I",               (int *)org_codeaurora_performance_native_perf_lock_acq},
     {"native_perf_lock_rel",  "(I)I",                  (int *)org_codeaurora_performance_native_perf_lock_rel},
-    {"native_deinit",         "()V",                   (void *)org_codeaurora_performance_native_deinit},
 };
 
 

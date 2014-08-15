@@ -168,10 +168,8 @@ LOCAL_SRC_FILES:= \
 	com_android_internal_net_NetworkStatsFactory.cpp \
 	com_android_internal_os_Zygote.cpp \
 	com_android_internal_util_VirtualRefBasePtr.cpp \
-	com_android_internal_view_animation_NativeInterpolatorFactoryHelper.cpp
-    ifeq ($(call is-vendor-board-platform,QCOM),true)
-    LOCAL_SRC_FILES += org_codeaurora_Performance.cpp
-    endif
+	com_android_internal_view_animation_NativeInterpolatorFactoryHelper.cpp \
+	org_codeaurora_Performance.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
