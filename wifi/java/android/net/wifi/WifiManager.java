@@ -2471,6 +2471,19 @@ public class WifiManager {
     }
 
     /**
+     * Set wifi rssi threshold. Called from advance wifi settings.
+     * @hide
+     */
+    public void enableRssiThreshold (int enabled) {
+        try {
+            mService.enableRssiThreshold(enabled);
+        } catch (Exception e) {
+            //ignore any failure here
+            Log.e(TAG, "enableRssiThreshold " + e.toString());
+        }
+    }
+
+    /**
      * Get the WiFi verbose logging level.This is used by settings
      * to decide what to show within the picker.
      * @hide
