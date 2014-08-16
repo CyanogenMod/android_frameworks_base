@@ -67,6 +67,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "SettingsProvider";
     private static final String DATABASE_NAME = "settings.db";
 
+    private static final int TYPE_NONE = -1;
+
     // Please, please please. If you update the database version, check to make sure the
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
@@ -2299,6 +2301,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
+            loadStringSetting(stmt, Settings.System.TIME_12_24,
+                    R.string.def_time_format);
+
+            loadStringSetting(stmt, Settings.System.DATE_FORMAT,
+                    R.string.def_date_format);
+
             loadIntegerSetting(stmt, Settings.System.DEV_FORCE_SHOW_NAVBAR,
                     R.integer.def_force_disable_navkeys);
 
@@ -2354,7 +2362,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // Allow mock locations default, based on build
             loadSetting(stmt, Settings.Secure.ALLOW_MOCK_LOCATION,
-                    "1".equals(SystemProperties.get("ro.allow.mock.location")) ? 1 : 0);
+                    "1".equals(SystemProperties.get("persist.env.c.allow.enable")) ? 1 : 0);
 
             loadSecure35Settings(stmt);
 
@@ -2436,6 +2444,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.Secure.SLEEP_TIMEOUT,
                     R.integer.def_sleep_timeout);
+
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_input_method))) {
+                loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
+                        R.string.def_input_method);
+            }
+
+            if (!TextUtils.isEmpty(mContext.getResources().getString(
+                    R.string.def_enable_input_methods))) {
+                loadStringSetting(stmt, Settings.Secure.ENABLED_INPUT_METHODS,
+                        R.string.def_enable_input_methods);
+            }
+
+            // for accessibility enabled
+            loadStringSetting(stmt, Settings.Secure.ACCESSIBILITY_ENABLED,
+                    R.integer.def_enable_accessiblity);
+            loadStringSetting(stmt, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
+                    R.string.def_enable_accessiblity_services);
         } finally {
             if (stmt != null) stmt.close();
         }
@@ -2520,10 +2545,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     RILConstants.CDMA_CELL_BROADCAST_SMS_DISABLED);
 
             // Data roaming default, based on build
-            loadSetting(stmt, Settings.Global.DATA_ROAMING,
-                    "true".equalsIgnoreCase(
-                            SystemProperties.get("ro.com.android.dataroaming",
-                                    "false")) ? 1 : 0);
+            loadBooleanSetting(stmt, Settings.Global.DATA_ROAMING,
+                    R.bool.def_enable_data_roaming);
 
             loadBooleanSetting(stmt, Settings.Global.DEVICE_PROVISIONED,
                     R.bool.def_device_provisioned);
@@ -2543,22 +2566,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
 
             // Mobile Data default, based on build
-            loadSetting(stmt, Settings.Global.MOBILE_DATA,
-                    "true".equalsIgnoreCase(
-                            SystemProperties.get("ro.com.android.mobiledata",
-                                    "true")) ? 1 : 0);
+            loadBooleanSetting(stmt, Settings.Global.MOBILE_DATA,
+                    R.bool.def_enable_mobile_data);
 
+            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
             // SUB specific flags for Multisim devices
             for (int phoneId = 0; phoneId < MAX_PHONE_COUNT; phoneId++) {
                 // Mobile Data default, based on build
-                loadSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
-                        "true".equalsIgnoreCase(
-                        SystemProperties.get("ro.com.android.mobiledata", "true")) ? 1 : 0);
+                loadBooleanSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
+                        R.bool.def_enable_mobile_data);
 
                 // Data roaming default, based on build
-                loadSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
-                        "true".equalsIgnoreCase(
-                        SystemProperties.get("ro.com.android.dataroaming", "true")) ? 1 : 0);
+                loadBooleanSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
+                        R.bool.def_enable_data_roaming);
             }
 
             loadBooleanSetting(stmt, Settings.Global.NETSTATS_ENABLED,
@@ -2595,6 +2615,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.string.def_car_undock_sound);
             loadStringSetting(stmt, Settings.Global.WIRELESS_CHARGING_STARTED_SOUND,
                     R.string.def_wireless_charging_started_sound);
+            loadIntegerSetting(stmt, Settings.Global.DOCK_AUDIO_MEDIA_ENABLED,
+                    R.integer.def_dock_audio_media_enabled);
 
             loadIntegerSetting(stmt, Settings.Global.DOCK_AUDIO_MEDIA_ENABLED,
                     R.integer.def_dock_audio_media_enabled);
@@ -2612,9 +2634,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Set the preferred network mode to target desired value or Default
             // value defined in RILConstants
             int type;
-            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
-            type = SystemProperties.getInt("ro.telephony.default_network",
+            type = SystemProperties.getInt("persist.radio.default_network", -1);
+            if (type == TYPE_NONE) {
+                type = SystemProperties.getInt("ro.telephony.default_network",
                         RILConstants.PREFERRED_NETWORK_MODE);
+            }
             String val = Integer.toString(type);
             for (int phoneId = 1; phoneId < phoneCount; phoneId++) {
                 val = val + "," + type;
