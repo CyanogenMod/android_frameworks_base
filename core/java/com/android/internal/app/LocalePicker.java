@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LocalePicker extends ListFragment {
     private static final String TAG = "LocalePicker";
@@ -83,11 +87,23 @@ public class LocalePicker extends ListFragment {
         }
     }
 
+    public static ArrayList<String> getLocaleArray(String[] locales, Resources resources) {
+        String locale_codes = resources.getString(R.string.locale_codes);
+        String[] localeCodesArray = null;
+        if (locale_codes != null && !"".equals(locale_codes.trim())) {
+            localeCodesArray = locale_codes.split(",");
+        }
+        ArrayList<String> localeList = new ArrayList<String>(
+            Arrays.asList((localeCodesArray == null || localeCodesArray.length == 0) ? locales
+                : localeCodesArray));
+        return localeList;
+    }
+
     public static List<LocaleInfo> getAllAssetLocales(Context context, boolean isInDeveloperMode) {
         final Resources resources = context.getResources();
 
-        final String[] locales = Resources.getSystem().getAssets().getLocales();
-        List<String> localeList = new ArrayList<String>(locales.length);
+        String[] locales = Resources.getSystem().getAssets().getLocales();
+        ArrayList<String> localeList = getLocaleArray(locales, resources);
         Collections.addAll(localeList, locales);
 
         // Don't show the pseudolocales unless we're in developer mode. http://b/17190407.
