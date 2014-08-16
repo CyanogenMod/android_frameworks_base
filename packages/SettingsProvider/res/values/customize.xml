@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2014, The Linux Foundation. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of The Linux Foundation nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<resources>
+
+    <!-- Time format,default vlaue is 24 : 24 format,other value is 12 format -->
+    <string name="def_time_format" translatable="false">24</string>
+
+    <!-- Date format,yyyy-MM-dd: 2013/07/30; MM-dd-yyyy:07/30/2013; dd-MM-yyyy:30/07/2013 -->
+    <string name="def_date_format" translatable="false">MM-dd-yyyy</string>
+
+    <!--
+         Default Input Method, its value is from inputmethod's package name and main class name
+              such as "com.android.inputmethod.pinyin/.PinyinIME"
+    -->
+    <string name="def_input_method" translatable="false"></string>
+
+    <!-- Default for Settings.Global.DATA_ROAMING -->
+    <bool name="def_enable_data_roaming">true</bool>
+
+    <!-- Default for Settings.Global.MOBILE_DATA -->
+    <bool name="def_enable_mobile_data">true</bool>
+
+    <!--
+        Default Enable InputMethods, its value is from inputmethod's package name and main class name
+              such as "com.android.inputmethod.pinyin/.PinyinIME" ;This is a string
+         containing the IDs of all enabled input methods, each ID separated by ':'.
+    -->
+    <string name="def_enable_input_methods" translatable="false"></string>
+
+    <!-- enable accessiblity or not,1:enable;0:disable -->
+    <integer name="def_enable_accessiblity" translatable="false">0</integer>
+
+    <!-- for enable accessiblity services,split by ":" ,example "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService" -->
+    <string name="def_enable_accessiblity_services" translatable="false"></string>
+
+</resources>
