@@ -29,15 +29,44 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources>
 
-    <!--
-    customize the default value to instead of persist.env.spec,
-    default value is false, true is for enable spn rule
+    <!-- Time format. Default value is 24, other value is 12 -->
+    <string name="def_time_format" translatable="false">24</string>
+
+    <!-- Date format:
+        yyyy-MM-dd = 2013/07/30
+        MM-dd-yyyy = 07/30/2013
+        dd-MM-yyyy = 30/07/2013
     -->
-    <bool name="def_telephony_spn_spec_enabled">false</bool>
+    <string name="def_date_format" translatable="false">MM-dd-yyyy</string>
 
-    <!-- Used in LocalePicker, default language must be contained -->
-    <string name="locale_codes" translatable="false"></string>
+    <!--
+         Default Input Method, its value is from inputmethod's package name and
+         main class name, such as "com.android.inputmethod.pinyin/.PinyinIME"
+    -->
+    <string name="def_input_method" translatable="false"></string>
 
-    <!-- custom date format or not  -->
-    <bool name="def_custom_dateformat">false</bool>
+    <!-- Default for Settings.Global.DATA_ROAMING -->
+    <bool name="def_enable_data_roaming">true</bool>
+
+    <!-- Default for Settings.Global.MOBILE_DATA -->
+    <bool name="def_enable_mobile_data">true</bool>
+
+    <!--
+        Default Enable InputMethods, its value is from inputmethod's package
+        name and main class name such as
+        "com.android.inputmethod.pinyin/.PinyinIME".
+        This is a string containing the IDs of all enabled input methods, each
+        ID separated by ':'.
+    -->
+    <string name="def_enable_input_methods" translatable="false"></string>
+
+    <!-- enable accessiblity, 1:enable; 0:disable -->
+    <integer name="def_enable_accessiblity" translatable="false">0</integer>
+
+    <!-- for enable accessiblity services, split by ":". Example:
+    "com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
+    -->
+    <string name="def_enable_accessiblity_services"
+        translatable="false"></string>
+
 </resources>
