@@ -46,6 +46,7 @@ public class SignalClusterView
     private int mWifiStrengthId = 0;
     private boolean mMobileVisible = false;
     private int mMobileStrengthId = 0, mMobileTypeId = 0;
+    private int mNoSimIconId = 0;
     private boolean mIsAirplaneMode = false;
     private int mAirplaneIconId = 0;
     private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
@@ -53,7 +54,7 @@ public class SignalClusterView
     private boolean mIsMobileTypeIconWide;
 
     ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mVpn, mWifi, mMobile, mMobileType, mAirplane;
+    ImageView mVpn, mWifi, mMobile, mMobileType, mAirplane, mNoSimSlot;
     View mWifiAirplaneSpacer;
     View mWifiSignalSpacer;
 
@@ -100,6 +101,7 @@ public class SignalClusterView
         mMobileGroup    = (ViewGroup) findViewById(R.id.mobile_combo);
         mMobile         = (ImageView) findViewById(R.id.mobile_signal);
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
+        mNoSimSlot      = (ImageView) findViewById(R.id.no_sim);
         mAirplane       = (ImageView) findViewById(R.id.airplane);
         mWifiAirplaneSpacer =         findViewById(R.id.wifi_airplane_spacer);
         mWifiSignalSpacer =           findViewById(R.id.wifi_signal_spacer);
@@ -115,6 +117,7 @@ public class SignalClusterView
         mMobileGroup    = null;
         mMobile         = null;
         mMobileType     = null;
+        mNoSimSlot      = null;
         mAirplane       = null;
 
         super.onDetachedFromWindow();
@@ -144,7 +147,7 @@ public class SignalClusterView
     @Override
     public void setMobileDataIndicators(boolean visible, int strengthIcon, int typeIcon,
             String contentDescription, String typeContentDescription, boolean roaming,
-            boolean isTypeIconWide) {
+            boolean isTypeIconWide, int noSimIcon) {
         mMobileVisible = visible;
         mMobileStrengthId = strengthIcon;
         mMobileTypeId = typeIcon;
@@ -152,6 +155,7 @@ public class SignalClusterView
         mMobileTypeDescription = typeContentDescription;
         mRoaming = roaming;
         mIsMobileTypeIconWide = isTypeIconWide;
+        mNoSimIconId = noSimIcon;
 
         apply();
     }
@@ -227,6 +231,7 @@ public class SignalClusterView
             mMobileType.setImageResource(mMobileTypeId);
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
             mMobileGroup.setVisibility(View.VISIBLE);
+            mNoSimSlot.setImageResource(mNoSimIconId);
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
@@ -238,7 +243,7 @@ public class SignalClusterView
             mAirplane.setVisibility(View.GONE);
         }
 
-        if (mIsAirplaneMode && mWifiVisible) {
+        if (mWifiVisible && ((mIsAirplaneMode) || (mNoSimIconId != 0))) {
             mWifiAirplaneSpacer.setVisibility(View.VISIBLE);
         } else {
             mWifiAirplaneSpacer.setVisibility(View.GONE);
