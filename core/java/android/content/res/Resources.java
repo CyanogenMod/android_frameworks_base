@@ -17,6 +17,7 @@
 package android.content.res;
 
 import android.app.ComposedIconInfo;
+import android.app.IconPackHelper;
 import com.android.internal.util.XmlUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -1184,8 +1185,8 @@ public class Resources {
         }
         boolean found = mAssets.getResourceValue(id, 0, outValue, resolveRefs);
         if (found) {
-            if (supportComposedIcons && mComposedIconInfo != null && info != null &&
-                    info.themedIcon == 0) {
+            if (supportComposedIcons && IconPackHelper.shouldComposeIcon(mComposedIconInfo)
+                    && info != null && info.themedIcon == 0) {
                 Drawable dr = loadDrawable(outValue, id);
                 IconCustomizer.getValue(this, id, outValue, dr);
             }
@@ -1222,8 +1223,8 @@ public class Resources {
         }
         boolean found = mAssets.getResourceValue(id, density, outValue, resolveRefs);
         if (found) {
-            if (supportComposedIcons && mComposedIconInfo != null && info != null &&
-                    info.themedIcon == 0) {
+            if (supportComposedIcons && IconPackHelper.shouldComposeIcon(mComposedIconInfo) &&
+                    info != null && info.themedIcon == 0) {
                 Drawable dr = loadDrawable(outValue, id);
                 IconCustomizer.getValue(this, id, outValue, dr);
             }

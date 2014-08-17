@@ -425,6 +425,12 @@ public class IconPackHelper {
         return mLoadedIconPackResource.getDrawableForDensity(id, density, false);
     }
 
+    public static boolean shouldComposeIcon(ComposedIconInfo iconInfo) {
+        return iconInfo != null &&
+                (iconInfo.iconBacks != null || iconInfo.iconMask != 0 ||
+                        iconInfo.iconUpon != 0 || iconInfo.colorFilter != null);
+    }
+
     public static class IconCustomizer {
         private static final Random sRandom = new Random();
         private static final IThemeService sThemeService;
