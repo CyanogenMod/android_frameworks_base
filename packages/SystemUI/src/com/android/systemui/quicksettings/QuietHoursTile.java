@@ -25,8 +25,6 @@ public class QuietHoursTile extends QuickSettingsTile {
 
     private boolean mEnabled;
     private boolean mForced;
-    private int mStart;
-    private int mEnd;
     private QuietHoursReceiver mReceiver;
 
     public QuietHoursTile(Context context, QuickSettingsController qsc) {
@@ -88,10 +86,6 @@ public class QuietHoursTile extends QuickSettingsTile {
                 Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
         mForced = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QUIET_HOURS_FORCED, 0, UserHandle.USER_CURRENT) == 1;
-        mStart = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_START, 0, UserHandle.USER_CURRENT);
-        mEnd = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_END, 0, UserHandle.USER_CURRENT);
 
         updateTile();
         super.updateResources();
@@ -114,6 +108,9 @@ public class QuietHoursTile extends QuickSettingsTile {
         Settings.System.putIntForUser(mContext.getContentResolver(),
                 Settings.System.QUIET_HOURS_FORCED,
                 mForced ? 1 : 0, UserHandle.USER_CURRENT);
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_ENABLED_TEMP,
+                0, UserHandle.USER_CURRENT);
     }
 
     private synchronized void updateTile() {
@@ -121,8 +118,10 @@ public class QuietHoursTile extends QuickSettingsTile {
         PendingIntent alarmIntent = getAlarmIntent();
 
         if (mEnabled && !mForced) {
+            // update the hours, start and end
+            boolean isInQuietHours = QuietHoursUtils.inQuietHours(mContext);
             // Set an alarm for the next trigger time or cancel
-            long trigger = getNextTriggerTimeInMillis(mStart, mEnd);
+            long trigger = getNextTriggerTimeInMillis(QuietHoursUtils.getQuietHoursStart(), QuietHoursUtils.getQuietHoursEnd());
             if (trigger != 0) {
                 am.set(AlarmManager.RTC, trigger, alarmIntent);
             } else {
@@ -130,7 +129,7 @@ public class QuietHoursTile extends QuickSettingsTile {
             }
 
             // Update the UI elements
-            if (QuietHoursUtils.inQuietHours(mStart, mEnd)) {
+            if (isInQuietHours) {
                 mDrawable = R.drawable.ic_qs_quiet_hours_on_timed;
             } else {
                 mDrawable = R.drawable.ic_qs_quiet_hours_off_timed;
