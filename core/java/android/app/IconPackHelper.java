@@ -720,7 +720,7 @@ public class IconPackHelper {
         }
 
         public static ColorMatrix adjustSaturation(float saturation) {
-            saturation = Math.min(Math.max(saturation / 100, 0), 2);
+            saturation = saturation / 100;
             ColorMatrix cm = new ColorMatrix();
             cm.setSaturation(saturation);
 
@@ -739,7 +739,7 @@ public class IconPackHelper {
         }
 
         public static ColorMatrix adjustBrightness(float brightness) {
-            brightness = Math.min(Math.max(brightness / 100, 0), 1);
+            brightness = brightness / 100;
             ColorMatrix cm = new ColorMatrix();
             cm.setScale(brightness, brightness, brightness, 1);
 
@@ -747,7 +747,7 @@ public class IconPackHelper {
         }
 
         public static ColorMatrix adjustContrast(float contrast) {
-            contrast = Math.min(Math.max(contrast / 100, 0), 1) + 1;
+            contrast = contrast / 100 + 1;
             float o = (-0.5f * contrast + 0.5f) * 255;
             float[] matrix = {
                     contrast, 0, 0, 0, o, //red
@@ -760,7 +760,7 @@ public class IconPackHelper {
         }
 
         public static ColorMatrix adjustAlpha(float alpha) {
-            alpha = Math.min(Math.max(alpha / 100, 0), 1);
+            alpha = alpha / 100;
             ColorMatrix cm = new ColorMatrix();
             cm.setScale(1, 1, 1, alpha);
 
