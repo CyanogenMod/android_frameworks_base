@@ -6223,6 +6223,20 @@ public final class Settings {
         public static final String ALLOW_CALL_RECORDING = "allow_call_recording";
 
         /**
+         * whether to colorize the account icons of the settings app root list
+         *
+         * @hide
+         */
+        public static final String SETTINGS_ROOT_LIST_COLORIZE_ACCOUNT_ICONS = "settings_root_list_colorize_account_icons";
+
+        /**
+         * Colors of the settings app root list icons
+         *
+         * @hide
+         */
+        public static final String SETTINGS_ROOT_LIST_ICON_COLOR = "settings_root_list_icon_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
