@@ -3214,6 +3214,12 @@ public final class Settings {
          * @hide
          */
         public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
+        
+        /**
+         * Whether to enable quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_ENABLED_TEMP = "quiet_hours_enabled_temp";
 
         /**
          * Sets when quiet hours starts. This is stored in minutes from the start of the day.
@@ -3226,6 +3232,18 @@ public final class Settings {
          * @hide
          */
         public static final String QUIET_HOURS_END = "quiet_hours_end";
+        
+        /**
+         * Sets when quiet hours starts. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String QUIET_HOURS_START_TEMP = "quiet_hours_start_temp";
+        
+        /**
+         * Sets when quiet hours end. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String QUIET_HOURS_END_TEMP = "quiet_hours_end_temp";
 
         /**
          * Whether to remove the sound from phone ringing during quiet hours.

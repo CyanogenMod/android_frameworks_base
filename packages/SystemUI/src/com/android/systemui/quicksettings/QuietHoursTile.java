@@ -114,6 +114,9 @@ public class QuietHoursTile extends QuickSettingsTile {
         Settings.System.putIntForUser(mContext.getContentResolver(),
                 Settings.System.QUIET_HOURS_FORCED,
                 mForced ? 1 : 0, UserHandle.USER_CURRENT);
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.QUIET_HOURS_ENABLED_TEMP,
+                0, UserHandle.USER_CURRENT);
     }
 
     private synchronized void updateTile() {
