@@ -21,6 +21,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.telephony.SignalStrength;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.NetworkController;
@@ -60,7 +61,7 @@ public class SignalClusterTextView extends LinearLayout implements
     }
 
     private String getSignalLevelString(int dBm) {
-        if (dBm == 0) {
+        if (dBm == 0 || dBm == SignalStrength.INVALID) {
             return "-\u221e"; // -oo ('minus infinity')
         }
         return Integer.toString(dBm);
