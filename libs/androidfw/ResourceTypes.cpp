@@ -3547,6 +3547,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
             checkOverlay = false;
             ip++;
         }
+        uint32_t originalResID = 0;
         if (package->header->resourceIDMap) {
             if (performMapping) {
                 uint32_t overlayResID = 0x0;
@@ -3558,6 +3559,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
                     ALOGV("resource map 0x%08x -> 0x%08x\n", resID, overlayResID);
                     T = Res_GETTYPE(overlayResID);
                     E = Res_GETENTRY(overlayResID);
+                    originalResID = resID;
                     resID = overlayResID;
                 } else {
                     // resource not present in overlay package, continue with the next package
@@ -3746,6 +3748,71 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         };
         if (curEntry > set->numAttrs) {
             set->numAttrs = curEntry;
+        }
+
+        // If this style was overridden by a theme then we need to compare our bag with
+        // the bag from the original and add any missing attributes to our bag
+        if (originalResID && originalResID != resID) {
+            const bag_entry* originalBag;
+            uint32_t originalTypeSpecFlags = 0;
+            const ssize_t NO = getBagLocked(originalResID, &originalBag,
+                    &originalTypeSpecFlags, false);
+            if (NO <= 0) {
+                ALOGW("Failed to retrieve original bag for 0x%08x", originalResID);
+            }
+
+            // Now merge in the original attributes...
+            bag_entry* entries = (bag_entry*)(set+1);
+            size_t curEntry = 0;
+            uint32_t pos = 0;
+            for (int i = 0; i < NO; i++) {
+                TABLE_NOISY(printf("Now at %d\n", i));
+                const uint32_t newName = originalBag[i].map.name.ident;
+                bool isInside;
+                uint32_t oldName = 0;
+                curEntry = 0;
+
+                while ((isInside=(curEntry < set->numAttrs))
+                        && (oldName=entries[curEntry].map.name.ident) < newName) {
+                    curEntry++;
+                }
+
+                if ((!isInside) || oldName != newName) {
+                    // This is a new attribute...  figure out what to do with it.
+                    // Need to alloc more memory...
+                    curEntry = set->availAttrs;
+                    set->availAttrs++;
+                    const size_t newAvail = set->availAttrs;
+                    set = (bag_set*)realloc(set,
+                                            sizeof(bag_set)
+                                            + sizeof(bag_entry)*newAvail);
+                    if (set == NULL) {
+                        return NO_MEMORY;
+                    }
+                    entries = (bag_entry*)(set+1);
+                    TABLE_NOISY(printf("Reallocated set %p, entries=%p, avail=%d\n",
+                                 set, entries, set->availAttrs));
+                    if (isInside) {
+                        // Going in the middle, need to make space.
+                        memmove(entries+curEntry+1, entries+curEntry,
+                                sizeof(bag_entry)*(set->numAttrs-curEntry));
+                    }
+                    TABLE_NOISY(printf("#%d: Inserting new attribute: 0x%08x\n",
+                                 curEntry, newName));
+
+                    bag_entry* cur = entries+curEntry;
+
+                    cur->stringBlock = originalBag[i].stringBlock;
+                    cur->map.name.ident = originalBag[i].map.name.ident;
+                    cur->map.value = originalBag[i].map.value;
+                    set->typeSpecFlags |= originalTypeSpecFlags;
+                    set->numAttrs = set->availAttrs;
+                    TABLE_NOISY(printf("Setting entry #%d %p: block=%d, name=0x%08x, type=%d, \
+                                 data=0x%08x\n",
+                                 curEntry, cur, cur->stringBlock, cur->map.name.ident,
+                                 cur->map.value.dataType, cur->map.value.data));
+                }
+            };
         }
     }
 
