@@ -1225,7 +1225,27 @@ public class Resources {
         if (found) {
             if (supportComposedIcons && IconPackHelper.shouldComposeIcon(mComposedIconInfo) &&
                     info != null && info.themedIcon == 0) {
+                int tmpDensity = outValue.density;
+                /*
+                 * Pretend the requested density is actually the display density. If
+                 * the drawable returned is not the requested density, then force it
+                 * to be scaled later by dividing its density by the ratio of
+                 * requested density to actual device density. Drawables that have
+                 * undefined density or no density don't need to be handled here.
+                 */
+                if (outValue.density > 0 && outValue.density != TypedValue.DENSITY_NONE) {
+                    if (outValue.density == density) {
+                        outValue.density = mMetrics.densityDpi;
+                    } else {
+                        outValue.density = (outValue.density * mMetrics.densityDpi) / density;
+                    }
+                }
                 Drawable dr = loadDrawable(outValue, id);
+
+                // Return to original density. If we do not do this then
+                // the caller will get the wrong density for the given id and perform
+                // more of its own scaling in loadDrawable
+                outValue.density = tmpDensity;
                 IconCustomizer.getValue(this, id, outValue, dr);
             }
             return;
