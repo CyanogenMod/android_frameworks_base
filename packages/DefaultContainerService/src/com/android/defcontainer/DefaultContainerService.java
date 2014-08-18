@@ -717,7 +717,7 @@ public class DefaultContainerService extends IntentService {
             prefer = PREFER_INTERNAL;
         }
 
-        final boolean emulated = Environment.isExternalStorageEmulated();
+        final boolean noemulated = Environment.isNoEmulatedStorageExist();
 
         final File apkFile = new File(archiveFilePath);
 
@@ -731,7 +731,7 @@ public class DefaultContainerService extends IntentService {
         }
 
         boolean fitsOnSd = false;
-        if (!emulated && (checkBoth || prefer == PREFER_EXTERNAL)) {
+        if (noemulated && (checkBoth || prefer == PREFER_EXTERNAL)) {
             try {
                 fitsOnSd = isUnderExternalThreshold(apkFile, isForwardLocked);
             } catch (IOException e) {
@@ -743,7 +743,7 @@ public class DefaultContainerService extends IntentService {
             if (fitsOnInternal) {
                 return PackageHelper.RECOMMEND_INSTALL_INTERNAL;
             }
-        } else if (!emulated && prefer == PREFER_EXTERNAL) {
+        } else if (noemulated && prefer == PREFER_EXTERNAL) {
             if (fitsOnSd) {
                 return PackageHelper.RECOMMEND_INSTALL_EXTERNAL;
             }
@@ -752,7 +752,7 @@ public class DefaultContainerService extends IntentService {
         if (checkBoth) {
             if (fitsOnInternal) {
                 return PackageHelper.RECOMMEND_INSTALL_INTERNAL;
-            } else if (!emulated && fitsOnSd) {
+            } else if (noemulated && fitsOnSd) {
                 return PackageHelper.RECOMMEND_INSTALL_EXTERNAL;
             }
         }
@@ -762,8 +762,8 @@ public class DefaultContainerService extends IntentService {
          * the media was unavailable. Otherwise, indicate there was insufficient
          * storage space available.
          */
-        if (!emulated && (checkBoth || prefer == PREFER_EXTERNAL)
-                && !Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (noemulated && (checkBoth || prefer == PREFER_EXTERNAL)
+                && !Environment.MEDIA_MOUNTED.equals(Environment.getSecondaryStorageState())) {
             return PackageHelper.RECOMMEND_MEDIA_UNAVAILABLE;
         } else {
             return PackageHelper.RECOMMEND_FAILED_INSUFFICIENT_STORAGE;
@@ -806,17 +806,17 @@ public class DefaultContainerService extends IntentService {
      */
     private boolean isUnderExternalThreshold(File apkFile, boolean isForwardLocked)
             throws IOException {
-        if (Environment.isExternalStorageEmulated()) {
+        if (!Environment.isNoEmulatedStorageExist()) {
             return false;
         }
 
         final int sizeMb = calculateContainerSize(apkFile, isForwardLocked);
 
         final int availSdMb;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            final StatFs sdStats = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getSecondaryStorageState())) {
+            final StatFs sdStats = new StatFs(Environment.getSecondaryStorageDirectory().getPath());
             final int blocksToMb = (1 << 20) / sdStats.getBlockSize();
-            availSdMb = sdStats.getAvailableBlocks() * blocksToMb;
+            availSdMb = sdStats.getAvailableBlocks() / blocksToMb;
         } else {
             availSdMb = -1;
         }

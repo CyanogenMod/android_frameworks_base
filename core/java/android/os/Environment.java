@@ -70,6 +70,7 @@ public class Environment {
 
     @GuardedBy("sLock")
     private static volatile StorageVolume sPrimaryVolume;
+    private static volatile StorageVolume sNoEmulatedVolume;
 
     private static StorageVolume getPrimaryVolume() {
         if (SystemProperties.getBoolean("config.disable_storage", false)) {
@@ -91,6 +92,24 @@ public class Environment {
             }
         }
         return sPrimaryVolume;
+    }
+
+    private static StorageVolume getNoEmulatedVolume() {
+        if (sNoEmulatedVolume == null) {
+            synchronized (sLock) {
+                if (sNoEmulatedVolume == null) {
+                    try {
+                        IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                                .getService("mount"));
+                        final StorageVolume[] volumes = mountService.getVolumeList();
+                        sNoEmulatedVolume = StorageManager.getNoEmulatedVolume(volumes);
+                    } catch (Exception e) {
+                        Log.e(TAG, "couldn't talk to MountService", e);
+                    }
+                }
+            }
+        }
+        return sNoEmulatedVolume;
     }
 
     static {
@@ -176,6 +195,11 @@ public class Environment {
         @Deprecated
         public File getExternalStorageDirectory() {
             return mExternalDirsForApp[0];
+        }
+
+        /** {@hide} */
+        public File getSecondaryStorageDirectory() {
+            return mExternalDirsForApp[1];
         }
 
         @Deprecated
@@ -387,6 +411,12 @@ public class Environment {
     public static File getExternalStorageDirectory() {
         throwIfUserRequired();
         return sCurrentUser.getExternalDirsForApp()[0];
+    }
+
+    /** {@hide} */
+    public static File getSecondaryStorageDirectory() {
+        throwIfUserRequired();
+        return sCurrentUser.getExternalDirsForApp()[1];
     }
 
     /** {@hide} */
@@ -709,6 +739,12 @@ public class Environment {
         return getStorageState(externalDir);
     }
 
+    /** {@hide} */
+    public static String getSecondaryStorageState() {
+        final File externalDir = sCurrentUser.getExternalDirsForApp()[1];
+        return getStorageState(externalDir);
+    }
+
     /**
      * Returns the current state of the storage device that provides the given
      * path.
@@ -754,6 +790,12 @@ public class Environment {
     public static boolean isExternalStorageRemovable() {
         final StorageVolume primary = getPrimaryVolume();
         return (primary != null && primary.isRemovable());
+    }
+
+    /** {@hide} */
+    public static boolean isNoEmulatedStorageExist() {
+        final StorageVolume volume = getNoEmulatedVolume();
+        return (volume != null);
     }
 
     /**

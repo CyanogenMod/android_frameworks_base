@@ -6605,8 +6605,20 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         verificationParams.setInstallerUid(uid);
 
+        final int userFilteredFlags;
+
+        if (getInstallLocation() == PackageHelper.APP_INSTALL_INTERNAL) {
+            Slog.w(TAG, "PackageManager.INSTALL_INTERNAL"  );
+            userFilteredFlags = flags | PackageManager.INSTALL_INTERNAL;
+        } else if (getInstallLocation() == PackageHelper.APP_INSTALL_EXTERNAL) {
+            Slog.w(TAG, "PackageManager.INSTALL_EXTERNAL"  );
+            userFilteredFlags = flags | PackageManager.INSTALL_EXTERNAL;
+        } else{
+            userFilteredFlags = filteredFlags;
+        }
+
         final Message msg = mHandler.obtainMessage(INIT_COPY);
-        msg.obj = new InstallParams(packageURI, observer, filteredFlags, installerPackageName,
+        msg.obj = new InstallParams(packageURI, observer, userFilteredFlags, installerPackageName,
                 verificationParams, encryptionParams, user);
         mHandler.sendMessage(msg);
     }
@@ -7233,7 +7245,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (Environment.isExternalStorageEmulated()) {
                 mounted = true;
             } else {
-                final String status = Environment.getExternalStorageState();
+                final String status = Environment.getSecondaryStorageState();
                 mounted = (Environment.MEDIA_MOUNTED.equals(status)
                         || Environment.MEDIA_MOUNTED_READ_ONLY.equals(status));
             }

@@ -678,9 +678,9 @@ class MountService extends IMountService.Stub
 
         Slog.d(TAG, "volume state changed for " + path + " (" + oldState + " -> " + state + ")");
 
-        // Tell PackageManager about changes to primary volume state, but only
-        // when not emulated.
-        if (volume.isPrimary() && !volume.isEmulated()) {
+        // Tell PackageManager about changes, not only to primary volume,
+        // to all the non-emulated storage volumes
+        if (!volume.isEmulated()) {
             if (Environment.MEDIA_UNMOUNTED.equals(state)) {
                 mPms.updateExternalMediaStatus(false, false);
 
