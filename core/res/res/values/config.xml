@@ -1495,10 +1495,6 @@
     <!-- bool value to for enabling motion accelerometer -->
     <bool name="use_motion_accel">false</bool>
 
-    <!-- Net Traffic Meter-->
-    <integer name="config_networkSpeedIndicatorSingleLineFontSize">15</integer>
-    <integer name="config_networkSpeedIndicatorDualLineFontSize">10</integer>
-
     <!-- Override the default detection behavior for the framework method
          android.view.ViewConfiguration#hasPermanentMenuKey().
          Valid settings are:
