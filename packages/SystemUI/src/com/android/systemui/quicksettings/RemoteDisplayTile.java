@@ -1,17 +1,16 @@
 package com.android.systemui.quicksettings;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import android.content.Context;
-import android.content.Intent;
-import android.hardware.display.DisplayManager;
 import android.media.MediaRouter;
 import android.media.MediaRouter.RouteInfo;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
 public class RemoteDisplayTile extends QuickSettingsTile{
@@ -21,6 +20,7 @@ public class RemoteDisplayTile extends QuickSettingsTile{
     private final MediaRouter mMediaRouter;
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
     private MediaRouter.RouteInfo connectedRoute;
+    private final ExecutorService mExecutor;
 
     public RemoteDisplayTile(Context context, 
             QuickSettingsController qsc) {
@@ -35,7 +35,7 @@ public class RemoteDisplayTile extends QuickSettingsTile{
         };
         mMediaRouter = (MediaRouter)context.getSystemService(Context.MEDIA_ROUTER_SERVICE);
         mRemoteDisplayRouteCallback = new RemoteDisplayRouteCallback();
-
+        mExecutor = Executors.newSingleThreadExecutor();
     }
 
     /** Callback for changes to remote display routes. */
@@ -80,25 +80,44 @@ public class RemoteDisplayTile extends QuickSettingsTile{
         updateResources();
     }
 
+    private final Runnable mRegisterRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY,
+                    mRemoteDisplayRouteCallback,
+                    MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
+            updateRemoteDisplays();
+        }
+    };
+
+    private final Runnable mUnRegisterRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mMediaRouter.removeCallback(mRemoteDisplayRouteCallback);
+        }
+    };
+
     @Override
     void onPostCreate() {
         mTile.setOnPrepareListener(new QuickSettingsTileView.OnPrepareListener() {
             @Override
             public void onPrepare() {
-                mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY,
-                        mRemoteDisplayRouteCallback,
-                        MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-                updateRemoteDisplays();
+                mExecutor.submit(mRegisterRunnable);
             }
             @Override
             public void onUnprepare() {
-                mMediaRouter.removeCallback(mRemoteDisplayRouteCallback);
+                mExecutor.submit(mUnRegisterRunnable);
             }
         });
 
         updateRemoteDisplays();
 
         super.onPostCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        mExecutor.shutdownNow();
     }
 
     @Override
