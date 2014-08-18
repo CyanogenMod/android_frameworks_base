@@ -734,22 +734,20 @@ class MountService extends IMountService.Stub
 
         Slog.d(TAG, "volume state changed for " + path + " (" + oldState + " -> " + state + ")");
 
-        // Tell PackageManager about changes to primary volume state, but only
-        // when not emulated.
-        if (volume.isPrimary() && !volume.isEmulated()) {
-            if (Environment.MEDIA_UNMOUNTED.equals(state)) {
-                mPms.updateExternalMediaStatus(false, false);
+        // Tell PackageManager about changes, not only to primary volume,
+        // to all the non-emulated storage volumes
+        if (Environment.MEDIA_UNMOUNTED.equals(state)) {
+            mPms.updateExternalMediaStatus(false, false);
 
-                /*
-                 * Some OBBs might have been unmounted when this volume was
-                 * unmounted, so send a message to the handler to let it know to
-                 * remove those from the list of mounted OBBS.
-                 */
-                mObbActionHandler.sendMessage(mObbActionHandler.obtainMessage(
-                        OBB_FLUSH_MOUNT_STATE, path));
-            } else if (Environment.MEDIA_MOUNTED.equals(state)) {
-                mPms.updateExternalMediaStatus(true, false);
-            }
+            /*
+         * Some OBBs might have been unmounted when this volume was
+         * unmounted, so send a message to the handler to let it know to
+         * remove those from the list of mounted OBBS.
+         */
+            mObbActionHandler.sendMessage(mObbActionHandler.obtainMessage(
+                    OBB_FLUSH_MOUNT_STATE, path));
+        } else if (Environment.MEDIA_MOUNTED.equals(state)) {
+            mPms.updateExternalMediaStatus(true, false);
         }
 
         synchronized (mListeners) {
