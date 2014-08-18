@@ -1687,9 +1687,9 @@
         <item>试图获取位置信息</item>
         <item>试图使用震动器</item>
         <item>试图读取联系人</item>
-        <item>试图修改联系人</item>
+        <item>试图写联系人</item>
         <item>试图读取通话记录</item>
-        <item>试图修改通话记录</item>
+        <item>试图写通话记录</item>
         <item>试图读取日程表</item>
         <item>试图修改日程表</item>
         <item>试图获取位置信息</item>
@@ -1697,14 +1697,14 @@
         <item>试图获取位置信息</item>
         <item>试图拨打电话</item>
         <item>试图读取短信</item>
-        <item>试图修改短信</item>
+        <item>试图写短信</item>
         <item>试图收取短信</item>
         <item>试图收取短信</item>
         <item>试图收取彩信</item>
         <item>试图收取短信</item>
         <item>试图发送短信</item>
         <item>试图读取短信</item>
-        <item>试图修改短信</item>
+        <item>试图写短信</item>
         <item>试图修改设置</item>
         <item>试图在顶层绘图</item>
         <item>试图获取通知</item>
@@ -1730,7 +1730,7 @@
         <item>试图开关移动数据</item>
         <item>试图发送彩信</item>
         <item>试图读取彩信</item>
-        <item>试图修改彩信</item>
+        <item>试图写彩信</item>
         <item>试图自启动</item>
         <item>试图开关NFC</item>
         <item>试图删除短信</item>

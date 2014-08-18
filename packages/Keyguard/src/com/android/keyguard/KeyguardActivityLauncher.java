@@ -54,7 +54,6 @@ public abstract class KeyguardActivityLauncher {
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
     private static final Intent CALL_INTENT = new Intent(Intent.ACTION_DIAL);
     private static final Intent CALL_LOG_LIST_INTENT = new Intent(Intent.ACTION_VIEW);
-    private static final Intent SMS_INTENT = new Intent(Intent.ACTION_MAIN);
 
     abstract Context getContext();
 
@@ -140,8 +139,16 @@ public abstract class KeyguardActivityLauncher {
     }
 
     public void launchMessage() {
-        SMS_INTENT.setType("vnd.android-dir/mms-sms");
-        launchActivity(SMS_INTENT, false, false, null, null);
+        Intent intent = new Intent(Intent.ACTION_MAIN).setType("vnd.android-dir/mms-sms");
+        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(getContext());
+        Bundle bundle = monitor.getMessageBundle();
+        if (bundle.getInt("unread_number", 0) > 0) {
+            Log.v(TAG, "launchMessage(): unread_number > 0");
+            intent.putExtra("thread_id", bundle.getLong("thread_id", -1));
+            intent.putExtra("_id", bundle.getLong("_id", -1));
+            intent.putExtra("type", bundle.getString("type", ""));
+        }
+        launchActivity(intent, false, false, null, null);
     }
 
     public void launchWidgetPicker(int appWidgetId) {
