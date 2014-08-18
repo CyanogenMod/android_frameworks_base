@@ -16,6 +16,9 @@
 
 package com.android.systemui.quicksettings;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaRouter;
@@ -32,6 +35,7 @@ public class RemoteDisplayTile extends QuickSettingsTile implements
     private final MediaRouter mMediaRouter;
     private RouteInfo mConnectedRoute;
     private boolean mEnabled;
+    private final ExecutorService mExecutor;
 
     /** Callback for changes to remote display routes. */
     private final MediaRouter.SimpleCallback mRemoteDisplayRouteCallback =
@@ -69,6 +73,7 @@ public class RemoteDisplayTile extends QuickSettingsTile implements
         };
 
         mMediaRouter = (MediaRouter) context.getSystemService(Context.MEDIA_ROUTER_SERVICE);
+        mExecutor = Executors.newSingleThreadExecutor();
     }
 
     private void updateRemoteDisplays() {
@@ -88,6 +93,23 @@ public class RemoteDisplayTile extends QuickSettingsTile implements
         updateResources();
     }
 
+    private final Runnable mRegisterRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY,
+                    mRemoteDisplayRouteCallback,
+                    MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
+            updateRemoteDisplays();
+        }
+    };
+
+    private final Runnable mUnRegisterRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mMediaRouter.removeCallback(mRemoteDisplayRouteCallback);
+        }
+    };
+
     @Override
     void onPostCreate() {
         mTile.setOnPrepareListener(this);
@@ -97,15 +119,17 @@ public class RemoteDisplayTile extends QuickSettingsTile implements
 
     @Override
     public void onPrepare() {
-        mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY,
-                mRemoteDisplayRouteCallback,
-                MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-        updateRemoteDisplays();
+        mExecutor.submit(mRegisterRunnable);
     }
 
     @Override
     public void onUnprepare() {
-        mMediaRouter.removeCallback(mRemoteDisplayRouteCallback);
+        mExecutor.submit(mUnRegisterRunnable);
+    }
+
+    @Override
+    public void onDestroy() {
+        mExecutor.shutdownNow();
     }
 
     @Override
