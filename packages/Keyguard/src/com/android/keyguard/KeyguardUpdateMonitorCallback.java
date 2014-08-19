@@ -190,4 +190,13 @@ class KeyguardUpdateMonitorCallback {
      * @param subscription The subscription for which onRefreshCarrierInfo is meant
      */
     void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int subscription) { }
+
+    /**
+     * Called when the lid state changes. Default value is
+     * {@link  WindowManagerPolicy#LID_ABSENT}
+     * @param the new lid state, either
+     *    {@link WindowManagerPolicy#LID_OPEN} or
+     *    {@link WindowManagerPolicy#LID_CLOSED}
+     */
+    public void onLidStateChanged(int state) { }
 }
