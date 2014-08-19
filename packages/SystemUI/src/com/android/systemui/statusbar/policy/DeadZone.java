@@ -72,6 +72,9 @@ public class DeadZone extends View {
         mSizeMax = a.getDimensionPixelSize(R.styleable.DeadZone_maxSize, 0);
 
         int index = a.getInt(R.styleable.DeadZone_orientation, -1);
+
+        a.recycle();
+
         mVertical = (index == VERTICAL);
 
         if (DEBUG)

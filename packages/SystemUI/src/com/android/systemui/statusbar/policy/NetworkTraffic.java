@@ -241,7 +241,9 @@ public class NetworkTraffic extends TextView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mAttached) {
-            mContext.unregisterReceiver(mIntentReceiver);
+            try {
+                mContext.unregisterReceiver(mIntentReceiver);
+            } catch (Exception ignored) { }
             mAttached = false;
         }
     }
