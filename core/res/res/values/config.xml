@@ -1420,9 +1420,9 @@
     <array name="sim_icons">
         <item>@drawable/ic_sim_icon_1</item>
         <item>@drawable/ic_sim_icon_2</item>
-        <item>@drawable/ic_sim_icon_c</item>
-        <item>@drawable/ic_sim_icon_g</item>
-        <item>@drawable/ic_sim_icon_w</item>
+        <item>@drawable/ic_sim_icon_personal</item>
+        <item>@drawable/ic_sim_icon_business</item>
+        <item>@drawable/ic_sim_icon_primary</item>
         <item>@null</item>
     </array>
 
