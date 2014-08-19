@@ -499,7 +499,7 @@ public class MSimNetworkController extends NetworkController {
                 // DSDS case: Data is active only on DDS. Ignore the Data Connection
                 // State changed notifications of the other NON-DDS.
                 if (mSubscription ==
-                        MSimTelephonyManager.getDefault().getPreferredDataSubscription()) {
+                        MSimTelephonyManager.getDefault().getDefaultDataSubscription()) {
                     mDataState = state;
                     mDataNetType = networkType;
                 }
@@ -534,7 +534,7 @@ public class MSimNetworkController extends NetworkController {
                     if (msg.arg1 != mWifiActivity) {
                         mWifiActivity = msg.arg1;
                         refreshViews(MSimTelephonyManager.getDefault().
-                                getPreferredDataSubscription());
+                                getDefaultDataSubscription());
                     }
                     break;
                 default:
@@ -606,8 +606,8 @@ public class MSimNetworkController extends NetworkController {
     }
 
     private final void updateTelephonySignalStrength(int subscription) {
-        if (DEBUG) Slog.d(TAG, "updateTelephonySignalStrength: subscription =" + subscription);
-        int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
+        Slog.d(TAG, "updateTelephonySignalStrength: subscription =" + subscription);
+        int dataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
 
         if (!hasService(subscription) &&
                 (mMSimDataServiceState[subscription] != ServiceState.STATE_IN_SERVICE)) {
@@ -686,7 +686,7 @@ public class MSimNetworkController extends NetworkController {
 
     private final void updateDataNetType(int subscription) {
         // DSDS case: Data is active only on DDS. Clear the icon for NON-DDS
-        int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
+        int dataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
         if (subscription != dataSub) {
             if (DEBUG) {
                 Slog.d(TAG,"updateDataNetType: SUB" + subscription
@@ -792,8 +792,8 @@ public class MSimNetworkController extends NetworkController {
         int iconId = 0;
         boolean visible = true;
 
-        int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
-        if (DEBUG) Slog.d(TAG,"updateDataIcon dataSub =" + dataSub);
+        int dataSub = MSimTelephonyManager.getDefault().getDefaultDataSubscription();
+        Slog.d(TAG,"updateDataIcon dataSub =" + dataSub);
         // DSDS case: Data is active only on DDS. Clear the icon for NON-DDS
         if (subscription != dataSub) {
             mMSimDataConnected[subscription] = false;
@@ -1233,7 +1233,7 @@ public class MSimNetworkController extends NetworkController {
 
         //Update mobile label only for preferred data subscription and in airplane mode
         if (subscription ==
-                MSimTelephonyManager.getDefault().getPreferredDataSubscription() || mAirplaneMode) {
+                MSimTelephonyManager.getDefault().getDefaultDataSubscription() || mAirplaneMode) {
             // mobile label
             N = mMobileLabelViews.size();
             for (int i=0; i<N; i++) {

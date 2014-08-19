@@ -99,7 +99,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public NetworkInfo getNetworkInfo(int subId) {
+        return new NetworkInfo(mNetworkInfo);
+    }
+
+    @Override
     public LinkProperties getLinkProperties() {
+        return new LinkProperties(mLinkProperties);
+    }
+
+    @Override
+    public LinkProperties getLinkProperties(int subId) {
         return new LinkProperties(mLinkProperties);
     }
 
@@ -109,7 +119,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public LinkCapabilities getLinkCapabilities(int subId) {
+        return new LinkCapabilities(mLinkCapabilities);
+    }
+
+    @Override
     public LinkQualityInfo getLinkQualityInfo() {
+        return null;
+    }
+
+    @Override
+    public LinkQualityInfo getLinkQualityInfo(int subId) {
         return null;
     }
 
@@ -135,12 +155,26 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public boolean isAvailable(int subId) {
+        return mNetworkInfo.isAvailable();
+    }
+
+    @Override
     public void setUserDataEnable(boolean enabled) {
         // Base tracker doesn't handle enabled flags
     }
 
     @Override
+    public void setUserDataEnable(boolean enabled, int subId) {
+        // Base tracker doesn't handle enabled flags
+    }
+    @Override
     public void setPolicyDataEnable(boolean enabled) {
+        // Base tracker doesn't handle enabled flags
+    }
+
+    @Override
+    public void setPolicyDataEnable(boolean enabled, int subId) {
         // Base tracker doesn't handle enabled flags
     }
 
@@ -150,7 +184,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public boolean isPrivateDnsRouteSet(int subId) {
+        return mPrivateDnsRouteSet.get();
+    }
+
+    @Override
     public void privateDnsRouteSet(boolean enabled) {
+        mPrivateDnsRouteSet.set(enabled);
+    }
+
+    @Override
+    public void privateDnsRouteSet(boolean enabled, int subId) {
         mPrivateDnsRouteSet.set(enabled);
     }
 
@@ -160,7 +204,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public boolean isDefaultRouteSet(int subId) {
+        return mDefaultRouteSet.get();
+    }
+
+    @Override
     public void defaultRouteSet(boolean enabled) {
+        mDefaultRouteSet.set(enabled);
+    }
+
+    @Override
+    public void defaultRouteSet(boolean enabled, int subId) {
         mDefaultRouteSet.set(enabled);
     }
 
@@ -170,7 +224,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public boolean isTeardownRequested(int subId) {
+        return mTeardownRequested.get();
+    }
+
+    @Override
     public void setTeardownRequested(boolean isRequested) {
+        mTeardownRequested.set(isRequested);
+    }
+
+    @Override
+    public void setTeardownRequested(boolean isRequested, int subId) {
         mTeardownRequested.set(isRequested);
     }
 
@@ -180,7 +244,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public void setDependencyMet(boolean met, int subId) {
+        // Base tracker doesn't handle dependencies
+    }
+
+    @Override
     public void addStackedLink(LinkProperties link) {
+        mLinkProperties.addStackedLink(link);
+    }
+
+    @Override
+    public void addStackedLink(LinkProperties link, int subId) {
         mLinkProperties.addStackedLink(link);
     }
 
@@ -190,12 +264,32 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public void removeStackedLink(LinkProperties link, int subId) {
+        mLinkProperties.removeStackedLink(link);
+    }
+
+    @Override
     public void supplyMessenger(Messenger messenger) {
         // not supported on this network
     }
 
     @Override
+    public void supplyMessengerForSubscription(Messenger messenger, int subId) {
+        // not supported on this network
+    }
+
+
+    @Override
     public String getNetworkInterfaceName() {
+        if (mLinkProperties != null) {
+            return mLinkProperties.getInterfaceName();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String getNetworkInterfaceName(int subId) {
         if (mLinkProperties != null) {
             return mLinkProperties.getInterfaceName();
         } else {
@@ -209,7 +303,17 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
     }
 
     @Override
+    public void startSampling(SamplingDataTracker.SamplingSnapshot s, int subId) {
+        // nothing to do
+    }
+
+    @Override
     public void stopSampling(SamplingDataTracker.SamplingSnapshot s) {
+        // nothing to do
+    }
+
+    @Override
+    public void stopSampling(SamplingDataTracker.SamplingSnapshot s, int subId) {
         // nothing to do
     }
 
@@ -228,5 +332,20 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
 
     public String getDefaultTcpUserConfigPropName() {
         return PROP_TCP_USERCFG_DEFAULT;
+    }
+
+    public boolean reconnect(int subId) {
+        if (this instanceof MobileDataStateTracker) {
+            MobileDataStateTracker tracker = (MobileDataStateTracker) this;
+            return tracker.reconnect(subId);
+        }
+        return false;
+    }
+    public boolean teardown(int subId) {
+        if (this instanceof MobileDataStateTracker) {
+            MobileDataStateTracker tracker = (MobileDataStateTracker) this;
+            return tracker.teardown(subId);
+        }
+        return false;
     }
 }
