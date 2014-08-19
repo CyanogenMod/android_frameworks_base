@@ -649,6 +649,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_PANEL_HEADER_TEXT_COLOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_CARRIER_WIFI_LABEL_COLOR),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -909,6 +912,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 resolver, Settings.System.STATUS_BAR_CARRIER, 0, UserHandle.USER_CURRENT) == 1;
             showStatusBarCarrierLabel(mShowStatusBarCarrier);
 
+            int labelColor  = Settings.System.getIntForUser(resolver,
+                Settings.System.NOTIFICATION_CARRIER_WIFI_LABEL_COLOR, 0xff999999, UserHandle.USER_CURRENT);
+
             if (mCarrierLabel != null) {
                 mHideLabels = Settings.System.getIntForUser(resolver,
                         Settings.System.NOTIFICATION_HIDE_LABELS, 0, UserHandle.USER_CURRENT);
@@ -917,8 +923,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mCarrierAndWifiViewVisible = false;
                     mCarrierAndWifiView.setVisibility(View.INVISIBLE);
                 }
+                mCarrierLabel.setTextColor(labelColor);
                 updateCarrierAndWifiLabelVisibility(false);
             }
+
+            if (mWifiLabel != null) {
+                mWifiLabel.setTextColor(labelColor);
+            }
+
             updateBatteryIcons();
             updateCustomHeaderStatus();
 
@@ -1642,9 +1654,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
 
+        int labelColor = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NOTIFICATION_CARRIER_WIFI_LABEL_COLOR, 0xff999999, UserHandle.USER_CURRENT);
+
         mCarrierAndWifiView = mStatusBarWindow.findViewById(R.id.carrier_wifi);
         mWifiView = mStatusBarWindow.findViewById(R.id.wifi_view);
         mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
+        mCarrierLabel.setTextColor(labelColor);
         if (mCarrierLabel != null) {
             mHideLabels = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.NOTIFICATION_HIDE_LABELS, 0, UserHandle.USER_CURRENT);
@@ -1661,6 +1677,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mWifiLabel = (TextView)mStatusBarWindow.findViewById(R.id.wifi_text);
+        mWifiLabel.setTextColor(labelColor);
         if (mWifiLabel != null) {
             mNetworkController.addWifiLabelView(mWifiLabel);
             mWifiLabel.addTextChangedListener(new TextWatcher() {

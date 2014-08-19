@@ -4659,6 +4659,12 @@ public final class Settings {
         public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
 
         /**
+         * Color of the carrier and wifi network name in the notification drawer
+         * @hide
+         */
+        public static final String NOTIFICATION_CARRIER_WIFI_LABEL_COLOR = "notification_carrier_wifi_label_color";
+
+        /**
          * Whether or not to use the app sidebar
          *
          * @hide
