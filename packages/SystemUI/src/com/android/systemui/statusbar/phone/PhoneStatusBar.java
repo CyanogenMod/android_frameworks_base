@@ -646,6 +646,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.IME_CURSOR_LONGPRESS_ACTION),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENT_PANEL_HEADER_TEXT_COLOR),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -771,6 +774,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.ACTIVE_NOTIFICATIONS_MODE))) {
                 updateActiveDisplayViewState();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.RECENT_PANEL_HEADER_TEXT_COLOR))) {
+                rebuildRecentsScreen();
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SHAKE_LISTENER_ENABLED))) {
                 updateShakeListener();
