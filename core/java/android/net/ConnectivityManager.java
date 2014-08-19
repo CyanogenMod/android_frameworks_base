@@ -620,6 +620,30 @@ public class ConnectivityManager {
     }
 
     /**
+     * Returns connection status information about a particular
+     * network type.
+     *
+     * @param networkType integer specifying which networkType in
+     *        which you're interested.
+     * @parama subId integer specifying which subscription Id
+     *         you're interested
+     * @return a {@link NetworkInfo} object for the requested
+     *        network type or {@code null} if the type is not
+     *        supported by the device.
+     *
+     * <p>This method requires the call to hold the permission
+     * {@link android.Manifest.permission#ACCESS_NETWORK_STATE}.
+     * @hide
+     */
+    public NetworkInfo getNetworkInfoForSubscription(int networkType, int subId) {
+        try {
+            return mService.getNetworkInfoForSubscription(networkType, subId);
+        } catch (RemoteException e) {
+            return null;
+        }
+    }
+
+    /**
      * Returns connection status information about all network
      * types supported by the device.
      *
@@ -762,6 +786,30 @@ public class ConnectivityManager {
     }
 
     /**
+     * Tells the underlying networking system that the caller wants to
+     * begin using the named feature. The interpretation of {@code feature}
+     * is completely up to each networking implementation.
+     * <p>This method requires the caller to hold the permission
+     * {@link android.Manifest.permission#CHANGE_NETWORK_STATE}.
+     * @param networkType specifies which network the request pertains to
+     * @param feature the name of the feature to be used
+     * @param subId subscription Id
+     * @return an integer value representing the outcome of the request.
+     * The interpretation of this value is specific to each networking
+     * implementation+feature combination, except that the value {@code -1}
+     * always indicates failure.
+     * @hide
+     */
+    public int startUsingNetworkFeatureForSubscription(int networkType, String feature, int subId) {
+        try {
+            return mService.startUsingNetworkFeatureForSubscription(networkType, feature, subId, new Binder());
+        } catch (RemoteException e) {
+            return -1;
+        }
+    }
+
+
+    /**
      * Tells the underlying networking system that the caller is finished
      * using the named feature. The interpretation of {@code feature}
      * is completely up to each networking implementation.
@@ -773,10 +821,34 @@ public class ConnectivityManager {
      * The interpretation of this value is specific to each networking
      * implementation+feature combination, except that the value {@code -1}
      * always indicates failure.
+     *
      */
     public int stopUsingNetworkFeature(int networkType, String feature) {
         try {
             return mService.stopUsingNetworkFeature(networkType, feature);
+        } catch (RemoteException e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Tells the underlying networking system that the caller is finished
+     * using the named feature. The interpretation of {@code feature}
+     * is completely up to each networking implementation.
+     * <p>This method requires the caller to hold the permission
+     * {@link android.Manifest.permission#CHANGE_NETWORK_STATE}.
+     * @param networkType specifies which network the request pertains to
+     * @param feature the name of the feature that is no longer needed
+     * @param subId subscription Id
+     * @return an integer value representing the outcome of the request.
+     * The interpretation of this value is specific to each networking
+     * implementation+feature combination, except that the value {@code -1}
+     * always indicates failure.
+     * @hide
+     */
+    public int stopUsingNetworkFeatureForSubscription(int networkType, String feature, int subId) {
+        try {
+            return mService.stopUsingNetworkFeatureForSubscription(networkType, feature, subId);
         } catch (RemoteException e) {
             return -1;
         }
@@ -908,6 +980,21 @@ public class ConnectivityManager {
         } catch (RemoteException e) {
         }
     }
+
+
+               /**
+                 * Sets the persisted value for enabling/disabling Mobile data.
+                 *
+                 * @param enabled Whether the user wants the mobile data connection used
+                 *            or not.
+                 * @hide
+                 */
+                public void setMobileDataEnabledOnSubscription(boolean enabled, int subId) {
+                    try {
+                        mService.setMobileDataEnabledOnSubscription(ActivityThread.currentPackageName(), enabled, subId);
+                    } catch (RemoteException e) {
+                    }
+                }
 
     /**
      * {@hide}
@@ -1407,6 +1494,22 @@ public class ConnectivityManager {
         } catch (RemoteException e) {
         }
     }
+
+    /**
+     * Supply the backend messenger for a network tracker
+     *
+     * @param type NetworkType to set
+     * @param messenger {@link Messenger}
+     * @param subId subscription Id
+     * {@hide}
+     */
+    public void supplyMessengerForSubscription(int networkType, Messenger messenger, int subId) {
+        try {
+            mService.supplyMessengerForSubscription(networkType, messenger, subId);
+        } catch (RemoteException e) {
+        }
+    }
+
 
     /**
      * Check mobile provisioning.

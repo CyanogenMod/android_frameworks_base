@@ -32,7 +32,6 @@ import static android.net.ConnectivityManager.getNetworkTypeName;
 import static android.net.ConnectivityManager.isNetworkTypeValid;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_METERED;
-
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.Notification;
@@ -101,8 +100,10 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.security.Credentials;
 import android.security.KeyStore;
+import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Slog;
@@ -167,6 +168,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
+
 
 /**
  * @hide
@@ -374,6 +376,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      */
     private static final int EVENT_PROXY_HAS_CHANGED = 16;
 
+    private static final int DEFAULT_SUBSCRIPTION_UNKNOWN=-1;
+
     /** Handler used for internal events. */
     private InternalHandler mHandler;
     /** Handler used for incoming {@link NetworkStateTracker} events. */
@@ -446,6 +450,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private AtomicInteger mEnableFailFastMobileDataTag = new AtomicInteger(0);
 
     TelephonyManager mTelephonyManager;
+    private MSimTelephonyManager mSimTelephonyManager;
+    private int mDefaultSubscription = DEFAULT_SUBSCRIPTION_UNKNOWN;
 
     protected ConnectivityService() { }
 
@@ -498,6 +504,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         mPolicyManager = checkNotNull(policyManager, "missing INetworkPolicyManager");
         mKeyStore = KeyStore.getInstance();
         mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        mSimTelephonyManager=(MSimTelephonyManager) context.getSystemService(Context.MSIM_TELEPHONY_SERVICE);
 
         try {
             mPolicyManager.registerListener(mPolicyListener);
@@ -712,8 +719,94 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         mContext.registerReceiver(mProvisioningReceiver, filter);
 
         mAppOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+
+        mDefaultSubscription=mSimTelephonyManager.getDefaultDataSubscription();
+        ContentResolver contentResolver = mContext.getContentResolver();
+        Uri multiSimUri = Settings.Global.getUriFor(Settings.Global.MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION);
+        Uri tempDataUri = Settings.Global.getUriFor(Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION);
+        contentResolver.registerContentObserver(multiSimUri, false, new MultiSimObserver(mHandler));
+        contentResolver.registerContentObserver(tempDataUri, false, new MultiSimObserver(mHandler));
     }
 
+    private class MultiSimObserver extends ContentObserver{
+
+        public MultiSimObserver(Handler handler) {
+            super(handler);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            onChange(selfChange,null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+
+            int newDefaultSub = DEFAULT_SUBSCRIPTION_UNKNOWN;
+            int newPreferredSub = DEFAULT_SUBSCRIPTION_UNKNOWN;
+            NetworkInfo networkInfo;
+            try {
+                NetworkStateTracker networkTracker = mNetTrackers[ConnectivityManager.TYPE_MOBILE];
+                if (networkTracker != null) {
+                    if (mSimTelephonyManager != null && mSimTelephonyManager.isMultiSimEnabled()) {
+                        newDefaultSub = Settings.Global.getInt(mContext.getContentResolver(),
+                                Settings.Global.MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION);
+                        newPreferredSub = Settings.Global.getInt(mContext.getContentResolver(),
+                                Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION);
+                        if (DBG)
+                            log("MultiSimObserver onChange event captured with oldDefaultSub "
+                                    + mDefaultSubscription + " changed default sub to "
+                                    + newDefaultSub);
+
+                        if (newDefaultSub != mDefaultSubscription) {
+                            if (DBG)
+                                log("MultiSimObserver onChange event: Manual DDS switch"
+                            +" requested teardown for sub requested "
+                                        + mDefaultSubscription);
+                            if (teardownForSubscription(networkTracker, mDefaultSubscription)) {
+                                networkTracker.reconnect(newDefaultSub);
+                            }
+                        }
+                        if (mSimTelephonyManager.getMultiSimConfiguration().toString()
+                                .equals("DSDS")) {
+                            if (newPreferredSub != mDefaultSubscription) {
+                                if (DBG)
+                                    log("MultiSimObserver onChange event: DSDS"
+                                +" teardown for sub requested"
+                                            + mDefaultSubscription
+                                            + " no reconnect for "
+                                            + newPreferredSub);
+                                if (teardownForSubscription(networkTracker, mDefaultSubscription)) {
+                                    if (DBG)
+                                        log("MultiSimObserver onChange event: "
+                                    +"teardown successfull");
+                                }
+                            } else if (newPreferredSub == mDefaultSubscription) {
+                                if (DBG)
+                                    log("MultiSimObserver onChange event: reconnect default sub "
+                                            + mDefaultSubscription
+                                            + "  network state "
+                                            + networkTracker.getNetworkInfo(mDefaultSubscription)
+                                                    .getState());
+                                if (networkTracker.getNetworkInfo(mDefaultSubscription).getState()
+                                        == NetworkInfo.State.DISCONNECTED) {
+                                    networkTracker.reconnect(mDefaultSubscription);
+                                }
+                            }
+                        }
+                        networkTracker = null;
+                        mDefaultSubscription = newDefaultSub;
+                    }
+                }
+            } catch (SettingNotFoundException e) {
+                if (DBG)
+                    log("MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION"
+                +" not found in settings manager");
+                e.printStackTrace();
+            }
+        }
+
+    }
     /**
      * Factory that creates {@link NetworkStateTracker} instances using given
      * {@link NetworkConfig}.
@@ -926,6 +1019,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
     }
 
+
+
+    private boolean teardownForSubscription(NetworkStateTracker netTracker,int subId) {
+        if (netTracker.teardown(subId)) {
+            netTracker.setTeardownRequested(true);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     /**
      * Check if UID should be blocked from using the network represented by the
      * given {@link NetworkStateTracker}.
@@ -954,7 +1059,24 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      * {@link #isNetworkBlocked(NetworkStateTracker, int)}.
      */
     private NetworkInfo getFilteredNetworkInfo(NetworkStateTracker tracker, int uid) {
-        NetworkInfo info = tracker.getNetworkInfo();
+        NetworkInfo info = tracker.getNetworkInfo(mSimTelephonyManager.getPreferredDataSubscription());
+        if (isNetworkBlocked(tracker, uid)) {
+            info = new NetworkInfo(info);
+            info.setDetailedState(DetailedState.BLOCKED, null, null);
+        }
+        if (mLockdownTracker != null) {
+            info = mLockdownTracker.augmentNetworkInfo(info);
+        }
+        return info;
+    }
+
+    /**
+     * Return a filtered {@link NetworkInfo} for a subscription, potentially marked
+     * {@link DetailedState#BLOCKED} based on
+     * {@link #isNetworkBlocked(NetworkStateTracker, int)}.
+     */
+    private NetworkInfo getFilteredNetworkInfoForSubscription(NetworkStateTracker tracker, int uid, int subId) {
+        NetworkInfo info = tracker.getNetworkInfo(subId);
         if (isNetworkBlocked(tracker, uid)) {
             // network is blocked; clone and override state
             info = new NetworkInfo(info);
@@ -1043,12 +1165,30 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         return getNetworkInfo(networkType, uid);
     }
 
+    @Override
+    public NetworkInfo getNetworkInfoForSubscription(int networkType, int subId) {
+        enforceAccessPermission();
+        final int uid = Binder.getCallingUid();
+        return getNetworkInfoForSubscription(networkType, uid, subId);
+    }
+
     private NetworkInfo getNetworkInfo(int networkType, int uid) {
         NetworkInfo info = null;
         if (isNetworkTypeValid(networkType)) {
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 info = getFilteredNetworkInfo(tracker, uid);
+            }
+        }
+        return info;
+    }
+
+    private NetworkInfo getNetworkInfoForSubscription(int networkType, int uid, int subId) {
+        NetworkInfo info = null;
+        if (isNetworkTypeValid(networkType)) {
+            final NetworkStateTracker tracker = mNetTrackers[networkType];
+            if (tracker != null) {
+                info = getFilteredNetworkInfoForSubscription(tracker, uid, subId);
             }
         }
         return info;
@@ -1208,6 +1348,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         IBinder mBinder;
         int mPid;
         int mUid;
+        int msubId=DEFAULT_SUBSCRIPTION_UNKNOWN;
         long mCreateTime;
 
         FeatureUser(int type, String feature, IBinder binder) {
@@ -1218,6 +1359,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             mPid = getCallingPid();
             mUid = getCallingUid();
             mCreateTime = System.currentTimeMillis();
+
+            try {
+                mBinder.linkToDeath(this, 0);
+            } catch (RemoteException e) {
+                binderDied();
+            }
+        }
+
+        FeatureUser(int type, String feature, int subId, IBinder binder) {
+            super();
+            mNetworkType = type;
+            mFeature = feature;
+            mBinder = binder;
+            mPid = getCallingPid();
+            mUid = getCallingUid();
+            mCreateTime = System.currentTimeMillis();
+            msubId=subId;
 
             try {
                 mBinder.linkToDeath(this, 0);
@@ -1252,9 +1410,33 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return isSameUser(u.mPid, u.mUid, u.mNetworkType, u.mFeature);
         }
 
+        public boolean isSameUserForSubscription(FeatureUser u) {
+            if (u == null) return false;
+            return isSameUser(u.mPid, u.mUid, u.mNetworkType, u.mFeature, u.msubId);
+        }
+
+
         public boolean isSameUser(int pid, int uid, int networkType, String feature) {
             if ((mPid == pid) && (mUid == uid) && (mNetworkType == networkType) &&
                 TextUtils.equals(mFeature, feature)) {
+                return true;
+            }
+            return false;
+        }
+
+
+        public boolean isFeatureActiveOnOtherSub(FeatureUser u){
+            if ((mPid == u.mPid) && (mUid == u.mUid) && (mNetworkType == u.mNetworkType) &&
+                    TextUtils.equals(mFeature, u.mFeature) && msubId!=u.msubId) {
+
+                    return true;
+                }
+                return false;
+        }
+        public boolean isSameUser(int pid, int uid, int networkType, String feature, int subId) {
+            if ((mPid == pid) && (mUid == uid) && (mNetworkType == networkType) &&
+                TextUtils.equals(mFeature, feature) && msubId==subId) {
+
                 return true;
             }
             return false;
@@ -1415,6 +1597,170 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     // javadoc from interface
+    public int startUsingNetworkFeatureForSubscription(int networkType, String feature, int subId,
+            IBinder binder) {
+        long startTime = 0;
+        if (DBG) {
+            startTime = SystemClock.elapsedRealtime();
+        }
+        if (VDBG) {
+            log("startUsingNetworkFeature for net " + networkType + ": " + feature + ", uid="
+                    + Binder.getCallingUid());
+        }
+        enforceChangePermission();
+        try {
+            if (!ConnectivityManager.isNetworkTypeValid(networkType) ||
+                    mNetConfigs[networkType] == null) {
+                return PhoneConstants.APN_REQUEST_FAILED;
+            }
+
+            FeatureUser f = new FeatureUser(networkType, feature, subId, binder);
+
+            // TODO - move this into individual networktrackers
+            int usedNetworkType = convertFeatureToNetworkType(networkType, feature);
+            if (mSimTelephonyManager != null) {
+                if (usedNetworkType != ConnectivityManager.TYPE_MOBILE_MMS
+                        && subId != mSimTelephonyManager.getDefaultSubscription()) {
+                    return PhoneConstants.APN_REQUEST_FAILED;
+                }
+            }
+            if (mLockdownEnabled) {
+                return PhoneConstants.APN_TYPE_NOT_AVAILABLE;
+            }
+
+            if (mProtectedNetworks.contains(usedNetworkType)) {
+                enforceConnectivityInternalPermission();
+            }
+
+            final boolean networkMetered = isNetworkMeteredUnchecked(usedNetworkType);
+            final int uidRules;
+            synchronized (mRulesLock) {
+                uidRules = mUidRules.get(Binder.getCallingUid(), RULE_ALLOW_ALL);
+            }
+            if (networkMetered && (uidRules & RULE_REJECT_METERED) != 0) {
+                return PhoneConstants.APN_REQUEST_FAILED;
+            }
+
+            NetworkStateTracker network = mNetTrackers[usedNetworkType];
+            if (network != null) {
+                Integer currentPid = new Integer(getCallingPid());
+                if (usedNetworkType != networkType) {
+                    NetworkInfo ni = network.getNetworkInfo(subId);
+
+                    if (ni.isAvailable() == false) {
+                        if (!TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS)) {
+                            if (DBG)
+                                log("special network not available ni=" + ni.getTypeName());
+                            return PhoneConstants.APN_TYPE_NOT_AVAILABLE;
+                        } else {
+                            if (DBG) {
+                                log("special network not available, but try anyway ni=" +
+                                        ni.getTypeName());
+                            }
+                        }
+                    }
+
+                    int restoreTimer = getRestoreDefaultNetworkDelay(usedNetworkType);
+
+                    synchronized (this) {
+                        boolean addToList = true;
+                        if (restoreTimer < 0) {
+                            // In case there is no timer is specified for the
+                            // feature,
+                            // make sure we don't add duplicate entry with same
+                            // sub and same request.
+                            for (FeatureUser u : mFeatureUsers) {
+                                if (u.isSameUserForSubscription(f)) {
+                                    // Duplicate user is found. Do not add.
+                                    addToList = false;
+                                    break;
+                                }
+                                // Use case: Only TYPE_MOBILE_MMS call be active
+                                if (u.isFeatureActiveOnOtherSub(f)) {
+                                    return PhoneConstants.APN_REQUEST_FAILED;
+                                }
+                            }
+                        }
+
+                        if (addToList)
+                            mFeatureUsers.add(f);
+                        if (!mNetRequestersPids[usedNetworkType].contains(currentPid)) {
+                            // this gets used for per-pid dns when connected
+                            mNetRequestersPids[usedNetworkType].add(currentPid);
+                        }
+                    }
+
+                    if (restoreTimer >= 0) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(
+                                EVENT_RESTORE_DEFAULT_NETWORK, f), restoreTimer);
+                    }
+
+                    if ((ni.isConnectedOrConnecting() == true) &&
+                            !network.isTeardownRequested(subId)) {
+                        if (ni.isConnected() == true) {
+                            final long token = Binder.clearCallingIdentity();
+                            try {
+                                // add the pid-specific dns
+                                handleDnsConfigurationChange(usedNetworkType);
+                                if (VDBG)
+                                    log("special network already active");
+                            } finally {
+                                Binder.restoreCallingIdentity(token);
+                            }
+                            return PhoneConstants.APN_ALREADY_ACTIVE;
+                        }
+                        if (VDBG)
+                            log("special network already connecting");
+                        return PhoneConstants.APN_REQUEST_STARTED;
+                    }
+
+                    // check if the radio in play can make another contact
+                    // assume if cannot for now
+
+                    if (DBG) {
+                        log("startUsingNetworkFeature reconnecting to " + networkType + ": " +
+                                feature);
+                    }
+                    if (network.reconnect(subId)) {
+                        if (DBG)
+                            log("startUsingNetworkFeature X: return APN_REQUEST_STARTED");
+                        return PhoneConstants.APN_REQUEST_STARTED;
+                    } else {
+                        if (DBG)
+                            log("startUsingNetworkFeature X: return APN_REQUEST_FAILED");
+                        return PhoneConstants.APN_REQUEST_FAILED;
+                    }
+                } else {
+                    // need to remember this unsupported request so we respond
+                    // appropriately on stop
+                    synchronized (this) {
+                        mFeatureUsers.add(f);
+                        if (!mNetRequestersPids[usedNetworkType].contains(currentPid)) {
+                            // this gets used for per-pid dns when connected
+                            mNetRequestersPids[usedNetworkType].add(currentPid);
+                        }
+                    }
+                    if (DBG)
+                        log("startUsingNetworkFeature X: return -1 unsupported feature.");
+                    return -1;
+                }
+            }
+            if (DBG)
+                log("startUsingNetworkFeature X: return APN_TYPE_NOT_AVAILABLE");
+            return PhoneConstants.APN_TYPE_NOT_AVAILABLE;
+        } finally {
+            if (DBG) {
+                final long execTime = SystemClock.elapsedRealtime() - startTime;
+                if (execTime > 250) {
+                    loge("startUsingNetworkFeature took too long: " + execTime + "ms");
+                } else {
+                    if (VDBG)
+                        log("startUsingNetworkFeature took " + execTime + "ms");
+                }
+            }
+        }
+    }
+    // javadoc from interface
     public int stopUsingNetworkFeature(int networkType, String feature) {
         enforceChangePermission();
 
@@ -1440,6 +1786,38 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         } else {
             // none found!
             if (VDBG) log("stopUsingNetworkFeature: X not a live request, ignoring");
+            return 1;
+        }
+    }
+
+
+    public int stopUsingNetworkFeatureForSubscription(int networkType, String feature, int subId) {
+        enforceChangePermission();
+
+        int pid = getCallingPid();
+        int uid = getCallingUid();
+
+        FeatureUser u = null;
+        boolean found = false;
+
+        synchronized (this) {
+            for (FeatureUser x : mFeatureUsers) {
+                if (x.isSameUser(pid, uid, networkType, feature, subId)) {
+                    u = x;
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found && u != null) {
+            if (VDBG)
+                log("stopUsingNetworkFeature: X");
+            // stop regardless of how many other time this proc had called start
+            return stopUsingNetworkFeatureForSubscription(u, true, subId);
+        } else {
+            // none found!
+            if (VDBG)
+                log("stopUsingNetworkFeature: X not a live request, ignoring");
             return 1;
         }
     }
@@ -1542,6 +1920,110 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return -1;
         }
     }
+
+    private int stopUsingNetworkFeatureForSubscription(FeatureUser u, boolean ignoreDups, int subId) {
+        int networkType = u.mNetworkType;
+        String feature = u.mFeature;
+        int pid = u.mPid;
+        int uid = u.mUid;
+
+        NetworkStateTracker tracker = null;
+        boolean callTeardown = false; // used to carry our decision outside of
+                                      // sync block
+
+        if (VDBG) {
+            log("stopUsingNetworkFeature: net " + networkType + ": " + feature);
+        }
+
+        if (!ConnectivityManager.isNetworkTypeValid(networkType)) {
+            if (DBG) {
+                log("stopUsingNetworkFeature: net " + networkType + ": " + feature +
+                        ", net is invalid");
+            }
+            return -1;
+        }
+
+        // need to link the mFeatureUsers list with the mNetRequestersPids state
+        // in this
+        // sync block
+        synchronized (this) {
+            // check if this process still has an outstanding start request
+            if (!mFeatureUsers.contains(u)) {
+                if (VDBG) {
+                    log("stopUsingNetworkFeature: this process has no outstanding requests" +
+                            ", ignoring");
+                }
+                return 1;
+            }
+            u.unlinkDeathRecipient();
+            mFeatureUsers.remove(mFeatureUsers.indexOf(u));
+            // If we care about duplicate requests, check for that here.
+            //
+            // This is done to support the extension of a request - the app
+            // can request we start the network feature again and renew the
+            // auto-shutoff delay. Normal "stop" calls from the app though
+            // do not pay attention to duplicate requests - in effect the
+            // API does not refcount and a single stop will counter multiple
+            // starts.
+            if (ignoreDups == false) {
+                for (FeatureUser x : mFeatureUsers) {
+                    if (x.isSameUserForSubscription(u)) {
+                        if (VDBG)
+                            log("stopUsingNetworkFeature: dup is found, ignoring");
+                        return 1;
+                    }
+                }
+            }
+
+            int usedNetworkType = convertFeatureToNetworkType(networkType, feature);
+
+            tracker = mNetTrackers[usedNetworkType];
+            if (tracker == null) {
+                if (DBG) {
+                    log("stopUsingNetworkFeature: net " + networkType + ": " + feature +
+                            " no known tracker for used net type " + usedNetworkType);
+                }
+                return -1;
+            }
+            if (usedNetworkType != networkType) {
+                Integer currentPid = new Integer(pid);
+                mNetRequestersPids[usedNetworkType].remove(currentPid);
+
+                final long token = Binder.clearCallingIdentity();
+                try {
+                    reassessPidDns(pid, true);
+                } finally {
+                    Binder.restoreCallingIdentity(token);
+                }
+                flushVmDnsCache();
+                if (mNetRequestersPids[usedNetworkType].size() != 0) {
+                    if (VDBG) {
+                        log("stopUsingNetworkFeature: net " + networkType + ": " + feature +
+                                " others still using it");
+                    }
+                    return 1;
+                }
+                callTeardown = true;
+            } else {
+                if (DBG) {
+                    log("stopUsingNetworkFeature: net " + networkType + ": " + feature +
+                            " not a known feature - dropping");
+                }
+            }
+        }
+
+        if (callTeardown) {
+            if (DBG) {
+                log("stopUsingNetworkFeature: teardown net " + networkType + ": " + feature
+                        + " for sub " + subId);
+            }
+            tracker.teardown(subId);
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
 
     /**
      * Check if the address falls into any of currently running VPN's route's.
@@ -1647,7 +2129,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return false;
         }
         NetworkStateTracker tracker = mNetTrackers[networkType];
-        DetailedState netState = tracker.getNetworkInfo().getDetailedState();
+        DetailedState netState = getNetworkInfoForMultiSim(tracker).getDetailedState();
 
         if (tracker == null || (netState != DetailedState.CONNECTED &&
                 netState != DetailedState.CAPTIVE_PORTAL_CHECK) ||
@@ -1671,6 +2153,22 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         } finally {
             Binder.restoreCallingIdentity(token);
         }
+    }
+
+    private NetworkInfo getNetworkInfoForMultiSim(NetworkStateTracker tracker) {
+        NetworkInfo newNetworkInfo=tracker.getNetworkInfo();
+        if(mSimTelephonyManager.isMultiSimEnabled()){
+            if(mSimTelephonyManager.getDefaultSubscription()
+                    ==mSimTelephonyManager.getPreferredDataSubscription()){
+                newNetworkInfo=tracker.getNetworkInfo(mSimTelephonyManager.getDefaultSubscription());
+            }else{
+                newNetworkInfo=tracker.getNetworkInfo(mSimTelephonyManager.
+                        getPreferredDataSubscription());
+            }
+        }
+
+        log("requestRouteToHostAddress:getNetworkInfoForMultiSim "+newNetworkInfo);
+        return newNetworkInfo;
     }
 
     private boolean addRoute(LinkProperties p, RouteInfo r, boolean toDefaultTable,
@@ -1907,12 +2405,50 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 (enabled ? ENABLED : DISABLED), 0));
     }
 
+
+    /**
+     * @see ConnectivityManager#setMobileDataEnabled(boolean)
+     */
+    public void setMobileDataEnabledOnSubscription(String callingPackage,
+            boolean enabled, int subId) {
+        enforceChangePermission();
+        if (DBG)
+            log("setMobileDataEnabled(" + enabled + ", subId= " + subId + ")");
+
+        AppOpsManager appOps = (AppOpsManager) mContext
+                .getSystemService(Context.APP_OPS_SERVICE);
+        int callingUid = Binder.getCallingUid();
+        if (appOps.noteOp(AppOpsManager.OP_DATA_CONNECT_CHANGE, callingUid,
+                callingPackage) != AppOpsManager.MODE_ALLOWED)
+            return;
+
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
+                (enabled ? ENABLED : DISABLED), subId));
+    }
+
     private void handleSetMobileData(boolean enabled) {
         if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
             if (VDBG) {
                 log(mNetTrackers[ConnectivityManager.TYPE_MOBILE].toString() + enabled);
             }
             mNetTrackers[ConnectivityManager.TYPE_MOBILE].setUserDataEnable(enabled);
+        }
+        if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
+            if (VDBG) {
+                log(mNetTrackers[ConnectivityManager.TYPE_WIMAX].toString() + enabled);
+            }
+            mNetTrackers[ConnectivityManager.TYPE_WIMAX].setUserDataEnable(enabled);
+        }
+    }
+
+
+    private void handleSetMobileData(boolean enabled, int subId) {
+        if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+            if (VDBG) {
+                log("subId = " + subId + mNetTrackers[ConnectivityManager.TYPE_MOBILE].toString()
+                        + enabled);
+            }
+            mNetTrackers[ConnectivityManager.TYPE_MOBILE].setUserDataEnable(enabled, subId);
         }
         if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
             if (VDBG) {
@@ -2389,6 +2925,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             mInetConditionChangeInFlight = false;
             // Don't do this - if we never sign in stay, grey
             //reportNetworkCondition(mActiveDefaultNetwork, 100);
+            updateNetworkSettings(thisNet);
 
             // Update TCP delayed ACK settings
             updateTcpDelayedAckSettings(thisNet);
@@ -3151,9 +3688,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         @Override
         public void handleMessage(Message msg) {
             NetworkInfo info;
+            int subscriptionId=DEFAULT_SUBSCRIPTION_UNKNOWN;
             switch (msg.what) {
                 case NetworkStateTracker.EVENT_STATE_CHANGED: {
                     info = (NetworkInfo) msg.obj;
+                    subscriptionId=msg.arg2;
                     NetworkInfo.State state = info.getState();
 
                     if (VDBG || (state == NetworkInfo.State.CONNECTED) ||
@@ -3300,7 +3839,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 }
                 case EVENT_SET_MOBILE_DATA: {
                     boolean enabled = (msg.arg1 == ENABLED);
-                    handleSetMobileData(enabled);
+                    int subId = (int)msg.arg2;
+                    handleSetMobileData(enabled, subId);
                     break;
                 }
                 case EVENT_APPLY_GLOBAL_HTTP_PROXY: {
@@ -4127,6 +4667,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         if (isNetworkTypeValid(networkType) && mNetTrackers[networkType] != null) {
             mNetTrackers[networkType].supplyMessenger(messenger);
+        }
+    }
+
+     public void supplyMessengerForSubscription(int networkType, Messenger messenger, int subId) {
+        enforceConnectivityInternalPermission();
+
+        if (isNetworkTypeValid(networkType) && mNetTrackers[networkType] != null) {
+            mNetTrackers[networkType].supplyMessengerForSubscription(messenger, subId);
         }
     }
 
