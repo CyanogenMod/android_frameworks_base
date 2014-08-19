@@ -149,4 +149,9 @@
     <dimen name="shadow_width">8dp</dimen>
     <dimen name="layer_width">300dp</dimen>
     <dimen name="offset_width">48dp</dimen>
+
+    <!-- Network traffic monitor single-line text size -->
+    <dimen name="net_traffic_single_text_size">14dp</dimen>
+    <!-- Network traffic monitor multi-line text size -->
+    <dimen name="net_traffic_multi_text_size">10dp</dimen>
 </resources>
