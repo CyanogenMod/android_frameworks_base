@@ -74,7 +74,7 @@ public class OnTheGoService extends Service implements ShakeDetector.Listener {
     private static final int NOTIFICATION_ERROR   = 2;
 
     private final Handler mHandler       = new Handler();
-    private final Object  mRestartObject = new Object();
+    public final Object  mRestartObject = new Object();
 
     private FrameLayout         mOverlay;
     private Camera              mCamera;
