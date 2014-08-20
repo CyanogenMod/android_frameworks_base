@@ -25,8 +25,12 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.input.IInputManager;
+import android.hardware.input.IInputManager.Stub;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.Log;
 
 /**
@@ -59,6 +63,10 @@ public final class PointerIcon implements Parcelable {
     /** {@hide} Style constant: Spot anchor icon for touchpads. */
     public static final int STYLE_SPOT_ANCHOR = 2002;
 
+    /** {@hide} Style constant: Hovering icon for stylus. */
+    public static final int STYLE_STYLUS_HOVER = 2003;
+
+
     // OEM private styles should be defined starting at this range to avoid
     // conflicts with any system styles that may be defined in the future.
     private static final int STYLE_OEM_FIRST = 10000;
@@ -67,6 +75,9 @@ public final class PointerIcon implements Parcelable {
     private static final int STYLE_DEFAULT = STYLE_ARROW;
 
     private static final PointerIcon gNullIcon = new PointerIcon(STYLE_NULL);
+
+    private static IInputManager sInputManager;
+    private static Object sInputManagerSync = new Object();
 
     private final int mStyle;
     private int mSystemIconResourceId;
@@ -200,6 +211,24 @@ public final class PointerIcon implements Parcelable {
         PointerIcon icon = new PointerIcon(STYLE_CUSTOM);
         icon.loadResource(null, resources, resourceId);
         return icon;
+    }
+
+    /**
+     * Changes the shape of the hover cursor. If the cursor is
+     * visible it will be changed as soon as possible.
+     *
+     * @param bitmap bitmap for the cursor
+     * @param hotSpotX x position of hot-spot for cursor offset
+     *                 adjustment
+     * @param hotSpotY y position of hot-spot for cursor offset
+     *                 adjustment
+     *
+     * @throws RemoteException if failed to set the cursor
+     */
+    public static void setCustomHoverIcon(Bitmap bitmap, int hotSpotX, int hotSpotY)
+    throws RemoteException
+    {
+        getInputManager().setCustomHoverIcon(bitmap, hotSpotX, hotSpotY);
     }
 
     /**
@@ -433,8 +462,19 @@ public final class PointerIcon implements Parcelable {
                 return com.android.internal.R.styleable.Pointer_pointerIconSpotTouch;
             case STYLE_SPOT_ANCHOR:
                 return com.android.internal.R.styleable.Pointer_pointerIconSpotAnchor;
+            case STYLE_STYLUS_HOVER:
+                return com.android.internal.R.styleable.Pointer_pointerIconStylusHover;
             default:
                 return 0;
+        }
+    }
+
+    private static IInputManager getInputManager() {
+        synchronized(sInputManagerSync) {
+            if(sInputManager == null) {
+                sInputManager = IInputManager.Stub.asInterface(ServiceManager.getService("input"));
+            }
+            return sInputManager;
         }
     }
 }

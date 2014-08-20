@@ -25,9 +25,9 @@ import android.os.SystemService;
 import android.util.ArraySet;
 import android.util.TimeUtils;
 import android.view.IWindowId;
-
 import android.view.IWindowSessionCallback;
 import android.view.WindowContentFrameStats;
+import com.android.server.display.DigitalPenOffScreenDisplayAdapter;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.policy.impl.PhoneWindowManager;
@@ -7088,13 +7088,38 @@ public class WindowManagerService extends IWindowManager.Stub
         return sw;
     }
 
+    private DisplayContent getDigitalPenOffScreenDisplayContentLocked() {
+        Display[] displays = mDisplayManager.getDisplays();
+        int displayId = -1;
+        for (Display display : displays) {
+            if (display.getName().equals(DigitalPenOffScreenDisplayAdapter.getDisplayName())) {
+                displayId = display.getDisplayId();
+            }
+        }
+        return getDisplayContentLocked(displayId);
+    }
+
     boolean computeScreenConfigurationLocked(Configuration config) {
+        // TODO(multidisplay): For now, apply Configuration to main screen
+        // and DigitalPenOffScreenDisplay only
+        DisplayContent displayContent = getDigitalPenOffScreenDisplayContentLocked();
+        if (null != displayContent &&
+            !DigitalPenOffScreenDisplayAdapter.isDigitalPenDisabled()) {
+            if (false == computeScreenConfigurationDisplayLocked(config, displayContent)) {
+                Slog.i(TAG,
+                       "computeScreenConfigurationLocked returned false for DigitalPenOffScreenDisplay");
+            }
+        }
+
+        displayContent = getDefaultDisplayContentLocked();
+        return computeScreenConfigurationDisplayLocked(config, displayContent);
+    }
+
+    private boolean computeScreenConfigurationDisplayLocked(Configuration config,
+                                                    DisplayContent displayContent) {
         if (!mDisplayReady) {
             return false;
         }
-
-        // TODO(multidisplay): For now, apply Configuration to main screen only.
-        final DisplayContent displayContent = getDefaultDisplayContentLocked();
 
         // Use the effective "visual" dimensions based on current rotation
         final boolean rotated = (mRotation == Surface.ROTATION_90
@@ -10336,6 +10361,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 // doing this part.
                 mInputMonitor.setInputFocusLw(mCurrentFocus, updateInputWindows);
             }
+
+            mInputManager.notifyWindowFocusChanged();
 
             Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
             return true;

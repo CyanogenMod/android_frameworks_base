@@ -261,6 +261,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/speech/IRecognitionService.aidl \
 	core/java/android/speech/tts/ITextToSpeechCallback.aidl \
 	core/java/android/speech/tts/ITextToSpeechService.aidl \
+	core/java/codeaurora/ultrasound/IDigitalPenDimensionsCallback.aidl \
 	core/java/com/android/internal/app/IAppOpsCallback.aidl \
 	core/java/com/android/internal/app/IAppOpsService.aidl \
 	core/java/com/android/internal/app/IBatteryStats.aidl \
@@ -439,7 +440,8 @@ LOCAL_JAR_PACKAGES := \
     android.hardware \
     com \
     javax \
-    org
+    org \
+    codeaurora
 
 include $(BUILD_JAVA_LIBRARY)
 framework2_module := $(LOCAL_INSTALLED_MODULE)

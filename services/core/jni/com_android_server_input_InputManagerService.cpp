@@ -229,6 +229,7 @@ public:
     /* --- PointerControllerPolicyInterface implementation --- */
 
     virtual void loadPointerResources(PointerResources* outResources);
+    virtual void setHoverIcon(jobject pointerIconObj);
 
 private:
     sp<InputManager> mInputManager;
@@ -1001,8 +1002,32 @@ void NativeInputManager::loadPointerResources(PointerResources* outResources) {
             &outResources->spotTouch);
     loadSystemIconAsSprite(env, mContextObj, POINTER_ICON_STYLE_SPOT_ANCHOR,
             &outResources->spotAnchor);
+    loadSystemIconAsSprite(env, mContextObj, POINTER_ICON_STYLE_STYLUS_HOVER,
+            &outResources->stylusHover);
 }
 
+void NativeInputManager::setHoverIcon(jobject pointerIconObj)
+{
+    // pointerIconObj == NULL means reset to default hover icon
+    AutoMutex _l(mLock);
+    sp<PointerController> controller = mLocked.pointerController.promote();
+    if (controller != NULL) {
+        if (pointerIconObj != NULL) {
+            PointerIcon pointerIcon;
+            JNIEnv* env = jniEnv();
+            status_t status = android_view_PointerIcon_load(env, pointerIconObj,
+                    mContextObj, &pointerIcon);
+            if (!status && !pointerIcon.isNullIcon()) {
+                controller->setHoverIcon(SpriteIcon(pointerIcon.bitmap,
+                        pointerIcon.hotSpotX, pointerIcon.hotSpotY));
+            } else {
+                controller->setHoverIcon(SpriteIcon());
+            }
+        } else {
+            controller->setHoverIcon(SpriteIcon());
+        }
+    }
+}
 
 // ----------------------------------------------------------------------------
 
@@ -1341,6 +1366,10 @@ static void nativeMonitor(JNIEnv* env, jclass clazz, jlong ptr) {
     im->getInputManager()->getDispatcher()->monitor();
 }
 
+static void nativeSetHoverIcon(JNIEnv* env, jclass clazz, jlong ptr, jobject icon) {
+    NativeInputManager* im = reinterpret_cast<NativeInputManager*>(ptr);
+    im->setHoverIcon(icon);
+}
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gInputManagerMethods[] = {
@@ -1399,6 +1428,8 @@ static JNINativeMethod gInputManagerMethods[] = {
             (void*) nativeDump },
     { "nativeMonitor", "(J)V",
             (void*) nativeMonitor },
+    { "nativeSetHoverIcon", "(JLandroid/view/PointerIcon;)V",
+            (void*) nativeSetHoverIcon },
 };
 
 #define FIND_CLASS(var, className) \

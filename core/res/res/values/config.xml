@@ -1881,4 +1881,8 @@
 
     <!-- set this value to true to set network mode as global during boot up -->
     <bool name="config_global_phone_enabled">false</bool>
+
+    <!-- Is the device capable of supporting digital pen -->
+    <bool name="config_digitalPenCapable">false</bool>
+
 </resources>

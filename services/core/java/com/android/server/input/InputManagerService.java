@@ -46,6 +46,7 @@ import android.content.res.Resources.NotFoundException;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.hardware.display.DisplayViewport;
 import android.hardware.input.IInputDevicesChangedListener;
 import android.hardware.input.IInputManager;
@@ -195,6 +196,7 @@ public class InputManagerService extends IInputManager.Stub
     private static native void nativeReloadDeviceAliases(long ptr);
     private static native String nativeDump(long ptr);
     private static native void nativeMonitor(long ptr);
+    private static native void nativeSetHoverIcon(long ptr, PointerIcon icon);
 
     // Input event injection constants defined in InputDispatcher.h.
     private static final int INPUT_EVENT_INJECTION_SUCCEEDED = 0;
@@ -1227,6 +1229,16 @@ public class InputManagerService extends IInputManager.Stub
         setPointerSpeedUnchecked(speed);
     }
 
+    /**
+     * Notification from WindowManagerService when focused window is
+     * changed (happens mainly when new app becomes visible)
+     */
+    public void notifyWindowFocusChanged() {
+        // when focused window changes, reset the hover cursor so one app will not
+        // be able to affect the hovering behavior of other apps
+        setCustomHoverIcon(null, 0, 0);
+    }
+
     private void setPointerSpeedUnchecked(int speed) {
         speed = Math.min(Math.max(speed, InputManager.MIN_POINTER_SPEED),
                 InputManager.MAX_POINTER_SPEED);
@@ -1337,6 +1349,16 @@ public class InputManagerService extends IInputManager.Stub
                 v.mVibrating = false;
             }
         }
+    }
+
+    // Binder call
+    @Override
+    public void setCustomHoverIcon(Bitmap icon, int hotSpotX, int hotSpotY) {
+        PointerIcon pointerIcon = null;
+        if(icon != null) {
+            pointerIcon = PointerIcon.createCustomIcon(icon, hotSpotX, hotSpotY);
+        }
+        nativeSetHoverIcon(mPtr, pointerIcon);
     }
 
     @Override

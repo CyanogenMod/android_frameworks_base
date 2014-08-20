@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.AudioService;
 import android.media.tv.TvInputManager;
 import android.os.Build;
@@ -424,6 +425,8 @@ public final class SystemServer {
         boolean disableNonCoreServices = SystemProperties.getBoolean("config.disable_noncore", false);
         boolean disableNetwork = SystemProperties.getBoolean("config.disable_network", false);
         boolean isEmulator = SystemProperties.get("ro.kernel.qemu").equals("1");
+        boolean digitalPenCapable =
+            Resources.getSystem().getBoolean(com.android.internal.R.bool.config_digitalPenCapable);
 
         try {
             Slog.i(TAG, "Reading configuration...");
@@ -979,6 +982,23 @@ public final class SystemServer {
                 }
             } else {
                 Slog.d(TAG, "Wipower not supported");
+            }
+
+            if (digitalPenCapable) {
+              try {
+                  Slog.i(TAG, "Digital Pen Service");
+                  PathClassLoader digitalPenClassLoader =
+                    new PathClassLoader("/system/framework/DigitalPenService.jar",
+                                        ClassLoader.getSystemClassLoader());
+                  Class digitalPenClass = digitalPenClassLoader.loadClass
+                    ("com.qti.snapdragon.digitalpen.DigitalPenService");
+                  Constructor<Class> ctor = digitalPenClass.getConstructor(Context.class);
+                  Object digitalPenRemoteObject = ctor.newInstance(context);
+                  Slog.i(TAG, "Successfully loaded DigitalPenService class");
+                  ServiceManager.addService("DigitalPen", (IBinder)digitalPenRemoteObject);
+              } catch (Throwable e) {
+                  reportWtf("starting DigitalPenService", e);
+              }
             }
         }
 

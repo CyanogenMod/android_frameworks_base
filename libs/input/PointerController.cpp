@@ -397,6 +397,15 @@ void PointerController::setPointerIcon(const SpriteIcon& icon) {
     updatePointerLocked();
 }
 
+void PointerController::setHoverIcon(const SpriteIcon& icon) {
+    AutoMutex _l(mLock);
+
+    mLocked.hoverIcon = icon.copy();
+    mLocked.pointerIconChanged = true;
+
+    updatePointerLocked();
+}
+
 void PointerController::handleMessage(const Message& message) {
     switch (message.what) {
     case MSG_ANIMATE:
@@ -494,8 +503,14 @@ void PointerController::updatePointerLocked() {
     }
 
     if (mLocked.pointerIconChanged || mLocked.presentationChanged) {
-        mLocked.pointerSprite->setIcon(mLocked.presentation == PRESENTATION_POINTER
-                ? mLocked.pointerIcon : mResources.spotAnchor);
+        if (mLocked.presentation == PRESENTATION_POINTER) {
+            mLocked.pointerSprite->setIcon(mLocked.pointerIcon);
+        } else if(mLocked.presentation == PRESENTATION_STYLUS_HOVER) {
+            mLocked.pointerSprite->setIcon(mLocked.hoverIcon.isValid()
+                    ? mLocked.hoverIcon : mResources.stylusHover);
+        } else { // PRESENTATION_SPOT
+            mLocked.pointerSprite->setIcon(mResources.spotAnchor);
+        }
         mLocked.pointerIconChanged = false;
         mLocked.presentationChanged = false;
     }
