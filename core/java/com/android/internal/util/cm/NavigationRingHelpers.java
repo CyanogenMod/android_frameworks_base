@@ -253,6 +253,18 @@ public class NavigationRingHelpers {
         return com.android.internal.R.drawable.ic_navigation_ring_torch_off;
     }
 
+    public static boolean hasLockscreenTargets(Context context) {
+        final String[] result = new String[NavigationRingHelpers.MAX_ACTIONS];
+        for (int i = 0; i < result.length; i++) {
+            String targetValue = Settings.System.getString(context.getContentResolver(),
+                    Settings.System.NAVIGATION_RING_TARGETS[i]);
+            if (!TextUtils.equals(targetValue, NavigationRingConstants.ACTION_NONE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void updateDynamicIconIfNeeded(Context context,
             GlowPadView view, String action, int position) {
         int resourceId = -1;
