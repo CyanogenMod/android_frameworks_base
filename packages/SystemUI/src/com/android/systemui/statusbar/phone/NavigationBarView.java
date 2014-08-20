@@ -57,6 +57,9 @@ import android.view.accessibility.AccessibilityManager.TouchExplorationStateChan
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.internal.util.cm.LockscreenTargetUtils;
+import com.android.internal.util.cm.NavigationRingConstants;
+import com.android.internal.util.cm.NavigationRingHelpers;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
@@ -602,10 +605,23 @@ public class NavigationBarView extends LinearLayout {
         final boolean showCamera = showSearch && !mCameraDisabledByDpm
                 && mLockUtils.getCameraEnabled();
 
-        setVisibleOrGone(getSearchLight(), showSearch && mModLockDisabled);
+        setVisibleOrGone(getSearchLight(), showSearch && mModLockDisabled
+                && hasLockscreenTargets());
         setVisibleOrGone(getCameraButton(), showCamera);
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
+    }
+
+    private boolean hasLockscreenTargets() {
+        final String[] result = new String[NavigationRingHelpers.MAX_ACTIONS];
+        for (int i = 0; i < result.length; i++) {
+            String targetValue = Settings.System.getString(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_RING_TARGETS[i]);
+            if (targetValue != null && !targetValue.equals(NavigationRingConstants.ACTION_NONE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setVisibleOrGone(View view, boolean visible) {
