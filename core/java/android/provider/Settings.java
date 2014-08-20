@@ -4641,6 +4641,13 @@ public final class Settings {
         public static final String CLEAR_RECENTS_BUTTON_LOCATION = "clear_recents_button_location";
 
         /**
+         * Color of the clear all button
+         *
+         * @hide
+         */
+        public static final String CLEAR_RECENTS_BUTTON_COLOR = "clear_recents_all_button_color";
+
+        /**
          * show carrier in statusbar. The value is
          * boolean (1 or 0).
          */

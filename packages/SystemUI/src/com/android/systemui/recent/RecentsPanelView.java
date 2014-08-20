@@ -42,6 +42,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.Paint;
 import android.graphics.Shader.TileMode;
@@ -463,6 +464,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 mClearRecents.setVisibility(noApps ? View.GONE : View.VISIBLE);
                 int clearAllButtonLocation = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT, UserHandle.USER_CURRENT);
+                int ClearButtonColor = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.CLEAR_RECENTS_BUTTON_COLOR, 0xffffffff, UserHandle.USER_CURRENT);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mClearRecents.getLayoutParams();
                 switch (clearAllButtonLocation) {
                     case Constants.CLEAR_ALL_BUTTON_TOP_LEFT:
@@ -480,6 +483,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         break;
                 }
                 mClearRecents.setLayoutParams(layoutParams);
+                mClearRecents.setColorFilter(null);
+                mClearRecents.setColorFilter(ClearButtonColor, Mode.MULTIPLY);
             } else {
                 mClearRecents.setVisibility(View.GONE);
             }
