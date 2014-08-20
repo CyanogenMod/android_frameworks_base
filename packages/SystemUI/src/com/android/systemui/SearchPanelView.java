@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ServiceManager;
@@ -31,12 +32,14 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.android.internal.util.cm.NavigationRingConstants;
@@ -326,11 +329,18 @@ public class SearchPanelView extends FrameLayout implements
     }
 
     private boolean isScreenLarge() {
-        final Configuration configuration = mContext.getResources().getConfiguration();
-        final int screenSize = configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+        WindowManager wm = (WindowManager) mContext.getSystemService(mContext.WINDOW_SERVICE);
+        Point size = new Point();
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getRealSize(size);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        int width = size.x;
+        int height = size.y;
 
-        return screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE
-                || screenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE;
+        int shortSide = height > width ? width : height;
+        int shortSideDp = shortSide * metrics.DENSITY_DEFAULT / metrics.densityDpi;
+
+        return shortSideDp > 600;
     }
 
     private boolean isScreenPortrait() {
