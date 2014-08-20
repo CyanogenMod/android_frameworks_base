@@ -191,6 +191,8 @@ public final class ShutdownThread extends Thread {
                                         mRebootReason = actions[which];
                                         if (actions[which].equals(SOFT_REBOOT)) {
                                             mRebootSoft = true;
+                                        } else {
+                                            mRebootSoft = false;
                                         }
                                     }
                                 }
