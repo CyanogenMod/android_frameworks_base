@@ -5816,8 +5816,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private void applyLidSwitchState() {
         mPowerManager.setKeyboardVisibility(isBuiltInKeyboardVisible());
-
         if (mLidState == LID_CLOSED && mLidControlsSleep) {
+            if (mFocusedWindow != null && (mFocusedWindow.getAttrs().flags
+                    & WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON) != 0) {
+                // if an application requests that the screen be turned on
+                // and there's a closed device cover, don't turn the screen off!
+                return;
+            }
             ITelephony telephonyService = getTelephonyService();
             try {
                 if(telephonyService != null && telephonyService.isIdle()) {
