@@ -554,6 +554,18 @@ interface ITelephony {
      */
     IccOpenLogicalChannelResponse iccOpenLogicalChannel(String AID);
 
+
+    /**
+     * Opens a logical channel to the ICC card for a particular subId.
+     *
+     * Input parameters equivalent to TS 27.007 AT+CCHO command.
+     *
+     * @param subId user preferred subId.
+     * @param AID Application id. See ETSI 102.221 and 101.220.
+     * @return an IccOpenLogicalChannelResponse object.
+     */
+    IccOpenLogicalChannelResponse iccOpenLogicalChannelUsingSubId(int subId, String AID);
+
     /**
      * Closes a previously opened logical channel to the ICC card.
      *
@@ -564,6 +576,19 @@ interface ITelephony {
      * @return true if the channel was closed successfully.
      */
     boolean iccCloseLogicalChannel(int channel);
+
+    /**
+     * Closes a previously opened logical channel to the ICC card for a
+     * particular subId.
+     *
+     * Input parameters equivalent to TS 27.007 AT+CCHC command.
+     *
+     * @param subId user preferred subId.
+     * @param channel is the channel id to be closed as retruned by a
+     *            successful iccOpenLogicalChannel.
+     * @return true if the channel was closed successfully.
+     */
+    boolean iccCloseLogicalChannelUsingSubId(int subId, int channel);
 
     /**
      * Transmit an APDU to the ICC card over a logical channel.
@@ -586,6 +611,28 @@ interface ITelephony {
             int p1, int p2, int p3, String data);
 
     /**
+     * Transmit an APDU to the ICC card over a logical channel for a
+     * particular subId.
+     *
+     * Input parameters equivalent to TS 27.007 AT+CGLA command.
+     *
+     * @param subId user preferred subId.
+     * @param channel is the channel id to be closed as retruned by a
+     *            successful iccOpenLogicalChannel.
+     * @param cla Class of the APDU command.
+     * @param instruction Instruction of the APDU command.
+     * @param p1 P1 value of the APDU command.
+     * @param p2 P2 value of the APDU command.
+     * @param p3 P3 value of the APDU command. If p3 is negative a 4 byte APDU
+     *            is sent to the SIM.
+     * @param data Data to be sent with the APDU.
+     * @return The APDU response from the ICC card with the status appended at
+     *            the end.
+     */
+    String iccTransmitApduLogicalChannelUsingSubId(int subId, int channel, int cla,
+            int instruction, int p1, int p2, int p3, String data);
+
+    /**
      * Transmit an APDU to the ICC card over the basic channel.
      *
      * Input parameters equivalent to TS 27.007 AT+CSIM command.
@@ -604,6 +651,26 @@ interface ITelephony {
             int p1, int p2, int p3, String data);
 
     /**
+     * Transmit an APDU to the ICC card over the basic channel for a particular
+     * subId.
+     *
+     * Input parameters equivalent to TS 27.007 AT+CSIM command.
+     *
+     * @param subId user preferred subId.
+     * @param cla Class of the APDU command.
+     * @param instruction Instruction of the APDU command.
+     * @param p1 P1 value of the APDU command.
+     * @param p2 P2 value of the APDU command.
+     * @param p3 P3 value of the APDU command. If p3 is negative a 4 byte APDU
+     *            is sent to the SIM.
+     * @param data Data to be sent with the APDU.
+     * @return The APDU response from the ICC card with the status appended at
+     *            the end.
+     */
+    String iccTransmitApduBasicChannelUsingSubId(int subId, int cla, int instruction,
+            int p1, int p2, int p3, String data);
+
+    /**
      * Returns the response APDU for a command APDU sent through SIM_IO.
      *
      * @param fileID
@@ -616,6 +683,22 @@ interface ITelephony {
      */
     byte[] iccExchangeSimIO(int fileID, int command, int p1, int p2, int p3,
             String filePath);
+
+    /**
+     * Returns the response APDU for a command APDU sent through SIM_IO
+     * for a particular subId.
+     *
+     * @param subId user preferred subId.
+     * @param fileID
+     * @param command
+     * @param p1 P1 value of the APDU command.
+     * @param p2 P2 value of the APDU command.
+     * @param p3 P3 value of the APDU command.
+     * @param filePath
+     * @return The APDU response.
+     */
+    byte[] iccExchangeSimIOUsingSubId(int subId, int fileID, int command, int p1, int p2,
+            int p3, String filePath);
 
     /**
      * Send ENVELOPE to the SIM and returns the response.
@@ -1005,4 +1088,15 @@ interface ITelephony {
      *@hide
      */
     ModemActivityInfo getModemActivityInfo();
+
+    /**
+     * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
+     */
+    byte[] getAtr();
+
+    /**
+     * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
+     * for a particular subId.
+     */
+    byte[] getAtrUsingSubId(int subId);
 }

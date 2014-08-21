@@ -77,7 +77,7 @@ public interface RILConstants {
     int SIM_SAP_MSG_SIZE_TOO_SMALL = 34;
     int SIM_SAP_CONNECT_OK_CALL_ONGOING = 35;
     int LCE_NOT_SUPPORTED = 36;               /* Link Capacity Estimation (LCE) not supported */
-
+    int INVALID_PARAMETER = 37;
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
@@ -335,6 +335,7 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_STOP_LCE = 133;
     int RIL_REQUEST_PULL_LCEDATA = 134;
     int RIL_REQUEST_GET_ACTIVITY_INFO = 135;
+    int RIL_REQUEST_SIM_GET_ATR = 136;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
