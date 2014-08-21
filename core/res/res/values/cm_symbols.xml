@@ -274,4 +274,7 @@
     <java-symbol type="string" name="usb_media_checking" />
     <java-symbol type="string" name="usb_media_removed" />
     <java-symbol type="string" name="usb_media_shared" />
+
+    <!-- USB OTG Notification -->
+    <java-symbol type="string" name="usb_storage_notification_manage_message" />
 </resources>
