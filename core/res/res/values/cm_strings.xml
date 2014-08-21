@@ -235,4 +235,7 @@
     <string name="storage_safe_unmount_notification_message">You can safely remove <xliff:g id="storage" example="SD card">%s</xliff:g>.</string>
     <string name="storage_nomedia_notification_title">Removed <xliff:g id="storage" example="SD card">%s</xliff:g></string>
     <string name="storage_nomedia_notification_message"><xliff:g id="storage" example="SD card">%s</xliff:g> removed. Insert new media.</string>
+
+    <!-- USB OTG notification message -->
+    <string name="usb_storage_notification_manage_message">Tap to manage</string>
 </resources>
