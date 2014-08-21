@@ -303,6 +303,9 @@
     <java-symbol type="string" name="usb_ext_media_unmountable_notification_message" />
     <java-symbol type="string" name="usb_ext_media_unmountable_notification_title" />
 
+    <!-- USB OTG Notification -->
+    <java-symbol type="string" name="usb_storage_notification_manage_message" />
+
     <!-- LiveDisplay -->
     <java-symbol type="string" name="live_display_title" />
     <java-symbol type="string" name="live_display_hint" />

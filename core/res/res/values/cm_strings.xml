@@ -334,6 +334,9 @@
     <string name="usb_ext_media_nomedia_notification_title">Removed USB storage</string>
     <string name="usb_ext_media_nomedia_notification_message">USB storage removed. Insert new media.</string>
 
+    <!-- USB OTG notification message -->
+    <string name="usb_storage_notification_manage_message">Tap to manage</string>
+
     <!-- LiveDisplay strings -->
     <string name="live_display_title" translatable="false">LiveDisplay</string>
     <string name="live_display_auto">Automatic</string>
