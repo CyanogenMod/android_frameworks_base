@@ -328,4 +328,7 @@
     <string name="usb_ext_media_safe_unmount_notification_message">You can safely remove USB storage.</string>
     <string name="usb_ext_media_nomedia_notification_title">Removed USB storage</string>
     <string name="usb_ext_media_nomedia_notification_message">USB storage removed. Insert new media.</string>
+
+    <!-- USB OTG notification message -->
+    <string name="usb_storage_notification_manage_message">Tap to manage</string>
 </resources>
