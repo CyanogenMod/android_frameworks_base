@@ -71,6 +71,7 @@ public interface RILConstants {
     int SUBSCRIPTION_NOT_SUPPORTED = 26;      /* Subscription not supported */
     int MISSING_RESOURCE = 27;                /* no logical channel available */
     int NO_SUCH_ELEMENT = 28;                 /* application not found on SIM */
+    int INVALID_PARAMETER = 29;
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
@@ -316,6 +317,7 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_SET_DATA_PROFILE = 128;
     int RIL_REQUEST_SHUTDOWN = 129;
     int RIL_REQUEST_GET_DATA_CALL_PROFILE = 130;
+    int RIL_REQUEST_SIM_GET_ATR = 131;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
