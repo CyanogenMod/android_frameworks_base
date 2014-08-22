@@ -66,6 +66,8 @@ public class WallpaperManager {
     private static boolean DEBUG = false;
     private float mWallpaperXStep = -1;
     private float mWallpaperYStep = -1;
+    private float mWallpaperXOffset = 0;
+    private float mWallpaperYOffset = 0;
     private int mWallpaperXOverscroll = -1;
     private int mWallpaperYOverscroll = -1;
 
@@ -1091,6 +1093,8 @@ public class WallpaperManager {
                     windowToken, xOffset, yOffset, mWallpaperXStep, mWallpaperYStep,
                     -1, -1, mWallpaperXOverscroll, mWallpaperYOverscroll);
             //Log.v(TAG, "...app returning after sending offsets!");
+            mWallpaperXOffset = xOffset;
+            mWallpaperYOffset = yOffset;
         } catch (RemoteException e) {
             // Ignore.
         }
@@ -1163,6 +1167,26 @@ public class WallpaperManager {
         }
 
         return -1;
+    }
+
+    /** @hide */
+    public float getWallpaperXOffset() {
+        return mWallpaperXOffset;
+    }
+
+    /** @hide */
+    public float getWallpaperYOffset() {
+        return mWallpaperYOffset;
+    }
+
+    /** @hide */
+    public float getWallpaperXStep() {
+        return mWallpaperXStep;
+    }
+
+    /** @hide */
+    public float getWallpaperYStep() {
+        return mWallpaperYStep;
     }
 
     /**
