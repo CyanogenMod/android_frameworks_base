@@ -20,6 +20,8 @@ package com.android.systemui.slimrecent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,9 +116,17 @@ public class RecentHeader extends CardHeader {
             }
             view.setTag(holder);
         }
-
+        int defaultCardText = mContext.getResources().getColor(
+                R.color.card_text_color_header);
+        int textColor = Settings.System.getIntForUser( mContext.getContentResolver(),
+                Settings.System.RECENT_CARD_TEXT_COLOR,
+                defaultCardText, UserHandle.USER_CURRENT);
         holder.textView.setText(mLabel);
-
+        if (textColor != 0x00ffffff) {
+            holder.textView.setTextColor(textColor);
+        } else {
+            holder.textView.setTextColor(defaultCardText);
+        }
     }
 
     static class ViewHolder {

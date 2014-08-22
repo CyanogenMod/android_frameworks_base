@@ -22,8 +22,8 @@
 
     <!-- Card Color -->
     <color name="card_background">#ff1c1c1c</color>
-    <color name="card_background_header">#ff1c1c1c</color>
-    <color name="card_backgroundExpand">#ff1c1c1c</color>
+    <color name="card_background_header">#001c1c1c</color>
+    <color name="card_backgroundExpand">#001c1c1c</color>
 
     <color name="card_text_color_header">#ffffffff</color>
 
