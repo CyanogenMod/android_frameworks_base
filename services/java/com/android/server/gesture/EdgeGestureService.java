@@ -44,6 +44,7 @@ import android.view.DisplayInfo;
 import android.view.WindowManager;
 
 import com.android.internal.util.gesture.EdgeGesturePosition;
+import com.android.internal.util.gesture.EdgeServiceConstants;
 import com.android.server.gesture.EdgeGestureInputFilter;
 import com.android.server.input.InputManagerService;
 
@@ -213,7 +214,8 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
                     activePositions |= temp.positions;
                 }
                 if (temp.sensitivity != SENSITIVITY_NONE) {
-                    mGlobalSensitivity = Math.max(mGlobalSensitivity, temp.sensitivity);
+                    mGlobalSensitivity = Math.min(Math.max(mGlobalSensitivity, temp.sensitivity),
+                            EdgeServiceConstants.SENSITIVITY_HIGHEST);
                 }
                 someLongLiving |= temp.longLiving;
             }
