@@ -16,6 +16,7 @@
 
 package com.android.systemui.quicksettings;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -26,6 +27,8 @@ import android.media.MediaRouter;
 import android.media.RemoteControlClient;
 import android.media.RemoteController;
 import android.media.audiofx.AudioEffect;
+import android.net.NetworkInfo;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.view.View;
 
 import com.android.systemui.R;
@@ -42,6 +45,7 @@ public class EqualizerTile extends QuickSettingsTile {
     private AudioManager mAudioManager;
     private RemoteController mRemoteController;
     private QuickTileVisualizer mVisualizer;
+    private boolean mWifiDisplayActive;
 
     private RemoteController.OnClientUpdateListener mRCClientUpdateListener =
             new RemoteController.OnClientUpdateListener() {
@@ -141,6 +145,17 @@ public class EqualizerTile extends QuickSettingsTile {
                         AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL));
             }
         };
+        qsc.registerAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION, this);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(intent.getAction())) {
+            NetworkInfo networkInfo = (NetworkInfo) intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+            mWifiDisplayActive = networkInfo.isConnected();
+            updateResources();
+        }
     }
 
     @Override
@@ -213,6 +228,9 @@ public class EqualizerTile extends QuickSettingsTile {
     private boolean isMusicPlaying() {
         switch (mCurrentPlayState) {
             case RemoteControlClient.PLAYSTATE_PLAYING:
+                if (mWifiDisplayActive) {
+                    return true;
+                }
                 // Check if Chromecast is active
                 MediaRouter mediaRouter = (MediaRouter)
                         mContext.getSystemService(Context.MEDIA_ROUTER_SERVICE);
