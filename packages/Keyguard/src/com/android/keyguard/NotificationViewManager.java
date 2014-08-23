@@ -56,7 +56,6 @@ public class NotificationViewManager {
     private boolean mWokenByPocketMode = false;
     private boolean mIsScreenOn = false;
     private long mTimeCovered = 0;
-    private boolean mQuietTime;
     private boolean activeD;
 
     private Context mContext;
@@ -333,7 +332,7 @@ public class NotificationViewManager {
      * Check if device is in Quiet Hours in the moment.
      */
     private boolean inQuietHours() {
-        if (!mQuietTime) {
+        if (config.mQuietTime) {
             boolean quietHoursEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT_OR_SELF) != 0;
             if (quietHoursEnabled) {
