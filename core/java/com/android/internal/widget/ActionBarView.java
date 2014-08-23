@@ -491,6 +491,12 @@ public class ActionBarView extends AbsActionBarView {
         return mTitle;
     }
 
+    public void setTitleColor(int color) {
+        if (mTitleView != null) {
+            mTitleView.setTextColor(color);
+        }
+    }
+
     /**
      * Set the action bar title. This will always replace or override window titles.
      * @param title Title to set

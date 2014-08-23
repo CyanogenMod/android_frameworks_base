@@ -6246,7 +6246,21 @@ public final class Settings {
          *
          * @hide
          */
-        public static final String SETTINGS_ROOT_LIST_ICON_COLOR = "settings_root_list_icon_color";
+         public static final String SETTINGS_ROOT_LIST_ICON_COLOR = "settings_root_list_icon_color";
+
+        /**
+         * Colors of the settings app root list category text
+         *
+         * @hide
+         */
+         public static final String SETTINGS_ROOT_LIST_CATEGORY_TEXT_COLOR = "settings_root_list_category_text_color";
+
+        /**
+         * Colors of the settings app root list title text
+         *
+         * @hide
+         */
+        public static final String SETTINGS_ROOT_LIST_TITLE_TEXT_COLOR = "settings_root_list_title_text_color";
 
         /**
          * Status bar opaque color
