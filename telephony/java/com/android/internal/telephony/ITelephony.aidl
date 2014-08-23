@@ -456,7 +456,7 @@ interface ITelephony {
      * @param slotId user preferred slotId.
      * Return true if an ICC card is present
      */
-    boolean hasIccCardUsingSlotId(long slotId);
+    boolean hasIccCardUsingSlotId(int slotId);
 
     /**
      * Return if the current radio is LTE on CDMA. This

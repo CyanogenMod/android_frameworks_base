@@ -1395,7 +1395,7 @@ public class TelephonyManager {
      */
     /** {@hide} */
     // FIXME Input argument slotId should be of type int
-    public boolean hasIccCard(long slotId) {
+    public boolean hasIccCard(int slotId) {
 
         try {
             return getITelephony().hasIccCardUsingSlotId(slotId);
