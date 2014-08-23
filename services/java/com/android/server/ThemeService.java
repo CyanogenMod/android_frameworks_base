@@ -561,6 +561,9 @@ public class ThemeService extends IThemeService.Stub {
                     PackageManager pm = mContext.getPackageManager();
                     PackageInfo pi = pm.getPackageInfo(pkgName, 0);
                     if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0) {
+                        // we need to get an instance of the WallpaperManager using the theme's
+                        // context so it can retrieve the resource
+                        wm = WallpaperManager.getInstance(themeContext);
                         wm.setResource(pi.legacyThemeInfos[0].wallpaperResourceId);
                     } else {
                         return false;
