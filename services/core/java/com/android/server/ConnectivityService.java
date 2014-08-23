@@ -212,6 +212,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private static final String ACTION_PKT_CNT_SAMPLE_INTERVAL_ELAPSED =
             "android.net.ConnectivityService.action.PKT_CNT_SAMPLE_INTERVAL_ELAPSED";
 
+    private static final String NETID_UPDATE =
+        "org.codeaurora.NETID_UPDATE";
+
+    private static final String EXTRA_NETWORK_TYPE = "netType";
+
+    private static final String EXTRA_NETID = "netID";
+
+    private static final int EVENT_DEFAULT_NETWORK_SWITCH = 540670;
+
     private static final int SAMPLE_INTERVAL_ELAPSED_REQUEST_CODE = 0;
 
     private PendingIntent mSampleIntervalElapsedIntent;
@@ -1404,6 +1413,17 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             intent.putExtra(ConnectivityManager.EXTRA_EXTRA_INFO,
                     info.getExtraInfo());
         }
+        NetworkAgentInfo def = mNetworkForRequestId.get(mDefaultRequest.requestId);
+        boolean isDefault = false;
+        if((info.getType() == ConnectivityManager.TYPE_MOBILE)&&
+                (def.networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))) {
+            isDefault = true;
+        }
+        if((info.getType() == ConnectivityManager.TYPE_WIFI)&&
+                (def.networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI))) {
+            isDefault = true;
+        }
+        intent.putExtra("isDefault", isDefault);
         intent.putExtra(ConnectivityManager.EXTRA_INET_CONDITION, mDefaultInetConditionPublished);
         return intent;
     }
@@ -1830,6 +1850,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     }
                     break;
                 }
+                case EVENT_DEFAULT_NETWORK_SWITCH: {
+                    handleDefaultNetworkSwitch();
+                    break;
+                }
                 case NetworkAgent.EVENT_NETWORK_PROPERTIES_CHANGED: {
                     NetworkAgentInfo nai = mNetworkAgentInfos.get(msg.replyTo);
                     if (nai == null) {
@@ -1843,7 +1867,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         synchronized (nai) {
                             nai.linkProperties = (LinkProperties)msg.obj;
                         }
-                        if (nai.created) updateLinkProperties(nai, oldLp);
+                        if (nai.created) {
+                            updateLinkProperties(nai, oldLp);
+                            notifyNetworkCallbacks(nai, ConnectivityManager.CALLBACK_IP_CHANGED);
+                        }
                     }
                     break;
                 }
@@ -2024,6 +2051,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if (mNetworkFactoryInfos.containsKey(msg.replyTo)) {
             if (msg.arg1 == AsyncChannel.STATUS_SUCCESSFUL) {
                 if (VDBG) log("NetworkFactory connected");
+                mNetworkFactoryInfos.get(msg.replyTo).asyncChannel.
+                    sendMessage(AsyncChannel.CMD_CHANNEL_FULL_CONNECTION);
                 // A network factory has connected.  Send it all current NetworkRequests.
                 for (NetworkRequestInfo nri : mNetworkRequests.values()) {
                     if (nri.isRequest == false) continue;
@@ -3794,6 +3823,36 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         teardownUnneededNetwork(oldNetwork);
     }
 
+    /**
+    By default ConnectivityService will establish connections
+    over one network.Provide a way to allow switching to another established
+    network with a higher score.
+    */
+    private void handleDefaultNetworkSwitch() {
+        NetworkAgentInfo currentDefaultNetwork = null;
+        for (NetworkAgentInfo nai : mNetworkAgentInfos.values()) {
+            if(nai.networkRequests.get(mDefaultRequest.requestId) != null) {
+                currentDefaultNetwork = nai;
+                break;
+            }
+        }
+        if(currentDefaultNetwork == null) return;
+        log("currentDefaultNetwork: " + currentDefaultNetwork);
+            NetworkAgentInfo networkSwitchTo = currentDefaultNetwork;
+            for (NetworkAgentInfo nai : mNetworkAgentInfos.values()) {
+                if(mDefaultRequest.networkCapabilities.satisfiedByNetworkCapabilities(
+                            nai.networkCapabilities)) {
+                    if(nai.currentScore > networkSwitchTo.currentScore){
+                        networkSwitchTo = nai;
+                    }
+                }
+            }
+        log("network switch to: " + networkSwitchTo);
+        if(networkSwitchTo != currentDefaultNetwork){
+            networkSwitchTo.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_CONNECTED);
+        }
+    }
+
     private void makeDefault(NetworkAgentInfo newNetwork) {
         if (DBG) log("Switching to new default network: " + newNetwork);
         mActiveDefaultNetwork = newNetwork.networkInfo.getType();
@@ -4049,6 +4108,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
     }
 
+    private void sendNetworkInfoUpdateBroadcast(int type, int netid) {
+        Intent intent = new Intent(NETID_UPDATE);
+        intent.putExtra(EXTRA_NETWORK_TYPE, type);
+        intent.putExtra(EXTRA_NETID, netid);
+        log("sendNetworkInfoUpdateBroadcast type = " + type + " netid = " + netid);
+        try {
+            mContext.sendBroadcast(intent);
+        } catch (SecurityException se) {
+            loge("sendPrefChangedBroadcast() SecurityException: " + se);
+        }
+    }
+
     private void updateNetworkInfo(NetworkAgentInfo networkAgent, NetworkInfo newInfo) {
         NetworkInfo.State state = newInfo.getState();
         NetworkInfo oldInfo = null;
@@ -4102,6 +4173,17 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
             // Consider network even though it is not yet validated.
             rematchNetworkAndRequests(networkAgent, false);
+            int val = SystemProperties.getInt("persist.cne.feature", 0);
+            boolean isPropFeatureEnabled = (val == 3) ? true : false;
+            if (isPropFeatureEnabled) {
+               if ((newInfo.getType() == ConnectivityManager.TYPE_WIFI) ||
+                    (newInfo.getType() == ConnectivityManager.TYPE_MOBILE)) {
+                  if (DBG) {
+                    log("sending network info update for type = " + newInfo.getType());
+                  }
+                  sendNetworkInfoUpdateBroadcast(newInfo.getType(), networkAgent.network.netId);
+               }
+            }
         } else if (state == NetworkInfo.State.DISCONNECTED ||
                 state == NetworkInfo.State.SUSPENDED) {
             networkAgent.asyncChannel.disconnect();
