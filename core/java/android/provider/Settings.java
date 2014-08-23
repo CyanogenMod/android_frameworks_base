@@ -3378,6 +3378,18 @@ public final class Settings {
          */
         public static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
 
+        /**
+         * Color of the status bar notif count icon
+         * @hide
+         */
+        public static final String STATUS_BAR_NOTIF_COUNT_ICON_COLOR = "status_bar_notif_count_icon_color";
+
+        /**
+         * Color of the status bar notif count text
+         * @hide
+         */
+        public static final String STATUS_BAR_NOTIF_COUNT_TEXT_COLOR = "status_bar_notif_count_text_color";
+
        /**
          * HALO enabled, should default to 0 (HALO is disabled)
          * @hide
