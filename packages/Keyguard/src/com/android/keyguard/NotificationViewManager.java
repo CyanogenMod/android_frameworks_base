@@ -167,9 +167,7 @@ public class NotificationViewManager {
 
     private class ProximityListener implements SensorEventListener {
         public void onSensorChanged(SensorEvent event) {
-            if (config.pocketMode == 1) {
-                // continue
-            } else {
+            if (config.pocketMode != 1) {
                 return;
             }
             if (event.sensor.equals(ProximitySensor)) {
