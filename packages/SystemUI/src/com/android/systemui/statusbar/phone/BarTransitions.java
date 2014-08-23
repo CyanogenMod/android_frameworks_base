@@ -18,15 +18,19 @@ package com.android.systemui.statusbar.phone;
 
 import android.animation.TimeInterpolator;
 import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.UserHandle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -54,10 +58,10 @@ public class BarTransitions {
 
     private int mMode;
 
-    public BarTransitions(View view, int gradientResourceId) {
+    public BarTransitions(View view, int gradientResourceId, boolean isStatusbar) {
         mTag = "BarTransitions." + view.getClass().getSimpleName();
         mView = view;
-        mBarBackground = new BarBackgroundDrawable(mView.getContext(), gradientResourceId);
+        mBarBackground = new BarBackgroundDrawable(mView.getContext(), gradientResourceId, isStatusbar);
         if (HIGH_END) {
             mView.setBackground(mBarBackground);
         }
@@ -120,21 +124,34 @@ public class BarTransitions {
         private long mEndTime;
 
         private int mGradientAlpha;
+        private int mOpaqueColor;
+
+        private boolean mIsStatusbarColor;
+        private int mSemiTransColor;
+        private int mGradientColor;
         private int mColor;
 
         private int mGradientAlphaStart;
         private int mColorStart;
 
-        public BarBackgroundDrawable(Context context, int gradientResourceId) {
+        private Context mContext;
+
+        public BarBackgroundDrawable(Context context, int gradientResourceId, boolean isStatusbar) {
             final Resources res = context.getResources();
+            mContext = context;
+            mIsStatusbarColor = isStatusbar;
+
+            updateUserColors();
+
             if (DEBUG_COLORS) {
                 mOpaque = 0xff0000ff;
                 mSemiTransparent = 0x7f0000ff;
             } else {
-                mOpaque = res.getColor(R.color.system_bar_background_opaque);
-                mSemiTransparent = res.getColor(R.color.system_bar_background_semi_transparent);
+                mOpaque = mOpaqueColor;
+                mSemiTransparent = mSemiTransColor;
             }
             mGradient = res.getDrawable(gradientResourceId);
+            mGradient.setColorFilter(mGradientColor, Mode.MULTIPLY);
             mInterpolator = new LinearInterpolator();
         }
 
@@ -152,6 +169,46 @@ public class BarTransitions {
         protected void onBoundsChange(Rect bounds) {
             super.onBoundsChange(bounds);
             mGradient.setBounds(bounds);
+        }
+
+        public void updateUserColors() {
+            final ContentResolver resolver = mContext.getContentResolver();
+
+            if (mIsStatusbarColor) {
+                mOpaqueColor = Settings.System.getIntForUser(resolver,
+                        Settings.System.STATUS_BAR_OPAQUE_COLOR,
+                        0xff000000, UserHandle.USER_CURRENT);
+                mSemiTransColor = Settings.System.getIntForUser(resolver,
+                        Settings.System.STATUS_BAR_SEMI_TRANS_COLOR,
+                        0x66000000, UserHandle.USER_CURRENT);
+                mGradientColor = Settings.System.getIntForUser(resolver,
+                        Settings.System.STATUS_BAR_GRADIENT_COLOR,
+                        0x66000000, UserHandle.USER_CURRENT);
+            } else {
+                mOpaqueColor = Settings.System.getIntForUser(resolver,
+                        Settings.System.NAVIGATION_BAR_OPAQUE_COLOR,
+                        0xff000000, UserHandle.USER_CURRENT);
+                mSemiTransColor = Settings.System.getIntForUser(resolver,
+                        Settings.System.NAVIGATION_BAR_SEMI_TRANS_COLOR,
+                        0x66000000, UserHandle.USER_CURRENT);
+                mGradientColor = Settings.System.getIntForUser(resolver,
+                        Settings.System.NAVIGATION_BAR_GRADIENT_COLOR,
+                        0x66000000, UserHandle.USER_CURRENT);
+            }
+
+            // The semi transparent color has a default transparency of 40%,
+            // in my opinion, it makes no sense to change the default transparency at all,
+            // so check the current transparency, and change it to 40% if needed.
+            int currentAlpha = Color.alpha(mSemiTransColor);
+            int defaultAlpha = 102;
+
+            if (currentAlpha != defaultAlpha) {
+                int r = Color.red(mSemiTransColor);
+                int g = Color.green(mSemiTransColor);
+                int b = Color.blue(mSemiTransColor);
+
+                mSemiTransColor = (defaultAlpha << 24) + (r << 16) + (g << 8) + b;
+            }
         }
 
         public void applyModeBackground(int oldMode, int newMode, boolean animate) {
