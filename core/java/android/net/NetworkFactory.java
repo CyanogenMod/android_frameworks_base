@@ -103,6 +103,7 @@ public class NetworkFactory extends Handler {
 
     private int mRefCount = 0;
     private Messenger mMessenger = null;
+    protected AsyncChannel mAsyncChannel;
 
     public NetworkFactory(Looper looper, Context context, String logTag,
             NetworkCapabilities filter) {
@@ -131,6 +132,28 @@ public class NetworkFactory extends Handler {
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
+            case AsyncChannel.CMD_CHANNEL_FULL_CONNECTION: {
+                if (mAsyncChannel != null) {
+                    log("asyncchannel is connected");
+                } else {
+                    AsyncChannel ac = new AsyncChannel();
+                    ac.connected(null,this,msg.replyTo);
+                    ac.replyToMessage(msg,AsyncChannel.CMD_CHANNEL_FULLY_CONNECTED,
+                            AsyncChannel.STATUS_SUCCESSFUL);
+                    mAsyncChannel = ac;
+                }
+            }
+                break;
+            case AsyncChannel.CMD_CHANNEL_DISCONNECT: {
+                if(mAsyncChannel != null) {
+                    mAsyncChannel.disconnect();
+                }
+            }
+                break;
+            case AsyncChannel.CMD_CHANNEL_DISCONNECTED: {
+                mAsyncChannel = null;
+            }
+                break;
             case CMD_REQUEST_NETWORK: {
                 handleAddRequest((NetworkRequest)msg.obj, msg.arg1);
                 break;
