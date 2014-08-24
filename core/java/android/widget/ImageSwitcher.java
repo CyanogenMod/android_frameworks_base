@@ -17,6 +17,7 @@
 package android.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -53,6 +54,13 @@ public class ImageSwitcher extends ViewSwitcher
     {
         ImageView image = (ImageView)this.getNextView();
         image.setImageDrawable(drawable);
+        showNext();
+    }
+
+    public void setImageBitmap(Bitmap bm)
+    {
+        ImageView image = (ImageView)this.getNextView();
+        image.setImageBitmap(bm);
         showNext();
     }
 
