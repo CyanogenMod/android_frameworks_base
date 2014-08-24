@@ -86,6 +86,9 @@ public class NetworkTraffic extends TextView {
             if (shouldHide(rxData, txData, timeDelta)) {
                 setText("");
                 setVisibility(View.GONE);
+            } else if (!getConnectAvailable()) {
+                clearHandlerCallbacks();
+                setVisibility(View.GONE);
             } else {
                 // If bit/s convert from Bytes to bits
                 String symbol;
