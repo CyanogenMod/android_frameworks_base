@@ -2014,8 +2014,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mNavigationBarView != null) {
             WindowManager.LayoutParams lp =
                 (android.view.WindowManager.LayoutParams) mNavigationBarView.getLayoutParams();
-            lp.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-            mWindowManager.updateViewLayout(mNavigationBarView, lp);
+            if (lp != null) {
+                lp.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+                mWindowManager.updateViewLayout(mNavigationBarView, lp);
+            }
         }
     }
 
