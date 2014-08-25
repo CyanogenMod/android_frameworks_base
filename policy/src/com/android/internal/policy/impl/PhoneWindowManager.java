@@ -77,6 +77,7 @@ import android.service.dreams.IDreamManager;
 import android.service.gesture.EdgeGestureManager;
 import com.android.internal.os.DeviceKeyHandler;
 
+import com.android.internal.util.cm.LastAppUtils;
 import dalvik.system.DexClassLoader;
 
 import android.util.DisplayMetrics;
@@ -185,6 +186,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_VOICE_SEARCH = 4;
     private static final int KEY_ACTION_IN_APP_SEARCH = 5;
     private static final int KEY_ACTION_LAUNCH_CAMERA = 6;
+    private static final int KEY_ACTION_LAST_APP = 7;
 
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
@@ -1130,6 +1132,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KEY_ACTION_LAUNCH_CAMERA:
                 launchCameraAction();
                 break;
+            case KEY_ACTION_LAST_APP:
+                LastAppUtils.switchToLastApp(mContext);
             default:
                 break;
         }
