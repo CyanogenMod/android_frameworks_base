@@ -2357,4 +2357,8 @@
   <!-- Package Manager -->
   <java-symbol type="array" name="config_disabledComponents" />
 
+  <!-- Last app switch animations -->
+  <java-symbol type="anim" name="last_app_in" />
+  <java-symbol type="anim" name="last_app_out" />
+
 </resources>

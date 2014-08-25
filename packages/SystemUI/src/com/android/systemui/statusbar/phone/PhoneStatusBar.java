@@ -129,6 +129,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.statusbar.StatusBarIcon;
+import com.android.internal.util.cm.ActionUtils;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.BatteryMeterView;
@@ -4402,17 +4403,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
 
             if (hijackRecentsLongPress) {
-                final ActivityManager am =
-                        (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-                ActivityManager.RunningTaskInfo lastTask = getLastTask(am);
-
-                if (lastTask != null) {
-                    if (DEBUG) Log.d(TAG, "switching to " + lastTask.topActivity.getPackageName());
-                    final ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
-                            R.anim.last_app_in, R.anim.last_app_out);
-                    am.moveTaskToFront(lastTask.id, ActivityManager.MOVE_TASK_NO_USER_ACTION,
-                            opts.toBundle());
-                }
+                ActionUtils.switchToLastApp(mContext, mCurrentUserId);
             }
         } catch (RemoteException e) {
             Log.d(TAG, "Unable to reach activity manager", e);
