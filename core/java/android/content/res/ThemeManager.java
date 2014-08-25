@@ -24,6 +24,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,11 +53,13 @@ public class ThemeManager {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    for (ThemeChangeListener listener : mListeners) {
+                    Iterator<ThemeChangeListener> iterator = mListeners.iterator();
+                    while(iterator.hasNext()) {
                         try {
-                            listener.onProgress(progress);
+                            iterator.next().onProgress(progress);
                         } catch (Throwable e) {
                             Log.w(TAG, "Unable to update theme change progress", e);
+                            iterator.remove();
                         }
                     }
                 }
@@ -68,11 +71,13 @@ public class ThemeManager {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    for (ThemeChangeListener listener : mListeners) {
+                    Iterator<ThemeChangeListener> iterator = mListeners.iterator();
+                    while(iterator.hasNext()) {
                         try {
-                            listener.onFinish(isSuccess);
+                            iterator.next().onFinish(isSuccess);
                         } catch (Throwable e) {
                             Log.w(TAG, "Unable to update theme change listener", e);
+                            iterator.remove();
                         }
                     }
                 }
