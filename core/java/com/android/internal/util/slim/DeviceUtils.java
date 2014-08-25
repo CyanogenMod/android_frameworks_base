@@ -46,6 +46,8 @@ public class DeviceUtils {
 
     private static final String SETTINGS_METADATA_NAME = "com.android.settings";
 
+    public static final String GOOGLE_SEARCH = "com.google.android.googlequicksearchbox";
+
     // Device types
     private static final int DEVICE_PHONE  = 0;
     private static final int DEVICE_HYBRID = 1;
@@ -102,6 +104,20 @@ public class DeviceUtils {
     public static boolean deviceSupportsVibrator(Context ctx) {
         Vibrator vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
         return vibrator.hasVibrator();
+    }
+
+    public static boolean deviceSupportsSearch(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            List<ApplicationInfo> packages = pm.getInstalledApplications(0);
+                for (ApplicationInfo packageInfo : packages) {
+                    if (packageInfo.packageName.equals(GOOGLE_SEARCH)) {
+                        return true;
+                    }
+                }
+        } catch (Exception e) {
+        }
+        return false;
     }
 
     public static boolean deviceSupportsTorch(Context context) {
