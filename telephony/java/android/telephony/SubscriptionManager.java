@@ -1090,5 +1090,18 @@ public class SubscriptionManager implements BaseColumns {
          // ignore it
         }
     }
+
+    public static long getOnDemandDataSubId() {
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                return iSub.getOnDemandDataSubId();
+            } else {
+                return INVALID_SUB_ID;
+            }
+        } catch (RemoteException ex) {
+            return INVALID_SUB_ID;
+        }
+    }
 }
 
