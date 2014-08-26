@@ -6292,6 +6292,20 @@ public final class Settings {
         public static final String SETTINGS_ROOT_LIST_TITLE_TEXT_COLOR = "settings_root_list_title_text_color";
 
         /**
+         * Text color of the settings app root list switch widget for state on
+         * 
+         * @hide
+         */
+        public static final String SETTINGS_ROOT_LIST_SWITCH_ON_TEXT_COLOR = "settings_root_list_switch_on_text_color";
+
+        /**
+         * Text color of the settings app root list switch widget for state off
+         * 
+         * @hide
+         */
+        public static final String SETTINGS_ROOT_LIST_SWITCH_OFF_TEXT_COLOR = "settings_root_list_switch_off_text_color";
+
+        /**
          * Status bar opaque color
          * @hide
          */

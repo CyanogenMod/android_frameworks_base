@@ -101,6 +101,7 @@ public class Switch extends CompoundButton {
     private int mSwitchBottom;
 
     private TextPaint mTextPaint;
+    private boolean mUseCustomTextColor = false;
     private ColorStateList mTextColors;
     private Layout mOnLayout;
     private Layout mOffLayout;
@@ -231,6 +232,14 @@ public class Switch extends CompoundButton {
         }
 
         appearance.recycle();
+    }
+
+    public void setUseCustomTextColor() {
+        mUseCustomTextColor = true;
+    }
+
+    public void setCustomTextColor(int color) {
+        mTextPaint.setColor(color);
     }
 
     private void setSwitchTypefaceByIndex(int typefaceIndex, int styleIndex) {
@@ -744,8 +753,10 @@ public class Switch extends CompoundButton {
 
         // mTextColors should not be null, but just in case
         if (mTextColors != null) {
-            mTextPaint.setColor(mTextColors.getColorForState(getDrawableState(),
-                    mTextColors.getDefaultColor()));
+            if (!mUseCustomTextColor) {
+                mTextPaint.setColor(mTextColors.getColorForState(getDrawableState(),
+                        mTextColors.getDefaultColor()));
+            }
         }
         mTextPaint.drawableState = getDrawableState();
 
