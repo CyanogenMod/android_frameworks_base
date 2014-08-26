@@ -250,6 +250,14 @@
     </string-array>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
+         p2p Go interfaces.  If the device doesn't want to support tethering over P2p this
+         should be empty. -->
+    <string-array translatable="false" name="config_tether_p2p_regexs">
+        <item>"p2p0"</item>
+    </string-array>
+
+
+    <!-- List of regexpressions describing the interface (if any) that represent tetherable
          WiMAX interfaces.  If the device doesn't want to support tethering over Wifi this
          should be empty.  An example would be "softap.*" -->
     <string-array translatable="false" name="config_tether_wimax_regexs">
