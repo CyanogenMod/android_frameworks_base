@@ -48,6 +48,9 @@ oneway interface IConnectionServiceAdapter {
 
     void setDisconnected(String callId, in DisconnectCause disconnectCause);
 
+    void setDisconnectedWithSsNotification(String callId, int disconnectCause,
+            String disconnectMessage, int type, int code);
+
     void setOnHold(String callId);
 
     void setRingbackRequested(String callId, boolean ringing);
