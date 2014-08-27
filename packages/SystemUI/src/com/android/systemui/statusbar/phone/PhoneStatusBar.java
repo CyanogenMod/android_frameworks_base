@@ -226,7 +226,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     BluetoothController mBluetoothController;
     BatteryController mBatteryController;
     LocationController mLocationController;
-    NetworkController mNetworkController;
+    public NetworkController mNetworkController; //pa pie
 
     // Shake listener for user-defined events
     private ShakeListener mShakeListener;
@@ -282,7 +282,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     boolean mHasSettingsPanel, mHideSettingsPanel, mHasFlipSettings;
     SettingsPanelView mSettingsPanel;
     View mFlipSettingsView;
-    QuickSettingsContainerView mSettingsContainer;
+    public QuickSettingsContainerView mSettingsContainer; //PA PIE
     int mSettingsPanelGravity;
 
     boolean mDoubleTapToSleep;

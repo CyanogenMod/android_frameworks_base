@@ -51,13 +51,14 @@ public class PieControl implements OnClickListener {
     public static final String MENU_BUTTON = "##menu##";
     public static final String SEARCH_BUTTON = "##search##";
     public static final String RECENT_BUTTON = "##recent##";
-    public static final String LAST_APP_BUTTON = "##lastapp##";
-    public static final String KILL_TASK_BUTTON = "##killtask##";
     public static final String APP_WINDOW_BUTTON = "##appwindow##";
     public static final String ACT_NOTIF_BUTTON = "##actnotif##";
     public static final String ACT_QS_BUTTON = "##actqs##";
-    public static final String SCREENSHOT_BUTTON = "##screenshot##";
+    public static final String LAST_APP_BUTTON = "##lastapp##";
+    public static final String KILL_TASK_BUTTON = "##killtask##";
     public static final String POWER_BUTTON = "##power##";
+    public static final String SCREENSHOT_BUTTON = "##screenshot##";
+    public static final String TORCH_BUTTON = "##torch##";
 
     protected Context mContext;
     protected PieMenu mPie;
@@ -67,14 +68,15 @@ public class PieControl implements OnClickListener {
     private PieItem mHome;
     private PieItem mMenu;
     private PieItem mRecent;
-    private PieItem mLastApp;
-    private PieItem mKillTask;
     private PieItem mAppWindow;
     private PieItem mActNotif;
     private PieItem mActQs;
+    private PieItem mLastApp;
+    private PieItem mKillTask;
+    private PieItem mPower;
     private PieItem mSearch;
     private PieItem mScreenShot;
-    private PieItem mPower;
+    private PieItem mTorch;
     private OnNavButtonPressedListener mListener;
     private PieControlPanel mPanel;
 
@@ -132,31 +134,31 @@ public class PieControl implements OnClickListener {
         mBack = makeItem(R.drawable.ic_sysbar_back, 1, BACK_BUTTON, false);
         mHome = makeItem(R.drawable.ic_sysbar_home, 1, HOME_BUTTON, false);
         mRecent = makeItem(R.drawable.ic_sysbar_recent, 1, RECENT_BUTTON, false);
-        mLastApp = makeItem(R.drawable.ic_sysbar_lastapp_side, 1, LAST_APP_BUTTON, true);
-        mKillTask = makeItem(R.drawable.ic_sysbar_killtask_pie, 1, KILL_TASK_BUTTON, true);
-        mAppWindow = makeItem(R.drawable.ic_sysbar_appwindow_pie, 1, APP_WINDOW_BUTTON, true);
+        mMenu = makeItem(R.drawable.ic_sysbar_menu, 1, MENU_BUTTON, true);
         mActNotif = makeItem(R.drawable.ic_sysbar_notifications_pie, 1, ACT_NOTIF_BUTTON, true);
         mActQs = makeItem(R.drawable.ic_sysbar_quicksettings_pie, 1, ACT_QS_BUTTON, true);
-        mScreenShot = makeItem(R.drawable.ic_sysbar_screenshot_pie, 1, SCREENSHOT_BUTTON, true);
+        mAppWindow = makeItem(R.drawable.ic_sysbar_appwindow_pie, 1, APP_WINDOW_BUTTON, true);
+        mLastApp = makeItem(R.drawable.ic_sysbar_lastapp_side, 1, LAST_APP_BUTTON, true);
+        mKillTask = makeItem(R.drawable.ic_sysbar_killtask_pie, 1, KILL_TASK_BUTTON, true);
         mPower = makeItem(R.drawable.ic_sysbar_power, 1, POWER_BUTTON, true);
-        mMenu = makeItem(R.drawable.ic_sysbar_menu, 1, MENU_BUTTON, true);
-        mPie.addItem(mMenu);
-        mPie.addItem(mPower);
-        mPie.addItem(mScreenShot);
-        mPie.addItem(mKillTask);
-        mPie.addItem(mLastApp);
-        mPie.addItem(mAppWindow);
-        mPie.addItem(mActNotif);
-        mPie.addItem(mActQs);
-
+        mScreenShot = makeItem(R.drawable.ic_sysbar_screenshot_pie, 1, SCREENSHOT_BUTTON, true);
+        mTorch = makeItem(R.drawable.ic_sysbar_torch, 1, TORCH_BUTTON, true);
+        mPie.addItem(mMenu);  //Right End
         if(mIsAssistantAvailable) {
             mSearch = makeItem(R.drawable.ic_sysbar_search_side, 1, SEARCH_BUTTON, true);
             mPie.addItem(mSearch);
         }
-
+        mPie.addItem(mTorch);
+        mPie.addItem(mActNotif);
+        mPie.addItem(mActQs);
+        mPie.addItem(mAppWindow);
+        mPie.addItem(mKillTask);
+        mPie.addItem(mLastApp);
+        mPie.addItem(mPower);
+        mPie.addItem(mScreenShot);
         mPie.addItem(mRecent);
         mPie.addItem(mHome);
-        mPie.addItem(mBack);
+        mPie.addItem(mBack); // Left End
     }
 
     @Override

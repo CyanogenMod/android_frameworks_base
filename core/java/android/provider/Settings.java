@@ -4821,6 +4821,12 @@ public final class Settings {
         public static final String PIE_MENU = "pie_menu";
 
         /**
+         * Pie will not rotate. Should default to 1, (yes, do not rotate)
+         * @hide
+         */
+        public static final String PIE_STICK = "pie_stick";
+
+        /**
          * Pie search, should default to 1 (yes, show)
          * @hide
          */
@@ -4873,6 +4879,12 @@ public final class Settings {
          * @hide
          */
         public static final String PIE_POWER = "pie_power";
+
+        /**
+         * Pie torch, should default to 0 (no, show only when needed)
+         * @hide
+         */
+        public static final String PIE_TORCH = "pie_torch";
 
         /*
          * Pie gap angle, should default to 2

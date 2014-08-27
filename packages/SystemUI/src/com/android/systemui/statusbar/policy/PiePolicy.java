@@ -92,6 +92,13 @@ public class PiePolicy {
         return mTelephony;
     }
 
+    public void destroy() {
+        if (mClockReceiver != null)
+            mContext.unregisterReceiver(mClockReceiver);
+        if (mBatteryReceiver != null)
+            mContext.unregisterReceiver(mBatteryReceiver);
+    }
+
     public static String getWifiSsid() {
         String ssid = mContext.getString(R.string.quick_settings_wifi_not_connected);
         ConnectivityManager connManager = (ConnectivityManager) mContext

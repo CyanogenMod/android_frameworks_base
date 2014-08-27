@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.PieControlPanel;
+import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 
@@ -73,36 +74,37 @@ public class PieStatusPanel {
         mContext = context;
         mPanel = panel;
 
-        mNotificationPanel = mPanel.getBar().getNotificationRowLayout();
+        mNotificationPanel = mPanel.getBar().mPile;
         mNotificationPanel.setTag(NOTIFICATIONS_PANEL);
-        mQS = mPanel.getBar().getQuickSettingsPanel();
+        mQS = ((PhoneStatusBar) mPanel.getBar()).mSettingsContainer;
         mQS.setTag(QUICK_SETTINGS_PANEL);
 
         mPanelParents[NOTIFICATIONS_PANEL] = (ViewGroup) mNotificationPanel.getParent();
         mPanelParents[QUICK_SETTINGS_PANEL] = (ViewGroup) mQS.getParent();
 
-        mContentHeader = (View) mPanel.getBar().mContainer.findViewById(R.id.content_header);
+        mContentHeader = (View) mPanel.getBar().mPieContainer.findViewById(R.id.content_header);
 
-        mContentFrame = (View) mPanel.getBar().mContainer.findViewById(R.id.content_frame);
-        mScrollView = (ScrollView) mPanel.getBar().mContainer.findViewById(R.id.content_scroll);
+        mContentFrame = (View) mPanel.getBar().mPieContainer.findViewById(R.id.content_frame);
+        mScrollView = (ScrollView) mPanel.getBar().mPieContainer.findViewById(R.id.content_scroll);
         mScrollView.setOnTouchListener(new ViewOnTouchListener());
         mContentFrame.setOnTouchListener(new ViewOnTouchListener());
 
         mNotificationData = mPanel.getBar().getNotificationData();
-        mClearButton = (ImageView) mPanel.getBar().mContainer.findViewById(R.id.clear_all_button);
+
+        mClearButton = (ImageView) mPanel.getBar().mPieContainer.findViewById(R.id.clear_all_button);
         mClearButton.setOnClickListener(mClearButtonListener);
 
-        mHaloButton = (ImageView) mPanel.getBar().mContainer.findViewById(R.id.halo_button);
+        mHaloButton = (ImageView) mPanel.getBar().mPieContainer.findViewById(R.id.halo_button);
         if (mHaloButton != null) {
             mHaloButton.setOnClickListener(mHaloButtonListener);
         }
 
-        mQuickSettingsButton = (ImageView) mPanel.getBar().mContainer.findViewById(R.id.quicksettings_button);
+        mQuickSettingsButton = (ImageView) mPanel.getBar().mPieContainer.findViewById(R.id.quicksettings_button);
         if (mQuickSettingsButton != null) {
             mQuickSettingsButton.setOnClickListener(mQuickSettingsButtonListener);
         }
 
-        mNotificationButton = (ImageView) mPanel.getBar().mContainer.findViewById(R.id.notification_button);
+        mNotificationButton = (ImageView) mPanel.getBar().mPieContainer.findViewById(R.id.notification_button);
         if (mNotificationButton != null) {
             mNotificationButton.setOnClickListener(mNotificationButtonListener);
         }
@@ -115,7 +117,7 @@ public class PieStatusPanel {
                 showHaloButton(true);
             }});
 
-        mPanel.getBar().mContainer.setVisibility(View.GONE);
+        mPanel.getBar().mPieContainer.setVisibility(View.GONE);
     }
 
     private View.OnClickListener mHaloButtonListener = new View.OnClickListener() {
@@ -219,7 +221,8 @@ public class PieStatusPanel {
                 final ArrayList<View> snapshot = new ArrayList<View>(numChildren);
                 for (int i=0; i<numChildren; i++) {
                     final View child = mNotificationPanel.getChildAt(i);
-                    if (mNotificationPanel.canChildBeDismissed(child) && child.getBottom() > scrollTop &&
+                    if (mNotificationPanel.canChildBeDismissed(child)
+                            && child.getBottom() > scrollTop &&
                             child.getTop() < scrollBottom) {
                         snapshot.add(child);
                     }
@@ -304,7 +307,8 @@ public class PieStatusPanel {
         } else if (mCurrentViewState == QUICK_SETTINGS_PANEL) {
             hidePanel(mQS);
         }
-        if (reset) mCurrentViewState = -1;
+        if (reset)
+            mCurrentViewState = -1;
     }
 
     public static void ResetPanels(boolean reset) {
@@ -395,7 +399,7 @@ public class PieStatusPanel {
     }
 
     private static void updateContainer(boolean visible) {
-        mPanel.getBar().mContainer.setVisibility(visible ? View.VISIBLE : View.GONE);
+        mPanel.getBar().mPieContainer.setVisibility(visible ? View.VISIBLE : View.GONE);
         updatePanelConfiguration();
     }
 

@@ -61,6 +61,7 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.PanelBar;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.systemui.statusbar.PieControl.OnNavButtonPressedListener;
+import com.android.internal.util.slim.TorchConstants;
 
 import java.util.List;
 
@@ -196,8 +197,8 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
     public void reorient(int orientation, boolean storeSetting) {
         mOrientation = orientation;
         mWindowManager.removeView(mTrigger);
-        mWindowManager.addView(mTrigger, BaseStatusBar
-                .getPieTriggerLayoutParams(mContext, mOrientation));
+        mWindowManager.addView(mTrigger, 
+                mStatusBar.pieGetTriggerLayoutParams(mContext, mOrientation));
         show(mShowing);
         if (storeSetting) {
             int gravityOffset = mOrientation;
@@ -305,6 +306,10 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
             } catch (RemoteException e) {
                 // wtf is this
             }
+        } else if (buttonName.equals(PieControl.TORCH_BUTTON)) {
+                Intent torch = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+                torch.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                mContext.sendBroadcastAsUser(torch, new UserHandle(UserHandle.USER_CURRENT));
         }
     }
 

@@ -83,7 +83,6 @@
 
     <!-- PA PIE -->
     <dimen name="pie_trigger_height">12dp</dimen>
-
     <dimen name="pie_radius_start">65dp</dimen>
     <dimen name="pie_radius_increment">80dp</dimen>
     <dimen name="pie_outline">1.5dp</dimen>
@@ -112,7 +111,6 @@
     <dimen name="pie_touch_offset">15dp</dimen>
     <dimen name="pie_tab_title_height">24dp</dimen>
     <dimen name="pie_item_size">40dp</dimen>
-
     <dimen name="pie_panel_padding">20dp</dimen>
     <!-- PA PIE-->
 
