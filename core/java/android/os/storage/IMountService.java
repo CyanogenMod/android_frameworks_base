@@ -189,12 +189,17 @@ public interface IMountService extends IInterface {
              * consistent with MountServiceResultCode
              */
             public int formatVolume(String mountPoint) throws RemoteException {
+                return formatVolume(mountPoint, null);
+            }
+
+            public int formatVolume(String mountPoint, String filesystem) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 int _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
                     _data.writeString(mountPoint);
+                    _data.writeString(filesystem);
                     mRemote.transact(Stub.TRANSACTION_formatVolume, _data, _reply, 0);
                     _reply.readException();
                     _result = _reply.readInt();
@@ -922,7 +927,9 @@ public interface IMountService extends IInterface {
                     data.enforceInterface(DESCRIPTOR);
                     String mountPoint;
                     mountPoint = data.readString();
-                    int result = formatVolume(mountPoint);
+                    String filesystem;
+                    filesystem = data.readString();
+                    int result = formatVolume(mountPoint, filesystem);
                     reply.writeNoException();
                     reply.writeInt(result);
                     return true;
@@ -1218,6 +1225,7 @@ public interface IMountService extends IInterface {
      * with MountServiceResultCode
      */
     public int formatVolume(String mountPoint) throws RemoteException;
+    public int formatVolume(String mountPoint, String filesystem) throws RemoteException;
 
     /**
      * Gets the path to the mounted Opaque Binary Blob (OBB).

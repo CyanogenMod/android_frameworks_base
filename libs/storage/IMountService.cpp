@@ -176,11 +176,12 @@ public:
         return reply.readInt32();
     }
 
-    int32_t formatVolume(const String16& mountPoint)
+    int32_t formatVolume(const String16& mountPoint, const String16& filesystem)
     {
         Parcel data, reply;
         data.writeInterfaceToken(IMountService::getInterfaceDescriptor());
         data.writeString16(mountPoint);
+        data.writeString16(filesystem);
         if (remote()->transact(TRANSACTION_formatVolume, data, &reply) != NO_ERROR) {
             ALOGD("formatVolume could not contact remote\n");
             return -1;

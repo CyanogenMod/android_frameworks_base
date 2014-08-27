@@ -43,6 +43,7 @@ public class ExternalStorageFormatter extends Service
 
     // If non-null, the volume to format. Otherwise, will use the default external storage directory
     private StorageVolume mStorageVolume;
+    private String mStorageVolumeFS = null;
 
     public static final ComponentName COMPONENT_NAME
             = new ComponentName("android", ExternalStorageFormatter.class.getName());
@@ -93,6 +94,7 @@ public class ExternalStorageFormatter extends Service
         }
 
         mStorageVolume = intent.getParcelableExtra(StorageVolume.EXTRA_STORAGE_VOLUME);
+        mStorageVolumeFS = intent.getStringExtra(StorageVolume.EXTRA_STORAGE_VOLUME_FS);
 
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -249,8 +251,7 @@ public class ExternalStorageFormatter extends Service
                             else {
                                 extStoragePath = mStorageVolume.getPath();
                             }
-                            mountService.formatVolume(extStoragePath);
-                            success = true;
+                            mountService.formatVolume(extStoragePath, mStorageVolumeFS);
                         } catch (Exception e) {
                             Toast.makeText(ExternalStorageFormatter.this,
                                     R.string.format_error, Toast.LENGTH_LONG).show();

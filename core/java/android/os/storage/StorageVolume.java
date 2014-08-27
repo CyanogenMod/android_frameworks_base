@@ -57,6 +57,7 @@ public class StorageVolume implements Parcelable {
     // ACTION_MEDIA_NOFS, ACTION_MEDIA_MOUNTED, ACTION_MEDIA_SHARED, ACTION_MEDIA_UNSHARED,
     // ACTION_MEDIA_BAD_REMOVAL, ACTION_MEDIA_UNMOUNTABLE and ACTION_MEDIA_EJECT broadcasts.
     public static final String EXTRA_STORAGE_VOLUME = "storage_volume";
+    public static final String EXTRA_STORAGE_VOLUME_FS = "storage_volume_fs";
 
     public StorageVolume(File path, int descriptionId, boolean primary, boolean removable,
             boolean emulated, int mtpReserveSpace, boolean allowMassStorage, long maxFileSize,
