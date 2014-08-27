@@ -2458,7 +2458,10 @@ public abstract class BaseStatusBar extends SystemUI implements
             looper++;
         }
         if (lastAppId != 0) {
-            am.moveTaskToFront(lastAppId, am.MOVE_TASK_NO_USER_ACTION);
+            final ActivityOptions opts = ActivityOptions.makeCustomAnimation(mContext,
+                        com.android.internal.R.anim.last_app_in,
+                        com.android.internal.R.anim.last_app_out);
+            am.moveTaskToFront(lastAppId, am.MOVE_TASK_NO_USER_ACTION, opts.toBundle());
         }
     }
 
