@@ -85,6 +85,8 @@ public abstract class ConnectionService extends Service {
             new RemoteConnectionManager(this);
     private final List<Runnable> mPreInitializationConnectionRequests = new ArrayList<>();
     private final ConnectionServiceAdapter mAdapter = new ConnectionServiceAdapter();
+    private int mSsNotificationType = 0xFF;
+    private int mSsNotificationCode = 0xFF;
 
     private boolean mAreAccountsInitialized = false;
     private Conference sNullConference;
@@ -417,7 +419,15 @@ public abstract class ConnectionService extends Service {
         public void onDisconnected(Connection c, DisconnectCause disconnectCause) {
             String id = mIdByConnection.get(c);
             Log.d(this, "Adapter set disconnected %s", disconnectCause);
-            mAdapter.setDisconnected(id, disconnectCause);
+            if (mSsNotificationType == 0xFF && mSsNotificationCode == 0xFF) {
+                mAdapter.setDisconnected(id, disconnectCause);
+            } else {
+                mAdapter.setDisconnectedWithSsNotification(id, disconnectCause.getCode(),
+                        disconnectCause.getReason(),
+                        mSsNotificationType, mSsNotificationCode);
+                mSsNotificationType = 0xFF;
+                mSsNotificationCode = 0xFF;
+            }
         }
 
         @Override
@@ -503,6 +513,12 @@ public abstract class ConnectionService extends Service {
                 }
                 mAdapter.setIsConferenced(id, conferenceId);
             }
+        }
+
+        @Override
+        public void onSsNotificationData(int type, int code) {
+            mSsNotificationType = type;
+            mSsNotificationCode = code;
         }
     };
 
