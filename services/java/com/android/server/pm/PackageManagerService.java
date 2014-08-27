@@ -452,6 +452,9 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     final HashSet<String> mAllowances = new HashSet<String>();
 
+    final HashMap<Signature, HashSet<String>> mSignatureAllowances
+            = new HashMap<Signature, HashSet<String>>();
+
     // All available services, for your resolving pleasure.
     final ServiceIntentResolver mServices = new ServiceIntentResolver();
 
@@ -1844,14 +1847,35 @@ public class PackageManagerService extends IPackageManager.Stub {
                         continue;
                     }
                     String sharedUserId = parser.getAttributeValue(null, "sharedUserId");
-                    if (sharedUserId == null) {
+                    String signature = parser.getAttributeValue(null, "signature");
+                    if (signature == null && sharedUserId == null) {
                         Slog.w(TAG,
-                                "<allow-permission> without uid at "
+                                "<allow-permission> without uid or signature at "
                                         + parser.getPositionDescription());
                         XmlUtils.skipCurrentTag(parser);
                         continue;
                     }
-                    mAllowances.add(sharedUserId + ":" + perm);
+                    if (sharedUserId != null) mAllowances.add(sharedUserId + ":" + perm);
+                    if (signature != null) {
+                        Signature sig = null;
+                        try {
+                            sig = new Signature(signature);
+                        } catch (IllegalArgumentException e) {
+                            // sig will be null so we will log it below
+                        }
+                        if (sig != null) {
+                            HashSet<String> perms = mSignatureAllowances.get(sig);
+                            if (perms == null) {
+                                perms = new HashSet<String>();
+                                mSignatureAllowances.put(sig, perms);
+                            }
+                            perms.add(perm);
+                        } else {
+                            Slog.w(TAG,
+                                    "<allow-permission> with bad signature at "
+                                            + parser.getPositionDescription());
+                        }
+                    }
                     XmlUtils.skipCurrentTag(parser);
 
                 } else if ("library".equals(name)) {
@@ -2593,6 +2617,16 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    private boolean isAllowedSignature(PackageParser.Package pkg, String permissionName) {
+        for (Signature pkgSig : pkg.mSignatures) {
+            HashSet<String> perms = mSignatureAllowances.get(pkgSig);
+            if (perms != null && perms.contains(permissionName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void grantPermission(String packageName, String permissionName) {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.GRANT_REVOKE_PERMISSIONS, null);
@@ -2606,7 +2640,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 throw new IllegalArgumentException("Unknown permission: " + permissionName);
             }
 
-            checkGrantRevokePermissions(pkg, bp);
+            boolean allowedSignature = isAllowedSignature(pkg, permissionName);
+
+            if (!allowedSignature) checkGrantRevokePermissions(pkg, bp);
 
             final PackageSetting ps = (PackageSetting) pkg.mExtras;
             if (ps == null) {
@@ -6301,6 +6337,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             } else {
                 allowed = false;
+            }
+            if (!allowed) {
+                allowed = isAllowedSignature(pkg, perm);
             }
             if (DEBUG_INSTALL) {
                 if (gp != ps) {
