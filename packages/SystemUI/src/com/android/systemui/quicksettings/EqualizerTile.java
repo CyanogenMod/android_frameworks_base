@@ -23,7 +23,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.AudioManager;
-import android.media.MediaRouter;
 import android.media.RemoteControlClient;
 import android.media.RemoteController;
 import android.media.audiofx.AudioEffect;
@@ -231,12 +230,10 @@ public class EqualizerTile extends QuickSettingsTile {
                 if (mWifiDisplayActive) {
                     return true;
                 }
-                // Check if Chromecast is active
-                MediaRouter mediaRouter = (MediaRouter)
-                        mContext.getSystemService(Context.MEDIA_ROUTER_SERVICE);
-                MediaRouter.RouteInfo connectedRoute = mediaRouter.getSelectedRoute(
-                        MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY);
-                if (connectedRoute != null) {
+                // Transport controls include remote playback clients (e.g. Chromecast)
+                // so we don't want to return true in this case to avoid an empty
+                // equalizer tile.
+                if (mAudioManager.isMusicActiveRemotely()) {
                     return false;
                 }
 
