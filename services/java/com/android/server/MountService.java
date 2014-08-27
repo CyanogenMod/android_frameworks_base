@@ -1113,9 +1113,9 @@ class MountService extends IMountService.Stub
         }
     }
 
-    private int doFormatVolume(String path) {
+    private int doFormatVolume(String path, String filesystem) {
         try {
-            mConnector.execute("volume", "format", path);
+            mConnector.execute("volume", "format", path, filesystem);
             return StorageResultCode.OperationSucceeded;
         } catch (NativeDaemonConnectorException e) {
             int code = e.getCode();
@@ -1672,10 +1672,14 @@ class MountService extends IMountService.Stub
     }
 
     public int formatVolume(String path) {
+        return formatVolume(path, null);
+    }
+
+    public int formatVolume(String path, String filesystem) {
         validatePermission(android.Manifest.permission.MOUNT_FORMAT_FILESYSTEMS);
         waitForReady();
 
-        return doFormatVolume(path);
+        return doFormatVolume(path, filesystem);
     }
 
     public int[] getStorageUsers(String path) {

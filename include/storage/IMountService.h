@@ -41,7 +41,7 @@ public:
     virtual int32_t mountVolume(const String16& mountPoint) = 0;
     virtual int32_t unmountVolume(
             const String16& mountPoint, const bool force, const bool removeEncryption) = 0;
-    virtual int32_t formatVolume(const String16& mountPoint) = 0;
+    virtual int32_t formatVolume(const String16& mountPoint, const String16& filesystem) = 0;
     virtual int32_t
             getStorageUsers(const String16& mountPoint, int32_t** users) = 0;
     virtual int32_t getVolumeState(const String16& mountPoint) = 0;
