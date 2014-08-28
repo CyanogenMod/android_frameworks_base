@@ -21,6 +21,7 @@ import com.android.internal.telecom.IVideoProvider;
 
 import android.annotation.SystemApi;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -48,6 +49,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @SystemApi
 public abstract class Connection {
+
+    private static final boolean DBG = false;
 
     public static final int STATE_INITIALIZING = 0;
 
@@ -89,6 +92,7 @@ public abstract class Connection {
     public abstract static class Listener {
         public void onStateChanged(Connection c, int state) {}
         public void onAddressChanged(Connection c, Uri newAddress, int presentation) {}
+        public void onExtrasUpdated(Connection c, Bundle extras) {}
         public void onCallerDisplayNameChanged(
                 Connection c, String callerDisplayName, int presentation) {}
         public void onVideoStateChanged(Connection c, int videoState) {}
@@ -797,6 +801,19 @@ public abstract class Connection {
     public final void setActive() {
         setRingbackRequested(false);
         setState(STATE_ACTIVE);
+    }
+
+    /**
+     * Updates the call extras for the connection.
+     */
+    public final void setExtras(Bundle extras) {
+        if (DBG) {
+            Log.d(this, "setExtras extras size= " + extras.size());
+        }
+
+        for (Listener l : mListeners) {
+            l.onExtrasUpdated(this, extras);
+        }
     }
 
     /**
