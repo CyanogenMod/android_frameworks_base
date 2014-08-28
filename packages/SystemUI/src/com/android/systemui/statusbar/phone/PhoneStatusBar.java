@@ -4706,10 +4706,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.setClassName("com.android.settings",
-                    "com.android.settings.Settings$QuickSettingsTilesSettingsActivity");
-            startActivityDismissingKeyguard(intent, true);
+            startActivityDismissingKeyguard(
+                    new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             return true;
         }
     };
