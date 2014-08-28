@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.content.ContentResolver;
@@ -7,17 +23,13 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class ScreenTimeoutTile extends QuickSettingsTile {
-
     // timeout values
     private static final int SCREEN_TIMEOUT_MIN    =  15000;
     private static final int SCREEN_TIMEOUT_LOW    =  30000;
@@ -32,15 +44,14 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
     public ScreenTimeoutTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
 
-        mOnClick = new OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleState();
                 updateResources();
             }
         };
-
-        mOnLongClick = new OnLongClickListener() {
+        mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent("android.settings.DISPLAY_SETTINGS");
@@ -49,8 +60,8 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
             }
         };
 
-        qsc.registerObservedContent(Settings.System.getUriFor(Settings.System.SCREEN_OFF_TIMEOUT)
-                , this);
+        qsc.registerObservedContent(
+                Settings.System.getUriFor(Settings.System.SCREEN_OFF_TIMEOUT), this);
     }
 
     @Override
@@ -74,16 +85,6 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
         int timeout = getScreenTimeout();
         mLabel = makeTimeoutSummaryString(mContext, timeout);
         mDrawable = R.drawable.ic_qs_screen_timeout_off;
-
-        /* TODO: Determine if we need an on and off state
-        if (timeout <= SCREEN_TIMEOUT_LOW) {
-            mDrawable = R.drawable.ic_qs_screen_timeout_off;
-        } else if (timeout <= SCREEN_TIMEOUT_HIGH) {
-            mDrawable = R.drawable.ic_qs_screen_timeout_off;
-        } else {
-            mDrawable = R.drawable.ic_qs_screen_timeout_on;
-        }
-        */
     }
 
     protected void toggleState() {
@@ -122,8 +123,7 @@ public class ScreenTimeoutTile extends QuickSettingsTile {
             screenTimeout = SCREEN_TIMEOUT_MIN;
         }
 
-        Settings.System.putIntForUser(
-                mContext.getContentResolver(),
+        Settings.System.putIntForUser(mContext.getContentResolver(),
                 Settings.System.SCREEN_OFF_TIMEOUT, screenTimeout, UserHandle.USER_CURRENT);
     }
 
