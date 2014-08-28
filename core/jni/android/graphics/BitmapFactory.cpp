@@ -528,13 +528,14 @@ static jobject nativeDecodeFileDescriptor(JNIEnv* env, jobject clazz, jobject fi
     // Restore the descriptor's offset on exiting this function.
     AutoFDSeek autoRestore(descriptor);
 
+    descriptor = dup(descriptor);
     FILE* file = fdopen(descriptor, "r");
     if (file == NULL) {
         return nullObjectReturn("Could not open file");
     }
 
     SkAutoTUnref<SkFILEStream> fileStream(new SkFILEStream(file,
-                         SkFILEStream::kCallerRetains_Ownership));
+                         SkFILEStream::kCallerPasses_Ownership));
 
     SkAutoTUnref<SkStreamRewindable> stream;
 
