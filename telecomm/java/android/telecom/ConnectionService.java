@@ -22,6 +22,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -461,6 +462,14 @@ public abstract class ConnectionService extends Service {
                     mAdapter.setRinging(id);
                     break;
             }
+        }
+
+        @Override
+        public void onExtrasUpdated(Connection c, Bundle extras) {
+            String id = mIdByConnection.get(c);
+            Log.d(this, "Adapter set extras size="
+                    + extras.size() + " | call id= " + id);
+            mAdapter.setExtras(id, extras);
         }
 
         @Override

@@ -17,6 +17,7 @@
 package android.telecom;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IBinder.DeathRecipient;
 import android.os.RemoteException;
@@ -97,6 +98,11 @@ final class RemoteConnectionService {
                 findConferenceForAction(callId, "setActive")
                         .setState(Connection.STATE_ACTIVE);
             }
+        }
+
+        @Override
+        public void setExtras(String callId, Bundle extras) {
+            // NOTE: Should this be a no-op?
         }
 
         @Override
