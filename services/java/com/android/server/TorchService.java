@@ -26,8 +26,9 @@ public class TorchService extends ITorchService.Stub {
     private final Context mContext;
     private int mTorchAppUid = 0;
     private int mTorchAppCameraId = -1;
-    private SparseArray<CameraUserRecord> mCamerasInUse;
-    private Object mStopTorchLock = new Object();
+    private final SparseArray<CameraUserRecord> mCamerasInUse;
+    private final Object mStopTorchLock = new Object();
+    private boolean mSysFsInterfaceActive;
 
     private static class CameraUserRecord {
         IBinder token;
@@ -76,7 +77,7 @@ public class TorchService extends ITorchService.Stub {
         }
 
         // Shutdown torch outside of lock - torch shutdown will call into onCameraClosed()
-        if (needTorchShutdown) {
+        if (needTorchShutdown || mSysFsInterfaceActive) {
             shutdownTorch();
         }
 
@@ -121,6 +122,13 @@ public class TorchService extends ITorchService.Stub {
         }
     }
 
+    @Override
+    public void setSysInterfaceActive(boolean active) {
+        synchronized (mCamerasInUse) {
+            mSysFsInterfaceActive = active;
+        }
+    }
+
     private void removeCameraUserLocked(IBinder token, int cameraId) {
         CameraUserRecord record = mCamerasInUse.get(cameraId);
         if (record != null && record.token == token) {
@@ -130,6 +138,7 @@ public class TorchService extends ITorchService.Stub {
     }
 
     private void shutdownTorch() {
+        if (DEBUG) Log.d(TAG, "shutdownTorch()");
         // Ordered broadcasts are asynchronous (they only guarantee the order between
         // receivers), so make them synchronous manually by executing the broadcast in a
         // background thread and blocking the calling thread until the broadcast is done
@@ -139,6 +148,7 @@ public class TorchService extends ITorchService.Stub {
 
         Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
         i.putExtra("stop", true);
+        i.addFlags(Intent.FLAG_FROM_BACKGROUND | Intent.FLAG_RECEIVER_FOREGROUND);
 
         synchronized (mStopTorchLock) {
             if (DEBUG) Log.v(TAG, "Sending torch shutdown broadcast");
