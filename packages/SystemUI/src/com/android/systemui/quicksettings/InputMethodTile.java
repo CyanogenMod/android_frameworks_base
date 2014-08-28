@@ -1,17 +1,28 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
-import java.util.List;
-
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
@@ -20,10 +31,12 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
-public class InputMethodTile extends QuickSettingsTile {
+import java.util.List;
 
+public class InputMethodTile extends QuickSettingsTile {
     private InputMethodManager mImm;
-    private boolean showTile = false;
+    private boolean mShowTile = false;
+
     private static final String TAG_TRY_SUPPRESSING_IME_SWITCHER = "TrySuppressingImeSwitcher";
 
     public InputMethodTile(Context context, QuickSettingsController qsc) {
@@ -31,53 +44,98 @@ public class InputMethodTile extends QuickSettingsTile {
 
         mImm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        mOnClick = new OnClickListener() {
-
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mQsc.mBar.collapseAllPanels(true);
+
+                Intent intent = new Intent(Settings.ACTION_SHOW_INPUT_METHOD_PICKER);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
                 try {
-                    mQsc.mBar.collapseAllPanels(true);
-                    Intent intent = new Intent(Settings.ACTION_SHOW_INPUT_METHOD_PICKER);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
                     pendingIntent.send();
-                } catch (Exception e) {}
+                } catch (PendingIntent.CanceledException e) {
+                    // ignore, nothing we can do about it
+                }
             }
         };
-
     }
 
-    private static String getCurrentInputMethodName(Context context, ContentResolver resolver,
-            InputMethodManager imm, List<InputMethodInfo> imis, PackageManager pm) {
-        if (resolver == null || imis == null) return null;
-        final String currentInputMethodId = Settings.Secure.getString(resolver,
-                Settings.Secure.DEFAULT_INPUT_METHOD);
-        if (TextUtils.isEmpty(currentInputMethodId)) return null;
+    @Override
+    void onPostCreate() {
+        updateTile();
+        super.onPostCreate();
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
+    @Override
+    void updateQuickSettings() {
+        mTile.setVisibility(mShowTile ? View.VISIBLE : View.GONE);
+        super.updateQuickSettings();
+    }
+
+    public void toggleVisibility(boolean show) {
+        mShowTile = show && needsToShowImeSwitchOngoingNotification();
+        updateResources();
+    }
+
+    private void updateTile() {
+        mLabel = getCurrentInputMethodName();
+        mDrawable = R.drawable.ic_qs_ime;
+    }
+
+    private String getCurrentInputMethodName() {
+        List<InputMethodInfo> imis = mImm.getInputMethodList();
+        if (imis == null) {
+            return null;
+        }
+
+        final String currentInputMethodId = Settings.Secure.getStringForUser(
+                mContext.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD,
+                UserHandle.USER_CURRENT);
+        if (TextUtils.isEmpty(currentInputMethodId)) {
+            return null;
+        }
+
         for (InputMethodInfo imi : imis) {
-            if (currentInputMethodId.equals(imi.getId())) {
-                final InputMethodSubtype subtype = imm.getCurrentInputMethodSubtype();
-                final CharSequence summary = subtype != null
-                        ? subtype.getDisplayName(context, imi.getPackageName(),
-                                imi.getServiceInfo().applicationInfo)
-                        : context.getString(R.string.quick_settings_ime_label);
-                return summary.toString();
+            if (!currentInputMethodId.equals(imi.getId())) {
+                continue;
             }
+            final InputMethodSubtype subtype = mImm.getCurrentInputMethodSubtype();
+            if (subtype == null) {
+                return mContext.getString(R.string.quick_settings_ime_label);
+            }
+
+            return subtype.getDisplayName(mContext, imi.getPackageName(),
+                    imi.getServiceInfo().applicationInfo).toString();
         }
         return null;
     }
 
-    private boolean needsToShowImeSwitchOngoingNotification(InputMethodManager imm) {
-        List<InputMethodInfo> imis = imm.getEnabledInputMethodList();
+    private boolean needsToShowImeSwitchOngoingNotification() {
+        List<InputMethodInfo> imis = mImm.getEnabledInputMethodList();
         final int N = imis.size();
-        if (N > 2) return true;
-        if (N < 1) return false;
+
+        if (N > 2) {
+            return true;
+        }
+        if (N < 1) {
+            return false;
+        }
+
         int nonAuxCount = 0;
         int auxCount = 0;
         InputMethodSubtype nonAuxSubtype = null;
         InputMethodSubtype auxSubtype = null;
+
         for(int i = 0; i < N; ++i) {
             final InputMethodInfo imi = imis.get(i);
-            final List<InputMethodSubtype> subtypes = imm.getEnabledInputMethodSubtypeList(imi,
-                    true);
+            final List<InputMethodSubtype> subtypes =
+                    mImm.getEnabledInputMethodSubtypeList(imi, true);
             final int subtypeCount = subtypes.size();
             if (subtypeCount == 0) {
                 ++nonAuxCount;
@@ -108,35 +166,4 @@ public class InputMethodTile extends QuickSettingsTile {
         }
         return false;
     }
-
-    @Override
-    void onPostCreate() {
-        updateTile();
-        super.onPostCreate();
-    }
-
-    @Override
-    public void updateResources() {
-        updateTile();
-        super.updateResources();
-    }
-
-    @Override
-    void updateQuickSettings() {
-        mTile.setVisibility(showTile ? View.VISIBLE : View.GONE);
-        super.updateQuickSettings();
-    }
-
-    private synchronized void updateTile() {
-        List<InputMethodInfo> imis = mImm.getInputMethodList();
-        mLabel = getCurrentInputMethodName(mContext, mContext.getContentResolver(),
-                mImm, imis, mContext.getPackageManager());
-        mDrawable = R.drawable.ic_qs_ime;
-    }
-
-    public void toggleVisibility(boolean show) {
-        showTile = (show && needsToShowImeSwitchOngoingNotification(mImm));
-        updateResources();
-    }
-
 }

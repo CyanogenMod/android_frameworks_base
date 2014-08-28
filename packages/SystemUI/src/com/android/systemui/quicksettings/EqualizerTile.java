@@ -16,10 +16,11 @@
 
 package com.android.systemui.quicksettings;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.AudioManager;
@@ -38,7 +39,8 @@ import com.pheelicks.visualizer.FFTData;
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
 import com.pheelicks.visualizer.renderer.Renderer;
 
-public class EqualizerTile extends QuickSettingsTile {
+public class EqualizerTile extends QuickSettingsTile implements
+        QuickSettingsTileView.OnPrepareListener {
     private boolean mLinked;
     private int mCurrentPlayState;
     private AudioManager mAudioManager;
@@ -46,36 +48,60 @@ public class EqualizerTile extends QuickSettingsTile {
     private QuickTileVisualizer mVisualizer;
     private boolean mWifiDisplayActive;
 
+    private final Runnable mLinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null) {
+                if (!mLinked) {
+                    mVisualizer.link(0);
+                    mLinked = true;
+                }
+            }
+        }
+    };
+
+    private final Runnable mUnlinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null) {
+                if (mLinked) {
+                    mVisualizer.unlink();
+                    mLinked = false;
+                }
+            }
+        }
+    };
+
     private RemoteController.OnClientUpdateListener mRCClientUpdateListener =
             new RemoteController.OnClientUpdateListener() {
-                @Override
-                public void onClientChange(boolean clearing) {
-                    if (clearing) {
-                        updateState(RemoteControlClient.PLAYSTATE_STOPPED);
-                    }
-                }
+        @Override
+        public void onClientChange(boolean clearing) {
+            if (clearing) {
+                updateState(RemoteControlClient.PLAYSTATE_STOPPED);
+            }
+        }
 
-                @Override
-                public void onClientPlaybackStateUpdate(int state) {
-                    updateState(state);
-                }
+        @Override
+        public void onClientPlaybackStateUpdate(int state) {
+            updateState(state);
+        }
 
-                @Override
-                public void onClientPlaybackStateUpdate(
-                        int state, long stateChangeTimeMs, long currentPosMs, float speed) {
-                    updateState(state);
-                }
+        @Override
+        public void onClientPlaybackStateUpdate(int state, long stateChangeTimeMs,
+                long currentPosMs, float speed) {
+            updateState(state);
+        }
 
-                @Override
-                public void onClientTransportControlUpdate(int transportControlFlags) {
-                    // Do nothing here
-                }
+        @Override
+        public void onClientTransportControlUpdate(int transportControlFlags) {
+            // Do nothing here
+        }
 
-                @Override
-                public void onClientMetadataUpdate(RemoteController.MetadataEditor metadataEditor) {
-                    // Do nothing here
-                }
-            };
+        @Override
+        public void onClientMetadataUpdate(RemoteController.MetadataEditor metadataEditor) {
+            // Do nothing here
+        }
+    };
 
     private static class TileBarGraphRenderer extends Renderer {
         private int mDivisions;
@@ -91,10 +117,7 @@ public class EqualizerTile extends QuickSettingsTile {
          * @param dbfuzz - final dB display adjustment
          * @param dbFactor - dbfuzz is multiplied by dbFactor.
          */
-        public TileBarGraphRenderer(int divisions,
-                                        Paint paint,
-                                        int dbfuzz, int dbFactor)
-        {
+        public TileBarGraphRenderer(int divisions, Paint paint, int dbfuzz, int dbFactor) {
             super();
             mDivisions = divisions;
             mPaint = paint;
@@ -103,14 +126,12 @@ public class EqualizerTile extends QuickSettingsTile {
         }
 
         @Override
-        public void onRender(Canvas canvas, AudioData data, Rect rect)
-        {
+        public void onRender(Canvas canvas, AudioData data, Rect rect) {
             // Do nothing, we only display FFT data
         }
 
         @Override
-        public void onRender(Canvas canvas, FFTData data, Rect rect)
-        {
+        public void onRender(Canvas canvas, FFTData data, Rect rect) {
             for (int i = 0; i < data.bytes.length / mDivisions; i++) {
                 mFFTPoints[i * 4] = i * 4 * mDivisions;
                 mFFTPoints[i * 4 + 2] = i * 4 * mDivisions;
@@ -129,7 +150,7 @@ public class EqualizerTile extends QuickSettingsTile {
 
     public EqualizerTile(Context context, QuickSettingsController qsc) {
         super(context, qsc, R.layout.quick_settings_tile_equalizer);
-        mLabel = context.getString(R.string.quick_settings_equalizer);
+
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         // Until we get a callback
@@ -150,8 +171,8 @@ public class EqualizerTile extends QuickSettingsTile {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(intent.getAction())) {
-            NetworkInfo networkInfo = (NetworkInfo) intent
-                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+            NetworkInfo networkInfo =
+                    (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             mWifiDisplayActive = networkInfo.isConnected();
             updateResources();
         }
@@ -159,43 +180,33 @@ public class EqualizerTile extends QuickSettingsTile {
 
     @Override
     protected View getImageView() {
-        return mTile.findViewById(R.id.visualizer_view);
+        return mVisualizer;
     }
 
     @Override
     void onPostCreate() {
-        super.onPostCreate();
         mVisualizer = (QuickTileVisualizer) mTile.findViewById(R.id.visualizer_view);
         mVisualizer.setEnabled(false);
-        if (mVisualizer != null) {
-            Paint paint = new Paint();
-            paint.setStrokeWidth(mContext.getResources().getDimensionPixelSize(
-                    R.dimen.eqalizer_path_stroke_width));
-            paint.setAntiAlias(true);
-            paint.setColor(mContext.getResources().getColor(R.color.equalizer_fill_color));
-            paint.setPathEffect(new android.graphics.DashPathEffect(new float[] {
-                    mContext.getResources().getDimensionPixelSize(R.dimen.eqalizer_path_effect_1),
-                    mContext.getResources().getDimensionPixelSize(R.dimen.eqalizer_path_effect_2)
-            }, 0));
 
-            mVisualizer.addRenderer(new TileBarGraphRenderer(mContext.getResources().getInteger(
-                            R.integer.equalizer_divisions),
-                    paint,
-                    mContext.getResources().getInteger(R.integer.equalizer_db_fuzz),
-                    mContext.getResources().getInteger(R.integer.equalizer_db_fuzz_factor)));
-        }
+        Resources res = mContext.getResources();
+        Paint paint = new Paint();
+        paint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.eqalizer_path_stroke_width));
+        paint.setAntiAlias(true);
+        paint.setColor(res.getColor(R.color.equalizer_fill_color));
+        paint.setPathEffect(new DashPathEffect(new float[] {
+                res.getDimensionPixelSize(R.dimen.eqalizer_path_effect_1),
+                res.getDimensionPixelSize(R.dimen.eqalizer_path_effect_2)
+        }, 0));
 
-        mTile.setOnPrepareListener(new QuickSettingsTileView.OnPrepareListener() {
-            @Override
-            public void onPrepare() {
-                mLinkVisualizer.run();
-            }
+        int bars = res.getInteger(R.integer.equalizer_divisions);
+        mVisualizer.addRenderer(new TileBarGraphRenderer(bars, paint,
+                res.getInteger(R.integer.equalizer_db_fuzz),
+                res.getInteger(R.integer.equalizer_db_fuzz_factor)));
 
-            @Override
-            public void onUnprepare() {
-                mUnlinkVisualizer.run();
-            }
-        });
+        updateResources();
+        super.onPostCreate();
+
+        mTile.setOnPrepareListener(this);
 
         mAudioManager.registerRemoteController(mRemoteController);
         mTile.setVisibility(View.GONE);
@@ -205,6 +216,22 @@ public class EqualizerTile extends QuickSettingsTile {
     public void onDestroy() {
         mAudioManager.unregisterRemoteController(mRemoteController);
         super.onDestroy();
+    }
+
+    @Override
+    public void onPrepare() {
+        mLinkVisualizer.run();
+    }
+
+    @Override
+    public void onUnprepare() {
+        mUnlinkVisualizer.run();
+    }
+
+    @Override
+    public void updateResources() {
+        mLabel = mContext.getString(R.string.quick_settings_equalizer);
+        super.updateResources();
     }
 
     @Override
@@ -242,28 +269,4 @@ public class EqualizerTile extends QuickSettingsTile {
                 return false;
         }
     }
-
-    private final Runnable mLinkVisualizer = new Runnable() {
-        @Override
-        public void run() {
-            if (mVisualizer != null) {
-                if (!mLinked) {
-                    mVisualizer.link(0);
-                    mLinked = true;
-                }
-            }
-        }
-    };
-
-    private final Runnable mUnlinkVisualizer = new Runnable() {
-        @Override
-        public void run() {
-            if (mVisualizer != null) {
-                if (mLinked) {
-                    mVisualizer.unlink();
-                    mLinked = false;
-                }
-            }
-        }
-    };
 }

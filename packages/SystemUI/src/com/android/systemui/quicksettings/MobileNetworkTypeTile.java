@@ -1,30 +1,44 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.android.internal.telephony.Phone;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-import com.android.systemui.statusbar.policy.MSimNetworkController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
-public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkSignalChangedCallback {
-
+public class MobileNetworkTypeTile extends QuickSettingsTile implements
+        NetworkSignalChangedCallback {
     private static final String TAG = "NetworkModeQuickSettings";
 
     // retrieved from Phone.apk
-    private static final String ACTION_NETWORK_MODE_CHANGED = "com.android.internal.telephony.NETWORK_MODE_CHANGED";
-    private static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
+    private static final String ACTION_NETWORK_MODE_CHANGED =
+            "com.android.internal.telephony.NETWORK_MODE_CHANGED";
+    private static final String ACTION_MODIFY_NETWORK_MODE =
+            "com.android.internal.telephony.MODIFY_NETWORK_MODE";
     private static final String EXTRA_NETWORK_MODE = "networkMode";
 
     private static final int STATE_2G_AND_3G = 1;
@@ -46,12 +60,13 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
     private int mInternalState = STATE_INTERMEDIATE;
     private int mState;
 
-    public MobileNetworkTypeTile(Context context, QuickSettingsController qsc, NetworkController controller) {
+    public MobileNetworkTypeTile(Context context, QuickSettingsController qsc,
+            NetworkController controller) {
         super(context, qsc);
 
         mController = controller;
 
-        mOnClick = new OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentMode = getCurrentCMMode();
@@ -92,7 +107,6 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                 mContext.sendBroadcast(intent);
             }
         };
-
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -136,8 +150,9 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
         super.updateResources();
     }
 
-    private synchronized void updateTile() {
-        mMode = get2G3G(mContext);
+    private void updateTile() {
+        mMode = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.PREFERRED_NETWORK_MODE, 99);
         mState = networkModeToState();
 
         mLabel = mContext.getString(R.string.quick_settings_network_type);
@@ -168,17 +183,6 @@ public class MobileNetworkTypeTile extends QuickSettingsTile implements NetworkS
                 }
                 break;
         }
-    }
-
-    private static int get2G3G(Context context) {
-        int state = 99;
-        try {
-            state = Settings.Global.getInt(context.getContentResolver(),
-                    Settings.Global.PREFERRED_NETWORK_MODE);
-        } catch (SettingNotFoundException e) {
-            // Do nothing
-        }
-        return state;
     }
 
     private int networkModeToState() {

@@ -30,7 +30,6 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
 public class PerformanceProfileTile extends QuickSettingsTile {
-
     private String[] mEntries;
     private TypedArray mTypedArrayDrawables;
     private int mCurrentValue;
@@ -104,18 +103,11 @@ public class PerformanceProfileTile extends QuickSettingsTile {
         mCurrentValue = 0;
     }
 
-    private synchronized void updateTile() {
+    private void updateTile() {
         mDrawable = mTypedArrayDrawables.getResourceId(mCurrentValue, -1);
         Resources res = mContext.getResources();
         mEntries = res.getStringArray(com.android.internal.R.array.perf_profile_entries);
         mLabel = mEntries[mCurrentValue];
-    }
-
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        updateCurrentValue();
-        updateResources();
     }
 
     @Override
@@ -123,6 +115,5 @@ public class PerformanceProfileTile extends QuickSettingsTile {
         updateCurrentValue();
         updateResources();
     }
-
 }
 

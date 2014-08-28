@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.RemoteException;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
@@ -38,12 +37,8 @@ public class ProfileTile extends QuickSettingsTile {
     private Profile mChosenProfile;
     private ProfileManager mProfileManager;
 
-    public ProfileTile(Context context, 
-            QuickSettingsController qsc) {
+    public ProfileTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
-
-        qsc.registerAction(ProfileManager.INTENT_ACTION_PROFILE_SELECTED, this);
-        qsc.registerAction(ProfileManager.INTENT_ACTION_PROFILE_UPDATED, this);
 
         mProfileManager = (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
 
@@ -61,6 +56,9 @@ public class ProfileTile extends QuickSettingsTile {
                 return true;
             }
         };
+
+        qsc.registerAction(ProfileManager.INTENT_ACTION_PROFILE_SELECTED, this);
+        qsc.registerAction(ProfileManager.INTENT_ACTION_PROFILE_UPDATED, this);
     }
 
     @Override
@@ -75,7 +73,7 @@ public class ProfileTile extends QuickSettingsTile {
         super.updateResources();
     }
 
-    private synchronized void updateTile() {
+    private void updateTile() {
         mDrawable = R.drawable.ic_qs_profiles;
         mLabel = mProfileManager.getActiveProfile().getName();
     }
@@ -87,11 +85,8 @@ public class ProfileTile extends QuickSettingsTile {
 
     // copied from com.android.internal.policy.impl.GlobalActions
     private void createProfileDialog() {
-        final ProfileManager profileManager = (ProfileManager) mContext
-                .getSystemService(Context.PROFILE_SERVICE);
-
-        final Profile[] profiles = profileManager.getProfiles();
-        UUID activeProfile = profileManager.getActiveProfile().getUuid();
+        final Profile[] profiles = mProfileManager.getProfiles();
+        UUID activeProfile = mProfileManager.getActiveProfile().getUuid();
         final CharSequence[] names = new CharSequence[profiles.length];
 
         int i = 0;
@@ -106,17 +101,19 @@ public class ProfileTile extends QuickSettingsTile {
         }
 
         final AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
+        ab.setSingleChoiceItems(names, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which < 0) {
+                    return;
+                }
+                mChosenProfile = profiles[which];
+                mProfileManager.setActiveProfile(mChosenProfile.getUuid());
+                dialog.dismiss();
+            }
+        });
 
-        AlertDialog dialog = ab.setSingleChoiceItems(names, checkedItem,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which < 0)
-                            return;
-                        mChosenProfile = profiles[which];
-                        profileManager.setActiveProfile(mChosenProfile.getUuid());
-                        dialog.cancel();
-                    }
-                }).create();
+        final AlertDialog dialog = ab.create();
         mStatusbarService.animateCollapsePanels();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
         try {
