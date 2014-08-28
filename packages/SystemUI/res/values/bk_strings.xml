@@ -11,7 +11,10 @@
 
     <!-- Content description of the halo button in the notification panel for accessibility (not sho
          wn on the screen). [CHAR LIMIT=NONE] -->	
-    <string name="accessibility_halo">Create notification halo.</string>	
+    <string name="accessibility_halo">Create notification halo.</string>
+
+    <!-- Content description for the add quick settings tile button. [CHAR LIMIT=NONE] -->
+    <string name="accessibility_desc_add_quick_settings">Add Quick settings.</string>
 
     <!-- Title shown in notification popup for launching notification in floating mode -->
     <string name="status_bar_notification_floating_item_title">Floating mode</string>
