@@ -18,13 +18,13 @@ package com.android.internal.telecom;
 
 import android.app.PendingIntent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.telecom.ConnectionRequest;
 import android.telecom.DisconnectCause;
 import android.telecom.ParcelableConnection;
 import android.telecom.ParcelableConference;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.StatusHints;
-
 import com.android.internal.telecom.IVideoProvider;
 import com.android.internal.telecom.RemoteServiceCallback;
 
@@ -84,4 +84,6 @@ oneway interface IConnectionServiceAdapter {
     void setPhoneAccountHandle(String callId, in PhoneAccountHandle pHandle);
 
     void setCallSubstate(String callId, int callSubstate);
+
+    void setExtras(String callId, in Bundle extras);
 }
