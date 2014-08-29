@@ -723,6 +723,14 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.extra.shortcut.ICON_RESOURCE";
 
     /**
+     * GesturePanelView: Toggle the panel
+     * <p>Input: nothing
+     * <p>Output: nothing
+     * @hide
+     */
+    public static final String TOGGLE_GESTURE_ACTIONS = "vanir.TOGGLE_GESTURE_PANEL";
+
+    /**
      * Represents a shortcut/live folder icon resource.
      *
      * @see Intent#ACTION_CREATE_SHORTCUT

@@ -72,4 +72,6 @@
 
     <!-- status message in phone options dialog for when wifi is off -->
     <string name="global_actions_wifi_off_status">WiFi is OFF</string>
+
+    <string name="gesture_actions">Gesture panel</string>
 </resources>

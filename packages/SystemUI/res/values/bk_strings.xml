@@ -188,4 +188,7 @@
     <string name="status_bar_notification_swipe_floating_title">Swipe notification to float</string>
     <string name="status_bar_notification_swipe_floating_message">Would you like to swipe left to open apps in floating window?</string>
     <string name="status_bar_notification_swipe_floating" translatable="false">@string/status_bar_notification_swipe_floating_title</string>
+
+    <!-- Gesture panel -->
+    <string name="gesture_panel_add">Add</string>
 </resources>

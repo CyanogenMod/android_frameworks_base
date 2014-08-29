@@ -178,4 +178,6 @@
     <java-symbol type="string" name="global_actions_toggle_wifi" />
     <java-symbol type="drawable" name="ic_lock_wifi" />
     <java-symbol type="drawable" name="ic_lock_wifi_off" />
+
+    <java-symbol type="string" name="gesture_actions" />
 </resources>

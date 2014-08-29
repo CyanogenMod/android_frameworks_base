@@ -33,6 +33,7 @@ import android.annotation.ChaosLab;
 import android.annotation.ChaosLab.Classification;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
@@ -126,6 +127,7 @@ import com.android.systemui.EventLogTags;
 
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
 import com.android.systemui.statusbar.policy.WeatherPanel;
+import com.android.systemui.vanir.GesturePanelView;
 
 import com.android.systemui.R;
 import com.android.systemui.ReminderMessageView;
@@ -1856,6 +1858,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         filter.addDataScheme("package");
         context.registerReceiver(mAppBroadcastReceiver, filter);
+
+        // Gesture actions panel
+        filter = new IntentFilter();
+        filter.addAction(Intent.TOGGLE_GESTURE_ACTIONS);
+        mContext.registerReceiver(mGestureToggleReceiver, filter);
 
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
@@ -4717,6 +4724,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
+    private final BroadcastReceiver mGestureToggleReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+            if (km.inKeyguardRestrictedInputMode()) return;
+
+            boolean toggled = (mGesturePanelView != null) && mGesturePanelView.isGesturePanelAttached();
+
+            if (!toggled) {
+                addGesturePanelView();
+            } else {
+                mGesturePanelView.switchToClosingState();
+            }
+        }
+    };
+
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if (DEBUG) Log.v(TAG, "onReceive: " + intent);
@@ -4740,6 +4762,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 unregisterShakeListener();
                 finishBarAnimations();
                 if (mHover.isShowing()) mHover.dismissHover(false, true);
+                if (mGesturePanelView != null
+                        && mGesturePanelView.isGesturePanelAttached()) removeGesturePanelView();
             } else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
                 if (mRecreating) {
                 } else {
@@ -4802,6 +4826,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         if (DEBUG) {
             Log.v(TAG, "configuration changed: " + mContext.getResources().getConfiguration());
+        }
+        if (mGesturePanelView != null && mGesturePanelView.isGesturePanelAttached()) {
+            removeGesturePanelView();
         }
         updateDisplaySize(); // populates mDisplayMetrics
 
@@ -5227,8 +5254,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mNavigationBarView != null) {
             mWindowManager.removeViewImmediate(mNavigationBarView);
         }
+        if (mGesturePanelView != null) {
+            mWindowManager.removeViewImmediate(mGesturePanelView);
+        }
         try {
             mContext.unregisterReceiver(mBroadcastReceiver);
+        } catch (Exception ignored) { }
+        try {
+            mContext.unregisterReceiver(mGestureToggleReceiver);
         } catch (Exception ignored) { }
         try {
             mContext.unregisterReceiver(mAppBroadcastReceiver);

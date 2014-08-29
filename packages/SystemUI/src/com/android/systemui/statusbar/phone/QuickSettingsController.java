@@ -67,6 +67,7 @@ import static com.android.internal.util.slim.QSConstants.TILE_APPCIRCLEBAR;
 import static com.android.internal.util.slim.QSConstants.TILE_COMPASS;
 import static com.android.internal.util.slim.QSConstants.TILE_HOVER;
 import static com.android.internal.util.slim.QSConstants.TILE_HALO;
+import static com.android.internal.util.slim.QSConstants.TILE_GESTUREPANEL;
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -142,6 +143,7 @@ import com.android.systemui.quicksettings.ScreenCastTile;
 import com.android.systemui.quicksettings.AppcirclebarTile;
 import com.android.systemui.quicksettings.HaloTile;
 import com.android.systemui.quicksettings.HoverTile;
+import com.android.systemui.quicksettings.GesturePanelTile;
 
 import com.android.systemui.R;
 
@@ -336,6 +338,8 @@ public class QuickSettingsController {
                 qs = new CustomTile(mContext, this, findCustomKey(tile));
             } else if (tile.contains(TILE_CONTACT)) {
                 qs = new ContactTile(mContext, this, findCustomKey(tile));
+            } else if (tile.equals(TILE_GESTUREPANEL)) {
+                qs = new GesturePanelTile(mContext, this);
             }
 
             if (qs != null) {

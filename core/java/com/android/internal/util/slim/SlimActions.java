@@ -152,6 +152,10 @@ public class SlimActions {
                 i.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 context.sendBroadcastAsUser(i, new UserHandle(UserHandle.USER_CURRENT));
                 return;
+            } else if (action.equals(ButtonsConstants.ACTION_GESTURE)) {
+                Intent t = new Intent(Intent.TOGGLE_GESTURE_ACTIONS);
+                context.sendBroadcastAsUser(t, new UserHandle(UserHandle.USER_CURRENT));
+                return;
             } else if (action.equals(ButtonsConstants.ACTION_IME)) {
                 if (isKeyguardShowing) {
                     return;
