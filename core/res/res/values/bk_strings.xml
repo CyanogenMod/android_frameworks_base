@@ -63,4 +63,13 @@
 
     <!-- status message in phone options dialog for when mobile data is off -->
     <string name="global_actions_mobile_data_off_status">Mobile data is OFF</string>
+
+    <!-- label for item that toggle wifi -->
+    <string name="global_actions_toggle_wifi">WiFi</string>
+
+    <!-- status message in phone options dialog for when wifi is on -->
+    <string name="global_actions_wifi_on_status">WiFi is ON</string>
+
+    <!-- status message in phone options dialog for when wifi is off -->
+    <string name="global_actions_wifi_off_status">WiFi is OFF</string>
 </resources>

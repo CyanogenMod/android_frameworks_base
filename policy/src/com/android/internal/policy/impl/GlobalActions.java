@@ -39,6 +39,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -122,6 +123,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction mPAPieModeOn;
     private ToggleAction mNavBarModeOn;
     private ToggleAction mMobileDataOn;
+    private ToggleAction mWifiOn;
 
     private MyAdapter mAdapter;
 
@@ -133,12 +135,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction.State mPAPieState = ToggleAction.State.Off;
     private ToggleAction.State mNavBarState = ToggleAction.State.Off;
     private ToggleAction.State mMobileDataState = ToggleAction.State.Off;
+    private ToggleAction.State mWifiState = ToggleAction.State.Off;
     private boolean mIsWaitingForEcmExit = false;
     private boolean mHasTelephony;
     private boolean mHasVibrator;
     private Profile mChosenProfile;
     private final boolean mShowSilentToggle;
     private ConnectivityManager mConnectivityManager;
+    private WifiManager mWifiManager;
 
     private static int mTextColor;
 
@@ -151,6 +155,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.getService(DreamService.DREAM_SERVICE));
+        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
@@ -159,7 +164,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         filter.addAction(TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED);
         context.registerReceiver(mBroadcastReceiver, filter);
 
-	ThemeUtils.registerThemeChangeReceiver(context, mThemeChangeReceiver);
+        ThemeUtils.registerThemeChangeReceiver(context, mThemeChangeReceiver);
 
         // get notified of phone state changes
         TelephonyManager telephonyManager =
@@ -467,6 +472,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             config.getClickAction(), config.getIcon(), true),
                             config.getClickActionDescription());
                 mItems.add(mMobileDataOn);
+            // Wifi Switch
+            } else if (config.getClickAction().equals(PolicyConstants.ACTION_WIFI)) {
+                constructWifiToggle(PolicyHelper.getPowerMenuIconImage(mContext,
+                            config.getClickAction(), config.getIcon(), true),
+                            config.getClickActionDescription());
+                mItems.add(mWifiOn);
             // Navigation bar
             } else if (config.getClickAction().equals(PolicyConstants.ACTION_NAVBAR)) {
                 constructNavBarToggle(PolicyHelper.getPowerMenuIconImage(mContext,
@@ -588,6 +599,36 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 Log.i(TAG, "MobileData Toggle On");
                 boolean currentState = mConnectivityManager.getMobileDataEnabled();
                 mConnectivityManager.setMobileDataEnabled(!currentState);
+            }
+
+            @Override
+            protected void changeStateFromPress(boolean buttonOn) {
+                // comment
+                Log.i(TAG, "changeStateFromPress");
+            }
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return false;
+            }
+        };
+    }
+
+    private void constructWifiToggle(Drawable icon, String description) {
+        mWifiOn = new ToggleAction(
+                icon,
+                icon,
+                description,
+                R.string.global_actions_wifi_on_status,
+                R.string.global_actions_wifi_off_status) {
+
+            void onToggle(boolean on) {
+                // comment
+                Log.i(TAG, "Wifi Toggle On");
+                mWifiManager.setWifiEnabled(!mWifiManager.isWifiEnabled());
             }
 
             @Override
@@ -797,6 +838,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
         if (mMobileDataOn != null) {
             mMobileDataOn.updateState(mConnectivityManager.getMobileDataEnabled() ? ToggleAction.State.On : ToggleAction.State.Off);
+        }
+        if (mWifiOn != null) {
+            mWifiOn.updateState(mWifiManager.isWifiEnabled() ? ToggleAction.State.On : ToggleAction.State.Off);
         }
         if (mExpandDesktopModeOn != null) {
             mExpandDesktopModeOn.updateState(mExpandDesktopState);

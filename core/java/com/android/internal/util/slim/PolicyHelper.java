@@ -209,6 +209,9 @@ public class PolicyHelper {
         } else if (clickAction.equals(PolicyConstants.ACTION_MOBILEDATA)) {
             return context.getResources().getDrawable(
                 com.android.internal.R.drawable.ic_lock_mobile_data);
+        } else if (clickAction.equals(PolicyConstants.ACTION_WIFI)) {
+            return context.getResources().getDrawable(
+                com.android.internal.R.drawable.ic_lock_wifi);
         }
         return null;
     }
