@@ -44,6 +44,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.view.SoundEffectConstants;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -251,6 +252,7 @@ public class GesturePanelView extends FrameLayout implements GestureOverlayView.
                 } catch (ActivityNotFoundException e) {
                     Log.e(TAG, "ActivityNotFound: [" + uri + "]");
                 }
+                playSoundEffect(SoundEffectConstants.CLICK);
                 switchToState(State.Closing);
                 return;
             }
