@@ -3227,6 +3227,13 @@ public final class Settings {
         public static final String CALL_UI_AS_HEADS_UP = "call_ui_as_heads_up";
 
         /**
+         * Choose between CallUI HEADSUP method
+         *
+         * @hide
+         */
+        public static final String CALL_UI_AS_HEADS_UP_MODE = "call_ui_as_heads_up_mode";
+
+        /**
          * Quick Settings Panel Dynamic Tiles
          *
          * @hide
