@@ -3162,7 +3162,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         final boolean halfWayDone = mScrollView.getVisibility() == View.VISIBLE;
         final int zeroOutDelays = halfWayDone ? 0 : 1;
 
+        mHaloButtonVisible = true;
         setAreThereNotifications(); // determine if the clear button is necessary
+
+        if (!halfWayDone) {
+            mScrollView.setScaleX(0f);
+            mFlipSettingsView.setScaleX(1f);
+        }
 
         // Only show the Power widget if it should be shown
         mPowerWidget.updateVisibility();
@@ -3217,12 +3223,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mCarrierAndWifiViewBlocked = false;
         }
 
-        if (mHoverEnabled) {
-            updateHoverButton(true);
-            mHoverButtonAnim = start(
-                ObjectAnimator.ofFloat(mHoverButton, View.ALPHA, 1f)
-                    .setDuration(FLIP_DURATION));
-        }
+        updateHoverButton(true);
+        mHoverButtonAnim = start(
+            ObjectAnimator.ofFloat(mHoverButton, View.ALPHA, 1f)
+                .setDuration(FLIP_DURATION));
 
         if (mHaloEnabled && !mHaloActive) {
             mHaloButtonVisible = true;
@@ -3278,9 +3282,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mFlipSettingsView.setScaleX(1f);
         mFlipSettingsView.setVisibility(View.VISIBLE);
         mSettingsButton.setVisibility(View.GONE);
-        updateHoverButton(false);
         mHaloButtonVisible = false;
-        updateHaloButton();
+        updateHoverButton(false);
         mScrollView.setVisibility(View.GONE);
         mScrollView.setScaleX(0f);
         if (mRibbonView != null) {
@@ -3293,6 +3296,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mAddTileButton.setVisibility(View.VISIBLE);
         mAddTileButton.setAlpha(1f);
         mClearButton.setVisibility(View.GONE);
+        mHaloButton.setVisibility(View.GONE);
     }
 
     public boolean isShowingSettings() {
@@ -3343,10 +3347,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mHaloButton.setVisibility(View.VISIBLE);
                 mHaloButton.setAlpha(-percent);
             }
-            if (mHoverEnabled) {
-                mHoverButton.setVisibility(View.VISIBLE);
-                mHoverButton.setAlpha(-percent);
-            }
+            updateHoverButton(true);
+            mHoverButton.setAlpha(-percent);
             updateCarrierAndWifiLabelVisibility(false);
             updateNotificationShortcutsVisibility(true);
         } else { // settings side
@@ -3360,14 +3362,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mRibbonView.setVisibility(View.GONE);
                 mRibbonView.setScaleX(0f);
             }
+            mNotificationButton.setVisibility(View.VISIBLE);
+            mNotificationButton.setAlpha(percent);
             mClearButton.setVisibility(View.GONE);
             mClearButton.setAlpha(percent);
             mHaloButton.setVisibility(View.GONE);
-            mHaloButton.setAlpha(percent);
-            mHoverButton.setVisibility(View.GONE);
-            mHoverButton.setAlpha(percent);
-            mNotificationButton.setVisibility(View.VISIBLE);
-            mNotificationButton.setAlpha(percent);
+            updateHoverButton(false);
             mAddTileButton.setVisibility(View.VISIBLE);
             mAddTileButton.setAlpha(percent);
 
@@ -3445,29 +3445,23 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             ObjectAnimator.ofFloat(mAddTileButton, View.ALPHA, 1f)
                 .setDuration(FLIP_DURATION));
 
-        if (clearable) {
-            mClearButtonAnim = start(
-                setVisibilityWhenDone(
-                    ObjectAnimator.ofFloat(mClearButton, View.ALPHA, 0f)
+        mClearButtonAnim = start(
+            setVisibilityWhenDone(
+                ObjectAnimator.ofFloat(mClearButton, View.ALPHA, 0f)
+                .setDuration(FLIP_DURATION),
+                mClearButton, View.INVISIBLE));
+
+        mHaloButtonAnim = start(
+            setVisibilityWhenDone(
+                ObjectAnimator.ofFloat(mHaloButton, View.ALPHA, 0f)
                     .setDuration(FLIP_DURATION),
-                    mClearButton, View.INVISIBLE));
-        }
+                     mScrollView, View.INVISIBLE));
 
-        if (mHaloEnabled && !mHaloActive) {
-            mHaloButtonAnim = start(
-                setVisibilityWhenDone(
-                    ObjectAnimator.ofFloat(mHaloButton, View.ALPHA, 0f)
-                        .setDuration(FLIP_DURATION),
-                        mScrollView, View.INVISIBLE));
-        }
-
-        if (mHoverEnabled) {
-            mHoverButtonAnim = start(
-                setVisibilityWhenDone(
-                    ObjectAnimator.ofFloat(mHoverButton, View.ALPHA, 0f)
-                        .setDuration(FLIP_DURATION),
-                        mScrollView, View.INVISIBLE));
-        }
+        mHoverButtonAnim = start(
+            setVisibilityWhenDone(
+                ObjectAnimator.ofFloat(mHoverButton, View.ALPHA, 0f)
+                   .setDuration(FLIP_DURATION),
+                    mScrollView, View.INVISIBLE));
 
         updateNotificationShortcutsVisibility(false);
         updateCarrierAndWifiLabelVisibility(true);
@@ -3529,7 +3523,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mHaloButtonVisible = true;
             updateHaloButton();
             mHoverButton.setAlpha(1f);
-            mHoverButton.setVisibility(View.VISIBLE);
+            updateHoverButton(true);
             mNotificationPanel.setVisibility(View.GONE);
             mFlipSettingsView.setVisibility(View.GONE);
             mNotificationButton.setVisibility(View.GONE);
