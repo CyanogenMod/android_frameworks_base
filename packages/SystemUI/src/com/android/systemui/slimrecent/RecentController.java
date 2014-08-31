@@ -103,7 +103,6 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
     private int mLayoutDirection;
     private int mMainGravity;
     private int mUserGravity;
-    private Drawable defaultBackground;
     private int mPanelColor;
 
     private float mScaleFactor = DEFAULT_SCALE_FACTOR;
@@ -273,18 +272,17 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
         if (mRecentPanelView != null) {
             mRecentPanelView.setMainGravity(mMainGravity);
         }
-        if (mMainGravity == Gravity.LEFT) {
-            defaultBackground = mContext.getResources().getDrawable(
-                R.drawable.recent_bg_dropshadow_left).getCurrent();
-        } else {
-            defaultBackground = mContext.getResources().getDrawable(
-                R.drawable.recent_bg_dropshadow).getCurrent();
-        }
+        
+        // Set custom background color (or reset to default, as the case may be
         if (mRecentContent != null) {
             if (mPanelColor != 0x00ffffff) {
                 mRecentContent.setBackgroundColor(mPanelColor);
             } else {
-                mRecentContent.setBackground(defaultBackground);
+                if (mMainGravity == Gravity.LEFT) {
+                    mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow_left);
+                } else {
+                    mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow);
+                }
             }
         }
     }
@@ -583,27 +581,20 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
             }
 
             // Update colors in RecentPanelView
-            if (mMainGravity == Gravity.LEFT) {
-                defaultBackground = mContext.getResources().getDrawable(
-                    R.drawable.recent_bg_dropshadow_left).getCurrent();
-            } else {
-                defaultBackground = mContext.getResources().getDrawable(
-                    R.drawable.recent_bg_dropshadow).getCurrent();
-            }
-
             mPanelColor = Settings.System.getIntForUser(resolver,
-                    Settings.System.RECENT_PANEL_BG_COLOR, -2, UserHandle.USER_CURRENT);
+                    Settings.System.RECENT_PANEL_BG_COLOR, 0x00ffffff, UserHandle.USER_CURRENT);
 
             if (mPanelColor == Integer.MIN_VALUE
-                || mPanelColor == -2) {
-                // Flag to reset recent panel background color
-                mRecentContent.setBackground(defaultBackground);
+                || mPanelColor == -2
+                || mPanelColor == 0x00ffffff) {
+                    // Flag to reset recent panel background color
+                    if (mMainGravity == Gravity.LEFT) {
+                        mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow_left);
+                    } else {
+                        mRecentContent.setBackgroundResource(R.drawable.recent_bg_dropshadow);
+                    }
             } else {
-                if (mPanelColor != 0x00ffffff) {
                     mRecentContent.setBackgroundColor(mPanelColor);
-                } else {
-                    mRecentContent.setBackground(defaultBackground);
-                }
             }
         }
     }
