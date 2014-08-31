@@ -174,7 +174,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
-    protected static final int INTERRUPTION_THRESHOLD = 10;
+    protected static final int INTERRUPTION_THRESHOLD = 1;
     // Default timeout for heads up snooze. 5 minutes.
     protected static final int DEFAULT_TIME_HEADS_UP_SNOOZE = 300000;
 
@@ -192,7 +192,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected CommandQueue mCommandQueue;
     protected INotificationManager mNotificationManager;
-    public IStatusBarService mBarService;
+    protected IStatusBarService mBarService;
     protected H mHandler = createHandler();
 
     // all notifications
@@ -676,6 +676,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mContext.registerReceiver(mBroadcastReceiver, filter);
         SidebarObserver observer = new SidebarObserver(mHandler);
         observer.observe();
+        SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
+        mSettingsObserver.observe();
 
         pieOnStart();
 
@@ -1987,8 +1989,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         boolean updateTicker = (notification.getNotification().tickerText != null
                 && !TextUtils.equals(notification.getNotification().tickerText,
                    oldEntry.notification.getNotification().tickerText))
-                && (mHaloActive || !mHoverActive)
-                && !isDisabled(StatusBarManager.DISABLE_NOTIFICATION_TICKER);
+                && !isDisabled(StatusBarManager.DISABLE_NOTIFICATION_TICKER)
+                || (mHaloActive || !mHoverActive);
         boolean isTopAnyway = isTopNotification(rowParent, oldEntry);
         if (contentsUnchanged && bigContentsUnchanged && (orderUnchanged || isTopAnyway)) {
             if (DEBUG) Log.d(TAG, "reusing notification for key: " + key);
@@ -2166,7 +2168,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         boolean isFullscreen = notification.fullScreenIntent != null;
         int asHeadsUp = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
                 Notification.HEADS_UP_NEVER);
-        boolean isAllowed = asHeadsUp != Notification.HEADS_UP_NEVER;
+        boolean isAllowed = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
+                Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
         boolean isRequested = asHeadsUp == Notification.HEADS_UP_REQUESTED;
         boolean isOngoing = sbn.isOngoing();
 
@@ -2201,7 +2204,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         // its below our threshold priority, we might want to always display
         // notifications from certain apps
-        if (!isHighPriority && keyguardNotVisible && !isOngoing && !isIMEShowing &&!isRequested) {
+        if (!isHighPriority && keyguardNotVisible && !isOngoing && !isRequested) {
             // However, we don't want to interrupt if we're in an application that is
             // in Do Not Disturb
             if (!isPackageInDnd(getTopLevelPackage())) {

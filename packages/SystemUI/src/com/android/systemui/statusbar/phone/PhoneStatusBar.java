@@ -696,10 +696,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 if (mSettingsPanel != null) {
                     mSettingsPanel.setBackgroundDrawables();
                 }
-            }else if (uri.equals(Settings.System.getUriFor(
+            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_ALPHA))) {
                 setNotificationAlpha();
-            }else if (uri.equals(Settings.System.getUriFor(
+            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_CAMERA_WIDGET))
                 || uri.equals(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL))) {
@@ -815,6 +815,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             mContext.getContentResolver(),
                             Settings.System.HEADS_UP_SHOW_UPDATE, 0,
                             UserHandle.USER_CURRENT) == 1;
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_GRAVITY_BOTTOM))) {
+                    mHeadsUpGravityBottom = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.HEADS_UP_GRAVITY_BOTTOM, 0,
+                            UserHandle.USER_CURRENT) == 1;
+                    updateHeadsUpPosition(mStatusBarShows);
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_QUICK_ACCESS))) {
                 mHasQuickAccessSettings = Settings.System.getIntForUser(resolver,
@@ -843,51 +850,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mRibbonView.setVisibility(View.VISIBLE);
             } else if (mSettingsContainer != null) {
                 mQS.setupQuickSettings();
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.HEADS_UP_GRAVITY_BOTTOM))) {
-                    mHeadsUpGravityBottom = Settings.System.getIntForUser(
-                            mContext.getContentResolver(),
-                            Settings.System.HEADS_UP_GRAVITY_BOTTOM, 0,
-                            UserHandle.USER_CURRENT) == 1;
-                    updateHeadsUpPosition(mStatusBarShows);
-            }
-
-            mWeatherEnabled = Settings.System.getBoolean(resolver,
-                    Settings.System.USE_WEATHER, false);
-
-
-            mWeatherPanelEnabled = (Settings.System.getInt(resolver,
-                    Settings.System.STATUSBAR_WEATHER_STYLE, 0) == 2
-                    && mWeatherEnabled);
-
-            mWeatherPanelStyle = Settings.System.getInt(resolver,
-                    Settings.System.STATUSBAR_WEATHER_STYLE, 0);
-
-            if (mWeatherEnabled) {
-                switch (mWeatherPanelStyle) {
-                    case 0:
-                    case 1:
-                    case 4:
-                        mWeatherHeader.setVisibility(View.GONE);
-                        mWeatherHeader.setEnabled(false);
-                        mWeatherPanel.setVisibility(View.GONE);
-                        break;
-                    case 2:
-                        mWeatherHeader.setVisibility(View.GONE);
-                        mWeatherHeader.setEnabled(false);
-                        mWeatherPanel.setVisibility(View.VISIBLE);
-                        break;
-                    case 3:
-                    case 5:
-                        mWeatherHeader.setVisibility(View.VISIBLE);
-                        mWeatherHeader.setEnabled(true);
-                        mWeatherPanel.setVisibility(View.GONE);
-                        break;
-                }
-            } else {
-                mWeatherHeader.setVisibility(View.GONE);
-                mWeatherHeader.setEnabled(false);
-                mWeatherPanel.setVisibility(View.GONE);
             }
             update();
         }
@@ -930,6 +892,44 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
 
             updateBatteryIcons();
+
+            mWeatherEnabled = Settings.System.getBoolean(resolver,
+                    Settings.System.USE_WEATHER, false);
+
+
+            mWeatherPanelEnabled = (Settings.System.getInt(resolver,
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 0) == 2
+                    && mWeatherEnabled);
+
+            mWeatherPanelStyle = Settings.System.getInt(resolver,
+                    Settings.System.STATUSBAR_WEATHER_STYLE, 0);
+
+            if (mWeatherEnabled) {
+                switch (mWeatherPanelStyle) {
+                    case 0:
+                    case 1:
+                    case 4:
+                        mWeatherHeader.setVisibility(View.GONE);
+                        mWeatherHeader.setEnabled(false);
+                        mWeatherPanel.setVisibility(View.GONE);
+                        break;
+                    case 2:
+                        mWeatherHeader.setVisibility(View.GONE);
+                        mWeatherHeader.setEnabled(false);
+                        mWeatherPanel.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                    case 5:
+                        mWeatherHeader.setVisibility(View.VISIBLE);
+                        mWeatherHeader.setEnabled(true);
+                        mWeatherPanel.setVisibility(View.GONE);
+                        break;
+                }
+            } else {
+                mWeatherHeader.setVisibility(View.GONE);
+                mWeatherHeader.setEnabled(false);
+                mWeatherPanel.setVisibility(View.GONE);
+            }
 
             mFlipInterval = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.REMINDER_ALERT_INTERVAL, 1500, UserHandle.USER_CURRENT);
