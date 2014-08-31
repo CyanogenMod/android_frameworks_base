@@ -40,6 +40,7 @@
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Download</string>
+  <string name="reboot_soft">Soft reboot</string>
   <string name="reboot_progress">Rebooting\u2026</string>
   <string name="reboot_confirm" product="tablet">Tablet Anda akan direboot.</string>
   <string name="reboot_confirm" product="default">Ponsel Anda akan direboot.</string>

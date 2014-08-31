@@ -18,4 +18,15 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Skermslot</string>
   <string name="keyguard_discharging">Ontlaai, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <plurals name="missed_calls">
+    <item quantity="one">%d oproep gemis</item>
+    <item quantity="other">%d oproepe gemis</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d ongeleesde boodskap</item>
+    <item quantity="other">%d ongeleesde boodskappe</item>
+  </plurals>
+  <string name="missed_call">Oproep gemis</string>
+  <string name="message_from">Boodskap van</string>
+  <string name="message_from_person">Boodskap van %1$s</string>
 </resources>

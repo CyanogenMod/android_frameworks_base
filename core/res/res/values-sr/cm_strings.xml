@@ -44,11 +44,11 @@
   <string name="reboot_progress">Рестартовање\u2026</string>
   <string name="reboot_confirm" product="tablet">Tаблет ће се рестартовати.</string>
   <string name="reboot_confirm" product="default">Tелефон ће се рестартовати.</string>
-  <string name="permlab_preventpower">Спречи дугме напајања</string>
-  <string name="permdesc_preventpower">Дозвољава апликацији да заобиђе дугме напајања</string>
-  <string name="permlab_sendMockSms">Пошаљи лажне SMS поруке</string>
+  <string name="permlab_preventpower">спречи дугме за напајање</string>
+  <string name="permdesc_preventpower">Дозвољава апликацији да заобиђе дугме за напајање</string>
+  <string name="permlab_sendMockSms">пошаљи лажне SMS поруке</string>
   <string name="permdesc_sendMockSms">Дозвољава апликацији да шаље лажне SMS поруке. Ово омогућава слање SMS-а на поузданим апликацијама. Злонамерне апликације могу непрекидно да шаљу поруке, блокирајући систем обавештавања уређаја и ометају корисника.</string>
-  <string name="storage_sd_dock_card">Doк SD картица</string>
+  <string name="storage_sd_dock_card">База SD картице</string>
   <string name="app_killed_message">Апликација је затворена</string>
   <string name="global_action_reboot">Рестартуј</string>
   <string name="global_action_choose_profile">Профил</string>
@@ -64,25 +64,25 @@
   <string name="perf_profile_pwrsv">Уштеда енергије</string>
   <string name="perf_profile_bal">Уравнотежено</string>
   <string name="perf_profile_perf">Перформансе</string>
-  <string name="permlab_interceptSmsSent">Пресретање одлазних SMS-ова</string>
-  <string name="permdesc_interceptSmsSent">Дозвољава апликацији да пресретне одлазне SMS-ове. Злонамерне апликације могу да користе ово да спрече одлазне SMS поруке.</string>
-  <string name="permlab_resetBatteryStats">Ресетуј статистику батерије</string>
+  <string name="permlab_interceptSmsSent">пресретни одлазни SMS</string>
+  <string name="permdesc_interceptSmsSent">Дозвољава апликацији да пресретне одлазни SMS. Злонамерне апликације могу да користе ово да спрече одлазне SMS поруке.</string>
+  <string name="permlab_resetBatteryStats">ресетуј статистику батерије</string>
   <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
   <string name="permgrouplab_security">Безбедност</string>
   <string name="permgroupdesc_security">Дозволе које се односе на безбедносне информације уређаја.</string>
-  <string name="permlab_readPhoneBlacklist">Читај црну листу телефона</string>
+  <string name="permlab_readPhoneBlacklist">читај црну листу телефона</string>
   <string name="permdesc_readPhoneBlacklist">Омогућава апликацији да чита информације о телефонским бројевима који су блокирани за долазне позиве или поруке.</string>
-  <string name="permlab_changePhoneBlacklist">Мењај црну листу телефона</string>
+  <string name="permlab_changePhoneBlacklist">мењај црну листу телефона</string>
   <string name="permdesc_changePhoneBlacklist">Омогућава апликацији да промени бројеве телефона које су блокирани за долазне позиве или поруке.</string>
-  <string name="permlab_accessThemeService">Приступај услузи тема</string>
+  <string name="permlab_accessThemeService">приступај услузи тема</string>
   <string name="permdesc_accessThemeService">Омогућава апликацији да приступи услузи тема. Никада не би требало за нормалне апликације.</string>
-  <string name="permlab_readThemes">Читај информације о мојој теми</string>
+  <string name="permlab_readThemes">читај информације о мојој теми</string>
   <string name="permdesc_readThemesDesc">Омогућава апликацији да чита твоје теме и одлучује која тема ће бити примењена.</string>
-  <string name="permlab_writeThemes">Модификуј моје теме</string>
+  <string name="permlab_writeThemes">модификуј моје теме</string>
   <string name="permdesc_writeThemesDesc">Омогућава апликацији да убацује нове теме и модификује коју тему ћеш применити.</string>
-  <string name="permlab_setKeyguardWallpaper">Постави позадину закључаног екрана</string>
+  <string name="permlab_setKeyguardWallpaper">постави позадину закључаног екрана</string>
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени позадину на закључаном екрану.</string>
-  <string name="permlab_useHardwareFramework">Користи хардверски оквир</string>
+  <string name="permlab_useHardwareFramework">користи хардверски оквир</string>
   <string name="permdesc_useHardwareFramework">Дозвољава апликацији приступ CM хардверском оквиру.</string>
   <string name="immersive_mode_confirmation_bottom">Превуци нагоре од дна за излазак из целог екрана.</string>
   <string name="app_ops_access_camera">приступ камери</string>
@@ -134,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Сви подаци са твог USB складишта (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
   <string name="extmedia_format_message_cm" product="default">Сви подаци са твоје картице (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
+  <string name="usb_storage_notification_manage_message">Додирни да управљаш</string>
 </resources>

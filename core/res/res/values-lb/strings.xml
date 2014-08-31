@@ -49,16 +49,22 @@
   <string name="enablePin">Feeler. Aktivéier d\'SIM-/RUIM-Spär.</string>
   <string name="imei">IMEI</string>
   <string name="meid">MEID</string>
+  <string name="CfMmi">Gespréich-Weiderleedung</string>
   <string name="CwMmi">Gespréich pauséiert</string>
   <string name="BaMmi">Uruffspär</string>
   <string name="PwdMmi">Passwuert-Ännerung</string>
   <string name="PinMmi">PIN-Ännerung</string>
+  <string name="CnipMmi">Ruffnummer disponibel</string>
+  <string name="CnirMmi">Rufnummer begrenzt</string>
   <string name="DndMmi">Net stéieren</string>
   <string name="RestrictedChangedTitle">Begrenzten Zougrëff geännert</string>
   <string name="RestrictedOnData">Dateservice ass gespaart.</string>
   <string name="RestrictedOnEmergency">Noutruff ass gespaart.</string>
+  <string name="RestrictedOnNormal">Sproochservice ass gespaart.</string>
   <string name="RestrictedOnAllVoice">All Stëmmservicer si gespaart.</string>
   <string name="RestrictedOnSms">SMS-Service ass gespaart.</string>
+  <string name="RestrictedOnVoiceSms">Sprooch-/SMS-Servicer si gespaart.</string>
+  <string name="RestrictedOnAll">Alle Sprooch-/Date-/SMS-Servicer si gespaart.</string>
   <string name="serviceClassVoice">Stëmm</string>
   <string name="serviceClassData">Daten</string>
   <string name="serviceClassFAX">FAX</string>
@@ -477,6 +483,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="data_usage_3g_limit_title">2G- an 3G-Daten deaktivéiert</string>
   <string name="data_usage_4g_limit_title">4G-Daten deaktivéiert</string>
   <string name="data_usage_mobile_limit_title">Mobil Daten deaktivéiert</string>
+  <string name="data_usage_wifi_limit_title">WLAN-Daten deaktivéiert</string>
   <string name="list_delimeter">", "</string>
   <string name="activity_resolver_use_always">Ëmmer</string>
   <string name="default_audio_route_name" product="default">Telefon</string>

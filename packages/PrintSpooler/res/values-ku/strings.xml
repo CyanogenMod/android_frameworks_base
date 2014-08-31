@@ -18,14 +18,14 @@
   <string name="app_label">بەڕێوەبەری چاپکەر</string>
   <string name="advanced_settings_button">رێکخستنی چاپکەر</string>
   <string name="print_button">چاپکردن</string>
-  <string name="save_button">پاشەکەوتکردن</string>
+  <string name="save_button">پاشەکەوت</string>
   <string name="label_destination">ئامانج</string>
   <string name="label_copies">لەبەرگرتنەوەکان</string>
   <string name="label_paper_size">قەبارەی کاغەز</string>
   <string name="label_color">رەنگ</string>
   <string name="label_orientation">ئاراستە</string>
-  <string name="label_pages">پەڕەکان(<xliff:g id="page_count" example="5">%1$s</xliff:g>)</string>
-  <string name="pages_range_example">بۆ نموونە 1—5,8,11—13</string>
+  <string name="label_pages">پەڕەکان (<xliff:g id="page_count" example="5">%1$s</xliff:g>)</string>
+  <string name="pages_range_example">نمونە . 1—5,8,11—13</string>
   <string name="print_preview">بینین پێش چاپکردن</string>
   <string name="install_for_print_preview">دامەزراندنی بینەری PDF بۆ پێشبینین</string>
   <string name="printing_app_crashed">بەرنامەی چاپکردن تێکشکا</string>

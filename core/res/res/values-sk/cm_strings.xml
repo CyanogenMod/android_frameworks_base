@@ -40,14 +40,14 @@
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Download</string>
-  <string name="reboot_soft">Ľahký reštart</string>
+  <string name="reboot_soft">Softvérový reštart</string>
   <string name="reboot_progress">Reštartuje sa\u2026</string>
   <string name="reboot_confirm" product="tablet">Váš tablet bude reštartovaný.</string>
   <string name="reboot_confirm" product="default">Váš telefón bude reštartovaný.</string>
   <string name="permlab_preventpower">zabránenie klávesy napájania</string>
   <string name="permdesc_preventpower">Povolí aplikácii prepísať klávesu napájania</string>
   <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
-  <string name="permdesc_sendMockSms">Povolí aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať správy do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať používateľa.</string>
+  <string name="permdesc_sendMockSms">Umožňuje aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať správy do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať používateľa.</string>
   <string name="storage_sd_dock_card">Karta SD v doku</string>
   <string name="app_killed_message">Aplikácia bola ukončená</string>
   <string name="global_action_reboot">Reštartovať</string>
@@ -55,8 +55,8 @@
   <string name="toast_rotation_unlocked">Otáčanie obrazovky odomknuté</string>
   <string name="toast_rotation_locked">Otáčanie obrazovky uzamknuté</string>
   <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
-  <string name="permlab_changePrivacyGuardState">povoliť alebo zakázať ochranu súkromia</string>
-  <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s ochranou súkromia. Keď je aplikácia spustená s Ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
+  <string name="permlab_changePrivacyGuardState">povoliť alebo zakázať Ochranu súkromia</string>
+  <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s Ochranou súkromia. Keď je aplikácia spustená s Ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
   <string name="privacy_guard_notification">Aktívna ochrana súkromia</string>
   <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
   <string name="profile_picker_title">Profily</string>
@@ -81,7 +81,7 @@
   <string name="permlab_writeThemes">upraviť vaše témy</string>
   <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu uzamykacej obrazovky</string>
-  <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu uzamykacej obrazovky.</string>
+  <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
   <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
   <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
@@ -127,11 +127,12 @@
   <string name="app_ops_write_sms">napísať správu SMS</string>
   <string name="notify_turn_wifi_off_title">Vypnúť Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Ochrana súkromia</string>
-  <string name="privacy_guard_dialog_summary">Aplikácia <xliff:g id="app">%1$s</xliff:g> požaduje <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="privacy_guard_dialog_summary">Aplikácia <xliff:g id="app">%1$s</xliff:g> sa pokúša <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="permission_remember_choice">Zapamätať si výber</string>
   <string name="adb_net_active_notification_title">ADB cez sieť povolené</string>
   <string name="adb_both_active_notification_title">ADB cez USB a sieť povolené</string>
   <string name="adb_active_generic_notification_message">Dotykom zakážate ladenie.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Vymažú sa všetky údaje na vašom USB  úložisku (cesta \"%1$s\"). Túto akciu nemožno vrátiť späť!</string>
   <string name="extmedia_format_message_cm" product="default">Vymažú sa všetky údaje na vašej karte (cesta \"%1$s\"). Túto akciu nemožno vrátiť späť!</string>
+  <string name="usb_storage_notification_manage_message">Dotykom spravovať</string>
 </resources>

@@ -17,5 +17,5 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Kilit Ekranı</string>
-  <string name="keyguard_discharging">Şarj Olmuyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_discharging">Şarj azalıyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 </resources>

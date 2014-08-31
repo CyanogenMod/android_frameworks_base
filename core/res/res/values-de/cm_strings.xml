@@ -40,6 +40,7 @@
   <string name="reboot_bootmenu">Bootmenü</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Download</string>
+  <string name="reboot_soft">Schneller Neustart</string>
   <string name="reboot_progress">Neu starten\u2026</string>
   <string name="reboot_confirm" product="tablet">Tablet wird neu gestartet</string>
   <string name="reboot_confirm" product="default">Telefon wird neu gestartet</string>

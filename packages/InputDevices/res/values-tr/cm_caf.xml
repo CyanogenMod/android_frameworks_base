@@ -20,7 +20,7 @@
   <string name="keyboard_layout_arabic">Arapça</string>
   <string name="keyboard_layout_greek">Yunanca</string>
   <string name="keyboard_layout_hebrew">İbranice</string>
-  <string name="keyboard_layout_lithuanian">Litvanyaca</string>
+  <string name="keyboard_layout_lithuanian">Litvanca</string>
   <string name="keyboard_layout_spanish_latin">İspanyolca (Latin)</string>
-  <string name="keyboard_layout_latvian">Letonyaca</string>
+  <string name="keyboard_layout_latvian">Letonca</string>
 </resources>

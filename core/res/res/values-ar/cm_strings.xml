@@ -40,6 +40,7 @@
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Download</string>
+  <string name="reboot_soft">إعادة تشغيل ناعمة</string>
   <string name="reboot_progress">إعادة التشغيل\u2026</string>
   <string name="reboot_confirm" product="tablet">سيتم إعادة تشغيل الكمبيوتر اللوحي الخاص بك.</string>
   <string name="reboot_confirm" product="default">سيتم إعادة تشغيل الهاتف الخاص بك.</string>

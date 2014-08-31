@@ -134,4 +134,5 @@
   <string name="adb_active_generic_notification_message">タップしてデバッグを無効にします。</string>
   <string name="extmedia_format_message_cm" product="nosdcard">USBストレージ上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
   <string name="extmedia_format_message_cm" product="default">カード上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
+  <string name="usb_storage_notification_manage_message">タップして管理する</string>
 </resources>

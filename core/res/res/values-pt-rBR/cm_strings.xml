@@ -134,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Toque para desativar a depuração.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Todos os dados em seu armazenamento USB (sob o caminho \'%1$s\') serão apagados. Esta ação não pode ser revertida!</string>
   <string name="extmedia_format_message_cm" product="default">Todos os dados do seu cartão (no caminho de \'%1$s\') serão apagados. Esta ação não pode ser revertida!</string>
+  <string name="usb_storage_notification_manage_message">Toque para configurar</string>
 </resources>

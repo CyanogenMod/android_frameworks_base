@@ -170,7 +170,7 @@
   <string name="start_dreams">ڕۆژی خەون</string>
   <string name="ethernet_label">ئێسه‌رنێت</string>
   <string name="quick_settings_airplane_mode_label">باری فڕۆکە</string>
-  <string name="quick_settings_battery_charging_label">بارگاوی نەکردن, <xliff:g id="ژمارە">%d</xliff:g><xliff:g id="لەسەدا">%%</xliff:g></string>
+  <string name="quick_settings_battery_charging_label">بارگاوی کردن, <xliff:g id="ژمارە">%d</xliff:g><xliff:g id="لەسەدا">%%</xliff:g></string>
   <string name="quick_settings_battery_charged_label">بارگاوی بوە</string>
   <string name="quick_settings_bluetooth_label">بلوتوس</string>
   <string name="quick_settings_bluetooth_multiple_devices_label">بلوتوس (<xliff:g id="number">%d</xliff:g> ئامێرەکان)</string>

@@ -36,7 +36,7 @@
   <string name="quick_settings_ringer_normal">Klingelmodus</string>
   <string name="quick_settings_lockscreen">Sperren</string>
   <string name="quick_settings_network_type">Netzmodus</string>
-  <string name="quick_settings_report_bug">Fehlerprotokollierung</string>
+  <string name="quick_settings_report_bug">Fehler melden</string>
   <string name="quick_settings_sync">Sync</string>
   <string name="quick_settings_sync_off">Sync aus</string>
   <string name="quick_settings_torch">Lampe</string>

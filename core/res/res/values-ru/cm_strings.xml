@@ -134,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Нажмите, чтобы отключить отладку.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Все данные на USB-накопителе (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
   <string name="extmedia_format_message_cm" product="default">Все данные на карте (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
+  <string name="usb_storage_notification_manage_message">Нажмите, чтобы открыть список опций.</string>
 </resources>

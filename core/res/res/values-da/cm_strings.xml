@@ -40,6 +40,7 @@
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Download</string>
+  <string name="reboot_soft">Blød genstart</string>
   <string name="reboot_progress">Genstarter\u2026</string>
   <string name="reboot_confirm" product="tablet">Din tablet vil genstarte.</string>
   <string name="reboot_confirm" product="default">Din telefon vil genstarte.</string>
@@ -133,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Tryk for at deaktivere fejlretning.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Alle data på dit USB-lager (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
   <string name="extmedia_format_message_cm" product="default">Alle data på dit kort (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
+  <string name="usb_storage_notification_manage_message">Tryk for at konfigurere</string>
 </resources>
