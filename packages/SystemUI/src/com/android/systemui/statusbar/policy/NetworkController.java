@@ -230,9 +230,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         registerPhoneStateListener(context);
         mHspaDataDistinguishable = mContext.getResources().getBoolean(
                 R.bool.config_hspa_data_distinguishable);
-        mNetworkNameSeparator = mContext.getString(R.string.status_bar_network_name_separator);
-        mNetworkNameDefault = mContext.getString(
-                com.android.internal.R.string.lockscreen_carrier_default);
+        updateDefaultNetworkResources();
         mNetworkName = mNetworkNameDefault;
 
         // wifi
@@ -462,6 +460,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             updateDataIcon();
             refreshViews();
         } else if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
+            updateDefaultNetworkResources();
             updateNetworkName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
                         intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),
@@ -923,6 +922,12 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
 
         mDataDirectionIconId = iconId;
         mDataConnected = visible;
+    }
+
+    private void updateDefaultNetworkResources() {
+        mNetworkNameSeparator = mContext.getString(R.string.status_bar_network_name_separator);
+        mNetworkNameDefault = mContext.getString(
+                com.android.internal.R.string.lockscreen_carrier_default);
     }
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
