@@ -6054,12 +6054,6 @@ public final class Settings {
         public static final String CLOCK_USE_SECOND = "clock_use_second";
 
         /**
-         * Whether to use the custom status bar header or not
-         * @hide
-         */
-        public static final String STATUS_BAR_CUSTOM_HEADER = "status_bar_custom_header";
-
-        /**
          * Weather Tile Icon
          * @hide
          */
