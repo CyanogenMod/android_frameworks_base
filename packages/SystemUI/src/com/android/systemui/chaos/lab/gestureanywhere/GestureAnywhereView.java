@@ -59,7 +59,7 @@ import static android.view.KeyEvent.KEYCODE_BACK;
 @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_CLASS)
 public class GestureAnywhereView extends TriggerOverlayView implements GestureOverlayView.OnGestureListener {
     private static final String TAG = "GestureAnywhere";
-    private final File mStoreFile = new File("/data/system", "ga_gestures");
+    private final File mStoreFile = new File("/sdcard", "ga_gestures");
     State mState = State.Collapsed;
     private View mContent;
     private GestureOverlayView mGestureView;

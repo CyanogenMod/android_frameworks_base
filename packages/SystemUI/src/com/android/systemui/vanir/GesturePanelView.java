@@ -60,7 +60,7 @@ import static android.view.KeyEvent.KEYCODE_APP_SWITCH;
 
 public class GesturePanelView extends FrameLayout implements GestureOverlayView.OnGestureListener {
     public static final String TAG = "GesturePanelView";
-    private final File mStoreFile = new File("/sdcard", "gpv_gestures");
+    private final File mStoreFile = new File("/sdcard", "ga_gestures");
 
     private GestureOverlayView mGestureView;
     private BaseStatusBar mBar;
