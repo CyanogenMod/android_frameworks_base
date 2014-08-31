@@ -3,10 +3,8 @@ package com.android.systemui.quicksettings;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
@@ -14,10 +12,7 @@ import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
-import com.android.systemui.statusbar.policy.MSimNetworkController;
 import com.android.systemui.statusbar.policy.NetworkController;
-import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChangedCallback;
 
 import static com.android.internal.util.cm.QSUtils.deviceSupportsMobileData;
 
@@ -25,7 +20,6 @@ public class MobileNetworkTile extends NetworkTile {
     private static final int NO_OVERLAY = 0;
     private static final int DISABLED_OVERLAY = -1;
 
-    private NetworkController mController;
     private boolean mEnabled;
     private String mDescription;
     private int mDataTypeIconId = NO_OVERLAY;
@@ -73,7 +67,7 @@ public class MobileNetworkTile extends NetworkTile {
                 ? dataContentDescription
                 : r.getString(R.string.accessibility_no_data);
         mLabel = mEnabled
-                ? removeTrailingPeriod(mDescription)
+                ? mDescription
                 : r.getString(R.string.quick_settings_rssi_emergency_only);
     }
 
@@ -109,7 +103,7 @@ public class MobileNetworkTile extends NetworkTile {
             }
 
             mEnabled = enabled;
-            mDescription = description;
+            mDescription = removeTrailingPeriod(description);
 
             setActivity(activityIn, activityOut);
             updateResources();
@@ -148,11 +142,12 @@ public class MobileNetworkTile extends NetworkTile {
     // Remove the period from the network name
     public static String removeTrailingPeriod(String string) {
         if (string == null) return null;
-        final int length = string.length();
-        if (string.endsWith(".")) {
-            string.substring(0, length - 1);
+        final String aux = string.trim();
+        final int length = aux.length();
+        if (aux.endsWith(".")) {
+            return aux.substring(0, length - 1);
         }
-        return string;
+        return aux;
     }
 
 }
