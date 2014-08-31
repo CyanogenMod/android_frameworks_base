@@ -2699,7 +2699,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         mPieTriggerSize = Settings.System.getFloatForUser(resolver,
                 Settings.System.PIE_TRIGGER, 1f, UserHandle.USER_CURRENT);
         mPieStick = Settings.System.getIntForUser(resolver,
-                Settings.System.PIE_STICK, 1, UserHandle.USER_CURRENT) != 0;
+                Settings.System.PIE_STICK, 0, UserHandle.USER_CURRENT) != 0;
         mPieCenter = Settings.System.getIntForUser(resolver,
                 Settings.System.PIE_CENTER, 1, UserHandle.USER_CURRENT) != 0;
 
