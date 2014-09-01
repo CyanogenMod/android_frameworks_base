@@ -301,6 +301,18 @@ public abstract class InCallService extends Service {
     }
 
     /**
+     * Instructs Telecomm to switch to other active subscripion
+     *
+     * @param subId switch to this subscription
+     * @hide
+     */
+    public void switchToOtherActiveSub(String subId) {
+        if (mPhone != null) {
+            mPhone.switchToOtherActiveSub(subId);
+        }
+    }
+
+    /**
      * Sets the audio route (speaker, bluetooth, etc...).  When this request is honored, there will
      * be change to the {@link #getCallAudioState()}.
      *

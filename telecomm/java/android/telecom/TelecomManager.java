@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -1036,6 +1037,37 @@ public class TelecomManager {
             Log.e(TAG, "RemoteException attempting to get the current TTY mode.", e);
         }
         return TTY_MODE_OFF;
+    }
+
+    /**
+     * Returns current active subscription.
+     * Active subscription is the one from which calls are displayed to user when there are actve
+     * calls on both subscriptions.
+     * @hide
+     */
+    public int getActiveSubscription() {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().getActiveSubscription();
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException attempting to get the active subsription.", e);
+        }
+        return SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+    }
+
+    /**
+     * switches to other active subscription.
+     * @hide
+     */
+    public void switchToOtherActiveSub(int subId) {
+        try {
+            if (isServiceConnected()) {
+                getTelecomService().switchToOtherActiveSub(subId);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException attempting to switchToOtherActiveSub.", e);
+        }
     }
 
     /**

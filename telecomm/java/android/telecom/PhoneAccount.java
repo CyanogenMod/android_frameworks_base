@@ -34,6 +34,7 @@ import android.text.TextUtils;
 
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -363,6 +364,43 @@ public final class PhoneAccount implements Parcelable {
             PhoneAccountHandle accountHandle,
             CharSequence label) {
         return new Builder(accountHandle, label);
+    }
+
+    /**
+     * Contains information related to
+     * LCH and ACTIVE.
+     */
+    private BitSet callsStatus = new BitSet();
+
+    /**
+     * {@hide}
+     */
+    public static final int LCH = 1;
+
+    /**
+     * {@hide}
+     */
+    public static final int ACTIVE = 2;
+
+    /**
+     * {@hide}
+     */
+    public void setBit(int bit) {
+        callsStatus.set(bit);
+    }
+
+    /**
+     * {@hide}
+     */
+    public void unSetBit(int bit) {
+        callsStatus.set(bit, false);
+    }
+
+    /**
+     * {@hide}
+     */
+    public boolean isSet(int bit) {
+        return callsStatus.get(bit);
     }
 
     /**

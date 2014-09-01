@@ -1719,6 +1719,12 @@ public abstract class Connection extends Conferenceable {
     public void onStopDtmfTone() {}
 
     /**
+     * Notifies this to set local call hold.
+     * {@hide}
+     */
+    public void setLocalCallHold(boolean lchState) {}
+
+    /**
      * Notifies this Connection of a request to disconnect.
      */
     public void onDisconnect() {}

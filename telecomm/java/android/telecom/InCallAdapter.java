@@ -273,4 +273,17 @@ public final class InCallAdapter {
         } catch (RemoteException ignored) {
         }
     }
+
+    /**
+     * Instructs Telecomm to switch to other active subscripion
+     *
+     * @param subid switch to subscription denoted by subId
+     * {@hide}
+     */
+    public void switchToOtherActiveSub(String subId) {
+        try {
+            mAdapter.switchToOtherActiveSub(subId);
+        } catch (RemoteException e) {
+        }
+    }
 }
