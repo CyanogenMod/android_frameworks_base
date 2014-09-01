@@ -74,6 +74,8 @@ public abstract class ConnectionService extends Service {
     private static final int MSG_ANSWER_VIDEO = 17;
     private static final int MSG_MERGE_CONFERENCE = 18;
     private static final int MSG_SWAP_CONFERENCE = 19;
+    private static final int MSG_SET_LOCAL_HOLD = 20;
+    private static final int MSG_SET_ACTIVE_SUB = 21;
 
     private static Connection sNullConnection;
 
@@ -172,6 +174,20 @@ public abstract class ConnectionService extends Service {
         @Override
         public void stopDtmfTone(String callId) {
             mHandler.obtainMessage(MSG_STOP_DTMF_TONE, callId).sendToTarget();
+        }
+
+        @Override
+        public void setLocalCallHold(String callId, int lchState) {
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = callId;
+            args.argi1 = lchState;
+            mHandler.obtainMessage(MSG_SET_LOCAL_HOLD, args).sendToTarget();
+        }
+
+        @Override
+        public void setActiveSubscription(String callId) {
+            Log.i(this, "setActiveSubscription %s", callId);
+            mHandler.obtainMessage(MSG_SET_ACTIVE_SUB, callId).sendToTarget();
         }
 
         @Override
@@ -297,6 +313,20 @@ public abstract class ConnectionService extends Service {
                     break;
                 case MSG_STOP_DTMF_TONE:
                     stopDtmfTone((String) msg.obj);
+                    break;
+                case MSG_SET_LOCAL_HOLD: {
+                    SomeArgs args = (SomeArgs) msg.obj;
+                    try {
+                        String callId = (String) args.arg1;
+                        int lchStatus = args.argi1;
+                        setLocalCallHold(callId, lchStatus);
+                    } finally {
+                        args.recycle();
+                    }
+                    break;
+                }
+                case MSG_SET_ACTIVE_SUB:
+                    setActiveSubscription((String) msg.obj);
                     break;
                 case MSG_CONFERENCE: {
                     SomeArgs args = (SomeArgs) msg.obj;
@@ -683,6 +713,16 @@ public abstract class ConnectionService extends Service {
         } else {
             findConferenceForAction(callId, "stopDtmfTone").onStopDtmfTone();
         }
+    }
+
+    private void setLocalCallHold(String callId, int lchStatus) {
+        Log.d(this, "setLocalCallHold %s", callId);
+        findConnectionForAction(callId, "setLocalCallHold").setLocalCallHold(lchStatus);
+    }
+
+    private void setActiveSubscription(String callId) {
+        Log.d(this, "setActiveSubscription %s", callId);
+        findConnectionForAction(callId, "setActiveSubscription").setActiveSubscription();
     }
 
     private void conference(String callId1, String callId2) {

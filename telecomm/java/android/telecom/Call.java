@@ -390,6 +390,9 @@ public final class Call {
     private int mNotificationType;
     private int mNotificationCode;
 
+    /** {@hide} */
+    public boolean mIsActiveSub = false;
+
     /**
      * Obtains the post-dial sequence remaining to be emitted by this {@code Call}, if any.
      *
@@ -645,11 +648,12 @@ public final class Call {
     }
 
     /** {@hide} */
-    Call(Phone phone, String telecomCallId, InCallAdapter inCallAdapter) {
+    Call(Phone phone, String telecomCallId, InCallAdapter inCallAdapter, boolean isActiveSub) {
         mPhone = phone;
         mTelecomCallId = telecomCallId;
         mInCallAdapter = inCallAdapter;
         mState = STATE_NEW;
+        mIsActiveSub = isActiveSub;
     }
 
     /** {@hide} */
@@ -695,9 +699,10 @@ public final class Call {
         }
 
         int state = stateFromParcelableCallState(parcelableCall.getState());
-        boolean stateChanged = mState != state;
+        boolean stateChanged = (mState != state) || (mIsActiveSub != parcelableCall.mIsActiveSub);
         if (stateChanged) {
             mState = state;
+            mIsActiveSub = parcelableCall.mIsActiveSub;
         }
 
         String parentId = parcelableCall.getParentCallId();
