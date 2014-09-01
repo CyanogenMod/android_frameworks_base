@@ -60,10 +60,11 @@ interface ISub {
     int getAllSubInfoCount();
 
     /**
-     * Get the count of active SUB(s)
-     * @return active SIM count
+     * Get the count of activated SUB(s)
+     * @param context Context provided by caller
+     * @return activated SIM count
      */
-    int getActiveSubInfoCount();
+    int getActivatedSubInfoCount();
 
     /**
      * Add a new SubInfoRecord to subinfo database if needed
@@ -149,8 +150,6 @@ interface ISub {
     void setDefaultSmsSubId(long subId);
 
     void clearDefaultsForInactiveSubIds();
-
-    long[] getActiveSubIdList();
 
     boolean isSMSPromptEnabled();
 
