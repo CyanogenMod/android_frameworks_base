@@ -56,6 +56,7 @@ public final class ParcelableCall implements Parcelable {
     private final Bundle mExtras;
     private int mNotificationType;
     private int mCode;
+    boolean mIsActiveSub;
 
     public ParcelableCall(
             String id,
@@ -79,7 +80,8 @@ public final class ParcelableCall implements Parcelable {
             List<String> conferenceableCallIds,
             Bundle extras,
             int notificationType,
-            int code) {
+            int code,
+            boolean isActiveSub) {
         mId = id;
         mState = state;
         mDisconnectCause = disconnectCause;
@@ -102,6 +104,7 @@ public final class ParcelableCall implements Parcelable {
         mExtras = extras;
         mNotificationType = notificationType;
         mCode = code;
+        mIsActiveSub = isActiveSub;
     }
 
     /** The unique ID of the call. */
@@ -278,6 +281,7 @@ public final class ParcelableCall implements Parcelable {
             Bundle extras = source.readParcelable(classLoader);
             int notificationType = source.readInt();
             int code = source.readInt();
+            boolean isActiveSub = (source.readInt() == 1) ? true : false;
             return new ParcelableCall(
                     id,
                     state,
@@ -300,7 +304,8 @@ public final class ParcelableCall implements Parcelable {
                     conferenceableCallIds,
                     extras,
                     notificationType,
-                    code);
+                    code,
+                    isActiveSub);
         }
 
         @Override
@@ -341,6 +346,7 @@ public final class ParcelableCall implements Parcelable {
         destination.writeParcelable(mExtras, 0);
         destination.writeInt(mNotificationType);
         destination.writeInt(mCode);
+        destination.writeInt(mIsActiveSub ? 1 : 0);
     }
 
     @Override

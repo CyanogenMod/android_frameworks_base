@@ -995,6 +995,18 @@ public abstract class Connection {
     public void onStopDtmfTone() {}
 
     /**
+     * Notifies this to set local call hold.
+     * {@hide}
+     */
+    public void setLocalCallHold(int lchState) {}
+
+    /**
+     * Notifies this to set active subscription.
+     * {@hide}
+     */
+    public void setActiveSubscription() {}
+
+    /**
      * Notifies this Connection of a request to disconnect.
      */
     public void onDisconnect() {}
