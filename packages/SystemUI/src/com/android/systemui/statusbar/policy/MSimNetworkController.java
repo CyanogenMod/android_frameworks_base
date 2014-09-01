@@ -680,8 +680,8 @@ public class MSimNetworkController extends NetworkController {
     }
 
     private boolean isRoaming(int subscription) {
-        return (isCdma(subscription) && isCdmaEri(subscription))
-                || mPhone.isNetworkRoaming(subscription);
+        return (isCdma(subscription) ? isCdmaEri(subscription)
+                : mPhone.isNetworkRoaming(subscription));
     }
 
     private final void updateDataNetType(int subscription) {
