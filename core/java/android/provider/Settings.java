@@ -4809,13 +4809,6 @@ public final class Settings {
         // PA PIE //
 
         /**
-         * Pie menu, should default to 0 (no, show only when needed)
-         * Restart Launcher
-         * @hide
-         */
-        public static final String EXPANDED_DESKTOP_RESTART_LAUNCHER = "expanded_desktop_restart_launcher";
-
-        /**
          * On or off the Pie.
          * @hide
          */

@@ -2706,6 +2706,13 @@ public abstract class BaseStatusBar extends SystemUI implements
         pieRemove();
         if (mPieEnabled) {
             pieAdd();
+            if (mPieGravity == 3) {
+                Settings.System.putIntForUser(resolver,
+                        Settings.System.NAVIGATION_BAR_SHOW, 0, UserHandle.USER_CURRENT);
+            } else {
+                Settings.System.putIntForUser(resolver,
+                        Settings.System.NAVIGATION_BAR_SHOW, 1, UserHandle.USER_CURRENT);
+            }
         }
     }
 
