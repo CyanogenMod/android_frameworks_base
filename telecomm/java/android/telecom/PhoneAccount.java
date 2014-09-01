@@ -28,6 +28,7 @@ import android.text.TextUtils;
 
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -257,6 +258,46 @@ public class PhoneAccount implements Parcelable {
             CharSequence label) {
         return new Builder(accountHandle, label);
     }
+
+    private BitSet dsda = new BitSet();
+
+    /**
+     * {@hide}
+     */
+    public static final int LCH = 1;
+
+    /**
+     * {@hide}
+     */
+    public static final int ACTIVE = 2;
+
+    /**
+     * {@hide}
+     */
+    public static final int LCHMUTE = 3;
+
+    /**
+     * {@hide}
+     */
+    public void setBit(int bit) {
+        dsda.set(bit);
+    }
+
+    /**
+     * {@hide}
+     */
+    public void unSetBit(int bit) {
+        dsda.set(bit, false);
+    }
+
+    /**
+     * {@hide}
+     */
+    public boolean isSet(int bit) {
+        return dsda.get(bit);
+    }
+
+    public static Builder builder() { return new Builder(); }
 
     /**
      * Returns a builder initialized with the current {@link PhoneAccount} instance.

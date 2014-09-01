@@ -182,4 +182,14 @@ interface ITelecomService {
      * @see TelecomServiceImpl#addNewUnknownCall
      */
     void addNewUnknownCall(in PhoneAccountHandle phoneAccount, in Bundle extras);
+
+    /**
+     * @see TelecommManager#getActiveSubscription
+     */
+    long getActiveSubscription();
+
+    /**
+     * @see TelecommManager#switchToOtherActiveSub
+     */
+    void switchToOtherActiveSub(long subId);
 }

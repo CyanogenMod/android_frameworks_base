@@ -271,4 +271,18 @@ public final class InCallAdapter {
         } catch (RemoteException ignored) {
         }
     }
+
+    /**
+     * Instructs Telecomm to switch to other active subscripion
+     *
+     * @param sub switch to this subscription
+     * @param retainLch whether LCH on switched sub should be retained.
+     * {@hide}
+     */
+    public void switchToOtherActiveSub(String sub, boolean retainLch) {
+        try {
+            mAdapter.switchToOtherActiveSub(sub, retainLch);
+        } catch (RemoteException e) {
+        }
+    }
 }
