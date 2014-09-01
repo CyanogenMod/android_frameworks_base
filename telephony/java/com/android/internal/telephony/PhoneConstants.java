@@ -163,9 +163,6 @@ public class PhoneConstants {
     public static final int SUB2 = 1;
     public static final int SUB3 = 2;
 
-    public static final int EVENT_SUBSCRIPTION_ACTIVATED   = 500;
-    public static final int EVENT_SUBSCRIPTION_DEACTIVATED = 501;
-
     // TODO: Remove these constants and use an int instead.
     public static final int SIM_ID_1 = 0;
     public static final int SIM_ID_2 = 1;
@@ -201,4 +198,6 @@ public class PhoneConstants {
     public static final int IMS_AUDIO_OUTPUT_ENABLE_SPEAKER = 0;
     public static final int IMS_AUDIO_OUTPUT_DISABLE_SPEAKER = 1;
     public static final int IMS_AUDIO_OUTPUT_DEFAULT = IMS_AUDIO_OUTPUT_ENABLE_SPEAKER;
+    //FIXME maybe this shouldn't be here - sprout only
+    public static final int CAPABILITY_3G   = 1;
 }

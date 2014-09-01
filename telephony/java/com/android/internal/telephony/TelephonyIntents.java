@@ -440,4 +440,18 @@ public class TelephonyIntents {
 
     public static final String EXTRA_RESULT  = "operationResult";
     public static final String EXTRA_NEW_SUB_STATE = "newSubState";
+    /**
+     * To notify the capability switch procedure start
+     */
+    // FIXME maybe these should be removed - sprout only
+    public static final String ACTION_CAPABILITY_SWITCH_START
+            = "com.android.phone.ACTION_CAPABILITY_SWITCH_START";
+
+    /**
+     * To notify the capability switch procedure end
+     */
+    // FIXME maybe these should be removed - sprout only
+    public static final String ACTION_CAPABILITY_SWITCH_DONE
+            = "com.android.phone.ACTION_CAPABILITY_SWITCH_DONE";
+
 }

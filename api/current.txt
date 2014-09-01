@@ -28617,44 +28617,42 @@ package android.telephony {
     field public byte[] encodedScAddress;
   }
 
-  public class SubscriptionInfo implements android.os.Parcelable {
-    method public android.graphics.Bitmap createIconBitmap(android.content.Context);
+  public class SubInfoRecord implements android.os.Parcelable {
+    ctor public SubInfoRecord();
+    ctor public SubInfoRecord(long, java.lang.String, int, java.lang.String, int, int, java.lang.String, int, int, int[], int, int);
     method public int describeContents();
-    method public java.lang.CharSequence getCarrierName();
-    method public java.lang.String getCountryIso();
-    method public int getDataRoaming();
-    method public java.lang.CharSequence getDisplayName();
-    method public java.lang.String getIccId();
-    method public int getIconTint();
-    method public int getMcc();
-    method public int getMnc();
-    method public java.lang.String getNumber();
-    method public int getSimSlotIndex();
-    method public int getSubscriptionId();
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.SubscriptionInfo> CREATOR;
+    field public static final android.os.Parcelable.Creator CREATOR;
+    field public int color;
+    field public int dataRoaming;
+    field public java.lang.String displayName;
+    field public int displayNumberFormat;
+    field public java.lang.String iccId;
+    field public int mcc;
+    field public int mnc;
+    field public int nameSource;
+    field public java.lang.String number;
+    field public int[] simIconRes;
+    field public int slotId;
+    field public long subId;
   }
 
   public class SubscriptionManager implements android.provider.BaseColumns {
-    method public static void deactivateSubId(long);
-    method public static android.telephony.SubscriptionManager from(android.content.Context);
-    method public static long getOnDemandDataSubId();
-    method public static int getSubState(long);
-    method public static boolean isSMSPromptEnabled();
-    method public static boolean isVoicePromptEnabled();
-    method public static void putPhoneIdAndSubIdExtra(android.content.Intent, int);
-    method public static void setSMSPromptEnabled(boolean);
-    method public static int setSubState(long, int);
-    method public static void setVoicePromptEnabled(boolean);
-    field public static final int ACTIVE = 1; // 0x1
-    field public static final int DEFAULT_NW_MODE = -1; // 0xffffffff
-    field public static final int INACTIVE = 0; // 0x0
+    method public static java.util.List<android.telephony.SubInfoRecord> getActiveSubInfoList();
+    method public static long getDefaultSmsSubId();
+    method public static int getSlotId(long);
+    method public static java.util.List<android.telephony.SubInfoRecord> getSubInfoUsingSlotId(int);
+    method public static android.telephony.SubInfoRecord getSubInfoUsingSubId(long);
+    method public static boolean isValidSubId(long);
+    field public static final long ASK_USER_SUB_ID = -1001L; // 0xfffffffffffffc17L
+    field public static final int DEFAULT_PHONE_ID = 2147483647; // 0x7fffffff
+    field public static final long DEFAULT_SUB_ID = 9223372036854775807L; // 0x7fffffffffffffffL
+    field public static final int INVALID_PHONE_ID = -1000; // 0xfffffc18
+    field public static final int INVALID_SLOT_ID = -1000; // 0xfffffc18
     field public static final long INVALID_SUB_ID = -1000L; // 0xfffffffffffffc18L
     field public static final java.lang.String MCC = "mcc";
     field public static final java.lang.String MNC = "mnc";
-    field public static final java.lang.String NETWORK_MODE = "network_mode";
-    field public static final int SUB_CONFIGURATION_IN_PROGRESS = 2; // 0x2
-    field public static final java.lang.String SUB_STATE = "sub_state";
+    field public static final int SIM_NOT_INSERTED = -1; // 0xffffffff
   }
 
   public static class SubscriptionManager.OnSubscriptionsChangedListener {

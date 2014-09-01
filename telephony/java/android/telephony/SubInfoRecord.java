@@ -21,111 +21,59 @@ import android.os.Parcelable;
 
 /**
  * A Parcelable class for Subscription Information.
- * @hide - to be unhidden
  */
 public class SubInfoRecord implements Parcelable {
 
-    /**
-     * Subscription Identifier, this is a device unique number
-     * and not an index into an array
-     */
-    public long subId;
-    /** The GID for a SIM that maybe associated with this subscription, empty if unknown */
-    public String iccId;
-    /**
-     * The slot identifier for that currently contains the subscription
-     * and not necessarily unique and maybe INVALID_SLOT_ID if unknown
-     */
-    public int slotId;
-    /**
-     * The string displayed to the user that identifies this subscription
-     */
-    public String displayName;
-    /**
-     * The source of the name, NAME_SOURCE_UNDEFINED, NAME_SOURCE_DEFAULT_SOURCE,
-     * NAME_SOURCE_SIM_SOURCE or NAME_SOURCE_USER_INPUT.
-     */
-    public int nameSource;
-    /**
-     * The color to be used for when displaying to the user
-     */
-    public int color;
-    /**
-     * A number presented to the user identify this subscription
-     */
-    public String number;
-    /**
-     * How to display the phone number, DISPLAY_NUMBER_NONE, DISPLAY_NUMBER_FIRST,
-     * DISPLAY_NUMBER_LAST
-     */
-    public int displayNumberFormat;
-    /**
-     * Data roaming state, DATA_RAOMING_ENABLE, DATA_RAOMING_DISABLE
-     */
-    public int dataRoaming;
-    /**
-     * SIM Icon resource identifiers. FIXME: Check with MTK what it really is
-     */
-    public int[] simIconRes;
-    /**
-     * Mobile Country Code
-     */
-    public int mcc;
-    /**
-     * Mobile Network Code
-     */
-    public int mnc;
-    public int mStatus;
-    public int mNwMode;
+    public long mSubId;
+    public String mIccId;
+    public int mSlotId;
+    public String mDisplayName;
+    public int mNameSource;
+    public int mColor;
+    public String mNumber;
+    public int mDisplayNumberFormat;
+    public int mDataRoaming;
+    public int[] mSimIconRes;
 
     public SubInfoRecord() {
-        this.subId = SubscriptionManager.INVALID_SUB_ID;
-        this.iccId = "";
-        this.slotId = SubscriptionManager.INVALID_SLOT_ID;
-        this.displayName = "";
-        this.nameSource = 0;
-        this.color = 0;
-        this.number = "";
-        this.displayNumberFormat = 0;
-        this.dataRoaming = 0;
-        this.simIconRes = new int[2];
-        this.mcc = 0;
-        this.mnc = 0;
-        this.mStatus = SubscriptionManager.ACTIVE;
-        this.mNwMode = SubscriptionManager.DEFAULT_NW_MODE;
+        this.mSubId = SubscriptionManager.INVALID_SUB_ID;
+        this.mIccId = "";
+        this.mSlotId = SubscriptionManager.INVALID_SLOT_ID;
+        this.mDisplayName = "";
+        this.mNameSource = 0;
+        this.mColor = 0;
+        this.mNumber = "";
+        this.mDisplayNumberFormat = 0;
+        this.mDataRoaming = 0;
+        this.mSimIconRes = new int[2];
     }
 
-    public SubInfoRecord(long subId, String iccId, int slotId, String displayName, int nameSource,
-            int color, String number, int displayFormat, int roaming, int[] iconRes,
-            int mcc, int mnc, int status, int nwMode) {
-        this.subId = subId;
-        this.iccId = iccId;
-        this.slotId = slotId;
-        this.displayName = displayName;
-        this.nameSource = nameSource;
-        this.color = color;
-        this.number = number;
-        this.displayNumberFormat = displayFormat;
-        this.dataRoaming = roaming;
-        this.simIconRes = iconRes;
-        this.mcc = mcc;
-        this.mnc = mnc;
-        this.mStatus = status;
-        this.mNwMode = nwMode;
+    public SubInfoRecord(long subId, String iccId, int slotId, String displayName,
+            int nameSource, int mColor, String mNumber, int displayFormat, int roaming, int[] iconRes) {
+        this.mSubId = subId;
+        this.mIccId = iccId;
+        this.mSlotId = slotId;
+        this.mDisplayName = displayName;
+        this.mNameSource = nameSource;
+        this.mColor = mColor;
+        this.mNumber = mNumber;
+        this.mDisplayNumberFormat = displayFormat;
+        this.mDataRoaming = roaming;
+        this.mSimIconRes = iconRes;
     }
 
     public static final Parcelable.Creator<SubInfoRecord> CREATOR = new Parcelable.Creator<SubInfoRecord>() {
         @Override
         public SubInfoRecord createFromParcel(Parcel source) {
-            long subId = source.readLong();
-            String iccId = source.readString();
-            int slotId = source.readInt();
-            String displayName = source.readString();
-            int nameSource = source.readInt();
-            int color = source.readInt();
-            String number = source.readString();
-            int displayNumberFormat = source.readInt();
-            int dataRoaming = source.readInt();
+            long mSubId = source.readLong();
+            String mIccId = source.readString();
+            int mSlotId = source.readInt();
+            String mDisplayName = source.readString();
+            int mNameSource = source.readInt();
+            int mColor = source.readInt();
+            String mNumber = source.readString();
+            int mDisplayNumberFormat = source.readInt();
+            int mDataRoaming = source.readInt();
             int[] iconRes = new int[2];
             source.readIntArray(iconRes);
             int mcc = source.readInt();
@@ -133,8 +81,8 @@ public class SubInfoRecord implements Parcelable {
            int status = source.readInt();
            int nwMode = source.readInt();
 
-            return new SubInfoRecord(subId, iccId, slotId, displayName, nameSource, color, number,
-                displayNumberFormat, dataRoaming, iconRes, mcc, mnc, status, nwMode);
+            return new SubInfoRecord(mSubId, mIccId, mSlotId, mDisplayName, mNameSource, mColor, mNumber,
+                mDisplayNumberFormat, mDataRoaming, iconRes);
         }
 
         @Override
@@ -145,20 +93,16 @@ public class SubInfoRecord implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(subId);
-        dest.writeString(iccId);
-        dest.writeInt(slotId);
-        dest.writeString(displayName);
-        dest.writeInt(nameSource);
-        dest.writeInt(color);
-        dest.writeString(number);
-        dest.writeInt(displayNumberFormat);
-        dest.writeInt(dataRoaming);
-        dest.writeIntArray(simIconRes);
-        dest.writeInt(mcc);
-        dest.writeInt(mnc);
-        dest.writeInt(mStatus);
-        dest.writeInt(mNwMode);
+        dest.writeLong(mSubId);
+        dest.writeString(mIccId);
+        dest.writeInt(mSlotId);
+        dest.writeString(mDisplayName);
+        dest.writeInt(mNameSource);
+        dest.writeInt(mColor);
+        dest.writeString(mNumber);
+        dest.writeInt(mDisplayNumberFormat);
+        dest.writeInt(mDataRoaming);
+        dest.writeIntArray(mSimIconRes);
     }
 
     @Override
@@ -168,11 +112,10 @@ public class SubInfoRecord implements Parcelable {
 
     @Override
     public String toString() {
-        return "{mSubId=" + subId + ", mIccId=" + iccId + " mSlotId=" + slotId
-                + " mDisplayName=" + displayName + " mNameSource=" + nameSource
-                + " mColor=" + color + " mNumber=" + number
-                + " mDisplayNumberFormat=" + displayNumberFormat + " mDataRoaming=" + dataRoaming
-                + " mSimIconRes=" + simIconRes + " mMcc " + mcc + " mMnc " + mnc
-                + " mSubStatus=" + mStatus + " mNwMode=" + mNwMode + "}";
+        return "{mSubId=" + mSubId + ", mIccId=" + mIccId + " mSlotId=" + mSlotId
+                + " mDisplayName=" + mDisplayName + " mNameSource=" + mNameSource
+                + " mColor=" + mColor + " mNumber=" + mNumber
+                + " mDisplayNumberFormat=" + mDisplayNumberFormat + " mDataRoaming=" + mDataRoaming
+                + " mSimIconRes=" + mSimIconRes + "}";
     }
 }
