@@ -292,7 +292,7 @@ public class PieMenu extends FrameLayout {
         mUseMenuAlways = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_MENU, 1, UserHandle.USER_CURRENT) == 1;
         mUseSearch = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_SEARCH, 1, UserHandle.USER_CURRENT) == 1;
+                Settings.System.PIE_SEARCH, 0, UserHandle.USER_CURRENT) == 1;
         mUseLastApp = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_LAST_APP, 0, UserHandle.USER_CURRENT) == 1;
         mUsePower = Settings.System.getIntForUser(mContext.getContentResolver(),
