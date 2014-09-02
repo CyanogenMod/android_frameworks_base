@@ -193,6 +193,16 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        // dismiss the dialog.
+        if (mSimUnlockProgressDialog != null) {
+            mSimUnlockProgressDialog.dismiss();
+            mSimUnlockProgressDialog = null;
+        }
+    }
+
+    @Override
     public void onPause() {
         // dismiss the dialog.
         if (mSimUnlockProgressDialog != null) {
