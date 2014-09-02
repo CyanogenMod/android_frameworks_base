@@ -934,6 +934,11 @@ public class TelephonyManager {
     private static final String sLteOnCdmaProductType =
         SystemProperties.get(TelephonyProperties.PROPERTY_LTE_ON_CDMA_PRODUCT_TYPE, "");
 
+    /** @hide */
+     public static int getLteOnCdmaModeStatic() {
+        return getLteOnCdmaModeStatic(getDefaultSim());
+    }
+
     /**
      * Return if the current radio is LTE on CDMA. This
      * is a tri-state return value as for a period of time
@@ -944,12 +949,12 @@ public class TelephonyManager {
      *
      * @hide
      */
-    public static int getLteOnCdmaModeStatic() {
+    public static int getLteOnCdmaModeStatic(int slotId) {
         int retVal;
         int curVal;
         String productType = "";
 
-        curVal = SystemProperties.getInt(TelephonyProperties.PROPERTY_LTE_ON_CDMA_DEVICE,
+        curVal = getTelephonyProperty(TelephonyProperties.PROPERTY_LTE_ON_CDMA_DEVICE, slotId,
                     PhoneConstants.LTE_ON_CDMA_UNKNOWN);
         retVal = curVal;
         if (retVal == PhoneConstants.LTE_ON_CDMA_UNKNOWN) {
@@ -2629,7 +2634,7 @@ public class TelephonyManager {
     }
 
     /** {@hide} */
-    public int getDefaultSim() {
+    public static int getDefaultSim() {
         //TODO Need to get it from Telephony Devcontroller
         return 0;
     }
@@ -2778,6 +2783,23 @@ public class TelephonyManager {
             }
         }
         return propVal == null ? defaultVal : propVal;
+    }
+
+    /**
+     * Gets the telephony property.
+     *
+     * @hide
+     */
+    public static int getTelephonyProperty(String property, int slotId, int defaultVal) {
+        String propVal = null;
+        String prop = SystemProperties.get(property);
+        if ((prop != null) && (prop.length() > 0)) {
+            String values[] = prop.split(",");
+            if ((slotId >= 0) && (slotId < values.length) && (values[slotId] != null)) {
+                propVal = values[slotId];
+            }
+        }
+        return propVal == null ? defaultVal : Integer.parseInt(propVal);
     }
 
     /** @hide */
