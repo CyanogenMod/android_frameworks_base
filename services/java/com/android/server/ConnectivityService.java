@@ -1620,7 +1620,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             int usedNetworkType = convertFeatureToNetworkType(networkType, feature);
             if (mSimTelephonyManager != null) {
                 if (usedNetworkType != ConnectivityManager.TYPE_MOBILE_MMS
-                        && subId != mSimTelephonyManager.getDefaultSubscription()) {
+                        && subId != mSimTelephonyManager.getDefaultDataSubscription()) {
                     return PhoneConstants.APN_REQUEST_FAILED;
                 }
             }
@@ -2158,9 +2158,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private NetworkInfo getNetworkInfoForMultiSim(NetworkStateTracker tracker) {
         NetworkInfo newNetworkInfo=tracker.getNetworkInfo();
         if(mSimTelephonyManager.isMultiSimEnabled()){
-            if(mSimTelephonyManager.getDefaultSubscription()
+            if(mSimTelephonyManager.getDefaultDataSubscription()
                     ==mSimTelephonyManager.getPreferredDataSubscription()){
-                newNetworkInfo=tracker.getNetworkInfo(mSimTelephonyManager.getDefaultSubscription());
+                newNetworkInfo=tracker.getNetworkInfo(mSimTelephonyManager.getDefaultDataSubscription());
             }else{
                 newNetworkInfo=tracker.getNetworkInfo(mSimTelephonyManager.
                         getPreferredDataSubscription());
