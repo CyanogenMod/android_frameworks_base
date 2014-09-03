@@ -4886,6 +4886,12 @@ public final class Settings {
          */
         public static final String PIE_TORCH = "pie_torch";
 
+        /**
+         * Pie gesture, should default to 0 (no, show only when needed)
+         * @hide
+         */
+        public static final String PIE_GESTURE = "pie_gesture";
+
         /*
          * Pie gap angle, should default to 2
          * @hide

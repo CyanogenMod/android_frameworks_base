@@ -59,6 +59,7 @@ public class PieControl implements OnClickListener {
     public static final String POWER_BUTTON = "##power##";
     public static final String SCREENSHOT_BUTTON = "##screenshot##";
     public static final String TORCH_BUTTON = "##torch##";
+    public static final String GESTURE_BUTTON = "##gesture##";
 
     protected Context mContext;
     protected PieMenu mPie;
@@ -77,6 +78,7 @@ public class PieControl implements OnClickListener {
     private PieItem mSearch;
     private PieItem mScreenShot;
     private PieItem mTorch;
+    private PieItem mGesture;
     private OnNavButtonPressedListener mListener;
     private PieControlPanel mPanel;
 
@@ -143,6 +145,7 @@ public class PieControl implements OnClickListener {
         mPower = makeItem(R.drawable.ic_sysbar_power, 1, POWER_BUTTON, true);
         mScreenShot = makeItem(R.drawable.ic_sysbar_screenshot_pie, 1, SCREENSHOT_BUTTON, true);
         mTorch = makeItem(R.drawable.ic_sysbar_torch, 1, TORCH_BUTTON, true);
+        mGesture = makeItem(R.drawable.ic_sysbar_gesture, 1, GESTURE_BUTTON, true);
         mSearch = makeItem(R.drawable.ic_sysbar_search_side, 1, SEARCH_BUTTON, true);
         mPie.addItem(mMenu);  //Right End
         mPie.addItem(mSearch);
@@ -154,6 +157,7 @@ public class PieControl implements OnClickListener {
         mPie.addItem(mLastApp);
         mPie.addItem(mPower);
         mPie.addItem(mScreenShot);
+        mPie.addItem(mGesture);
         mPie.addItem(mRecent);
         mPie.addItem(mHome);
         mPie.addItem(mBack); // Left End

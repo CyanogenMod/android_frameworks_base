@@ -359,6 +359,9 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
                 Intent torch = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
                 torch.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 mContext.sendBroadcastAsUser(torch, new UserHandle(UserHandle.USER_CURRENT));
+        } else if (buttonName.equals(PieControl.GESTURE_BUTTON)) {
+                Intent gesture = new Intent(Intent.TOGGLE_GESTURE_ACTIONS);
+                mContext.sendBroadcastAsUser(gesture, new UserHandle(UserHandle.USER_CURRENT));
         }
     }
 

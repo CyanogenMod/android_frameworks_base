@@ -232,6 +232,7 @@ public class PieMenu extends FrameLayout {
     private boolean mUsePower;
     private boolean mUseScreenShot;
     private boolean mUseTorch;
+    private boolean mUseGesture;
     private boolean mHapticFeedback;
     private boolean mIsProtected;
 
@@ -292,7 +293,7 @@ public class PieMenu extends FrameLayout {
         mUseMenuAlways = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_MENU, 1, UserHandle.USER_CURRENT) == 1;
         mUseSearch = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_SEARCH, 0, UserHandle.USER_CURRENT) == 1;
+                Settings.System.PIE_SEARCH, 1, UserHandle.USER_CURRENT) == 1;
         mUseLastApp = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_LAST_APP, 0, UserHandle.USER_CURRENT) == 1;
         mUsePower = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -308,9 +309,11 @@ public class PieMenu extends FrameLayout {
         mUseScreenShot = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_SCREENSHOT, 0, UserHandle.USER_CURRENT) == 1;
         mUseSearch = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_SEARCH, 1, UserHandle.USER_CURRENT) == 1;
+                Settings.System.PIE_SEARCH, 0, UserHandle.USER_CURRENT) == 1;
         mUseTorch = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_TORCH, 0, UserHandle.USER_CURRENT) == 1;
+        mUseGesture = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
         mStatusMode = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_MODE, 0, UserHandle.USER_CURRENT);
         mPieSize = Settings.System.getFloatForUser(mContext.getContentResolver(),
@@ -713,7 +716,8 @@ public class PieMenu extends FrameLayout {
                !(item.getName().equals(PieControl.LAST_APP_BUTTON) && !mUseLastApp) &&
                !(item.getName().equals(PieControl.POWER_BUTTON) && !mUsePower) &&
                !(item.getName().equals(PieControl.SCREENSHOT_BUTTON) && !mUseScreenShot) &&
-               !(item.getName().equals(PieControl.TORCH_BUTTON) && !mUseTorch);
+               !(item.getName().equals(PieControl.TORCH_BUTTON) && !mUseTorch) &&
+               !(item.getName().equals(PieControl.GESTURE_BUTTON) && !mUseGesture);
     }
 
     private void layoutPie() {
@@ -740,6 +744,8 @@ public class PieMenu extends FrameLayout {
         if (!mUseScreenShot)
             itemCount--;
         if (!mUseTorch)
+            itemCount--;
+        if (!mUseGesture)
             itemCount--;
 
         int lesserSweepCount = 0;
