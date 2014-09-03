@@ -276,7 +276,7 @@ public class MSimSignalClusterView
                     mMobileCdma3gId = strengthIcon;
                     mMobileCdma1xId = getCdma2gId(mMobileCdma3gId);
 
-                    if (subscription == 0 && isLteOnlyMode(subscription)) {
+                    if (isCdmaDataOnlyMode(subscription)) {
                         mMobileCdmaVisible = false;
                         mMobileCdma1xOnlyVisible = false;
                         mMobileStrengthId[subscription] = convertMobileStrengthIcon(strengthIcon);
@@ -489,7 +489,7 @@ public class MSimSignalClusterView
         return ret;
     }
 
-    private boolean isLteOnlyMode(int sub) {
+    private boolean isCdmaDataOnlyMode(int sub) {
         if (mStyle != STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
             return false;
         }
@@ -498,7 +498,9 @@ public class MSimSignalClusterView
         }
         int dataType = mMSimNC.getDataNetworkType(sub);
         int voiceType = mMSimNC.getVoiceNetworkType(sub);
-        return dataType == TelephonyManager.NETWORK_TYPE_LTE
+        return ((dataType == TelephonyManager.NETWORK_TYPE_LTE)
+                || (dataType == TelephonyManager.NETWORK_TYPE_EVDO_0)
+                || (dataType == TelephonyManager.NETWORK_TYPE_EVDO_A))
                 && voiceType == TelephonyManager.NETWORK_TYPE_UNKNOWN;
     }
 
