@@ -10365,7 +10365,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (DEBUG_INSTALL) Slog.d(TAG, "installPackageLI: path=" + tmpPackageFile);
         if (true != mSecurityBridge.approveAppInstallRequest(
                         args.getResourcePath(),
-                        Uri.fromFile(args.originFile).toSafeString())) {
+                        Uri.fromFile(args.origin.file).toSafeString())) {
             res.returnCode = PackageManager.INSTALL_FAILED_VERIFICATION_FAILURE;
             return;
         }
