@@ -25,8 +25,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,11 +39,10 @@ public class CompassTile extends QuickSettingsTile implements
     private boolean mPrepared = false;
 
     private float mDegree = 0f;
-    private float mCurrentAnimationDegree = 0f;
 
     private final static float ALPHA = 0.97f;
     private final static int MSG_UPDATE_COMPASS = 1;
-    private final static int COMPASS_TILE_UPDATE_INTERVAL = 100;
+    private final static int COMPASS_TILE_UPDATE_INTERVAL = 16;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerationSensor;
@@ -139,8 +136,6 @@ public class CompassTile extends QuickSettingsTile implements
             mLabel = mContext.getString(R.string.quick_settings_compass_off);
 
             // Reset rotation of the ImageView
-            mCurrentAnimationDegree = 0;
-            mImage.setAnimation(null);
             mImage.setRotation(0);
 
             // Remove listeners
@@ -190,7 +185,7 @@ public class CompassTile extends QuickSettingsTile implements
         // Convert azimuth to degrees
         float newDegree = (float) Math.toDegrees(orientation[0]);
         newDegree = (newDegree + 360) % 360;
-        if (mDegree != newDegree && !mHandler.hasMessages(MSG_UPDATE_COMPASS)) {
+        if (!mHandler.hasMessages(MSG_UPDATE_COMPASS)) {
             mHandler.sendEmptyMessageDelayed(MSG_UPDATE_COMPASS, COMPASS_TILE_UPDATE_INTERVAL);
         }
 
@@ -201,29 +196,12 @@ public class CompassTile extends QuickSettingsTile implements
         // Set rotation in degrees as tile title
         mText.setText(formatValueWithCardinalDirection(mDegree));
 
-        // Make arrow always point to north
-        float animationDegrees = 360f - mDegree;
+        float target = 360 - mDegree;
 
-        // Use the shortest animation path between last and new angle
-        if (animationDegrees - mCurrentAnimationDegree > 180) {
-            animationDegrees -= 360f;
-        } else if (animationDegrees - mCurrentAnimationDegree < -180) {
-            animationDegrees += 360f;
-        }
+        float relative = target - mImage.getRotation();
+        if (relative > 180) relative -= 360;
 
-        // Create a rotation animation
-        RotateAnimation rotateAnimation = new RotateAnimation(mCurrentAnimationDegree,
-                animationDegrees, Animation.RELATIVE_TO_SELF,
-                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-
-        // Set animation properties
-        float duration = (Math.abs(animationDegrees - mCurrentAnimationDegree) % 360) * 2;
-        rotateAnimation.setDuration((int) duration);
-        rotateAnimation.setFillAfter(true);
-
-        // Start the animation
-        mImage.startAnimation(rotateAnimation);
-        mCurrentAnimationDegree = animationDegrees;
+        mImage.setRotation(mImage.getRotation() + relative / 2);
     }
 
     private String formatValueWithCardinalDirection(float degree) {

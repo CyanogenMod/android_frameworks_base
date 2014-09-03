@@ -17,4 +17,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Action(s) list background used on expanded notifications -->
     <drawable name="notification_action_list_bg">#00000000</drawable>
+    <!-- Title divider bar for the dialog boxes -->
+    <color name="dialog_title_divider">@android:color/holo_blue_light</color>
 </resources>

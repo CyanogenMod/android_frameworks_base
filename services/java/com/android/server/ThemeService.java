@@ -21,6 +21,7 @@ import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -42,6 +43,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -106,6 +108,7 @@ public class ThemeService extends IThemeService.Stub {
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
         private static final int MESSAGE_APPLY_DEFAULT_THEME = 2;
+        private static final int MESSAGE_BUILD_ICON_CACHE = 3;
 
         public ThemeWorkerHandler(Looper looper) {
             super(looper);
@@ -120,6 +123,9 @@ public class ThemeService extends IThemeService.Stub {
                     break;
                 case MESSAGE_APPLY_DEFAULT_THEME:
                     doApplyDefaultTheme();
+                    break;
+                case MESSAGE_BUILD_ICON_CACHE:
+                    doBuildIconCache();
                     break;
                 default:
                     Log.w(TAG, "Unknown message " + msg.what);
@@ -191,6 +197,7 @@ public class ThemeService extends IThemeService.Stub {
             incrementProgress(progressIncrement);
         }
 
+        Environment.setUserRequired(false);
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ALARMS)) {
             updateAlarms(componentMap.get(ThemesColumns.MODIFIES_ALARMS));
             incrementProgress(progressIncrement);
@@ -205,6 +212,7 @@ public class ThemeService extends IThemeService.Stub {
             updateBootAnim(componentMap.get(ThemesColumns.MODIFIES_BOOT_ANIM));
             incrementProgress(progressIncrement);
         }
+        Environment.setUserRequired(true);
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_FONTS)) {
             updateFonts(componentMap.get(ThemesColumns.MODIFIES_FONTS));
@@ -266,6 +274,7 @@ public class ThemeService extends IThemeService.Stub {
             pm.updateIconMaps(null);
         } else {
             pm.updateIconMaps(pkgName);
+            mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
         }
     }
 
@@ -467,11 +476,14 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private boolean setCustomLockScreenWallpaper(String pkgName) {
+        WallpaperManager wm = WallpaperManager.getInstance(mContext);
         try {
             if (HOLO_DEFAULT.equals(pkgName)) {
                 final Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(),
                         com.android.internal.R.drawable.default_wallpaper);
-                WallpaperManager.getInstance(mContext).setKeyguardBitmap(bmp);
+                wm.setKeyguardBitmap(bmp);
+            } else if (TextUtils.isEmpty(pkgName)) {
+                wm.clearKeyguardWallpaper();
             } else {
                 //Get input WP stream from the theme
                 Context themeCtx = mContext.createPackageContext(pkgName,
@@ -485,7 +497,7 @@ public class ThemeService extends IThemeService.Stub {
                 InputStream is = ThemeUtils.getInputStreamFromAsset(themeCtx,
                         "file:///android_asset/" + wpPath);
 
-                WallpaperManager.getInstance(mContext).setKeyguardStream(is);
+                wm.setKeyguardStream(is);
             }
         } catch (Exception e) {
             Log.e(TAG, "There was an error setting lockscreen wp for pkg " + pkgName, e);
@@ -501,10 +513,16 @@ public class ThemeService extends IThemeService.Stub {
                 null, selection,
                 selectionArgs, null);
         c.moveToFirst();
-
+        WallpaperManager wm = WallpaperManager.getInstance(mContext);
         if (HOLO_DEFAULT.equals(pkgName)) {
             try {
-                WallpaperManager.getInstance(mContext).clear();
+                wm.clear();
+            } catch (IOException e) {
+                return false;
+            }
+        } else if (TextUtils.isEmpty(pkgName)) {
+            try {
+                wm.clear(false);
             } catch (IOException e) {
                 return false;
             }
@@ -538,13 +556,15 @@ public class ThemeService extends IThemeService.Stub {
                         in = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/"
                                 + wpPath);
                     }
-                    WallpaperManager.getInstance(mContext).setStream(in);
+                    wm.setStream(in);
                 } else {
                     PackageManager pm = mContext.getPackageManager();
                     PackageInfo pi = pm.getPackageInfo(pkgName, 0);
                     if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0) {
-                        WallpaperManager.getInstance(themeContext)
-                                .setResource(pi.legacyThemeInfos[0].wallpaperResourceId);
+                        // we need to get an instance of the WallpaperManager using the theme's
+                        // context so it can retrieve the resource
+                        wm = WallpaperManager.getInstance(themeContext);
+                        wm.setResource(pi.legacyThemeInfos[0].wallpaperResourceId);
                     } else {
                         return false;
                     }
@@ -863,4 +883,20 @@ public class ThemeService extends IThemeService.Stub {
             return (int) (lhs.lastModified() - rhs.lastModified());
         }
     };
+
+    private void doBuildIconCache() {
+        PackageManager pm = mContext.getPackageManager();
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        List<ResolveInfo> infos = pm.queryIntentActivities(mainIntent, 0);
+        for(ResolveInfo info : infos) {
+            try {
+                pm.getActivityIcon(new ComponentName(info.activityInfo.packageName,
+                        info.activityInfo.name));
+            } catch (Exception e) {
+                Log.w(TAG, "Unable to fetch icon for " + info, e);
+            }
+        }
+    }
 }

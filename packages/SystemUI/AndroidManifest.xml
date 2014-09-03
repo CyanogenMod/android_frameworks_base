@@ -68,9 +68,6 @@
     <uses-permission android:name="android.permission.READ_DREAM_STATE" />
     <uses-permission android:name="android.permission.WRITE_DREAM_STATE" />
 
-    <!-- Alarm clocks -->
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-
     <!-- Keyguard -->
     <uses-permission android:name="android.permission.CONTROL_KEYGUARD" />
 
@@ -85,9 +82,6 @@
     <!-- Development shortcut -->
     <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
     <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
-
-    <!-- Wifi Display -->
-    <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
 
     <!-- WallpaperManager -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />

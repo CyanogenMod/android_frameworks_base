@@ -58,7 +58,7 @@
         <View android:id="@+id/titleDivider"
             android:layout_width="match_parent"
             android:layout_height="2dip"
-            android:background="@android:color/holo_blue_light" />
+            android:background="@color/dialog_title_divider" />
         <!-- If the client uses a customTitle, it will be added here. -->
     </LinearLayout>
 

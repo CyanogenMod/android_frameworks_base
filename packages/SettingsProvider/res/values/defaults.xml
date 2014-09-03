@@ -185,6 +185,9 @@
     <!-- Default for Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED -->
     <integer name="def_wifi_suspend_optimizations_enabled">1</integer>
 
+    <!-- Default for Settings.Global.SEND_ACTION_APP_ERROR -->
+    <integer name="def_send_action_app_error">0</integer>
+
     <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
     <integer name="def_battery_style">0</integer>
     <!-- Default for Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT -->

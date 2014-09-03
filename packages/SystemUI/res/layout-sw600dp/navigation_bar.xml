@@ -117,6 +117,16 @@
             systemui:orientation="horizontal"
             android:layout_gravity="top"
             />
+
+        <!-- The status bar area blocker is only really needed in phone configurations.
+             In order to not clutter the code with null checks for it in the tablet case,
+             add it as a dummy here as well. -->
+        <View
+            android:id="@+id/status_bar_blocker"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            />
     </FrameLayout>
 
     <FrameLayout android:id="@+id/rot90"

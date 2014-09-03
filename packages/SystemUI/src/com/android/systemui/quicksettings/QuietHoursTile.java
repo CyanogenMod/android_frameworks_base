@@ -185,7 +185,7 @@ public class QuietHoursTile extends QuickSettingsTile {
         if (currentTime > startTime && currentTime > endTime) {
             // Past last trigger of the day, use next day's first one
             nextTime = Math.min(startTime, endTime);
-            cal.roll(Calendar.DAY_OF_MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
         } else if (currentTime < startTime && currentTime < endTime) {
             // Before first trigger of the day, use it
             nextTime = Math.min(startTime, endTime);

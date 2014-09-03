@@ -56,7 +56,7 @@ public class BugReportTile extends QuickSettingsTile{
 
     private synchronized void updateTile() {
         mLabel = mContext.getString(R.string.quick_settings_report_bug);
-        mDrawable = com.android.internal.R.drawable.stat_sys_adb;
+        mDrawable = R.drawable.ic_qs_bug_report;
         final ContentResolver cr = mContext.getContentResolver();
         try {
             enabled = (Settings.Global.getInt(cr, Settings.Global.BUGREPORT_IN_POWER_MENU) != 0);

@@ -25,8 +25,15 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="top|center_horizontal"
         android:layout_marginBottom="@dimen/qs_tile_margin_below_icon"
-        android:layout_marginTop="@dimen/qs_tile_margin_above_icon"
-        android:background="@drawable/ic_qs_battery_bg" >
+        android:layout_marginTop="@dimen/qs_tile_margin_above_icon" >
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_horizontal"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_qs_battery_bg" />
 
         <com.android.systemui.BatteryMeterView
             android:id="@+id/battery"

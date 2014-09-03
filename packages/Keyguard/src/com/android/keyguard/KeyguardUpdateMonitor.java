@@ -98,6 +98,7 @@ public class KeyguardUpdateMonitor {
     protected static final int MSG_REPORT_EMERGENCY_CALL_ACTION = 318;
     private static final int MSG_SCREEN_TURNED_ON = 319;
     private static final int MSG_SCREEN_TURNED_OFF = 320;
+    private static final int MSG_LID_STATE_CHANGED = 321;
 
     private static KeyguardUpdateMonitor sInstance;
 
@@ -199,6 +200,9 @@ public class KeyguardUpdateMonitor {
                     break;
                 case MSG_SCREEN_TURNED_ON:
                     handleScreenTurnedOn();
+                    break;
+                case MSG_LID_STATE_CHANGED:
+                    handleLidStateChanged(msg.arg1);
                     break;
             }
         }
@@ -438,6 +442,16 @@ public class KeyguardUpdateMonitor {
             sInstance = new KeyguardUpdateMonitor(context);
         }
         return sInstance;
+    }
+
+    protected void handleLidStateChanged(int arg1) {
+        final int count = mCallbacks.size();
+        for (int i = 0; i < count; i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onLidStateChanged(arg1);
+            }
+        }
     }
 
     protected void handleScreenTurnedOn() {
@@ -1069,8 +1083,7 @@ public class KeyguardUpdateMonitor {
 
     public void reportSimUnlocked(int subscription) {
         if (DEBUG) Log.d(TAG, "reportSimUnlocked(" + subscription + ")");
-        mSimState[subscription] = IccCardConstants.State.READY;
-        handleSimStateChange(new SimArgs(mSimState[subscription], subscription));
+        handleSimStateChange(new SimArgs(IccCardConstants.State.READY, subscription));
     }
 
     /**
@@ -1210,6 +1223,10 @@ public class KeyguardUpdateMonitor {
             mScreenOn = false;
         }
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SCREEN_TURNED_OFF, why, 0));
+    }
+
+    public void dispatchLidStateChange(int state) {
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_LID_STATE_CHANGED, state, 0));
     }
 
     public boolean isScreenOn() {

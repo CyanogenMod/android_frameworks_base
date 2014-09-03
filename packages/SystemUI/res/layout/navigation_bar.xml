@@ -239,6 +239,13 @@
             systemui:orientation="vertical"
             android:layout_gravity="top"
             />
+
+        <View
+            android:id="@+id/status_bar_blocker"
+            android:layout_width="match_parent"
+            android:layout_height="@*android:dimen/status_bar_height"
+            android:alpha="0"
+            />
     </FrameLayout>
 
     <!-- not used -->

@@ -17,4 +17,18 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Lockscreen</string>
     <string name="keyguard_discharging">Discharging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="keyguard_battery_percent" translatable="false"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <plurals name="missed_calls">
+        <item quantity="one">%d missed call</item>
+        <item quantity="other">%d missed calls</item>
+    </plurals>
+    <plurals name="unread_messages">
+        <item quantity="one">%d unread message</item>
+        <item quantity="other">%d unread messages</item>
+    </plurals>
+    <string name="missed_call">missed call</string>
+    <string name="message_from">message from</string>
+    <string name="message_from_person">message from %1$s</string>
+    <!-- Skeleton string format for displaying the date. -->
+    <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
 </resources>

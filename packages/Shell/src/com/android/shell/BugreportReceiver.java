@@ -52,6 +52,8 @@ public class BugreportReceiver extends BroadcastReceiver {
     private static final String EXTRA_BUGREPORT = "android.intent.extra.BUGREPORT";
     private static final String EXTRA_SCREENSHOT = "android.intent.extra.SCREENSHOT";
 
+    public static final String ACTION_BUGREPORT_STARTED = "android.intent.action.BUGREPORT_STARTED";
+
     /**
      * Always keep the newest 8 bugreport files; 4 reports and 4 screenshots are
      * roughly 17MB of disk space.
@@ -65,6 +67,19 @@ public class BugreportReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (ACTION_BUGREPORT_STARTED.equals(intent.getAction())) {
+            Notification.Builder builder = new Notification.Builder(context)
+                    .setSmallIcon(com.android.internal.R.drawable.stat_sys_adb)
+                    .setOngoing(true)
+                    .setProgress(0, 0, true)
+                    .setContentTitle(context
+                            .getString(R.string.notification_bug_report_active_title))
+                    .setContentText(context
+                            .getString(R.string.notification_bug_report_active_text));
+            NotificationManager.from(context).notify(TAG, 0, builder.build());
+            return;
+        }
+
         final File bugreportFile = getFileExtra(intent, EXTRA_BUGREPORT);
         final File screenshotFile = getFileExtra(intent, EXTRA_SCREENSHOT);
 

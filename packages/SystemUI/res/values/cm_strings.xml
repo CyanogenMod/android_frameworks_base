@@ -126,5 +126,5 @@
     <string name="sim_slot_2" translatable="false">2</string>
     <string name="sim_slot_3" translatable="false">3</string>
 
-    <string name="status_bar_notification_spam_item_title">Block messages like these</string>
+    <string name="status_bar_notification_spam_item_title">Ignore messages like this</string>
 </resources>
