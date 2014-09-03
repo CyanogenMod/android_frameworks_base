@@ -65,7 +65,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     // telephony
     boolean mHspaDataDistinguishable;
-    private TelephonyManager mPhone;
+    protected TelephonyManager mPhone;
     boolean mDataConnected;
     IccCardConstants.State mSimState = IccCardConstants.State.READY;
     int mPhoneState = TelephonyManager.CALL_STATE_IDLE;
@@ -205,13 +205,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         mNetworkName = mNetworkNameDefault;
 
         // wifi
-        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        Handler handler = new WifiHandler();
-        mWifiChannel = new AsyncChannel();
-        Messenger wifiMessenger = mWifiManager.getWifiServiceMessenger();
-        if (wifiMessenger != null) {
-            mWifiChannel.connect(mContext, handler, wifiMessenger);
-        }
+        createWifiHandler();
 
         // broadcasts
         IntentFilter filter = new IntentFilter();
