@@ -4892,6 +4892,12 @@ public final class Settings {
          */
         public static final String PIE_GESTURE = "pie_gesture";
 
+        /**
+         * Pie omniSwitch, should default to 0 (no, show only when needed)
+         * @hide
+         */
+        public static final String PIE_OMNISWITCH = "pie_omniSwitch";
+
         /*
          * Pie gap angle, should default to 2
          * @hide

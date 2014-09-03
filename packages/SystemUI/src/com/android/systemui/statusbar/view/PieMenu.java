@@ -314,6 +314,8 @@ public class PieMenu extends FrameLayout {
                 Settings.System.PIE_TORCH, 0, UserHandle.USER_CURRENT) == 1;
         mUseGesture = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
+        mUseGesture = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIE_OMNISWITCH, 0, UserHandle.USER_CURRENT) == 1;
         mStatusMode = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_MODE, 0, UserHandle.USER_CURRENT);
         mPieSize = Settings.System.getFloatForUser(mContext.getContentResolver(),
