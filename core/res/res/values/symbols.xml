@@ -2094,4 +2094,5 @@
   <java-symbol type="bool" name="config_switch_phone_on_voice_reg_state_change" />
   <java-symbol type="string" name="whichHomeApplicationNamed" />
   <java-symbol type="bool" name="config_sms_force_7bit_encoding" />
+  <java-symbol type="string" name="config_partial_segment_expire_age" />
 </resources>
