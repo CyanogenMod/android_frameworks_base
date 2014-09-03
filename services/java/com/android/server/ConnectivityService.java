@@ -4337,8 +4337,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         // adb shell setprop persist.checkmp.testfailures 1 to enable testing failures
         private static boolean mTestingFailures;
 
-        // Choosing 4 loops as half of them will use HTTPS and the other half HTTP
-        private static final int MAX_LOOPS = 4;
+        // Choosing 3 loops use HTTP as HTTPS will last longer time if server is
+        // unreachable. Keep same behavior with QcConnectivityService.
+        private static final int MAX_LOOPS = 3;
 
         // Number of milli-seconds to complete all of the retires
         public static final int MAX_TIMEOUT_MS =  60000;
@@ -4625,7 +4626,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             // CMP_RESULT_CODE_NO_TCP_CONNECTION. We could change this, but by
                             // having http second we will be using logic used for some time.
                             URL newUrl;
-                            String scheme = (addrTried <= (MAX_LOOPS/2)) ? "https" : "http";
+                            String scheme = "http";
                             newUrl = new URL(scheme, hostAddr.getHostAddress(),
                                         orgUri.getPath());
                             log("isMobileOk: newUrl=" + newUrl);
