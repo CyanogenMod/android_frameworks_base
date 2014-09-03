@@ -67,7 +67,6 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
     // telephony
-    private TelephonyManager mPhone;
     boolean[] mMSimDataConnected;
     IccCardConstants.State[] mMSimState;
     int[] mMSimDataActivity;
