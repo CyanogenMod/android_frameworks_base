@@ -588,6 +588,7 @@ public final class SystemServer {
                 false);
         boolean isEmulator = SystemProperties.get("ro.kernel.qemu").equals("1");
         boolean enableWigig = SystemProperties.getBoolean("persist.wigig.enable", false);
+        boolean disableAtlas = SystemProperties.getBoolean("config.disable_atlas", false);
 
         String externalServer = context.getResources().getString(
                 org.cyanogenmod.platform.internal.R.string.config_externalSystemServer);
@@ -1156,7 +1157,7 @@ public final class SystemServer {
                 mSystemServiceManager.startService(DreamManagerService.class);
             }
 
-            if (!disableNonCoreServices && ZygoteInit.PRELOAD_RESOURCES) {
+            if (!disableNonCoreServices && ZygoteInit.PRELOAD_RESOURCES && !disableAtlas) {
                 traceBeginAndSlog("StartAssetAtlasService");
                 try {
                     atlas = new AssetAtlasService(context);
