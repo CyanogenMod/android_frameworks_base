@@ -15,7 +15,10 @@
      limitations under the License.
 -->
 <resources>
+    <!-- @hide -->
     <public type="string" name="storage_internal" id="0x01040018" />
+    <!-- @hide -->
     <public type="string" name="storage_sd_card" id="0x01040019" />
+    <!-- @hide -->
     <public type="string" name="storage_usb" id="0x0104001a" />
 </resources>
