@@ -1322,16 +1322,16 @@ public final class MediaSession {
                     mCallback.onCommand(cmd.command, cmd.extras, cmd.stub);
                     break;
                 case MSG_SET_BROWSED_PLAYER:
-                    Log.d(TAG, "MSG_SET_BROWSED_PLAYER received in TransportMessageHandler");
+                    Log.d(TAG, "MSG_SET_BROWSED_PLAYER received in CallbackMessageHandler");
                     mCallback.setBrowsedPlayer();
                     break;
                 case MSG_SET_PLAY_ITEM:
-                    Log.d(TAG, "MSG_SET_PLAY_ITEM received in TransportMessageHandler");
+                    Log.d(TAG, "MSG_SET_PLAY_ITEM received in CallbackMessageHandler");
                     PlayItemToken playItemToken = (PlayItemToken) msg.obj;
                     mCallback.setPlayItem(playItemToken.getScope(), playItemToken.getUid());
                     break;
                 case MSG_GET_NOW_PLAYING_ITEMS:
-                    Log.d(TAG, "MSG_GET_NOW_PLAYING_ITEMS received in TransportMessageHandler");
+                    Log.d(TAG, "MSG_GET_NOW_PLAYING_ITEMS received in CallbackMessageHandler");
                     mCallback.getNowPlayingEntries();
                     break;
             }
