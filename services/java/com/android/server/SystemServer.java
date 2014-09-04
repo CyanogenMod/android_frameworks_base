@@ -599,6 +599,7 @@ public final class SystemServer {
 
         String externalServer = context.getResources().getString(
                 org.cyanogenmod.platform.internal.R.string.config_externalSystemServer);
+        boolean disableAtlas = SystemProperties.getBoolean("config.disable_atlas", false);
 
         try {
             Slog.i(TAG, "Reading configuration...");
@@ -1158,7 +1159,7 @@ public final class SystemServer {
                 mSystemServiceManager.startService(DreamManagerService.class);
             }
 
-            if (!disableNonCoreServices && ZygoteInit.PRELOAD_RESOURCES) {
+            if (!disableNonCoreServices && ZygoteInit.PRELOAD_RESOURCES && !disableAtlas) {
                 traceBeginAndSlog("StartAssetAtlasService");
                 try {
                     atlas = new AssetAtlasService(context);
