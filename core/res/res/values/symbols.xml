@@ -2037,4 +2037,8 @@
   <!-- USB OTG Notification -->
   <java-symbol type="string" name="usb_storage_notification_manage_message" />
 
+  <!-- Wifi tethering-->
+  <java-symbol type="plurals" name="tethered_clients_connected" />
+  <java-symbol type="xml" name="vendors" />
+
 </resources>
