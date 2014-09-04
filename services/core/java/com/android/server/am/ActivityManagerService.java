@@ -1270,6 +1270,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         }
                         return;
                     }
+                    mShowDialogs = false;
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
                         Dialog d = new AppErrorDialog(mContext,
                                 ActivityManagerService.this, res, proc);
