@@ -173,51 +173,67 @@ public class ThemeService extends IThemeService.Stub {
         // TODO: provide progress updates that reflect the time needed for each component
         final int progressIncrement = 75 / componentMap.size();
 
-        updateProvider(componentMap);
-
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ICONS)) {
-            updateIcons(componentMap.get(ThemesColumns.MODIFIES_ICONS));
+            if (!updateIcons(componentMap.get(ThemesColumns.MODIFIES_ICONS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_ICONS);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_LAUNCHER)) {
             if (updateWallpaper(componentMap.get(ThemesColumns.MODIFIES_LAUNCHER))) {
                 mWallpaperChangedByUs = true;
+            } else {
+                componentMap.remove(ThemesColumns.MODIFIES_LAUNCHER);
             }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_LOCKSCREEN)) {
-            updateLockscreen(componentMap.get(ThemesColumns.MODIFIES_LOCKSCREEN));
+            if (!updateLockscreen(componentMap.get(ThemesColumns.MODIFIES_LOCKSCREEN))) {
+                componentMap.remove(ThemesColumns.MODIFIES_LOCKSCREEN);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_NOTIFICATIONS)) {
-            updateNotifications(componentMap.get(ThemesColumns.MODIFIES_NOTIFICATIONS));
+            if (!updateNotifications(componentMap.get(ThemesColumns.MODIFIES_NOTIFICATIONS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_NOTIFICATIONS);
+            }
             incrementProgress(progressIncrement);
         }
 
         Environment.setUserRequired(false);
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ALARMS)) {
-            updateAlarms(componentMap.get(ThemesColumns.MODIFIES_ALARMS));
+            if (!updateAlarms(componentMap.get(ThemesColumns.MODIFIES_ALARMS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_ALARMS);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_RINGTONES)) {
-            updateRingtones(componentMap.get(ThemesColumns.MODIFIES_RINGTONES));
+            if (!updateRingtones(componentMap.get(ThemesColumns.MODIFIES_RINGTONES))) {
+                componentMap.remove(ThemesColumns.MODIFIES_RINGTONES);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_BOOT_ANIM)) {
-            updateBootAnim(componentMap.get(ThemesColumns.MODIFIES_BOOT_ANIM));
+            if (!updateBootAnim(componentMap.get(ThemesColumns.MODIFIES_BOOT_ANIM))) {
+                componentMap.remove(ThemesColumns.MODIFIES_BOOT_ANIM);
+            }
             incrementProgress(progressIncrement);
         }
         Environment.setUserRequired(true);
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_FONTS)) {
-            updateFonts(componentMap.get(ThemesColumns.MODIFIES_FONTS));
+            if (!updateFonts(componentMap.get(ThemesColumns.MODIFIES_FONTS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_FONTS);
+            }
             incrementProgress(progressIncrement);
         }
+
+        updateProvider(componentMap);
 
         updateConfiguration(componentMap);
 
@@ -268,14 +284,20 @@ public class ThemeService extends IThemeService.Stub {
         }
     }
 
-    private void updateIcons(String pkgName) {
-        PackageManager pm = mContext.getPackageManager();
-        if (pkgName.equals(HOLO_DEFAULT)) {
-            pm.updateIconMaps(null);
-        } else {
-            pm.updateIconMaps(pkgName);
-            mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
+    private boolean updateIcons(String pkgName) {
+        try {
+            PackageManager pm = mContext.getPackageManager();
+            if (pkgName.equals(HOLO_DEFAULT)) {
+                pm.updateIconMaps(null);
+            } else {
+                pm.updateIconMaps(pkgName);
+                mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Changing icons failed", e);
+            return false;
         }
+        return true;
     }
 
     private boolean updateFonts(String pkgName) {
@@ -325,9 +347,11 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private void updateBootAnim(String pkgName) {
-        clearBootAnimation();
-        if (HOLO_DEFAULT.equals(pkgName)) return;
+    private boolean updateBootAnim(String pkgName) {
+        if (HOLO_DEFAULT.equals(pkgName)) {
+            clearBootAnimation();
+            return true;
+        }
 
         PackageManager pm = mContext.getPackageManager();
         try {
@@ -335,7 +359,9 @@ public class ThemeService extends IThemeService.Stub {
             applyBootAnimation(ai.sourceDir);
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Changing boot animation failed", e);
+            return false;
         }
+        return true;
     }
 
     private boolean updateAlarms(String pkgName) {
@@ -465,7 +491,7 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private boolean updateLockscreen(String pkgName) {
-        boolean success = false;
+        boolean success;
         success = setCustomLockScreenWallpaper(pkgName);
 
         if (success) {
