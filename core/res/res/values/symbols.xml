@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
 ** Not a Contribution.
 **
 ** Copyright 2012, The Android Open Source Project
@@ -351,6 +351,8 @@
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
 
   <java-symbol type="bool" name="config_feature_iwlan_enabled" />
+  <java-symbol type="bool" name="def_telephony_spn_spec_enabled" />
+
   <java-symbol type="integer" name="config_bluetooth_max_advertisers" />
   <java-symbol type="integer" name="config_bluetooth_max_scan_filters" />
   <java-symbol type="integer" name="config_cursorWindowSize" />
