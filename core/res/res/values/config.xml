@@ -1952,5 +1952,6 @@
         <item>Trying to project media</item>
         <item>Trying to activate vpn</item>
         <item>Trying to turn on/off Wifi</item>
+        <item>Trying to trun on/off bluetooth</item>
     </string-array>
 </resources>
