@@ -358,6 +358,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private boolean mHeadsUpGravityBottom;
     private boolean mStatusBarShows = true;
     private boolean mImeIsShowing;
+    private int mHeadsUpCustomBg;
 
     // on-screen navigation buttons
     private NavigationBarView mNavigationBarView = null;
@@ -648,6 +649,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CIRCLE_DOT_OFFSET), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_BG_COLOR), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_BG_COLOR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -822,6 +826,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             Settings.System.HEADS_UP_GRAVITY_BOTTOM, 0,
                             UserHandle.USER_CURRENT) == 1;
                     updateHeadsUpPosition(mStatusBarShows);
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_BG_COLOR))) {
+                    mHeadsUpCustomBg = Settings.System.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.System.HEADS_UP_BG_COLOR, 0x00ffffff,
+                        UserHandle.USER_CURRENT);
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_BG_COLOR))) {
                 rebuildRecentsScreen();
@@ -2245,6 +2255,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 shadeEntry.setInterruption();
             }
 
+            // get background value
+            mHeadsUpCustomBg = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.HEADS_UP_BG_COLOR, 0x00ffffff,
+                UserHandle.USER_CURRENT);
+
             // Either the user want to see every heads up expanded....or the app which
             // requests the heads up force it to show as expanded.
             final boolean isExpanded = notification.getNotification().extras.getInt(
@@ -2254,7 +2270,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             // 1. Populate mHeadsUpNotificationView
             mHeadsUpNotificationView.setNotification(
-                    mInterruptingNotificationEntry, isExpanded);
+                    mInterruptingNotificationEntry, isExpanded, mHeadsUpCustomBg);
 
             // 2. Animate mHeadsUpNotificationView in
             mHandler.sendEmptyMessage(MSG_SHOW_HEADS_UP);
