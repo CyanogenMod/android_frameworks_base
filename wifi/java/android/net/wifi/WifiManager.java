@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +22,7 @@ package android.net.wifi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.annotation.SystemApi;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.net.wifi.ScanSettings;
@@ -558,6 +562,7 @@ public class WifiManager {
     private static final Object sThreadRefLock = new Object();
     private static int sThreadRefCount;
     private static HandlerThread sHandlerThread;
+    private final AppOpsManager mAppOps;
 
     /**
      * Create a new WifiManager instance.
@@ -573,6 +578,7 @@ public class WifiManager {
         mContext = context;
         mService = service;
         init();
+        mAppOps = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
     }
 
     /**
@@ -1286,6 +1292,9 @@ public class WifiManager {
      *         is the same as the requested state).
      */
     public boolean setWifiEnabled(boolean enabled) {
+        if (mAppOps.noteOp(AppOpsManager.OP_WIFI_CHANGE) !=
+                AppOpsManager.MODE_ALLOWED)
+            return false;
         try {
             return mService.setWifiEnabled(enabled);
         } catch (RemoteException e) {
