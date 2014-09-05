@@ -829,7 +829,10 @@ public class KeyguardHostView extends KeyguardViewBase {
                 case SimPuk:
                     // Shortcut for SIM PIN/PUK to go to directly to user's security screen or home
                     SecurityMode securityMode = mSecurityModel.getSecurityMode();
-                    if (securityMode != SecurityMode.None) {
+                    if (mViewMediatorCallback != null &&
+                            mViewMediatorCallback.isKeyguardDisabled()) {
+                        finish = true;
+                    } else if (securityMode != SecurityMode.None) {
                         showSecurityScreen(securityMode);
                     } else {
                         finish = true;

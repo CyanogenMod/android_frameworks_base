@@ -326,6 +326,11 @@ public class KeyguardViewMediator {
          * Report when keyguard is actually gone
          */
         void keyguardGone();
+
+        /**
+         * Check whether the keyguard was disabled by an app
+         */
+        boolean isKeyguardDisabled();
     }
 
     KeyguardUpdateMonitorCallback mUpdateCallback = new KeyguardUpdateMonitorCallback() {
@@ -366,7 +371,7 @@ public class KeyguardViewMediator {
             synchronized (KeyguardViewMediator.this) {
                 if (TelephonyManager.CALL_STATE_IDLE == phoneState  // call ending
                         && !mScreenOn                           // screen off
-                        && mExternallyEnabled) {                // not disabled by any app
+                        && !isKeyguardDisabled()) {                // not disabled by any app
 
                     // note: this is a way to gracefully reenable the keyguard when the call
                     // ends and the screen is off without always reenabling the keyguard
@@ -408,6 +413,7 @@ public class KeyguardViewMediator {
                                 if (DEBUG) Log.d(TAG, "ICC_ABSENT isn't showing,"
                                         + " we need to show the keyguard since the "
                                         + "device isn't provisioned yet.");
+                                mHandler.removeMessages(HIDE);
                                 doKeyguardLocked(null);
                             } else {
                                 resetStateLocked(null);
@@ -423,6 +429,7 @@ public class KeyguardViewMediator {
                                     + "showing; need to show keyguard so user can enter sim pin");
                             doKeyguardLocked(null);
                         } else {
+                            mHandler.removeMessages(HIDE);
                             resetStateLocked(null);
                         }
                     }
@@ -436,6 +443,7 @@ public class KeyguardViewMediator {
                         } else {
                             if (DEBUG) Log.d(TAG, "PERM_DISABLED, resetStateLocked to"
                                   + "show permanently disabled message in lockscreen.");
+                            mHandler.removeMessages(HIDE);
                             resetStateLocked(null);
                         }
                     }
@@ -487,6 +495,11 @@ public class KeyguardViewMediator {
         @Override
         public void keyguardGone() {
             mKeyguardDisplayManager.hide();
+        }
+
+        @Override
+        public boolean isKeyguardDisabled() {
+            return KeyguardViewMediator.this.isKeyguardDisabled();
         }
     };
 
@@ -620,7 +633,7 @@ public class KeyguardViewMediator {
                     Slog.w(TAG, "Failed to call onKeyguardExitResult(false)", e);
                 }
                 mExitSecureCallback = null;
-                if (!mExternallyEnabled) {
+                if (isKeyguardDisabled() && !isAnySimLockedOrMissing()) {
                     hideLocked();
                 }
             } else if (mShowing) {
@@ -765,7 +778,7 @@ public class KeyguardViewMediator {
 
             mExternallyEnabled = enabled;
 
-            if (!enabled && mShowing) {
+            if (!enabled && mShowing && !isAnySimLockedOrMissing()) {
                 if (mExitSecureCallback != null) {
                     if (DEBUG) Log.d(TAG, "in process of verifyUnlock request, ignoring");
                     // we're in the process of handling a request to verify the user
@@ -922,14 +935,7 @@ public class KeyguardViewMediator {
 
         // if the setup wizard hasn't run yet, don't show
         final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
-        int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
-        final IccCardConstants.State []state = new IccCardConstants.State[numPhones];
-        boolean lockedOrMissing = false;
-        for (int i = 0; i < numPhones; i++) {
-            state[i] = mUpdateMonitor.getSimState(i);
-            lockedOrMissing = lockedOrMissing || isLockedOrMissing(state[i]);
-            if (lockedOrMissing) break;
-        }
+        final boolean lockedOrMissing = isAnySimLockedOrMissing();
 
         if (!lockedOrMissing && !provisioned) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because device isn't provisioned"
@@ -937,7 +943,7 @@ public class KeyguardViewMediator {
             return;
         }
 
-        if (isKeyguardDisabled() && !lockedOrMissing) {
+        if (!lockedOrMissing && isKeyguardDisabled()) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because disabled");
             return;
         }
@@ -946,13 +952,22 @@ public class KeyguardViewMediator {
         showLocked(options);
     }
 
-    boolean isLockedOrMissing(IccCardConstants.State state) {
-        final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
-                false);
-        return (state.isPinLocked()
-                || ((state == IccCardConstants.State.ABSENT
-                        || state == IccCardConstants.State.PERM_DISABLED)
-                    && requireSim));
+    boolean isAnySimLockedOrMissing() {
+        int numPhones = MSimTelephonyManager.getDefault().getPhoneCount();
+        final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim", false);
+        for (int i = 0; i < numPhones; i++) {
+            IccCardConstants.State state = mUpdateMonitor.getSimState(i);
+            if (state.isPinLocked()) {
+                return true;
+            }
+            if (requireSim) {
+                if (state == IccCardConstants.State.ABSENT
+                        || state == IccCardConstants.State.PERM_DISABLED) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
