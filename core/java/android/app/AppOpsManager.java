@@ -250,8 +250,10 @@ public class AppOpsManager {
     public static final int OP_TURN_SCREEN_ON = 61;
     /** @hide Get device accounts. */
     public static final int OP_GET_ACCOUNTS = 62;
+    /** @hide Wifi state change **/
+    public static final int OP_WIFI_CHANGE = 63;
     /** @hide */
-    public static final int _NUM_OP = 63;
+    public static final int _NUM_OP = 64;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -349,6 +351,9 @@ public class AppOpsManager {
     /** @hide Get device accounts. */
     public static final String OPSTR_GET_ACCOUNTS
             = "android:get_accounts";
+    /** @hide **/
+    private static final String OPSTR_WIFI_CHANGE =
+            "android:wifi_change";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -422,6 +427,7 @@ public class AppOpsManager {
             OP_WRITE_EXTERNAL_STORAGE,
             OP_TURN_SCREEN_ON,
             OP_GET_ACCOUNTS,
+            OP_WIFI_CHANGE,
     };
 
     /**
@@ -491,7 +497,8 @@ public class AppOpsManager {
             OPSTR_READ_EXTERNAL_STORAGE,
             OPSTR_WRITE_EXTERNAL_STORAGE,
             null,
-            OPSTR_GET_ACCOUNTS
+            OPSTR_GET_ACCOUNTS,
+            OPSTR_WIFI_CHANGE,
     };
 
     /**
@@ -562,6 +569,7 @@ public class AppOpsManager {
             "WRITE_EXTERNAL_STORAGE",
             "TURN_ON_SCREEN",
             "GET_ACCOUNTS",
+            "WIFI_CHANGE",
     };
 
     /**
@@ -631,7 +639,8 @@ public class AppOpsManager {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             null, // no permission for turning the screen on
-            Manifest.permission.GET_ACCOUNTS
+            Manifest.permission.GET_ACCOUNTS,
+            Manifest.permission.CHANGE_WIFI_STATE,
     };
 
     /**
@@ -703,6 +712,7 @@ public class AppOpsManager {
             null, // WRITE_EXTERNAL_STORAGE
             null, // TURN_ON_SCREEN
             null, // GET_ACCOUNTS
+            null, //WIFI_CHANGE
     };
 
     /**
@@ -773,6 +783,7 @@ public class AppOpsManager {
             false, // WRITE_EXTERNAL_STORAGE
             false, // TURN_ON_SCREEN
             false, // GET_ACCOUNTS
+            false, // WIFI_CHANGE
     };
 
     /**
@@ -842,6 +853,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,  // OP_TURN_ON_SCREEN
             AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ALLOWED, // OP_WIFI_CHANGE
     };
 
     /**
@@ -912,6 +924,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED, // OP_WRITE_EXTERNAL_STORAGE
             AppOpsManager.MODE_ALLOWED, // OP_TURN_ON_SCREEN
             AppOpsManager.MODE_ALLOWED, // OP_GET_ACCOUNTS
+            AppOpsManager.MODE_ASK,     // OP_WIFI_CHANGE
     };
 
     /**
@@ -981,6 +994,7 @@ public class AppOpsManager {
         true,     // WRITE_EXTERNAL_STORAGE
         false,    // TURN_ON_SCREEN
         false,    // GET_ACCOUNTS
+        true,     // OP_WIFI_CHANGE
     };
 
     /**
@@ -1053,7 +1067,8 @@ public class AppOpsManager {
             false,
             false,
             false,
-            false
+            false,
+            false,     // OP_WIFI_CHANGE
     };
 
     /**
