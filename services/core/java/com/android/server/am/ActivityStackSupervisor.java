@@ -111,6 +111,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Perf */
+import org.codeaurora.Performance;
+
 public final class ActivityStackSupervisor implements DisplayListener {
     static final boolean DEBUG = ActivityManagerService.DEBUG || false;
     static final boolean DEBUG_ADD_REMOVE = DEBUG || false;
@@ -139,6 +142,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
     static final int RESUME_TOP_ACTIVITY_MSG = FIRST_SUPERVISOR_STACK_MSG + 2;
     static final int SLEEP_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 3;
     static final int LAUNCH_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 4;
+    public Performance mPerf = null;
+    public boolean mIsPerfLockAcquired = false;
     static final int HANDLE_DISPLAY_ADDED = FIRST_SUPERVISOR_STACK_MSG + 5;
     static final int HANDLE_DISPLAY_CHANGED = FIRST_SUPERVISOR_STACK_MSG + 6;
     static final int HANDLE_DISPLAY_REMOVED = FIRST_SUPERVISOR_STACK_MSG + 7;
@@ -2632,6 +2637,15 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
             }
         }
+        /* Acquire perf lock during new app launch */
+        if (mPerf == null) {
+            mPerf = new Performance();
+        }
+        if (mPerf != null && mIsPerfLockAcquired == false) {
+            mPerf.perfLockAcquire(2000,0x1E01,0x20D,0x1C00);
+            mIsPerfLockAcquired = true;
+        }
+
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
     }
