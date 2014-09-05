@@ -84,5 +84,6 @@
         <item>Trying to write external storage</item>
         <item>Trying to turn screen on</item>
         <item>Trying to get device accounts</item>
+        <item>Trying to turn on/off Wi-Fi</item>
     </string-array>
 </resources>
