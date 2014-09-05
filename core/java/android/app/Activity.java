@@ -32,6 +32,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -648,6 +649,7 @@ public class Activity extends ContextThemeWrapper
         OnCreateContextMenuListener, ComponentCallbacks2 {
     private static final String TAG = "Activity";
     private static final boolean DEBUG_LIFECYCLE = false;
+    private static final int REQUEST_PROTECTED_STATUS = 1337;
 
     /** Standard activity result: operation canceled. */
     public static final int RESULT_CANCELED    = 0;
@@ -698,6 +700,7 @@ public class Activity extends ContextThemeWrapper
     /*package*/ Configuration mCurrentConfig;
     private SearchManager mSearchManager;
     private MenuInflater mMenuInflater;
+    private boolean mAuth = false;
 
     static final class NonConfigurationInstances {
         Object activity;
@@ -1093,6 +1096,27 @@ public class Activity extends ContextThemeWrapper
      * @see #onPause
      */
     protected void onResume() {
+        if (!mAuth) {
+            // Check activity protected status and authenticate!
+            PackageManager pm = getPackageManager();
+            boolean system = false;
+            try {
+                ApplicationInfo aInfo = pm.getApplicationInfo(getPackageName(), 0);
+                system = (aInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+            } catch (NameNotFoundException e) {
+
+            }
+            if (!"com.android.settings".equals(getPackageName()) || !system){
+                Intent intent = new Intent();
+                intent.setClassName("com.android.settings", ".cyanogenmod.ProtectedAppsStatusAuth");
+                intent.putExtra("cyanogenmod.intent.extra.COMPONENT", this.getClass().getName());
+
+                startActivityForResult(intent, REQUEST_PROTECTED_STATUS);
+            } else {
+                mAuth = true;
+            }
+        }
+
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onResume " + this);
         getApplication().dispatchActivityResumed(this);
         mCalled = true;
@@ -4330,6 +4354,17 @@ public class Activity extends ContextThemeWrapper
      * @see #setResult(int)
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PROTECTED_STATUS) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    // component is either not protected or the user has authenticated
+                    mAuth = true;
+                    break;
+                default:
+                    // GET OUUUUUT
+                    finish();
+            }
+        }
     }
 
     /**
