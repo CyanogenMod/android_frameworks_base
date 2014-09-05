@@ -18,6 +18,7 @@ package android.app;
 
 import android.util.ArrayMap;
 import android.util.SuperNotCalledException;
+import android.widget.Toast;
 import com.android.internal.app.ActionBarImpl;
 import com.android.internal.policy.PolicyManager;
 
@@ -32,6 +33,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -648,6 +650,7 @@ public class Activity extends ContextThemeWrapper
         OnCreateContextMenuListener, ComponentCallbacks2 {
     private static final String TAG = "Activity";
     private static final boolean DEBUG_LIFECYCLE = false;
+    private static final int REQUEST_PROTECTED_STATUS = 1337;
 
     /** Standard activity result: operation canceled. */
     public static final int RESULT_CANCELED    = 0;
@@ -698,6 +701,7 @@ public class Activity extends ContextThemeWrapper
     /*package*/ Configuration mCurrentConfig;
     private SearchManager mSearchManager;
     private MenuInflater mMenuInflater;
+    private boolean mAuth = false;
 
     static final class NonConfigurationInstances {
         Object activity;
@@ -1093,6 +1097,32 @@ public class Activity extends ContextThemeWrapper
      * @see #onPause
      */
     protected void onResume() {
+        if (!mAuth) {
+            // Check activity protected status and authenticate!
+            ApplicationInfo aInfo = getApplicationInfo();
+            PackageManager pm = getPackageManager();
+            try {
+                aInfo = pm.getApplicationInfo(getPackageName(), 0);
+            } catch (NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+            boolean system = (aInfo.flags & mask) != 0;
+            Log.v("RAJ", "ApplicationInfo: " + aInfo.packageName + " protect: " + aInfo.protect);
+
+            if (aInfo.protect && !system){
+                Intent intent = new Intent();
+                intent.setClassName("com.android.settings",
+                        "com.android.settings.cyanogenmod.ProtectedAppsStatusAuth");
+                ComponentName cName = new ComponentName(getPackageName(),
+                        this.getClass().getName());
+                intent.putExtra("cyanogenmod.intent.extra.COMPONENT", cName.flattenToString());
+                startActivityForResult(intent, REQUEST_PROTECTED_STATUS);
+            } else {
+                mAuth = true;
+            }
+        }
+
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onResume " + this);
         getApplication().dispatchActivityResumed(this);
         mCalled = true;
@@ -1283,6 +1313,8 @@ public class Activity extends ContextThemeWrapper
      * @see #onStop
      */
     protected void onPause() {
+        // Protected Apps reset
+        mAuth = false;
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onPause " + this);
         getApplication().dispatchActivityPaused(this);
         mCalled = true;
@@ -5420,7 +5452,22 @@ public class Activity extends ContextThemeWrapper
             + ", resCode=" + resultCode + ", data=" + data);
         mFragments.noteStateNotSaved();
         if (who == null) {
-            onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_PROTECTED_STATUS) {
+                switch (resultCode) {
+                    case RESULT_OK:
+                        // component is either not protected or the user has authenticated
+                        Log.v("RAJ", "Result OK!");
+                        mAuth = true;
+                        break;
+                    default:// GET OUUUUUT
+                        Toast.makeText(this,
+                                "You are not authorized to enter this protected application, GET OUUUUUT",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                }
+            } else {
+                onActivityResult(requestCode, resultCode, data);
+            }
         } else {
             Fragment frag = mFragments.findFragmentByWho(who);
             if (frag != null) {
