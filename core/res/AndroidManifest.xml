@@ -2617,6 +2617,23 @@
         android:description="@string/permdesc_useHardwareFramework"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to read smart package stats
+         <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.READ_SMART_PACKAGE_STATS"
+                android:permissionGroup="android.permission-group.SECURITY"
+                android:protectionLevel="signature|system"
+                android:label="@string/permlab_readSmartPackageStats"
+                android:description="@string/permdesc_readSmartPackageStats" />
+
+    <!-- Allows an application to write smart package stats
+         <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.WRITE_SMART_PACKAGE_STATS"
+                android:permissionGroup="android.permission-group.SECURITY"
+                android:protectionLevel="signature|system"
+                android:label="@string/permlab_writeSmartPackageStats"
+                android:description="@string/permdesc_writeSmartPackageStats" />
 
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
