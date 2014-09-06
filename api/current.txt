@@ -28655,11 +28655,6 @@ package android.telephony {
     field public static final int SIM_NOT_INSERTED = -1; // 0xffffffff
   }
 
-  public static class SubscriptionManager.OnSubscriptionsChangedListener {
-    ctor public SubscriptionManager.OnSubscriptionsChangedListener();
-    method public void onSubscriptionsChanged();
-  }
-
   public class TelephonyManager {
     method public java.util.List<android.telephony.CellInfo> getAllCellInfo();
     method public int getCallState();
