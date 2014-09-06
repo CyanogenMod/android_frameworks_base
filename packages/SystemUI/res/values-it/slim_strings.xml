@@ -140,6 +140,8 @@
     <string name="quick_settings_reminder_noti_dismiss">Disattiva</string>
     <string name="quick_settings_reminder_noti_later">Posponi</string>
     <string name="quick_settings_reminder_help_message">Tocca lo spazio vuoto per impostare o cambiare il promemoria. Premi a lungo per cancellare il promemoria corrente.</string>
+    <string name="quick_settings_network_adb_disabled_label">Disattivato</string>
+    <string name="quick_settings_network_adb_enabled_label">Attivato</string>
 
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">In carica (<xliff:g id="percent">%d</xliff:g>%%)</string>
