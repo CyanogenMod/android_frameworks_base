@@ -25,4 +25,5 @@ interface IUsageStats {
     void noteLaunchTime(in ComponentName componentName, int millis);
     PkgUsageStats getPkgUsageStats(in ComponentName componentName);
     PkgUsageStats[] getAllPkgUsageStats();
+    PkgUsageStats[] getTotalPkgUsageStats();
 }
