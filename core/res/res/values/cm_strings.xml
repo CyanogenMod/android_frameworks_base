@@ -166,6 +166,16 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_useHardwareFramework">Allows an app access to the CM hardware framework.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+    <string name="permlab_readSmartPackageStats">read smart package stats</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readSmartPackageStats">Allows an app to read smart package stats for the user.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+    <string name="permlab_writeSmartPackageStats">write smart package stats</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeSmartPackageStats">Allows an app to write smart package stats for the user.</string>
+
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
 
     <!-- App ops requests -->
