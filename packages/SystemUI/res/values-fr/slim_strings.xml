@@ -48,7 +48,7 @@
     <string name="shortcut_immersive">Mode immersif</string>
     <string name="shortcut_quiethours">Heures silencieuses (ignore les contraintes de temps)</string>
     <string name="shortcut_rotation">Rotation</string>
-    <string name="shortcut_shakeevent">Shake events</string>
+    <string name="shortcut_shakeevent">Évènements de secousse</string>
     <string name="shortcut_torch">Torche</string>
     <string name="shortcut_reboot">Redémarrer</string>
     <string name="shortcut_recovery">Recovery</string>
@@ -59,16 +59,16 @@
     <string name="shortcut_chamber">Chambre des Secrets</string>
     <string name="chamber_disabled">La chambre des secrets est fermée</string>
     <string name="chamber_title">Entrer une chaine de paramètres</string>
-    <string name="chamber_message">Entrez une chaine de paramètres qui soit une fonction On-Off (case à cocher) ou une liste de préférences. Par exemple: quiet_hours_ringer. Les différents paramètres possibles peuvent être trouvés dans le fichier Settings.java. ATTENTION: Ce processus peut être dangereux !</string>
-    <string name="chamber_invalid">Entrée non valide. Soyez prudent.</string>
-    <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
+    <string name="chamber_message">Entrez une chaine de paramètres qui soit une fonction Oui/Non (case à cocher) ou une liste de préférences. Par exemple: quiet_hours_ringer. Les différents paramètres possibles peuvent être trouvés dans le fichier Settings.java. ATTENTION: Ce processus peut être dangereux !</string>
+    <string name="chamber_invalid">Entrée non valide. Soyez prudent !</string>
+    <string name="chamber_invalid_setting">Essayez de changer manuellement l\'état de votre paramètre afin d\'être sûr qu\'il soit dans la base de données.</string>
     <string name="chamber_checkbox">Case à cocher</string>
     <string name="chamber_chk_message">Ce paramètre utilise-t-il une case à cocher ?</string>
     <string name="chamber_int">Valeurs d\'entrée</string>
     <string name="chamber_int_message">Entrez les valeurs entre lesquelles vous voudriez voir le paramètre basculer. Séparez chaque valeur par une virgule. Les paramètres de couleur acceptent des valeurs hexadécimales comme #FF00aacc ou des valeurs de couleur basiques comme rouge, vert, et jaune.</string>
     <string name="chamber_name_title">Nom du raccourci</string>
     <string name="chamber_name_message">Donner un nom au raccourci à afficher avec l\'icône.</string>
-    <string name="chamber_name_toast">Utilise le nom par défaut</string>
+    <string name="chamber_name_toast">Utilisation du nom par défaut.</string>
 
     <!-- Quick Settings -->
     <string name="quick_settings_gps">GPS</string>
@@ -97,12 +97,12 @@
     <string name="quick_settings_usb_tether_on_label">Connexion partagée</string>
     <string name="quick_settings_wifiap">PA Wi-Fi activé</string>
     <string name="quick_settings_wifiap_off">PA Wi-Fi désactivé</string>
-    <string name="quick_settings_quiethours">Heures silencieuses</string>
-    <string name="quick_settings_quiethours_off">Heures normales</string>
+    <string name="quick_settings_quiethours">H.S. activées</string>
+    <string name="quick_settings_quiethours_off">H.S. désactivées</string>
     <string name="quick_settings_lte">LTE</string>
     <string name="quick_settings_lte_off">LTE désactivé</string>
-    <string name="quick_settings_shakeevents">Shake events activés</string>
-    <string name="quick_settings_shakeevents_off">Shake events désactivés</string>
+    <string name="quick_settings_shakeevents">Secousses activées</string>
+    <string name="quick_settings_shakeevents_off">Secousses désactivées</string>
     <string name="quick_settings_volume">Volume</string>
     <string name="quick_settings_expanded_desktop">Bureau étendu</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
@@ -135,11 +135,13 @@
     <string name="quick_settings_reminder_update">Mettre à jour l\'heure</string>
     <string name="quick_settings_reminder_no_expire">Pas de notification</string>
     <string name="quick_settings_reminder_dismiss">Supprimer le rappel</string>
-    <string name="quick_settings_reminder_dismiss_message">Supprimer le rappel actuel?</string>
-    <string name="quick_settings_reminder_help_title">Toucher</string>
-    <string name="quick_settings_reminder_noti_dismiss">Rejeter</string>
-    <string name="quick_settings_reminder_noti_later">Mettre à jour l\'heure</string>
-    <string name="quick_settings_reminder_help_message">Toucher l\'espace vide au dessus pour régler ou changer le rappel. Appui long pour effacer le rappel en cours.</string>
+    <string name="quick_settings_reminder_dismiss_message">Supprimer le rappel actuel ?</string>
+    <string name="quick_settings_reminder_help_title">Démo</string>
+    <string name="quick_settings_reminder_noti_dismiss">Supprimer</string>
+    <string name="quick_settings_reminder_noti_later">Reporter l\'heure</string>
+    <string name="quick_settings_reminder_help_message">Pour ajouter ou modifier un rappel, appuyer dans la zone vide à droite de l\'heure dans le panneau des notifications. Un appui long effaçera le rappel en cours.</string>
+    <string name="quick_settings_network_adb_disabled_label">Désactivé</string>
+    <string name="quick_settings_network_adb_enabled_label">Activé</string>
 
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">En charge (<xliff:g id="percent">%d</xliff:g>%%)</string>
