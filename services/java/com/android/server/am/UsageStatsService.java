@@ -18,10 +18,13 @@ package com.android.server.am;
 
 import android.app.AppGlobals;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.FileUtils;
@@ -40,6 +43,7 @@ import com.android.internal.content.PackageMonitor;
 import com.android.internal.os.PkgUsageStats;
 import com.android.internal.util.FastXmlSerializer;
 
+import com.android.internal.util.cm.SmartPackageStatsContracts;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -75,7 +79,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
     private static final boolean localLOGV = false;
     private static final boolean REPORT_UNEXPECTED = false;
     private static final String TAG = "UsageStats";
-    
+
     // Current on-disk Parcel version
     private static final int VERSION = 1008;
 
@@ -173,7 +177,9 @@ public final class UsageStatsService extends IUsageStats.Stub {
         int mLaunchCount;
         long mUsageTime;
         long mPausedTime;
+        long mActualPausedtime;
         long mResumedTime;
+        long mActualResumedTime;
         
         PkgUsageStatsExtended() {
             mLaunchCount = 0;
@@ -212,11 +218,30 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 mLaunchCount ++;
             }
             mResumedTime = SystemClock.elapsedRealtime();
+            mActualResumedTime = System.currentTimeMillis();
         }
         
         void updatePause() {
             mPausedTime =  SystemClock.elapsedRealtime();
+            mActualPausedtime = System.currentTimeMillis();
             mUsageTime += (mPausedTime - mResumedTime);
+            new Thread("UsageStatsService_DiskWriter") {
+                public void run() {
+                    ContentResolver resolver = mContext.getContentResolver();
+                    Uri addLaunchUri = SmartPackageStatsContracts.AUTHORITY_URI.buildUpon()
+                            .appendPath(SmartPackageStatsContracts.RawStats.PATH)
+                            .build();
+                    ContentValues values = new ContentValues();
+                    values.put(SmartPackageStatsContracts.RawStats.PKG_NAME, mLastResumedPkg);
+                    values.put(SmartPackageStatsContracts.RawStats.RESUMED_TIME,
+                            mActualResumedTime);
+                    values.put(SmartPackageStatsContracts.RawStats.PAUSED_TIME, mActualPausedtime);
+                    values.put(SmartPackageStatsContracts.RawStats.USAGE_TIME, mUsageTime);
+                    values.put(SmartPackageStatsContracts.RawStats.LAUNCH_COUNT,
+                            (long) mLaunchCount);
+                    resolver.insert(addLaunchUri, values);
+                }
+            }.start();
         }
         
         void addLaunchCount(String comp) {
