@@ -5684,13 +5684,6 @@ public final class Settings {
         public static final String RECENTS_STYLE = "recents_style";
 
         /**
-         * Color of the recent app panel header text
-         *
-         * @hide
-         */
-         public static final String RECENT_PANEL_HEADER_TEXT_COLOR = "recent_panel_header_text_color";
-
-        /**
          * Whether recent panel gravity is left or right (default = Gravity.RIGHT).
          * @hide
          */

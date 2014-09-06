@@ -20,8 +20,6 @@ package com.android.systemui.slimrecent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,11 +114,9 @@ public class RecentHeader extends CardHeader {
             }
             view.setTag(holder);
         }
-        int textColor = Settings.System.getIntForUser( mContext.getContentResolver(),
-                Settings.System.RECENT_PANEL_HEADER_TEXT_COLOR,
-                0xffffffff, UserHandle.USER_CURRENT);
+
         holder.textView.setText(mLabel);
-        holder.textView.setTextColor(textColor);
+
     }
 
     static class ViewHolder {
