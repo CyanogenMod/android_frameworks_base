@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -102,7 +103,7 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
     private int mLayoutDirection;
     private int mMainGravity;
     private int mUserGravity;
-    private int defaultColor;
+    private Drawable defaultBackground;
     private int mPanelColor;
 
     private float mScaleFactor = DEFAULT_SCALE_FACTOR;
@@ -272,8 +273,19 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
         if (mRecentPanelView != null) {
             mRecentPanelView.setMainGravity(mMainGravity);
         }
+        if (mMainGravity == Gravity.LEFT) {
+            defaultBackground = mContext.getResources().getDrawable(
+                R.drawable.recent_bg_dropshadow_left).getCurrent();
+        } else {
+            defaultBackground = mContext.getResources().getDrawable(
+                R.drawable.recent_bg_dropshadow).getCurrent();
+        }
         if (mRecentContent != null) {
-            mRecentContent.setBackgroundColor(mPanelColor);
+            if (mPanelColor != 0x00ffffff) {
+                mRecentContent.setBackgroundColor(mPanelColor);
+            } else {
+                mRecentContent.setBackground(defaultBackground);
+            }
         }
     }
 
@@ -571,18 +583,28 @@ public class RecentController implements RecentsComponent, RecentPanelView.OnExi
             }
 
             // Update colors in RecentPanelView
-            defaultColor = Settings.System.getIntForUser(resolver,
-                Settings.System.RECENT_PANEL_BG_COLOR, 0x80f5f5f5, UserHandle.USER_CURRENT);
+            if (mMainGravity == Gravity.LEFT) {
+                defaultBackground = mContext.getResources().getDrawable(
+                    R.drawable.recent_bg_dropshadow_left).getCurrent();
+            } else {
+                defaultBackground = mContext.getResources().getDrawable(
+                    R.drawable.recent_bg_dropshadow).getCurrent();
+            }
 
             mPanelColor = Settings.System.getIntForUser(resolver,
                     Settings.System.RECENT_PANEL_BG_COLOR, -2, UserHandle.USER_CURRENT);
 
             if (mPanelColor == Integer.MIN_VALUE
                 || mPanelColor == -2) {
-                // flag to reset the color
-                mPanelColor = defaultColor;
+                // Flag to reset recent panel background color
+                mRecentContent.setBackground(defaultBackground);
+            } else {
+                if (mPanelColor != 0x00ffffff) {
+                    mRecentContent.setBackgroundColor(mPanelColor);
+                } else {
+                    mRecentContent.setBackground(defaultBackground);
+                }
             }
-            mRecentContent.setBackgroundColor(mPanelColor);
         }
     }
 
