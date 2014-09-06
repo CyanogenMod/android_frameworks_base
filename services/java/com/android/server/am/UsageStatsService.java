@@ -18,10 +18,13 @@ package com.android.server.am;
 
 import android.app.AppGlobals;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.FileUtils;
@@ -75,7 +78,12 @@ public final class UsageStatsService extends IUsageStats.Stub {
     private static final boolean localLOGV = false;
     private static final boolean REPORT_UNEXPECTED = false;
     private static final String TAG = "UsageStats";
-    
+
+    private static final Uri CYNGN_INSERT_URI = Uri.parse("content://com.cnyng.smartpackagestats")
+            .buildUpon()
+            .appendPath("launchpath")
+            .build();
+
     // Current on-disk Parcel version
     private static final int VERSION = 1008;
 
@@ -753,6 +761,11 @@ public final class UsageStatsService extends IUsageStats.Stub {
             pus.updateResume(mLastResumedComp, !samePackage);
             if (!sameComp) {
                 pus.addLaunchCount(mLastResumedComp);
+                ContentResolver resolver = mContext.getContentResolver();
+                Uri incrementLaunchCountUri = CYNGN_INSERT_URI.buildUpon()
+                        .appendPath(pkgName)
+                        .build();
+                resolver.update(incrementLaunchCountUri, null, null, null);
             }
 
             ArrayMap<String, Long> componentResumeTimes = mLastResumeTimes.get(pkgName);
