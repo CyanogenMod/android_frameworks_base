@@ -630,6 +630,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final int[] mGlobalGids;
     final SparseArray<ArraySet<String>> mSystemPermissions;
     final ArrayMap<String, FeatureInfo> mAvailableFeatures;
+    final ArrayMap<Signature, HashSet<String>> mSignatureAllowances;
 
     // If mac_permissions.xml was found for seinfo labeling.
     boolean mFoundPolicyFile;
@@ -2275,6 +2276,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         mGlobalGids = systemConfig.getGlobalGids();
         mSystemPermissions = systemConfig.getSystemPermissions();
         mAvailableFeatures = systemConfig.getAvailableFeatures();
+        mSignatureAllowances = systemConfig.getSignatureAllowances();
 
         synchronized (mInstallLock) {
         // writer
@@ -4097,6 +4099,16 @@ public class PackageManagerService extends IPackageManager.Stub {
             throw new SecurityException("Permission " + bp.name
                     + " is not a changeable permission type");
         }
+    }
+
+    private boolean isAllowedSignature(PackageParser.Package pkg, String permissionName) {
+        for (Signature pkgSig : pkg.mSignatures) {
+            HashSet<String> perms = mSignatureAllowances.get(pkgSig);
+            if (perms != null && perms.contains(permissionName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -10245,9 +10257,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                         == PackageManager.SIGNATURE_MATCH);
         if (!allowed && (bp.protectionLevel
                 & PermissionInfo.PROTECTION_FLAG_PRIVILEGED) != 0) {
-            if (isSystemApp(pkg)) {
+            boolean allowedSig = isAllowedSignature(pkg, perm);
+            if (isSystemApp(pkg) || allowedSig) {
                 // For updated system applications, a system permission
-                // is granted only if it had been defined by the original application.
                 if (pkg.isUpdatedSystemApp()) {
                     final PackageSetting sysPs = mSettings
                             .getDisabledSystemPkgLPr(pkg.packageName);
@@ -10299,7 +10311,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         }
                     }
                 } else {
-                    allowed = isPrivilegedApp(pkg);
+                    allowed = isPrivilegedApp(pkg) || allowedSig;
                 }
             }
         }
