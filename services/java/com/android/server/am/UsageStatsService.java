@@ -18,9 +18,10 @@ package com.android.server.am;
 
 import android.app.AppGlobals;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.IPackageManager;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
@@ -40,6 +41,7 @@ import com.android.internal.content.PackageMonitor;
 import com.android.internal.os.PkgUsageStats;
 import com.android.internal.util.FastXmlSerializer;
 
+import com.android.internal.util.cm.SmartPackageStatsContracts;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -75,7 +77,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
     private static final boolean localLOGV = false;
     private static final boolean REPORT_UNEXPECTED = false;
     private static final String TAG = "UsageStats";
-    
+
     // Current on-disk Parcel version
     private static final int VERSION = 1008;
 
@@ -173,7 +175,9 @@ public final class UsageStatsService extends IUsageStats.Stub {
         int mLaunchCount;
         long mUsageTime;
         long mPausedTime;
+        long mActualPausedtime;
         long mResumedTime;
+        long mActualResumedTime;
         
         PkgUsageStatsExtended() {
             mLaunchCount = 0;
@@ -212,13 +216,30 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 mLaunchCount ++;
             }
             mResumedTime = SystemClock.elapsedRealtime();
+            mActualResumedTime = System.currentTimeMillis();
         }
         
         void updatePause() {
             mPausedTime =  SystemClock.elapsedRealtime();
+            mActualPausedtime = System.currentTimeMillis();
             mUsageTime += (mPausedTime - mResumedTime);
+            new Thread("UsageStatsService_DiskWriter") {
+                public void run() {
+                    ContentResolver resolver = mContext.getContentResolver();
+                    ContentValues values = new ContentValues();
+                    values.put(SmartPackageStatsContracts.RawStats.PKG_NAME, mLastResumedPkg);
+                    values.put(SmartPackageStatsContracts.RawStats.COMP_NAME, mLastResumedComp);
+                    values.put(SmartPackageStatsContracts.RawStats.RESUMED_TIME,
+                            mActualResumedTime);
+                    values.put(SmartPackageStatsContracts.RawStats.PAUSED_TIME, mActualPausedtime);
+                    values.put(SmartPackageStatsContracts.RawStats.USAGE_TIME, mUsageTime);
+                    values.put(SmartPackageStatsContracts.RawStats.LAUNCH_COUNT,
+                            (long) mLaunchCount);
+                    resolver.insert(SmartPackageStatsContracts.RawStats.CONTENT_URI, values);
+                }
+            }.start();
         }
-        
+
         void addLaunchCount(String comp) {
             TimeStats times = mLaunchTimes.get(comp);
             if (times == null) {
@@ -227,7 +248,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
             times.incCount();
         }
-        
+
         void addLaunchTime(String comp, int millis) {
             TimeStats times = mLaunchTimes.get(comp);
             if (times == null) {
@@ -262,7 +283,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 mFullyDrawnTimes.valueAt(i).writeToParcel(out);
             }
         }
-        
+
         void clear() {
             mLaunchTimes.clear();
             mFullyDrawnTimes.clear();
@@ -270,7 +291,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             mUsageTime = 0;
         }
     }
-    
+
     UsageStatsService(String dir) {
         mStats = new ArrayMap<String, PkgUsageStatsExtended>();
         mLastResumeTimes = new ArrayMap<String, ArrayMap<String, Long>>();
@@ -278,9 +299,9 @@ public final class UsageStatsService extends IUsageStats.Stub {
         mFileLock = new Object();
         mDir = new File(dir);
         mCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+0"));
-        
+
         mDir.mkdir();
-        
+
         // Remove any old usage files from previous versions.
         File parentDir = mDir.getParentFile();
         String fList[] = parentDir.list();
@@ -295,7 +316,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 }
             }
         }
-        
+
         // Update current stats which are binned by date
         mFileLeaf = getCurrentDateStr(FILE_PREFIX);
         mFile = new File(mDir, mFileLeaf);
@@ -331,7 +352,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         }
         return sb.toString();
     }
-    
+
     private Parcel getParcelForFile(File file) throws IOException {
         FileInputStream stream = new FileInputStream(file);
         byte[] raw = readFully(stream);
@@ -341,7 +362,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         stream.close();
         return in;
     }
-    
+
     private void readStatsFromFile() {
         File newFile = mFile;
         synchronized (mFileLock) {
@@ -358,7 +379,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             }
         }
     }
-    
+
     private void readStatsFLOCK(File file) throws IOException {
         Parcel in = getParcelForFile(file);
         int vers = in.readInt();
@@ -472,7 +493,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
         }
         return fileList;
     }
-    
+
     private void checkFileLimitFLOCK() {
         // Get all usage stats output files
         ArrayList<String> fileList = getUsageStatsFileListFLOCK();
@@ -687,9 +708,16 @@ public final class UsageStatsService extends IUsageStats.Stub {
     public void monitorPackages() {
         mPackageMonitor = new PackageMonitor() {
             @Override
-            public void onPackageRemovedAllUsers(String packageName, int uid) {
+            public void onPackageRemovedAllUsers(final String packageName, int uid) {
                 synchronized (mStatsLock) {
                     mLastResumeTimes.remove(packageName);
+                    new Thread("UsageStatsService_DiskWriter") {
+                        public void run() {
+                            ContentResolver resolver = mContext.getContentResolver();
+                            resolver.delete(SmartPackageStatsContracts.RawStats.CONTENT_URI, null,
+                                    new String[]{packageName});
+                        }
+                    }.start();
                 }
             }
         };
@@ -722,7 +750,9 @@ public final class UsageStatsService extends IUsageStats.Stub {
                     ((pkgName = componentName.getPackageName()) == null)) {
                 return;
             }
-            
+
+            mLastResumedComp = componentName.getClassName();
+
             final boolean samePackage = pkgName.equals(mLastResumedPkg);
             if (mIsResumed) {
                 if (mLastResumedPkg != null) {
@@ -742,7 +772,6 @@ public final class UsageStatsService extends IUsageStats.Stub {
             
             mIsResumed = true;
             mLastResumedPkg = pkgName;
-            mLastResumedComp = componentName.getClassName();
             
             if (localLOGV) Slog.i(TAG, "started component:" + pkgName);
             PkgUsageStatsExtended pus = mStats.get(pkgName);
@@ -860,7 +889,55 @@ public final class UsageStatsService extends IUsageStats.Stub {
             return new PkgUsageStats(pkgName, launchCount, usageTime, lastResumeTimes);
         }
     }
-    
+
+    public PkgUsageStats[] getTotalPkgUsageStats() {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.PACKAGE_USAGE_STATS, null);
+        ArrayList<PkgUsageStats> result = new ArrayList<PkgUsageStats>();
+        List<String> fileList = getUsageStatsFileListFLOCK();
+        if (fileList == null) {
+            return null;
+        }
+        Collections.sort(fileList);
+        HashMap<String, Long> emptyResumeTime = new HashMap<String, Long>();
+        for (String file : fileList) {
+            File dFile = new File(mDir, file);
+            String dateStr = file.substring(FILE_PREFIX.length());
+            if (dateStr.length() > 0 && (dateStr.charAt(0) <= '0' || dateStr.charAt(0) >= '9')) {
+                // If the remainder does not start with a number, it is not a date,
+                // so we should ignore it for purposes here.
+                continue;
+            }
+            try {
+                Parcel in = getParcelForFile(dFile);
+                int vers = in.readInt();
+                if (vers != VERSION) {
+                    Slog.w(TAG, "Usage stats version changed; dropping");
+                    return null;
+                }
+                int N = in.readInt();
+                while (N > 0) {
+                    N--;
+                    String pkgName = in.readString();
+                    if (pkgName == null) {
+                        break;
+                    }
+                    PkgUsageStatsExtended pus = new PkgUsageStatsExtended(in);
+                    synchronized (mStatsLock) {
+                        result.add(new PkgUsageStats(pkgName, pus.mLaunchCount, pus.mUsageTime,
+                                emptyResumeTime));
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                Slog.w(TAG, "Failed with "+e+" when collecting dump info from file : " + file);
+                return null;
+            } catch (IOException e) {
+                Slog.w(TAG, "Failed with "+e+" when collecting dump info from file : "+file);
+            }
+        }
+        return result.toArray(new PkgUsageStats[result.size()]);
+    }
+
     public PkgUsageStats[] getAllPkgUsageStats() {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.PACKAGE_USAGE_STATS, null);
