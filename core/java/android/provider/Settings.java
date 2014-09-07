@@ -6348,6 +6348,13 @@ public final class Settings {
         public static final String RECENT_CARD_TEXT_COLOR = "recent_card_text_color";
 
         /**
+         * touch wake
+         *
+         * @hide
+         */
+        public static final String TOUCH_WAKE = "touch_wake";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
