@@ -204,6 +204,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
         super.onFinishInflate();
         mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
         mGlowPadView.setOnTriggerListener(mOnTriggerListener);
+        mGlowPadView.setVisibility(View.GONE);
         updateTargets();
 
         mSecurityMessageDisplay = new KeyguardMessageArea.Helper(this);
