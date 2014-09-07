@@ -59,6 +59,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.RemoteViews.OnClickHandler;
@@ -342,6 +343,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         ev.offsetLocation(mTempRect.left, mTempRect.top);
         result = mSecurityViewContainer.dispatchTouchEvent(ev) || result;
         ev.offsetLocation(-mTempRect.left, -mTempRect.top);
+        mDragHelper.processTouchEvent(ev);
         return result;
     }
 
@@ -523,12 +525,65 @@ public class KeyguardHostView extends KeyguardViewBase {
         mLockPatternUtils = utils;
         updateSecurityViews();
     }
-
+    private ViewDragHelper mDragHelper;
+    int childTop = 0;
+    private AppDock dock;
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mAppWidgetHost.startListening();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateMonitorCallbacks);
+        mDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
+            @Override
+            public boolean tryCaptureView(View child, int pointerId) {
+                childTop = child.getTop();
+                return true;
+            }
+            @Override
+            public int clampViewPositionVertical(View child, int top, int dy) {
+                if (dock.mHiding || ((childTop - top > 0) && dy < 0)) {
+                    return super.clampViewPositionVertical(child, top, dy);
+                }
+                return top;
+            }
+            @Override
+            public int getViewVerticalDragRange(View child) {
+                return ((ViewGroup)getParent()).getMeasuredHeight()-child.getMeasuredHeight();
+            }
+            @Override
+            public void onViewReleased(View releasedChild, float xvel, float yvel) {
+                super.onViewReleased(releasedChild, xvel, yvel);
+                if(yvel>0) {
+                    mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), ((ViewGroup)getParent()).getMeasuredHeight()-releasedChild.getMeasuredHeight());
+                } else {
+                    mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), 0);
+                }
+                dock.slide(0, false);
+                invalidate();
+            }
+            @Override
+            public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+                dock.setTranslationY(Math.abs(childTop - top));
+                float percentage = (Math.abs(childTop - top) / (float) dock.mPanel.getPanelHeight());
+                dock.slide(percentage, true);
+                if (percentage > 0.8) {
+                    mCallback.dismiss(false);
+                    mDragHelper.abort();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if(mDragHelper.continueSettling(true)) {
+            postInvalidateOnAnimation();
+        }
+    }
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return mDragHelper.shouldInterceptTouchEvent(ev);
     }
 
     @Override
@@ -1266,6 +1321,12 @@ public class KeyguardHostView extends KeyguardViewBase {
         LockPatternUtils getLockPatternUtils() {
             return mLockPatternUtils;
         }
+
+        @Override
+        protected void dismissKeyguardOnNextActivity() {
+            // TODO WE DONT WANT THIS HERE
+            getCallback().dismiss(false);
+        }
     };
 
     private int numWidgets() {
@@ -1528,6 +1589,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         if (mSlidingChallengeLayout != null) mSlidingChallengeLayout.setInsets(mInsets);
         if (mMultiPaneChallengeLayout != null) mMultiPaneChallengeLayout.setInsets(mInsets);
 
+        ((View) getParent()).setPadding(0, 0, 0, insets.bottom);
         final CameraWidgetFrame cameraWidget = findCameraPage();
         if (cameraWidget != null) cameraWidget.setInsets(mInsets);
     }
@@ -1839,6 +1901,15 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     public void launchCamera() {
         mActivityLauncher.launchCamera(getHandler(), null);
+    }
+
+    public void launchAcitivity(Intent i) {
+        mActivityLauncher.launchActivity(i, false, false, null, null);
+    }
+
+    public void setDock(AppDock dock) {
+        this.dock = dock;
+        mSlidingChallengeLayout.setDock(dock);
     }
 
 }
