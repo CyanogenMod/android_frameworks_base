@@ -1052,6 +1052,16 @@ public class SlidingChallengeLayout extends ViewGroup implements ChallengeLayout
     }
 
     public void fadeChallenge(final boolean show) {
+        if (mDock != null) {
+            if (show) {
+                mDock.setHiding(false);
+                mDock.mPanel.showPanel();
+            } else {
+                mDock.setHiding(true);
+                mDock.mPanel.hidePanel();
+                
+            }
+        }
         if (mChallengeView != null) {
 
             cancelTransitionsInProgress();
@@ -1286,5 +1296,9 @@ public class SlidingChallengeLayout extends ViewGroup implements ChallengeLayout
                     R.styleable.SlidingChallengeLayout_Layout_layout_maxHeight, 0);
             a.recycle();
         }
+    }
+AppDock mDock;
+    public void setDock(AppDock dock) {
+        mDock = dock;
     }
 }
