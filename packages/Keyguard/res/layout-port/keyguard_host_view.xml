@@ -19,9 +19,23 @@
 
 <!-- This is the host view that generally contains two sub views: the widget view
     and the security view. -->
-<com.android.keyguard.KeyguardHostView
+<com.android.keyguard.SlidingUpPanelLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/res/com.android.keyguard"
+        android:gravity="bottom"
+        android:clipToPadding="false"
+        android:background="@android:color/transparent"
+        android:clipChildren="false"
+        android:id="@+id/sliding_panel"
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        sothree:panelHeight="160dp"
+        sothree:fadeColor="@android:color/transparent"
+        sothree:shadowHeight="0dp"
+        sothree:overlay="true"
+        sothree:flingVelocity="2147483647"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<com.android.keyguard.KeyguardHostView
     android:id="@+id/keyguard_host_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -95,4 +109,11 @@
 
     </com.android.keyguard.SlidingChallengeLayout>
 </com.android.keyguard.KeyguardHostView>
+        <com.android.keyguard.AppDock
+            android:layout_alignParentBottom="true"
+            android:id="@+id/dock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.android.keyguard.AppDock>
+</com.android.keyguard.SlidingUpPanelLayout>
 

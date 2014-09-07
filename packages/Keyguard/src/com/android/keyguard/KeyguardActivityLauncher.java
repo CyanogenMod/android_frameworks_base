@@ -159,8 +159,9 @@ public abstract class KeyguardActivityLauncher {
             final Runnable onStarted) {
 
         final Context context = getContext();
-        final Bundle animation = useDefaultAnimations ? null
-                : ActivityOptions.makeCustomAnimation(context, 0, 0).toBundle();
+        /*final Bundle animation = useDefaultAnimations ? null
+                        : ActivityOptions.makeCustomAnimation(context, 0, 0).toBundle();*/
+        final Bundle animation = ActivityOptions.makeCustomAnimation(context, R.anim.slide, R.anim.exit).toBundle();
         launchActivityWithAnimation(intent, showsWhileLocked, animation, worker, onStarted);
     }
 
