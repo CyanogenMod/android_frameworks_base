@@ -159,6 +159,7 @@ public class KeyguardViewStateManager implements
                 camera.setUseFastTransition(mKeyguardWidgetPager.isWarping());
             }
             SlidingChallengeLayout scl = (SlidingChallengeLayout) mChallengeLayout;
+            System.out.println("Interactive " + !isCameraPage);
             scl.setChallengeInteractive(!isCameraPage);
             final int currentFlags = mKeyguardWidgetPager.getSystemUiVisibility();
             final int newFlags = isCameraPage ? (currentFlags | View.STATUS_BAR_DISABLE_SEARCH)
