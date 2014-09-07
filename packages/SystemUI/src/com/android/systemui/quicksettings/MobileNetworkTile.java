@@ -22,8 +22,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.view.View;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.internal.util.cm.QSUtils;
 import com.android.systemui.R;
@@ -166,5 +166,17 @@ public class MobileNetworkTile extends NetworkTile {
             return aux.substring(0, aux.length() - 1);
         }
         return aux;
+    }
+
+    // MobileNetworkTile use an internal frame, so we need to restrict frame margins
+    // instead of image margin
+    @Override
+    public void setImageMargins(int margin) {
+        View image = mTile.findViewById(R.id.image);
+        if (image != null) {
+            MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
+            params.topMargin = params.bottomMargin = margin;
+            image.setLayoutParams(params);
+        }
     }
 }
