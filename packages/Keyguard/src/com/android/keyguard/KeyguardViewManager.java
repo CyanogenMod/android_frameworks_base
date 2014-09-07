@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
-
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -28,6 +27,7 @@ import android.view.Gravity;
 import android.view.WindowManagerPolicy;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -654,7 +654,7 @@ public class KeyguardViewManager {
         mKeyguardView.setViewMediatorCallback(mViewMediatorCallback);
         mKeyguardView.initializeSwitchingUserState(options != null &&
                 options.getBoolean(IS_SWITCHING_USER));
-
+        
         // HACK
         // The keyguard view will have set up window flags in onFinishInflate before we set
         // the view mediator callback. Make sure it knows the correct IME state.
@@ -712,6 +712,11 @@ public class KeyguardViewManager {
             contentParams.width = windowWidth;
             contentParams.leftMargin = coverWindowCoords[1];
         }
+        final SlidingUpPanelLayout panelLayout = (SlidingUpPanelLayout) mKeyguardHost.findViewById(R.id.sliding_panel);
+        final AppDock dock = (AppDock) panelLayout.findViewById(R.id.dock);
+        dock.setPanel(panelLayout);
+        dock.setSecurityCallback(mKeyguardView);
+        mKeyguardView.setDock(dock);
     }
 
     public void updateUserActivityTimeout() {
