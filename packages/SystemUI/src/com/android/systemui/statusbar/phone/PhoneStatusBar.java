@@ -401,6 +401,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_NETWORK_LINK_STATUS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this);
             updateSettings();
             updateClockLocation();
@@ -3270,10 +3272,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         int signalStyle = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_SIGNAL_TEXT,
                 SignalClusterView.STYLE_NORMAL, mCurrentUserId);
+        boolean showNetworkLinkStatus = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_SHOW_NETWORK_LINK_STATUS,
+                1, mCurrentUserId) == 1;
         if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
             mMSimSignalClusterView.setStyle(signalStyle);
+            mMSimSignalClusterView.setShowNetworkLinkStatus(showNetworkLinkStatus);
         } else {
             mSignalClusterView.setStyle(signalStyle);
+            mSignalClusterView.setShowNetworkLinkStatus(showNetworkLinkStatus);
             if (mSignalTextView != null) {
                 mSignalTextView.setStyle(signalStyle);
             }

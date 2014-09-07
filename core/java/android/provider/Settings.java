@@ -3161,6 +3161,14 @@ public final class Settings {
          */
         public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
 
+        /**
+        * Whether to display network (wifi/mobile) link status in the status bar
+        *
+        * @hide
+        */
+       public static final String STATUS_BAR_SHOW_NETWORK_LINK_STATUS =
+               "status_bar_show_network_link_status";
+
          /**
          * Whether to control brightness from status bar
          *

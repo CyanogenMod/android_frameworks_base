@@ -63,6 +63,8 @@ public class MSimSignalClusterView
     private String mWifiDescription, mMobileTypeDescription;
     private String[] mMobileDescription;
 
+    private boolean mShowNetworkLinkStatus = true;
+
     ViewGroup mWifiGroup;
     ViewGroup[] mMobileGroup;
     ImageView mWifi, mWifiActivity, mAirplane;
@@ -213,7 +215,7 @@ public class MSimSignalClusterView
         if (mWifiVisible) {
             mWifiGroup.setVisibility(View.VISIBLE);
             mWifi.setImageResource(mWifiStrengthId);
-            mWifiActivity.setImageResource(mWifiActivityId);
+            mWifiActivity.setImageResource(mShowNetworkLinkStatus ? mWifiActivityId : 0);
             mWifiGroup.setContentDescription(mWifiDescription);
         } else {
             mWifiGroup.setVisibility(View.GONE);
@@ -229,7 +231,8 @@ public class MSimSignalClusterView
             mMobile[subscription].setImageResource(mMobileStrengthId[subscription]);
             mMobileGroup[subscription].setContentDescription(mMobileTypeDescription + " "
                 + mMobileDescription[subscription]);
-            mMobileActivity[subscription].setImageResource(mMobileActivityId[subscription]);
+            mMobileActivity[subscription].setImageResource(
+                    mShowNetworkLinkStatus ? mMobileActivityId[subscription] : 0);
             mMobileType[subscription].setImageResource(mMobileTypeId[subscription]);
             mMobileType[subscription].setVisibility(
                 !mWifiVisible ? View.VISIBLE : View.GONE);
@@ -257,6 +260,10 @@ public class MSimSignalClusterView
 
     public void setStyle(int style) {
         mSignalClusterStyle = style;
+    }
+
+    public void setShowNetworkLinkStatus(boolean show) {
+        mShowNetworkLinkStatus = show;
     }
 }
 

@@ -57,6 +57,8 @@ public class SignalClusterView
     private boolean mEthernetVisible = false;
     private int mEthernetIconId = 0;
 
+    private boolean mShowNetworkLinkStatus = true;
+
     ViewGroup mWifiGroup, mMobileGroup;
     ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane, mNoSimSlot,
         mEthernet;
@@ -208,7 +210,7 @@ public class SignalClusterView
 
         if (mWifiVisible) {
             mWifi.setImageResource(mWifiStrengthId);
-            mWifiActivity.setImageResource(mWifiActivityId);
+            mWifiActivity.setImageResource(mShowNetworkLinkStatus ? mWifiActivityId : 0);
 
             mWifiGroup.setContentDescription(mWifiDescription);
             mWifiGroup.setVisibility(View.VISIBLE);
@@ -223,7 +225,7 @@ public class SignalClusterView
 
         if (mMobileVisible && !mIsAirplaneMode) {
             mMobile.setImageResource(mMobileStrengthId);
-            mMobileActivity.setImageResource(mMobileActivityId);
+            mMobileActivity.setImageResource(mShowNetworkLinkStatus ? mMobileActivityId : 0);
             mMobileType.setImageResource(mMobileTypeId);
 
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
@@ -269,6 +271,10 @@ public class SignalClusterView
     public void setStyle(int style) {
         mSignalClusterStyle = style;
         updateVisibilityForStyle();
+    }
+
+    public void setShowNetworkLinkStatus(boolean show) {
+        mShowNetworkLinkStatus = show;
     }
 
     private void updateVisibilityForStyle() {
