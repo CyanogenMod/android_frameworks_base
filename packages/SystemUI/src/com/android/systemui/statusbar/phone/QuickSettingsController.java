@@ -50,6 +50,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.cm.QSConstants.TILE_WIMAX;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -70,8 +71,10 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.android.internal.util.cm.QSUtils;
 import com.android.systemui.R;
+import com.android.internal.util.cm.SmartPackageStatsUtils;
 import com.android.systemui.quicksettings.AirplaneModeTile;
 import com.android.systemui.quicksettings.AlarmTile;
+import com.android.systemui.quicksettings.AppTile;
 import com.android.systemui.quicksettings.AutoRotateTile;
 import com.android.systemui.quicksettings.BatteryTile;
 import com.android.systemui.quicksettings.BluetoothTile;
@@ -202,9 +205,22 @@ public class QuickSettingsController {
             TILES_DEFAULT.remove(TILE_TORCH);
         }
 
+        //fuck you i get priority
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        QuickSettingsTile qs1 = new UserTile(mContext, this, mHandler);
+        qs1.setupQuickSettingsTile(inflater, mContainerView);
+        mQuickSettingsTiles.add(qs1);
+        for (ComponentName componentName :
+                SmartPackageStatsUtils.getMostLaunchedComponents(mContext, 8)) {
+            System.out.println("COMPONENT ADNAN " + componentName.getPackageName());
+            QuickSettingsTile qs =
+                    new AppTile(mContext, this, componentName);
+            qs.setupQuickSettingsTile(inflater, mContainerView);
+            mQuickSettingsTiles.add(qs);
+        }
+
         // Read the stored list of tiles
         ContentResolver resolver = mContext.getContentResolver();
-        LayoutInflater inflater = LayoutInflater.from(mContext);
         String tiles = Settings.System.getStringForUser(resolver,
                 mSettingsKey, UserHandle.USER_CURRENT);
         if (tiles == null) {
@@ -222,9 +238,7 @@ public class QuickSettingsController {
 
         for (String tile : tiles.split("\\|")) {
             QuickSettingsTile qs = null;
-            if (tile.equals(TILE_USER)) {
-                qs = new UserTile(mContext, this, mHandler);
-            } else if (tile.equals(TILE_BATTERY)) {
+            if (tile.equals(TILE_BATTERY)) {
                 qs = new BatteryTile(mContext, this, mStatusBarService.mBatteryController);
             } else if (tile.equals(TILE_SETTINGS)) {
                 qs = new PreferencesTile(mContext, this);
