@@ -723,7 +723,7 @@ public final class Settings {
      */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_NOTIFICATION_LISTENER_SETTINGS
-            = "android.settings.NOTIFICATION_LISTENER_SETTINGS";
+            = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
 
     /**
      * Activity Action: Show settings for video captioning.
