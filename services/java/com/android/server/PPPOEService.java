@@ -167,7 +167,7 @@ public class PPPOEService {
                     } else if (cooked[2].equals("linkstate") && cooked.length == 5) {
                         if(cooked[3].startsWith("ppp")) {
                             if(cooked[4].equals("up")) {
-                                if(mPppoeStatus != Status.ONLINE) {
+                                if(mPppoeStatus == Status.CONNECTING) {
                                     setRouteAndDNS(cooked[3]);
                                     mPppoeStatus = Status.ONLINE;
                                     mConnectedtime = System.currentTimeMillis();
