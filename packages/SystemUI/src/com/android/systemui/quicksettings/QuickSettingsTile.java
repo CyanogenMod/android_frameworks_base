@@ -21,6 +21,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.os.UserHandle;
@@ -46,6 +47,7 @@ public class QuickSettingsTile implements View.OnClickListener {
     protected View.OnClickListener mOnClick;
     protected View.OnLongClickListener mOnLongClick;
     protected final int mTileLayout;
+    protected Drawable mImage = null;
     protected int mDrawable;
     protected String mLabel;
     protected int mTileTextSize;
@@ -123,7 +125,9 @@ public class QuickSettingsTile implements View.OnClickListener {
 
     void onPostCreate() {}
 
-    public void onDestroy() {}
+    public void onDestroy() {
+        mImage = null;
+    }
 
     public void onReceive(Context context, Intent intent) {}
 
@@ -147,7 +151,11 @@ public class QuickSettingsTile implements View.OnClickListener {
         }
         View image = getImageView();
         if (image != null && image instanceof ImageView) {
-            ((ImageView) image).setImageResource(mDrawable);
+            if (mImage != null) {
+                ((ImageView) image).setImageDrawable(mImage);
+            } else {
+                ((ImageView) image).setImageResource(mDrawable);
+            }
         }
     }
 
