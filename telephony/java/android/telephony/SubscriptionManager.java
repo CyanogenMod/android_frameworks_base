@@ -329,9 +329,9 @@ public class SubscriptionManager implements BaseColumns {
      * @param subId The unique SubInfoRecord index in database
      * @return SubInfoRecord, maybe null
      */
-    public static SubInfoRecord getSubInfoUsingSubId(Context context, long subId) {
+    public static SubInfoRecord getSubInfoForSubscriber(long subId) {
         if (!isValidSubId(subId)) {
-            logd("[getSubInfoUsingSubIdx]- invalid subId");
+            logd("[getSubInfoForSubscriberx]- invalid subId");
             return null;
         }
 
@@ -848,8 +848,9 @@ public class SubscriptionManager implements BaseColumns {
         }
     }
 
-    public static SubInfoRecord getDefaultVoiceSubInfo(Context context) {
-        return getSubInfoUsingSubId(context, getDefaultVoiceSubId());
+    /** @hide */
+    public static SubInfoRecord getDefaultVoiceSubInfo() {
+        return getSubInfoForSubscriber(getDefaultVoiceSubId());
     }
 
     public static int getDefaultVoicePhoneId() {
@@ -911,8 +912,9 @@ public class SubscriptionManager implements BaseColumns {
         }
     }
 
-    public static SubInfoRecord getDefaultSmsSubInfo(Context context) {
-        return getSubInfoUsingSubId(context, getDefaultSmsSubId());
+    /** @hide */
+    public static SubInfoRecord getDefaultSmsSubInfo() {
+        return getSubInfoForSubscriber(getDefaultSmsSubId());
     }
 
     public static int getDefaultSmsPhoneId() {
@@ -949,8 +951,9 @@ public class SubscriptionManager implements BaseColumns {
         }
     }
 
-    public static SubInfoRecord getDefaultDataSubInfo(Context context) {
-        return getSubInfoUsingSubId(context, getDefaultDataSubId());
+    /** @hide */
+    public static SubInfoRecord getDefaultDataSubInfo() {
+        return getSubInfoForSubscriber(getDefaultDataSubId());
     }
 
     public static int getDefaultDataPhoneId() {

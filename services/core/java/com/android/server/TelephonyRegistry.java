@@ -539,11 +539,18 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         broadcastCallStateChanged(state, incomingNumber, subId);
     }
 
-    public void notifyServiceStateForPhoneId(int phoneId, long subId, ServiceState state) {
+     public void notifyServiceState(ServiceState state) {
+         notifyServiceStateForSubscriber(mDefaultSubId, state);
+     }
+
+    public void notifyServiceStateForSubscriber(long subId, ServiceState state) {
         if (!checkNotifyPermission("notifyServiceState()")){
             return;
         }
-
+        if (subId == SubscriptionManager.DEFAULT_SUB_ID) {
+            subId = mDefaultSubId;
+            if (VDBG) log("notifyServiceStateForSubscriber: using mDefaultSubId=" + mDefaultSubId);
+        }
         synchronized (mRecords) {
             if (VDBG) {
                 log("notifyServiceStateForSubscriber: subId=" + subId + " phoneId=" + phoneId
@@ -583,7 +590,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifySignalStrength(SignalStrength signalStrength) {
-        notifySignalStrengthForSubscriber(SubscriptionManager.DEFAULT_SUB_ID, signalStrength);
+        notifySignalStrengthForSubscriber(mDefaultSubId, signalStrength);
     }
 
     public void notifySignalStrengthForSubscriber(long subId, SignalStrength signalStrength) {
@@ -645,7 +652,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyCellInfo(List<CellInfo> cellInfo) {
-         notifyCellInfoForSubscriber(SubscriptionManager.DEFAULT_SUB_ID, cellInfo);
+         notifyCellInfoForSubscriber(mDefaultSubId, cellInfo);
     }
 
     public void notifyCellInfoForSubscriber(long subId, List<CellInfo> cellInfo) {
@@ -705,13 +712,16 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
     }
 
-    @Override
-    public void notifyMessageWaitingChangedForPhoneId(int phoneId, long subId, boolean mwi) {
+    public void notifyMessageWaitingChanged(boolean mwi) {
+        notifyMessageWaitingChangedForSubscriber(mDefaultSubId, mwi);
+    }
+
+    public void notifyMessageWaitingChangedForSubscriber(long subId, boolean mwi) {
         if (!checkNotifyPermission("notifyMessageWaitingChanged()")) {
             return;
         }
         if (VDBG) {
-            log("notifyMessageWaitingChangedForSubscriberPhoneID: subId=" + phoneId
+            log("notifyMessageWaitingChangedForSubscriber: subId=" + subId
                 + " mwi=" + mwi);
         }
         synchronized (mRecords) {
@@ -734,7 +744,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyCallForwardingChanged(boolean cfi) {
-        notifyCallForwardingChangedForSubscriber(SubscriptionManager.DEFAULT_SUB_ID, cfi);
+        notifyCallForwardingChangedForSubscriber(mDefaultSubId, cfi);
     }
 
     public void notifyCallForwardingChangedForSubscriber(long subId, boolean cfi) {
@@ -766,7 +776,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyDataActivity(int state) {
-        notifyDataActivityForSubscriber(SubscriptionManager.DEFAULT_SUB_ID, state);
+        notifyDataActivityForSubscriber(mDefaultSubId, state);
     }
 
     public void notifyDataActivityForSubscriber(long subId, int state) {
@@ -792,8 +802,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     public void notifyDataConnection(int state, boolean isDataConnectivityPossible,
             String reason, String apn, String apnType, LinkProperties linkProperties,
             NetworkCapabilities networkCapabilities, int networkType, boolean roaming) {
-        notifyDataConnectionForSubscriber(SubscriptionManager.DEFAULT_SUB_ID, state,
-            isDataConnectivityPossible,reason, apn, apnType, linkProperties,
+        notifyDataConnectionForSubscriber(mDefaultSubId, state, isDataConnectivityPossible,
+            reason, apn, apnType, linkProperties,
             networkCapabilities, networkType, roaming);
     }
 
@@ -883,8 +893,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyDataConnectionFailed(String reason, String apnType) {
-         notifyDataConnectionFailedForSubscriber(SubscriptionManager.DEFAULT_SUB_ID,
-                 reason, apnType);
+         notifyDataConnectionFailedForSubscriber(mDefaultSubId, reason, apnType);
     }
 
     public void notifyDataConnectionFailedForSubscriber(long subId,
@@ -917,7 +926,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyCellLocation(Bundle cellLocation) {
-         notifyCellLocationForSubscriber(SubscriptionManager.DEFAULT_SUB_ID, cellLocation);
+         notifyCellLocationForSubscriber(mDefaultSubId, cellLocation);
     }
 
     public void notifyCellLocationForSubscriber(long subId, Bundle cellLocation) {
