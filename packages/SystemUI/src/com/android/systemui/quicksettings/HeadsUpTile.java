@@ -34,7 +34,7 @@ public class HeadsUpTile extends QuickSettingsTile {
             public void onClick(View v) {
                 Settings.System.putIntForUser(mContext.getContentResolver(),
                         Settings.System.HEADS_UP_NOTIFICATION,
-                        isEnabled() ? 1 : 0, UserHandle.USER_CURRENT);
+                        isEnabled() ? 0 : 1, UserHandle.USER_CURRENT);
             }
         };
 
