@@ -60,6 +60,7 @@ import android.service.wallpaper.IWallpaperConnection;
 import android.service.wallpaper.IWallpaperEngine;
 import android.service.wallpaper.IWallpaperService;
 import android.service.wallpaper.WallpaperService;
+import android.service.wallpaper.WallpaperSettingsActivity;
 import android.util.Slog;
 import android.util.SparseArray;
 import android.util.Xml;
@@ -1059,7 +1060,9 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             WallpaperInfo wi = null;
             
             Intent intent = new Intent(WallpaperService.SERVICE_INTERFACE);
+            boolean isLiveWallPaperService = false;
             if (componentName != null && !componentName.equals(IMAGE_WALLPAPER)) {
+                isLiveWallPaperService = true;
                 // Make sure the selected service is actually a wallpaper service.
                 List<ResolveInfo> ris =
                         mIPackageManager.queryIntentServices(intent,
@@ -1104,11 +1107,23 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             intent.setComponent(componentName);
             intent.putExtra(Intent.EXTRA_CLIENT_LABEL,
                     com.android.internal.R.string.wallpaper_binding_label);
-            intent.putExtra(Intent.EXTRA_CLIENT_INTENT, PendingIntent.getActivityAsUser(
-                    mContext, 0,
-                    Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER),
-                            mContext.getText(com.android.internal.R.string.chooser_wallpaper)),
-                    0, null, new UserHandle(serviceUserId)));
+            // If the wallpaper has settings, opens the defined activity. Otherwise just
+            // open the system wallpaper picker dialog
+            if (isLiveWallPaperService && wi.getSettingsActivity() != null) {
+                Intent liveWallPaperSettingsIntent = new Intent();
+                liveWallPaperSettingsIntent.setComponent(new ComponentName(
+                        wi.getPackageName(), wi.getSettingsActivity()));
+                intent.putExtra(WallpaperSettingsActivity.EXTRA_PREVIEW_MODE, true);
+                intent.putExtra(Intent.EXTRA_CLIENT_INTENT, PendingIntent.getActivityAsUser(
+                        mContext, 0, liveWallPaperSettingsIntent, 0, null,
+                        new UserHandle(serviceUserId)));
+            } else {
+                intent.putExtra(Intent.EXTRA_CLIENT_INTENT, PendingIntent.getActivityAsUser(
+                        mContext, 0,
+                        Intent.createChooser(new Intent(Intent.ACTION_SET_WALLPAPER),
+                                mContext.getText(com.android.internal.R.string.chooser_wallpaper)),
+                        0, null, new UserHandle(serviceUserId)));
+            }
             if (!mContext.bindServiceAsUser(intent, newConn,
                     Context.BIND_AUTO_CREATE | Context.BIND_SHOWING_UI,
                     new UserHandle(serviceUserId))) {
