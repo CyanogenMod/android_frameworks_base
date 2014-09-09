@@ -40,6 +40,7 @@
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Download</string>
+  <string name="reboot_soft">軟重啟</string>
   <string name="reboot_progress">正在重新啟動\u2026</string>
   <string name="reboot_confirm" product="tablet">您的平板電腦將會重新啟動。</string>
   <string name="reboot_confirm" product="default">您的手機將會重新啟動。</string>
@@ -133,4 +134,5 @@
   <string name="adb_active_generic_notification_message">輕觸來停用調試。</string>
   <string name="extmedia_format_message_cm" product="nosdcard">USB 儲存空間上所有資料將會被清除（路徑 \'%1$s\'）。這個動作無法復原.</string>
   <string name="extmedia_format_message_cm" product="default">SD 卡上所有資料將會被清除（路徑 \'%1$s\'）。這個動作無法復原.</string>
+  <string name="usb_storage_notification_manage_message">點擊進行管理</string>
 </resources>

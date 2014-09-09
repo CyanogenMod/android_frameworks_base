@@ -29,5 +29,5 @@
   <string name="missed_call">llamada perdida</string>
   <string name="message_from">mensaje de</string>
   <string name="message_from_person">mensaje de %1$s</string>
-  <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
 </resources>

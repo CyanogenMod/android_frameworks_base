@@ -15,6 +15,6 @@
      limitations under the License.
 -->
 <resources>
-  <string name="notification_bug_report_active_title">Réception du rapport de bogue</string>
+  <string name="notification_bug_report_active_title">Réception du rapport de bug</string>
   <string name="notification_bug_report_active_text">Veuillez patienter quelques minutes</string>
 </resources>

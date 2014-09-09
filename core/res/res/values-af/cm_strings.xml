@@ -134,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Raak om ontfouting af te skakel.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Alle data op jou USB stoor-spasie (onder die pad \'%1$s\') sal uitgevee word. Hierdie aksie kan nie ontdoen word nie!</string>
   <string name="extmedia_format_message_cm" product="default">Alle data op jou kaart (onder die pad \'%1$s\') sal uitgewis word. Hierdie aksie kan nie ontdoen word nie!</string>
+  <string name="usb_storage_notification_manage_message">Raak om te bestuur</string>
 </resources>

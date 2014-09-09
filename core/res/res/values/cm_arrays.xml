@@ -106,6 +106,7 @@
         <item>@string/app_ops_read_mms</item>
         <item>@string/app_ops_write_mms</item>
         <item>@string/app_ops_start_at_bootup</item>
+        <item>@string/app_ops_toggle_nfc</item>
     </string-array>
 
 </resources>

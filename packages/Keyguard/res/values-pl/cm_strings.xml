@@ -17,5 +17,19 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Ekran blokady</string>
-  <string name="keyguard_discharging">Rozładowanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_discharging">Rozładowywanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <plurals name="missed_calls">
+    <item quantity="one">%d nieodebrane połączenie</item>
+    <item quantity="few">%d nieodebrane połączenia</item>
+    <item quantity="other">%d nieodebranych połączeń</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d nieprzeczytana wiadomość</item>
+    <item quantity="few">%d nieprzeczytane wiadomości</item>
+    <item quantity="other">%d nieprzeczytanych wiadomości</item>
+  </plurals>
+  <string name="missed_call">nieodebrane połączenie</string>
+  <string name="message_from">wiadomość od</string>
+  <string name="message_from_person">wiadomość od %1$s</string>
+  <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
 </resources>

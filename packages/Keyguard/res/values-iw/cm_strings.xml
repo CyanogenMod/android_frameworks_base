@@ -18,4 +18,16 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">מסך נעילה</string>
   <string name="keyguard_discharging">סוללה מתרוקנת, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <plurals name="missed_calls">
+    <item quantity="one">שיחה %d שפוספסה</item>
+    <item quantity="other">%d שיחות שפוספו</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">הודעה %d שלא נקראה</item>
+    <item quantity="other">%d הודעות שלא נקראו</item>
+  </plurals>
+  <string name="missed_call">שיחה שפוספסה</string>
+  <string name="message_from">הודעה מ</string>
+  <string name="message_from_person">הודעה מ-%1$s</string>
+  <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
 </resources>

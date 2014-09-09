@@ -21,7 +21,7 @@
   <string name="accessibility_dpad_left">カーソルを左へ</string>
   <string name="accessibility_dpad_right">カーソルを右へ</string>
   <string name="dessert_case_settings_cm_title">CMのマスコットを表示</string>
-  <string name="dessert_case_settings_cm_summary">ドリーム内にAndroidのデザートと一緒にCMのマスコットを表示する</string>
+  <string name="dessert_case_settings_cm_summary">スクリーンセーバーにAndroidのデザートと一緒にCMのマスコットを表示する</string>
   <string name="quick_settings_profile_label">プロファイル</string>
   <string name="powerwidget_screen_timeout_toast">画面のタイムアウトを%1$d%2$sに設定しました</string>
   <string name="quick_settings_gps">GPS</string>

@@ -37,7 +37,7 @@
   <string name="quick_settings_ringer_normal">Звук</string>
   <string name="quick_settings_lockscreen">Закључан екран</string>
   <string name="quick_settings_network_type">Режим мреже</string>
-  <string name="quick_settings_report_bug">Пријави проблем</string>
+  <string name="quick_settings_report_bug">Пријави грешку</string>
   <string name="quick_settings_sync">Синхрон.</string>
   <string name="quick_settings_sync_off">Синхрон. искључено</string>
   <string name="quick_settings_torch">Бакља</string>
