@@ -2610,7 +2610,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mNavigationBarView != null) {
             mNavigationBarView.getBarTransitions().transitionTo(mNavigationBarMode,
                     shouldAnimateBarTransition(mNavigationBarMode, mNavigationBarWindowState));
-            int sbbMode = mStatusBarWindowState == WINDOW_STATE_HIDDEN ? MODE_TRANSPARENT : sbMode;
+            // The status bar blocker is only needed if both
+            // - the status bar is visible and
+            // - the navigation bar is translucent (as otherwise there is no
+            //   visual 'gap' which needs to be filled)
+            boolean sbbNeeded = mStatusBarWindowState != WINDOW_STATE_HIDDEN
+                    && mNavigationBarMode == MODE_TRANSLUCENT;
+            int sbbMode = sbbNeeded ? sbMode : MODE_TRANSPARENT;
             mNavigationBarView.getStatusBarBlockerTransitions().transitionTo(sbbMode, animateSb);
         }
     }
