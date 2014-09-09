@@ -36,7 +36,7 @@
   <string name="quick_settings_ringer_normal">Son</string>
   <string name="quick_settings_lockscreen">Verrouillage écran</string>
   <string name="quick_settings_network_type">Mode réseau</string>
-  <string name="quick_settings_report_bug">Rapporter un bogue</string>
+  <string name="quick_settings_report_bug">Rapporter un bug</string>
   <string name="quick_settings_sync">Synchronisation</string>
   <string name="quick_settings_sync_off">Synchronisation désactivée</string>
   <string name="quick_settings_torch">Lampe</string>

@@ -18,4 +18,16 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Lokatze pantaila</string>
   <string name="keyguard_discharging">(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>) deskargatzen</string>
+  <plurals name="missed_calls">
+    <item quantity="one">Dei galdu %d</item>
+    <item quantity="other">%d dei galdu</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">Irakurri gabeko mezu %d</item>
+    <item quantity="other">Irakurri gabeko %d mezu</item>
+  </plurals>
+  <string name="missed_call">Dei galdua</string>
+  <string name="message_from">Honen mezua</string>
+  <string name="message_from_person">%1$s -(r)en mezua</string>
+  <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
 </resources>

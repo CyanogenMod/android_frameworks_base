@@ -15,6 +15,6 @@
      limitations under the License.
 -->
 <resources>
-  <string name="notification_bug_report_active_title">Réception du rapport de bug</string>
-  <string name="notification_bug_report_active_text">Veuillez patienter quelques minutes</string>
+  <string name="notification_bug_report_active_title">正在收集錯誤報告\u2026</string>
+  <string name="notification_bug_report_active_text">請稍等片刻</string>
 </resources>

@@ -134,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Appuyez pour désactiver le débogage.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Toutes les données sur votre espace de stockage USB (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
   <string name="extmedia_format_message_cm" product="default">Toutes les données sur votre carte (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
+  <string name="usb_storage_notification_manage_message">Appuyez pour configurer</string>
 </resources>

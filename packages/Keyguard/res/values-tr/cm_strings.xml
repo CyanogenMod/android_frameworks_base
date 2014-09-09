@@ -18,4 +18,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Kilit Ekranı</string>
   <string name="keyguard_discharging">Şarj azalıyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <plurals name="missed_calls">
+    <item quantity="other">%d cevapsız arama</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="other">%d okunmamış mesaj</item>
+  </plurals>
+  <string name="missed_call">cevapsız arama</string>
+  <string name="message_from">mesaj gönderen</string>
+  <string name="message_from_person">%1$s kişisinden mesaj</string>
+  <string name="full_wday_month_day_no_year">dMMMMEEEE</string>
 </resources>

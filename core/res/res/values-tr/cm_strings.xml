@@ -136,4 +136,5 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="adb_active_generic_notification_message">Hata ayıklamayı devre dışı bırakmak için dokunun.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">USB depolama (%1$s) alanınızdaki tüm veri silinecek. Bu işlem geri alınamaz!</string>
   <string name="extmedia_format_message_cm" product="default">Kartınızdaki (%1$s) tüm veri silinecek. Bu işlem geri alınamaz!</string>
+  <string name="usb_storage_notification_manage_message">Yönetmek için dokunun</string>
 </resources>

@@ -40,12 +40,14 @@
   <string name="reboot_bootmenu">Bootmenu-a</string>
   <string name="reboot_fastboot">Fastboot-a</string>
   <string name="reboot_download">Download-a</string>
+  <string name="reboot_soft">Berrabiarazte leuna</string>
   <string name="reboot_progress">Berrabiarazten\u2026</string>
   <string name="reboot_confirm" product="tablet">Tablet-a berrabiarazi egingo da.</string>
   <string name="reboot_confirm" product="default">Telefonoa berrabiarazi egingo da.</string>
   <string name="permlab_preventpower">Pizteko tekla ezgaitu</string>
   <string name="permdesc_preventpower">Aplikazioak pizteko teklaren jokabidea aldatzea ahalbidetzen du</string>
   <string name="permlab_sendMockSms">Itxurazko SMS-ak bidali</string>
+  <string name="permdesc_sendMockSms">Aplikazioa konfiantzazko beste aplikazioei itxurazko SMS-ak bidaltzera baimentzen du. Aplikazio maltzurrek SMS mezuak etengabe bidali ditzakete, jakinarazpen barra blokeatuz eta erabiltzailea etenaz.</string>
   <string name="storage_sd_dock_card">Oinarriaren SD txartela</string>
   <string name="app_killed_message">Aplikazioa eten da</string>
   <string name="global_action_reboot">Berrabiarazi</string>
@@ -53,6 +55,7 @@
   <string name="toast_rotation_unlocked">Pantailaren biraketa deslokatuta</string>
   <string name="toast_rotation_locked">Pantailaren biraketa lokatuta</string>
   <string name="stylus_app_not_installed">%s ez dago instalatuta</string>
+  <string name="permlab_changePrivacyGuardState">Pribatutasuna gaitu edo ezgaitu</string>
   <string name="permdesc_changePrivacyGuardState">Aplikazioa beste aplikazioen pribatutasun egoera aldatzera baimentzen du. Aplikazio bat pribatutasuna gaituta izanik abiatzen denean ezingo du datu pertsonalik ikusi, ez kontakturik, ez mezurik ezta dei erregistrorik ere.</string>
   <string name="privacy_guard_notification">Pribatutasuna gaituta</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> -k ezingo du datu pertsonalik irakurri</string>
@@ -131,4 +134,5 @@
   <string name="adb_active_generic_notification_message">Sakatu depurazioa ezgaitzeko.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">USB biltegiratzean (\u00AB%1$s\u00BB) dagoen informazio guztia ezabatu egingo da. Ekintza hau ezin da desegin!</string>
   <string name="extmedia_format_message_cm" product="default">SD txartelean (\u00AB%1$s\u00BB) dagoen informazio guztia ezabatu egingo da. Ekintza hau ezin da desegin!</string>
+  <string name="usb_storage_notification_manage_message">Ukitu kudeatzeko</string>
 </resources>

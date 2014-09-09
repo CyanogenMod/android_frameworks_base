@@ -17,7 +17,7 @@
 <resources>
   <string name="app_label">توێکڵ</string>
   <string name="bugreport_finished_title">ڕاپۆرتی کەموکورتیەکان وێنەگیرا</string>
-  <string name="bugreport_finished_text">دەستلێدان بۆ بەشدارکردنی ڕاپۆرتی کەموکورتی</string>
-  <string name="bugreport_confirm">ڕاپۆرتى مێروو زانيارى لە تۆمارى جۆراوجۆرەوەى سيستەم فايل دەن، هەروەك زانياريى تايبەت كەسى. مێرووى بەش تەنها لەگەڵ بەرنامە و خەڵك بڵاو دەكاتەوە تۆ متمانە دەكەن.</string>
-  <string name="bugreport_confirm_repeat">پیشاندانی ئەم نامەیە لە داهاتوو</string>
+  <string name="bugreport_finished_text">ده‌ستی لێده‌ بۆ په‌رشکردنی ڕاپۆرتی که‌موکوڕییه‌کانت</string>
+  <string name="bugreport_confirm">ڕاپۆرتى که‌موکوڕییه‌کان داتا له‌ خۆ ده‌گرێت لە تۆمارى سيستم فايلی جۆراوجۆره‌وه‌، هەروەك زانياريى تايبەت و كەسى. تۆماری که‌موکوڕییه‌کان ته‌نها له‌گه‌ڵ ئه‌و که‌س و به‌رنامانه‌دا په‌رش بکه‌ که‌ متمانه‌ت پێیانه‌.</string>
+  <string name="bugreport_confirm_repeat">جاری داهاتوو ئه‌م په‌یامه‌ پیشان بده‌</string>
 </resources>

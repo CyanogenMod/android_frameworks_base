@@ -29,17 +29,17 @@
   <string name="menu_share">په‌رش</string>
   <string name="menu_delete">سڕینه‌وه‌</string>
   <string name="mode_selected_count"><xliff:g id="count" example="3">%1$d</xliff:g>  ده‌ستنیشان کراوه‌</string>
-  <string name="sort_name">به‌ ناو</string>
-  <string name="sort_date">به‌ پێی ده‌ستکاریی به‌روار</string>
+  <string name="sort_name">به‌پێی ناو</string>
+  <string name="sort_date">به‌پێی به‌رواری ده‌ستکاریی</string>
   <string name="sort_size">به‌پێی قه‌باره‌</string>
-  <string name="drawer_open">نیشاندانی ڕه‌گه‌کان</string>
-  <string name="drawer_close">شاردنه‌وه‌ی ڕه‌گه‌کان</string>
+  <string name="drawer_open">ڕه‌گه‌کان پیشان بده‌</string>
+  <string name="drawer_close">ڕه‌گه‌کان بشاره‌وه‌</string>
   <string name="save_error">پاشه‌که‌وتی به‌ڵگه‌نامه‌ شکستی هێنا</string>
   <string name="create_error">دروستکردنی بوخچه‌ شکستی هێنا</string>
   <string name="query_error">پرسی به‌ڵگه‌نامه‌کان شکستی هێنا</string>
   <string name="root_recent">تازه‌</string>
   <string name="root_available_bytes"><xliff:g id="size" example="3GB">%1$s</xliff:g> به‌تاڵه‌</string>
-  <string name="root_type_service">ڕاژه‌ی بیرگەی</string>
+  <string name="root_type_service">ڕاژه‌کانی بیرگە</string>
   <string name="root_type_shortcut">کورتبڕییه‌کان</string>
   <string name="root_type_device">ئامێره‌کان</string>
   <string name="root_type_apps">به‌رنامه‌ی زیاتر</string>
