@@ -3374,8 +3374,14 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public void setDataEnabled(boolean enable) {
+        setDataEnabledUsingSubId(getDefaultSubscription(), enable);
+    }
+
+    /** @hide */
+    @SystemApi
+    public void setDataEnabledUsingSubId(long subId, boolean enable) {
         try {
-            getITelephony().setDataEnabled(enable);
+            getITelephony().setDataEnabledUsingSubId(subId, enable);
         } catch (RemoteException e) {
             Log.e(TAG, "Error calling ITelephony#setDataEnabled", e);
         }
