@@ -861,7 +861,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
     private final void updateSimIcon() {
         Log.d(TAG,"In updateSimIcon simState= " + mSimState);
         if (mSimState ==  IccCardConstants.State.ABSENT) {
-            mNoSimIconId = R.drawable.stat_sys_no_sim;
+            mNoSimIconId = R.drawable.ic_qs_no_sim;
         } else {
             mNoSimIconId = 0;
         }

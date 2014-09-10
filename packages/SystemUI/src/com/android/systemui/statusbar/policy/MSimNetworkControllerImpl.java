@@ -916,7 +916,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             } else {
                 Slog.d(TAG,"updateDataIcon when no sim");
                 mNoSim = true;
-                iconId = R.drawable.stat_sys_no_sim;
+                iconId = R.drawable.ic_qs_no_sim;
                 visible = false; // no SIM? no data
             }
         } else {
@@ -1120,7 +1120,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             // look again; your radios are now airplanes
             mMSimContentDescriptionPhoneSignal[phoneId] = mContext.getString(
                     R.string.accessibility_airplane_mode);
-            mAirplaneIconId = R.drawable.stat_sys_signal_flightmode;
+            mAirplaneIconId = R.drawable.stat_sys_airplane_mode;
             mMSimPhoneSignalIconId[phoneId] = mMSimDataSignalIconId[phoneId]
                     = mMSimDataTypeIconId[phoneId] = 0;
             mNoMSimIconId[phoneId] = 0;
