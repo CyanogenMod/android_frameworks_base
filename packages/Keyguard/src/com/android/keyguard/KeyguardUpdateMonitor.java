@@ -629,7 +629,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
     protected void handleSubInfoRecordUpdate() {
         List<SubInfoRecord> activeSubInfos = null;
-        activeSubInfos = SubscriptionManager.getActivatedSubInfoList(mContext);
+        activeSubInfos = SubscriptionManager.getActiveSubInfoList();
 
         if (activeSubInfos != null) {
             for (SubInfoRecord subInfo: activeSubInfos) {
