@@ -418,7 +418,7 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     private void handleSubInfoChange() {
         String displayName = null;
         //get Display Name
-        SubInfoRecord info = SubscriptionManager.getSubInfoUsingSubId(getContext(), mSubId);
+        SubInfoRecord info = SubscriptionManager.getSubInfoUsingSubId(mSubId);
         if (null != info) {
            displayName = info.mDisplayName;
         }
