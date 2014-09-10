@@ -181,15 +181,17 @@ public class MSimSignalClusterView
 
     @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+        int defaultPhoneId = SubscriptionManager.getPhoneId(SubscriptionManager.
+                getDefaultSubId());
         // Standard group layout onPopulateAccessibilityEvent() implementations
         // ignore content description, so populate manually
         if (mWifiVisible && mWifiGroup != null &&
                 mWifiGroup.getContentDescription() != null)
             event.getText().add(mWifiGroup.getContentDescription());
-        if (mMobileVisible && mMobileGroup[PhoneConstants.DEFAULT_SUBSCRIPTION] != null
-                && mMobileGroup[PhoneConstants.DEFAULT_SUBSCRIPTION].
-                getContentDescription() != null)
-            event.getText().add(mMobileGroup[PhoneConstants.DEFAULT_SUBSCRIPTION].
+        if (mMobileVisible && mMobileGroup[defaultPhoneId] != null
+                && mMobileGroup[defaultPhoneId]
+                        .getContentDescription() != null)
+            event.getText().add(mMobileGroup[defaultPhoneId].
                     getContentDescription());
         return super.dispatchPopulateAccessibilityEvent(event);
     }
