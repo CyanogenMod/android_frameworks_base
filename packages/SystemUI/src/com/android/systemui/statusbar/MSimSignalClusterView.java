@@ -164,12 +164,13 @@ public class MSimSignalClusterView
     @Override
     public void setMobileDataIndicators(boolean visible, int strengthIcon, int typeIcon,
             String contentDescription, String typeContentDescription,
-            int phoneId) {
+            int phoneId, int noSimIcon) {
         mMobileVisible = visible;
         mMobileStrengthId[phoneId] = strengthIcon;
         mMobileTypeId[phoneId] = typeIcon;
         mMobileDescription[phoneId] = contentDescription;
         mMobileTypeDescription = typeContentDescription;
+        mNoSimIconId[phoneId] = noSimIcon;
 
         apply(phoneId);
     }

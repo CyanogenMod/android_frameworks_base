@@ -83,6 +83,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     int[] mMSimDataDirectionIconId; // data + data direction on phones
     int[] mMSimDataSignalIconId;
     int[] mMSimDataTypeIconId;
+    int[] mNoMSimIconId;
     int[] mMSimMobileActivityIconId; // overlay arrows for data direction
 
     String[] mMSimContentDescriptionPhoneSignal;
@@ -94,6 +95,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     int[] mMSimLastDataTypeIconId;
     int[] mMSimcombinedSignalIconId;
     int[] mMSimcombinedActivityIconId;
+    int[] mMSimLastSimIconId;
     private int mDefaultPhoneId;
     boolean[] mShowSpn;
     boolean[] mShowPlmn;
@@ -110,7 +112,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         void setWifiIndicators(boolean visible, int strengthIcon, String contentDescription);
         void setMobileDataIndicators(boolean visible, int strengthIcon, int typeIcon,
                 String contentDescription, String typeContentDescription,
-                int phoneId);
+                int phoneId, int noSimIcon);
         void setIsAirplaneMode(boolean is, int airplaneIcon);
     }
 
@@ -128,6 +130,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mMSimIconId = new int[numPhones];
         mMSimPhoneSignalIconId = new int[numPhones];
         mMSimDataTypeIconId = new int[numPhones];
+        mNoMSimIconId = new int[numPhones];
         mMSimMobileActivityIconId = new int[numPhones];
         mMSimContentDescriptionPhoneSignal = new String[numPhones];
         mMSimLastPhoneSignalIconId = new int[numPhones];
@@ -143,6 +146,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mMSimDataActivity = new int[numPhones];
         mMSimContentDescriptionCombinedSignal = new String[numPhones];
         mMSimContentDescriptionDataType = new String[numPhones];
+        mMSimLastSimIconId = new int[numPhones];
         mCarrierTextSub = new String[numPhones];
         mShowSpn = new boolean[numPhones];
         mShowPlmn = new boolean[numPhones];
@@ -164,6 +168,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             mMSimcombinedSignalIconId[i] = 0;
             mMSimcombinedActivityIconId[i] = 0;
             mMSimDataActivity[i] = TelephonyManager.DATA_ACTIVITY_NONE;
+            mMSimLastSimIconId[i] = 0;
             mMSimNetworkName[i] = mNetworkNameDefault;
             mMSimDataServiceState[i] = ServiceState.STATE_OUT_OF_SERVICE;
         }
@@ -184,6 +189,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mDataDirectionIconId = mMSimDataDirectionIconId[mDefaultPhoneId];
         mDataSignalIconId = mMSimDataSignalIconId[mDefaultPhoneId];
         mDataTypeIconId = mMSimDataTypeIconId[mDefaultPhoneId];
+        mNoSimIconId = mNoMSimIconId[mDefaultPhoneId];
 
         mContentDescriptionPhoneSignal = mMSimContentDescriptionPhoneSignal[mDefaultPhoneId];
         mContentDescriptionCombinedSignal = mMSimContentDescriptionCombinedSignal[
@@ -193,6 +199,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mLastDataDirectionIconId = mMSimLastDataDirectionIconId[mDefaultPhoneId];
         mLastCombinedSignalIconId = mMSimLastCombinedSignalIconId[mDefaultPhoneId];
         mLastDataTypeIconId = mMSimLastDataTypeIconId[mDefaultPhoneId];
+        mLastSimIconId = mMSimLastSimIconId[mDefaultPhoneId];
     }
 
     @Override
@@ -286,7 +293,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 mMSimDataTypeIconId[phoneId],
                 mMSimContentDescriptionPhoneSignal[phoneId],
                 mMSimContentDescriptionDataType[phoneId],
-                phoneId);
+                phoneId,
+                mNoMSimIconId[phoneId]);
         if (mIsWimaxEnabled && mWimaxConnected) {
             // wimax is special
             cluster.setMobileDataIndicators(
@@ -295,7 +303,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     mMSimDataTypeIconId[phoneId],
                     mContentDescriptionWimax,
                     mMSimContentDescriptionDataType[phoneId],
-                    phoneId);
+                    phoneId,
+                    mNoMSimIconId[phoneId]);
         } else {
             // normal mobile data
             cluster.setMobileDataIndicators(
@@ -305,7 +314,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     mMSimDataTypeIconId[phoneId],
                     mMSimContentDescriptionPhoneSignal[phoneId],
                     mMSimContentDescriptionDataType[phoneId],
-                    phoneId);
+                    phoneId,
+                    mNoMSimIconId[phoneId]);
         }
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
     }
@@ -348,6 +358,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
             updateAirplaneMode();
             for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+                updateSimIcon(i);
                 updateCarrierText(i);
             }
             refreshViews(mDefaultPhoneId);
@@ -587,6 +598,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 Slog.d(TAG, "updateSimState simState =" + mMSimState[phoneId]);
             }
             updateDataIcon(phoneId);
+            updateTelephonySignalStrength(phoneId);
+            updateSimIcon(phoneId);
         }
     }
 
@@ -614,8 +627,9 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         Slog.d(TAG, "updateTelephonySignalStrength: phoneId =" + phoneId);
         int dataSub = SubscriptionManager.getPhoneId(
                 SubscriptionManager.getDefaultDataSubId());
-        if (!hasService(phoneId) &&
-                (mMSimDataServiceState[phoneId] != ServiceState.STATE_IN_SERVICE)) {
+        if ((!hasService(phoneId) &&
+                (mMSimDataServiceState[phoneId] != ServiceState.STATE_IN_SERVICE))
+                || mMSimState[phoneId] == IccCardConstants.State.ABSENT) {
             if (DEBUG) Slog.d(TAG, " No service");
             mMSimPhoneSignalIconId[phoneId] = R.drawable.stat_sys_signal_null;
             mMSimDataSignalIconId[phoneId] = R.drawable.stat_sys_signal_null;
@@ -842,6 +856,15 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             }
         }
         return false;
+    }
+
+    private final void updateSimIcon(int phoneId) {
+        Slog.d(TAG,"In updateSimIcon card =" + phoneId + ", simState= " + mMSimState[phoneId]);
+        if (mMSimState[phoneId] ==  IccCardConstants.State.ABSENT) {
+            mNoMSimIconId[phoneId] = R.drawable.ic_qs_no_sim;
+        } else {
+            mNoMSimIconId[phoneId] = 0;
+        }
     }
 
     private final void updateDataIcon(int phoneId) {
@@ -1100,6 +1123,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             mAirplaneIconId = R.drawable.stat_sys_signal_flightmode;
             mMSimPhoneSignalIconId[phoneId] = mMSimDataSignalIconId[phoneId]
                     = mMSimDataTypeIconId[phoneId] = 0;
+            mNoMSimIconId[phoneId] = 0;
             if (phoneId == dataSub) {
                 mQSDataTypeIconId = 0;
                 mNetworkName = mNetworkNameDefault;
@@ -1186,6 +1210,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                             (mMSimDataSignalIconId[phoneId])
                     + " mMSimDataTypeIconId=0x" + Integer.toHexString
                             (mMSimDataTypeIconId[phoneId])
+                    + " mNoMSimIconId=0x" + Integer.toHexString(
+                            mNoMSimIconId[phoneId])
                     + " mWifiIconId=0x" + Integer.toHexString(mWifiIconId)
                     + " mBluetoothTetherIconId=0x" + Integer.toHexString(mBluetoothTetherIconId));
         }
@@ -1199,7 +1225,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
          || mLastWifiIconId                 != mWifiIconId
          || mLastWimaxIconId                != mWimaxIconId
          || mMSimLastDataTypeIconId[phoneId] != mMSimDataTypeIconId[phoneId]
-         || mLastAirplaneMode               != mAirplaneMode)
+         || mLastAirplaneMode               != mAirplaneMode
+         || mMSimLastSimIconId[phoneId] != mNoMSimIconId[phoneId])
         {
             // NB: the mLast*s will be updated later
             for (MSimSignalCluster cluster : mSimSignalClusters) {
@@ -1221,6 +1248,9 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             mMSimLastDataDirectionIconId[phoneId] = mMSimDataDirectionIconId[phoneId];
         }
 
+        if (mMSimLastSimIconId[phoneId] != mNoMSimIconId[phoneId]) {
+            mMSimLastSimIconId[phoneId] = mNoMSimIconId[phoneId];
+        }
 
         // the wifi icon on phones
         if (mLastWifiIconId != mWifiIconId) {
