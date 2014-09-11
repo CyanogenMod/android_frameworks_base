@@ -19,7 +19,7 @@
 
 namespace android {
 
-static jint DBG = true;
+static jint DBG = false;
 
 struct accessPointObjectItem *g_pItemList = NULL;
 struct accessPointObjectItem *g_pLastNode = NULL;
