@@ -1005,11 +1005,13 @@ void PathTessellator::recursiveQuadraticBezierVertices(
     float dy = by - ay;
     float d = (cx - bx) * dy - (cy - by) * dx;
 
-    // In some cases like the distance between the calculating point is very small, the recursion may not terminate.
-    // If the calculated dx and dy are 0, d is 0 too. Then the termination condition(d*d < TH*TH*(dx*dx*sq + dy*dy*sq))
-    // will never be met. Infinite recursion will cause stack-overflow.
-    // We added one more threshold to terminate the recursion when d is very small (possibly 0).
-    if (d * d < THRESHOLD * THRESHOLD * (dx * dx * sqrInvScaleY + dy * dy * sqrInvScaleX) || d < THRESHOLD_MIN) {
+    if (d * d < THRESHOLD * THRESHOLD * (dx * dx * sqrInvScaleY + dy * dy * sqrInvScaleX)
+            // In some cases like the distance between the calculating point is very small,
+            // the recursion may not terminate. If the calculated dx and dy are 0, d is 0 too,
+            // in which case the termination condition will never be met, thus infinite recursion
+            // will cause stack-overflow. To avoid that, introduce an additional threshold to
+            // terminate the recursion when d is very small (possibly 0).
+            || fabs(d) < THRESHOLD_MIN) {
         // below thresh, draw line by adding endpoint
         pushToVector(outputVertices, bx, by);
     } else {
