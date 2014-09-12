@@ -120,13 +120,13 @@
     <string name="quick_settings_theme_switch_dark">Ciemny motyw</string>
     <string name="quick_settings_theme_switch_light">Jasny motyw</string>
     <string name="quick_settings_quick_record_deleted">Usunięto...</string>
-    <string name="quick_settings_quick_record_nofile">Przytrzymanie</string>
+    <string name="quick_settings_quick_record_nofile">Przytrzymaj</string>
     <string name="quick_settings_quick_record_def">Szybkie nagrywanie</string>
     <string name="quick_settings_quick_record_rec">Nagrywanie...</string>
     <string name="quick_settings_quick_record_save">Zapisano</string>
     <string name="quick_settings_quick_record_play">Odtwarzanie...</string>
     <string name="quick_settings_quick_record_dialog_cancel">Zamknij</string>
-    <string name="quick_settings_quick_record_dialog">Odtwórz nagrane\nprzytrzymaj, aby usunąć</string>
+    <string name="quick_settings_quick_record_dialog">Odtwórz nagrania\nprzytrzymaj, aby usunąć</string>
     <string name="quick_settings_custom_toggle">Własny</string>
     <string name="quick_settings_contact_toggle">Kontakt</string>
     <string name="quick_settings_reminder">Przypomnienie</string>
@@ -142,6 +142,8 @@
     <string name="quick_settings_reminder_noti_dismiss">Odrzuć</string>
     <string name="quick_settings_reminder_noti_later">Zmień czas</string>
     <string name="quick_settings_reminder_help_message">Dotknij pole powyżej, aby ustawić lub zmienić przypomnienie. Przytrzymanie wyczyści aktualne przypomnienie.</string>
+    <string name="quick_settings_network_adb_disabled_label">Wyłączone</string>
+    <string name="quick_settings_network_adb_enabled_label">Włączone</string>
 
     <!-- Battery status in pie controls -->
     <string name="pie_battery_status_charging">Ładowanie (<xliff:g id="percent">%d</xliff:g>%%)</string>
