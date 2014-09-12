@@ -69,6 +69,7 @@ public class MSimNetworkController extends NetworkController {
     int[] mMSimDataActivity;
     int[] mMSimDataServiceState;
     ServiceState[] mMSimServiceState;
+    ServiceState[] mMSimLastServiceState;
     SignalStrength[] mMSimSignalStrength;
     private PhoneStateListener[] mMSimPhoneStateListener;
     private CharSequence[] mCarrierTextSub;
@@ -124,6 +125,7 @@ public class MSimNetworkController extends NetworkController {
         mMSimSignalStrength = new SignalStrength[numPhones];
         mMSimDataServiceState = new int[numPhones];
         mMSimServiceState = new ServiceState[numPhones];
+        mMSimLastServiceState = new ServiceState[numPhones];
         mMSimState = new IccCardConstants.State[numPhones];
         mMSimIconId = new int[numPhones];
         mMSimPhoneSignalIconId = new int[numPhones];
@@ -157,6 +159,7 @@ public class MSimNetworkController extends NetworkController {
         for (int i=0; i < numPhones; i++) {
             mMSimSignalStrength[i] = new SignalStrength();
             mMSimServiceState[i] = new ServiceState();
+            mMSimLastServiceState[i] = new ServiceState();
             mMSimState[i] = IccCardConstants.State.READY;
             // phone_signal
             mMSimPhoneSignalIconId[i] = 0;
@@ -1158,7 +1161,9 @@ public class MSimNetworkController extends NetworkController {
          || mLastAirplaneMode               != mAirplaneMode
          || mMSimLastSimIconId[subscription] != mNoMSimIconId[subscription]
          || mMSimLastcombinedActivityIconId[subscription]
-                != mMSimcombinedActivityIconId[subscription])
+                != mMSimcombinedActivityIconId[subscription]
+         || mMSimLastServiceState[subscription].getVoiceNetworkType()
+                != getVoiceNetworkType(subscription))
         {
             // NB: the mLast*s will be updated later
             for (MSimSignalCluster cluster : mSimSignalClusters) {
@@ -1168,6 +1173,10 @@ public class MSimNetworkController extends NetworkController {
 
         if (mLastAirplaneMode != mAirplaneMode) {
             mLastAirplaneMode = mAirplaneMode;
+        }
+
+        if (mMSimLastServiceState[subscription] != mMSimServiceState[subscription]) {
+            mMSimLastServiceState[subscription] = mMSimServiceState[subscription];
         }
 
         // the phone icon on phones
