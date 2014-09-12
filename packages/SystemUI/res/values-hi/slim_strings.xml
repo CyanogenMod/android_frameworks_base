@@ -90,7 +90,6 @@
     <string name="quick_settings_nfc">NFC</string>
     <string name="quick_settings_nfc_off">NFC बंद</string>
     <string name="quick_settings_screen_timeout">टाइमआउट</string>
-    <string name="quick_settings_screen_timeout_summary" translatable="false">%1$d %2$s</string>
     <string name="quick_settings_screen_timeout_summary_never">कभी नहीं</string>
     <string name="quick_settings_usb_tether_off_label">डिस्कनेक्टेड</string>
     <string name="quick_settings_usb_tether_connected_label">तेथरिंग बंद</string>
