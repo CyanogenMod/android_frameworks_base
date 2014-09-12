@@ -2259,7 +2259,7 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
 
     const uint32_t count = meshWidth * meshHeight * 6;
 
-    ColorTextureVertex* mesh=new ColorTextureVertex[count];
+    ColorTextureVertex mesh[count];
     ColorTextureVertex* vertex = mesh;
 
     bool cleanupColors = false;
@@ -2311,7 +2311,6 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
 
     if (quickReject(left, top, right, bottom)) {
         if (cleanupColors) delete[] colors;
-        delete[] mesh;
         return DrawGlInfo::kStatusDone;
     }
 
@@ -2319,7 +2318,6 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
         texture = mCaches.textureCache.get(bitmap);
         if (!texture) {
             if (cleanupColors) delete[] colors;
-            delete[] mesh;
             return DrawGlInfo::kStatusDone;
         }
     }
@@ -2359,7 +2357,6 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     }
 
     if (cleanupColors) delete[] colors;
-    delete[] mesh;
 
     return DrawGlInfo::kStatusDrew;
 }
