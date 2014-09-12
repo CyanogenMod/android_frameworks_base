@@ -729,17 +729,23 @@ public class ToneGenerator
      */
     public static final int TONE_CDMA_SIGNAL_OFF = 98;
     /**
+     * LOCAL_CW - 440Hz
+     *
+     * @hide #ToneGenerator(int, int)
+     */
+    public static final int TONE_LOCAL_CW = 99;
+    /**
      * SUPERVISORY_CH - 440Hz
      *
      * @hide #ToneGenerator(int, int)
      */
-    public static final int TONE_SUPERVISORY_CH = 99;
+    public static final int TONE_SUPERVISORY_CH = 100;
     /**
      * HOLD_RECALL - 440Hz
      *
      * @hide #ToneGenerator(int, int)
      */
-    public static final int TONE_HOLD_RECALL = 100;
+    public static final int TONE_HOLD_RECALL = 101;
 
     /** Maximum volume, for use with {@link #ToneGenerator(int,int)} */
     public static final int MAX_VOLUME = 100;
