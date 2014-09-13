@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">canviar el Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">canviar les dades mòbils</string>
   <string name="app_ops_toggle_wifi">canviar WiFi</string>
+  <string name="app_ops_toggle_nfc">canviar NFC</string>
   <string name="app_ops_use_alarm_volume">controlar el volum de l\'alarma</string>
   <string name="app_ops_use_audio_focus">controlar el focus del so</string>
   <string name="app_ops_use_bluetooth_volume">controlar el volum del Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">S\'esborraran totes les dades del teu emmagatzematge USB (a la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
   <string name="extmedia_format_message_cm" product="default">S\'esborraran totes les dades de la teva targeta (a la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
   <string name="usb_storage_notification_manage_message">Pica per gestionar</string>
+  <string name="sd_ext_media_checking_notification_title">S\'està preparant la targeta SD</string>
+  <string name="sd_ext_media_checking_notification_message">S\'està verificant la targeta SD per cercar errors.</string>
+  <string name="sd_ext_media_nofs_notification_title">Targeta SD en blanc</string>
+  <string name="sd_ext_media_nofs_notification_message">La targeta SD està en blanc o té un sistema de fitxers no compatible.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Targeta SD malmesa</string>
+  <string name="sd_ext_media_unmountable_notification_message">La targeta SD està malmesa. Intenta reformatar-la.</string>
+  <string name="sd_ext_media_badremoval_notification_title">La targeta SD s\'ha extret inesperadament</string>
+  <string name="sd_ext_media_badremoval_notification_message">Desmunta la targeta SD abans de d\'extreure-la per evitar la pèrdua de dades.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Es pot extreure la targeta SD amb seguretat</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Pots extreure la targeta SD amb seguretat.</string>
+  <string name="sd_ext_media_nomedia_notification_title">S\'ha extret la targeta SD</string>
+  <string name="sd_ext_media_nomedia_notification_message">S\'ha extret la targeta SD. Insereix-ne una altra.</string>
+  <string name="usb_ext_media_checking_notification_title">S\'està preparant l\'emmagatzematge USB</string>
+  <string name="usb_ext_media_checking_notification_message">S\'està verificant l\'emmagatzematge USB per cercar errors.</string>
+  <string name="usb_ext_media_nofs_notification_title">Emmagatzematge USB buit</string>
+  <string name="usb_ext_media_nofs_notification_message">L\'emmagatzematge USB està buit o té un sistema de fitxers no compatible.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Emmagatzematge USB malmès</string>
+  <string name="usb_ext_media_unmountable_notification_message">L\'emmagatzematge USB està malmès. Intenta reformatar-lo.</string>
+  <string name="usb_ext_media_badremoval_notification_title">L\'emmagatzematge USB s\'ha extret inesperadament</string>
+  <string name="usb_ext_media_badremoval_notification_message">Desmunta l\'emmagatzematge USB abans d\'extreure\'l per evitar la pèrdua de dades.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Es pot extreure l\'emmagatzematge USB amb seguretat</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Pots extreure l\'emmagatzematge USB amb seguretat.</string>
+  <string name="usb_ext_media_nomedia_notification_title">S\'ha extret l\'emmagatzematge USB</string>
+  <string name="usb_ext_media_nomedia_notification_message">S\'ha extret l\'emmagatzematge USB. Insereix un mitjà nou.</string>
 </resources>

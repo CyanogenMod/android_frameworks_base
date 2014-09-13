@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">Bluetooth kapcsolása</string>
   <string name="app_ops_toggle_mobile_data">mobilinternet kapcsolása</string>
   <string name="app_ops_toggle_wifi">WiFi kapcsolása</string>
+  <string name="app_ops_toggle_nfc">NFC kapcsolása</string>
   <string name="app_ops_use_alarm_volume">ébresztőhang vezérlése</string>
   <string name="app_ops_use_audio_focus">hang fókusz vezérlése</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth hangerő vezérlése</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Minden adat az USB tárolóról (ezen az útvonalon: \"%1$s\") el fog veszni. A műveletet nem lehet visszavonni!</string>
   <string name="extmedia_format_message_cm" product="default">Minden adat a kártyájáról (ezen az útvonalon: \"%1$s\") el fog veszni. A műveletet nem lehet visszavonni!</string>
   <string name="usb_storage_notification_manage_message">Kezeléshez érintse meg</string>
+  <string name="sd_ext_media_checking_notification_title">SD kártya előkészítése</string>
+  <string name="sd_ext_media_checking_notification_message">SD kártya hibák ellenőrzése.</string>
+  <string name="sd_ext_media_nofs_notification_title">Üres SD kártya</string>
+  <string name="sd_ext_media_nofs_notification_message">Az SD kártya üres, vagy a fájlrendszere nem támogatott.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Sérült SD kártya</string>
+  <string name="sd_ext_media_unmountable_notification_message">Az SD kártya sérült. Próbálja meg újraformázni.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Az SD kártya váratlanul el lett távolítva</string>
+  <string name="sd_ext_media_badremoval_notification_message">Válassza le az SD kártyát az eltávolítás előtt, az adatvesztés elkerülése érdekében.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD kártya biztonságosan eltávolítható</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Biztonságosan eltávolíthatja az SD kártyát.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Eltávolított SD kártya</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kártya eltávolítva. Helyezzen be egy újat.</string>
+  <string name="usb_ext_media_checking_notification_title">USB tároló előkészítése</string>
+  <string name="usb_ext_media_checking_notification_message">USB tároló hibák ellenőrzése.</string>
+  <string name="usb_ext_media_nofs_notification_title">Üres USB tároló</string>
+  <string name="usb_ext_media_nofs_notification_message">Az USB tároló üres, vagy a fájlrendszere nem támogatott.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Sérült USB tároló</string>
+  <string name="usb_ext_media_unmountable_notification_message">Az USB tároló sérült. Próbálja meg újraformázni.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Az USB tároló váratlanul el lett távolítva</string>
+  <string name="usb_ext_media_badremoval_notification_message">Válassza le az USB tárolót az eltávolítás előtt, az adatvesztés elkerülése érdekében.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB tároló biztonságosan eltávolítható</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Biztonságosan eltávolíthatja az USB tárolót.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Eltávolított USB tároló</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB tároló eltávolítva. Helyezzen be egy új adathordozót.</string>
 </resources>

@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">εναλλαγή Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">εναλλαγή δεδομένων</string>
   <string name="app_ops_toggle_wifi">εναλλαγή Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">εναλλαγή NFC</string>
   <string name="app_ops_use_alarm_volume">έλεγχο έντασης ξυπνητηριού</string>
   <string name="app_ops_use_audio_focus">έλεγχο της εστίασης ήχου</string>
   <string name="app_ops_use_bluetooth_volume">έλεγχο της έντασης Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Όλα τα αρχεία στον αποθηκευτικό σας χώρο USB (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
   <string name="extmedia_format_message_cm" product="default">Όλα τα δεδομένα στην κάρτα σας (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
   <string name="usb_storage_notification_manage_message">Πατήστε για διαχείριση</string>
+  <string name="sd_ext_media_checking_notification_title">Προετοιμασία κάρτας SD</string>
+  <string name="sd_ext_media_checking_notification_message">Έλεγχος κάρτας SD για σφάλματα.</string>
+  <string name="sd_ext_media_nofs_notification_title">Κενή κάρτα SD</string>
+  <string name="sd_ext_media_nofs_notification_message">Η κάρτα SD είναι κενή ή διαθέτει μη υποστηριζόμενο σύστημα αρχείων.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Κατεστραμμένη κάρτα SD</string>
+  <string name="sd_ext_media_unmountable_notification_message">Η κάρτα SD είναι κατεστραμμένη. Δοκιμάστε να τη διαμορφώσετε ξανά.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Μη αναμενόμενη αφαίρεση κάρτας SD</string>
+  <string name="sd_ext_media_badremoval_notification_message">Αποπροσαρτήστε την κάρτα SD πριν την αφαιρέσετε για την αποφυγή απώλειας δεδομένων.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Ασφαλής αφαίρεση κάρτας SD</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Μπορείτε να αφαιρέσετε με ασφάλεια της κάρτα SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Η κάρτα SD αφαιρέθηκε</string>
+  <string name="sd_ext_media_nomedia_notification_message">Η κάρτα SD αφαιρέθηκε. Τοποθετήστε μια νέα κάρτα.</string>
+  <string name="usb_ext_media_checking_notification_title">Προετοιμασία αποθ. χώρου USB</string>
+  <string name="usb_ext_media_checking_notification_message">Έλεγχος αποθηκευτικού χώρου USB για σφάλματα.</string>
+  <string name="usb_ext_media_nofs_notification_title">Κενός αποθ. χώρος USB</string>
+  <string name="usb_ext_media_nofs_notification_message">Ο χώρος αποθήκευσης USB είναι κενός ή διαθέτει μη υποστηριζόμενο σύστημα αρχείων.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Βλάβη αποθ. χώρου USB</string>
+  <string name="usb_ext_media_unmountable_notification_message">Ο χώρος αποθήκευσης USB είναι κατεστραμμένος. Δοκιμάστε να τον διαμορφώσετε ξανά.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Μη αναμενόμενη κατάργηση αποθ. χώρου USB</string>
+  <string name="usb_ext_media_badremoval_notification_message">Αποπροσαρτήστε τον αποθηκευτικό χώρο USB πριν τον αφαιρέσετε για την αποφυγή απώλειας δεδομένων.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Ασφαλής κατάργηση αποθ. χώρου USB</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Μπορείτε να καταργήσετε τον αποθηκευτικό χώρο USB με ασφάλεια.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Ο αποθ. χώρος USB καταργήθηκε</string>
+  <string name="usb_ext_media_nomedia_notification_message">Ο αποθηκευτικός χώρος USB καταργήθηκε. Εισαγάγετε νέο μέσο.</string>
 </resources>

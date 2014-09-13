@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">Bluetoothの切り替え</string>
   <string name="app_ops_toggle_mobile_data">データ通信の切り替え</string>
   <string name="app_ops_toggle_wifi">WiFiの切り替え</string>
+  <string name="app_ops_toggle_nfc">NFCの切り替え</string>
   <string name="app_ops_use_alarm_volume">アラームの音量の制御</string>
   <string name="app_ops_use_audio_focus">音声フォーカスの制御</string>
   <string name="app_ops_use_bluetooth_volume">Bluetoothの音量の制御</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">USBストレージ上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
   <string name="extmedia_format_message_cm" product="default">カード上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
   <string name="usb_storage_notification_manage_message">タップして管理する</string>
+  <string name="sd_ext_media_checking_notification_title">SDカードを準備中</string>
+  <string name="sd_ext_media_checking_notification_message">SDカードのエラーを確認しています。</string>
+  <string name="sd_ext_media_nofs_notification_title">空のSDカード</string>
+  <string name="sd_ext_media_nofs_notification_message">SDカードが空であるか、サポートされていないファイルシステムを使用しています。</string>
+  <string name="sd_ext_media_unmountable_notification_title">破損したSDカード</string>
+  <string name="sd_ext_media_unmountable_notification_message">SDカードが破損しています。再フォーマットをお試しください。</string>
+  <string name="sd_ext_media_badremoval_notification_title">SDカードが予期せず取り外されました</string>
+  <string name="sd_ext_media_badremoval_notification_message">データの損失を防ぐために、SDカードを取り外す前にマウントを解除してください。</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SDカードの安全な取り外し</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SDカードを安全に取り外すことができます。</string>
+  <string name="sd_ext_media_nomedia_notification_title">SDカードが取り外されました</string>
+  <string name="sd_ext_media_nomedia_notification_message">SDカードが取り外されました。新しいSDカードを挿入してください。</string>
+  <string name="usb_ext_media_checking_notification_title">USBストレージを準備中</string>
+  <string name="usb_ext_media_checking_notification_message">USBストレージのエラーを確認しています。</string>
+  <string name="usb_ext_media_nofs_notification_title">空のUSBストレージ</string>
+  <string name="usb_ext_media_nofs_notification_message">USBストレージが空であるか、サポートされていないファイルシステムを使用しています。</string>
+  <string name="usb_ext_media_unmountable_notification_title">破損したUSBストレージ</string>
+  <string name="usb_ext_media_unmountable_notification_message">USBストレージが破損しています。再フォーマットをお試しください。</string>
+  <string name="usb_ext_media_badremoval_notification_title">USBストレージが予期せず取り外されました</string>
+  <string name="usb_ext_media_badremoval_notification_message">データの損失を防ぐために、USBストレージを取り外す前にマウントを解除してください。</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USBストレージの安全な取り外し</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USBストレージを安全に取り外すことができます。</string>
+  <string name="usb_ext_media_nomedia_notification_title">USBストレージが取り外されました</string>
+  <string name="usb_ext_media_nomedia_notification_message">USBストレージが取り外されました。新しいメディアを挿入してください。</string>
 </resources>

@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">تبديل Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">تبديل البيانات المتنقلة</string>
   <string name="app_ops_toggle_wifi">تبديل WiFi</string>
+  <string name="app_ops_toggle_nfc">تبديل NFC</string>
   <string name="app_ops_use_alarm_volume">التحكم في مستوى الصوت إنذار</string>
   <string name="app_ops_use_audio_focus">التحكم في تركيز الصوت</string>
   <string name="app_ops_use_bluetooth_volume">التحكم في مستوى الصوت Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">سيتم مسح كافة البيانات الموجودة على جهاز تخزين USB (في إطار المسار \'%1$s). لا يمكن التراجع عن هذا الإجراء!</string>
   <string name="extmedia_format_message_cm" product="default">سيتم مسح كافة البيانات الموجودة في الذاكرة (في إطار المسار\'%1$s\'). لا يمكن التراجع عن هذا الإجراء!</string>
   <string name="usb_storage_notification_manage_message">اضغط لإدارة الخيارات</string>
+  <string name="sd_ext_media_checking_notification_title">إعداد بطاقة SD</string>
+  <string name="sd_ext_media_checking_notification_message">فحص بطاقة SD للأخطاء.</string>
+  <string name="sd_ext_media_nofs_notification_title">بطاقة SD فارغة</string>
+  <string name="sd_ext_media_nofs_notification_message">بطاقة SD  فارغ أو غير معتمد من نظام الملفات.</string>
+  <string name="sd_ext_media_unmountable_notification_title">بطاقة SD معطوبة</string>
+  <string name="sd_ext_media_unmountable_notification_message">بطاقة SD معطوبة. حاول إعادة تهيئته.</string>
+  <string name="sd_ext_media_badremoval_notification_title">إزالة بطاقة SD بشكل غير متوقع</string>
+  <string name="sd_ext_media_badremoval_notification_message">قم بإلغاء تحميل بطاقة SD قبل الإزالة لتجنب فقدان البيانات.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">بطاقة SD الآمنة للإزالة</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">يمكنك بأمان إزالة بطاقة الذاكرة SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">إزالة بطاقة الذاكرة SD</string>
+  <string name="sd_ext_media_nomedia_notification_message">SDتم إزالة بطاقة الذاكرة SD. أدخل الجديدة.</string>
+  <string name="usb_ext_media_checking_notification_title">إعداد التخزين USB</string>
+  <string name="usb_ext_media_checking_notification_message">التحقق من تخزين USB للأخطاء.</string>
+  <string name="usb_ext_media_nofs_notification_title">تخزين USB فارغ</string>
+  <string name="usb_ext_media_nofs_notification_message">تخزين USB فارغ أو غير معتمد من نظام الملفات.</string>
+  <string name="usb_ext_media_unmountable_notification_title">تخزين USB معطوب</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB التخزين معطوب. حاول إعادة تهيئته.</string>
+  <string name="usb_ext_media_badremoval_notification_title">تخزين USB تم  إزالته بشكل غير متوقع</string>
+  <string name="usb_ext_media_badremoval_notification_message">قم بإلغاء تحميل وحدة تخزين USB قبل إزالة لتجنب فقدان البيانات.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">وحدة تخزين USB أمنة لإزالة</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">يمكنك بأمان إزالة وحدة تخزين USB.</string>
+  <string name="usb_ext_media_nomedia_notification_title">إزالة وحدة تخزين USB</string>
+  <string name="usb_ext_media_nomedia_notification_message">إزالة وحدة تخزين USB. قم بإدراج وسائط وسائط جديدة.</string>
 </resources>

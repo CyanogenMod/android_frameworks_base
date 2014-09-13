@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">przełączanie Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">przełączanie przesyłu danych</string>
   <string name="app_ops_toggle_wifi">przełączanie Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">Przełączanie NFC</string>
   <string name="app_ops_use_alarm_volume">kontrolowanie głośności alarmu</string>
   <string name="app_ops_use_audio_focus">kontrolowanie priorytetów audio</string>
   <string name="app_ops_use_bluetooth_volume">kontrolowanie głośności urządzenia Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Wszystkie dane z pamięci USB (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
   <string name="extmedia_format_message_cm" product="default">Wszystkie dane z karty pamięci (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
   <string name="usb_storage_notification_manage_message">Dotknij, aby zarządzać</string>
+  <string name="sd_ext_media_checking_notification_title">Przygotowanie karty SD</string>
+  <string name="sd_ext_media_checking_notification_message">Sprawdzanie karty SD pod kątem błędów.</string>
+  <string name="sd_ext_media_nofs_notification_title">Pusta karta SD</string>
+  <string name="sd_ext_media_nofs_notification_message">Karta SD jest pusta lub posiada nieobsługiwany system plików.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Uszkodzona karta SD</string>
+  <string name="sd_ext_media_unmountable_notification_message">Karta SD jest uszkodzona. Spróbuj sformatować ją ponownie.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Karta SD została niespodziewanie wyciągnięta</string>
+  <string name="sd_ext_media_badremoval_notification_message">Odmontuj kartę SD przed wyciągnięciem, aby zapobiec utracie danych.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Można bezpiecznie wyciągnąć kartę SD</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Możesz bezpiecznie wyciągnąć kartę SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Karta SD wyciągnięta</string>
+  <string name="sd_ext_media_nomedia_notification_message">Karta SD wyciągnięta. Włóż nową.</string>
+  <string name="usb_ext_media_checking_notification_title">Przygotowywanie pamięci USB</string>
+  <string name="usb_ext_media_checking_notification_message">Sprawdzanie pamięci USB pod kątem błędów.</string>
+  <string name="usb_ext_media_nofs_notification_title">Pusta pamięć USB</string>
+  <string name="usb_ext_media_nofs_notification_message">Pamięć USB jest pusta lub posiada nieobsługiwany system plików.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Uszkodzona pamięć USB</string>
+  <string name="usb_ext_media_unmountable_notification_message">Pamięć USB jest uszkodzona. Spróbuj sformatować ją ponownie.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Pamięć USB została niespodziewanie odłączona</string>
+  <string name="usb_ext_media_badremoval_notification_message">Odmontuj pamięć USB przed odłączeniem, aby zapobiec utracie danych.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Pamięć USB może zostać bezpiecznie odłączona</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Możesz bezpiecznie odłączyć pamięć USB.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Odłączono pamięć USB</string>
+  <string name="usb_ext_media_nomedia_notification_message">Pamięć USB odłączona. Podłącz nowe urządzenie.</string>
 </resources>

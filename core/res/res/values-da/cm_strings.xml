@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">tænde/slukke Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">tænde/slukke mobildata</string>
   <string name="app_ops_toggle_wifi">tænde/slukke Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">NFC til/fra</string>
   <string name="app_ops_use_alarm_volume">kontrollere lydstyrken for alarmer</string>
   <string name="app_ops_use_audio_focus">kontrollere lydfokus</string>
   <string name="app_ops_use_bluetooth_volume">kontrollere lydstyrken for Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Alle data på dit USB-lager (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
   <string name="extmedia_format_message_cm" product="default">Alle data på dit kort (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
   <string name="usb_storage_notification_manage_message">Tryk for at konfigurere</string>
+  <string name="sd_ext_media_checking_notification_title">Forbereder SD-kort</string>
+  <string name="sd_ext_media_checking_notification_message">Kontrollerer SD-kort for fejl.</string>
+  <string name="sd_ext_media_nofs_notification_title">SD-kort er tom</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-kort er tom, eller filsystem er ikke understøttet.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Beskadiget SD-kort</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-kort er beskadiget. Prøv at formatter det.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-kort er fjernet uventet</string>
+  <string name="sd_ext_media_badremoval_notification_message">Frakoble SD-kort før det fjernes, for at undgå tab af data.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-kort er sikkert at fjerne</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Du kan sikkert fjerne SD-kort.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-kort fjernet</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kort fjernet. Indsæt et nyt.</string>
+  <string name="usb_ext_media_checking_notification_title">Forbereder USB-hukommelse</string>
+  <string name="usb_ext_media_checking_notification_message">Kontrollerer USB-hukommelse for fejl.</string>
+  <string name="usb_ext_media_nofs_notification_title">USB-hukommelse er tom</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-hukommelse er tom, eller filsystem er ikke understøttet.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Beskadiget USB-hukommelse</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-hukommelse er beskadiget. Prøv at formatter den.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-hukommelse er fjernet uventet</string>
+  <string name="usb_ext_media_badremoval_notification_message">Frakoble USB-hukommelse før den fjernes, for at undgå tab af data.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-hukommelse er sikker at fjerne</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Du kan sikkert fjerne USB-hukommelse.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB-hukommelse fjernet</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-hukommelse fjernet. Indsæt nyt medie.</string>
 </resources>

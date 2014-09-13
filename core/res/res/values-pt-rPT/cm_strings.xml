@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">alternar Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">alternar dados móveis</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_use_alarm_volume">controlar volume do alarme</string>
   <string name="app_ops_use_audio_focus">controlar o foco de áudio</string>
   <string name="app_ops_use_bluetooth_volume">controlar o volume de Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Todos os dados do teu armazenamento USB (na diretoria \'%1$s\') vão ser eliminados. Esta ação não é reversível!</string>
   <string name="extmedia_format_message_cm" product="default">Todos os dados do teu cartão de memória (na diretoria \'%1$s\') vão ser eliminados. Esta ação não é reversível!</string>
   <string name="usb_storage_notification_manage_message">Toque para gerir</string>
+  <string name="sd_ext_media_checking_notification_title">A preparar o cartão SD</string>
+  <string name="sd_ext_media_checking_notification_message">A verificar erros no cartão SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Cartão SD vazio</string>
+  <string name="sd_ext_media_nofs_notification_message">O cartão SD está vazio ou possui um sistema de ficheiros não suportado.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Cartão SD danificado</string>
+  <string name="sd_ext_media_unmountable_notification_message">O cartão SD está danificado. Tente reformatá-lo.</string>
+  <string name="sd_ext_media_badremoval_notification_title">O cartão SD removido inesperadamente</string>
+  <string name="sd_ext_media_badremoval_notification_message">Desmonte o cartão SD antes de remover para evitar perda de dados.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">É seguro remover o cartão do SD</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Pode remover o cartão SD em segurança.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Cartão SD removido</string>
+  <string name="sd_ext_media_nomedia_notification_message">Cartão SD removido. Inserir um novo.</string>
+  <string name="usb_ext_media_checking_notification_title">A preparar o armazenamento USB</string>
+  <string name="usb_ext_media_checking_notification_message">A verificar erros no armazenamento USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Armazenamento USB vazio</string>
+  <string name="usb_ext_media_nofs_notification_message">O armazenamento USB está vazio ou têm um sistema de ficheiros não suportado.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Armazenamento USB danificado</string>
+  <string name="usb_ext_media_unmountable_notification_message">O armazenamento USB está danificado. Tente reformatá-lo.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Armazenamento USB removido inesperadamente</string>
+  <string name="usb_ext_media_badremoval_notification_message">Desmonte o armazenamento USB antes de remover para evitar perda de dados.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">É seguro retirar o armazenamento USB</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Pode remover o armazenamento USB em segurança.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Armazenamento USB removido</string>
+  <string name="usb_ext_media_nomedia_notification_message">Armazenamento USB removido. Inserir novo.</string>
 </resources>

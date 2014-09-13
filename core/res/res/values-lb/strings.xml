@@ -56,6 +56,8 @@
   <string name="PinMmi">PIN-Ännerung</string>
   <string name="CnipMmi">Ruffnummer disponibel</string>
   <string name="CnirMmi">Rufnummer begrenzt</string>
+  <string name="RuacMmi">Refus vun onerwënschten Uriff</string>
+  <string name="CndMmi">Iwwermëttlung fir Ruffnummeren</string>
   <string name="DndMmi">Net stéieren</string>
   <string name="RestrictedChangedTitle">Begrenzten Zougrëff geännert</string>
   <string name="RestrictedOnData">Dateservice ass gespaart.</string>

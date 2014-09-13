@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">cambiar Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">cambiar datos móviles</string>
   <string name="app_ops_toggle_wifi">cambiar Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">cambiar NFC</string>
   <string name="app_ops_use_alarm_volume">controlar el volumen de la alarma</string>
   <string name="app_ops_use_audio_focus">controlar volumen del sonido</string>
   <string name="app_ops_use_bluetooth_volume">controlar el volumen de Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Toda la información en tu almacenamiento USB (en la ruta \u00AB%1$s\u00BB) será borrada. ¡Esta acción no se puede deshacer!</string>
   <string name="extmedia_format_message_cm" product="default">Toda la información en tu tarjeta SD (en la ruta \u00AB%1$s\u00BB) será borrada. ¡Esta acción no se puede deshacer!</string>
   <string name="usb_storage_notification_manage_message">Toca para gestionar</string>
+  <string name="sd_ext_media_checking_notification_title">Preparando tarjeta SD</string>
+  <string name="sd_ext_media_checking_notification_message">Comprobando errores en la tarjeta SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tarjeta SD vacía</string>
+  <string name="sd_ext_media_nofs_notification_message">La tarjeta SD está vacía o tiene un sistema de archivos no soportado.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Tarjeta SD dañada</string>
+  <string name="sd_ext_media_unmountable_notification_message">La tarjeta SD está dañada. Intenta formatearla de nuevo.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Tarjeta SD extraída inesperadamente</string>
+  <string name="sd_ext_media_badremoval_notification_message">Desmonta la tarjeta SD antes de extraerla para evitar pérdida de datos.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Extraer tarjeta SD</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Puedes extraer la tarjeta SD de forma segura.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Tarjeta SD extraída</string>
+  <string name="sd_ext_media_nomedia_notification_message">Tarjeta SD extraída. Inserta una nueva.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparando almacenamiento USB</string>
+  <string name="usb_ext_media_checking_notification_message">Comprobando errores en el almacenamiento USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Almacenamiento USB vacío</string>
+  <string name="usb_ext_media_nofs_notification_message">El almacenamiento USB está vacío o tiene un sistema de archivos no soportado.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Almacenamiento USB dañado</string>
+  <string name="usb_ext_media_unmountable_notification_message">El almacenamiento USB está dañado. Intenta formatearlo de nuevo.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Almacenamiento USB extraído inesperadamente</string>
+  <string name="usb_ext_media_badremoval_notification_message">Desmonta el almacenamiento USB antes de extraerlo para evitar pérdida de datos.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Extraer almacenamiento USB</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Puedes extraer el almacenamiento USB de forma segura.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Almacenamiento USB extraído</string>
+  <string name="usb_ext_media_nomedia_notification_message">Almacenamiento USB extraído. Inserta uno nuevo.</string>
 </resources>
