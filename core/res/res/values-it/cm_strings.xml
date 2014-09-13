@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">cambiare stato del Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">cambiare stato dei dati mobili</string>
   <string name="app_ops_toggle_wifi">cambiare stato del Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">cambiare stato dell\'NFC</string>
   <string name="app_ops_use_alarm_volume">controllare il volume sveglia</string>
   <string name="app_ops_use_audio_focus">controllare il focus audio</string>
   <string name="app_ops_use_bluetooth_volume">controllare il volume Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Tutti i dati sulla memoria USB (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
   <string name="extmedia_format_message_cm" product="default">Tutti i dati sulla scheda (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
   <string name="usb_storage_notification_manage_message">Tocca per gestire</string>
+  <string name="sd_ext_media_checking_notification_title">Preparazione scheda SD</string>
+  <string name="sd_ext_media_checking_notification_message">Controllo errori su scheda SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Scheda SD vuota</string>
+  <string name="sd_ext_media_nofs_notification_message">La scheda SD è vuota o ha un filesystem non supportato.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Scheda SD danneggiata</string>
+  <string name="sd_ext_media_unmountable_notification_message">La scheda SD è danneggiata. Prova a riformattarla.</string>
+  <string name="sd_ext_media_badremoval_notification_title">La scheda SD è stata rimossa inaspettatamente</string>
+  <string name="sd_ext_media_badremoval_notification_message">Smonta la scheda SD prima di rimuoverla per prevenire perdite di dati.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">È possibile rimuovere la scheda SD in sicurezza</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Puoi rimuovere la scheda SD in sicurezza.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Scheda SD rimossa</string>
+  <string name="sd_ext_media_nomedia_notification_message">Scheda SD rimossa. Inserisci una nuova scheda.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparazione memoria USB</string>
+  <string name="usb_ext_media_checking_notification_message">Controllo errori sulla memoria USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Memoria USB vuota</string>
+  <string name="usb_ext_media_nofs_notification_message">La memoria USB è vuota o ha un filesystem non supportato.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Memoria USB danneggiata</string>
+  <string name="usb_ext_media_unmountable_notification_message">La memoria USB è danneggiata. Prova a riformattarla.</string>
+  <string name="usb_ext_media_badremoval_notification_title">La memoria USB è stata rimossa inaspettatamente</string>
+  <string name="usb_ext_media_badremoval_notification_message">Smonta la memoria USB prima di rimuoverla per prevenire perdite di dati.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">È possibile rimuovere la memoria USB in sicurezza</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Puoi rimuovere la memoria USB in sicurezza.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Memoria USB rimossa</string>
+  <string name="usb_ext_media_nomedia_notification_message">Memoria USB rimossa. Inserisci un nuovo archivio.</string>
 </resources>

@@ -112,7 +112,8 @@
   <string name="app_ops_start_at_bootup">démarrer à la mise sous tension</string>
   <string name="app_ops_toggle_bluetooth">activer/désactiver le Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">activer/désactiver les données mobiles</string>
-  <string name="app_ops_toggle_wifi">activer/désactiver le WiFi</string>
+  <string name="app_ops_toggle_wifi">activer/désactiver le Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">activer/désactiver le NFC</string>
   <string name="app_ops_use_alarm_volume">contrôler le volume des alarmes</string>
   <string name="app_ops_use_audio_focus">contrôler le focus audio</string>
   <string name="app_ops_use_bluetooth_volume">contrôler le volume du Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Toutes les données sur votre espace de stockage USB (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
   <string name="extmedia_format_message_cm" product="default">Toutes les données sur votre carte (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
   <string name="usb_storage_notification_manage_message">Appuyez pour configurer</string>
+  <string name="sd_ext_media_checking_notification_title">Préparation de la carte SD</string>
+  <string name="sd_ext_media_checking_notification_message">Vérification des erreurs sur la carte SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Carte SD vide</string>
+  <string name="sd_ext_media_nofs_notification_message">La carte SD est vide ou utilise un système de fichiers non pris en charge.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Carte SD endommagée</string>
+  <string name="sd_ext_media_unmountable_notification_message">La carte SD est endommagée. Essayez de la reformater.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Carte SD retirée inopinément</string>
+  <string name="sd_ext_media_badremoval_notification_message">Pour éviter de perdre des données, démontez la carte SD avant de la retirer.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">La carte SD peut être retirée en toute sécurité</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Vous pouvez retirer la carte SD en toute sécurité.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Carte SD retirée</string>
+  <string name="sd_ext_media_nomedia_notification_message">Carte SD retirée. Insérez une nouvelle carte.</string>
+  <string name="usb_ext_media_checking_notification_title">Préparation du stockage USB</string>
+  <string name="usb_ext_media_checking_notification_message">Vérification des erreurs sur le stockage USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Stockage USB vide</string>
+  <string name="usb_ext_media_nofs_notification_message">Le stockage USB est vide ou utilise un système de fichiers non pris en charge.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Stockage USB endommagé</string>
+  <string name="usb_ext_media_unmountable_notification_message">Stockage USB endommagé. Essayez de le reformater.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Stockage USB retiré inopinément</string>
+  <string name="usb_ext_media_badremoval_notification_message">Pour éviter de perdre des données, démontez le stockage USB avant de le retirer.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Le stockage USB peut être retiré en toute sécurité</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Vous pouvez retirer le stockage USB en toute sécurité.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Stockage USB retiré</string>
+  <string name="usb_ext_media_nomedia_notification_message">Stockage USB retiré. Insérez un nouveau média.</string>
 </resources>

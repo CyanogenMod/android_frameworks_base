@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">블루투스 켜기/끄기</string>
   <string name="app_ops_toggle_mobile_data">모바일 데이터 켜기/끄기</string>
   <string name="app_ops_toggle_wifi">Wi-Fi 켜기/끄기</string>
+  <string name="app_ops_toggle_nfc">NFC 켜기/끄기</string>
   <string name="app_ops_use_alarm_volume">알람 볼륨 제어</string>
   <string name="app_ops_use_audio_focus">오디오 포커스 제어</string>
   <string name="app_ops_use_bluetooth_volume">블루투스 볼륨 제어</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">USB 저장소에 있는 모든 데이터(\'%1$s\'경로 아래)가 삭제 됩니다. 이 작업은 돌이킬 수 없습니다!</string>
   <string name="extmedia_format_message_cm" product="default">카드에 있는 모든 데이터(\'%1$s\'경로 아래)가 삭제 됩니다. 이 작업은 돌이킬 수 없습니다!</string>
   <string name="usb_storage_notification_manage_message">탭하여 관리하기</string>
+  <string name="sd_ext_media_checking_notification_title">SD 카드 준비 중</string>
+  <string name="sd_ext_media_checking_notification_message">오류 확인 중입니다.</string>
+  <string name="sd_ext_media_nofs_notification_title">빈 SD 카드</string>
+  <string name="sd_ext_media_nofs_notification_message">SD 카드가 비어있거나 지원되지 않는 파일 시스템으로 구성되어 있습니다.</string>
+  <string name="sd_ext_media_unmountable_notification_title">손상된 SD 카드</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD 카드가 손상되었습니다. 다시 포맷해보십시오.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD 카드가 예상치 않게 제거됨</string>
+  <string name="sd_ext_media_badremoval_notification_message">데이터 손실을 피하려면 SD 카드를 제거하기 전에 마운트 해제하십시오.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD 카드 제거 가능</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">이제 SD 카드를 안전하게 제거할 수 있습니다.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD 카드 제거됨</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD 카드가 제거되었습니다. 새 SD 카드를 삽입하십시오.</string>
+  <string name="usb_ext_media_checking_notification_title">USB 저장소 준비 중</string>
+  <string name="usb_ext_media_checking_notification_message">오류 검사 중입니다.</string>
+  <string name="usb_ext_media_nofs_notification_title">빈 USB 저장소</string>
+  <string name="usb_ext_media_nofs_notification_message">USB 저장소가 비어있거나 지원되지 않는 파일 시스템으로 구성되어 있습니다.</string>
+  <string name="usb_ext_media_unmountable_notification_title">손상된 USB 저장소</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB 저장소가 손상되었습니다. 다시 포맷해보십시오.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB 저장소가 예상치 않게 제거됨</string>
+  <string name="usb_ext_media_badremoval_notification_message">데이터 손실을 피하려면 USB 저장소를 제거하기 전에 마운트 해제하십시오.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB 저장소 제거 가능</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">이제 USB 저장소를 안전하게 제거할 수 있습니다.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB 저장소 제거됨</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB 저장소가 제거되었습니다. 새 저장소를 삽입하십시오.</string>
 </resources>

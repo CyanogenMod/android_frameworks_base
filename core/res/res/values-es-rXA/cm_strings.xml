@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">cambiar Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">cambiar datos móviles</string>
   <string name="app_ops_toggle_wifi">cambiar Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">cambiar NFC</string>
   <string name="app_ops_use_alarm_volume">remanar volume de l\'alarma</string>
   <string name="app_ops_use_audio_focus">remanar el volume de soníu</string>
   <string name="app_ops_use_bluetooth_volume">remanar el volume del Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Va desaniciase tola información del almacenamientu USB (nel camín \u00AB%1$s\u00BB). ¡Esta aición nun pue desfacese!</string>
   <string name="extmedia_format_message_cm" product="default">Van desaniciase tolos datos de la tarxeta (nel camín \'%1$s\'). Esta aición nun pue desfacese!</string>
   <string name="usb_storage_notification_manage_message">Toca pa xestionar</string>
+  <string name="sd_ext_media_checking_notification_title">Preparando tarxeta SD</string>
+  <string name="sd_ext_media_checking_notification_message">Comprobando fallos na tarxeta SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tarxeta SD balera</string>
+  <string name="sd_ext_media_nofs_notification_message">La tarxeta SD ta balera o tien un sistema de ficheros non sofitáu.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Tarxeta SD frañada</string>
+  <string name="sd_ext_media_unmountable_notification_message">La tarxeta SD ta frañada. Intenta formatiala otra vegada.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Tarxeta SD estrayida de sópitu</string>
+  <string name="sd_ext_media_badremoval_notification_message">Desmonta la tarxeta SD enantes d\'estrayela pa evitar la perda de datos.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Estrayer tarxeta SD</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Pues estrayer la tarxeta SD con seguridá.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Tarxeta SD estrayida</string>
+  <string name="sd_ext_media_nomedia_notification_message">Tarxeta SD estrayida. Inxerta una nueva.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparando almacenamientu USB</string>
+  <string name="usb_ext_media_checking_notification_message">Comprobando fallos nel almacenamientu USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Almacenamientu USB baleru</string>
+  <string name="usb_ext_media_nofs_notification_message">L\'almacenamientu USB ta baleru o tien un sistema de ficheros non sofitáu.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Almacenamientu USB frañáu</string>
+  <string name="usb_ext_media_unmountable_notification_message">L\'almacenamientu USB ta frañáu. Intenta formatialu de nueves.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Almacenamientu USB estrayíu de sópitu</string>
+  <string name="usb_ext_media_badremoval_notification_message">Desmonta l\'almacenamientu USB enantes d\'estrayelu pa evitar la perda de datos.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Estrayer almacenamientu USB</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Pues estrayer l\'almacenamientu USB con seguridá.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Almacenamientu USB estrayíu</string>
+  <string name="usb_ext_media_nomedia_notification_message">Almacenamientu USB estrayíu. Inxerta ún nuevu.</string>
 </resources>

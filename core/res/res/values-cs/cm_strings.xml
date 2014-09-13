@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">přepnout Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">přepnout mobilní data</string>
   <string name="app_ops_toggle_wifi">přepnout Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">přepnout NFC</string>
   <string name="app_ops_use_alarm_volume">ovládat hlasitost budíku</string>
   <string name="app_ops_use_audio_focus">ovládat zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládat hlasitost Bluetooth</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Všechna data na úložišti USB (v cestě „%1$s“) budou smazána! Tuto akci nelze vzít zpět!</string>
   <string name="extmedia_format_message_cm" product="default">Všechna data na kartě (v cestě „%1$s“) budou smazána! Tuto akci nelze vzít zpět!</string>
   <string name="usb_storage_notification_manage_message">Dotykem spravovat</string>
+  <string name="sd_ext_media_checking_notification_title">Příprava SD karty</string>
+  <string name="sd_ext_media_checking_notification_message">Kontrola chyb na SD kartě.</string>
+  <string name="sd_ext_media_nofs_notification_title">Prázdná SD karta</string>
+  <string name="sd_ext_media_nofs_notification_message">SD karta je prázdná nebo obsahuje nepodporovaný systém souborů.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Poškozená SD karta</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD karta je poškozena. Zkuste provést zformátovat.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD karta byla neočekávaně odebrána</string>
+  <string name="sd_ext_media_badremoval_notification_message">Před odebráním SD kartu odpojit, aby nedošlo ke ztrátě dat.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD kartu je bezpečné odebrat</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Nyní je možné SD kartu bezpečně odebrat.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Odebraná SD karta</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD karta odebrána. Vložte novou.</string>
+  <string name="usb_ext_media_checking_notification_title">Příprava USB úložiště</string>
+  <string name="usb_ext_media_checking_notification_message">Kontrola chyb na USB úložišti.</string>
+  <string name="usb_ext_media_nofs_notification_title">Prázdné USB úložiště</string>
+  <string name="usb_ext_media_nofs_notification_message">USB úložiště je prázdné nebo obsahuje nepodporovaný systém souborů.</string>
+  <string name="usb_ext_media_unmountable_notification_title">USB úložiště je poškozené</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB úložiště je poškozené. Zkuste provést formát.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB úložiště bylo neočekávaně odebráno</string>
+  <string name="usb_ext_media_badremoval_notification_message">Před odebráním odpojit USB úložiště, aby nedošlo ke ztrátě dat.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB úložiště je bezpečné odebrat</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Nyní je možné USB úložiště bezpečně odebrat.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Odebráno USB úložiště</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB úložiště odebráno. Vložte nové.</string>
 </resources>

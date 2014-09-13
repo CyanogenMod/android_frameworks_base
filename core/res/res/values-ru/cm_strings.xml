@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">переключить состояние Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">переключить состояние Мобильного интернета</string>
   <string name="app_ops_toggle_wifi">переключить состояние Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">переключить состояние модуля NFC</string>
   <string name="app_ops_use_alarm_volume">получить управление громкостью будильника</string>
   <string name="app_ops_use_audio_focus">получить управление аудиофокусом</string>
   <string name="app_ops_use_bluetooth_volume">получить управление громкостью Bluetooth-устройств</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Все данные на USB-накопителе (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
   <string name="extmedia_format_message_cm" product="default">Все данные на карте (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
   <string name="usb_storage_notification_manage_message">Нажмите, чтобы открыть список опций.</string>
+  <string name="sd_ext_media_checking_notification_title">Подготовка SD-карты</string>
+  <string name="sd_ext_media_checking_notification_message">Выполняется проверка карты на наличие ошибок.</string>
+  <string name="sd_ext_media_nofs_notification_title">Пустая SD-карта</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-карта пуста или имеет неподдерживаемую файловую систему.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Повреждённая SD-карта</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-карта повреждена. Попробуйте её отформатировать.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-карта неожиданно извлечена</string>
+  <string name="sd_ext_media_badremoval_notification_message">Перед извлечением SD-карты рекомендуется отключать её во избежание потери данных.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-карту можно извлечь</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Теперь SD-карта может быть безопасно отключена.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-карта извлечена</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-карта извлечена. Можно вставить новую карту.</string>
+  <string name="usb_ext_media_checking_notification_title">Подготовка USB-накопителя</string>
+  <string name="usb_ext_media_checking_notification_message">Выполняется проверка накопителя на наличие ошибок.</string>
+  <string name="usb_ext_media_nofs_notification_title">Пустой USB-накопитель</string>
+  <string name="usb_ext_media_nofs_notification_message">На USB-накопителе нет данных, или его файловая система не поддерживается.</string>
+  <string name="usb_ext_media_unmountable_notification_title">USB-накопитель повреждён</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-накопитель повреждён. Попробуйте отформатировать его.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Накопитель неожиданно извлечён</string>
+  <string name="usb_ext_media_badremoval_notification_message">Перед извлечением USB-накопителя рекомендуется отключать его во избежание потери данных.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-накопитель можно извлечь</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Теперь USB-накопитель может быть безопасно отключён.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB-накопитель извлечён</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-накопитель отключён. Можно вставить другой накопитель.</string>
 </resources>

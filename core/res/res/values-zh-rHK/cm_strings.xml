@@ -102,11 +102,11 @@
   <string name="app_ops_read_call_log">讀取通話記錄</string>
   <string name="app_ops_read_clipboard">讀取剪貼簿</string>
   <string name="app_ops_read_contacts">讀取您的聯絡人</string>
-  <string name="app_ops_read_mms">讀取您的多媒體簡訊</string>
+  <string name="app_ops_read_mms">讀取您的多媒體短訊</string>
   <string name="app_ops_read_sms">讀取您的短訊</string>
   <string name="app_ops_receive_sms">接收短訊</string>
   <string name="app_ops_record_audio">錄音</string>
-  <string name="app_ops_send_mms">發送多媒體簡訊</string>
+  <string name="app_ops_send_mms">發送多媒體短訊</string>
   <string name="app_ops_send_sms">發送短訊</string>
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toggle_bluetooth">切換藍牙</string>
@@ -122,7 +122,7 @@
   <string name="app_ops_use_ring_volume">控制鈴聲音量</string>
   <string name="app_ops_use_vibrate">使用觸控震動</string>
   <string name="app_ops_use_voice_volume">控制語音通話音量</string>
-  <string name="app_ops_write_mms">撰寫多媒體簡訊</string>
+  <string name="app_ops_write_mms">撰寫多媒體短訊</string>
   <string name="app_ops_write_sms">編寫短訊</string>
   <string name="notify_turn_wifi_off_title">關閉 Wi-Fi</string>
   <string name="privacy_guard_dialog_title">私隱守衛</string>
@@ -132,4 +132,15 @@
   <string name="adb_both_active_notification_title">USB &amp; 網絡 ADB 偵錯</string>
   <string name="adb_active_generic_notification_message">觸碰以停用調試。</string>
   <string name="usb_storage_notification_manage_message">輕按以管理</string>
+  <string name="sd_ext_media_checking_notification_title">正在準備 SD 卡</string>
+  <string name="sd_ext_media_checking_notification_message">正在檢查 SD 卡的錯誤。</string>
+  <string name="sd_ext_media_nofs_notification_title">SD 卡無內容</string>
+  <string name="sd_ext_media_nofs_notification_message">SD 卡無內容，或使用不受支援的檔案系統。</string>
+  <string name="sd_ext_media_unmountable_notification_title">SD 卡已損壞</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD 卡已損壞。請嘗試將它重新格式化。</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD 卡未正常移除</string>
+  <string name="sd_ext_media_badremoval_notification_message">請先卸載 SD 卡再將其移除，以免數據遺失。</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">可安全移除 SD 卡</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">你現在可以安全地移除 SD 卡。</string>
+  <string name="usb_ext_media_nomedia_notification_title">已移除 USB 儲存裝置</string>
 </resources>

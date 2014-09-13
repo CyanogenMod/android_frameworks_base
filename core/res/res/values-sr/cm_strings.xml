@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">пребаци Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">пребаци мобилне податке</string>
   <string name="app_ops_toggle_wifi">пребаци WiFi</string>
+  <string name="app_ops_toggle_nfc">пребацуј NFC</string>
   <string name="app_ops_use_alarm_volume">контрола јачине аларма</string>
   <string name="app_ops_use_audio_focus">контрола аудио фокуса</string>
   <string name="app_ops_use_bluetooth_volume">контрола Bluetooth јачине</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Сви подаци са твог USB складишта (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
   <string name="extmedia_format_message_cm" product="default">Сви подаци са твоје картице (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
   <string name="usb_storage_notification_manage_message">Додирни да управљаш</string>
+  <string name="sd_ext_media_checking_notification_title">Припрема SD картице</string>
+  <string name="sd_ext_media_checking_notification_message">Провера SD картице за грешкама.</string>
+  <string name="sd_ext_media_nofs_notification_title">Празна SD картица</string>
+  <string name="sd_ext_media_nofs_notification_message">SD картица је празна или има неподржан систем фајлова.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Оштећена SD картица</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD картица је оштећена. Пробај да је форматираш.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD картица је неочекивано уклоњена</string>
+  <string name="sd_ext_media_badremoval_notification_message">Искључи SD картицу пре уклањања да би избегао губитак података.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD картица је безбедна за уклањање</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Можеш безбедно да уклониш SD картицу.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Уклоњена SD картица</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD картица је уклоњена. Убаци нову.</string>
+  <string name="usb_ext_media_checking_notification_title">Припрема USB складишта</string>
+  <string name="usb_ext_media_checking_notification_message">Провера USB складишта за грешкама.</string>
+  <string name="usb_ext_media_nofs_notification_title">Празно USB складиште</string>
+  <string name="usb_ext_media_nofs_notification_message">USB складиште је празно или има неподржан систем фајлова.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Оштећено USB складиште</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB складиште је оштећено. Пробај да га форматираш.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB складиште је неочекивано уклоњено</string>
+  <string name="usb_ext_media_badremoval_notification_message">Искључи USB складиште пре уклањања да избегнеш губитак података.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB складиште је безбедно за уклањање</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Можеш безбедно да уклониш USB складиште.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Уклоњено USB складиште</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB складиште је уклоњено. Убаци нове медије.</string>
 </resources>

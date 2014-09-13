@@ -115,6 +115,7 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth\'u açıp kapat</string>
   <string name="app_ops_toggle_mobile_data">mobil veriyi açıp kapat</string>
   <string name="app_ops_toggle_wifi">WiFi açıp kapat</string>
+  <string name="app_ops_toggle_nfc">NFC\'yi aç kapa</string>
   <string name="app_ops_use_alarm_volume">alarm sesini kontrol et</string>
   <string name="app_ops_use_audio_focus">ses odağını kontrol et</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth sesini kontrol et</string>
@@ -137,4 +138,28 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">USB depolama (%1$s) alanınızdaki tüm veri silinecek. Bu işlem geri alınamaz!</string>
   <string name="extmedia_format_message_cm" product="default">Kartınızdaki (%1$s) tüm veri silinecek. Bu işlem geri alınamaz!</string>
   <string name="usb_storage_notification_manage_message">Yönetmek için dokunun</string>
+  <string name="sd_ext_media_checking_notification_title">SD kart hazırlanıyor</string>
+  <string name="sd_ext_media_checking_notification_message">SD kartta hatalar denetleniyor.</string>
+  <string name="sd_ext_media_nofs_notification_title">Boş SD kart</string>
+  <string name="sd_ext_media_nofs_notification_message">SD kart boş veya desteklenmeyen dosya sistemine sahip.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Hasarlı SD kart</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD kart zarar görmüş. Yeniden biçimlendirmeyi deneyin.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD kart beklenmedik biçimde kaldırıldı</string>
+  <string name="sd_ext_media_badremoval_notification_message">Veri kaybını önlemek için SD kartı çıkarmadan önce bağlantısını kesin.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD kartı çıkarmak güvenli</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SD kartı güvenle çıkartabilirsiniz.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD kart çıkarıldı</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kart kaldırıldı. Yeni bir tane takın.</string>
+  <string name="usb_ext_media_checking_notification_title">USB depolama hazırlanıyor</string>
+  <string name="usb_ext_media_checking_notification_message">USB depolamada hatalar denetleniyor.</string>
+  <string name="usb_ext_media_nofs_notification_title">Boş USB depolama</string>
+  <string name="usb_ext_media_nofs_notification_message">USB depolama boş veya desteklenmeyen dosya sistemine sahip.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Hasarlı USB depolama</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB depolama zarar görmüş. Yeniden biçimlendirmeyi deneyin.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB depolama beklenmedik biçimde kaldırıldı</string>
+  <string name="usb_ext_media_badremoval_notification_message">Veri kaybını önlemek için USB depolamayı çıkarmadan önce bağlantısını kesin.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB depolamayı çıkarmak güvenli</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB depolamayı güvenle çıkarabilirsiniz.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB depolama çıkarıldı</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB depolama çıkarıldı. Yeni ortamı yerleştirin.</string>
 </resources>

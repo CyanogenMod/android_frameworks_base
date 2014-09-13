@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">įjungti „Bluetooth“</string>
   <string name="app_ops_toggle_mobile_data">įjungti mobiliuosius duomenis</string>
   <string name="app_ops_toggle_wifi">įjungti „Wi-Fi“</string>
+  <string name="app_ops_toggle_nfc">Įjungti / išjungti ALR</string>
   <string name="app_ops_use_alarm_volume">valdyti žadintuvo garsumą</string>
   <string name="app_ops_use_audio_focus">valdyti garso sutelktį</string>
   <string name="app_ops_use_bluetooth_volume">valdyti „Bluetooth“ garsumą</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Visi („%1$s“) USB saugyklos duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
   <string name="extmedia_format_message_cm" product="default">Visi („%1$s“) kortelės duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
   <string name="usb_storage_notification_manage_message">Bakstelėkite norėdami valdyti</string>
+  <string name="sd_ext_media_checking_notification_title">Ruošiama SD kortelė</string>
+  <string name="sd_ext_media_checking_notification_message">Tikrinama ar nėra klaidų SD kortelėje.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tuščia SD kortelė</string>
+  <string name="sd_ext_media_nofs_notification_message">SD kortelė tuščia arba turi nepalaikomą failų sistemą.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Sugadinta SD kortelė</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD kortelė yra sugadinta. Pabandykite ją suformatuoti.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD kortelė netikėtai pašalinta</string>
+  <string name="sd_ext_media_badremoval_notification_message">Išimkite SD kortelę prieš pašalinant norėdami išvengti duomenų praradimo.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Saugu pašalinti SD kortelę</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti SD kortelę.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD kortelė pašalinta</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kortelė pašalinta. Įdėkite naują.</string>
+  <string name="usb_ext_media_checking_notification_title">Ruošiama USB saugykla</string>
+  <string name="usb_ext_media_checking_notification_message">Tikrinama ar nėra klaidų USB saugykloje.</string>
+  <string name="usb_ext_media_nofs_notification_title">Tuščia USB saugykla</string>
+  <string name="usb_ext_media_nofs_notification_message">USB saugykla tuščia arba turi nepalaikomą failų sistemą.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Sugadinta USB saugykla</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB saugykla yra sugadinta. Pabandykite ją suformatuoti.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB saugykla netikėtai pašalinta</string>
+  <string name="usb_ext_media_badremoval_notification_message">Išimkite USB saugyklą prieš pašalinant norėdami išvengti duomenų praradimo.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Saugu pašalinti USB sagyklą</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti USB saugyklą.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB saugykla pašalinta</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują.</string>
 </resources>

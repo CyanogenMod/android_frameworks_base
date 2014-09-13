@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">开启蓝牙</string>
   <string name="app_ops_toggle_mobile_data">开启移动数据</string>
   <string name="app_ops_toggle_wifi">开启 Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">切换 NFC</string>
   <string name="app_ops_use_alarm_volume">控制闹铃音量</string>
   <string name="app_ops_use_audio_focus">控制音频焦点</string>
   <string name="app_ops_use_bluetooth_volume">控制蓝牙音量</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
   <string name="extmedia_format_message_cm" product="default">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
   <string name="usb_storage_notification_manage_message">点击以管理</string>
+  <string name="sd_ext_media_checking_notification_title">正在准备 SD 卡</string>
+  <string name="sd_ext_media_checking_notification_message">正在检查 SD 卡的错误。</string>
+  <string name="sd_ext_media_nofs_notification_title">空白 SD 卡</string>
+  <string name="sd_ext_media_nofs_notification_message">SD 卡为空或使用了不支持的文件系统。</string>
+  <string name="sd_ext_media_unmountable_notification_title">损坏的 SD 卡</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD 卡已损坏。请尝试重新格式化。</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD 卡意外移除</string>
+  <string name="sd_ext_media_badremoval_notification_message">在移除 SD 卡之前先卸载以避免数据丢失。</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD 卡可安全移除</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">您可以安全地移除 SD 卡。</string>
+  <string name="sd_ext_media_nomedia_notification_title">已移除 SD 卡</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD 卡已移除。请插入新卡。</string>
+  <string name="usb_ext_media_checking_notification_title">正在准备 USB 存储</string>
+  <string name="usb_ext_media_checking_notification_message">正在检查 USB 存储的错误。</string>
+  <string name="usb_ext_media_nofs_notification_title">空白 USB 存储</string>
+  <string name="usb_ext_media_nofs_notification_message">USB 存储为空或使用了不支持的文件系统。</string>
+  <string name="usb_ext_media_unmountable_notification_title">损坏的 USB 存储</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB 存储已损坏，请尝试重新格式化。</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB 存储意外移除</string>
+  <string name="usb_ext_media_badremoval_notification_message">在移除 USB 存储之前先卸载以避免数据丢失。</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB 存储可安全移除</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">您现在可以安全移除 USB 存储。</string>
+  <string name="usb_ext_media_nomedia_notification_title">已移除 USB 存储</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB 存储已移除。请插入新的媒体。</string>
 </resources>

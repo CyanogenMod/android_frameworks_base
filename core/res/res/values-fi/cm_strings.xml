@@ -113,6 +113,7 @@
   <string name="app_ops_toggle_bluetooth">ottaa Bluetoothin käyttöön</string>
   <string name="app_ops_toggle_mobile_data">ottaa mobiilidatan käyttöön</string>
   <string name="app_ops_toggle_wifi">ota Wi-Fin käyttöön</string>
+  <string name="app_ops_toggle_nfc">ota NFC käyttöön</string>
   <string name="app_ops_use_alarm_volume">säätää hälytyksen äänenvoimakkuutta</string>
   <string name="app_ops_use_audio_focus">säätää äänen kohdistusta</string>
   <string name="app_ops_use_bluetooth_volume">säätää Bluetoothin äänenvoimakkuutta</string>
@@ -135,4 +136,28 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Kaikki tiedot USB-muistiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
   <string name="extmedia_format_message_cm" product="default">Kaikki tiedot muistikortiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
   <string name="usb_storage_notification_manage_message">Paina hallitaksesi</string>
+  <string name="sd_ext_media_checking_notification_title">Valmistellaan SD-korttia</string>
+  <string name="sd_ext_media_checking_notification_message">Tarkistetaan SD-korttia virheiden varalta.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tyhjä SD-kortti</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-kortti on tyhjä tai sen tiedostojärjestelmää ei tueta.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Vioittunut SD-kortti</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-kortti on vioittunut. Kokeile alustaa se.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-kortti poistettu odottamatta</string>
+  <string name="sd_ext_media_badremoval_notification_message">Irroita SD-kortti ennen poistamista välttääksesi tietojen häviämisen.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-kortti voidaan poistaa turvallisesti</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Voit nyt poistaa SD-kortin turvallisesti.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-kortti poistettu</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kortti poistettu. Aseta uusi kortti.</string>
+  <string name="usb_ext_media_checking_notification_title">Valmistellaan USB-muistia</string>
+  <string name="usb_ext_media_checking_notification_message">Tarkistetaan USB-muistia virheiden varalta.</string>
+  <string name="usb_ext_media_nofs_notification_title">Tyhjä USB-muisti</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-muisti on tyhjä tai sen tiedostojärjestelmää ei tueta.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Vioittunut USB-muisti</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-muisti on vioittunut. Kokeile alustaa se.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-muisti poistettu odottamatta</string>
+  <string name="usb_ext_media_badremoval_notification_message">Irroita USB-muisti ennen poistamista välttääksesi tietojen häviämisen.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-muisti voidaan poistaa turvallisesti</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Voit nyt poistaa USB-muistin turvallisesti.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Poistettu USB-muisti</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-muisti poistettu. Aseta uusi tallennustila.</string>
 </resources>
