@@ -2140,6 +2140,9 @@
   <java-symbol type="array" name="origin_carrier_names" />
   <java-symbol type="array" name="locale_carrier_names" />
 
+  <!-- Enabled ESN Tracker -->
+  <java-symbol type="bool" name="config_telephony_ESN_Tracker_enabled" />
+
   <!-- Data Connectivity Error Configurations -->
   <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />
   <java-symbol type="bool" name="config_protocol_errors_perm_failure" />
