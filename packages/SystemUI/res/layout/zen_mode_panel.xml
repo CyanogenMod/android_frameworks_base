@@ -33,8 +33,8 @@
             android:id="@+id/zen_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/qs_panel_padding"
-            android:layout_marginRight="@dimen/qs_panel_padding"
+            android:layout_marginStart="@dimen/qs_panel_padding"
+            android:layout_marginEnd="@dimen/qs_panel_padding"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
             android:clipChildren="false" />
@@ -45,8 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:gravity="center_vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp" >
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp" >
 
         <TextView
             android:id="@+id/zen_subhead_collapsed"
@@ -54,8 +54,8 @@
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp"
             android:background="@drawable/btn_borderless_rect"
             android:clickable="true"
             android:drawableEnd="@drawable/qs_subhead_caret"
@@ -67,7 +67,7 @@
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
             android:textAppearance="@style/TextAppearance.QS.Subhead" />
 
         <ImageView

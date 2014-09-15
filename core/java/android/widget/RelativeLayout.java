@@ -26,6 +26,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Build;
@@ -1246,7 +1247,9 @@ public class RelativeLayout extends ViewGroup {
                     com.android.internal.R.styleable.RelativeLayout_Layout);
 
             final int targetSdkVersion = c.getApplicationInfo().targetSdkVersion;
-            mIsRtlCompatibilityMode = (targetSdkVersion < JELLY_BEAN_MR1 ||
+            final boolean isSystemApp = (c.getApplicationInfo().flags &
+                    ApplicationInfo.FLAG_SYSTEM) != 0;
+            mIsRtlCompatibilityMode = (targetSdkVersion < JELLY_BEAN_MR1 && !isSystemApp ||
                     !c.getApplicationInfo().hasRtlSupport());
 
             final int[] rules = mRules;
