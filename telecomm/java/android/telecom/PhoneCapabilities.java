@@ -96,6 +96,10 @@ public final class PhoneCapabilities {
             | ADD_CALL | RESPOND_VIA_TEXT | MUTE | MANAGE_CONFERENCE | SEPARATE_FROM_CONFERENCE
             | DISCONNECT_FROM_CONFERENCE;
 
+    /* Add participant in an active or conference call option*/
+    /** {@hide} */
+    public static final int ADD_PARTICIPANT = 0x00004000;
+
     public static String toString(int capabilities) {
         StringBuilder builder = new StringBuilder();
         builder.append("[Capabilities:");
