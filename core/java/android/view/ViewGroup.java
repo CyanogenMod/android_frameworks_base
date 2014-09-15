@@ -18,6 +18,7 @@ package android.view;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -6635,8 +6636,10 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             }
 
             final boolean hasRtlSupport = c.getApplicationInfo().hasRtlSupport();
+            final boolean isSystemApp = (c.getApplicationInfo().flags &
+                    ApplicationInfo.FLAG_SYSTEM) != 0;
             final int targetSdkVersion = c.getApplicationInfo().targetSdkVersion;
-            if (targetSdkVersion < JELLY_BEAN_MR1 || !hasRtlSupport) {
+            if (targetSdkVersion < JELLY_BEAN_MR1 && !isSystemApp || !hasRtlSupport) {
                 mMarginFlags |= RTL_COMPATIBILITY_MODE_MASK;
             }
 
