@@ -33,6 +33,7 @@ import android.graphics.Outline;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.LayoutDirection;
 
 import java.io.IOException;
 
@@ -230,8 +231,13 @@ public class InsetDrawable extends Drawable implements Drawable.Callback {
     public boolean getPadding(Rect padding) {
         boolean pad = mInsetState.mDrawable.getPadding(padding);
 
-        padding.left += mInsetState.mInsetLeft;
-        padding.right += mInsetState.mInsetRight;
+        if (needMirroring()) {
+            padding.left += mInsetState.mInsetRight;
+            padding.right += mInsetState.mInsetLeft;
+        } else {
+            padding.left += mInsetState.mInsetLeft;
+            padding.right += mInsetState.mInsetRight;
+        }
         padding.top += mInsetState.mInsetTop;
         padding.bottom += mInsetState.mInsetBottom;
 
@@ -329,9 +335,9 @@ public class InsetDrawable extends Drawable implements Drawable.Callback {
         final Rect r = mTmpRect;
         r.set(bounds);
 
-        r.left += mInsetState.mInsetLeft;
+        r.left += (needMirroring() ? mInsetState.mInsetRight : mInsetState.mInsetLeft);
         r.top += mInsetState.mInsetTop;
-        r.right -= mInsetState.mInsetRight;
+        r.right -= (needMirroring() ? mInsetState.mInsetLeft : mInsetState.mInsetRight);
         r.bottom -= mInsetState.mInsetBottom;
 
         mInsetState.mDrawable.setBounds(r.left, r.top, r.right, r.bottom);
@@ -439,6 +445,11 @@ public class InsetDrawable extends Drawable implements Drawable.Callback {
 
     private InsetDrawable(InsetState state, Resources res) {
         mInsetState = new InsetState(state, this, res);
+    }
+
+    private boolean needMirroring() {
+        return mInsetState.mDrawable.isAutoMirrored() &&
+                mInsetState.mDrawable.getLayoutDirection() == LayoutDirection.RTL;
     }
 }
 

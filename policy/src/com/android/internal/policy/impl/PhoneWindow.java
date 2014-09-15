@@ -3608,7 +3608,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             } else {
                 mTitleView = (TextView)findViewById(R.id.title);
                 if (mTitleView != null) {
-                    mTitleView.setLayoutDirection(mDecor.getLayoutDirection());
                     if ((getLocalFeatures() & (1 << FEATURE_NO_TITLE)) != 0) {
                         View titleContainer = findViewById(
                                 R.id.title_container);
