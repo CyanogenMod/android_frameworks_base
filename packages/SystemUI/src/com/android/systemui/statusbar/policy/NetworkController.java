@@ -76,6 +76,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     int mDataState = TelephonyManager.DATA_DISCONNECTED;
     int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
     ServiceState mServiceState;
+    ServiceState mLastServiceState = new ServiceState();
     SignalStrength mSignalStrength;
     int[] mDataIconList = TelephonyIcons.DATA_G[0];
     String mNetworkName;
@@ -1314,7 +1315,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
          || mLastAirplaneMode               != mAirplaneMode
          || mLastLocale                     != mLocale
          || mLastSimIconId                  != mNoSimIconId
-         || mLastMobileActivityIconId       != mMobileActivityIconId)
+         || mLastMobileActivityIconId       != mMobileActivityIconId
+         || mLastServiceState.getVoiceNetworkType() != getVoiceNetworkType())
         {
             // NB: the mLast*s will be updated later
             for (SignalCluster cluster : mSignalClusters) {
@@ -1364,6 +1366,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         // the data network type overlay
         if (mLastDataTypeIconId != mDataTypeIconId) {
             mLastDataTypeIconId = mDataTypeIconId;
+        }
+
+        // the service state
+        if (mLastServiceState != mServiceState) {
+            mLastServiceState = mServiceState;
         }
 
         // the combinedLabel in the notification panel
