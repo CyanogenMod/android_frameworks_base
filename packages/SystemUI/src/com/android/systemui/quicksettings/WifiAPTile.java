@@ -54,7 +54,8 @@ public class WifiAPTile extends QuickSettingsTile {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
+                intent.setClassName("com.android.settings",
+                        "com.android.settings.Settings$WifiApSettingsActivity");
                 startSettingsActivity(intent);
                 return true;
             }
