@@ -64,7 +64,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     private static final String TAG = "MobileDataStateTracker";
     private static final boolean DBG = true;
-    private static final boolean VDBG = true;
+    private static final boolean VDBG = false;
 
     private int mPhoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
     private PhoneConstants.DataState[] mMobileDataState
@@ -404,10 +404,12 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                             if (retry == 0) getPhoneService(true);
                         }
                     }
-                    log(String.format(
+                    if (VDBG) {
+                        log(String.format(
                                 "ACTION_ANY_DATA_CONNECTION_STATE_CHANGED"
                                 + ", subscription=%s, dds=%s, reason=%s", subscription
                                 , dds, reason));
+                    }
 
                 }
 
@@ -434,7 +436,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                 mNetworkInfo[subscription].setIsAvailable(!intent.getBooleanExtra(
                         PhoneConstants.NETWORK_UNAVAILABLE_KEY, false));
 
-                if (DBG) {
+                if (VDBG) {
                     log("Received state=" + state + ", old=" + mMobileDataState[subscription] +
                         ", reason=" + (reason == null ? "(unspecified)" : reason));
                 }
