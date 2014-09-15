@@ -2014,6 +2014,9 @@
         <item>Trying to turn on mobile data</item>
     </string-array>
 
+    <!-- Configuartion to support ESN Tracker -->
+    <bool name="config_telephony_ESN_Tracker_enabled">false</bool>
+
     <!-- Whether cpu boost is enabled for overscroller fling. -->
     <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
 
