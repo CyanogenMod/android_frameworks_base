@@ -234,4 +234,5 @@ public interface TelephonyProperties
 
     static final String EXTRA_DIAL_CONFERENCE_URI =
             "org.codeaurora.extra.DIAL_CONFERENCE_URI";
+    static final String ADD_PARTICIPANT_KEY = "add_participant";
 }
