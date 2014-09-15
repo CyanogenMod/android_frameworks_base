@@ -1023,7 +1023,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private boolean teardownForSubscription(NetworkStateTracker netTracker,int subId) {
         if (netTracker.teardown(subId)) {
-            netTracker.setTeardownRequested(true);
+            netTracker.setTeardownRequested(true, subId);
             return true;
         } else {
             return false;
@@ -2527,8 +2527,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private void handleDisconnect(NetworkInfo info) {
 
         int prevNetType = info.getType();
+        int subId = info.getSubscription();
 
-        mNetTrackers[prevNetType].setTeardownRequested(false);
+        mNetTrackers[prevNetType].setTeardownRequested(false, subId);
 
         // Remove idletimer previously setup in {@code handleConnect}
         removeDataActivityTracking(prevNetType);
@@ -2733,7 +2734,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      * @param info the {@link NetworkInfo} for the failed network
      */
     private void handleConnectionFailure(NetworkInfo info) {
-        mNetTrackers[info.getType()].setTeardownRequested(false);
+        int subId = info.getSubscription();
+        mNetTrackers[info.getType()].setTeardownRequested(false, subId);
 
         String reason = info.getReason();
         String extraInfo = info.getExtraInfo();
@@ -2865,6 +2867,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private void handleConnect(NetworkInfo info) {
         final int newNetType = info.getType();
+        int subId = info.getSubscription();
 
         setupDataActivityTracking(newNetType);
 
@@ -2930,7 +2933,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             // Update TCP delayed ACK settings
             updateTcpDelayedAckSettings(thisNet);
         }
-        thisNet.setTeardownRequested(false);
+        thisNet.setTeardownRequested(false, subId);
         updateMtuSizeSettings(thisNet);
         handleConnectivityChange(newNetType, false);
         sendConnectedBroadcastDelayed(info, getConnectivityChangeDelay());
