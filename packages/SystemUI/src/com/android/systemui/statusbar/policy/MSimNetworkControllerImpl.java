@@ -77,6 +77,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     private String[] mCarrierTextSub;
 
     String[] mMSimNetworkName;
+    String[] mOriginalSpn;
+    String[] mOriginalPlmn;
     int[] mMSimPhoneSignalIconId;
     int[] mMSimLastPhoneSignalIconId;
     private int[] mMSimIconId;
@@ -137,6 +139,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mMSimContentDescriptionPhoneSignal = new String[numPhones];
         mMSimLastPhoneSignalIconId = new int[numPhones];
         mMSimNetworkName = new String[numPhones];
+        mOriginalSpn = new String[numPhones];
+        mOriginalPlmn = new String[numPhones];
         mMSimLastDataTypeIconId = new int[numPhones];
         mMSimDataConnected = new boolean[numPhones];
         mMSimDataSignalIconId = new int[numPhones];
@@ -366,6 +370,17 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             mShowPlmn[phoneId] = intent.getBooleanExtra(
                     TelephonyIntents.EXTRA_SHOW_PLMN, false);
             mPlmn[phoneId] = intent.getStringExtra(TelephonyIntents.EXTRA_PLMN);
+            mOriginalSpn[phoneId] = mSpn[phoneId];
+            mOriginalPlmn[phoneId] = mPlmn[phoneId];
+            if (mContext.getResources().getBoolean(com.android.internal.R.bool.
+                    config_monitor_locale_change)) {
+                if (mShowSpn[phoneId] && mSpn[phoneId] != null) {
+                    mSpn[phoneId] = getLocaleString(mOriginalSpn[phoneId]);
+                }
+                if (mShowPlmn[phoneId] && mPlmn[phoneId] != null) {
+                    mPlmn[phoneId] = getLocaleString(mOriginalPlmn[phoneId]);
+                }
+            }
 
             updateNetworkName(mShowSpn[phoneId], mSpn[phoneId], mShowPlmn[phoneId],
                     mPlmn[phoneId], phoneId);
@@ -376,7 +391,24 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             updateConnectivity(intent);
             refreshViews(mDefaultPhoneId);
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
-            refreshViews(mDefaultPhoneId);
+            //parse the string to current language string in public resources
+            if (mContext.getResources().getBoolean(com.android.internal.R.
+                    bool.config_monitor_locale_change)) {
+                for (int i = 0; i < mPhoneCount; i++) {
+                    if (mShowSpn[i] && mSpn[i] != null) {
+                        mSpn[i] = getLocaleString(mOriginalSpn[i]);
+                    }
+                    if (mShowPlmn[i] && mPlmn[i] != null) {
+                        mPlmn[i] = getLocaleString(mOriginalPlmn[i]);
+                    }
+
+                    updateNetworkName(mShowSpn[i], mSpn[i], mShowPlmn[i], mPlmn[i], i);
+                    updateCarrierText(i);
+                    refreshViews(i);
+                }
+            } else {
+                refreshViews(mDefaultPhoneId);
+            }
         } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
             updateAirplaneMode();
             for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
@@ -908,15 +940,30 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         StringBuilder str = new StringBuilder();
         boolean something = false;
         if (showPlmn && plmn != null) {
+            if(mContext.getResources().getBoolean(com.android.internal.R.bool.config_display_rat) &&
+                    mMSimServiceState[phoneId] != null) {
+                plmn = appendRatToNetworkName(plmn, mMSimServiceState[phoneId]);
+            }
             str.append(plmn);
             something = true;
         }
         if (showSpn && spn != null) {
-            if (something) {
-                str.append(mNetworkNameSeparator);
+            if(mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_spn_display_control)
+                    && something){
+               Slog.d(TAG,"Do not display spn string when showPlmn and showSpn are both true"
+                       + "and plmn string is not null");
+            } else {
+                if (something) {
+                    str.append(mNetworkNameSeparator);
+                }
+                if(mContext.getResources().getBoolean(com.android.internal.R.bool.
+                        config_display_rat) && mMSimServiceState[phoneId] != null) {
+                    spn = appendRatToNetworkName(spn, mMSimServiceState[phoneId]);
+                }
+                str.append(spn);
+                something = true;
             }
-            str.append(spn);
-            something = true;
         }
         if (something) {
             mMSimNetworkName[phoneId] = str.toString();
