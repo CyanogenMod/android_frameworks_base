@@ -170,6 +170,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         public static final int InterfaceDnsServerInfo    = 615;
         public static final int RouteChange               = 616;
         public static final int StrictCleartext           = 617;
+        public static final int InterfaceMessage          = 618;
     }
 
     static final int DAEMON_MSG_MOBILE_CONN_REAL_TIME_INFO = 1;
@@ -520,6 +521,21 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     /**
+     * Notify our observers of a change in the data activity state of the interface
+     */
+    private void notifyInterfaceMessage(String message) {
+        final int length = mObservers.beginBroadcast();
+        for (int i = 0; i < length; i++) {
+            try {
+                mObservers.getBroadcastItem(i).interfaceMessageRecevied(message);
+            } catch (RemoteException e) {
+            } catch (RuntimeException e) {
+            }
+        }
+        mObservers.finishBroadcast();
+    }
+
+    /**
      * Prepare native daemon once connected, enabling modules and pushing any
      * existing in-memory rules.
      */
@@ -788,6 +804,22 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                         return true;
                     }
                     throw new IllegalStateException(errorMessage);
+                    // break;
+            case NetdResponseCode.InterfaceMessage:
+                    /*
+                     * An message arrived in network interface.
+                     * Format: "NNN IfaceMessage <3>AP-STA-CONNECTED 00:08:22:64:9d:84
+                     */
+                    if (cooked.length < 3 || !cooked[1].equals("IfaceMessage")) {
+                        throw new IllegalStateException(errorMessage);
+                    }
+                    Slog.d(TAG, "onEvent: "+ raw);
+                    if(cooked[4] != null) {
+                        notifyInterfaceMessage(cooked[3] + " " + cooked[4]);
+                    } else {
+                        notifyInterfaceMessage(cooked[3]);
+                    }
+                    return true;
                     // break;
             case NetdResponseCode.InterfaceClassActivity:
                     /*

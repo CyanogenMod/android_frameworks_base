@@ -70,6 +70,7 @@ import android.net.ProxyInfo;
 import android.net.RouteInfo;
 import android.net.UidRange;
 import android.net.Uri;
+import android.net.wifi.WifiDevice;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.FileUtils;
@@ -2512,6 +2513,14 @@ public class ConnectivityService extends IConnectivityManager.Stub
                     break;
                 }
             }
+        }
+    }
+
+    public List<WifiDevice> getTetherConnectedSta() {
+        if (isTetheringSupported()) {
+            return mTethering.getTetherConnectedSta();
+        } else {
+            return null;
         }
     }
 
