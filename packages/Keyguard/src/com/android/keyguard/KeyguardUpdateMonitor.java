@@ -635,24 +635,24 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             for (SubInfoRecord subInfo: activeSubInfos) {
                 //subId for the slot initially initiazed to invalid value
                 //Got intent with correct subId for the slot now.
-                if (mSubIdForSlot[subInfo.mSlotId] != subInfo.mSubId) {
-                    long subId = mSubIdForSlot[subInfo.mSlotId];
-                    mSimState.put(subInfo.mSubId, mSimState.get(subId));
-                    mPlmn.put(subInfo.mSubId, mPlmn.get(subId));
-                    mSpn.put(subInfo.mSubId, mSpn.get(subId));
+                if (mSubIdForSlot[subInfo.slotId] != subInfo.subId) {
+                    long subId = mSubIdForSlot[subInfo.slotId];
+                    mSimState.put(subInfo.subId, mSimState.get(subId));
+                    mPlmn.put(subInfo.subId, mPlmn.get(subId));
+                    mSpn.put(subInfo.subId, mSpn.get(subId));
 
                     final int count = mCallbacks.size();
                     for (int i = 0; i < count; i++) {
                         KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
                         if (cb != null) {
-                            cb.onSubIdUpdated(subId, subInfo.mSubId);
+                            cb.onSubIdUpdated(subId, subInfo.subId);
                         }
                     }
                 }
-                mSubIdForSlot[subInfo.mSlotId] = subInfo.mSubId;
+                mSubIdForSlot[subInfo.slotId] = subInfo.subId;
                 if (DEBUG) {
                     Log.d(TAG, "handleSubInfoRecordUpdate mSubIdForSlot["
-                        + subInfo.mSlotId + "] = " + subInfo.mSubId);
+                        + subInfo.slotId + "] = " + subInfo.subId);
                 }
             }
         } else {

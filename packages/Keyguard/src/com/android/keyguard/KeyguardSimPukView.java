@@ -263,7 +263,7 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
             try {
                 Log.v(TAG, "call supplyPukReportResultUsingSubId() mSubId = " + mSubId);
                 final int[] result = ITelephony.Stub.asInterface(ServiceManager
-                    .checkService("phone")).supplyPukReportResultUsingSubId(mSubId, mPuk, mPin);
+                    .checkService("phone")).supplyPukReportResultForSubscriber(mSubId, mPuk, mPin);
                 Log.v(TAG, "supplyPukReportResultUsingSubId returned: " + result[0] +
                         " " + result[1]);
                 post(new Runnable() {
@@ -418,9 +418,9 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     private void handleSubInfoChange() {
         String displayName = null;
         //get Display Name
-        SubInfoRecord info = SubscriptionManager.getSubInfoUsingSubId(mSubId);
+        SubInfoRecord info = SubscriptionManager.getSubInfoForSubscriber(mSubId);
         if (null != info) {
-           displayName = info.mDisplayName;
+           displayName = info.displayName;
         }
         if (DEBUG) Log.i(TAG, "handleSubInfoChange, mSubId=" + mSubId +
                 ", displayName=" + displayName);
@@ -437,8 +437,8 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
             if (DEBUG) Log.d(TAG, "handleSubInfoChange, refresh Sub Info for mSubId=" + mSubId);
             Drawable bgDrawable = null;
             if (null != info) {
-                if (info.mSimIconRes[0] > 0) {
-                    bgDrawable = getContext().getResources().getDrawable(info.mSimIconRes[0]);
+                if (info.simIconRes[0] > 0) {
+                    bgDrawable = getContext().getResources().getDrawable(info.simIconRes[0]);
                 }
             }
             mSubDisplayName.setBackground(bgDrawable);
