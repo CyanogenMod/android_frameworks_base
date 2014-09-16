@@ -86,6 +86,7 @@ import android.net.RouteInfo;
 import android.net.SamplingDataTracker;
 import android.net.UidRange;
 import android.net.Uri;
+import android.net.wifi.WifiDevice;
 import android.net.wimax.WimaxManagerConstants;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -2381,6 +2382,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     break;
                 }
             }
+        }
+    }
+
+    public List<WifiDevice> getTetherConnectedSta() {
+        if (isTetheringSupported()) {
+            return mTethering.getTetherConnectedSta();
+        } else {
+            return null;
         }
     }
 
