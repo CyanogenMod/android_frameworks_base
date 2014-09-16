@@ -20,24 +20,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
+import com.android.systemui.qs.tiles.ApnTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
+import com.android.systemui.qs.tiles.DataTile;
+import com.android.systemui.qs.tiles.DdsTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.settings.CurrentUserTracker;
@@ -68,6 +74,8 @@ public class QSTileHost implements QSTile.Host {
     private static final String TILES_SETTING = "sysui_qs_tiles";
 
     private final Context mContext;
+    private final ConnectivityManager mConnectivityManager;
+    private final TelephonyManager mTelephonyManager;
     private final PhoneStatusBar mStatusBar;
     private final LinkedHashMap<String, QSTile<?>> mTiles = new LinkedHashMap<>();
     private final Observer mObserver = new Observer();
@@ -107,6 +115,10 @@ public class QSTileHost implements QSTile.Host {
         mUserSwitcherController = userSwitcher;
         mKeyguard = keyguard;
         mSecurity = security;
+        mConnectivityManager = (ConnectivityManager)
+                mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mTelephonyManager = (TelephonyManager)
+                mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
         final HandlerThread ht = new HandlerThread(QSTileHost.class.getSimpleName());
         ht.start();
@@ -258,6 +270,15 @@ public class QSTileHost implements QSTile.Host {
         else if (tileSpec.equals("location")) return new LocationTile(this);
         else if (tileSpec.equals("cast")) return new CastTile(this);
         else if (tileSpec.equals("hotspot")) return new HotspotTile(this);
+        else if (tileSpec.equals("data")
+                && mConnectivityManager.isNetworkSupported(ConnectivityManager.TYPE_MOBILE))
+            return new DataTile(this);
+        else if (tileSpec.equals("roaming")) return new RoamingTile(this);
+        else if (tileSpec.equals("dds") && mTelephonyManager.isMultiSimEnabled()
+                && (mTelephonyManager.getMultiSimConfiguration()
+                == TelephonyManager.MultiSimVariants.DSDA))
+            return new DdsTile(this);
+        else if (tileSpec.equals("apn")) return new ApnTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
