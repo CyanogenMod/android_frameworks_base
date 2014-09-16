@@ -7242,6 +7242,8 @@
         <!-- number of megabytes of storage MTP should reserve for free storage
              (used for emulated storage that is shared with system's data partition) -->
         <attr name="mtpReserve" format="integer" />
+        <!-- make false if don't want to get mounted on MTP -->
+        <attr name="allowMtp" format="boolean" />
         <!-- true if the storage can be shared via USB mass storage -->
         <attr name="allowMassStorage" format="boolean" />
         <!-- maximum file size for the volume in megabytes, zero or unspecified if it is unbounded -->
