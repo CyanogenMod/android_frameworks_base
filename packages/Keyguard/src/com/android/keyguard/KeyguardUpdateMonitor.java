@@ -54,6 +54,7 @@ import android.service.fingerprint.FingerprintManagerReceiver;
 import android.service.fingerprint.FingerprintUtils;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubInfoRecord;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -118,6 +119,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private static final int MSG_FACE_UNLOCK_STATE_CHANGED = 325;
     private static final int MSG_SUBINFO_RECORD_UPDATE = 326;
     private static final int MSG_SUBINFO_CONTENT_CHANGE = 327;
+    private static final int MSG_SERVICE_STATE_CHANGED = 328;
 
     private static final long INVALID_SUBID = SubscriptionManager.INVALID_SUB_ID;
 
@@ -130,6 +132,11 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             = new HashMap<Long, IccCardConstants.State>();
     private HashMap<Long, CharSequence> mPlmn = new HashMap<Long, CharSequence>();
     private HashMap<Long, CharSequence> mSpn = new HashMap<Long, CharSequence>();
+    private HashMap<Long, CharSequence> mOriginalPlmn = new HashMap<Long, CharSequence>();
+    private HashMap<Long, CharSequence> mOriginalSpn = new HashMap<Long, CharSequence>();
+    private HashMap<Long, Boolean> mShowPlmn = new HashMap<Long, Boolean>();
+    private HashMap<Long, Boolean> mShowSpn = new HashMap<Long, Boolean>();
+    private HashMap<Long, ServiceState> mServiceState = new HashMap<Long, ServiceState>();
     private long mSubIdForSlot[];
     private int mRingMode;
     private int mPhoneState;
@@ -391,6 +398,11 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
                 mPlmn.put(subId, getTelephonyPlmnFrom(intent));
                 mSpn.put(subId, getTelephonySpnFrom(intent));
+                mOriginalPlmn.put(subId, getTelephonyPlmnFrom(intent));
+                mOriginalSpn.put(subId, getTelephonySpnFrom(intent));
+                mShowPlmn.put(subId, intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN,
+                        false));
+                mShowSpn.put(subId, intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false));
                 if (DEBUG) Log.d(TAG, "SPN_STRINGS_UPDATED_ACTION, update subId=" + subId
                     +" , plmn=" + mPlmn.get(subId) + ", spn=" + mSpn.get(subId));
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE, subId));
@@ -435,7 +447,21 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 final Message msg = mHandler.obtainMessage(MSG_SUBINFO_CONTENT_CHANGE,
                         new SubInfoContent(subId, column, sValue, iValue));
                 mHandler.sendMessage(msg);
+            } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
+                long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, INVALID_SUBID);
+                mServiceState.put(subId, ServiceState.newFromBundle(intent.getExtras()));
+                Log.d(TAG, "ACTION_SERVICE_STATE_CHANGED on sub: " + subId + " showSpn:" +
+                        mShowSpn.get(subId) + " showPlmn:" + mShowPlmn.get(subId) +
+                        " mServiceState: " + mServiceState.get(subId));
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE, subId));
+            } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
+                Log.d(TAG, "Received CONFIGURATION_CHANGED intent");
+                for (int i = 0; i < mNumPhones; i++) {
+                    long subId = SubscriptionManager.getSubId(i)[0];
+                    mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE, subId));
+                }
             }
+
         }
     };
 
@@ -728,6 +754,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         filter.addAction(Intent.ACTION_USER_REMOVED);
         filter.addAction(TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED);
         filter.addAction(TelephonyIntents.ACTION_SUBINFO_CONTENT_CHANGE);
+        filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED);
 
         context.registerReceiver(mBroadcastReceiver, filter);
 
@@ -972,10 +1000,46 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
     }
 
+    protected String getLocaleString(String originalCarrier) {
+        String localeCarrier = android.util.NativeTextHelper.getLocalString(mContext,
+                originalCarrier,
+                com.android.internal.R.array.origin_carrier_names,
+                com.android.internal.R.array.locale_carrier_names);
+        return localeCarrier;
+    }
+
     /**
      * Handle {@link #MSG_CARRIER_INFO_UPDATE}
      */
     private void handleCarrierInfoUpdate(long subId) {
+        if (mContext.getResources().getBoolean(com.android.internal
+                .R.bool.config_monitor_locale_change)) {
+            if (mOriginalPlmn.get(subId) != null) {
+                mPlmn.put(subId, getLocaleString(mOriginalPlmn.get(subId).toString()));
+            }
+
+            if (mOriginalSpn.get(subId) != null) {
+                if (mOriginalPlmn.get(subId) != null && mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_spn_display_control)) {
+                    mShowSpn.put(subId, false);
+                    mSpn.put(subId, null);
+                    Log.d(TAG,"Do not display spn string when Plmn and Spn both need to show"
+                               + "and plmn string is not null");
+                } else {
+                    mSpn.put(subId, getLocaleString(mOriginalSpn.get(subId).toString()));
+                }
+            }
+        }
+
+        //display 2G/3G/4G if operator ask for showing radio tech
+        if ((mServiceState.get(subId) != null) && (mServiceState.get(subId).getDataRegState()
+                == ServiceState.STATE_IN_SERVICE || mServiceState.get(subId).getVoiceRegState()
+                == ServiceState.STATE_IN_SERVICE) && mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_display_rat)) {
+            concatenate(mShowSpn.get(subId), mShowPlmn.get(subId), subId,
+                     mServiceState.get(subId));
+        }
+
         if (DEBUG) Log.d(TAG, "handleCarrierInfoUpdate: plmn = " + mPlmn
             + ", spn = " + mSpn + ", subId = " + subId);
 
@@ -985,6 +1049,36 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 cb.onRefreshCarrierInfo(subId, mPlmn.get(subId), mSpn.get(subId));
             }
         }
+    }
+
+    private void concatenate(boolean showSpn, boolean showPlmn, long subId,
+            ServiceState state) {
+        int phoneId = SubscriptionManager.getPhoneId(subId);
+        String rat = getRadioTech(state, phoneId);
+        if (showSpn) {
+            mSpn.put(subId, new StringBuilder().append(mSpn.get(subId)).append(rat));
+        }
+        if (showPlmn) {
+            mPlmn.put(subId, new StringBuilder().append(mPlmn.get(subId)).append(rat));
+        }
+    }
+
+    private String getRadioTech(ServiceState serviceState, int phoneId) {
+        String radioTech = "";
+        int networkType = 0;
+        Log.d(TAG, "dataRegState = " + serviceState.getDataRegState() + " voiceRegState = "
+                + serviceState.getVoiceRegState() + " phoneId = " + phoneId);
+        if (serviceState.getRilDataRadioTechnology() != ServiceState.RIL_RADIO_TECHNOLOGY_UNKNOWN) {
+            networkType = serviceState.getDataNetworkType();
+            radioTech = new StringBuilder().append(" ").append(TelephonyManager.from(mContext).
+                    networkTypeToString(networkType)).toString();
+        } else if (serviceState.getRilVoiceRadioTechnology() != ServiceState.
+                RIL_RADIO_TECHNOLOGY_UNKNOWN) {
+            networkType = serviceState.getVoiceNetworkType();
+            radioTech = new StringBuilder().append(" ").append(TelephonyManager.from(mContext).
+                    networkTypeToString(networkType)).toString();
+        }
+        return radioTech;
     }
 
     /**

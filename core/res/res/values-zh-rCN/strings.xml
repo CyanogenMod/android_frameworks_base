@@ -1852,4 +1852,9 @@
         <item>试图删除通话记录</item>
         <item>试图打开移动数据</item>
     </string-array>
+
+    <!-- Carrier Name -->
+    <string name="China_Mobile">中国移动</string>
+    <string name="China_Unicom">中国联通</string>
+    <string name="China_Telecom">中国电信</string>
 </resources>

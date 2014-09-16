@@ -1783,4 +1783,9 @@
     <item quantity="other" msgid="5408537517529822157">"%d 小時"</item>
   </plurals>
     <string name="zen_mode_forever" msgid="4316804956488785559">"無限期"</string>
+
+    <!-- Carrier Name -->
+    <string name="China_Mobile">中國移動</string>
+    <string name="China_Unicom">中國聯通</string>
+    <string name="China_Telecom">中國電信</string>
 </resources>
