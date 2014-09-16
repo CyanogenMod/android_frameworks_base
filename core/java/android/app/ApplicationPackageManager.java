@@ -1416,6 +1416,20 @@ final class ApplicationPackageManager extends PackageManager {
         }
     }
 
+    /**
+     * @hide
+     */
+    @Override
+    public int processThemeResources(String themePkgName) {
+        try {
+            return mPM.processThemeResources(themePkgName);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to process theme resources for " + themePkgName, e);
+        }
+
+        return 0;
+    }
+
     @Override
     public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
         try {

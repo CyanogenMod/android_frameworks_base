@@ -3291,6 +3291,18 @@ public abstract class PackageManager {
     public abstract void updateIconMaps(String pkgName);
 
     /**
+     * Used to compile theme resources for a given theme
+     * @param themePkgName
+     * @return A value of 0 indicates success.  Possible errors returned are:
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_AAPT_ERROR},
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_IDMAP_ERROR}, or
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_UNKNOWN_ERROR}
+     *
+     * @hide
+     */
+    public abstract int processThemeResources(String themePkgName);
+
+    /**
      * Update Component protection state
      * @hide
      */
