@@ -297,8 +297,6 @@ public class PhoneAccount implements Parcelable {
         return dsda.get(bit);
     }
 
-    public static Builder builder() { return new Builder(); }
-
     /**
      * Returns a builder initialized with the current {@link PhoneAccount} instance.
      *

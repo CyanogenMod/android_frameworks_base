@@ -206,7 +206,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             try {
                 Log.v(TAG, "call supplyPinReportResultUsingSubId() mSubId = " + mSubId);
                 final int[] result = ITelephony.Stub.asInterface(ServiceManager
-                    .checkService("phone")).supplyPinReportResultUsingSubId(mSubId, mPin);
+                    .checkService("phone")).supplyPinReportResultForSubscriber(mSubId, mPin);
                 Log.v(TAG, "supplyPinReportResultUsingSubId returned: " + result[0] +
                         " " + result[1]);
                 post(new Runnable() {
@@ -345,9 +345,9 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     private void handleSubInfoChange() {
         String displayName = null;
         //get Display Name
-        SubInfoRecord info = SubscriptionManager.getSubInfoUsingSubId(mSubId);
+        SubInfoRecord info = SubscriptionManager.getSubInfoForSubscriber(mSubId);
         if (null != info) {
-           displayName = info.mDisplayName;
+           displayName = info.displayName;
         }
         if (DEBUG) Log.i(TAG, "handleSubInfoChange, mSubId=" + mSubId +
                 ", displayName=" + displayName);
@@ -364,8 +364,8 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             if (DEBUG) Log.d(TAG, "handleSubInfoChange, refresh Sub Info for mSubId=" + mSubId);
             Drawable bgDrawable = null;
             if (null != info) {
-                if (info.mSimIconRes[0] > 0) {
-                    bgDrawable = getContext().getResources().getDrawable(info.mSimIconRes[0]);
+                if (info.simIconRes[0] > 0) {
+                    bgDrawable = getContext().getResources().getDrawable(info.simIconRes[0]);
                 }
             }
             mSubDisplayName.setBackground(bgDrawable);
