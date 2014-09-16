@@ -1274,7 +1274,7 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
             if (newBlock >= 0) {
                 DEBUG_STYLES(LOGI("-> From theme: type=0x%x, data=0x%08x",
                         value.dataType, value.data));
-                newBlock = res.resolveReference(&value, block, &resid,
+                newBlock = res.resolveReference(&value, newBlock, &resid,
                         &typeSetFlags, &config);
 #if THROW_ON_BAD_ID
                 if (newBlock == BAD_INDEX) {
