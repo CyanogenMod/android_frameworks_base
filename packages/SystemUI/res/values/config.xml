@@ -249,5 +249,7 @@
 
     <!-- Zen toast visibility duration -->
     <integer name="zen_toast_visible_duration">500</integer>
+    <!-- Whether to enable data switch or not -->
+    <bool name="config_enableDataSwitch">false</bool>
 </resources>
 
