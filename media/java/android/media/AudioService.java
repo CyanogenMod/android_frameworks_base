@@ -4255,10 +4255,17 @@ public class AudioService extends IAudioService.Stub {
                 state = intent.getIntExtra("state", 0);
                 if (state == 1) {
                     // Headset plugged in
+                    final boolean restoreSafeVolume = Settings.System.getIntForUser(
+                            context.getContentResolver(),
+                            Settings.System.SAFE_HEADSET_VOLUME_RESTORE,
+                            0, UserHandle.USER_CURRENT) != 0;
+                    if (restoreSafeVolume) {
+                        enforceSafeMediaVolume();
+                    }
+                    // Ensure volumes are updated
                     adjustCurrentStreamVolume();
-                    // TODO: Cap volume at safe levels
 
-                    boolean launchPlayer = Settings.System.getIntForUser(
+                    final boolean launchPlayer = Settings.System.getIntForUser(
                             context.getContentResolver(),
                             Settings.System.HEADSET_CONNECT_PLAYER,
                             0, UserHandle.USER_CURRENT) != 0;
@@ -4274,6 +4281,7 @@ public class AudioService extends IAudioService.Stub {
                     }
                 } else {
                     // Headset disconnected
+                    // Ensure volumes are updated
                     adjustCurrentStreamVolume();
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
