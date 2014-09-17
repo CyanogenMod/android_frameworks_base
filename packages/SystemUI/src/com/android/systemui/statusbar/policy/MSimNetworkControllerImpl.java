@@ -169,7 +169,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             mMSimDataServiceState[i] = ServiceState.STATE_OUT_OF_SERVICE;
         }
 
-        mDefaultPhoneId = SubscriptionManager.getPhoneId(SubscriptionManager.getDefaultSubId());
+        mDefaultPhoneId = getDefaultPhoneId();
         mDataConnected = mMSimDataConnected[mDefaultPhoneId];
         mSimState = mMSimState[mDefaultPhoneId];
         mDataActivity = mMSimDataActivity[mDefaultPhoneId];
@@ -243,6 +243,18 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             }
         //}
     }
+
+    private int getDefaultPhoneId() {
+        int phoneId;
+        int numPhones = TelephonyManager.getDefault().getPhoneCount();
+        phoneId = getPhoneId(SubscriptionManager.getDefaultSubId());
+        if ( phoneId < 0 || phoneId >= numPhones) {
+            phoneId = 0;
+        }
+        return phoneId;
+    }
+
+
     private int getPhoneId(long subId) {
         int phoneId;
         phoneId = SubscriptionManager.getPhoneId(subId);
@@ -348,8 +360,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         } else if (action.equals(TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED)) {
                 unregisterPhoneStateListener();
                 registerPhoneStateListener(mContext);
-                mDefaultPhoneId = SubscriptionManager.getPhoneId(
-                        SubscriptionManager.getDefaultSubId());
+                mDefaultPhoneId = getDefaultPhoneId();
                 for (int i=0 ; i < mPhoneCount ; i++) {
                     updateCarrierText(i);
                     updateTelephonySignalStrength(i);

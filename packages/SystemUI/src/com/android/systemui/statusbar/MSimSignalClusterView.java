@@ -130,7 +130,9 @@ public class MSimSignalClusterView
             mMobileType[i]     = (ImageView) findViewById(mMobileTypeResourceId[i]);
             mNoSimSlot[i]      = (ImageView) findViewById(mNoSimSlotResourceId[i]);
         }
-        apply(SubscriptionManager.getPhoneId(SubscriptionManager.getDefaultSubId()));
+        for (int i = 0; i < mNumPhones; i++) {
+            apply(i);
+        }
     }
 
     @Override
@@ -154,7 +156,9 @@ public class MSimSignalClusterView
         mWifiVisible = visible;
         mWifiStrengthId = strengthIcon;
         mWifiDescription = contentDescription;
-        apply(SubscriptionManager.getPhoneId(SubscriptionManager.getDefaultSubId()));
+        for (int i = 0; i < mNumPhones; i++) {
+            apply(i);
+        }
     }
 
     @Override
@@ -181,8 +185,7 @@ public class MSimSignalClusterView
 
     @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
-        int defaultPhoneId = SubscriptionManager.getPhoneId(SubscriptionManager.
-                getDefaultSubId());
+        int defaultPhoneId = getDefaultPhoneId();
         // Standard group layout onPopulateAccessibilityEvent() implementations
         // ignore content description, so populate manually
         if (mWifiVisible && mWifiGroup != null &&
@@ -201,6 +204,21 @@ public class MSimSignalClusterView
         return false;
     }
 
+    private int getDefaultPhoneId() {
+        int phoneId;
+        phoneId = getPhoneId(SubscriptionManager.getDefaultSubId());
+        if ( phoneId < 0 || phoneId >= mNumPhones) {
+            phoneId = 0;
+        }
+        return phoneId;
+    }
+
+
+    private int getPhoneId(long subId) {
+        int phoneId;
+        phoneId = SubscriptionManager.getPhoneId(subId);
+        return phoneId;
+    }
 
 
     // Run after each indicator change.
