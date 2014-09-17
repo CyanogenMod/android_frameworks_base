@@ -694,10 +694,9 @@ public class KeyguardViewManager {
             final int windowHeight = coverWindowCoords[2] - coverWindowCoords[0];
             final int windowWidth = metrics.widthPixels - coverWindowCoords[1] -
                     (metrics.widthPixels - coverWindowCoords[3]);
-            final int stretch = ViewGroup.LayoutParams.MATCH_PARENT;
 
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-                    stretch, stretch, type, flags, PixelFormat.TRANSLUCENT);
+                    windowWidth, windowHeight, type, flags, PixelFormat.TRANSLUCENT);
             lp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
             lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
             lp.setTitle("SmartCover");
@@ -711,6 +710,7 @@ public class KeyguardViewManager {
             contentParams.height = windowHeight;
             contentParams.width = windowWidth;
             contentParams.leftMargin = coverWindowCoords[1];
+            mCoverView.setLayoutParams(contentParams);
         }
     }
 
