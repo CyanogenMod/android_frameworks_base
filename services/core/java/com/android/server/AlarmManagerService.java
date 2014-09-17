@@ -35,6 +35,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -883,6 +884,38 @@ class AlarmManagerService extends SystemService {
 
             dumpImpl(pw);
         }
+
+        @Override
+        /* updates the blocked uids, so if a wake lock is acquired to only fire
+         * alarm for it, it can be released.
+         */
+        public void updateBlockedUids(int uid, boolean isBlocked) {
+
+            if (localLOGV) Slog.v(TAG, "UpdateBlockedUids: uid = " + uid + " isBlocked = " + isBlocked);
+
+            if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+                if (localLOGV) Slog.v(TAG, "UpdateBlockedUids is not allowed");
+                return;
+            }
+
+            synchronized(mLock) {
+                if(isBlocked) {
+                    mBlockedUids.add(new Integer(uid));
+                    if (checkReleaseWakeLock()) {
+                        /* all the uids for which the alarms are triggered
+                         * are either blocked or have called onSendFinished.
+                         */
+                        if (mWakeLock.isHeld()) {
+                            mWakeLock.release();
+                            if (localLOGV)
+                                Slog.v(TAG, "AM WakeLock Released Internally in updateBlockedUids");
+                        }
+                    }
+                } else {
+                    mBlockedUids.clear();
+                }
+            }
+        }
     };
 
     void dumpImpl(PrintWriter pw) {
@@ -1283,30 +1316,6 @@ class AlarmManagerService extends SystemService {
         if (nextNonWakeup != 0 && mNextNonWakeup != nextNonWakeup) {
             mNextNonWakeup = nextNonWakeup;
             setLocked(ELAPSED_REALTIME, nextNonWakeup);
-        }
-    }
-
-    /* updates the blocked uids, so if a wake lock is acquired to only fire
-     * alarm for it, it can be released.
-     */
-    void updateBlockedUids(int uid, boolean isBlocked) {
-        if (localLOGV) Slog.v(TAG, "UpdateBlockedUids: uid = "+uid +" isBlocked = "+isBlocked);
-        synchronized(mLock) {
-            if(isBlocked) {
-                mBlockedUids.add(new Integer(uid));
-                if (checkReleaseWakeLock()) {
-                    /* all the uids for which the alarms are triggered
-                     * are either blocked or have called onSendFinished.
-                     */
-                    if (mWakeLock.isHeld()) {
-                        mWakeLock.release();
-                        if (localLOGV)
-                            Slog.v(TAG, "AM WakeLock Released Internally in updateBlockedUids");
-                    }
-                }
-            } else {
-               mBlockedUids.clear();
-            }
         }
     }
 
