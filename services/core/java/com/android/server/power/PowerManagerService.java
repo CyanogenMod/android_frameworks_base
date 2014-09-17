@@ -903,39 +903,6 @@ public final class PowerManagerService extends SystemService
         }
     }
 
-    /* updates the blocked uids, so if a wake lock is acquired for it
-     * can be released.
-     */
-    public void updateBlockedUids(int uid, boolean isBlocked) {
-        synchronized(mLock) {
-            if (DEBUG_SPEW) Slog.v(TAG, "updateBlockedUids: uid = "+uid +"isBlocked = "+isBlocked);
-            if(isBlocked) {
-                mBlockedUids.add(new Integer(uid));
-                for (int index = 0; index < mWakeLocks.size(); index++) {
-                    WakeLock wl = mWakeLocks.get(index);
-                    if(wl != null) {
-                        if(wl.mTag.startsWith("*sync*") && wl.mOwnerUid == Process.SYSTEM_UID) {
-                            releaseWakeLockInternal(wl.mLock, wl.mFlags);
-                            index--;
-                            if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing the wakelock"
-                                    + "acquired by SyncManager");
-                            continue;
-                        }
-                        // release the wakelock for the blocked uid
-                        if (wl.mOwnerUid == uid || checkWorkSourceObjectId(uid, wl)) {
-                            releaseWakeLockInternal(wl.mLock, wl.mFlags);
-                            index--;
-                            if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing it");
-                        }
-                    }
-                }
-            }
-            else {
-                mBlockedUids.remove(new Integer(uid));
-            }
-        }
-    }
-
     private boolean checkWorkSourceObjectId(int uid, WakeLock wl) {
         try {
             for (int index = 0; index < wl.mWorkSource.size(); index++) {
@@ -3251,6 +3218,46 @@ public final class PowerManagerService extends SystemService
                 dumpInternal(pw);
             } finally {
                 Binder.restoreCallingIdentity(ident);
+            }
+        }
+
+        /* updates the blocked uids, so if a wake lock is acquired for it
+         * can be released.
+         */
+        public void updateBlockedUids(int uid, boolean isBlocked) {
+
+            if (DEBUG_SPEW) Slog.v(TAG, "updateBlockedUids: uid = " + uid + "isBlocked = " + isBlocked);
+
+            if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+                if (DEBUG_SPEW) Slog.v(TAG, "UpdateBlockedUids is not allowed");
+                return;
+            }
+
+            synchronized(mLock) {
+                if(isBlocked) {
+                    mBlockedUids.add(new Integer(uid));
+                    for (int index = 0; index < mWakeLocks.size(); index++) {
+                        WakeLock wl = mWakeLocks.get(index);
+                        if(wl != null) {
+                            if(wl.mTag.startsWith("*sync*") && wl.mOwnerUid == Process.SYSTEM_UID) {
+                                releaseWakeLockInternal(wl.mLock, wl.mFlags);
+                                index--;
+                                if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing the wakelock"
+                                        + "acquired by SyncManager");
+                                continue;
+                            }
+                            // release the wakelock for the blocked uid
+                            if (wl.mOwnerUid == uid || checkWorkSourceObjectId(uid, wl)) {
+                                releaseWakeLockInternal(wl.mLock, wl.mFlags);
+                                index--;
+                                if (DEBUG_SPEW) Slog.v(TAG, "Internally releasing it");
+                            }
+                        }
+                    }
+                }
+                else {
+                    mBlockedUids.remove(new Integer(uid));
+                }
             }
         }
     }
