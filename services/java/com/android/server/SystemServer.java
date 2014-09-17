@@ -701,7 +701,7 @@ public final class SystemServer {
                 }
                 try {
                     Slog.i(TAG, "DPM Service");
-                    startDpmService(context, this);
+                    startDpmService(context);
                 } catch (Throwable e) {
                     reportWtf("starting DpmService", e);
                 }
@@ -1228,7 +1228,7 @@ public final class SystemServer {
         context.startServiceAsUser(intent, UserHandle.OWNER);
     }
 
-    private static final void startDpmService(Context context, SystemServer systemServer) {
+    private static final void startDpmService(Context context) {
         try {
             Object dpmObj = null;
             int dpmFeature = SystemProperties.getInt("persist.dpm.feature", 0);
@@ -1240,8 +1240,8 @@ public final class SystemServer {
                             ClassLoader.getSystemClassLoader());
                 Class dpmClass = dpmClassLoader.loadClass("com.qti.dpm.DpmService");
                 Constructor dpmConstructor = dpmClass.getConstructor(
-                        new Class[] {Context.class, SystemServer.class});
-                dpmObj = dpmConstructor.newInstance(context, systemServer);
+                        new Class[] {Context.class});
+                dpmObj = dpmConstructor.newInstance(context);
                 try {
                     if(dpmObj != null && (dpmObj instanceof IBinder)) {
                         ServiceManager.addService("dpmservice", (IBinder)dpmObj);
@@ -1253,20 +1253,6 @@ public final class SystemServer {
             }
         } catch (Throwable e) {
             Slog.i(TAG, "starting DPM Service", e);
-        }
-    }
-
-
-    public void updateBlockedUids(int uid, boolean isBlocked) {
-        try {
-            mAlarmManagerService.updateBlockedUids(uid, isBlocked);
-        } catch (NullPointerException e) {
-            Slog.w(TAG, "Could Not Update blocked Uids with alarmManager" + e);
-        }
-        try {
-            mPowerManagerService.updateBlockedUids(uid, isBlocked);
-        } catch (NullPointerException e) {
-            Slog.w(TAG, "Could Not Update blocked Uids with powerManager" + e);
         }
     }
 }
