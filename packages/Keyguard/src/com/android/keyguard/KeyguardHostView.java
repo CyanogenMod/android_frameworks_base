@@ -998,6 +998,12 @@ public class KeyguardHostView extends KeyguardViewBase {
                 ViewStub vStub = (ViewStub) (v.findViewById(R.id.stub_msim_carrier_text));
                 if (vStub != null) {
                     vStub.inflate();
+
+                    // Remove the non-MSim carrier text
+                    View carrierText = v.findViewById(R.id.carrier_text);
+                    if (carrierText != null) {
+                        ((EmergencyCarrierArea) carrierText.getParent()).removeView(carrierText);
+                    }
                 }
             }
             mSecurityViewContainer.addView(v);
