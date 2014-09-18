@@ -16,7 +16,12 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Lockscreen</string>
+    <!-- When the lock screen is showing, the phone is not plugged in, and the battery
+         is not fully charged, show the current charge %. -->
     <string name="keyguard_discharging">Discharging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <!-- When the lock screen is showing and the battery is low, warn user to plug
+         in the phone soon and show current percentage. -->
+    <string name="keyguard_low_battery_cm">Connect your charger, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="keyguard_battery_percent" translatable="false"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <plurals name="missed_calls">
         <item quantity="one">%d missed call</item>
@@ -31,4 +36,35 @@
     <string name="message_from_person">message from %1$s</string>
     <!-- Skeleton string format for displaying the date. -->
     <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+
+    <!-- Message shown when the user enters an invalid PUK code in the PUK screen -->
+    <string name="kg_invalid_sim_puk_hint_cm">PUK code should be 8 numbers.</string>
+
+    <!-- Instructions telling the user that they entered the wrong puk while trying
+         to unlock the keyguard.  Displayed in one line in a large font.  -->
+    <string name="keyguard_password_wrong_puk_code">Incorrect PUK code.</string>
+
+    <!-- Instructions telling the user that the operation to unlock the keyguard
+         with PIN failed. Displayed in one line in a large font.  -->
+    <string name="keyguard_password_pin_failed">PIN operation failed.</string>
+
+    <!-- Instructions telling the user that the operation to unlock the keyguard
+         with PUK failed. Displayed in one line in a large font.  -->
+    <string name="keyguard_password_puk_failed">PUK operation failed.</string>
+
+    <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+    <string name="pinpuk_attempts">\nAttempts remaining:</string>
+
+    <!-- Shown in the lock screen when there is SIM card IO error. -->
+    <string name="lockscreen_sim_error_message_short">Invalid card.</string>
+
+    <!-- When the user inserts a sim card with some personalization enabled -->
+    <string name="keyguard_perso_locked_message">SIM/RUIM is Perso locked</string>
+
+    <!-- Multi SIM related -->
+    <!-- Message used in Multi SIM enabled SIM PIN view -->
+    <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+
+    <!-- Carrier text used in Multi SIM enabled view -->
+    <string name="msim_carrier_text_format" translatable="false"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
 </resources>
