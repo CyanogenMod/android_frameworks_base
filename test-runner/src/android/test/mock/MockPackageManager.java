@@ -680,7 +680,7 @@ public class MockPackageManager extends PackageManager {
      * @hide
      */
     @Override
-    public void processThemeResources(String themePkgName) {
+    public int processThemeResources(String themePkgName) {
         throw new UnsupportedOperationException();
     }
 

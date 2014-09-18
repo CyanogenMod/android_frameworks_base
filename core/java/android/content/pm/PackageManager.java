@@ -3296,7 +3296,7 @@ public abstract class PackageManager {
      *
      * @hide
      */
-    public abstract void processThemeResources(String themePkgName);
+    public abstract int processThemeResources(String themePkgName);
 
     /**
      * Update Component protection state
