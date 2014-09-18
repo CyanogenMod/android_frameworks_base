@@ -287,4 +287,7 @@
     <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
     <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
 
+    <!-- Theme installation error notification -->
+    <string name="theme_install_error_title">Failed to install theme</string>
+    <string name="theme_install_error_message">%s failed to install</string>
 </resources>
