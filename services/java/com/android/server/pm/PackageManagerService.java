@@ -36,6 +36,7 @@ import android.Manifest;
 import android.app.ComposedIconInfo;
 import android.content.res.AssetManager;
 import android.content.res.ThemeConfig;
+import android.content.res.ThemeManager;
 import android.util.Pair;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
@@ -5439,10 +5440,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                 Exception failedException = null;
 
                 insertIntoOverlayMap(target, pkg);
-                if (!isBootScan || (mBootThemeConfig != null &&
+                if (mBootThemeConfig != null &&
                         (pkg.packageName.equals(mBootThemeConfig.getOverlayPkgName()) ||
                         pkg.packageName.equals(
-                                mBootThemeConfig.getOverlayPkgNameForApp(target))))) {
+                                mBootThemeConfig.getOverlayPkgNameForApp(target)))) {
                     try {
                         compileResourcesAndIdmapIfNeeded(mPackages.get(target), pkg);
                     } catch (IdmapException e) {
@@ -5463,12 +5464,18 @@ public class PackageManagerService extends IPackageManager.Stub {
                         deletePackageLI(pkg.packageName, null, true, null, null, 0, null, false);
                         return null;
                     }
+                } else if (!isBootScan) {
+                    // Pass this off to the ThemeService for processing
+                    ThemeManager tm =
+                            (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
+                    if (tm != null) {
+                        tm.processThemeResources(pkg.packageName);
+                    }
                 }
             }
 
             //Icon Packs need aapt too
-            //TODO: No need to run aapt on icons for every startup...
-            if (!isBootScan || (mBootThemeConfig != null &&
+            if ((mBootThemeConfig != null &&
                     pkg.packageName.equals(mBootThemeConfig.getIconPackPkgName()))) {
                 if (isIconCompileNeeded(pkg)) {
                     try {
@@ -12581,7 +12588,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 compileIconPack(pkg);
             } catch (Exception e) {
                 uninstallThemeForAllApps(pkg);
-                deletePackageLI(pkg.packageName, null, true, null, null, 0, null, false);
+                deletePackageX(themePkgName, getCallingUid(), PackageManager.DELETE_ALL_USERS);
                 return PackageManager.INSTALL_FAILED_THEME_AAPT_ERROR;
             }
         }
@@ -12604,11 +12611,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
 
             if (failedException != null) {
-                Log.e(TAG, "Unable to process theme, disabling " + pkg.packageName,
-                        failedException);
-                // TODO: Notify the user that this theme was disabled?
-                setApplicationEnabledSetting(pkg.packageName, COMPONENT_ENABLED_STATE_DISABLED,
-                        0, getCallingUid(), null);
+                Log.e(TAG, "Unable to process theme, uninstalling " + pkg.packageName,
+                      failedException);
+                uninstallThemeForAllApps(pkg);
+                deletePackageX(themePkgName, getCallingUid(), PackageManager.DELETE_ALL_USERS);
                 return errorCode;
             }
         }
