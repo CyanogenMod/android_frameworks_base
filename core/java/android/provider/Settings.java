@@ -2451,6 +2451,15 @@ public final class Settings {
          */
         public static final String HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY =
                 "hide_rotation_lock_toggle_for_accessibility";
+        
+        /**
+         * Call recording format value
+         * 0: AMR_WB
+         * 1: MPEG_4
+         * Default: 0
+         * @hide
+         */
+        public static final String CALL_RECORDING_FORMAT = "call_recording_format";
 
         /**
          * Whether the phone vibrates when it is ringing due to an incoming call. This will
