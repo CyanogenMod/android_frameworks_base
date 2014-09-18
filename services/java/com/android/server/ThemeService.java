@@ -19,6 +19,8 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -34,6 +36,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ThemeUtils;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.content.res.IThemeProcessingListener;
 import android.content.res.ThemeConfig;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
@@ -49,6 +52,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemProperties;
@@ -60,6 +64,8 @@ import android.provider.ThemesContract.ThemesColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.URLUtil;
+
+import com.android.internal.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -98,6 +104,7 @@ public class ThemeService extends IThemeService.Stub {
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
     private Context mContext;
+    private PackageManager mPM;
     private int mProgress;
     private boolean mWallpaperChangedByUs = false;
     private long mIconCacheSize = 0L;
@@ -106,6 +113,9 @@ public class ThemeService extends IThemeService.Stub {
 
     private final RemoteCallbackList<IThemeChangeListener> mClients =
             new RemoteCallbackList<IThemeChangeListener>();
+
+    private final RemoteCallbackList<IThemeProcessingListener> mProcessingListeners =
+            new RemoteCallbackList<IThemeProcessingListener>();
 
     final private ArrayList<String> mThemesToProcessQueue = new ArrayList<String>(0);
 
@@ -151,13 +161,28 @@ public class ThemeService extends IThemeService.Stub {
                     }
                     if (pkgName != null) {
                         if (DEBUG) Log.d(TAG, "Processing " + pkgName);
-                        mContext.getPackageManager().processThemeResources(pkgName);
+                        String name;
+                        try {
+                            PackageInfo pi = mPM.getPackageInfo(pkgName, 0);
+                            name = getThemeName(pi);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            name = null;
+                        }
+                        if (name != null) {
+                            int result = mPM.processThemeResources(pkgName);
+                            if (result < 0) {
+                                postFailedThemeInstallNotification(name);
+                            }
+                            sendThemeResourcesCachedBroadcast(pkgName, result);
+                        }
                         synchronized (mThemesToProcessQueue) {
                             mThemesToProcessQueue.remove(0);
-                            if (mThemesToProcessQueue.size() > 0) {
+                            if (mThemesToProcessQueue.size() > 0 &&
+                                    !hasMessages(MESSAGE_DEQUEUE_AND_PROCESS_THEME)) {
                                 this.sendEmptyMessage(MESSAGE_DEQUEUE_AND_PROCESS_THEME);
                             }
                         }
+                        postFinishedProcessing(pkgName);
                     }
                     break;
                 default:
@@ -170,7 +195,7 @@ public class ThemeService extends IThemeService.Stub {
     public ThemeService(Context context) {
         super();
         mContext = context;
-        mWorker = new HandlerThread("ThemeServiceWorker");
+        mWorker = new HandlerThread("ThemeServiceWorker", Process.THREAD_PRIORITY_BACKGROUND);
         mWorker.start();
         mHandler = new ThemeWorkerHandler(mWorker.getLooper());
         Log.i(TAG, "Spawned worker thread");
@@ -188,6 +213,8 @@ public class ThemeService extends IThemeService.Stub {
         // listen for wallpaper changes
         IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangeReceiver, filter);
+
+        mPM = mContext.getPackageManager();
         processInstalledThemes();
     }
 
@@ -320,11 +347,10 @@ public class ThemeService extends IThemeService.Stub {
 
     private boolean updateIcons(String pkgName) {
         try {
-            PackageManager pm = mContext.getPackageManager();
             if (pkgName.equals(HOLO_DEFAULT)) {
-                pm.updateIconMaps(null);
+                mPM.updateIconMaps(null);
             } else {
-                pm.updateIconMaps(pkgName);
+                mPM.updateIconMaps(pkgName);
                 mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
             }
         } catch (Exception e) {
@@ -387,9 +413,8 @@ public class ThemeService extends IThemeService.Stub {
             return true;
         }
 
-        PackageManager pm = mContext.getPackageManager();
         try {
-            final ApplicationInfo ai = pm.getApplicationInfo(pkgName, 0);
+            final ApplicationInfo ai = mPM.getApplicationInfo(pkgName, 0);
             applyBootAnimation(ai.sourceDir);
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Changing boot animation failed", e);
@@ -426,7 +451,7 @@ public class ThemeService extends IThemeService.Stub {
 
         PackageInfo pi = null;
         try {
-            pi = mContext.getPackageManager().getPackageInfo(pkgName, 0);
+            pi = mPM.getPackageInfo(pkgName, 0);
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Unable to update audible " + dirPath, e);
             return false;
@@ -622,8 +647,7 @@ public class ThemeService extends IThemeService.Stub {
                     }
                     wm.setStream(in);
                 } else {
-                    PackageManager pm = mContext.getPackageManager();
-                    PackageInfo pi = pm.getPackageInfo(pkgName, 0);
+                    PackageInfo pi = mPM.getPackageInfo(pkgName, 0);
                     if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0) {
                         // we need to get an instance of the WallpaperManager using the theme's
                         // context so it can retrieve the resource
@@ -720,14 +744,13 @@ public class ThemeService extends IThemeService.Stub {
 
         final ActivityManager am =
                 (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        final PackageManager pm = mContext.getPackageManager();
 
         Intent homeIntent = new Intent();
         homeIntent.setAction(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
 
-        List<ResolveInfo> infos = pm.queryIntentActivities(homeIntent, 0);
-        List<ResolveInfo> themeChangeInfos = pm.queryBroadcastReceivers(
+        List<ResolveInfo> infos = mPM.queryIntentActivities(homeIntent, 0);
+        List<ResolveInfo> themeChangeInfos = mPM.queryBroadcastReceivers(
                 new Intent(ThemeUtils.ACTION_THEME_CHANGED), 0);
         for(ResolveInfo info : infos) {
             if (info.activityInfo != null && info.activityInfo.applicationInfo != null &&
@@ -796,6 +819,19 @@ public class ThemeService extends IThemeService.Stub {
         }
     }
 
+    private void postFinishedProcessing(String pkgName) {
+        int N = mProcessingListeners.beginBroadcast();
+        for(int i=0; i < N; i++) {
+            IThemeProcessingListener listener = mProcessingListeners.getBroadcastItem(0);
+            try {
+                listener.onFinishedProcessing(pkgName);
+            } catch(RemoteException e) {
+                Log.w(TAG, "Unable to post progress to listener", e);
+            }
+        }
+        mProcessingListeners.finishBroadcast();
+    }
+
     private void broadcastThemeChange(Map<String, String> components) {
         final Intent intent = new Intent(ThemeUtils.ACTION_THEME_CHANGED);
         ArrayList componentsArrayList = new ArrayList(components.keySet());
@@ -829,7 +865,36 @@ public class ThemeService extends IThemeService.Stub {
     public void requestThemeChange(Map componentMap) throws RemoteException {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
-        Message msg = Message.obtain();
+        Message msg;
+
+        /**
+         * Since the ThemeService handles compiling theme resource we need to make sure that any
+         * of the components we are trying to apply are either already processed or put to the
+         * front of the queue and handled before the theme change takes place.
+         *
+         * TODO: create a callback that can be sent to any ThemeChangeListeners to notify them that
+         * the theme will be applied once the processing is done.
+         */
+        synchronized (mThemesToProcessQueue) {
+            for (Object key : componentMap.keySet()) {
+                if (ThemesColumns.MODIFIES_OVERLAYS.equals(key) ||
+                        ThemesColumns.MODIFIES_NAVIGATION_BAR.equals(key) ||
+                        ThemesColumns.MODIFIES_STATUS_BAR.equals(key) ||
+                        ThemesColumns.MODIFIES_ICONS.equals(key)) {
+                    String pkgName = (String) componentMap.get(key);
+                    if (mThemesToProcessQueue.indexOf(pkgName) > 0) {
+                        mThemesToProcessQueue.remove(pkgName);
+                        mThemesToProcessQueue.add(0, pkgName);
+                        // We want to make sure these resources are taken care of first so
+                        // send the dequeue message and place it in the front of the queue
+                        msg = mHandler.obtainMessage(
+                                ThemeWorkerHandler.MESSAGE_DEQUEUE_AND_PROCESS_THEME);
+                        mHandler.sendMessageAtFrontOfQueue(msg);
+                    }
+                }
+            }
+        }
+        msg = Message.obtain();
         msg.what = ThemeWorkerHandler.MESSAGE_CHANGE_THEME;
         msg.obj = componentMap;
         mHandler.sendMessage(msg);
@@ -846,15 +911,13 @@ public class ThemeService extends IThemeService.Stub {
 
     @Override
     public boolean isThemeApplying() throws RemoteException {
-        mContext.enforceCallingOrSelfPermission(
-                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        mContext.enforceCallingOrSelfPermission(Manifest.permission.ACCESS_THEME_MANAGER, null);
         return mIsThemeApplying;
     }
 
     @Override
     public int getProgress() throws RemoteException {
-        mContext.enforceCallingOrSelfPermission(
-                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        mContext.enforceCallingOrSelfPermission(Manifest.permission.ACCESS_THEME_MANAGER, null);
         synchronized(this) {
             return mProgress;
         }
@@ -888,6 +951,48 @@ public class ThemeService extends IThemeService.Stub {
         }
         Binder.restoreCallingIdentity(token);
         return success;
+    }
+
+    @Override
+    public boolean processThemeResources(String themePkgName) throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        try {
+            mPM.getPackageInfo(themePkgName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            // Package doesn't exist so nothing to process
+            return false;
+        }
+        // Obtain a message and send it to the handler to process this theme
+        Message msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+                                     0, 0, themePkgName);
+        mHandler.sendMessage(msg);
+        return true;
+    }
+
+    @Override
+    public boolean isThemeBeingProcessed(String themePkgName) throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        synchronized (mThemesToProcessQueue) {
+            return mThemesToProcessQueue.contains(themePkgName);
+        }
+    }
+
+    @Override
+    public void registerThemeProcessingListener(IThemeProcessingListener listener)
+            throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        mProcessingListeners.register(listener);
+    }
+
+    @Override
+    public void unregisterThemeProcessingListener(IThemeProcessingListener listener)
+            throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_THEME_MANAGER, null);
+        mProcessingListeners.unregister(listener);
     }
 
     private void purgeIconCache() {
@@ -955,15 +1060,14 @@ public class ThemeService extends IThemeService.Stub {
     };
 
     private void doBuildIconCache() {
-        PackageManager pm = mContext.getPackageManager();
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> infos = pm.queryIntentActivities(mainIntent, 0);
+        List<ResolveInfo> infos = mPM.queryIntentActivities(mainIntent, 0);
         for(ResolveInfo info : infos) {
             try {
-                pm.getActivityIcon(new ComponentName(info.activityInfo.packageName,
-                        info.activityInfo.name));
+                mPM.getActivityIcon(
+                        new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
             } catch (Exception e) {
                 Log.w(TAG, "Unable to fetch icon for " + info, e);
             }
@@ -980,7 +1084,7 @@ public class ThemeService extends IThemeService.Stub {
             mHandler.sendMessage(msg);
         }
         // Iterate over all installed packages and queue up the ones that are themes or icon packs
-        List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
+        List<PackageInfo> packages = mPM.getInstalledPackages(0);
         for (PackageInfo info : packages) {
             if (!defaultTheme.equals(info.packageName) &&
                     (info.isThemeApk || info.isLegacyThemeApk || info.isLegacyIconPackApk)) {
@@ -989,5 +1093,45 @@ public class ThemeService extends IThemeService.Stub {
                 mHandler.sendMessage(msg);
             }
         }
+    }
+
+    private void sendThemeResourcesCachedBroadcast(String themePkgName, int resultCode) {
+        final Intent intent = new Intent(Intent.ACTION_THEME_RESOURCES_CACHED);
+        intent.putExtra(Intent.EXTRA_THEME_PACKAGE_NAME, themePkgName);
+        intent.putExtra(Intent.EXTRA_THEME_RESULT, resultCode);
+        mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+    }
+
+    /**
+     * Posts a notification to let the user know the theme was not installed.
+     * @param name
+     */
+    private void postFailedThemeInstallNotification(String name) {
+        NotificationManager nm =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notice = new Notification.Builder(mContext)
+                .setAutoCancel(true)
+                .setOngoing(false)
+                .setContentTitle(
+                        mContext.getString(R.string.theme_install_error_title))
+                .setContentText(String.format(mContext.getString(
+                                R.string.theme_install_error_message),
+                                name))
+                .setSmallIcon(android.R.drawable.stat_notify_error)
+                .setWhen(System.currentTimeMillis())
+                .build();
+        nm.notify(name.hashCode(), notice);
+    }
+
+    private String getThemeName(PackageInfo pi) {
+        if (pi.themeInfos != null && pi.themeInfos.length > 0) {
+            return pi.themeInfos[0].name;
+        } else if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0) {
+            return pi.legacyThemeInfos[0].name;
+        } else if (pi.isLegacyIconPackApk) {
+            return pi.applicationInfo.name;
+        }
+
+        return null;
     }
 }
