@@ -28,8 +28,8 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="20dp"
-        android:paddingRight="40dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="40dp"
         android:orientation="vertical">
 
         <Space
@@ -47,14 +47,14 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/clock_white"
-                android:gravity="left|center_vertical" />
+                android:gravity="start|center_vertical" />
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="right|bottom">
+                android:gravity="end|bottom">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -63,6 +63,7 @@
                     android:src="@drawable/kg_smartcover_bat_75"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
+                    android:paddingStart="5dp"
                     android:paddingEnd="5dp" />
 
                 <TextView
@@ -85,6 +86,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
                     android:textSize="30sp"
                     android:textColor="@android:color/white" />
 
@@ -129,14 +131,14 @@
             android:textColor="#CCF3F3E9"
             android:textSize="10sp"
             android:textAllCaps="true"
-            android:gravity="left|bottom" />
+            android:gravity="start|bottom" />
 
         <TextView
             android:id="@+id/line_2"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:textColor="@color/clock_white"
-            android:gravity="left"
+            android:gravity="start"
             android:textSize="16sp" />
 
         <TextView
@@ -145,6 +147,6 @@
             android:layout_height="20dp"
             android:textColor="@color/clock_white"
             android:textSize="14sp"
-            android:gravity="left" />
+            android:gravity="start" />
     </LinearLayout>
 </com.android.keyguard.KeyguardSmartCoverView>
