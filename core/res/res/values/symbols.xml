@@ -2069,4 +2069,9 @@
   <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_title" />
   <java-symbol type="string" name="usb_ext_media_unmountable_notification_message" />
   <java-symbol type="string" name="usb_ext_media_unmountable_notification_title" />
+
+  <!-- Theme install failure notification -->
+  <java-symbol type="string" name="theme_install_error_title" />
+  <java-symbol type="string" name="theme_install_error_message" />
+
 </resources>
