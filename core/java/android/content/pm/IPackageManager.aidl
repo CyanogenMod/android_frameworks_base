@@ -425,7 +425,7 @@ interface IPackageManager {
     /** Themes */
     void updateIconMapping(String pkgName);
     ComposedIconInfo getComposedIconInfo();
-    void processThemeResources(String themePkgName);
+    int processThemeResources(String themePkgName);
 
     /** Protected Apps */
     void setComponentProtectedSetting(in ComponentName componentName, in boolean newState,
