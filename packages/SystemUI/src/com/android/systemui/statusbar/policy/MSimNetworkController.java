@@ -326,7 +326,7 @@ public class MSimNetworkController extends NetworkController {
                     textResId = com.android.internal.R.string.lockscreen_missing_sim_message_short;
                     break;
                 case PIN_REQUIRED:
-                    textResId = com.android.internal.R.string.lockscreen_sim_locked_message;
+                    textResId = com.android.internal.R.string.lockscreen_sim_locked_message_cm;
                     break;
                 case PUK_REQUIRED:
                     textResId = com.android.internal.R.string.lockscreen_sim_puk_locked_message;

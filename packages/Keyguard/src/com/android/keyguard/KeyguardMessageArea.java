@@ -277,7 +277,7 @@ class KeyguardMessageArea extends TextView {
                 icon.value = CHARGING_ICON;
             } else if (mBatteryIsLow) {
                 // Battery is low
-                string = getContext().getString(R.string.keyguard_low_battery, mBatteryLevel);
+                string = getContext().getString(R.string.keyguard_low_battery_cm, mBatteryLevel);
                 icon.value = BATTERY_LOW_ICON;
             } else if (mAlwaysShowBattery) {
                 // Discharging
