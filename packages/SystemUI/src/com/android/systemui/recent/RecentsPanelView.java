@@ -1052,6 +1052,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         } else {
             if (floating) {
                 if (DEBUG) Log.v(TAG, "Starting floating activity " + intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_FLOATING_WINDOW);
                 try {
                     context.startActivityAsUser(intent, opts,
                         new UserHandle(UserHandle.USER_CURRENT));
