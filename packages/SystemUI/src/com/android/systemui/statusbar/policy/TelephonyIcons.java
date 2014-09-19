@@ -380,7 +380,6 @@ class TelephonyIcons {
             case TelephonyManager.NETWORK_TYPE_HSDPA:
             case TelephonyManager.NETWORK_TYPE_HSUPA:
             case TelephonyManager.NETWORK_TYPE_HSPA:
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
                 if (hspaDistinguishable) {
                     mSelectedDataActivityIndex[sub] = DATA_TYPE_H;
                     mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
@@ -388,6 +387,24 @@ class TelephonyIcons {
                     mSelectedQSDataTypeIcon[sub] = QS_DATA_H[inetCondition];
                     mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
                     mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_H;
+                } else {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            mDataTypeGenerationArray[0], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeGenerationDescArray[0];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_3G;
+
+                }
+                break;
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                if (hspaDistinguishable) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_HP;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_H[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_HP;
                 } else {
                     mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
                     mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
