@@ -4852,37 +4852,44 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
                         }
                     }
-
                 }
 
-                if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
-                    if (mVolBtnMusicControls && down && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
+                boolean handleKeyForMusic = isMusicActive() && (result & ACTION_PASS_TO_USER) == 0;
+                if (handleKeyForMusic && mVolBtnMusicControls &&
+                        keyCode != KeyEvent.KEYCODE_VOLUME_MUTE) {
+                    if (down) {
                         mIsLongPress = false;
+                        // TODO: Long click of MUTE could be mapped to KEYCODE_MEDIA_PLAY_PAUSE.
                         int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
                                 KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
                         Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK,
-                                new KeyEvent(event.getDownTime(), event.getEventTime(), event.getAction(), newKeyCode, 0));
+                                new KeyEvent(event.getDownTime(), event.getEventTime(),
+                                event.getAction(), newKeyCode, 0));
                         msg.setAsynchronous(true);
                         mHandler.sendMessageDelayed(msg, ViewConfiguration.getLongPressTimeout());
+                        // Consume down events of all clicks.
                         break;
                     } else {
-                        if (mVolBtnMusicControls && !down) {
-                            mHandler.removeMessages(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK);
-                            if (mIsLongPress) {
-                                break;
-                            }
-                        }
-                        if (!isScreenOn && !mVolumeWakeScreen) {
-                            handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
+                        mHandler.removeMessages(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK);
+                        // Consume up events of long clicks only.
+                        if (mIsLongPress) {
+                            break;
                         }
                     }
                 }
-                if (isScreenOn || !mVolumeWakeScreen) {
-                    break;
-                } else {
+
+                // At this point we know volume key music control isn't interested in handling
+                // the key. Check whether it'll wake up the screen...
+                if (!isScreenOn && mVolumeWakeScreen) {
                     result |= ACTION_WAKE_UP;
-                    break;
                 }
+
+                // ... and whether it should control the music volume. Only do that if the key
+                // press doesn't wake the screen.
+                if (handleKeyForMusic && down && (result & ACTION_WAKE_UP) == 0) {
+                    handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
+                }
+                break;
             }
 
             case KeyEvent.KEYCODE_POWER: {
