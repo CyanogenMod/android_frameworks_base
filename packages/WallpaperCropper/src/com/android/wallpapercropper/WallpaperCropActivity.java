@@ -255,7 +255,7 @@ public class WallpaperCropActivity extends Activity {
         // We need to ensure that there is enough extra space in the wallpaper
         // for the intended
         // parallax effects
-        final int defaultWidth, defaultHeight;
+        int defaultWidth, defaultHeight;
         if (isScreenLarge(res)) {
             defaultWidth = (int) (maxDim * wallpaperTravelToScreenWidthRatio(maxDim, minDim));
             defaultHeight = maxDim;
@@ -263,6 +263,14 @@ public class WallpaperCropActivity extends Activity {
             defaultWidth = Math.max((int) (minDim * WALLPAPER_SCREENS_SPAN), maxDim);
             defaultHeight = maxDim;
         }
+
+        // Respect HW-limited max width
+        int maxWidth = Resources.getSystem().getInteger(
+                com.android.internal.R.integer.config_wallpaperMaxWidth);
+        if (maxWidth != -1 && defaultWidth > maxWidth) {
+              defaultWidth = maxWidth;
+        }
+
         return new Point(defaultWidth, defaultHeight);
     }
 
