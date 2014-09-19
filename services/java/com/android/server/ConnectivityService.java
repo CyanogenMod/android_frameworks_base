@@ -2316,6 +2316,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         return retVal;
     }
 
+    public boolean getMobileDataEnabledOnSubscription(int subId) {
+        enforceAccessPermission();
+        boolean retVal = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MOBILE_DATA + subId, 1) == 1;
+        if (VDBG) log("getMobileDataEnabledOnSubscription return " + retVal + "subId " +subId);
+        return retVal;
+    }
+
+
     public void setDataDependency(int networkType, boolean met) {
         enforceConnectivityInternalPermission();
 

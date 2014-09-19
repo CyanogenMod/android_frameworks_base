@@ -968,6 +968,25 @@ public class ConnectivityManager {
     }
 
     /**
+     * Gets the value of the setting for enabling Mobile data.
+     * of requested subscription
+     * @param subId for subscription
+     *
+     * @return Whether mobile data is enabled.
+     *
+     * <p>This method requires the call to hold the permission
+     * {@link android.Manifest.permission#ACCESS_NETWORK_STATE}.
+     * @hide
+     */
+    public boolean getMobileDataEnabledOnSubscription(int subId) {
+        try {
+            return mService.getMobileDataEnabledOnSubscription(subId);
+        } catch (RemoteException e) {
+            return true;
+        }
+    }
+
+    /**
      * Sets the persisted value for enabling/disabling Mobile data.
      *
      * @param enabled Whether the user wants the mobile data connection used

@@ -84,6 +84,7 @@ interface IConnectivityManager
     boolean requestRouteToHostAddress(int networkType, in byte[] hostAddress, String packageName);
 
     boolean getMobileDataEnabled();
+    boolean getMobileDataEnabledOnSubscription(int subId);
     void setMobileDataEnabled(String callingPackage, boolean enabled);
 
     /** Policy control over specific {@link NetworkStateTracker}. */
