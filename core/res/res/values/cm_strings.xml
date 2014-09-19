@@ -235,8 +235,8 @@
     <string name="usb_storage_notification_manage_message">Tap to manage</string>
 
     <!-- SD card storage notification -->
-    <string name="sd_ext_media_checking_notification_title">Preparing SD card</string>
-    <string name="sd_ext_media_checking_notification_message">Checking SD card for errors.</string>
+    <string name="sd_ext_media_checking_notification_title">Preparing SD card\u2026</string>
+    <string name="sd_ext_media_checking_notification_message">Checking SD card for errors\u2026</string>
     <string name="sd_ext_media_nofs_notification_title">Blank SD card</string>
     <string name="sd_ext_media_nofs_notification_message">SD card is blank or has unsupported filesystem.</string>
     <string name="sd_ext_media_unmountable_notification_title">Damaged SD card</string>
@@ -249,8 +249,8 @@
     <string name="sd_ext_media_nomedia_notification_message">SD card removed. Insert a new one.</string>
 
     <!-- USB storage notification -->
-    <string name="usb_ext_media_checking_notification_title">Preparing USB storage</string>
-    <string name="usb_ext_media_checking_notification_message">Checking USB storage for errors.</string>
+    <string name="usb_ext_media_checking_notification_title">Preparing USB storage\u2026</string>
+    <string name="usb_ext_media_checking_notification_message">Checking USB storage for errors\u2026</string>
     <string name="usb_ext_media_nofs_notification_title">Blank USB storage</string>
     <string name="usb_ext_media_nofs_notification_message">USB storage is blank or has unsupported filesystem.</string>
     <string name="usb_ext_media_unmountable_notification_title">Damaged USB storage</string>
