@@ -4854,35 +4854,45 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
 
                 }
-
                 if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
-                    if (mVolBtnMusicControls && down && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
-                        mIsLongPress = false;
-                        int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
-                                KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-                        Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK,
-                                new KeyEvent(event.getDownTime(), event.getEventTime(), event.getAction(), newKeyCode, 0));
-                        msg.setAsynchronous(true);
-                        mHandler.sendMessageDelayed(msg, ViewConfiguration.getLongPressTimeout());
-                        break;
-                    } else {
-                        if (mVolBtnMusicControls && !down) {
+                    boolean doit = down;
+                    if (mVolBtnMusicControls && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
+                        if (down) {
+                            mIsLongPress = false;
+                            // TODO: Long click of MUTE could be mapped to KEYCODE_MEDIA_PLAY_PAUSE.
+                            int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
+                                    KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+                            Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK,
+                                    new KeyEvent(event.getDownTime(), event.getEventTime(),
+                                    event.getAction(), newKeyCode, 0));
+                            msg.setAsynchronous(true);
+                            mHandler.sendMessageDelayed(msg, ViewConfiguration.getLongPressTimeout());
+                            // Consume down events of all clicks.
+                            break;
+                        } else {
                             mHandler.removeMessages(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK);
+                            // Consume up events of long clicks only.
                             if (mIsLongPress) {
                                 break;
                             }
+                            doit = true;
                         }
-                        if (!isScreenOn && !mVolumeWakeScreen) {
+                    }
+                    // Act upon up events of short clicks only if long click detection applies;
+                    // otherwise act upon down events and ignore up events.
+                    if (doit)
+                    {
+                        // Do not affect volume if this key event will be waking up the device.
+                        if (!(!isScreenOn && mVolumeWakeScreen)) {
                             handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
                         }
                     }
                 }
-                if (isScreenOn || !mVolumeWakeScreen) {
-                    break;
-                } else {
+                if (!isScreenOn && mVolumeWakeScreen) {
                     result |= ACTION_WAKE_UP;
                     break;
                 }
+                break;
             }
 
             case KeyEvent.KEYCODE_POWER: {
