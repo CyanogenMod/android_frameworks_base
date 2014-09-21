@@ -1259,39 +1259,6 @@ public final class Settings {
         }
 
         /**
-         * @hide
-         * Convenience function for retrieving a single system settings value
-         * as a boolean.  Note that internally setting values are always
-         * stored as strings; this function converts the string to a boolean
-         * for you. It will only return true if the stored value is "1"
-         *
-         * @param cr The ContentResolver to access.
-         * @param name The name of the setting to retrieve.
-         * @param def Value to return if the setting is not defined.
-         *
-         * @return The setting's current value, or 'def' if it is not defined
-         * or not a valid integer.
-         */
-        public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
-            return getBooleanForUser(cr, name, def, UserHandle.myUserId());
-        }
-
-        /** @hide */
-        public static boolean getBooleanForUser(ContentResolver cr, String name, boolean def,
-                                                int userHandle) {
-            final String v = getStringForUser(cr, name, userHandle);
-            try {
-                if (v != null) {
-                    return "1".equals(v);
-                } else {
-                    return def;
-                }
-            } catch (NumberFormatException e) {
-                return def;
-            }
-        }
-
-        /**
          * Convenience function for updating a single settings value as an
          * integer. This will either create a new entry in the table if the
          * given name does not exist, or modify the value of the existing row
@@ -1316,13 +1283,45 @@ public final class Settings {
 
         /**
          * @hide
+         * Convenience function for retrieving a single system settings value
+         * as a boolean. Note that internally setting values are always
+         * stored as strings; this function converts the string to a boolean
+         * for you. It will only return true if the stored value is "1"
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param def Value to return if the setting is not defined.
+         *
+         * @return The setting's current value, or 'def' if it is not defined
+         * or not a valid integer.
+         */
+        public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
+            return getBooleanForUser(cr, name, def, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean getBooleanForUser(ContentResolver cr, String name, boolean def,
+                                                int userHandle) {
+            String v = getStringForUser(cr, name, userHandle);
+            try {
+                if(v != null)
+                    return "1".equals(v);
+                else
+                    return def;
+            } catch (NumberFormatException e) {
+                return def;
+            }
+        }
+
+        /**
+         * @hide
          * Convenience function for updating a single settings value as a
          * boolean. This will either create a new entry in the table if the
          * given name does not exist, or modify the value of the existing row
-         * with that name.  Note that internally setting values are always
+         * with that name. Note that internally setting values are always
          * stored as strings, so this function converts the given value to a
          * string (1 or 0) before storing it.
-         * 
+         *
          * @param cr The ContentResolver to access.
          * @param name The name of the setting to modify.
          * @param value The new value for the setting.
@@ -1336,6 +1335,46 @@ public final class Settings {
         public static boolean putBooleanForUser(ContentResolver cr, String name, boolean value,
                                                 int userHandle) {
             return putStringForUser(cr, name, value ? "1" : "0", userHandle);
+        }
+
+        /**
+         * @hide
+         * Methods to handle storing and retrieving arraylists
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to modify.
+         * @param value The new value for the setting.
+         * @return true if the value was set, false on database errors
+         */
+        public static boolean putArrayList(ContentResolver cr, String name, ArrayList<String> list) {
+            return putArrayListForUser(cr, name, list, UserHandle.myUserId());
+        }
+
+        public static boolean putArrayListForUser(ContentResolver cr, String name, ArrayList<String> list, int userHandle) {
+            if (list != null && list.size() > 0) {
+                String joined = TextUtils.join("|",list);
+                return putStringForUser(cr, name, joined, userHandle);
+            } else {
+                return putStringForUser(cr, name, "", userHandle);
+            }
+        }
+
+        public static ArrayList<String> getArrayList(ContentResolver cr, String name) {
+            return getArrayListForUser(cr, name,  UserHandle.myUserId());
+        }
+
+        public static ArrayList<String> getArrayListForUser(ContentResolver cr, String name, int userHandle) {
+            String v = getStringForUser(cr, name, userHandle);
+            ArrayList<String> list = new ArrayList<String>();
+            if (v != null) {
+                if (!v.isEmpty()){
+                    String[] split = v.split("\\|");
+                    for (String i : split) {
+                        list.add(i);
+                    }
+                }
+            }
+            return list;
         }
 
         /**
@@ -1512,100 +1551,6 @@ public final class Settings {
         public static boolean putFloatForUser(ContentResolver cr, String name, float value,
                 int userHandle) {
             return putStringForUser(cr, name, Float.toString(value), userHandle);
-        }
-
-        /**
-         * @hide
-         * Convenience function for retrieving a single system settings value
-         * as a boolean. Note that internally setting values are always
-         * stored as strings; this function converts the string to a boolean
-         * for you. It will only return true if the stored value is "1"
-         *
-         * @param cr The ContentResolver to access.
-         * @param name The name of the setting to retrieve.
-         * @param def Value to return if the setting is not defined.
-         *
-         * @return The setting's current value, or 'def' if it is not defined
-         * or not a valid integer.
-         */
-        public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
-            return getBooleanForUser(cr, name, def, UserHandle.myUserId());
-        }
-
-        /** @hide */
-        public static boolean getBooleanForUser(ContentResolver cr, String name, boolean def, int userHandle) {
-            String v = getStringForUser(cr, name, userHandle);
-            try {
-                if(v != null)
-                    return "1".equals(v);
-                else
-                    return def;
-            } catch (NumberFormatException e) {
-                return def;
-            }
-        }
-
-        /**
-         * @hide
-         * Convenience function for updating a single settings value as a
-         * boolean. This will either create a new entry in the table if the
-         * given name does not exist, or modify the value of the existing row
-         * with that name. Note that internally setting values are always
-         * stored as strings, so this function converts the given value to a
-         * string (1 or 0) before storing it.
-         *
-         * @param cr The ContentResolver to access.
-         * @param name The name of the setting to modify.
-         * @param value The new value for the setting.
-         * @return true if the value was set, false on database errors
-         */
-        public static boolean putBoolean(ContentResolver cr, String name, boolean value) {
-            return putBooleanForUser(cr, name, value, UserHandle.myUserId());
-        }
-
-        /** @hide */
-        public static boolean putBooleanForUser(ContentResolver cr, String name, boolean value, int userHandle) {
-            return putStringForUser(cr, name, value ? "1" : "0", userHandle);
-        }
-
-        /**
-         * @hide
-         * Methods to handle storing and retrieving arraylists
-         *
-         * @param cr The ContentResolver to access.
-         * @param name The name of the setting to modify.
-         * @param value The new value for the setting.
-         * @return true if the value was set, false on database errors
-         */
-        public static boolean putArrayList(ContentResolver cr, String name, ArrayList<String> list) {
-            return putArrayListForUser(cr, name, list, UserHandle.myUserId());
-        }
-
-        public static boolean putArrayListForUser(ContentResolver cr, String name, ArrayList<String> list, int userHandle) {
-            if (list != null && list.size() > 0) {
-                String joined = TextUtils.join("|",list);
-                return putStringForUser(cr, name, joined, userHandle);
-            } else {
-                return putStringForUser(cr, name, "", userHandle);
-            }
-        }
-
-        public static ArrayList<String> getArrayList(ContentResolver cr, String name) {
-            return getArrayListForUser(cr, name,  UserHandle.myUserId());
-        }
-
-        public static ArrayList<String> getArrayListForUser(ContentResolver cr, String name, int userHandle) {
-            String v = getStringForUser(cr, name, userHandle);
-            ArrayList<String> list = new ArrayList<String>();
-            if (v != null) {
-                if (!v.isEmpty()){
-                    String[] split = v.split("\\|");
-                    for (String i : split) {
-                        list.add(i);
-                    }
-                }
-            }
-            return list;
         }
 
         /**
