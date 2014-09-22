@@ -1787,4 +1787,69 @@
     <item quantity="other" msgid="5408537517529822157">"%d小时"</item>
   </plurals>
     <string name="zen_mode_forever" msgid="4316804956488785559">"无限期"</string>
+    <!-- App Ops -->
+    <string name="permission_remember_choice">记住</string>
+    <string name="permission">权限</string>
+    <string-array name="app_ops_labels">
+        <item>试图获取位置信息</item>
+        <item>试图获取位置信息</item>
+        <item>试图获取位置信息</item>
+        <item>试图使用震动器</item>
+        <item>试图读取联系人</item>
+        <item>试图写联系人</item>
+        <item>试图读取通话记录</item>
+        <item>试图写通话记录</item>
+        <item>试图读取日程表</item>
+        <item>试图修改日程表</item>
+        <item>试图获取位置信息</item>
+        <item>试图发出通知</item>
+        <item>试图获取位置信息</item>
+        <item>试图拨打电话</item>
+        <item>试图读取短信</item>
+        <item>试图写短信</item>
+        <item>试图收取短信</item>
+        <item>试图收取短信</item>
+        <item>试图收取彩信</item>
+        <item>试图收取短信</item>
+        <item>试图发送短信</item>
+        <item>试图读取短信</item>
+        <item>试图写短信</item>
+        <item>试图修改设置</item>
+        <item>试图在顶层绘图</item>
+        <item>试图获取通知</item>
+        <item>试图使用摄像头</item>
+        <item>试图录音</item>
+        <item>试图放音</item>
+        <item>试图读取剪贴板</item>
+        <item>试图修改剪贴板</item>
+        <item>试图控制多媒体按钮</item>
+        <item>试图控制音频焦点</item>
+        <item>试图控制主音量</item>
+        <item>试图控制语音音量</item>
+        <item>试图控制铃声音量</item>
+        <item>试图控制多媒体音量</item>
+        <item>试图控制闹钟音量</item>
+        <item>试图控制通知音量</item>
+        <item>试图控制蓝牙音量</item>
+        <item>试图阻止手机休眠</item>
+        <item>试图获取位置信息</item>
+        <item>试图获取位置信息</item>
+        <item>试图获取使用情况统计信息</item>
+        <item>试图使麦克风静音</item>
+        <item>试图弹出提示窗口</item>
+        <item>试图投影媒体</item>
+        <item>试图激活VPN</item>
+        <item>试图开关WLAN</item>
+        <item>试图开关蓝牙</item>
+        <item>试图发送彩信</item>
+        <item>试图读取彩信</item>
+        <item>试图写彩信</item>
+        <item>试图自启动</item>
+        <item>试图开关NFC</item>
+        <item>试图删除短信</item>
+        <item>试图删除彩信</item>
+        <item>试图删除联系人</item>
+        <item>试图删除通话记录</item>
+        <item>试图打开移动数据</item>
+    </string-array>
 </resources>
