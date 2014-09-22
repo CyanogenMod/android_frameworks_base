@@ -227,6 +227,13 @@ public abstract class Connection extends Conferenceable {
     public static final int CAPABILITY_CAN_PAUSE_VIDEO = 0x00100000;
 
     /**
+     * Add participant in an active or conference call option
+     *
+     * @hide
+     */
+    public static final int CAPABILITY_ADD_PARTICIPANT = 0x02000000;
+
+    /**
      * For a conference, indicates the conference will not have child connections.
      * <p>
      * An example of a conference with child connections is a GSM conference call, where the radio

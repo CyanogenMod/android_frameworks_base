@@ -73,4 +73,6 @@ oneway interface IConnectionService {
     void onPostDialContinue(String callId, boolean proceed);
 
     void setLocalCallHold(String callId, boolean lchState);
+
+    void addParticipantWithConference(String callId, String recipients);
 }
