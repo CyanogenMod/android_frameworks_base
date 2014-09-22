@@ -40,10 +40,12 @@ public class SignalStrength implements Parcelable {
     /** @hide */
     public static final int SIGNAL_STRENGTH_GREAT = 4;
     /** @hide */
-    public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
+    public static final int SIGNAL_STRENGTH_EXCELLENT = 5;
+    /** @hide */
+    public static final int NUM_SIGNAL_STRENGTH_BINS = 6;
     /** @hide */
     public static final String[] SIGNAL_STRENGTH_NAMES = {
-        "none", "poor", "moderate", "good", "great"
+        "none", "poor", "moderate", "good", "great", "excellent"
     };
 
     /** @hide */
@@ -787,6 +789,24 @@ public class SignalStrength implements Parcelable {
         else if (mLteRsrp >= -113) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
         else if (mLteRsrp >= -120) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
         else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+
+        return rsrpIconLevel;
+    }
+
+    /**
+     * Get LTE as level 0..4
+     *
+     * @hide
+     */
+    public int getLteLevelByRsrp() {
+        int rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+
+        if (mLteRsrp > -44) rsrpIconLevel = -1;
+        else if (mLteRsrp >= -97) rsrpIconLevel = SIGNAL_STRENGTH_EXCELLENT;
+        else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
+        else if (mLteRsrp >= -110) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
+        else if (mLteRsrp >= -115) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
+        else if (mLteRsrp >= -120) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
 
         return rsrpIconLevel;
     }

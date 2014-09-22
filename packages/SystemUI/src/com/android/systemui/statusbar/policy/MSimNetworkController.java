@@ -653,6 +653,15 @@ public class MSimNetworkController extends NetworkController {
                             Slog.d(TAG, "updateTelephonySignalStrength, data type is lte, level = "
                                 + level + " | " + mMSimSignalStrength[subscription]);
                         }
+                    } else if (mShowAlternateRsrpSignalLevelforLTE) {
+                        if (mMSimServiceState[subscription].getDataNetworkType() ==
+                                TelephonyManager.NETWORK_TYPE_LTE) {
+                            int level = mMSimSignalStrength[subscription].getLteLevelByRsrp();
+                            mLastSignalLevel = iconLevel = (level == -1 ? 0 : level);
+                            Slog.d(TAG, "updateAlternateTelephonySignalStrength, data type is lte" +
+                                    ", level = " + level + " | "
+                                    + mMSimSignalStrength[subscription]);
+                        }
                     }
                 }
 
