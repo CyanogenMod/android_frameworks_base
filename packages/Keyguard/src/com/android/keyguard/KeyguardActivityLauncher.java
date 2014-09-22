@@ -36,6 +36,7 @@ import android.os.UserHandle;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.provider.MediaStore;
+import android.provider.Telephony;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -147,6 +148,10 @@ public abstract class KeyguardActivityLauncher {
             intent.putExtra("thread_id", bundle.getLong("thread_id", -1));
             intent.putExtra("_id", bundle.getLong("_id", -1));
             intent.putExtra("type", bundle.getString("type", ""));
+        }
+        final String smsAppPackage = Telephony.Sms.getDefaultSmsPackage(getContext());
+        if (smsAppPackage != null) {
+            intent.setPackage(smsAppPackage);
         }
         launchActivity(intent, false, false, null, null);
     }
