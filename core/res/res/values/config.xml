@@ -1908,9 +1908,9 @@
         <item>Trying to access location</item>
         <item>Trying to use vibrate</item>
         <item>Trying to read contacts</item>
-        <item>Trying to modify contacts</item>
+        <item>Trying to write contacts</item>
         <item>Trying to read call log</item>
-        <item>Trying to modify call log</item>
+        <item>Trying to write call log</item>
         <item>Trying to read calendar</item>
         <item>Trying to modify calendar</item>
         <item>Trying to access location</item>
@@ -1918,14 +1918,14 @@
         <item>Trying to access location</item>
         <item>Trying to make phone call</item>
         <item>Trying to read SMS</item>
-        <item>Trying to write/modify SMS</item>
+        <item>Trying to write SMS</item>
         <item>Trying to receive SMS</item>
         <item>Trying to receive emergency SMS</item>
         <item>Trying to receive MMS</item>
         <item>Trying to receive WAP push</item>
         <item>Trying to send SMS</item>
         <item>Trying to read ICC SMS</item>
-        <item>Trying to write/modify ICC SMS</item>
+        <item>Trying to write ICC SMS</item>
         <item>Trying to modify settings</item>
         <item>Trying to draw on top</item>
         <item>Trying to access notifications</item>
