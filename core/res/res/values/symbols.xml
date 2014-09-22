@@ -1427,6 +1427,7 @@
   <java-symbol type="string" name="lockscreen_permanent_disabled_sim_message_short" />
   <java-symbol type="string" name="lockscreen_carrier_default" />
   <java-symbol type="string" name="lockscreen_sim_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_locked_message_cm" />
   <java-symbol type="string" name="lockscreen_sim_puk_locked_message" />
   <java-symbol type="string" name="lockscreen_airplane_mode_on" />
   <java-symbol type="style" name="Animation.LockScreen" />
