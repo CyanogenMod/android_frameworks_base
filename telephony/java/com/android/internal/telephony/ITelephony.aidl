@@ -447,6 +447,13 @@ interface ITelephony {
     int getVoiceNetworkTypeForSubscriber(long subId);
 
     /**
+      * Return icc operator numeric for given subId
+      * @param subId user preferred subId.
+      * Returns icc operator numeric
+      */
+    String getIccOperatorNumeric(long subId);
+
+    /**
      * Return true if an ICC card is present
      */
     boolean hasIccCard();
