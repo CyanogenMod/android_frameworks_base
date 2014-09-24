@@ -157,6 +157,9 @@ public final class PhoneCapabilities {
         if ((capabilities & CALL_TYPE_MODIFIABLE) != 0) {
             builder.append(" CALL_TYPE_MODIFIABLE");
         }
+        if ((capabilities & ADD_PARTICIPANT) != 0) {
+            builder.append(" ADD_PARTICIPANT");
+        }
 
         builder.append("]");
         return builder.toString();
