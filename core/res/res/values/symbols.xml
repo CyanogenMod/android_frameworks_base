@@ -1969,24 +1969,6 @@
   <!-- External media format -->
   <java-symbol type="string" name="extmedia_format_message_cm" />
 
-  <!-- Used for storage notification -->
-  <java-symbol type="string" name="storage_internal" />
-  <java-symbol type="string" name="storage_sd_card" />
-  <java-symbol type="string" name="storage_usb" />
-
-  <java-symbol type="string" name="storage_badremoval_notification_message" />
-  <java-symbol type="string" name="storage_badremoval_notification_title" />
-  <java-symbol type="string" name="storage_checking_notification_message" />
-  <java-symbol type="string" name="storage_checking_notification_title" />
-  <java-symbol type="string" name="storage_nofs_notification_message" />
-  <java-symbol type="string" name="storage_nofs_notification_title" />
-  <java-symbol type="string" name="storage_nomedia_notification_message" />
-  <java-symbol type="string" name="storage_nomedia_notification_title" />
-  <java-symbol type="string" name="storage_safe_unmount_notification_message" />
-  <java-symbol type="string" name="storage_safe_unmount_notification_title" />
-  <java-symbol type="string" name="storage_unmountable_notification_message" />
-  <java-symbol type="string" name="storage_unmountable_notification_title" />
-
   <java-symbol type="integer" name="config_LTE_antenna_bar_quantity_metric" />
   <java-symbol type="integer" name="config_LTE_RSRP_threshold_type" />
 
@@ -2003,4 +1985,36 @@
   <java-symbol type="anim" name="last_app_in" />
   <java-symbol type="anim" name="last_app_out" />
 
+  <!-- Used for storage notification -->
+  <java-symbol type="string" name="storage_internal" />
+  <java-symbol type="string" name="storage_sd_card" />
+  <java-symbol type="string" name="storage_usb" />
+
+  <!-- SD card storage notification -->
+  <java-symbol type="string" name="sd_ext_media_badremoval_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_badremoval_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_checking_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_checking_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_nofs_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_nofs_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_nomedia_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_nomedia_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_safe_unmount_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_safe_unmount_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_unmountable_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_unmountable_notification_title" />
+
+  <!-- USB storage notification -->
+  <java-symbol type="string" name="usb_ext_media_badremoval_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_badremoval_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_checking_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_checking_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_nofs_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_nofs_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_nomedia_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_nomedia_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_unmountable_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_unmountable_notification_title" />
 </resources>
