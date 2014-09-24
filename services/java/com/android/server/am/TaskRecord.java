@@ -173,6 +173,9 @@ final class TaskRecord extends ThumbnailHolder {
                 foundFront = true;
             }
         }
+        if(!foundFront) {
+            mActivities.get(0).frontOfTask = true;
+        }
     }
 
     /**
