@@ -191,6 +191,11 @@ public final class RemoteConnection {
         public void onConferenceChanged(
                 RemoteConnection connection,
                 RemoteConference conference) {}
+
+        /** @hide */
+        public void setPhoneAccountHandle(
+                RemoteConnection connection,
+                PhoneAccountHandle pHandle) {}
     }
 
     /** {@hide} */
@@ -896,6 +901,13 @@ public final class RemoteConnection {
             for (Callback c : mCallbacks) {
                 c.onConferenceChanged(this, conference);
             }
+        }
+    }
+
+    /** @hide */
+    void setPhoneAccountHandle(PhoneAccountHandle pHandle) {
+        for (Listener l : mListeners) {
+            l.setPhoneAccountHandle(this, pHandle);
         }
     }
 

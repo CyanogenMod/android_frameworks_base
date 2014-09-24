@@ -86,6 +86,7 @@ public abstract class Connection {
         public void onConferenceableConnectionsChanged(
                 Connection c, List<Connection> conferenceableConnections) {}
         public void onConferenceChanged(Connection c, Conference conference) {}
+        public void onPhoneAccountChanged(Connection c, PhoneAccountHandle pHandle) {}
     }
 
     /** @hide */
@@ -479,6 +480,7 @@ public abstract class Connection {
     private DisconnectCause mDisconnectCause;
     private Conference mConference;
     private ConnectionService mConnectionService;
+    private PhoneAccountHandle mPhoneAccountHandle = null;
 
     /**
      * Create a new Connection.
@@ -886,6 +888,23 @@ public abstract class Connection {
     }
 
     /**
+     * @hide.
+     */
+    public final void setPhoneAccountHandle(PhoneAccountHandle pHandle) {
+        mPhoneAccountHandle = pHandle;
+        for (Listener l : mListeners) {
+            l.onPhoneAccountChanged(this, pHandle);
+        }
+    }
+
+    /**
+     * @hide.
+     */
+    public final PhoneAccountHandle getPhoneAccountHandle() {
+        return mPhoneAccountHandle;
+    }
+
+    /*
      * @hide
      */
     public final void setConnectionService(ConnectionService connectionService) {
