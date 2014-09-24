@@ -213,7 +213,7 @@ interface ISms {
      *  broadcast when the message is delivered to the recipient.  The
      *  raw pdu of the status report is in the extended data ("pdu").
      */
-    void sendDataWithOrigPortUsingSubId(long subId, String callingPkg, in String destAddr,
+    void sendDataWithOrigPortUsingSubscriber(long subId, String callingPkg, in String destAddr,
         in String scAddr,in int destPort, in int origPort, in byte[] data,
         in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
@@ -313,7 +313,7 @@ interface ISms {
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
      */
-    void sendTextWithOptionsUsingSubId(in long subId, String callingPkg, in String destAddr,
+    void sendTextWithOptionsUsingSubscriber(in long subId, String callingPkg, in String destAddr,
             in String scAddr, in String text, in PendingIntent sentIntent,
             in PendingIntent deliveryIntent, in int priority, in boolean isExpectMore,
             in int validityPeriod);
@@ -330,6 +330,21 @@ interface ISms {
      *  the same time an SMS received from radio is acknowledged back.
      */
     void injectSmsPdu(in byte[] pdu, String format, in PendingIntent receivedIntent);
+
+    /**
+     * Inject an SMS PDU into the android platform.
+     *
+     * @param subId on which SMS PDU to be injected into android application framework
+     * @param pdu is the byte array of pdu to be injected into android application framework
+     * @param format is the format of SMS pdu (android.telephony.SmsMessage.FORMAT_3GPP or
+     * android.telephony.SmsMessage.FORMAT_3GPP2)
+     * @param receivedIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is successfully received by the
+     *  android application framework. This intent is broadcasted at
+     *  the same time an SMS received from radio is acknowledged back.
+     */
+    void injectSmsPduForSubscriber(in long subId, in byte[] pdu, String format,
+            in PendingIntent receivedIntent);
 
     /**
      * Update the status of a pending (send-by-IP) SMS message and resend by PSTN if necessary.
@@ -436,7 +451,7 @@ interface ISms {
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
      */
-    void sendMultipartTextWithOptionsUsingSubId(in long subId, String callingPkg,
+    void sendMultipartTextWithOptionsUsingSubscriber(in long subId, String callingPkg,
             in String destinationAddress, in String scAddress, in List<String> parts,
             in List<PendingIntent> sentIntents, in List<PendingIntent> deliveryIntents,
             in int priority, in boolean isExpectMore, in int validityPeriod);
