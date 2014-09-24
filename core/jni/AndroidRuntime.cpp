@@ -459,6 +459,7 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
     bool checkJni = false;
     bool checkDexSum = false;
     bool logStdio = false;
+    bool isArt = false;
     enum {
       kEMDefault,
       kEMIntPortable,
@@ -466,6 +467,10 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
       kEMJitCompiler,
     } executionMode = kEMDefault;
 
+    property_get("persist.sys.dalvik.vm.lib", propBuf, "");
+    if (strcmp(propBuf, "libart.so") == 0) {
+        isArt = true;
+    }
 
     property_get("dalvik.vm.checkjni", propBuf, "");
     if (strcmp(propBuf, "true") == 0) {
@@ -478,13 +483,15 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
         }
     }
 
-    property_get("dalvik.vm.execution-mode", propBuf, "");
-    if (strcmp(propBuf, "int:portable") == 0) {
-        executionMode = kEMIntPortable;
-    } else if (strcmp(propBuf, "int:fast") == 0) {
-        executionMode = kEMIntFast;
-    } else if (strcmp(propBuf, "int:jit") == 0) {
-        executionMode = kEMJitCompiler;
+    if (!isArt) {
+        property_get("dalvik.vm.execution-mode", propBuf, "");
+        if (strcmp(propBuf, "int:portable") == 0) {
+            executionMode = kEMIntPortable;
+        } else if (strcmp(propBuf, "int:fast") == 0) {
+            executionMode = kEMIntFast;
+        } else if (strcmp(propBuf, "int:jit") == 0) {
+            executionMode = kEMJitCompiler;
+        }
     }
 
     property_get("dalvik.vm.stack-trace-file", stackTraceFileBuf, "");
