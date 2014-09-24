@@ -1757,15 +1757,8 @@ public class WifiStateMachine extends StateMachine {
                         ifcg = mNwService.getInterfaceConfig(intf);
                         if (ifcg != null) {
                             /* IP/netmask: 192.168.43.1/255.255.255.0 */
-                            String addr = Settings.Global.getString(mContext.getContentResolver(),
-                                    Settings.Global.TETHER_WIFI_NETWORK);
-                            if (addr != null && (addr.length() > 0)) {
-                                addr = addr.substring(0, addr.lastIndexOf('.')) + ".1";
-                            } else {
-                                addr = "192.168.43.1";
-                            }
                             ifcg.setLinkAddress(new LinkAddress(
-                                    NetworkUtils.numericToInetAddress(addr), 24));
+                                    NetworkUtils.numericToInetAddress("192.168.43.1"), 24));
                             ifcg.setInterfaceUp();
 
                             mNwService.setInterfaceConfig(intf, ifcg);

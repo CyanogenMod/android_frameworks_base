@@ -5002,6 +5002,7 @@ public final class Settings {
         public static final String PIE_NOTIFICATIONS = "pie_notifications";
 
         // PIE COLORS EVERYWHERE! //
+
         /**
          * @hide
          */
@@ -6895,8 +6896,6 @@ public final class Settings {
             MOVED_TO_GLOBAL.add(Settings.Global.TETHER_DUN_REQUIRED);
             MOVED_TO_GLOBAL.add(Settings.Global.TETHER_SUPPORTED);
             MOVED_TO_GLOBAL.add(Settings.Global.USB_MASS_STORAGE_ENABLED);
-            MOVED_TO_GLOBAL.add(Settings.Global.TETHER_WIFI_NETWORK);
-            MOVED_TO_GLOBAL.add(Settings.Global.TETHER_USB_NETWORK);
             MOVED_TO_GLOBAL.add(Settings.Global.USE_GOOGLE_MAIL);
             MOVED_TO_GLOBAL.add(Settings.Global.WEB_AUTOFILL_QUERY_URL);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_COUNTRY_CODE);
@@ -9552,20 +9551,6 @@ public final class Settings {
         * @hide
         */
        public static final String TETHER_DUN_APN = "tether_dun_apn";
-
-       /**
-        * Used to let the device specify a specific network for WiFI Tethering.
-        * Defaults to empty (use system default networks).
-        * @hide
-        */
-       public static final String TETHER_WIFI_NETWORK = "tether_wifi_network";
-
-       /**
-        * Used to let the device specify a specific network for USB Tethering.
-        * Defaults to empty (use system default networks).
-        * @hide
-        */
-       public static final String TETHER_USB_NETWORK = "tether_usb_network";
 
        /**
         * USB Mass Storage Enabled

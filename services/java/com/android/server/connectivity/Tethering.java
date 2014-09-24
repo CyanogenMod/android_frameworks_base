@@ -1351,28 +1351,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 }
                 return true;
             }
-            private void setDhcpRangeOverrides() {
-                /* override Usb tether network if there exists a global setting */
-                if ((mDhcpRange.length) > 1) {
-                    String addr = Settings.Global.getString(mContext.getContentResolver(),
-                            Settings.Global.TETHER_USB_NETWORK);
-                    if ((addr != null) && (addr.length() > 0)) {
-                        addr = addr.substring(0, addr.lastIndexOf('.'));
-                        mDhcpRange[0] = addr + ".2";
-                        mDhcpRange[1] = addr + ".254";
-                    }
-                }
-                /* override WiFi tether network if there exists a global setting */
-                if ((mDhcpRange.length) > 3) {
-                    String addr = Settings.Global.getString(mContext.getContentResolver(),
-                            Settings.Global.TETHER_WIFI_NETWORK);
-                    if ((addr != null) && (addr.length() > 0)) {
-                        addr = addr.substring(0, addr.lastIndexOf('.'));
-                        mDhcpRange[2] = addr + ".2";
-                        mDhcpRange[3] = addr + ".254";
-                    }
-                }
-            }
             protected boolean turnOnMasterTetherSettings() {
                 try {
                     mNMService.setIpForwardingEnabled(true);
@@ -1381,12 +1359,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                     return false;
                 }
                 try {
-                    setDhcpRangeOverrides();
                     mNMService.startTethering(mDhcpRange);
                 } catch (Exception e) {
                     try {
                         mNMService.stopTethering();
-                        setDhcpRangeOverrides();
                         mNMService.startTethering(mDhcpRange);
                     } catch (Exception ee) {
                         transitionTo(mStartTetheringErrorState);
