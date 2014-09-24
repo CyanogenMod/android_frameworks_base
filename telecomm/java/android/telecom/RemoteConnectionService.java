@@ -294,6 +294,12 @@ final class RemoteConnectionService {
                         .setConferenceableConnections(conferenceable);
             }
         }
+
+        @Override
+        public void setPhoneAccountHandle(String callId, PhoneAccountHandle pHandle) {
+            findConnectionForAction(callId, "setPhoneAccountHandle")
+                    .setPhoneAccountHandle(pHandle);
+        }
     };
 
     private final ConnectionServiceAdapterServant mServant =
