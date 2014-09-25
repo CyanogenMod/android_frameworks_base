@@ -142,6 +142,32 @@
     <!-- milliseconds before the heads up notification accepts touches. -->
     <integer name="heads_up_sensitivity_delay">700</integer>
 
+    <!-- Show emergency call label only without carrier label on expanded notification area -->
+    <bool name="config_showEmergencyCallLabelOnly">true</bool>
+    <bool name="config_showDataConnectionView">true</bool>
+    <bool name="config_disableWifiAndBluetooth">false</bool>
+
+    <!-- style of status bar:
+        0: Default Android style
+        1: Show data activity with data type at the left side of
+           signal icon, and signal icon on slot 0 may be two icons
+           stacked, the upper one is to show 3G, and the lower one
+           is to show 1X.
+        2: Do not show data activity besides signal icon, instead,
+           it shows data activity within signal view.
+        3: Show data activity with data type at the left side
+           of signal icon, and do not show two stacked icon on
+           one slot.
+    -->
+    <integer name="status_bar_style">0</integer>
+
+    <integer-array name="config_showVoiceAndDataForSub">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+    </integer-array>
+    <bool name="config_showRsrpSignalLevelforLTE">false</bool>
+
     <!-- The duration in seconds to wait before the dismiss buttons are shown. -->
     <integer name="recents_task_bar_dismiss_delay_seconds">1</integer>
     <!-- The min animation duration for animating views that are currently visible. -->

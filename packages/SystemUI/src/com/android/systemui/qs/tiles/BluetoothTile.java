@@ -71,8 +71,10 @@ public class BluetoothTile extends QSTile<QSTile.BooleanState>  {
 
     @Override
     protected void handleClick() {
-        final boolean isEnabled = (Boolean)mState.value;
-        mController.setBluetoothEnabled(!isEnabled);
+        if (!isRadioProhibited()) {
+            final boolean isEnabled = (Boolean)mState.value;
+            mController.setBluetoothEnabled(!isEnabled);
+        }
     }
 
     @Override
@@ -131,6 +133,14 @@ public class BluetoothTile extends QSTile<QSTile.BooleanState>  {
         } else {
             return mContext.getString(R.string.accessibility_quick_settings_bluetooth_changed_off);
         }
+    }
+
+    public boolean isRadioProhibited() {
+        boolean airModeOn = (android.provider.Settings.System.getInt(
+                mContext.getContentResolver(),
+                android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0);
+        boolean disable = mContext.getResources().getBoolean(R.bool.config_disableWifiAndBluetooth);
+        return disable && airModeOn;
     }
 
     private final BluetoothController.Callback mCallback = new BluetoothController.Callback() {

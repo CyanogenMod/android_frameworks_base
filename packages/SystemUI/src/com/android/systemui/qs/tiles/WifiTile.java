@@ -81,8 +81,10 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
 
     @Override
     protected void handleClick() {
-        mState.copyTo(mStateBeforeClick);
-        mController.setWifiEnabled(!mState.enabled);
+        if (!isRadioProhibited()) {
+            mState.copyTo(mStateBeforeClick);
+            mController.setWifiEnabled(!mState.enabled);
+        }
     }
 
     @Override
@@ -159,6 +161,14 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
             return string.substring(1, length - 1);
         }
         return string;
+    }
+
+    public boolean isRadioProhibited() {
+        boolean airModeOn = (android.provider.Settings.System.getInt(
+                mContext.getContentResolver(),
+                android.provider.Settings.System.AIRPLANE_MODE_ON, 0) != 0);
+        boolean disable = mContext.getResources().getBoolean(R.bool.config_disableWifiAndBluetooth);
+        return disable && airModeOn;
     }
 
     private static final class CallbackInfo {
