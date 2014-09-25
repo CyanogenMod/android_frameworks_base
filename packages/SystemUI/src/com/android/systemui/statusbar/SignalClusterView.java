@@ -20,6 +20,8 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +43,14 @@ public class SignalClusterView
     static final String TAG = "SignalClusterView";
     static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
+    private final int STATUS_BAR_STYLE_ANDROID_DEFAULT = 0;
+    private final int STATUS_BAR_STYLE_CDMA_1X_COMBINED = 1;
+    private final int STATUS_BAR_STYLE_DEFAULT_DATA = 2;
+    private final int STATUS_BAR_STYLE_DATA_VOICE = 3;
+
+    private int mStyle = 0;
+    private int[] mShowTwoBars;
+
     NetworkControllerImpl mNC;
     SecurityController mSC;
 
@@ -50,6 +60,28 @@ public class SignalClusterView
     private boolean mMobileVisible = false;
     private int mMobileStrengthId = 0, mMobileTypeId = 0, mMobileActivityId = 0;
     private int mNoSimIconId = 0;
+
+    //cdma and 1x
+    private boolean mMobileCdmaVisible = false;
+    private boolean mMobileCdma1xOnlyVisible = false;
+    private int mMobileCdma3gId = 0;
+    private int mMobileCdma1xId = 0;
+    private int mMobileCdma1xOnlyId = 0;
+    private ViewGroup mMobileCdmaGroup;
+    private ImageView mMobileCdma3g, mMobileCdma1x, mMobileCdma1xOnly;
+
+    //data & voice
+    private boolean mMobileDataVoiceVisible = false;
+    private int mMobileSignalDataId = 0;
+    private int mMobileSignalVoiceId = 0;
+    private ViewGroup mMobileDataVoiceGroup;
+    private ImageView mMobileSignalData, mMobileSignalVoice;
+
+    //data
+    private boolean mDataVisible = false;
+    private int mDataActivityId = 0;
+    private ViewGroup mDataGroup;
+    private ImageView mDataActivity;
     private boolean mIsAirplaneMode = false;
     private int mAirplaneIconId = 0;
     private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
@@ -74,6 +106,10 @@ public class SignalClusterView
 
     public SignalClusterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        mStyle = context.getResources().getInteger(R.integer.status_bar_style);
+        mShowTwoBars = context.getResources().getIntArray(
+                R.array.config_showVoiceAndDataForSub);
     }
 
     public void setNetworkController(NetworkControllerImpl nc) {
@@ -108,6 +144,20 @@ public class SignalClusterView
         mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
         mNoSimSlot      = (ImageView) findViewById(R.id.no_sim);
+        //cdma and 1x
+        mMobileCdmaGroup    = (ViewGroup) findViewById(R.id.mobile_signal_cdma);
+        mMobileCdma3g       = (ImageView) findViewById(R.id.mobile_signal_3g);
+        mMobileCdma1x       = (ImageView) findViewById(R.id.mobile_signal_1x);
+        mMobileCdma1xOnly   = (ImageView) findViewById(R.id.mobile_signal_1x_only);
+
+        //data & voice
+        mMobileDataVoiceGroup = (ViewGroup) findViewById(R.id.mobile_data_voice);
+        mMobileSignalData     = (ImageView) findViewById(R.id.mobile_signal_data);
+        mMobileSignalVoice    = (ImageView) findViewById(R.id.mobile_signal_voice);
+
+        //data
+        mDataGroup          = (ViewGroup) findViewById(R.id.data_combo);
+        mDataActivity       = (ImageView) findViewById(R.id.data_inout);
         mAirplane       = (ImageView) findViewById(R.id.airplane);
         mWifiAirplaneSpacer =         findViewById(R.id.wifi_airplane_spacer);
         mWifiSignalSpacer =           findViewById(R.id.wifi_signal_spacer);
@@ -126,7 +176,17 @@ public class SignalClusterView
         mMobileActivity = null;
         mMobileType     = null;
         mNoSimSlot      = null;
-        mAirplane       = null;
+        mMobileCdmaGroup    = null;
+        mMobileCdma3g       = null;
+        mMobileCdma1x       = null;
+        mMobileCdma1xOnly   = null;
+        mDataGroup          = null;
+        mDataActivity       = null;
+        mAirplane           = null;
+
+        mMobileDataVoiceGroup = null;
+        mMobileSignalData     = null;
+        mMobileSignalVoice    = null;
 
         super.onDetachedFromWindow();
     }
@@ -168,6 +228,60 @@ public class SignalClusterView
         mRoaming = roaming;
         mIsMobileTypeIconWide = isTypeIconWide;
         mNoSimIconId = noSimIcon;
+
+        if (showMobileActivity()) {
+            mDataActivityId = 0;
+            mDataVisible = false;
+        } else {
+            mMobileActivityId = 0;
+            mDataActivityId = activityIcon;
+            mDataVisible = (activityIcon != 0) ? true : false;
+        }
+
+        if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
+            if (!isRoaming() && showDataAndVoice()) {
+                mMobileCdmaVisible = true;
+                mMobileCdma1xOnlyVisible = false;
+                mMobileStrengthId = 0;
+
+                mMobileCdma3gId = strengthIcon;
+                mMobileCdma1xId = getCdma2gId(mMobileCdma3gId);
+                if (isCdmaDataOnlyMode()) {
+                    mMobileCdmaVisible = false;
+                    mMobileCdma1xOnlyVisible = false;
+                    mMobileStrengthId = convertMobileStrengthIcon(strengthIcon);
+                }
+            } else if (show1xOnly() || isRoaming()) {
+                mMobileCdmaVisible = false;
+                mMobileCdma1xOnlyVisible = true;
+                mMobileStrengthId = 0;
+
+                if (mDataVisible && getCdmaRoamId(strengthIcon) != 0) {
+                    mMobileCdma1xOnlyId = getCdmaRoamId(strengthIcon);
+                } else {
+                    mMobileCdma1xOnlyId = strengthIcon;
+                }
+            } else {
+                mMobileCdmaVisible = false;
+                mMobileCdma1xOnlyVisible = false;
+
+                mMobileStrengthId = convertMobileStrengthIcon(strengthIcon);
+            }
+        } else if (mStyle == STATUS_BAR_STYLE_DATA_VOICE) {
+            if (showBothDataAndVoice() && getMobileVoiceId() != 0) {
+                mMobileStrengthId = 0;
+                mMobileDataVoiceVisible = true;
+                mMobileSignalDataId = strengthIcon;
+                mMobileSignalVoiceId = getMobileVoiceId();
+            } else {
+                mMobileStrengthId = convertMobileStrengthIcon(mMobileStrengthId);
+                mMobileDataVoiceVisible = false;
+            }
+        } else {
+            mMobileCdmaVisible = false;
+            mMobileCdma1xOnlyVisible = false;
+            mMobileDataVoiceVisible = false;
+        }
 
         apply();
     }
@@ -248,14 +362,16 @@ public class SignalClusterView
                     mWifiStrengthId, mWifiActivityId));
 
         if (mMobileVisible && !mIsAirplaneMode) {
-            mMobile.setImageResource(mMobileStrengthId);
-            mMobileActivity.setImageResource(mMobileActivityId);
-            mMobileType.setImageResource(mMobileTypeId);
-            mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
+            updateMobile();
+            updateCdma();
+            updateData();
+            updateDataVoice();
             mMobileGroup.setVisibility(View.VISIBLE);
-            mNoSimSlot.setImageResource(mNoSimIconId);
         } else {
             mMobileGroup.setVisibility(View.GONE);
+            mMobileCdmaGroup.setVisibility(View.GONE);
+            mMobileCdma1xOnly.setVisibility(View.GONE);
+            mDataGroup.setVisibility(View.GONE);
         }
 
         if (mIsAirplaneMode) {
@@ -284,7 +400,337 @@ public class SignalClusterView
                     (mMobileVisible ? "VISIBLE" : "GONE"),
                     mMobileStrengthId,  mMobileActivityId, mMobileTypeId));
 
-        mMobileType.setVisibility((mRoaming || mMobileTypeId != 0) ? View.VISIBLE : View.GONE);
+        if (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT) {
+            mMobileType.setVisibility(
+                    (mRoaming || mMobileTypeId != 0) ? View.VISIBLE : View.GONE);
+        } else {
+            mMobileType.setVisibility(View.GONE);
+        }
+
+        if (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT) {
+            if (mNoSimIconId != 0) {
+                mNoSimSlot.setVisibility(View.VISIBLE);
+                mMobile.setVisibility(View.GONE);
+            } else {
+                mNoSimSlot.setVisibility(View.GONE);
+                mMobile.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void updateMobile() {
+        mMobile.setImageResource(mMobileStrengthId);
+        mMobileType.setImageResource(mMobileTypeId);
+        mMobileActivity.setImageResource(mMobileActivityId);
+        mNoSimSlot.setImageResource(mNoSimIconId);
+        mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
+    }
+
+    private void updateCdma() {
+        if (mMobileCdmaVisible) {
+            mMobileCdma3g.setImageResource(mMobileCdma3gId);
+            mMobileCdma1x.setImageResource(mMobileCdma1xId);
+            mMobileCdmaGroup.setVisibility(View.VISIBLE);
+        } else {
+            mMobileCdmaGroup.setVisibility(View.GONE);
+        }
+
+        if (mMobileCdma1xOnlyVisible) {
+            mMobileCdma1xOnly.setImageResource(mMobileCdma1xOnlyId);
+            mMobileCdma1xOnly.setVisibility(View.VISIBLE);
+        } else {
+            mMobileCdma1xOnly.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateData() {
+        if (mDataVisible) {
+            mDataActivity.setImageResource(mDataActivityId);
+            mDataGroup.setVisibility(View.VISIBLE);
+        } else {
+            mDataGroup.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateDataVoice() {
+        if (mMobileDataVoiceVisible) {
+            mMobileSignalData.setImageResource(mMobileSignalDataId);
+            mMobileSignalVoice.setImageResource(mMobileSignalVoiceId);
+            mMobileDataVoiceGroup.setVisibility(View.VISIBLE);
+        } else {
+            mMobileDataVoiceGroup.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean showBothDataAndVoice() {
+        if (mStyle != STATUS_BAR_STYLE_DATA_VOICE) {
+            return false;
+        }
+
+        if (mShowTwoBars[0] == 0) {
+            return false;
+        }
+
+        if (mNC == null) {
+            return false;
+        }
+
+        boolean ret = false;
+        int dataType = mNC.getDataNetworkType();
+        int voiceType = mNC.getVoiceNetworkType();
+        if ((dataType == TelephonyManager.NETWORK_TYPE_TD_SCDMA
+                || dataType == TelephonyManager.NETWORK_TYPE_LTE)
+            && voiceType == TelephonyManager.NETWORK_TYPE_GSM) {
+            ret = true;
+        }
+        return ret;
+    }
+
+    private boolean isCdmaDataOnlyMode() {
+        if (mStyle != STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
+            return false;
+        }
+        if (mNC == null) {
+            return false;
+        }
+        int dataType = mNC.getDataNetworkType();
+        int voiceType = mNC.getVoiceNetworkType();
+        return ((dataType == TelephonyManager.NETWORK_TYPE_LTE)
+                || (dataType == TelephonyManager.NETWORK_TYPE_EVDO_0)
+                || (dataType == TelephonyManager.NETWORK_TYPE_EVDO_A))
+                && voiceType == TelephonyManager.NETWORK_TYPE_UNKNOWN;
+    }
+
+    private boolean showDataAndVoice() {
+        if (mStyle != STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
+            return false;
+        }
+        if (mNC == null) {
+            return false;
+        }
+        int dataType = mNC.getDataNetworkType();
+        int voiceType = mNC.getVoiceNetworkType();
+        boolean ret = false;
+        if ((dataType == TelephonyManager.NETWORK_TYPE_EVDO_0
+                || dataType == TelephonyManager.NETWORK_TYPE_EVDO_0
+                || dataType == TelephonyManager.NETWORK_TYPE_EVDO_A
+                || dataType == TelephonyManager.NETWORK_TYPE_EVDO_B
+                || dataType == TelephonyManager.NETWORK_TYPE_EHRPD
+                || dataType == TelephonyManager.NETWORK_TYPE_LTE)
+                && (voiceType == TelephonyManager.NETWORK_TYPE_GSM
+                    || voiceType == TelephonyManager.NETWORK_TYPE_1xRTT)) {
+            ret = true;
+        }
+        return ret;
+    }
+
+    private boolean show1xOnly() {
+        if (mStyle != STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
+            return false;
+        }
+        if (mNC == null) {
+            return false;
+        }
+        int dataType = mNC.getDataNetworkType();
+        int voiceType = mNC.getVoiceNetworkType();
+        boolean ret = false;
+        if (dataType == TelephonyManager.NETWORK_TYPE_1xRTT
+                || dataType == TelephonyManager.NETWORK_TYPE_CDMA) {
+            ret = true;
+        }
+        return ret;
+    }
+
+    private boolean showMobileActivity() {
+        return (mStyle == STATUS_BAR_STYLE_DEFAULT_DATA)
+                || (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT);
+    }
+
+    private boolean isRoaming() {
+        return mMobileTypeId == R.drawable.stat_sys_data_fully_connected_roam;
+    }
+
+    private int getMobileVoiceId() {
+        if (mNC == null) {
+            return 0;
+        }
+        int retValue = 0;
+        int level = mNC.getGsmSignalLevel();
+        switch(level){
+            case SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN:
+                retValue = R.drawable.stat_sys_signal_0_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_POOR:
+                retValue = R.drawable.stat_sys_signal_1_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_MODERATE:
+                retValue = R.drawable.stat_sys_signal_2_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_GOOD:
+                retValue = R.drawable.stat_sys_signal_3_gsm;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_GREAT:
+                retValue = R.drawable.stat_sys_signal_4_gsm;
+                break;
+            default:
+                break;
+        }
+        return retValue;
+    }
+
+    private int convertMobileStrengthIcon(int icon) {
+        int returnVal = icon;
+        switch(icon){
+            case R.drawable.stat_sys_signal_0_3g:
+                returnVal = R.drawable.stat_sys_signal_0_3g_default;
+                break;
+            case R.drawable.stat_sys_signal_0_4g:
+                returnVal = R.drawable.stat_sys_signal_0_4g_default;
+                break;
+            case R.drawable.stat_sys_signal_1_3g:
+                returnVal = R.drawable.stat_sys_signal_1_3g_default;
+                break;
+            case R.drawable.stat_sys_signal_1_4g:
+                returnVal = R.drawable.stat_sys_signal_1_4g_default;
+                break;
+            case R.drawable.stat_sys_signal_2_3g:
+                returnVal = R.drawable.stat_sys_signal_2_3g_default;
+                break;
+            case R.drawable.stat_sys_signal_2_4g:
+                returnVal = R.drawable.stat_sys_signal_2_4g_default;
+                break;
+            case R.drawable.stat_sys_signal_3_3g:
+                returnVal = R.drawable.stat_sys_signal_3_3g_default;
+                break;
+            case R.drawable.stat_sys_signal_3_4g:
+                returnVal = R.drawable.stat_sys_signal_3_4g_default;
+                break;
+            case R.drawable.stat_sys_signal_4_3g:
+                returnVal = R.drawable.stat_sys_signal_4_3g_default;
+                break;
+            case R.drawable.stat_sys_signal_4_4g:
+                returnVal = R.drawable.stat_sys_signal_4_4g_default;
+                break;
+            case R.drawable.stat_sys_signal_0_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_0_3g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_0_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_0_4g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_1_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_1_3g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_1_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_1_4g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_2_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_2_3g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_2_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_2_4g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_3_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_3_3g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_3_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_3_4g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_4_3g_fully:
+                returnVal = R.drawable.stat_sys_signal_4_3g_default_fully;
+                break;
+            case R.drawable.stat_sys_signal_4_4g_fully:
+                returnVal = R.drawable.stat_sys_signal_4_4g_default_fully;
+                break;
+            default:
+                break;
+        }
+        return returnVal;
+    }
+
+    private int getCdma2gId(int icon) {
+        if (mNC == null) {
+            return 0;
+        }
+        int retValue = 0;
+        int level = mNC.getGsmSignalLevel();
+        switch(level){
+            case SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN:
+                retValue = R.drawable.stat_sys_signal_0_2g;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_POOR:
+                retValue = R.drawable.stat_sys_signal_1_2g;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_MODERATE:
+                retValue = R.drawable.stat_sys_signal_2_2g;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_GOOD:
+                retValue = R.drawable.stat_sys_signal_3_2g;
+                break;
+            case SignalStrength.SIGNAL_STRENGTH_GREAT:
+                retValue = R.drawable.stat_sys_signal_4_2g;
+                break;
+            default:
+                break;
+        }
+        return retValue;
+    }
+
+    private int getCdmaRoamId(int icon){
+        int returnVal = 0;
+        switch(icon){
+            case R.drawable.stat_sys_signal_0_2g_default_roam:
+            case R.drawable.stat_sys_signal_0_3g_default_roam:
+            case R.drawable.stat_sys_signal_0_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_0_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_1_2g_default_roam:
+            case R.drawable.stat_sys_signal_1_3g_default_roam:
+            case R.drawable.stat_sys_signal_1_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_1_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_2_2g_default_roam:
+            case R.drawable.stat_sys_signal_2_3g_default_roam:
+            case R.drawable.stat_sys_signal_2_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_2_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_3_2g_default_roam:
+            case R.drawable.stat_sys_signal_3_3g_default_roam:
+            case R.drawable.stat_sys_signal_3_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_3_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_4_2g_default_roam:
+            case R.drawable.stat_sys_signal_4_3g_default_roam:
+            case R.drawable.stat_sys_signal_4_4g_default_roam:
+                returnVal = R.drawable.stat_sys_signal_4_default_roam;
+                break;
+            case R.drawable.stat_sys_signal_0_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_0_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_0_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_0_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_1_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_1_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_1_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_1_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_2_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_2_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_2_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_2_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_3_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_3_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_3_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_3_default_fully_roam;
+                break;
+            case R.drawable.stat_sys_signal_4_2g_default_fully_roam:
+            case R.drawable.stat_sys_signal_4_3g_default_fully_roam:
+            case R.drawable.stat_sys_signal_4_4g_default_fully_roam:
+                returnVal = R.drawable.stat_sys_signal_4_default_fully_roam;
+                break;
+            default:
+                break;
+        }
+        return returnVal;
     }
 }
-

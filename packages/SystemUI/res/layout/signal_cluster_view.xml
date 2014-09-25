@@ -2,6 +2,8 @@
 <!--
 /* apps/common/assets/default/default/skins/StatusBar.xml
 **
+** Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+** Not a Contribution.
 ** Copyright 2011, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -56,6 +58,23 @@
         android:visibility="gone"
         />
     <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/data_combo"
+        android:visibility="gone"
+        >
+        <View
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:visibility="invisible"
+            />
+        <ImageView
+            android:id="@+id/data_inout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </FrameLayout>
+    <FrameLayout
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         >
@@ -64,6 +83,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
+            <LinearLayout
+                android:id="@+id/mobile_signal_cdma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/mobile_signal_3g"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:id="@+id/mobile_signal_1x"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/mobile_signal_1x_only"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+            />
+            <LinearLayout
+                android:id="@+id/mobile_data_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/mobile_signal_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:id="@+id/mobile_signal_voice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
             <ImageView
                 android:id="@+id/mobile_signal"
                 android:layout_height="wrap_content"

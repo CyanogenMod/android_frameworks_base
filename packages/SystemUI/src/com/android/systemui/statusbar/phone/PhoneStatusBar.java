@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1725,7 +1727,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         // Emergency calls only is shown in the expanded header now.
-        final boolean emergencyCallsShownElsewhere = true;
+        final boolean emergencyCallsShownElsewhere = mContext.getResources().getBoolean(
+                R.bool.config_showEmergencyCallLabelOnly);
+
         final boolean makeVisible ;
         if (isMSim()) {
             makeVisible =
