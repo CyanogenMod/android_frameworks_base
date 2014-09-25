@@ -36,6 +36,11 @@ import java.net.UnknownServiceException;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Socket;
+import java.net.SocketAddress;
+
 import static android.media.MediaPlayer.MEDIA_ERROR_UNSUPPORTED;
 
 /** @hide */
@@ -48,6 +53,8 @@ public class MediaHTTPConnection extends IMediaHTTPConnection.Stub {
 
     private long mCurrentOffset = -1;
     private URL mURL = null;
+    private int mProxyPort = 0;
+    private String mProxyIP;
     private Map<String, String> mHeaders = null;
     private HttpURLConnection mConnection = null;
     private long mTotalSize = -1;
@@ -97,10 +104,19 @@ public class MediaHTTPConnection extends IMediaHTTPConnection.Stub {
 
     /* returns true iff header is internal */
     private boolean filterOutInternalHeaders(String key, String val) {
+        Log.d(TAG, "filterOutInternalHeaders: key=" + key + ", val=" + val);
         if ("android-allow-cross-domain-redirect".equalsIgnoreCase(key)) {
             mAllowCrossDomainRedirect = parseBoolean(val);
             // cross-protocol redirects are also controlled by this flag
             mAllowCrossProtocolRedirect = mAllowCrossDomainRedirect;
+        } else if ("use-proxy".equalsIgnoreCase(key)) {
+            Log.d(TAG, "filterOutInternalHeaders use-proxy " + val);
+            int colonPos = val.indexOf(":");
+            if (colonPos > 0) {
+                mProxyIP = new String((val.substring(0, colonPos)).trim());
+                mProxyPort = Integer.parseInt(val.substring(colonPos + 1));
+                Log.d(TAG, "sta-proxy-ip " + mProxyIP + " port " + mProxyPort);
+            }
         } else {
             return false;
         }
@@ -180,10 +196,19 @@ public class MediaHTTPConnection extends IMediaHTTPConnection.Stub {
             boolean noProxy = isLocalHost(url);
 
             while (true) {
-                if (noProxy) {
-                    mConnection = (HttpURLConnection)url.openConnection(Proxy.NO_PROXY);
+
+                Log.d(TAG, "proxy " + mProxyIP  +" port "+ mProxyPort);
+                if (mProxyPort > 0) {
+                    SocketAddress socketAddr = new InetSocketAddress(mProxyIP, mProxyPort);
+                    java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, socketAddr);
+                    mConnection = (HttpURLConnection) url.openConnection(proxy);
+                    Log.d(TAG, "connection initialized with proxy");
                 } else {
-                    mConnection = (HttpURLConnection)url.openConnection();
+                    if (noProxy) {
+                        mConnection = (HttpURLConnection)url.openConnection(Proxy.NO_PROXY);
+                    } else {
+                        mConnection = (HttpURLConnection)url.openConnection();
+                    }
                 }
                 mConnection.setConnectTimeout(CONNECT_TIMEOUT_MS);
 
