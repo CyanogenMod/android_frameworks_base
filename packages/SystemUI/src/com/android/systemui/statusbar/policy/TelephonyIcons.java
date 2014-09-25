@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +17,12 @@
  */
 
 package com.android.systemui.statusbar.policy;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.android.systemui.R;
 
@@ -199,5 +207,398 @@ class TelephonyIcons {
     static final int QS_ICON_3G = R.drawable.ic_qs_signal_3g;
     static final int QS_ICON_4G = R.drawable.ic_qs_signal_4g;
     static final int QS_ICON_1X = R.drawable.ic_qs_signal_1x;
+
+    static final int DATA_TYPE_UNKNOWN = 0;
+    static final int DATA_TYPE_G = 1;
+    static final int DATA_TYPE_E = 2;
+    static final int DATA_TYPE_2G = 3;
+    static final int DATA_TYPE_3G = 4;
+    static final int DATA_TYPE_4G = 5;
+    static final int DATA_TYPE_H = 6;
+    static final int DATA_TYPE_HP = 7;
+    static final int DATA_TYPE_1X = 8;
+    static final int DATA_TYPE_LTE = 9;
+
+    static final int SIGNAL_STRENGTH_TYPE_G = 0;
+    static final int SIGNAL_STRENGTH_TYPE_E = 1;
+    static final int SIGNAL_STRENGTH_TYPE_3G = 2;
+    static final int SIGNAL_STRENGTH_TYPE_4G = 3;
+    static final int SIGNAL_STRENGTH_TYPE_H = 4;
+    static final int SIGNAL_STRENGTH_TYPE_HP = 5;
+    static final int SIGNAL_STRENGTH_TYPE_1X = 6;
+    static final int SIGNAL_STRENGTH_TYPE_CDMA = 7;
+    static final int SIGNAL_STRENGTH_TYPE_UMTS = 8;
+
+    static final boolean DEBUG = true;
+    static final int DEFAULT_SUB = 0;
+    static final String TAG = "TelephonyIcons";
+    static final String NS = "com.android.systemui";
+
+    static String[] mDataTypeArray, mDataTypeGenerationArray;
+    static String[] mDataTypeDescriptionArray, mDataTypeGenerationDescArray;
+    static String[] mDataActivityArray;
+    static String[] mSignalStrengthArray, mSignalStrengthRoamingArray;
+    static String[] mSignalNullArray, mNoSimArray;
+    static String[] mSignalStrengthDesc;
+
+    static int[] mSelectedDataTypeIcon;
+    static int[] mSelectedQSDataTypeIcon;
+    static String mSelectedDataTypeDesc;
+    static int[] mSelectedDataActivityIndex;
+    static int[] mSelectedSignalStreagthIndex;
+
+    private static Resources mRes;
+    private static boolean isInitiated = false;
+
+    static void initAll(Context context) {
+        if (isInitiated) {
+            log(TAG, "initAll, already initiated!");
+            return;
+        }
+
+        mRes = context.getResources();
+        try {
+            mDataTypeArray = mRes.getStringArray(
+                    R.array.multi_data_type);
+            mDataTypeDescriptionArray = mRes.getStringArray(
+                    R.array.telephony_data_type_description);
+            mDataTypeGenerationArray = mRes.getStringArray(
+                    R.array.telephony_data_type_generation);
+            mDataTypeGenerationDescArray = mRes.getStringArray(
+                    R.array.telephony_data_type_generation_description);
+            mDataActivityArray = mRes.getStringArray(
+                    R.array.multi_data_activity);
+            mSignalStrengthArray = mRes.getStringArray(
+                    R.array.multi_signal_strength);
+            mSignalStrengthRoamingArray = mRes.getStringArray(
+                    R.array.multi_signal_strength_roaming);
+            mSignalNullArray = mRes.getStringArray(
+                    R.array.multi_signal_null);
+            mNoSimArray = mRes.getStringArray(
+                    R.array.multi_no_sim);
+            mSignalStrengthDesc = mRes.getStringArray(
+                    R.array.signal_strength_description);
+        } catch (android.content.res.Resources.NotFoundException e) {
+            isInitiated = false;
+            log(TAG, "initAll, exception happened: " + e);
+            return;
+        }
+
+        if (mSelectedDataTypeIcon == null
+            && mDataTypeArray.length != 0) {
+            mSelectedDataTypeIcon = new int[mDataTypeArray.length];
+        }
+        if (mSelectedQSDataTypeIcon == null
+            && mDataTypeArray.length != 0) {
+            mSelectedQSDataTypeIcon = new int[mDataTypeArray.length];
+        }
+        if (mSelectedDataActivityIndex == null
+            && mDataActivityArray.length != 0) {
+            mSelectedDataActivityIndex = new int[mDataActivityArray.length];
+        }
+        if (mSelectedSignalStreagthIndex == null
+            && mSignalStrengthArray.length != 0) {
+            mSelectedSignalStreagthIndex = new int[mSignalStrengthArray.length];
+        }
+        isInitiated = true;
+    }
+
+    static int getNoSimIcon() {
+        return getNoSimIcon(DEFAULT_SUB);
+    }
+
+    static int getNoSimIcon(int sub){
+        if (mNoSimArray == null) {
+            return 0;
+        }
+        String resName = mNoSimArray[sub];
+        log(TAG, "no sim icon name: " + resName);
+        int resId = mRes.getIdentifier(resName, null, NS);
+        return resId;
+    }
+
+    static int getSignalNullIcon() {
+        return getSignalNullIcon(DEFAULT_SUB);
+    }
+
+    static int getSignalNullIcon(int sub) {
+        if (mSignalNullArray == null) {
+            return 0;
+        }
+        String resName = mSignalNullArray[sub];
+        log(TAG, "null signal icon name: " + resName);
+        int resId = mRes.getIdentifier(resName, null, NS);
+        return resId;
+    }
+
+     static void updateDataType(int type, boolean showAtLeast3G,
+            boolean show4GforLte, boolean hspaDistinguishable,
+            int inetCondition) {
+        updateDataType(DEFAULT_SUB, type, showAtLeast3G,
+            show4GforLte, hspaDistinguishable, inetCondition);
+    }
+
+    static void updateDataType(int sub, int type, boolean showAtLeast3G,
+            boolean show4GforLte, boolean hspaDistinguishable,
+            int inetCondition) {
+        log(TAG, "updateDataType "
+                + String.format("sub=%d, type=%d, inetCondition=%d",
+                        sub, type, inetCondition)
+                + " showAtLeast3G=" + String.valueOf(showAtLeast3G)
+                + " show4GforLte=" + String.valueOf(show4GforLte)
+                + " hspaDistinguishable=" + String.valueOf(hspaDistinguishable));
+
+        String resName = mDataTypeArray[sub];
+        log(TAG, "data type item name: " + resName);
+        int resId = mRes.getIdentifier(resName, null, NS);
+        log(TAG, "data type item id: " + resId);
+        String[] dataTypeArray = mRes.getStringArray(resId);
+
+        switch (type) {
+            case TelephonyManager.NETWORK_TYPE_UNKNOWN:
+                if (!showAtLeast3G) {
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = 0;
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedDataActivityIndex[sub] = 0;
+                    mSelectedSignalStreagthIndex[sub] = 0;
+                    break;
+                } else {
+                    // fall through
+                }
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+                if (!showAtLeast3G) {
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_E[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_E;
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_E;
+                    break;
+                } else {
+                    // fall through
+                }
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+                mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
+                mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                        dataTypeArray[type], null, NS);
+                mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
+                mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_UMTS;
+                break;
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+                if (hspaDistinguishable) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_H;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_H[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_H;
+                } else {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            mDataTypeGenerationArray[0], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeGenerationDescArray[0];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_3G;
+
+                }
+                break;
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                if (hspaDistinguishable) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_HP;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_H[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_HP;
+                } else {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            mDataTypeGenerationArray[0], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeGenerationDescArray[0];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_3G;
+
+                }
+                break;
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+                if (!showAtLeast3G) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_1X;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_1X[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_CDMA;
+                    break;
+                } else {
+                    // fall through
+                }
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+                if (!showAtLeast3G) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_1X;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_1X[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_1X;
+                    break;
+                } else {
+                    // fall through
+                }
+            case TelephonyManager.NETWORK_TYPE_EVDO_0: //fall through
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_3G;
+                break;
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                if (show4GforLte) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_4G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            mDataTypeGenerationArray[1], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_4G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeGenerationDescArray[1];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_4G;
+                } else {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_LTE;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_LTE[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_4G;
+                }
+                break;
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_GSM:
+                if (!showAtLeast3G) {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            dataTypeArray[type], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_G;
+                } else {
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
+                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                            mDataTypeGenerationArray[0], null, NS);
+                    mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
+                    mSelectedDataTypeDesc = mDataTypeGenerationDescArray[0];;
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_3G;
+                }
+                break;
+            default:
+                    mSelectedDataActivityIndex[sub] = DATA_TYPE_UNKNOWN;
+                    mSelectedDataTypeIcon[sub] = 0;
+                    mSelectedQSDataTypeIcon[sub] = 0;
+                    mSelectedDataTypeDesc = "";
+                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_G;
+                break;
+        }
+        log(TAG, "updateDataType "
+                + String.format(
+                "mSelectedDataTypeIcon[%d]=%d, mSelectedDataActivityIndex=%d",
+                sub, mSelectedDataTypeIcon[sub], mSelectedDataActivityIndex[sub]));
+    }
+
+    static int getQSDataTypeIcon() {
+        return mSelectedQSDataTypeIcon[DEFAULT_SUB];
+    }
+
+    static int getQSDataTypeIcon(int sub) {
+        return mSelectedQSDataTypeIcon[sub];
+    }
+
+    static int getDataTypeIcon() {
+        return mSelectedDataTypeIcon[DEFAULT_SUB];
+    }
+
+    static int getDataTypeIcon(int sub) {
+        log(TAG, "getDataTypeIcon " + String.format("sub=%d", sub));
+        return mSelectedDataTypeIcon[sub];
+    }
+
+    static String getDataTypeDesc() {
+        return mSelectedDataTypeDesc;
+    }
+
+    static int getDataActivity(int activity){
+        return getDataActivity(DEFAULT_SUB, activity);
+    }
+
+    static int getDataActivity(int sub, int activity) {
+        log(TAG, String.format("getDataActivity, sub=%d, activity=%d",
+                sub, activity));
+
+        String[] dataActivityArray = mRes.getStringArray(
+                mRes.getIdentifier(mDataActivityArray[sub], null, NS));
+        String[] selectedTypeArray = mRes.getStringArray(mRes.getIdentifier(
+                dataActivityArray[mSelectedDataActivityIndex[sub]], null, NS));
+
+        return mRes.getIdentifier(selectedTypeArray[activity], null, NS);
+    }
+
+    static int getSignalStrengthIcon(int inetCondition, int level,
+            boolean isRoaming) {
+        return getSignalStrengthIcon(DEFAULT_SUB, inetCondition,
+                level, isRoaming);
+    }
+
+    static int getSignalStrengthIcon(int sub, int inetCondition, int level,
+            boolean isRoaming) {
+        log(TAG, "getSignalStrengthIcon: "
+                + String.format("sub=%d, inetCondition=%d, level=%d",
+                sub, inetCondition, level)
+                + " isRoaming=" + String.valueOf(isRoaming));
+
+        String[] signalStrengthArray, selectedTypeArray;
+        if (!isRoaming) {
+            signalStrengthArray = mRes.getStringArray(
+                    mRes.getIdentifier(mSignalStrengthArray[sub], null, NS));
+        } else {
+            signalStrengthArray = mRes.getStringArray(mRes.getIdentifier(
+                    mSignalStrengthRoamingArray[sub], null, NS));
+        }
+
+        log(TAG, String.format("signalStrengthArray.length = %d",
+                signalStrengthArray.length));
+
+        selectedTypeArray = mRes.getStringArray(mRes.getIdentifier(
+                signalStrengthArray[mSelectedSignalStreagthIndex[sub]], null, NS));
+
+        log(TAG, String.format("selectedTypeArray.length = %d",
+                selectedTypeArray.length));
+
+        String[] inetArray = mRes.getStringArray(
+                mRes.getIdentifier(selectedTypeArray[inetCondition], null, NS));
+
+        log(TAG, String.format("inetArray.length = %d",
+                inetArray.length));
+
+        return mRes.getIdentifier(inetArray[level], null, NS);
+    }
+
+    static String getSignalStrengthDes(int level) {
+        return getSignalStrengthDes(DEFAULT_SUB, level);
+    }
+
+    static String  getSignalStrengthDes(int sub, int level) {
+        return mSignalStrengthDesc[level];
+    }
+
+    private static void log(String tag, String str){
+        if (DEBUG) {
+            Log.d(tag, str);
+        }
+    }
 }
 
