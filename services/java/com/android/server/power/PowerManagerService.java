@@ -44,6 +44,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.SystemSensorManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Binder;
@@ -201,6 +202,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     private LightsService.Light mKeyboardLight;
     private LightsService.Light mCapsLight;
     private LightsService.Light mFnLight;
+    private LightsService.Light mMusicLight;
 
     private int mButtonTimeout;
     private int mButtonBrightness;
@@ -522,6 +524,7 @@ public final class PowerManagerService extends IPowerManager.Stub
             mKeyboardLight = mLightsService.getLight(LightsService.LIGHT_ID_KEYBOARD);
             mCapsLight = mLightsService.getLight(LightsService.LIGHT_ID_CAPS);
             mFnLight = mLightsService.getLight(LightsService.LIGHT_ID_FUNC);
+            mMusicLight = mLightsService.getLight(LightsService.LIGHT_ID_MUSIC);
 
             // Register for broadcasts from other components of the system.
             IntentFilter filter = new IntentFilter();
@@ -1178,15 +1181,37 @@ public final class PowerManagerService extends IPowerManager.Stub
     @Override // Binder call
     public void setKeyboardLight(boolean on, int key) {
         if (key == 1) {
-            if (on)
+            if (on) {
                 mCapsLight.setColor(0x00ffffff);
-            else
+            } else {
                 mCapsLight.turnOff();
+            }
         } else if (key == 2) {
-            if (on)
+            if (on) {
                 mFnLight.setColor(0x00ffffff);
-            else
+            } else {
                 mFnLight.turnOff();
+            }
+        }
+    }
+
+    @Override // Binder call
+    public void setMusicLight(boolean on) {
+        if (on) {
+            mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            if (mAudioManager != null) {
+                mMasterStreamType = mAudioManager.getMasterStreamType();
+
+                // If music is playing and the stream is not muted, turn on the music light
+                if (mAudioManager.isMusicActive()
+                        && !mAudioManager.isStreamMute(mMasterStreamType)) {
+                    mMusicLight.setColor(0x00ffffff);
+                } else {
+                    mMusicLight.turnOff();
+                }
+            } else {
+                mMusicLight.turnOff();
+            }
         }
     }
 

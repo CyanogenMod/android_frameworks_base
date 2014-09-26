@@ -138,7 +138,7 @@ public class BridgePowerManager implements IPowerManager {
 
     @Override
     public void setKeyboardVisibility(boolean visible) {
-        
+        // pass for now
     }
 
     @Override
@@ -146,4 +146,8 @@ public class BridgePowerManager implements IPowerManager {
         // pass for now
     }
 
+    @Override
+    public void setMusicLight(boolean on) {
+        // pass for now
+    }
 }

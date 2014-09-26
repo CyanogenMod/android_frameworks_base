@@ -974,7 +974,7 @@ public final class PowerManager {
     }
 
     /**
-     * sets the keyboard LED state
+     * Sets the keyboard LED state
      *
      * @param on boolean state
      * @param key 1 for caps, 2 for fn
@@ -985,6 +985,19 @@ public final class PowerManager {
     {
         try {
             mService.setKeyboardLight(on, key);
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * Sets the music LED state
+     *
+     * {@hide}
+     */
+    public void setMusicLight(boolean on)
+    {
+        try {
+            mService.setMusicLight(on);
         } catch (RemoteException e) {
         }
     }
