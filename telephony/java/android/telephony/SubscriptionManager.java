@@ -27,6 +27,7 @@ import android.os.RemoteException;
 
 import com.android.internal.telephony.ISub;
 import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.RILConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +117,14 @@ public class SubscriptionManager implements BaseColumns {
     /** SIM is not inserted */
     /** @hide - to be unhidden */
     public static final int SIM_NOT_INSERTED = -1;
+
+    /**
+     * The Network mode of SIM/sub.
+     * <P>Type: INTEGER (int)</P>
+     */
+    public static final String NETWORK_MODE = "network_mode";
+
+    public static final int DEFAULT_NW_MODE = -1;
 
     /**
      * The activation state of SIM/sub.
