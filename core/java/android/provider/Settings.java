@@ -1922,6 +1922,12 @@ public final class Settings {
         public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
 
         /**
+         * Control whether to enable the music light while music is playing
+         * @hide
+         */
+        public static final String MUSIC_LIGHT = "music_light";
+
+        /**
          * Control whether the screen off animation should be shown
          * @hide
          */
