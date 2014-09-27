@@ -94,6 +94,7 @@
     <!-- Development shortcut -->
     <string name="advanced_dev_option_wipe_app">Wipe app data</string>
     <string name="advanced_dev_option_force_stop">Force stop</string>
+    <string name="advanced_dev_option_uninstall">Uninstall</string>
 
     <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_dock_battery_level">Dock battery <xliff:g id="number">%d</xliff:g> percent.</string>
