@@ -81,6 +81,7 @@
   <string name="navbar_menu_big_button">Pulsante Menu</string>
   <string name="advanced_dev_option_wipe_app">Cancella dati</string>
   <string name="advanced_dev_option_force_stop">Arresto forzato</string>
+  <string name="advanced_dev_option_uninstall">Disinstalla</string>
   <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
   <string name="screenshot_delete_action">Elimina</string>
   <string name="screenshot_delete_confirmation">Schermata eliminata.</string>
