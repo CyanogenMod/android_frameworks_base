@@ -4833,6 +4833,12 @@ public final class Settings {
         public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
 
         /**
+         * Hides carrier label in keyguard
+         * @hide
+         */
+        public static final String NO_CARRIER_LABEL = "no_carrier_label";
+
+        /**
          * Color of the carrier and wifi network name in the notification drawer
          * @hide
          */

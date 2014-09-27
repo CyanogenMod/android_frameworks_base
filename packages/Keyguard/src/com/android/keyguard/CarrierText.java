@@ -105,10 +105,18 @@ public class CarrierText extends TextView {
     protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn) {
         String customCarrierLabel = Settings.System.getStringForUser(getContext().getContentResolver(),
             Settings.System.CUSTOM_CARRIER_LABEL, UserHandle.USER_CURRENT);
-        if (!TextUtils.isEmpty(customCarrierLabel)) {
-            setText(customCarrierLabel);
+
+        int noCarrierLabel = Settings.System.getIntForUser(getContext().getContentResolver(),
+            Settings.System.NO_CARRIER_LABEL, 0, UserHandle.USER_CURRENT);
+
+        if (noCarrierLabel == 0) {
+            if (!TextUtils.isEmpty(customCarrierLabel)) {
+                setText(customCarrierLabel);
+            } else {
+                setText(getCarrierTextForSimState(simState, plmn, spn));
+            }
         } else {
-            setText(getCarrierTextForSimState(simState, plmn, spn));
+            setText("");
         }
     }
 
