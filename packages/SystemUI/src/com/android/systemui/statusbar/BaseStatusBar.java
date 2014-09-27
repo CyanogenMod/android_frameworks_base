@@ -1593,7 +1593,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         return new NotificationClicker(intent, pkg, tag, id);
     }
 
-    public class NotificationClicker implements View.OnClickListener {
+    public class NotificationClicker implements View.OnClickListener, View.OnLongClickListener {
         private KeyguardTouchDelegate mKeyguard;
         public PendingIntent mPendingIntent;
         private Intent mIntent;
@@ -1621,6 +1621,12 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         public void makeFloating(boolean floating) {
             mFloat = floating;
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            onClick(v);
+            return true;
         }
 
         public void onClick(View v) {
@@ -2099,12 +2105,16 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (contentIntent != null) {
             final View.OnClickListener listener =
                    mNotificationHelper.getNotificationClickListener(entry, headsUp);
+            final View.OnLongClickListener longClickListener =
+                    mNotificationHelper.getNotificationClickListener(entry, false);
             entry.content.setOnClickListener(listener);
+            entry.content.setOnLongClickListener(longClickListener);
             entry.floatingIntent = makeClicker(contentIntent,
                     notification.getPackageName(), notification.getTag(), notification.getId());
             entry.floatingIntent.makeFloating(true);
         } else {
             entry.content.setOnClickListener(null);
+            entry.content.setOnLongClickListener(null);
             entry.floatingIntent = null;
         }
         // Update the roundIcon
