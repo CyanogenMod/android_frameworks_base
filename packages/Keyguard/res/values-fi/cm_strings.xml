@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Lukitusnäyttö</string>
   <string name="keyguard_discharging">Puretaan latausta, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Kytke laturi, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d vastaamaton puhelu</item>
     <item quantity="other">%d vastaamatonta puhelua</item>
@@ -30,4 +31,12 @@
   <string name="message_from">viesti</string>
   <string name="message_from_person">viesti %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK-koodin pitäisi olla 8 numeroa.</string>
+  <string name="keyguard_password_wrong_puk_code">Virheellinen PUK-koodi.</string>
+  <string name="keyguard_password_pin_failed">PIN-toiminto epäonnistui.</string>
+  <string name="keyguard_password_puk_failed">PUK-toiminto epäonnistui.</string>
+  <string name="pinpuk_attempts">\nYrityksiä jäljellä:</string>
+  <string name="lockscreen_sim_error_message_short">Virheellinen kortti.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM on Perso-lukittu</string>
+  <string name="msim_kg_sim_pin_msg_format">Tilaus: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

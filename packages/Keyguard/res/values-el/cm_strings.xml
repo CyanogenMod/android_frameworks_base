@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Οθόνη κλειδώματος</string>
   <string name="keyguard_discharging">Αποφόρτιση, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Συνδέστε τον φορτιστή, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d αναπάντητη κλήση</item>
     <item quantity="other">%d αναπάντητες κλήσεις</item>
@@ -30,4 +31,12 @@
   <string name="message_from">μήνυμα από</string>
   <string name="message_from_person">μήνυμα από %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
+  <string name="kg_invalid_sim_puk_hint_cm">Ο κωδικός PUK πρέπει να αποτελείται από 8 αριθμούς.</string>
+  <string name="keyguard_password_wrong_puk_code">Εσφαλμένος κωδικός PUK.</string>
+  <string name="keyguard_password_pin_failed">Αποτυχία λειτουργίας PIN.</string>
+  <string name="keyguard_password_puk_failed">Αποτυχία λειτουργίας PUK.</string>
+  <string name="pinpuk_attempts">\nΠροσπάθειες που απομένουν:</string>
+  <string name="lockscreen_sim_error_message_short">Μη έγκυρη κάρτα.</string>
+  <string name="keyguard_perso_locked_message">Η SIM/RUIM είναι κλειδωμένη</string>
+  <string name="msim_kg_sim_pin_msg_format">ΣΥΝΔΡ: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

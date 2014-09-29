@@ -31,7 +31,6 @@
   <string name="faceunlock_multiple_failures">Maximal Unzuel u Versich fir mam Gesiicht z\'entspären iwwerschratt</string>
   <string name="keyguard_charged">Opgelueden</string>
   <string name="keyguard_plugged_in">Gëtt opgelueden, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="keyguard_low_battery">Schléiss däin Oplueder un, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="keyguard_instructions_when_pattern_disabled">Menü drécke fir z\'entspären.</string>
   <string name="keyguard_network_locked_message">Netzwierk gespaart</string>
   <string name="keyguard_missing_sim_message_short">Keng SIM-Kaart</string>

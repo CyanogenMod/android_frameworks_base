@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Låseskjerm</string>
   <string name="keyguard_discharging">Utlader, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Koble til laderen, <xliff:g id="number">%d</xliff:g> <xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d tapt anrop</item>
     <item quantity="other">%d tapte anrop</item>
@@ -30,4 +31,12 @@
   <string name="message_from">melding fra</string>
   <string name="message_from_person">melding fra %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK-kode skal være 8 tall.</string>
+  <string name="keyguard_password_wrong_puk_code">Feil PUK kode.</string>
+  <string name="keyguard_password_pin_failed">PIN-operasjonen mislyktes.</string>
+  <string name="keyguard_password_puk_failed">PUK-operasjonen mislyktes.</string>
+  <string name="pinpuk_attempts">\nForsøk igjen:</string>
+  <string name="lockscreen_sim_error_message_short">Ugyldig kort.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM er Person låst</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

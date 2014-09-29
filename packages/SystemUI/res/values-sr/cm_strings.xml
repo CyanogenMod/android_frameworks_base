@@ -16,24 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="accessibility_quick_settings_ringer">Звук <xliff:g id="state" example="Off">%s</xliff:g></string>
-  <string name="accessibility_quick_settings_vibration">Вибрација <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_dpad_left">Курсор лево</string>
   <string name="accessibility_dpad_right">Курсор десно</string>
   <string name="dessert_case_settings_cm_title">Прикажи CM маскоте</string>
   <string name="dessert_case_settings_cm_summary">Прикажи CM маскоте заједно са Android-овим</string>
-  <string name="quick_settings_profile_label">Профил</string>
-  <string name="powerwidget_screen_timeout_toast">Гашење екрана за: %1$d %2$s</string>
-  <string name="quick_settings_gps">GPS</string>
-  <string name="quick_settings_gps_off">GPS искључено</string>
   <string name="quick_settings_screen_sleep">Спавање</string>
-  <string name="quick_settings_ringer_on">Звук укључено</string>
-  <string name="quick_settings_ringer_off">Звук искључено</string>
-  <string name="quick_settings_vibration_on">Вибрација укључено</string>
-  <string name="quick_settings_vibration_off">Вибрација искључено</string>
   <string name="quick_settings_label_enabled">Укључено
 </string>
-  <string name="quick_settings_label_disabled">Искључено</string>
   <string name="quick_settings_ringer_normal">Звук</string>
   <string name="quick_settings_lockscreen">Закључан екран</string>
   <string name="quick_settings_network_type">Режим мреже</string>
@@ -44,7 +33,6 @@
   <string name="quick_settings_torch_off">Бакља искључено</string>
   <string name="quick_settings_nfc">NFC</string>
   <string name="quick_settings_nfc_off">NFC искључено</string>
-  <string name="quick_settings_screen_timeout">Гашење екрана</string>
   <string name="quick_settings_usb_tether_off_label">Дисконектован</string>
   <string name="quick_settings_usb_tether_connected_label">Привезивање искључено</string>
   <string name="quick_settings_usb_tether_on_label">Привезивање</string>
@@ -58,7 +46,6 @@
   <string name="quick_settings_camera_label">Камера</string>
   <string name="quick_settings_network_adb_disabled_label">Онемогућено</string>
   <string name="quick_settings_network_adb_enabled_label">Омогућено</string>
-  <string name="quick_settings_bluetooth_multi_label">%1$d повезано</string>
   <string name="quick_settings_equalizer">Еквилајзер</string>
   <string name="quick_settings_compass_off">Компас искључено</string>
   <string name="quick_settings_compass_init">Покретање\u2026</string>
@@ -67,7 +54,6 @@
   <string name="location_mode_high_accuracy_title">Велика прецизност</string>
   <string name="location_mode_battery_saving_title">Уштеда батерије</string>
   <string name="location_mode_sensors_only_title">Само уређај</string>
-  <string name="location_mode_location_off_title">Локација искључено</string>
   <string name="quick_settings_expanded_desktop">Проширен</string>
   <string name="quick_settings_expanded_desktop_off">Нормалaн</string>
   <string name="quick_settings_camera_error_connect">Немогуће повезивање са камером</string>

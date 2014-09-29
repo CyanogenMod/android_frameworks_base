@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Kilit Ekranı</string>
   <string name="keyguard_discharging">Şarj azalıyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Şarj cihazınızı bağlayın, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="other">%d cevapsız arama</item>
   </plurals>
@@ -28,4 +29,12 @@
   <string name="message_from">mesaj gönderen</string>
   <string name="message_from_person">%1$s kişisinden mesaj</string>
   <string name="full_wday_month_day_no_year">dMMMMEEEE</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK kodu 8 rakamdan oluşmalı.</string>
+  <string name="keyguard_password_wrong_puk_code">Yanlış PUK kodu.</string>
+  <string name="keyguard_password_pin_failed">PIN işlemi başarısız oldu.</string>
+  <string name="keyguard_password_puk_failed">PUK işlemi başarısız oldu.</string>
+  <string name="pinpuk_attempts">\nKalan deneme sayısı:</string>
+  <string name="lockscreen_sim_error_message_short">Geçersiz kart.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM Perso kilitli</string>
+  <string name="msim_kg_sim_pin_msg_format">ABONELİK: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>
