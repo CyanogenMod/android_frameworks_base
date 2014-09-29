@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Kunci layar</string>
   <string name="keyguard_discharging">Dilepaskan, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Hubungkan pengisi daya Anda, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="other">%d panggilan tak terjawab</item>
   </plurals>
@@ -28,4 +29,12 @@
   <string name="message_from">pesan dari</string>
   <string name="message_from_person">pesan dari %1$s</string>
   <string name="full_wday_month_day_no_year">dMMMMEEEE</string>
+  <string name="kg_invalid_sim_puk_hint_cm">Kode PUK harus 8 angka.</string>
+  <string name="keyguard_password_wrong_puk_code">Kode PUK salah.</string>
+  <string name="keyguard_password_pin_failed">Operasi PIN gagal.</string>
+  <string name="keyguard_password_puk_failed">Operasi PUK gagal.</string>
+  <string name="pinpuk_attempts">\nUsaha tersisa:</string>
+  <string name="lockscreen_sim_error_message_short">Kartu SIM tidak sah.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM terkunci Perso</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

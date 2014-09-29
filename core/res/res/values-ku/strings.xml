@@ -3,9 +3,6 @@
 <!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
-** Copyright (c) 2013, The Linux Foundation. All rights reserved.
-** Not a Contribution.
-**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,174 +22,175 @@
   <string name="byteShort">بایت</string>
   <string name="kilobyteShort">کیلۆبایت</string>
   <string name="megabyteShort">مێگابایت</string>
-  <string name="gigabyteShort">گێگابایت</string>
+  <string name="gigabyteShort">گیگابایت</string>
   <string name="terabyteShort">تێرابایت</string>
   <string name="petabyteShort">پیکۆبایت</string>
   <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
-  <string name="untitled">وlt;بێناونیشانوgt;</string>
+  <string name="untitled">&lt;بێ ناونیشان&gt;</string>
   <string name="ellipsis">\u2026</string>
   <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">(هیچ ژماره‌ ته‌له‌فۆنێک نییه‌)</string>
   <string name="unknownName">(نه‌زانراو)</string>
-  <string name="defaultVoiceMailAlphaTag">دەنگەنامە</string>
+  <string name="defaultVoiceMailAlphaTag">پۆستی دەنگی</string>
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
-  <string name="mmiError">کێشه‌ی په‌یوه‌ندی هه‌یه‌ یان کۆدی MMI هه‌ڵه‌یه‌.</string>
-  <string name="mmiFdnError">فرمانه‌که‌ سنوورداره‌ ته‌نها بۆ چاره‌سه‌رکردنی ژماره‌ی لێدراو.</string>
-  <string name="serviceEnabled">خزمه‌تگوزاریی چالاکه‌.</string>
-  <string name="serviceEnabledFor">خزمه‌تگوزاریی چالاکه‌ بۆ:</string>
-  <string name="serviceDisabled">خزمه‌تگوزاری ناچالاکه‌.</string>
-  <string name="serviceRegistered">تۆمارکردن سه‌رکه‌وتو بوو.</string>
-  <string name="serviceErased">سڕینه‌وه‌ سه‌رکه‌وتو بوو.</string>
-  <string name="passwordIncorrect">تێپه‌ڕه‌وشه‌ هه‌ڵه‌یه‌.</string>
-  <string name="mmiComplete">فرمانی MMI کۆتایی هات.</string>
-  <string name="badPin">ئه‌و PIN کۆنه‌ی لێتداوه‌ هه‌ڵه‌یه‌.</string>
-  <string name="badPuk">ئه‌و PUK لێتداوه‌ هه‌ڵه‌یه‌.</string>
-  <string name="mismatchPin">ئه‌و PINـانه‌ی لێتداون له‌یه‌کناچن.</string>
-  <string name="invalidPin">PINـێک بنووسه‌ که‌ 4 بۆ 8 ژماره‌ بێت.</string>
-  <string name="invalidPuk">PUK بنووسه‌ که‌ له‌ 8 ڕه‌نوس یان زیاتر پێکهاتبێت.</string>
-  <string name="needPuk">سیمکارده‌که‌ت قوفڵه‌ به‌ PUK ، تکایه‌ PUK بنووسه‌ بۆ کردنه‌وه‌ی.</string>
-  <string name="needPuk2">تکایه‌ PUK2 بنووسه‌ بۆ لابردنی قوفڵی سیمکارد</string>
-  <string name="enablePin">سه‌رکه‌وتوونه‌بوو ، تکایه‌ قوفڵی SIM/RUIM چالاکبکه‌.</string>
+  <string name="mmiError">کێشه‌ی په‌یوه‌ندی هه‌یه‌ یان کۆدی MMI ناڕاستە.</string>
+  <string name="mmiFdnError">کردارەکە تەنیا بۆ ژمارە جێگیرکراوەکان سنووربەندکراوە.</string>
+  <string name="serviceEnabled">خزمه‌تگوزارییەکە چالاککرا.</string>
+  <string name="serviceEnabledFor">خزمه‌تگوزارییەکە چالاککرا بۆ:</string>
+  <string name="serviceDisabled">خزمه‌تگوزارییەکە ناچالاککراوە.</string>
+  <string name="serviceRegistered">تۆمارکردن سه‌رکه‌وتوو بوو.</string>
+  <string name="serviceErased">سڕینه‌وه‌ سه‌رکه‌وتوو بوو.</string>
+  <string name="passwordIncorrect">تێپه‌ڕوشه‌ ناڕاستە.</string>
+  <string name="mmiComplete">کۆدی MMI تەواوە.</string>
+  <string name="badPin">(PIN)ە کۆنه‌کە کە نووسیوتە ڕاست نییە.</string>
+  <string name="badPuk">(PUK)ەکە کە نووسیوتە ڕاست نییە.</string>
+  <string name="mismatchPin">(PIN)ەکان کە نووسیوتن له‌یه‌کناچن.</string>
+  <string name="invalidPin">(PIN)ەک بنووسه‌ که‌ ٤ بۆ ٨ ژماره‌ بێت.</string>
+  <string name="invalidPuk">(PUK)ەکەیەک بنووسە کە ٨ ژمارە یان درێژتر بێت.</string>
+  <string name="needPuk">سیمکارته‌که‌ت داخراوە به‌ PUK، بۆ کردنه‌وه‌ی کۆدی PUK بنووسە.</string>
+  <string name="needPuk2">تکایه‌ PUK2 بنووسه‌ بۆ کردنەوەی سیمکارت.</string>
+  <string name="enablePin">سه‌رکه‌وتوو نه‌بوو ، تکایه‌ داخەری SIM/RUIM چالاک بکه‌.</string>
   <plurals name="pinpuk_attempts">
-    <item quantity="one">  <xliff:g id="number">%d</xliff:g> جه‌ند هه‌وڵێکت ماوه‌ پێشی ئه‌وه‌ی سیمکارته‌که‌ت قوفڵ بێت.</item>
-    <item quantity="other">  <xliff:g id="number">%d</xliff:g> جه‌ند هه‌وڵێکت ماوه‌ پێشی ئه‌وه‌ی سیمکارته‌که‌ت قوفڵ بێت.</item>
+    <item quantity="one"><xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ پێش ئه‌وه‌ی سیمکارت دابخرێت.</item>
+    <item quantity="other"><xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ پێش ئه‌وه‌ی سیمکارت دابخرێت.</item>
   </plurals>
   <string name="imei">IMEI</string>
   <string name="meid">MEID</string>
-  <string name="ClipMmi">هاتنی ناسنامه‌ی په‌یوه‌ندیکه‌ر</string>
-  <string name="ClirMmi">ڕۆشتنی ناسنامه‌ی په‌یوه‌ندیکه‌ر</string>
-  <string name="CfMmi">گۆڕه‌ری په‌یوه‌ندی</string>
-  <string name="CwMmi">په‌یوه‌ندیی چاوه‌ڕوان</string>
-  <string name="BaMmi">په‌یوه‌ندی بێجگه‌ له‌</string>
-  <string name="PwdMmi">گۆڕینی تێپه‌ڕه‌وشه‌</string>
+  <string name="ClipMmi">هاتنی پێناسه‌ی پەیوەندیکه‌ر</string>
+  <string name="ClirMmi">ڕۆیشتنی پێناسەی په‌یوه‌ندیکه‌ر</string>
+  <string name="CfMmi">ئاراستەکردنی په‌یوه‌ندی</string>
+  <string name="CwMmi">چاوەڕوانکردنی پەیوەندی</string>
+  <string name="BaMmi">قەدەغەکردنی پەیوەندی</string>
+  <string name="PwdMmi">گۆڕینی تێپه‌ڕوشه‌</string>
   <string name="PinMmi">گۆڕینی PIN</string>
-  <string name="CnipMmi">ژماره‌ی په‌یوه‌ندیی ئاماده‌</string>
-  <string name="CnirMmi">ژماره‌ی په‌یوه‌ندیی سنوردار</string>
-  <string name="ThreeWCMmi">په‌یوه‌ندیی سێ ڕێگایی</string>
-  <string name="RuacMmi">ڕه‌تکردنه‌وه‌ی ئه‌و په‌یوه‌ندییانه‌ی نه‌خوازراون</string>
-  <string name="CndMmi">گواستنه‌وه‌ی ژماره‌ی په‌یوه‌ندی</string>
+  <string name="CnipMmi">ژماره‌ی په‌یوه‌ندی ئاماده‌یە</string>
+  <string name="CnirMmi">ژماره‌ی په‌یوه‌ندی سنووردارکراوە</string>
+  <string name="ThreeWCMmi">په‌یوه‌ندیکردنی سێ ڕێگایی</string>
+  <string name="RuacMmi">نەویستنی په‌یوه‌ندییە بێزارکەرەکان و نەخوازراوەکان</string>
+  <string name="CndMmi">گەیاندنی ژماره‌ی په‌یوه‌ندیکردن</string>
   <string name="DndMmi">بێزارم مەکە</string>
-  <string name="CLIRDefaultOnNextCallOn">ناسنامه‌ی په‌یوه‌ندیکه‌ر له‌سه‌ر سنورداره‌. په‌یوه‌ندیی داهاتوو: سنورداره‌</string>
-  <string name="CLIRDefaultOnNextCallOff">ناسنامه‌ی په‌یوه‌ندیکه‌ر له‌سه‌ر سنورداره‌. په‌یوه‌ندیی داهاتوو: سنوردار نییه‌</string>
-  <string name="CLIRDefaultOffNextCallOn">ناسنامه‌ی په‌یوه‌ندیکه‌ر له‌سه‌ر سنوردار نییه‌. په‌یوه‌ندیی داهاتوو: سنورداره‌</string>
-  <string name="CLIRDefaultOffNextCallOff">ناسنامه‌ی په‌یوه‌ندیکه‌ر له‌سه‌ر سنورداره نییه‌. په‌یوه‌ندیی داهاتوو: سنوردار نییه‌</string>
-  <string name="serviceNotProvisioned">خزمه‌تگوزاریی به‌رده‌ست نییه‌.</string>
-  <string name="CLIRPermanent">ناتوانیت ڕێکخستنی ناسنامه‌ی په‌یوه‌ندیکه‌ر بگۆڕیت.</string>
-  <string name="RestrictedChangedTitle">چوونه‌ژووره‌وه‌ی سنوردار گۆڕا</string>
-  <string name="RestrictedOnData">ڕاژه‌ی داتا به‌ستراوه‌.</string>
-  <string name="RestrictedOnEmergency">ڕاژه‌ی فریاگوزاریی به‌ستراوه‌.</string>
-  <string name="RestrictedOnNormal">ڕاژه‌ی ده‌نگ به‌ستراوه‌.</string>
-  <string name="RestrictedOnAllVoice">هه‌موو ڕاژه‌کانی ده‌نگ به‌ستراون.</string>
-  <string name="RestrictedOnSms">ڕاژه‌ی SMS به‌ستراوه‌.</string>
-  <string name="RestrictedOnVoiceData">ڕاژه‌کانی ده‌نگ/داتا به‌ستراون.</string>
-  <string name="RestrictedOnVoiceSms">ڕاژه‌کانی ده‌نگ/SMS به‌ستراون.</string>
-  <string name="RestrictedOnAll">هه‌موو ڕاژه‌کانی ده‌نگ/داتا/SMS به‌ستراون.</string>
+  <string name="CLIRDefaultOnNextCallOn">پێناسەی په‌یوه‌ندیکه‌ر له‌سه‌ر سنوورداره‌. په‌یوه‌ندیی داهاتوو: سنوورداره‌</string>
+  <string name="CLIRDefaultOnNextCallOff">پێناسەی په‌یوه‌ندیکه‌ر له‌سه‌ر سنوورداره‌. په‌یوه‌ندیی داهاتوو: سنووردار نییه‌</string>
+  <string name="CLIRDefaultOffNextCallOn">پێناسەی په‌یوه‌ندیکه‌ر له‌سه‌ر سنووردار نییه‌. په‌یوه‌ندیی داهاتوو: سنوورداره‌</string>
+  <string name="CLIRDefaultOffNextCallOff">پێناسەی په‌یوه‌ندیکه‌ر له‌سه‌ر سنوورداره نییه‌. په‌یوه‌ندیی داهاتوو: سنووردار نییه‌</string>
+  <string name="serviceNotProvisioned">خزمه‌تگوزاری به‌رده‌ست نییه‌.</string>
+  <string name="CLIRPermanent">ناتوانیت ڕێکخستنی پێناسەی په‌یوه‌ندیکه‌ر بگۆڕیت.</string>
+  <string name="RestrictedChangedTitle">دەستگەیاندنی سنووردار گۆڕدرا</string>
+  <string name="RestrictedOnData">خزمەتگوزاریی دراوە به‌ستراوه‌.</string>
+  <string name="RestrictedOnEmergency">خزمەتگوزاریی فریاکەوتن به‌ستراوه‌.</string>
+  <string name="RestrictedOnNormal">خزمەتگوزاریی ده‌نگ به‌ستراوه‌.</string>
+  <string name="RestrictedOnAllVoice">هه‌موو خزمەتگوزارییەکانی ده‌نگ به‌ستراون.</string>
+  <string name="RestrictedOnSms">خزمەتگوزاریی کورتەنامە به‌ستراوه‌.</string>
+  <string name="RestrictedOnVoiceData">خزمەتگوزارییەکانی ده‌نگ و داتا به‌ستراون.</string>
+  <string name="RestrictedOnVoiceSms">خزمەتگوزارییەکانی ده‌نگ و کورتەنامە به‌ستراون.</string>
+  <string name="RestrictedOnAll">هه‌موو خزمەتگوزارییەکانی ده‌نگ، داتا و کورتەنامە به‌ستراون.</string>
   <string name="serviceClassVoice">ده‌نگ</string>
   <string name="serviceClassData">داتا</string>
   <string name="serviceClassFAX">فاکس</string>
-  <string name="serviceClassSMS">SMS</string>
-  <string name="serviceClassDataAsync">Async</string>
-  <string name="serviceClassDataSync">Sync</string>
-  <string name="serviceClassPacket">پاکه‌ت</string>
-  <string name="serviceClassPAD">PAD</string>
-  <string name="roamingText0">دیارخه‌ری ڕۆمین داگیرساوه‌</string>
-  <string name="roamingText1">دیارخه‌ری ڕۆمین کوژاوه‌ته‌وه‌</string>
-  <string name="roamingText2">دیارخه‌ری ڕۆمین ده‌دره‌وشێته‌وه‌</string>
+  <string name="serviceClassSMS">کورتەنامە</string>
+  <string name="serviceClassDataAsync">ناهاوکاتگەری</string>
+  <string name="serviceClassDataSync">هاوکاتگەری</string>
+  <string name="serviceClassPacket">گورزەی دراوە</string>
+  <string name="serviceClassPAD">نەزانراو</string>
+  <string name="roamingText0">دیارخه‌ری ڕۆمینگ هەڵکراوە</string>
+  <string name="roamingText1">دیارخه‌ری ڕۆمینگ کوژاوه‌ته‌وه‌</string>
+  <string name="roamingText2">دیارخه‌ری ڕۆمینگ چاودادەگرێ</string>
   <string name="roamingText3">له‌ ده‌ره‌وه‌ی گه‌ڕه‌ک</string>
-  <string name="roamingText4">له‌ ده‌ره‌وه‌ی بینا</string>
-  <string name="roamingText5">ڕۆمین - سیستمی خوازراو</string>
-  <string name="roamingText6">ڕۆمین - سیستمی به‌رده‌ست</string>
-  <string name="roamingText7">ڕۆمین - به‌ هاوپه‌یمانی</string>
-  <string name="roamingText8">ڕۆمین - به‌ مانگانه‌</string>
-  <string name="roamingText9">ڕۆمین - توانایی ڕاژه‌ی ته‌واو</string>
-  <string name="roamingText10">ڕۆمین - توانایی ڕاژه‌ی به‌شێک</string>
-  <string name="roamingText11">سه‌رپه‌ری ڕۆمین داگیرساوه‌</string>
-  <string name="roamingText12">سه‌رپه‌ری ڕۆمین کوژاوه‌ته‌وه‌</string>
+  <string name="roamingText4">له‌ ده‌ره‌وه‌ی خانوو</string>
+  <string name="roamingText5">ڕۆمینگ - سیستەمی بەباشزانراو</string>
+  <string name="roamingText6">ڕۆمینگ - سیستەمی به‌رده‌ست</string>
+  <string name="roamingText7">ڕۆمینگ - هاوپەیمانی یەکگرتوو</string>
+  <string name="roamingText8">ڕۆمینگ - هاوپەیمانی باشتر</string>
+  <string name="roamingText9">ڕۆمینگ - کارکردی تەواوی خزمەتگوزاری</string>
+  <string name="roamingText10">ڕۆمینگ - کارکردی بەشێک لە خزمەتگوزاری</string>
+  <string name="roamingText11">هێمای ڕۆمینگ هەڵکراوە</string>
+  <string name="roamingText12">هێمای ڕۆمینگ کووژاوه‌ته‌وه‌</string>
   <string name="roamingTextSearching">گه‌ڕان به‌دوای خزمه‌تگوزاری</string>
-  <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: به‌دواداچوونی نه‌کراوه‌</string>
+  <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: پەیوەندی ئاراستە نەکراوە</string>
   <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
   <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> دوای <xliff:g id="time_delay">{2}</xliff:g> چرکه‌</string>
-  <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: به‌دواداچوونی نه‌کراوه‌</string>
-  <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: به‌دواداچوونی نه‌کراوه‌</string>
-  <string name="fcComplete">کۆدی داهاتوو ته‌واو بوو.</string>
-  <string name="fcError">کێشه‌ی په‌یوه‌ست کردن هه‌یه‌ یان کۆدی داهاتوو ناڕاسته‌.</string>
+  <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: پەیوەندی  ئاراستە نەکراوە</string>
+  <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: پەیوەندی  ئاراستە نەکراوە</string>
+  <string name="fcComplete">کۆدی تایبەت ته‌واوبوو.</string>
+  <string name="fcError">کێشه‌ی گرێدان هه‌یه‌ یان کۆدی داهاتوو ناڕاسته‌.</string>
   <string name="httpErrorOk">باشه‌</string>
   <string name="httpError">هه‌ڵه‌یه‌ک له‌ تۆڕدا هه‌بوو.</string>
-  <string name="httpErrorLookup">نه‌توانرا ناونیشان بدۆزرێته‌وه‌.</string>
-  <string name="httpErrorUnsupportedAuthScheme">پلانی دروستیی ماڵپه‌ڕ پشتگیریی نه‌کراوه‌.</string>
-  <string name="httpErrorAuth">دروست نه‌بوو.</string>
-  <string name="httpErrorProxyAuth">دروستیی له‌ڕێی ڕاژه‌ی بریکاره‌وه‌ سه‌رکه‌وتو نه‌بوو.</string>
-  <string name="httpErrorConnect">نه‌توانرا په‌یوه‌ندی بکرێت به‌ ڕاژه‌کاره‌وه‌.</string>
-  <string name="httpErrorIO">نه‌توانرا په‌یوه‌ندی به‌ ڕاژه‌وه‌ بکرێت. دواتر هه‌وڵبده‌وه‌.</string>
-  <string name="httpErrorTimeout">کاتی په‌یوه‌ست بوون به‌ ڕاژه‌کاره‌وه‌ به‌سه‌رچوو.</string>
-  <string name="httpErrorRedirectLoop">په‌ڕه‌که‌ ڕاسپاردنی ڕاژه‌کاری زۆر تێدایه‌.</string>
-  <string name="httpErrorUnsupportedScheme">کۆنووسه‌که‌ پشتگیریی نه‌کراوه‌.</string>
-  <string name="httpErrorFailedSslHandshake">ناتوانرێت په‌یوه‌ستبوونێکی دڵنیا دابمه‌زرێت.</string>
-  <string name="httpErrorBadUrl">ناتوانرێت په‌ڕه‌که‌ بکرێته‌وه‌ چونکه‌ ناونیشانه‌که‌ دروست نییه‌.</string>
-  <string name="httpErrorFile">ناتوانرێت فایله‌که‌ به‌کاربهێنرێت.</string>
-  <string name="httpErrorFileNotFound">ناتوانرێت فایلی داواکراو بدۆزرێته‌وه‌.</string>
+  <string name="httpErrorLookup">نه‌یتوانی ناونیشان بدۆزرێته‌وه‌.</string>
+  <string name="httpErrorUnsupportedAuthScheme">پلانی ڕەسەنێتی ماڵپه‌ڕ پشتگیری نه‌کراوه‌.</string>
+  <string name="httpErrorAuth">نەیتوانی دەسەڵات وەربگرێت.</string>
+  <string name="httpErrorProxyAuth">ڕیپێدان له‌ڕێی ڕاژه‌کاری پرۆکسی سه‌رکه‌وتو نه‌بوو.</string>
+  <string name="httpErrorConnect">نه‌یتوانی گرێبدرێت به‌ ڕاژه‌کاره‌وه‌.</string>
+  <string name="httpErrorIO">نه‌یتوانی گرێبدرێت به‌ ڕاژه‌کاره‌وه‌. دواتر هه‌وڵبده‌وه‌.</string>
+  <string name="httpErrorTimeout">کاتی گرێدان به‌ ڕاژه‌کاره‌وه‌ به‌سه‌رچوو.</string>
+  <string name="httpErrorRedirectLoop">په‌ڕه‌که‌ پڕە لە ئاراستەکردنەوەی ڕاژه‌کار.</string>
+  <string name="httpErrorUnsupportedScheme">پرۆتۆكۆڵەکە پشتگیری نه‌کراوه‌.</string>
+  <string name="httpErrorFailedSslHandshake">نەتوانرا گرێدانێکی دڵنیا دابمه‌زرێت.</string>
+  <string name="httpErrorBadUrl">نەتوانرا په‌ڕه‌که‌ بکرێته‌وه‌ لەبەر ئەوەی ناونیشانه‌که‌ ڕاست نییه‌.</string>
+  <string name="httpErrorFile">نەتوانرا دەست بگەیەنرێتە فایلەکە.</string>
+  <string name="httpErrorFileNotFound">نەتوانرا فایلی داواکراو بدۆزرێته‌وه‌.</string>
   <string name="httpErrorTooManyRequests">داواکاریی زۆر خراوه‌ته‌ ڕوو. دواتر هه‌وڵبده‌وه‌.</string>
   <string name="notification_title">هه‌ڵه‌ له‌ چونه‌ ژوره‌وه‌ بۆ <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
-  <string name="contentServiceSync">Sync</string>
-  <string name="contentServiceSyncNotificationTitle">Sync</string>
-  <string name="contentServiceTooManyDeletesNotificationDesc"><xliff:g id="content_type">%s</xliff:g> ی زۆر سڕاوه‌ته‌وه‌.</string>
-  <string name="low_memory" product="tablet">بیرگه‌ی تابلێت پڕبووه‌. هه‌ندێک فایل بسڕه‌وه‌ بۆئه‌وه‌ی بۆشایی هه‌بێت.</string>
-  <string name="low_memory" product="default">بیرگه‌ی ته‌له‌فۆنه‌که‌ پڕبووه‌. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئه‌وه‌ی بۆشایی هه‌بێت.</string>
+  <string name="contentServiceSync">هاوکاتگەری</string>
+  <string name="contentServiceSyncNotificationTitle">هاوکاتگەری</string>
+  <string name="contentServiceTooManyDeletesNotificationDesc"><xliff:g id="content_type">%s</xliff:g> ی زۆر سڕاونەته‌وه‌.</string>
+  <string name="low_memory" product="tablet">بیرگه‌ی تابلێت پڕە. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئازادکردنی بۆشایی.</string>
+  <string name="low_memory" product="default">بیرگه‌ی تەلەفۆن پڕە. هه‌ندێک فایل بسڕه‌وه‌ بۆ ئازادکردنی بۆشایی.</string>
   <string name="ssl_ca_cert_warning">له‌وانه‌یه‌ تۆڕه‌که‌ چاودێریی بکرێت</string>
   <string name="ssl_ca_cert_noti_by_unknown">له‌لایه‌ن به‌شی نه‌ناسراوی سێیه‌مه‌وه‌</string>
   <string name="ssl_ca_cert_noti_managed">له‌لایه‌ن <xliff:g id="managing_domain">%s</xliff:g></string>
   <string name="me">من</string>
   <string name="power_dialog" product="tablet">بژارده‌کانی تابلێت</string>
-  <string name="power_dialog" product="default">بژارده‌ی ته‌له‌فۆن</string>
-  <string name="silent_mode">باری بێده‌نگ</string>
+  <string name="power_dialog" product="default">بژارده‌کانی ته‌له‌فۆن</string>
+  <string name="silent_mode">دۆخی بێده‌نگ</string>
   <string name="turn_on_radio">داگیرسانی بێته‌ل</string>
-  <string name="turn_off_radio">کوژانه‌وه‌ی بێته‌ل</string>
-  <string name="screen_lock">داخستنی ڕوونما</string>
-  <string name="power_off">کوژانه‌وه‌</string>
-  <string name="silent_mode_silent">کوژانه‌وه‌ی زه‌نگ</string>
-  <string name="silent_mode_vibrate">له‌رزه‌ی زه‌نگ</string>
-  <string name="silent_mode_ring">داگیرسانی زه‌نگ</string>
-  <string name="shutdown_progress">کوژانه‌وه‌ی\u2026</string>
-  <string name="shutdown_confirm" product="tablet">تابلێته‌که‌ت ده‌کوژێته‌وه‌.</string>
-  <string name="shutdown_confirm" product="default">ته‌له‌فۆنه‌که‌ت ده‌کوژێته‌وه‌.</string>
-  <string name="shutdown_confirm_question">ده‌ته‌وێت بکوژێته‌وه‌؟</string>
-  <string name="reboot_safemode_title">هه‌ڵیکه‌ره‌وه‌ بۆ دۆخی پارێزه‌ر</string>
-  <string name="reboot_safemode_confirm">ئایا ده‌ته‌وێت بیکوژێنیته‌وه‌ بۆ دۆخی پارێزه‌ر؟
-ئه‌م کرداره‌ هه‌موو ئه‌و به‌رنامه‌ لاوه‌کییانه‌ ده‌سڕێته‌وه‌ که‌ داتمه‌زراندووه‌.
-ده‌چنه‌وه‌ باری خۆیان که‌ دووباره‌ هه‌ڵیده‌که‌یته‌وه‌.</string>
-  <string name="recent_tasks_title">تازه‌</string>
-  <string name="no_recent_tasks">به‌رنامه‌ی تازه‌ نیه‌.</string>
-  <string name="global_actions" product="tablet">بژارده‌ی تابلێت</string>
-  <string name="global_actions" product="default">بژارده‌ی ته‌له‌فۆن</string>
-  <string name="global_action_lock">داخستنی ڕوونما</string>
-  <string name="global_action_power_off">کوژانه‌وه‌</string>
-  <string name="global_action_bug_report">راپۆرتی که‌موکورت</string>
-  <string name="bugreport_title">ڕاپۆرتی خراپ بگره‌</string>
-  <string name="bugreport_message">ئه‌مه‌ زانیاری کۆ ئه‌کاته‌وه‌ ده‌رباره‌ی ئامێری ئێستات ، بۆ ناردنی پۆستی ئیلکترۆنی. کاتێکی ئه‌وێت بۆ ناردنی ڕاپۆرته‌که‌ بۆ ناردنه‌که‌ی،
-تکایه‌ ئارام به‌.</string>
-  <string name="global_action_toggle_silent_mode">باری بێده‌نگ</string>
-  <string name="global_action_silent_mode_on_status">کوژانه‌وه‌ی ده‌نگ</string>
-  <string name="global_action_silent_mode_off_status">کردنه‌وه‌ی ده‌نگ</string>
-  <string name="global_actions_toggle_airplane_mode">باری فڕۆکه‌</string>
-  <string name="global_actions_airplane_mode_on_status">باری فڕۆکه‌ کراوه‌یه‌</string>
-  <string name="global_actions_airplane_mode_off_status">باری فڕۆکه‌ کوژاوه‌یه‌</string>
-  <string name="status_bar_notification_info_overflow">999+</string>
-  <string name="safeMode">باری پارێز</string>
+  <string name="turn_off_radio">کووژاندنه‌وه‌ی بێته‌ل</string>
+  <string name="screen_lock">داخەری ڕوونما</string>
+  <string name="power_off">کووژاندنه‌وه‌</string>
+  <string name="silent_mode_silent">کووژاندنه‌وه‌ی زه‌نگلێدەر</string>
+  <string name="silent_mode_vibrate">له‌ره‌ی زه‌نگلێدەر</string>
+  <string name="silent_mode_ring">داگیرسانی زه‌نگلێدەر</string>
+  <string name="shutdown_progress">کووژاندنه‌وه‌ی\u2026</string>
+  <string name="shutdown_confirm" product="tablet">تابلێته‌که‌ت ده‌کووژێته‌وه‌.</string>
+  <string name="shutdown_confirm" product="default">ته‌له‌فۆنه‌که‌ت ده‌کووژێته‌وه‌.</string>
+  <string name="shutdown_confirm_question">ده‌ته‌وێت بکووژێته‌وه‌؟</string>
+  <string name="reboot_safemode_title">دەسپێکردنەوە بۆ دۆخی دڵنیاکراو</string>
+  <string name="reboot_safemode_confirm">ئایا ده‌ته‌وێت بیکووژێنیته‌وه‌ بۆ دۆخی دڵنیاکراو؟
+         ئه‌م کرداره‌ هه‌موو ئه‌و به‌رنامه‌ لاوه‌کییانه‌ ده‌سڕێته‌وه‌ که‌ داتمه‌زراندووه‌.
+         ئەوانە دەگەڕێنەوە باری خۆیان کاتێک دووباره‌ هه‌ڵیده‌که‌یته‌وه‌.</string>
+  <string name="recent_tasks_title">نوێ</string>
+  <string name="no_recent_tasks">هیچ به‌رنامه‌یەکی نوێ نییه‌.</string>
+  <string name="global_actions" product="tablet">بژارده‌کانی تابلێت</string>
+  <string name="global_actions" product="default">بژاردەکانی ته‌له‌فۆن</string>
+  <string name="global_action_lock">داخەری ڕوونما</string>
+  <string name="global_action_power_off">کووژاندنه‌وه‌</string>
+  <string name="global_action_bug_report">ڕاپۆرتی که‌موکورتی</string>
+  <string name="bugreport_title">ڕاپۆرتی کەموکورتی بگره‌</string>
+  <string name="bugreport_message">ئه‌م کردارە سەبارەت بە ئامێری ئێستات زانیاری کۆ ده‌کاته‌وه‌
+        و بە شێوەی پۆستی ئەلەکترۆنی دەینێرێت. ماوەیەکی زۆر کەم دەخایەنێت
+         بۆ ئامادەکردنی ڕاپۆرتەکە تا ئەو کات کە دەنێردرێت: تکایە هێور بە.</string>
+  <string name="global_action_toggle_silent_mode">دۆخی بێده‌نگ</string>
+  <string name="global_action_silent_mode_on_status">دەنگ کووژاوەیە</string>
+  <string name="global_action_silent_mode_off_status">دەنگ هەڵکراوە</string>
+  <string name="global_actions_toggle_airplane_mode">دۆخی فڕۆکە</string>
+  <string name="global_actions_airplane_mode_on_status">دۆخی فڕۆکه‌ کراوه‌یه‌</string>
+  <string name="global_actions_airplane_mode_off_status">دۆخی فڕۆکه‌ کووژاوه‌یه‌</string>
+  <string name="status_bar_notification_info_overflow">+٩٩٩</string>
+  <string name="safeMode">دۆخی دڵنیاکراو</string>
   <string name="android_system_label">سیسته‌می ئه‌ندرۆید</string>
-  <string name="permgrouplab_costMoney">ئه‌و خزمه‌تگوزاریه‌ که‌ پاره‌ی تێ ئه‌چێت له‌سه‌رت</string>
+  <string name="permgrouplab_costMoney">ئه‌و خزمه‌تگوزارییانه‌ که‌ پاره‌ی تێ ئه‌چێت</string>
   <string name="permgroupdesc_costMoney">ئه‌و شتانه‌ بکه‌ که‌ پاره‌ی تێ ئه‌چێت.</string>
   <string name="permgrouplab_messages">نامه‌کانت</string>
-  <string name="permgroupdesc_messages">SMS کان بخوێنه‌و بنوسه‌،پۆستی ئیلکترۆنی، و نامه‌کان.</string>
+  <string name="permgroupdesc_messages">نامەکەت، پۆستی ئەلەکترۆنی و دیکەی نامه‌کان بخوێنه‌وە و بنووسه‌.</string>
   <string name="permgrouplab_personalInfo">زانیاری که‌سیت</string>
-  <string name="permgroupdesc_personalInfo">ڕێگه‌ی ڕاسته‌وخۆ بۆ زانیاری ده‌رباره‌ی تۆ. له‌ کارتی ناوه‌کان پاشه‌که‌وتکراوه‌.</string>
+  <string name="permgroupdesc_personalInfo">دەستگەیاندنی ڕاسته‌وخۆ بەو زانیارییانەی سەبارەت بە تۆ،کە له‌ کارتی ناوه‌کانت کۆگاکراون.</string>
   <string name="permgrouplab_socialInfo">زانیاری کۆمه‌ڵایه‌تی تۆ</string>
-  <string name="permgroupdesc_socialInfo">زانیاری ڕاسته‌وخۆ ده‌رباره‌ی ناوه‌کانت له‌ په‌یوه‌ندی کۆمه‌ڵایه‌تی.</string>
-  <string name="permgrouplab_location">ناوچه‌ی تۆ</string>
-  <string name="permgroupdesc_location">ناوچه‌ی جوڵاوی فیزیکی.</string>
-  <string name="permgrouplab_network">په‌یوه‌ندی تۆڕ</string>
-  <string name="permgroupdesc_network">ڕێگه‌ی جۆراوجۆر.</string>
+  <string name="permgroupdesc_socialInfo">دەستگەیشتنی ڕاسته‌وخۆ سەبارەت بە ناوه‌کانت و په‌یوه‌ندی کۆمه‌ڵایه‌تییەکانت.</string>
+  <string name="permgrouplab_location">شوێنی تۆ</string>
+  <string name="permgroupdesc_location">تۆمارکردنی شوێنی فیزیکیی تۆ.</string>
+  <string name="permgrouplab_network">پەیوەندی کردنەکانی تۆڕ</string>
+  <string name="permgroupdesc_network">دەستگەیاندن بە جۆرەها تایبەتمەندی تۆڕ.</string>
   <string name="permgrouplab_bluetoothNetwork">بلوتوس</string>
-  <string name="permgroupdesc_bluetoothNetwork">ڕێگه‌ی ئامێره‌کان و تۆڕی بلوتوس.</string>
+  <string name="permgroupdesc_bluetoothNetwork">دەستبگەیەنە بە تۆڕەکان و ئامێرەکان لە رێگای بلوتوسەوە.</string>
   <string name="permgrouplab_audioSettings">ڕێکخستنی ده‌نگه‌کان</string>
   <string name="permgroupdesc_audioSettings">گۆڕینی ڕیکخستنی ده‌نگ.</string>
   <string name="permgrouplab_affectsBattery">کاریگه‌ری باتری</string>
@@ -822,7 +820,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permdesc_bluetooth" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ بینینی ڕێکخستنی بلوتوس له‌سه‌ر مۆبایله‌که‌ت. وه‌ک قبوڵکردن و دروستکردنی په‌یوه‌ندی له‌گه‌ڵ ناسرێنراوه‌کان.</string>
   <string name="permlab_nfc">سه‌رپه‌رشتیکردنی په‌یوه‌ندییه‌ نزیکه‌کان.</string>
   <string name="permdesc_nfc">رێگە بە بەرنامەکە دەدات کە کۆنترۆلی پەیوەندی لەرێگەی Near Field Communicationەوە بکات</string>
-  <string name="permlab_disableKeyguard">لەکارخستنی قفڵی شاشە</string>
+  <string name="permlab_disableKeyguard">ناچالاککردنی داخەری ڕوونما</string>
   <string name="permdesc_disableKeyguard">ڕێگە بە بەرنامەکە دەدا کە قوفلی دوکمەکان و وشە نهێنیەکەنیان لەکار بخا .بۆ نمونە مۆبایلەکەت لە کاتی هاتنی پەیوەندی ،قوفڵەکە بۆ ماوەیەکی کاتی لەکار دەخا بۆ ئەوەی بتوانی وەڵام بدەیتەوە</string>
   <string name="permlab_readSyncSettings">خوێندنەوەی زانیاریەکەنی هاوتاکردن</string>
   <string name="permdesc_readSyncSettings">ڕیگە بە بەرنامەکە دەدا کە زانیاری دەربارەی هاوتاکردن بخوێنێتەوە.بۆ نمونە ئەمە دیاری دەکەت کە ئایا بەرنامەی Pepole لەگەڵ هیچ هەژمارێک هاوتا کراوە یان نە</string>
@@ -980,6 +978,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="postalTypeWork">کار</string>
   <string name="postalTypeOther">دیکە</string>
   <string name="imTypeCustom">دروستکراو</string>
+  <string name="imTypeHome">ماڵه‌وه‌</string>
   <string name="imTypeWork">کار</string>
   <string name="imTypeOther">دیکە</string>
   <string name="imProtocolCustom">دروستکراو</string>
@@ -1034,6 +1033,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="lockscreen_return_to_call">گەڕانەوە بۆ تەلەفۆن</string>
   <string name="lockscreen_pattern_correct">ڕاست!</string>
   <string name="lockscreen_pattern_wrong">دوبارە هەوڵبدەرەوە</string>
+  <string name="lockscreen_password_wrong">دووباره‌ هەوڵ بدەوە</string>
   <string name="faceunlock_multiple_failures">چالاککردنی قوفڵ بە ڕوخسار هەوڵ زۆر دراوە</string>
   <string name="lockscreen_plugged_in">بارگاوی کردن, <xliff:g id="ژمارە">%d</xliff:g><xliff:g id="لەسەدا">%%</xliff:g></string>
   <string name="lockscreen_charged">بارگاوی بوە</string>
@@ -1054,8 +1054,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="emergency_calls_only" msgid="2485604591272668370">ته‌نها په‌یوه‌ندی كتوپڕ</string>
   <string name="lockscreen_network_locked_message">تۆڕ قوفڵکراوە</string>
   <string name="lockscreen_sim_puk_locked_message">سیمکارتەکە PUK-قوفڵکراوە.</string>
-  <string name="lockscreen_sim_puk_locked_instructions">PIN1 قوفڵکراوە. PUK 1 لێدە\nor\n تکایە پەیوەدنی بکە بە کۆمپانیاوە یان خزمەتگوزاری ڕیبەوە.</string>
-  <string name="lockscreen_sim_locked_message">SIM/RUIM قوفڵکراوە.</string>
+  <string name="lockscreen_sim_locked_message">سیمکارتەکە داخرا.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">کردنەوەی سیمکارت\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">
         تۆ قوفڵی کێشانەکەت بە هەڵە لێداوە <xliff:g id="number">%d</xliff:g> جار.
@@ -1621,7 +1620,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="vpn_lockdown_connected">\"VPN\"ی هەردەم چالاک گرێدرا</string>
   <string name="vpn_lockdown_error">\"VPN\"ی هەردەم چالاک هەڵەی دا</string>
   <string name="vpn_lockdown_config">دەست لێدان بۆ سازدان</string>
-  <string name="upload_file">هەڵبژاردنی فایل</string>
+  <string name="upload_file">هەڵبژاردنی پەڕگە</string>
   <string name="no_file_chosen">هیچ فایلێک دەستنیشان نەکراوە</string>
   <string name="reset">ڕێکخستنەوە</string>
   <string name="submit">پێشکەشکردن</string>
@@ -1753,6 +1752,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="sha1_fingerprint">SHA-1 په‌نجه‌مۆر:</string>
   <string name="activity_chooser_view_see_all">هەموو ببينە</string>
   <string name="activity_chooser_view_dialog_title_default">هەڵبژاردنی چالاکی</string>
+  <string name="share_action_provider_share_with">هاوبەشی بکە بە ناوی</string>
   <string name="list_delimeter">", "</string>
   <string name="sending">ناردن\u2026</string>
   <string name="launchBrowserDefault">چالاککردنی وێبگەر؟</string>
@@ -1803,10 +1803,17 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="kg_enter_confirm_pin_hint">کۆدی PIN دوپاتکەرەوە</string>
   <string name="kg_sim_unlock_progress_dialog_message">کردنەوەی سیمکارت\u2026</string>
   <string name="kg_password_wrong_pin_code">کۆدی PIN هەڵەیە.</string>
-  <string name="kg_invalid_sim_puk_hint">کۆدی PUK دەبێ 8 ژمارە بێت.</string>
+  <string name="kg_invalid_sim_pin_hint">(PIN)ەک بنووسه‌ که‌ ٤ بۆ ٨ ژماره‌ بێت.</string>
+  <string name="kg_invalid_sim_puk_hint">کۆدی PUK ده‌بێت 8 ژمارە یان زیاتر بێت.</string>
   <string name="kg_invalid_puk">دوبارە کۆدی PUK دروست تێبنووسەوە. هەوڵدانە دوبارەکراوەکان بۆ هەمیشە سیمکارتەکەت لاچالاک ئەکات.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">کۆدەکانی PIN لە یەکتر ناچن</string>
+  <string name="kg_login_too_many_attempts">هەوڵی کێشانی ئێجگار زۆری شێوەئاسا</string>
+  <string name="kg_login_instructions">بۆ کردنەوە، بە هەژماری گوگڵ بچۆ ژووره‌وه‌.</string>
+  <string name="kg_login_username_hint">ناوی بەکارهێنەر (ئیمەیڵ)</string>
   <string name="kg_login_password_hint">تێپەڕەوشە</string>
+  <string name="kg_login_submit_button">چوونەژوورەوە</string>
+  <string name="kg_login_invalid_input">ناو یان تێپه‌ڕوشه‌ ڕاست نییه‌.</string>
+  <string name="kg_login_account_recovery_hint">ناو یان تێپەڕوشەت لە بیرچووە\?\nVisit <b>google.com/accounts/recovery</b>.</string>
   <string name="kg_login_checking_password">تاقیکردنەوەی ئەژمێر\u2026</string>
   <string name="kg_too_many_failed_pin_attempts_dialog_message">
         چەند جارێک بە هەڵە PIN نوسیوە <xliff:g id="number">%d</xliff:g> times.

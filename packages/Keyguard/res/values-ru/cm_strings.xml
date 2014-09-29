@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Экран блокировки</string>
   <string name="keyguard_discharging">Заряд батареи: <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Подключите зарядное устройство (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
   <plurals name="missed_calls">
     <item quantity="one">%d пропущенный звонок</item>
     <item quantity="few">%d пропущенных звонка</item>
@@ -32,4 +33,12 @@
   <string name="message_from">сообщение от</string>
   <string name="message_from_person">сообщение от абонента «%1$s»</string>
   <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK-код должен содержать 8 цифр.</string>
+  <string name="keyguard_password_wrong_puk_code">Неправильный PUK-код.</string>
+  <string name="keyguard_password_pin_failed">Сбой операции PIN.</string>
+  <string name="keyguard_password_puk_failed">Сбой операции PUK.</string>
+  <string name="pinpuk_attempts">\nОсталось попыток:</string>
+  <string name="lockscreen_sim_error_message_short">Сбой SIM-карты.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM заблокирована оператором</string>
+  <string name="msim_kg_sim_pin_msg_format">Оператор <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

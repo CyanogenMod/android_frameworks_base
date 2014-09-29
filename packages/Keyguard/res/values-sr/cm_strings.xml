@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Закључан екран</string>
   <string name="keyguard_discharging">Пражњење, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Повежи свој пуњач, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d пропуштен позив</item>
     <item quantity="few">%d пропуштена позива</item>
@@ -34,4 +35,12 @@
   <string name="message_from">порука од</string>
   <string name="message_from_person">порука од %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK код би требало да буде 8 бројева.</string>
+  <string name="keyguard_password_wrong_puk_code">Нетачан PUK код.</string>
+  <string name="keyguard_password_pin_failed">PIN операција није успела.</string>
+  <string name="keyguard_password_puk_failed">PUK операција није успела.</string>
+  <string name="pinpuk_attempts">\nПокушаја преостало:</string>
+  <string name="lockscreen_sim_error_message_short">Неважећа картица.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM је лично закључан</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

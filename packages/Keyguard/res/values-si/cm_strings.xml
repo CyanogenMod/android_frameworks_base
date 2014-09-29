@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">අගුළු තිරය</string>
   <string name="keyguard_discharging">විසර්ජනය වෙමින්, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">ඔබගේ ආරෝපකය සම්බන්ධ කරන්න, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d මගහැරුණු ඇමතුමක්</item>
     <item quantity="other">මගහැරුණු ඇමතුම් %d</item>
@@ -30,4 +31,12 @@
   <string name="message_from">පණිවිඩය කාවිසින්ද</string>
   <string name="message_from_person">%1$s විසින් පණිවිඩයක්</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK කේතය අංක 8 විය යුතුය.</string>
+  <string name="keyguard_password_wrong_puk_code">වැරදි PUK කේතයකි.</string>
+  <string name="keyguard_password_pin_failed">PIN ක්‍රියාව අසමත්විය.</string>
+  <string name="keyguard_password_puk_failed">PUK ක්‍රියාව අසමත්විය.</string>
+  <string name="pinpuk_attempts">\nඋත්සාහයන් ඉතුරුව ඇත:</string>
+  <string name="lockscreen_sim_error_message_short">අවලංගු කාඩ් පතකි.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM ව්‍යාකූලව අඟුළුලා ඇත</string>
+  <string name="msim_kg_sim_pin_msg_format">දායක: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

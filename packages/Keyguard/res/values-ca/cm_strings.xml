@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Pantalla de bloqueig</string>
   <string name="keyguard_discharging">S\'està descarregant, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Connecta el teu carregador, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d trucada perduda</item>
     <item quantity="other">%d trucades perdudes</item>
@@ -30,4 +31,12 @@
   <string name="message_from">missatge de</string>
   <string name="message_from_person">missatge de %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
+  <string name="kg_invalid_sim_puk_hint_cm">El codi PUK hauria de tenir 8 números.</string>
+  <string name="keyguard_password_wrong_puk_code">Codi PUK incorrecte.</string>
+  <string name="keyguard_password_pin_failed">L\'operació PIN ha fallat.</string>
+  <string name="keyguard_password_puk_failed">L\'operació PUK ha fallat.</string>
+  <string name="pinpuk_attempts">\nIntents restants:</string>
+  <string name="lockscreen_sim_error_message_short">Targeta invàlida.</string>
+  <string name="keyguard_perso_locked_message">La SIM/RUIM està Perso bloquejada</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

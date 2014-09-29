@@ -31,7 +31,7 @@
   <string name="faceunlock_multiple_failures">Perpasóse\'l númberu máximu d\'intentos de desbloquéu facial.</string>
   <string name="keyguard_charged">Cargada</string>
   <string name="keyguard_plugged_in">Cargando (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)</string>
-  <string name="keyguard_low_battery">Coneuta\'l cargador, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery">Coneuta\'l cargador.</string>
   <string name="keyguard_instructions_when_pattern_disabled">Empobina al menú pa desbloquiar la pantalla.</string>
   <string name="keyguard_network_locked_message">Bloquiada pa la rede</string>
   <string name="keyguard_missing_sim_message_short">Falta la tarxeta SIM</string>
