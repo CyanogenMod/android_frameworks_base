@@ -3,9 +3,6 @@
 <!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
-** Copyright (c) 2013, The Linux Foundation. All rights reserved.
-** Not a Contribution.
-**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -859,8 +856,7 @@
   <string name="emergency_calls_only" msgid="2485604591272668370">Namái llamaes d\'emerxencia</string>
   <string name="lockscreen_network_locked_message">Bloquiada pa la rede</string>
   <string name="lockscreen_sim_puk_locked_message">La tarxeta SIM ta bloquiada col códigu PUK.</string>
-  <string name="lockscreen_sim_puk_locked_instructions">Consulta la guía del usuariu o ponte en contautu col serviciu d\'atención al cliente.</string>
-  <string name="lockscreen_sim_locked_message">Inxerta\'l códigu PIN.</string>
+  <string name="lockscreen_sim_locked_message">La tarxeta SIM ta bloquiada.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">Desbloquiando tarxeta SIM\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">Fixisti <xliff:g id="number">%d</xliff:g> intentos fallíos de desbloquéu.
 \n\nVuelvi intentalo en <xliff:g id="number">%d</xliff:g> segundos.
@@ -1570,7 +1566,7 @@
   <string name="kg_sim_unlock_progress_dialog_message">Desbloquiando tarxeta SIM…</string>
   <string name="kg_password_wrong_pin_code">Códigu PIN incorreutu</string>
   <string name="kg_invalid_sim_pin_hint">Introduz un códigu PIN con una llonxitú comprendida ente cuatro y ocho díxitos.</string>
-  <string name="kg_invalid_sim_puk_hint">El códigu PUK tien de tener ocho númberos como mínimo.</string>
+  <string name="kg_invalid_sim_puk_hint">El códigu PUK tien de tener ocho númberos como mínimu.</string>
   <string name="kg_invalid_puk">Vuelvi a introducir el códigu PUK correutu. Si introduces un códigu incorreutu delles vegaes, va inhabilitase la tarxeta SIM.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">Los códigos PIN nun concasen.</string>
   <string name="kg_login_too_many_attempts">Abondos intentos incorreutos de crear el patrón</string>
