@@ -3,9 +3,6 @@
 <!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
-** Copyright (c) 2013, The Linux Foundation. All rights reserved.
-** Not a Contribution.
-**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -272,6 +269,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_transport_stop_description">Stopp-Knäppchen</string>
   <string name="emergency_calls_only" msgid="2485604591272668370">Nëmmen Noutriff</string>
   <string name="lockscreen_sim_puk_locked_message">SIM-Kaart ass PUK-gespaart.</string>
+  <string name="lockscreen_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nach eng Kéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_glogin_forgot_pattern">Kont-Entspärung</string>
@@ -510,6 +508,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_password_instructions">Passwuert aginn</string>
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
   <string name="kg_invalid_sim_pin_hint">Tipp e PIN deen tëscht 4 an 8 Zifferen huet.</string>
+  <string name="kg_invalid_sim_puk_hint">De PUK-Code misst 8 oder méi Zifferen hunn.</string>
   <string name="kg_login_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
   <string name="kg_login_submit_button">Aloggen</string>
   <string name="kg_login_invalid_input">Ongëltege Benotzernumm oder Passwuert.</string>

@@ -16,10 +16,19 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">Uzamykacia obrazovka</string>
+  <string name="app_name">Obrazovka uzamknutia</string>
   <string name="keyguard_discharging">Vybíjanie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Pripojte nabíjačku, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="missed_call">zmeškaný hovor</string>
   <string name="message_from">správa od</string>
   <string name="message_from_person">správa od %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
+  <string name="kg_invalid_sim_puk_hint_cm">Kód PUK by mal mať 8 čísiel.</string>
+  <string name="keyguard_password_wrong_puk_code">Nesprávny kód PUK.</string>
+  <string name="keyguard_password_pin_failed">Operácia PIN zlyhala.</string>
+  <string name="keyguard_password_puk_failed">Operácia PUK zlyhala.</string>
+  <string name="pinpuk_attempts">\nZostávajúce pokusy:</string>
+  <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM je uzamknutá pomocou Perso</string>
+  <string name="msim_kg_sim_pin_msg_format">Poskytovateľ: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

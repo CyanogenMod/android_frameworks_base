@@ -18,4 +18,25 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Lukustusekraan</string>
   <string name="keyguard_discharging">Tühjakslaadimine, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Ühenda oma laadija, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <plurals name="missed_calls">
+    <item quantity="one">%d vastamata kõne</item>
+    <item quantity="other">%d vastamata kõnet</item>
+  </plurals>
+  <plurals name="unread_messages">
+    <item quantity="one">%d lugemata sõnum</item>
+    <item quantity="other">%d lugemata sõnumit</item>
+  </plurals>
+  <string name="missed_call">vastamata kõne</string>
+  <string name="message_from">sõnum</string>
+  <string name="message_from_person">sõnum %1$s</string>
+  <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK kood peaks olema 8 numbrit.</string>
+  <string name="keyguard_password_wrong_puk_code">Vale PUK kood.</string>
+  <string name="keyguard_password_pin_failed">PIN toiming nurjus.</string>
+  <string name="keyguard_password_puk_failed">PUK toiming nurjus.</string>
+  <string name="pinpuk_attempts">\nKatset jäänud:</string>
+  <string name="lockscreen_sim_error_message_short">Kehtetu kaart.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM on Perso lukustatud</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

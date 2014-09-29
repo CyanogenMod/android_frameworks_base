@@ -16,23 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="accessibility_quick_settings_ringer">Zvuk <xliff:g id="state" example="Off">%s</xliff:g>.</string>
-  <string name="accessibility_quick_settings_vibration">Vibracija <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_dpad_left">Kursor lijevo</string>
   <string name="accessibility_dpad_right">Kursor desno</string>
   <string name="dessert_case_settings_cm_title">Prikaži CM maskotu</string>
   <string name="dessert_case_settings_cm_summary">Prikaži CM maskotu skupa sa Android desertima u snu</string>
-  <string name="quick_settings_profile_label">Profil</string>
-  <string name="powerwidget_screen_timeout_toast">Istek zaslona podešen na : %1$d %2$s</string>
-  <string name="quick_settings_gps">GPS</string>
-  <string name="quick_settings_gps_off">GPS isključen</string>
   <string name="quick_settings_screen_sleep">Stanje mirovanja</string>
-  <string name="quick_settings_ringer_on">Zvuk uključen</string>
-  <string name="quick_settings_ringer_off">Zvuk isključen</string>
-  <string name="quick_settings_vibration_on">Vibracija uključena</string>
-  <string name="quick_settings_vibration_off">Vibracija isključena</string>
   <string name="quick_settings_label_enabled">Uključeno</string>
-  <string name="quick_settings_label_disabled">Isključeno</string>
   <string name="quick_settings_ringer_normal">Zvuk</string>
   <string name="quick_settings_lockscreen">Zaključaj zaslon</string>
   <string name="quick_settings_network_type">Način mreže</string>
@@ -43,7 +32,6 @@
   <string name="quick_settings_torch_off">Baklja isključena</string>
   <string name="quick_settings_nfc">NFC</string>
   <string name="quick_settings_nfc_off">NFC isključen</string>
-  <string name="quick_settings_screen_timeout">Istek</string>
   <string name="quick_settings_usb_tether_off_label">Odspojen</string>
   <string name="quick_settings_usb_tether_connected_label">Dijeljenje veze isključeno</string>
   <string name="quick_settings_usb_tether_on_label">Dijeljenje veze</string>
@@ -57,7 +45,6 @@
   <string name="quick_settings_camera_label">Kamera</string>
   <string name="quick_settings_network_adb_disabled_label">Onemogućeno</string>
   <string name="quick_settings_network_adb_enabled_label">Omogućeno</string>
-  <string name="quick_settings_bluetooth_multi_label">%1$d spojeno</string>
   <string name="quick_settings_equalizer">Ekvilajzer</string>
   <string name="quick_settings_compass_off">Kompas ugašen</string>
   <string name="quick_settings_compass_init">Inicijalizacija\u2026</string>
@@ -66,7 +53,6 @@
   <string name="location_mode_high_accuracy_title">Visoka preciznost</string>
   <string name="location_mode_battery_saving_title">Štednja baterije</string>
   <string name="location_mode_sensors_only_title">Samo uređaj</string>
-  <string name="location_mode_location_off_title">Lokacija isključena</string>
   <string name="quick_settings_expanded_desktop">Prošireno</string>
   <string name="quick_settings_expanded_desktop_off">Normalno</string>
   <string name="quick_settings_camera_error_connect">Nije moguće povezivanje s kamerom</string>
