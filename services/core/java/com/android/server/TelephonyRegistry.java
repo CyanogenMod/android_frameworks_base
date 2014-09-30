@@ -225,8 +225,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                     //defaultSubId comes before new defaultSubId update) we need to recall all
                     //possible missed notify callback
                     synchronized (mRecords) {
-                        for (int i =0; i < mRecords.size(); i++) {
-                            Record r = mRecords.get(i);
+                        for (Record r : mRecords) {
                             if(r.subId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
                                 checkPossibleMissNotify(r, newDefaultPhoneId);
                             }
@@ -1572,7 +1571,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 r.callback.onServiceStateChanged(
                         new ServiceState(mServiceState[phoneId]));
             } catch (RemoteException ex) {
-                remove(r.binder);
+                mRemoveList.add(r.binder);
             }
         }
 
@@ -1599,7 +1598,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 r.callback.onSignalStrengthChanged((gsmSignalStrength == 99 ? -1
                         : gsmSignalStrength));
             } catch (RemoteException ex) {
-                remove(r.binder);
+                mRemoveList.add(r.binder);
             }
         }
 
@@ -1611,7 +1610,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 }
                 r.callback.onCellInfoChanged(mCellInfo.get(phoneId));
             } catch (RemoteException ex) {
-                remove(r.binder);
+                mRemoveList.add(r.binder);
             }
         }
 
@@ -1624,7 +1623,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 r.callback.onMessageWaitingIndicatorChanged(
                         mMessageWaiting[phoneId]);
             } catch (RemoteException ex) {
-                remove(r.binder);
+                mRemoveList.add(r.binder);
             }
         }
 
@@ -1637,7 +1636,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 r.callback.onCallForwardingIndicatorChanged(
                         mCallForwarding[phoneId]);
             } catch (RemoteException ex) {
-                remove(r.binder);
+                mRemoveList.add(r.binder);
             }
         }
 
@@ -1662,7 +1661,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 r.callback.onDataConnectionStateChanged(mDataConnectionState[phoneId],
                         mDataConnectionNetworkType[phoneId]);
             } catch (RemoteException ex) {
-                remove(r.binder);
+                mRemoveList.add(r.binder);
             }
         }
     }
