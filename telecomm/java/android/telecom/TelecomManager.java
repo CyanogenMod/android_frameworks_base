@@ -809,7 +809,7 @@ public class TelecomManager {
     public long getActiveSubscription() {
         try {
             if (isServiceConnected()) {
-                return getTelecommService().getActiveSubscription();
+                return getTelecomService().getActiveSubscription();
             }
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException attempting to get the active subsription.", e);
@@ -824,7 +824,7 @@ public class TelecomManager {
     public void switchToOtherActiveSub(long subId) {
         try {
             if (isServiceConnected()) {
-                getTelecommService().switchToOtherActiveSub(subId);
+                getTelecomService().switchToOtherActiveSub(subId);
             }
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException attempting to switchToOtherActiveSub.", e);

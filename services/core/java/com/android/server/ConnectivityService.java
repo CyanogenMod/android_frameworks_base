@@ -2174,7 +2174,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 bestNetwork.addRequest(nri.request);
                 mNetworkForRequestId.put(nri.request.requestId, bestNetwork);
                 notifyNetworkCallback(bestNetwork, nri);
-                score = bestNetwork.currentScore;
+                score = bestNetwork.getCurrentScore();
                 if (nri.isRequest && nri.request.legacyType != TYPE_NONE) {
                     //To support legacy calls for network request
                     mLegacyTypeTracker.add(nri.request.legacyType, bestNetwork);
