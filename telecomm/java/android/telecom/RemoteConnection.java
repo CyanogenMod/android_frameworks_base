@@ -774,8 +774,8 @@ public final class RemoteConnection {
     /** @hide */
    public void setDisconnectedWithSsNotification(int disconnectCause,
                 String disconnectMessage, int type, int code) {
-        for (Listener l : mListeners) {
-            l.setDisconnectedWithSsNotification(this, disconnectCause,
+        for (Callback c : mCallbacks) {
+            c.setDisconnectedWithSsNotification(this, disconnectCause,
                     disconnectMessage, type, code);
         }
     }
@@ -906,8 +906,8 @@ public final class RemoteConnection {
 
     /** @hide */
     void setPhoneAccountHandle(PhoneAccountHandle pHandle) {
-        for (Listener l : mListeners) {
-            l.setPhoneAccountHandle(this, pHandle);
+        for (Callback c : mCallbacks) {
+            c.setPhoneAccountHandle(this, pHandle);
         }
     }
 
