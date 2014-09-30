@@ -44,7 +44,7 @@
         </FrameLayout>
     </FrameLayout>
 
-    <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
+    <com.android.systemui.statusbar.BackDropView
             android:id="@+id/backdrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,9 +59,9 @@
                    android:layout_height="match_parent"
                    android:scaleType="centerCrop"
                    android:visibility="invisible" />
-    </com.android.systemui.statusbar.AlphaOptimizedFrameLayout>
+    </com.android.systemui.statusbar.BackDropView>
 
-    <View android:id="@+id/scrim_behind"
+    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_behind"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -80,7 +80,7 @@
             android:visibility="gone" />
     </com.android.systemui.statusbar.phone.PanelHolder>
 
-    <View android:id="@+id/scrim_in_front"
+    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_in_front"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

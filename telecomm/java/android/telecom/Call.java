@@ -427,7 +427,7 @@ public final class Call {
      */
     /** @hide */
     public void deflectCall(String number) {
-        mInCallAdapter.deflectCall(mTelecommCallId, number);
+        mInCallAdapter.deflectCall(mTelecomCallId, number);
     }
 
     /**
