@@ -1,7 +1,5 @@
 package com.android.systemui.statusbar.policy;
 
-import java.text.DecimalFormat;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,6 +17,7 @@ import android.os.UserHandle;
 import android.os.Message;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -26,41 +25,49 @@ import android.widget.TextView;
 
 import com.android.systemui.R;
 
+import java.text.DecimalFormat;
+
 /*
-*
-* Seeing how an Integer object in java requires at least 16 Bytes, it seemed awfully wasteful
-* to only use it for a single boolean. 32-bits is plenty of room for what we need it to do.
-*
-*/
+ * Seeing how an Integer object in java requires at least 16 Bytes, it seemed awfully wasteful
+ * to only use it for a single boolean. 32-bits is plenty of room for what we need it to do.
+ */
 public class NetworkTraffic extends TextView {
-    public static final int MASK_UP = 0x00000001;        // Least valuable bit
-    public static final int MASK_DOWN = 0x00000002;      // Second least valuable bit
-    public static final int MASK_UNIT = 0x00000004;      // Third least valuable bit
+    public static final int MASK_UP     = 0x00000001;      // Least valuable bit
+    public static final int MASK_DOWN   = 0x00000002;      // Second least valuable bit
+    public static final int MASK_UNIT   = 0x00000004;      // Third least valuable bit
     public static final int MASK_PERIOD = 0xFFFF0000;    // Most valuable 16 bits
 
-    private static final int KILOBIT = 1000;
+    private static final int KILOBIT  = 1000;
     private static final int KILOBYTE = 1024;
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("##0.#");
+    private static final DecimalFormat decimalFormat = new DecimalFormat("##0.#");
     static {
         decimalFormat.setMaximumIntegerDigits(3);
         decimalFormat.setMaximumFractionDigits(1);
     }
 
+    private final ConnectivityManager connectivityManager;
+
+    private BroadcastReceiver mIntentReceiver;
+
     private int mState = 0;
     private boolean mAttached;
+    private boolean mEnabled;
+    private boolean mWasConnectionAvailable;
+
     private long totalRxBytes;
     private long totalTxBytes;
     private long lastUpdateTime;
-    private int txtSizeSingle;
-    private int txtSizeMulti;
+    private int  txtSizeSingle;
+    private int  txtSizeMulti;
+
     private int KB = KILOBIT;
     private int MB = KB * KB;
     private int GB = MB * KB;
     private boolean mAutoHide;
     private int mAutoHideThreshold;
 
-    private Handler mTrafficHandler = new Handler() {
+    private final Handler mTrafficHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             long timeDelta = SystemClock.elapsedRealtime() - lastUpdateTime;
@@ -78,8 +85,8 @@ public class NetworkTraffic extends TextView {
             lastUpdateTime = SystemClock.elapsedRealtime();
 
             // Calculate the data rate from the change in total bytes and time
-            long newTotalRxBytes = TrafficStats.getTotalRxBytes();
-            long newTotalTxBytes = TrafficStats.getTotalTxBytes();
+            final long newTotalRxBytes = TrafficStats.getTotalRxBytes();
+            final long newTotalTxBytes = TrafficStats.getTotalTxBytes();
             long rxData = newTotalRxBytes - totalRxBytes;
             long txData = newTotalTxBytes - totalTxBytes;
 
@@ -91,7 +98,7 @@ public class NetworkTraffic extends TextView {
                 setVisibility(View.GONE);
             } else {
                 // If bit/s convert from Bytes to bits
-                String symbol;
+                final String symbol;
                 if (KB == KILOBYTE) {
                     symbol = "B/s";
                 } else {
@@ -121,8 +128,8 @@ public class NetworkTraffic extends TextView {
                 }
 
                 // Update view if there's anything new to show
-                if (! output.contentEquals(getText())) {
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, (float)textSize);
+                if (!output.contentEquals(getText())) {
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) textSize);
                     setText(output);
                 }
                 setVisibility(View.VISIBLE);
@@ -136,15 +143,15 @@ public class NetworkTraffic extends TextView {
         }
 
         private String formatOutput(long timeDelta, long data, String symbol) {
-            long speed = (long)(data / (timeDelta / 1000F));
+            final long speed = (long) (data / (timeDelta / 1000F));
             if (speed < KB) {
                 return decimalFormat.format(speed) + symbol;
             } else if (speed < MB) {
-                return decimalFormat.format(speed / (float)KB) + 'k' + symbol;
+                return decimalFormat.format(speed / (float) KB) + 'k' + symbol;
             } else if (speed < GB) {
-                return decimalFormat.format(speed / (float)MB) + 'M' + symbol;
+                return decimalFormat.format(speed / (float) MB) + 'M' + symbol;
             }
-            return decimalFormat.format(speed / (float)GB) + 'G' + symbol;
+            return decimalFormat.format(speed / (float) GB) + 'G' + symbol;
         }
 
         private boolean shouldHide(long rxData, long txData, long timeDelta) {
@@ -167,14 +174,14 @@ public class NetworkTraffic extends TextView {
         }
     };
 
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
+    private class SettingsObserver extends ContentObserver {
+        public SettingsObserver(Handler handler) {
             super(handler);
         }
 
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            Uri uri = Settings.System.getUriFor(Settings.System.NETWORK_TRAFFIC_STATE);
+        public void observe() {
+            final ContentResolver resolver = mContext.getContentResolver();
+            final Uri uri = Settings.System.getUriFor(Settings.System.NETWORK_TRAFFIC_STATE);
             resolver.registerContentObserver(uri, false,
                     this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System
@@ -189,43 +196,36 @@ public class NetworkTraffic extends TextView {
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.NETWORK_TRAFFIC_ICON_COLOR), false,
                     this, UserHandle.USER_ALL);
+
+            updateSettings();
         }
 
-        /*
-         *  @hide
-         */
         @Override
         public void onChange(boolean selfChange) {
             updateSettings();
         }
     }
 
-    /*
-     *  @hide
-     */
     public NetworkTraffic(Context context) {
         this(context, null);
     }
 
-    /*
-     *  @hide
-     */
     public NetworkTraffic(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    /*
-     *  @hide
-     */
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         final Resources resources = getResources();
         txtSizeSingle = resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
         txtSizeMulti = resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
-        Handler mHandler = new Handler();
+
+        final Handler mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
-        updateSettings();
     }
 
     @Override
@@ -233,9 +233,7 @@ public class NetworkTraffic extends TextView {
         super.onAttachedToWindow();
         if (!mAttached) {
             mAttached = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            mContext.registerReceiver(mIntentReceiver, filter, null, getHandler());
+            registerReceivers();
         }
         updateSettings();
     }
@@ -244,32 +242,73 @@ public class NetworkTraffic extends TextView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mAttached) {
-            try {
-                mContext.unregisterReceiver(mIntentReceiver);
-            } catch (Exception ignored) { }
+            unregisterReceivers();
             mAttached = false;
         }
     }
 
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null && action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                updateSettings();
-            }
+    private void registerReceivers() {
+        if (mIntentReceiver == null) {
+            mIntentReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    final String action = intent.getAction();
+                    if (TextUtils.equals(action, ConnectivityManager.CONNECTIVITY_ACTION)) {
+                        // update the indicator
+                        update();
+                    }
+                }
+            };
+            final IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            mContext.registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
-    };
+    }
+
+    private void unregisterReceivers() {
+        if (mIntentReceiver != null) {
+            try {
+                mContext.unregisterReceiver(mIntentReceiver);
+            } catch (Exception ignored) { }
+            mIntentReceiver = null;
+        }
+    }
 
     private boolean getConnectAvailable() {
-        ConnectivityManager connManager =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo network = (connManager != null) ? connManager.getActiveNetworkInfo() : null;
+        final NetworkInfo network = (connectivityManager != null)
+                ? connectivityManager.getActiveNetworkInfo() : null;
         return network != null && network.isConnected();
     }
 
+    private void update() {
+        // if the indicator is not enabled, skip updating it
+        if (!mEnabled) return;
+
+        // check if we have connectivity
+        if (getConnectAvailable()) {
+            // if we are attached, let the handler know
+            if (mAttached) {
+                totalRxBytes = TrafficStats.getTotalRxBytes();
+                lastUpdateTime = SystemClock.elapsedRealtime();
+                mTrafficHandler.sendEmptyMessage(1);
+            }
+            // if we did not have connectivity before, the indicator was hidden, therefore show it
+            if (!mWasConnectionAvailable) {
+                setVisibility(View.VISIBLE);
+                updateTrafficDrawable();
+            }
+            mWasConnectionAvailable = true;
+        } else {
+            // else check if there was a connectivity before and if, hide the view
+            if (mWasConnectionAvailable) {
+                setVisibility(View.GONE);
+            }
+            mWasConnectionAvailable = false;
+        }
+    }
+
     private void updateSettings() {
-        ContentResolver resolver = mContext.getContentResolver();
+        final ContentResolver resolver = mContext.getContentResolver();
 
         mAutoHide = Settings.System.getIntForUser(resolver,
                 Settings.System.NETWORK_TRAFFIC_AUTOHIDE, 0,
@@ -299,29 +338,33 @@ public class NetworkTraffic extends TextView {
 
 	    setTextColor(mNetworkTrafficColor);
 
+        // reset the was connection available state
+        mWasConnectionAvailable = false;
+
         if (isSet(mState, MASK_UNIT)) {
             KB = KILOBYTE;
         } else {
             KB = KILOBIT;
         }
+
         MB = KB * KB;
         GB = MB * KB;
 
         if (isSet(mState, MASK_UP) || isSet(mState, MASK_DOWN)) {
-            if (getConnectAvailable()) {
-                if (mAttached) {
-                    totalRxBytes = TrafficStats.getTotalRxBytes();
-                    lastUpdateTime = SystemClock.elapsedRealtime();
-                    mTrafficHandler.sendEmptyMessage(1);
-                }
-                setVisibility(View.VISIBLE);
-                updateTrafficDrawable();
-                return;
-            }
+            mEnabled = true;
         } else {
+            mEnabled = false;
             clearHandlerCallbacks();
         }
-        setVisibility(View.GONE);
+
+        // if the indicator is enabled, update the view, else hide it
+        if (mEnabled) {
+            registerReceivers();
+            update();
+        } else {
+            unregisterReceivers();
+            setVisibility(View.GONE);
+        }
     }
 
     private static boolean isSet(int intState, int intMask) {
@@ -340,7 +383,7 @@ public class NetworkTraffic extends TextView {
     }
 
     private void updateTrafficDrawable() {
-        int intTrafficDrawable;
+        final int intTrafficDrawable;
         final int iconcolor = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.NETWORK_TRAFFIC_ICON_COLOR, -2);
         if (isSet(mState, MASK_UP + MASK_DOWN)) {
