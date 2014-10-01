@@ -181,6 +181,16 @@ public class VideoProfile implements Parcelable {
         }
 
         /**
+         * Whether the video state is any of the video type
+         * @param videoState The video state.
+         * @return Returns true if the video state TX or RX or Bidirectional
+         */
+        public static boolean isVideo(int videoState) {
+            return hasState(videoState, TX_ENABLED) || hasState(videoState, RX_ENABLED)
+                    || hasState(videoState, BIDIRECTIONAL);
+        }
+
+        /**
          * Whether the video transmission is enabled.
          * @param videoState The video state.
          * @return Returns true if the video transmission is enabled.
