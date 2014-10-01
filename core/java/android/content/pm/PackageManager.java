@@ -191,6 +191,13 @@ public abstract class PackageManager {
     public static final int MATCH_DEFAULT_ONLY   = 0x00010000;
 
     /**
+     * Resolution flag: If there is only 1 activity that the intent resolves too and if this
+     * flag  is set perform pre launch check for the resolved activity.
+     * @hide
+     */
+    public static final int PERFORM_PRE_LAUNCH_CHECK   = 0x00100000;
+
+    /**
      * Permission check result: this is returned by {@link #checkPermission}
      * if the permission has been granted to the given package.
      */

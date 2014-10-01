@@ -1331,6 +1331,10 @@
          Example: com.google.android.myapp/.resolver.MyResolverActivity  -->
     <string name="config_customResolverActivity"></string>
 
+    <!-- Component name of a custom pre launch check activity to be used instead of default
+         framework version. Currently, there is no default version. -->
+    <string name="config_prelaunchcheckactivity"></string>
+
     <!-- Apps that are authorized to access shared accounts, overridden by product overlays -->
     <string name="config_appsAuthorizedForSharedAccounts">;com.android.settings;</string>
 
