@@ -894,9 +894,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         if (mDataNetType == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
             // If data network type is unknown do not display data icon
             visible = false;
-        } else if (!isCdma(phoneId)) {
-             Slog.d(TAG,"updateDataIcon  when gsm mMSimState =" + mMSimState[phoneId]);
-            // GSM case, we have to check also the sim state
+        } else {
+            Slog.d(TAG,"updateDataIcon  when gsm mMSimState =" + mMSimState[phoneId]);
             if (mMSimState[phoneId] == IccCardConstants.State.READY ||
                 mMSimState[phoneId] == IccCardConstants.State.UNKNOWN) {
                 mNoSim = false;
@@ -912,14 +911,6 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 mNoSim = true;
                 iconId = TelephonyIcons.getNoSimIcon();
                 visible = false; // no SIM? no data
-            }
-        } else {
-            // CDMA case, mMSimDataActivity can be also DATA_ACTIVITY_DORMANT
-            if (mDataState == TelephonyManager.DATA_CONNECTED) {
-                iconId = TelephonyIcons.getDataActivity(phoneId, mDataActivity);
-            } else {
-                iconId = 0;
-                visible = false;
             }
         }
 
