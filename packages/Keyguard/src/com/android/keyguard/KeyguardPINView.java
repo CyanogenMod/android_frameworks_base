@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +45,8 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
 
     public KeyguardPINView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mMaxCountdownTimes = context.getResources()
+                .getInteger(R.integer.config_max_unlock_countdown_times);
         mAppearAnimationUtils = new AppearAnimationUtils(context);
         mDisappearYTranslation = getResources().getDimensionPixelSize(
                 R.dimen.disappear_y_translation);
@@ -49,8 +54,22 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
 
     protected void resetState() {
         super.resetState();
+        showDefautMessage();
+        mPasswordEntry.setEnabled(true);
+    }
+
+    private String getMessge(int mMaxCountdownTimes) {
+        String msg = getContext().getString(R.string.kg_pin_instructions);
+        msg += " - " + getContext().getResources().getString(
+                R.string.kg_remaining_attempts, getRemainingCount());
+        return msg;
+    }
+
+    private void showDefautMessage() {
         if (KeyguardUpdateMonitor.getInstance(mContext).getMaxBiometricUnlockAttemptsReached()) {
             mSecurityMessageDisplay.setMessage(R.string.faceunlock_multiple_failures, true);
+        } else if (mMaxCountdownTimes > 0) {
+            mSecurityMessageDisplay.setMessage(getMessge(mMaxCountdownTimes), true);
         } else {
             mSecurityMessageDisplay.setMessage(R.string.kg_pin_instructions, false);
         }
