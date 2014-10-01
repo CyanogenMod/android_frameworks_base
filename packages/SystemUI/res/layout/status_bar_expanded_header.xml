@@ -65,7 +65,7 @@
 
     <TextView
         android:id="@+id/header_debug_info"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -79,7 +79,7 @@
     <FrameLayout android:id="@+id/action_button_holder"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="5dp"
         >
         <ImageView android:id="@+id/clear_all_button"
             android:layout_width="50dp"
@@ -104,7 +104,7 @@
     <FrameLayout android:id="@+id/settings_button_holder"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="5dp"
         >
         <ImageView android:id="@+id/settings_button"
             android:layout_width="50dp"
