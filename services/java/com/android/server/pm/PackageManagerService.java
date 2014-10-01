@@ -516,6 +516,15 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private ThemeConfig mBootThemeConfig;
 
+    final ActivityInfo mPreLaunchCheckActivity = new ActivityInfo();
+    final ResolveInfo mPreLaunchCheckResolveInfo = new ResolveInfo();
+    ComponentName mPreLaunchCheckPackagesComponentName;
+    ComponentName mCustomPreLaunchComponentName;
+    private Set<String> mPreLaunchCheckPackages =
+            Collections.synchronizedSet(new HashSet<String>());
+
+    boolean mPreLaunchCheckPackagesReplaced = false;
+
     // Set of pending broadcasts for aggregating enable/disable of components.
     static class PendingPackageBroadcasts {
         // for each user id, a map of <package name -> components within that package>
@@ -1257,6 +1266,15 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
 
                 startTime = SystemClock.uptimeMillis();
+
+                String customPreLaunchCheckActivity = Resources.getSystem().getString(
+                        R.string.config_prelaunchcheckactivity);
+                if (TextUtils.isEmpty(customPreLaunchCheckActivity)) {
+                    customPreLaunchCheckActivity = null;
+                } else {
+                    mCustomPreLaunchComponentName = ComponentName.unflattenFromString(
+                            customPreLaunchCheckActivity);
+                }
 
                 EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SYSTEM_SCAN_START,
                         startTime);
@@ -2899,12 +2917,54 @@ public class PackageManagerService extends IPackageManager.Stub {
                 false, false, false, userId);
     }
 
+    private ResolveInfo findPreLaunchCheckResolve(Intent intent, ResolveInfo rInfo, int userId) {
+        if (mPreLaunchCheckPackagesComponentName == null) {
+            return rInfo;
+        }
+
+        String packageName = rInfo.activityInfo.packageName;
+        // If pre launch check has been enabled for this pacakge, return the appropriate
+        // resolve info.
+        if (!mPreLaunchCheckPackages.contains(packageName)) {
+            return rInfo;
+        }
+
+        // Only pre-check for intents that show up in the Launcher, if the intent originates
+        // else where, ignore it.
+        if (!intent.hasCategory(Intent.CATEGORY_LAUNCHER)) {
+            return rInfo;
+        }
+
+        if (userId != 0) {
+            ResolveInfo ri;
+            ri = new ResolveInfo(mPreLaunchCheckResolveInfo);
+            ri.activityInfo = new ActivityInfo(ri.activityInfo);
+            ri.activityInfo.applicationInfo = new ApplicationInfo(
+                    ri.activityInfo.applicationInfo);
+            ri.activityInfo.applicationInfo.uid = UserHandle.getUid(userId,
+                    UserHandle.getAppId(ri.activityInfo.applicationInfo.uid));
+            ri.targetComponentName = new ComponentName(ri.activityInfo.packageName,
+                    ri.activityInfo.targetActivity);
+            return ri;
+        }
+        // Save the target component since we are doing the redirection here.
+        mPreLaunchCheckResolveInfo.targetComponentName = new ComponentName(
+                rInfo.activityInfo.packageName, rInfo.activityInfo.name);
+        return mPreLaunchCheckResolveInfo;
+    }
+
     private ResolveInfo chooseBestActivity(Intent intent, String resolvedType,
             int flags, List<ResolveInfo> query, int userId) {
         if (query != null) {
             final int N = query.size();
             if (N == 1) {
-                return query.get(0);
+                // Check if we have to perform pre launch check for this activity.
+                if ((flags & PackageManager.PERFORM_PRE_LAUNCH_CHECK) ==
+                        PackageManager.PERFORM_PRE_LAUNCH_CHECK) {
+                    return findPreLaunchCheckResolve(intent, query.get(0), userId);
+                } else {
+                    return query.get(0);
+                }
             } else if (N > 1) {
                 final boolean debug = ((intent.getFlags() & Intent.FLAG_DEBUG_LOG_RESOLUTION) != 0);
                 // If there is more than one activity with the same priority,
@@ -4447,6 +4507,12 @@ public class PackageManagerService extends IPackageManager.Stub {
             setUpCustomResolverActivity(pkg);
         }
 
+        // Is there a custom pre launch check activity defined in this package
+        if (mCustomPreLaunchComponentName != null &&
+                pkg.packageName.equals(mCustomPreLaunchComponentName.getPackageName())) {
+            setUpCustomPreLaunchCheckActivity(pkg);
+        }
+
         if (pkg.packageName.equals("android")) {
             synchronized (mPackages) {
                 if (mAndroidApplication != null) {
@@ -4479,6 +4545,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                     mResolveInfo.match = 0;
                     mResolveComponentName = new ComponentName(
                             mAndroidApplication.packageName, mResolveActivity.name);
+                }
+
+                if (!mPreLaunchCheckPackagesReplaced) {
+                    // If a default pre launch check activity is defined, define it here.
+                    Log.d(TAG, "No custom and no default Pre Launch Check activity defined");
                 }
             }
         }
@@ -5952,6 +6023,31 @@ public class PackageManagerService extends IPackageManager.Stub {
             mResolveComponentName = mCustomResolverComponentName;
             Slog.i(TAG, "Replacing default ResolverActivity with custom activity: " +
                     mResolveComponentName);
+        }
+    }
+
+    private void setUpCustomPreLaunchCheckActivity(PackageParser.Package pkg) {
+        synchronized (mPackages) {
+            mPreLaunchCheckPackagesReplaced = true;
+            // Set up information for custom user intent resolution activity.
+            mPreLaunchCheckActivity.applicationInfo = pkg.applicationInfo;
+            mPreLaunchCheckActivity.name = mCustomPreLaunchComponentName.getClassName();
+            mPreLaunchCheckActivity.packageName = pkg.applicationInfo.packageName;
+            mPreLaunchCheckActivity.processName = pkg.applicationInfo.packageName;
+            mPreLaunchCheckActivity.theme = com.android.internal.R.style.Theme_Holo_Dialog_Alert;
+            mPreLaunchCheckActivity.launchMode = ActivityInfo.LAUNCH_MULTIPLE;
+            mPreLaunchCheckActivity.flags = ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS |
+                    ActivityInfo.FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS;
+            mPreLaunchCheckActivity.exported = true;
+            mPreLaunchCheckActivity.enabled = true;
+
+            mPreLaunchCheckResolveInfo.activityInfo = mPreLaunchCheckActivity;
+            mPreLaunchCheckResolveInfo.priority = 0;
+            mPreLaunchCheckResolveInfo.preferredOrder = 0;
+            mPreLaunchCheckResolveInfo.match = 0;
+            mPreLaunchCheckPackagesComponentName = mCustomPreLaunchComponentName;
+            Slog.i(TAG, "Replacing default Pre Launch Activity with custom activity: " +
+                    mPreLaunchCheckPackagesComponentName);
         }
     }
 
@@ -12514,6 +12610,16 @@ public class PackageManagerService extends IPackageManager.Stub {
     @Deprecated
     public boolean isPermissionEnforced(String permission) {
         return true;
+    }
+
+    @Override
+    public final void addPreLaunchCheckPackage(String packageName) {
+        mPreLaunchCheckPackages.add(packageName);
+    }
+
+    @Override
+    public final void removePreLaunchCheckPackage(String packageName) {
+        mPreLaunchCheckPackages.remove(packageName);
     }
 
     public boolean isStorageLow() {
