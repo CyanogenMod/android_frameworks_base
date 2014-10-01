@@ -1318,7 +1318,7 @@ public final class ActiveServices {
         ProcessRecord app;
 
         if (!isolated) {
-            app = mAm.getProcessRecordLocked(procName, r.appInfo.uid, false);
+            app = mAm.getProcessRecordLocked(procName, r.appInfo.uid, true);
             if (DEBUG_MU) Slog.v(TAG_MU, "bringUpServiceLocked: appInfo.uid=" + r.appInfo.uid
                         + " app=" + app);
             if (app != null && app.thread != null) {
@@ -2036,7 +2036,14 @@ public final class ActiveServices {
             }
         }
 
-        // First clear app state from services.
+        // Clean up any connections this application has to other services.
+        for (int i=app.connections.size()-1; i>=0; i--) {
+            ConnectionRecord r = app.connections.valueAt(i);
+            removeConnectionLocked(r, app, null);
+        }
+        app.connections.clear();
+
+        // Clear app state from services.
         for (int i=app.services.size()-1; i>=0; i--) {
             ServiceRecord sr = app.services.valueAt(i);
             synchronized (sr.stats.getBatteryStats()) {
@@ -2062,13 +2069,6 @@ public final class ActiveServices {
                 b.requested = b.received = b.hasBound = false;
             }
         }
-
-        // Clean up any connections this application has to other services.
-        for (int i=app.connections.size()-1; i>=0; i--) {
-            ConnectionRecord r = app.connections.valueAt(i);
-            removeConnectionLocked(r, app, null);
-        }
-        app.connections.clear();
 
         ServiceMap smap = getServiceMap(app.userId);
 

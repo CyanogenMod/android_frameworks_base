@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Tela de bloqueio</string>
   <string name="keyguard_discharging">Descarregando, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Conecte no carregador, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d chamada perdida</item>
     <item quantity="other">%d chamadas perdidas</item>
@@ -30,4 +31,12 @@
   <string name="message_from">mensagem de</string>
   <string name="message_from_person">mensagem de %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">O código PUK deve ter 8 números.</string>
+  <string name="keyguard_password_wrong_puk_code">Código PUK incorreto.</string>
+  <string name="keyguard_password_pin_failed">Operação PIN falhou.</string>
+  <string name="keyguard_password_puk_failed">Operação PUK falhou.</string>
+  <string name="pinpuk_attempts">\nTentativas restantes:</string>
+  <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM está travado</string>
+  <string name="msim_kg_sim_pin_msg_format">ASS: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

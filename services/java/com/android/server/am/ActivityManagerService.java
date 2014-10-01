@@ -344,6 +344,16 @@ public final class ActivityManagerService extends ActivityManagerNative
     // devices.
     private boolean mShowDialogs = true;
 
+    // Penalise Large applications going to background only for Low-RAM devices
+    private boolean mPenaliseLargeApps = ActivityManager.isLowRamDeviceStatic();
+
+    // ADJ to be set for new background app (if found to be large)
+    private int mPenalisedAdj = SystemProperties.getInt("ro.am.penalise_large_apps.adj",
+                                                   ProcessList.CACHED_APP_MAX_ADJ);
+
+    // Threshold Pss to be compared against new background app's Pss
+    private long mPenalisedThreshold;
+
     /**
      * Description of a request to start a new activity, which has been held
      * due to app switches being disabled.
@@ -1677,7 +1687,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 break;
             }
             case REQUEST_ALL_PSS_MSG: {
-                requestPssAllProcsLocked(SystemClock.uptimeMillis(), true, false);
+                synchronized (ActivityManagerService.this) {
+                    requestPssAllProcsLocked(SystemClock.uptimeMillis(), true, false);
+                }
                 break;
             }
             case POST_PRIVACY_NOTIFICATION_MSG: {
@@ -2062,6 +2074,15 @@ public final class ActivityManagerService extends ActivityManagerNative
         mGrantFile = new AtomicFile(new File(systemDir, "urigrants.xml"));
 
         mHeadless = "1".equals(SystemProperties.get("ro.config.headless", "0"));
+
+        if (mPenaliseLargeApps == true) {
+            long cachedAppMaxMemLevel
+                    = mProcessList.getMemLevel(ProcessList.CACHED_APP_MAX_ADJ)/1024;
+            mPenalisedThreshold = SystemProperties.getLong(
+                    "ro.am.penalise_large_apps.pss", cachedAppMaxMemLevel);
+            Slog.i(TAG,"Large apps penalisation enabled. Threshold Pss = " + mPenalisedThreshold +
+                        ", ADJ = " + mPenalisedAdj);
+        }
 
         // User 0 is the first and only user that runs at boot.
         mStartedUsers.put(0, new UserStartedState(new UserHandle(0), true));
@@ -7871,10 +7892,12 @@ public final class ActivityManagerService extends ActivityManagerNative
                             if (DEBUG_PROVIDER) {
                                 Slog.d(TAG, "Installing in existing process " + proc);
                             }
-                            proc.pubProviders.put(cpi.name, cpr);
-                            try {
-                                proc.thread.scheduleInstallProvider(cpi);
-                            } catch (RemoteException e) {
+                            if (!proc.pubProviders.containsKey(cpi.name)) {
+                                proc.pubProviders.put(cpi.name, cpr);
+                                try {
+                                    proc.thread.scheduleInstallProvider(cpi);
+                                } catch (RemoteException e) {
+                                }
                             }
                         } else {
                             proc = startProcessLocked(cpi.processName,
@@ -8387,10 +8410,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             } finally {
                 // Ensure that whatever happens, we clean up the identity state
                 sCallerIdentity.remove();
+                // Ensure we're done with the provider.
+                removeContentProviderExternalUnchecked(name, null, userId);
             }
-
-            // We've got the fd now, so we're done with the provider.
-            removeContentProviderExternalUnchecked(name, null, userId);
         } else {
             Slog.d(TAG, "Failed to get provider for authority '" + name + "'");
         }
@@ -15194,6 +15216,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         mPendingPssProcesses.clear();
         for (int i=mLruProcesses.size()-1; i>=0; i--) {
             ProcessRecord app = mLruProcesses.get(i);
+            if (app.thread == null || app.curProcState < 0) {
+                continue;
+            }
             if (memLowered || now > (app.lastStateTime+ProcessList.PSS_ALL_INTERVAL)) {
                 app.pssProcState = app.setProcState;
                 app.nextPssTime = ProcessList.computeNextPssTime(app.curProcState, true,
@@ -15448,6 +15473,23 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
 
             app.setRawAdj = app.curRawAdj;
+        }
+
+        if ( (mPenaliseLargeApps == true) &&
+                (app.curAdj >= ProcessList.CACHED_APP_MIN_ADJ) &&
+                (app.curAdj < ProcessList.CACHED_APP_MAX_ADJ) ) {
+
+            // Validate the PSS to be compared against for penalisation
+            if (app.lastCachedPss == 0) {
+                app.lastCachedPss = Debug.getPss(app.pid, null);
+            }
+
+            if (app.lastCachedPss > mPenalisedThreshold) {
+                if (DEBUG_SWITCH || DEBUG_OOM_ADJ) Slog.i(
+                    TAG,"New BG app : " + app.processName + " is heavy! (pss = " +
+                    app.lastCachedPss + " kB). Forcing to ADJ " + mPenalisedAdj);
+                app.curAdj = mPenalisedAdj;
+            }
         }
 
         if (app.curAdj != app.setAdj) {

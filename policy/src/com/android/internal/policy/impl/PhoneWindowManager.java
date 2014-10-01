@@ -185,6 +185,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_IN_APP_SEARCH = 5;
     private static final int KEY_ACTION_LAUNCH_CAMERA = 6;
     private static final int KEY_ACTION_LAST_APP = 7;
+    private static final int KEY_ACTION_SLEEP = 8;
 
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
@@ -1133,6 +1134,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KEY_ACTION_LAST_APP:
                 ActionUtils.switchToLastApp(mContext, mCurrentUserId);
                 break;
+            case KEY_ACTION_SLEEP:
+                mPowerManager.goToSleep(SystemClock.uptimeMillis());
+                break;
             default:
                 break;
         }
@@ -1423,14 +1427,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mLongPressOnHomeBehavior > KEY_ACTION_LAUNCH_CAMERA) {
+                mLongPressOnHomeBehavior > KEY_ACTION_SLEEP) {
             mLongPressOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
         mDoubleTapOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_doubleTapOnHomeBehavior);
         if (mDoubleTapOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mDoubleTapOnHomeBehavior > KEY_ACTION_LAUNCH_CAMERA) {
+                mDoubleTapOnHomeBehavior > KEY_ACTION_SLEEP) {
             mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
@@ -4852,37 +4856,50 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
                         }
                     }
-
                 }
 
+                boolean mayChangeVolume = false;
+
                 if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
-                    if (mVolBtnMusicControls && down && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
-                        mIsLongPress = false;
-                        int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
-                                KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-                        Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK,
-                                new KeyEvent(event.getDownTime(), event.getEventTime(), event.getAction(), newKeyCode, 0));
-                        msg.setAsynchronous(true);
-                        mHandler.sendMessageDelayed(msg, ViewConfiguration.getLongPressTimeout());
-                        break;
-                    } else {
-                        if (mVolBtnMusicControls && !down) {
+                    if (mVolBtnMusicControls && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
+                        // Detect long key presses.
+                        if (down) {
+                            mIsLongPress = false;
+                            // TODO: Long press of MUTE could be mapped to KEYCODE_MEDIA_PLAY_PAUSE
+                            int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
+                                    KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+                            Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK,
+                                    new KeyEvent(event.getDownTime(), event.getEventTime(),
+                                    event.getAction(), newKeyCode, 0));
+                            msg.setAsynchronous(true);
+                            mHandler.sendMessageDelayed(msg,
+                                    ViewConfiguration.getLongPressTimeout());
+                            // Consume key down events of all presses.
+                            break;
+                        } else {
                             mHandler.removeMessages(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK);
+                            // Consume key up events of long presses only.
                             if (mIsLongPress) {
                                 break;
                             }
+                            // Change volume only on key up events of short presses.
+                            mayChangeVolume = true;
                         }
-                        if (!isScreenOn && !mVolumeWakeScreen) {
-                            handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
-                        }
+                    } else {
+                        // Long key press detection not applicable, change volume only
+                        // on key down events
+                        mayChangeVolume = down;
                     }
                 }
-                if (isScreenOn || !mVolumeWakeScreen) {
-                    break;
-                } else {
+                if (!isScreenOn && mVolumeWakeScreen) {
                     result |= ACTION_WAKE_UP;
                     break;
                 }
+                if (mayChangeVolume) {
+                    handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
+                    break;
+                }
+                break;
             }
 
             case KeyEvent.KEYCODE_POWER: {

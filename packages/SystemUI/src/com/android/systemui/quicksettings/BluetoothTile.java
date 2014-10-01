@@ -126,8 +126,9 @@ public class BluetoothTile extends QuickSettingsTile implements
                         mLabel = device.getName();
                     }
                 } else {
-                    mLabel = mContext.getString(R.string.quick_settings_bluetooth_multi_label,
-                            connected.size());
+                    mLabel = mContext.getResources().getQuantityString(
+                            R.plurals.quick_settings_bluetooth_multi_label,
+                            connected.size(), connected.size());
                 }
             } else {
                 mDrawable = R.drawable.ic_qs_bluetooth_not_connected;

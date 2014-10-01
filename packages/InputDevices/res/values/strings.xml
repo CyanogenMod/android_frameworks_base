@@ -45,9 +45,6 @@
     <!-- Swiss German keyboard layout label. [CHAR LIMIT=35] -->
     <string name="keyboard_layout_swiss_german_label">Swiss German</string>
 
-    <!-- Armenian Eastern keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_armenian_eastern_label">Armenian Eastern</string>
-
     <!-- Belgian keyboard layout label. [CHAR LIMIT=35] -->
     <string name="keyboard_layout_belgian">Belgian</string>
 
@@ -101,22 +98,4 @@
 
     <!-- Ukrainian keyboard layout label. [CHAR LIMIT=35] -->
     <string name="keyboard_layout_ukrainian">Ukrainian</string>
-
-    <!-- Arabic keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_arabic">Arabic</string>
-
-    <!-- Greek keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_greek">Greek</string>
-
-    <!-- Hebrew keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_hebrew">Hebrew</string>
-
-    <!-- Lithuanian keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_lithuanian">Lithuanian</string>
-
-    <!-- Spanish (Latin) keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_spanish_latin">Spanish (Latin)</string>
-
-    <!-- Latvian keyboard layout label. [CHAR LIMIT=35] -->
-    <string name="keyboard_layout_latvian">Latvian</string>
 </resources>

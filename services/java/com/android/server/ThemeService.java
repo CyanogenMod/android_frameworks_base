@@ -87,6 +87,8 @@ import java.util.List;
 public class ThemeService extends IThemeService.Stub {
     private static final String TAG = ThemeService.class.getName();
 
+    private static final boolean DEBUG = false;
+
     private static final String GOOGLE_SETUPWIZARD_PACKAGE = "com.google.android.setupwizard";
     private static final String CM_SETUPWIZARD_PACKAGE = "com.cyanogenmod.account";
 
@@ -105,10 +107,14 @@ public class ThemeService extends IThemeService.Stub {
     private final RemoteCallbackList<IThemeChangeListener> mClients =
             new RemoteCallbackList<IThemeChangeListener>();
 
+    final private ArrayList<String> mThemesToProcessQueue = new ArrayList<String>(0);
+
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
         private static final int MESSAGE_APPLY_DEFAULT_THEME = 2;
         private static final int MESSAGE_BUILD_ICON_CACHE = 3;
+        private static final int MESSAGE_QUEUE_THEME_FOR_PROCESSING = 4;
+        private static final int MESSAGE_DEQUEUE_AND_PROCESS_THEME = 5;
 
         public ThemeWorkerHandler(Looper looper) {
             super(looper);
@@ -126,6 +132,33 @@ public class ThemeService extends IThemeService.Stub {
                     break;
                 case MESSAGE_BUILD_ICON_CACHE:
                     doBuildIconCache();
+                    break;
+                case MESSAGE_QUEUE_THEME_FOR_PROCESSING:
+                    String pkgName = (String) msg.obj;
+                    synchronized (mThemesToProcessQueue) {
+                        if (!mThemesToProcessQueue.contains(pkgName)) {
+                            if (DEBUG) Log.d(TAG, "Adding " + pkgName + " for processing");
+                            mThemesToProcessQueue.add(pkgName);
+                            if (mThemesToProcessQueue.size() == 1) {
+                                this.sendEmptyMessage(MESSAGE_DEQUEUE_AND_PROCESS_THEME);
+                            }
+                        }
+                    }
+                    break;
+                case MESSAGE_DEQUEUE_AND_PROCESS_THEME:
+                    synchronized (mThemesToProcessQueue) {
+                        pkgName = mThemesToProcessQueue.get(0);
+                    }
+                    if (pkgName != null) {
+                        if (DEBUG) Log.d(TAG, "Processing " + pkgName);
+                        mContext.getPackageManager().processThemeResources(pkgName);
+                        synchronized (mThemesToProcessQueue) {
+                            mThemesToProcessQueue.remove(0);
+                            if (mThemesToProcessQueue.size() > 0) {
+                                this.sendEmptyMessage(MESSAGE_DEQUEUE_AND_PROCESS_THEME);
+                            }
+                        }
+                    }
                     break;
                 default:
                     Log.w(TAG, "Unknown message " + msg.what);
@@ -155,6 +188,7 @@ public class ThemeService extends IThemeService.Stub {
         // listen for wallpaper changes
         IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangeReceiver, filter);
+        processInstalledThemes();
     }
 
     private void doApplyTheme(Map<String, String> componentMap) {
@@ -173,51 +207,67 @@ public class ThemeService extends IThemeService.Stub {
         // TODO: provide progress updates that reflect the time needed for each component
         final int progressIncrement = 75 / componentMap.size();
 
-        updateProvider(componentMap);
-
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ICONS)) {
-            updateIcons(componentMap.get(ThemesColumns.MODIFIES_ICONS));
+            if (!updateIcons(componentMap.get(ThemesColumns.MODIFIES_ICONS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_ICONS);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_LAUNCHER)) {
             if (updateWallpaper(componentMap.get(ThemesColumns.MODIFIES_LAUNCHER))) {
                 mWallpaperChangedByUs = true;
+            } else {
+                componentMap.remove(ThemesColumns.MODIFIES_LAUNCHER);
             }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_LOCKSCREEN)) {
-            updateLockscreen(componentMap.get(ThemesColumns.MODIFIES_LOCKSCREEN));
+            if (!updateLockscreen(componentMap.get(ThemesColumns.MODIFIES_LOCKSCREEN))) {
+                componentMap.remove(ThemesColumns.MODIFIES_LOCKSCREEN);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_NOTIFICATIONS)) {
-            updateNotifications(componentMap.get(ThemesColumns.MODIFIES_NOTIFICATIONS));
+            if (!updateNotifications(componentMap.get(ThemesColumns.MODIFIES_NOTIFICATIONS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_NOTIFICATIONS);
+            }
             incrementProgress(progressIncrement);
         }
 
         Environment.setUserRequired(false);
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ALARMS)) {
-            updateAlarms(componentMap.get(ThemesColumns.MODIFIES_ALARMS));
+            if (!updateAlarms(componentMap.get(ThemesColumns.MODIFIES_ALARMS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_ALARMS);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_RINGTONES)) {
-            updateRingtones(componentMap.get(ThemesColumns.MODIFIES_RINGTONES));
+            if (!updateRingtones(componentMap.get(ThemesColumns.MODIFIES_RINGTONES))) {
+                componentMap.remove(ThemesColumns.MODIFIES_RINGTONES);
+            }
             incrementProgress(progressIncrement);
         }
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_BOOT_ANIM)) {
-            updateBootAnim(componentMap.get(ThemesColumns.MODIFIES_BOOT_ANIM));
+            if (!updateBootAnim(componentMap.get(ThemesColumns.MODIFIES_BOOT_ANIM))) {
+                componentMap.remove(ThemesColumns.MODIFIES_BOOT_ANIM);
+            }
             incrementProgress(progressIncrement);
         }
         Environment.setUserRequired(true);
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_FONTS)) {
-            updateFonts(componentMap.get(ThemesColumns.MODIFIES_FONTS));
+            if (!updateFonts(componentMap.get(ThemesColumns.MODIFIES_FONTS))) {
+                componentMap.remove(ThemesColumns.MODIFIES_FONTS);
+            }
             incrementProgress(progressIncrement);
         }
+
+        updateProvider(componentMap);
 
         updateConfiguration(componentMap);
 
@@ -268,14 +318,20 @@ public class ThemeService extends IThemeService.Stub {
         }
     }
 
-    private void updateIcons(String pkgName) {
-        PackageManager pm = mContext.getPackageManager();
-        if (pkgName.equals(HOLO_DEFAULT)) {
-            pm.updateIconMaps(null);
-        } else {
-            pm.updateIconMaps(pkgName);
-            mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
+    private boolean updateIcons(String pkgName) {
+        try {
+            PackageManager pm = mContext.getPackageManager();
+            if (pkgName.equals(HOLO_DEFAULT)) {
+                pm.updateIconMaps(null);
+            } else {
+                pm.updateIconMaps(pkgName);
+                mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Changing icons failed", e);
+            return false;
         }
+        return true;
     }
 
     private boolean updateFonts(String pkgName) {
@@ -325,9 +381,11 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private void updateBootAnim(String pkgName) {
-        clearBootAnimation();
-        if (HOLO_DEFAULT.equals(pkgName)) return;
+    private boolean updateBootAnim(String pkgName) {
+        if (HOLO_DEFAULT.equals(pkgName)) {
+            clearBootAnimation();
+            return true;
+        }
 
         PackageManager pm = mContext.getPackageManager();
         try {
@@ -335,7 +393,9 @@ public class ThemeService extends IThemeService.Stub {
             applyBootAnimation(ai.sourceDir);
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Changing boot animation failed", e);
+            return false;
         }
+        return true;
     }
 
     private boolean updateAlarms(String pkgName) {
@@ -465,7 +525,7 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private boolean updateLockscreen(String pkgName) {
-        boolean success = false;
+        boolean success;
         success = setCustomLockScreenWallpaper(pkgName);
 
         if (success) {
@@ -507,9 +567,9 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private boolean updateWallpaper(String pkgName) {
-        String selection = ThemesContract.ThemesColumns.PKG_NAME + "= ?";
+        String selection = ThemesColumns.PKG_NAME + "= ?";
         String[] selectionArgs = { pkgName };
-        Cursor c = mContext.getContentResolver().query(ThemesContract.MixnMatchColumns.CONTENT_URI,
+        Cursor c = mContext.getContentResolver().query(ThemesColumns.CONTENT_URI,
                 null, selection,
                 selectionArgs, null);
         c.moveToFirst();
@@ -519,12 +579,16 @@ public class ThemeService extends IThemeService.Stub {
                 wm.clear();
             } catch (IOException e) {
                 return false;
+            } finally {
+                c.close();
             }
         } else if (TextUtils.isEmpty(pkgName)) {
             try {
                 wm.clear(false);
             } catch (IOException e) {
                 return false;
+            } finally {
+                c.close();
             }
         } else {
             InputStream in = null;
@@ -532,10 +596,10 @@ public class ThemeService extends IThemeService.Stub {
                 Context themeContext = mContext.createPackageContext(pkgName,
                         Context.CONTEXT_IGNORE_SECURITY);
                 boolean isLegacyTheme = c.getInt(
-                        c.getColumnIndex(ThemesContract.ThemesColumns.IS_LEGACY_THEME)) == 1;
+                        c.getColumnIndex(ThemesColumns.IS_LEGACY_THEME)) == 1;
                 if (!isLegacyTheme) {
                     String wallpaper = c.getString(
-                            c.getColumnIndex(ThemesContract.ThemesColumns.WALLPAPER_URI));
+                                c.getColumnIndex(ThemesColumns.WALLPAPER_URI));
                     if (wallpaper != null) {
                         if (URLUtil.isAssetUrl(wallpaper)) {
                             in = ThemeUtils.getInputStreamFromAsset(themeContext, wallpaper);
@@ -573,6 +637,7 @@ public class ThemeService extends IThemeService.Stub {
                 return false;
             } finally {
                 ThemeUtils.closeQuietly(in);
+                c.close();
             }
         }
         return true;
@@ -901,6 +966,27 @@ public class ThemeService extends IThemeService.Stub {
                         info.activityInfo.name));
             } catch (Exception e) {
                 Log.w(TAG, "Unable to fetch icon for " + info, e);
+            }
+        }
+    }
+
+    private void processInstalledThemes() {
+        final String defaultTheme = ThemeUtils.getDefaultThemePackageName(mContext);
+        Message msg;
+        // Make sure the default theme is the first to get processed!
+        if (!ThemeConfig.HOLO_DEFAULT.equals(defaultTheme)) {
+            msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+                    0, 0, defaultTheme);
+            mHandler.sendMessage(msg);
+        }
+        // Iterate over all installed packages and queue up the ones that are themes or icon packs
+        List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
+        for (PackageInfo info : packages) {
+            if (!defaultTheme.equals(info.packageName) &&
+                    (info.isThemeApk || info.isLegacyThemeApk || info.isLegacyIconPackApk)) {
+                msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+                        0, 0, info.packageName);
+                mHandler.sendMessage(msg);
             }
         }
     }

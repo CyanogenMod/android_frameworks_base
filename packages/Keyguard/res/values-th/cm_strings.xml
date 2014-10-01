@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">หน้าจอล็อก</string>
   <string name="keyguard_discharging">แบตเตอรี่,<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">ต่อที่ชาร์จ, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="other">%d ​สาย​ไม่​ได้​รับ</item>
   </plurals>
@@ -28,4 +29,12 @@
   <string name="message_from">ข้อความจาก</string>
   <string name="message_from_person">ข้อความจาก %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">รหัส PUK ควร 8 ตัว</string>
+  <string name="keyguard_password_wrong_puk_code">PUK ​ผิด</string>
+  <string name="keyguard_password_pin_failed">PIN ล้มเหลว</string>
+  <string name="keyguard_password_puk_failed">PUK ล้มเหลว</string>
+  <string name="pinpuk_attempts">\nความพยายามที่เหลือ:</string>
+  <string name="lockscreen_sim_error_message_short">บัตรไม่ถูกต้อง</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM ถูกล็อค</string>
+  <string name="msim_kg_sim_pin_msg_format">ย่อย: <xliff:g id="number"> %d</xliff:g>: <xliff:g id="msg"> %s</xliff:g></string>
 </resources>

@@ -46,7 +46,7 @@
     <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> چاپکەری دۆزراوە</item>
     <item quantity="other"><xliff:g id="count" example="2">%1$s</xliff:g> چاپکەرەکانی دۆزراوە</item>
   </plurals>
-  <string name="choose_print_service">ڕاژەی چاپکردن هەڵبژێرە</string>
+  <string name="choose_print_service">خزمەتگوزاریی چاپکردن هەڵبژێرە</string>
   <string name="print_searching_for_printers">گەڕان بەدوای چاپکەردا</string>
   <string name="print_no_printers">هیچ چاپکەرێک نەدۆزرایەوە</string>
   <string name="printing_notification_title_template">چاپکردن <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>

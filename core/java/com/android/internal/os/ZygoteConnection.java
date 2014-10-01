@@ -76,6 +76,8 @@ class ZygoteConnection {
     private final Credentials peer;
     private final String peerSecurityContext;
 
+    private static final int GC_LOOP_COUNT = 10;
+
     /**
      * Constructs instance from connected socket.
      *
@@ -124,7 +126,7 @@ class ZygoteConnection {
      */
     void run() throws ZygoteInit.MethodAndArgsCaller {
 
-        int loopCount = ZygoteInit.GC_LOOP_COUNT;
+        int loopCount = GC_LOOP_COUNT;
 
         while (true) {
             /*
@@ -137,8 +139,8 @@ class ZygoteConnection {
              * heap is a lot of overhead to free a few hundred bytes.
              */
             if (loopCount <= 0) {
-                ZygoteInit.gc();
-                loopCount = ZygoteInit.GC_LOOP_COUNT;
+                System.gc();
+                loopCount = GC_LOOP_COUNT;
             } else {
                 loopCount--;
             }
