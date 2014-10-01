@@ -47,6 +47,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StrictMode;
 import android.service.voice.IVoiceInteractionSession;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Singleton;
@@ -2355,6 +2356,7 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
 
 class ActivityManagerProxy implements IActivityManager
 {
+    static final String TAG_TIMELINE = "Timeline";
     public ActivityManagerProxy(IBinder remote)
     {
         mRemote = remote;
@@ -2370,6 +2372,13 @@ class ActivityManagerProxy implements IActivityManager
             int startFlags, ProfilerInfo profilerInfo, Bundle options) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
+
+        if (intent.getComponent() != null) {
+            Log.i(TAG_TIMELINE, "Timeline: Activity_launch_request id:"
+                + intent.getComponent().getPackageName() + " time:"
+                + SystemClock.uptimeMillis());
+        }
+
         data.writeInterfaceToken(IActivityManager.descriptor);
         data.writeStrongBinder(caller != null ? caller.asBinder() : null);
         data.writeString(callingPackage);
@@ -2836,6 +2845,8 @@ class ActivityManagerProxy implements IActivityManager
     public void activityIdle(IBinder token, Configuration config, boolean stopProfiling)
             throws RemoteException
     {
+        Log.i(TAG_TIMELINE, "Timeline: Activity_idle id: " + token + " time:"
+             + SystemClock.uptimeMillis());
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
