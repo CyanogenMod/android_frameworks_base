@@ -116,4 +116,29 @@ oneway interface IBackupAgent {
     void doRestoreFile(in ParcelFileDescriptor data, long size,
             int type, String domain, String path, long mode, long mtime,
             int token, IBackupManager callbackBinder);
+
+
+    /**
+     * Perform a backup for all the files specified by domainTokens parameter. The output file
+     * should be a socket or other non-seekable, write-only data sink.  When this method is
+     * called, the app should write all of its files to the output.
+     *
+     * @param data Write-only file to receive the backed-up content stream.
+     *        The data must be formatted correctly for the resulting archive to be
+     *        legitimate and restorable.
+     *
+     * @param token Opaque token identifying this transaction.  This must
+     *        be echoed back to the backup service binder once the agent
+     *        completes restoring the application based on the restore data
+     *        contents.
+     *
+     * @param domainTokens File paths of the files (represented as domains) to include.
+     *
+     * @param excludeFilesRegex Files to exclude specified as a Java-compatible pattern.
+     *
+     * @param callbackBinder Binder on which to indicate operation completion,
+     *        passed here as a convenience to the agent.
+     */
+    void doBackupFiles(in ParcelFileDescriptor data, int token, in String[] domainTokens,
+            in String excludeFilesRegex, IBackupManager callbackBinder);
 }
