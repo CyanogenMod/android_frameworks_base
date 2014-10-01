@@ -23,6 +23,8 @@
     <string name="kg_dismiss">Dismiss</string>
     <!-- Slot id in SIM pin/puk unlock view -->
     <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: New Sim Card\u0020 </string>
+    <!-- failed unlock: remaining attempts -->
+    <string name="kg_remaining_attempts">Remaining attempts: <xliff:g id="number">%d</xliff:g></string>
 
     <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
     <plurals name="kg_password_default_pin_message">

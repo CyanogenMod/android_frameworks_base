@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,6 +84,7 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
     private SecurityMessageDisplay mSecurityMessageDisplay;
     private View mEcaView;
     private Drawable mBouncerFrame;
+    private int mMaxCountdownTimes;
     private ViewGroup mKeyguardBouncerFrame;
     private KeyguardMessageArea mHelpMessage;
     private int mDisappearYTranslation;
@@ -98,6 +102,8 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
     public KeyguardPatternView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mKeyguardUpdateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
+        mMaxCountdownTimes = context.getResources()
+                .getInteger(R.integer.config_max_unlock_countdown_times);
         mAppearAnimationUtils = new AppearAnimationUtils(context,
                 AppearAnimationUtils.DEFAULT_APPEAR_DURATION, 1.5f /* delayScale */,
                 2.0f /* transitionScale */, AnimationUtils.loadInterpolator(
@@ -179,9 +185,18 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
     private void displayDefaultSecurityMessage() {
         if (mKeyguardUpdateMonitor.getMaxBiometricUnlockAttemptsReached()) {
             mSecurityMessageDisplay.setMessage(R.string.faceunlock_multiple_failures, true);
+        } else if (mMaxCountdownTimes > 0) {
+            mSecurityMessageDisplay.setMessage(getSecurityMeasasge(), true);
         } else {
             mSecurityMessageDisplay.setMessage(R.string.kg_pattern_instructions, false);
         }
+    }
+
+    private String getSecurityMeasasge() {
+        String msg = getContext().getString(R.string.kg_pattern_instructions);
+        msg += " - " + getContext().getResources().
+                getString(R.string.kg_remaining_attempts, getRemainingCount());
+        return msg;
     }
 
     @Override
@@ -224,16 +239,34 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
                     mCallback.reportUnlockAttempt(false);
                 }
                 int attempts = mKeyguardUpdateMonitor.getFailedUnlockAttempts();
-                if (registeredAttempt &&
+                if (!(mMaxCountdownTimes > 0) && registeredAttempt &&
                         0 == (attempts % LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT)) {
                     long deadline = mLockPatternUtils.setLockoutAttemptDeadline();
                     handleAttemptLockout(deadline);
                 } else {
-                    mSecurityMessageDisplay.setMessage(R.string.kg_wrong_pattern, true);
+                    showWrongPassword();
                     mLockPatternView.postDelayed(mCancelPatternRunnable, PATTERN_CLEAR_TIMEOUT_MS);
                 }
             }
         }
+    }
+
+    private void showWrongPassword() {
+        mSecurityMessageDisplay.setMessage(getWrongPasswordMessage(), true);
+    }
+
+    private int getRemainingCount() {
+        return mMaxCountdownTimes
+                - KeyguardUpdateMonitor.getInstance(mContext).getFailedUnlockAttempts();
+    }
+
+    private String getWrongPasswordMessage() {
+        String msg = getContext().getString(R.string.kg_wrong_pattern);
+        if (getRemainingCount() >= 0) {
+            msg += " - " + getContext().getResources().getString(R.string.kg_remaining_attempts,
+                    getRemainingCount());
+        }
+        return msg;
     }
 
     private void handleAttemptLockout(long elapsedRealtimeDeadline) {
