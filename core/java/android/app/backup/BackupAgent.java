@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Pattern;
 
 import libcore.io.ErrnoException;
 import libcore.io.Libcore;
@@ -106,7 +107,14 @@ import libcore.io.StructStat;
  */
 public abstract class BackupAgent extends ContextWrapper {
     private static final String TAG = "BackupAgent";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
+
+    /**
+     * To lookup an application's database and shared preferences directories (usually
+     * /data/data/com.application.name), this generic name is used to invoke the
+     * getSharedPrefsFile(String) and getDatabasePath(String) APIs.
+     */
+    private static final String GENERIC_FILE_NAME = "foo";
 
     /** @hide */
     public static final int TYPE_EOF = 0;
@@ -252,8 +260,9 @@ public abstract class BackupAgent extends ContextWrapper {
 
         String rootDir = new File(appInfo.dataDir).getCanonicalPath();
         String filesDir = getFilesDir().getCanonicalPath();
-        String databaseDir = getDatabasePath("foo").getParentFile().getCanonicalPath();
-        String sharedPrefsDir = getSharedPrefsFile("foo").getParentFile().getCanonicalPath();
+        String databaseDir = getDatabasePath(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
+        String sharedPrefsDir =
+            getSharedPrefsFile(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
         String cacheDir = getCacheDir().getCanonicalPath();
         String libDir = (appInfo.nativeLibraryDir != null)
                 ? new File(appInfo.nativeLibraryDir).getCanonicalPath()
@@ -328,8 +337,8 @@ public abstract class BackupAgent extends ContextWrapper {
         try {
             mainDir = new File(appInfo.dataDir).getCanonicalPath();
             filesDir = getFilesDir().getCanonicalPath();
-            dbDir = getDatabasePath("foo").getParentFile().getCanonicalPath();
-            spDir = getSharedPrefsFile("foo").getParentFile().getCanonicalPath();
+            dbDir = getDatabasePath(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
+            spDir = getSharedPrefsFile(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
             cacheDir = getCacheDir().getCanonicalPath();
             libDir = (appInfo.nativeLibraryDir == null)
                     ? null
@@ -394,7 +403,20 @@ public abstract class BackupAgent extends ContextWrapper {
      * @hide
      */
     protected final void fullBackupFileTree(String packageName, String domain, String rootPath,
-            HashSet<String> excludes, FullBackupDataOutput output) {
+            HashSet<String> excludeFullPathDir, FullBackupDataOutput output) {
+        fullBackupFileTree(packageName, domain, rootPath, excludeFullPathDir, null, output);
+    }
+
+    /**
+     * Scan the dir tree (if it actually exists) and process each entry we find.  If the
+     * 'excludes' parameter is non-null, it is consulted each time a new file system entity
+     * is visited to see whether that entity (and its subtree, if appropriate) should be
+     * omitted from the backup process.
+     *
+     * @hide
+     */
+    protected final void fullBackupFileTree(String packageName, String domain, String rootPath,
+            HashSet<String> excludeFullPathDir, Pattern excludeFiles, FullBackupDataOutput output) {
         File rootFile = new File(rootPath);
         if (rootFile.exists()) {
             LinkedList<File> scanQueue = new LinkedList<File>();
@@ -407,7 +429,14 @@ public abstract class BackupAgent extends ContextWrapper {
                     filePath = file.getCanonicalPath();
 
                     // prune this subtree?
-                    if (excludes != null && excludes.contains(filePath)) {
+                    if (excludeFullPathDir != null && excludeFullPathDir.contains(filePath)) {
+                        if (DEBUG) Log.i(TAG, "Excluding directory path: " + filePath);
+                        continue;
+                    }
+
+                    // Does this match the regex ?
+                    if (excludeFiles != null && excludeFiles.matcher(filePath).find()) {
+                        if (DEBUG) Log.i(TAG, "Excluding file: " + filePath);
                         continue;
                     }
 
@@ -428,13 +457,100 @@ public abstract class BackupAgent extends ContextWrapper {
                     if (DEBUG) Log.w(TAG, "Error canonicalizing path of " + file);
                     continue;
                 } catch (ErrnoException e) {
-                    if (DEBUG) Log.w(TAG, "Error scanning file " + file + " : " + e);
+                    if (DEBUG) {
+                        Log.w(TAG, "Error scanning file " + file + ", skipping this file backup");
+                    }
                     continue;
                 }
 
                 // Finally, back this file up before proceeding
                 FullBackup.backupToTar(packageName, domain, null, rootPath, filePath,
                         output.getData());
+            }
+        }
+    }
+
+    /**
+     * Backup files specified by domainTokens parameter. It should be one (or more) of
+     * rootDir, filesDir, databaseDir, cacheDir, sharedPrefsDir, externalFilesDir
+     * excludeFiles is a regex of the files to be excluded when doing the backup.
+     *
+     * @param domainTokens
+     * @param excludeFilesRegex
+     * @param data
+     * @hide
+     */
+    private void onBackupFiles(String[] domainTokens, String excludeFilesRegex,
+            FullBackupDataOutput data) throws IOException {
+        String rootDir, filesDir, databaseDir, sharedPrefsDir, cacheDir, libDir, efLocationDir;
+        ApplicationInfo appInfo = getApplicationInfo();
+
+        rootDir = new File(appInfo.dataDir).getCanonicalPath();
+        filesDir = getFilesDir().getCanonicalPath();
+        databaseDir = getDatabasePath(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
+        sharedPrefsDir = getSharedPrefsFile(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
+        cacheDir = getCacheDir().getCanonicalPath();
+        libDir = (appInfo.nativeLibraryDir != null)
+                ? new File(appInfo.nativeLibraryDir).getCanonicalPath()
+                : null;
+        efLocationDir = getExternalFilesDir(null).getCanonicalPath();
+
+        // Filters, the scan queue, and the set of resulting entities
+        HashSet<String> filterSet = new HashSet<String>();
+        String packageName = getPackageName();
+        // Okay, start with the app's root tree, but exclude all of the canonical subdirs
+        if (libDir != null) {
+            filterSet.add(libDir);
+        }
+        filterSet.add(cacheDir);
+        filterSet.add(databaseDir);
+        filterSet.add(sharedPrefsDir);
+        filterSet.add(filesDir);
+
+        Pattern excludeFiles = null;
+        if (excludeFilesRegex != null) {
+            excludeFiles = Pattern.compile(excludeFilesRegex, Pattern.CASE_INSENSITIVE);
+        }
+
+        for (String dToken : domainTokens) {
+            if (FullBackup.ROOT_TREE_TOKEN.equals(dToken)) {
+                fullBackupFileTree(packageName, FullBackup.ROOT_TREE_TOKEN, rootDir, filterSet,
+                        excludeFiles, data);
+            }
+
+            if (FullBackup.DATA_TREE_TOKEN.equals(dToken)) {
+                filterSet.add(rootDir);
+                filterSet.remove(filesDir);
+                fullBackupFileTree(packageName, FullBackup.DATA_TREE_TOKEN, filesDir, filterSet,
+                        excludeFiles, data);
+            }
+
+            if (FullBackup.DATABASE_TREE_TOKEN.equals(dToken)) {
+                filterSet.add(filesDir);
+                filterSet.remove(databaseDir);
+                fullBackupFileTree(packageName, FullBackup.DATABASE_TREE_TOKEN, databaseDir,
+                        filterSet, excludeFiles, data);
+            }
+
+            if (FullBackup.SHAREDPREFS_TREE_TOKEN.equals(dToken)) {
+                filterSet.add(databaseDir);
+                filterSet.remove(sharedPrefsDir);
+                fullBackupFileTree(packageName, FullBackup.SHAREDPREFS_TREE_TOKEN, sharedPrefsDir,
+                        filterSet, excludeFiles, data);
+            }
+
+            if (FullBackup.MANAGED_EXTERNAL_TREE_TOKEN.equals(dToken)) {
+                // getExternalFilesDir() location associated with this app.  Technically there should
+                // not be any files here if the app does not properly have permission to access
+                // external storage, but edge cases happen. fullBackupFileTree() catches
+                // IOExceptions and similar, and treats them as non-fatal, so we rely on that; and
+                // we know a priori that processes running as the system UID are not permitted to
+                // access external storage, so we check for that as well to avoid nastygrams in
+                // the log.
+                if (Process.myUid() != Process.SYSTEM_UID) {
+                    fullBackupFileTree(packageName, FullBackup.MANAGED_EXTERNAL_TREE_TOKEN,
+                            efLocationDir, null, excludeFiles, data);
+                }
             }
         }
     }
@@ -489,11 +605,11 @@ public abstract class BackupAgent extends ContextWrapper {
         if (domain.equals(FullBackup.DATA_TREE_TOKEN)) {
             basePath = getFilesDir().getCanonicalPath();
         } else if (domain.equals(FullBackup.DATABASE_TREE_TOKEN)) {
-            basePath = getDatabasePath("foo").getParentFile().getCanonicalPath();
+            basePath = getDatabasePath(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
         } else if (domain.equals(FullBackup.ROOT_TREE_TOKEN)) {
             basePath = new File(getApplicationInfo().dataDir).getCanonicalPath();
         } else if (domain.equals(FullBackup.SHAREDPREFS_TREE_TOKEN)) {
-            basePath = getSharedPrefsFile("foo").getParentFile().getCanonicalPath();
+            basePath = getSharedPrefsFile(GENERIC_FILE_NAME).getParentFile().getCanonicalPath();
         } else if (domain.equals(FullBackup.CACHE_TREE_TOKEN)) {
             basePath = getCacheDir().getCanonicalPath();
         } else if (domain.equals(FullBackup.MANAGED_EXTERNAL_TREE_TOKEN)) {
@@ -635,6 +751,46 @@ public abstract class BackupAgent extends ContextWrapper {
                 throw new RuntimeException(ex);
             } catch (RuntimeException ex) {
                 Log.d(TAG, "onBackup (" + BackupAgent.this.getClass().getName() + ") threw", ex);
+                throw ex;
+            } finally {
+                // ... and then again after, as in the doBackup() case
+                waitForSharedPrefs();
+
+                // Send the EOD marker indicating that there is no more data
+                // forthcoming from this agent.
+                try {
+                    FileOutputStream out = new FileOutputStream(data.getFileDescriptor());
+                    byte[] buf = new byte[4];
+                    out.write(buf);
+                } catch (IOException e) {
+                    Log.e(TAG, "Unable to finalize backup stream!");
+                }
+
+                Binder.restoreCallingIdentity(ident);
+                try {
+                    callbackBinder.opComplete(token);
+                } catch (RemoteException e) {
+                    // we'll time out anyway, so we're safe
+                }
+            }
+        }
+
+        @Override
+        public void doBackupFiles(ParcelFileDescriptor data, int token, String[] domainTokens,
+                String excludeFilesRegex, IBackupManager callbackBinder) {
+            // Ensure that we're running with the app's normal permission level
+            long ident = Binder.clearCallingIdentity();
+
+            // Ensure that any SharedPreferences writes have landed *before*
+            // we potentially try to back up the underlying files directly.
+            waitForSharedPrefs();
+
+            try {
+                BackupAgent.this.onBackupFiles(domainTokens, excludeFilesRegex,
+                        new FullBackupDataOutput(data));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (RuntimeException ex) {
                 throw ex;
             } finally {
                 // ... and then again after, as in the doBackup() case
