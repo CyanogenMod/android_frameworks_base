@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,11 +68,29 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
                 context, android.R.interpolator.linear_out_slow_in);
         mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(
                 context, android.R.interpolator.fast_out_linear_in);
+        mMaxCountdownTimes = context.getResources()
+                .getInteger(R.integer.config_max_unlock_countdown_times);
     }
 
     protected void resetState() {
-        mSecurityMessageDisplay.setMessage(R.string.kg_password_instructions, false);
+        showDefautMessage();
         mPasswordEntry.setEnabled(true);
+    }
+
+    private String getMessge(int mMaxCountdownTimes) {
+        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
+        String msg = getContext().getString(R.string.kg_pin_instructions);
+        msg += " - " + getContext().getResources().getString(
+                R.string.kg_remaining_attempts, getRemainingCount());
+        return msg;
+    }
+
+    private void showDefautMessage() {
+        if (mMaxCountdownTimes > 0) {
+            mSecurityMessageDisplay.setMessage(getMessge(mMaxCountdownTimes), true);
+        } else {
+            mSecurityMessageDisplay.setMessage(R.string.kg_password_instructions, false);
+        }
     }
 
     @Override

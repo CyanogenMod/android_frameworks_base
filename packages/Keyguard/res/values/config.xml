@@ -28,6 +28,7 @@
 
     <!-- Allow the menu hard key to be disabled in LockScreen on some devices [DO NOT TRANSLATE] -->
     <bool name="config_disableMenuKeyInLockScreen">false</bool>
+    <integer name="config_max_unlock_countdown_times">0</integer>
 
     <!-- True if we need to show on "Slide" lock screen -->
     <bool name="config_showEmergencyButton">false</bool>

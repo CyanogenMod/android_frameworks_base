@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +42,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     protected View mEcaView;
     private Drawable mBouncerFrame;
     protected boolean mEnableHaptics;
+    protected int mMaxCountdownTimes = 0;
 
     // To avoid accidental lockout due to events while the device in in the pocket, ignore
     // any passwords with length less than or equal to this length.
@@ -112,12 +116,13 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
                 // real password. This may require some tweaking.
                 mCallback.reportUnlockAttempt(false);
                 int attempts = KeyguardUpdateMonitor.getInstance(mContext).getFailedUnlockAttempts();
-                if (0 == (attempts % LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT)) {
+                if (!(mMaxCountdownTimes > 0) && 0 ==
+                        (attempts % LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT)) {
                     long deadline = mLockPatternUtils.setLockoutAttemptDeadline();
                     handleAttemptLockout(deadline);
                 }
             }
-            mSecurityMessageDisplay.setMessage(getWrongPasswordStringId(), true);
+            showWrongPassword();
         }
         resetPasswordText(true /* animate */);
     }
@@ -145,6 +150,21 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
                 resetState();
             }
         }.start();
+    }
+
+    protected void showWrongPassword() {
+        String msg = getContext().getString(getWrongPasswordStringId());
+        if (mMaxCountdownTimes > 0) {
+            int remaining = getRemainingCount();
+            msg += " - " + getContext().getResources().getString(
+                    R.string.kg_remaining_attempts, remaining);
+        }
+        mSecurityMessageDisplay.setMessage(msg, true);
+    }
+
+    protected int getRemainingCount() {
+        return mMaxCountdownTimes
+                - KeyguardUpdateMonitor.getInstance(mContext).getFailedUnlockAttempts();
     }
 
     @Override
