@@ -304,6 +304,12 @@ public class BackupRestoreConfirmation extends Activity {
         }
 
         @Override
+        public void onEndBackupWithResult(int result) throws RemoteException {
+            // The framework calls both onEndBackup() and onEndBackupResult().
+            // This observer needs to only listen to one callback.
+        }
+
+        @Override
         public void onStartRestore() throws RemoteException {
             mHandler.sendEmptyMessage(MSG_START_RESTORE);
         }
@@ -316,7 +322,13 @@ public class BackupRestoreConfirmation extends Activity {
         @Override
         public void onEndRestore() throws RemoteException {
             mHandler.sendEmptyMessage(MSG_END_RESTORE);
-        }        
+        }
+
+        @Override
+        public void onEndRestoreWithResult(int result) throws RemoteException {
+            // The framework calls both onEndRestore() and onEndRestoreResult().
+            // This observer needs to only listen to one callback.
+        }
 
         @Override
         public void onTimeout() throws RemoteException {
