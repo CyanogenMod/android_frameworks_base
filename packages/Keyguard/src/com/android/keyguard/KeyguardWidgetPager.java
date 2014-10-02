@@ -91,6 +91,7 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
     private final HandlerThread mBackgroundWorkerThread;
     private final Handler mBackgroundWorkerHandler;
     private boolean mCameraEventInProgress;
+    private boolean mApplicationWidgetEventInProgress;
 
     public KeyguardWidgetPager(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -888,6 +889,11 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
         return v != null && v instanceof CameraWidgetFrame;
     }
 
+    boolean isApplicationWidgetPage(int pageIndex) {
+        View v = getChildAt(pageIndex);
+        return v != null && v instanceof ApplicationWidgetFrame;
+    }
+
     @Override
     protected boolean shouldSetTopAlignedPivotForWidget(int childIndex) {
         return !isCameraPage(childIndex) && super.shouldSetTopAlignedPivotForWidget(childIndex);
@@ -940,6 +946,39 @@ public class KeyguardWidgetPager extends PagedView implements PagedView.PageSwit
         }
 
         return flags;
+    }
+
+    public void handleExternalApplicationWidgetEvent(MotionEvent event) {
+        beginApplicationWidgetEvent();
+        int applicationWidgetPage;
+        boolean endWarp = false;
+        int appWidgetIndex = indexOfChild(findViewById(R.id.keyguard_add_widget));
+        if (appWidgetIndex < 0) {
+            applicationWidgetPage = 0;
+        } else {
+            applicationWidgetPage = PagedView.APPLICATION_WIDGET_PAGE_NUMBER;
+        }
+
+        if (isApplicationWidgetPage(applicationWidgetPage) || mApplicationWidgetEventInProgress) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // Once we start dispatching application widget events, we must continue to do so
+                    // to keep event dispatch happy.
+                    mApplicationWidgetEventInProgress = true;
+                    userActivity();
+                    startPageWarp(applicationWidgetPage);
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    mApplicationWidgetEventInProgress = false;
+                    endWarp = isWarping();
+                    break;
+            }
+            dispatchTouchEvent(event);
+            // This has to happen after the event has been handled by the real widget pager
+            if (endWarp) stopPageWarp();
+        }
+        endApplicationWidgetEvent();
     }
 
     public void handleExternalCameraEvent(MotionEvent event) {

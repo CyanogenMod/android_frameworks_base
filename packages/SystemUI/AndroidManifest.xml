@@ -86,6 +86,9 @@
     <!-- WallpaperManager -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
+    <!-- Keyguard widget on the Navigation Bar for the application -->
+    <uses-permission android:name="android.permission.SET_KEYGUARD_APPLICATION_WIDGET" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
