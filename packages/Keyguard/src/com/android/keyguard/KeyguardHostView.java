@@ -51,9 +51,9 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.telephony.MSimTelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Pair;
 import android.util.Slog;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -99,6 +99,8 @@ public class KeyguardHostView extends KeyguardViewBase {
     private int mAppWidgetToShow;
 
     private View mExpandChallengeView;
+
+    private View mApplicationWidgetView;
 
     private boolean mDefaultAppWidgetAttached;
 
@@ -214,6 +216,9 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
         if ((mDisabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0) {
             Log.v(TAG, "Keyguard secure camera disabled by DPM");
+        }
+        if ((mDisabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_APPLICATION_WIDGET) != 0) {
+            Log.v(TAG, "Keyguard application widget disabled by DPM");
         }
     }
 
@@ -503,6 +508,13 @@ public class KeyguardHostView extends KeyguardViewBase {
                 (mDisabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0
                 && mLockPatternUtils.isSecure();
         return mCameraDisabled || disabledSecureKeyguard || !mLockPatternUtils.getCameraEnabled();
+    }
+
+    private boolean applicationWidgetDisabledByDpm() {
+        boolean disabledByDpm =
+                (mDisabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_APPLICATION_WIDGET) != 0;
+        boolean disabledByUser = !mLockPatternUtils.getApplicationWidgetEnabled();
+        return disabledByDpm || disabledByUser;
     }
 
     private void updateSecurityViews() {
@@ -1124,6 +1136,10 @@ public class KeyguardHostView extends KeyguardViewBase {
         if (cameraPage != null) {
             cameraPage.onScreenTurnedOff();
         }
+        ApplicationWidgetFrame applicationWidgetPage = findApplicationWidgetPage();
+        if (applicationWidgetPage != null) {
+            applicationWidgetPage.onScreenTurnedOff();
+        }
 
         clearFocus();
     }
@@ -1266,6 +1282,37 @@ public class KeyguardHostView extends KeyguardViewBase {
             }
         };
 
+    private final ApplicationWidgetFrame.Callbacks mApplicationWidgetFrame =
+        new ApplicationWidgetFrame.Callbacks() {
+            @Override
+            public void onLaunchingApplicationWidgetContainer() {
+                setSliderHandleAlpha(0);
+            }
+
+            @Override
+            public void onApplicationWidgetContainerLaunchedSuccessfully() {
+                if (mAppWidgetContainer.isApplicationWidgetPage(
+                        mAppWidgetContainer.getCurrentPage())) {
+                    mAppWidgetContainer.scrollRight();
+                }
+                setSliderHandleAlpha(1);
+                mShowSecurityWhenReturn = true;
+            }
+
+            @Override
+            public void onApplicationWidgetContainerLaunchedUnsuccessfully() {
+                setSliderHandleAlpha(1);
+            }
+
+            private void setSliderHandleAlpha(float alpha) {
+                SlidingChallengeLayout slider =
+                        (SlidingChallengeLayout) findViewById(R.id.sliding_layout);
+                if (slider != null) {
+                    slider.setHandleAlpha(alpha);
+                }
+            }
+        };
+
     private final KeyguardActivityLauncher mActivityLauncher = new KeyguardActivityLauncher() {
         @Override
         Context getContext() {
@@ -1309,6 +1356,27 @@ public class KeyguardHostView extends KeyguardViewBase {
             });
         }
 
+        // We currently don't display the application widget in safe mode
+        if (!mSafeModeEnabled && !applicationWidgetDisabledByDpm() && mUserSetupCompleted
+                && mContext.getResources().getBoolean(R.bool.kg_enable_application_widget)) {
+            Pair<String, byte[]> applicationWidget =
+                    KeyguardUpdateMonitor.getInstance(mContext).getApplicationWidgetDetails();
+
+            if (applicationWidget.first != null) {
+                mApplicationWidgetView =
+                        ApplicationWidgetFrame.create(mContext, mApplicationWidgetFrame,
+                                mActivityLauncher);
+                if (mApplicationWidgetView != null) {
+                    ((ApplicationWidgetFrame)mApplicationWidgetView).
+                            setApplicationWidgetPackageName(applicationWidget.first);
+                    ((ApplicationWidgetFrame)mApplicationWidgetView).updatePreviewImage(
+                            applicationWidget.second);
+
+                    mAppWidgetContainer.addWidget(mApplicationWidgetView);
+                }
+            }
+        }
+
         // We currently disable cameras in safe mode because we support loading 3rd party
         // cameras we can't trust.  TODO: plumb safe mode into camera creation code and only
         // inflate system-provided camera?
@@ -1343,11 +1411,18 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     private int getInsertPageIndex() {
         View addWidget = mAppWidgetContainer.findViewById(R.id.keyguard_add_widget);
-        int insertionIndex = mAppWidgetContainer.indexOfChild(addWidget);
-        if (insertionIndex < 0) {
-            insertionIndex = 0; // no add widget page found
+        int addWidgetIndex = mAppWidgetContainer.indexOfChild(addWidget);
+        int applicationWidgetIndex = -1;
+        if (mApplicationWidgetView != null) {
+            applicationWidgetIndex = mAppWidgetContainer.getWidgetPageIndex(mApplicationWidgetView);
+        }
+        int insertionIndex;
+        if (addWidgetIndex < 0 && applicationWidgetIndex < 0) {
+            insertionIndex = 0; // no add widget page and application widget page found
+        } else if (addWidgetIndex >=0 && applicationWidgetIndex >= 0) {
+            insertionIndex = 2 ; // place after add widget and application widget
         } else {
-            insertionIndex++; // place after add widget
+            insertionIndex = 1; // One of add widget page / application widget is present.
         }
         return insertionIndex;
     }
@@ -1545,6 +1620,9 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         final CameraWidgetFrame cameraWidget = findCameraPage();
         if (cameraWidget != null) cameraWidget.setInsets(mInsets);
+
+        final ApplicationWidgetFrame applicationWidgetFrame = findApplicationWidgetPage();
+        if (applicationWidgetFrame != null) applicationWidgetFrame.setInsets(mInsets);
     }
 
     @Override
@@ -1629,6 +1707,15 @@ public class KeyguardHostView extends KeyguardViewBase {
         for (int i = mAppWidgetContainer.getChildCount() - 1; i >= 0; i--) {
             if (mAppWidgetContainer.isCameraPage(i)) {
                 return (CameraWidgetFrame) mAppWidgetContainer.getChildAt(i);
+            }
+        }
+        return null;
+    }
+
+    private ApplicationWidgetFrame findApplicationWidgetPage() {
+        for (int i = mAppWidgetContainer.getChildCount() - 1; i >= 0; i--) {
+            if (mAppWidgetContainer.isApplicationWidgetPage(i)) {
+                return (ApplicationWidgetFrame) mAppWidgetContainer.getChildAt(i);
             }
         }
         return null;
@@ -1848,12 +1935,19 @@ public class KeyguardHostView extends KeyguardViewBase {
                 intent, false, opts.toBundle(), null, null);
     }
 
-    public void dispatch(MotionEvent event) {
+    public void dispatchCameraEvent(MotionEvent event) {
         mAppWidgetContainer.handleExternalCameraEvent(event);
+    }
+
+    public void dispatchApplicationWidgetEvent(MotionEvent event) {
+        mAppWidgetContainer.handleExternalApplicationWidgetEvent(event);
     }
 
     public void launchCamera() {
         mActivityLauncher.launchCamera(getHandler(), null);
     }
 
+    public void launchApplicationWidget(String packageName) {
+        mActivityLauncher.launchApplicationWidget(getHandler(), null, packageName);
+    }
 }

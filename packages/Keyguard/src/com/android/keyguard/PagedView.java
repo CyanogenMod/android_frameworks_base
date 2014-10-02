@@ -95,6 +95,9 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
     private static final boolean DISABLE_TOUCH_SIDE_PAGES = true;
     private static final boolean DISABLE_FLING_TO_DELETE = false;
 
+    // Page number for the ApplicationWidget"
+    static final int APPLICATION_WIDGET_PAGE_NUMBER = 1;
+
     static final int AUTOMATIC_PAGE_SPACING = -1;
 
     protected int mFlingThresholdVelocity;
@@ -266,6 +269,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
     private ViewPropertyAnimator mWarpAnimation;
 
     private boolean mIsCameraEvent;
+    private boolean mIsApplicationWidgetEvent;
     private float mWarpPeekAmount;
     private boolean mOnPageEndWarpCalled;
     private boolean mOnPageBeginWarpCalled;
@@ -967,7 +971,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                     final View v = getPageAt(i);
                     if (v == mDragView) continue;
                     if (mForceDrawAllChildrenNextFrame ||
-                               (leftScreen <= i && i <= rightScreen && shouldDrawChild(v))) {
+                            (leftScreen <= i && i <= rightScreen && shouldDrawChild(v))) {
                         drawChild(canvas, v, drawingTime);
                     }
                 }
@@ -1133,7 +1137,8 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                  * whether the user has moved far enough from his original down touch.
                  */
                 if (mActivePointerId != INVALID_POINTER) {
-                    if (mIsCameraEvent || determineScrollingStart(ev)) {
+                    if (mIsCameraEvent || mIsApplicationWidgetEvent ||
+                            determineScrollingStart(ev)) {
                         startScrolling(ev);
                     }
                     break;
@@ -1148,7 +1153,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             }
 
             case MotionEvent.ACTION_DOWN: {
-                if (mIsCameraEvent) {
+                if (mIsCameraEvent || mIsApplicationWidgetEvent) {
                     animateWarpPageOnScreen("interceptTouch(): DOWN");
                 }
                 // Remember where the motion event started
@@ -1165,8 +1170,9 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                     setTouchState(TOUCH_STATE_REST);
                     mScroller.abortAnimation();
                 } else {
-                    if (mIsCameraEvent || isTouchPointInViewportWithBuffer(
-                            (int) mDownMotionX, (int) mDownMotionY)) {
+                    if (mIsCameraEvent || mIsApplicationWidgetEvent ||
+                            isTouchPointInViewportWithBuffer((int) mDownMotionX,
+                                    (int) mDownMotionY)) {
                         setTouchState(TOUCH_STATE_SCROLLING);
                     } else {
                         setTouchState(TOUCH_STATE_REST);
@@ -1422,7 +1428,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                 setTouchState(TOUCH_STATE_READY);
             }
 
-            if (mIsCameraEvent) {
+            if (mIsCameraEvent || mIsApplicationWidgetEvent) {
                 animateWarpPageOnScreen("onTouch(): DOWN");
             }
             break;
@@ -1565,7 +1571,7 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                     removeCallbacks(mSidePageHoverRunnable);
                     mSidePageHoverIndex = -1;
                 }
-            } else if (mIsCameraEvent || determineScrollingStart(ev)) {
+            } else if (mIsCameraEvent || mIsApplicationWidgetEvent || determineScrollingStart(ev)) {
                 startScrolling(ev);
             }
             break;
@@ -1606,13 +1612,16 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
                 // move to the left and fling to the right will register as a fling to the right.
                 if (((isSignificantMove && deltaX > 0 && !isFling) ||
                         (isFling && velocityX > 0)) && mCurrentPage > 0) {
-                    finalPage = returnToOriginalPage || isWarping()
-                            ? mCurrentPage : mCurrentPage - 1;
+                    int moveToPage = (mPageWarpIndex != -1) ? mPageWarpIndex :  mCurrentPage - 1;
+                    finalPage = returnToOriginalPage ? mCurrentPage : moveToPage;
+
                     snapToPageWithVelocity(finalPage, velocityX);
                 } else if (((isSignificantMove && deltaX < 0 && !isFling) ||
                         (isFling && velocityX < 0)) &&
                         mCurrentPage < getChildCount() - 1) {
-                    finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage + 1;
+                    int moveToPage = (mPageWarpIndex != -1) ? mPageWarpIndex :  mCurrentPage + 1;
+                    finalPage = returnToOriginalPage ? mCurrentPage : moveToPage;
+
                     snapToPageWithVelocity(finalPage, velocityX);
                 } else {
                     snapToDestination();
@@ -2153,7 +2162,8 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
 
         float offset = Math.max(0f, Math.min(1f, (float) getScrollX() / maxScrollX));
         int indicatorSpace = trackWidth / numPages;
-        int indicatorPos = (int) (offset * (trackWidth - indicatorSpace)) + mScrollIndicatorPaddingLeft;
+        int indicatorPos = (int) (offset * (trackWidth - indicatorSpace)) +
+                mScrollIndicatorPaddingLeft;
         if (hasElasticScrollIndicator()) {
             if (mScrollIndicator.getMeasuredWidth() != indicatorSpace) {
                 mScrollIndicator.getLayoutParams().width = indicatorSpace;
@@ -2233,7 +2243,8 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         getVisiblePages(mTempVisiblePagesRange);
         boundByReorderablePages(true, mTempVisiblePagesRange);
         for (int i = 0; i < getPageCount(); ++i) {
-            if (i < mTempVisiblePagesRange[0] || i > mTempVisiblePagesRange[1]) {
+            if (i < mTempVisiblePagesRange[0] ||
+                    i > mTempVisiblePagesRange[1]) {
                 getPageAt(i).setAlpha(0f);
             }
         }
@@ -2269,7 +2280,8 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         getVisiblePages(mTempVisiblePagesRange);
         boundByReorderablePages(true, mTempVisiblePagesRange);
         for (int i = 0; i < getPageCount(); ++i) {
-            if (i < mTempVisiblePagesRange[0] || i > mTempVisiblePagesRange[1]) {
+            if (i < mTempVisiblePagesRange[0] ||
+                    i > mTempVisiblePagesRange[1]) {
                 getPageAt(i).setAlpha(1f);
             }
         }
@@ -2708,6 +2720,14 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
         mIsCameraEvent = false;
     }
 
+    void beginApplicationWidgetEvent() {
+        mIsApplicationWidgetEvent = true;
+    }
+
+    void endApplicationWidgetEvent() {
+        mIsApplicationWidgetEvent = false;
+    }
+
     AnimatorListenerAdapter mOnScreenAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(Animator animation) {
@@ -2754,7 +2774,14 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
             if (DEBUG_WARP) Log.v(TAG, "moving page on screen: Tx=" + v.getTranslationX());
             DecelerateInterpolator interp = new DecelerateInterpolator(1.5f);
             mWarpAnimation = v.animate();
-            mWarpAnimation.translationX(mWarpPeekAmount)
+            float translationX = 0;
+            if (mCurrentPage < mPageWarpIndex) {
+                translationX = mWarpPeekAmount;
+            } else if (mCurrentPage > mPageWarpIndex) {
+                float offset = (mCurrentPage - mPageWarpIndex - 1) * v.getWidth();
+                translationX = offset - mWarpPeekAmount;
+            }
+            mWarpAnimation.translationX(translationX)
                     .setInterpolator(interp)
                     .setDuration(WARP_PEEK_ANIMATION_DURATION)
                     .setListener(mOnScreenAnimationListener);
@@ -2792,7 +2819,16 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
 
     public void startPageWarp(int pageIndex) {
         if (DEBUG_WARP) Log.v(TAG, "START WARP");
-        if (pageIndex != mCurrentPage + 1) {
+        int cameraPage = getPageCount() - 1;
+        int applicationWidgetPage;
+        int appWidgetIndex = indexOfChild(findViewById(R.id.keyguard_add_widget));
+        if (appWidgetIndex < 0) {
+            applicationWidgetPage = 0;
+        } else {
+            applicationWidgetPage = APPLICATION_WIDGET_PAGE_NUMBER;
+        }
+
+        if (pageIndex != cameraPage && pageIndex != applicationWidgetPage) {
             mPageSwapIndex = mCurrentPage + 1;
         }
         mPageWarpIndex = pageIndex;
