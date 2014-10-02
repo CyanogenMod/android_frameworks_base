@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -125,6 +128,9 @@ public class EmergencyButton extends Button {
                 enabled = mLockPatternUtils.isSecure() ||
                         mContext.getResources().getBoolean(R.bool.config_showEmergencyButton);
             }
+        }
+        if (getContext().getResources().getBoolean(R.bool.icccardexist_hide_emergencybutton)) {
+            enabled = false;
         }
         mLockPatternUtils.updateEmergencyCallButtonState(this, enabled, false);
     }
