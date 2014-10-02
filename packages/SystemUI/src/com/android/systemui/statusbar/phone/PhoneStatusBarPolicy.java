@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +28,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.os.storage.StorageEventListener;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.os.UserHandle;
 import android.provider.Settings.Global;
 import android.telecom.TelecomManager;
@@ -59,6 +65,9 @@ public class PhoneStatusBarPolicy {
     private static final String SLOT_CDMA_ERI = "cdma_eri";
     private static final String SLOT_ALARM_CLOCK = "alarm_clock";
 
+    private static final String SDCARD_ABSENT = "sdcard_absent";
+    private static final String SDCARD_KEYWORD = "SD";
+
     private final Context mContext;
     private final StatusBarManager mService;
     private final Handler mHandler = new Handler();
@@ -74,7 +83,7 @@ public class PhoneStatusBarPolicy {
     private int mZen;
 
     private boolean mBluetoothEnabled = false;
-
+    StorageManager mStorageManager;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -157,10 +166,43 @@ public class PhoneStatusBarPolicy {
         mService.setIconVisibility(SLOT_VOLUME, false);
         updateVolumeZen();
 
+        if (mContext.getResources().getBoolean(R.bool.config_showSdcardAbsentIndicator)) {
+            mStorageManager = (StorageManager) context
+                    .getSystemService(Context.STORAGE_SERVICE);
+            StorageEventListener listener = new StorageEventListener() {
+                public void onStorageStateChanged(final String path,
+                        final String oldState, final String newState) {
+                    updateSDCardtoAbsent();
+                }
+            };
+            mStorageManager.registerListener(listener);
+        }
+
         // cast
         mService.setIcon(SLOT_CAST, R.drawable.stat_sys_cast, 0, null);
         mService.setIconVisibility(SLOT_CAST, false);
         mCast.addCallback(mCastCallback);
+    }
+
+    private final void updateSDCardtoAbsent() {
+        mService.setIcon(SDCARD_ABSENT, R.drawable.stat_sys_no_sdcard, 0, null);
+        mService.setIconVisibility(SDCARD_ABSENT, !isSdCardInsert(mContext));
+    }
+
+    private boolean isSdCardInsert(Context context) {
+        return !mStorageManager.getVolumeState(getSDPath(context)).equals(
+                android.os.Environment.MEDIA_REMOVED);
+    }
+
+    private String getSDPath(Context context) {
+        StorageVolume[] volumes = mStorageManager.getVolumeList();
+        for (int i = 0; i < volumes.length; i++) {
+            if (volumes[i].isRemovable() && volumes[i].allowMassStorage()
+                    && volumes[i].getDescription(context).contains(SDCARD_KEYWORD)) {
+                return volumes[i].getPath();
+            }
+        }
+        return null;
     }
 
     public void setZenMode(int zen) {
