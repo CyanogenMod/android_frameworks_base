@@ -2619,6 +2619,14 @@
         android:protectionLevel="signature" />
 
 
+    <!-- Allows an application to set the application widget on the keyguard.
+         <p> Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_APPLICATION_WIDGET"
+        android:label="@string/permlab_keyguardApplicationWidget"
+        android:description="@string/permdesc_keyguardApplicationWidget"
+        android:protectionLevel="system|signature" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
