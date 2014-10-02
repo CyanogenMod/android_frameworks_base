@@ -19,7 +19,7 @@
   <string name="accessibility_dpad_left">游標左移</string>
   <string name="accessibility_dpad_right">游標右移</string>
   <string name="dessert_case_settings_cm_title">顯示 CM 的吉祥物</string>
-  <string name="dessert_case_settings_cm_summary">在休眠模式內顯示 CM 的吉祥物以及 Android 的甜點</string>
+  <string name="dessert_case_settings_cm_summary">在休眠模式內顯示 CM 的吉祥物以及 Android 彩蛋</string>
   <string name="quick_settings_screen_sleep">進入休眠</string>
   <string name="quick_settings_label_enabled">開啟</string>
   <string name="quick_settings_ringer_normal">音效</string>
@@ -57,19 +57,19 @@
   <string name="quick_settings_expanded_desktop_off">正常</string>
   <string name="quick_settings_camera_error_connect">無法連線到相機</string>
   <string name="navbar_dialog_title">選擇要指定的動作</string>
-  <string name="navbar_home_button">主螢幕按鈕</string>
-  <string name="navbar_recent_button">多工按鈕</string>
-  <string name="navbar_search_button">搜尋按鈕</string>
-  <string name="navbar_back_button">返回按鈕</string>
+  <string name="navbar_home_button">首頁鍵</string>
+  <string name="navbar_recent_button">多工鍵</string>
+  <string name="navbar_search_button">搜尋鍵</string>
+  <string name="navbar_back_button">返回鍵</string>
   <string name="navbar_empty_button">留空</string>
-  <string name="navbar_menu_conditional_button">選單按鈕 (自動隱藏)</string>
-  <string name="navbar_menu_always_button">選單按鈕 (一律顯示)</string>
-  <string name="navbar_menu_big_button">選單按鈕</string>
+  <string name="navbar_menu_conditional_button">選單鍵 (自動隱藏)</string>
+  <string name="navbar_menu_always_button">選單鍵 (一律顯示)</string>
+  <string name="navbar_menu_big_button">選單鍵</string>
   <string name="advanced_dev_option_wipe_app">清除應用程式資料</string>
   <string name="advanced_dev_option_force_stop">強制停止</string>
   <string name="accessibility_dock_battery_level">座架電池 <xliff:g id="number">%d</xliff:g>%%。</string>
   <string name="screenshot_delete_action">刪除</string>
   <string name="screenshot_delete_confirmation">已刪除螢幕擷取畫面。</string>
   <string name="accessibility_desc_add_quick_settings">新增快速設定。</string>
-  <string name="status_bar_notification_spam_item_title">忽略這樣的消息</string>
+  <string name="status_bar_notification_spam_item_title">忽略此類型通知</string>
 </resources>
