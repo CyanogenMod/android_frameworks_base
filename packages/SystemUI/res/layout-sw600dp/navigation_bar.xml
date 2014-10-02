@@ -97,6 +97,15 @@
 
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:layout_width="128dp"
+            android:id="@+id/application_widget_button"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|left"
+            android:scaleType="center"
+            android:visibility="gone"
+            />
+
+        <com.android.systemui.statusbar.policy.KeyButtonView
+            android:layout_width="128dp"
             android:id="@+id/search_light"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"

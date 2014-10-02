@@ -2770,6 +2770,43 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_THEME_RESOURCES_CACHED =
             "android.intent.action.THEME_RESOURCES_CACHED";
 
+   /**
+    * Allows an application to add a widget to the keyguard which will launch the application
+    * associated with the widget. It has 2 extras - one for the icon to use
+    * {@link #EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON} and the other for the package name
+    * {@link #EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME} of the application associated with
+    * the widget. You must hold "android.permission.SET_KEYGUARD_APPLICATION_WIDGET" to receive
+    * this broadcast.
+    *
+    * @hide
+    */
+    public static final String ACTION_SET_KEYGUARD_APPLICATION_WIDGET =
+            "android.intent.action.SET_KEYGUARD_APPLICATION_WIDGET_ACTION";
+
+    /**
+     * Allows an application to remove the widget on the keyguard which was added using the
+     * {@link #ACTION_SET_KEYGUARD_APPLICATION_WIDGET} intent. You must hold
+     * "android.permission.SET_KEYGUARD_APPLICATION_WIDGET" to receive this
+     * broadcast.
+     *
+     * @hide
+     */
+    public static final String ACTION_UNSET_KEYGUARD_APPLICATION_WIDGET =
+            "android.intent.action.UNSET_KEYGUARD_APPLICATION_WIDGET_ACTION";
+
+    /**
+     * Allows an application to know when the application associated with the keyguard application
+     * widget has been launched. It has 1 extra -
+     * {@link #EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME} which has the package name
+     * associated with the widget. You must hold
+     * "android.permission.SET_KEYGUARD_APPLICATION_WIDGET" to receive this broadcast.
+     *
+     * @see #ACTION_SET_KEYGUARD_APPLICATION_WIDGET
+     * @hide
+     */
+    public static final String ACTION_KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION =
+            "android.intent.action.KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
@@ -3433,6 +3470,25 @@ public class Intent implements Parcelable, Cloneable {
      * @hide
      */
     public static final String EXTRA_THEME_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
+
+    /**
+     * Extra for {@link #ACTION_SET_KEYGUARD_APPLICATION_WIDGET} which tells the keyguard
+     * the icon to use for the widget.
+     *
+     * @hide
+     */
+    public static final String EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON =
+            "android.intent.extra.EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON";
+
+    /**
+     * Extra for {@link #ACTION_SET_KEYGUARD_APPLICATION_WIDGET} and
+     * {@link #ACTION_KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION}. It contains the package name
+     * of the application widget.
+     *
+     * @hide
+     */
+    public static final String EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME =
+            "android.intent.extra.EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

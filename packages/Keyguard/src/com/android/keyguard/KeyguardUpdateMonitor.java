@@ -54,6 +54,8 @@ import com.android.internal.telephony.TelephonyIntents;
 import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Pair;
+
 import com.google.android.collect.Lists;
 
 import java.lang.ref.WeakReference;
@@ -77,6 +79,10 @@ public class KeyguardUpdateMonitor {
     private static final int FAILED_BIOMETRIC_UNLOCK_ATTEMPTS_BEFORE_BACKUP = 3;
     private static final int LOW_BATTERY_THRESHOLD = 20;
 
+    private String mApplicationWidgetPackageName;
+    private byte[] mApplicationWidgetIcon;
+    private Object mApplicationWidgetLock = new Object();
+
     // Callback messages
     private static final int MSG_TIME_UPDATE = 301;
     private static final int MSG_BATTERY_UPDATE = 302;
@@ -99,6 +105,7 @@ public class KeyguardUpdateMonitor {
     private static final int MSG_SCREEN_TURNED_ON = 319;
     private static final int MSG_SCREEN_TURNED_OFF = 320;
     private static final int MSG_LID_STATE_CHANGED = 321;
+    private static final int MSG_APPLICATION_WIDGET_UPDATED = 322;
 
     private static KeyguardUpdateMonitor sInstance;
 
@@ -203,6 +210,9 @@ public class KeyguardUpdateMonitor {
                     break;
                 case MSG_LID_STATE_CHANGED:
                     handleLidStateChanged(msg.arg1);
+                    break;
+                case MSG_APPLICATION_WIDGET_UPDATED:
+                    handleApplicationWidgetUpdated();
                     break;
             }
         }
@@ -454,6 +464,19 @@ public class KeyguardUpdateMonitor {
         }
     }
 
+    protected void handleApplicationWidgetUpdated() {
+        final int count = mCallbacks.size();
+        synchronized (mApplicationWidgetLock) {
+            for (int i = 0; i < count; i++) {
+                KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+                if (cb != null) {
+                    cb.onApplicationWidgetUpdated(mApplicationWidgetPackageName,
+                            mApplicationWidgetIcon);
+                }
+            }
+        }
+    }
+
     protected void handleScreenTurnedOn() {
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
@@ -576,6 +599,33 @@ public class KeyguardUpdateMonitor {
         final IntentFilter userInfoFilter = new IntentFilter(Intent.ACTION_USER_INFO_CHANGED);
         context.registerReceiverAsUser(mBroadcastAllReceiver, UserHandle.ALL, userInfoFilter,
                 null, null);
+
+        // Register the receiver for ACTION_SET_KEYGUARD_APPLICATION_WIDGET and
+        // ACTION_UNSET_KEYGUARD_APPLICATION_WIDGET intents.
+        IntentFilter applicationWidgetFilter = new IntentFilter();
+        applicationWidgetFilter.addAction(Intent.ACTION_SET_KEYGUARD_APPLICATION_WIDGET);
+        applicationWidgetFilter.addAction(Intent.ACTION_UNSET_KEYGUARD_APPLICATION_WIDGET);
+
+        context.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                synchronized (mApplicationWidgetLock) {
+                    if (Intent.ACTION_SET_KEYGUARD_APPLICATION_WIDGET.equals(intent.getAction())) {
+                        mApplicationWidgetPackageName = intent.getStringExtra(
+                                Intent.EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME);
+                        mApplicationWidgetIcon = intent.getByteArrayExtra(
+                                Intent.EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON);
+                        mHandler.sendMessage(mHandler.obtainMessage(MSG_APPLICATION_WIDGET_UPDATED));
+
+                    } else if (Intent.ACTION_UNSET_KEYGUARD_APPLICATION_WIDGET.equals(
+                            intent.getAction())) {
+                        mApplicationWidgetPackageName = null;
+                        mApplicationWidgetIcon = null;
+                        mHandler.sendMessage(mHandler.obtainMessage(MSG_APPLICATION_WIDGET_UPDATED));
+                    }
+                }
+            }
+        }, applicationWidgetFilter, "android.permission.SET_KEYGUARD_APPLICATION_WIDGET", null);
 
         try {
             ActivityManagerNative.getDefault().registerUserSwitchObserver(
@@ -1231,5 +1281,11 @@ public class KeyguardUpdateMonitor {
 
     public boolean isScreenOn() {
         return mScreenOn;
+    }
+
+    public Pair<String, byte[]> getApplicationWidgetDetails() {
+        synchronized (mApplicationWidgetLock) {
+            return new Pair<String, byte[]>(mApplicationWidgetPackageName, mApplicationWidgetIcon);
+        }
     }
 }
