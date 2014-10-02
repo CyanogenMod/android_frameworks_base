@@ -19,6 +19,7 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -178,6 +179,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     boolean mDataAndWifiStacked = false;
 
+    protected static boolean mAppopsStrictEnabled = false;
+
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon,
 		int activityIcon, String contentDescription);
@@ -201,6 +204,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         mHasMobileDataFeature = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
+
+        mAppopsStrictEnabled = AppOpsManager.isStrictEnable();
 
         mShowPhoneRSSIForData = res.getBoolean(R.bool.config_showPhoneRSSIForData);
         mShowAtLeastThreeGees = res.getBoolean(R.bool.config_showMin3G);
@@ -434,7 +439,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         if (mDemoMode) return;
         cluster.setWifiIndicators(
                 // only show wifi in the cluster if connected or if wifi-only
-                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
+                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature || mAppopsStrictEnabled),
                 mWifiIconId,
                 mWifiActivityIconId,
                 mContentDescriptionWifi);
