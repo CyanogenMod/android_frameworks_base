@@ -121,6 +121,28 @@ public abstract class KeyguardActivityLauncher {
         }
     }
 
+    public void launchApplicationWidget(Handler worker, Runnable onStarted, String packageName) {
+        if (DEBUG) {
+            Log.d(TAG, "Launch Application Widget Called for packageName: " + packageName);
+        }
+        try {
+            // Dismiss the lock screen when Settings starts.
+            ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+        } catch (RemoteException e) {
+        }
+
+        Intent appLaunchIntent = getContext().getPackageManager()
+                .getLaunchIntentForPackage(packageName);
+        appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        Intent i = new Intent(Intent.ACTION_KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION);
+        i.putExtra(Intent.EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME, packageName);
+        getContext().sendBroadcast(i, "android.permission.SET_KEYGUARD_APPLICATION_WIDGET");
+
+        launchActivity(appLaunchIntent, false, false, null, null);
+    }
+
     public void launchWidgetPicker(int appWidgetId) {
         Intent pickIntent = new Intent(AppWidgetManager.ACTION_KEYGUARD_APPWIDGET_PICK);
 

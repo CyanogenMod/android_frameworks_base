@@ -158,6 +158,11 @@ public class KeyguardViewStateManager implements
                 CameraWidgetFrame camera = (CameraWidgetFrame) newPage;
                 camera.setUseFastTransition(mKeyguardWidgetPager.isWarping());
             }
+            boolean isApplicationWidgetPage = newPage instanceof ApplicationWidgetFrame;
+            if (isApplicationWidgetPage) {
+                ApplicationWidgetFrame applicationWidgetFrame = (ApplicationWidgetFrame) newPage;
+                applicationWidgetFrame.setUseFastTransition(mKeyguardWidgetPager.isWarping());
+            }
             SlidingChallengeLayout scl = (SlidingChallengeLayout) mChallengeLayout;
             scl.setChallengeInteractive(!isCameraPage);
             final int currentFlags = mKeyguardWidgetPager.getSystemUiVisibility();
