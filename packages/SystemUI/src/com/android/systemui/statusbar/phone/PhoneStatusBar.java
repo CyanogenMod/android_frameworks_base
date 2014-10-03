@@ -34,11 +34,11 @@ import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
-import android.app.ActivityOptions;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -1097,13 +1097,103 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    private View.OnLongClickListener mRecentsLongPressListener = new View.OnLongClickListener() {
+    private Runnable mDefaultRecentsLongPressHandler = new Runnable() {
         @Override
-        public boolean onLongClick(View v) {
+        public void run() {
+            mHandler.removeCallbacks(mDefaultRecentsLongPressHandler);
             cancelPreloadingRecentTasksList();
-            return ActionUtils.switchToLastApp(mContext, mCurrentUserId);
+            boolean switched = ActionUtils.switchToLastApp(mContext, mCurrentUserId);
+            if (switched) {
+                mNavigationBarView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            }
+            mRecentsLongPressed = true;
         }
     };
+
+    private Runnable mIntentRecentsLongPressHandler = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.removeCallbacks(mIntentRecentsLongPressHandler);
+            cancelPreloadingRecentTasksList();
+
+            // allow touch events to leave the system ui
+            mNavigationBarView.setSlippery(true);
+            mNavigationBarView.disableSearchBar();
+            mRecentsLongPressed = true;
+
+            // Let the default activity handle this
+            Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            ComponentName componentName = getRecentsTouchHandlerComponentName();
+            if (componentName != null) {
+                intent.setComponent(componentName);
+                mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            }
+        }
+    };
+    private Runnable getRecentsLongPressHandler(boolean custom) {
+        return custom ? mIntentRecentsLongPressHandler : mDefaultRecentsLongPressHandler;
+    }
+
+    private boolean mRecentsLongPressed = false;
+    private View.OnTouchListener mRecentsTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                boolean hasIntentHandler = hasRecentsTouchHandler();
+                Runnable recentsLongPressHandler = getRecentsLongPressHandler(hasIntentHandler);
+                mHandler.removeCallbacks(recentsLongPressHandler);
+                mHandler.postDelayed(recentsLongPressHandler,
+                        ViewConfiguration.getLongPressTimeout());
+            } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                    event.getAction() == MotionEvent.ACTION_CANCEL) {
+                recentsTouchCleanupHandler(hasRecentsTouchHandler());
+            }
+            return mRecentsPreloadOnTouchListener.onTouch(v, event);
+        }
+    };
+
+    private void recentsTouchCleanupHandler(boolean hasIntentHandler) {
+        if (hasIntentHandler && mRecentsLongPressed) {
+            mNavigationBarView.setSlippery(false);
+            mNavigationBarView.enableSearchBar();
+        }
+        mRecentsLongPressed = false;
+        mHandler.removeCallbacks(getRecentsLongPressHandler(hasIntentHandler));
+    }
+
+    private ComponentName getRecentsTouchHandlerComponentName() {
+        String componentString = Settings.Secure.getString(mContext.getContentResolver(),
+                Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY);
+        return componentString == null ? null : ComponentName.unflattenFromString(componentString);
+    }
+
+    private boolean hasRecentsTouchHandler() {
+        // Check if ACTION_RECENTS_LONG_PRESS has a registered handler
+        PackageManager pm = mContext.getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+
+        ComponentName defaultComponent = getRecentsTouchHandlerComponentName();
+        if (defaultComponent == null) {
+            return false;
+        }
+
+        // Query PackageManager for all packages that can handle this intent
+        List<ResolveInfo> activities = pm.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        if (activities.size() > 0) {
+            for (ResolveInfo info : activities) {
+                // Check that we have a valid ComponentName before launching
+                ComponentName targetComponent = new ComponentName(info.activityInfo.packageName,
+                        info.activityInfo.name);
+                if (targetComponent.equals(defaultComponent)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private int mShowSearchHoldoff = 0;
     private Runnable mShowSearchPanel = new Runnable() {
@@ -1145,8 +1235,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
-        mNavigationBarView.setListeners(mRecentsClickListener,
-                mRecentsPreloadOnTouchListener, mRecentsLongPressListener,
+        mNavigationBarView.setListeners(mRecentsClickListener, mRecentsTouchListener,
                 mHomeSearchActionListener);
         updateSearchPanel();
     }

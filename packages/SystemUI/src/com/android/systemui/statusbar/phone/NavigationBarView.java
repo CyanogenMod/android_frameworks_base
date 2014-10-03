@@ -305,6 +305,14 @@ public class NavigationBarView extends LinearLayout {
         mDelegateHelper.setBar(phoneStatusBar);
     }
 
+    public void disableSearchBar() {
+        mDelegateHelper.setDisabled(true);
+    }
+
+    public void enableSearchBar() {
+        mDelegateHelper.setDisabled(false);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (mDeadZone != null && event.getAction() == MotionEvent.ACTION_OUTSIDE) {
@@ -333,11 +341,10 @@ public class NavigationBarView extends LinearLayout {
     }
 
     /* package */ void setListeners(OnClickListener recentsClickListener,
-            OnTouchListener recentsPreloadListener, OnLongClickListener recentsLongClickListener,
+            OnTouchListener recentsPreloadListener,
             OnTouchListener homeSearchActionListener) {
         mRecentsClickListener = recentsClickListener;
         mRecentsPreloadListener = recentsPreloadListener;
-        mRecentsLongClickListener = recentsLongClickListener;
         mHomeSearchActionListener = homeSearchActionListener;
         updateButtonListeners();
     }
@@ -360,7 +367,6 @@ public class NavigationBarView extends LinearLayout {
         if (recentView != null) {
             recentView.setOnClickListener(mRecentsClickListener);
             recentView.setOnTouchListener(mRecentsPreloadListener);
-            recentView.setOnLongClickListener(mRecentsLongClickListener);
         }
         View homeView = findButton(NavbarEditor.NAVBAR_HOME);
         if (homeView != null) {
