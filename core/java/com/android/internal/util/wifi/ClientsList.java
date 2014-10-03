@@ -26,7 +26,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.lang.InterruptedException;
+import java.lang.Process;
+import java.lang.Runtime;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -35,7 +37,7 @@ public class ClientsList {
     private static final String TAG = "ClientsList";
 
     /**
-     * Gets a list of the clients connected to the Hotspot, reachable timeout is 3000
+     * Gets a list of the clients connected to the Hotspot, reachable deadline(-w) is 3(sec)
      *
      * @param onlyReachables {@code false} if the list should contain unreachable
      *                       (probably disconnected) clients, {@code true} otherwise
@@ -57,9 +59,10 @@ public class ClientsList {
                     String mac = splitted[3];
 
                     if (mac.matches("..:..:..:..:..:..")) {
-                        InetAddress address = InetAddress.getByName(splitted[0]);
-                        boolean isReachable = address.isReachable(3000);
-
+                        boolean isReachable = false;
+                        if (onlyReachables) {
+                           isReachable = isReachableByPing(splitted[0]);
+                        }
                         if (!onlyReachables || isReachable) {
                             ClientScanResult client = new ClientScanResult();
                             client.ipAddr = splitted[0];
@@ -134,6 +137,20 @@ public class ClientsList {
             eventType = parser.next();
         }
         return "";
+    }
+
+    private static boolean isReachableByPing(String client) {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            Process mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 -w 3 " + client);
+            int mExitValue = mIpAddrProcess.waitFor();
+            return (mExitValue == 0);
+        } catch (InterruptedException e) {
+            // Ignore
+        } catch (IOException e) {
+            // Ignore
+        }
+        return false;
     }
 
     public static class ClientScanResult {
