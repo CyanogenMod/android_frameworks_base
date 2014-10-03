@@ -26,6 +26,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.Process;
+import java.lang.Runtime;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -41,6 +43,29 @@ public class ClientsList {
      *                       (probably disconnected) clients, {@code true} otherwise
      * @return ArrayList of {@link ClientScanResult}
      */
+    private static boolean isReachableByPing(String host) {
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 -w 3 " + host);
+            int mExitValue = mIpAddrProcess.waitFor();
+            mIpAddrProcess.destroy();
+
+            if (mExitValue == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (InterruptedException e) {
+            Log.d(TAG, "catch InterruptedException hit in run", e);
+        }
+        catch (IOException e) {
+            Log.d(TAG, "catch IOException hit in run", e);
+        }
+        return false;
+    }
+
     public static ArrayList<ClientScanResult> get(boolean onlyReachables, Context context) {
         BufferedReader br = null;
         ArrayList<ClientScanResult> result = new ArrayList<ClientScanResult>();
@@ -58,9 +83,9 @@ public class ClientsList {
 
                     if (mac.matches("..:..:..:..:..:..")) {
                         InetAddress address = InetAddress.getByName(splitted[0]);
-                        boolean isReachable = address.isReachable(3000);
+                        boolean isReachable = isReachableByPing(splitted[0]);
 
-                        if (!onlyReachables || isReachable) {
+			if (!onlyReachables || isReachable) {
                             ClientScanResult client = new ClientScanResult();
                             client.ipAddr = splitted[0];
                             if (mac.equals("00:00:00:00:00:00")) {
