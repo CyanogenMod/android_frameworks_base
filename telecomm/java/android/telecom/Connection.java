@@ -227,7 +227,8 @@ public abstract class Connection {
             }
 
             public void setDeviceOrientation(int rotation) {
-                mMessageHandler.obtainMessage(MSG_SET_DEVICE_ORIENTATION, rotation).sendToTarget();
+                mMessageHandler.obtainMessage(
+                        MSG_SET_DEVICE_ORIENTATION, rotation, 0).sendToTarget();
             }
 
             public void setZoom(float value) {
