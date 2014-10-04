@@ -31,6 +31,7 @@ package android.provider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract.CommonDataKinds;
@@ -46,6 +47,9 @@ public class LocalGroups {
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
     public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "local-groups");
+
+    private static final Uri RESTORE_GROUPS_CONTENT_URI =
+            Uri.withAppendedPath(AUTHORITY_URI, "restore-local-groups");
 
     public static interface GroupColumns {
 
@@ -150,6 +154,13 @@ public class LocalGroups {
             }
             return null;
         }
+    }
+
+    public static void restoreDefaultLocalGroups(Context context) {
+        ContentResolver cr = context.getContentResolver();
+        cr.delete(Data.CONTENT_URI, Data.MIMETYPE + "=?", new String[] {
+                CommonDataKinds.LocalGroup.CONTENT_ITEM_TYPE});
+        cr.delete(RESTORE_GROUPS_CONTENT_URI, null, null);
     }
 
 }
