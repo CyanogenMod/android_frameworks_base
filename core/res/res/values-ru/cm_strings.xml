@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Сбой SIM-карты.</string>
   <string name="lockscreen_airplane_mode_on">Режим полёта</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM-карта заблокирована.</string>
+  <string name="pinpuk_attempts">\nОсталось попыток:</string>
   <string name="stk_cc_ussd_to_dial">USSD-запрос преобразован в DIAL-запрос.</string>
   <string name="stk_cc_ussd_to_ss">USSD-запрос преобразован в SS-запрос.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-запрос преобразован в новый USSD-запрос.</string>

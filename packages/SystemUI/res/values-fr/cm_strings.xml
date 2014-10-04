@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">Appareil uniquement</string>
   <string name="quick_settings_expanded_desktop">Étendu</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d connecté</item>
+    <item quantity="other">%1$d connectés</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Impossible de se connecter à l\'appareil photo</string>
   <string name="navbar_dialog_title">Choisir l\'action à attribuer</string>
   <string name="navbar_home_button">Bouton d\'accueil</string>

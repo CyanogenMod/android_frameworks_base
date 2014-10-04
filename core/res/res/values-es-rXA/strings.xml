@@ -856,6 +856,7 @@
   <string name="emergency_calls_only" msgid="2485604591272668370">Namái llamaes d\'emerxencia</string>
   <string name="lockscreen_network_locked_message">Bloquiada pa la rede</string>
   <string name="lockscreen_sim_puk_locked_message">La tarxeta SIM ta bloquiada col códigu PUK.</string>
+  <string name="lockscreen_sim_puk_locked_instructions">Ver la Guía d\'usuariu o contautar con atención al veceru.</string>
   <string name="lockscreen_sim_locked_message">La tarxeta SIM ta bloquiada.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">Desbloquiando tarxeta SIM\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">Fixisti <xliff:g id="number">%d</xliff:g> intentos fallíos de desbloquéu.

@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">Namái preséu</string>
   <string name="quick_settings_expanded_desktop">Estendíu</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d coneutáu</item>
+    <item quantity="other">%1$d coneutaos</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Imposible coneutar cola cámara</string>
   <string name="navbar_dialog_title">Seleicionar botón a amosar</string>
   <string name="navbar_home_button">Botón Aniciu</string>

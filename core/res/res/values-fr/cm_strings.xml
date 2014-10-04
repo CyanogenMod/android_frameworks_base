@@ -28,7 +28,7 @@
   <string name="profileGroupGmail">Gmail</string>
   <string name="profileGroupEmail">E-mail</string>
   <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Autres</string>
+  <string name="wildcardProfile">Autre</string>
   <string name="global_action_screenshot">Capture d\'écran</string>
   <string name="global_actions_toggle_expanded_desktop_mode">Bureau étendu</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Activé</string>
@@ -45,14 +45,14 @@
   <string name="reboot_progress">Redémarrage en cours\u2026</string>
   <string name="reboot_confirm" product="tablet">Votre tablette va redémarrer</string>
   <string name="reboot_confirm" product="default">Votre téléphone va redémarrer</string>
-  <string name="permlab_preventpower">outrepasser le bouton d\'alimentation</string>
+  <string name="permlab_preventpower">outrepasser le bouton marche/arrêt</string>
   <string name="permdesc_preventpower">Autoriser une application à outrepasser le bouton d\'alimentation</string>
   <string name="permlab_sendMockSms">envoyer des SMS simulés</string>
   <string name="permdesc_sendMockSms">Permettre à l\'application d\'envoyer des messages simulés. Cela permet à une application d\'envoyer des SMS à des applications de confiance. Des applications malveillantes peuvent envoyer des messages en permanence, bloquer le système de notification de l\'appareil et perturber l\'utilisateur.</string>
   <string name="storage_sd_dock_card">Dock carte SD</string>
   <string name="app_killed_message">Application arrêtée</string>
   <string name="global_action_reboot">Redémarrer</string>
-  <string name="global_action_choose_profile">Profils</string>
+  <string name="global_action_choose_profile">Profil</string>
   <string name="toast_rotation_unlocked">Rotation de l\'écran déverrouillée</string>
   <string name="toast_rotation_locked">Rotation de l\'écran verrouillée</string>
   <string name="stylus_app_not_installed">%s n\'est pas installé</string>
@@ -75,7 +75,7 @@
   <string name="permdesc_readPhoneBlacklist">Autorise une application de lire les informations sur les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_changePhoneBlacklist">modifier la liste noire du téléphone</string>
   <string name="permdesc_changePhoneBlacklist">Autorise une application à modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
-  <string name="permlab_accessThemeService">accèder au service de thème</string>
+  <string name="permlab_accessThemeService">accéder au service de thème</string>
   <string name="permdesc_accessThemeService">Autorise une application à accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
   <string name="permlab_readThemes">lire les informations de votre thème</string>
   <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
@@ -87,7 +87,7 @@
   <string name="permdesc_useHardwareFramework">Permet à une application l\'accès au framework matériel de CM.</string>
   <string name="immersive_mode_confirmation_bottom">Balayez du haut vers le bas pour quitter le mode plein écran.</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
-  <string name="app_ops_access_location">accéder à votre emplacement</string>
+  <string name="app_ops_access_location">accéder à votre localisation</string>
   <string name="app_ops_access_notifications">lire vos notifications</string>
   <string name="app_ops_alarm_wakeup">réveiller l\'appareil</string>
   <string name="app_ops_draw_on_top">déplacer au-dessus</string>
@@ -138,6 +138,7 @@
   <string name="extmedia_format_message_cm" product="default">Toutes les données sur votre carte (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
   <string name="usb_storage_notification_manage_message">Appuyez pour configurer</string>
   <string name="sd_ext_media_checking_notification_title">Préparation de la carte SD\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">Vérification de la carte SD\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">Carte SD vide</string>
   <string name="sd_ext_media_nofs_notification_message">La carte SD est vide ou utilise un système de fichiers non pris en charge.</string>
   <string name="sd_ext_media_unmountable_notification_title">Carte SD endommagée</string>
@@ -148,6 +149,8 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Vous pouvez retirer la carte SD en toute sécurité.</string>
   <string name="sd_ext_media_nomedia_notification_title">Carte SD retirée</string>
   <string name="sd_ext_media_nomedia_notification_message">Carte SD retirée. Insérez une nouvelle carte.</string>
+  <string name="usb_ext_media_checking_notification_title">Préparation du stockage USB\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">Vérification du stockage USB\u2026</string>
   <string name="usb_ext_media_nofs_notification_title">Stockage USB vide</string>
   <string name="usb_ext_media_nofs_notification_message">Le stockage USB est vide ou utilise un système de fichiers non pris en charge.</string>
   <string name="usb_ext_media_unmountable_notification_title">Stockage USB endommagé</string>
@@ -158,6 +161,15 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Vous pouvez retirer le stockage USB en toute sécurité.</string>
   <string name="usb_ext_media_nomedia_notification_title">Stockage USB retiré</string>
   <string name="usb_ext_media_nomedia_notification_message">Stockage USB retiré. Insérez un nouveau média.</string>
+  <string name="progress_nomediapresent" product="default">Aucun support amovible présent\u2026</string>
   <string name="lockscreen_sim_error_message_short">Carte SIM non valide.</string>
   <string name="lockscreen_airplane_mode_on">Mode Avion</string>
+  <string name="lockscreen_sim_locked_message_cm">La carte SIM/RUIM est verrouillée.</string>
+  <string name="pinpuk_attempts">\nTentatives restantes :</string>
+  <string name="stk_cc_ussd_to_dial">Requête USSD modifiée en requête DIAL.</string>
+  <string name="stk_cc_ussd_to_ss">Requête USSD modifiée en requête SS.</string>
+  <string name="stk_cc_ussd_to_ussd">Requête USSD modifiée en une nouvelle requête USSD.</string>
+  <string name="stk_cc_ss_to_dial">Requête SS modifiée en requête DIAL.</string>
+  <string name="stk_cc_ss_to_ussd">Requête SS modifiée en requête USSD.</string>
+  <string name="stk_cc_ss_to_ss">Requête SS modifiée en une nouvelle requête SS.</string>
 </resources>

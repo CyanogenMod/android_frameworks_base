@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">Vain laite</string>
   <string name="quick_settings_expanded_desktop">Laajennettu</string>
   <string name="quick_settings_expanded_desktop_off">Normaali</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d yhdistetty</item>
+    <item quantity="other">%1$d yhdistetty</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Ei voi yhdistää kameraan</string>
   <string name="navbar_dialog_title">Valitse käytettävä toiminto</string>
   <string name="navbar_home_button">Kotinäppäin</string>

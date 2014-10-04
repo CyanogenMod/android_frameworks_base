@@ -55,6 +55,9 @@
   <string name="location_mode_sensors_only_title">기기 전용</string>
   <string name="quick_settings_expanded_desktop">확장</string>
   <string name="quick_settings_expanded_desktop_off">보통</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="other">%1$d대 연결됨</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">카메라에 연결할 수 없습니다.</string>
   <string name="navbar_dialog_title">할당할 작업을 선택</string>
   <string name="navbar_home_button">홈 버튼</string>

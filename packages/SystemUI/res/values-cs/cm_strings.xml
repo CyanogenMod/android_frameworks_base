@@ -55,6 +55,11 @@
   <string name="location_mode_sensors_only_title">Pouze zařízení</string>
   <string name="quick_settings_expanded_desktop">Rozšířený</string>
   <string name="quick_settings_expanded_desktop_off">Normální</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d připojen</item>
+    <item quantity="few">%1$d připojeny</item>
+    <item quantity="other">%1$d připojeno</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Fotoaparát nelze spustit</string>
   <string name="navbar_dialog_title">Vybrat akci k přiřazení</string>
   <string name="navbar_home_button">Tlačítko Domů</string>

@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Ongeldige kaart.</string>
   <string name="lockscreen_airplane_mode_on">Vliegtuigmodus</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM kaart is gesluit.</string>
+  <string name="pinpuk_attempts">\nOorblywende pogings:</string>
   <string name="stk_cc_ussd_to_dial">USSD versoek is verander om te skakel.</string>
   <string name="stk_cc_ussd_to_ss">USSD versoek verander na SS versoek.</string>
   <string name="stk_cc_ussd_to_ussd">USSD versoek verander na nuwe USSD versoek.</string>

@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">Apenas dispositivo</string>
   <string name="quick_settings_expanded_desktop">Expandido</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d conectado</item>
+    <item quantity="other">%1$d conectados</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Não é possível ligar à câmara</string>
   <string name="navbar_dialog_title">Escolha uma ação para atribuir</string>
   <string name="navbar_home_button">Botão Home</string>

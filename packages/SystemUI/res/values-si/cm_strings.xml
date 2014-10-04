@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">සංවේදක පමණි</string>
   <string name="quick_settings_expanded_desktop">විහිදුණු</string>
   <string name="quick_settings_expanded_desktop_off">සාමාන්‍ය</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d සම්බන්ධිතයි</item>
+    <item quantity="other">%1$d සම්බන්ධිතයි</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">කැමරාවට සම්බන්ධ විය නොහැක</string>
   <string name="navbar_dialog_title">පැවරීමට ක්‍රියාවක් තෝරන්න</string>
   <string name="navbar_home_button">නිවස බොත්තම</string>

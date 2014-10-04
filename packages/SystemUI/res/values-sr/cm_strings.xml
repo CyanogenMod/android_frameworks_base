@@ -56,6 +56,12 @@
   <string name="location_mode_sensors_only_title">Само уређај</string>
   <string name="quick_settings_expanded_desktop">Проширен</string>
   <string name="quick_settings_expanded_desktop_off">Нормалaн</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d повезан</item>
+    <item quantity="few">%1$d повезана</item>
+    <item quantity="many">%1$d повезаних</item>
+    <item quantity="other">%1$d повезаних</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Немогуће повезивање са камером</string>
   <string name="navbar_dialog_title">Изабери акцију да доделиш</string>
   <string name="navbar_home_button">Главно дугме</string>

@@ -41,6 +41,7 @@
   <string name="reboot_bootmenu">開機功能表</string>
   <string name="reboot_fastboot">Fastboot 模式</string>
   <string name="reboot_download">下載</string>
+  <string name="reboot_soft">軟重新啟動</string>
   <string name="reboot_progress">正在重新啟動\u2026</string>
   <string name="reboot_confirm" product="tablet">您的平板電腦將重新啟動。</string>
   <string name="reboot_confirm" product="default">您的電話將重新啟動。</string>
@@ -80,8 +81,8 @@
   <string name="permdesc_readThemesDesc">允許應用程式讀取您的主題，並判斷您已套用的主題。</string>
   <string name="permlab_writeThemes">修改你的主題</string>
   <string name="permdesc_writeThemesDesc">允許應用程式來插入新的主題，並修改您已應用的主題。</string>
-  <string name="permlab_setKeyguardWallpaper">設定鍵盤鎖的桌布</string>
-  <string name="permdesc_setKeyguardWallpaper">允許應用程式來更改鎖定螢幕桌布。</string>
+  <string name="permlab_setKeyguardWallpaper">設定鎖定畫面牆紙</string>
+  <string name="permdesc_setKeyguardWallpaper">允許應用程式更改鎖定畫面牆紙。</string>
   <string name="permlab_useHardwareFramework">使用硬件框架</string>
   <string name="permdesc_useHardwareFramework">允許應用程式存取 CM 硬件框架。</string>
   <string name="immersive_mode_confirmation_bottom">從底部向上滑動即可退出全螢幕模式。</string>
@@ -113,6 +114,7 @@
   <string name="app_ops_toggle_bluetooth">切換藍牙</string>
   <string name="app_ops_toggle_mobile_data">切換流動數據</string>
   <string name="app_ops_toggle_wifi">切換 Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">切換 NFC</string>
   <string name="app_ops_use_alarm_volume">控制鬧鐘音量</string>
   <string name="app_ops_use_audio_focus">控制音訊焦點</string>
   <string name="app_ops_use_bluetooth_volume">控制藍牙音量</string>
@@ -132,6 +134,7 @@
   <string name="adb_net_active_notification_title">網絡 ADB 偵錯</string>
   <string name="adb_both_active_notification_title">USB &amp; 網絡 ADB 偵錯</string>
   <string name="adb_active_generic_notification_message">觸碰以停用調試。</string>
+  <string name="extmedia_format_message_cm" product="nosdcard">您 USB 儲存裝置上的所有數據（位於路徑『%1$s』下的）將會被刪除。此操作不可撤銷！</string>
   <string name="usb_storage_notification_manage_message">輕按以管理</string>
   <string name="sd_ext_media_nofs_notification_title">SD 卡無內容</string>
   <string name="sd_ext_media_nofs_notification_message">SD 卡無內容，或使用不受支援的檔案系統。</string>
@@ -142,4 +145,6 @@
   <string name="sd_ext_media_safe_unmount_notification_title">可安全移除 SD 卡</string>
   <string name="sd_ext_media_safe_unmount_notification_message">你現在可以安全地移除 SD 卡。</string>
   <string name="usb_ext_media_nomedia_notification_title">已移除 USB 儲存裝置</string>
+  <string name="lockscreen_sim_error_message_short">無效的 SIM 咭。</string>
+  <string name="lockscreen_airplane_mode_on">飛航模式</string>
 </resources>

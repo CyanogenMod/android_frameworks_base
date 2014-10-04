@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Ugyldigt SIM-kort.</string>
   <string name="lockscreen_airplane_mode_on">Flytilstand</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM-kort er låst.</string>
+  <string name="pinpuk_attempts">\nForsøg tilbage:</string>
   <string name="stk_cc_ussd_to_dial">USSD-anmodning er ændret til en DIAL-anmodning.</string>
   <string name="stk_cc_ussd_to_ss">USSD-anmodning er ændret til en SS-anmodning.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-anmodning er ændret til en ny USSD-anmodning.</string>

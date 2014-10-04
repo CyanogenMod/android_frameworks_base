@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Érvénytelen kártya.</string>
   <string name="lockscreen_airplane_mode_on">Repülőgép üzemmód</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM kártya zárolva.</string>
+  <string name="pinpuk_attempts">\nHátralevő kisérletek száma:</string>
   <string name="stk_cc_ussd_to_dial">USSD kérés módosítva DIAL kérésre.</string>
   <string name="stk_cc_ussd_to_ss">USSD kérés módosítva SS kérésre.</string>
   <string name="stk_cc_ussd_to_ussd">USSD kérés módosítva új USSD kérésre.</string>

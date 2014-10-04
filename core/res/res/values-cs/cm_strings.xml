@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Neplatná karta.</string>
   <string name="lockscreen_airplane_mode_on">Režim „V letadle“</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM karta je zamčena.</string>
+  <string name="pinpuk_attempts">\nZbývajících pokusů:</string>
   <string name="stk_cc_ussd_to_dial">Požadavek USSD byl změněn na požadavek DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Požadavek USSD byl změněn na požadavek SS.</string>
   <string name="stk_cc_ussd_to_ussd">Požadavek USSD byl změněn na nový požadavek USSD.</string>

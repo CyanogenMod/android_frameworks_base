@@ -167,6 +167,7 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="lockscreen_sim_error_message_short">Geçersiz kart.</string>
   <string name="lockscreen_airplane_mode_on">Uçak modu</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM kart kilitli.</string>
+  <string name="pinpuk_attempts">\nKalan deneme sayısı:</string>
   <string name="stk_cc_ussd_to_dial">USSD isteği ARAMA isteğine dönüştürüldü.</string>
   <string name="stk_cc_ussd_to_ss">USSD isteği SS isteğine dönüştürüldü.</string>
   <string name="stk_cc_ussd_to_ussd">USSD isteği yeni bir USSD isteğine dönüştürüldü.</string>

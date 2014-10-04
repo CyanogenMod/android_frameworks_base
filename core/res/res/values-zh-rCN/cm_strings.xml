@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">SIM 卡无效。</string>
   <string name="lockscreen_airplane_mode_on">飞行模式</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM 卡被锁定。</string>
+  <string name="pinpuk_attempts">\n剩余次数：</string>
   <string name="stk_cc_ussd_to_dial">USSD 请求已修改为 DIAL 请求。</string>
   <string name="stk_cc_ussd_to_ss">USSD 请求已修改为 SS 请求。</string>
   <string name="stk_cc_ussd_to_ussd">USSD 请求已修改为新的 USSD 请求。</string>

@@ -115,6 +115,7 @@
   <string name="app_ops_toggle_bluetooth">گۆڕینی بلوتوس</string>
   <string name="app_ops_toggle_mobile_data">گۆڕینی داتای مۆبایل</string>
   <string name="app_ops_toggle_wifi">گۆڕینی WI-FI</string>
+  <string name="app_ops_toggle_nfc">گۆڕینی دۆخی NFC</string>
   <string name="app_ops_use_alarm_volume">کۆنترۆڵی دەنگی زەنگ</string>
   <string name="app_ops_use_audio_focus">کۆنترۆڵی تیشکۆی دەنگ</string>
   <string name="app_ops_use_bluetooth_volume">کۆنترۆڵکردنی دەنگی بلوتوس</string>
@@ -136,4 +137,25 @@
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی USB (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
   <string name="extmedia_format_message_cm" product="default">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی ناوه‌کی (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
+  <string name="usb_storage_notification_manage_message">بە سووکی لێدە بۆ بەڕێوەبردن</string>
+  <string name="sd_ext_media_nofs_notification_title">بیرگەی دەرەکی بەتاڵ</string>
+  <string name="sd_ext_media_nofs_notification_message">بیرگەی دەرەکی بەتاڵە یان سیستەمی پەڕگە پشتگیری ناکرێت.</string>
+  <string name="sd_ext_media_unmountable_notification_title">بیرگەی دەرەکی تێکشکاو</string>
+  <string name="sd_ext_media_unmountable_notification_message">بیرگەی دەرەکی تێکشکاوە. هەوڵ بدە بۆ دووبارە فۆرماتکردنەوەی.</string>
+  <string name="sd_ext_media_badremoval_notification_title">بیرگەی دەرەکی لەپڕ لادرا</string>
+  <string name="sd_ext_media_badremoval_notification_message">بۆ ڕێگرتن لە لەدەستدانی دراوە پێش ئەوەی بیرگەی دەرەکی لابەری، دەریبکێشە .</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">لەخۆگری بیرگەی USB پارێزراوە بۆ لابردن</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">تۆ دەتوانیت بە دڵنیایی لەخۆگری بیرگەی USB لابەریت.</string>
+  <string name="sd_ext_media_nomedia_notification_title">بیرگەی دەرەکی لابرا</string>
+  <string name="sd_ext_media_nomedia_notification_message">بیرگەی دەرەکی لابرا. دانەیەکی نوێ بخە ناو.</string>
+  <string name="usb_ext_media_nofs_notification_title">لەخۆگری USB بەتاڵ</string>
+  <string name="usb_ext_media_nofs_notification_message">لەخۆگری USB بەتاڵە یان سیستەمی پەڕگە پشتگیری نەکراوە.</string>
+  <string name="usb_ext_media_unmountable_notification_title">لەخۆگری USB تێکشکاو</string>
+  <string name="usb_ext_media_unmountable_notification_message">لەخۆگری USB تێکشکاوە. هەوڵ بدە بۆ دووبارە فۆرماتکردنەوەی.</string>
+  <string name="usb_ext_media_badremoval_notification_title">لەخۆگری USB لەپڕ لابرا</string>
+  <string name="usb_ext_media_badremoval_notification_message">بۆ ڕێگرتن لە لەدەستدانی دراوە پێش ئەوەی لەخۆگری بیرگەی USB لابەری، دەریبکێشە .</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">لەخۆگری بیرگەی USB پارێزراوە بۆ لابردن</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">تۆ دەتوانی بە دڵنیایی لەخۆگری بیرگەی USB لابەری.</string>
+  <string name="usb_ext_media_nomedia_notification_title">لەخۆگەی بیرگەی USB لابرا</string>
+  <string name="usb_ext_media_nomedia_notification_message">لەخۆگری بیرگەی USB لابرا. ڕەنگاڵەیەکی نوێ بخە ناو.</string>
 </resources>

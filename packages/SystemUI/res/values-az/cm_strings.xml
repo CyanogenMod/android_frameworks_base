@@ -50,4 +50,30 @@
   <string name="quick_settings_compass_init">Başladılır\u2026</string>
   <string name="quick_settings_heads_up_on">Bildiriş Pəncərələri aktivdir</string>
   <string name="quick_settings_heads_up_off">Bildiriş Pəncərələri aktiv deyil</string>
+  <string name="location_mode_high_accuracy_title">Yüksək dəqiqlik</string>
+  <string name="location_mode_battery_saving_title">Batareyaya qənaət</string>
+  <string name="location_mode_sensors_only_title">Yalnız cihaz</string>
+  <string name="quick_settings_expanded_desktop">Genişlədilib</string>
+  <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d cihaz qoşuludur</item>
+    <item quantity="other">%1$d cihaz qoşuludur</item>
+  </plurals>
+  <string name="quick_settings_camera_error_connect">Kameraya bağlana bilmir</string>
+  <string name="navbar_dialog_title">Hərəkət seçin</string>
+  <string name="navbar_home_button">Əsas ekran düyməsi</string>
+  <string name="navbar_recent_button">Son tətb. düyməsi</string>
+  <string name="navbar_search_button">Axtarış düyməsi</string>
+  <string name="navbar_back_button">Geri düyməsi</string>
+  <string name="navbar_empty_button">Boş burax</string>
+  <string name="navbar_menu_conditional_button">Menyu (avtoGizlət) düyməsi</string>
+  <string name="navbar_menu_always_button">Menyu (hmşGöstər) düyməsi</string>
+  <string name="navbar_menu_big_button">Menyu düyməsi</string>
+  <string name="advanced_dev_option_wipe_app">Tətbiq məlumatını sil</string>
+  <string name="advanced_dev_option_force_stop">Dayandır</string>
+  <string name="accessibility_dock_battery_level">Batareya faizi <xliff:g id="number">%d</xliff:g>.</string>
+  <string name="screenshot_delete_action">Sil</string>
+  <string name="screenshot_delete_confirmation">Ekran görüntüsünü sil.</string>
+  <string name="accessibility_desc_add_quick_settings">Sürətli tənzimləmələrə əlavə et.</string>
+  <string name="status_bar_notification_spam_item_title">Belə mesajları gizlət</string>
 </resources>
