@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Ungültige Karte.</string>
   <string name="lockscreen_airplane_mode_on">Flugmodus</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM-Karte ist gesperrt.</string>
+  <string name="pinpuk_attempts">\nVerbleibende Versuche:</string>
   <string name="stk_cc_ussd_to_dial">USSD-Anfrage wurde in DIAL-Anfrage umgewandelt.</string>
   <string name="stk_cc_ussd_to_ss">USSD-Anfrage wurde in SS-Anfrage umgewandelt.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-Anfrage wurde in neue USSD-Anfrage umgewandelt.</string>

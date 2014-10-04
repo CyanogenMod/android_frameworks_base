@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">無効なカードです。</string>
   <string name="lockscreen_airplane_mode_on">機内モード</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIMカードはロックされています。</string>
+  <string name="pinpuk_attempts">\n残り試行回数:</string>
   <string name="stk_cc_ussd_to_dial">USSDリクエストはDIALリクエストに変更されます。</string>
   <string name="stk_cc_ussd_to_ss">USSDリクエストはSSリクエストに変更されます。</string>
   <string name="stk_cc_ussd_to_ussd">USSDリクエストは新しいUSSDに変更されます。</string>

@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
   <string name="lockscreen_airplane_mode_on">Modo de avião</string>
   <string name="lockscreen_sim_locked_message_cm">Cartão SIM/RUIM está bloqueado.</string>
+  <string name="pinpuk_attempts">\nTentativas restantes:</string>
   <string name="stk_cc_ussd_to_dial">Pedido USSD modificado em pedido DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Pedido USSD modificado em pedido SS.</string>
   <string name="stk_cc_ussd_to_ussd">Pedido USSD modificado em novo pedido USSD.</string>

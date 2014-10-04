@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">카드가 잘못되었습니다.</string>
   <string name="lockscreen_airplane_mode_on">비행기 모드</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM 카드가 잠겨 있습니다.</string>
+  <string name="pinpuk_attempts">\n남은 시도 횟수:</string>
   <string name="stk_cc_ussd_to_dial">USSD 요청이 DIAL 요청으로 변경되었습니다.</string>
   <string name="stk_cc_ussd_to_ss">USSD 요청이 SS 요청으로 변경되었습니다.</string>
   <string name="stk_cc_ussd_to_ussd">USSD 요청이 새로운 USSD 요청으로 변경되었습니다.</string>

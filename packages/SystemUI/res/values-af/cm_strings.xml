@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">Toestel alleenlik</string>
   <string name="quick_settings_expanded_desktop">Uitgebrei</string>
   <string name="quick_settings_expanded_desktop_off">Normaal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d gekoppel</item>
+    <item quantity="other">%1$d gekoppel</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Kan nie aan Kamera konnekteer nie</string>
   <string name="navbar_dialog_title">Kies \'n aksie om toe te ken</string>
   <string name="navbar_home_button">Tuis-knoppie</string>

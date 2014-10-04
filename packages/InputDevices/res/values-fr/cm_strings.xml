@@ -23,4 +23,5 @@
   <string name="keyboard_layout_hebrew">Hébreu</string>
   <string name="keyboard_layout_lithuanian">Lituanien</string>
   <string name="keyboard_layout_spanish_latin">Espagnol (Latin)</string>
+  <string name="keyboard_layout_latvian">Letton</string>
 </resources>

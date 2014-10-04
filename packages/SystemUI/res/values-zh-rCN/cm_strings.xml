@@ -55,6 +55,9 @@
   <string name="location_mode_sensors_only_title">仅限设备</string>
   <string name="quick_settings_expanded_desktop">扩展桌面</string>
   <string name="quick_settings_expanded_desktop_off">正常</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="other">%1$d 已连接</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">无法连接到相机</string>
   <string name="navbar_dialog_title">选择要分配的动作</string>
   <string name="navbar_home_button">Home 键</string>

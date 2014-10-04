@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Virheellinen kortti.</string>
   <string name="lockscreen_airplane_mode_on">Lentokonetila</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM-kortti on lukittu.</string>
+  <string name="pinpuk_attempts">\nYrityksiä jäljellä:</string>
   <string name="stk_cc_ussd_to_dial">USSD-pyyntö muutetaan DIAL-pyynnöksi.</string>
   <string name="stk_cc_ussd_to_ss">USSD-pyyntö muutetaan SS-pyynnöksi.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-pyyntö muutetaan uudeksi USSD-pyynnöksi.</string>

@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">Csak készülék</string>
   <string name="quick_settings_expanded_desktop">Kiterjesztett</string>
   <string name="quick_settings_expanded_desktop_off">Normál</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d csatlakoztatva</item>
+    <item quantity="other">%1$d csatlakoztatva</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Nem lehet csatlakozni a kamerához</string>
   <string name="navbar_dialog_title">Válasszon eseményt</string>
   <string name="navbar_home_button">Kezdőgomb</string>

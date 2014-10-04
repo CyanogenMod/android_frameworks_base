@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Μη έγκυρη κάρτα.</string>
   <string name="lockscreen_airplane_mode_on">Λειτουργία πτήσης</string>
   <string name="lockscreen_sim_locked_message_cm">Η κάρτα SIM/RUIM είναι κλειδωμένη.</string>
+  <string name="pinpuk_attempts">\nΠροσπάθειες που απομένουν:</string>
   <string name="stk_cc_ussd_to_dial">Η αίτηση USSD τροποποιήθηκε σε αίτηση DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Η αίτηση USSD τροποποιήθηκε σε αίτηση SS.</string>
   <string name="stk_cc_ussd_to_ussd">Η αίτηση USSD τροποποιήθηκε σε νέα αίτηση USSD.</string>

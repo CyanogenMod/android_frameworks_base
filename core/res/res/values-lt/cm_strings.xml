@@ -137,6 +137,8 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Visi („%1$s“) USB saugyklos duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
   <string name="extmedia_format_message_cm" product="default">Visi („%1$s“) kortelės duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
   <string name="usb_storage_notification_manage_message">Bakstelėkite norėdami valdyti</string>
+  <string name="sd_ext_media_checking_notification_title">SD kortelė ruošiama\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">SD kortelėje ieškoma klaidų\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">Tuščia SD kortelė</string>
   <string name="sd_ext_media_nofs_notification_message">SD kortelė tuščia arba turi nepalaikomą failų sistemą.</string>
   <string name="sd_ext_media_unmountable_notification_title">Sugadinta SD kortelė</string>
@@ -147,6 +149,8 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti SD kortelę.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD kortelė pašalinta</string>
   <string name="sd_ext_media_nomedia_notification_message">SD kortelė pašalinta. Įdėkite naują.</string>
+  <string name="usb_ext_media_checking_notification_title">USB saugykla ruošiama\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">USB saugykloje ieškoma klaidų\u2026</string>
   <string name="usb_ext_media_nofs_notification_title">Tuščia USB saugykla</string>
   <string name="usb_ext_media_nofs_notification_message">USB saugykla tuščia arba turi nepalaikomą failų sistemą.</string>
   <string name="usb_ext_media_unmountable_notification_title">Sugadinta USB saugykla</string>
@@ -157,4 +161,15 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti USB saugyklą.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB saugykla pašalinta</string>
   <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują.</string>
+  <string name="progress_nomediapresent" product="default">Nėra laikmenos\u2026</string>
+  <string name="lockscreen_sim_error_message_short">Neteisinga kortelė.</string>
+  <string name="lockscreen_airplane_mode_on">Lėktuvo režimas</string>
+  <string name="lockscreen_sim_locked_message_cm">SIM/RUIM kortelė užrakinta.</string>
+  <string name="pinpuk_attempts">\nLiko bandymų:</string>
+  <string name="stk_cc_ussd_to_dial">USSD užklausa pakeista į DIAL prašymą.</string>
+  <string name="stk_cc_ussd_to_ss">USSD užklausa pakeista į SS prašymą.</string>
+  <string name="stk_cc_ussd_to_ussd">USSD užklausa pakeista į naują USSD prašymą.</string>
+  <string name="stk_cc_ss_to_dial">SS užklausa pakeista į DIAL prašymą.</string>
+  <string name="stk_cc_ss_to_ussd">SS užklausa pakeista į USSD prašymą.</string>
+  <string name="stk_cc_ss_to_ss">SS užklausa pakeista į naują SS prašymą.</string>
 </resources>

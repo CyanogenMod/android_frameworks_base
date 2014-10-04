@@ -165,6 +165,7 @@
   <string name="lockscreen_sim_error_message_short">Targeta invàlida.</string>
   <string name="lockscreen_airplane_mode_on">Mode avió</string>
   <string name="lockscreen_sim_locked_message_cm">La targeta SIM/RUIM està bloquejada.</string>
+  <string name="pinpuk_attempts">\nIntents restants:</string>
   <string name="stk_cc_ussd_to_dial">Petició SS modificada a una petició DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Petició USSD modificada a una petició SS.</string>
   <string name="stk_cc_ussd_to_ussd">Petició USSD modificada a una nova petició USSD.</string>
