@@ -6502,6 +6502,15 @@ public final class Settings {
          */
         public static final String DISABLE_FORCED_NAVBAR = "disable_forced_navbar";
 
+        /**
+         * Whether to disable navbar or statusbar system gesture when in immersive mode
+         * 0 - both enabled (default)
+         * 1 - disable navbar gesture
+         * 2 - disable statusbar gesture
+         * @hide
+         */
+        public static final String DISABLE_SYSTEM_GESTURES = "disable_system_gestures";
+
          /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.

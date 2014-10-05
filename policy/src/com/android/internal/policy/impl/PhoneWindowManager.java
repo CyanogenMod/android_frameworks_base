@@ -460,6 +460,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mForcingShowNavBarLayer;
 
     int mExpandedDesktopStyle = 2;
+    int mDisableSystemGestures = -1;
 
     // States of keyguard dismiss.
     private static final int DISMISS_KEYGUARD_NONE = 0; // Keyguard not being dismissed.
@@ -677,6 +678,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.DISABLE_FORCED_NAVBAR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DISABLE_SYSTEM_GESTURES), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -822,14 +826,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 EdgeGesturePosition position, int flags) {
             WindowState target = null;
 
-            if (position == EdgeGesturePosition.TOP) {
+            if (position == EdgeGesturePosition.TOP && !disableStatusBarGesture()) {
                 target = mStatusBar;
-            } else if (position == EdgeGesturePosition.BOTTOM && mNavigationBarOnBottom) {
+            } else if (position == EdgeGesturePosition.BOTTOM && mNavigationBarOnBottom
+                        && !disableNavigationBarGesture()) {
                 target = mNavigationBar;
             } else if (position == EdgeGesturePosition.LEFT
-                    && !mNavigationBarOnBottom /*&& mNavigationBarLeftInLandscape*/) {
+                    && !mNavigationBarOnBottom /*&& mNavigationBarLeftInLandscape*/
+                        && !disableNavigationBarGesture()) {
                 target = mNavigationBar;
-            } else if (position == EdgeGesturePosition.RIGHT && !mNavigationBarOnBottom) {
+            } else if (position == EdgeGesturePosition.RIGHT && !mNavigationBarOnBottom
+                        && !disableNavigationBarGesture()) {
                 target = mNavigationBar;
             }
 
@@ -851,10 +858,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int flags = 0;
         if (mUsingEdgeGestureServiceForGestures) {
             flags = EdgeServiceConstants.LONG_LIVING | EdgeServiceConstants.UNRESTRICTED;
-            if (mStatusBar != null && !mStatusBar.isVisibleLw()) {
+            if (mStatusBar != null && !mStatusBar.isVisibleLw() && !disableStatusBarGesture()) {
                 flags |= EdgeGesturePosition.TOP.FLAG;
             }
-            if (mNavigationBar != null && !mNavigationBar.isVisibleLw()) {
+            if (mNavigationBar != null && !mNavigationBar.isVisibleLw() && !disableNavigationBarGesture()) {
                 if (mNavigationBarOnBottom) {
                     flags |= EdgeGesturePosition.BOTTOM.FLAG;
                 /*} else if (mNavigationBarLeftInLandscape) {
@@ -1277,6 +1284,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         });
     }
 
+    private boolean disableNavigationBarGesture() {
+        return mDisableSystemGestures == 1;
+    }
+
+    private boolean disableStatusBarGesture() {
+        return mDisableSystemGestures == 2;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void init(Context context, IWindowManager windowManager,
@@ -1383,19 +1398,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 new SystemGesturesPointerEventListener.Callbacks() {
                     @Override
                     public void onSwipeFromTop() {
-                        if (mStatusBar != null) {
+                        if (mStatusBar != null && !disableStatusBarGesture()) {
                             requestTransientBars(mStatusBar);
                         }
                     }
                     @Override
                     public void onSwipeFromBottom() {
-                        if (mNavigationBar != null && mNavigationBarOnBottom) {
+                        if (mNavigationBar != null && mNavigationBarOnBottom && !disableNavigationBarGesture()) {
                             requestTransientBars(mNavigationBar);
                         }
                     }
                     @Override
                     public void onSwipeFromRight() {
-                        if (mNavigationBar != null && !mNavigationBarOnBottom) {
+                        if (mNavigationBar != null && !mNavigationBarOnBottom
+                                && !disableNavigationBarGesture()) {
                             requestTransientBars(mNavigationBar);
                         }
                     }
@@ -1686,6 +1702,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.EXPANDED_DESKTOP_STATE, 0, UserHandle.USER_CURRENT) == 0) {
                 mExpandedDesktopStyle = 0;
                 mShowSystemBarOnKeyguard = false;
+            }
+
+            mDisableSystemGestures = Settings.System.getIntForUser(resolver,
+                    Settings.System.DISABLE_SYSTEM_GESTURES, 0, UserHandle.USER_CURRENT);
+            if (Settings.System.getIntForUser(resolver,
+                    Settings.System.DISABLE_SYSTEM_GESTURES, 0, UserHandle.USER_CURRENT) == 0) {
+                mDisableSystemGestures = 0;
             }
 
             final boolean useEdgeService = Settings.System.getIntForUser(resolver,
