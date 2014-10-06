@@ -18,6 +18,7 @@ package com.android.internal.util.slim;
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
+import android.app.KeyguardManager;
 import android.app.SearchManager;
 import android.app.IUiModeManager;
 import android.content.ActivityNotFoundException;
@@ -57,6 +58,9 @@ public class SlimActions {
 
     private static final int MSG_INJECT_KEY_DOWN = 1066;
     private static final int MSG_INJECT_KEY_UP = 1067;
+
+    private Context mContext;
+    private KeyguardManager mKeyguardManager;
 
     public static void processAction(Context context, String action, boolean isLongpress) {
         processActionWithOptions(context, action, isLongpress, true);
@@ -138,9 +142,17 @@ public class SlimActions {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_MOVE_END, isLongpress);
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_POWER_MENU)) {
-                try {
-                    windowManagerService.toggleGlobalMenu();
-                } catch (RemoteException e) {
+                KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+                boolean locked = km.inKeyguardRestrictedInputMode() && km.isKeyguardSecure();
+                boolean globalActionsOnLockScreen = Settings.System.getInt(
+                        context.getContentResolver(), Settings.System.LOCKSCREEN_ENABLE_POWER_MENU, 0) == 1;
+                if (locked && !globalActionsOnLockScreen) {
+                    return;
+                } else {
+                    try {
+                        windowManagerService.toggleGlobalMenu();
+                    } catch (RemoteException e) {
+                    }
                 }
                 return;
             } else if (action.equals(ButtonsConstants.ACTION_POWER)) {
