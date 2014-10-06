@@ -4930,4 +4930,11 @@
     <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
     <string name="permission_remember_choice">Remember</string>
     <string name="permission">Permission</string>
+
+    <!-- Default wi-fi hotspot ssid -->
+    <string name="def_wifi_wifihotspot_ssid" translatable="false"></string>
+    <!-- Default wi-fi hotspot pass -->
+    <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
+    <!-- Default wi-fi direct name -->
+    <string name="def_wifi_direct_name" translatable="false"></string>
 </resources>
