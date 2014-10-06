@@ -3708,7 +3708,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         = mOverscanScreenTop + mOverscanScreenHeight;
             }
         } else  if (attrs.type == TYPE_INPUT_METHOD) {
-            pf.left = df.left = of.left = cf.left = vf.left = mDockLeft;
+            pf.left = df.left = of.left = cf.left = vf.left = mStableLeft;
             pf.top = df.top = of.top = cf.top = vf.top = mDockTop;
             pf.right = df.right = of.right = cf.right = vf.right = mStableRight;
             // IM dock windows layout below the nav bar...
