@@ -5435,6 +5435,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
+            // If this is a theme we should re-compile common resources if they exist so
+            // remove this package from mAvailableCommonResources.
+            if (!isBootScan && pkg.mOverlayTargets.size() > 0) {
+                mAvailableCommonResources.remove(pkg.packageName);
+            }
+
             // Generate Idmaps and res tables if pkg is a theme
             for(String target : pkg.mOverlayTargets) {
                 Exception failedException = null;
