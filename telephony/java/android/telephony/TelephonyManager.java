@@ -806,6 +806,21 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * Returns the icc operator numeric
+     *
+     * @hide
+     */
+    public String getIccOperatorNumeric() {
+       try{
+            return getITelephony().getIccOperatorNumeric();
+       } catch (RemoteException ex) {
+           return null;
+       } catch (NullPointerException ex) {
+           return null;
+       }
+    }
+
     /** Unknown network class. {@hide} */
     public static final int NETWORK_CLASS_UNKNOWN = 0;
     /** Class of broadly defined "2G" networks. {@hide} */

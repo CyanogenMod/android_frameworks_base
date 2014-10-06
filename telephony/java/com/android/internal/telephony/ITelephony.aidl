@@ -308,6 +308,11 @@ interface ITelephony {
       */
     int getVoiceNetworkType();
 
+   /**
+     * Return icc operator numeric
+     */
+    String getIccOperatorNumeric();
+
     /**
      * Return true if an ICC card is present
      */
