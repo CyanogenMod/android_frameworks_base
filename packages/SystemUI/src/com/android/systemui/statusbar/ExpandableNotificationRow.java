@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.provider.Settings;
 
 public class ExpandableNotificationRow extends FrameLayout {
     private int mRowHeight;
@@ -52,7 +53,12 @@ public class ExpandableNotificationRow extends FrameLayout {
     }
 
     public boolean isUserExpanded() {
-        return mUserExpanded;
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FORCE_EXPANDED_NOTIFICATIONS, 0) != 1) {
+            return mUserExpanded;
+        } else {
+            return true;
+        }
     }
 
     public void setUserExpanded(boolean userExpanded) {
