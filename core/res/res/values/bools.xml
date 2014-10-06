@@ -18,6 +18,8 @@
     <bool name="kg_enable_camera_default_widget">true</bool>
     <bool name="kg_center_small_widgets_vertically">false</bool>
     <bool name="kg_top_align_page_shrink_on_bouncer_visible">true</bool>
+    <!-- Whether to make default hotspot security NONE-->
+    <bool name="set_wifi_hotspot_security_none">false</bool>
     <bool name="kg_show_ime_at_screen_on">true</bool>
     <bool name="action_bar_embed_tabs">true</bool>
     <bool name="action_bar_embed_tabs_pre_jb">false</bool>
