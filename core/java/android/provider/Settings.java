@@ -3087,10 +3087,16 @@ public final class Settings {
         public static final String EXPANDED_SCREENTIMEOUT_MODE = "expanded_screentimeout_mode";
 
         /**
-        * Notification Power Widget - Custom Ring Mode
-        * @hide
-        */
+         * Notification Power Widget - Custom Ring Mode
+         * @hide
+         */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
+
+        /**
+         * Notification Power Widget - Custom Location Mode
+         * @hide
+         */
+        public static final String EXPANDED_LOCATION_MODE = "expanded_location_mode";
 
         /**
         * Notification Power Widget - Custom Torch Mode
