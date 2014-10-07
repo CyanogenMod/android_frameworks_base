@@ -160,8 +160,8 @@ public class RingerModeTile extends QuickSettingsTile {
                 }
             }
         } else {
-            for (int i = 0; i < modes.length; i++) {
-                int index = Integer.valueOf(modes[i]);
+            for (String mode : modes) {
+                int index = Integer.valueOf(mode);
                 Ringer r = index < RINGERS.length ? RINGERS[index] : null;
 
                 if (r != null && (hasVibrator || !r.mVibrateWhenRinging)) {
