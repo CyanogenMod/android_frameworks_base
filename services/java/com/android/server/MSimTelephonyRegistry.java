@@ -111,7 +111,7 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
 
     private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
 
-    private int mDataConnectionState = TelephonyManager.DATA_UNKNOWN;
+    private int[] mDataConnectionState;
 
     private boolean mDataConnectionPossible = false;
 
@@ -119,7 +119,7 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
 
     private String mDataConnectionApn = "";
 
-    private ArrayList<String> mConnectedApns;
+    private ArrayList<String>[] mConnectedApns;
 
     private LinkProperties mDataConnectionLinkProperties;
 
@@ -127,7 +127,7 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
 
     private Bundle[] mCellLocation;
 
-    private int mDataConnectionNetworkType;
+    private int[] mDataConnectionNetworkType;
 
     private int mOtaspMode = ServiceStateTracker.OTASP_UNKNOWN;
 
@@ -183,7 +183,6 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
 
         mContext = context;
         mBatteryStats = BatteryStatsService.getService();
-        mConnectedApns = new ArrayList<String>();
 
         // Initialize default subscription to be used for single standby.
         mDefaultSubscription = MSimTelephonyManager.getDefault().getDefaultSubscription();
@@ -197,7 +196,12 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
         mCallForwarding = new boolean[numPhones];
         mCellLocation = new Bundle[numPhones];
         mCellInfo = new ArrayList<List<CellInfo>>();
+        mConnectedApns = (ArrayList[]) new ArrayList[numPhones];
+        mDataConnectionState = new int[numPhones];
+        mDataConnectionNetworkType = new int[numPhones];
         for (int i = 0; i < numPhones; i++) {
+            mConnectedApns[i] = new ArrayList<String>();
+            mDataConnectionState[i] = TelephonyManager.DATA_UNKNOWN;
             mCallState[i] =  TelephonyManager.CALL_STATE_IDLE;
             mCallIncomingNumber[i] =  "";
             mServiceState[i] =  new ServiceState();
@@ -318,8 +322,9 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
                     if ((events & PhoneStateListener.LISTEN_DATA_CONNECTION_STATE) != 0) {
                         try {
                             if (r.subscription == subscription) {
-                                r.callback.onDataConnectionStateChanged(mDataConnectionState,
-                                        mDataConnectionNetworkType);
+                                r.callback.onDataConnectionStateChanged(
+                                        mDataConnectionState[subscription],
+                                        mDataConnectionNetworkType[subscription]);
                             }
                         } catch (RemoteException ex) {
                             remove(r.binder);
@@ -543,22 +548,23 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
             Slog.i(TAG, "notifyDataConnection: state=" + state + " isDataConnectivityPossible="
                 + isDataConnectivityPossible + " reason='" + reason
                 + "' apn='" + apn + "' apnType=" + apnType + " networkType=" + networkType
-                + " mRecords.size()=" + mRecords.size() + " mRecords=" + mRecords);
+                + " mRecords.size()=" + mRecords.size() + " mRecords=" + mRecords
+                + " subscription=" + subscription);
         }
         synchronized (mRecords) {
             boolean modified = false;
             if (state == TelephonyManager.DATA_CONNECTED) {
-                if (!mConnectedApns.contains(apnType)) {
-                    mConnectedApns.add(apnType);
-                    if (mDataConnectionState != state) {
-                        mDataConnectionState = state;
+                if (!mConnectedApns[subscription].contains(apnType)) {
+                    mConnectedApns[subscription].add(apnType);
+                    if (mDataConnectionState[subscription] != state) {
+                        mDataConnectionState[subscription] = state;
                         modified = true;
                     }
                 }
             } else {
-                if (mConnectedApns.remove(apnType)) {
-                    if (mConnectedApns.isEmpty()) {
-                        mDataConnectionState = state;
+                if (mConnectedApns[subscription].remove(apnType)) {
+                    if (mConnectedApns[subscription].isEmpty()) {
+                        mDataConnectionState[subscription] = state;
                         modified = true;
                     } else {
                         // leave mDataConnectionState as is and
@@ -570,15 +576,16 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
             mDataConnectionReason = reason;
             mDataConnectionLinkProperties = linkProperties;
             mDataConnectionLinkCapabilities = linkCapabilities;
-            if (mDataConnectionNetworkType != networkType) {
-                mDataConnectionNetworkType = networkType;
+            if (mDataConnectionNetworkType[subscription] != networkType) {
+                mDataConnectionNetworkType[subscription] = networkType;
                 // need to tell registered listeners about the new network type
                 modified = true;
             }
             if (modified) {
                 if (DBG) {
-                    Slog.d(TAG, "onDataConnectionStateChanged(" + mDataConnectionState
-                        + ", " + mDataConnectionNetworkType + ")");
+                    Slog.d(TAG, "onDataConnectionStateChanged(" +
+                            mDataConnectionState[subscription] +
+                            ", " + mDataConnectionNetworkType[subscription] + ")");
                 }
                 for (Record r : mRecords) {
                     if (((r.events & PhoneStateListener.LISTEN_DATA_CONNECTION_STATE) != 0) &&
@@ -586,8 +593,9 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
                         try {
                             Slog.d(TAG,"Notify data connection state changed on sub: " +
                                     subscription);
-                            r.callback.onDataConnectionStateChanged(mDataConnectionState,
-                                    mDataConnectionNetworkType);
+                            r.callback.onDataConnectionStateChanged(
+                                    mDataConnectionState[subscription],
+                                    mDataConnectionNetworkType[subscription]);
                         } catch (RemoteException ex) {
                             mRemoveList.add(r.binder);
                         }
@@ -686,15 +694,15 @@ class MSimTelephonyRegistry extends ITelephonyRegistryMSim.Stub {
                 pw.println("  mCallForwarding[" + i + "]=" + mCallForwarding[i]);
                 pw.println("  mCellLocation[" + i + "]=" + mCellLocation[i]);
                 pw.println("  mCellInfo[" + i + "]=" + mCellInfo.get(i));
+                pw.println("  mDataConnectionState=" + mDataConnectionState[i]);
+                pw.println("  mDataConnectionNetworkType=" + mDataConnectionNetworkType[i]);
             }
             pw.println("  mDataActivity=" + mDataActivity);
-            pw.println("  mDataConnectionState=" + mDataConnectionState);
             pw.println("  mDataConnectionPossible=" + mDataConnectionPossible);
             pw.println("  mDataConnectionReason=" + mDataConnectionReason);
             pw.println("  mDataConnectionApn=" + mDataConnectionApn);
             pw.println("  mDataConnectionLinkProperties=" + mDataConnectionLinkProperties);
             pw.println("  mDataConnectionLinkCapabilities=" + mDataConnectionLinkCapabilities);
-            pw.println("  mDataConnectionNetworkType=" + mDataConnectionNetworkType);
             pw.println("registrations: count=" + recordCount);
             for (Record r : mRecords) {
                 pw.println("  " + r.pkgForDebug + " 0x" + Integer.toHexString(r.events));
