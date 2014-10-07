@@ -16,32 +16,51 @@
 
 package com.android.systemui.quicksettings;
 
+import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationSettingsChangeCallback;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class GPSTile extends QuickSettingsTile implements LocationSettingsChangeCallback {
     private LocationController mLocationController;
     private int mCurrentMode;
 
+    private static final String SEPARATOR = "OV=I=XseparatorX=I=VO";
+
+    private static final Locator[] LOCATORS = new Locator[] {
+            new Locator(Settings.Secure.LOCATION_MODE_OFF),
+            new Locator(Settings.Secure.LOCATION_MODE_BATTERY_SAVING),
+            new Locator(Settings.Secure.LOCATION_MODE_SENSORS_ONLY),
+            new Locator(Settings.Secure.LOCATION_MODE_HIGH_ACCURACY)
+    };
+
+    private ArrayList<Locator> mLocators;
+    private int mLocatorIndex;
+
     public GPSTile(Context context, QuickSettingsController qsc, LocationController lc) {
         super(context, qsc);
+
+        mLocators = new ArrayList<Locator>();
 
         mLocationController = lc;
 
         mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeLocationMode();
+                toggleState();
+                updateResources();
             }
         };
         mOnLongClick = new View.OnLongClickListener() {
@@ -51,11 +70,14 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
                 return true;
             }
         };
+        qsc.registerObservedContent(
+                Settings.System.getUriFor(Settings.System.EXPANDED_LOCATION_MODE), this);
     }
 
     @Override
     void onPostCreate() {
         onLocationSettingsChanged(false);
+        updateSettings();
         updateTile();
         super.onPostCreate();
         mLocationController.addSettingsChangedCallback(this);
@@ -81,33 +103,70 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
         updateResources();
     }
 
-    private void changeLocationMode() {
-        int newMode;
+    protected void toggleState() {
+        Locator r;
+        do {
+            mLocatorIndex++;
+            if (mLocatorIndex >= LOCATORS.length) {
+                mLocatorIndex = 0;
+            }
+            r = LOCATORS[mLocatorIndex];
+        }  while(!mLocators.contains(r));
 
-        switch (mCurrentMode) {
-            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
-                newMode = Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
-                break;
-            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
-                newMode = Settings.Secure.LOCATION_MODE_BATTERY_SAVING;
-                break;
-            case Settings.Secure.LOCATION_MODE_OFF:
-                newMode = Settings.Secure.LOCATION_MODE_SENSORS_ONLY;
-                break;
-            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
-                newMode = Settings.Secure.LOCATION_MODE_OFF;
-                break;
-            default:
-                newMode = Settings.Secure.LOCATION_MODE_OFF;
-                break;
-        }
-
+        // Set the desired state
         Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                Settings.Secure.LOCATION_MODE, newMode, UserHandle.USER_CURRENT);
+                Settings.Secure.LOCATION_MODE, r.mLocatorMode, UserHandle.USER_CURRENT);
+    }
+
+    private void findCurrentState() {
+        mLocatorIndex = 0;
+        for (int i = 0; i < LOCATORS.length; i++) {
+            Locator r = LOCATORS[i];
+            if (mCurrentMode == r.mLocatorMode) {
+                mLocatorIndex = i;
+                break;
+            }
+        }
+    }
+
+    public String[] parseStoredValue(CharSequence val) {
+        if (TextUtils.isEmpty(val)) {
+            return null;
+        }
+        return val.toString().split(SEPARATOR);
+    }
+
+    private void updateSettings() {
+        String setting = Settings.System.getStringForUser(mContext.getContentResolver(),
+                Settings.System.EXPANDED_LOCATION_MODE, UserHandle.USER_CURRENT);
+        String[] modes = parseStoredValue(setting);
+
+        mLocators.clear();
+
+        if (modes == null || modes.length == 0) {
+            Collections.addAll(mLocators, LOCATORS);
+        } else for (String mode : modes) {
+            int index = Integer.valueOf(mode);
+            Locator r = index < LOCATORS.length ? LOCATORS[index] : null;
+
+            if (r != null) {
+                mLocators.add(r);
+            }
+        }
+        if (mLocators.isEmpty()) {
+            mLocators.add(LOCATORS[0]);
+        }
+    }
+
+    @Override
+    public void onChangeUri(ContentResolver resolver, Uri uri) {
+        updateSettings();
+        updateResources();
     }
 
     private synchronized void updateTile() {
         int textResId;
+        findCurrentState();
         switch (mCurrentMode) {
             case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
                 textResId = R.string.location_mode_sensors_only_title;
@@ -127,5 +186,13 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
                 break;
         }
         mLabel = mContext.getString(textResId);
+    }
+
+    private static class Locator {
+        final int mLocatorMode;
+
+        Locator(int ringerMode) {
+            mLocatorMode = ringerMode;
+        }
     }
 }
