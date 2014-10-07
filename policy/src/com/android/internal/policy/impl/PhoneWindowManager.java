@@ -456,7 +456,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mForceStatusBarFromKeyguard;
     boolean mHideLockScreen;
     boolean mForcingShowNavBar;
-    boolean mDisableImeNavbar;
+    boolean mDisableForcedNavbar;
     int mForcingShowNavBarLayer;
 
     int mExpandedDesktopStyle = 2;
@@ -674,7 +674,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.IMMERSIVE_MODE_CONFIRMATIONS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DISABLE_IME_NAVBAR), false, this,
+                    Settings.System.DISABLE_FORCED_NAVBAR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this,
@@ -1842,8 +1842,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.LOCKSCREEN_LID_WAKE, true, UserHandle.USER_CURRENT);
             mLidControlsSleep = Settings.System.getBooleanForUser(resolver,
                     Settings.System.LOCKSCREEN_LID_SLEEP, true, UserHandle.USER_CURRENT);
-            mDisableImeNavbar = Settings.System.getBooleanForUser(resolver,
-                    Settings.System.DISABLE_IME_NAVBAR, true, UserHandle.USER_CURRENT);
+            mDisableForcedNavbar = Settings.System.getBooleanForUser(resolver,
+                    Settings.System.DISABLE_FORCED_NAVBAR, true, UserHandle.USER_CURRENT);
         }
 
         if (updateRotation) {
@@ -4024,17 +4024,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pf.bottom = df.bottom = of.bottom = cf.bottom
                         = mOverscanScreenTop + mOverscanScreenHeight;
             }
-        } else if (attrs.type == TYPE_INPUT_METHOD && !mDisableImeNavbar) {
-            pf.left = df.left = of.left = cf.left = vf.left = mDockLeft;
-            pf.top = df.top = of.top = cf.top = vf.top = mDockTop;
-            pf.right = df.right = of.right = cf.right = vf.right = mStableRight;
-            // IM dock windows layout below the nav bar...
-            pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
-            // ...with content insets above the nav bar
-            cf.bottom = vf.bottom = mStableBottom;
-            // IM dock windows always go to the bottom of the screen.
-            attrs.gravity = Gravity.BOTTOM;
-            mDockLayer = win.getSurfaceLayer();
+        } else if (attrs.type == TYPE_INPUT_METHOD) {
+            if (mNavigationBarOnBottom && expandedDesktopHidesNavigationBar() && mDisableForcedNavbar) {
+                pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+                cf.bottom = vf.bottom = mStableFullscreenBottom;
+            } else {
+                pf.left = df.left = of.left = cf.left = vf.left = mDockLeft;
+                pf.top = df.top = of.top = cf.top = vf.top = mDockTop;
+                pf.right = df.right = of.right = cf.right = vf.right = mStableRight;
+                // IM dock windows layout below the nav bar...
+                pf.bottom = df.bottom = of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
+                // ...with content insets above the nav bar
+                cf.bottom = vf.bottom = mStableBottom;
+                // IM dock windows always go to the bottom of the screen.
+                attrs.gravity = Gravity.BOTTOM;
+                mDockLayer = win.getSurfaceLayer();
+            }
         } else {
 
             // Default policy decor for the default display
@@ -4478,9 +4483,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 + win.isVisibleOrBehindKeyguardLw());
         final int flags = updateWindowManagerVisibilityFlagsForExpandedDesktop(attrs);
         if (mTopFullscreenOpaqueWindowState == null
-                && win.isVisibleLw() && attrs.type == TYPE_INPUT_METHOD && !mDisableImeNavbar) {
-            mForcingShowNavBar = true;
-            mForcingShowNavBarLayer = win.getSurfaceLayer();
+                && win.isVisibleLw() && attrs.type == TYPE_INPUT_METHOD) {
+            if (mNavigationBarOnBottom && expandedDesktopHidesNavigationBar() && mDisableForcedNavbar) {
+                mForcingShowNavBar = false;
+                mForcingShowNavBarLayer = -1;
+            } else {
+                mForcingShowNavBar = true;
+                mForcingShowNavBarLayer = win.getSurfaceLayer();
+            }
         }
         if (mTopFullscreenOpaqueWindowState == null &&
                 win.isVisibleOrBehindKeyguardLw() && !win.isGoneForLayoutLw()) {

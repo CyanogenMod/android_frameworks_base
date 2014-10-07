@@ -6496,11 +6496,11 @@ public final class Settings {
         public static final String DATA_TO_WIFI_CONNECT_TYPE = "data_to_wifi_connect_type";
 
         /**
-         * Whether to disable the navigation bar when in immersive mode and IME is showing
+         * Whether to disable forced navigation bar during immersive mode and keyboard is showing
          *
          * @hide
          */
-        public static final String DISABLE_IME_NAVBAR = "disable_ime_navbar";
+        public static final String DISABLE_FORCED_NAVBAR = "disable_forced_navbar";
 
          /**
          * Settings to backup. This is here so that it's in the same place as the settings
