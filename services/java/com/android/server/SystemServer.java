@@ -1255,7 +1255,7 @@ public final class SystemServer {
             int dpmFeature = SystemProperties.getInt("persist.dpm.feature", 0);
             Slog.i(TAG, "DPM configuration set to " + dpmFeature);
 
-            if (dpmFeature > 0 && dpmFeature < 8) {
+            if (dpmFeature > 0 && dpmFeature < 16) {
                 PathClassLoader dpmClassLoader =
                     new PathClassLoader("/system/framework/com.qti.dpmframework.jar",
                             ClassLoader.getSystemClassLoader());
