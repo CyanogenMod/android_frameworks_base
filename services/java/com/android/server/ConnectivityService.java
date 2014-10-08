@@ -2410,8 +2410,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             AppOpsManager.MODE_ALLOWED)
             return;
 
+        int defaultSub = mSimTelephonyManager.getDefaultDataSubscription();
+        if (DBG) log("setMobileDataEnabled defaultSub is(" + defaultSub + ")");
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
-                (enabled ? ENABLED : DISABLED), 0));
+                (enabled ? ENABLED : DISABLED), defaultSub));
     }
 
 
