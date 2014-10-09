@@ -54,6 +54,7 @@
 
 #include <media/AudioSystem.h>
 #include <media/mediaplayer.h>
+#include <media/IMediaHTTPService.h>
 
 #include "BootAnimation.h"
 #include "AudioPlayer.h"
@@ -903,20 +904,20 @@ void* playMusic(void* arg)
         ALOGD("starting to play %s", fileName);
         mp->setListener(mListener);
 
-        FILE * fp = fopen(fileName, "r");
-        if (fp == NULL) {
-            ALOGW("failed to open %s", fileName);
-            fclose(fp);
-            return NULL;
-        }
-        fseek(fp, 0, SEEK_END);
-        int length = ftell(fp);
-        rewind(fp);
-
-        if (mp->setDataSource((long)fp, 0, length) == NO_ERROR) {
+        if (mp->setDataSource(NULL, fileName, NULL) == NO_ERROR) {
             mp->setAudioStreamType(AUDIO_STREAM_ENFORCED_AUDIBLE);
             mp->prepare();
+        } else {
+            ALOGE("failed to setDataSource for %s", fileName);
+            return NULL;
         }
+
+        //waiting for media player is prepared.
+        pthread_mutex_lock(&mp_lock);
+        while (!isMPlayerPrepared) {
+            pthread_cond_wait(&mp_cond, &mp_lock);
+        }
+        pthread_mutex_unlock(&mp_lock);
 
         audio_devices_t device = AudioSystem::getDevicesForStream(AUDIO_STREAM_ENFORCED_AUDIBLE);
         AudioSystem::initStreamVolume(AUDIO_STREAM_ENFORCED_AUDIBLE,0,7);
@@ -930,8 +931,6 @@ void* playMusic(void* arg)
         } else {
             ALOGW("current volume is zero.");
         }
-
-        fclose(fp);
     }
     return NULL;
 }
