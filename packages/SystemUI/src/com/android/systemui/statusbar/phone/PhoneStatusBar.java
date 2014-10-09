@@ -836,12 +836,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         if (isMSim()) {
             mMSimNetworkController = new MSimNetworkControllerImpl(mContext);
-            MSimSignalClusterView mSimSignalCluster = (MSimSignalClusterView)
-              mStatusBarView.findViewById(R.id.msim_signal_cluster);
+            MSimSignalClusterView signalCluster = (MSimSignalClusterView)
+                    mStatusBarView.findViewById(R.id.msim_signal_cluster);
+            MSimSignalClusterView signalClusterKeyguard = (MSimSignalClusterView)
+                    mKeyguardStatusBar.findViewById(R.id.msim_signal_cluster);
             for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
-                mMSimNetworkController.addSignalCluster(mSimSignalCluster, i);
+                mMSimNetworkController.addSignalCluster(signalCluster, i);
+                mMSimNetworkController.addSignalCluster(signalClusterKeyguard, i);
             }
-            mSimSignalCluster.setNetworkController(mMSimNetworkController);
+            signalCluster.setNetworkController(mMSimNetworkController);
+            signalClusterKeyguard.setNetworkController(mMSimNetworkController);
 
             mMSimNetworkController.addEmergencyLabelView(mHeader);
 
