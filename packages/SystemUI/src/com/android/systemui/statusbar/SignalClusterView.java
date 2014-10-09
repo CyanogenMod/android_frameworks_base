@@ -437,9 +437,7 @@ public class SignalClusterView
         }
         int dataType = mNC.getDataNetworkType();
         int voiceType = mNC.getVoiceNetworkType();
-        return ((dataType == TelephonyManager.NETWORK_TYPE_LTE)
-                || (dataType == TelephonyManager.NETWORK_TYPE_EVDO_0)
-                || (dataType == TelephonyManager.NETWORK_TYPE_EVDO_A))
+        return dataType != TelephonyManager.NETWORK_TYPE_UNKNOWN
                 && voiceType == TelephonyManager.NETWORK_TYPE_UNKNOWN;
     }
 
