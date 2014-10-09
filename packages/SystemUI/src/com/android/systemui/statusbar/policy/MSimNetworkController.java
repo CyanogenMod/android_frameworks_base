@@ -484,7 +484,9 @@ public class MSimNetworkController extends NetworkController {
         if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
             simState = IccCardConstants.State.ABSENT;
         }
-        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)
+                || IccCardConstants.INTENT_VALUE_ICC_IMSI.equals(stateExtra)
+                || IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(stateExtra)) {
             simState = IccCardConstants.State.READY;
         }
         else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
