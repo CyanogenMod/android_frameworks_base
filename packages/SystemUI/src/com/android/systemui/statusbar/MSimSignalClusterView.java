@@ -161,20 +161,23 @@ public class MSimSignalClusterView
     }
 
     @Override
-    public void setWifiIndicators(boolean visible, int strengthIcon, String contentDescription) {
+    public void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
+            String contentDescription) {
         mWifiVisible = visible;
         mWifiStrengthId = strengthIcon;
+        mWifiActivityId = activityIcon;
         mWifiDescription = contentDescription;
 
         applySubscription(MSimTelephonyManager.getDefault().getDefaultSubscription());
     }
 
     @Override
-    public void setMobileDataIndicators(boolean visible, int strengthIcon,
+    public void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
             int typeIcon, String contentDescription, String typeContentDescription,
             int noSimIcon, int subscription) {
         mMobileVisible = visible;
         mMobileStrengthId[subscription] = strengthIcon;
+        mMobileActivityId[subscription] = activityIcon;
         mMobileTypeId[subscription] = typeIcon;
         mMobileDescription[subscription] = contentDescription;
         mMobileTypeDescription = typeContentDescription;
