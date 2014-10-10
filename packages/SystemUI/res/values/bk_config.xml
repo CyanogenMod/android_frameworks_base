@@ -23,4 +23,7 @@
 
     <integer name="quick_settings_onthego_dialog_short_timeout">3000</integer>
     <integer name="quick_settings_onthego_dialog_long_timeout">6000</integer>
+
+    <!-- number of saved networks | can be increased with an overlay for wifi only devices -->
+    <integer name="wifi_notifications_remembered_connections">8</integer>
 </resources>

@@ -194,4 +194,10 @@
 
     <!-- Gesture panel -->
     <string name="gesture_panel_add">Add</string>
+
+    <!-- notify changed wifi network -->
+    <string name="wifi_status_changed">New connection </string>
+    <string name="wifi_restored">Connection restored </string>
+    <string name="wifi_address_changed">Wi\u2011Fi SSID changed to <xliff:g id="name">%s</xliff:g></string>
+    <string name="wifi_changed_ticker">Wi\u2011Fi SSID: <xliff:g id="name">%s</xliff:g></string>
 </resources>
