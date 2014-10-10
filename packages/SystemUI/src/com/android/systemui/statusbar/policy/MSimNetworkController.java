@@ -31,6 +31,7 @@ import android.net.wimax.WimaxManagerConstants;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.MSimTelephonyManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -335,6 +336,9 @@ public class MSimNetworkController extends NetworkController {
                 action.equals(WimaxManagerConstants.WIMAX_NETWORK_STATE_CHANGED_ACTION)) {
             updateWimaxState(intent);
             refreshViews(mDefaultSubscription);
+        } else if (action.equals("cm.UPDATE_WIFI_NOTIFICATION_PREFERENCE")) {
+            mWifiNotifications = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.WIFI_NETWORK_NOTIFICATIONS, 0);
         }
     }
 

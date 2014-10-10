@@ -111,5 +111,8 @@
 
     <!-- milliseconds before the heads up notification accepts touches. -->
     <integer name="heads_up_sensitivity_delay">700</integer>
+
+    <!-- number of saved networks | can be increased with an overlay for wifi only devices -->
+    <integer name="wifi_notifications_remembered_connections">8</integer>
 </resources>
 
