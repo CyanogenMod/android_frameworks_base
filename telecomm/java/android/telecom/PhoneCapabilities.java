@@ -104,7 +104,7 @@ public final class PhoneCapabilities {
      * Call is using voice privacy.
      * @hide
      */
-    public static final int VOICE_PRIVACY = 0x00002000;
+    public static final int VOICE_PRIVACY = 0x00008000;
 
     public static String toString(int capabilities) {
         StringBuilder builder = new StringBuilder();
