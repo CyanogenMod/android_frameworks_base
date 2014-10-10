@@ -19,14 +19,19 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.AppOpsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -45,6 +50,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.TelephonyIntents;
@@ -57,6 +63,7 @@ import com.android.systemui.statusbar.phone.StatusBarHeaderView;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -122,11 +129,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
     protected AsyncChannel mWifiChannel;
     boolean mWifiEnabled, mWifiConnected;
     int mWifiRssi, mWifiLevel;
-    String mWifiSsid;
+    static String mWifiSsid;
     int mWifiIconId = 0;
     int mQSWifiIconId = 0;
     int mWifiActivityIconId = 0; // overlay arrows for wifi direction
     int mWifiActivity = WifiManager.DATA_ACTIVITY_NONE;
+    static String oldWifiSsid = "";
+    static boolean mConnectionAtBoot = true;
+    int mWifiNotifications = 0;
+    NotificationManager nm;
+    private int mStoredSSIDs;
+    LinkedList mConnectionsList = new LinkedList();
 
     // bluetooth
     protected boolean mBluetoothTethered = false;
@@ -245,6 +258,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
         // broadcasts
         IntentFilter filter = new IntentFilter();
+        filter.addAction("cm.UPDATE_WIFI_NOTIFICATION_PREFERENCE");
+        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -270,6 +285,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
         updateAirplaneMode();
 
         mLastLocale = mContext.getResources().getConfiguration().locale;
+        mWifiNotifications = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.WIFI_NETWORK_NOTIFICATIONS, 0);
         mAccessPoints = new WifiAccessPointController(mContext);
         mMobileDataController = new MobileDataController(mContext);
         mMobileDataController.setCallback(new MobileDataController.Callback() {
@@ -307,6 +324,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         if (wifiMessenger != null) {
             mWifiChannel.connect(mContext, handler, wifiMessenger);
         }
+        mStoredSSIDs = mContext.getResources().getInteger(R.integer.wifi_notifications_remembered_connections);
     }
 
     protected void registerPhoneStateListener(Context context) {
@@ -574,6 +592,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
                  action.equals(ConnectivityManager.INET_CONDITION_ACTION)) {
             updateConnectivity(intent);
             refreshViews();
+        } else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Delay wifi connection notifications by at least
+                    // 30 seconds immediately after boot
+                    mConnectionAtBoot = false;
+            }}, 30000);
+        } else if (action.equals("cm.UPDATE_WIFI_NOTIFICATION_PREFERENCE")) {
+            mWifiNotifications = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.WIFI_NETWORK_NOTIFICATIONS, 0);
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
             //parse the string to current language string in public resources
             if (mContext.getResources().getBoolean(
@@ -1118,11 +1147,68 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 if (info != null) {
                     mWifiSsid = huntForSsid(info);
+                    if (mWifiNotifications > 0) {
+                        boolean restoredConnection = mConnectionsList.contains(mWifiSsid);
+
+                        if (!mConnectionAtBoot && (mWifiSsid != oldWifiSsid)) {
+                            String contentText = mContext.getString(R.string.wifi_status_changed);
+                            if (restoredConnection) {
+                                contentText = mContext.getString(R.string.wifi_restored);
+                            }
+
+                            switch (mWifiNotifications) {
+                                case 0: // off
+                                    break;
+                                case 1: // toast
+                                    final String cheese = (contentText + ": " + mWifiSsid);
+                                    Toast.makeText(mContext, cheese, Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 2: // notification
+                                case 3: // notification with sound
+                                    Intent i = new Intent();
+                                    i.setClassName("com.android.settings",
+                                             "com.android.settings.Settings$WifiSettingsActivity");
+                                    PendingIntent contentIntent = PendingIntent.getActivity(
+                                             mContext, 0, i, PendingIntent.FLAG_ONE_SHOT);
+
+                                    nm = (NotificationManager) mContext.getSystemService(
+                                             Context.NOTIFICATION_SERVICE);
+                                    Notification.Builder network =
+                                            new Notification.Builder(mContext)
+                                            .setSmallIcon(R.drawable.wifi_notify)
+                                            .setWhen(System.currentTimeMillis())
+                                            .setTicker(mContext.getString(
+                                                     R.string.wifi_changed_ticker, mWifiSsid))
+                                            .setContentTitle(contentText)
+                                            .setContentText(mContext.getString(
+                                                     R.string.wifi_address_changed, mWifiSsid))
+                                            .setContentIntent(contentIntent)
+                                            .setAutoCancel(true);
+
+                                    if (mWifiNotifications == 3) {
+                                        Uri soundUri = RingtoneManager.getDefaultUri(
+                                                RingtoneManager.TYPE_NOTIFICATION);
+                                        network.setSound(soundUri);
+                                    }
+
+                                    nm.cancel(R.string.wifi_address_changed);
+                                    nm.notify(R.string.wifi_address_changed, network.build());
+                                    break;
+                            }
+                        }
+                        oldWifiSsid = mWifiSsid;
+                        if (mConnectionsList.size() == mStoredSSIDs) {
+                            mConnectionsList.remove(0);
+                        }
+                        if (!restoredConnection) mConnectionsList.add(mWifiSsid);
+                    }
+                    mConnectionAtBoot = false;
                 } else {
                     mWifiSsid = null;
                 }
             } else if (!mWifiConnected) {
                 mWifiSsid = null;
+                if (nm != null) nm.cancel(R.string.wifi_address_changed);
             }
         } else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
             mWifiRssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -200);

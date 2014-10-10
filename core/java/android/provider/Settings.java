@@ -2822,6 +2822,16 @@ public final class Settings {
         public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
 
         /**
+         * Displays a notification when wifi network has changed
+         * 0 - default (off)
+         * 1 - toast
+         * 2 - notification
+         * 3 - notification with sound
+         * @hide
+         */
+        public static final String WIFI_NETWORK_NOTIFICATIONS = "wifi_network_notifications";
+
+        /**
          * Whether to play sounds when the keyguard is shown and dismissed.
          * @hide
          */
