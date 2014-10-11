@@ -306,6 +306,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     int mLidState = LID_ABSENT;
     boolean mHaveBuiltInKeyboard;
+    ITelephony mTelephony;
 
     boolean mSystemReady;
     boolean mSystemBooted;
@@ -2461,9 +2462,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
     }
 
-    static ITelephony getTelephonyService() {
-        return ITelephony.Stub.asInterface(
-                ServiceManager.checkService(Context.TELEPHONY_SERVICE));
+    private ITelephony getTelephonyService() {
+        if (mTelephony == null) {
+            mTelephony = ITelephony.Stub.asInterface(
+                    ServiceManager.checkService(Context.TELEPHONY_SERVICE));
+        }
+        return mTelephony;
     }
 
     static IAudioService getAudioService() {
