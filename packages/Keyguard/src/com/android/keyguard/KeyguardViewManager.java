@@ -132,7 +132,7 @@ public class KeyguardViewManager {
 
         @Override
         public void onLidStateChanged(int state) {
-            if(mSmartCoverCoords == null) return;
+            if(!isSmartCoverEnabled()) return;
 
             if(DEBUG) Log.e(TAG, "onLidStateChanged(): " + state + ", screenOn: " + mScreenOn);
             mLidState = state;
@@ -204,6 +204,12 @@ public class KeyguardViewManager {
         mKeyguardHost.setVisibility(View.VISIBLE);
         mKeyguardView.show();
         mKeyguardView.requestFocus();
+    }
+
+    private boolean isSmartCoverEnabled() {
+        return mSmartCoverCoords != null
+                && Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SMART_COVER_ENABLED, 1) != 0;
     }
 
     private boolean shouldEnableScreenRotation() {
@@ -675,7 +681,7 @@ public class KeyguardViewManager {
             }
         }
 
-        if (mSmartCoverCoords != null) {
+        if (isSmartCoverEnabled()) {
             view = inflater.inflate(R.layout.smart_cover, mKeyguardHost, true);
             mCoverView = (SmartCoverView) view.findViewById(R.id.keyguard_cover_layout);
 
@@ -926,7 +932,7 @@ public class KeyguardViewManager {
     public void showCover() {
         if(DEBUG) Log.v(TAG, "showCover()");
 
-        if (mSmartCoverCoords == null) {
+        if (!isSmartCoverEnabled()) {
             return;
         }
 
@@ -948,7 +954,7 @@ public class KeyguardViewManager {
     public void hideCover(boolean force) {
         if(DEBUG) Log.v(TAG, "hideCover()");
 
-        if (mSmartCoverCoords == null) {
+        if (!isSmartCoverEnabled()) {
             return;
         }
 
@@ -970,7 +976,7 @@ public class KeyguardViewManager {
 
     private void resetSmartCoverState() {
         if(DEBUG) Log.v(TAG, "resetSmartCoverState()");
-        if(mSmartCoverCoords == null) return;
+        if(!isSmartCoverEnabled()) return;
 
         if(DEBUG) Log.v(TAG, "resetCoverRunnable run()");
         mHandler.removeCallbacks(mSmartCoverTimeout);

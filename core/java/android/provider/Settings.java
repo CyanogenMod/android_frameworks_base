@@ -3687,6 +3687,14 @@ public final class Settings {
          */
         public static final String DATA_TO_WIFI_CONNECT_TYPE = "data_to_wifi_connect_type";
 
+        /**
+         * Whether to enable the SmartCover throughout the system (keyguard, incallui, etc).
+         *
+         * Default is enabled, if the coordinate overlay exists in the frameworks.
+         * @hide
+         */
+        public static final String SMART_COVER_ENABLED = "smart_cover_enabled";
+
          /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
