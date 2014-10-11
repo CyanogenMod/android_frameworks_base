@@ -325,6 +325,13 @@ interface ITelephonyMSim {
     int getVoiceNetworkType(int subscription);
 
     /**
+     * Return icc operator numeric of a subscription
+     * @param subscription user preferred subscription
+     * Returns icc operator numeric
+     */
+    String getIccOperatorNumeric(int subscription);
+
+    /**
      * Return true if an ICC card is present for a subscription.
      * @param subscription user preferred subscription.
      * Return true if an ICC card is present

@@ -450,6 +450,23 @@ public class MSimTelephonyManager {
         return TelephonyManager.getNetworkTypeName(getNetworkType(subscription));
     }
 
+    /**
+     * Returns the icc operator numeric of a subscription
+     * @param subscription user preferred subscription
+     * @return icc operator numeric
+     *
+     * @hide
+     */
+    public String getIccOperatorNumeric(int subscription) {
+       try{
+            return getITelephonyMSim().getIccOperatorNumeric(subscription);
+       } catch (RemoteException ex) {
+           return null;
+       } catch (NullPointerException ex) {
+           return null;
+       }
+    }
+
     //
     //
     // SIM Card
