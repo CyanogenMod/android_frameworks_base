@@ -41,8 +41,9 @@ public class SignalClusterView
     NetworkController mNC;
 
     public static final int STYLE_NORMAL = 0;
-    public static final int STYLE_TEXT = 1;
-    public static final int STYLE_HIDDEN = 2;
+    public static final int STYLE_ALWAYS = 1;
+    public static final int STYLE_TEXT = 2;
+    public static final int STYLE_HIDDEN = 3;
 
     private int mSignalClusterStyle = STYLE_NORMAL;
     private boolean mWifiVisible = false;
@@ -57,8 +58,8 @@ public class SignalClusterView
     private boolean mEthernetVisible = false;
     private int mEthernetIconId = 0;
 
-    ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane, mNoSimSlot,
+    ViewGroup mWifiGroup, mMobileGroup, mWifiGroupAlways;
+    ImageView mWifi, mWifiAlways, mMobile, mWifiActivity, mWifiActivityAlways, mMobileActivity, mMobileType, mAirplane, mNoSimSlot,
         mEthernet;
     View mSpacer;
 
@@ -83,17 +84,20 @@ public class SignalClusterView
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
-        mWifi           = (ImageView) findViewById(R.id.wifi_signal);
-        mWifiActivity   = (ImageView) findViewById(R.id.wifi_inout);
-        mMobileGroup    = (ViewGroup) findViewById(R.id.mobile_combo);
-        mMobile         = (ImageView) findViewById(R.id.mobile_signal);
-        mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
-        mMobileType     = (ImageView) findViewById(R.id.mobile_type);
-        mNoSimSlot      = (ImageView) findViewById(R.id.no_sim);
-        mSpacer         =             findViewById(R.id.spacer);
-        mAirplane       = (ImageView) findViewById(R.id.airplane);
-        mEthernet       = (ImageView) findViewById(R.id.ethernet);
+        mWifiGroup          = (ViewGroup) findViewById(R.id.wifi_combo);
+        mWifiGroupAlways    = (ViewGroup) findViewById(R.id.wifi_combo_always);
+        mWifi               = (ImageView) findViewById(R.id.wifi_signal);
+        mWifiAlways         = (ImageView) findViewById(R.id.wifi_signal_always);
+        mWifiActivity       = (ImageView) findViewById(R.id.wifi_inout);
+        mWifiActivityAlways = (ImageView) findViewById(R.id.wifi_inout_always);
+        mMobileGroup        = (ViewGroup) findViewById(R.id.mobile_combo);
+        mMobile             = (ImageView) findViewById(R.id.mobile_signal);
+        mMobileActivity     = (ImageView) findViewById(R.id.mobile_inout);
+        mMobileType         = (ImageView) findViewById(R.id.mobile_type);
+        mNoSimSlot          = (ImageView) findViewById(R.id.no_sim);
+        mSpacer             =             findViewById(R.id.spacer);
+        mAirplane           = (ImageView) findViewById(R.id.airplane);
+        mEthernet           = (ImageView) findViewById(R.id.ethernet);
 
         apply();
     }
@@ -212,8 +216,15 @@ public class SignalClusterView
 
             mWifiGroup.setContentDescription(mWifiDescription);
             mWifiGroup.setVisibility(View.VISIBLE);
+
+            mWifiAlways.setImageResource(mWifiStrengthId);
+            mWifiActivityAlways.setImageResource(mWifiActivityId);
+
+            mWifiGroupAlways.setContentDescription(mWifiDescription);
+            mWifiGroupAlways.setVisibility(View.VISIBLE);
         } else {
             mWifiGroup.setVisibility(View.GONE);
+            mWifiGroupAlways.setVisibility(View.GONE);
         }
 
         if (DEBUG) Log.d(TAG,
@@ -261,7 +272,7 @@ public class SignalClusterView
                     mMobileStrengthId, mMobileActivityId, mMobileTypeId));
 
         mMobileType.setVisibility(
-                !mWifiVisible ? View.VISIBLE : View.GONE);
+		(!mWifiVisible || mSignalClusterStyle == STYLE_ALWAYS) ? View.VISIBLE : View.GONE);
 
         updateVisibilityForStyle();
     }
@@ -273,9 +284,18 @@ public class SignalClusterView
 
     private void updateVisibilityForStyle() {
         if (!mIsAirplaneMode && mMobileGroup != null) {
-            mMobileGroup.setVisibility(mSignalClusterStyle != STYLE_NORMAL
-                    ? View.GONE : View.VISIBLE);
-        }
+            if (mSignalClusterStyle == STYLE_ALWAYS && mMobileType != null) {
+                mWifiGroup.setVisibility(View.GONE);
+                mWifiGroupAlways.setVisibility(!mWifiVisible ? View.GONE : View.VISIBLE);
+            } else {
+                mWifiGroupAlways.setVisibility(View.GONE);
+                mWifiGroup.setVisibility(!mWifiVisible ? View.GONE : View.VISIBLE);
+                mMobileType.setVisibility(mWifiVisible ? View.GONE : View.VISIBLE);
+    	    }
+    	    mMobileGroup.setVisibility(
+    	    		mSignalClusterStyle != STYLE_NORMAL && mSignalClusterStyle != STYLE_ALWAYS
+    	    		? View.GONE : View.VISIBLE);
+    	}
     }
 }
 
