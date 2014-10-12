@@ -233,9 +233,9 @@
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
 
     <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
-    <string name="extmedia_format_message_cm" product="nosdcard">All data on your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="usb_extmedia_format_message">All data on your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. -->
-    <string name="extmedia_format_message_cm" product="default">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="sd_extmedia_format_message">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
 
     <!-- USB OTG notification message -->
     <string name="usb_storage_notification_manage_message">Tap to manage</string>
@@ -298,4 +298,22 @@
 
     <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
     <string name="storage_uicc">UICC storage</string>
+
+    <!-- Strings for ExternalStorageFormatter service (SD card). -->
+    <string name="sd_progress_unmounting">Unmounting SD card\u2026</string>
+    <string name="sd_progress_erasing">Erasing SD card\u2026</string>
+    <string name="sd_format_error">Couldn\'t erase SD card.</string>
+    <string name="sd_media_bad_removal">SD card was removed before being unmounted.</string>
+    <string name="sd_media_checking">SD card is currently being checked.</string>
+    <string name="sd_media_removed">SD card has been removed.</string>
+    <string name="sd_media_shared">SD card is currently in use by a computer.</string>
+
+    <!-- Strings for ExternalStorageFormatter service (USB storage). -->
+    <string name="usb_progress_unmounting">Unmounting USB storage\u2026</string>
+    <string name="usb_progress_erasing">Erasing USB storage\u2026</string>
+    <string name="usb_format_error">Couldn\'t erase USB storage.</string>
+    <string name="usb_media_bad_removal">USB storage was removed before being unmounted.</string>
+    <string name="usb_media_checking">USB storage is currently being checked.</string>
+    <string name="usb_media_removed">USB storage has been removed.</string>
+    <string name="usb_media_shared">USB storage is currently in use by a computer.</string>
 </resources>

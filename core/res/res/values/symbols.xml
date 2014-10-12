@@ -2026,7 +2026,8 @@
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
   <!-- External media format -->
-  <java-symbol type="string" name="extmedia_format_message_cm" />
+  <java-symbol type="string" name="usb_extmedia_format_message" />
+  <java-symbol type="string" name="sd_extmedia_format_message" />
 
   <!-- Proximity check on screen on -->
   <java-symbol type="bool" name="config_proximityCheckOnWake" />
@@ -2084,4 +2085,22 @@
 
   <!-- for wifi auto connection -->
   <java-symbol type="bool" name="wifi_autocon" />
+
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
+  <java-symbol type="string" name="sd_progress_unmounting" />
+  <java-symbol type="string" name="sd_progress_erasing" />
+  <java-symbol type="string" name="sd_format_error" />
+  <java-symbol type="string" name="sd_media_bad_removal" />
+  <java-symbol type="string" name="sd_media_checking" />
+  <java-symbol type="string" name="sd_media_removed" />
+  <java-symbol type="string" name="sd_media_shared" />
+
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
+  <java-symbol type="string" name="usb_progress_unmounting" />
+  <java-symbol type="string" name="usb_progress_erasing" />
+  <java-symbol type="string" name="usb_format_error" />
+  <java-symbol type="string" name="usb_media_bad_removal" />
+  <java-symbol type="string" name="usb_media_checking" />
+  <java-symbol type="string" name="usb_media_removed" />
+  <java-symbol type="string" name="usb_media_shared" />
 </resources>
