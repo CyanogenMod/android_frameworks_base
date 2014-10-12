@@ -252,7 +252,7 @@ interface ITelephony {
      */
     boolean isDataConnectivityPossible();
 
-    Bundle getCellLocation();
+    Bundle getCellLocation(String callingPackage);
 
     /**
      * Returns the neighboring cell information of the device.

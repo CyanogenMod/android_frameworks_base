@@ -313,7 +313,7 @@ public class TelephonyManager {
      */
     public CellLocation getCellLocation() {
         try {
-            Bundle bundle = getITelephony().getCellLocation();
+            Bundle bundle = getITelephony().getCellLocation(mContext.getOpPackageName());
             if (bundle.isEmpty()) return null;
             CellLocation cl = CellLocation.newFromBundle(bundle);
             if (cl.isEmpty())
