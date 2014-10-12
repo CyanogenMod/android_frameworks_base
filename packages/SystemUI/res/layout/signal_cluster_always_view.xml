@@ -2,8 +2,6 @@
 <!--
 /* apps/common/assets/default/default/skins/StatusBar.xml
 **
-** Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
-** Not a Contribution.
 ** Copyright 2011, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -28,31 +26,10 @@
     android:orientation="horizontal"
     >
     <FrameLayout
-        android:id="@+id/wifi_combo_always"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-	android:layout_marginEnd="2dp"
-        >
-        <ImageView
-            android:id="@+id/wifi_signal_always"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:scaleType="center"
-            />
-        <ImageView
-            android:id="@+id/wifi_inout_always"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center|bottom"
-            />
-    </FrameLayout>
-    <FrameLayout
         android:id="@+id/wifi_combo"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginEnd="@dimen/wifi_combo_margin_end"
+	android:layout_marginEnd="2dp"
         >
         <ImageView
             android:id="@+id/wifi_signal"
@@ -127,20 +104,10 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="end|bottom"
                 />
-            <ImageView
-                android:id="@+id/no_sim"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                />
         </FrameLayout>
     </FrameLayout>
     <ImageView
         android:id="@+id/airplane"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        />
-    <ImageView
-        android:id="@+id/ethernet"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         />
