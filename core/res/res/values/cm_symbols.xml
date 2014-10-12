@@ -252,5 +252,26 @@
     <java-symbol type="string" name="storage_usb" />
     <java-symbol type="string" name="storage_uicc" />
     <java-symbol type="bool" name="config_batterySdCardAccessibility" />
-    <java-symbol type="string" name="extmedia_format_message_cm" />
+
+    <!-- External media format -->
+    <java-symbol type="string" name="usb_extmedia_format_message" />
+    <java-symbol type="string" name="sd_extmedia_format_message" />
+
+    <!-- Strings for ExternalStorageFormatter service (SD card). -->
+    <java-symbol type="string" name="sd_progress_unmounting" />
+    <java-symbol type="string" name="sd_progress_erasing" />
+    <java-symbol type="string" name="sd_format_error" />
+    <java-symbol type="string" name="sd_media_bad_removal" />
+    <java-symbol type="string" name="sd_media_checking" />
+    <java-symbol type="string" name="sd_media_removed" />
+    <java-symbol type="string" name="sd_media_shared" />
+
+    <!-- Strings for ExternalStorageFormatter service (USB storage). -->
+    <java-symbol type="string" name="usb_progress_unmounting" />
+    <java-symbol type="string" name="usb_progress_erasing" />
+    <java-symbol type="string" name="usb_format_error" />
+    <java-symbol type="string" name="usb_media_bad_removal" />
+    <java-symbol type="string" name="usb_media_checking" />
+    <java-symbol type="string" name="usb_media_removed" />
+    <java-symbol type="string" name="usb_media_shared" />
 </resources>
