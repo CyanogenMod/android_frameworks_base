@@ -253,9 +253,7 @@ public class KeyButtonView extends ImageView {
 
             // also invalidate our immediate parent to help avoid situations where nearby glows
             // interfere
-            if ((View)getParent() != null) {
-                ((View)getParent()).invalidate();
-            }
+            ((View)getParent()).invalidate();
         }
     }
 
