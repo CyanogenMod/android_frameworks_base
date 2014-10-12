@@ -120,6 +120,8 @@ public class KeyguardHostView extends KeyguardViewBase {
 
     private boolean mUserSetupCompleted;
 
+    private boolean mLidControlsSleep;
+
     // User for whom this host view was created.  Final because we should never change the
     // id without reconstructing an instance of KeyguardHostView. See note below...
     private final int mUserId;
@@ -202,6 +204,9 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         mUserSetupCompleted = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.USER_SETUP_COMPLETE, 0, UserHandle.USER_CURRENT) != 0;
+
+        mLidControlsSleep = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_lidControlsSleep);
 
         // Ensure we have the current state *before* we call showAppropriateWidgetPage()
         getInitialTransportState();
@@ -319,11 +324,18 @@ public class KeyguardHostView extends KeyguardViewBase {
         public void onLidStateChanged(int newState){
             //when lid goes open and no security is set -> unlock device
             if(newState == WindowManagerPolicy.WindowManagerFuncs.LID_OPEN
-                && mCurrentSecuritySelection == SecurityMode.None){
+                && mCurrentSecuritySelection == SecurityMode.None
+                && lidControlsSleep()) {
                 dismiss();
             }
         }
     };
+
+    private boolean lidControlsSleep() {
+        return mLidControlsSleep == true
+            && Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_LID_WAKE, 0) != 0;
+    }
 
     private static final boolean isMusicPlaying(int playbackState) {
         // This should agree with the list in AudioService.isPlaystateActive()
