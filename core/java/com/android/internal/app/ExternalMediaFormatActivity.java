@@ -81,12 +81,16 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
         Log.d("ExternalMediaFormatActivity", "The storage volume to be formatted is : "
                 + mStorageVolume.getPath());
 
+        boolean isUsbStorage = mStorageVolume.getDescriptionId() ==
+                com.android.internal.R.string.storage_usb;
+
         // Set up the "dialog"
         final AlertController.AlertParams p = mAlertParams;
         p.mIconId = com.android.internal.R.drawable.stat_sys_warning;
         p.mTitle = getString(com.android.internal.R.string.extmedia_format_title);
-        p.mMessage = String.format(
-                getString(com.android.internal.R.string.extmedia_format_message_cm),
+        p.mMessage = String.format(getString(isUsbStorage ?
+                        com.android.internal.R.string.usb_extmedia_format_message :
+                        com.android.internal.R.string.sd_extmedia_format_message),
                 mStorageVolume.getPath());
         p.mPositiveButtonText = getString(com.android.internal.R.string.extmedia_format_button_format);
         p.mPositiveButtonListener = this;
