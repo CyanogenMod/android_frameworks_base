@@ -229,6 +229,7 @@ public class PieMenu extends FrameLayout {
     private boolean mUseActQs;
     private boolean mUseLastApp;
     private boolean mUseKillTask;
+    private boolean mUseOmniRecent;
     private boolean mUsePower;
     private boolean mUseScreenShot;
     private boolean mUseTorch;
@@ -308,13 +309,11 @@ public class PieMenu extends FrameLayout {
                 Settings.System.PIE_ACT_QS, 0, UserHandle.USER_CURRENT) == 1;
         mUseScreenShot = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_SCREENSHOT, 0, UserHandle.USER_CURRENT) == 1;
-        mUseSearch = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIE_SEARCH, 0, UserHandle.USER_CURRENT) == 1;
         mUseTorch = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_TORCH, 0, UserHandle.USER_CURRENT) == 1;
         mUseGesture = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
-        mUseGesture = Settings.System.getIntForUser(mContext.getContentResolver(),
+        mUseOmniRecent = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_OMNISWITCH, 0, UserHandle.USER_CURRENT) == 1;
         mStatusMode = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_MODE, 0, UserHandle.USER_CURRENT);
