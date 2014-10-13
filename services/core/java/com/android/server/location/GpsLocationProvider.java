@@ -31,6 +31,7 @@ import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -73,6 +74,7 @@ import android.provider.Settings;
 import android.provider.Telephony.Carriers;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.SmsMessage;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
@@ -91,7 +93,9 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Properties;
-
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
 import libcore.io.IoUtils;
 
 /**
@@ -229,6 +233,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private static final int AGPS_SETID_TYPE_IMSI = 1;
     private static final int AGPS_SETID_TYPE_MSISDN = 2;
 
+    // agps start mode
+    private static final int AGPS_START_MODE_COLD = 0;
+    private static final int AGPS_START_MODE_WARM = 1;
+    private static final int AGPS_START_MODE_HOT = 2;
+
     private static final String PROPERTIES_FILE_PREFIX = "/etc/gps";
     private static final String PROPERTIES_FILE_SUFFIX = ".conf";
     private static final String DEFAULT_PROPERTIES_FILE = PROPERTIES_FILE_PREFIX + PROPERTIES_FILE_SUFFIX;
@@ -343,6 +352,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private long mLastFixTime;
 
     private int mPositionMode;
+
+    private boolean mAGPSConfigDb = false;
 
     // Current request from underlying location clients.
     private ProviderRequest mProviderRequest = null;
@@ -578,6 +589,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
         if (!isPropertiesLoadedFromFile) {
             loadPropertiesFromFile(DEFAULT_PROPERTIES_FILE, properties);
         }
+        // Store GPS configuration to Settings Database and then reload it
+        mAGPSConfigDb = testMccMncConfigurable(context);
+        loadPropertiesFromSettingsDb(context, properties);
         Log.d(TAG, "GPS properties reloaded, size = " + properties.size());
 
         // TODO: we should get rid of C2K specific setting.
@@ -649,6 +663,92 @@ public class GpsLocationProvider implements LocationProviderInterface {
         return true;
     }
 
+    private void addSettingDatabaseObserver(Context context) {
+        Uri agpsSuplHostUri = Settings.Global.getUriFor(Settings.Global.ASSISTED_GPS_SUPL_HOST);
+        Uri agpsSuplPortUri = Settings.Global.getUriFor(Settings.Global.ASSISTED_GPS_SUPL_PORT);
+        Uri agpsPositionModeUri = Settings.Global.getUriFor(Settings.Global.ASSISTED_GPS_POSITION_MODE);
+        Uri agpsResetTypeUri = Settings.Global.getUriFor(Settings.Global.ASSISTED_GPS_RESET_TYPE);
+        ContentObserver observer = new ContentObserver(mHandler) {
+            public void onChange(boolean bSelfChanged) {
+                handleAgpsUpdate();
+            }
+        };
+        ContentObserver observerForResetType = new ContentObserver(mHandler) {
+            public void onChange(boolean bSelfChanged) {
+                handleAgpsReset();
+            }
+        };
+        context.getContentResolver().registerContentObserver(agpsSuplHostUri, true, observer);
+        context.getContentResolver().registerContentObserver(agpsSuplPortUri, true, observer);
+        context.getContentResolver().registerContentObserver(agpsPositionModeUri, true, observer);
+        context.getContentResolver().registerContentObserver(agpsResetTypeUri, true, observerForResetType);
+    }
+
+    /**
+     * Test whether current mcc+mnc is in the configurable list
+     */
+    private boolean testMccMncConfigurable(Context context) {
+        TelephonyManager phone = (TelephonyManager)
+                context.getSystemService(Context.TELEPHONY_SERVICE);
+        int phoneCnt = phone.getPhoneCount();
+        Vector<String> mccMnc = new Vector<String>();
+        for(int i = 0;i<phoneCnt;++i) {
+            long[] subIds = SubscriptionManager.getSubId(i);
+            if (subIds != null && subIds.length > 0) {
+                mccMnc.add(phone.getNetworkOperator(subIds[0]));
+            }
+        }
+        if (mccMnc.size() > 0) {
+            ContentResolver objContentResolver = context.getContentResolver();
+            String configurable_list = Settings.Global.getString(objContentResolver,
+                    Settings.Global.ASSISTED_GPS_CONFIGURABLE_LIST);
+            if (!TextUtils.isEmpty(configurable_list)) {
+                String[] list = configurable_list.split(",");
+                for (String item:list) {
+                    if(mccMnc.contains(item))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * When boot and sim card changes, it will load new cfg to properties
+     */
+    private void loadPropertiesFromSettingsDb(Context context, Properties properties) {
+        if (DEBUG) Log.d(TAG, "loadPropertiesFromSettingsDb configurable = " + mAGPSConfigDb);
+        if (mAGPSConfigDb) {
+            ContentResolver objContentResolver = context.getContentResolver();
+            String mode = Settings.Global.getString(objContentResolver,
+                    Settings.Global.ASSISTED_GPS_POSITION_MODE);
+            if(!TextUtils.isEmpty(mode)) {
+                try {
+                    if (mode.equals("MSB")) {
+                        properties.setProperty("SUPL_MODE", Integer.toString(AGPS_SUPL_MODE_MSB));
+                    } else if (mode.equals("MSA")) {
+                        properties.setProperty("SUPL_MODE", Integer.toString(AGPS_SUPL_MODE_MSA));
+                    }
+                    if (DEBUG)
+                        Log.d(TAG, "loadPropertiesFromSettingsDb agps_type = " + mode);
+                } catch (Exception e) {
+                    Log.e(TAG, "Fail to set supl_mode for " + e);
+                }
+            }
+            String suplAddr = Settings.Global.getString(objContentResolver,
+                    Settings.Global.ASSISTED_GPS_SUPL_HOST);
+            String suplPort = Settings.Global.getString(objContentResolver,
+                    Settings.Global.ASSISTED_GPS_SUPL_PORT);
+            if (!TextUtils.isEmpty(suplAddr) && !TextUtils.isEmpty(suplPort)) {
+                properties.setProperty("SUPL_HOST", suplAddr);
+                properties.setProperty("SUPL_PORT", suplPort);
+                if (DEBUG)
+                    Log.d(TAG, "loadPropertiesFromSettingsDb SUPL = " + suplAddr + ":"
+                            + suplPort);
+            }
+        }
+    }
+
     public GpsLocationProvider(Context context, ILocationManager ilocationManager,
             Looper looper) {
         mContext = context;
@@ -712,6 +812,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
                         mHandler.getLooper());
             }
         });
+        // Add Observer for AGPS database change
+        addSettingDatabaseObserver(context);
     }
 
     private void listenForBroadcasts() {
@@ -930,6 +1032,29 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
     }
 
+    private void handleAgpsUpdate() {
+        loadPropertiesFromSettingsDb(mContext,mProperties);
+        setSuplHostPort(mProperties.getProperty("SUPL_HOST"),
+                mProperties.getProperty("SUPL_PORT"));
+    }
+
+    private void handleAgpsReset() {
+        ContentResolver objContentResolver = mContext.getContentResolver();
+        try {
+            int startMode = Settings.Global.getInt(objContentResolver,
+                    Settings.Global.ASSISTED_GPS_RESET_TYPE, AGPS_START_MODE_HOT);
+            Bundle bundle = new Bundle();
+            if (startMode == AGPS_START_MODE_COLD) {
+                bundle.putBoolean("all", true);
+            } else if (startMode == AGPS_START_MODE_WARM) {
+                bundle.putBoolean("ephemeris", true);
+            }
+            sendExtraCommand("delete_aiding_data", bundle);
+        } catch (Exception ex) {
+            Log.e(TAG, "handleAgpsReset Failed!");
+        }
+    }
+
     /**
      * Enables this provider.  When enabled, calls to getStatus()
      * must be handled.  Hardware may be started up
@@ -983,6 +1108,14 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     Log.e(TAG, "unable to parse SUPL_MODE: " + modeString);
                     return GPS_POSITION_MODE_STANDALONE;
                 }
+            }
+            String prefAGpsNetworkType = Settings.Global.getString(
+                    mContext.getContentResolver(), Settings.Global.ASSISTED_GPS_NETWORK);
+            if (prefAGpsNetworkType != null && prefAGpsNetworkType.equals("HOME")) {
+                TelephonyManager tm = (TelephonyManager) mContext
+                        .getSystemService(Context.TELEPHONY_SERVICE);
+                if (tm.isNetworkRoaming())
+                    return GPS_POSITION_MODE_STANDALONE;
             }
             if (singleShot
                     && hasCapability(GPS_CAPABILITY_MSA)
