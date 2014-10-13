@@ -100,7 +100,7 @@ public class AlarmManager
      */
     public static final int ELAPSED_REALTIME = 3;
 
-    /**
+    /** @hide
      * Alarm time in {@link System#currentTimeMillis System.currentTimeMillis()}
      * (wall clock time in UTC), which will wake up the device when
      * it goes off. And it will power on the devices when it shuts down.
