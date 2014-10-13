@@ -2522,6 +2522,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.Global.ASSISTED_GPS_ENABLED,
                     R.bool.assisted_gps_enabled);
 
+            loadStringSetting(stmt, Settings.Global.ASSISTED_GPS_CONFIGURABLE_LIST,
+                    R.string.assisted_gps_configurable_list);
+
+            String[] gpsConfigValues = mContext.getResources().getStringArray(
+                    com.android.internal.R.array.config_gpsParameters);
+            for (String item : gpsConfigValues) {
+                String[] split = item.split("=");
+                if (split.length == 2) {
+                    String name = split[0].trim().toUpperCase();
+                    String value = split[1];
+                    if (name.equals("SUPL_HOST"))
+                        loadSetting(stmt, Settings.Global.ASSISTED_GPS_SUPL_HOST, value);
+                    else if (name.equals("SUPL_PORT"))
+                        loadSetting(stmt, Settings.Global.ASSISTED_GPS_SUPL_PORT, value);
+                }
+            }
+
             loadBooleanSetting(stmt, Settings.Global.AUTO_TIME,
                     R.bool.def_auto_time); // Sync time to NITZ
 
