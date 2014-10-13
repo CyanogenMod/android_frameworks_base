@@ -46,9 +46,11 @@ import android.sax.ElementListener;
 import android.sax.RootElement;
 import android.system.ErrnoException;
 import android.system.Os;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
+import com.android.internal.telephony.PhoneConstants;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1003,7 +1005,17 @@ public class MediaScanner
                     setSettingIfNotSet(Settings.System.NOTIFICATION_SOUND, tableUri, rowId);
                     mDefaultNotificationSet = true;
                 } else if (ringtones) {
+                    // memorize default system ringtone persistently
+                    setSettingIfNotSet(Settings.System.DEFAULT_RINGTONE, tableUri, rowId);
+
                     setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
+                    if (TelephonyManager.getDefault().isMultiSimEnabled()) {
+                        int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+                        for (int i = PhoneConstants.SUB2; i < phoneCount; i++) {
+                            // Set the default setting to the given URI for multi SIMs
+                            setSettingIfNotSet((Settings.System.RINGTONE + "_" + (i+1)), tableUri, rowId);
+                        }
+                    }
                     mDefaultRingtoneSet = true;
                 } else if (alarms) {
                     setSettingIfNotSet(Settings.System.ALARM_ALERT, tableUri, rowId);
