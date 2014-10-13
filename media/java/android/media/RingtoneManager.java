@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -614,7 +615,25 @@ public class RingtoneManager {
         String setting = getSettingForType(type);
         if (setting == null) return null;
         final String uriString = Settings.System.getString(context.getContentResolver(), setting);
-        return uriString != null ? Uri.parse(uriString) : null;
+        if ((uriString == null) || (type & TYPE_RINGTONE) == 0) {
+            return uriString != null ? Uri.parse(uriString) : null;
+        }
+
+        Uri ringToneUri = getStaticDefaultRingtoneUri(context);
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(Uri.parse(uriString),
+                    null, null, null, null);
+            if ((cursor != null) && (cursor.getCount() > 0)) {
+                ringToneUri = Uri.parse(uriString);
+            }
+        } catch (SQLiteException ex) {
+            Log.e(TAG, "ex " + ex);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+
+        return ringToneUri;
     }
     
     /**
@@ -703,6 +722,21 @@ public class RingtoneManager {
     }
 
     /**
+     * Returns the {@link Uri} for the static default ringtone.
+     * Rather than returning the actual ringtone's sound {@link Uri}, this will
+     * return the default system ringtone. When actual ringtone is not valid
+     * in media provider, default system ringtone is the one to rollback to.
+     *
+     * @return The {@link Uri} of the default system ringtone.
+     * @hide
+     */
+    public static Uri getStaticDefaultRingtoneUri(Context context) {
+        final String uriString = Settings.System.getString(
+                context.getContentResolver(), Settings.System.DEFAULT_RINGTONE.toString());
+        return uriString != null ? Uri.parse(uriString) : null;
+    }
+
+    /**
      * Returns the subscription ID of {@link Uri}.
      *
      * @param defaultRingtoneUri The default {@link Uri}. For example,
@@ -778,8 +812,27 @@ public class RingtoneManager {
         } else {
             setting = Settings.System.RINGTONE + "_" + (subId + 1);
         }
+
         final String uriString = Settings.System.getString(context.getContentResolver(), setting);
-        return uriString != null ? Uri.parse(uriString) : null;
+        if (uriString == null) {
+            return null;
+        }
+
+        Uri ringToneUri = getStaticDefaultRingtoneUri(context);
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(Uri.parse(uriString),
+                    null, null, null, null);
+            if ((cursor != null) && (cursor.getCount() > 0)) {
+                ringToneUri = Uri.parse(uriString);
+            }
+        } catch (SQLiteException ex) {
+            Log.e(TAG, "ex " + ex);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+
+        return ringToneUri;
     }
 
     /**

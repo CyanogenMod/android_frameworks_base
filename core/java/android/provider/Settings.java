@@ -2197,6 +2197,14 @@ public final class Settings {
         public static final String APPEND_FOR_LAST_AUDIBLE = "_last_audible";
 
         /**
+         * Persistent store for the static default system ringtone URI.
+         * This setting is initialized within media scanner and read only afterwards.
+         * It provides the persistent URI of default system ringtone.
+         * @hide
+         */
+        public static final String DEFAULT_RINGTONE = "ringtone_default";
+
+        /**
          * Persistent store for the system-wide default ringtone URI.
          * <p>
          * If you need to play the default ringtone at any given time, it is recommended
