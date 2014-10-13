@@ -155,7 +155,6 @@
                 android:id="@+id/mobile_type"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center|bottom"
                 />
             <ImageView
                 android:id="@+id/mobile_inout"
@@ -235,7 +234,6 @@
                 android:id="@+id/mobile_type_sub2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center|bottom"
                 />
             <ImageView
                 android:id="@+id/mobile_inout_sub2"
@@ -315,7 +313,6 @@
                 android:id="@+id/mobile_type_sub3"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center|bottom"
                 />
             <ImageView
                 android:id="@+id/mobile_inout_sub3"
