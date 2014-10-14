@@ -94,6 +94,9 @@ private:
      */
     enum ImageID { IMG_OEM = 0, IMG_SYS = 1, IMG_ENC = 2 };
     const char *getAnimationFileName(ImageID image);
+    const char *getBootRingtoneFileName(ImageID image);
+    void playBackgroundMusic();
+    bool checkBootState();
     status_t initTexture(Texture* texture, AssetManager& asset, const char* name);
     status_t initTexture(const Animation::Frame& frame);
     bool android();
@@ -110,7 +113,7 @@ private:
     sp<SurfaceComposerClient>       mSession;
     sp<AudioPlayer>                 mAudioPlayer;
     AssetManager mAssets;
-    Texture     mAndroid[2];
+    Texture     mAndroid[3];
     Texture     mClock;
     int         mWidth;
     int         mHeight;

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,8 @@
 #include <utils/misc.h>
 #include <signal.h>
 #include <time.h>
+#include <pthread.h>
+#include <sys/select.h>
 
 #include <cutils/properties.h>
 
@@ -54,6 +57,10 @@
 #include <GLES/glext.h>
 #include <EGL/eglext.h>
 
+#include <media/AudioSystem.h>
+#include <media/mediaplayer.h>
+#include <media/IMediaHTTPService.h>
+
 #include "BootAnimation.h"
 #include "AudioPlayer.h"
 
@@ -63,6 +70,16 @@
 #define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
 #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
 
+#define OEM_SHUTDOWN_ANIMATION_FILE "/oem/media/shutdownanimation.zip"
+#define SYSTEM_SHUTDOWN_ANIMATION_FILE "/system/media/shutdownanimation.zip"
+#define SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE "/system/media/shutdownanimation-encrypted.zip"
+
+#define OEM_BOOT_MUSIC_FILE "/oem/media/boot.wav"
+#define SYSTEM_BOOT_MUSIC_FILE "/system/media/boot.wav"
+
+#define OEM_SHUTDOWN_MUSIC_FILE "/oem/media/shutdown.wav"
+#define SYSTEM_SHUTDOWN_MUSIC_FILE "/system/media/shutdown.wav"
+
 #define EXIT_PROP_NAME "service.bootanim.exit"
 
 namespace android {
@@ -70,6 +87,36 @@ namespace android {
 static const int ANIM_ENTRY_NAME_MAX = 256;
 
 // ---------------------------------------------------------------------------
+
+static pthread_mutex_t mp_lock;
+static pthread_cond_t mp_cond;
+static bool isMPlayerPrepared = false;
+static bool isMPlayerCompleted = false;
+
+class MPlayerListener : public MediaPlayerListener
+{
+    void notify(int msg, int /*ext1*/, int /*ext2*/, const Parcel * /*obj*/)
+    {
+        switch (msg) {
+        case MEDIA_NOP: // interface test message
+            break;
+        case MEDIA_PREPARED:
+            pthread_mutex_lock(&mp_lock);
+            isMPlayerPrepared = true;
+            pthread_cond_signal(&mp_cond);
+            pthread_mutex_unlock(&mp_lock);
+            break;
+        case MEDIA_PLAYBACK_COMPLETE:
+            pthread_mutex_lock(&mp_lock);
+            isMPlayerCompleted = true;
+            pthread_cond_signal(&mp_cond);
+            pthread_mutex_unlock(&mp_lock);
+            break;
+        default:
+            break;
+        }
+    }
+};
 
 BootAnimation::BootAnimation() : Thread(false), mClockEnabled(true) {
     mSession = new SurfaceComposerClient();
@@ -233,27 +280,136 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
 // Return Value : File path
 const char *BootAnimation::getAnimationFileName(ImageID image)
 {
-    const char *fileName[3] = { OEM_BOOTANIMATION_FILE,
+    const char *fileName[2][3] = { { OEM_BOOTANIMATION_FILE,
             SYSTEM_BOOTANIMATION_FILE,
-            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE };
+            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE }, {
+            OEM_SHUTDOWN_ANIMATION_FILE,
+            SYSTEM_SHUTDOWN_ANIMATION_FILE,
+            SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE } };
+    int state;
 
     // Load animations of Carrier through regionalization environment
     if (Environment::isSupported()) {
         Environment* environment = new Environment();
         const char* animFile = environment->getMediaFile(
                 Environment::ANIMATION_TYPE, Environment::BOOT_STATUS);
-        ALOGE("Get Carrier Animation type: %d,status:%d", Environment::ANIMATION_TYPE,Environment::BOOT_STATUS);
+        ALOGE("Get Carrier Animation type: %d, status:%d",
+                Environment::ANIMATION_TYPE, Environment::BOOT_STATUS);
         if (animFile != NULL && strcmp(animFile, "") != 0) {
            return animFile;
-        }else{
+        } else {
            ALOGD("Get Carrier Animation file: %s failed", animFile);
         }
         delete environment;
-    }else{
-           ALOGE("Get Carrier Animation file,since it's not support carrier");
     }
 
-    return fileName[image];
+    state = checkBootState() ? 0 : 1;
+
+    return fileName[state][image];
+}
+
+const char *BootAnimation::getBootRingtoneFileName(ImageID image)
+{
+    if (image == IMG_ENC) {
+        return NULL;
+    }
+
+    const char *fileName[2][2] = { { OEM_BOOT_MUSIC_FILE,
+            SYSTEM_BOOT_MUSIC_FILE }, {
+            OEM_SHUTDOWN_MUSIC_FILE,
+            SYSTEM_SHUTDOWN_MUSIC_FILE } };
+    int state;
+
+    state = checkBootState() ? 0 : 1;
+
+    return fileName[state][image];
+}
+
+static void* playMusic(void* arg)
+{
+    int index = 0;
+    char *fileName = (char *)arg;
+    sp<MediaPlayer> mp = new MediaPlayer();
+    sp<MPlayerListener> mListener = new MPlayerListener();
+
+    if (mp != NULL) {
+        ALOGD("starting to play %s", fileName);
+        mp->setListener(mListener);
+
+        if (mp->setDataSource(NULL, fileName, NULL) == NO_ERROR) {
+            mp->setAudioStreamType(AUDIO_STREAM_ENFORCED_AUDIBLE);
+            mp->prepare();
+        } else {
+            ALOGE("failed to setDataSource for %s", fileName);
+            return NULL;
+        }
+
+        // waiting for media player is prepared.
+        pthread_mutex_lock(&mp_lock);
+        while (!isMPlayerPrepared) {
+            pthread_cond_wait(&mp_cond, &mp_lock);
+        }
+        pthread_mutex_unlock(&mp_lock);
+
+        audio_devices_t device = AudioSystem::getDevicesForStream(AUDIO_STREAM_ENFORCED_AUDIBLE);
+        AudioSystem::initStreamVolume(AUDIO_STREAM_ENFORCED_AUDIBLE, 0, 7);
+        AudioSystem::setStreamVolumeIndex(AUDIO_STREAM_ENFORCED_AUDIBLE, 7, device);
+
+        AudioSystem::getStreamVolumeIndex(AUDIO_STREAM_ENFORCED_AUDIBLE, &index, device);
+        if (index != 0) {
+            ALOGD("playing %s", fileName);
+            mp->seekTo(0);
+            mp->start();
+        } else {
+            ALOGW("current volume is zero.");
+        }
+    }
+    return NULL;
+}
+
+void BootAnimation::playBackgroundMusic(void)
+{
+    // Shutdown music is playing in ShutdownThread.java
+    if (!checkBootState()) {
+        return;
+    }
+
+    /* Make sure sound cards are populated */
+    FILE* fp = NULL;
+    if ((fp = fopen("/proc/asound/cards", "r")) == NULL) {
+        ALOGW("Cannot open /proc/asound/cards file to get sound card info.");
+    }
+
+    char value[PROPERTY_VALUE_MAX];
+    property_get("qcom.audio.init", value, "null");
+    if (strncmp(value, "complete", 8) != 0) {
+        ALOGW("Audio service is not initiated.");
+    }
+
+    fclose(fp);
+
+    const char *fileName;
+    if (((fileName = getBootRingtoneFileName(IMG_OEM)) != NULL
+            && access(fileName, R_OK) == 0) ||
+            ((fileName = getBootRingtoneFileName(IMG_SYS)) != NULL
+            && access(fileName, R_OK) == 0)) {
+        pthread_t tid;
+        pthread_create(&tid, NULL, playMusic, (void *)fileName);
+        pthread_join(tid, NULL);
+    }
+}
+
+bool BootAnimation::checkBootState(void)
+{
+    char value[PROPERTY_VALUE_MAX];
+    bool ret = true;
+
+    property_get("sys.shutdown.requested", value, "null");
+    if (strncmp(value, "null", 4) != 0) {
+        ret = false;
+    }
+
+    return ret;
 }
 
 status_t BootAnimation::readyToRun() {
@@ -712,9 +868,16 @@ bool BootAnimation::playAnimation(const Animation& animation)
     const int xc = (mWidth - animation.width) / 2;
     const int yc = ((mHeight - animation.height) / 2);
     nsecs_t frameDuration = s2ns(1) / animation.fps;
+    char value[PROPERTY_VALUE_MAX];
 
     Region clearReg(Rect(mWidth, mHeight));
     clearReg.subtractSelf(Rect(xc, yc, xc+animation.width, yc+animation.height));
+
+    pthread_mutex_init(&mp_lock, NULL);
+    pthread_condattr_t attr;
+    pthread_condattr_init(&attr);
+    pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
+    pthread_cond_init(&mp_cond, &attr);
 
     for (size_t i=0 ; i<pcount ; i++) {
         const Animation::Part& part(animation.parts[i]);
@@ -816,6 +979,33 @@ bool BootAnimation::playAnimation(const Animation& animation)
             }
         }
     }
+
+    property_get("persist.sys.silent", value, "null");
+    if (strncmp(value, "1", 1) != 0) {
+       ALOGD("playing boot audio here");
+       playBackgroundMusic();
+    }
+
+    if (isMPlayerPrepared) {
+        ALOGD("waiting for media player to complete.");
+        struct timespec timeout;
+        clock_gettime(CLOCK_MONOTONIC, &timeout);
+        timeout.tv_sec += 5; // timeout after 5s.
+
+        pthread_mutex_lock(&mp_lock);
+        while (!isMPlayerCompleted) {
+            int err = pthread_cond_timedwait(&mp_cond, &mp_lock, &timeout);
+            if (err == ETIMEDOUT) {
+                break;
+            }
+        }
+        pthread_mutex_unlock(&mp_lock);
+        ALOGD("media player is completed.");
+    }
+
+    pthread_cond_destroy(&mp_cond);
+    pthread_mutex_destroy(&mp_lock);
+
     return true;
 }
 
