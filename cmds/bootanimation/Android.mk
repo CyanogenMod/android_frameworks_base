@@ -24,7 +24,8 @@ LOCAL_SHARED_LIBRARIES := \
     libGLESv1_CM \
     libgui \
     libtinyalsa \
-    libregionalization
+    libregionalization \
+    libmedia
 
 ifeq ($(TARGET_CONTINUOUS_SPLASH_ENABLED),true)
     LOCAL_CFLAGS += -DCONTINUOUS_SPLASH
