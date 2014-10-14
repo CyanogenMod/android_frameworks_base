@@ -130,7 +130,7 @@
   <string name="notify_turn_wifi_off_title">Wi-FiをOFFにする</string>
   <string name="privacy_guard_dialog_title">プライバシーガード</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>をしようとしています。</string>
-  <string name="permission_remember_choice">選択を記憶する</string>
+  <string name="permission_remember_choice">選択を記憶</string>
   <string name="adb_net_active_notification_title">ネットワーク経由のADBが有効です</string>
   <string name="adb_both_active_notification_title">USBとネットワーク経由のADBが有効です</string>
   <string name="adb_active_generic_notification_message">タップしてデバッグを無効にします。</string>
@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SSリクエストはDIALリクエストに変更されます。</string>
   <string name="stk_cc_ss_to_ussd">SSリクエストはUSSDリクエストに変更されます。</string>
   <string name="stk_cc_ss_to_ss">SSリクエストは新しいSSリクエストに変更されます。</string>
+  <string name="theme_install_error_title">テーマをインストールできませんでした</string>
+  <string name="theme_install_error_message">%sをインストールできませんでした</string>
 </resources>

@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS kérés módosítva DIAL kérésre.</string>
   <string name="stk_cc_ss_to_ussd">SS kérés módosítva USSD kérésre.</string>
   <string name="stk_cc_ss_to_ss">SS kérés módosítva új SS kérésre.</string>
+  <string name="theme_install_error_title">Téma telepítése sikertelen</string>
+  <string name="theme_install_error_message">Sikertelen telepítés: %s</string>
 </resources>

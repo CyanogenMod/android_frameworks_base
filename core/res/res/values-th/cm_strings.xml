@@ -165,10 +165,13 @@
   <string name="lockscreen_sim_error_message_short">บัตรไม่ถูกต้อง</string>
   <string name="lockscreen_airplane_mode_on">โหมดเครื่องบิน</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM ถูกล็อก</string>
+  <string name="pinpuk_attempts">\nความพยายามที่เหลือ:</string>
   <string name="stk_cc_ussd_to_dial">คำขอ USSD ถูกแก้ไขเป็นคำขอ DIAL</string>
   <string name="stk_cc_ussd_to_ss">คำขอ USSD ถูกแก้ไขเป็นคำขอ SS</string>
   <string name="stk_cc_ussd_to_ussd">คำขอ USSD ถูกแก้ไขเป็นคำขอ USSD ใหม่</string>
   <string name="stk_cc_ss_to_dial">คำขอ SS ถูกแก้ไขเป็นคำขอ DIAL</string>
   <string name="stk_cc_ss_to_ussd">คำขอ SS ถูกแก้ไขเป็นคำขอ USSD</string>
   <string name="stk_cc_ss_to_ss">คำขอ SS ถูกแก้ไขเป็นคำขอ SS ใหม่</string>
+  <string name="theme_install_error_title">การติดตั้งชุดรูปแบบล้มเหลว</string>
+  <string name="theme_install_error_message">ชุดรูปแบบ %s ติดตั้งล้มเหลว</string>
 </resources>

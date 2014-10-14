@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">Solicitú SS modifícase a solicitú DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Solicitú SS modifícase a solicitú USSD.</string>
   <string name="stk_cc_ss_to_ss">Solicitú SS modifícase a solicitú nueva SS.</string>
+  <string name="theme_install_error_title">Falló al instalar el tema</string>
+  <string name="theme_install_error_message">%s falló al instalar</string>
 </resources>

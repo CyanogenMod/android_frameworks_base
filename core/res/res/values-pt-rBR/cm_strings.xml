@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">Requisição SS foi modificada para requisição DISCAGEM.</string>
   <string name="stk_cc_ss_to_ussd">Requisição SS foi modificada para requisição USSD.</string>
   <string name="stk_cc_ss_to_ss">Requisição SS foi modificada para uma nova requisição SS.</string>
+  <string name="theme_install_error_title">Falha ao instalar o tema</string>
+  <string name="theme_install_error_message">%s falhou ao instalar</string>
 </resources>

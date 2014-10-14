@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS-pyyntö muutetaan DIAL-pyynnöksi.</string>
   <string name="stk_cc_ss_to_ussd">SS-pyyntö muutetaan USSD-pyynnöksi.</string>
   <string name="stk_cc_ss_to_ss">SS-pyyntö muutetaan uudeksi SS-pyynnöksi.</string>
+  <string name="theme_install_error_title">Teeman asennus epäonnistui</string>
+  <string name="theme_install_error_message">Teeman \"%s\" asennus epäonnistui</string>
 </resources>

@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS ආයාචනය DIAL ආයාචනයක් බවට වෙනස් කර ඇත.</string>
   <string name="stk_cc_ss_to_ussd">SS ආයාචනය USSD ආයාචනයක් බවට වෙනස් කර ඇත.</string>
   <string name="stk_cc_ss_to_ss">SS ආයාචනය නව SS ආයාචනයක් බවට වෙනස් කර ඇත.</string>
+  <string name="theme_install_error_title">තේමාව ස්ථාපනයට අසමත්විය</string>
+  <string name="theme_install_error_message">%s ස්ථාපනයට අසමත්විය</string>
 </resources>

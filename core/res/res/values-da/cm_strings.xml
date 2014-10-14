@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS-anmodning er ændret til en DIAL-anmodning.</string>
   <string name="stk_cc_ss_to_ussd">SS-anmodning er ændret til en USSD-anmodning.</string>
   <string name="stk_cc_ss_to_ss">SS-anmodning er ændret til en ny SS-anmodning.</string>
+  <string name="theme_install_error_title">Det lykkedes ikke at installere temaet</string>
+  <string name="theme_install_error_message">%s kunne ikke installeres</string>
 </resources>

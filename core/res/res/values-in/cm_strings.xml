@@ -165,10 +165,13 @@
   <string name="lockscreen_sim_error_message_short">Kartu SIM tidak valid.</string>
   <string name="lockscreen_airplane_mode_on">Mode pesawat</string>
   <string name="lockscreen_sim_locked_message_cm">Kartu SIM/RUIM terkunci.</string>
+  <string name="pinpuk_attempts">\nUsaha tersisa:</string>
   <string name="stk_cc_ussd_to_dial">Permintaan USSD dimodifikasi ke permintaan DIAL.</string>
   <string name="stk_cc_ussd_to_ss">Permintaan USSD dimodifikasi ke permintaan SS.</string>
   <string name="stk_cc_ussd_to_ussd">Permintaan USSD dimodifikasi ke permintaan USSD yang baru.</string>
   <string name="stk_cc_ss_to_dial">Permintaan SS dimodifikasi ke permintaan DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Permintaan SS dimodifikasi ke permintaan USSD.</string>
   <string name="stk_cc_ss_to_ss">Permintaan SS dimodifikasi ke permintaan SS yang baru.</string>
+  <string name="theme_install_error_title">Gagal menginstal tema</string>
+  <string name="theme_install_error_message">%s gagal untuk di instal</string>
 </resources>
