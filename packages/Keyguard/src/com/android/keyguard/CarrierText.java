@@ -136,7 +136,7 @@ public class CarrierText extends LinearLayout {
             mOperatorName[i].setVisibility(View.VISIBLE);
             mOperatorName[i].setSelected(true);
             if (i < mNumPhones-1) {
-                mOperatorSeparator[0] = (TextView) findViewById(operatorSepId[i]);
+                mOperatorSeparator[i] = (TextView) findViewById(operatorSepId[i]);
                 mOperatorSeparator[i].setVisibility(View.VISIBLE);
                 mOperatorSeparator[i].setText("|");
             }
