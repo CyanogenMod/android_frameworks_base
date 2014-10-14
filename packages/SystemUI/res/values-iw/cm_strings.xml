@@ -55,6 +55,10 @@
   <string name="location_mode_sensors_only_title">התקן בלבד</string>
   <string name="quick_settings_expanded_desktop">מורחב</string>
   <string name="quick_settings_expanded_desktop_off">רגיל</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d מכשירים מחוברים</item>
+    <item quantity="other">%1$d מכשירים מחוברים</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">אין אפשרות להתחבר אל המצלמה</string>
   <string name="navbar_dialog_title">בחר את הפעולה להקצה</string>
   <string name="navbar_home_button">כפתור הבית</string>

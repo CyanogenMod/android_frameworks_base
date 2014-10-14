@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS versoek is verander na skakel versoek.</string>
   <string name="stk_cc_ss_to_ussd">SS versoek verander na USSD versoek.</string>
   <string name="stk_cc_ss_to_ss">SS versoek verander na nuwe SS versoek.</string>
+  <string name="theme_install_error_title">Kon nie tema installeer</string>
+  <string name="theme_install_error_message">%s kon nie geïnstalleer word nie</string>
 </resources>

@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">מסך נעילה</string>
   <string name="keyguard_discharging">סוללה מתרוקנת, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">חבר את המטען, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">שיחה %d שפוספסה</item>
     <item quantity="other">%d שיחות שפוספו</item>
@@ -30,4 +31,12 @@
   <string name="message_from">הודעה מ</string>
   <string name="message_from_person">הודעה מ-%1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">קוד PUK צריך לכלול 8 ספרות.</string>
+  <string name="keyguard_password_wrong_puk_code">קוד PUK שגוי.</string>
+  <string name="keyguard_password_pin_failed">פעולת PIN נכשלה.</string>
+  <string name="keyguard_password_puk_failed">פעולת PUK נכשלה.</string>
+  <string name="pinpuk_attempts">\n ניסיונות נותרו:</string>
+  <string name="lockscreen_sim_error_message_short">כרטיס שגוי.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM נעול ב-Perso</string>
+  <string name="msim_kg_sim_pin_msg_format">הרשמה: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

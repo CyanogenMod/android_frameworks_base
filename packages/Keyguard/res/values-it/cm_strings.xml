@@ -18,7 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Schermata di sblocco</string>
   <string name="keyguard_discharging">In uso (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
-  <string name="keyguard_low_battery_cm">Collegare il caricabatterie, <xliff:g id="number">%d</xliff:g> <xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Collegare il caricabatterie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d chiamata persa</item>
     <item quantity="other">%d chiamate perse</item>

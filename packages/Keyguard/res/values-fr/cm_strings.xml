@@ -37,6 +37,6 @@
   <string name="keyguard_password_puk_failed">Opération PUK échouée.</string>
   <string name="pinpuk_attempts">\nTentatives restantes :</string>
   <string name="lockscreen_sim_error_message_short">Carte SIM non valide.</string>
-  <string name="keyguard_perso_locked_message">La SIM/RUIM posséde un verrouillage personnel</string>
+  <string name="keyguard_perso_locked_message">La SIM/RUIM possède un verrouillage personnel</string>
   <string name="msim_kg_sim_pin_msg_format">ABONNEMENT : <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

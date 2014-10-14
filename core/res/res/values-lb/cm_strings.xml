@@ -54,7 +54,6 @@
   <string name="perf_profile_pwrsv">Energie spueren</string>
   <string name="perf_profile_bal">Ausgeglach</string>
   <string name="perf_profile_perf">Leeschtung</string>
-  <string name="permlab_interceptSmsSent">verschéckt SMSen interceptéieren</string>
   <string name="permlab_resetBatteryStats">Akkustatistiken zrécksetzen</string>
   <string name="permgrouplab_security">Sécherheet</string>
 </resources>

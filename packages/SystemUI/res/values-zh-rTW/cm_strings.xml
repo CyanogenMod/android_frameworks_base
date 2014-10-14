@@ -55,6 +55,9 @@
   <string name="location_mode_sensors_only_title">僅限裝置</string>
   <string name="quick_settings_expanded_desktop">已擴展</string>
   <string name="quick_settings_expanded_desktop_off">正常</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="other">%1$d 已連線</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">無法連線到相機</string>
   <string name="navbar_dialog_title">選擇要指定的動作</string>
   <string name="navbar_home_button">主螢幕按鈕</string>

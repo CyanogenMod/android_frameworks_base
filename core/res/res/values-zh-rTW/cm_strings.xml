@@ -157,4 +157,6 @@
   <string name="usb_ext_media_safe_unmount_notification_message">您現在可以安全地移除 USB 儲存裝置。</string>
   <string name="usb_ext_media_nomedia_notification_title">已移除 USB 儲存裝置</string>
   <string name="usb_ext_media_nomedia_notification_message"> USB 儲存裝置已移除，請插入新的 USB 儲存裝置。</string>
+  <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
+  <string name="lockscreen_airplane_mode_on">飛航模式</string>
 </resources>
