@@ -130,6 +130,11 @@ public class CallLog {
          * @hide
          */
         public static final int VOICEMAIL_TYPE = 4;
+        /** Call log type for blacklisted calls
+         * @hide
+         */
+        public static final int BLACKLIST_TYPE = 173;
+
 
         /**
          * The phone number as the user entered it.
