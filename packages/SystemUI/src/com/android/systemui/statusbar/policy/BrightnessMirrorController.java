@@ -21,6 +21,7 @@ import com.android.systemui.statusbar.ScrimView;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.StatusBarWindowView;
 
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
@@ -41,7 +42,11 @@ public class BrightnessMirrorController {
     public BrightnessMirrorController(StatusBarWindowView statusBarWindow) {
         mScrimBehind = (ScrimView) statusBarWindow.findViewById(R.id.scrim_behind);
         mBrightnessMirror = statusBarWindow.findViewById(R.id.brightness_mirror);
-        mPanelHolder = statusBarWindow.findViewById(R.id.panel_holder);
+        if (isMSim()) {
+            mPanelHolder = statusBarWindow.findViewById(R.id.msim_panel_holder);
+        } else {
+            mPanelHolder = statusBarWindow.findViewById(R.id.panel_holder);
+        }
     }
 
     public void showMirror() {
@@ -102,5 +107,9 @@ public class BrightnessMirrorController {
                 R.dimen.notification_side_padding);
         mBrightnessMirror.setPadding(padding, mBrightnessMirror.getPaddingTop(),
                 padding, mBrightnessMirror.getPaddingBottom());
+    }
+
+    boolean isMSim() {
+        return (TelephonyManager.getDefault().getPhoneCount() > 1);
     }
 }
