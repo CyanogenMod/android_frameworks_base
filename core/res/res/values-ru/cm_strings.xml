@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS-запрос преобразован в DIAL-запрос.</string>
   <string name="stk_cc_ss_to_ussd">SS-запрос преобразован в USSD-запрос.</string>
   <string name="stk_cc_ss_to_ss">SS-запрос преобразован в новый SS-запрос.</string>
+  <string name="theme_install_error_title">Не удалось установить тему</string>
+  <string name="theme_install_error_message">Сбой при установке «%s»</string>
 </resources>

@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS 请求已修改为 DIAL 请求。</string>
   <string name="stk_cc_ss_to_ussd">SS 请求已修改为 USSD 请求。</string>
   <string name="stk_cc_ss_to_ss">SS 请求已修改为新的 SS 请求。</string>
+  <string name="theme_install_error_title">安装主题失败</string>
+  <string name="theme_install_error_message">%s 安装失败</string>
 </resources>

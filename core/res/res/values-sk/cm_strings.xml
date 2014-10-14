@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">Požiadavka SS bola upravená na požiadavku DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Požiadavka SS bola upravená na požiadavku USSD.</string>
   <string name="stk_cc_ss_to_ss">Požiadavka SS bola upravená na novú požiadavku SS.</string>
+  <string name="theme_install_error_title">Inštalácia témy zlyhala</string>
+  <string name="theme_install_error_message">Nepodarilo sa nainštalovať tému %s</string>
 </resources>
