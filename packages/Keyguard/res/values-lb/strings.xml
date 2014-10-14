@@ -31,6 +31,7 @@
   <string name="faceunlock_multiple_failures">Maximal Unzuel u Versich fir mam Gesiicht z\'entspären iwwerschratt</string>
   <string name="keyguard_charged">Opgelueden</string>
   <string name="keyguard_plugged_in">Gëtt opgelueden, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery">Connectéier däin Oplueder.</string>
   <string name="keyguard_instructions_when_pattern_disabled">Menü drécke fir z\'entspären.</string>
   <string name="keyguard_network_locked_message">Netzwierk gespaart</string>
   <string name="keyguard_missing_sim_message_short">Keng SIM-Kaart</string>
@@ -127,10 +128,7 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
         Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
-  <string name="kg_too_many_failed_password_attempts_dialog_message">
-        Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.
-        \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
-    </string>
+  <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.

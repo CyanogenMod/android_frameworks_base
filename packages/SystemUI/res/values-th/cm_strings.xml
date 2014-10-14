@@ -55,6 +55,9 @@
   <string name="location_mode_sensors_only_title">อุปกรณ์เท่านั้น</string>
   <string name="quick_settings_expanded_desktop">เต็มจอแล้ว!</string>
   <string name="quick_settings_expanded_desktop_off">ปกติ</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="other">%1$d เชื่อมต่อแล้ว</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">ไม่สามารถเชื่อมต่อกับกล้องได้</string>
   <string name="navbar_dialog_title">เลือกการกระทำ</string>
   <string name="navbar_home_button">ปุ่มโฮม</string>

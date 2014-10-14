@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS-Anfrage wurde in DIAL-Anfrage umgewandelt.</string>
   <string name="stk_cc_ss_to_ussd">SS-Anfrage wurde in USSD-Anfrage umgewandelt.</string>
   <string name="stk_cc_ss_to_ss">SS-Anfrage wurde in neue SS-Anfrage umgewandelt.</string>
+  <string name="theme_install_error_title">Design konnte nicht intalliert werden</string>
+  <string name="theme_install_error_message">%s konnte nicht installiert werden</string>
 </resources>

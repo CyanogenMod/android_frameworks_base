@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">Petició SS modificada a una petició DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Petició SS modificada a una petició USSD.</string>
   <string name="stk_cc_ss_to_ss">Petició SS modificada a una nova petició SS.</string>
+  <string name="theme_install_error_title">No ha pogut instal·lar el tema</string>
+  <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
 </resources>

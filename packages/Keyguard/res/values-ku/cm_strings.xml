@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">قوفڵی ڕوونما</string>
   <string name="keyguard_discharging">بارگاوی نەکردن, <xliff:g id="ژمارە">%d</xliff:g><xliff:g id="لەسەدا">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">پەیوەستکردنی بە بارگەکەرەکەت, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d په‌یوه‌ندی وه‌ڵام نه‌دراوه‌</item>
     <item quantity="other">%d په‌یوه‌ندی وه‌ڵام نه‌دراوه‌</item>
@@ -30,4 +31,7 @@
   <string name="message_from">نامه‌ له‌لایه‌ن</string>
   <string name="message_from_person">نامه‌یه‌ک له‌لایه‌ن %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK کۆد ئەبێت لە ٨ ژمارە کەمتر نەبێت.</string>
+  <string name="lockscreen_sim_error_message_short">کارتی تیا نیە.</string>
+  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

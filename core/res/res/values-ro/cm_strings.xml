@@ -114,6 +114,7 @@
   <string name="app_ops_toggle_bluetooth">comută Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">comută date mobile</string>
   <string name="app_ops_toggle_wifi">comută WiFi</string>
+  <string name="app_ops_toggle_nfc">Comutare NFC</string>
   <string name="app_ops_use_alarm_volume">controlează volumul alarmei</string>
   <string name="app_ops_use_audio_focus">controlează focalizarea audio</string>
   <string name="app_ops_use_bluetooth_volume">controlează volumul Bluetooth</string>
@@ -135,4 +136,42 @@
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
   <string name="extmedia_format_message_cm" product="nosdcard">Toate datele de pe dispozitivul de stocare USB (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
   <string name="extmedia_format_message_cm" product="default">Toate datele de pe pe card-ul (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
+  <string name="usb_storage_notification_manage_message">Atinge pentru a gestiona</string>
+  <string name="sd_ext_media_checking_notification_title">Se pregătește cardul SD\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">Se verifică cardul SD pentru erori\u2026</string>
+  <string name="sd_ext_media_nofs_notification_title">Card SD gol</string>
+  <string name="sd_ext_media_nofs_notification_message">Cardul SD este gol sau are un sistem de fișiere neacceptat.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Card SD deteriorat</string>
+  <string name="sd_ext_media_unmountable_notification_message">Cardul SD este deteriorat. Încercați reformatarea acestuia.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Cardul SD înlăturat în mod neașteptat</string>
+  <string name="sd_ext_media_badremoval_notification_message">Demontază cardul SD înainte de a fi scos pentru a evita pierderea de date.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Cardul SD poate fii înlăturat în condiții de siguranță</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Puteți elimina în condiții de siguranță cardul SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Card SD eliminat</string>
+  <string name="sd_ext_media_nomedia_notification_message">Card SD eliminat. Inserați unul nou.</string>
+  <string name="usb_ext_media_checking_notification_title">Se pregătește stocarea USB\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">Se verifică mediul de stocare USB pentru erori\u2026</string>
+  <string name="usb_ext_media_nofs_notification_title">Stocare USB goală</string>
+  <string name="usb_ext_media_nofs_notification_message">Mediul de stocare USB este gol sau are un sistem de fişiere neaceptat.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Mediu de stocare USB deteriorat</string>
+  <string name="usb_ext_media_unmountable_notification_message">Mediul de stocare USB este deteriorat. Încercați reformatarea acestuia.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Mediu de stocare USB eliminat în mod neaşteptat</string>
+  <string name="usb_ext_media_badremoval_notification_message">Demontază mediul de stocare USB înainte de a înlaturare pentru a evita pierderea de date.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Mediul de stocare USB poate fi înlaturat în siguranță</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Puteți elimina în condiții de siguranță mediul de stocare USB.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Mediul de stocare USB eliminat</string>
+  <string name="usb_ext_media_nomedia_notification_message">Mediul de stocare USB eliminat. Introduceți mediu nou.</string>
+  <string name="progress_nomediapresent" product="default">Nu este prezentă nicio unitate detașabilă\u2026</string>
+  <string name="lockscreen_sim_error_message_short">Cartelă invalidă.</string>
+  <string name="lockscreen_airplane_mode_on">Mod Avion</string>
+  <string name="lockscreen_sim_locked_message_cm">Cardul SIM/RUIM este blocat.</string>
+  <string name="pinpuk_attempts">\nÎncercări rămase:</string>
+  <string name="stk_cc_ussd_to_dial">Cererea USSD este modificată în cerere DIAL.</string>
+  <string name="stk_cc_ussd_to_ss">Cererea USSD este modificată în cerere SS.</string>
+  <string name="stk_cc_ussd_to_ussd">Cererea USSD este modificată într-o cerere nouă USSD.</string>
+  <string name="stk_cc_ss_to_dial">Cererea SS este modificată în cerere DIAL.</string>
+  <string name="stk_cc_ss_to_ussd">Cererea SS este modificată în cerere USSD.</string>
+  <string name="stk_cc_ss_to_ss">Cererea SS este modificată într-o cerere nouă SS.</string>
+  <string name="theme_install_error_title">Instalarea temei a eșuat</string>
+  <string name="theme_install_error_message">%s au eșuat să fie instalate</string>
 </resources>

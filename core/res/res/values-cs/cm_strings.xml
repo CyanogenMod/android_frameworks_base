@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">Požadavek SS byl změněn na požadavek DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Požadavek SS byl změněn na požadavek USSD.</string>
   <string name="stk_cc_ss_to_ss">Požadavek SS byl změněn na nový požadavek SS.</string>
+  <string name="theme_install_error_title">Instalace motivu selhala</string>
+  <string name="theme_install_error_message">Instalace „%s“ selhala</string>
 </resources>
