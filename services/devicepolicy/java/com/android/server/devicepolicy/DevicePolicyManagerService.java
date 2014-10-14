@@ -3387,6 +3387,11 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
      * {@link DevicePolicyManager#ENCRYPTION_STATUS_ACTIVE}.
      */
     private int getEncryptionStatus() {
+        String pfeStatus = SystemProperties.get("vold.pfe", "");
+        if ("activated".equalsIgnoreCase(pfeStatus)) {
+            return DevicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED;
+        }
+
         String status = SystemProperties.get("ro.crypto.state", "unsupported");
         if ("encrypted".equalsIgnoreCase(status)) {
             final long token = Binder.clearCallingIdentity();
