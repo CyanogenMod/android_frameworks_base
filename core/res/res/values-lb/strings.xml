@@ -31,6 +31,7 @@
   <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">(Keng Telefonsnummer)</string>
   <string name="unknownName">(Onbekannt)</string>
+  <string name="defaultVoiceMailAlphaTag">Sproochopnam</string>
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <string name="mmiError">Connectiounsproblem oder ongëltegen MMI-Code.</string>
   <string name="mmiFdnError">De Virgank ass just fir deng zougeloosse Ruffnummer méiglech.</string>
@@ -142,6 +143,7 @@
   <string name="permgroupdesc_bookmarks">Direkten Zougrëff op d\'Lieszeechen an de Browserhistorique.</string>
   <string name="permgrouplab_deviceAlarms">Wecker</string>
   <string name="permgroupdesc_deviceAlarms">Wecker astellen.</string>
+  <string name="permgrouplab_voicemail">Sproochopnam</string>
   <string name="permgrouplab_microphone">Mikro</string>
   <string name="permgroupdesc_microphone">Direkten Zougrëff op de Mikro fir Toun opzehuelen.</string>
   <string name="permgrouplab_camera">Fotoapparat</string>
@@ -157,8 +159,6 @@
   <string name="permgroupdesc_storage" product="default">Op d\'SD-Kaart zougräifen.</string>
   <string name="permgrouplab_accessibilityFeatures">Funktioune fir d\'Zougänglechkeet</string>
   <string name="permgroupdesc_accessibilityFeatures">Funktiounen déi vun techneschen Hëllefsmëttele kënnen ugefrot ginn.</string>
-  <string name="permlab_receiveSms">SMSe kréien</string>
-  <string name="permlab_receiveMms">MMSe kréien</string>
   <string name="permlab_sendSms">SMS-Messagë schécken</string>
   <string name="permlab_readSms">SMSen oder MMSe liesen</string>
   <string name="permlab_writeSms">SMSen oder MMSen änneren</string>
@@ -171,7 +171,6 @@
   <string name="permlab_readCallLog">Urufflëscht liesen</string>
   <string name="permlab_writeCallLog">Urufflëscht änneren</string>
   <string name="permlab_readProfile">Deng eege Kontaktkaart liesen</string>
-  <string name="permlab_writeProfile">Deng eege Kontaktkaart änneren</string>
   <string name="permlab_setTime">Zäit setzen</string>
   <string name="permlab_setTimeZone">Zäitzon setzen</string>
   <string name="permlab_manageAccounts">Konten dobäisetzen oder ewechhuelen</string>
@@ -258,6 +257,7 @@
   <string name="lockscreen_plugged_in">Gëtt opgelueden, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="lockscreen_charged">Opgelueden</string>
   <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="lockscreen_low_battery">Connectéier däin Oplueder.</string>
   <string name="lockscreen_missing_sim_message_short">Keng SIM-Kaart</string>
   <string name="lockscreen_missing_sim_message" product="tablet">Keng SIM-Kaart am Tablet.</string>
   <string name="lockscreen_missing_sim_message" product="default">Keng SIM-Kaart am Telefon.</string>
@@ -271,6 +271,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_sim_puk_locked_message">SIM-Kaart ass PUK-gespaart.</string>
   <string name="lockscreen_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
+  <string name="lockscreen_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nach eng Kéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_glogin_forgot_pattern">Kont-Entspärung</string>
   <string name="lockscreen_glogin_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
@@ -309,7 +310,47 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="autofill_address_summary_name_format">$1$2$3</string>
   <string name="autofill_address_summary_separator">,\u0020</string>
   <string name="autofill_address_summary_format">$1$2$3</string>
-  <string name="autofill_address_type_same_as_re">selwecht wéi</string>
+  <string name="autofill_attention_ignored_re">attention|attn</string>
+  <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_country_re">country|location<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">state|county|region|province<!-- de-DE -->|land<!-- en-UK -->|county|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">same as</string>
+  <string name="autofill_address_type_use_my_re">use my</string>
+  <string name="autofill_billing_designator_re">bill</string>
+  <string name="autofill_shipping_designator_re">ship</string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">user.?name|user.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
+  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">irst.*name|initials|fname|first$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">middle.*initial|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_last_name_re">last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">area.*code|acode|area</string>
+  <string name="autofill_phone_prefix_re">prefix<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">suffix</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_name_on_card_re">card.?holder|name.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">name</string>
+  <string name="autofill_card_cvc_re">verification|card identification|cvn|security code|cvv code|cvc</string>
+  <string name="autofill_card_number_re">number|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^card</string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">country.*code|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
   <string name="autofill_province">Provënz</string>
   <string name="autofill_state">Staat</string>
   <string name="autofill_county">Landkrees</string>
@@ -364,6 +405,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="VideoView_error_title">Videoproblem</string>
   <string name="VideoView_error_text_unknown">Dëse Video kann net ofgespillt ginn.</string>
   <string name="VideoView_error_button">OK</string>
+  <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
   <string name="noon">"Mëtteg"</string>
   <string name="Noon">"Mëtteg"</string>
   <string name="selectAll">All auswielen</string>
@@ -457,7 +499,9 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="deny">Verweigeren</string>
   <string name="input_method_binding_label">Method fir anzeginn</string>
   <string name="sync_binding_label">Sync</string>
+  <string name="accessibility_binding_label">Accessibilitéit</string>
   <string name="wallpaper_binding_label">Hannergrondbild</string>
+  <string name="alternate_eri_file">/data/eri.xml</string>
   <string name="vpn_title">VPN aktivéiert</string>
   <string name="vpn_lockdown_config">Dréck fir anzestellen</string>
   <string name="upload_file">Fichier auswielen</string>
@@ -469,6 +513,8 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="share">Deelen</string>
   <string name="gpsVerifYes">Jo</string>
   <string name="gpsVerifNo">Nee</string>
+  <string name="add_account_label">"E Kont dobäisetzen"</string>
+  <string name="add_account_button_label">Kont dobäisetzen</string>
   <string name="keyboardview_keycode_cancel">Ofbriechen</string>
   <string name="keyboardview_keycode_delete">Läschen</string>
   <string name="keyboardview_keycode_done">Fäerdeg</string>
@@ -485,8 +531,10 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="data_usage_mobile_limit_title">Mobil Daten deaktivéiert</string>
   <string name="data_usage_wifi_limit_title">WLAN-Daten deaktivéiert</string>
   <string name="list_delimeter">", "</string>
+  <string name="sending">Gëtt geschéckt\u2026</string>
   <string name="activity_resolver_use_always">Ëmmer</string>
   <string name="default_audio_route_name" product="default">Telefon</string>
+  <string name="default_audio_route_category_name">System</string>
   <string name="media_route_chooser_extended_settings">Astellungen</string>
   <string name="media_route_controller_disconnect">Deconnectéieren</string>
   <string name="media_route_status_scanning">Gëtt gescannt...</string>
@@ -512,8 +560,10 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_login_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
   <string name="kg_login_submit_button">Aloggen</string>
   <string name="kg_login_invalid_input">Ongëltege Benotzernumm oder Passwuert.</string>
+  <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="owner_name" msgid="3879126011135546571">Besëtzer</string>
+  <string name="error_message_title">Feeler</string>
   <string name="reason_unknown">onbekannt</string>
 </resources>

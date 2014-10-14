@@ -60,7 +60,7 @@
     <item quantity="other">%1$d connectés</item>
   </plurals>
   <string name="quick_settings_camera_error_connect">Impossible de se connecter à l\'appareil photo</string>
-  <string name="navbar_dialog_title">Choisir l\'action à attribuer</string>
+  <string name="navbar_dialog_title">Choisir l\'action à assigner</string>
   <string name="navbar_home_button">Bouton d\'accueil</string>
   <string name="navbar_recent_button">Bouton d\'applications récentes</string>
   <string name="navbar_search_button">Bouton de recherche</string>

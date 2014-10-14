@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS 요청이 DIAL 요청으로 변경되었습니다.</string>
   <string name="stk_cc_ss_to_ussd">SS 요청이 USSD 요청으로 변경되었습니다.</string>
   <string name="stk_cc_ss_to_ss">SS 요청이 새로운 SS 요청으로 변경되었습니다.</string>
+  <string name="theme_install_error_title">테마 설치 실패</string>
+  <string name="theme_install_error_message">%s을(를) 설치하지 못했습니다</string>
 </resources>

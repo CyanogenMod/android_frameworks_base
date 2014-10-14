@@ -165,10 +165,13 @@
   <string name="lockscreen_sim_error_message_short">Ugyldig kort.</string>
   <string name="lockscreen_airplane_mode_on">Flymodus</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM kortet er låst.</string>
+  <string name="pinpuk_attempts">\nForsøk igjen:</string>
   <string name="stk_cc_ussd_to_dial">USSD forespørsel endres til DIAL forespørsel.</string>
   <string name="stk_cc_ussd_to_ss">USSD forespørsel endres til SS-forespørsel.</string>
   <string name="stk_cc_ussd_to_ussd">USSD forespørsel endres til den nye USSD forespørselen.</string>
   <string name="stk_cc_ss_to_dial">SS forespørsel endret til DIAL forespørsel.</string>
   <string name="stk_cc_ss_to_ussd">SS forespørsel endres til USSD forespørsel.</string>
   <string name="stk_cc_ss_to_ss">SS forespørsel endres til den nye SS forespørselen.</string>
+  <string name="theme_install_error_title">Kan ikke installere tema</string>
+  <string name="theme_install_error_message">%s ble ikke installert</string>
 </resources>

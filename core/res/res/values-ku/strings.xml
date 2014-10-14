@@ -104,7 +104,7 @@
   <string name="roamingText9">ڕۆمینگ - کارکردی تەواوی خزمەتگوزاری</string>
   <string name="roamingText10">ڕۆمینگ - کارکردی بەشێک لە خزمەتگوزاری</string>
   <string name="roamingText11">هێمای ڕۆمینگ هەڵکراوە</string>
-  <string name="roamingText12">هێمای ڕۆمینگ کووژاوه‌ته‌وه‌</string>
+  <string name="roamingText12">هێمای ڕۆمینگ کوژاوه‌ته‌وه‌</string>
   <string name="roamingTextSearching">گه‌ڕان به‌دوای خزمه‌تگوزاری</string>
   <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: پەیوەندی ئاراستە نەکراوە</string>
   <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
@@ -118,7 +118,7 @@
   <string name="httpErrorLookup">نه‌یتوانی ناونیشانی ئینتەرنێتی بدۆزێته‌وه‌.</string>
   <string name="httpErrorUnsupportedAuthScheme">پلانی پارێزپرسیی ماڵپه‌ڕ پشتگیری ناکرێت.</string>
   <string name="httpErrorAuth">نەیتوانی پارێزپرسی تێپەڕ بکات.</string>
-  <string name="httpErrorProxyAuth">تێپەڕکردنی پارێزپرسی له‌ ڕێی ڕاژه‌کاری پرۆکسی سه‌رکه‌وتو نه‌بوو.</string>
+  <string name="httpErrorProxyAuth">تێپەڕکردنی پارێزپرسی له‌ ڕێی ڕاژه‌کاری پرۆکسی سه‌رکه‌وتوو نه‌بوو.</string>
   <string name="httpErrorConnect">نه‌یتوانی گرێبدرێت به‌ ڕاژه‌کاره‌وه‌.</string>
   <string name="httpErrorIO">نه‌یتوانی گرێبدرێت به‌ ڕاژه‌کاره‌وه‌. دواتر هه‌وڵبده‌وه‌.</string>
   <string name="httpErrorTimeout">کاتی گرێدان به‌ ڕاژه‌کاره‌وه‌ به‌سه‌ر چوو.</string>
@@ -129,7 +129,7 @@
   <string name="httpErrorFile">نەیتوانی دەست بگەیەنێتە فایلەکە.</string>
   <string name="httpErrorFileNotFound">نەیتوانی فایلی داواکراو بدۆزێته‌وه‌.</string>
   <string name="httpErrorTooManyRequests">داواکاریی زۆر خراوه‌ته‌ ڕوو. دواتر هه‌وڵبده‌وه‌.</string>
-  <string name="notification_title">هه‌ڵه‌ له‌ چونه‌ژووره‌وه‌ بۆ <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+  <string name="notification_title">هه‌ڵه‌ له‌ چوونه‌ژووره‌وه‌ بۆ <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
   <string name="contentServiceSync">هاوکاتگەری</string>
   <string name="contentServiceSyncNotificationTitle">هاوکاتگەری</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">هەندێک <xliff:g id="content_type">%s</xliff:g>  دەسڕێنەوە.</string>
@@ -143,16 +143,16 @@
   <string name="power_dialog" product="default">بژارده‌کانی ته‌له‌فۆن</string>
   <string name="silent_mode">دۆخی بێده‌نگ</string>
   <string name="turn_on_radio">داگیرساندنی بێته‌ل</string>
-  <string name="turn_off_radio">کووژاندنه‌وه‌ی بێته‌ل</string>
+  <string name="turn_off_radio">کوژاندنه‌وه‌ی بێته‌ل</string>
   <string name="screen_lock">داخەری ڕوونما</string>
-  <string name="power_off">کووژاندنه‌وه‌</string>
-  <string name="silent_mode_silent">کووژاندنه‌وه‌ی زه‌نگلێدەر</string>
+  <string name="power_off">کوژاندنه‌وه‌</string>
+  <string name="silent_mode_silent">کوژاندنه‌وه‌ی زه‌نگلێدەر</string>
   <string name="silent_mode_vibrate">زەنگلێدەر لەسەر دۆخی لەرین</string>
   <string name="silent_mode_ring">بەکارخستنی زه‌نگلێدەر</string>
-  <string name="shutdown_progress">کووژاندنه‌وه‌ی\u2026</string>
+  <string name="shutdown_progress">کوژاندنه‌وه‌ی\u2026</string>
   <string name="shutdown_confirm" product="tablet">تابلێته‌که‌ت ده‌کووژێته‌وه‌.</string>
   <string name="shutdown_confirm" product="default">ته‌له‌فۆنه‌که‌ت ده‌کووژێته‌وه‌.</string>
-  <string name="shutdown_confirm_question">ده‌ته‌وێت بکووژێته‌وه‌؟</string>
+  <string name="shutdown_confirm_question">ده‌ته‌وێت بکوژێته‌وه‌؟</string>
   <string name="reboot_safemode_title">دەسپێکردنەوە بۆ سەر دۆخی دڵنیاکراو</string>
   <string name="reboot_safemode_confirm">ده‌ته‌وێت دەست پێ بکەیتەوە بۆ دۆخی دڵنیاکراو؟
          ئه‌م کرداره‌ هه‌موو ئه‌و به‌رنامه‌ لاوه‌کییانه‌ ده‌سڕێته‌وه‌ که‌ داتمه‌زراندوون.
@@ -162,18 +162,18 @@
   <string name="global_actions" product="tablet">بژارده‌کانی تابلێت</string>
   <string name="global_actions" product="default">بژاردەکانی ته‌له‌فۆن</string>
   <string name="global_action_lock">داخەری ڕوونما</string>
-  <string name="global_action_power_off">کووژاندنه‌وه‌</string>
+  <string name="global_action_power_off">کوژاندنه‌وه‌</string>
   <string name="global_action_bug_report">ڕاپۆرتی کەلێن</string>
   <string name="bugreport_title">گرتنەوەی ڕاپۆرتی کەلێن</string>
   <string name="bugreport_message">ئه‌م کردارە سەبارەت بە ئامێری ئێستات زانیاری کۆ ده‌کاته‌وه‌
         و بە شێوەی پۆستی ئەلەکترۆنی دەینێرێت. ماوەیەکی زۆر کەم دەخایەنێت
-         بۆ ئامادەکردنی ڕاپۆرتەکە تا ئەو کات کە دەنێردرێت: تکایە هێور بە.</string>
+         بۆ ئامادەکردنی ڕاپۆرتەکە تا ئەوکات کە دەنێردرێت: تکایە هێور بە.</string>
   <string name="global_action_toggle_silent_mode">دۆخی بێده‌نگ</string>
-  <string name="global_action_silent_mode_on_status">دەنگ کووژاوە یە</string>
+  <string name="global_action_silent_mode_on_status">دەنگ کوژاوەیە</string>
   <string name="global_action_silent_mode_off_status">دەنگ هەڵکراوە</string>
   <string name="global_actions_toggle_airplane_mode">دۆخی فڕۆکە</string>
-  <string name="global_actions_airplane_mode_on_status">دۆخی فڕۆکه‌ کراوه‌ یه‌</string>
-  <string name="global_actions_airplane_mode_off_status">دۆخی فڕۆکه‌ کووژاوه‌ یه‌</string>
+  <string name="global_actions_airplane_mode_on_status">دۆخی فڕۆکه‌ کراوه‌یه‌</string>
+  <string name="global_actions_airplane_mode_off_status">دۆخی فڕۆکه‌ کوژاوه‌یه‌</string>
   <string name="status_bar_notification_info_overflow">+٩٩٩</string>
   <string name="safeMode">دۆخی دڵنیاکراو</string>
   <string name="android_system_label">سیسته‌می ئه‌ندرۆید</string>
@@ -218,27 +218,27 @@
   <string name="permgrouplab_wallpaper">دیوارپۆش</string>
   <string name="permgroupdesc_wallpaper">گۆڕینی ڕیکخستنی دیوارپۆشی ئامێره‌که‌ت.</string>
   <string name="permgrouplab_systemClock">کاژێر</string>
-  <string name="permgroupdesc_systemClock">گۆڕینی کاتی ئامێره‌که‌ت.</string>
-  <string name="permgrouplab_statusBar">باری شریتی</string>
-  <string name="permgroupdesc_statusBar">گۆڕینی ڕیکخستنی باری شریتی ئامێر.</string>
-  <string name="permgrouplab_syncSettings">ناردنی ڕێکخستنه‌کان</string>
-  <string name="permgroupdesc_syncSettings">ڕێگه‌ی ناردنی ڕێکخستنه‌کان.</string>
-  <string name="permgrouplab_accounts">هه‌ژماره‌که‌ت</string>
-  <string name="permgroupdesc_accounts">ڕێگه‌ بۆ هه‌ژماری له‌کار.</string>
-  <string name="permgrouplab_hardwareControls">کۆنترۆڵی ڕه‌قه‌كاڵا</string>
-  <string name="permgroupdesc_hardwareControls">ڕێگه‌ی ڕاسته‌خۆ بۆ ڕه‌قه‌كاڵا له‌سه‌ر ده‌ست.</string>
-  <string name="permgrouplab_phoneCalls">ته‌له‌فۆن</string>
-  <string name="permgroupdesc_phoneCalls">پیشانگەر،تۆمارکردن، و پرۆسه‌کردنی ته‌له‌فۆن.</string>
-  <string name="permgrouplab_systemTools">تووڵی سیسته‌م</string>
-  <string name="permgroupdesc_systemTools">ئاستی-ڕێگه‌ی خوار بۆ کۆنترۆل کردنی سیسته‌م.</string>
-  <string name="permgrouplab_developmentTools">ئامرازی گه‌شه‌پێده‌ر</string>
-  <string name="permgroupdesc_developmentTools">شێواز ته‌نها پێویستی به‌ به‌رنامه‌ی گه‌شه‌پێده‌ره‌.</string>
-  <string name="permgrouplab_display">به‌رنامه‌ی تر UI</string>
-  <string name="permgroupdesc_display">کاریگه‌ری UI له‌سه‌ر باره‌نامه‌ی تر.</string>
+  <string name="permgroupdesc_systemClock">گۆڕینی کات یان ناوچەکاتی ئامێره‌که‌ت.</string>
+  <string name="permgrouplab_statusBar">میلی دۆخ</string>
+  <string name="permgroupdesc_statusBar">گۆڕینی ڕیکخستنی میلی دۆخی ئامێر.</string>
+  <string name="permgrouplab_syncSettings">هاوکاتسازیی ڕێکخستنه‌کان</string>
+  <string name="permgroupdesc_syncSettings">دەست گەیاندن بە ڕێکخستنەکانی هاوکاتگەری.</string>
+  <string name="permgrouplab_accounts">هه‌ژماره‌کانت</string>
+  <string name="permgroupdesc_accounts">دەست گەیاندن بە هەژمارەکانی بەردەست.</string>
+  <string name="permgrouplab_hardwareControls">چاودێریی ڕەقەواڵە</string>
+  <string name="permgroupdesc_hardwareControls">دەستگەیاندنی ڕاستەوخۆ بۆ ڕەقەواڵەی تەلەفۆن.</string>
+  <string name="permgrouplab_phoneCalls">پەیوەندییەکانی تەلەفۆن</string>
+  <string name="permgroupdesc_phoneCalls">پیشاندان، تۆمارکردن و ڕێکخستنی پەیوەندییەکانی ته‌له‌فۆن.</string>
+  <string name="permgrouplab_systemTools">ئامرازەکانی سیستەم</string>
+  <string name="permgroupdesc_systemTools">چاودێری و دەستگەیاندن بە ئاستێکی نزمتر بە سیستەم.</string>
+  <string name="permgrouplab_developmentTools">ئامرازەکانی گه‌شه‌پێدان</string>
+  <string name="permgroupdesc_developmentTools">ئەو تایبەتمەندییانەی کە تەنیا بۆ گەشەپێدەران پێویستن.</string>
+  <string name="permgrouplab_display">به‌رنامه‌کانی دیکەی نێوانەڕووی بەکارهێنەر</string>
+  <string name="permgroupdesc_display">کاریگه‌ری لەسەر ناوبەستی بەکارهێنەری دیکەی نەرمەواڵەکان.</string>
   <string name="permgrouplab_storage">بیرگه‌</string>
-  <string name="permgroupdesc_storage" product="nosdcard">ڕێگه‌ی USB بیرگه‌</string>
-  <string name="permgroupdesc_storage" product="default">بیرگه‌ی ده‌ره‌کی.</string>
-  <string name="permgrouplab_accessibilityFeatures">شێوازی دەستپێگەیشتن </string>
+  <string name="permgroupdesc_storage" product="nosdcard">دەستگەیاندن بە بیرگەی USB.</string>
+  <string name="permgroupdesc_storage" product="default">دەستگەیاندن بە بیرگەی دەرەکی.</string>
+  <string name="permgrouplab_accessibilityFeatures">تایبەتمەندییەکانی دەستگەیاندن</string>
   <string name="permgroupdesc_accessibilityFeatures">ئەوە تەكنەلۆجياى ئاسيستيڤێى تايبەندمەندى دەتوانێت داوا بكات.</string>
   <string name="capability_title_canRetrieveWindowContent">ناوەرۆكى پەنجەرە بگێڕەوە</string>
   <string name="capability_desc_canRetrieveWindowContent">ناوەرۆكى پەنجەرەيێك دەپشكنێت تۆ ن 
@@ -1054,6 +1054,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="emergency_calls_only" msgid="2485604591272668370">ته‌نها په‌یوه‌ندی كتوپڕ</string>
   <string name="lockscreen_network_locked_message">تۆڕ قوفڵکراوە</string>
   <string name="lockscreen_sim_puk_locked_message">سیمکارتەکە PUK-قوفڵکراوە.</string>
+  <string name="lockscreen_sim_puk_locked_instructions">بینینی تێبینی بەکارهێنەر یان پەیوەندی بکە بە خزمەتگوزاری یارمەتیدەرەوە.</string>
   <string name="lockscreen_sim_locked_message">سیمکارتەکە داخرا.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">کردنەوەی سیمکارت\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">

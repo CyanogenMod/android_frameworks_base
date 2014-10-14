@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">SS захтев је модификован на DIAL захтев.</string>
   <string name="stk_cc_ss_to_ussd">SS захтев је модификован на USSD захтев.</string>
   <string name="stk_cc_ss_to_ss">SS захтев је модификован на нови SS захтев.</string>
+  <string name="theme_install_error_title">Инсталирање теме није успело</string>
+  <string name="theme_install_error_message">%s инсталирање није успело</string>
 </resources>

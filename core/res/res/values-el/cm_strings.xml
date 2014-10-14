@@ -172,4 +172,6 @@
   <string name="stk_cc_ss_to_dial">Η αίτηση SS τροποποιήθηκε σε αίτηση DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Η αίτηση SS τροποποιήθηκε σε αίτηση USSD.</string>
   <string name="stk_cc_ss_to_ss">Η αίτηση SS τροποποιήθηκε σε νέα αίτηση SS.</string>
+  <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
+  <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
 </resources>
