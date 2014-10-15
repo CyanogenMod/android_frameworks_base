@@ -6736,7 +6736,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 if (mViewTypeCount == 1) {
                     mCurrentScrap.add(scrap);
                 } else {
-                    mScrapViews[viewType].add(scrap);
+                    if (!mScrapViews[viewType].contains(scrap)) {
+                        mScrapViews[viewType].add(scrap);
+                    }
                 }
 
                 // Clear any system-managed transient state.
