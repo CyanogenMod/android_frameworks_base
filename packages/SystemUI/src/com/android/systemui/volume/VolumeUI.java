@@ -58,6 +58,7 @@ public class VolumeUI extends SystemUI {
     private VolumeController mVolumeController;
     private RemoteVolumeController mRemoteVolumeController;
 
+    private VolumePanel mDialogPanel;
     private VolumePanel mPanel;
     private int mDismissDelay;
 
@@ -126,6 +127,7 @@ public class VolumeUI extends SystemUI {
                 }
             }
         });
+        mDialogPanel = mPanel;
     }
 
     private final ContentObserver mObserver = new ContentObserver(mHandler) {
@@ -141,7 +143,7 @@ public class VolumeUI extends SystemUI {
         public void run() {
             getComponent(PhoneStatusBar.class).startActivityDismissingKeyguard(
                     ZenModePanel.ZEN_SETTINGS, true /* onlyProvisioned */, true /* dismissShade */);
-            mPanel.postDismiss(mDismissDelay);
+            mDialogPanel.postDismiss(mDismissDelay);
         }
     };
 
@@ -182,7 +184,12 @@ public class VolumeUI extends SystemUI {
 
         @Override
         public ZenModeController getZenController() {
-            return mPanel.getZenController();
+            return mDialogPanel.getZenController();
+        }
+
+        @Override
+        public void setVolumePanel(VolumePanel panel) {
+            mPanel = (panel == null) ? mDialogPanel : panel;
         }
     }
 
