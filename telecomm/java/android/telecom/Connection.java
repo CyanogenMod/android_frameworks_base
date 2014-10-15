@@ -142,6 +142,11 @@ public abstract class Connection {
          */
         public static final int SESSION_MODIFY_REQUEST_INVALID = 3;
 
+        /**
+         * Session modify request ignored due to invalid parameters.
+         */
+        public static final int SESSION_MODIFY_REQUEST_TIMED_OUT = 4;
+
         private static final int MSG_SET_VIDEO_CALLBACK = 1;
         private static final int MSG_SET_CAMERA = 2;
         private static final int MSG_SET_PREVIEW_SURFACE = 3;
