@@ -938,15 +938,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (isMSim()) {
                 qsh = new QSTileHost(mContext, this,
                     mBluetoothController, mLocationController, mRotationLockController,
-                    mMSimNetworkController, mZenModeController, mHotspotController,
-                    mCastController, mFlashlightController,
+                    mMSimNetworkController, mZenModeController, mVolumeComponent,
+                    mHotspotController, mCastController, mFlashlightController,
                     mUserSwitcherController, mKeyguardMonitor,
                     mSecurityController);
             } else {
                 qsh = new QSTileHost(mContext, this,
                     mBluetoothController, mLocationController, mRotationLockController,
-                    mNetworkController, mZenModeController, mHotspotController,
-                    mCastController, mFlashlightController,
+                    mNetworkController, mZenModeController, mVolumeComponent,
+                    mHotspotController, mCastController, mFlashlightController,
                     mUserSwitcherController, mKeyguardMonitor,
                     mSecurityController);
             }
