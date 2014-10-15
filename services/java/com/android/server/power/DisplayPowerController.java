@@ -47,7 +47,6 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.format.DateUtils;
-import android.util.FloatMath;
 import android.util.Log;
 import android.util.Slog;
 import android.util.Spline;
@@ -1319,7 +1318,7 @@ final class DisplayPowerController {
 
         if (USE_SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT
                 && mPowerRequest.screenAutoBrightnessAdjustment != 0.0f) {
-            final float adjGamma = FloatMath.pow(SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT_MAX_GAMMA,
+            final float adjGamma = (float) Math.pow(SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT_MAX_GAMMA,
                     Math.min(1.0f, Math.max(-1.0f,
                             -mPowerRequest.screenAutoBrightnessAdjustment)));
             gamma *= adjGamma;
@@ -1346,7 +1345,7 @@ final class DisplayPowerController {
 
         if (gamma != 1.0f) {
             final float in = value;
-            value = FloatMath.pow(value, gamma);
+            value = (float) Math.pow(value, gamma);
             if (DEBUG) {
                 Slog.d(TAG, "updateAutoBrightness: gamma=" + gamma
                         + ", in=" + in + ", out=" + value);

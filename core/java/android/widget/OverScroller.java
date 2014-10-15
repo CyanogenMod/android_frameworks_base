@@ -19,7 +19,6 @@ package android.widget;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.os.PowerManager;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
@@ -177,9 +176,7 @@ public class OverScroller {
      * @return The original velocity less the deceleration, norm of the X and Y velocity vector.
      */
     public float getCurrVelocity() {
-        float squaredNorm = mScrollerX.mCurrVelocity * mScrollerX.mCurrVelocity;
-        squaredNorm += mScrollerY.mCurrVelocity * mScrollerY.mCurrVelocity;
-        return FloatMath.sqrt(squaredNorm);
+        return (float) Math.hypot(mScrollerX.mCurrVelocity, mScrollerY.mCurrVelocity);
     }
 
     /**
