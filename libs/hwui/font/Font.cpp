@@ -228,16 +228,10 @@ void Font::drawCachedGlyphBitmap(CachedGlyphInfo* glyph, int x, int y, uint8_t* 
 
     for (uint32_t cacheY = startY, bitmapY = dstY * bitmapWidth; cacheY < endY;
             cacheY += srcStride, bitmapY += bitmapWidth) {
-
-        if (formatSize == 1) {
-            memcpy(&bitmap[bitmapY + dstX], &cacheBuffer[cacheY + glyph->mStartX], glyph->mBitmapWidth);
-        } else {
-            for (uint32_t i = 0; i < glyph->mBitmapWidth; ++i) {
-                bitmap[bitmapY + dstX + i] = cacheBuffer[cacheY + (glyph->mStartX + i)*formatSize + alpha_channel_offset];
-            }
+        for (uint32_t i = 0; i < glyph->mBitmapWidth; ++i) {
+            bitmap[bitmapY + dstX + i] |= cacheBuffer[cacheY + (glyph->mStartX + i)*formatSize + alpha_channel_offset];
         }
     }
-
 }
 
 void Font::drawCachedGlyph(CachedGlyphInfo* glyph, float x, float hOffset, float vOffset,
