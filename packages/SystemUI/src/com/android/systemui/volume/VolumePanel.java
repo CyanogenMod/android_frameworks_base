@@ -151,6 +151,8 @@ public class VolumePanel extends Handler {
     private final View mView;
     /** Dialog hosting the panel */
     private final Dialog mDialog;
+    /** Parent view hosting the panel, if embedded */
+    private ViewGroup mParent = null;
 
     /** The visible portion of the volume overlay */
     private final ViewGroup mPanel;
@@ -160,6 +162,7 @@ public class VolumePanel extends Handler {
     private ZenModePanel mZenPanel;
 
     private Callback mCallback;
+    private ZenModePanel.Callback mZenPanelCallback;
 
     /** Currently active stream that shows up at the top of the list of sliders */
     private int mActiveStreamType = -1;
@@ -332,9 +335,10 @@ public class VolumePanel extends Handler {
         };
     }
 
-    public VolumePanel(Context context, ZenModeController zenController) {
+    public VolumePanel(Context context, ViewGroup parent, ZenModeController zenController) {
         mTag = String.format("%s.%08x", TAG, hashCode());
         mContext = context;
+        mParent = parent;
         mZenController = zenController;
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mAccessibilityManager = (AccessibilityManager) context.getSystemService(
@@ -359,57 +363,63 @@ public class VolumePanel extends Handler {
             arr.recycle();
         }
 
-        mDialog = new Dialog(context) {
-            @Override
-            public boolean onTouchEvent(MotionEvent event) {
-                if (isShowing() && event.getAction() == MotionEvent.ACTION_OUTSIDE &&
-                        sSafetyWarning == null) {
-                    forceTimeout(0);
-                    return true;
+        if (parent == null) {
+            mDialog = new Dialog(context) {
+                @Override
+                public boolean onTouchEvent(MotionEvent event) {
+                    if (isShowing() && event.getAction() == MotionEvent.ACTION_OUTSIDE &&
+                            sSafetyWarning == null) {
+                        forceTimeout(0);
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        };
+            };
 
-        final Window window = mDialog.getWindow();
-        window.requestFeature(Window.FEATURE_NO_TITLE);
-        mDialog.setCanceledOnTouchOutside(true);
-        mDialog.setContentView(com.android.systemui.R.layout.volume_dialog);
-        mDialog.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                mActiveStreamType = -1;
-                mAudioManager.forceVolumeControlStream(mActiveStreamType);
-                setZenPanelVisible(false);
-            }
-        });
+            final Window window = mDialog.getWindow();
+            window.requestFeature(Window.FEATURE_NO_TITLE);
+            mDialog.setCanceledOnTouchOutside(true);
+            mDialog.setContentView(com.android.systemui.R.layout.volume_dialog);
+            mDialog.setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    mActiveStreamType = -1;
+                    mAudioManager.forceVolumeControlStream(mActiveStreamType);
+                    setZenPanelVisible(false);
+                }
+            });
 
-        mDialog.create();
+            mDialog.create();
 
-        final LayoutParams lp = window.getAttributes();
-        lp.token = null;
-        lp.y = res.getDimensionPixelOffset(com.android.systemui.R.dimen.volume_panel_top);
-        lp.type = LayoutParams.TYPE_STATUS_BAR_PANEL;
-        lp.format = PixelFormat.TRANSLUCENT;
-        lp.windowAnimations = com.android.systemui.R.style.VolumePanelAnimation;
-        lp.setTitle(TAG);
-        window.setAttributes(lp);
+            final LayoutParams lp = window.getAttributes();
+            lp.token = null;
+            lp.y = res.getDimensionPixelOffset(com.android.systemui.R.dimen.volume_panel_top);
+            lp.type = LayoutParams.TYPE_STATUS_BAR_PANEL;
+            lp.format = PixelFormat.TRANSLUCENT;
+            lp.windowAnimations = com.android.systemui.R.style.VolumePanelAnimation;
+            lp.setTitle(TAG);
+            window.setAttributes(lp);
 
-        updateWidth();
+            updateWidth();
 
-        window.setBackgroundDrawable(new ColorDrawable(0x00000000));
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        window.addFlags(LayoutParams.FLAG_NOT_FOCUSABLE
-                | LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                | LayoutParams.FLAG_HARDWARE_ACCELERATED);
-        mView = window.findViewById(R.id.content);
-        Interaction.register(mView, new Interaction.Callback() {
-            @Override
-            public void onInteraction() {
-                resetTimeout();
-            }
-        });
+            window.setBackgroundDrawable(new ColorDrawable(0x00000000));
+            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.addFlags(LayoutParams.FLAG_NOT_FOCUSABLE
+                    | LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                    | LayoutParams.FLAG_HARDWARE_ACCELERATED);
+            mView = window.findViewById(R.id.content);
+            Interaction.register(mView, new Interaction.Callback() {
+                @Override
+                public void onInteraction() {
+                    resetTimeout();
+                }
+            });
+        } else {
+            mDialog = null;
+            mView = LayoutInflater.from(mContext).inflate(
+                    com.android.systemui.R.layout.volume_panel, parent, false);
+        }
 
         mPanel = (ViewGroup) mView.findViewById(com.android.systemui.R.id.visible_panel);
         mSliderPanel = (ViewGroup) mView.findViewById(com.android.systemui.R.id.slider_panel);
@@ -430,6 +440,11 @@ public class VolumePanel extends Handler {
         mPlayMasterStreamTones = masterVolumeOnly && masterVolumeKeySounds;
 
         registerReceiver();
+
+    }
+
+    public VolumePanel(Context context, ZenModeController zenController) {
+        this(context, null, zenController);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -440,12 +455,15 @@ public class VolumePanel extends Handler {
     }
 
     private void updateWidth() {
-        final Resources res = mContext.getResources();
-        final LayoutParams lp = mDialog.getWindow().getAttributes();
-        lp.width = res.getDimensionPixelSize(com.android.systemui.R.dimen.notification_panel_width);
-        lp.gravity =
-                res.getInteger(com.android.systemui.R.integer.notification_panel_layout_gravity);
-        mDialog.getWindow().setAttributes(lp);
+        if (mDialog != null) {
+            final Resources res = mContext.getResources();
+            final LayoutParams lp = mDialog.getWindow().getAttributes();
+            lp.width = res.getDimensionPixelSize(
+                    com.android.systemui.R.dimen.notification_panel_width);
+            lp.gravity = res.getInteger(
+                    com.android.systemui.R.integer.notification_panel_layout_gravity);
+            mDialog.getWindow().setAttributes(lp);
+        }
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -485,6 +503,10 @@ public class VolumePanel extends Handler {
         }
     }
 
+    public View getContentView() {
+        return mView;
+    }
+
     private void initZenModePanel() {
         mZenPanel.init(mZenController);
         mZenPanel.setCallback(new ZenModePanel.Callback() {
@@ -493,11 +515,18 @@ public class VolumePanel extends Handler {
                 if (mCallback != null) {
                     mCallback.onZenSettings();
                 }
+
+                if (mZenPanelCallback != null) {
+                    mZenPanelCallback.onMoreSettings();
+                }
             }
 
             @Override
             public void onInteraction() {
                 resetTimeout();
+                if (mZenPanelCallback != null) {
+                    mZenPanelCallback.onInteraction();
+                }
             }
 
             @Override
@@ -799,6 +828,10 @@ public class VolumePanel extends Handler {
         mCallback = callback;
     }
 
+    public void setZenModePanelCallback(ZenModePanel.Callback callback) {
+        mZenPanelCallback = callback;
+    }
+
     private void updateTimeoutDelay() {
         mTimeoutDelay = sSafetyWarning != null ? TIMEOUT_DELAY_SAFETY_WARNING
                 : mActiveStreamType == AudioManager.STREAM_MUSIC ? TIMEOUT_DELAY_SHORT
@@ -1081,7 +1114,9 @@ public class VolumePanel extends Handler {
             int stream = (streamType == STREAM_REMOTE_MUSIC) ? -1 : streamType;
             // when the stream is for remote playback, use -1 to reset the stream type evaluation
             mAudioManager.forceVolumeControlStream(stream);
-            mDialog.show();
+            if (mDialog != null) {
+                mDialog.show();
+            }
             if (mCallback != null) {
                 mCallback.onVisible(true);
             }
@@ -1107,7 +1142,8 @@ public class VolumePanel extends Handler {
     }
 
     private boolean isShowing() {
-        return mDialog.isShowing();
+        //Return whether parent view is currently attached to a window if mDialog is null
+        return (mDialog != null) ? mDialog.isShowing() : mParent.isAttachedToWindow();
     }
 
     protected void onPlaySound(int streamType, int flags) {
@@ -1326,11 +1362,13 @@ public class VolumePanel extends Handler {
 
             case MSG_TIMEOUT: {
                 if (isShowing()) {
-                    mDialog.dismiss();
-                    clearRemoteStreamController();
-                    mActiveStreamType = -1;
-                    if (mCallback != null) {
-                        mCallback.onVisible(false);
+                    if (mDialog != null) {
+                        mDialog.dismiss();
+                        clearRemoteStreamController();
+                        mActiveStreamType = -1;
+                        if (mCallback != null) {
+                            mCallback.onVisible(false);
+                        }
                     }
                 }
                 synchronized (sSafetyWarningLock) {
