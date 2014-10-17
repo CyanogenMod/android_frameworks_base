@@ -6511,6 +6511,12 @@ public final class Settings {
          */
         public static final String DISABLE_SYSTEM_GESTURES = "disable_system_gestures";
 
+        /**
+        　* Allow status bar alarm icon
+        　* @hide
+         */
+        public static final String ALARM_ICON_PREFERENCE = "alarm_icon_preference";
+
          /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.

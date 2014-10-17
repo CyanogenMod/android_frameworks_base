@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.IccCardConstants;
@@ -68,6 +69,9 @@ public class PhoneStatusBarPolicy {
 
     // ringer volume
     private boolean mVolumeVisible;
+
+    // Alarm icon
+    private boolean mAlarmIconDisabled;
 
     // bluetooth device status
     private boolean mBluetoothEnabled = false;
@@ -114,9 +118,12 @@ public class PhoneStatusBarPolicy {
         }
 
         void observe() {
-            mContext.getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(
-                    Settings.System.QUIET_HOURS_ENABLED),
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QUIET_HOURS_ENABLED),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.ALARM_ICON_PREFERENCE),
                     false, this, UserHandle.USER_ALL);
             updateSettings();
         }
@@ -124,14 +131,29 @@ public class PhoneStatusBarPolicy {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-            updateSettings();
+            ContentResolver resolver = mContext.getContentResolver();
+            if (uri.equals(Settings.System.getUriFor(Settings.System.ALARM_ICON_PREFERENCE))) {
+                mAlarmIconDisabled = Settings.System.getIntForUser(resolver,
+                        Settings.System.ALARM_ICON_PREFERENCE, 0, UserHandle.USER_CURRENT) == 1;
+                final String timeString = Settings.System.getString(resolver,
+                        Settings.System.NEXT_ALARM_FORMATTED);
+                if (!mAlarmIconDisabled) {
+                    if (timeString != null || !TextUtils.isEmpty(timeString)) {
+                        mService.setIconVisibility("alarm_clock", true);
+                    }
+                } else {
+                    mService.setIconVisibility("alarm_clock", false);
+                }
+            } else {
+                updateSettings();
+            }
         }
 
         private void updateSettings() {
 
             // Setup quiet hours icon.
             final int quietHoursMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT);
+                    Settings.System.QUIET_HOURS_ENABLED, 0, UserHandle.USER_CURRENT);
 
             final int drawableResource;
             switch (quietHoursMode) {
@@ -145,8 +167,8 @@ public class PhoneStatusBarPolicy {
                 default:
                     drawableResource = R.drawable.stat_sys_quiet_hours;
                     break;
-
             }
+
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -219,6 +241,9 @@ public class PhoneStatusBarPolicy {
 
     private final void updateAlarm(Intent intent) {
         boolean alarmSet = intent.getBooleanExtra("alarmSet", false);
+        if (!mAlarmIconDisabled) {
+            alarmSet = false;
+        }
         mService.setIconVisibility("alarm_clock", alarmSet);
     }
 
