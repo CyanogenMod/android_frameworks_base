@@ -390,6 +390,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // ticker
     private View mTickerView;
     private boolean mTicking;
+    private boolean mTickerDisabled;
 
     // Tracking finger for opening/closing.
     int mEdgeBorder; // corresponds to R.dimen.status_bar_edge_ignore
@@ -655,6 +656,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_CARD_TEXT_COLOR), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TICKER_DISABLED), false, this,
                     UserHandle.USER_ALL);
             update();
         }
@@ -948,6 +952,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             mFlipInterval = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.REMINDER_ALERT_INTERVAL, 1500, UserHandle.USER_CURRENT);
+
+            mTickerDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.TICKER_DISABLED, 0, UserHandle.USER_CURRENT) == 1;
 
             mDoubleTapToSleep = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
@@ -1635,11 +1642,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         });
 
+        mTickerDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.TICKER_DISABLED, 0, UserHandle.USER_CURRENT) == 1;
+
         mTicker = new MyTicker(context, mStatusBarView);
 
         TickerView tickerView = (TickerView)mStatusBarView.findViewById(R.id.tickerText);
         tickerView.mTicker = mTicker;
-        if (mHaloActive) mTickerView.setVisibility(View.GONE);
 
         mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
 
@@ -4042,6 +4051,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // not for you
         if (!notificationIsForCurrentUser(n)) return;
+
+        // just.. no
+        if (mTickerDisabled) return;
 
         // Show the ticker if one is requested. Also don't do this
         // until status bar window is attached to the window manager,

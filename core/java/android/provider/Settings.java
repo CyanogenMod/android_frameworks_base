@@ -6517,6 +6517,13 @@ public final class Settings {
          */
         public static final String ALARM_ICON_PREFERENCE = "alarm_icon_preference";
 
+        /**
+         * Disable the statusbar ticker
+         * Default is enabled
+         * @hide
+         */
+        public static final String TICKER_DISABLED = "ticker_disabled";
+
          /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
