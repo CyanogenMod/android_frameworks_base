@@ -3284,6 +3284,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mSignalTextView.setStyle(signalStyle);
             }
         }
+
+        int signalStrengthBars = Settings.System.getIntForUser(resolver,
+        		Settings.System.STATUS_BAR_SIGNAL_BAR_NUMBER,
+        		mCurrentUserId);
     }
 
     private void resetUserSetupObserver() {
