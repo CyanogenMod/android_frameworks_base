@@ -2455,6 +2455,12 @@ public final class ViewRootImpl implements ViewParent,
             // kill stuff (or ourself) for no reason.
             mLayoutRequested = true;    // ask wm for a new surface next time.
             return false;
+        } catch (IllegalStateException e) {
+            // After queueBuffer has been abandoned, Surface.unlockCanvasAndPost throws IllegalArgumentException.
+            // However, mLockedObject is not clear in Surface.
+            // This will lead to IllegalStateException while calling Surface.lockCanvas.
+            Log.e(TAG, "Could not lock surface after unlockCanvasAndPost failed", e);
+            return false;
         }
 
         try {
