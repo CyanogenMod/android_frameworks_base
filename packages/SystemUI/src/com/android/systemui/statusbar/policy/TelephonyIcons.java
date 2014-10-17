@@ -23,29 +23,123 @@ class TelephonyIcons {
 
     //GSM/UMTS
     static final int[][] TELEPHONY_SIGNAL_STRENGTH = {
-        { R.drawable.stat_sys_signal_0_fully,
-          R.drawable.stat_sys_signal_1_fully,
-          R.drawable.stat_sys_signal_2_fully,
-          R.drawable.stat_sys_signal_3_fully,
-          R.drawable.stat_sys_signal_4_fully },
-        { R.drawable.stat_sys_signal_0_fully,
-          R.drawable.stat_sys_signal_1_fully,
-          R.drawable.stat_sys_signal_2_fully,
-          R.drawable.stat_sys_signal_3_fully,
-          R.drawable.stat_sys_signal_4_fully }
+        switch (mSignalStrengthBars) {
+            case 6:
+                { R.drawable.stat_sys_signal6_0_fully,
+                  R.drawable.stat_sys_signal6_1_fully,
+                  R.drawable.stat_sys_signal6_2_fully,
+                  R.drawable.stat_sys_signal6_3_fully,
+                  R.drawable.stat_sys_signal6_4_fully,
+                  R.drawable.stat_sys_signal6_5_fully,
+                  R.drawable.stat_sys_signal6_6_fully },
+                { R.drawable.stat_sys_signal6_0_fully,
+                  R.drawable.stat_sys_signal6_1_fully,
+                  R.drawable.stat_sys_signal6_2_fully,
+                  R.drawable.stat_sys_signal6_3_fully,
+                  R.drawable.stat_sys_signal6_4_fully,
+                  R.drawable.stat_sys_signal6_5_fully,
+                  R.drawable.stat_sys_signal6_6_fully }
+                break;
+            case 5:
+                { R.drawable.stat_sys_signal5_0_fully,
+                  R.drawable.stat_sys_signal5_1_fully,
+                  R.drawable.stat_sys_signal5_2_fully,
+                  R.drawable.stat_sys_signal5_3_fully,
+                  R.drawable.stat_sys_signal5_4_fully,
+                  R.drawable.stat_sys_signal5_5_fully },
+                { R.drawable.stat_sys_signal5_0_fully,
+                  R.drawable.stat_sys_signal5_1_fully,
+                  R.drawable.stat_sys_signal5_2_fully,
+                  R.drawable.stat_sys_signal5_3_fully,
+                  R.drawable.stat_sys_signal5_4_fully,
+                  R.drawable.stat_sys_signal5_5_fully }
+                break;
+            case 4:
+                { R.drawable.stat_sys_signal_0_fully,
+                  R.drawable.stat_sys_signal_1_fully,
+                  R.drawable.stat_sys_signal_2_fully,
+                  R.drawable.stat_sys_signal_3_fully,
+                  R.drawable.stat_sys_signal_4_fully },
+                { R.drawable.stat_sys_signal_0_fully,
+                  R.drawable.stat_sys_signal_1_fully,
+                  R.drawable.stat_sys_signal_2_fully,
+                  R.drawable.stat_sys_signal_3_fully,
+                  R.drawable.stat_sys_signal_4_fully }
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen 
+                { R.drawable.stat_sys_signal_0_fully,
+                  R.drawable.stat_sys_signal_1_fully,
+                  R.drawable.stat_sys_signal_2_fully,
+                  R.drawable.stat_sys_signal_3_fully,
+                  R.drawable.stat_sys_signal_4_fully },
+                { R.drawable.stat_sys_signal_0_fully,
+                  R.drawable.stat_sys_signal_1_fully,
+                  R.drawable.stat_sys_signal_2_fully,
+                  R.drawable.stat_sys_signal_3_fully,
+                  R.drawable.stat_sys_signal_4_fully }
+        }
     };
 
     static final int[][] QS_TELEPHONY_SIGNAL_STRENGTH = {
-        { R.drawable.ic_qs_signal_0,
-          R.drawable.ic_qs_signal_1,
-          R.drawable.ic_qs_signal_2,
-          R.drawable.ic_qs_signal_3,
-          R.drawable.ic_qs_signal_4 },
-        { R.drawable.ic_qs_signal_full_0,
-          R.drawable.ic_qs_signal_full_1,
-          R.drawable.ic_qs_signal_full_2,
-          R.drawable.ic_qs_signal_full_3,
-          R.drawable.ic_qs_signal_full_4 }
+        switch (mSignalStrengthBars) {
+            case 6:
+                { R.drawable.ic_qs_signal6_0,
+                  R.drawable.ic_qs_signal6_1,
+                  R.drawable.ic_qs_signal6_2,
+                  R.drawable.ic_qs_signal6_3,
+                  R.drawable.ic_qs_signal6_4,
+                  R.drawable.ic_qs_signal6_5,
+                  R.drawable.ic_qs_signal6_6 },
+                { R.drawable.ic_qs_signal6_full_0,
+                  R.drawable.ic_qs_signal6_full_1,
+                  R.drawable.ic_qs_signal6_full_2,
+                  R.drawable.ic_qs_signal6_full_3,
+                  R.drawable.ic_qs_signal6_full_4,
+                  R.drawable.ic_qs_signal6_full_5,
+                  R.drawable.ic_qs_signal6_full_6 }
+                break;
+            case 5:
+                { R.drawable.ic_qs_signal5_0,
+                  R.drawable.ic_qs_signal5_1,
+                  R.drawable.ic_qs_signal5_2,
+                  R.drawable.ic_qs_signal5_3,
+                  R.drawable.ic_qs_signal5_4,
+                  R.drawable.ic_qs_signal5_5 },
+                { R.drawable.ic_qs_signal5_full_0,
+                  R.drawable.ic_qs_signal5_full_1,
+                  R.drawable.ic_qs_signal5_full_2,
+                  R.drawable.ic_qs_signal5_full_3,
+                  R.drawable.ic_qs_signal5_full_4,
+                  R.drawable.ic_qs_signal5_full_5 }
+                break;
+            case 4:
+                { R.drawable.ic_qs_signal_0,
+                  R.drawable.ic_qs_signal_1,
+                  R.drawable.ic_qs_signal_2,
+                  R.drawable.ic_qs_signal_3,
+                  R.drawable.ic_qs_signal_4 },
+                { R.drawable.ic_qs_signal_full_0,
+                  R.drawable.ic_qs_signal_full_1,
+                  R.drawable.ic_qs_signal_full_2,
+                  R.drawable.ic_qs_signal_full_3,
+                  R.drawable.ic_qs_signal_full_4 }
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                { R.drawable.ic_qs_signal_0,
+                  R.drawable.ic_qs_signal_1,
+                  R.drawable.ic_qs_signal_2,
+                  R.drawable.ic_qs_signal_3,
+                  R.drawable.ic_qs_signal_4 },
+                { R.drawable.ic_qs_signal_full_0,
+                  R.drawable.ic_qs_signal_full_1,
+                  R.drawable.ic_qs_signal_full_2,
+                  R.drawable.ic_qs_signal_full_3,
+                  R.drawable.ic_qs_signal_full_4 }
+        }
     };
 
     static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING = {
@@ -210,13 +304,13 @@ class TelephonyIcons {
     // LTE branded "LTE"
     static final int[][] DATA_LTE = {
             { R.drawable.stat_sys_data_fully_connected_lte,
-                    R.drawable.stat_sys_data_fully_connected_lte,
-                    R.drawable.stat_sys_data_fully_connected_lte,
-                    R.drawable.stat_sys_data_fully_connected_lte },
+              R.drawable.stat_sys_data_fully_connected_lte,
+              R.drawable.stat_sys_data_fully_connected_lte,
+              R.drawable.stat_sys_data_fully_connected_lte },
             { R.drawable.stat_sys_data_fully_connected_lte,
-                    R.drawable.stat_sys_data_fully_connected_lte,
-                    R.drawable.stat_sys_data_fully_connected_lte,
-                    R.drawable.stat_sys_data_fully_connected_lte }
+              R.drawable.stat_sys_data_fully_connected_lte,
+              R.drawable.stat_sys_data_fully_connected_lte,
+              R.drawable.stat_sys_data_fully_connected_lte }
     };
 
     static final int[] QS_DATA_LTE = {
