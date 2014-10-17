@@ -54,13 +54,12 @@ import java.util.Queue;
 
 public class NotificationHostView extends FrameLayout {
     private static final String TAG = "NotificationHostView";
-    private static final int MSG_NOTIFICATION_ADD = 0;
-    private static final int MSG_NOTIFICATION_REMOVE = 1;
+    public static final int MSG_NOTIFICATION_ADD = 0;
+    public static final int MSG_NOTIFICATION_REMOVE = 1;
 
-    private static final float SWIPE = 0.2f;
     private static final int ANIMATION_MAX_DURATION = 300;
-    private static final int PPMS = 2;
-    private static final int MAX_ALPHA = 200;
+    public final int PPMS = 2;
+    public final int MAX_ALPHA = 200;
 
     //Here we store dimissed notifications so we don't add them again in onFinishInflate
     private static HashMap<String, StatusBarNotification> mDismissedNotifications = new HashMap<String, StatusBarNotification>();
@@ -70,14 +69,14 @@ public class NotificationHostView extends FrameLayout {
     private HashMap<String, NotificationView> mNotifications = new HashMap<String, NotificationView>();
     private INotificationManager mNotificationManager;
     private WindowManager mWindowManager;
-    private int mNotificationMinHeight, mNotificationMinRowHeight;
-    private int mDisplayWidth, mDisplayHeight;
-    private int mShownNotifications = 0;
-    private boolean mDynamicWidth;
+    int mNotificationMinHeight, mNotificationMinRowHeight;
+    int mDisplayWidth, mDisplayHeight;
+    int mShownNotifications = 0;
+    boolean mDynamicWidth;
 
-    private ViewMediatorCallback mViewMediatorCallback;
+    ViewMediatorCallback mViewMediatorCallback;
     private LinearLayout mNotifView;
-    private TouchModalScrollView mScrollView;
+    TouchModalScrollView mScrollView;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -134,6 +133,7 @@ public class NotificationHostView extends FrameLayout {
 
     private class NotificationView extends FrameLayout implements OnClickListener {
         private static final int CLICK_THRESHOLD = 10;
+        private static final float SWIPE = 0.2f;
 
         private StatusBarNotification statusBarNotification;
         private Runnable onAnimationEnd;
