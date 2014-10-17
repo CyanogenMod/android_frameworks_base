@@ -3842,7 +3842,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             for (NetworkAgentInfo nai : mNetworkAgentInfos.values()) {
                 if(mDefaultRequest.networkCapabilities.satisfiedByNetworkCapabilities(
                             nai.networkCapabilities)) {
-                    if(nai.currentScore > networkSwitchTo.currentScore){
+                    if(nai.getCurrentScore() > networkSwitchTo.getCurrentScore()){
                         networkSwitchTo = nai;
                     }
                 }
