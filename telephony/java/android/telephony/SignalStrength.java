@@ -30,22 +30,89 @@ public class SignalStrength implements Parcelable {
     private static final String LOG_TAG = "SignalStrength";
     private static final boolean DBG = false;
 
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_POOR = 1;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_MODERATE = 2;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_GOOD = 3;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_GREAT = 4;
-    /** @hide */
-    public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
-    /** @hide */
-    public static final String[] SIGNAL_STRENGTH_NAMES = {
-        "none", "poor", "moderate", "good", "great"
-    };
+    public static final int mSignalStrengthBars
+
+    switch (mSignalStrengthBars) {
+        case 6:
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_EXCELLENT = 5;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_SUPERIOR = 6;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 7;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great", "excellent", "superior"
+            };
+            break;
+        case 5:
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_EXCELLENT = 5;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 6;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great", "excellent"
+            };
+            break;
+        case 4:
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great"
+            };
+            break;
+        default:
+            // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+            // but just in case it does happen
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great"
+            };
+    }
 
     /** @hide */
     //Use int max, as -1 is a valid value in signal strength
@@ -504,7 +571,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get signal level as an int from 0..4
+     * Get signal level as an int from 0..4/5/6
      *
      * @hide
      */
@@ -630,7 +697,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get gsm as level 0..4
+     * Get gsm as level 0..4/5/6
      *
      * @hide
      */
@@ -642,11 +709,41 @@ public class SignalStrength implements Parcelable {
         // signal, its better to show 0 bars to the user in such cases.
         // asu = 99 is a special case, where the signal strength is unknown.
         int asu = getGsmSignalStrength();
-        if (asu <= 2 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
-        else if (asu >= 12) level = SIGNAL_STRENGTH_GREAT;
-        else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
-        else if (asu >= 5)  level = SIGNAL_STRENGTH_MODERATE;
-        else level = SIGNAL_STRENGTH_POOR;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (asu <= 1 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_SUPERIOR;
+                else if (asu >= 10) level = SIGNAL_STRENGTH_EXCELLENT;
+                else if (asu >= 8)  level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 6)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 4)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+                break;
+            case 5:
+                if (asu <= 1 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_EXCELLENT;
+                else if (asu >= 10) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 7)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 4)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+                break;
+            case 4:
+                if (asu <= 2 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 5)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (asu <= 2 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 5)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+            }
+        
         if (DBG) log("getGsmLevel=" + level);
         return level;
     }
@@ -667,7 +764,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get cdma as level 0..4
+     * Get cdma as level 0..4/5/6
      *
      * @hide
      */
@@ -677,18 +774,76 @@ public class SignalStrength implements Parcelable {
         int levelDbm;
         int levelEcio;
 
-        if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_GREAT;
-        else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GOOD;
-        else if (cdmaDbm >= -95) levelDbm = SIGNAL_STRENGTH_MODERATE;
-        else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
-        else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        switch (mSignalStrengthBars) {
+            case 6: 
+                if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_SUPERIOR;
+                else if (cdmaDbm >= -80) levelDbm = SIGNAL_STRENGTH_EXCELLENT;
+                else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaDbm >= -90) levelDbm = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaDbm >= -95) levelDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
+                else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 5:
+                if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_EXCELLENT;
+                else if (cdmaDbm >= -82) levelDbm = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaDbm >= -88) levelDbm = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaDbm >= -94) levelDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
+                else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 4:
+                if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaDbm >= -95) levelDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
+                else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (cdmaDbm >= -75) levelDbm = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaDbm >= -85) levelDbm = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaDbm >= -95) levelDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaDbm >= -100) levelDbm = SIGNAL_STRENGTH_POOR;
+                else levelDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        }
 
         // Ec/Io are in dB*10
-        if (cdmaEcio >= -90) levelEcio = SIGNAL_STRENGTH_GREAT;
-        else if (cdmaEcio >= -110) levelEcio = SIGNAL_STRENGTH_GOOD;
-        else if (cdmaEcio >= -130) levelEcio = SIGNAL_STRENGTH_MODERATE;
-        else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
-        else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (cdmaEcio >= -90) levelEcio = SIGNAL_STRENGTH_SUPERIOR;
+                else if (cdmaEcio >= -102) levelEcio = SIGNAL_STRENGTH_EXCELLENT;
+                else if (cdmaEcio >= -114) levelEcio = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaEcio >= -126) levelEcio = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaEcio >= -138) levelEcio = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
+                else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 5:
+                if (cdmaEcio >= -90) levelEcio = SIGNAL_STRENGTH_EXCELLENT;
+                else if (cdmaEcio >= -105) levelEcio = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaEcio >= -120) levelEcio = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaEcio >= -135) levelEcio = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
+                else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 4:
+                if (cdmaEcio >= -90) levelEcio = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaEcio >= -110) levelEcio = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaEcio >= -130) levelEcio = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
+                else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (cdmaEcio >= -90) levelEcio = SIGNAL_STRENGTH_GREAT;
+                else if (cdmaEcio >= -110) levelEcio = SIGNAL_STRENGTH_GOOD;
+                else if (cdmaEcio >= -130) levelEcio = SIGNAL_STRENGTH_MODERATE;
+                else if (cdmaEcio >= -150) levelEcio = SIGNAL_STRENGTH_POOR;
+                else levelEcio = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        }
 
         int level = (levelDbm < levelEcio) ? levelDbm : levelEcio;
         if (DBG) log("getCdmaLevel=" + level);
@@ -705,21 +860,85 @@ public class SignalStrength implements Parcelable {
         final int cdmaEcio = getCdmaEcio();
         int cdmaAsuLevel;
         int ecioAsuLevel;
-
-        if (cdmaDbm >= -75) cdmaAsuLevel = 16;
-        else if (cdmaDbm >= -82) cdmaAsuLevel = 8;
-        else if (cdmaDbm >= -90) cdmaAsuLevel = 4;
-        else if (cdmaDbm >= -95) cdmaAsuLevel = 2;
-        else if (cdmaDbm >= -100) cdmaAsuLevel = 1;
-        else cdmaAsuLevel = 99;
+      
+        switch (mSignalStrengthBars) {
+            case 6: 
+                if (cdmaDbm >= -70) cdmaAsuLevel = 16;
+                else if (cdmaDbm >= -75) cdmaAsuLevel = 14;
+                else if (cdmaDbm >= -80) cdmaAsuLevel = 11;
+                else if (cdmaDbm >= -85) cdmaAsuLevel = 8;
+                else if (cdmaDbm >= -90) cdmaAsuLevel = 4;
+                else if (cdmaDbm >= -95) cdmaAsuLevel = 2;
+                else if (cdmaDbm >= -100) cdmaAsuLevel = 1;
+                else cdmaAsuLevel = 99;
+                break;
+            case 5:
+                if (cdmaDbm >= -75) cdmaAsuLevel = 16;
+                else if (cdmaDbm >= -80) cdmaAsuLevel = 12;
+                else if (cdmaDbm >= -85) cdmaAsuLevel = 8;
+                else if (cdmaDbm >= -90) cdmaAsuLevel = 4;
+                else if (cdmaDbm >= -95) cdmaAsuLevel = 2;
+                else if (cdmaDbm >= -100) cdmaAsuLevel = 1;
+                else cdmaAsuLevel = 99;
+                break;
+            case 4:
+                if (cdmaDbm >= -75) cdmaAsuLevel = 16;
+                else if (cdmaDbm >= -82) cdmaAsuLevel = 8;
+                else if (cdmaDbm >= -90) cdmaAsuLevel = 4;
+                else if (cdmaDbm >= -95) cdmaAsuLevel = 2;
+                else if (cdmaDbm >= -100) cdmaAsuLevel = 1;
+                else cdmaAsuLevel = 99;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (cdmaDbm >= -75) cdmaAsuLevel = 16;
+                else if (cdmaDbm >= -82) cdmaAsuLevel = 8;
+                else if (cdmaDbm >= -90) cdmaAsuLevel = 4;
+                else if (cdmaDbm >= -95) cdmaAsuLevel = 2;
+                else if (cdmaDbm >= -100) cdmaAsuLevel = 1;
+                else cdmaAsuLevel = 99;
+        }
 
         // Ec/Io are in dB*10
-        if (cdmaEcio >= -90) ecioAsuLevel = 16;
-        else if (cdmaEcio >= -100) ecioAsuLevel = 8;
-        else if (cdmaEcio >= -115) ecioAsuLevel = 4;
-        else if (cdmaEcio >= -130) ecioAsuLevel = 2;
-        else if (cdmaEcio >= -150) ecioAsuLevel = 1;
-        else ecioAsuLevel = 99;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (cdmaEcio >= -90) ecioAsuLevel = 16;
+                else if (cdmaEcio >= -100) ecioAsuLevel = 14;
+                else if (cdmaEcio >= -110) ecioAsuLevel = 11;
+                else if (cdmaEcio >= -120) ecioAsuLevel = 8;
+                else if (cdmaEcio >= -130) ecioAsuLevel = 4;
+                else if (cdmaEcio >= -140) ecioAsuLevel = 2;
+                else if (cdmaEcio >= -150) ecioAsuLevel = 1;
+                else ecioAsuLevel = 99;
+                break;
+            case 5:
+                if (cdmaEcio >= -90) ecioAsuLevel = 16;
+                else if (cdmaEcio >= -102) ecioAsuLevel = 12;
+                else if (cdmaEcio >= -114) ecioAsuLevel = 8;
+                else if (cdmaEcio >= -126) ecioAsuLevel = 4;
+                else if (cdmaEcio >= -138) ecioAsuLevel = 2;
+                else if (cdmaEcio >= -150) ecioAsuLevel = 1;
+                else ecioAsuLevel = 99;
+                break;
+            case 4:
+                if (cdmaEcio >= -90) ecioAsuLevel = 16;
+                else if (cdmaEcio >= -100) ecioAsuLevel = 8;
+                else if (cdmaEcio >= -115) ecioAsuLevel = 4;
+                else if (cdmaEcio >= -130) ecioAsuLevel = 2;
+                else if (cdmaEcio >= -150) ecioAsuLevel = 1;
+                else ecioAsuLevel = 99;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (cdmaEcio >= -90) ecioAsuLevel = 16;
+                else if (cdmaEcio >= -100) ecioAsuLevel = 8;
+                else if (cdmaEcio >= -115) ecioAsuLevel = 4;
+                else if (cdmaEcio >= -130) ecioAsuLevel = 2;
+                else if (cdmaEcio >= -150) ecioAsuLevel = 1;
+                else ecioAsuLevel = 99;
+        }
 
         int level = (cdmaAsuLevel < ecioAsuLevel) ? cdmaAsuLevel : ecioAsuLevel;
         if (DBG) log("getCdmaAsuLevel=" + level);
@@ -727,7 +946,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get Evdo as level 0..4
+     * Get Evdo as level 0..4/5/6
      *
      * @hide
      */
@@ -737,17 +956,75 @@ public class SignalStrength implements Parcelable {
         int levelEvdoDbm;
         int levelEvdoSnr;
 
-        if (evdoDbm >= -65) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
-        else if (evdoDbm >= -75) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
-        else if (evdoDbm >= -90) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
-        else if (evdoDbm >= -105) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
-        else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (evdoDbm >= -60) levelEvdoDbm = SIGNAL_STRENGTH_SUPERIOR;
+                else if (evdoDbm >= -70) levelEvdoDbm = SIGNAL_STRENGTH_EXCELLENT;
+                else if (evdoDbm >= -80) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
+                else if (evdoDbm >= -90) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
+                else if (evdoDbm >= -100) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoDbm >= -110) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
+                else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 5:
+                if (evdoDbm >= -60) levelEvdoDbm = SIGNAL_STRENGTH_EXCELLENT;
+                else if (evdoDbm >= -71) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
+                else if (evdoDbm >= -82) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
+                else if (evdoDbm >= -93) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoDbm >= -105) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
+                else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 4:
+                if (evdoDbm >= -65) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
+                else if (evdoDbm >= -75) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
+                else if (evdoDbm >= -90) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoDbm >= -105) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
+                else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (evdoDbm >= -65) levelEvdoDbm = SIGNAL_STRENGTH_GREAT;
+                else if (evdoDbm >= -75) levelEvdoDbm = SIGNAL_STRENGTH_GOOD;
+                else if (evdoDbm >= -90) levelEvdoDbm = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoDbm >= -105) levelEvdoDbm = SIGNAL_STRENGTH_POOR;
+                else levelEvdoDbm = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        }
 
-        if (evdoSnr >= 7) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
-        else if (evdoSnr >= 5) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
-        else if (evdoSnr >= 3) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
-        else if (evdoSnr >= 1) levelEvdoSnr = SIGNAL_STRENGTH_POOR;
-        else levelEvdoSnr = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (evdoSnr >= 8) levelEvdoSnr = SIGNAL_STRENGTH_SUPERIOR;
+                else if (evdoSnr >= 6) levelEvdoSnr = SIGNAL_STRENGTH_EXCELLENT;
+                else if (evdoSnr >= 5) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
+                else if (evdoSnr >= 4) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
+                else if (evdoSnr >= 3) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoSnr >= 1) levelEvdoSnr = SIGNAL_STRENGTH_POOR;
+                else levelEvdoSnr = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 5:
+                if (evdoSnr >= 7) levelEvdoSnr = SIGNAL_STRENGTH_EXCELLENT;
+                else if (evdoSnr >= 6) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
+                else if (evdoSnr >= 4) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
+                else if (evdoSnr >= 3) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoSnr >= 1) levelEvdoSnr = SIGNAL_STRENGTH_POOR;
+                else levelEvdoSnr = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            case 4:
+                if (evdoSnr >= 7) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
+                else if (evdoSnr >= 5) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
+                else if (evdoSnr >= 3) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoSnr >= 1) levelEvdoSnr = SIGNAL_STRENGTH_POOR;
+                else levelEvdoSnr = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (evdoSnr >= 7) levelEvdoSnr = SIGNAL_STRENGTH_GREAT;
+                else if (evdoSnr >= 5) levelEvdoSnr = SIGNAL_STRENGTH_GOOD;
+                else if (evdoSnr >= 3) levelEvdoSnr = SIGNAL_STRENGTH_MODERATE;
+                else if (evdoSnr >= 1) levelEvdoSnr = SIGNAL_STRENGTH_POOR;
+                else levelEvdoSnr = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        }
 
         int level = (levelEvdoDbm < levelEvdoSnr) ? levelEvdoDbm : levelEvdoSnr;
         if (DBG) log("getEvdoLevel=" + level);
@@ -764,20 +1041,84 @@ public class SignalStrength implements Parcelable {
         int evdoSnr = getEvdoSnr();
         int levelEvdoDbm;
         int levelEvdoSnr;
+      
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (evdoDbm >= -60) levelEvdoDbm = 16;
+                else if (evdoDbm >= -68) levelEvdoDbm = 14;
+                else if (evdoDbm >= -76) levelEvdoDbm = 11;
+                else if (evdoDbm >= -84) levelEvdoDbm = 8;
+                else if (evdoDbm >= -92) levelEvdoDbm = 4;
+                else if (evdoDbm >= -100) levelEvdoDbm = 2;
+                else if (evdoDbm >= -108) levelEvdoDbm = 1;
+                else levelEvdoDbm = 99;
+                break;
+            case 5:
+                if (evdoDbm >= -65) levelEvdoDbm = 16;
+                else if (evdoDbm >= -73) levelEvdoDbm = 12;
+                else if (evdoDbm >= -81) levelEvdoDbm = 8;
+                else if (evdoDbm >= -89) levelEvdoDbm = 4;
+                else if (evdoDbm >= -97) levelEvdoDbm = 2;
+                else if (evdoDbm >= -105) levelEvdoDbm = 1;
+                else levelEvdoDbm = 99;
+                break;
+            case 4:
+                if (evdoDbm >= -65) levelEvdoDbm = 16;
+                else if (evdoDbm >= -75) levelEvdoDbm = 8;
+                else if (evdoDbm >= -85) levelEvdoDbm = 4;
+                else if (evdoDbm >= -95) levelEvdoDbm = 2;
+                else if (evdoDbm >= -105) levelEvdoDbm = 1;
+                else levelEvdoDbm = 99;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (evdoDbm >= -65) levelEvdoDbm = 16;
+                else if (evdoDbm >= -75) levelEvdoDbm = 8;
+                else if (evdoDbm >= -85) levelEvdoDbm = 4;
+                else if (evdoDbm >= -95) levelEvdoDbm = 2;
+                else if (evdoDbm >= -105) levelEvdoDbm = 1;
+                else levelEvdoDbm = 99;
+        }
 
-        if (evdoDbm >= -65) levelEvdoDbm = 16;
-        else if (evdoDbm >= -75) levelEvdoDbm = 8;
-        else if (evdoDbm >= -85) levelEvdoDbm = 4;
-        else if (evdoDbm >= -95) levelEvdoDbm = 2;
-        else if (evdoDbm >= -105) levelEvdoDbm = 1;
-        else levelEvdoDbm = 99;
-
-        if (evdoSnr >= 7) levelEvdoSnr = 16;
-        else if (evdoSnr >= 6) levelEvdoSnr = 8;
-        else if (evdoSnr >= 5) levelEvdoSnr = 4;
-        else if (evdoSnr >= 3) levelEvdoSnr = 2;
-        else if (evdoSnr >= 1) levelEvdoSnr = 1;
-        else levelEvdoSnr = 99;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (evdoSnr >= 8) levelEvdoSnr = 16;
+                else if (evdoSnr >= 7) levelEvdoSnr = 14;
+                else if (evdoSnr >= 6) levelEvdoSnr = 11;
+                else if (evdoSnr >= 5) levelEvdoSnr = 8;
+                else if (evdoSnr >= 4) levelEvdoSnr = 4;
+                else if (evdoSnr >= 3) levelEvdoSnr = 2;
+                else if (evdoSnr >= 1) levelEvdoSnr = 1;
+                else levelEvdoSnr = 99;
+                break;
+            case 5:
+                if (evdoSnr >= 7) levelEvdoSnr = 16;
+                else if (evdoSnr >= 6) levelEvdoSnr = 12;
+                else if (evdoSnr >= 5) levelEvdoSnr = 8;
+                else if (evdoSnr >= 4) levelEvdoSnr = 4;
+                else if (evdoSnr >= 3) levelEvdoSnr = 2;
+                else if (evdoSnr >= 1) levelEvdoSnr = 1;
+                else levelEvdoSnr = 99;
+                break;
+            case 4:
+                if (evdoSnr >= 7) levelEvdoSnr = 16;
+                else if (evdoSnr >= 6) levelEvdoSnr = 8;
+                else if (evdoSnr >= 5) levelEvdoSnr = 4;
+                else if (evdoSnr >= 3) levelEvdoSnr = 2;
+                else if (evdoSnr >= 1) levelEvdoSnr = 1;
+                else levelEvdoSnr = 99;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (evdoSnr >= 7) levelEvdoSnr = 16;
+                else if (evdoSnr >= 6) levelEvdoSnr = 8;
+                else if (evdoSnr >= 5) levelEvdoSnr = 4;
+                else if (evdoSnr >= 3) levelEvdoSnr = 2;
+                else if (evdoSnr >= 1) levelEvdoSnr = 1;
+                else levelEvdoSnr = 99;
+        }
 
         int level = (levelEvdoDbm < levelEvdoSnr) ? levelEvdoDbm : levelEvdoSnr;
         if (DBG) log("getEvdoAsuLevel=" + level);
@@ -794,7 +1135,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get LTE as level 0..4
+     * Get LTE as level 0..4/5/6
      *
      * @hide
      */
