@@ -28187,6 +28187,7 @@ package android.telecom {
   public class TelecomManager {
     method public void cancelMissedCallsNotification();
     method public boolean handleMmi(java.lang.String);
+    method public boolean handleMmi(android.telecom.PhoneAccountHandle, java.lang.String);
     method public boolean isInCall();
     method public void showInCallScreen(boolean);
     field public static final java.lang.String ACTION_SHOW_CALL_SETTINGS = "android.telecom.action.SHOW_CALL_SETTINGS";
