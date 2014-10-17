@@ -403,7 +403,7 @@ public class NotificationHostView extends FrameLayout {
         );
     }
 
-    private void handleAddNotification(final boolean showNotification, boolean bigContentView) {
+    public void handleAddNotification(final boolean showNotification, boolean bigContentView) {
         final NotificationView nv = mNotificationsToAdd.poll();
         Log.d(TAG, "Add: " + describeNotification(nv.statusBarNotification));
         final StatusBarNotification sbn = nv.statusBarNotification;
@@ -519,7 +519,7 @@ public class NotificationHostView extends FrameLayout {
         mHandler.sendMessage(msg);
     }
 
-    private void handleRemoveNotification(final boolean dismiss) {
+    public void handleRemoveNotification(final boolean dismiss) {
         final NotificationView v = mNotificationsToRemove.poll();
         final StatusBarNotification sbn = v.statusBarNotification;
         if (mNotifications.containsKey(describeNotification(sbn)) && sbn != null) {
@@ -541,7 +541,15 @@ public class NotificationHostView extends FrameLayout {
             v.onAnimationEnd = new Runnable() {
                 public void run() {
                     if (dismiss) {
-                        dismiss(sbn);
+                        if (sbn != null && sbn.isClearable()) {
+                            INotificationManager nm = INotificationManager.Stub.asInterface(
+                                    ServiceManager.getService(Context.NOTIFICATION_SERVICE));
+                            try {
+                                nm.cancelNotificationFromListener(NotificationViewManager.NotificationListener, sbn.getPackageName(), sbn.getTag(), sbn.getId());
+                            } catch (RemoteException ex) {
+                                Log.e(TAG, "Failed to cancel notification: " + sbn.getPackageName());
+                            }
+                        }
                     }
                     mNotifView.removeView(v);
                     mNotifView.requestLayout();
@@ -554,30 +562,8 @@ public class NotificationHostView extends FrameLayout {
     public void onButtonClick(int buttonId) {
         if (mShownNotifications == mNotifications.size()) {
             dismissAll();
-        } else {
-            showAllNotifications();
-        }
-    }
-
-    private void dismissAll() {
         for (NotificationView nv : mNotifications.values()) {
             if (nv.canBeDismissed()) removeNotification(nv.statusBarNotification);
-        }
-    }
-
-    private void dismiss(StatusBarNotification sbn) {
-        if (sbn.isClearable()) {
-            INotificationManager nm = INotificationManager.Stub.asInterface(
-                    ServiceManager.getService(Context.NOTIFICATION_SERVICE));
-            try {
-                PendingIntent i  = sbn.getNotification().deleteIntent;
-                if (i != null) i.send();
-                nm.cancelNotificationFromListener(NotificationViewManager.NotificationListener, sbn.getPackageName(), sbn.getTag(), sbn.getId());
-            } catch (RemoteException ex) {
-                Log.e(TAG, "Failed to cancel notification: " + sbn.getPackageName());
-            } catch (CanceledException ex) {
-                Log.e(TAG, "deleteIntent canceled");
-            }
         }
     }
 

@@ -234,50 +234,11 @@ public class NotificationViewManager {
     }
 
     public void unregisterListeners() {
-        unregisterNotificationListener();
-        unregisterProximityListener();
-    }
-
-    public void registerListeners() {
-        registerProximityListener();
-        registerNotificationListener();
-    }
-
-    private void registerProximityListener() {
-        if (config.pocketMode == 1 || config.wakeOnNotification) {
-            // continue
-        } else {
-            return;
-        }
-        if (ProximityListener == null) {
-            SensorManager sensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-            ProximityListener = new ProximityListener();
-            ProximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-            sensorManager.registerListener(ProximityListener, ProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-    }
-
-    private void registerNotificationListener() {
-        if (NotificationListener == null) {
-            NotificationListener = new NotificationListenerWrapper();
-            ComponentName cn = new ComponentName(mContext, getClass().getName());
-            try {
-                mNotificationManager.registerListener(NotificationListener, cn, UserHandle.USER_ALL);
-            } catch (RemoteException ex) {
-                Log.e(TAG, "Could not register notification listener: " + ex.toString());
-            }
-        }
-    }
-
-    private void unregisterProximityListener() {
         if (ProximityListener != null) {
             SensorManager sensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
             sensorManager.unregisterListener(ProximityListener);
             ProximityListener = null;
         }
-    }
-
-    private void unregisterNotificationListener() {
         if (NotificationListener != null) {
             try {
                 mNotificationManager.unregisterListener(NotificationListener, UserHandle.USER_ALL);
@@ -307,7 +268,24 @@ public class NotificationViewManager {
         mWokenByPocketMode = false;
         if (mHostView != null) mHostView.hideAllNotifications();
         if (NotificationListener == null) {
-            registerListeners();
+            NotificationListener = new NotificationListenerWrapper();
+            ComponentName cn = new ComponentName(mContext, getClass().getName());
+            try {
+                mNotificationManager.registerListener(NotificationListener, cn, UserHandle.USER_ALL);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Could not register notification listener: " + ex.toString());
+            }
+        }
+        if (config.pocketMode == 1 || config.wakeOnNotification) {
+            // continue
+        } else {
+            return;
+        }
+        if (ProximityListener == null) {
+            SensorManager sensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+            ProximityListener = new ProximityListener();
+            ProximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            sensorManager.registerListener(ProximityListener, ProximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
