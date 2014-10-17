@@ -3638,6 +3638,11 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public boolean handlePinMmiForSubscriber(int subId, String dialString) {
+        try {
+            return getITelephony().handlePinMmiForSubscriber(subId, dialString);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelephony#handlePinMmi", e);
+        }
         return false;
     }
 
