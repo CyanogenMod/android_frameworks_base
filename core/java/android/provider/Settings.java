@@ -3175,6 +3175,16 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_SIGNAL_TEXT = "status_bar_signal";
+        
+        /**
+         * How many signal strength bars to show
+         * default: 4
+         * 4: show 4 signal bars
+         * 5: show 5 signal bars
+         * 6: show 6 signal bars
+         * @hide
+         */
+        public static final String STATUS_BAR_SIGNAL_BAR_NUMBER = "signal_bar_number";
 
          /**
          * Whether to control brightness from status bar
