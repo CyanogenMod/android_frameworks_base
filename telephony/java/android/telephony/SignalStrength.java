@@ -30,22 +30,89 @@ public class SignalStrength implements Parcelable {
     private static final String LOG_TAG = "SignalStrength";
     private static final boolean DBG = false;
 
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_POOR = 1;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_MODERATE = 2;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_GOOD = 3;
-    /** @hide */
-    public static final int SIGNAL_STRENGTH_GREAT = 4;
-    /** @hide */
-    public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
-    /** @hide */
-    public static final String[] SIGNAL_STRENGTH_NAMES = {
-        "none", "poor", "moderate", "good", "great"
-    };
+    public static final int mSignalStrengthBars
+
+    switch (mSignalStrengthBars) {
+        case 6:
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_TERRIBLE = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 4;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 5;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_EXCELLENT = 6;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 7;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "terrible", "poor", "moderate", "good", "great", "excellent"
+            };
+            break;
+        case 5:
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_EXCELLENT = 5;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 6;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great", "excellent"
+            };
+            break;
+        case 4:
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great"
+            };
+            break;
+        default:
+            // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+            // but just in case it does happen
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_POOR = 1;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_MODERATE = 2;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GOOD = 3;
+            /** @hide */
+            public static final int SIGNAL_STRENGTH_GREAT = 4;
+            /** @hide */
+            public static final int NUM_SIGNAL_STRENGTH_BINS = 5;
+            /** @hide */
+            public static final String[] SIGNAL_STRENGTH_NAMES = {
+                "none", "poor", "moderate", "good", "great"
+            };
+    }
 
     /** @hide */
     //Use int max, as -1 is a valid value in signal strength
@@ -504,7 +571,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get signal level as an int from 0..4
+     * Get signal level as an int from 0..6
      *
      * @hide
      */
@@ -630,7 +697,7 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get gsm as level 0..4
+     * Get gsm as level 0..6
      *
      * @hide
      */
@@ -642,11 +709,41 @@ public class SignalStrength implements Parcelable {
         // signal, its better to show 0 bars to the user in such cases.
         // asu = 99 is a special case, where the signal strength is unknown.
         int asu = getGsmSignalStrength();
-        if (asu <= 2 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
-        else if (asu >= 12) level = SIGNAL_STRENGTH_GREAT;
-        else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
-        else if (asu >= 5)  level = SIGNAL_STRENGTH_MODERATE;
-        else level = SIGNAL_STRENGTH_POOR;
+        switch (mSignalStrengthBars) {
+            case 6:
+                if (asu <= 1 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_EXCELLENT;
+                else if (asu >= 10) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 6)  level = SIGNAL_STRENGTH_MODERATE;
+                else if (asu >= 4)  level = SIGNAL_STRENGTH_POOR;
+                else level = SIGNAL_STRENGTH_TERRIBLE;
+                break;
+            case 5:
+                if (asu <= 1 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_EXCELLENT;
+                else if (asu >= 10) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 7)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 4)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+                break;
+            case 4:
+                if (asu <= 2 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 5)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+                break;
+            default:
+                // we shouldn't get here as the num of bars has to be 4, 5, or 6,
+                // but just in case it does happen
+                if (asu <= 2 || asu == 99) level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+                else if (asu >= 12) level = SIGNAL_STRENGTH_GREAT;
+                else if (asu >= 8)  level = SIGNAL_STRENGTH_GOOD;
+                else if (asu >= 5)  level = SIGNAL_STRENGTH_MODERATE;
+                else level = SIGNAL_STRENGTH_POOR;
+            }
+        
         if (DBG) log("getGsmLevel=" + level);
         return level;
     }
