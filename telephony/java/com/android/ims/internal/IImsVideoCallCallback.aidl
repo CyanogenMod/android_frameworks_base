@@ -44,4 +44,6 @@ oneway interface IImsVideoCallCallback {
     void changeCallDataUsage(int dataUsage);
 
     void changeCameraCapabilities(in CameraCapabilities cameraCapabilities);
+
+    void changeVideoQuality(int videoQuality);
 }
