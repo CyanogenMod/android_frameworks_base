@@ -449,6 +449,20 @@ public abstract class Connection {
                 }
             }
         }
+
+        /**
+         * Invokes callback method defined in In-Call UI.
+         *
+         * @param videoQuality The updated video quality.
+         */
+        public void changeVideoQuality(int videoQuality) {
+            if (mVideoCallback != null) {
+                try {
+                    mVideoCallback.changeVideoQuality(videoQuality);
+                } catch (RemoteException ignored) {
+                }
+            }
+        }
     }
 
     private final Listener mConnectionDeathListener = new Listener() {
