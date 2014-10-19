@@ -83,7 +83,7 @@ public class SignalClusterView
         super.onAttachedToWindow();
 
         ContentResolver res = mContext.getContentResolver();
-        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_SIGNAL_TEXT), false, mSettingsObserver);
+        res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUSBAR_SIGNAL_TEXT), false, mSettingsObserver);
         res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_AIRPLANE_COLOR), false, mSettingsObserver);
         res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_DATA_COLOR), false, mSettingsObserver);
         res.registerContentObserver(Settings.System.getUriFor(Settings.System.STATUS_BAR_WIFI_COLOR), false, mSettingsObserver);
