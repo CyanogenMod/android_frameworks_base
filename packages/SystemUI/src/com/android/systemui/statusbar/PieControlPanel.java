@@ -326,7 +326,7 @@ public class PieControlPanel extends FrameLayout implements StatusBarPanel, OnNa
             injectKeyDelayed(KeyEvent.KEYCODE_MENU);
         } else if (buttonName.equals(PieControl.RECENT_BUTTON)) {
             boolean mOmniSwitch = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.PIE_OMNISWITCH, 1, UserHandle.USER_CURRENT) == 1;
+                        Settings.System.PIE_OMNISWITCH, 0, UserHandle.USER_CURRENT) == 1;
             if (mOmniSwitch) {
                 Intent omniswitch = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
                 mContext.sendBroadcastAsUser(omniswitch, new UserHandle(UserHandle.USER_CURRENT));  
