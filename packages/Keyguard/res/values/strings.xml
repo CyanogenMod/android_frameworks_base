@@ -117,8 +117,6 @@
     <string name="keyguard_accessibility_status">Status</string>
     <!-- Accessibility description of the camera widget. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_camera">Camera</string>
-    <!-- Accessibility description of the application widget. [CHAR_LIMIT=none] -->
-    <string name="keyguard_accessibility_application_widget">Last app used</string>
     <!-- Accessibility description of the lock media control widget. [CHAR_LIMIT=none] -->
     <string name="keygaurd_accessibility_media_controls">Media controls</string>
     <!-- Accessibility description of widget reordering start. [CHAR_LIMIT=none] -->

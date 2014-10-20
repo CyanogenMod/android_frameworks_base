@@ -67,4 +67,7 @@
 
     <!-- Carrier text used in Multi SIM enabled view -->
     <string name="msim_carrier_text_format" translatable="false"><xliff:g id="text_1">%s</xliff:g>, <xliff:g id="text_2">%s</xliff:g></string>
+
+    <!-- Accessibility description of the application widget. [CHAR_LIMIT=none] -->
+    <string name="keyguard_accessibility_application_widget">Last app used</string>
 </resources>
