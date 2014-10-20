@@ -23,10 +23,13 @@
   <string name="quick_settings_lockscreen">Schierm spären</string>
   <string name="quick_settings_network_type">Netzwierkmodus</string>
   <string name="quick_settings_report_bug">Bug mellen</string>
+  <string name="quick_settings_sync">Synchronisatioun</string>
+  <string name="quick_settings_sync_off">Synchronisatioun aus</string>
   <string name="quick_settings_torch">Täscheluucht</string>
   <string name="quick_settings_torch_off">Täscheluucht aus</string>
   <string name="quick_settings_nfc">NFC</string>
   <string name="quick_settings_nfc_off">NFC aus</string>
+  <string name="quick_settings_usb_tether_off_label">Deconnectéiert</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering aus</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
   <string name="quick_settings_wifiap">WLAN-AP</string>
@@ -37,7 +40,7 @@
   <string name="quick_settings_lte_off">LTE aus</string>
   <string name="quick_settings_volume">Lautstäerkt</string>
   <string name="quick_settings_camera_label">Kamera</string>
-  <string name="quick_settings_network_adb_disabled_label">Deaktivéiert</string>
+  <string name="quick_settings_network_adb_disabled_label">Desaktivéiert</string>
   <string name="quick_settings_network_adb_enabled_label">Aktivéiert</string>
   <string name="quick_settings_compass_off">Kompass aus</string>
   <string name="quick_settings_compass_init">Initialiséieren\u2026</string>
@@ -47,6 +50,10 @@
   <string name="location_mode_sensors_only_title">Nëmmen Apparat</string>
   <string name="quick_settings_expanded_desktop">Vergréissert</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d connectéiert</item>
+    <item quantity="other">%1$d connectéiert</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Keng Verbindung zur Kamera méiglech</string>
   <string name="navbar_dialog_title">Funktioun zouweisen</string>
   <string name="navbar_home_button">Heemknäppchen</string>
@@ -61,4 +68,5 @@
   <string name="screenshot_delete_action">Läschen</string>
   <string name="screenshot_delete_confirmation">Schiermfoto geläscht.</string>
   <string name="accessibility_desc_add_quick_settings">Schnellastellungen dobäisetzen.</string>
+  <string name="status_bar_notification_spam_item_title">Ähnlech Messagen ignoréieren</string>
 </resources>

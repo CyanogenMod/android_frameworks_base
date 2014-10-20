@@ -108,13 +108,13 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_sim_pin_instructions">SIM-PIN aginn</string>
   <string name="kg_pin_instructions">PIN aginn</string>
   <string name="kg_password_instructions">Passwuert aginn</string>
-  <string name="kg_puk_enter_puk_hint">D\'SIM ass elo deaktivéiert. Gëff e PUK-Code a fir weiderzemaachen. Kontaktéier däin Netzbedreiwer fir Detailer.</string>
+  <string name="kg_puk_enter_puk_hint">D\'SIM ass elo desaktivéiert. Gëff e PUK-Code a fir weiderzemaachen. Kontaktéier däin Netzbedreiwer fir Detailer.</string>
   <string name="kg_puk_enter_pin_hint">Gëff de gewënschte PIN-Code an</string>
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
   <string name="kg_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
   <string name="kg_invalid_sim_pin_hint">Tipp e PIN deen tëscht 4 an 8 Zifferen huet.</string>
   <string name="kg_invalid_sim_puk_hint">De PUK-Code misst 8 oder méi Zifferen hunn.</string>
-  <string name="kg_invalid_puk">Gëff de korrekte PUK-Code nees an. Bei widderhuelende Versich gëtt d\'SIM permanent deaktivéiert.</string>
+  <string name="kg_invalid_puk">Gëff de korrekte PUK-Code nees an. Bei widderhuelende Versich gëtt d\'SIM permanent desaktivéiert.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">D\'PIN-Codë stëmmen net iwwereneen</string>
   <string name="kg_login_too_many_attempts">Ze vill Musterversich</string>
   <string name="kg_login_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>

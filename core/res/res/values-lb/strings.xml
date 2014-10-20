@@ -37,7 +37,7 @@
   <string name="mmiFdnError">De Virgank ass just fir deng zougeloosse Ruffnummer méiglech.</string>
   <string name="serviceEnabled">Service gouf aktivéiert.</string>
   <string name="serviceEnabledFor">Service gouf aktivéiert fir:</string>
-  <string name="serviceDisabled">Service gouf deaktivéiert.</string>
+  <string name="serviceDisabled">Service gouf desaktivéiert.</string>
   <string name="serviceRegistered">Registréierung war erfollegräich.</string>
   <string name="serviceErased">Ausläsche war erfollegräich.</string>
   <string name="passwordIncorrect">Inkorrekt Passwuert.</string>
@@ -525,11 +525,13 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="description_target_silent">Roueg</string>
   <string name="description_target_search">Sichen</string>
   <string name="action_bar_home_subtitle_description_format">%1$s, %2$s. %3$s</string>
+  <string name="storage_sd_card">SD-Kaart</string>
+  <string name="storage_usb">USB-Späicher</string>
   <string name="data_usage_warning_body">Drécke fir Verbrauch an Astellungen unzeweisen.</string>
-  <string name="data_usage_3g_limit_title">2G- an 3G-Daten deaktivéiert</string>
-  <string name="data_usage_4g_limit_title">4G-Daten deaktivéiert</string>
-  <string name="data_usage_mobile_limit_title">Mobil Daten deaktivéiert</string>
-  <string name="data_usage_wifi_limit_title">WLAN-Daten deaktivéiert</string>
+  <string name="data_usage_3g_limit_title">2G- an 3G-Daten desaktivéiert</string>
+  <string name="data_usage_4g_limit_title">4G-Daten desaktivéiert</string>
+  <string name="data_usage_mobile_limit_title">Mobil Daten desaktivéiert</string>
+  <string name="data_usage_wifi_limit_title">WLAN-Daten desaktivéiert</string>
   <string name="list_delimeter">", "</string>
   <string name="sending">Gëtt geschéckt\u2026</string>
   <string name="activity_resolver_use_always">Ëmmer</string>

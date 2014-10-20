@@ -31,7 +31,7 @@
   <string name="global_action_screenshot">Schiermfoto</string>
   <string name="global_actions_toggle_expanded_desktop_mode">Desktop vergréisseren</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Aktivéiert</string>
-  <string name="global_actions_expanded_desktop_mode_off_status">Deaktivéiert</string>
+  <string name="global_actions_expanded_desktop_mode_off_status">Desaktivéiert</string>
   <string name="reboot_system" product="tablet">Tablet nei starten</string>
   <string name="reboot_system" product="default">Telefon nei starten</string>
   <string name="reboot_reboot">Nei starten</string>

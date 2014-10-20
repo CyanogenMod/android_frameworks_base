@@ -18,6 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Екран блокування</string>
   <string name="keyguard_discharging">Заряд батареї: <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Підключіть зарядний пристрій, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d пропущений дзвінок</item>
     <item quantity="few">%d пропущених дзвінків</item>
@@ -32,4 +33,12 @@
   <string name="message_from">повідомлення від</string>
   <string name="message_from_person">повідомлення від %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">PUK код має містити 8 цифр.</string>
+  <string name="keyguard_password_wrong_puk_code">Невірний PUK код.</string>
+  <string name="keyguard_password_pin_failed">Не вдалося виконати операцію PIN.</string>
+  <string name="keyguard_password_puk_failed">Не вдалося виконати операцію PUK.</string>
+  <string name="pinpuk_attempts">\nСпроб залишилось:</string>
+  <string name="lockscreen_sim_error_message_short">Невірна карта.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM заблокована</string>
+  <string name="msim_kg_sim_pin_msg_format">Оператор: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>
