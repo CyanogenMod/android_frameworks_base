@@ -33,6 +33,7 @@ import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -426,7 +427,7 @@ public class SlimActions {
                 PowerManager powerManager =
                         (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                 if (!powerManager.isScreenOn()) {
-                    powerManager.wakeUp(SystemClock.uptimeMillis());
+                    powerManager.wakeUpWithProximityCheck(SystemClock.uptimeMillis());
                 }
                 return;
             } else {
