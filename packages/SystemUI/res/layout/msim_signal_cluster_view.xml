@@ -54,13 +54,13 @@
         android:id="@+id/wimax_combo"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginRight="-6dp"
+        android:layout_marginEnd="-6dp"
         >
         <ImageView
             android:id="@+id/wimax_signal"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:scaleType="center"
             />
@@ -160,7 +160,7 @@
                 android:id="@+id/mobile_inout"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end|bottom"
                 />
             <ImageView
                 android:id="@+id/no_sim"
@@ -239,7 +239,7 @@
                 android:id="@+id/mobile_inout_sub2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end|bottom"
                 />
             <ImageView
                 android:id="@+id/no_sim_slot2"
@@ -318,7 +318,7 @@
                 android:id="@+id/mobile_inout_sub3"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end|bottom"
                 />
             <ImageView
                 android:id="@+id/no_sim_slot3"

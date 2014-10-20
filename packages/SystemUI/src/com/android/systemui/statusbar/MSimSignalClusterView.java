@@ -381,6 +381,38 @@ public class MSimSignalClusterView
         return phoneId;
     }
 
+    @Override
+    public void onRtlPropertiesChanged(int layoutDirection) {
+        super.onRtlPropertiesChanged(layoutDirection);
+
+        int count = TelephonyManager.getDefault().getPhoneCount();
+
+        if (mWifi != null) {
+            mWifi.setImageDrawable(null);
+        }
+        if (mWifiActivity != null) {
+            mWifiActivity.setImageDrawable(null);
+        }
+        if (mAirplane != null) {
+            mAirplane.setImageDrawable(null);
+        }
+        for (int i = 0; i < count; i++) {
+            if (mMobile[i] != null) {
+                mMobile[i].setImageDrawable(null);
+            }
+            if (mMobileActivity[i] != null) {
+                mMobileActivity[i].setImageDrawable(null);
+            }
+            if (mMobileType[i] != null) {
+                mMobileType[i].setImageDrawable(null);
+            }
+            if (mNoSimSlot[i] != null) {
+                mNoSimSlot[i].setImageDrawable(null);
+            }
+
+            apply(i);
+        }
+    }
 
     // Run after each indicator change.
     private void apply(int phoneId) {
