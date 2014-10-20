@@ -1505,24 +1505,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (contentView == null) {
             return false;
         }
-        if (mHeadsUpTextColor != 0) {
-            if (contentView != null) {
-                contentView.setTextColor(com.android.internal.R.id.title, mHeadsUpTextColor);
-                contentView.setTextColor(com.android.internal.R.id.text, mHeadsUpTextColor);
-                contentView.setTextColor(com.android.internal.R.id.big_text, mHeadsUpTextColor);
-                contentView.setTextColor(com.android.internal.R.id.time, mHeadsUpTextColor);
-//                contentView.setTextColor(com.android.internal.R.id.action0, mHeadsUpTextColor);
-                contentView.setTextColor(com.android.internal.R.id.text2, mHeadsUpTextColor);
-                contentView.setTextColor(com.android.internal.R.id.info, mHeadsUpTextColor);
-            }
-            if (bigContentView != null) {
-                bigContentView.setTextColor(com.android.internal.R.id.title, mHeadsUpTextColor);
-                bigContentView.setTextColor(com.android.internal.R.id.text, mHeadsUpTextColor);
-                bigContentView.setTextColor(com.android.internal.R.id.big_text, mHeadsUpTextColor);
-                bigContentView.setTextColor(com.android.internal.R.id.time, mHeadsUpTextColor);
-//                bigContentView.setTextColor(com.android.internal.R.id.action0, mHeadsUpTextColor);
-                bigContentView.setTextColor(com.android.internal.R.id.text2, mHeadsUpTextColor);
-                bigContentView.setTextColor(com.android.internal.R.id.info, mHeadsUpTextColor);
+
+        // apply custom text color to heads up notifications ONLY
+        if (mHeadsUpTextColor != 0) { // if it's 0, then text color is default
+            if (mHeadsUpTextColor != -1) { //if it's -1, then it's a regular notification
+                setHeadsUpTextColor(contentView, mHeadsUpTextColor);
+                setHeadsUpTextColor(bigContentView, mHeadsUpTextColor);
             }
         }
 
@@ -1603,6 +1591,18 @@ public abstract class BaseStatusBar extends SystemUI implements
         entry.setBigContentView(bigContentViewLocal);
 
         return true;
+    }
+
+    private void setHeadsUpTextColor(RemoteViews view, int color) {
+        if (view != null) {
+            view.setInt(com.android.internal.R.id.title, "setTextColor", color);
+            view.setInt(com.android.internal.R.id.text, "setTextColor", color);
+            view.setInt(com.android.internal.R.id.big_text, "setTextColor", color);
+            view.setInt(com.android.internal.R.id.time, "setTextColor", color);
+//            view.setInt(com.android.internal.R.id.action0, "setTextColor", color);
+            view.setInt(com.android.internal.R.id.text2, "setTextColor", color);
+            view.setInt(com.android.internal.R.id.info, "setTextColor", color);
+        }
     }
 
     public NotificationClicker makeClicker(PendingIntent intent, String pkg, String tag, int id) {
