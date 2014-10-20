@@ -282,6 +282,9 @@ public class ExternalStorageProvider extends DocumentsProvider {
                 final RootInfo root = mIdToRoot.get(rootId);
                 final File path = mIdToPath.get(rootId);
 
+                if (ROOT_ID_PRIMARY_EMULATED.equals(root.rootId)) {
+                    root.title = getContext().getString(R.string.root_internal_storage);
+                }
                 final RowBuilder row = result.newRow();
                 row.add(Root.COLUMN_ROOT_ID, root.rootId);
                 row.add(Root.COLUMN_FLAGS, root.flags);
