@@ -154,7 +154,9 @@ public class ExternalStorageProvider extends DocumentsProvider {
                 if (ROOT_ID_PRIMARY_EMULATED.equals(rootId)) {
                     root.title = getContext().getString(R.string.root_internal_storage);
                 } else {
-                    root.title = volume.getUserLabel();
+                    // Use volume's description firstly, if it has any
+                    root.title = TextUtils.isEmpty(volume.getDescription(getContext())) ?
+                            volume.getUserLabel() : volume.getDescription(getContext());
                 }
                 root.docId = getDocIdForFile(path);
                 mRoots.add(root);
