@@ -55,6 +55,11 @@
   <string name="location_mode_sensors_only_title">По датчиках пристрою</string>
   <string name="quick_settings_expanded_desktop">Розширений</string>
   <string name="quick_settings_expanded_desktop_off">Звичайний</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d підключено</item>
+    <item quantity="few">%1$d підключено</item>
+    <item quantity="other">%1$d підключено</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Неможливо підключитися до камери</string>
   <string name="navbar_dialog_title">Виберіть дію щоб призначити</string>
   <string name="navbar_home_button">Кнопка Додому</string>

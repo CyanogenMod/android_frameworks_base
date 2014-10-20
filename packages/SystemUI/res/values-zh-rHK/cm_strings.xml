@@ -27,7 +27,7 @@
   <string name="quick_settings_sync">同步</string>
   <string name="quick_settings_sync_off">同步關閉</string>
   <string name="quick_settings_torch">電筒</string>
-  <string name="quick_settings_torch_off">手電筒關閉</string>
+  <string name="quick_settings_torch_off">電筒關閉</string>
   <string name="quick_settings_nfc">NFC</string>
   <string name="quick_settings_nfc_off">NFC 關閉</string>
   <string name="quick_settings_usb_tether_off_label">已中斷連接</string>

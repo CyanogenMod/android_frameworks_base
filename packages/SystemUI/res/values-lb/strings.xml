@@ -154,10 +154,10 @@
   <string name="accessibility_quick_settings_bluetooth">Bluetooth <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_location">Standuert <xliff:g id="state" example="Off">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_alarm">Alarm gesat fir <xliff:g id="time" example="Wed 3:30 PM">%s</xliff:g>.</string>
-  <string name="data_usage_disabled_dialog_3g_title">2G- an 3G-Daten deaktivéiert</string>
-  <string name="data_usage_disabled_dialog_4g_title">4G-Daten deaktivéiert</string>
-  <string name="data_usage_disabled_dialog_mobile_title">Mobil Daten deaktivéiert</string>
-  <string name="data_usage_disabled_dialog_title">Daten deaktivéiert</string>
+  <string name="data_usage_disabled_dialog_3g_title">2G- an 3G-Daten desaktivéiert</string>
+  <string name="data_usage_disabled_dialog_4g_title">4G-Daten desaktivéiert</string>
+  <string name="data_usage_disabled_dialog_mobile_title">Mobil Daten desaktivéiert</string>
+  <string name="data_usage_disabled_dialog_title">Daten desaktivéiert</string>
   <string name="data_usage_disabled_dialog">Du hues déi konfiguréiert Datelimit erreecht.\n\nFalls du d\'Dateniwwerdroung reaktivéiers, kéint däi Provider dat zousätzlech a Rechnung stellen.</string>
   <string name="data_usage_disabled_dialog_enable">Date reaktivéieren</string>
   <string name="status_bar_settings_signal_meter_disconnected">

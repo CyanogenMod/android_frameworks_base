@@ -116,6 +116,7 @@
   <string name="app_ops_toggle_bluetooth">увімк. або вимк. Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">увімк. або вимк. мобільних даних</string>
   <string name="app_ops_toggle_wifi">увімк. або вимк. Wi-Fi</string>
+  <string name="app_ops_toggle_nfc">увімк. вимк. NFC</string>
   <string name="app_ops_use_alarm_volume">керування гучністю будильника</string>
   <string name="app_ops_use_audio_focus">керування аудіо-фокусом</string>
   <string name="app_ops_use_bluetooth_volume">керування гучністю Bluetooth</string>
@@ -138,5 +139,41 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Всі дані на USB-накопичувачі (за шляхом \'%1$s\') будуть видалені. Цю дію неможливо відмінити!</string>
   <string name="extmedia_format_message_cm" product="default">Всі дані на карті (за шляхом \'%1$s\') будуть видалені. Цю дію неможливо відмінити!</string>
   <string name="usb_storage_notification_manage_message">Натисніть для налаштування</string>
+  <string name="sd_ext_media_checking_notification_title">Підготовка SD-карти\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">Перевірка SD-карти на помилки\u2026</string>
+  <string name="sd_ext_media_nofs_notification_title">SD-карта порожня</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-карта порожня, або має файлову систему, яка не підтримується.</string>
   <string name="sd_ext_media_unmountable_notification_title">Пошкоджена SD-картка</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD карта пошкоджена. Спробуйте відформатувати її.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-карта несподівано вилучена</string>
+  <string name="sd_ext_media_badremoval_notification_message">Відключіть SD-карту перед вилученням для запобігання втрати даних.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-карта готова до вилучення</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Можна безпечно вилучити SD-карту.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-карта була вилучена</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-карту вилучено. Вставте нову.</string>
+  <string name="usb_ext_media_checking_notification_title">Підготовка USB-носія\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">Перевірка USB-носія на помилки\u2026</string>
+  <string name="usb_ext_media_nofs_notification_title">USB-носій порожній</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-носій пустий або має непідтримувану файлову систему.</string>
+  <string name="usb_ext_media_unmountable_notification_title">USB-носій пошкоджений</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-носій пошкоджений. Спробуйте переформатувати.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-носій несподівано вилучено</string>
+  <string name="usb_ext_media_badremoval_notification_message">Від\'єднайте USB-носій перед вилученням, щоб уникнути втрати даних.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-носій можна безпечно вилучити</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Ви можете безпечно вилучити USB-носій.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB-носій відключенно</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-носій відключенно. Вставте новий пристрій.</string>
+  <string name="progress_nomediapresent" product="default">Немає зовнішнього носія\u2026</string>
+  <string name="lockscreen_sim_error_message_short">Невірна карта.</string>
+  <string name="lockscreen_airplane_mode_on">Режим польоту</string>
+  <string name="lockscreen_sim_locked_message_cm">SIM/RUIM-картка заблокована.</string>
+  <string name="pinpuk_attempts">\nСпроб залишилось:</string>
+  <string name="stk_cc_ussd_to_dial">USSD-запит перетворено в DIAL-запит.</string>
+  <string name="stk_cc_ussd_to_ss">USSD-запит перетворено в SS-запит.</string>
+  <string name="stk_cc_ussd_to_ussd">USSD-запит перетворено в новий USSD-запит.</string>
+  <string name="stk_cc_ss_to_dial">SS-запит перетворено в DIAL-запит.</string>
+  <string name="stk_cc_ss_to_ussd">SS-запит перетворений в USSD-запит.</string>
+  <string name="stk_cc_ss_to_ss">SS-запит перетворений в новий SS-запит.</string>
+  <string name="theme_install_error_title">Не вдалося інсталювати тему</string>
+  <string name="theme_install_error_message">не вдалося інсталювати %s</string>
 </resources>
