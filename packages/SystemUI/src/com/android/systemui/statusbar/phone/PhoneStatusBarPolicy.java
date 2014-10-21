@@ -131,8 +131,8 @@ public class PhoneStatusBarPolicy {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-            ContentResolver resolver = mContext.getContentResolver();
             if (uri.equals(Settings.System.getUriFor(Settings.System.ALARM_ICON_PREFERENCE))) {
+                ContentResolver resolver = mContext.getContentResolver();
                 mAlarmIconDisabled = Settings.System.getIntForUser(resolver,
                         Settings.System.ALARM_ICON_PREFERENCE, 0, UserHandle.USER_CURRENT) == 1;
                 final String timeString = Settings.System.getString(resolver,
@@ -237,11 +237,14 @@ public class PhoneStatusBarPolicy {
         // NOTE: This is not controled anymore over broadcasts.
         SettingsObserver observer = new SettingsObserver(mHandler);
         observer.observe();
+
+        mAlarmIconDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.ALARM_ICON_PREFERENCE, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     private final void updateAlarm(Intent intent) {
         boolean alarmSet = intent.getBooleanExtra("alarmSet", false);
-        if (!mAlarmIconDisabled) {
+        if (mAlarmIconDisabled) {
             alarmSet = false;
         }
         mService.setIconVisibility("alarm_clock", alarmSet);
