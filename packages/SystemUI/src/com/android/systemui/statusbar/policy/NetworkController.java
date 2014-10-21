@@ -38,6 +38,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -176,6 +177,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     String mLastCombinedLabel = "";
 
     protected boolean mHasMobileDataFeature;
+    protected String mEmergencyCallOnlyLabel;
 
     boolean mDataAndWifiStacked = false;
 
@@ -211,6 +213,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
      */
     public NetworkController(Context context) {
         mContext = context;
+        mEmergencyCallOnlyLabel = mContext.getString(com.android.internal.R.string
+                .emergency_calls_only);
         final Resources res = context.getResources();
 
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
@@ -266,6 +270,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         updateAirplaneMode();
 
         mLastLocale = mContext.getResources().getConfiguration().locale;
+        initNetworkState();
+    }
+
+    protected void initNetworkState() {
+        TelephonyManager tm = TelephonyManager.getDefault();
+        updateNetworkName(true, tm.getSimOperatorName(),
+                    true, tm.getNetworkOperatorName());
     }
 
     public boolean hasMobileDataFeature() {
@@ -450,6 +461,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
+        Log.d(TAG, "onReceive() " + action);
         if (action.equals(WifiManager.RSSI_CHANGED_ACTION)
                 || action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)
                 || action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
@@ -933,19 +945,24 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     }
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
-        if (false) {
+        if (DEBUG) {
             Log.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
         StringBuilder str = new StringBuilder();
         boolean something = false;
         if (showPlmn && plmn != null) {
+            plmn = maybeStripPeriod(plmn);
             str.append(plmn);
             something = true;
         }
-        if (showSpn && spn != null) {
+        if (showSpn && spn != null &&
+                !spn.equals(plmn) &&
+                !mEmergencyCallOnlyLabel.equals(plmn)) {
             if (something) {
+                str.append("  ");
                 str.append(mNetworkNameSeparator);
+                str.append("  ");
             }
             str.append(spn);
             something = true;
@@ -955,6 +972,16 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         } else {
             mNetworkName = mNetworkNameDefault;
         }
+        mNetworkName = maybeStripPeriod(mNetworkName);
+    }
+
+    protected String maybeStripPeriod(String name) {
+        if (!TextUtils.isEmpty(name)) {
+            return name.equals(mNetworkNameDefault) ?
+                    name.replace(".", "") :
+                    name;
+        }
+        return name;
     }
 
     // ===== Wifi ===================================================================
