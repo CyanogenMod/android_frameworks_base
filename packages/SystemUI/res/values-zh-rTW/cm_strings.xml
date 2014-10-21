@@ -59,7 +59,7 @@
     <item quantity="other">%1$d 已連線</item>
   </plurals>
   <string name="quick_settings_camera_error_connect">無法連線到相機</string>
-  <string name="navbar_dialog_title">選擇要指定的動作</string>
+  <string name="navbar_dialog_title">選擇指定的動作</string>
   <string name="navbar_home_button">首頁鍵</string>
   <string name="navbar_recent_button">多工鍵</string>
   <string name="navbar_search_button">搜尋鍵</string>
