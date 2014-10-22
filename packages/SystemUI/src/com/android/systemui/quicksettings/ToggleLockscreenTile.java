@@ -42,8 +42,12 @@ public class ToggleLockscreenTile extends QuickSettingsTile
     private static int sLockTileCount = 0;
     private static boolean sDisabledLockscreen = false;
 
+    protected SharedPreferences mPrefs;
+
     public ToggleLockscreenTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
+
+        mPrefs = mContext.getSharedPreferences("quicksettings", Context.MODE_PRIVATE);
 
         mOnClick = new OnClickListener() {
 
@@ -63,6 +67,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile
                 return true;
             }
         };
+
     }
 
     @Override

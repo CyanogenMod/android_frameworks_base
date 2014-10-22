@@ -26,7 +26,6 @@ import android.app.ActivityManagerNative;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -69,7 +68,6 @@ public class QuickSettingsTile implements OnClickListener {
 
     protected PhoneStatusBar mStatusbarService;
     protected QuickSettingsController mQsc;
-    protected SharedPreferences mPrefs;
 
     private Handler mHandler = new Handler();
 
@@ -106,7 +104,6 @@ public class QuickSettingsTile implements OnClickListener {
         mStatusbarService = qsc.mStatusBarService;
         mQsc = qsc;
         mTileLayout = layout;
-        mPrefs = mContext.getSharedPreferences("quicksettings", Context.MODE_PRIVATE);
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mGestureDetector = new GestureDetector(mContext, new QuickTileGestureDetector());
         mGestureListener = new View.OnTouchListener() {
