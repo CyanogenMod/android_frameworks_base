@@ -123,7 +123,7 @@ public class PhoneStatusBarPolicy {
                     Settings.System.getUriFor(Settings.System.QUIET_HOURS_ENABLED),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.ALARM_ICON_PREFERENCE),
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_HIDE_ALARM_ICON),
                     false, this, UserHandle.USER_ALL);
             updateSettings();
         }
@@ -131,10 +131,10 @@ public class PhoneStatusBarPolicy {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
-            if (uri.equals(Settings.System.getUriFor(Settings.System.ALARM_ICON_PREFERENCE))) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_HIDE_ALARM_ICON))) {
                 ContentResolver resolver = mContext.getContentResolver();
                 mAlarmIconDisabled = Settings.System.getIntForUser(resolver,
-                        Settings.System.ALARM_ICON_PREFERENCE, 0, UserHandle.USER_CURRENT) == 1;
+                        Settings.System.STATUS_BAR_HIDE_ALARM_ICON, 0, UserHandle.USER_CURRENT) == 1;
                 final String timeString = Settings.System.getString(resolver,
                         Settings.System.NEXT_ALARM_FORMATTED);
                 if (!mAlarmIconDisabled) {
@@ -239,7 +239,7 @@ public class PhoneStatusBarPolicy {
         observer.observe();
 
         mAlarmIconDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.ALARM_ICON_PREFERENCE, 0, UserHandle.USER_CURRENT) == 1;
+                        Settings.System.STATUS_BAR_HIDE_ALARM_ICON, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     private final void updateAlarm(Intent intent) {

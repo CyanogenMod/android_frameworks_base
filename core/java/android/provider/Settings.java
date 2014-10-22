@@ -6512,10 +6512,12 @@ public final class Settings {
         public static final String DISABLE_SYSTEM_GESTURES = "disable_system_gestures";
 
         /**
-        　* Allow status bar alarm icon
+        　* Optionally hide the status bar alarm icon
+         * 0: default, shown
+         * 1: hidden
         　* @hide
          */
-        public static final String ALARM_ICON_PREFERENCE = "alarm_icon_preference";
+        public static final String STATUS_BAR_HIDE_ALARM_ICON = "statusbar_hide_alarm_icon";
 
         /**
          * Disable the statusbar ticker
