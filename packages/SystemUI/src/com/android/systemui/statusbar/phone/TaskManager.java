@@ -110,9 +110,20 @@ public class TaskManager {
     }
 
     public void refreshTaskManagerView () {
+        if (DEBUG) Log.e(TAG, "refreshTaskManagerView");
+        setTaskManagerTitle();
         loadRunningTasks();
         refreshMemoryUsagePanel();
         inflateTaskListView();
+    }
+
+    private void setTaskManagerTitle() {
+        final TextView taskManagerTitle =
+                (TextView) mTaskManagerPanel.findViewById(R.id.task_manager_title);
+        final Button killAllButton =
+                (Button) mTaskManagerPanel.findViewById(R.id.kill_all_button);
+        taskManagerTitle.setText(R.string.tasklistview_title);
+        killAllButton.setText(R.string.tasklist_killall);
     }
 
     private void loadRunningTasks() {

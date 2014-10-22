@@ -852,7 +852,7 @@
     <string name="empty_shade_text">No notifications</string>
 
     <!-- Task Manager -->
-    <string name="task_manager_title">Task Manager</string>
+    <string name="tasklistview_title">Task Manager</string>
     <string name="message_switch_fail">Can not switch to this task, because it has no interface.</string>
     <string name="tasklist_killall">Kill All</string>
     <string name="tasklist_memory_usage">"Free/Total Memory: [<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
