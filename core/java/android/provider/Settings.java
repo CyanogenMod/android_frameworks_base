@@ -6441,12 +6441,6 @@ public final class Settings {
         public static final String TOUCH_WAKE = "touch_wake";
 
         /**
-         * Heads Up background color
-         * @hide
-         */
-        public static final String HEADS_UP_BG_COLOR = "heads_up_bg_color";
-
-        /**
          * Whether lid wakes the device
          * @hide
          */
