@@ -739,8 +739,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
     }
 
     private void updateIconSet() {
-        int voiceNetworkType = mServiceState.getVoiceNetworkType();
-        int dataNetworkType =  mServiceState.getDataNetworkType();
+        int voiceNetworkType = getVoiceNetworkType();
+        int dataNetworkType =  getDataNetworkType();
 
         if (DEBUG) {
             Log.d(TAG, "updateIconSet, voice network type is: " + voiceNetworkType
