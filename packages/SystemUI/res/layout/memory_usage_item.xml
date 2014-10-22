@@ -46,7 +46,7 @@
             android:paddingTop="3dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff"
-            android:text="@string/task_manager_title"
+            android:text="@string/tasklistview_title"
             android:layout_alignParentLeft="true" />
         <Button
             android:id="@+id/kill_all_button"
