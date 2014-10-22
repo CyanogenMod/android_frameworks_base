@@ -617,6 +617,9 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                         mWifiActivity = msg.arg1;
                         int dataSub = SubscriptionManager.getPhoneId(
                                 SubscriptionManager.getDefaultDataSubId());
+                        if (!SubscriptionManager.isValidPhoneId(dataSub)) {
+                            dataSub = 0;
+                        }
                         refreshViews(dataSub);
                     }
                     break;
