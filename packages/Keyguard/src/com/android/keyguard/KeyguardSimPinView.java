@@ -341,7 +341,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
 
     private void handleSubInfoChangeIfNeeded() {
         long subId = mKgUpdateMonitor.getSimPinLockSubId();
-        if (subId != mSubId) {
+        if (SubscriptionManager.isValidSubId(subId) && (subId != mSubId)) {
             mSubId = subId;
             handleSubInfoChange();
         }
@@ -388,8 +388,6 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             mSecurityMessageDisplay.setMessage(getPinPasswordErrorMessage(
                     mRemainingAttempts, true), true);
             return;
-        } else {
-            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
         }
     }
 }
