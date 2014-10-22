@@ -295,4 +295,7 @@
     <!-- Theme installation error notification -->
     <string name="theme_install_error_title">Failed to install theme</string>
     <string name="theme_install_error_message">%s failed to install</string>
+
+    <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
+    <string name="storage_uicc">UICC storage</string>
 </resources>
