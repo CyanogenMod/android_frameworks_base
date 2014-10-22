@@ -6081,8 +6081,15 @@ status_t ResTable::createIdmap(const ResTable& overlay,
 
             if (typeMap.entryOffset + typeMap.entryMap.size() < entryIndex) {
                 // Resize to accomodate this entry and the 0's in between.
+                const size_t oldSize = typeMap.entryMap.size();
                 if (typeMap.entryMap.resize((entryIndex - typeMap.entryOffset) + 1) < 0) {
                     return NO_MEMORY;
+                }
+                const size_t newSize = typeMap.entryMap.size();
+                for (size_t i = oldSize; i < newSize; ++i) {
+                    // As this entry is not present in this idmap, so init the item as 0xffffffff.
+                    // Please refer to the function IdmapEntries.lookup().
+                    typeMap.entryMap.editItemAt(i) = 0xffffffff;
                 }
                 typeMap.entryMap.editTop() = Res_GETENTRY(overlayResID);
             } else {
