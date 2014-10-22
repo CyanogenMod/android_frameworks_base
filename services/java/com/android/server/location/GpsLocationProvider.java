@@ -638,8 +638,6 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 if (DEBUG) Log.d(TAG, "call native_agps_data_conn_failed");
                 mAGpsApn = null;
                 mAGpsDataConnectionState = AGPS_DATA_CONNECTION_CLOSED;
-                mConnMgr.stopUsingNetworkFeature(
-                        ConnectivityManager.TYPE_MOBILE, Phone.FEATURE_ENABLE_SUPL);
                 native_agps_data_conn_failed();
             }
         }
