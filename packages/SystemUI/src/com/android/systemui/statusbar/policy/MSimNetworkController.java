@@ -95,6 +95,8 @@ public class MSimNetworkController extends NetworkController {
     ArrayList<MSimSignalCluster> mSimSignalClusters = new ArrayList<MSimSignalCluster>();
     ArrayList<View> mSubsLabelViews = new ArrayList<View>();
 
+    private final boolean mIsInitialized;
+
     public interface MSimSignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
                 String contentDescription);
@@ -192,19 +194,19 @@ public class MSimNetworkController extends NetworkController {
         mLastCombinedSignalIconId = mMSimLastCombinedSignalIconId[mDefaultSubscription];
         mLastDataTypeIconId = mMSimLastDataTypeIconId[mDefaultSubscription];
         mLastSimIconId = mMSimLastSimIconId[mDefaultSubscription];
+        mIsInitialized = true;
         initNetworkState();
     }
 
     protected void initNetworkState() {
-        if (mMSimServiceState == null) {
-            return; // Not initialized yet
-        }
-        MSimTelephonyManager tm = MSimTelephonyManager.getDefault();
-        for (int i=0; i < tm.getPhoneCount(); i++) {
-            mSpn[i] = tm.getSimOperatorName(i);
-            mPlmn[i] = tm.getNetworkOperatorName(i);
-            updateNetworkName(true, mSpn[i],
-                    true, mPlmn[i], i);
+        if (mIsInitialized) {
+            MSimTelephonyManager tm = MSimTelephonyManager.getDefault();
+            for (int i = 0; i < tm.getPhoneCount(); i++) {
+                mSpn[i] = tm.getSimOperatorName(i);
+                mPlmn[i] = tm.getNetworkOperatorName(i);
+                updateNetworkName(true, mSpn[i],
+                        true, mPlmn[i], i);
+            }
         }
     }
 
@@ -291,6 +293,9 @@ public class MSimNetworkController extends NetworkController {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (!mIsInitialized) {
+            return; // Not initialized yet
+        }
         final String action = intent.getAction();
         if (action.equals(WifiManager.RSSI_CHANGED_ACTION)
                 || action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)
