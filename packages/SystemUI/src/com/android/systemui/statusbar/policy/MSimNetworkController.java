@@ -932,16 +932,18 @@ public class MSimNetworkController extends NetworkController {
             str.append(plmn);
             something = true;
         }
-        if (showSpn && spn != null &&
-                !spn.equals(plmn) &&
-                !mEmergencyCallOnlyLabel.equals(plmn)) {
-            if (something) {
+        if (showSpn && spn != null) {
+            if (something && showPlmn
+                    && !spn.equals(plmn) &&
+                    !mEmergencyCallOnlyLabel.equals(plmn)) {
                 str.append("  ");
                 str.append(mNetworkNameSeparator);
                 str.append("  ");
+                str.append(spn);
+            } else if (!showPlmn) {
+                str.append(spn);
+                something = true;
             }
-            str.append(spn);
-            something = true;
         }
         if (something) {
             mMSimNetworkName[subscription] = str.toString();
