@@ -32,7 +32,6 @@ import java.util.List;
 
 /**
  * Provides access to Telecom-related functionality.
- * TODO: Move this all into PhoneManager.
  */
 public class TelecomManager {
 
