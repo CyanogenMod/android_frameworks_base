@@ -93,8 +93,9 @@ public class RecentPanelView {
     private static final int MENU_APP_FLOATING_ID  = 1;
     private static final int MENU_APP_WIPE_ID      = 2;
     private static final int MENU_APP_STOP_ID      = 3;
-    private static final int MENU_APP_PLAYSTORE_ID = 4;
-    private static final int MENU_APP_AMAZON_ID    = 5;
+    private static final int MENU_APP_UNINSTALL_ID = 4;
+    private static final int MENU_APP_PLAYSTORE_ID = 5;
+    private static final int MENU_APP_AMAZON_ID    = 6;
 
     private static final String PLAYSTORE_REFERENCE = "com.android.vending";
     private static final String AMAZON_REFERENCE    = "com.amazon.venezia";
@@ -336,6 +337,8 @@ public class RecentPanelView {
             } catch (NameNotFoundException ex) {
                 Log.e(TAG, "Failed looking up ApplicationInfo for " + td.packageName, ex);
             }
+            popup.getMenu().add(0, MENU_APP_UNINSTALL_ID, 0,
+                    mContext.getResources().getString(R.string.advanced_dev_option_uninstall));
         }
 
         // Add playstore or amazon entry if it is provided by the application.
@@ -380,7 +383,7 @@ public class RecentPanelView {
                         }
                     });
                 } else if (item.getItemId() == MENU_APP_STOP_ID) {
-                    ActivityManager am = (ActivityManager)mContext.getSystemService(
+                    ActivityManager am = (ActivityManager) mContext.getSystemService(
                             Context.ACTIVITY_SERVICE);
                     am.forceStopPackage(td.packageName);
                     removeApplication(td);
@@ -389,6 +392,13 @@ public class RecentPanelView {
                             getSystemService(Context.ACTIVITY_SERVICE);
                     am.clearApplicationUserData(td.packageName,
                             new FakeClearUserDataObserver());
+                    removeApplication(td);
+                } else if (item.getItemId() == MENU_APP_UNINSTALL_ID) {
+                    Uri packageURI = Uri.parse("package:" + td.packageName);
+                    Intent uninstallIntent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageURI);
+                    uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    uninstallIntent.putExtra(Intent.EXTRA_UNINSTALL_ALL_USERS, true);
+                    mContext.startActivity(uninstallIntent);
                     removeApplication(td);
                 } else if (item.getItemId() == MENU_APP_PLAYSTORE_ID) {
                     startApplicationDetailsActivity(null,
