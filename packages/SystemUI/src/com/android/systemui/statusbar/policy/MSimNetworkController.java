@@ -341,6 +341,10 @@ public class MSimNetworkController extends NetworkController {
         mSubsLabelViews.add(v);
     }
 
+    public void clearSubsLabelView() {
+        mSubsLabelViews.clear();
+    }
+
     private void updateCarrierText(int sub) {
         int textResId = 0;
         if (mAirplaneMode) {
@@ -388,12 +392,18 @@ public class MSimNetworkController extends NetworkController {
         for (int i = 0; i < mSubsLabelViews.size(); i++) {
             View v = mSubsLabelViews.get(i);
             TextView label1 = (TextView)v.findViewById(R.id.sub1_label);
-            label1.setText(mCarrierTextSub[MSimConstants.SUB1]);
+            if (label1 != null) {
+                label1.setText(mCarrierTextSub[MSimConstants.SUB1]);
+            }
             TextView label2 = (TextView)v.findViewById(R.id.sub2_label);
-            label2.setText(mCarrierTextSub[MSimConstants.SUB2]);
+            if (label2 != null) {
+                label2.setText(mCarrierTextSub[MSimConstants.SUB2]);
+            }
             if (mSimSlotCount == 3) {
                 TextView label3 = (TextView)v.findViewById(R.id.sub3_label);
-                label3.setText(mCarrierTextSub[MSimConstants.SUB3]);
+                if (label3 != null) {
+                    label3.setText(mCarrierTextSub[MSimConstants.SUB3]);
+                }
             }
         }
     }
