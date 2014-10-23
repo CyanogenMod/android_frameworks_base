@@ -173,6 +173,11 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mKgUpdateMonitor.removeCallback(mUpdateCallback);
+        // dismiss the dialog.
+        if (mSimUnlockProgressDialog != null) {
+            mSimUnlockProgressDialog.dismiss();
+            mSimUnlockProgressDialog = null;
+        }
     }
 
     @Override
