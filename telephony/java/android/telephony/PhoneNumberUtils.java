@@ -1576,7 +1576,7 @@ public class PhoneNumberUtils
      *         listed in the RIL / SIM, otherwise return false.
      * @hide
      */
-    public static boolean isEmergencyNumber(long subId, String number) {
+    public static boolean isEmergencyNumber(int subId, String number) {
         // Return true only if the specified number *exactly* matches
         // one of the emergency numbers listed by the RIL / SIM.
         return isEmergencyNumberInternal(subId, number, true /* useExactMatch */);
@@ -1626,7 +1626,7 @@ public class PhoneNumberUtils
      *         same digits as any of those emergency numbers.
      * @hide
      */
-    public static boolean isPotentialEmergencyNumber(long subId, String number) {
+    public static boolean isPotentialEmergencyNumber(int subId, String number) {
         // Check against the emergency numbers listed by the RIL / SIM,
         // and *don't* require an exact match.
         return isEmergencyNumberInternal(subId, number, false /* useExactMatch */);
@@ -1675,7 +1675,7 @@ public class PhoneNumberUtils
      * @return true if the number is in the list of emergency numbers
      *         listed in the RIL / sim, otherwise return false.
      */
-    private static boolean isEmergencyNumberInternal(long subId, String number,
+    private static boolean isEmergencyNumberInternal(int subId, String number,
             boolean useExactMatch) {
         return isEmergencyNumberInternal(subId, number, null, useExactMatch);
     }
@@ -1704,7 +1704,7 @@ public class PhoneNumberUtils
      * otherwise false
      * @hide
      */
-    public static boolean isEmergencyNumber(long subId, String number, String defaultCountryIso) {
+    public static boolean isEmergencyNumber(int subId, String number, String defaultCountryIso) {
         return isEmergencyNumberInternal(subId, number,
                                          defaultCountryIso,
                                          true /* useExactMatch */);
@@ -1756,7 +1756,7 @@ public class PhoneNumberUtils
      *         any of those emergency numbers.
      * @hide
      */
-    public static boolean isPotentialEmergencyNumber(long subId, String number,
+    public static boolean isPotentialEmergencyNumber(int subId, String number,
             String defaultCountryIso) {
         return isEmergencyNumberInternal(subId, number,
                                          defaultCountryIso,
@@ -1800,7 +1800,7 @@ public class PhoneNumberUtils
      * @return true if the number is an emergency number for the specified country.
      * @hide
      */
-    private static boolean isEmergencyNumberInternal(long subId, String number,
+    private static boolean isEmergencyNumberInternal(int subId, String number,
                                                      String defaultCountryIso,
                                                      boolean useExactMatch) {
         // If the number passed in is null, just return false:
@@ -1917,7 +1917,7 @@ public class PhoneNumberUtils
      * is currently in.
      * @hide
      */
-    public static boolean isLocalEmergencyNumber(Context context, long subId, String number) {
+    public static boolean isLocalEmergencyNumber(Context context, int subId, String number) {
         return isLocalEmergencyNumberInternal(subId, number,
                                               context,
                                               true /* useExactMatch */);
@@ -1971,7 +1971,7 @@ public class PhoneNumberUtils
      *
      * @hide
      */
-    public static boolean isPotentialLocalEmergencyNumber(Context context, long subId,
+    public static boolean isPotentialLocalEmergencyNumber(Context context, int subId,
             String number) {
         return isLocalEmergencyNumberInternal(subId, number,
                                               context,
@@ -2020,7 +2020,7 @@ public class PhoneNumberUtils
      *              local country, based on the CountryDetector.
      * @hide
      */
-    private static boolean isLocalEmergencyNumberInternal(long subId, String number,
+    private static boolean isLocalEmergencyNumberInternal(int subId, String number,
                                                           Context context,
                                                           boolean useExactMatch) {
         String countryIso;
@@ -2063,7 +2063,7 @@ public class PhoneNumberUtils
      * to read the VM number.
      * @hide
      */
-    public static boolean isVoiceMailNumber(long subId, String number) {
+    public static boolean isVoiceMailNumber(int subId, String number) {
         String vmNumber;
 
         try {
@@ -2802,7 +2802,7 @@ public class PhoneNumberUtils
     /**
      * Returns Default voice subscription Id.
      */
-    private static long getDefaultVoiceSubId() {
+    private static int getDefaultVoiceSubId() {
         return SubscriptionManager.getDefaultVoiceSubId();
     }
     //==== End of utility methods used only in compareStrictly() =====

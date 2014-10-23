@@ -47,7 +47,7 @@ interface ISms {
      * @param subId the subId id.
      * @return list of SmsRawData of all sms on ICC
      */
-    List<SmsRawData> getAllMessagesFromIccEfForSubscriber(in long subId, String callingPkg);
+    List<SmsRawData> getAllMessagesFromIccEfForSubscriber(in int subId, String callingPkg);
 
     /**
      * Update the specified message on the ICC.
@@ -75,7 +75,7 @@ interface ISms {
      * @return success or not
      *
      */
-     boolean updateMessageOnIccEfForSubscriber(in long subId, String callingPkg,
+     boolean updateMessageOnIccEfForSubscriber(in int subId, String callingPkg,
              int messageIndex, int newStatus, in byte[] pdu);
 
     /**
@@ -99,7 +99,7 @@ interface ISms {
      * @return success or not
      *
      */
-    boolean copyMessageToIccEfForSubscriber(in long subId, String callingPkg, int status,
+    boolean copyMessageToIccEfForSubscriber(in int subId, String callingPkg, int status,
             in byte[] pdu, in byte[] smsc);
 
     /**
@@ -152,7 +152,7 @@ interface ISms {
      *  raw pdu of the status report is in the extended data ("pdu").
      * @param subId the subId id.
      */
-    void sendDataForSubscriber(long subId, String callingPkg, in String destAddr,
+    void sendDataForSubscriber(int subId, String callingPkg, in String destAddr,
             in String scAddr, in int destPort, in byte[] data, in PendingIntent sentIntent,
             in PendingIntent deliveryIntent);
 
@@ -267,7 +267,7 @@ interface ISms {
      *  raw pdu of the status report is in the extended data ("pdu").
      * @param subId the subId on which the SMS has to be sent.
      */
-    void sendTextForSubscriber(in long subId, String callingPkg, in String destAddr,
+    void sendTextForSubscriber(in int subId, String callingPkg, in String destAddr,
             in String scAddr, in String text, in PendingIntent sentIntent,
             in PendingIntent deliveryIntent);
 
@@ -406,7 +406,7 @@ interface ISms {
      *   extended data ("pdu").
      * @param subId the subId on which the SMS has to be sent.
      */
-    void sendMultipartTextForSubscriber(in long subId, String callingPkg,
+    void sendMultipartTextForSubscriber(in int subId, String callingPkg,
             in String destinationAddress, in String scAddress,
             in List<String> parts, in List<PendingIntent> sentIntents,
             in List<PendingIntent> deliveryIntents);
@@ -483,7 +483,7 @@ interface ISms {
      *
      * @see #disableCellBroadcast(int)
      */
-    boolean enableCellBroadcastForSubscriber(in long subId, int messageIdentifier);
+    boolean enableCellBroadcastForSubscriber(in int subId, int messageIdentifier);
 
     /**
      * Disable reception of cell broadcast (SMS-CB) messages with the given
@@ -512,7 +512,7 @@ interface ISms {
      *
      * @see #enableCellBroadcast(int)
      */
-    boolean disableCellBroadcastForSubscriber(in long subId, int messageIdentifier);
+    boolean disableCellBroadcastForSubscriber(in int subId, int messageIdentifier);
 
     /*
      * Enable reception of cell broadcast (SMS-CB) messages with the given
@@ -545,7 +545,7 @@ interface ISms {
      *
      * @see #disableCellBroadcastRange(int, int)
      */
-    boolean enableCellBroadcastRangeForSubscriber(long subId, int startMessageId, int endMessageId);
+    boolean enableCellBroadcastRangeForSubscriber(int subId, int startMessageId, int endMessageId);
 
     /**
      * Disable reception of cell broadcast (SMS-CB) messages with the given
@@ -578,7 +578,7 @@ interface ISms {
      *
      * @see #enableCellBroadcastRange(int, int, int)
      */
-    boolean disableCellBroadcastRangeForSubscriber(long subId, int startMessageId,
+    boolean disableCellBroadcastRangeForSubscriber(int subId, int startMessageId,
             int endMessageId);
 
     /**
@@ -591,7 +591,7 @@ interface ISms {
      * Returns the premium SMS send permission for the specified package.
      * Requires system permission.
      */
-    int getPremiumSmsPermissionForSubscriber(long subId, String packageName);
+    int getPremiumSmsPermissionForSubscriber(int subId, String packageName);
 
     /**
      * Set the SMS send permission for the specified package.
@@ -607,7 +607,7 @@ interface ISms {
      * Set the SMS send permission for the specified package.
      * Requires system permission.
      */
-    void setPremiumSmsPermissionForSubscriber(long subId, String packageName, int permission);
+    void setPremiumSmsPermissionForSubscriber(int subId, String packageName, int permission);
 
     /**
      * SMS over IMS is supported if IMS is registered and SMS is supported
@@ -627,7 +627,13 @@ interface ISms {
      *
      * @see #getImsSmsFormat()
      */
-    boolean isImsSmsSupportedForSubscriber(long subId);
+    boolean isImsSmsSupportedForSubscriber(int subId);
+
+    /*
+     * get user prefered SMS subId
+     * @return subId id
+     */
+    int getPreferredSmsSubscription();
 
     /*
      * get user prefered SMS subId
@@ -657,7 +663,7 @@ interface ISms {
      *
      * @see #isImsSmsSupported()
      */
-    String getImsSmsFormatForSubscriber(long subId);
+    String getImsSmsFormatForSubscriber(int subId);
 
     /*
      * Get SMS prompt property,  enabled or not
@@ -692,7 +698,7 @@ interface ISms {
      *  broadcast when the message is delivered to the recipient.  The
      *  raw pdu of the status report is in the extended data ("pdu").
      */
-    void sendStoredText(long subId, String callingPkg, in Uri messageUri, String scAddress,
+    void sendStoredText(int subId, String callingPkg, in Uri messageUri, String scAddress,
             in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
     /**
@@ -728,7 +734,7 @@ interface ISms {
      *   to the recipient.  The raw pdu of the status report is in the
      *   extended data ("pdu").
      */
-    void sendStoredMultipartText(long subId, String callingPkg, in Uri messageUri,
+    void sendStoredMultipartText(int subId, String callingPkg, in Uri messageUri,
                 String scAddress, in List<PendingIntent> sentIntents,
                 in List<PendingIntent> deliveryIntents);
 

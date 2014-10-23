@@ -72,7 +72,7 @@ import com.android.server.am.BatteryStatsService;
  * and 15973975 by saving the phoneId of the registrant and then using the
  * phoneId when deciding to to make a callback. This is necessary because
  * a subId changes from to a dummy value when a SIM is removed and thus won't
- * compare properly. Because SubscriptionManager.getPhoneId(long subId) handles
+ * compare properly. Because SubscriptionManager.getPhoneId(int subId) handles
  * the dummy value conversion we properly do the callbacks.
  *
  * Eventually we may want to remove the notion of dummy value but for now this
@@ -95,7 +95,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
         int events;
 
-        long subId;
+        int subId;
 
         int phoneId;
 
@@ -154,7 +154,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private VoLteServiceState mVoLteServiceState = new VoLteServiceState();
 
-    private long mDefaultSubId = SubscriptionManager.INVALID_SUB_ID;
+    private int mDefaultSubId = SubscriptionManager.INVALID_SUB_ID;
 
     private int mDefaultPhoneId = SubscriptionManager.INVALID_PHONE_ID;
 
@@ -201,7 +201,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 }
                 case MSG_UPDATE_DEFAULT_SUB: {
                     int newDefaultPhoneId = msg.arg1;
-                    long newDefaultSubId = (Long)(msg.obj);
+                    int newDefaultSubId = (Integer)(msg.obj);
                     if (VDBG) {
                         log("MSG_UPDATE_DEFAULT_SUB:current mDefaultSubId=" + mDefaultSubId
                             + " current mDefaultPhoneId=" + mDefaultPhoneId + " newDefaultSubId= "
@@ -235,7 +235,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 if (DBG) log("onReceive: userHandle=" + userHandle);
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_SWITCHED, userHandle, 0));
             } else if (action.equals(TelephonyIntents.ACTION_DEFAULT_SUBSCRIPTION_CHANGED)) {
-                Long newDefaultSubIdObj = new Long(intent.getLongExtra(
+                Integer newDefaultSubIdObj = new Integer(intent.getIntExtra(
                         PhoneConstants.SUBSCRIPTION_KEY, SubscriptionManager.getDefaultSubId()));
                 int newDefaultPhoneId = intent.getIntExtra(PhoneConstants.SLOT_KEY,
                     SubscriptionManager.getPhoneId(mDefaultSubId));
@@ -331,13 +331,13 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     @Override
-    public void listenForSubscriber(long subId, String pkgForDebug, IPhoneStateListener callback,
+    public void listenForSubscriber(int subId, String pkgForDebug, IPhoneStateListener callback,
             int events, boolean notifyNow) {
         listen(pkgForDebug, callback, events, notifyNow, subId);
     }
 
     private void listen(String pkgForDebug, IPhoneStateListener callback, int events,
-            boolean notifyNow, long subId) {
+            boolean notifyNow, int subId) {
         int callerUid = UserHandle.getCallingUserId();
         int myUid = UserHandle.myUserId();
         if (VDBG) {
@@ -544,7 +544,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         broadcastCallStateChanged(state, incomingNumber, SubscriptionManager.DEFAULT_SUB_ID);
     }
 
-    public void notifyCallStateForSubscriber(long subId, int state, String incomingNumber) {
+    public void notifyCallStateForSubscriber(int subId, int state, String incomingNumber) {
         if (!checkNotifyPermission("notifyCallState()")) {
             return;
         }
@@ -627,7 +627,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         notifySignalStrengthForSubscriber(mDefaultSubId, signalStrength);
     }
 
-    public void notifySignalStrengthForSubscriber(long subId, SignalStrength signalStrength) {
+    public void notifySignalStrengthForSubscriber(int subId, SignalStrength signalStrength) {
         if (!checkNotifyPermission("notifySignalStrength()")) {
             return;
         }
@@ -687,7 +687,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
          notifyCellInfoForSubscriber(mDefaultSubId, cellInfo);
     }
 
-    public void notifyCellInfoForSubscriber(long subId, List<CellInfo> cellInfo) {
+    public void notifyCellInfoForSubscriber(int subId, List<CellInfo> cellInfo) {
         if (!checkNotifyPermission("notifyCellInfo()")) {
             return;
         }
@@ -777,7 +777,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         notifyCallForwardingChangedForSubscriber(mDefaultSubId, cfi);
     }
 
-    public void notifyCallForwardingChangedForSubscriber(long subId, boolean cfi) {
+    public void notifyCallForwardingChangedForSubscriber(int subId, boolean cfi) {
         if (!checkNotifyPermission("notifyCallForwardingChanged()")) {
             return;
         }
@@ -808,7 +808,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         notifyDataActivityForSubscriber(mDefaultSubId, state);
     }
 
-    public void notifyDataActivityForSubscriber(long subId, int state) {
+    public void notifyDataActivityForSubscriber(int subId, int state) {
         if (!checkNotifyPermission("notifyDataActivity()" )) {
             return;
         }
@@ -836,7 +836,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             networkCapabilities, networkType, roaming);
     }
 
-    public void notifyDataConnectionForSubscriber(long subId, int state,
+    public void notifyDataConnectionForSubscriber(int subId, int state,
             boolean isDataConnectivityPossible, String reason, String apn, String apnType,
             LinkProperties linkProperties, NetworkCapabilities networkCapabilities,
             int networkType, boolean roaming) {
@@ -924,7 +924,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
          notifyDataConnectionFailedForSubscriber(mDefaultSubId, reason, apnType);
     }
 
-    public void notifyDataConnectionFailedForSubscriber(long subId,
+    public void notifyDataConnectionFailedForSubscriber(int subId,
             String reason, String apnType) {
         if (!checkNotifyPermission("notifyDataConnectionFailed()")) {
             return;
@@ -957,7 +957,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
          notifyCellLocationForSubscriber(mDefaultSubId, cellLocation);
     }
 
-    public void notifyCellLocationForSubscriber(long subId, Bundle cellLocation) {
+    public void notifyCellLocationForSubscriber(int subId, Bundle cellLocation) {
         log("notifyCellLocationForSubscriber: subId=" + subId
                 + " cellLocation=" + cellLocation);
         if (!checkNotifyPermission("notifyCellLocation()")) {
@@ -1104,7 +1104,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
     }
 
-    public void notifyOemHookRawEventForSubscriber(long subId, byte[] rawData) {
+    public void notifyOemHookRawEventForSubscriber(int subId, byte[] rawData) {
         if (!checkNotifyPermission("notifyOemHookRawEventForSubscriber")) {
             return;
         }
@@ -1170,7 +1170,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     // the legacy intent broadcasting
     //
 
-    private void broadcastServiceStateChanged(ServiceState state, long subId) {
+    private void broadcastServiceStateChanged(ServiceState state, int subId) {
         long ident = Binder.clearCallingIdentity();
         try {
             mBatteryStats.notePhoneState(state.getState());
@@ -1189,7 +1189,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
     }
 
-    private void broadcastSignalStrengthChanged(SignalStrength signalStrength, long subId) {
+    private void broadcastSignalStrengthChanged(SignalStrength signalStrength, int subId) {
         long ident = Binder.clearCallingIdentity();
         try {
             mBatteryStats.notePhoneSignalStrength(signalStrength);
@@ -1208,7 +1208,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
     }
 
-    private void broadcastCallStateChanged(int state, String incomingNumber, long subId) {
+    private void broadcastCallStateChanged(int state, String incomingNumber, int subId) {
         long ident = Binder.clearCallingIdentity();
         try {
             if (state == TelephonyManager.CALL_STATE_IDLE) {
@@ -1236,7 +1236,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     private void broadcastDataConnectionStateChanged(int state,
             boolean isDataConnectivityPossible,
             String reason, String apn, String apnType, LinkProperties linkProperties,
-            NetworkCapabilities networkCapabilities, boolean roaming, long subId) {
+            NetworkCapabilities networkCapabilities, boolean roaming, int subId) {
         // Note: not reporting to the battery stats service here, because the
         // status bar takes care of that after taking into account all of the
         // required info.
@@ -1268,7 +1268,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     private void broadcastDataConnectionFailed(String reason, String apnType,
-            long subId) {
+            int subId) {
         Intent intent = new Intent(TelephonyIntents.ACTION_DATA_CONNECTION_FAILED);
         intent.putExtra(PhoneConstants.FAILURE_REASON_KEY, reason);
         intent.putExtra(PhoneConstants.DATA_APN_TYPE_KEY, apnType);
@@ -1384,11 +1384,11 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     private static class LogSSC {
         private Time mTime;
         private String mS;
-        private long mSubId;
+        private int mSubId;
         private int mPhoneId;
         private ServiceState mState;
 
-        public void set(Time t, String s, long subId, int phoneId, ServiceState state) {
+        public void set(Time t, String s, int subId, int phoneId, ServiceState state) {
             mTime = t; mS = s; mSubId = subId; mPhoneId = phoneId; mState = state;
         }
 
@@ -1401,7 +1401,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     private LogSSC logSSC [] = new LogSSC[10];
     private int next = 0;
 
-    private void logServiceStateChanged(String s, long subId, int phoneId, ServiceState state) {
+    private void logServiceStateChanged(String s, int subId, int phoneId, ServiceState state) {
         if (logSSC == null || logSSC.length == 0) {
             return;
         }
@@ -1437,7 +1437,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
     }
 
-    boolean subIdMatch(long rSubId, long subId) {
+    boolean subIdMatch(int rSubId, int subId) {
         if(rSubId == SubscriptionManager.DEFAULT_SUB_ID) {
             return (subId == mDefaultSubId);
         } else {
