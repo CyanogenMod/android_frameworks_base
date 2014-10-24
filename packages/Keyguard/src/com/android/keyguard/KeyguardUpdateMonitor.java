@@ -113,6 +113,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private static final int MSG_REPORT_EMERGENCY_CALL_ACTION = 318;
     private static final int MSG_SCREEN_TURNED_ON = 319;
     private static final int MSG_SCREEN_TURNED_OFF = 320;
+    private static final int MSG_AIRPLANE_MODE_CHANGED = 321;
     private static final int MSG_KEYGUARD_BOUNCER_CHANGED = 322;
     private static final int MSG_FINGERPRINT_PROCESSED = 323;
     private static final int MSG_FINGERPRINT_ACQUIRED = 324;
@@ -228,6 +229,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                     break;
                 case MSG_SCREEN_TURNED_ON:
                     handleScreenTurnedOn();
+                    break;
+                case MSG_AIRPLANE_MODE_CHANGED:
+                    handleAirplaneModeChanged((Boolean) msg.obj);
                     break;
                 case MSG_FINGERPRINT_ACQUIRED:
                     handleFingerprintAcquired(msg.arg1);
@@ -432,6 +436,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             } else if (Intent.ACTION_USER_REMOVED.equals(action)) {
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_REMOVED,
                        intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0), 0));
+            } else if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)) {
+                boolean state = intent.getBooleanExtra("state", false);
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_AIRPLANE_MODE_CHANGED, state));
             } else if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
                 dispatchBootCompleted();
             } else if (TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED.equals(action)) {
@@ -711,6 +718,15 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
     }
 
+    private void handleAirplaneModeChanged(boolean on) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onAirplaneModeChanged(on);
+            }
+        }
+    }
+
     private void handleUserInfoChanged(int userId) {
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -752,6 +768,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_USER_REMOVED);
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED);
         filter.addAction(TelephonyIntents.ACTION_SUBINFO_CONTENT_CHANGE);
         filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
@@ -1279,6 +1296,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             callback.onRefreshCarrierInfo(subId, mPlmn.get(subId), mSpn.get(subId));
             callback.onSimStateChanged(subId, mSimState.get(subId));
         }
+        boolean airplaneModeOn = Settings.System.getInt(
+                mContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+        callback.onAirplaneModeChanged(airplaneModeOn);
     }
 
     public void sendKeyguardVisibilityChanged(boolean showing) {

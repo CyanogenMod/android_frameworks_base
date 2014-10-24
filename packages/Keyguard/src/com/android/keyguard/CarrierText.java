@@ -44,9 +44,12 @@ public class CarrierText extends LinearLayout {
 
     private LockPatternUtils mLockPatternUtils;
 
+    private boolean mShowAPM;
+
     private KeyguardUpdateMonitor mUpdateMonitor;
     private TextView mOperatorName[];
     private TextView mOperatorSeparator[];
+    private TextView mAirplaneModeText;
 
     private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
         @Override
@@ -58,6 +61,31 @@ public class CarrierText extends LinearLayout {
         public void onSimStateChanged(long subId, IccCardConstants.State simState) {
             updateCarrierText(simState, mUpdateMonitor.getTelephonyPlmn(subId),
                 mUpdateMonitor.getTelephonySpn(subId), subId);
+        }
+
+        @Override
+        void onAirplaneModeChanged(boolean on) {
+            if (on && mShowAPM) {
+                for (int i = 0; i < mNumPhones; i++) {
+                    mOperatorName[i].setVisibility(View.GONE);
+                    if (i < mNumPhones-1) {
+                        mOperatorSeparator[i].setVisibility(View.GONE);
+                    }
+                }
+                if (mAirplaneModeText != null) {
+                    mAirplaneModeText.setVisibility(View.VISIBLE);
+                }
+            } else {
+                for (int i = 0; i < mNumPhones; i++) {
+                    mOperatorName[i].setVisibility(View.VISIBLE);
+                    if (i < mNumPhones-1) {
+                        mOperatorSeparator[i].setVisibility(View.VISIBLE);
+                    }
+                }
+                if (mAirplaneModeText != null) {
+                    mAirplaneModeText.setVisibility(View.GONE);
+                }
+            }
         }
 
         public void onScreenTurnedOff(int why) {
@@ -101,6 +129,8 @@ public class CarrierText extends LinearLayout {
 
         mOperatorName = new TextView[mNumPhones];
         mOperatorSeparator = new TextView[mNumPhones-1];
+
+        mShowAPM = context.getResources().getBoolean(R.bool.config_display_APM);
     }
 
     protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn,
@@ -113,11 +143,19 @@ public class CarrierText extends LinearLayout {
             return;
         }
 
+        String airplaneMode = getResources().getString(
+                com.android.internal.R.string.lockscreen_airplane_mode_on);
         CharSequence text = getCarrierTextForSimState(simState, plmn, spn);
         TextView updateCarrierView = mOperatorName[phoneId];
         if (mContext.getResources().getBoolean(R.bool.kg_use_all_caps)) {
+            if (mAirplaneModeText != null && mShowAPM) {
+                mAirplaneModeText.setText(airplaneMode.toUpperCase());
+            }
             updateCarrierView.setText(text != null ? text.toString().toUpperCase() : null);
         } else {
+            if (mAirplaneModeText != null && mShowAPM) {
+                mAirplaneModeText.setText(airplaneMode);
+            }
             updateCarrierView.setText(text != null ? text.toString() : null);
         }
     }
@@ -141,6 +179,7 @@ public class CarrierText extends LinearLayout {
                 mOperatorSeparator[i].setText("|");
             }
         }
+        mAirplaneModeText = (TextView) findViewById(R.id.airplane_mode);
     }
 
     @Override
