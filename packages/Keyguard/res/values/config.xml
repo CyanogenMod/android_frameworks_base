@@ -32,6 +32,8 @@
     <!-- True if we need to show on "Slide" lock screen -->
     <bool name="config_showEmergencyButton">false</bool>
 
+    <bool name="config_showEmergencyCallOnlyInLockScreen">false</bool>
+
 	<!-- display airplane mode in lock sreen when phone is in APM mode -->
 	<bool name="config_display_APM">false</bool>
 </resources>

@@ -1227,7 +1227,15 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private CharSequence getTelephonyPlmnFrom(Intent intent) {
         if (intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false)) {
             final String plmn = intent.getStringExtra(TelephonyIntents.EXTRA_PLMN);
-            return (plmn != null) ? plmn : getDefaultPlmn();
+            String strEmergencyCallOnly = mContext.getResources().getText(
+                    com.android.internal.R.string.emergency_calls_only).toString();
+            if (mContext.getResources().getBoolean(
+                    R.bool.config_showEmergencyCallOnlyInLockScreen)
+                && plmn.equalsIgnoreCase(strEmergencyCallOnly)) {
+                    return getDefaultPlmn();
+            } else {
+                return (plmn != null) ? plmn : getDefaultPlmn();
+            }
         }
         return null;
     }
