@@ -4531,6 +4531,7 @@ public class Camera {
         private static final String KEY_QC_MIN_WB_CCT = "min-wb-cct";
         private static final String KEY_QC_MAX_WB_CCT = "max-wb-cct";
         private static final String KEY_QC_AUTO_HDR_ENABLE = "auto-hdr-enable";
+        private static final String KEY_QC_VIDEO_ROTATION = "video-rotation";
 
         /** @hide
         * KEY_QC_AE_BRACKET_HDR
@@ -4757,6 +4758,25 @@ public class Camera {
         * Face Detction on
         **/
         public static final String FACE_DETECTION_ON = "on";
+
+        // Values for video rotation settings.
+
+        /** @hide
+        * VIDEO_ROTATION_0
+        **/
+        public static final String VIDEO_ROTATION_0 = "0";
+        /** @hide
+        * VIDEO_ROTATION_90
+        **/
+        public static final String VIDEO_ROTATION_90 = "90";
+        /** @hide
+        * VIDEO_ROTATION_180
+        **/
+        public static final String VIDEO_ROTATION_180 = "180";
+        /** @hide
+        * VIDEO_ROTATION_270
+        **/
+        public static final String VIDEO_ROTATION_270 = "270";
 
         /* ### QC ADDED PARAMETER APIS*/
          /** @hide
@@ -5627,6 +5647,35 @@ public class Camera {
          */
          public void setFaceDetectionMode(String value) {
             set(KEY_QC_FACE_DETECTION, value);
+         }
+
+         /** @hide
+         * Gets the current video rotation setting.
+         *
+         * @return one of VIDEO_QC_ROTATION_XXX string constant. null if video rotation
+         *         setting is not supported.
+         */
+         public String getVideoRotation() {
+            return get(KEY_QC_VIDEO_ROTATION);
+         }
+
+         /** @hide
+         * Sets the current video rotation setting.
+         *
+         * @param value VIDEO_QC_ROTATION_XXX string constants.
+         */
+         public void setVideoRotation(String value) {
+            set(KEY_QC_VIDEO_ROTATION, value);
+         }
+         /** @hide
+         * Gets the supported video rotation  modes.
+         *
+         * @return a List of VIDEO_QC_ROTATION_XXX string constant. null if this
+         *         setting is not supported.
+         */
+         public List<String> getSupportedVideoRotationValues() {
+            String str = get(KEY_QC_VIDEO_ROTATION + SUPPORTED_VALUES_SUFFIX);
+            return split(str);
          }
 
          // Splits a comma delimited string to an ArrayList of Coordinate.
