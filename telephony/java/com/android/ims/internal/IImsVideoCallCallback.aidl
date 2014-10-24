@@ -41,7 +41,7 @@ oneway interface IImsVideoCallCallback {
 
     void changePeerDimensions(int width, int height);
 
-    void changeCallDataUsage(int dataUsage);
+    void changeCallDataUsage(long dataUsage);
 
     void changeCameraCapabilities(in CameraCapabilities cameraCapabilities);
 

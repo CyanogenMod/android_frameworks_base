@@ -91,7 +91,7 @@ final class VideoCallbackServant {
                 case MSG_CHANGE_CALL_DATA_USAGE: {
                     SomeArgs args = (SomeArgs) msg.obj;
                     try {
-                        mDelegate.changeCallDataUsage(args.argi1);
+                        mDelegate.changeCallDataUsage((long) args.arg1);
                     } finally {
                         args.recycle();
                     }
@@ -141,9 +141,9 @@ final class VideoCallbackServant {
         }
 
         @Override
-        public void changeCallDataUsage(int dataUsage) throws RemoteException {
+        public void changeCallDataUsage(long dataUsage) throws RemoteException {
             SomeArgs args = SomeArgs.obtain();
-            args.argi1 = dataUsage;
+            args.arg1 = dataUsage;
             mHandler.obtainMessage(MSG_CHANGE_CALL_DATA_USAGE, args).sendToTarget();
         }
 
