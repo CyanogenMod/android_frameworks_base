@@ -58,6 +58,13 @@ public class KeyguardUpdateMonitorCallback {
     void onRefreshCarrierInfo(long subId, CharSequence plmn, CharSequence spn) { }
 
     /**
+     * Called when the airplane mode changes.
+     *
+     * @param on Indicates if the airplane mode is now enable.
+     */
+    void onAirplaneModeChanged(boolean on) { }
+
+    /**
      * Called when the ringer mode changes.
      * @param state the current ringer state, as defined in
      * {@link AudioManager#RINGER_MODE_CHANGED_ACTION}
