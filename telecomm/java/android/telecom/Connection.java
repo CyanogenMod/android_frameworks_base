@@ -427,7 +427,7 @@ public abstract class Connection {
          *
          * @param dataUsage The updated data usage.
          */
-        public void changeCallDataUsage(int dataUsage) {
+        public void changeCallDataUsage(long dataUsage) {
             if (mVideoCallback != null) {
                 try {
                     mVideoCallback.changeCallDataUsage(dataUsage);
