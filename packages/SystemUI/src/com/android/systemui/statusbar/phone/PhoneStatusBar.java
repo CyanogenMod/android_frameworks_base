@@ -281,8 +281,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public QuickSettingsContainerView mSettingsContainer; //PA PIE
     int mSettingsPanelGravity;
 
-    boolean mDoubleTapToSleep;
-
     // Ribbon settings
     private boolean mHasQuickAccessSettings;
     private boolean mQuickAccessLayoutLinked = true;
@@ -872,6 +870,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     inflateRibbon();
                     mRibbonView.setVisibility(View.VISIBLE);
                 }
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE))) {
+                mStatusBarView.setGestureListener(Settings.System.getInt(
+                        mContext.getContentResolver(), Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 
+                        0, UserHandle.USER_CURRENT) == 1;
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QUICK_SETTINGS_RIBBON_TILES))) {
                 cleanupRibbon();
@@ -966,9 +969,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mTickerDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.TICKER_DISABLED, 0, UserHandle.USER_CURRENT) == 1;
 
-            mDoubleTapToSleep = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
-
             boolean reminderHolder = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.REMINDER_ALERT_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
             if (reminderHolder != mReminderEnabled) {
@@ -986,10 +986,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 enableOrDisableReminder();
             }
         }
-    }
-
-    protected boolean isDoubleTapEnabled() {
-        return mDoubleTapToSleep;
     }
 
     private void updateActiveDisplayViewState() {
