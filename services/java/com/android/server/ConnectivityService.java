@@ -803,6 +803,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     log("MULTI_SIM_DEFAULT_DATA_CALL_SUBSCRIPTION"
                 +" not found in settings manager");
                 e.printStackTrace();
+                if (mDefaultSubscription < 0) {
+                    mDefaultSubscription = 0;
+                    loge("ConnectivityService mDefaultSub - "  + mDefaultSubscription);
+                }
             }
         }
 
