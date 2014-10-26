@@ -254,12 +254,14 @@ class WifiConfigStore {
     }
 
     boolean isDataToWifiAutoConn() {
-        // If the active network type is mobile, wifi connection type is auto
-        // connect and GSM to WLAN connection type is auto connect,
-        // auto connect to wifi.
+        // If the active network type is mobile or wimax, wifi connection
+        // type is auto connect and GSM to WLAN connection type is auto
+        // connect, auto connect to wifi.
         return isWifiAuto()
-                && ((existActiveNetwork()
-                    == ConnectivityManager.TYPE_MOBILE) &&
+                && (((existActiveNetwork()
+                    == ConnectivityManager.TYPE_MOBILE) ||
+                     (existActiveNetwork()
+                    == ConnectivityManager.TYPE_WIMAX)) &&
                 isDataToWifiAuto());
 
     }
