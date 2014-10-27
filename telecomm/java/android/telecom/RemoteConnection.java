@@ -149,6 +149,16 @@ public final class RemoteConnection {
         public void onVideoStateChanged(RemoteConnection connection, int videoState) {}
 
         /**
+         * Indicates that the call substate of this {@code RemoteConnection} has changed.
+         * See {@link #getCallSubstate()}.
+         *
+         * @param connection The {@code RemoteConnection} invoking this method.
+         * @param callSubstate The new call substate of the {@code RemoteConnection}.
+         * @hide
+         */
+        public void onCallSubstateChanged(RemoteConnection connection, int callSubstate) {}
+
+        /**
          * Indicates that this {@code RemoteConnection} has been destroyed. No further requests
          * should be made to the {@code RemoteConnection}, and references to it should be cleared.
          *
@@ -405,6 +415,7 @@ public final class RemoteConnection {
     private boolean mConnected;
     private int mCallCapabilities;
     private int mVideoState;
+    private int mCallSubstate;
     private VideoProvider mVideoProvider;
     private boolean mIsVoipAudioMode;
     private StatusHints mStatusHints;
@@ -541,6 +552,14 @@ public final class RemoteConnection {
      */
     public int getVideoState() {
         return mVideoState;
+    }
+
+    /**
+     * @return The call substate of the {@code RemoteConnection}. See
+     * @hide
+     */
+    public int getCallSubstate() {
+        return mCallSubstate;
     }
 
     /**
@@ -847,6 +866,16 @@ public final class RemoteConnection {
         mVideoState = videoState;
         for (Callback c : mCallbacks) {
             c.onVideoStateChanged(this, videoState);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    void setCallSubstate(int callSubstate) {
+        mCallSubstate = callSubstate;
+        for (Callback c : mCallbacks) {
+            c.onCallSubstateChanged(this, callSubstate);
         }
     }
 

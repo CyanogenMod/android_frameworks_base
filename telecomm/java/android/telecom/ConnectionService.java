@@ -577,6 +577,13 @@ public abstract class ConnectionService extends Service {
             Log.i(this, "Adapter onPhoneAccountChanged %s, %s", c, pHandle);
             mAdapter.setPhoneAccountHandle(id, pHandle);
         }
+
+        @Override
+        public void onCallSubstateChanged(Connection c, int callSubstate) {
+            String id = mIdByConnection.get(c);
+            Log.d(this, "Adapter set call substate %d", callSubstate);
+            mAdapter.setCallSubstate(id, callSubstate);
+        }
     };
 
     /** {@inheritDoc} */
@@ -646,7 +653,8 @@ public abstract class ConnectionService extends Service {
                         connection.getAudioModeIsVoip(),
                         connection.getStatusHints(),
                         connection.getDisconnectCause(),
-                        createConnectionIdList(connection.getConferenceableConnections())));
+                        createConnectionIdList(connection.getConferenceableConnections()),
+                        connection.getCallSubstate()));
     }
 
     /** @hide */
