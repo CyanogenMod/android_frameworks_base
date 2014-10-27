@@ -253,4 +253,11 @@ interface IImsCallSession {
      * intermediates between the propriety implementation and Telecomm/InCall.
      */
     IImsVideoCallProvider getVideoCallProvider();
+
+    /**
+     * Gets the call substate for this session.
+     *
+     * @return the call substate for this session.
+     */
+    int getCallSubstate();
 }
