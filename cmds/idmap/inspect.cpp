@@ -223,7 +223,8 @@ namespace {
     }
 
     status_t parse_data(IdmapBuffer& buf, const AssetManager& am) {
-        const uint32_t packageId = am.getResources().getBasePackageId(0);
+        const ResTable& rt = am.getResources();
+        const uint32_t packageId = rt.getBasePackageId(rt.getBasePackageCount() - 1);
 
         uint16_t data16;
         status_t err = buf.nextUint16(&data16);
