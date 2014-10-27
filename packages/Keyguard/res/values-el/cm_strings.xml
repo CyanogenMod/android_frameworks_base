@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nΠροσπάθειες που απομένουν:</string>
   <string name="lockscreen_sim_error_message_short">Μη έγκυρη κάρτα.</string>
   <string name="keyguard_perso_locked_message">Η SIM/RUIM είναι κλειδωμένη</string>
-  <string name="msim_kg_sim_pin_msg_format">ΣΥΝΔΡ: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Τελευταία χρησιμοποιημένη εφαρμογή</string>
 </resources>

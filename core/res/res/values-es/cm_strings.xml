@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permite que la aplicación establezca el fondo de pantalla de bloqueo.</string>
   <string name="permlab_useHardwareFramework">usar marco de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite que la aplicación acceda al marco de hardware de CM.</string>
+  <string name="permlab_keyguardApplicationWidget">establecer el widget de la aplicación en la pantalla de bloqueo</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite a una aplicación definir el widget de la aplicación en la pantalla de bloqueo.</string>
   <string name="immersive_mode_confirmation_bottom">Desliza el dedo hacia arriba desde el borde inferior para salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a tu ubicación</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Solicitud SS es modificada a nueva solicitud SS.</string>
   <string name="theme_install_error_title">Fallo al instalar el tema</string>
   <string name="theme_install_error_message">%s falló en la instalación</string>
+  <string name="storage_uicc">Almacenamiento UICC</string>
 </resources>

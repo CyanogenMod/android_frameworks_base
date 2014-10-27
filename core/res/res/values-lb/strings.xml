@@ -42,11 +42,22 @@
   <string name="serviceErased">Ausläsche war erfollegräich.</string>
   <string name="passwordIncorrect">Inkorrekt Passwuert.</string>
   <string name="mmiComplete">MMI komplett.</string>
+  <string name="badPin">Déi al PIN déi s du agetippt hues ass net korrekt.</string>
+  <string name="badPuk">De PUK deen s du agetippt hues ass net korrekt.</string>
+  <string name="mismatchPin">D\'PINen déi s du agetippt hues stëmmen net iwwereneen.</string>
   <string name="invalidPin">Tipp e PIN deen tëscht 4 an 8 Zifferen huet.</string>
+  <string name="invalidPuk">Tipp e PUK deen 8 oder méi Zifferen huet.</string>
+  <string name="needPuk">Deng SIM-Kaart ass PUK-gespaart. Tipp de PUK-Code fir en z\'entspären.</string>
   <string name="needPuk2">Gëff de PUK2 vun der SIM-Kaart an, fir z\'entspären.</string>
   <string name="enablePin">Feeler. Aktivéier d\'SIM-/RUIM-Spär.</string>
+  <plurals name="pinpuk_attempts">
+    <item quantity="one">Du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier deng SIM gespaart ass.</item>
+    <item quantity="other">Du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier deng SIM gespaart ass.</item>
+  </plurals>
   <string name="imei">IMEI</string>
   <string name="meid">MEID</string>
+  <string name="ClipMmi">Erakommend Uruffer-ID</string>
+  <string name="ClirMmi">Erausgoend Uruffer-ID</string>
   <string name="CfMmi">Gespréich-Weiderleedung</string>
   <string name="CwMmi">Gespréich pauséiert</string>
   <string name="BaMmi">Uruffspär</string>
@@ -54,15 +65,23 @@
   <string name="PinMmi">PIN-Ännerung</string>
   <string name="CnipMmi">Ruffnummer disponibel</string>
   <string name="CnirMmi">Rufnummer begrenzt</string>
+  <string name="ThreeWCMmi">Dräierkonferenz</string>
   <string name="RuacMmi">Refus vun onerwënschten Uriff</string>
   <string name="CndMmi">Iwwermëttlung fir Ruffnummeren</string>
   <string name="DndMmi">Net stéieren</string>
+  <string name="CLIRDefaultOnNextCallOn">D\'Uruffer-ID ass standardméisseg ageschränkt. Nächsten Uruff: Ageschränkt</string>
+  <string name="CLIRDefaultOnNextCallOff">D\'Uruffer-ID ass standardméisseg ageschränkt. Nächsten Uruff: Net ageschränkt</string>
+  <string name="CLIRDefaultOffNextCallOn">D\'Uruffer-ID ass standardméisseg net ageschränkt. Nächsten Uruff: Ageschränkt</string>
+  <string name="CLIRDefaultOffNextCallOff">D\'Uruffer-ID ass standardméisseg net ageschränkt. Nächsten Uruff: Net ageschränkt</string>
+  <string name="serviceNotProvisioned">Service net ageriicht.</string>
+  <string name="CLIRPermanent">D\'Astellung fir d\'Uruffer-ID kann net geännert ginn.</string>
   <string name="RestrictedChangedTitle">Begrenzten Zougrëff geännert</string>
   <string name="RestrictedOnData">Dateservice ass gespaart.</string>
   <string name="RestrictedOnEmergency">Noutruff ass gespaart.</string>
   <string name="RestrictedOnNormal">Sproochservice ass gespaart.</string>
   <string name="RestrictedOnAllVoice">All Stëmmservicer si gespaart.</string>
   <string name="RestrictedOnSms">SMS-Service ass gespaart.</string>
+  <string name="RestrictedOnVoiceData">Sprooch-/Dateservicer si gespaart.</string>
   <string name="RestrictedOnVoiceSms">Sprooch-/SMS-Servicer si gespaart.</string>
   <string name="RestrictedOnAll">Alle Sprooch-/Date-/SMS-Servicer si gespaart.</string>
   <string name="serviceClassVoice">Stëmm</string>
@@ -72,6 +91,8 @@
   <string name="serviceClassDataAsync">Async</string>
   <string name="serviceClassDataSync">Sync</string>
   <string name="serviceClassPacket">Pak</string>
+  <string name="serviceClassPAD">PAD</string>
+  <string name="roamingText4">Aus dem Gebai eraus</string>
   <string name="roamingText5">Roaming - Preferéierte System</string>
   <string name="roamingText6">Roaming - Disponibele System</string>
   <string name="roamingText7">Roaming - Allianzpartner</string>
@@ -85,6 +106,7 @@
   <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Net weidergeleet</string>
   <string name="httpErrorOk">OK</string>
   <string name="httpErrorLookup">URL gouf net fonnt.</string>
+  <string name="httpErrorTooManyRequests">Et ginn ze vill Ufroe beaarbecht. Probéier méi spéit nees.</string>
   <string name="contentServiceSync">Sync</string>
   <string name="contentServiceSyncNotificationTitle">Sync</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">Ze vill <xliff:g id="content_type">%s</xliff:g> geläscht.</string>
@@ -159,6 +181,9 @@
   <string name="permgroupdesc_storage" product="default">Op d\'SD-Kaart zougräifen.</string>
   <string name="permgrouplab_accessibilityFeatures">Funktioune fir d\'Zougänglechkeet</string>
   <string name="permgroupdesc_accessibilityFeatures">Funktiounen déi vun techneschen Hëllefsmëttele kënnen ugefrot ginn.</string>
+  <string name="permlab_receiveSms">SMSen empfänken</string>
+  <string name="permlab_receiveMms">MMSen empfänken</string>
+  <string name="permlab_receiveEmergencyBroadcast">Noutfallwarnungen empfänken</string>
   <string name="permlab_sendSms">SMS-Messagë schécken</string>
   <string name="permlab_readSms">SMSen oder MMSe liesen</string>
   <string name="permlab_writeSms">SMSen oder MMSen änneren</string>
@@ -168,13 +193,76 @@
   <string name="permlab_freezeScreen">Schierm fixéieren</string>
   <string name="permlab_clearAppUserData">Date vun aner Apps läschen</string>
   <string name="permlab_receiveBootCompleted">Beim Start ausféieren</string>
+  <string name="permlab_readContacts">d\'Kontakter liesen</string>
   <string name="permlab_readCallLog">Urufflëscht liesen</string>
   <string name="permlab_writeCallLog">Urufflëscht änneren</string>
   <string name="permlab_readProfile">Deng eege Kontaktkaart liesen</string>
+  <string name="permlab_captureAudioOutput">Tounausgank ophuelen</string>
+  <string name="permlab_captureVideoOutput">de Videoausgank ophuelen</string>
+  <string name="permlab_modifyAudioSettings">d\'Tounastellungen änneren</string>
+  <string name="permlab_recordAudio">Toun ophuelen</string>
+  <string name="permlab_camera">Biller a Videoen ophuelen</string>
+  <string name="permlab_brick" product="tablet">Tablet dauerhaft desaktivéieren</string>
+  <string name="permlab_brick" product="default">Telefon dauerhaft desaktivéieren</string>
+  <string name="permlab_reboot" product="tablet">Neistart vum Tablet forcéieren</string>
+  <string name="permlab_reboot" product="default">Neistart vum Telefon forcéieren</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard">op de Fichierssystem vum USB-Späicher zougräifen</string>
+  <string name="permlab_mount_unmount_filesystems" product="default">op de Fichierssystem vun der SD-Kaart zougräifen</string>
   <string name="permlab_setTime">Zäit setzen</string>
   <string name="permlab_setTimeZone">Zäitzon setzen</string>
   <string name="permlab_manageAccounts">Konten dobäisetzen oder ewechhuelen</string>
+  <string name="permlab_createNetworkSockets">vollen Netzwierkzougrëff</string>
+  <string name="permlab_accessWifiState">WLAN-Connectioune weisen</string>
+  <string name="permlab_bluetoothAdmin">op d\'Bluetooth-Astellungen zougräifen</string>
+  <string name="permlab_changeWimaxState">WiMAX-Status änneren</string>
+  <string name="permlab_disableKeyguard">d\'Schiermspär desaktivéieren</string>
+  <string name="permlab_sdcardRead" product="nosdcard">d\'Inhalter vun dengem USB-Späicher liesen</string>
+  <string name="permlab_sdcardRead" product="default">d\'Inhalter vun denger SD-Kaart liesen</string>
+  <string name="permlab_accessNotifications">op Notifikatiounen zougräifen</string>
   <string name="policylab_wipeData">All Date läschen</string>
+  <string-array name="phoneTypes">
+    <item>Doheem</item>
+    <item>Mobile</item>
+    <item>Aarbecht</item>
+    <item>Work Fax</item>
+    <item>Home Fax</item>
+    <item>Pager</item>
+    <item>Other</item>
+    <item>Custom</item>
+  </string-array>
+  <string-array name="emailAddressTypes">
+    <item>Doheem</item>
+    <item>Aarbecht</item>
+    <item>Aner</item>
+    <item>Personaliséiert</item>
+  </string-array>
+  <string-array name="postalAddressTypes">
+    <item>Doheem</item>
+    <item>Aarbecht</item>
+    <item>Aner</item>
+    <item>Personaliséiert</item>
+  </string-array>
+  <string-array name="imAddressTypes">
+    <item>Doheem</item>
+    <item>Aarbecht</item>
+    <item>Other</item>
+    <item>Personaliséiert</item>
+  </string-array>
+  <string-array name="organizationTypes">
+    <item>Aarbecht</item>
+    <item>Aner</item>
+    <item>Personaliséiert</item>
+  </string-array>
+  <string-array name="imProtocols">
+    <item>AIM</item>
+    <item>Windows Live</item>
+    <item>Yahoo</item>
+    <item>Skype</item>
+    <item>QQ</item>
+    <item>Google Talk</item>
+    <item>ICQ</item>
+    <item>Jabber</item>
+  </string-array>
   <string name="phoneTypeCustom">Personaliséiert</string>
   <string name="phoneTypeHome">Doheem</string>
   <string name="phoneTypeMobile">Mobil</string>
@@ -185,6 +273,7 @@
   <string name="phoneTypeOther">Aner</string>
   <string name="phoneTypeCallback">Réckruff</string>
   <string name="phoneTypeCar">Auto</string>
+  <string name="phoneTypeCompanyMain">Firma</string>
   <string name="phoneTypeIsdn">ISDN</string>
   <string name="phoneTypeMain">Haapt</string>
   <string name="phoneTypeOtherFax">Anere Fax</string>
@@ -242,14 +331,17 @@
   <string name="keyguard_password_enter_pin_code">PIN-Code antippen</string>
   <string name="keyguard_password_enter_puk_code">PUK an neie PIN-Code antippen</string>
   <string name="keyguard_password_enter_puk_prompt">PUK-Code</string>
-  <string name="keyguard_password_enter_password_code">Passwuert antippe fir z\'entspäeren</string>
-  <string name="keyguard_password_enter_pin_password_code">PIN antippe fir z\'entspäeren</string>
+  <string name="keyguard_password_enter_pin_prompt">Neie PIN-Code</string>
+  <string name="keyguard_password_entry_touch_hint"><font size="17">Drécke fir d\'Passwuert anzeginn</font></string>
+  <string name="keyguard_password_enter_password_code">Passwuert antippe fir z\'entspären</string>
+  <string name="keyguard_password_enter_pin_password_code">PIN antippe fir z\'entspären</string>
   <string name="keyguard_password_wrong_pin_code">Falsche PIN-Code.</string>
   <string name="keyguard_label_text">Menü an dann 0 drécke fir z\'entspären.</string>
   <string name="emergency_call_dialog_number_for_display">Noutruffnummer</string>
   <string name="lockscreen_carrier_default">Kee Service.</string>
   <string name="lockscreen_screen_locked">Schierm gespaart.</string>
   <string name="lockscreen_instructions_when_pattern_disabled">Menü drécke fir z\'entspären.</string>
+  <string name="lockscreen_pattern_instructions">Muster zeechne fir z\'entspären</string>
   <string name="lockscreen_emergency_call">Noutruff</string>
   <string name="lockscreen_return_to_call">Zréck bei d\'Gespréich</string>
   <string name="lockscreen_pattern_correct">Korrekt!</string>
@@ -261,6 +353,8 @@
   <string name="lockscreen_missing_sim_message_short">Keng SIM-Kaart</string>
   <string name="lockscreen_missing_sim_message" product="tablet">Keng SIM-Kaart am Tablet.</string>
   <string name="lockscreen_missing_sim_message" product="default">Keng SIM-Kaart am Telefon.</string>
+  <string name="lockscreen_missing_sim_instructions">SIM-Kaart asetzen.</string>
+  <string name="lockscreen_missing_sim_instructions_long">D\'SIM-Kaart feelt oder ass net liesbar. Setz eng SIM-Kaart an.</string>
   <string name="lockscreen_permanent_disabled_sim_message_short">Onbenotzbar SIM-Kaart.</string>
   <string name="lockscreen_permanent_disabled_sim_instructions">Deng SIM-Kaart gouf permanent ausgeschalt.\n
 Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
@@ -272,6 +366,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nach eng Kéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_glogin_forgot_pattern">Kont-Entspärung</string>
   <string name="lockscreen_glogin_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
@@ -283,6 +378,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_unlock_label">Entspären</string>
   <string name="lockscreen_sound_on_label">Toun un</string>
   <string name="lockscreen_sound_off_label">Toun aus</string>
+  <string name="lockscreen_access_pattern_cell_added">Zell dobäigesat</string>
   <string name="keyguard_accessibility_widget_changed">%1$s. Widget %2$d vu(n) %3$d.</string>
   <string name="keyguard_accessibility_add_widget">Widget dobäisetzen.</string>
   <string name="keyguard_accessibility_widget_empty_slot">Eidel</string>
@@ -411,12 +507,15 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="selectAll">All auswielen</string>
   <string name="copy">Kopéieren</string>
   <string name="paste">Apechen</string>
+  <string name="replace">Ersetzen\u2026</string>
   <string name="delete">Läschen</string>
   <string name="copyUrl">URL kopéieren</string>
   <string name="selectTextMode">Text auswielen</string>
   <string name="textSelectionCABTitle">Textauswiel</string>
+  <string name="addToDictionary">Am Dictionnaire dobäisetzen</string>
   <string name="deleteText">Läschen</string>
   <string name="inputMethod">Method fir anzeginn</string>
+  <string name="editTextMenuTitle">Textaktiounen</string>
   <string name="low_internal_storage_view_text">E puer Systemfunktioune funktionéiere vläicht net</string>
   <string name="ok">OK</string>
   <string name="cancel">Ofbriechen</string>
@@ -425,6 +524,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="dialog_alert_title">Opgepasst</string>
   <string name="loading">Gëtt gelueden\u2026</string>
   <string name="capital_on">UN</string>
+  <string name="capital_off">AUS</string>
   <string name="whichApplication">Aktioun duerchféiere mat</string>
   <string name="whichHomeApplication">Start-App auswielen</string>
   <string name="force_close">OK</string>
@@ -518,15 +618,20 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="keyboardview_keycode_cancel">Ofbriechen</string>
   <string name="keyboardview_keycode_delete">Läschen</string>
   <string name="keyboardview_keycode_done">Fäerdeg</string>
+  <string name="keyboardview_keycode_mode_change">Modusännerung</string>
   <string name="keyboardview_keycode_shift">Shift</string>
   <string name="keyboardview_keycode_enter">Enter</string>
   <string name="description_target_unlock">Entspären</string>
   <string name="description_target_camera">Fotoapparat</string>
   <string name="description_target_silent">Roueg</string>
+  <string name="description_target_soundon">Toun un</string>
   <string name="description_target_search">Sichen</string>
+  <string name="action_menu_overflow_description">Méi Optiounen</string>
   <string name="action_bar_home_subtitle_description_format">%1$s, %2$s. %3$s</string>
+  <string name="storage_internal">Interne Späicher</string>
   <string name="storage_sd_card">SD-Kaart</string>
   <string name="storage_usb">USB-Späicher</string>
+  <string name="extract_edit_menu_button">Änneren</string>
   <string name="data_usage_warning_body">Drécke fir Verbrauch an Astellungen unzeweisen.</string>
   <string name="data_usage_3g_limit_title">2G- an 3G-Daten desaktivéiert</string>
   <string name="data_usage_4g_limit_title">4G-Daten desaktivéiert</string>
@@ -557,15 +662,20 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_pin_instructions">PIN aginn</string>
   <string name="kg_password_instructions">Passwuert aginn</string>
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
+  <string name="kg_password_wrong_pin_code">Falsche PIN-Code.</string>
   <string name="kg_invalid_sim_pin_hint">Tipp e PIN deen tëscht 4 an 8 Zifferen huet.</string>
   <string name="kg_invalid_sim_puk_hint">De PUK-Code misst 8 oder méi Zifferen hunn.</string>
+  <string name="kg_invalid_puk">Gëff de korrekte PUK-Code nees an. Bei widderhuelende Versich gëtt d\'SIM permanent desaktivéiert.</string>
   <string name="kg_login_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
   <string name="kg_login_submit_button">Aloggen</string>
   <string name="kg_login_invalid_input">Ongëltege Benotzernumm oder Passwuert.</string>
+  <string name="kg_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
+  <string name="user_switched">Aktuelle Benotzer <xliff:g id="name" example="Bob">%1$s</xliff:g>.</string>
   <string name="owner_name" msgid="3879126011135546571">Besëtzer</string>
   <string name="error_message_title">Feeler</string>
   <string name="reason_unknown">onbekannt</string>
+  <string name="restr_pin_enter_pin">PIN aginn</string>
 </resources>

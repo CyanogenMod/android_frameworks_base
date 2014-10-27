@@ -20,7 +20,7 @@
   <string name="accessibility_dpad_right">Kursoru pa labi</string>
   <string name="dessert_case_settings_cm_title">Rādīt CM talismanu</string>
   <string name="dessert_case_settings_cm_summary">Rādīt CM talismanu kopā ar Android papildinājumu</string>
-  <string name="quick_settings_screen_sleep">Iet gulēt</string>
+  <string name="quick_settings_screen_sleep">Iemidzināt</string>
   <string name="quick_settings_label_enabled">Ieslēgts</string>
   <string name="quick_settings_ringer_normal">Skaņa</string>
   <string name="quick_settings_lockscreen">Slēgt ekrānu</string>
@@ -35,8 +35,6 @@
   <string name="quick_settings_usb_tether_off_label">Atvalgots</string>
   <string name="quick_settings_usb_tether_connected_label">Pievalgošana izslēgta</string>
   <string name="quick_settings_usb_tether_on_label">Pievalgots</string>
-  <string name="quick_settings_wifiap">WiFi AP</string>
-  <string name="quick_settings_wifiap_off">WiFi AP izslēgts</string>
   <string name="quick_settings_quiethours">Klusās stundas</string>
   <string name="quick_settings_quiethours_off">Klusās stundas atslēgtas</string>
   <string name="quick_settings_lte">LTE</string>

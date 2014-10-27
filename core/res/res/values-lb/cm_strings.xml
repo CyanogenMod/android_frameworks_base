@@ -56,4 +56,21 @@
   <string name="perf_profile_perf">Leeschtung</string>
   <string name="permlab_resetBatteryStats">Akkustatistiken zrécksetzen</string>
   <string name="permgrouplab_security">Sécherheet</string>
+  <string name="app_ops_play_audio">Audio ofzespillen</string>
+  <string name="app_ops_read_calendar">de Kalenner ze liesen</string>
+  <string name="app_ops_read_call_log">d\'Urufflëscht ze liesen</string>
+  <string name="app_ops_read_clipboard">d\'Tëschenoflag ze liesen</string>
+  <string name="app_ops_read_contacts">d\'Kontakter ze liesen</string>
+  <string name="app_ops_read_mms">MMS-Messagen ze liesen</string>
+  <string name="app_ops_read_sms">SMS-Messagen ze liesen</string>
+  <string name="app_ops_start_at_bootup">automatesch ze starten</string>
+  <string name="app_ops_use_alarm_volume">d\'Lautstäerkt vum Wecker z\'änneren</string>
+  <string name="app_ops_use_bluetooth_volume">d\'Bluetooth-Lautstäerkt z\'änneren</string>
+  <string name="app_ops_use_master_volume">d\'Gesamtlautstäerkt z\'änneren</string>
+  <string name="app_ops_use_media_buttons">d\'Medieknäppercher ze benotzen</string>
+  <string name="app_ops_use_media_volume">d\'Medielautstäerkt z\'änneren</string>
+  <string name="app_ops_use_notification_volume">d\'Notifikatiounslautstäerkt z\'änneren</string>
+  <string name="app_ops_write_mms">eng MMS ze schreiwen</string>
+  <string name="app_ops_write_sms">eng SMS ze schreiwen</string>
+  <string name="usb_ext_media_unmountable_notification_title">Feelerhaften USB-Späicher</string>
 </resources>

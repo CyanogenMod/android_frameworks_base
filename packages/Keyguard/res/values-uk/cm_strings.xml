@@ -40,5 +40,5 @@
   <string name="pinpuk_attempts">\nСпроб залишилось:</string>
   <string name="lockscreen_sim_error_message_short">Невірна карта.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM заблокована</string>
-  <string name="msim_kg_sim_pin_msg_format">Оператор: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Недавня програма</string>
 </resources>

@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени позадину на закључаном екрану.</string>
   <string name="permlab_useHardwareFramework">користи хардверски оквир</string>
   <string name="permdesc_useHardwareFramework">Дозвољава апликацији приступ CM хардверском оквиру.</string>
+  <string name="permlab_keyguardApplicationWidget">постави додатак апликације закључаног екрана</string>
+  <string name="permdesc_keyguardApplicationWidget">Дозволи апликацији да постави апликациони додатак на закључани екран.</string>
   <string name="immersive_mode_confirmation_bottom">Превуци нагоре од дна за излазак из целог екрана.</string>
   <string name="app_ops_access_camera">приступ камери</string>
   <string name="app_ops_access_location">приступ твојој локацији</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS захтев је модификован на нови SS захтев.</string>
   <string name="theme_install_error_title">Инсталирање теме није успело</string>
   <string name="theme_install_error_message">%s инсталирање није успело</string>
+  <string name="storage_uicc">UICC складиште</string>
 </resources>

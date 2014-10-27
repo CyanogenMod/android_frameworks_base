@@ -32,8 +32,6 @@
   <string name="quick_settings_usb_tether_off_label">Deconnectéiert</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering aus</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
-  <string name="quick_settings_wifiap">WLAN-AP</string>
-  <string name="quick_settings_wifiap_off">WLAN-AP aus</string>
   <string name="quick_settings_quiethours">Roueg Stonnen</string>
   <string name="quick_settings_quiethours_off">Roueg Stonnen aus</string>
   <string name="quick_settings_lte">LTE</string>
@@ -64,6 +62,7 @@
   <string name="navbar_menu_big_button">Menüknäppchen</string>
   <string name="advanced_dev_option_wipe_app">Applikatiounsdate läschen</string>
   <string name="advanced_dev_option_force_stop">Zoumaachen zwéngen</string>
+  <string name="advanced_dev_option_uninstall">Deinstalléieren</string>
   <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
   <string name="screenshot_delete_action">Läschen</string>
   <string name="screenshot_delete_confirmation">Schiermfoto geläscht.</string>

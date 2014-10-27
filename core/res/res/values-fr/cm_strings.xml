@@ -46,7 +46,7 @@
   <string name="reboot_confirm" product="tablet">Votre tablette va redémarrer</string>
   <string name="reboot_confirm" product="default">Votre téléphone va redémarrer</string>
   <string name="permlab_preventpower">outrepasser le bouton marche/arrêt</string>
-  <string name="permdesc_preventpower">Autorise une application à outrepasser le bouton marche/arrêt</string>
+  <string name="permdesc_preventpower">Permet à l\'application d\'outrepasser le bouton marche/arrêt</string>
   <string name="permlab_sendMockSms">envoyer des SMS simulés</string>
   <string name="permdesc_sendMockSms">Permet à l\'application d\'envoyer des messages simulés. Cela permet à une application d\'envoyer des SMS à des applications de confiance. Des applications malveillantes peuvent envoyer des messages en permanence, bloquer le système de notification de l\'appareil et perturber l\'utilisateur.</string>
   <string name="storage_sd_dock_card">Dock carte SD</string>
@@ -174,4 +174,5 @@
   <string name="stk_cc_ss_to_ss">Requête SS modifiée en une nouvelle requête SS.</string>
   <string name="theme_install_error_title">Impossible d\'installer le thème</string>
   <string name="theme_install_error_message">Impossible d\'installer %s</string>
+  <string name="storage_uicc">Stockage de l\'UICC</string>
 </resources>

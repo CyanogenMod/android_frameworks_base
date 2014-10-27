@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Tillader en app at ændre baggrund for skærmlåsen.</string>
   <string name="permlab_useHardwareFramework">anvend hardware framework</string>
   <string name="permdesc_useHardwareFramework">Giver en app adgang til CM hardware framework.</string>
+  <string name="permlab_keyguardApplicationWidget">Placér applikationswidget på tastaturlåsen</string>
+  <string name="permdesc_keyguardApplicationWidget">Tillader en app at placere applikationens widget på tastaturlåsen.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
   <string name="app_ops_access_camera">tilgå kameraet</string>
   <string name="app_ops_access_location">tilgå din placering</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS-anmodning er ændret til en ny SS-anmodning.</string>
   <string name="theme_install_error_title">Det lykkedes ikke at installere temaet</string>
   <string name="theme_install_error_message">%s kunne ikke installeres</string>
+  <string name="storage_uicc">UICC lager</string>
 </resources>

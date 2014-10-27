@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nTentativi rimasti:</string>
   <string name="lockscreen_sim_error_message_short">Scheda non valida.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM bloccata</string>
-  <string name="msim_kg_sim_pin_msg_format">ABB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Ultima app usata</string>
 </resources>

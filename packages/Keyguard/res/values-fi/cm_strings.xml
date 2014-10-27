@@ -38,5 +38,5 @@
   <string name="pinpuk_attempts">\nYrityksiä jäljellä:</string>
   <string name="lockscreen_sim_error_message_short">Virheellinen kortti.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM on Perso-lukittu</string>
-  <string name="msim_kg_sim_pin_msg_format">Tilaus: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Viimeisin käytetty sovellus</string>
 </resources>

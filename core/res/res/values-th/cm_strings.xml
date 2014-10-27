@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
   <string name="permlab_useHardwareFramework">ใช้ฮาร์ดแวร์เฟรมเวิร์ค</string>
   <string name="permdesc_useHardwareFramework">อนุญาตให้แอปเข้าถึง CM ฮาร์ดแวร์เฟรมเวิร์ค</string>
+  <string name="permlab_keyguardApplicationWidget">ตั้งวิดเจ็ทล็อกหน้าจอ</string>
+  <string name="permdesc_keyguardApplicationWidget">อนุญาติให้แอปตั้งวิดเจ็ทล็อกหน้าจอได้</string>
   <string name="immersive_mode_confirmation_bottom">ปัดขึ้นจากด้านล่างเพื่อออกจากรูปแบบเต็มจอ</string>
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งของคุณ</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">คำขอ SS ถูกแก้ไขเป็นคำขอ SS ใหม่</string>
   <string name="theme_install_error_title">การติดตั้งชุดรูปแบบล้มเหลว</string>
   <string name="theme_install_error_message">ชุดรูปแบบ %s ติดตั้งล้มเหลว</string>
+  <string name="storage_uicc">ที่เก็บ UICC</string>
 </resources>

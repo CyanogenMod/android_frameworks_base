@@ -35,8 +35,6 @@
   <string name="quick_settings_usb_tether_off_label">Deconectat</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering oprit</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
-  <string name="quick_settings_wifiap">Wi-Fi AP</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi AP oprit</string>
   <string name="quick_settings_quiethours">Ore de liniște</string>
   <string name="quick_settings_quiethours_off">Ore de liniște oprite</string>
   <string name="quick_settings_lte">LTE</string>

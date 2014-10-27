@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">앱이 잠금화면 배경을 바꿀 수 있도록 허용합니다.</string>
   <string name="permlab_useHardwareFramework">하드웨어 프레임워크 사용</string>
   <string name="permdesc_useHardwareFramework">앱이 CM 하드웨어 프레임워크에 접근할 수 있도록 허용합니다.</string>
+  <string name="permlab_keyguardApplicationWidget">잠금 화면 위젯 설정</string>
+  <string name="permdesc_keyguardApplicationWidget">앱이 잠금 화면 위젯을 설정할 수 있도록 허용합니다.</string>
   <string name="immersive_mode_confirmation_bottom">전체화면을 종료하려면 아래쪽에서 위로 스와이프합니다.</string>
   <string name="app_ops_access_camera">카메라에 액세스</string>
   <string name="app_ops_access_location">위치 정보에 액세스</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS 요청이 새로운 SS 요청으로 변경되었습니다.</string>
   <string name="theme_install_error_title">테마 설치 실패</string>
   <string name="theme_install_error_message">%s을(를) 설치하지 못했습니다</string>
+  <string name="storage_uicc">UICC 저장소</string>
 </resources>

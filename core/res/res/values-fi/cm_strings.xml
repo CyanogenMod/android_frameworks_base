@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Sallii sovelluksen vaihtaa lukitusnäytön taustakuva.</string>
   <string name="permlab_useHardwareFramework">käytä laitteiston kehystä</string>
   <string name="permdesc_useHardwareFramework">Sallii sovelluksen pääsyn CM-laitteiston kehykseen.</string>
+  <string name="permlab_keyguardApplicationWidget">aseta näppäinlukon sovelluswidget</string>
+  <string name="permdesc_keyguardApplicationWidget">Sallii sovelluksen asettaa sovelluswidgetin näppäinlukkoon.</string>
   <string name="immersive_mode_confirmation_bottom">Pyyhkäise alhaalta ylös poistuaksesi koko näytön tilasta.</string>
   <string name="app_ops_access_camera">käyttää kameraa</string>
   <string name="app_ops_access_location">käyttää sijaintia</string>

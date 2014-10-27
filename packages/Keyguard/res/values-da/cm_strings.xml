@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nForsøg tilbage:</string>
   <string name="lockscreen_sim_error_message_short">Ugyldigt SIM-kort.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM-kort er operatørlåst</string>
-  <string name="msim_kg_sim_pin_msg_format">ABN: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Senest brugte app</string>
 </resources>
