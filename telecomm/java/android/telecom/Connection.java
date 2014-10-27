@@ -63,6 +63,25 @@ public abstract class Connection {
 
     public static final int STATE_DISCONNECTED = 6;
 
+    /**
+     * Call substate bitmask values
+     */
+
+    /* Default case */
+    public static final int CALL_SUBSTATE_NONE = 0;
+
+    /* Indicates that the call is connected but audio attribute is suspended */
+    public static final int CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED = 0x1;
+
+    /* Indicates that the call is connected but video attribute is suspended */
+    public static final int CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED = 0x2;
+
+    /* Indicates that the call is established but media retry is needed */
+    public static final int CALL_SUBSTATE_AVP_RETRY = 0x4;
+
+    /* Indicates that the call is multitasking */
+    public static final int CALL_SUBSTATE_MEDIA_PAUSED = 0x8;
+
     // Flag controlling whether PII is emitted into the logs
     private static final boolean PII_DEBUG = Log.isLoggable(android.util.Log.DEBUG);
 
@@ -87,6 +106,7 @@ public abstract class Connection {
                 Connection c, List<Connection> conferenceableConnections) {}
         public void onConferenceChanged(Connection c, Conference conference) {}
         public void onPhoneAccountChanged(Connection c, PhoneAccountHandle pHandle) {}
+        public void onCallSubstateChanged(Connection c, int substate) {}
     }
 
     /** @hide */
@@ -502,6 +522,7 @@ public abstract class Connection {
     private Conference mConference;
     private ConnectionService mConnectionService;
     private PhoneAccountHandle mPhoneAccountHandle = null;
+    private int mCallSubstate;
 
     /**
      * Create a new Connection.
@@ -557,6 +578,21 @@ public abstract class Connection {
      */
     public final int getVideoState() {
         return mVideoState;
+    }
+
+    /**
+     * Returns the call substate of the call.
+     * Valid values: {@link Connection#CALL_SUBSTATE_NONE},
+     * {@link Connection#CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED},
+     * {@link Connection#CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED},
+     * {@link Connection#CALL_SUBSTATE_AVP_RETRY},
+     * {@link Connection#CALL_SUBSTATE_MEDIA_PAUSED}.
+     *
+     * @param callSubstate The new call substate.
+     * @hide
+     */
+    public final int getCallSubstate() {
+        return mCallSubstate;
     }
 
     /**
@@ -732,6 +768,25 @@ public abstract class Connection {
         mVideoState = videoState;
         for (Listener l : mListeners) {
             l.onVideoStateChanged(this, mVideoState);
+        }
+    }
+
+    /**
+     * Set the call substate for the connection.
+     * Valid values: {@link Connection#CALL_SUBSTATE_NONE},
+     * {@link Connection#CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED},
+     * {@link Connection#CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED},
+     * {@link Connection#CALL_SUBSTATE_AVP_RETRY},
+     * {@link Connection#CALL_SUBSTATE_MEDIA_PAUSED}.
+     *
+     * @param callSubstate The new call substate.
+     * @hide
+     */
+    public final void setCallSubstate(int callSubstate) {
+        Log.d(this, "setCallSubstate %d", callSubstate);
+        mCallSubstate = callSubstate;
+        for (Listener l : mListeners) {
+            l.onCallSubstateChanged(this, mCallSubstate);
         }
     }
 
