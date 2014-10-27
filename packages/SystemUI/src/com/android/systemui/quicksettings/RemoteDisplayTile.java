@@ -126,7 +126,9 @@ public class RemoteDisplayTile extends QuickSettingsTile implements
 
     @Override
     public void onUnprepare() {
-        mExecutor.submit(mUnRegisterRunnable);
+        if (!mExecutor.isTerminated()) {
+            mExecutor.submit(mUnRegisterRunnable);
+        }
     }
 
     @Override
