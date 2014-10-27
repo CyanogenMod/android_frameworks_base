@@ -79,6 +79,7 @@ final class RemoteConnectionService {
                 }
                 connection.setConferenceableConnections(conferenceable);
                 connection.setVideoState(parcel.getVideoState());
+                connection.setCallSubstate(parcel.getCallSubstate());
                 if (connection.getState() == Connection.STATE_DISCONNECTED) {
                     // ... then, if it was created in a disconnected state, that indicates
                     // failure on the providing end, so immediately mark it destroyed
@@ -303,6 +304,12 @@ final class RemoteConnectionService {
         public void setPhoneAccountHandle(String callId, PhoneAccountHandle pHandle) {
             findConnectionForAction(callId, "setPhoneAccountHandle")
                     .setPhoneAccountHandle(pHandle);
+        }
+
+        @Override
+        public void setCallSubstate(String callId, int callSubstate) {
+            findConnectionForAction(callId, "callSubstate")
+                    .setCallSubstate(callSubstate);
         }
     };
 

@@ -82,4 +82,6 @@ oneway interface IConnectionServiceAdapter {
     void setConferenceableConnections(String callId, in List<String> conferenceableCallIds);
 
     void setPhoneAccountHandle(String callId, in PhoneAccountHandle pHandle);
+
+    void setCallSubstate(String callId, int callSubstate);
 }
