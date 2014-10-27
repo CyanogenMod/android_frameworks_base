@@ -47,6 +47,7 @@ import com.android.internal.telephony.TelephonyIntents;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.CastController.CastDevice;
+import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.SuController;
 
 /**
@@ -62,6 +63,7 @@ public class PhoneStatusBarPolicy {
 
     private static final String SLOT_SYNC_ACTIVE = "sync_active";
     private static final String SLOT_CAST = "cast";
+    private static final String SLOT_HOTSPOT = "hotspot";
     private static final String SLOT_BLUETOOTH = "bluetooth";
     private static final String SLOT_TTY = "tty";
     private static final String SLOT_ZEN = "zen";
@@ -79,6 +81,7 @@ public class PhoneStatusBarPolicy {
     private final CastController mCast;
     private final SuController mSuController;
     private boolean mAlarmIconVisible;
+    private final HotspotController mHotspot;
 
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
@@ -121,9 +124,11 @@ public class PhoneStatusBarPolicy {
         }
     };
 
-    public PhoneStatusBarPolicy(Context context, CastController cast, SuController su) {
+    public PhoneStatusBarPolicy(Context context, CastController cast, HotspotController hotspot,
+            SuController su) {
         mContext = context;
         mCast = cast;
+        mHotspot = hotspot;
         mSuController = su;
         mService = (StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE);
 
@@ -200,6 +205,11 @@ public class PhoneStatusBarPolicy {
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SHOW_ALARM_ICON),
                 false, mAlarmIconObserver);
+
+        // hotspot
+        mService.setIcon(SLOT_HOTSPOT, R.drawable.stat_sys_hotspot, 0, null);
+        mService.setIconVisibility(SLOT_HOTSPOT, mHotspot.isHotspotEnabled());
+        mHotspot.addCallback(mHotspotCallback);
     }
 
     private ContentObserver mAlarmIconObserver = new ContentObserver(null) {
@@ -394,9 +404,12 @@ public class PhoneStatusBarPolicy {
         mService.setIconVisibility(SLOT_CAST, isCasting);
     }
 
-    private void updateSu() {
-        mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
-    }
+    private final HotspotController.Callback mHotspotCallback = new HotspotController.Callback() {
+        @Override
+        public void onHotspotChanged(boolean enabled) {
+            mService.setIconVisibility(SLOT_HOTSPOT, enabled);
+        }
+    };
 
     private final CastController.Callback mCastCallback = new CastController.Callback() {
         @Override
@@ -404,6 +417,10 @@ public class PhoneStatusBarPolicy {
             updateCast();
         }
     };
+
+    private void updateSu() {
+        mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
+    }
 
     private final SuController.Callback mSuCallback = new SuController.Callback() {
         @Override
