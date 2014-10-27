@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Umožní změnit tapetu zámku obrazovky.</string>
   <string name="permlab_useHardwareFramework">využití hardware zařízení</string>
   <string name="permdesc_useHardwareFramework">Umožní aplikaci přistupovat přímo k hardware zařízení.</string>
+  <string name="permlab_keyguardApplicationWidget">nastavit aplikační widget zámku obrazovky</string>
+  <string name="permdesc_keyguardApplicationWidget">Umožňuje nastavit widget na zámku obrazovky.</string>
   <string name="immersive_mode_confirmation_bottom">Tažením od spodního okraje nahoru opustíte režim celé obrazovky.</string>
   <string name="app_ops_access_camera">používat fotoaparát</string>
   <string name="app_ops_access_location">zjišťovat polohu</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Požadavek SS byl změněn na nový požadavek SS.</string>
   <string name="theme_install_error_title">Instalace motivu selhala</string>
   <string name="theme_install_error_message">Instalace „%s“ selhala</string>
+  <string name="storage_uicc">Úložiště UICC</string>
 </resources>

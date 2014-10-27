@@ -35,8 +35,6 @@
   <string name="quick_settings_usb_tether_off_label">Gediskonnekteer</string>
   <string name="quick_settings_usb_tether_connected_label">Verbinding af</string>
   <string name="quick_settings_usb_tether_on_label">Verbind</string>
-  <string name="quick_settings_wifiap">Wi-Fi-warmkol</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi-warmkol af</string>
   <string name="quick_settings_quiethours">Stille-ure</string>
   <string name="quick_settings_quiethours_off">Stille-ure af</string>
   <string name="quick_settings_lte">LTE</string>

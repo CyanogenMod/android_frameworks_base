@@ -36,5 +36,6 @@
   <string name="pinpuk_attempts">\n残り試行回数:</string>
   <string name="lockscreen_sim_error_message_short">無効なカードです。</string>
   <string name="keyguard_perso_locked_message">SIM/RUIMはペルソロックされています</string>
-  <string name="msim_kg_sim_pin_msg_format">サブ: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">前回使ったアプリ</string>
 </resources>

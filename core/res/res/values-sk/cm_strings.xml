@@ -81,10 +81,12 @@
   <string name="permdesc_readThemesDesc">Umožňuje aplikácii čítať vaše témy a určiť, ktorú tému ste použili.</string>
   <string name="permlab_writeThemes">upraviť vaše témy</string>
   <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
-  <string name="permlab_setKeyguardWallpaper">nastaviť tapetu uzamykacej obrazovky</string>
+  <string name="permlab_setKeyguardWallpaper">nastaviť tapetu obrazovky uzamknutia</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
   <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
   <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
+  <string name="permlab_keyguardApplicationWidget">nastaviť miniaplikáciu na obrazovke uzamknutia</string>
+  <string name="permdesc_keyguardApplicationWidget">Umožňuje nastaviť miniaplikáciu na obrazovke uzamknutia.</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Požiadavka SS bola upravená na novú požiadavku SS.</string>
   <string name="theme_install_error_title">Inštalácia témy zlyhala</string>
   <string name="theme_install_error_message">Nepodarilo sa nainštalovať tému %s</string>
+  <string name="storage_uicc">Úložisko UICC</string>
 </resources>

@@ -40,5 +40,4 @@
   <string name="pinpuk_attempts">\nLiko bandymų:</string>
   <string name="lockscreen_sim_error_message_short">Neteisinga kortelė.</string>
   <string name="keyguard_perso_locked_message">SIM / RUIM perso. užrakintas</string>
-  <string name="msim_kg_sim_pin_msg_format">PREN.: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

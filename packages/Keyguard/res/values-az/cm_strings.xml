@@ -38,5 +38,4 @@
   <string name="pinpuk_attempts">\nQalan cəhd:</string>
   <string name="lockscreen_sim_error_message_short">Etibarsız kart.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM Perso kilitlidir</string>
-  <string name="msim_kg_sim_pin_msg_format">ABUNƏLİK: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

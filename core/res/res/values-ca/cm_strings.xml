@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permet que una app estableixi el fons de la pantalla de bloqueig.</string>
   <string name="permlab_useHardwareFramework">utilitza el marc de hardware</string>
   <string name="permdesc_useHardwareFramework">Permet a una app accedir al marc de hardware de CM.</string>
+  <string name="permlab_keyguardApplicationWidget">Defineix el widget de l\'aplicació de bloqueig de pantalla</string>
+  <string name="permdesc_keyguardApplicationWidget">Permet a una app definir el widget de l\'aplicació de bloqueig de pantalla.</string>
   <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Petició SS modificada a una nova petició SS.</string>
   <string name="theme_install_error_title">No ha pogut instal·lar el tema</string>
   <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
+  <string name="storage_uicc">Emmagatzematge UICC</string>
 </resources>

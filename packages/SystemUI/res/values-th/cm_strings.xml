@@ -35,8 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">ตัดการเชื่อมต่อแล้ว</string>
   <string name="quick_settings_usb_tether_connected_label">ปิดการกระจายสัญญาณ</string>
   <string name="quick_settings_usb_tether_on_label">กำลังกระจายสัญญาณ</string>
-  <string name="quick_settings_wifiap">Wi-Fi AP</string>
-  <string name="quick_settings_wifiap_off">ปิด Wi-Fi AP</string>
+  <string name="quick_settings_wifiap">ฮอตสปอต Wi-Fi</string>
+  <string name="quick_settings_wifiap_off">ฮอตสปอต Wi-Fi ปิด</string>
   <string name="quick_settings_quiethours">ชั่วโมงเงียบ</string>
   <string name="quick_settings_quiethours_off">ปิดชั่วโมงเงียบ</string>
   <string name="quick_settings_lte">LTE</string>
@@ -70,6 +70,7 @@
   <string name="navbar_menu_big_button">ปุ่มเมนู</string>
   <string name="advanced_dev_option_wipe_app">ล้างข้อมูล</string>
   <string name="advanced_dev_option_force_stop">บังคับปิด</string>
+  <string name="advanced_dev_option_uninstall">ถอนการติดตั้ง</string>
   <string name="accessibility_dock_battery_level">แบตเตอร์รี่ของแท่นชาร์จ <xliff:g id="number">%d</xliff:g> เปอร์เซ็น</string>
   <string name="screenshot_delete_action">ลบ</string>
   <string name="screenshot_delete_confirmation">ลบภาพจับหน้าจอเรียบร้อยแล้ว</string>

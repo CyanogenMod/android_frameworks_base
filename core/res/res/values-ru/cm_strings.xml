@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Приложение сможет изменять обои экрана блокировки устройства.</string>
   <string name="permlab_useHardwareFramework">Взаимодействие с оборудованием</string>
   <string name="permdesc_useHardwareFramework">Приложение сможет получать доступ к подсистеме аппаратных абстракций CyanogenMod.</string>
+  <string name="permlab_keyguardApplicationWidget">установка виджета быстрого запуска для экрана блокировки</string>
+  <string name="permdesc_keyguardApplicationWidget">Приложение сможет изменять виджет быстрого запуска на экране блокировки.</string>
   <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
   <string name="app_ops_access_camera">получить доступ к камере</string>
   <string name="app_ops_access_location">получить доступ к местоположению устройства</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS-запрос преобразован в новый SS-запрос.</string>
   <string name="theme_install_error_title">Не удалось установить тему</string>
   <string name="theme_install_error_message">Сбой при установке «%s»</string>
+  <string name="storage_uicc">Хранилище UICC</string>
 </resources>

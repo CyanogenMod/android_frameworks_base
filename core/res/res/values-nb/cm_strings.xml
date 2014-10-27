@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Tillat en app å endre låseskjermsbakgrunn.</string>
   <string name="permlab_useHardwareFramework">bruke maskinvare</string>
   <string name="permdesc_useHardwareFramework">Gir en app tilgang til CM maskinvaren.</string>
+  <string name="permlab_keyguardApplicationWidget">Angi keyguard appwidget</string>
+  <string name="permdesc_keyguardApplicationWidget">Tillater en app å settte appwidget på keyguarden.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe opp fra bunn for å gå ut av fullskjerm.</string>
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS forespørsel endres til den nye SS forespørselen.</string>
   <string name="theme_install_error_title">Kan ikke installere tema</string>
   <string name="theme_install_error_message">%s ble ikke installert</string>
+  <string name="storage_uicc">UICC lagring</string>
 </resources>

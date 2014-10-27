@@ -85,6 +85,7 @@
   <string name="permdesc_setKeyguardWallpaper">允許應用程式更改鎖定畫面牆紙。</string>
   <string name="permlab_useHardwareFramework">使用硬件框架</string>
   <string name="permdesc_useHardwareFramework">允許應用程式存取 CM 硬件框架。</string>
+  <string name="permlab_keyguardApplicationWidget">設定鎖定畫面小工具</string>
   <string name="immersive_mode_confirmation_bottom">從底部向上滑動即可退出全螢幕模式。</string>
   <string name="app_ops_access_camera">存取相機</string>
   <string name="app_ops_access_location">存取您的位置</string>

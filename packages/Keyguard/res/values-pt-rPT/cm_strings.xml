@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nTentativas restantes:</string>
   <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM está bloqueado</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Última aplicação utilizada</string>
 </resources>

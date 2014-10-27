@@ -35,8 +35,6 @@
   <string name="quick_settings_usb_tether_off_label">Lahti ühendatud</string>
   <string name="quick_settings_usb_tether_connected_label">Lõastamine väljas</string>
   <string name="quick_settings_usb_tether_on_label">Lõastamine</string>
-  <string name="quick_settings_wifiap">Wi-Fi AP</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi AP väljas</string>
   <string name="quick_settings_quiethours">Vaiksed tunnid</string>
   <string name="quick_settings_quiethours_off">Vaiksed tunnid väljas</string>
   <string name="quick_settings_lte">LTE</string>

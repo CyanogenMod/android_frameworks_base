@@ -16,4 +16,5 @@
 -->
 <resources>
   <string name="notification_bug_report_active_title">Feelerbericht gëtt gesammelt\u2026</string>
+  <string name="notification_bug_report_active_text">Waart w.e.g. e puer Minutten</string>
 </resources>

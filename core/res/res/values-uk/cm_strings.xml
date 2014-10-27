@@ -87,6 +87,8 @@
   <string name="permdesc_setKeyguardWallpaper">Дозволяє програмі міняти шпалери екрану блокування.</string>
   <string name="permlab_useHardwareFramework">Взаємодія із обладнанням</string>
   <string name="permdesc_useHardwareFramework">Програма може отримувати доступ до підсистемних апаратних абстракцій CyanogenMod.</string>
+  <string name="permlab_keyguardApplicationWidget">встановлювати віджет на екрані блокування</string>
+  <string name="permdesc_keyguardApplicationWidget">Дозволяє програмі, встановлювати віджет на екрані блокування.</string>
   <string name="immersive_mode_confirmation_bottom">Свайп вверх щоб вийти з повноекранного режиму</string>
   <string name="app_ops_access_camera">доступ до камери</string>
   <string name="app_ops_access_location">доступ до місцезнаходження</string>

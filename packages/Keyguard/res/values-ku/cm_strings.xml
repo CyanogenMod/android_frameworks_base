@@ -33,5 +33,4 @@
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
   <string name="kg_invalid_sim_puk_hint_cm">PUK کۆد ئەبێت لە ٨ ژمارە کەمتر نەبێت.</string>
   <string name="lockscreen_sim_error_message_short">کارتی تیا نیە.</string>
-  <string name="msim_kg_sim_pin_msg_format">SUB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

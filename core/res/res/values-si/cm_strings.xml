@@ -81,10 +81,12 @@
   <string name="permdesc_readThemesDesc">ඔබගේ තේමා කියවීමට සහ ඔබ යොදා ඇත්තේ කුමන තේමාව දැයි නිර්ණය කිරීමට, යෙදුමට අවසර දෙන්න.</string>
   <string name="permlab_writeThemes">ඔබගේ තේමා වෙනස් කරන්න</string>
   <string name="permdesc_writeThemesDesc">අලුත් තේමා ඇතුල් කිරීමට සහ ඔබ යොදා ඇති තේමාව වෙනස් කිරීමට, යෙදුමට අවසර දෙන්න.</string>
-  <string name="permlab_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය සැකසීම</string>
+  <string name="permlab_setKeyguardWallpaper">යතුරු රැක්මේ වෝල්පේපරය සකසන්න</string>
   <string name="permdesc_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය වෙනස්කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="permlab_useHardwareFramework">දෘඩාංග රාමුව භාවිතාකරන්න</string>
   <string name="permdesc_useHardwareFramework">යෙදුමක් CM දෘඩාංග රාමුව පරිශීලනය කිරීම අනුමත කරයි.</string>
+  <string name="permlab_keyguardApplicationWidget">යතුරු රැක්මේ යෙදුම් විජටය සකසන්න</string>
+  <string name="permdesc_keyguardApplicationWidget">යතුරු රැක්ම මත යෙදුම් විජටය සැකසීම සඳහා යෙදුමකට අවසර දෙයි.</string>
   <string name="immersive_mode_confirmation_bottom">පුන් තිරයෙන් පිටවීමට පතුලේ සිට උඩට අතුල්ලන්න.</string>
   <string name="app_ops_access_camera">කැමරාව පරිශීලනය</string>
   <string name="app_ops_access_location">ඔබගේ ස්ථානය පරිශීලනය</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS ආයාචනය නව SS ආයාචනයක් බවට වෙනස් කර ඇත.</string>
   <string name="theme_install_error_title">තේමාව ස්ථාපනයට අසමත්විය</string>
   <string name="theme_install_error_message">%s ස්ථාපනයට අසමත්විය</string>
+  <string name="storage_uicc">UICC ආචයනය</string>
 </resources>

@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
   <string name="permlab_useHardwareFramework">utilizza framework hardware</string>
   <string name="permdesc_useHardwareFramework">Consente all\'app di accedere al framework hardware di CM.</string>
+  <string name="permlab_keyguardApplicationWidget">imposta widget sulla schermata di sblocco</string>
+  <string name="permdesc_keyguardApplicationWidget">Consente all\'app di impostare un widget sulla schermata di sblocco.</string>
   <string name="immersive_mode_confirmation_bottom">Scorrere dal basso verso l\'alto per uscire dalla modalità schermo intero.</string>
   <string name="app_ops_access_camera">accedere alla fotocamera</string>
   <string name="app_ops_access_location">accedere alla posizione</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Richiesta SS modificata in nuova richiesta SS.</string>
   <string name="theme_install_error_title">Impossibile installare il tema</string>
   <string name="theme_install_error_message">Impossibile installare %s</string>
+  <string name="storage_uicc">Memoria UICC</string>
 </resources>

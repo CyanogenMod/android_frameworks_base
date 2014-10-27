@@ -70,6 +70,7 @@
   <string name="navbar_menu_big_button">メニューボタン</string>
   <string name="advanced_dev_option_wipe_app">アプリのデータを消去</string>
   <string name="advanced_dev_option_force_stop">強制停止</string>
+  <string name="advanced_dev_option_uninstall">アンインストール</string>
   <string name="accessibility_dock_battery_level">ホルダーの電池は<xliff:g id="number">%d</xliff:g>パーセントです。</string>
   <string name="screenshot_delete_action">削除</string>
   <string name="screenshot_delete_confirmation">スクリーンショットを削除しました。</string>

@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
   <string name="permlab_useHardwareFramework">usar marcu de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite que l\'aplicación acceda al marcu de hardware de CM.</string>
+  <string name="permlab_keyguardApplicationWidget">afitar el widget de l\'aplicación na pantalla de bloquéu</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite a una aplicación definir el widget de l\'aplicación na pantalla de bloquéu.</string>
   <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Solicitú SS modifícase a solicitú nueva SS.</string>
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
+  <string name="storage_uicc">Almacenamientu UICC</string>
 </resources>

@@ -35,8 +35,6 @@
   <string name="quick_settings_usb_tether_off_label">Bağlı deyil</string>
   <string name="quick_settings_usb_tether_connected_label">USB int. pyl. bağlıdır</string>
   <string name="quick_settings_usb_tether_on_label">USB int. paylaşması</string>
-  <string name="quick_settings_wifiap">Wi-Fi Giriş Nöqtəsi</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi Giriş Nöqtəsi bağlıdır</string>
   <string name="quick_settings_quiethours">Səssiz saatlar</string>
   <string name="quick_settings_quiethours_off">Səssis saatlar bağlıdır</string>
   <string name="quick_settings_lte">LTE</string>

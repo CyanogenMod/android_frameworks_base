@@ -87,6 +87,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permdesc_setKeyguardWallpaper">Bir uygulamanın kilit ekranı duvar kağıdını değiştirmesine izin verir.</string>
   <string name="permlab_useHardwareFramework">donanım altyapısını kullan</string>
   <string name="permdesc_useHardwareFramework">Uygulamanın CM donanım altyapısına erişimine izin verir.</string>
+  <string name="permlab_keyguardApplicationWidget">tuş kilidi uygulaması widgetinı ayarla</string>
+  <string name="permdesc_keyguardApplicationWidget">Uygulamalara kilit ekranındaki uygulama widgetlerını ayarlama izni verir.</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıkmak için aşağıdan yukarı kaydırın.</string>
   <string name="app_ops_access_camera">kameraya eriş</string>
   <string name="app_ops_access_location">konuma erişim</string>
@@ -176,4 +178,5 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="stk_cc_ss_to_ss">SS isteği yeni bir SS isteğine dönüştürüldü.</string>
   <string name="theme_install_error_title">Tema yüklenemedi</string>
   <string name="theme_install_error_message">%s yüklenemedi</string>
+  <string name="storage_uicc">UICC depolama</string>
 </resources>

@@ -36,8 +36,8 @@
   <string name="quick_settings_usb_tether_off_label">Дисконектован</string>
   <string name="quick_settings_usb_tether_connected_label">Привезивање искључено</string>
   <string name="quick_settings_usb_tether_on_label">Привезивање</string>
-  <string name="quick_settings_wifiap">Wi-Fi AP</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi AP искључено</string>
+  <string name="quick_settings_wifiap">Wi-Fi hotspot</string>
+  <string name="quick_settings_wifiap_off">Wi-Fi hotspot искључено</string>
   <string name="quick_settings_quiethours">Тихи сати</string>
   <string name="quick_settings_quiethours_off">Тихи сати искључено</string>
   <string name="quick_settings_lte">LTE</string>
@@ -74,6 +74,7 @@
   <string name="navbar_menu_big_button">Дугме за Мени</string>
   <string name="advanced_dev_option_wipe_app">Избриши податке апликације</string>
   <string name="advanced_dev_option_force_stop">Приморај заустављање</string>
+  <string name="advanced_dev_option_uninstall">Деинсталирај</string>
   <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
   <string name="screenshot_delete_action">Избриши</string>
   <string name="screenshot_delete_confirmation">Снимак екрана је избрисан.</string>

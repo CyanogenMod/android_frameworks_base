@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Επιτρέπει σε μια εφαρμογή την αλλαγή της ταπετσαρίας της οθόνης κλειδώματος.</string>
   <string name="permlab_useHardwareFramework">χρήση του πλαισίου υλικού</string>
   <string name="permdesc_useHardwareFramework">Επιτρέπει σε μια εφαρμογή την πρόσβαση στο πλαίσιο υλικού του CM.</string>
+  <string name="permlab_keyguardApplicationWidget">ορισμός widget εφαρμογής οθόνης κλειδώματος</string>
+  <string name="permdesc_keyguardApplicationWidget">Επιτρέπει σε μια εφαρμογή να ορίζει το widget εφαρμογής στην οθόνη κλειδώματος.</string>
   <string name="immersive_mode_confirmation_bottom">Σύρετε από το κάτω μέρος προς τα πάνω για να βγείτε από την πλήρη οθόνη</string>
   <string name="app_ops_access_camera">πρόσβαση στην φωτογρ. μηχανή</string>
   <string name="app_ops_access_location">πρόσβαση στην τοποθεσία σας</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Η αίτηση SS τροποποιήθηκε σε νέα αίτηση SS.</string>
   <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
   <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
+  <string name="storage_uicc">Αποθ. χώρος UICC</string>
 </resources>

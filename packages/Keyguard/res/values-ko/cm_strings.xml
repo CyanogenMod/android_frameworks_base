@@ -36,5 +36,6 @@
   <string name="pinpuk_attempts">\n남은 시도 횟수:</string>
   <string name="lockscreen_sim_error_message_short">잘못된 카드입니다.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM이 Perso 잠금되어 있습니다.</string>
-  <string name="msim_kg_sim_pin_msg_format">서브: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">최근에 사용한 앱</string>
 </resources>

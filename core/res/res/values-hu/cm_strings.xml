@@ -46,7 +46,7 @@
   <string name="reboot_confirm" product="tablet">A táblagép újraindul.</string>
   <string name="reboot_confirm" product="default">A telefon újraindul.</string>
   <string name="permlab_preventpower">kikapcsológomb felülbírálata</string>
-  <string name="permdesc_preventpower">Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát</string>
+  <string name="permdesc_preventpower">Lehetővé teszi az alkalmazás számára a kikapcsológomb felülbírálatát</string>
   <string name="permlab_sendMockSms">SMS utánzatok küldése</string>
   <string name="permdesc_sendMockSms">Lehetővé teszi az alkalmazás számára, hogy SMS utánzatokat hozzon létre. A rosszindulatú alkalmazások folyamatos üzenet-létrehozással zavarhatják a felhasználót, és megbéníthatják az eszköz értesítési felületét.</string>
   <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
@@ -78,13 +78,15 @@
   <string name="permlab_accessThemeService">hozzáférés a témaszolgáltatáshoz</string>
   <string name="permdesc_accessThemeService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen a témaszolgáltatáshoz. Általános alkalmazásoknak soha nem kell ilyen engedély.</string>
   <string name="permlab_readThemes">téma információjának megtekintése</string>
-  <string name="permdesc_readThemesDesc">Lehetővé teszi az alkalmazásnak, hogy megtekintse a témákat és megállapítsa, melyik téma aktív.</string>
+  <string name="permdesc_readThemesDesc">Lehetővé teszi az alkalmazás számára, hogy megtekintse a témákat és megállapítsa, melyik téma aktív.</string>
   <string name="permlab_writeThemes">témák módosítása</string>
-  <string name="permdesc_writeThemesDesc">Lehetővé teszi az alkalmazásnak, hogy új témákat hozzon létre és módosítsa a jelenleg aktív témát.</string>
+  <string name="permdesc_writeThemesDesc">Lehetővé teszi az alkalmazás számára, hogy új témákat hozzon létre és módosítsa a jelenleg aktív témát.</string>
   <string name="permlab_setKeyguardWallpaper">billentyűzár háttérképének beállítása</string>
-  <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára a képernyőzár hátterének módosítását.</string>
+  <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára, hogy módosítsa a képernyőzár hátterét.</string>
   <string name="permlab_useHardwareFramework">hardver keretrendszert használ</string>
-  <string name="permdesc_useHardwareFramework">Lehetővé teszi az alkalmazás számára a CM hardver keretrendszerhez való a hozzáférést.</string>
+  <string name="permdesc_useHardwareFramework">Lehetővé teszi az alkalmazás számára, hogy a CM hardver hozzáférjen a keretrendszerhez.</string>
+  <string name="permlab_keyguardApplicationWidget">alkalmazás modul beállítsa a képernyőzárra</string>
+  <string name="permdesc_keyguardApplicationWidget">Lehetővé teszi az alkalmazás számára, hogy beállítsa a modult a képernyőzárra.</string>
   <string name="immersive_mode_confirmation_bottom">Csúsztasson lentről felfelé a teljesképernyős módból való kilépéshez.</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
   <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">SS kérés módosítva új SS kérésre.</string>
   <string name="theme_install_error_title">Téma telepítése sikertelen</string>
   <string name="theme_install_error_message">Sikertelen telepítés: %s</string>
+  <string name="storage_uicc">UICC tároló</string>
 </resources>

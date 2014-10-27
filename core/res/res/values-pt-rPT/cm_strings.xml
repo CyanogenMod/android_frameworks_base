@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar a imagem de fundo do ecrã de bloqueio.</string>
   <string name="permlab_useHardwareFramework">Utilizar a estrutura de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite o acesso duma aplicação à estrutura de hardware CM.</string>
+  <string name="permlab_keyguardApplicationWidget">Definir a aplicação  do widget do ecrã de bloqueio</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite a uma aplicação definir o widget do ecrã de bloqueio.</string>
   <string name="immersive_mode_confirmation_bottom">Deslize de baixo para cima para sair de ecrã inteiro.</string>
   <string name="app_ops_access_camera">aceder à câmara</string>
   <string name="app_ops_access_location">aceder à sua localização</string>
@@ -174,4 +176,5 @@
   <string name="stk_cc_ss_to_ss">Pedido SS modificado em novo pedido SS.</string>
   <string name="theme_install_error_title">Falha ao instalar o tema</string>
   <string name="theme_install_error_message">%s não instalou</string>
+  <string name="storage_uicc">Armazenamento UICC</string>
 </resources>
