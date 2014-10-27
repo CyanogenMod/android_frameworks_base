@@ -6019,8 +6019,10 @@ status_t ResTable::createIdmap(const ResTable& overlay,
 
     KeyedVector<uint8_t, IdmapTypeMap> map;
 
-    // overlaid packages are assumed to contain only one package group
-    const PackageGroup* pg = mPackageGroups[0];
+    // Overlaid packages are assumed to contain only one package group or two package group
+    // as one is "system package(android)", and another is "application package". So we need
+    // to use the last package group to create idmap.
+    const PackageGroup* pg = mPackageGroups[mPackageGroups.size() - 1];
 
     // starting size is header
     *outSize = ResTable::IDMAP_HEADER_SIZE_BYTES;
