@@ -22,6 +22,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telecom.ITelecomService;
@@ -642,6 +643,20 @@ public class TelecomManager {
             }
         } catch (RemoteException e) {
             Log.e(TAG, "Error calling ITelecomService#clearAccounts", e);
+        }
+    }
+
+    /**
+     * Remove all Accounts that belong to the specified package from the system.
+     * @hide
+     */
+    public void clearAccountsForPackage(String packageName) {
+        try {
+            if (isServiceConnected() && !TextUtils.isEmpty(packageName)) {
+                getTelecomService().clearAccounts(packageName);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelecomService#clearAccountsForPackage()", e);
         }
     }
 
