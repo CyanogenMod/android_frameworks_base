@@ -28,8 +28,6 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationSettingsChangeCallback;
 
-import java.util.Arrays;
-
 
 public class GPSTile extends QuickSettingsTile implements LocationSettingsChangeCallback {
     private LocationController mLocationController;
@@ -98,20 +96,46 @@ public class GPSTile extends QuickSettingsTile implements LocationSettingsChange
     }
 
     private void toggleState() {
-        int locatorIndex = mLocatorsIndex;
-        int mask = 0;
-        do {
-            locatorIndex++;
-            if (locatorIndex >= LOCATORS.length) {
-                locatorIndex = 0;
-            }
-            mask = (int) Math.pow(2, locatorIndex);
-        } while (mLocatorsMode > 1 && (mLocatorsMode & mask) != mask); // Off is always preset
+        if (mLocatorsMode == 0) {
+            int newMode;
 
-        // Set the desired state
-        Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                Settings.Secure.LOCATION_MODE, LOCATORS[locatorIndex], UserHandle.USER_CURRENT);
+            switch (mCurrentMode) {
+                case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                    newMode = Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
+                    break;
+                case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                    newMode = Settings.Secure.LOCATION_MODE_BATTERY_SAVING;
+                    break;
+                case Settings.Secure.LOCATION_MODE_OFF:
+                    newMode = Settings.Secure.LOCATION_MODE_SENSORS_ONLY;
+                    break;
+                case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                    newMode = Settings.Secure.LOCATION_MODE_OFF;
+                    break;
+                default:
+                    newMode = Settings.Secure.LOCATION_MODE_OFF;
+            }
+
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.LOCATION_MODE, newMode, UserHandle.USER_CURRENT);
+        } else {
+            int locatorIndex = mLocatorsIndex;
+            int mask;
+            do {
+                locatorIndex++;
+                if (locatorIndex >= LOCATORS.length) {
+                    locatorIndex = 0;
+                }
+                mask = (int) Math.pow(2, locatorIndex);
+            }
+            while ((mLocatorsMode & mask) != mask);
+
+            // Set the desired state
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.LOCATION_MODE, LOCATORS[locatorIndex], UserHandle.USER_CURRENT);
+        }
     }
+
 
     private int currentModeToLocatorIndex(int mode) {
         int count = LOCATORS.length;
