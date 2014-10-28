@@ -178,4 +178,6 @@
     <dimen name="widget_big_font_size">80dp</dimen>
     <dimen name="big_font_size">120dp</dimen>
 
+    <!-- Height of the carrier name label -->
+    <dimen name="carrier_label_height">14dp</dimen>
 </resources>

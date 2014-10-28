@@ -20,23 +20,73 @@
 -->
 
 <!-- This contains emergency call button and carrier as shared by pin/pattern/password screens -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_gravity="center_horizontal"
-    android:layout_alignParentBottom="true"
-    android:clickable="true">
+<com.android.keyguard.MSimCarrierText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/carrier_label_height"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:id="@+id/msim_keyguard_carrier_area"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-    <com.android.keyguard.MSimCarrierText
-        android:id="@+id/msim_carrier_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="@dimen/kg_status_line_font_size"
-        android:textColor="?android:attr/textColorSecondary"/>
-</LinearLayout>
+    <TextView
+            android:id="@+id/sub1_label"
+            style="@style/TextAppearance.MSimCarrierText"
+            android:layout_height="wrap_content"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:singleLine="true"
+            android:ellipsize="end"
+            />
+
+    <TextView
+            android:id="@+id/sub1_separator"
+            style="@style/TextAppearance.MSimCarrierText"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/status_bar_sim_slot_separator"
+            />
+
+    <TextView
+            android:id="@+id/sub2_label"
+            style="@style/TextAppearance.MSimCarrierText"
+            android:layout_height="wrap_content"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:singleLine="true"
+            android:ellipsize="end"
+            />
+
+    <TextView
+            android:id="@+id/sub2_separator"
+            style="@style/TextAppearance.MSimCarrierText"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="@string/status_bar_sim_slot_separator"
+            android:visibility="gone"
+            />
+
+    <TextView
+            android:id="@+id/sub3_label"
+            style="@style/TextAppearance.MSimCarrierText"
+            android:layout_height="wrap_content"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:visibility="gone"
+            />
+</com.android.keyguard.MSimCarrierText>

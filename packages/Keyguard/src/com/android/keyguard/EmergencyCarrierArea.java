@@ -26,7 +26,7 @@ import com.android.keyguard.R;
 
 public class EmergencyCarrierArea extends LinearLayout {
 
-    private CarrierText mCarrierText;
+    private View mCarrierText;
     private EmergencyButton mEmergencyButton;
 
     public EmergencyCarrierArea(Context context) {
@@ -43,7 +43,7 @@ public class EmergencyCarrierArea extends LinearLayout {
 
         if (!KeyguardUpdateMonitor.sIsMultiSimEnabled) {
             // For MSIM, we need to wait until the view has been inflated to find it
-            mCarrierText = (CarrierText) findViewById(R.id.carrier_text);
+            mCarrierText = findViewById(R.id.carrier_text);
         }
 
         mEmergencyButton = (EmergencyButton) findViewById(R.id.emergency_call_button);
@@ -56,8 +56,7 @@ public class EmergencyCarrierArea extends LinearLayout {
 
                 if (mCarrierText == null) {
                     // We're using MSIM
-                    mCarrierText = (CarrierText) findViewById(R.id.msim_keyguard_carrier_area)
-                            .findViewById(R.id.msim_carrier_text);
+                    mCarrierText = findViewById(R.id.msim_keyguard_carrier_area);
                 }
 
                 switch(event.getAction()) {
