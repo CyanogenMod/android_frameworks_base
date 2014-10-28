@@ -82,4 +82,10 @@
         <item name="android:mirrorForRtl">true</item>
     </style>
 
+    <style name="TextAppearance.MSimCarrierText" parent="android:TextAppearance.DeviceDefault.Medium">
+        <item name="android:textSize">@dimen/kg_status_line_font_size</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/clock_white</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
 </resources>
