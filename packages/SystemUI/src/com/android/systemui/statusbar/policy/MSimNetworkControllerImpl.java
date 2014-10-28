@@ -776,7 +776,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
 
     private boolean isRoaming(int phoneId) {
         return (isCdma(phoneId) ? isCdmaEri(phoneId)
-                : mPhone.isNetworkRoaming(phoneId));
+                : mMSimServiceState[phoneId] != null && mMSimServiceState[phoneId].getRoaming());
     }
 
     private final void updateDataNetType(int phoneId) {
@@ -816,7 +816,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     mQSDataTypeIconId = R.drawable.stat_sys_data_fully_connected_roam;
                 }
             }
-        } else if (mPhone.isNetworkRoaming(phoneId)) {
+        } else if (isRoaming(phoneId)) {
             mMSimDataTypeIconId[phoneId] = R.drawable.stat_sys_data_fully_connected_roam;
             setQSDataTypeIcon = true;
             if (phoneId == dataSub) {
@@ -1205,7 +1205,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                         mQSDataTypeIconId = R.drawable.stat_sys_data_fully_connected_roam;
                     }
                 }
-            } else if (mPhone.isNetworkRoaming(phoneId)) {
+            } else if (isRoaming(phoneId)) {
                 mMSimDataTypeIconId[phoneId] = R.drawable.stat_sys_data_fully_connected_roam;
                 if (phoneId == dataSub) {
                     mQSDataTypeIconId = R.drawable.stat_sys_data_fully_connected_roam;
