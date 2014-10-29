@@ -85,19 +85,21 @@ public class PhoneStatusBarView extends PanelBar {
         mDoubleTapEnabled = enabled;
 
         if (enabled) {
-            mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onDoubleTap(MotionEvent e) {
-                    PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                    Log.d(TAG, "Gesture!!");
-                    if(pm != null)
-                        pm.goToSleep(e.getEventTime());
-                    else
-                        Log.d(TAG, "getSystemService returned null PowerManager");
+			if (mDoubleTapGesture == null) {
+				mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+					@Override
+					public boolean onDoubleTap(MotionEvent e) {
+						PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+						Log.d(TAG, "Gesture!!");
+						if(pm != null)
+							pm.goToSleep(e.getEventTime());
+						else
+							Log.d(TAG, "getSystemService returned null PowerManager");
 
-                    return true;
-                }
-            });
+						return true;
+					}
+				});
+			}
         } else {
             mDoubleTapGesture = null;
         }
