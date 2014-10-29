@@ -20,7 +20,6 @@ import static android.net.TrafficStats.MB_IN_BYTES;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.hardware.usb.UsbManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -380,22 +379,6 @@ public class StorageManager {
             }
        }
     }
-
-    /**
-     * Switch USB Mass Storage (UMS) on the device.
-     *
-     * @hide
-     */
-    public void setUsbMassStorageEnabled(boolean enable) {
-        if (enable && UsbManager.USB_FUNCTION_MASS_STORAGE
-                    .equals(new UsbManager(null, null).getDefaultFunction())) {
-            if(!isUsbMassStorageEnabled()) {
-                enableUsbMassStorage();
-            }
-        } else if (isUsbMassStorageEnabled()) {
-            disableUsbMassStorage();
-        }
-   }
 
     /**
      * Enables USB Mass Storage (UMS) on the device.
