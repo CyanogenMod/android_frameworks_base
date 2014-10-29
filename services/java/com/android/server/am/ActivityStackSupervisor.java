@@ -211,19 +211,21 @@ public final class ActivityStackSupervisor {
      */
     String mPrivacyGuardPackageName = null;
 
+    private final PowerManager mPm;
+
     public ActivityStackSupervisor(ActivityManagerService service, Context context,
             Looper looper) {
         mService = service;
         mContext = context;
         mLooper = looper;
-        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-        mGoingToSleep = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Sleep");
+        mPm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+        mGoingToSleep = mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Sleep");
         mHandler = new ActivityStackSupervisorHandler(looper);
         if (VALIDATE_WAKE_LOCK_CALLER && Binder.getCallingUid() != Process.myUid()) {
             throw new IllegalStateException("Calling must be system uid");
         }
         mLaunchingActivity =
-                pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Launch");
+                mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Launch");
         mLaunchingActivity.setReferenceCounted(false);
     }
 
@@ -2133,6 +2135,7 @@ public final class ActivityStackSupervisor {
                 return ar;
             }
         }
+        mPm.cpuBoost(2000 * 1000);
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
     }
