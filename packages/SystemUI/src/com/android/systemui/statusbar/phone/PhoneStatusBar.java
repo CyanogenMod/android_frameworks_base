@@ -274,6 +274,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private int mNotificationHeaderHeight;
 
     private boolean mShowCarrierInPanel = false;
+    private boolean mShowCarrierOverride = true;
 
     private SignalClusterView mSignalClusterView;
     private MSimSignalClusterView mMSimSignalClusterView;
@@ -403,6 +404,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.STATUS_BAR_SIGNAL_TEXT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_DRAWER_CARRIER_VISIBILITY), false, this);
             updateSettings();
             updateClockLocation();
         }
@@ -794,6 +797,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // set the inital view visibility
         setAreThereNotifications();
 
+        mShowCarrierOverride = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NOTIFICATION_DRAWER_CARRIER_VISIBILITY, 1, UserHandle.USER_CURRENT) == 1;
+
         // Other icons
         mBatteryView = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
         mDockBatteryView = (DockBatteryMeterView) mStatusBarView.findViewById(R.id.dock_battery);
@@ -828,7 +834,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mSubsLabel.findViewById(R.id.sub2_separator).setVisibility(View.VISIBLE);
                 mSubsLabel.findViewById(R.id.sub3_label).setVisibility(View.VISIBLE);
             }
-            mShowCarrierInPanel = (mCarrierLabel != null);
+            mShowCarrierInPanel = (mCarrierLabel != null) && mShowCarrierOverride;
 
             if (DEBUG) Log.v(TAG, "carrierlabel=" + mCarrierLabel + " show=" +
                                     mShowCarrierInPanel + "operator label=" + mSubsLabel);
@@ -884,7 +890,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
 
             mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
-            mShowCarrierInPanel = (mCarrierLabel != null);
+            mShowCarrierInPanel = (mCarrierLabel != null) && mShowCarrierOverride;
             if (DEBUG) Log.v(TAG, "carrierlabel=" + mCarrierLabel + " show=" +
                                                                   mShowCarrierInPanel);
             if (mShowCarrierInPanel) {
@@ -1635,7 +1641,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             !(emergencyCallsShownElsewhere && isEmergencyOnly)
             && mPile.getHeight() < (mNotificationPanel.getHeight() - labelHeight - mNotificationHeaderHeight)
             && mScrollView.getVisibility() == View.VISIBLE
-            && !mAnimatingFlip;
+            && !mAnimatingFlip && mShowCarrierOverride;
 
         if (force || mCarrierLabelVisible != makeVisible) {
             mCarrierLabelVisible = makeVisible;
@@ -1643,7 +1649,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 Log.d(TAG, "making carrier label " + (makeVisible?"visible":"invisible"));
             }
             mCarrierLableContainer.animate().cancel();
-            if (makeVisible) {
+            if (makeVisible && mShowCarrierOverride) {
                 mCarrierLableContainer.setVisibility(View.VISIBLE);
             }
             mCarrierLableContainer.animate()
@@ -3383,6 +3389,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (mSignalTextView != null) {
                 mSignalTextView.setStyle(signalStyle);
             }
+        }
+
+        boolean carrierOverride = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NOTIFICATION_DRAWER_CARRIER_VISIBILITY, 1, UserHandle.USER_CURRENT) == 1;
+        if (carrierOverride != mShowCarrierOverride) {
+            mShowCarrierOverride = carrierOverride;
+            updateCarrierLabelVisibility(false);
         }
     }
 
