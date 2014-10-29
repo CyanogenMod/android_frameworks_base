@@ -561,6 +561,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 } else {
                     state = IccCardConstants.State.UNKNOWN;
                 }
+            } else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
+                state = IccCardConstants.State.CARD_IO_ERROR;
             } else if (IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(stateExtra)
                         || IccCardConstants.INTENT_VALUE_ICC_IMSI.equals(stateExtra)) {
                 // This is required because telephony doesn't return to "READY" after
