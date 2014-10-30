@@ -1055,7 +1055,15 @@ public class TelecomManager {
      */
     @SystemApi
     public Uri getAdnUriForPhoneAccount(PhoneAccountHandle accountHandle) {
-        return null;
+        ITelecomService service = getTelecomService();
+        if (service != null && accountHandle != null) {
+            try {
+                return service.getAdnUriForPhoneAccount(accountHandle);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error calling ITelecomService#getAdnUriForPhoneAccount", e);
+            }
+        }
+        return Uri.parse("content://icc/adn");
     }
 
     /**
