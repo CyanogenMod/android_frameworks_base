@@ -1495,5 +1495,8 @@
     <bool name="config_spn_display_control">false</bool>
 
     <!-- config switching DDS switch back to the default sub -->
-    <bool name="config_dds_switch_back">false</bool>
+    <bool name="config_dds_switch_back">true</bool>
+
+    <!-- config switching DDS to the primary sub -->
+    <bool name="config_setDdsOnPrimarySub">false</bool>
 </resources>
