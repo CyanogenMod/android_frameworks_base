@@ -552,11 +552,11 @@ public abstract class ConnectionService extends Service {
         }
 
         @Override
-        public void onConferenceableConnectionsChanged(
-                Connection connection, List<Connection> conferenceableConnections) {
+        public void onConferenceablesChanged(
+                Connection connection, List<IConferenceable> conferenceables) {
             mAdapter.setConferenceableConnections(
                     mIdByConnection.get(connection),
-                    createConnectionIdList(conferenceableConnections));
+                    createIdList(conferenceables));
         }
 
         @Override
@@ -655,7 +655,7 @@ public abstract class ConnectionService extends Service {
                         connection.getAudioModeIsVoip(),
                         connection.getStatusHints(),
                         connection.getDisconnectCause(),
-                        createConnectionIdList(connection.getConferenceableConnections()),
+                        createIdList(connection.getConferenceables()),
                         connection.getCallSubstate()));
     }
 
@@ -763,12 +763,19 @@ public abstract class ConnectionService extends Service {
     private void conference(String callId1, String callId2) {
         Log.d(this, "conference %s, %s", callId1, callId2);
 
+        // Attempt to get second connection or conference.
         Connection connection2 = findConnectionForAction(callId2, "conference");
+        Conference conference2 = getNullConference();
         if (connection2 == getNullConnection()) {
-            Log.w(this, "Connection2 missing in conference request %s.", callId2);
-            return;
+            conference2 = findConferenceForAction(callId2, "conference");
+            if (conference2 == getNullConference()) {
+                Log.w(this, "Connection2 or Conference2 missing in conference request %s.",
+                        callId2);
+                return;
+            }
         }
 
+        // Attempt to get first connection or conference and perform merge.
         Connection connection1 = findConnectionForAction(callId1, "conference");
         if (connection1 == getNullConnection()) {
             Conference conference1 = findConferenceForAction(callId1, "addConnection");
@@ -777,10 +784,26 @@ public abstract class ConnectionService extends Service {
                         "Connection1 or Conference1 missing in conference request %s.",
                         callId1);
             } else {
-                conference1.onMerge(connection2);
+                // Call 1 is a conference.
+                if (connection2 != getNullConnection()) {
+                    // Call 2 is a connection so merge via call 1 (conference).
+                    conference1.onMerge(connection2);
+                } else {
+                    // Call 2 is ALSO a conference; this should never happen.
+                    Log.wtf(this, "There can only be one conference and an attempt was made to " +
+                            "merge two conferences.");
+                    return;
+                }
             }
         } else {
-            onConference(connection1, connection2);
+            // Call 1 is a connection.
+            if (conference2 != getNullConference()) {
+                // Call 2 is a conference, so merge via call 2.
+                conference2.onMerge(connection1);
+            } else {
+                // Call 2 is a connection, so merge together.
+                onConference(connection1, connection2);
+            }
         }
     }
 
@@ -935,6 +958,41 @@ public abstract class ConnectionService extends Service {
     }
 
     /**
+     * Adds a connection created by the {@link ConnectionService} and informs telecom of the new
+     * connection.
+     *
+     * @param phoneAccountHandle The phone account handle for the connection.
+     * @param connection The connection to add.
+     */
+    public final void addExistingConnection(PhoneAccountHandle phoneAccountHandle,
+            Connection connection) {
+
+        String id = addExistingConnectionInternal(connection);
+        if (id != null) {
+            List<String> emptyList = new ArrayList<>(0);
+
+            ParcelableConnection parcelableConnection = new ParcelableConnection(
+                    phoneAccountHandle,
+                    connection.getState(),
+                    connection.getCallCapabilities(),
+                    connection.getAddress(),
+                    connection.getAddressPresentation(),
+                    connection.getCallerDisplayName(),
+                    connection.getCallerDisplayNamePresentation(),
+                    connection.getVideoProvider() == null ?
+                            null : connection.getVideoProvider().getInterface(),
+                    connection.getVideoState(),
+                    connection.isRingbackRequested(),
+                    connection.getAudioModeIsVoip(),
+                    connection.getStatusHints(),
+                    connection.getDisconnectCause(),
+                    emptyList,
+                    connection.getCallSubstate());
+            mAdapter.addExistingConnection(id, parcelableConnection);
+        }
+    }
+
+    /**
      * Returns all the active {@code Connection}s for which this {@code ConnectionService}
      * has taken responsibility.
      *
@@ -1019,6 +1077,12 @@ public abstract class ConnectionService extends Service {
     public void onRemoteConferenceAdded(RemoteConference conference) {}
 
     /**
+     * Called when an existing connection is added remotely.
+     * @param connection The existing connection which was added.
+     */
+    public void onRemoteExistingConnectionAdded(RemoteConnection connection) {}
+
+    /**
      * @hide
      */
     public boolean containsConference(Conference conference) {
@@ -1030,12 +1094,29 @@ public abstract class ConnectionService extends Service {
         onRemoteConferenceAdded(remoteConference);
     }
 
+    /** {@hide} */
+    void addRemoteExistingConnection(RemoteConnection remoteConnection) {
+        onRemoteExistingConnectionAdded(remoteConnection);
+    }
+
     private void onAccountsInitialized() {
         mAreAccountsInitialized = true;
         for (Runnable r : mPreInitializationConnectionRequests) {
             r.run();
         }
         mPreInitializationConnectionRequests.clear();
+    }
+
+    /**
+     * Adds an existing connection to the list of connections, identified by a new UUID.
+     *
+     * @param connection The connection.
+     * @return The UUID of the connection (e.g. the call-id).
+     */
+    private String addExistingConnectionInternal(Connection connection) {
+        String id = UUID.randomUUID().toString();
+        addConnection(id, connection);
+        return id;
     }
 
     private void addConnection(String callId, Connection connection) {
@@ -1045,7 +1126,8 @@ public abstract class ConnectionService extends Service {
         connection.setConnectionService(this);
     }
 
-    private void removeConnection(Connection connection) {
+    /** {@hide} */
+    protected void removeConnection(Connection connection) {
         String id = mIdByConnection.get(connection);
         connection.unsetConnectionService(this);
         connection.removeConnectionListener(mConnectionListener);
@@ -1107,6 +1189,33 @@ public abstract class ConnectionService extends Service {
         for (Connection c : connections) {
             if (mIdByConnection.containsKey(c)) {
                 ids.add(mIdByConnection.get(c));
+            }
+        }
+        Collections.sort(ids);
+        return ids;
+    }
+
+    /**
+     * Builds a list of {@link Connection} and {@link Conference} IDs based on the list of
+     * {@link IConferenceable}s passed in.
+     *
+     * @param conferenceables The {@link IConferenceable} connections and conferences.
+     * @return List of string conference and call Ids.
+     */
+    private List<String> createIdList(List<IConferenceable> conferenceables) {
+        List<String> ids = new ArrayList<>();
+        for (IConferenceable c : conferenceables) {
+            // Only allow Connection and Conference conferenceables.
+            if (c instanceof Connection) {
+                Connection connection = (Connection) c;
+                if (mIdByConnection.containsKey(connection)) {
+                    ids.add(mIdByConnection.get(connection));
+                }
+            } else if (c instanceof Conference) {
+                Conference conference = (Conference) c;
+                if (mIdByConference.containsKey(conference)) {
+                    ids.add(mIdByConference.get(conference));
+                }
             }
         }
         Collections.sort(ids);

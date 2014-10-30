@@ -152,6 +152,18 @@ public class ImsCallProfile implements Parcelable {
     public static final int DIALSTRING_USSD = 2;
 
     /**
+     * Values for causes that restricts that restrict call types
+     */
+    // Default cause not restricted at peer and HD is supported
+    public static final int CALL_RESTRICT_CAUSE_NONE = 0;
+    // Service not supported by RAT at peer
+    public static final int CALL_RESTRICT_CAUSE_RAT = 1;
+    // Service Disabled at peer
+    public static final int CALL_RESTRICT_CAUSE_DISABLED = 2;
+    // HD is not supported
+    public static final int CALL_RESTRICT_CAUSE_HD = 3;
+
+    /**
      * String extra properties
      *  oi : Originating identity (number), MT only
      *  cna : Calling name
@@ -179,10 +191,9 @@ public class ImsCallProfile implements Parcelable {
 
     public int mServiceType;
     public int mCallType;
+    public int mRestrictCause = CALL_RESTRICT_CAUSE_NONE;
     public Bundle mCallExtras;
     public ImsStreamMediaProfile mMediaProfile;
-
-
 
     public ImsCallProfile(Parcel in) {
         readFromParcel(in);

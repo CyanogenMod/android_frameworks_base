@@ -174,10 +174,13 @@ interface IImsCallSession {
     void resume(in ImsStreamMediaProfile profile);
 
     /**
-     * Merges the active & hold call. When it succeeds, {@link Listener#callSessionMerged}
-     * is called.
+     * Merges the active & hold call. When the merge starts,
+     * {@link Listener#callSessionMergeStarted} is called.
+     * {@link Listener#callSessionMergeComplete} is called if the merge is successful, and
+     * {@link Listener#callSessionMergeFailed} is called if the merge fails.
      *
-     * @see Listener#callSessionMerged, Listener#callSessionMergeFailed
+     * @see Listener#callSessionMergeStarted, Listener#callSessionMergeComplete,
+     *      Listener#callSessionMergeFailed
      */
     void merge();
 
@@ -260,4 +263,10 @@ interface IImsCallSession {
      * @return the call substate for this session.
      */
     int getCallSubstate();
+
+    /**
+     * Determines if the current session is multiparty.
+     * @return {@code True} if the session is multiparty.
+     */
+    boolean isMultiparty();
 }

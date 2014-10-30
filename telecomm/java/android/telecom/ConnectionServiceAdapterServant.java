@@ -62,6 +62,7 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_SET_CALL_PROPERTIES = 22;
     private static final int MSG_SET_CALL_SUBSTATE = 23;
     private static final int MSG_SET_EXTRAS = 24;
+    private static final int MSG_ADD_EXISTING_CONNECTION = 25;
 
     private final IConnectionServiceAdapter mDelegate;
 
@@ -229,6 +230,16 @@ final class ConnectionServiceAdapterServant {
                 }
                 case MSG_SET_CALL_SUBSTATE: {
                     mDelegate.setCallSubstate((String) msg.obj, msg.arg1);
+                    break;
+                }
+                case MSG_ADD_EXISTING_CONNECTION: {
+                    SomeArgs args = (SomeArgs) msg.obj;
+                    try {
+                        mDelegate.addExistingConnection(
+                                (String) args.arg1, (ParcelableConnection) args.arg2);
+                    } finally {
+                        args.recycle();
+                    }
                     break;
                 }
             }
@@ -404,6 +415,15 @@ final class ConnectionServiceAdapterServant {
         public void setCallSubstate(String connectionId, int callSubstate) {
             mHandler.obtainMessage(MSG_SET_CALL_SUBSTATE, callSubstate, 0,
                 connectionId).sendToTarget();
+        }
+
+        @Override
+        public final void addExistingConnection(
+                String connectionId, ParcelableConnection connection) {
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = connectionId;
+            args.arg2 = connection;
+            mHandler.obtainMessage(MSG_ADD_EXISTING_CONNECTION, args).sendToTarget();
         }
     };
 

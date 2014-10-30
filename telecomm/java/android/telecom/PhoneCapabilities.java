@@ -43,8 +43,10 @@ public final class PhoneCapabilities {
     /** Calls withing a conference can be swapped between foreground and background. */
     public static final int SWAP_CONFERENCE    = 0x00000008;
 
-    /** Call currently supports adding another call to this one. */
-    public static final int ADD_CALL           = 0x00000010;
+    /**
+     * @hide
+     */
+    public static final int UNUSED             = 0x00000010;
 
     /** Call supports responding via text option. */
     public static final int RESPOND_VIA_TEXT   = 0x00000020;
@@ -92,63 +94,92 @@ public final class PhoneCapabilities {
      */
     public static final int DISCONNECT_FROM_CONFERENCE = 0x00002000;
 
+    /**
+     * Whether the call is a generic conference, where we do not know the precise state of
+     * participants in the conference (eg. on CDMA).
+     *
+     * TODO: Move to CallProperties.
+     *
+     * @hide
+     */
+    public static final int GENERIC_CONFERENCE = 0x00004000;
+
     public static final int ALL = HOLD | SUPPORT_HOLD | MERGE_CONFERENCE | SWAP_CONFERENCE
-            | ADD_CALL | RESPOND_VIA_TEXT | MUTE | MANAGE_CONFERENCE | SEPARATE_FROM_CONFERENCE
+            | RESPOND_VIA_TEXT | MUTE | MANAGE_CONFERENCE | SEPARATE_FROM_CONFERENCE
             | DISCONNECT_FROM_CONFERENCE;
 
     /* Add participant in an active or conference call option*/
     /** {@hide} */
-    public static final int ADD_PARTICIPANT = 0x00004000;
+    public static final int ADD_PARTICIPANT = 0x00008000;
 
     /**
      * Call is using voice privacy.
      * @hide
      */
-    public static final int VOICE_PRIVACY = 0x00008000;
+    public static final int VOICE_PRIVACY = 0x00010000;
 
     /**
      * Call type can be modified for IMS call
      * @hide
      */
-    public static final int CALL_TYPE_MODIFIABLE = 0x00010000;
+    public static final int CALL_TYPE_MODIFIABLE = 0x00020000;
+
+    /**
+     * Whether this set of capabilities supports the specified capability.
+     * @param capabilities The set of capabilities.
+     * @param capability The capability to check capabilities for.
+     * @return Whether the specified capability is supported.
+     * @hide
+     */
+    public static boolean can(int capabilities, int capability) {
+        return (capabilities & capability) != 0;
+    }
+
+    /**
+     * Removes the specified capability from the set of capabilities and returns the new set.
+     * @param capabilities The set of capabilities.
+     * @param capability The capability to remove from the set.
+     * @return The set of capabilities, with the capability removed.
+     * @hide
+     */
+    public static int remove(int capabilities, int capability) {
+        return capabilities & ~capability;
+    }
 
     public static String toString(int capabilities) {
         StringBuilder builder = new StringBuilder();
         builder.append("[Capabilities:");
-        if ((capabilities & HOLD) != 0) {
+        if (can(capabilities, HOLD)) {
             builder.append(" HOLD");
         }
-        if ((capabilities & SUPPORT_HOLD) != 0) {
+        if (can(capabilities, SUPPORT_HOLD)) {
             builder.append(" SUPPORT_HOLD");
         }
-        if ((capabilities & MERGE_CONFERENCE) != 0) {
+        if (can(capabilities, MERGE_CONFERENCE)) {
             builder.append(" MERGE_CONFERENCE");
         }
-        if ((capabilities & SWAP_CONFERENCE) != 0) {
+        if (can(capabilities, SWAP_CONFERENCE)) {
             builder.append(" SWAP_CONFERENCE");
         }
-        if ((capabilities & ADD_CALL) != 0) {
-            builder.append(" ADD_CALL");
-        }
-        if ((capabilities & RESPOND_VIA_TEXT) != 0) {
+        if (can(capabilities, RESPOND_VIA_TEXT)) {
             builder.append(" RESPOND_VIA_TEXT");
         }
-        if ((capabilities & MUTE) != 0) {
+        if (can(capabilities, MUTE)) {
             builder.append(" MUTE");
         }
-        if ((capabilities & MANAGE_CONFERENCE) != 0) {
+        if (can(capabilities, MANAGE_CONFERENCE)) {
             builder.append(" MANAGE_CONFERENCE");
         }
-        if ((capabilities & SUPPORTS_VT_LOCAL) != 0) {
+        if (can(capabilities, SUPPORTS_VT_LOCAL)) {
             builder.append(" SUPPORTS_VT_LOCAL");
         }
-        if ((capabilities & SUPPORTS_VT_REMOTE) != 0) {
+        if (can(capabilities, SUPPORTS_VT_REMOTE)) {
             builder.append(" SUPPORTS_VT_REMOTE");
         }
-        if ((capabilities & VoLTE) != 0) {
+        if (can(capabilities, VoLTE)) {
             builder.append(" VoLTE");
         }
-        if ((capabilities & VoWIFI) != 0) {
+        if (can(capabilities, VoWIFI)) {
             builder.append(" VoWIFI");
         }
         if ((capabilities & VOICE_PRIVACY) != 0) {
@@ -159,6 +190,9 @@ public final class PhoneCapabilities {
         }
         if ((capabilities & ADD_PARTICIPANT) != 0) {
             builder.append(" ADD_PARTICIPANT");
+        }
+        if (can(capabilities, GENERIC_CONFERENCE)) {
+            builder.append(" GENERIC_CONFERENCE");
         }
 
         builder.append("]");

@@ -30,7 +30,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @hide
  */
 @SystemApi
-public abstract class Conference {
+public abstract class Conference implements IConferenceable {
 
     /** @hide */
     public abstract static class Listener {
@@ -183,6 +183,13 @@ public abstract class Conference {
     public void onAudioStateChanged(AudioState state) {}
 
     /**
+     * Notifies this conference that a connection has been added to it.
+     *
+     * @param connection The newly added connection.
+     */
+    public void onConnectionAdded(Connection connection) {}
+
+    /**
      * Sets state to be on hold.
      */
     public final void setOnHold() {
@@ -211,6 +218,13 @@ public abstract class Conference {
     }
 
     /**
+     * @return The {@link DisconnectCause} for this connection.
+     */
+    public final DisconnectCause getDisconnectCause() {
+        return mDisconnectCause;
+    }
+
+    /**
      * Sets the capabilities of a conference. See {@link PhoneCapabilities} for valid values.
      *
      * @param capabilities A bitmask of the {@code PhoneCapabilities} of the conference call.
@@ -235,6 +249,7 @@ public abstract class Conference {
         if (connection != null && !mChildConnections.contains(connection)) {
             if (connection.setConference(this)) {
                 mChildConnections.add(connection);
+                onConnectionAdded(connection);
                 for (Listener l : mListeners) {
                     l.onConnectionAdded(this, connection);
                 }
@@ -335,6 +350,19 @@ public abstract class Conference {
     public final Conference removeListener(Listener listener) {
         mListeners.remove(listener);
         return this;
+    }
+
+    /**
+     * Retrieves the primary connection associated with the conference.  The primary connection is
+     * the connection from which the conference will retrieve its current state.
+     *
+     * @return The primary connection.
+     */
+    public Connection getPrimaryConnection() {
+        if (mUnmodifiableChildConnections == null || mUnmodifiableChildConnections.isEmpty()) {
+            return null;
+        }
+        return mUnmodifiableChildConnections.get(0);
     }
 
     /**
