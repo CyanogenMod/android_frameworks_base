@@ -2087,6 +2087,9 @@
         <item>Trying to turn on mobile data</item>
     </string-array>
 
+    <!-- Configuartion to set zen mode when silent mode is on -->
+    <bool name="config_setZenModeWhenSilentModeOn">false</bool>
+
     <!-- Configuartion to support ESN Tracker -->
     <bool name="config_telephony_ESN_Tracker_enabled">false</bool>
 
