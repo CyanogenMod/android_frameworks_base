@@ -17,6 +17,7 @@ package android.telecom;
 import android.annotation.SystemApi;
 import android.content.ComponentName;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -995,6 +996,26 @@ public class TelecomManager {
             }
         }
         return false;
+    }
+
+    /**
+     * @param accountHandle The handle for the account to derive an adn query URI for or
+     * {@code null} to return a URI which will use the default account.
+     * @return The URI (with the content:// scheme) specific to the specified {@link PhoneAccount}
+     * for the the content retrieve.
+     * @hide
+     */
+    @SystemApi
+    public Uri getAdnUriForPhoneAccount(PhoneAccountHandle accountHandle) {
+        ITelecomService service = getTelecomService();
+        if (service != null && accountHandle != null) {
+            try {
+                return service.getAdnUriForPhoneAccount(accountHandle);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error calling ITelecomService#getAdnUriForPhoneAccount", e);
+            }
+        }
+        return Uri.parse("content://icc/adn");
     }
 
     /**
