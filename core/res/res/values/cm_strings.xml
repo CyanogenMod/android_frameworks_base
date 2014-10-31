@@ -77,7 +77,7 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_sendMockSms">send mock SMS messages</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_sendMockSms">Allows the app to send mock SMS messages. This allows an app to send messages to trusted applications. Malicious apps could send messages continuously, blocking the device\'s notification system and disrupting the user.</string>
+    <string name="permdesc_sendMockSms">Allows the app to send mock SMS messages. This allows an app to send messages to trusted apps. Malicious apps could send messages continuously, blocking the device\'s notification system and disrupting the user.</string>
 
     <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
     <string name="storage_sd_dock_card">Dock SD card</string>
@@ -168,9 +168,9 @@
     <string name="permdesc_useHardwareFramework">Allows an app access to the CM hardware framework.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-    <string name="permlab_keyguardApplicationWidget">set keyguard application widget</string>
+    <string name="permlab_keyguardApplicationWidget">set keyguard app widget</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_keyguardApplicationWidget">Allows an app to set the application widget on the keyguard.</string>
+    <string name="permdesc_keyguardApplicationWidget">Allows an app to set the app widget on the keyguard.</string>
 
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
 
