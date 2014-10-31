@@ -5530,7 +5530,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 Exception failedException = null;
 
                 insertIntoOverlayMap(target, pkg);
-                if (mBootThemeConfig != null &&
+                if (isBootScan && mBootThemeConfig != null &&
                         (pkg.packageName.equals(mBootThemeConfig.getOverlayPkgName()) ||
                         pkg.packageName.equals(
                                 mBootThemeConfig.getOverlayPkgNameForApp(target)))) {
@@ -5565,7 +5565,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
 
             //Icon Packs need aapt too
-            if ((mBootThemeConfig != null &&
+            if (isBootScan && (mBootThemeConfig != null &&
                     pkg.packageName.equals(mBootThemeConfig.getIconPackPkgName()))) {
                 if (isIconCompileNeeded(pkg)) {
                     try {
