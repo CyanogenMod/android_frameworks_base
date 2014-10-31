@@ -435,7 +435,7 @@ class TelephonyIcons {
                 mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
                         dataTypeArray[type], null, NS);
                 mSelectedQSDataTypeIcon[sub] = QS_DATA_HP[inetCondition];
-                mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                mSelectedDataTypeDesc[sub] = mDataTypeDescriptionArray[type];
                 mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_HP;
                 break;
             case TelephonyManager.NETWORK_TYPE_CDMA:
