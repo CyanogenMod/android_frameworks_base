@@ -1862,4 +1862,7 @@
 
   <!-- config switching DDS switch back to the default sub -->
   <java-symbol type="bool" name="config_dds_switch_back" />
+
+  <!-- config switching DDS to the primary sub -->
+  <java-symbol type="bool" name="config_setDdsOnPrimarySub" />
 </resources>
