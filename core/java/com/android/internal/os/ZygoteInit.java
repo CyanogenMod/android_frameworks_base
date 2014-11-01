@@ -329,7 +329,6 @@ public class ZygoteInit {
                                 Log.v(TAG,
                                     " GC at " + Debug.getGlobalAllocSize());
                             }
-                            System.gc();
                             runtime.runFinalizationSync();
                             Debug.resetGlobalAllocSize();
                         }
@@ -349,7 +348,7 @@ public class ZygoteInit {
                         throw new RuntimeException(t);
                     }
                 }
-
+                System.gc();
                 Log.i(TAG, "...preloaded " + count + " classes in "
                         + (SystemClock.uptimeMillis()-startTime) + "ms.");
             } catch (IOException e) {
@@ -421,7 +420,6 @@ public class ZygoteInit {
                 if (false) {
                     Log.v(TAG, " GC at " + Debug.getGlobalAllocSize());
                 }
-                System.gc();
                 runtime.runFinalizationSync();
                 Debug.resetGlobalAllocSize();
             }
@@ -438,6 +436,7 @@ public class ZygoteInit {
                 }
             }
         }
+        System.gc();
         return N;
     }
 
@@ -449,7 +448,6 @@ public class ZygoteInit {
                 if (false) {
                     Log.v(TAG, " GC at " + Debug.getGlobalAllocSize());
                 }
-                System.gc();
                 runtime.runFinalizationSync();
                 Debug.resetGlobalAllocSize();
             }
@@ -466,6 +464,7 @@ public class ZygoteInit {
                 }
             }
         }
+        System.gc();
         return N;
     }
 
