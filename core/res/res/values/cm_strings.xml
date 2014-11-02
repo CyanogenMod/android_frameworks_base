@@ -131,6 +131,8 @@
     <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
     <!-- ADB notification message-->
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
+    <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
+    <string name="usb_choose_notification_title">Touch to choose USB options.</string>
 
     <!-- App ops requests -->
     <string name="app_ops_access_camera">access the camera</string>
