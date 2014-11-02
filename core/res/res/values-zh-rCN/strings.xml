@@ -1345,6 +1345,7 @@
     <string name="usb_ptp_notification_title" msgid="1960817192216064833">"作为相机连接"</string>
     <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"作为安装程序连接"</string>
     <string name="usb_accessory_notification_title" msgid="7848236974087653666">"已连接到USB配件"</string>
+    <string name="usb_choose_notification_title">触摸选择USB连接模式</string>
     <string name="usb_notification_message" msgid="2290859399983720271">"触摸可显示其他USB选项。"</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="9020092196061007262">"格式化USB存储设备吗？"</string>
     <string name="extmedia_format_title" product="default" msgid="3648415921526526069">"要格式化SD卡吗？"</string>
