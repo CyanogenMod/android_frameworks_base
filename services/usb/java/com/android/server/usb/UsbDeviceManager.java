@@ -19,6 +19,7 @@
 
 package com.android.server.usb;
 
+import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -726,6 +727,9 @@ public class UsbDeviceManager {
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
                 } else {
+                    if (AppOpsManager.isStrictEnable()) {
+                        id = com.android.internal.R.string.usb_choose_notification_title;
+                    }
                     // There is a different notification for USB tethering so we don't need one here
                     //if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
                     //    Slog.e(TAG, "No known USB function in updateUsbNotification");
