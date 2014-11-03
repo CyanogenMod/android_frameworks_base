@@ -61,7 +61,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.WindowManager;
-import android.view.WindowManagerPolicy;
 import android.widget.RemoteViews.OnClickHandler;
 
 import java.io.File;
@@ -318,14 +317,6 @@ public class KeyguardHostView extends KeyguardViewBase {
                     if (DEBUGXPORT) Log.v(TAG, "update widget: play state changed");
                     KeyguardHostView.this.post(mSwitchPageRunnable);
                 }
-            }
-        }
-        @Override
-        public void onLidStateChanged(int newState){
-            //when lid goes open and no security is set -> unlock device
-            if(newState == WindowManagerPolicy.WindowManagerFuncs.LID_OPEN
-                && mCurrentSecuritySelection == SecurityMode.None){
-                dismiss();
             }
         }
     };
