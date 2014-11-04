@@ -2626,6 +2626,14 @@
         android:description="@string/permdesc_useHardwareFramework"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to intercept package launch actions.
+        <p> Not for use by third-party applications.
+        @hide -->
+    <permission android:name="android.permission.INTERCEPT_PACKAGE_LAUNCH"
+        android:label="@string/permlab_interceptPackageLaunch"
+        android:description="@string/permdesc_interceptPackageLaunch"
+        android:protectionLevel="system|signature" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
