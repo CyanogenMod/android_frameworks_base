@@ -12614,11 +12614,15 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     @Override
     public final void addPreLaunchCheckPackage(String packageName) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.INTERCEPT_PACKAGE_LAUNCH, null);
         mPreLaunchCheckPackages.add(packageName);
     }
 
     @Override
     public final void removePreLaunchCheckPackage(String packageName) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.INTERCEPT_PACKAGE_LAUNCH, null);
         mPreLaunchCheckPackages.remove(packageName);
     }
 
