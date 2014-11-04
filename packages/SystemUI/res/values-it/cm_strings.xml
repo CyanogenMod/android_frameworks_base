@@ -35,8 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Disconnesso</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering OFF</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
-  <string name="quick_settings_wifiap">Wi-Fi AP</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi AP OFF</string>
+  <string name="quick_settings_wifiap">Hotspot Wi-Fi</string>
+  <string name="quick_settings_wifiap_off">Hotspot Wi-Fi spento</string>
   <string name="quick_settings_quiethours">Periodo quiete</string>
   <string name="quick_settings_quiethours_off">Periodo quiete OFF</string>
   <string name="quick_settings_lte">LTE</string>
@@ -71,6 +71,7 @@
   <string name="navbar_menu_big_button">Pulsante Menu</string>
   <string name="advanced_dev_option_wipe_app">Cancella dati</string>
   <string name="advanced_dev_option_force_stop">Arresto forzato</string>
+  <string name="advanced_dev_option_uninstall">Disinstalla</string>
   <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
   <string name="screenshot_delete_action">Elimina</string>
   <string name="screenshot_delete_confirmation">Schermata eliminata.</string>

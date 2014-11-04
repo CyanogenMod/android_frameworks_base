@@ -1249,6 +1249,14 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_SEARCH_LONG_PRESS = "android.intent.action.SEARCH_LONG_PRESS";
 
     /**
+     * Activity Action: Start action associated with long press on the recents key.
+     * <p>Input: Nothing
+     * <p>Output: Nothing
+     * @hide
+     */
+    public static final String ACTION_RECENTS_LONG_PRESS = "android.intent.action.RECENTS_LONG_PRESS";
+
+    /**
      * Activity Action: The user pressed the "Report" button in the crash/ANR dialog.
      * This intent is delivered to the package which installed the application, usually
      * Google Play.
@@ -2749,6 +2757,56 @@ public class Intent implements Parcelable, Cloneable {
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_CREATE_DOCUMENT = "android.intent.action.CREATE_DOCUMENT";
 
+    /**
+     * Broadcast Action:  A theme's resources were cached.  Includes two extra fields,
+     * {@link #EXTRA_THEME_PACKAGE_NAME}, containing the package name of the theme that was
+     * processed, and {@link #EXTRA_THEME_RESULT}, containing the result code.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.</p>
+     *
+     * @hide
+     */
+    public static final String ACTION_THEME_RESOURCES_CACHED =
+            "android.intent.action.THEME_RESOURCES_CACHED";
+
+   /**
+    * Allows an application to add a widget to the keyguard which will launch the application
+    * associated with the widget. It has 2 extras - one for the icon to use
+    * {@link #EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON} and the other for the package name
+    * {@link #EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME} of the application associated with
+    * the widget. You must hold "android.permission.SET_KEYGUARD_APPLICATION_WIDGET" to receive
+    * this broadcast.
+    *
+    * @hide
+    */
+    public static final String ACTION_SET_KEYGUARD_APPLICATION_WIDGET =
+            "android.intent.action.SET_KEYGUARD_APPLICATION_WIDGET_ACTION";
+
+    /**
+     * Allows an application to remove the widget on the keyguard which was added using the
+     * {@link #ACTION_SET_KEYGUARD_APPLICATION_WIDGET} intent. You must hold
+     * "android.permission.SET_KEYGUARD_APPLICATION_WIDGET" to receive this
+     * broadcast.
+     *
+     * @hide
+     */
+    public static final String ACTION_UNSET_KEYGUARD_APPLICATION_WIDGET =
+            "android.intent.action.UNSET_KEYGUARD_APPLICATION_WIDGET_ACTION";
+
+    /**
+     * Allows an application to know when the application associated with the keyguard application
+     * widget has been launched. It has 1 extra -
+     * {@link #EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME} which has the package name
+     * associated with the widget. You must hold
+     * "android.permission.SET_KEYGUARD_APPLICATION_WIDGET" to receive this broadcast.
+     *
+     * @see #ACTION_SET_KEYGUARD_APPLICATION_WIDGET
+     * @hide
+     */
+    public static final String ACTION_KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION =
+            "android.intent.action.KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
@@ -3392,6 +3450,45 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final String EXTRA_SHUTDOWN_USERSPACE_ONLY
             = "android.intent.extra.SHUTDOWN_USERSPACE_ONLY";
+
+    /**
+     * Extra for {@link #ACTION_THEME_RESOURCES_CACHED} that provides the return value
+     * from processThemeResources. A value of 0 indicates a successful caching of resources.
+     * Error results are:
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_AAPT_ERROR}
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_IDMAP_ERROR}
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_UNKNOWN_ERROR}
+     *
+     * @hide
+     */
+    public static final String EXTRA_THEME_RESULT = "android.intent.extra.RESULT";
+
+    /**
+     * Extra for {@link #ACTION_THEME_RESOURCES_CACHED} that provides the package name of the
+     * theme that was processed.
+     *
+     * @hide
+     */
+    public static final String EXTRA_THEME_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
+
+    /**
+     * Extra for {@link #ACTION_SET_KEYGUARD_APPLICATION_WIDGET} which tells the keyguard
+     * the icon to use for the widget.
+     *
+     * @hide
+     */
+    public static final String EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON =
+            "android.intent.extra.EXTRA_KEYGUARD_APPLICATION_WIDGET_ICON";
+
+    /**
+     * Extra for {@link #ACTION_SET_KEYGUARD_APPLICATION_WIDGET} and
+     * {@link #ACTION_KEYGUARD_APPLICATION_WIDGET_LAUNCH_ACTION}. It contains the package name
+     * of the application widget.
+     *
+     * @hide
+     */
+    public static final String EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME =
+            "android.intent.extra.EXTRA_KEYGUARD_APPLICATION_WIDGET_PACKAGE_NAME";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

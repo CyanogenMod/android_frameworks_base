@@ -104,7 +104,12 @@ JNIExtMediaPlayerListener::~JNIExtMediaPlayerListener()
 void JNIExtMediaPlayerListener::notify(int msg, int ext1, int ext2, const Parcel *obj)
 {
   JNIEnv *env = AndroidRuntime::getJNIEnv();
-  if (env && obj && obj->dataSize() > 0)
+
+  if (!env) {
+      return;
+  }
+
+  if (obj && obj->dataSize() > 0)
   {
     if (mParcel != NULL)
     {

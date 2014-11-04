@@ -77,7 +77,7 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_sendMockSms">send mock SMS messages</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_sendMockSms">Allows the app to send mock SMS messages. This allows an app to send messages to trusted applications. Malicious apps could send messages continuously, blocking the device\'s notification system and disrupting the user.</string>
+    <string name="permdesc_sendMockSms">Allows the app to send mock SMS messages. This allows an app to send messages to trusted apps. Malicious apps could send messages continuously, blocking the device\'s notification system and disrupting the user.</string>
 
     <!-- Storage description for the SD card on the dock. [CHAR LIMIT=NONE] -->
     <string name="storage_sd_dock_card">Dock SD card</string>
@@ -167,6 +167,11 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_useHardwareFramework">Allows an app access to the CM hardware framework.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+    <string name="permlab_keyguardApplicationWidget">set keyguard app widget</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_keyguardApplicationWidget">Allows an app to set the app widget on the keyguard.</string>
+
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
 
     <!-- App ops requests -->
@@ -228,9 +233,9 @@
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
 
     <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
-    <string name="extmedia_format_message_cm" product="nosdcard">All data on your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="usb_extmedia_format_message">All data on your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. -->
-    <string name="extmedia_format_message_cm" product="default">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="sd_extmedia_format_message">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
 
     <!-- USB OTG notification message -->
     <string name="usb_storage_notification_manage_message">Tap to manage</string>
@@ -287,4 +292,28 @@
     <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
     <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
 
+    <!-- Theme installation error notification -->
+    <string name="theme_install_error_title">Failed to install theme</string>
+    <string name="theme_install_error_message">%s failed to install</string>
+
+    <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
+    <string name="storage_uicc">UICC storage</string>
+
+    <!-- Strings for ExternalStorageFormatter service (SD card). -->
+    <string name="sd_progress_unmounting">Unmounting SD card\u2026</string>
+    <string name="sd_progress_erasing">Erasing SD card\u2026</string>
+    <string name="sd_format_error">Couldn\'t erase SD card.</string>
+    <string name="sd_media_bad_removal">SD card was removed before being unmounted.</string>
+    <string name="sd_media_checking">SD card is currently being checked.</string>
+    <string name="sd_media_removed">SD card has been removed.</string>
+    <string name="sd_media_shared">SD card is currently in use by a computer.</string>
+
+    <!-- Strings for ExternalStorageFormatter service (USB storage). -->
+    <string name="usb_progress_unmounting">Unmounting USB storage\u2026</string>
+    <string name="usb_progress_erasing">Erasing USB storage\u2026</string>
+    <string name="usb_format_error">Couldn\'t erase USB storage.</string>
+    <string name="usb_media_bad_removal">USB storage was removed before being unmounted.</string>
+    <string name="usb_media_checking">USB storage is currently being checked.</string>
+    <string name="usb_media_removed">USB storage has been removed.</string>
+    <string name="usb_media_shared">USB storage is currently in use by a computer.</string>
 </resources>

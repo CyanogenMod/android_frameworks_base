@@ -33,6 +33,7 @@
   <string name="message_from">wiadomość od</string>
   <string name="message_from_person">wiadomość od %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="kg_invalid_sim_puk_hint_cm">Kod PUK powinien składać się z 8 cyfr.</string>
   <string name="keyguard_password_wrong_puk_code">Nieprawidłowy kod PUK.</string>
   <string name="keyguard_password_pin_failed">Nieudana operacja PIN.</string>
   <string name="keyguard_password_puk_failed">Nieudana operacja PUK.</string>

@@ -165,10 +165,13 @@
   <string name="lockscreen_sim_error_message_short">Ongeldige simkaart.</string>
   <string name="lockscreen_airplane_mode_on">Vliegmodus</string>
   <string name="lockscreen_sim_locked_message_cm">SIM/RUIM-kaart is vergrendeld.</string>
+  <string name="pinpuk_attempts">\nResterende pogingen:</string>
   <string name="stk_cc_ussd_to_dial">USSD-verzoek veranderd naar DIAL-verzoek.</string>
   <string name="stk_cc_ussd_to_ss">USSD-verzoek veranderd naar SS-verzoek.</string>
   <string name="stk_cc_ussd_to_ussd">USSD-verzoek veranderd naar nieuw USSD-verzoek.</string>
   <string name="stk_cc_ss_to_dial">SS-verzoek veranderd naar DIAL-verzoek.</string>
   <string name="stk_cc_ss_to_ussd">SS-verzoek veranderd naar USSD-verzoek.</string>
   <string name="stk_cc_ss_to_ss">SS-verzoek veranderd naar nieuw SS-verzoek.</string>
+  <string name="theme_install_error_title">Thema installeren mislukt</string>
+  <string name="theme_install_error_message">%s kan niet worden geïnstalleerd</string>
 </resources>

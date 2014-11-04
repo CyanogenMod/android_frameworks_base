@@ -18,7 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Schermata di sblocco</string>
   <string name="keyguard_discharging">In uso (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
-  <string name="keyguard_low_battery_cm">Collegare il caricabatterie, <xliff:g id="number">%d</xliff:g> <xliff:g id="percent">%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Collegare il caricabatterie, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
     <item quantity="one">%d chiamata persa</item>
     <item quantity="other">%d chiamate perse</item>
@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nTentativi rimasti:</string>
   <string name="lockscreen_sim_error_message_short">Scheda non valida.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM bloccata</string>
-  <string name="msim_kg_sim_pin_msg_format">ABB: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Ultima app usata</string>
 </resources>

@@ -256,6 +256,7 @@
         android:name="com.android.server.connectivityservice.CONNECTED_TO_PROVISIONING_NETWORK_ACTION" />
 
     <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
 
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
@@ -1926,7 +1927,7 @@
     <permission android:name="android.permission.SET_ACTIVITY_WATCHER"
         android:label="@string/permlab_runSetActivityWatcher"
         android:description="@string/permdesc_runSetActivityWatcher"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- Allows an application to call the activity manager shutdown() API
          to put the higher-level system there into a shutdown state.
@@ -2617,6 +2618,14 @@
         android:description="@string/permdesc_useHardwareFramework"
         android:protectionLevel="signature" />
 
+
+    <!-- Allows an application to set the application widget on the keyguard.
+         <p> Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_APPLICATION_WIDGET"
+        android:label="@string/permlab_keyguardApplicationWidget"
+        android:description="@string/permdesc_keyguardApplicationWidget"
+        android:protectionLevel="system|signature" />
 
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->

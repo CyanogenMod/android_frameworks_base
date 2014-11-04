@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nIntentos restantes:</string>
   <string name="lockscreen_sim_error_message_short">Tarjeta inválida.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM con bloqueo personal</string>
-  <string name="msim_kg_sim_pin_msg_format">SUS: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Última aplicación utilizada</string>
 </resources>

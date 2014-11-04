@@ -38,5 +38,6 @@
   <string name="pinpuk_attempts">\nඋත්සාහයන් ඉතුරුව ඇත:</string>
   <string name="lockscreen_sim_error_message_short">අවලංගු කාඩ් පතකි.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM ව්‍යාකූලව අඟුළුලා ඇත</string>
-  <string name="msim_kg_sim_pin_msg_format">දායක: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">සිම්: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">භාවිතාවූ අවසන් යෙදුම</string>
 </resources>

@@ -17,6 +17,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="tethered_clients_connected">
-    <item quantity="other">%d台のクライアントが接続しています。</item>
+    <item quantity="other">%d台のクライアントと接続しています。</item>
   </plurals>
 </resources>

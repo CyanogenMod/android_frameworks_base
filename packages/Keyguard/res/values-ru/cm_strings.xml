@@ -40,5 +40,6 @@
   <string name="pinpuk_attempts">\nОсталось попыток:</string>
   <string name="lockscreen_sim_error_message_short">Сбой SIM-карты.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM заблокирована оператором</string>
-  <string name="msim_kg_sim_pin_msg_format">Оператор <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="msim_kg_sim_pin_msg_format">SIM <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Последнее использованное приложение</string>
 </resources>

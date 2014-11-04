@@ -137,6 +137,8 @@
   <string name="extmedia_format_message_cm" product="nosdcard">Wszystkie dane z pamięci USB (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
   <string name="extmedia_format_message_cm" product="default">Wszystkie dane z karty pamięci (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
   <string name="usb_storage_notification_manage_message">Dotknij, aby zarządzać</string>
+  <string name="sd_ext_media_checking_notification_title">Przygotowywanie karty pamięci\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">Sprawdzanie błędów karty pamięci\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">Pusta karta SD</string>
   <string name="sd_ext_media_nofs_notification_message">Karta SD jest pusta lub posiada nieobsługiwany system plików.</string>
   <string name="sd_ext_media_unmountable_notification_title">Uszkodzona karta SD</string>
@@ -147,6 +149,8 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Możesz bezpiecznie wyciągnąć kartę SD.</string>
   <string name="sd_ext_media_nomedia_notification_title">Karta SD wyciągnięta</string>
   <string name="sd_ext_media_nomedia_notification_message">Karta SD wyciągnięta. Włóż nową.</string>
+  <string name="usb_ext_media_checking_notification_title">Przygotowywanie pamięci USB\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">Sprawdzanie błędów pamięci USB\u2026</string>
   <string name="usb_ext_media_nofs_notification_title">Pusta pamięć USB</string>
   <string name="usb_ext_media_nofs_notification_message">Pamięć USB jest pusta lub posiada nieobsługiwany system plików.</string>
   <string name="usb_ext_media_unmountable_notification_title">Uszkodzona pamięć USB</string>
@@ -157,4 +161,17 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Możesz bezpiecznie odłączyć pamięć USB.</string>
   <string name="usb_ext_media_nomedia_notification_title">Odłączono pamięć USB</string>
   <string name="usb_ext_media_nomedia_notification_message">Pamięć USB odłączona. Podłącz nowe urządzenie.</string>
+  <string name="progress_nomediapresent" product="default">Brak wymiennego nośnika pamięci\u2026</string>
+  <string name="lockscreen_sim_error_message_short">Nieprawidłowa karta.</string>
+  <string name="lockscreen_airplane_mode_on">Tryb samolotowy</string>
+  <string name="lockscreen_sim_locked_message_cm">Karta SIM/RUIM jest zablokowana.</string>
+  <string name="pinpuk_attempts">\nPozostało prób:</string>
+  <string name="stk_cc_ussd_to_dial">Żądanie USSD jest modyfikowane na DIAL.</string>
+  <string name="stk_cc_ussd_to_ss">Żądanie USSD jest modyfikowane na SS.</string>
+  <string name="stk_cc_ussd_to_ussd">Żądanie USSD jest modyfikowane na nowe żądanie USSD.</string>
+  <string name="stk_cc_ss_to_dial">Żądanie SS jest modyfikowane na DIAL.</string>
+  <string name="stk_cc_ss_to_ussd">Żądanie SS jest modyfikowane na USSD.</string>
+  <string name="stk_cc_ss_to_ss">Żądanie SS jest modyfikowane na nowe żądanie SS.</string>
+  <string name="theme_install_error_title">Nie udało się zainstalować motywu</string>
+  <string name="theme_install_error_message">%s nie udało się zainstalować</string>
 </resources>

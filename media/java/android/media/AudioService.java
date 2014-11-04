@@ -79,6 +79,7 @@ import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.VolumePanel;
 import android.view.WindowManager;
+import android.view.OrientationEventListener;
 
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.util.XmlUtils;
@@ -475,6 +476,8 @@ public class AudioService extends IAudioService.Stub {
 
     private boolean mVolumeKeysControlRingStream;
 
+    private AudioOrientationEventListener mOrientationListener;
+
     ///////////////////////////////////////////////////////////////////////////
     // Construction
     ///////////////////////////////////////////////////////////////////////////
@@ -580,6 +583,10 @@ public class AudioService extends IAudioService.Stub {
             mDeviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE))
                     .getDefaultDisplay().getRotation();
             Log.v(TAG, "monitoring device rotation, initial=" + mDeviceRotation);
+
+            mOrientationListener = new AudioOrientationEventListener(mContext);
+            mOrientationListener.enable();
+
             // initialize rotation in AudioSystem
             setRotationForAudioSystem();
         }
@@ -815,6 +822,25 @@ public class AudioService extends IAudioService.Stub {
 
     private int rescaleIndex(int index, int srcStream, int dstStream) {
         return (index * mStreamStates[dstStream].getMaxIndex() + mStreamStates[srcStream].getMaxIndex() / 2) / mStreamStates[srcStream].getMaxIndex();
+    }
+
+    private class AudioOrientationEventListener
+            extends OrientationEventListener {
+        public AudioOrientationEventListener(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            //Even though we're responding to phone orientation events,
+            //use display rotation so audio stays in sync with video/dialogs
+            int newRotation = ((WindowManager) mContext.getSystemService(
+                    Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+            if (newRotation != mDeviceRotation) {
+                mDeviceRotation = newRotation;
+                setRotationForAudioSystem();
+            }
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2904,6 +2930,15 @@ public class AudioService extends IAudioService.Stub {
 
     public void setWiredDeviceConnectionState(int device, int state, String name) {
         synchronized (mConnectedDevices) {
+            if ((state == 1) && ((device & mSafeMediaVolumeDevices) != 0)) {
+                boolean restoreSafeVolume = Settings.System.getIntForUser(
+                        mContentResolver,
+                        Settings.System.SAFE_HEADSET_VOLUME_RESTORE,
+                        0, UserHandle.USER_CURRENT) != 0;
+                if (restoreSafeVolume) {
+                    enforceSafeMediaVolume();
+                }
+            }
             int delay = checkSendBecomingNoisyIntent(device, state);
             queueMsgUnderWakeLock(mAudioHandler,
                     MSG_SET_WIRED_DEVICE_CONNECTION_STATE,
@@ -3907,7 +3942,9 @@ public class AudioService extends IAudioService.Stub {
     }
 
     private void onSendBecomingNoisyIntent() {
-        sendBroadcastToAll(new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+        Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        sendBroadcastToAll(intent);
     }
 
     // must be called synchronized on mConnectedDevices
@@ -4252,12 +4289,11 @@ public class AudioService extends IAudioService.Stub {
                     }
                 }
             } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                applyCurrentStreamVolume();
+
                 state = intent.getIntExtra("state", 0);
                 if (state == 1) {
                     // Headset plugged in
-                    adjustCurrentStreamVolume();
-                    // TODO: Cap volume at safe levels
-
                     boolean launchPlayer = Settings.System.getIntForUser(
                             context.getContentResolver(),
                             Settings.System.HEADSET_CONNECT_PLAYER,
@@ -4272,9 +4308,6 @@ public class AudioService extends IAudioService.Stub {
                             Log.w(TAG, "No music player found to start after headset connection");
                         }
                     }
-                } else {
-                    // Headset disconnected
-                    adjustCurrentStreamVolume();
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
                            action.equals(Intent.ACTION_USB_AUDIO_DEVICE_PLUG)) {
@@ -4366,10 +4399,18 @@ public class AudioService extends IAudioService.Stub {
                         0,
                         null,
                         SAFE_VOLUME_CONFIGURE_TIMEOUT_MS);
-                adjustCurrentStreamVolume();
+                applyCurrentStreamVolume();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                if (mMonitorRotation) {
+                    mOrientationListener.onOrientationChanged(0); //argument is ignored anyway
+                    mOrientationListener.enable();
+                }
                 AudioSystem.setParameters("screen_state=on");
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                if (mMonitorRotation) {
+                    //reduce wakeups (save current) by only listening when display is on
+                    mOrientationListener.disable();
+                }
                 AudioSystem.setParameters("screen_state=off");
             } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 handleConfigurationChanged(context);
@@ -4398,7 +4439,10 @@ public class AudioService extends IAudioService.Stub {
             }
         }
 
-        private void adjustCurrentStreamVolume() {
+        // Forces volume to update. This is needed by devices affected by a bug
+        // where the new volume is not applied when the audio device changes.
+        // See: review.cyanogenmod.org/33778
+        private void applyCurrentStreamVolume() {
             VolumeStreamState streamState;
             int device;
 
@@ -4621,14 +4665,6 @@ public class AudioService extends IAudioService.Stub {
                 if (newOrientation != mDeviceOrientation) {
                     mDeviceOrientation = newOrientation;
                     setOrientationForAudioSystem();
-                }
-            }
-            if (mMonitorRotation) {
-                int newRotation = ((WindowManager) context.getSystemService(
-                        Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
-                if (newRotation != mDeviceRotation) {
-                    mDeviceRotation = newRotation;
-                    setRotationForAudioSystem();
                 }
             }
             sendMsg(mAudioHandler,

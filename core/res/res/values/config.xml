@@ -250,6 +250,14 @@
     </string-array>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
+         p2p Go interfaces.  If the device doesn't want to support tethering over P2p this
+         should be empty. -->
+    <string-array translatable="false" name="config_tether_p2p_regexs">
+        <item>"p2p0"</item>
+    </string-array>
+
+
+    <!-- List of regexpressions describing the interface (if any) that represent tetherable
          WiMAX interfaces.  If the device doesn't want to support tethering over Wifi this
          should be empty.  An example would be "softap.*" -->
     <string-array translatable="false" name="config_tether_wimax_regexs">
@@ -349,6 +357,9 @@
 
     <!-- Integer indicating wpa_supplicant scan interval when p2p is connected in milliseconds -->
     <integer translatable="false" name="config_wifi_scan_interval_p2p_connected">60000</integer>
+
+    <!-- Integer indicating wpa_supplicant scan intervel when WFD session established in milliseconds  -->
+    <integer translatable="false" name="config_wifi_scan_interval_wfd_connected">300000</integer>
 
     <!-- Integer indicating the framework scan interval in milliseconds. This is used in the scenario
          where the chipset does not support background scanning (config_wifi_background_scan_suport
@@ -612,6 +623,9 @@
 
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">false</bool>
+
+    <!-- Does the notification LED support multiple colors? Used to decide if the user can change the colors -->
+    <bool name="config_multiColorNotificationLed">true</bool>
 
     <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveBatteryLed">false</bool>
@@ -1212,8 +1226,10 @@
     <integer name="config_safe_media_volume_index">10</integer>
 
     <!-- Configure mobile network MTU. The standard default is set here but each carrier
-         may have a specific value set in an overlay config.xml file. -->
-    <integer name="config_mobile_mtu">1500</integer>
+         may have a specific value set in an overlay config.xml file. 
+         This really must be 1358 as per 3GPP standards and packet segmentation on the LTE
+         radio.-->
+    <integer name="config_mobile_mtu">1358</integer>
 
 
     <!-- Configuration to send sms on 1x when UE is attached to eHRPD and there is an active
@@ -1327,6 +1343,10 @@
          the default framework version. If left empty, then the framework version will be used.
          Example: com.google.android.myapp/.resolver.MyResolverActivity  -->
     <string name="config_customResolverActivity"></string>
+
+    <!-- Component name of a custom pre launch check activity to be used instead of default
+         framework version. Currently, there is no default version. -->
+    <string name="config_prelaunchcheckactivity"></string>
 
     <!-- Apps that are authorized to access shared accounts, overridden by product overlays -->
     <string name="config_appsAuthorizedForSharedAccounts">;com.android.settings;</string>

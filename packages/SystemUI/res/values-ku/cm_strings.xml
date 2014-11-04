@@ -35,10 +35,6 @@
   <string name="quick_settings_usb_tether_off_label">بێ پەیوەندکردنی</string>
   <string name="quick_settings_usb_tether_connected_label">پەیوەندی ئینتەرنێت بە تەلەفوون</string>
   <string name="quick_settings_usb_tether_on_label">پەیوەندی ئینتەرنێت بە</string>
-  <string name="quick_settings_wifiap">Wi-Fi AP
-</string>
-  <string name="quick_settings_wifiap_off">Wi-Fi AP off
-</string>
   <string name="quick_settings_quiethours">کاتی ئارام</string>
   <string name="quick_settings_quiethours_off">کاتی ئارام کوژاندنەوە</string>
   <string name="quick_settings_lte">ئێڵ تی ئی </string>

@@ -35,8 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Odpojené</string>
   <string name="quick_settings_usb_tether_connected_label">Zdieľanie vyp.</string>
   <string name="quick_settings_usb_tether_on_label">Zdieľanie</string>
-  <string name="quick_settings_wifiap">Prístupový bod Wi-Fi</string>
-  <string name="quick_settings_wifiap_off">Príst. bod Wi-Fi vyp.</string>
+  <string name="quick_settings_wifiap">Wi-Fi hotspot</string>
+  <string name="quick_settings_wifiap_off">Wi-Fi hotspot vyp.</string>
   <string name="quick_settings_quiethours">Čas ticha</string>
   <string name="quick_settings_quiethours_off">Čas ticha vyp.</string>
   <string name="quick_settings_lte">LTE</string>
@@ -67,6 +67,7 @@
   <string name="navbar_menu_big_button">Tlačidlo Ponuka</string>
   <string name="advanced_dev_option_wipe_app">Vymazať údaje aplikácie</string>
   <string name="advanced_dev_option_force_stop">Vynútiť zastavenie</string>
+  <string name="advanced_dev_option_uninstall">Odinštalovať</string>
   <string name="accessibility_dock_battery_level">Batéria doku <xliff:g id="number">%d</xliff:g> .</string>
   <string name="screenshot_delete_action">Odstrániť</string>
   <string name="screenshot_delete_confirmation">Snímka obrazovky bola vymazaná.</string>

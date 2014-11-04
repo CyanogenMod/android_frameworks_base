@@ -38,5 +38,4 @@
   <string name="pinpuk_attempts">\nResterende pogingen:</string>
   <string name="lockscreen_sim_error_message_short">Kaart ongeldig.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM is Perso-vergrendeld</string>
-  <string name="msim_kg_sim_pin_msg_format">ABON.<xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
 </resources>

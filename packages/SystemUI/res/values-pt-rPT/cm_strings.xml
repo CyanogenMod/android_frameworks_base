@@ -35,8 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Desligado</string>
   <string name="quick_settings_usb_tether_connected_label">PA USB desligado</string>
   <string name="quick_settings_usb_tether_on_label">PA USB</string>
-  <string name="quick_settings_wifiap">PA Wi-Fi</string>
-  <string name="quick_settings_wifiap_off">PA Wi-Fi desligado</string>
+  <string name="quick_settings_wifiap">Ponto de acesso Wi-Fi</string>
+  <string name="quick_settings_wifiap_off">Ponto de acesso Wi-Fi desligado</string>
   <string name="quick_settings_quiethours">Horas de silêncio</string>
   <string name="quick_settings_quiethours_off">Horas de silêncio desligadas</string>
   <string name="quick_settings_lte">LTE</string>
@@ -71,6 +71,7 @@
   <string name="navbar_menu_big_button">Botão Menu</string>
   <string name="advanced_dev_option_wipe_app">Limpar dados da aplicação</string>
   <string name="advanced_dev_option_force_stop">Forçar paragem</string>
+  <string name="advanced_dev_option_uninstall">Desinstalar</string>
   <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
   <string name="screenshot_delete_action">Eliminar</string>
   <string name="screenshot_delete_confirmation">Captura de ecrã eliminada.</string>

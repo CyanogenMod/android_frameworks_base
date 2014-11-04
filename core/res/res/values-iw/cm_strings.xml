@@ -114,6 +114,7 @@
   <string name="app_ops_toggle_bluetooth">שנה Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">שנה נתוני רשת</string>
   <string name="app_ops_toggle_wifi">שנה WiFi</string>
+  <string name="app_ops_toggle_nfc">שנה NFC</string>
   <string name="app_ops_use_alarm_volume">לשנות עוצמת שעון מעורר</string>
   <string name="app_ops_use_audio_focus">לשלוט במיקוד הקול</string>
   <string name="app_ops_use_bluetooth_volume">שלוט על עוצמת קול ב-Bluetooth</string>
@@ -136,4 +137,39 @@
   <string name="extmedia_format_message_cm" product="nosdcard">כל המידע על אחסון ה-USB (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
   <string name="extmedia_format_message_cm" product="default">כל המידע על הכרטיס (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
   <string name="usb_storage_notification_manage_message">הקש לניהול</string>
+  <string name="sd_ext_media_checking_notification_title">מכין כרטיס SD</string>
+  <string name="sd_ext_media_checking_notification_message">בודק שגיאות בכרטיס ה-SD</string>
+  <string name="sd_ext_media_nofs_notification_title">כרטיס SD ריק</string>
+  <string name="sd_ext_media_nofs_notification_message">כרטיס ה-SD הינו ריק או בעל קבצים שהמערכת לא תומכת בהם.</string>
+  <string name="sd_ext_media_unmountable_notification_title">כרטיס SD פגום</string>
+  <string name="sd_ext_media_unmountable_notification_message">כרטיס SD פגום. נסה לפרמט אותו מחדש.</string>
+  <string name="sd_ext_media_badremoval_notification_title">כרטיס SD הוסר באופן בלתי צפוי</string>
+  <string name="sd_ext_media_badremoval_notification_message">נתק את כרטיס ה-SD לפני הסרתו מהמכשיר בכדי למנוע אובדן נתונים.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">כרטיס SD ניתן להסיר בבטחה</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">אתה יכול להסיר בבטחה את כרטיס ה-SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">כרטיס ה-SD הוסר</string>
+  <string name="sd_ext_media_nomedia_notification_message">כרטיס ה-SD הוסר. הכנס כרטיס חדש.</string>
+  <string name="usb_ext_media_checking_notification_title">מכין אחסון USB</string>
+  <string name="usb_ext_media_checking_notification_message">בודק שגיאות באחסון ה-USB</string>
+  <string name="usb_ext_media_nofs_notification_title">אחסון USB ריק</string>
+  <string name="usb_ext_media_nofs_notification_message">אחסון ה-USB ריק או בעל קבצים שהמערכת אינה תומכת בהם.</string>
+  <string name="usb_ext_media_unmountable_notification_title">אחסון USB פגום</string>
+  <string name="usb_ext_media_unmountable_notification_message">אחסון USB פגום. נסה לפרמט אותו.</string>
+  <string name="usb_ext_media_badremoval_notification_title">אחסון USB הוסר בפתאומיות</string>
+  <string name="usb_ext_media_badremoval_notification_message">נתק את אחסון ה-USB לפני הסרתו כדי למנוע אובדן נתונים.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">ניתן להסיר את אחסון ה-USB בבטחה</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">אתה יכול להסיר את אחסון ה-USB בבטחה.</string>
+  <string name="usb_ext_media_nomedia_notification_title">אחסון USB הוסר</string>
+  <string name="usb_ext_media_nomedia_notification_message">אחסון USB הוסר. הכנס מדיה חדשה.</string>
+  <string name="progress_nomediapresent" product="default">אין מדיה חיצונית\u2026</string>
+  <string name="lockscreen_sim_error_message_short">כרטיס שגוי.</string>
+  <string name="lockscreen_airplane_mode_on">מצב טיסה</string>
+  <string name="lockscreen_sim_locked_message_cm">כרטיס ה-SIM/RUIM נעול.</string>
+  <string name="pinpuk_attempts">\n ניסיונות נותרו:</string>
+  <string name="stk_cc_ussd_to_dial">בקשת USSD שונתה לבקשת חיוג.</string>
+  <string name="stk_cc_ussd_to_ss">בקשת USSD שונתה לבקשת SS.</string>
+  <string name="stk_cc_ussd_to_ussd">בקשת USSD שונתה לבקשת USSD חדשה.</string>
+  <string name="stk_cc_ss_to_dial">בקשת SS שונתה לבקשת חיוג.</string>
+  <string name="stk_cc_ss_to_ussd">בקשת SS שונתה לבקשת USSD.</string>
+  <string name="stk_cc_ss_to_ss">בקשת SS שונתה לבקשת SS חדשה.</string>
 </resources>
