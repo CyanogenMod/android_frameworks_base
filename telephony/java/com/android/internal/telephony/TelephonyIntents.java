@@ -414,4 +414,21 @@ public class TelephonyIntents {
      */
     public static final String ACTION_DEFAULT_SMS_SUBSCRIPTION_CHANGED
             = "android.intent.action.ACTION_DEFAULT_SMS_SUBSCRIPTION_CHANGED";
+
+
+    /**
+     * Broadcast Action: The subscription activation/deactivation request result.
+     *  This has the following extra values:</p>
+     * <ul>
+     *   <li><em>operationResult</em> - A int, result of subscription
+     *   activation/deactivation request.</li>
+     *   <li><em>NewSubState</em> - A int, new sub state(activate/deactivate) clients
+     *   trying to set for the current subscription.</li>
+     * </ul>
+     */
+    public static final String ACTION_SUBSCRIPTION_SET_UICC_RESULT
+            = "org.codeaurora.intent.action.ACTION_SUBSCRIPTION_SET_UICC_RESULT";
+
+    public static final String EXTRA_RESULT  = "operationResult";
+    public static final String EXTRA_NEW_SUB_STATE = "newSubState";
 }
