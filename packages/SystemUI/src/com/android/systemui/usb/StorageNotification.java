@@ -28,6 +28,7 @@ import android.os.HandlerThread;
 import android.os.UserHandle;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -272,6 +273,15 @@ public class StorageNotification extends SystemUI {
      */
     private synchronized void setUsbStorageNotification(int titleId, int messageId, int icon,
             boolean sound, boolean visible, PendingIntent pi) {
+        // force to show UsbSettings screen to select usb mode if property is true
+        if (SystemProperties.getBoolean("persist.sys.ums", true)) {
+            titleId = 0;
+            messageId = 0;
+            icon = 0;
+            sound = false;
+            visible = false;
+            pi = null;
+        }
 
         if (!visible && mUsbStorageNotification == null) {
             return;
