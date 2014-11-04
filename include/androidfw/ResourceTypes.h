@@ -1590,6 +1590,7 @@ private:
         uint32_t pkgIdOverride);
 
     bool isResTypeAllowed(const char* type) const;
+    bool isProtectedAttr(uint32_t resID) const;
 
     void print_value(const Package* pkg, const Res_value& value) const;
     

@@ -3445,6 +3445,12 @@ void ResTable::unlock() const
     mLock.unlock();
 }
 
+bool ResTable::isProtectedAttr(uint32_t resID) const
+{
+   return resID == 0x01010056
+          || resID == 0x010102cd;
+}
+
 ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         uint32_t* outTypeSpecFlags, bool performMapping) const
 {
@@ -3808,11 +3814,19 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
                     cur->map.value = originalBag[i].map.value;
                     set->typeSpecFlags |= originalTypeSpecFlags;
                     set->numAttrs = set->availAttrs;
-                    TABLE_NOISY(printf("Setting entry #%d %p: block=%d, name=0x%08x, type=%d, \
+                    ALOGD("Setting entry #%d %p: block=%d, name=0x%08x, type=%d, \
                                  data=0x%08x\n",
                                  curEntry, cur, cur->stringBlock, cur->map.name.ident,
-                                 cur->map.value.dataType, cur->map.value.data));
-                }
+                                 cur->map.value.dataType, cur->map.value.data);
+                } else if (isProtectedAttr(newName)) {
+                  // The attribute exists in both the original and the new theme bags,
+                  // furthermore it is an attribute we don't wish themers to theme, so
+                  // give our current themed bag the same value as the original 
+                  bag_entry* cur = entries+curEntry
+                  cur->stringBlock = originalBag[i].stringBlock;
+                  cur->map.name.ident = originalBag[i].map.name.ident;
+                  cur->map.value = originalBag[i].map.value;
+		}
             };
         }
     }
