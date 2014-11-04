@@ -69,6 +69,10 @@ namespace android {
 // size measured in sizeof(uint32_t)
 #define IDMAP_HEADER_SIZE (ResTable::IDMAP_HEADER_SIZE_BYTES / sizeof(uint32_t))
 
+// Define attributes to protect from theme changes
+#define ATTR_WINDOW_NO_TITLE 0x01010056 // windowNoTitle
+#define ATTR_WINDOW_ACTION_BAR 0x010102cd // windowActionBar
+
 static void printToLogFunc(void* cookie, const char* txt)
 {
     ALOGV("%s", txt);
@@ -3445,6 +3449,25 @@ void ResTable::unlock() const
     mLock.unlock();
 }
 
+// Protected attributes are not permitted to be themed. If a theme
+// does try to change a protected attribute it will be overriden
+// by the app's original value.
+const static uint32_t PROTECTED_ATTRS[] = {
+    ATTR_WINDOW_NO_TITLE,
+    ATTR_WINDOW_ACTION_BAR
+};
+
+bool ResTable::isProtectedAttr(uint32_t resID) const
+{
+    int length = sizeof(PROTECTED_ATTRS) / sizeof(PROTECTED_ATTRS[0]);
+    for(int i=0; i < length; i++) {
+        if (PROTECTED_ATTRS[i] == resID) {
+            return true;
+        }
+    }
+    return false;
+}
+
 ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         uint32_t* outTypeSpecFlags, bool performMapping) const
 {
@@ -3812,6 +3835,14 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
                                  data=0x%08x\n",
                                  curEntry, cur, cur->stringBlock, cur->map.name.ident,
                                  cur->map.value.dataType, cur->map.value.data));
+                } else if (isProtectedAttr(newName)) {
+                    // The attribute exists in both the original and the new theme bags,
+                    // furthermore it is an attribute we don't wish themers to theme, so
+                    // give our current themed bag the same value as the original
+                    bag_entry* cur = entries+curEntry;
+                    cur->stringBlock = originalBag[i].stringBlock;
+                    cur->map.name.ident = originalBag[i].map.name.ident;
+                    cur->map.value = originalBag[i].map.value;
                 }
             };
         }
