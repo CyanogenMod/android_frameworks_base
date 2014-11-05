@@ -2068,6 +2068,13 @@ public final class Settings {
         public static final String PROXIMITY_AUTO_SPEAKER = "proximity_auto_speaker";
 
         /**
+         * Whether the proximity sensor will adjust call to speaker,
+         * only while in call (not while ringing on outgoing call)
+         * @hide
+         */
+        public static final String PROXIMITY_AUTO_SPEAKER_INCALL_ONLY = "proximity_auto_speaker_incall_only";
+
+        /**
          * Whether the torch will pulse on incoming call
          * @hide
          */
