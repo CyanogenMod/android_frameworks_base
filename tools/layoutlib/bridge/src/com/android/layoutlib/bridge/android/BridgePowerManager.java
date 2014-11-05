@@ -163,4 +163,8 @@ public class BridgePowerManager implements IPowerManager {
         // pass for now
     }
 
+    @Override
+    public void updateBlockedUids(int uid, boolean isBlocked) {
+        // pass for now.
+    }
 }
