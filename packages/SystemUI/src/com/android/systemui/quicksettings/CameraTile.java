@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.content.ContentResolver;
@@ -6,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -18,12 +34,10 @@ import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.WindowManager;
@@ -41,15 +55,17 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.PanelView;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
+import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
-public class CameraTile extends QuickSettingsTile {
+public class CameraTile extends QuickSettingsTile implements
+        QuickSettingsTileView.OnPrepareListener, TextureView.SurfaceTextureListener {
     private static final String DEFAULT_IMAGE_FILE_NAME_FORMAT = "'IMG'_yyyyMMdd_HHmmss";
     private static final int CAMERA_ID = 0;
 
     private Handler mHandler;
     private View mIconContainer;
     private FrameLayout mSurfaceLayout;
-    private SurfaceView mSurfaceView;
+    private TextureView mTextureView;
     private View mFlashView;
 
     private Camera mCamera;
@@ -95,8 +111,8 @@ public class CameraTile extends QuickSettingsTile {
             // Use smallest preview size that is bigger than the tile view
             Camera.Size previewSize = mParams.getPreviewSize();
             for (Camera.Size size : mParams.getSupportedPreviewSizes()) {
-                if ((size.width > mTile.getWidth() && size.height > mTile.getHeight()) &&
-                        (size.width < previewSize.width && size.height < previewSize.height)) {
+                if (size.width > mTile.getWidth() && size.height > mTile.getHeight() &&
+                        size.width < previewSize.width && size.height < previewSize.height) {
                     previewSize = size;
                 }
             }
@@ -118,7 +134,7 @@ public class CameraTile extends QuickSettingsTile {
                 mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
                 mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-            } else if (mParams.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
                 mParams.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             }
 
@@ -128,21 +144,11 @@ public class CameraTile extends QuickSettingsTile {
             final PanelView panel = getContainingPanel();
             final View parent = (View) mContainer.getParent();
 
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (panel.isFullyExpanded() && parent.getScaleX() == 1) {
-                        mHandler.postDelayed(this, 100);
-                    } else {
-                        mHandler.post(mReleaseCameraRunnable);
-                    }
-                }
-            }, 100);
-
             mIconContainer.setVisibility(View.GONE);
-            mSurfaceView = new CameraPreview(mContext, mCamera);
-            mSurfaceView.setVisibility(View.VISIBLE);
-            mSurfaceLayout.addView(mSurfaceView, 0);
+            mTextureView = new TextureView(mContext);
+            mTextureView.setVisibility(View.VISIBLE);
+            mSurfaceLayout.addView(mTextureView, 0);
+            mTextureView.setSurfaceTextureListener(CameraTile.this);
         }
     };
 
@@ -177,7 +183,7 @@ public class CameraTile extends QuickSettingsTile {
                 }
             });
 
-            // Update the JPEG rotation\
+            // Update the JPEG rotation
             if (mCameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 mJpegRotation = (mCameraInfo.orientation - mOrientation + 360) % 360;
             } else {
@@ -195,7 +201,6 @@ public class CameraTile extends QuickSettingsTile {
                         mCameraBusy = false;
 
                         long time = System.currentTimeMillis();
-
                         int orientation = (mOrientation + mDisplayRotation) % 360;
 
                         mStorage.addImage(mContext.getContentResolver(),
@@ -227,9 +232,10 @@ public class CameraTile extends QuickSettingsTile {
             mCameraOrientationListener.disable();
 
             mIconContainer.setVisibility(View.VISIBLE);
-            mSurfaceView.setVisibility(View.GONE);
-            mSurfaceLayout.removeView(mSurfaceView);
-            mSurfaceView = null;
+            mTextureView.setVisibility(View.GONE);
+            mSurfaceLayout.removeView(mTextureView);
+            mTextureView.setSurfaceTextureListener(null);
+            mTextureView = null;
         }
     };
 
@@ -246,26 +252,7 @@ public class CameraTile extends QuickSettingsTile {
         super(context, qsc, R.layout.quick_settings_tile_camera);
         mHandler = handler;
         mDrawable = R.drawable.ic_qs_camera;
-        mLabel = mContext.getString(R.string.quick_settings_camera_label);
 
-        String imageFileNameFormat = DEFAULT_IMAGE_FILE_NAME_FORMAT;
-        try {
-            final Resources camRes = context.getPackageManager()
-                    .getResourcesForApplication("com.android.gallery3d");
-            int imageFileNameFormatResId = camRes.getIdentifier(
-                    "image_file_name_format", "string", "com.android.gallery3d");
-            imageFileNameFormat = camRes.getString(imageFileNameFormatResId);
-        } catch (PackageManager.NameNotFoundException ex) {
-            // Use default
-        } catch (Resources.NotFoundException ex) {
-            // Use default
-        }
-        mImageNameFormatter = new SimpleDateFormat(imageFileNameFormat);
-
-    }
-
-    @Override
-    void onPostCreate() {
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -289,11 +276,33 @@ public class CameraTile extends QuickSettingsTile {
             }
         };
 
+        String imageFileNameFormat = DEFAULT_IMAGE_FILE_NAME_FORMAT;
+        try {
+            final PackageManager pm = context.getPackageManager();
+            final Resources camRes = pm.getResourcesForApplication("com.android.gallery3d");
+            int imageFileNameFormatResId = camRes.getIdentifier(
+                    "image_file_name_format", "string", "com.android.gallery3d");
+            imageFileNameFormat = camRes.getString(imageFileNameFormatResId);
+        } catch (PackageManager.NameNotFoundException ex) {
+            // Use default
+        } catch (Resources.NotFoundException ex) {
+            // Use default
+        }
+
+        mImageNameFormatter = new SimpleDateFormat(imageFileNameFormat);
+    }
+
+    @Override
+    void onPostCreate() {
+        updateTile();
+
         mIconContainer = mTile.findViewById(R.id.icon_container);
         mSurfaceLayout = (FrameLayout) mTile.findViewById(R.id.camera_surface_holder);
         mFlashView = mTile.findViewById(R.id.camera_surface_flash_overlay);
 
         super.onPostCreate();
+
+        mTile.setOnPrepareListener(this);
     }
 
     @Override
@@ -305,6 +314,21 @@ public class CameraTile extends QuickSettingsTile {
         }
     }
 
+    @Override
+    public void onPrepare() {
+    }
+
+    @Override
+    public void onUnprepare() {
+        mHandler.post(mReleaseCameraRunnable);
+    }
+
+    @Override
+    public void updateResources() {
+        updateTile();
+        super.updateResources();
+    }
+
     private PanelView getContainingPanel() {
         ViewParent parent = mContainer;
         while (parent != null) {
@@ -314,6 +338,10 @@ public class CameraTile extends QuickSettingsTile {
             parent = parent.getParent();
         }
         return null;
+    }
+
+    private void updateTile() {
+        mLabel = mContext.getString(R.string.quick_settings_camera_label);
     }
 
     private void updateOrientation() {
@@ -364,40 +392,35 @@ public class CameraTile extends QuickSettingsTile {
         }
     }
 
-    private class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-        private SurfaceHolder mHolder;
-        private Camera mCamera;
-
-        public CameraPreview(Context context, Camera camera) {
-            super(context);
-            mCamera = camera;
-
-            // Install a SurfaceHolder.Callback so we get notified when the
-            // underlying surface is created and destroyed.
-            mHolder = getHolder();
-            mHolder.addCallback(this);
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        // The Surface has been created, now tell the camera where
+        // to draw the preview.
+        try {
+            mCamera.setPreviewTexture(surface);
+            mCamera.startPreview();
+            mCameraStarted = true;
+            mCameraBusy = false;
+            mHandler.postDelayed(mAutoFocusRunnable, 200);
+        } catch (IOException e) {
+            // Try release camera
+            mCamera.release();
         }
+    }
 
-        public void surfaceCreated(SurfaceHolder holder) {
-            // The Surface has been created, now tell the camera where
-            // to draw the preview.
-            try {
-                mCamera.setPreviewDisplay(holder);
-                mCamera.startPreview();
-                mCameraStarted = true;
-                mCameraBusy = false;
-                mHandler.postDelayed(mAutoFocusRunnable, 200);
-            } catch (IOException e) {
-                // Try release camera
-                mCamera.release();
-            }
-        }
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
 
-        public void surfaceDestroyed(SurfaceHolder holder) {
-        }
+    }
 
-        public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        }
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
     }
 
     private class Storage {
@@ -510,3 +533,4 @@ public class CameraTile extends QuickSettingsTile {
         }
     }
 }
+
