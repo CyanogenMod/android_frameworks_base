@@ -231,4 +231,7 @@
 
     <!-- Default Blacklist values of Settings.System.HEADS_UP_NOTIFICATION -->
     <string name="def_heads_up_notification_blacklist_values"></string>
+
+    <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
+    <string-array name="def_protected_sms_list_values"></string-array>
 </resources>
