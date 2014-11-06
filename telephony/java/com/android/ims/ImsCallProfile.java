@@ -132,6 +132,7 @@ public class ImsCallProfile implements Parcelable {
     public static final String EXTRA_OIR = "oir";
     public static final String EXTRA_CNAP = "cnap";
     public static final String EXTRA_DIALSTRING = "dialstring";
+    public static final String EXTRA_CALL_DOMAIN = "call_domain";
 
     /**
      * Values for EXTRA_OIR / EXTRA_CNAP
