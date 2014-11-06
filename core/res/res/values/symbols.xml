@@ -2103,4 +2103,8 @@
   <java-symbol type="string" name="usb_media_checking" />
   <java-symbol type="string" name="usb_media_removed" />
   <java-symbol type="string" name="usb_media_shared" />
+
+  <!-- Strings for MultiSim -->
+  <java-symbol type="string" name="multi_sim_entry_format" />
+  <java-symbol type="string" name="multi_sim_entry_format_no_carrier" />
 </resources>

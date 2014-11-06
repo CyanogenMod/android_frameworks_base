@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.msim.ITelephonyMSim;
@@ -35,6 +36,9 @@ import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyProperties;
 
 import java.util.List;
+
+import static android.telephony.TelephonyManager.SIM_STATE_ABSENT;
+import static android.telephony.TelephonyManager.SIM_STATE_READY;
 
 /**
  * Provides access to information about the telephony services on
@@ -1165,5 +1169,32 @@ public class MSimTelephonyManager {
             }
         }
         return android.provider.Settings.Global.putString(cr, name, data);
+    }
+
+    /**
+     * Helper method to retrieve a custom SIM name if a user has set one.
+     * Handles logic to fall back to operator name if no custom name has been set for the SIM,
+     *
+     * @param context
+     * @param subscription SIM subscription ID
+     * @return returns the formatted SIM name ready to display to the user.
+     * @hide
+     */
+    public static String getFormattedSimName(Context context, int subscription) {
+        String label = Settings.Global.getSimNameForSubscription(context, subscription, null);
+        if (TextUtils.isEmpty(label)) {
+            MSimTelephonyManager tm = MSimTelephonyManager.from(context);
+            String operatorName = tm.getSimOperatorName(subscription);
+            if (tm.getSimState(subscription) == SIM_STATE_ABSENT
+                    || tm.getSimState(subscription) != SIM_STATE_READY
+                    || TextUtils.isEmpty(operatorName)) {
+                label = context.getString(com.android.internal.R.string.multi_sim_entry_format_no_carrier, subscription + 1);
+            } else {
+                label = context.getString(com.android.internal.R.string.multi_sim_entry_format, operatorName, subscription + 1);
+            }
+        } else {
+            label = context.getString(com.android.internal.R.string.multi_sim_entry_format, label, subscription + 1);
+        }
+        return label;
     }
 }

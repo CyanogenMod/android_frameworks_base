@@ -274,6 +274,9 @@
     <!-- Shown in the lock screen when there is SIM card IO error. -->
     <string name="lockscreen_sim_error_message_short">Invalid card.</string>
 
+    <string name="multi_sim_entry_format_no_carrier" translatable="false">SIM - <xliff:g id="index">%1$d</xliff:g></string>
+    <string name="multi_sim_entry_format" translatable="false"><xliff:g id="operator">%1$s</xliff:g> - <xliff:g id="index">%2$d</xliff:g></string>
+
     <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
     <string name="lockscreen_airplane_mode_on">Airplane mode</string>
 
