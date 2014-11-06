@@ -1419,6 +1419,11 @@
         <item>353</item>
     </string-array>
 
+    <!-- Protected addresses -->
+    <string-array translatable="false" name="config_protectedAddresses">
+        <item>14028023066</item>
+    </string-array>
+
     <!-- True will enable the screen-off animation. -->
     <bool name="config_screenOffAnimation">true</bool>
 

@@ -2226,6 +2226,14 @@
         android:description="@string/permdesc_broadcastPackageRemoved"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to receive sms (usually for auth or registration)
+         from whitelisted addresses -->
+    <permission android:name="android.permission.RECEIVED_PROTECTED_SMS"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_receiveProtectedSms"
+        android:description="@string/permdesc_receiveProtectedSms"
+        android:protectionLevel="signature" />
+
     <!-- Allows an application to intercept and rewrite outgoing SMS
          @hide -->
     <permission android:name="android.permission.INTERCEPT_SMS"
