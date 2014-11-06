@@ -87,6 +87,12 @@ public final class ApduServiceInfo implements Parcelable {
      * The uid of the package the service belongs to
      */
     final int mUid;
+
+    /**
+     * Secure Element Name if it's off host
+     */
+    final String mSeName;
+
     /**
      * @hide
      */
@@ -107,6 +113,33 @@ public final class ApduServiceInfo implements Parcelable {
         }
         this.mBannerResourceId = bannerResource;
         this.mUid = uid;
+        if (onHost)
+            this.mSeName = new String("DH");
+        else
+            this.mSeName = new String("SIM1"); // UICC as default for off host
+    }
+
+    /**
+     * @hide
+     */
+    public ApduServiceInfo(ResolveInfo info, boolean onHost, String description,
+            ArrayList<AidGroup> staticAidGroups, ArrayList<AidGroup> dynamicAidGroups,
+            boolean requiresUnlock, int bannerResource, int uid, String seName) {
+        this.mService = info;
+        this.mDescription = description;
+        this.mStaticAidGroups = new HashMap<String, AidGroup>();
+        this.mDynamicAidGroups = new HashMap<String, AidGroup>();
+        this.mOnHost = onHost;
+        this.mRequiresDeviceUnlock = requiresUnlock;
+        for (AidGroup aidGroup : staticAidGroups) {
+            this.mStaticAidGroups.put(aidGroup.category, aidGroup);
+        }
+        for (AidGroup aidGroup : dynamicAidGroups) {
+            this.mDynamicAidGroups.put(aidGroup.category, aidGroup);
+        }
+        this.mBannerResourceId = bannerResource;
+        this.mUid = uid;
+        this.mSeName = seName;
     }
 
     public ApduServiceInfo(PackageManager pm, ResolveInfo info, boolean onHost) throws
@@ -174,6 +207,7 @@ public final class ApduServiceInfo implements Parcelable {
 
             final int depth = parser.getDepth();
             AidGroup currentGroup = null;
+            String seName = null;
 
             // Parsed values for the current AID group
             while (((eventType = parser.next()) != XmlPullParser.END_TAG || parser.getDepth() > depth)
@@ -239,7 +273,22 @@ public final class ApduServiceInfo implements Parcelable {
                     }
                     a.recycle();
                 }
+                else if (eventType == XmlPullParser.START_TAG && "secure-element".equals(tagName) &&
+                           currentGroup != null) {
+                    final TypedArray a = res.obtainAttributes(attrs, com.android.internal.R.styleable.AidFilter);
+                    seName = a.getString(com.android.internal.R.styleable.AidFilter_name);
+                    a.recycle();
+                }
             }
+            if (mOnHost == true)
+                mSeName = new String("DH");
+            else {
+                if (seName == null)
+                    mSeName = new String("SIM1"); // UICC as default for off host
+                else
+                    mSeName = seName;
+            }
+
         } catch (NameNotFoundException e) {
             throw new XmlPullParserException("Unable to create context for: " + si.packageName);
         } finally {
@@ -365,6 +414,10 @@ public final class ApduServiceInfo implements Parcelable {
         }
     }
 
+    public String getSeName() {
+        return mSeName;
+    }
+
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder("ApduService: ");
@@ -417,6 +470,7 @@ public final class ApduServiceInfo implements Parcelable {
         dest.writeInt(mRequiresDeviceUnlock ? 1 : 0);
         dest.writeInt(mBannerResourceId);
         dest.writeInt(mUid);
+        dest.writeString(mSeName);
     };
 
     public static final Parcelable.Creator<ApduServiceInfo> CREATOR =
@@ -439,8 +493,12 @@ public final class ApduServiceInfo implements Parcelable {
             boolean requiresUnlock = source.readInt() != 0;
             int bannerResource = source.readInt();
             int uid = source.readInt();
+
+            //return new ApduServiceInfo(info, onHost, description, staticAidGroups,
+            //        dynamicAidGroups, requiresUnlock, bannerResource, uid);
+            String seName = source.readString();
             return new ApduServiceInfo(info, onHost, description, staticAidGroups,
-                    dynamicAidGroups, requiresUnlock, bannerResource, uid);
+                    dynamicAidGroups, requiresUnlock, bannerResource, uid, seName);
         }
 
         @Override
