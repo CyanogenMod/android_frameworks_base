@@ -43,6 +43,8 @@ public final class VoLteServiceState implements Parcelable {
     public static final int HANDOVER_FAILED    = 2;
     public static final int HANDOVER_CANCELED  = 3;
 
+    public static final int IMS_REGISTERED = 4;
+    public static final int IMS_UNREGISTERED = 5;
     private int mSrvccState;
 
     /**
