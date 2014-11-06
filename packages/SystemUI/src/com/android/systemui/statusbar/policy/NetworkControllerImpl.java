@@ -51,6 +51,7 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.SparseArray;
+import android.telephony.VoLteServiceState;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.IccCardConstants;
@@ -1139,6 +1140,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 eventMask = eventMask | PhoneStateListener.LISTEN_DATA_ACTIVITY;
             }
 
+            //VoLTE Reg state to be able to show HD status
+            eventMask = eventMask | PhoneStateListener.LISTEN_VOLTE_STATE;
+
             mPhone.listen(mPhoneStateListener, eventMask);
         }
 
@@ -1434,6 +1438,23 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     Log.d(mTag, "onDataActivity: direction=" + direction);
                 }
                 setActivity(direction);
+            }
+
+            @Override
+            public void onVoLteServiceStateChanged(VoLteServiceState stateInfo) {
+                if (DEBUG) {
+                    Log.d(mTag, "onVoLteServiceStateChanged: state=" + stateInfo);
+                }
+
+                String hdTag = mContext.getResources().getString(R.string.high_definiation_voice);
+               
+                if (stateInfo.getSrvccState() == VoLteServiceState.IMS_REGISTERED) {
+                    //Update status bar icon to show VoLTE enabled/ON
+                    Log.d(TAG, "Display  " + hdTag);
+                } else if (stateInfo.getSrvccState() == VoLteServiceState.IMS_UNREGISTERED) {
+                    //Update status bar icon to show VoLTE disabled/OFF
+                    Log.d(TAG, "Remove  " + hdTag);
+                }
             }
         };
 
