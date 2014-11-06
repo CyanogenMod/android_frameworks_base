@@ -18,6 +18,7 @@
 
 package android.telephony;
 
+import android.Manifest;
 import android.annotation.PrivateApi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
@@ -31,6 +32,7 @@ import android.os.SystemProperties;
 import android.telephony.Rlog;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.IPhoneSubInfo;
@@ -43,6 +45,7 @@ import com.android.internal.telephony.TelephonyProperties;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1578,6 +1581,63 @@ public class TelephonyManager {
             getITelephony().setCellInfoListRate(rateInMillis);
         } catch (RemoteException ex) {
         } catch (NullPointerException ex) {
+        }
+    }
+
+    /**
+     * Allows an application to add a protected sms address if the application has
+     * been granted the permission MODIFY_PROTECTED_SMS_LIST.
+     * @param address
+     * @hide
+     */
+    public void addProtectedSmsAddress(String address) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.MODIFY_PROTECTED_SMS_LIST, null);
+
+        if (TextUtils.isEmpty(address)) {
+            return;
+        }
+
+        List<String> settings =
+                Settings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                        Settings.Secure.PROTECTED_SMS_ADDRESSES, "\\|");
+        if (!settings.contains(address)) {
+            // Add the address
+            settings.add(address);
+        }
+
+        // Commit
+        Settings.Secure.putString(mContext.getContentResolver(),
+                Settings.Secure.PROTECTED_SMS_ADDRESSES, TextUtils.join("|", settings));
+    }
+
+    /**
+     * Allows an application to revoke/remove a protected sms address if the application has been
+     * granted the permission MODIFY_PROTECTED_SMS_LIST.
+     * @param address
+     * @return true if address is successfully removed
+     * @hide
+     */
+    public boolean revokeProtectedSmsAddress(String address) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.MODIFY_PROTECTED_SMS_LIST, null);
+
+        if (TextUtils.isEmpty(address)) {
+            return false;
+        }
+
+        List<String> settings =
+                Settings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                        Settings.Secure.PROTECTED_SMS_ADDRESSES, "\\|");
+
+        if (settings.contains(address)) {
+            settings.remove(address);
+            // Commit
+            Settings.Secure.putString(mContext.getContentResolver(),
+                    Settings.Secure.PROTECTED_SMS_ADDRESSES, TextUtils.join("\\|", settings));
+            return true;
+        } else {
+            return false;
         }
     }
 
