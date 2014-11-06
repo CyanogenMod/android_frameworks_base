@@ -6610,6 +6610,13 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             // Remove protected Application components
             if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+                String[] packages = getPackagesForUid(Binder.getCallingUid());
+                if (packages.length > 0) {
+                    ApplicationInfo ai = getApplicationInfo(packages[0], 0, userId);
+                    if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                        return list;
+                    }
+                }
                 Iterator<ResolveInfo> itr = list.iterator();
                 while (itr.hasNext()) {
                     if (itr.next().activityInfo.applicationInfo.protect) {
