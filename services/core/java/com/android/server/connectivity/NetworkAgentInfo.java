@@ -16,7 +16,10 @@
 
 package com.android.server.connectivity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -25,6 +28,7 @@ import android.net.NetworkMisc;
 import android.net.NetworkRequest;
 import android.os.Handler;
 import android.os.Messenger;
+import android.os.SystemProperties;
 import android.util.SparseArray;
 
 import com.android.internal.util.AsyncChannel;
@@ -47,14 +51,30 @@ public class NetworkAgentInfo {
     public final NetworkMisc networkMisc;
     public boolean created;
     public boolean validated;
+    private Context mContext;
 
     // This represents the last score received from the NetworkAgent.
     private int currentScore;
+    private boolean isCneWqeEnabled = false;
     // Penalty applied to scores of Networks that have not been validated.
     private static final int UNVALIDATED_SCORE_PENALTY = 40;
 
     // Score for explicitly connected network.
     private static final int EXPLICITLY_SELECTED_NETWORK_SCORE = 100;
+
+    private static final String EXTRA_FEATURE_ID = "cneFeatureId";
+
+    private static final String EXTRA_FEATURE_PARAMETER = "cneFeatureParameter";
+
+    private static final String EXTRA_PARAMETER_VALUE = "cneParameterValue";
+
+    private static final int FEATURE_ID = 1;
+
+    private static final int FEATURE_PARAM = 1;
+
+    private static final int FEATURE_OFF = 1;
+
+    private static final int FEATURE_ON = FEATURE_OFF + 1;
 
     // The list of NetworkRequests being satisfied by this Network.
     public final SparseArray<NetworkRequest> networkRequests = new SparseArray<NetworkRequest>();
@@ -77,6 +97,24 @@ public class NetworkAgentInfo {
         networkMisc = misc;
         created = false;
         validated = false;
+        mContext = context;
+        int val = SystemProperties.getInt("persist.cne.feature", 0);
+        if(val == 3) {
+            mContext.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String action = intent.getAction();
+                        if (action.equals("com.quicinc.cne.CNE_PREFERENCE_CHANGED")) {
+                            int featureId = intent.getIntExtra(EXTRA_FEATURE_ID, -1);
+                            int featureParam = intent.getIntExtra(EXTRA_FEATURE_PARAMETER, -1);
+                            int featureVal = intent.getIntExtra(EXTRA_PARAMETER_VALUE, -1);
+                            handlePrefChange(featureId, featureParam, featureVal);
+                        }
+                    }
+                }, new IntentFilter("com.quicinc.cne.CNE_PREFERENCE_CHANGED"));
+        }
+
     }
 
     public void addRequest(NetworkRequest networkRequest) {
@@ -96,6 +134,7 @@ public class NetworkAgentInfo {
         // so they are not scattered about the transports.
 
         int score = currentScore;
+        if (isCneWqeEnabled) return score;
 
         if (!validated) score -= UNVALIDATED_SCORE_PENALTY;
         if (score < 0) score = 0;
@@ -122,5 +161,15 @@ public class NetworkAgentInfo {
         return "NetworkAgentInfo [" + networkInfo.getTypeName() + " (" +
                 networkInfo.getSubtypeName() + ") - " +
                 (network == null ? "null" : network.toString()) + "]";
+    }
+
+    private void handlePrefChange(int featureId, int featureParam, int value) {
+        if(featureId == FEATURE_ID && featureParam == FEATURE_PARAM) {
+            if(value == FEATURE_ON) {
+                isCneWqeEnabled = true;
+            } else if(value == FEATURE_OFF) {
+                isCneWqeEnabled = false;
+            }
+        }
     }
 }
