@@ -782,7 +782,8 @@ public class VideoView extends SurfaceView
 
     public void suspend() {
         // HTTP streaming will call MediaPlayer::suspend() for suspend operation, others will call release()
-        if (isHTTPStreaming(mUri) && mCurrentState > STATE_PREPARING && mMediaPlayer != null) {
+        if (isHTTPStreaming(mUri) && mCurrentState > STATE_PREPARING &&
+                mCurrentState < STATE_PLAYBACK_COMPLETED && mMediaPlayer != null) {
             if (mMediaPlayer.suspend()) {
                 mTargetState = mCurrentState;
                 mCurrentState = STATE_SUSPENDED;
