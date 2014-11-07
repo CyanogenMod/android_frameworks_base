@@ -48,6 +48,11 @@ public class SubInfoRecord implements Parcelable {
     private CharSequence mDisplayName;
 
     /**
+     * The string displayed to the user that identifies Subscription Provider Name
+     */
+    private CharSequence mCarrierName;
+
+    /**
      * The source of the name, NAME_SOURCE_UNDEFINED, NAME_SOURCE_DEFAULT_SOURCE,
      * NAME_SOURCE_SIM_SOURCE or NAME_SOURCE_USER_INPUT.
      */
@@ -93,6 +98,7 @@ public class SubInfoRecord implements Parcelable {
         this.mIccId = "";
         this.mSimSlotIndex = SubscriptionManager.INVALID_SLOT_ID;
         this.mDisplayName = "";
+        this.mCarrierName = "";
         this.mNameSource = 0;
         this.mColor = 0;
         this.mNumber = "";
@@ -107,12 +113,13 @@ public class SubInfoRecord implements Parcelable {
      * @hide
      */
     public SubInfoRecord(int id, String iccId, int simSlotIndex, CharSequence displayName,
-            int nameSource, int color, String number, int roaming, int[] iconRes, int mcc,
-            int mnc, int status, int nwMode) {
+            CharSequence carrierName, int nameSource, int color, String number, int roaming,
+            int[] iconRes, int mcc, int mnc, int status, int nwMode) {
         this.mId = id;
         this.mIccId = iccId;
         this.mSimSlotIndex = simSlotIndex;
         this.mDisplayName = displayName;
+        this.mCarrierName = carrierName;
         this.mNameSource = nameSource;
         this.mColor = color;
         this.mNumber = number;
@@ -158,6 +165,22 @@ public class SubInfoRecord implements Parcelable {
      */
     public void setDisplayName(CharSequence name) {
         this.mDisplayName = name;
+    }
+
+    /**
+     * Returns the name displayed to the user that identifies Subscription provider name
+     * @hide
+     */
+    public CharSequence getCarrierName() {
+        return this.mCarrierName;
+    }
+
+    /**
+     * Sets the name displayed to the user that identifies Subscription provider name
+     * @hide
+     */
+    public void setCarrierName(CharSequence name) {
+        this.mCarrierName = name;
     }
 
     /**
@@ -227,7 +250,8 @@ public class SubInfoRecord implements Parcelable {
             int id = source.readInt();
             String iccId = source.readString();
             int simSlotIndex = source.readInt();
-            String displayName = source.readString();
+            CharSequence displayName = source.readCharSequence();
+            CharSequence carrierName = source.readCharSequence();
             int nameSource = source.readInt();
             int color = source.readInt();
             String number = source.readString();
@@ -239,8 +263,8 @@ public class SubInfoRecord implements Parcelable {
             int status = source.readInt();
             int nwMode = source.readInt();
 
-            return new SubInfoRecord(id, iccId, simSlotIndex, displayName, nameSource, color, number,
-                    dataRoaming, iconRes, mcc, mnc, status, nwMode);
+            return new SubInfoRecord(id, iccId, simSlotIndex, displayName, carrierName,
+                    nameSource, color, number, dataRoaming, iconRes, mcc, mnc, status, nwMode);
         }
 
         @Override
@@ -254,7 +278,8 @@ public class SubInfoRecord implements Parcelable {
         dest.writeInt(mId);
         dest.writeString(mIccId);
         dest.writeInt(mSimSlotIndex);
-        dest.writeString(mDisplayName.toString());
+        dest.writeCharSequence(mDisplayName);
+        dest.writeCharSequence(mCarrierName);
         dest.writeInt(mNameSource);
         dest.writeInt(mColor);
         dest.writeString(mNumber);
@@ -274,7 +299,7 @@ public class SubInfoRecord implements Parcelable {
     @Override
     public String toString() {
         return "{id=" + mId + ", iccId=" + mIccId + " simSlotIndex=" + mSimSlotIndex
-                + " displayName=" + mDisplayName + " nameSource=" + mNameSource + " color=" + mColor
+                + " displayName=" + mDisplayName + " carrierName=" + mCarrierName + " nameSource=" + mNameSource + " color=" + mColor
                 + " number=" + mNumber + " dataRoaming=" + mDataRoaming + " simIconRes=" + mSimIconRes
                 + " mcc " + mMcc + " mnc " + mMnc +
                 + " mSubStatus=" + mStatus + " mNwMode=" + mNwMode + "}";
