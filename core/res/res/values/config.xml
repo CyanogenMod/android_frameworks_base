@@ -2035,4 +2035,12 @@
     <!-- set to false if we dont need to consider data
          service state to display signal strength bars -->
     <bool name="config_combined_signal">true</bool>
+
+    <!-- Whether cpu boost is enabled for AppLaunch -->
+    <bool name="config_enableCpuBoostForAppLaunch">false</bool>
+    <integer name="launchboost_timeout_param">0</integer>
+    <integer name="launchboost_schedboost_param">0</integer>
+    <integer name="launchboost_cpuboost_param">0</integer>
+    <integer name="launchboost_pcdisbl_param">0</integer>
+    <integer name="launchboost_ksmboost_param">0</integer>
 </resources>
