@@ -58,7 +58,8 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
 public class CameraTile extends QuickSettingsTile implements
-        QuickSettingsTileView.OnPrepareListener, TextureView.SurfaceTextureListener {
+        QuickSettingsTileView.OnPrepareListener, TextureView.SurfaceTextureListener,
+        Camera.PreviewCallback {
     private static final String DEFAULT_IMAGE_FILE_NAME_FORMAT = "'IMG'_yyyyMMdd_HHmmss";
     private static final int CAMERA_ID = 0;
 
@@ -243,7 +244,13 @@ public class CameraTile extends QuickSettingsTile implements
         @Override
         public void run() {
             if (mCameraStarted) {
-                mCamera.autoFocus(null);
+                try {
+                    mCamera.autoFocus(null);
+                } catch (RuntimeException e) {
+                    // In the case that autofocus throws a {@link RuntimeException}
+                    // here, we should handle it gracefully instead of taking down systemui
+                    Log.wtf(CameraTile.class.getSimpleName(), "Unable to autofocus");
+                }
             }
         }
     };
@@ -376,6 +383,11 @@ public class CameraTile extends QuickSettingsTile implements
         mCamera.setDisplayOrientation(cameraOrientation);
     }
 
+    @Override
+    public void onPreviewFrame(byte[] bytes, Camera camera) {
+        mHandler.post(mAutoFocusRunnable);
+    }
+
     private class CameraOrientationListener extends OrientationEventListener {
         public CameraOrientationListener(Context context) {
             super(context);
@@ -397,11 +409,11 @@ public class CameraTile extends QuickSettingsTile implements
         // The Surface has been created, now tell the camera where
         // to draw the preview.
         try {
+            mCamera.setOneShotPreviewCallback(this);
             mCamera.setPreviewTexture(surface);
             mCamera.startPreview();
             mCameraStarted = true;
             mCameraBusy = false;
-            mHandler.postDelayed(mAutoFocusRunnable, 200);
         } catch (IOException e) {
             // Try release camera
             mCamera.release();
