@@ -34,8 +34,7 @@ import java.util.List;
 
 /**
  * Provides access to information about active calls and registration/call-management functionality.
- * Apps can use methods in this class to determine the current call state. Apps can also register new
- * {@link PhoneAccount}s and get a listing of existing {@link PhoneAccount}s.
+ * Apps can use methods in this class to determine the current call state.
  * <p>
  * Apps do not instantiate this class directly; instead, they retrieve a reference to an instance
  * through {@link Context#getSystemService Context.getSystemService(Context.TELECOM_SERVICE)}.
@@ -74,6 +73,7 @@ public class TelecomManager {
      * {@link android.telecom.ConnectionService}.
      * @hide
      */
+    @SystemApi
     public static final String ACTION_CONNECTION_SERVICE_CONFIGURE =
             "android.telecom.action.CONNECTION_SERVICE_CONFIGURE";
 
@@ -88,6 +88,7 @@ public class TelecomManager {
      * {@link PhoneAccount} preferences.
      * @hide
      */
+    @SystemApi
     public static final String ACTION_CHANGE_PHONE_ACCOUNTS =
             "android.telecom.action.CHANGE_PHONE_ACCOUNTS";
 
@@ -119,6 +120,7 @@ public class TelecomManager {
      * Retrieve with {@link android.content.Intent#getParcelableExtra(String)}.
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_PHONE_ACCOUNT_HANDLE =
             "android.telecom.extra.PHONE_ACCOUNT_HANDLE";
 
@@ -129,6 +131,7 @@ public class TelecomManager {
      *
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_INCOMING_CALL_EXTRAS =
             "android.telecom.extra.INCOMING_CALL_EXTRAS";
 
@@ -140,6 +143,7 @@ public class TelecomManager {
      *
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_OUTGOING_CALL_EXTRAS =
             "android.telecom.extra.OUTGOING_CALL_EXTRAS";
 
@@ -176,6 +180,7 @@ public class TelecomManager {
      * containing the component name of the associated connection service.
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_CONNECTION_SERVICE =
             "android.telecom.extra.CONNECTION_SERVICE";
 
@@ -212,6 +217,7 @@ public class TelecomManager {
      * user's expected caller ID.
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
 
     /**
@@ -459,6 +465,7 @@ public class TelecomManager {
      * @return The phone account handle of the current connection manager.
      * @hide
      */
+    @SystemApi
     public PhoneAccountHandle getConnectionManager() {
         return getSimCallManager();
     }
@@ -484,8 +491,9 @@ public class TelecomManager {
      *
      * @param uriScheme The URI scheme.
      * @return A list of {@code PhoneAccountHandle} objects supporting the URI scheme.
-     * {@hide}
+     * @hide
      */
+    @SystemApi
     public List<PhoneAccountHandle> getPhoneAccountsSupportingScheme(String uriScheme) {
         try {
             if (isServiceConnected()) {
@@ -526,6 +534,7 @@ public class TelecomManager {
      * otherwise.
      * @hide
      */
+    @SystemApi
     public boolean hasMultipleCallCapableAccounts() {
         return getCallCapablePhoneAccounts().size() > 1;
     }
@@ -536,6 +545,7 @@ public class TelecomManager {
      * @return A list of {@code PhoneAccountHandle} objects.
      * @hide
      */
+    @SystemApi
     public List<PhoneAccountHandle> getPhoneAccountsForPackage() {
         try {
             if (isServiceConnected()) {
@@ -555,6 +565,7 @@ public class TelecomManager {
      * @return The {@link PhoneAccount} object.
      * @hide
      */
+    @SystemApi
     public PhoneAccount getPhoneAccount(PhoneAccountHandle account) {
         try {
             if (isServiceConnected()) {
@@ -633,8 +644,10 @@ public class TelecomManager {
      * {@link PhoneAccountHandle#getComponentName()} does not match the package name of the app.
      *
      * @param account The complete {@link PhoneAccount}.
+     *
      * @hide
      */
+    @SystemApi
     public void registerPhoneAccount(PhoneAccount account) {
         try {
             if (isServiceConnected()) {
@@ -651,6 +664,7 @@ public class TelecomManager {
      * @param accountHandle A {@link PhoneAccountHandle} for the {@link PhoneAccount} to unregister.
      * @hide
      */
+    @SystemApi
     public void unregisterPhoneAccount(PhoneAccountHandle accountHandle) {
         try {
             if (isServiceConnected()) {
@@ -665,6 +679,7 @@ public class TelecomManager {
      * Remove all Accounts that belong to the calling package from the system.
      * @hide
      */
+    @SystemApi
     public void clearAccounts() {
         try {
             if (isServiceConnected()) {
@@ -953,6 +968,7 @@ public class TelecomManager {
      *            {@link ConnectionService#onCreateIncomingConnection}.
      * @hide
      */
+    @SystemApi
     public void addNewIncomingCall(PhoneAccountHandle phoneAccount, Bundle extras) {
         try {
             if (isServiceConnected()) {
@@ -1024,6 +1040,7 @@ public class TelecomManager {
      * @return True if the digits were processed as an MMI code, false otherwise.
      * @hide
      */
+    @SystemApi
     public boolean handleMmi(PhoneAccountHandle accountHandle, String dialString) {
         ITelecomService service = getTelecomService();
         if (service != null) {
@@ -1043,6 +1060,7 @@ public class TelecomManager {
      * for the the content retrieve.
      * @hide
      */
+    @SystemApi
     public Uri getAdnUriForPhoneAccount(PhoneAccountHandle accountHandle) {
         ITelecomService service = getTelecomService();
         if (service != null && accountHandle != null) {
