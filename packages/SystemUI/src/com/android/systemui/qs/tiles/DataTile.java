@@ -77,16 +77,15 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
     private void setEnabled(boolean enabled) {
         // Do not make mobile data on/off if airplane mode on or has no sim card
         if (Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.AIRPLANE_MODE_ON, 0) != 0 || !mTelephonyManager.hasIccCard()) {
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0 || !hasIccCard()) {
             return;
         }
-        mTelephonyManager.setDataEnabled(enabled);
-        Settings.Global.putInt(mContext.getContentResolver(),
-                Settings.Global.MOBILE_DATA, (enabled) ? 1 : 0);
-        int phoneCount = mTelephonyManager.getDefault().getPhoneCount();
+        int phoneCount = mTelephonyManager.getPhoneCount();
         for (int i = 0; i < phoneCount; i++) {
             Settings.Global.putInt(mContext.getContentResolver(),
                     Settings.Global.MOBILE_DATA + i, (enabled) ? 1 : 0);
+            long[] subId = SubscriptionManager.getSubId(i);
+            mTelephonyManager.setDataEnabledUsingSubId(subId[0], enabled);
         }
     }
 
@@ -151,12 +150,12 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
 
     public boolean hasIccCard() {
         if (mTelephonyManager.isMultiSimEnabled()) {
-            int prfDataPhoneId = SubscriptionManager.getPhoneId(
+            int prfDataSlotId = SubscriptionManager.getSlotId(
                     SubscriptionManager.getDefaultDataSubId());
-            int simState = mTelephonyManager.getSimState(prfDataPhoneId);
+            int simState = mTelephonyManager.getSimState(prfDataSlotId);
             boolean active = (simState != TelephonyManager.SIM_STATE_ABSENT)
                     && (simState != TelephonyManager.SIM_STATE_UNKNOWN);
-            return active && mTelephonyManager.hasIccCard(prfDataPhoneId);
+            return active && mTelephonyManager.hasIccCard(prfDataSlotId);
         } else {
             return mTelephonyManager.hasIccCard();
         }
