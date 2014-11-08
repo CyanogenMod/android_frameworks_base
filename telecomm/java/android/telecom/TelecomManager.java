@@ -34,8 +34,7 @@ import java.util.List;
 
 /**
  * Provides access to information about active calls and registration/call-management functionality.
- * Apps can use methods in this class to determine the current call state. Apps can also register new
- * {@link PhoneAccount}s and get a listing of existing {@link PhoneAccount}s.
+ * Apps can use methods in this class to determine the current call state.
  * <p>
  * Apps do not instantiate this class directly; instead, they retrieve a reference to an instance
  * through {@link Context#getSystemService Context.getSystemService(Context.TELECOM_SERVICE)}.
@@ -492,8 +491,6 @@ public class TelecomManager {
      *
      * @param uriScheme The URI scheme.
      * @return A list of {@code PhoneAccountHandle} objects supporting the URI scheme.
-     */
-    /**
      * @hide
      */
     @SystemApi
@@ -647,6 +644,7 @@ public class TelecomManager {
      * {@link PhoneAccountHandle#getComponentName()} does not match the package name of the app.
      *
      * @param account The complete {@link PhoneAccount}.
+     *
      * @hide
      */
     @SystemApi
@@ -1043,7 +1041,7 @@ public class TelecomManager {
      * @hide
      */
     @SystemApi
-     public boolean handleMmi(PhoneAccountHandle accountHandle, String dialString) {
+    public boolean handleMmi(PhoneAccountHandle accountHandle, String dialString) {
         ITelecomService service = getTelecomService();
         if (service != null) {
             try {
@@ -1053,7 +1051,7 @@ public class TelecomManager {
             }
         }
         return false;
-     }
+    }
 
     /**
      * @param accountHandle The handle for the account to derive an adn query URI for or
