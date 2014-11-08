@@ -382,6 +382,8 @@
     <!-- On the keyguard screen, it shows the carrier the phone is connected to.
         This is displayed if the phone is not connected to a carrier.-->
     <string name="keyguard_carrier_default">No service.</string>
+    <string name="kg_remaining_attempts">Remaining attempts: <xliff:g id="number">%d</xliff:g></string>
+
     <!-- Dismiss button text in SIM pin/puk unlock view -->
     <string name="kg_dismiss">Dismiss</string>
     <!-- Slot id in SIM pin/puk unlock view -->

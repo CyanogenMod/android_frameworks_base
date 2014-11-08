@@ -160,4 +160,5 @@
     <item quantity="one" msgid="8134313997799638254">"输入 SIM PIN，您还有<xliff:g id="NUMBER">%d</xliff:g>次尝试机会。如果仍然失败，则必须联系运营商帮您解锁设备。"</item>
     <item quantity="other" msgid="2215723361575359486">"输入 SIM PIN，您还有<xliff:g id="NUMBER">%d</xliff:g>次尝试机会。"</item>
   </plurals>
+    <string name="kg_remaining_attempts">剩余次数: <xliff:g id="number">%d</xliff:g></string>
 </resources>
