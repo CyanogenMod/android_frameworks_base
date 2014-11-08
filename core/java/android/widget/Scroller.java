@@ -115,6 +115,13 @@ public class Scroller  {
     * true value turns it on, by default will be turned off
     */
     private Performance mPerf = null;
+    boolean bIsPerfBoostEnabled = false;
+    private int lBoostTimeOut = 0;
+    private int lBoostCpuBoost = 0;
+    private int lBoostSchedBoost = 0;
+    private int lBoostPcDisblBoost = 0;
+    private int lBoostKsmBoost = 0;
+
 
     // A context-specific coefficient adjusted to physical values.
     private float mPhysicalCoeff;
@@ -189,6 +196,19 @@ public class Scroller  {
         mPhysicalCoeff = computeDeceleration(0.84f); // look and feel tuning
         bIsPerfBoostEnabled = context.getResources().getBoolean(
              com.android.internal.R.bool.config_enableCpuBoostForScroller);
+        if (bIsPerfBoostEnabled) {
+        lBoostSchedBoost = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_schedboost_param);
+        lBoostTimeOut = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_timeout_param);
+        lBoostCpuBoost = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_cpuboost_param);
+        lBoostPcDisblBoost = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_pcdisbl_param);
+        lBoostKsmBoost = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_ksmboost_param);
+        }
+
 
         if (mPerf == null && bIsPerfBoostEnabled) {
             mPerf = new Performance();
@@ -413,7 +433,11 @@ public class Scroller  {
         mDurationReciprocal = 1.0f / (float) mDuration;
 
         if ((mPerf != null) && (duration != 0)) {
-            mPerf.perfLockAcquire(mDuration, mPerf.CPUS_ON_2, 0x1E01, 0x20B, 0x30B, 0x1C00);
+            if (0 == lBoostTimeOut) {
+                lBoostTimeOut = mDuration;
+            }
+            mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
+                                          lBoostCpuBoost, lBoostKsmBoost);
         }
     }
 
