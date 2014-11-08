@@ -21651,6 +21651,9 @@ package android.os {
     method public static java.lang.String getExternalStorageState(java.io.File);
     method public static java.io.File getRootDirectory();
     method public static deprecated java.lang.String getStorageState(java.io.File);
+    method public static java.io.File getSecondaryStorageDirectory();
+    method public static java.lang.String getSecondaryStorageState();
+    method public static boolean isNoEmulatedStorageExist();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageEmulated(java.io.File);
     method public static boolean isExternalStorageRemovable();

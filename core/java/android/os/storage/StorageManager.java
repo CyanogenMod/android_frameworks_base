@@ -615,6 +615,16 @@ public class StorageManager {
         return null;
     }
 
+    /**{@hide} */
+    public static StorageVolume getNoEmulatedVolume(StorageVolume[] volumes) {
+        for (StorageVolume volume : volumes) {
+            if (!volume.isEmulated()) {
+                return volume;
+            }
+        }
+        return null;
+    }
+
     private static final int DEFAULT_THRESHOLD_PERCENTAGE = 10;
     private static final long DEFAULT_THRESHOLD_MAX_BYTES = 500 * MB_IN_BYTES;
     private static final long DEFAULT_FULL_THRESHOLD_BYTES = MB_IN_BYTES;
