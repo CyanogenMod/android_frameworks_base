@@ -25,6 +25,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:foreground="@drawable/bg_protect"
+    android:layoutDirection="ltr"
     systemui:recentItemLayout="@layout/status_bar_recent_item"
     >
     <FrameLayout
@@ -41,14 +42,14 @@
             android:layout_height="match_parent"
             android:fadingEdge="horizontal"
             android:scrollbars="none"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:fadingEdgeLength="@dimen/status_bar_recents_scroll_fading_edge_length">
 
             <LinearLayout android:id="@+id/recents_linear_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layoutDirection="ltr"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:orientation="horizontal"
                 android:fitsSystemWindows="true">
             </LinearLayout>

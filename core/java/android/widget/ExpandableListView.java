@@ -19,6 +19,7 @@ package android.widget;
 import com.android.internal.R;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -283,7 +284,9 @@ public class ExpandableListView extends ListView {
      */
     private boolean isRtlCompatibilityMode() {
         final int targetSdkVersion = mContext.getApplicationInfo().targetSdkVersion;
-        return targetSdkVersion < JELLY_BEAN_MR1 || !hasRtlSupport();
+        final boolean isSystemApp = (mContext.getApplicationInfo().flags &
+            ApplicationInfo.FLAG_SYSTEM) != 0;
+        return targetSdkVersion < JELLY_BEAN_MR1 && !isSystemApp || !hasRtlSupport();
     }
 
     /**
@@ -416,26 +419,24 @@ public class ExpandableListView extends ListView {
             // the left & right bounds
             if (pos.position.type != lastItemType) {
                 if (pos.position.type == ExpandableListPosition.CHILD) {
-                    indicatorRect.left = (mChildIndicatorLeft == CHILD_INDICATOR_INHERIT) ?
-                            mIndicatorLeft : mChildIndicatorLeft;
-                    indicatorRect.right = (mChildIndicatorRight == CHILD_INDICATOR_INHERIT) ?
-                            mIndicatorRight : mChildIndicatorRight;
+                    if (isLayoutRtl) {
+                        indicatorRect.left = (mChildIndicatorLeft == CHILD_INDICATOR_INHERIT) ?
+                                mRight - mIndicatorRight : mRight - mChildIndicatorRight;
+                        indicatorRect.right = (mChildIndicatorRight == CHILD_INDICATOR_INHERIT) ?
+                                mRight - mIndicatorLeft : mRight - mChildIndicatorLeft;
+                    } else {
+                        indicatorRect.left = (mChildIndicatorLeft == CHILD_INDICATOR_INHERIT) ?
+                                mIndicatorLeft : mChildIndicatorLeft;
+                        indicatorRect.right = (mChildIndicatorRight == CHILD_INDICATOR_INHERIT) ?
+                                mIndicatorRight : mChildIndicatorRight;
+                    }
                 } else {
-                    indicatorRect.left = mIndicatorLeft;
-                    indicatorRect.right = mIndicatorRight;
+                    indicatorRect.left = isLayoutRtl ? (width - mIndicatorRight) : mIndicatorLeft;
+                    indicatorRect.right = isLayoutRtl ? (width - mIndicatorLeft) : mIndicatorRight;
                 }
 
-                if (isLayoutRtl) {
-                    final int temp = indicatorRect.left;
-                    indicatorRect.left = width - indicatorRect.right;
-                    indicatorRect.right = width - temp;
-
-                    indicatorRect.left -= mPaddingRight;
-                    indicatorRect.right -= mPaddingRight;
-                } else {
-                    indicatorRect.left += mPaddingLeft;
-                    indicatorRect.right += mPaddingLeft;
-                }
+                indicatorRect.left += isLayoutRtl ? -mPaddingRight : mPaddingLeft;
+                indicatorRect.right += isLayoutRtl ? -mPaddingRight : mPaddingLeft;
 
                 lastItemType = pos.position.type; 
             }

@@ -75,8 +75,8 @@
                     android:layout_marginTop="@dimen/status_bar_header_height_expanded"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/notification_side_padding"
-                    android:layout_marginRight="@dimen/notification_side_padding"/>
+                    android:layout_marginStart="@dimen/notification_side_padding"
+                    android:layout_marginEnd="@dimen/notification_side_padding"/>
 
                 <!-- A view to reserve space for the collapsed stack -->
                 <!-- Layout height: notification_min_height + bottom_stack_peek_amount -->

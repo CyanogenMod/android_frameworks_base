@@ -22,6 +22,7 @@ import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -99,6 +100,8 @@ public class MediaController extends FrameLayout {
     private ImageButton mPrevButton;
     private CharSequence mPlayDescription;
     private CharSequence mPauseDescription;
+    private final boolean isLayoutRtl = TextUtils.getLayoutDirectionFromLocale(
+        Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
 
     public MediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -265,7 +268,11 @@ public class MediaController extends FrameLayout {
 
         mFfwdButton = (ImageButton) v.findViewById(com.android.internal.R.id.ffwd);
         if (mFfwdButton != null) {
-            mFfwdButton.setOnClickListener(mFfwdListener);
+            if (isLayoutRtl) {
+                mFfwdButton.setOnClickListener(mRewListener);
+            } else {
+                mFfwdButton.setOnClickListener(mFfwdListener);
+            }
             if (!mFromXml) {
                 mFfwdButton.setVisibility(mUseFastForward ? View.VISIBLE : View.GONE);
             }
@@ -273,7 +280,11 @@ public class MediaController extends FrameLayout {
 
         mRewButton = (ImageButton) v.findViewById(com.android.internal.R.id.rew);
         if (mRewButton != null) {
-            mRewButton.setOnClickListener(mRewListener);
+            if (isLayoutRtl) {
+                mRewButton.setOnClickListener(mFfwdListener);
+            } else {
+                mRewButton.setOnClickListener(mRewListener);
+            }
             if (!mFromXml) {
                 mRewButton.setVisibility(mUseFastForward ? View.VISIBLE : View.GONE);
             }
@@ -661,12 +672,20 @@ public class MediaController extends FrameLayout {
 
     private void installPrevNextListeners() {
         if (mNextButton != null) {
-            mNextButton.setOnClickListener(mNextListener);
+            if (isLayoutRtl) {
+                mNextButton.setOnClickListener(mPrevListener);
+            } else {
+                mNextButton.setOnClickListener(mNextListener);
+            }
             mNextButton.setEnabled(mNextListener != null);
         }
 
         if (mPrevButton != null) {
-            mPrevButton.setOnClickListener(mPrevListener);
+            if (isLayoutRtl) {
+                mPrevButton.setOnClickListener(mNextListener);
+            } else {
+                mPrevButton.setOnClickListener(mPrevListener);
+            }
             mPrevButton.setEnabled(mPrevListener != null);
         }
     }
