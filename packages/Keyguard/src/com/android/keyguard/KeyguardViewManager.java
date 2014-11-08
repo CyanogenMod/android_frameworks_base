@@ -401,6 +401,10 @@ public class KeyguardViewManager {
             WallpaperManager wm = WallpaperManager.getInstance(mContext);
             Bitmap bitmap = wm.getKeyguardBitmap();
             if (bitmap != null) {
+                // Recover memory
+                if (mUserBackground != null) {
+                    mUserBackground.getBitmap().recycle();
+                }
                 mUserBackground = new BitmapDrawable(mContext.getResources(), bitmap);
             } else {
                 mUserBackground = null;
