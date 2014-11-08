@@ -252,6 +252,7 @@
   <java-symbol type="bool" name="action_bar_embed_tabs_pre_jb" />
   <java-symbol type="bool" name="action_bar_expanded_action_views_exclusive" />
   <java-symbol type="bool" name="config_avoidGfxAccel" />
+  <java-symbol type="bool" name="always_popup_usb_computer_connection_option" />
   <java-symbol type="bool" name="config_allowActionMenuItemTextWithIcon" />
   <java-symbol type="bool" name="config_bluetooth_address_validation" />
   <java-symbol type="bool" name="config_bluetooth_sco_off_call" />

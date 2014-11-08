@@ -661,6 +661,10 @@ public class UsbDeviceManager {
                     if (mDebuggingManager != null) {
                         mDebuggingManager.setAdbEnabled(mAdbEnabled);
                     }
+                    if (mContext.getResources().getBoolean(com.android.internal.
+                            R.bool.always_popup_usb_computer_connection_option)) {
+                        updateState(bootState(mConnected, mConfigured));
+                    }
                     break;
                 case MSG_USER_SWITCHED: {
                     UserManager userManager =
@@ -685,6 +689,18 @@ public class UsbDeviceManager {
                     break;
                 }
             }
+        }
+
+        private String bootState(boolean isConnected, boolean isConfigured) {
+            String bootState = "CONNECTED";
+            if (!isConnected && !isConfigured) {
+                bootState = "DISCONNECTED";
+            } else if (isConnected && !isConfigured) {
+                bootState = "CONNECTED";
+            } else if (isConnected && isConfigured) {
+                bootState = "CONFIGURED";
+            }
+            return bootState;
         }
 
         public UsbAccessory getCurrentAccessory() {
@@ -717,7 +733,7 @@ public class UsbDeviceManager {
                     //}
                 }
             }
-            if (id != mUsbNotificationId) {
+            if (id != mUsbNotificationId && mBootCompleted) {
                 // clear notification if title needs changing
                 if (mUsbNotificationId != 0) {
                     mNotificationManager.cancelAsUser(null, mUsbNotificationId,
@@ -751,6 +767,9 @@ public class UsbDeviceManager {
                     mNotificationManager.notifyAsUser(null, id, notification,
                             UserHandle.ALL);
                     mUsbNotificationId = id;
+                    if (r.getBoolean(com.android.internal.R.bool.
+                            always_popup_usb_computer_connection_option))
+                        mContext.startActivity(intent);
                 }
             }
         }
