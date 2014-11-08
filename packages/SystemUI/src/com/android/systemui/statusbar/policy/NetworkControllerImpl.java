@@ -1305,23 +1305,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 combinedLabel = mobileLabel;
                 combinedSignalIconId = mDataSignalIconId; // set by updateDataIcon()
                 mContentDescriptionCombinedSignal = mContentDescriptionDataType;
-                switch (mDataActivity) {
-                case TelephonyManager.DATA_ACTIVITY_IN:
-                    mMobileActivityIconId = R.drawable.stat_sys_signal_in;
-                    break;
-                case TelephonyManager.DATA_ACTIVITY_OUT:
-                    mMobileActivityIconId = R.drawable.stat_sys_signal_out;
-                    break;
-                case TelephonyManager.DATA_ACTIVITY_INOUT:
-                    mMobileActivityIconId = R.drawable.stat_sys_signal_inout;
-                    break;
-                default:
-                    mMobileActivityIconId = 0;
-                    break;
-                }
-                combinedActivityIconId = mMobileActivityIconId;
-            } else {
-                mMobileActivityIconId = 0;
             }
         }
 
