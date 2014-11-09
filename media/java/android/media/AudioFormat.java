@@ -415,12 +415,6 @@ public class AudioFormat {
          *     {@link AudioFormat#ENCODING_PCM_FLOAT},
          *     {@link AudioFormat#ENCODING_AC3},
          *     {@link AudioFormat#ENCODING_E_AC3}.
-         *     {@link AudioFormat#ENCODING_AMRNB}.
-         *     {@link AudioFormat#ENCODING_AMRWB}.
-         *     {@link AudioFormat#ENCODING_EVRC}.
-         *     {@link AudioFormat#ENCODING_EVRCB}.
-         *     {@link AudioFormat#ENCODING_EVRCWB}.
-         *     {@link AudioFormat#ENCODING_EVRCNW}.
          * @return the same Builder instance.
          * @throws java.lang.IllegalArgumentException
          */
