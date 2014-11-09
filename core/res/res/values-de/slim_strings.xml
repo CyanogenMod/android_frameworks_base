@@ -24,7 +24,7 @@
   <string name="privacy_guard_notification">Datenschutz aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf persönliche Daten</string>
   <string name="privacy_guard_custom_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf benutzerdefinierte Berechtigungen</string>-->
-  <string name="default_string">Standart</string>
+  <string name="default_string">Standard</string>
   <string name="reboot_system" product="tablet">Tablet neustarten</string>
   <!--  <string name="reboot_system" product="default">Telefon neustarten</string>
   <string name="global_action_screenshot">Bildschirmfoto</string>
@@ -53,5 +53,5 @@
   <!--<string name="permlab_preventpower">Power Taste sperren</string>
   <string name="permdesc_preventpower">Ermöglicht es einer Anwendung, die Power-Taste zu überschreiben</string>-->
   <string name="permlab_changeHeadsUpState">Heads Up ein- oder ausschalten</string>
-  <string name="permdesc_changeHeadsUpState">Ermöglicht der App festzulegen, ob andere Apps normale Benachrichtigungen als Heads Up Benachrichtigungen anzeigen dürfen.</string>
+  <string name="permdesc_changeHeadsUpState">Ermöglicht der App festzulegen, ob andere Apps normale Benachrichtigungen als Heads-Up-Meldung anzeigen dürfen.</string>
 </resources>

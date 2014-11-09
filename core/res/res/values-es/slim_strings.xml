@@ -24,8 +24,9 @@
   <string name="privacy_guard_notification">Privacy Guard activo</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no tendrá acceso a los datos personales</string>
   <string name="privacy_guard_custom_notification_detail"><xliff:g id="app">%1$s</xliff:g> no podrá acceder a los permisos personalizados</string>-->
-  <string name="reboot_system" product="tablet">Reiniciar tableta</string>
-  <!--<string name="reboot_system" product="default">Reiniciar teléfono</string>
+  <string name="default_string">Defecto</string>
+  <!--<string name="reboot_system" product="tablet">Reiniciar tablet</string>
+  <string name="reboot_system" product="default">Reiniciar teléfono</string>
   <string name="global_action_screenshot">Captura de pantalla</string>
   <string name="reboot_reboot">Reiniciar</string>
   <string name="reboot_recovery">Recovery</string>
@@ -40,11 +41,17 @@
   <string name="notify_turn_wifi_ap_off_title">Desactivar AP Wi-Fi</string>
   <!--<string name="global_actions_expanded_desktop_mode_on_status">Escritorio extendido activado</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Escritorio extendido desactivado</string>-->
+  <string name="global_actions_pie_mode_on_status">Controles PIE activados</string>
+  <string name="global_actions_pie_mode_off_status">Controles PIE desactivados</string>
+  <string name="disable_pie_navigation_error">No puedes deshabilitar los controles PIE. No hay otro método de navegación disponible. Habilita la barra de navegación para desactivar PIE</string>
+  <string name="global_actions_nav_bar_mode_on_status">Barra de navegación activada</string>
+  <string name="global_actions_nav_bar_mode_off_status">Barra de navegación desactivada</string>
+  <string name="disable_navigation_pie_error">No puedes deshabilitar la barra de navegación. No hay otro método de navegación disponible. Habilita los controles PIE para desactivar la barra de navegación</string>
   <string name="accessibility_target_direction">Desliza para activar un acceso directo</string>
   <!--<string name="stylus_app_not_installed">%s no está instalado</string>-->
-  <string name="theme_auto_switch_mode_error">El cambio automático de condiciones de luz está activado. El cambio manual no se puede usar.</string>
-  <!--<string name="permlab_preventpower">Prevenir pulsación de botón de encendido</string>
+  <string name="theme_auto_switch_mode_error">Cambio automático de condiciones de luz activado. No se puede utilizar el cambio manual.</string>
+  <!--<string name="permlab_preventpower">Prevenir pulsación del botón de encendido</string>
   <string name="permdesc_preventpower">Permite a una aplicación utilizar el botón de encendido</string>-->
-  <string name="permlab_changeHeadsUpState">habilitar o deshabilitar \"heads up\"</string>
-  <string name="permdesc_changeHeadsUpState">Permite a la aplicación cambiar si tiene permisos para mostrar notificaciones normales como \"heads up\".</string>
+  <string name="permlab_changeHeadsUpState">Habilitar o deshabilitar mensajes de aviso</string>
+  <string name="permdesc_changeHeadsUpState">Permite a la aplicación determinar si tiene permisos para mostrar notificaciones normales como notificaciones de aviso</string>
 </resources>

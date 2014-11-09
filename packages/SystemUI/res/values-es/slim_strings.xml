@@ -22,7 +22,7 @@
   <string name="quick_settings_battery_discharging">Descargando</string>
   <string name="app_killed_message">Proceso cerrado</string>
   <string name="screenshot_notification_delete">Borrar</string>
-  <string name="screenshot_delete_confirmation">Captura borrada</string>
+  <string name="screenshot_delete_confirmation">Captura de pantalla borrada</string>
   <string name="accessibility_data_connection_HP">HSPA+</string>
   <string name="cancel">Cancelar</string>
   <string name="dlg_ok">Aceptar</string>
@@ -32,26 +32,27 @@
   <string name="on">Encender</string>
   <string name="toggle">Interruptor</string>
   <string name="shortcut_picker">Accesos Directos Slim</string>
-  <string name="shortcut_immersive">Int. Modo Immersivo</string>
-  <string name="shortcut_quiethours">Modo descanso (Ignora restricciones de tiempo)</string>
-  <string name="shortcut_rotation">Int. Bloqueo Rotación</string>
-  <string name="shortcut_torch">Int. Linterna</string>
+  <string name="shortcut_immersive">Modo Immersivo</string>
+  <string name="shortcut_quiethours">Modo Descanso</string>
+  <string name="shortcut_rotation">Bloqueo Rotación</string>
+  <string name="shortcut_shakeevent">Agitar</string>
+  <string name="shortcut_torch">Linterna</string>
   <string name="shortcut_reboot">Reiniciar</string>
   <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_last_app">Ultima ap.</string>
-  <string name="shortcut_screenshot">Captura Pantalla</string>
+  <string name="shortcut_last_app">Ultima aplicación</string>
+  <string name="shortcut_screenshot">Captura de Pantalla</string>
   <string name="shortcut_volume">Volumen</string>
   <string name="shortcut_toggle_title">Acción a realizar</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="chamber_disabled">Chamber of secrets está cerrado</string>
+  <string name="shortcut_chamber">Cámara de los Secretos</string>
+  <string name="chamber_disabled">Cámara de los Secretos cerrada</string>
   <string name="chamber_title">Introduce parámetros de configuración</string>
-  <string name="chamber_message">Introducir un parámetro de configuración que cuyo valor sea una función \"on\" o \"off\" (checkbox) o una lista de opciones. Por ejemplo, quiet_hours_ringer o similar. Los parámtros de configuración a usar están el fichero Settings.java. CUIDADO: Esto es peligroso!</string>
-  <string name="chamber_invalid">No es un parámetro correcto. Tenga cuidado.</string>
-  <string name="chamber_invalid_setting">Probar a activar/desactivar la configuración manualmente para confirmar que la opción para está acción existe en la base de datos.</string>
+  <string name="chamber_message">Introducir un parámetro de configuración cuyo valor sea una función \"on\" u \"off\" (checkbox) o una lista de opciones. Por ejemplo, quiet_hours_ringer o similar. Los parámetros de configuración a usar están en el fichero Settings.java. CUIDADO: Esto es peligroso</string>
+  <string name="chamber_invalid">No es un parámetro válido. Ten cuidado</string>
+  <string name="chamber_invalid_setting">Probar a activar/desactivar la configuración manualmente para confirmar que la opción para esta acción existe en la base de datos</string>
   <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Es esto un ajuste con valor \"checkbox\"?</string>
+  <string name="chamber_chk_message">¿Es un ajuste con valor \"checkbox\"?</string>
   <string name="chamber_int">Introducir valores</string>
-  <string name="chamber_int_message">Introducir los valores entre los que desea avanzar. Separar cada valor con una coma. Los parámetros de coloraceptan valores hexadecimales como #FF00aacc o colores básicos como red, green, y yellow.</string>
+  <string name="chamber_int_message">Introducir los valores entre los que avanzar, separados con una coma. Los parámetros de color aceptan valores hexadecimales como #FF00aacc o colores básicos como red, green, y yellow</string>
   <string name="chamber_name_title">Nombre del acceso directo</string>
   <string name="chamber_name_message">Nombre del acceso directo que se mostrará junto al icono.</string>
   <string name="chamber_name_toast">Se usará el nombre predeterminado</string>
@@ -68,8 +69,8 @@
   <string name="quick_settings_lockscreen">Bloquear pantalla</string>
   <string name="quick_settings_network_type">Modo de Red</string>
   <string name="quick_settings_report_bug">Reportar bug</string>
-  <string name="quick_settings_sync">Sincr.</string>
-  <string name="quick_settings_sync_off">Sincr. desactivada</string>
+  <string name="quick_settings_sync">Sincronizar</string>
+  <string name="quick_settings_sync_off">Sincronizar desactivado</string>
   <string name="quick_settings_torch">Linterna</string>
   <string name="quick_settings_torch_off">Linterna apagada</string>
   <string name="quick_settings_nfc">NFC</string>
@@ -81,10 +82,12 @@
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
   <string name="quick_settings_wifiap">AP Wi-Fi</string>
   <string name="quick_settings_wifiap_off">AP Wi-Fi apagado</string>
-  <string name="quick_settings_quiethours">Modo descanso activado</string>
-  <string name="quick_settings_quiethours_off">Modo descanso desact.</string>
+  <string name="quick_settings_quiethours">Descanso activado</string>
+  <string name="quick_settings_quiethours_off">Descanso desactivado</string>
   <string name="quick_settings_lte">LTE</string>
   <string name="quick_settings_lte_off">LTE apagado</string>
+  <string name="quick_settings_shakeevents">Agitar</string>
+  <string name="quick_settings_shakeevents_off">Agitar desactivado</string>
   <string name="quick_settings_volume">Volumen</string>
   <string name="quick_settings_expanded_desktop">Expandido</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
@@ -99,11 +102,14 @@
   <string name="quick_settings_reboot">Reiniciar</string>
   <string name="quick_settings_theme_switch_dark">Tema oscuro</string>
   <string name="quick_settings_theme_switch_light">Tema luminoso</string>
-  <string name="quick_settings_quick_record_nofile">Pulsación Larga</string>
+  <string name="quick_settings_quick_record_deleted">Borrado...</string>
+  <string name="quick_settings_quick_record_nofile">Pulsación larga</string>
   <string name="quick_settings_quick_record_def">Grabación rápida</string>
   <string name="quick_settings_quick_record_rec">Grabando...</string>
   <string name="quick_settings_quick_record_save">Guardado</string>
   <string name="quick_settings_quick_record_play">Reproduciendo...</string>
+  <string name="quick_settings_quick_record_dialog_cancel">Cerrar</string>
+  <string name="quick_settings_quick_record_dialog">Pulsa Play para Grabar\nPulsación larga para eliminar</string>
   <string name="quick_settings_custom_toggle">Personalizado</string>
   <string name="quick_settings_contact_toggle">Contacto</string>
   <string name="quick_settings_reminder">Recordatorio</string>
@@ -123,14 +129,14 @@
   <string name="quick_settings_network_adb_enabled_label">Habilitado</string>
   <string name="pie_battery_status_charging">Cargando (<xliff:g id="percent">%d</xliff:g>%%)</string>
   <string name="pie_battery_status_full">Cargado</string>
-  <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% remaining</string>
+  <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% falta</string>
   <string name="pie_phone_status_no_service">Sin servicio</string>
   <string name="pie_phone_status_airplane_mode">Modo avión activado</string>
-  <string name="pie_phone_status_emergency_only">Sólo llamadas de emergencia</string>
+  <string name="pie_phone_status_emergency_only">Solo llamada de emergencia</string>
   <string name="smart_pulldown_disabled">Despliegue inteligente desactivado</string>
   <string name="accessibility_ime_navigation_left">Cursor izquierda</string>
   <string name="accessibility_ime_navigation_right">Cursor derecha</string>
-  <string name="status_bar_notification_heads_up_enable_title">Habilitar \"heads up\"</string>
-  <string name="status_bar_notification_heads_up_disable_title">Deshabilitar \"heads up\"</string>
-  <string name="heads_up_snooze_message">Heads up deshabilitado durante <xliff:g id="number">%d</xliff:g> minutos.</string>
+  <string name="status_bar_notification_heads_up_enable_title">Habilitar avisos</string>
+  <string name="status_bar_notification_heads_up_disable_title">Deshabilitar avisos</string>
+  <string name="heads_up_snooze_message">Avisos deshabilitados durante <xliff:g id="number">%d</xliff:g> minutos</string>
 </resources>

@@ -126,10 +126,10 @@
   <string name="pie_phone_status_no_service">Kein Service</string>
   <string name="pie_phone_status_airplane_mode">Flugmodus an</string>
   <string name="pie_phone_status_emergency_only">Nur Notrufe</string>
-  <string name="smart_pulldown_disabled">Smart Pulldown ist deaktiviert</string>
+  <string name="smart_pulldown_disabled">Intelligentes Aufklappen ist deaktiviert</string>
   <string name="accessibility_ime_navigation_left">Pfeiltaste links</string>
   <string name="accessibility_ime_navigation_right">Pfeiltaste rechts</string>
-  <string name="status_bar_notification_heads_up_enable_title">Heads up aktivieren</string>
-  <string name="status_bar_notification_heads_up_disable_title">Heads Up deaktivieren</string>
+  <string name="status_bar_notification_heads_up_enable_title">Heads-Up aktivieren</string>
+  <string name="status_bar_notification_heads_up_disable_title">Heads-Up deaktivieren</string>
   <string name="heads_up_snooze_message">Heads up ist deaktiviert für <xliff:g id="number">%d</xliff:g> Minuten.</string>
 </resources>

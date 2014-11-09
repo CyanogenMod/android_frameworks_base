@@ -35,6 +35,7 @@
   <string name="shortcut_immersive">इम्मेरसीवे मोड</string>
   <string name="shortcut_quiethours">क्वाइट हॉर्स</string>
   <string name="shortcut_rotation">रोटेशन</string>
+  <string name="shortcut_shakeevent">शेक ईवेंट्स</string>
   <string name="shortcut_torch">टॉर्च</string>
   <string name="shortcut_reboot">रिबूट</string>
   <string name="shortcut_recovery">रिकवरी</string>
@@ -85,6 +86,7 @@
   <string name="quick_settings_quiethours_off">क्वाइट हॉर्स बंद</string>
   <string name="quick_settings_lte">LTE</string>
   <string name="quick_settings_lte_off">LTE ऑफ</string>
+  <string name="quick_settings_shakeevents">शेक ईवेंट्स</string>
   <string name="quick_settings_volume">आवाज</string>
   <string name="quick_settings_expanded_desktop">एक्स्पंदेद</string>
   <string name="quick_settings_expanded_desktop_off">नोर्मल</string>
