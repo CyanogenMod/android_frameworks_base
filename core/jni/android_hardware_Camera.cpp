@@ -160,16 +160,20 @@ JNICameraContext::JNICameraContext(JNIEnv* env, jobject weak_this, jclass clazz,
     mCameraJClass = (jclass)env->NewGlobalRef(clazz);
     mCamera = camera;
 
+#ifdef QCOM_BSP
     jclass extendedfaceClazz = env->FindClass("org/codeaurora/camera/ExtendedFace");
     if (NULL != extendedfaceClazz) {
         mFaceClass = (jclass) env->NewGlobalRef(extendedfaceClazz);
         mIsExtendedFace = true;
     } else {
         env->ExceptionClear();
+#endif
         jclass faceClazz = env->FindClass("android/hardware/Camera$Face");
         mFaceClass = (jclass) env->NewGlobalRef(faceClazz);
         mIsExtendedFace = false;
+#ifdef QCOM_BSP
     }
+#endif
 
     jclass rectClazz = env->FindClass("android/graphics/Rect");
     mRectClass = (jclass) env->NewGlobalRef(rectClazz);
@@ -419,6 +423,7 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
             env->DeleteLocalRef(mouth);
         }
 
+#ifdef QCOM_BSP
         if (mIsExtendedFace) {
             env->SetIntField(face, fields.face_sm_degree, metadata->faces[i].smile_degree);
             env->SetIntField(face, fields.face_sm_score, metadata->faces[i].smile_score);
@@ -433,6 +438,7 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
             env->SetIntField(face, fields.face_left_right_gaze, metadata->faces[i].left_right_gaze);
             env->SetIntField(face, fields.face_top_bottom_gaze, metadata->faces[i].top_bottom_gaze);
         }
+#endif
 
         env->DeleteLocalRef(face);
         env->DeleteLocalRef(rect);
@@ -1199,6 +1205,7 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "android/hardware/Camera$Face", "faceRecognised", "I", &fields.face_recognised },
     };
 
+#ifdef QCOM_BSP
     field extendedfacefields_to_find[] = {
         { "org/codeaurora/camera/ExtendedFace", "rect", "Landroid/graphics/Rect;", &fields.face_rect },
         { "org/codeaurora/camera/ExtendedFace", "score", "I", &fields.face_score },
@@ -1219,6 +1226,7 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "org/codeaurora/camera/ExtendedFace", "leftrightGaze", "I", &fields.face_left_right_gaze },
         { "org/codeaurora/camera/ExtendedFace", "topbottomGaze", "I", &fields.face_top_bottom_gaze },
     };
+#endif
 
     if (find_fields(env, fields_to_find, NELEM(fields_to_find)) < 0)
         return -1;
@@ -1245,6 +1253,7 @@ int register_android_hardware_Camera(JNIEnv *env)
         return -1;
     }
 
+#ifdef QCOM_BSP
     clazz = env->FindClass("org/codeaurora/camera/ExtendedFace");
     if (NULL != clazz) {
         fields.face_constructor = env->GetMethodID(clazz, "<init>", "()V");
@@ -1254,6 +1263,7 @@ int register_android_hardware_Camera(JNIEnv *env)
         }
     } else {
         env->ExceptionClear();
+#endif
         clazz = env->FindClass("android/hardware/Camera$Face");
         fields.face_constructor = env->GetMethodID(clazz, "<init>", "()V");
         if (fields.face_constructor == NULL) {
@@ -1264,7 +1274,9 @@ int register_android_hardware_Camera(JNIEnv *env)
             ALOGE("Can't find_fields() for facefields_to_find");
             return -1;
         }
+#ifdef QCOM_BSP
     }
+#endif
 
     // Register native functions
     return AndroidRuntime::registerNativeMethods(env, "android/hardware/Camera",
