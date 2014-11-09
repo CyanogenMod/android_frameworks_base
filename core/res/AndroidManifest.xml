@@ -2608,7 +2608,7 @@
     <permission android:name="android.permission.WRITE_THEMES"
         android:label="@string/permlab_writeThemes"
         android:description="@string/permdesc_writeThemesDesc"
-        android:protectionLevel="signature" />
+        android:protectionLevel="system|signature" />
 
     <!-- Allows an application access the CM hardware abstraction framework (DANGEROUS)
          <p>Not for use by third-party applications.
