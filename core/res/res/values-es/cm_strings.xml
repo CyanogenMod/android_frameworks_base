@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permite que la aplicación establezca el fondo de pantalla de bloqueo.</string>
   <string name="permlab_useHardwareFramework">usar marco de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite que la aplicación acceda al marco de hardware de CM.</string>
-  <string name="permlab_keyguardApplicationWidget">establecer el widget de la aplicación en la pantalla de bloqueo</string>
-  <string name="permdesc_keyguardApplicationWidget">Permite a una aplicación definir el widget de la aplicación en la pantalla de bloqueo.</string>
+  <string name="permlab_keyguardApplicationWidget">establecer widget de aplicación en la pantalla de bloqueo</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite que la aplicación establezca el widget de aplicación en la pantalla de bloqueo.</string>
   <string name="immersive_mode_confirmation_bottom">Desliza el dedo hacia arriba desde el borde inferior para salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a tu ubicación</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB sobre red activado</string>
   <string name="adb_both_active_notification_title">ADB sobre USB y red activado</string>
   <string name="adb_active_generic_notification_message">Toca para desactivar la depuración.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Toda la información en tu almacenamiento USB (en la ruta \u00AB%1$s\u00BB) será borrada. ¡Esta acción no se puede deshacer!</string>
-  <string name="extmedia_format_message_cm" product="default">Toda la información en tu tarjeta SD (en la ruta \u00AB%1$s\u00BB) será borrada. ¡Esta acción no se puede deshacer!</string>
+  <string name="usb_extmedia_format_message">Toda la información del almacenamiento USB (en la ruta \u00AB%1$s\u00BB) será borrada. ¡Esta acción no se puede deshacer!</string>
+  <string name="sd_extmedia_format_message">Toda la información de la tarjeta SD (en la ruta \u00AB%1$s\u00BB) será borrada. ¡Esta acción no se puede deshacer!</string>
   <string name="usb_storage_notification_manage_message">Toca para gestionar</string>
   <string name="sd_ext_media_checking_notification_title">Preparando la tarjeta SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Comprobando errores en la tarjeta SD\u2026</string>
@@ -175,6 +175,20 @@
   <string name="stk_cc_ss_to_ussd">Solicitud SS es modificada a solicitud USSD.</string>
   <string name="stk_cc_ss_to_ss">Solicitud SS es modificada a nueva solicitud SS.</string>
   <string name="theme_install_error_title">Fallo al instalar el tema</string>
-  <string name="theme_install_error_message">%s falló en la instalación</string>
+  <string name="theme_install_error_message">Fallo al instalar %s</string>
   <string name="storage_uicc">Almacenamiento UICC</string>
+  <string name="sd_progress_unmounting">Desmontando la tajeta SD\u2026</string>
+  <string name="sd_progress_erasing">Borrando la tarjeta SD\u2026</string>
+  <string name="sd_format_error">No se ha podido borrar la tarjeta SD.</string>
+  <string name="sd_media_bad_removal">La tarjeta SD fue extraída antes de ser desmontada.</string>
+  <string name="sd_media_checking">La tarjeta SD está siendo comprobada.</string>
+  <string name="sd_media_removed">La tarjeta SD ha sido extraída.</string>
+  <string name="sd_media_shared">La tarjeta SD está siendo usada por un ordenador.</string>
+  <string name="usb_progress_unmounting">Desmontando el almacenamiento USB\u2026</string>
+  <string name="usb_progress_erasing">Borrando el almacenamiento USB\u2026</string>
+  <string name="usb_format_error">No se ha podido borrar el almacenamiento USB.</string>
+  <string name="usb_media_bad_removal">El almacenamiento USB fue extraído antes de ser desmontado.</string>
+  <string name="usb_media_checking">El almacenamiento USB está siendo comprobado.</string>
+  <string name="usb_media_removed">El almacenamiento USB ha sido extraído.</string>
+  <string name="usb_media_shared">El almacenamiento USB está siendo usado por un ordenador.</string>
 </resources>

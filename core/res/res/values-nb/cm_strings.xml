@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">forhindre på/av knapp</string>
   <string name="permdesc_preventpower">Lar appen overstyre av/på knappen</string>
   <string name="permlab_sendMockSms">Send falske SMS-meldinger</string>
-  <string name="permdesc_sendMockSms">Lar programmet sende falske SMS-meldinger. Dette tillater en app å sende SMS til klarerte programmer. Skadelige programmer kan sende meldinger kontinuerlig, blokkerer enhetens varslingssystem og forstyrrer brukeren.</string>
+  <string name="permdesc_sendMockSms">Lar programmet sende falske SMS-meldinger. Dette tillater en app å sende SMS til klarerte programmer. Skadelige programmer kan sende meldinger kontinuerlig, blokkere enhetens varslingssystem og forstyrrer brukeren.</string>
   <string name="storage_sd_dock_card">SD-kort i dokkingstasjon</string>
   <string name="app_killed_message">Appen ble drept</string>
   <string name="global_action_reboot">Start på nytt</string>
@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Tillat en app å endre låseskjermsbakgrunn.</string>
   <string name="permlab_useHardwareFramework">bruke maskinvare</string>
   <string name="permdesc_useHardwareFramework">Gir en app tilgang til CM maskinvaren.</string>
-  <string name="permlab_keyguardApplicationWidget">Angi keyguard appwidget</string>
-  <string name="permdesc_keyguardApplicationWidget">Tillater en app å settte appwidget på keyguarden.</string>
+  <string name="permlab_keyguardApplicationWidget">Angi keyguard app widget</string>
+  <string name="permdesc_keyguardApplicationWidget">Tillat en app å sette opp app widgeten på keyguard.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe opp fra bunn for å gå ut av fullskjerm.</string>
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB over nettverk aktivert</string>
   <string name="adb_both_active_notification_title">ADB over USB &amp; nettverk aktivert</string>
   <string name="adb_active_generic_notification_message">Trykk for å deaktivere feilsøking.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Alle data på USB Lagringen (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
-  <string name="extmedia_format_message_cm" product="default">Alle data på kortet (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
+  <string name="usb_extmedia_format_message">Alle data på USB Lagringen (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
+  <string name="sd_extmedia_format_message">Alle data på kortet (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
   <string name="usb_storage_notification_manage_message">Trykk for å administrere</string>
   <string name="sd_ext_media_checking_notification_title">Forbereder SDkort\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Kontrollerer SDkort for feil\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Kan ikke installere tema</string>
   <string name="theme_install_error_message">%s ble ikke installert</string>
   <string name="storage_uicc">UICC lagring</string>
+  <string name="sd_progress_unmounting">Demonterer SDkort\u2026</string>
+  <string name="sd_progress_erasing">Sletter SDkort\u2026</string>
+  <string name="sd_format_error">Kunne ikke slette SD-kort.</string>
+  <string name="sd_media_bad_removal">SD-kortet var fjernet før det ble demontert.</string>
+  <string name="sd_media_checking">Sdkortet blir sjekket for feil.</string>
+  <string name="sd_media_removed">SD-kortet er fjernet.</string>
+  <string name="sd_media_shared">SD-kortet er i bruk av en datamaskin.</string>
+  <string name="usb_progress_unmounting">Demonterer USBlagring\u2026</string>
+  <string name="usb_progress_erasing">Sletter USBlagring\u2026</string>
+  <string name="usb_format_error">Kunne ikke slette USB lagring.</string>
+  <string name="usb_media_bad_removal">USB-lagring ble fjernet før det ble demontert.</string>
+  <string name="usb_media_checking">USB lagring blir sjekket for feil.</string>
+  <string name="usb_media_removed">USB lagring er fjernet.</string>
+  <string name="usb_media_shared">USB lagring er i bruk av en datamaskin.</string>
 </resources>

@@ -47,7 +47,6 @@
   <string name="permlab_preventpower">spriječiti \"power\" tipku</string>
   <string name="permdesc_preventpower">Dopušta aplikaciji nadvladati \"power\" tipku</string>
   <string name="permlab_sendMockSms">poslati lažne SMS poruke</string>
-  <string name="permdesc_sendMockSms">Dopušta aplikaciji slanje lažnih SMS poruka. Ovo dopušta aplikaciji slanje poruka provjerenim aplikacijama. Zlonamjerne aplikacije mogu slati poruke uzastopno, blokirajući sustav obavijesti uređaja i tako ometati korisnika.</string>
   <string name="storage_sd_dock_card">Dock SD kartica</string>
   <string name="app_killed_message">Aplikacija prisilno zaustavljena</string>
   <string name="global_action_reboot">Ponovno pokreni</string>
@@ -132,6 +131,4 @@
   <string name="adb_net_active_notification_title">Mrežni ADB omogućen</string>
   <string name="adb_both_active_notification_title">ADB preko USB &amp; mreže omogućen</string>
   <string name="adb_active_generic_notification_message">Dodirnite za onemogućavanje ispravljanja pogrešaka.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Svi podaci na vašoj USB pohrani (\'%1$s\') će biti obrisani. Ova radnja se ne može poništiti!</string>
-  <string name="extmedia_format_message_cm" product="default">Svi podaci na vašoj kartici (\'%1$s\') će biti obrisani. Ova radnja se ne može poništiti!</string>
 </resources>

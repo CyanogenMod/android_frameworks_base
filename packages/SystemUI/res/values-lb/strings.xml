@@ -189,7 +189,7 @@
   <string name="quick_settings_location_off_label">Lokaliséierung aus</string>
   <string name="quick_settings_media_device_label">Medienapparat</string>
   <string name="quick_settings_rssi_label">RSSI</string>
-  <string name="quick_settings_rssi_emergency_only">Nëmmen Noutriff</string>
+  <string name="quick_settings_rssi_emergency_only">Just Noutriff</string>
   <string name="quick_settings_settings_label">Astellungen</string>
   <string name="quick_settings_time_label">Zäit</string>
   <string name="quick_settings_user_label">Ech</string>

@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára, hogy módosítsa a képernyőzár hátterét.</string>
   <string name="permlab_useHardwareFramework">hardver keretrendszert használ</string>
   <string name="permdesc_useHardwareFramework">Lehetővé teszi az alkalmazás számára, hogy a CM hardver hozzáférjen a keretrendszerhez.</string>
-  <string name="permlab_keyguardApplicationWidget">alkalmazás modul beállítsa a képernyőzárra</string>
-  <string name="permdesc_keyguardApplicationWidget">Lehetővé teszi az alkalmazás számára, hogy beállítsa a modult a képernyőzárra.</string>
+  <string name="permlab_keyguardApplicationWidget">zárképernyő alkalmazás modul beállítása</string>
+  <string name="permdesc_keyguardApplicationWidget">Lehetővé teszi az alkalmazás számára, hogy a zárképernyőn alkalmazás modult állításon be.</string>
   <string name="immersive_mode_confirmation_bottom">Csúsztasson lentről felfelé a teljesképernyős módból való kilépéshez.</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
   <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB hálózaton keresztül engedélyezve</string>
   <string name="adb_both_active_notification_title">ADB USB-n &amp; hálózaton keresztül engedélyezve</string>
   <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Minden adat az USB tárolóról (ezen az útvonalon: \"%1$s\") el fog veszni. A műveletet nem lehet visszavonni!</string>
-  <string name="extmedia_format_message_cm" product="default">Minden adat a kártyájáról (ezen az útvonalon: \"%1$s\") el fog veszni. A műveletet nem lehet visszavonni!</string>
+  <string name="usb_extmedia_format_message">Minden adat az USB tárolóról (ezen az útvonalon: \"%1$s\") el fog veszni. A műveletet nem lehet visszavonni!</string>
+  <string name="sd_extmedia_format_message">Minden adat a kártyájáról (ezen az útvonalon: \"%1$s\") el fog veszni. A műveletet nem lehet visszavonni!</string>
   <string name="usb_storage_notification_manage_message">Kezeléshez érintse meg</string>
   <string name="sd_ext_media_checking_notification_title">SD kártya előkészítése\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD kártya ellenőrzése\u2026</string>
@@ -152,8 +152,8 @@
   <string name="sd_ext_media_nomedia_notification_title">Eltávolított SD kártya</string>
   <string name="sd_ext_media_nomedia_notification_message">SD kártya eltávolítva. Helyezzen be egy újat.</string>
   <string name="usb_ext_media_checking_notification_title">USB tárhely előkészítése\u2026</string>
-  <string name="usb_ext_media_checking_notification_message">USB tárhely ellenőrzése\2026</string>
-  <string name="usb_ext_media_nofs_notification_title">Üres USB tároló</string>
+  <string name="usb_ext_media_checking_notification_message">USB tároló hibáinak ellenőrzése\u2026</string>
+  <string name="usb_ext_media_nofs_notification_title">Üres az USB tároló</string>
   <string name="usb_ext_media_nofs_notification_message">Az USB tároló üres, vagy a fájlrendszere nem támogatott.</string>
   <string name="usb_ext_media_unmountable_notification_title">Sérült USB tároló</string>
   <string name="usb_ext_media_unmountable_notification_message">Az USB tároló sérült. Próbálja meg újraformázni.</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Téma telepítése sikertelen</string>
   <string name="theme_install_error_message">Sikertelen telepítés: %s</string>
   <string name="storage_uicc">UICC tároló</string>
+  <string name="sd_progress_unmounting">SD-kártya leválasztása\u2026</string>
+  <string name="sd_progress_erasing">SD-kártya törlése\u2026</string>
+  <string name="sd_format_error">Nem lehet törölni az SD-kártyát.</string>
+  <string name="sd_media_bad_removal">SD-kártya eltávolításra került a leválasztás előtt.</string>
+  <string name="sd_media_checking">SD-kártya ellenőrzése folyamatban van.</string>
+  <string name="sd_media_removed">SD-kártya eltávolításra került.</string>
+  <string name="sd_media_shared">SD-kártyát jelenleg a számítógép használja.</string>
+  <string name="usb_progress_unmounting">USB tároló leválasztása\u2026</string>
+  <string name="usb_progress_erasing">USB tároló törlése\u2026</string>
+  <string name="usb_format_error">Nem lehet törölni az USB tárolót.</string>
+  <string name="usb_media_bad_removal">USB tároló eltávolításra került a leválasztás előtt.</string>
+  <string name="usb_media_checking">USB tároló ellenőrzése folyamatban van.</string>
+  <string name="usb_media_removed">USB tároló eltávolításra került.</string>
+  <string name="usb_media_shared">USB tárolót jelenleg a számítógép használja.</string>
 </resources>

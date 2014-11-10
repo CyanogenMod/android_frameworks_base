@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ජාලය හරහා ADB සබලයි</string>
   <string name="adb_both_active_notification_title">ජාලය &amp; USB හරහා ADB සබලයි</string>
   <string name="adb_active_generic_notification_message">නිදොස් කරණය අබල කිරීමට ස්පර්ශ කරන්න.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">ඔබගේ USB ආචයනයේ (\'%1$s\' පෙත යටතෙහි) ඇති සියලුම දත්ත මකා දැමෙනු ඇත. මෙම ක්‍රියාව අවලංගු කල නොහැක!</string>
-  <string name="extmedia_format_message_cm" product="default">ඔබගේ කාඩ්පතෙහි (\'%1$s\' පෙත යටතෙහි) ඇති සියලුම දත්ත මකා දැමෙනු ඇත. මෙම ක්‍රියාව අවලංගු කල නොහැක!</string>
+  <string name="usb_extmedia_format_message">ඔබගේ USB ආචයනයේ (\'%1$s\' පෙත යටතෙහි) ඇති සියලුම දත්ත මකා දැමෙනු ඇත. මෙම ක්‍රියාව අවලංගු කල නොහැක!</string>
+  <string name="sd_extmedia_format_message">ඔබගේ කාඩ්පතෙහි (\'%1$s\' පෙත යටතෙහි) ඇති සියලුම දත්ත මකා දැමෙනු ඇත. මෙම ක්‍රියාව අවලංගු කල නොහැක!</string>
   <string name="usb_storage_notification_manage_message">පාලනයට තට්ටුකරන්න</string>
   <string name="sd_ext_media_checking_notification_title">SD කාඩ්පත සූදානම් කරමින්\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD කාඩ්පත දෝෂ සඳහා පිරික්සමින්\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">තේමාව ස්ථාපනයට අසමත්විය</string>
   <string name="theme_install_error_message">%s ස්ථාපනයට අසමත්විය</string>
   <string name="storage_uicc">UICC ආචයනය</string>
+  <string name="sd_progress_unmounting">SD කාඩ්පත අනාරූඩ කරමින්\u2026</string>
+  <string name="sd_progress_erasing">SD කාඩ්පත මකමින්\u2026</string>
+  <string name="sd_format_error">SD කාඩ්පත මැකිය නොහැක.</string>
+  <string name="sd_media_bad_removal">SD කාඩ්පත අනාරූඩ කිරීමට පෙර ඉවත්කෙරුණි.</string>
+  <string name="sd_media_checking">SD කාඩ්පත දැනට පරීක්ෂා කෙරෙමින් පවතී.</string>
+  <string name="sd_media_removed">SD කාඩ්පත ඉවත්කෙරුණි.</string>
+  <string name="sd_media_shared">SD කාඩ්පත දැනට පරිඝනකයක් මගින් භාවිතා කෙරේ.</string>
+  <string name="usb_progress_unmounting">USB ආචයනය අනාරූඩ කරමින්\u2026</string>
+  <string name="usb_progress_erasing">USB ආචයනය මකමින්\u2026</string>
+  <string name="usb_format_error">USB ආචයනය මැකිය නොහැක.</string>
+  <string name="usb_media_bad_removal">USB ආචයනය අනාරූඩ කිරීමට පෙර ඉවත්කෙරුණි.</string>
+  <string name="usb_media_checking">USB ආචයනය දැනට පරීක්ෂා කෙරෙමින් පවතී.</string>
+  <string name="usb_media_removed">USB ආචයනය ඉවත්කෙරුණි.</string>
+  <string name="usb_media_shared">USB ආචයනය දැනට පරිඝනකයක් මගින් භාවිතා කෙරේ.</string>
 </resources>

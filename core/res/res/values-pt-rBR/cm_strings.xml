@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">substituir tecla de energia</string>
   <string name="permdesc_preventpower">Permite que o aplicativo substitua a tecla de energia</string>
   <string name="permlab_sendMockSms">simular envio de mensagens SMS</string>
-  <string name="permdesc_sendMockSms">Permite ao aplicativo simular o envio de mensagens SMS.\n Isto permite um aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
+  <string name="permdesc_sendMockSms">Permite ao aplicativo simular o envio de mensagens SMS.\n Isto permite a um  aplicativo enviar SMS para aplicações confiáveis. Aplicativos maliciosos pode enviar mensagens continuamente, bloqueando o sistema de notificação do dispositivo e perturbar o usuário.</string>
   <string name="storage_sd_dock_card">Dock cartão SD</string>
   <string name="app_killed_message">Aplicativo terminado</string>
   <string name="global_action_reboot">Reiniciar</string>
@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permite um aplicativo a trocar o papel de parede da tela de bloqueio.</string>
   <string name="permlab_useHardwareFramework">utilizar a estrutura de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite o acesso de uma aplicação à estrutura de hardware CM.</string>
-  <string name="permlab_keyguardApplicationWidget">definir o widget da tela de bloqueio</string>
-  <string name="permdesc_keyguardApplicationWidget">Permite que um aplicativo defina o widget da tela de bloqueio.</string>
+  <string name="permlab_keyguardApplicationWidget">define widget do aplicativo keyguard</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite que um aplicativo definir o widget no keyguard.</string>
   <string name="immersive_mode_confirmation_bottom">Deslize para cima a partir de baixo para sair da tela cheia.</string>
   <string name="app_ops_access_camera">acessar a câmera</string>
   <string name="app_ops_access_location">acessar sua localização</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB sobre rede ativado</string>
   <string name="adb_both_active_notification_title">ABD sobre USB e rede ativado</string>
   <string name="adb_active_generic_notification_message">Toque para desativar a depuração.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Todos os dados em seu armazenamento USB (sob o caminho \'%1$s\') serão apagados. Esta ação não pode ser revertida!</string>
-  <string name="extmedia_format_message_cm" product="default">Todos os dados do seu cartão (no caminho de \'%1$s\') serão apagados. Esta ação não pode ser revertida!</string>
+  <string name="usb_extmedia_format_message">Todos os dados em seu armazenamento USB (sob o caminho \'%1$s\') serão apagados. Esta ação não pode ser desfeita!</string>
+  <string name="sd_extmedia_format_message">Todos os dados do seu cartão (no caminho \'%1$s\') serão apagados. Esta ação não pode ser desfeita!</string>
   <string name="usb_storage_notification_manage_message">Toque para configurar</string>
   <string name="sd_ext_media_checking_notification_title">Preparando o cartão SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Procurando por erros no cartão SD\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Falha ao instalar o tema</string>
   <string name="theme_install_error_message">%s falhou ao instalar</string>
   <string name="storage_uicc">Armazenamento UICC</string>
+  <string name="sd_progress_unmounting">Desmontando o cartão SD\u2026</string>
+  <string name="sd_progress_erasing">Apagando o cartão SD\u2026</string>
+  <string name="sd_format_error">Não foi possível apagar o cartão SD.</string>
+  <string name="sd_media_bad_removal">O cartão SD foi removido antes de ser desmontado.</string>
+  <string name="sd_media_checking">O armazenamento USB está sendo verificado no momento.</string>
+  <string name="sd_media_removed">O cartão SD foi removido.</string>
+  <string name="sd_media_shared">O cartão SD está atualmente em uso pelo computador.</string>
+  <string name="usb_progress_unmounting">Desmontando o armazenamento USB\u2026</string>
+  <string name="usb_progress_erasing">Apagando o armazenamento USB\u2026</string>
+  <string name="usb_format_error">Não foi possível apagar o armazenamento USB.</string>
+  <string name="usb_media_bad_removal">O armazenamento USB foi removido antes de ser desmontado.</string>
+  <string name="usb_media_checking">Armazenamento USB está sendo verificado.</string>
+  <string name="usb_media_removed">O armazenamento USB foi removido.</string>
+  <string name="usb_media_shared">O armazenamento USB está sendo utilizado por um computador.</string>
 </resources>

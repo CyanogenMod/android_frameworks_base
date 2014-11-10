@@ -48,7 +48,6 @@
   <string name="permlab_preventpower">Împiedica tasta de pornire</string>
   <string name="permdesc_preventpower">Permite aplicației să ignore tasta de pornire</string>
   <string name="permlab_sendMockSms">Trimite mesaje SMS false</string>
-  <string name="permdesc_sendMockSms">Permite aplicației să trimită mesaje SMS false. Aceasta permite unei aplicații să trimită mesaje SMS către aplicații de încredere. Aplicațiile rău intenționate pot trimite mesaje continuu, blocând sistemul de notificări al sistemului și întrerupând utilizatorul.</string>
   <string name="storage_sd_dock_card">Dock card SD</string>
   <string name="app_killed_message">Aplicație oprită</string>
   <string name="global_action_reboot">Repornire</string>
@@ -134,8 +133,6 @@
   <string name="adb_net_active_notification_title">ADB prin rețea activ</string>
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Toate datele de pe dispozitivul de stocare USB (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
-  <string name="extmedia_format_message_cm" product="default">Toate datele de pe pe card-ul (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
   <string name="usb_storage_notification_manage_message">Atinge pentru a gestiona</string>
   <string name="sd_ext_media_checking_notification_title">Se pregătește cardul SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Se verifică cardul SD pentru erori\u2026</string>

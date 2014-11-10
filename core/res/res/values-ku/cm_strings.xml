@@ -48,7 +48,6 @@
   <string name="permlab_preventpower">بەرگری لە کلیلی هێز</string>
   <string name="permdesc_preventpower">ڕێگە دان بە بەرنامەکە</string>
   <string name="permlab_sendMockSms">ناردنی په‌یام پۆش</string>
-  <string name="permdesc_sendMockSms">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ناردنی په‌یام پۆش. ئه‌مه‌ ڕێگه‌ به‌ به‌رنامه‌کان ده‌دات بۆ ناردنی نامه‌ بۆ به‌رنامه‌ باوه‌ڕپێکراوه‌کان.ئاگاداربه‌ به‌رنامه‌ ناحه‌زه‌کان بۆ کاری خراپ به‌کاری نه‌هێنن، وه‌ک ڕاگرتنی ئاگاداری ئامێر و بێزارکردنی به‌کارهێنه‌ر.</string>
   <string name="storage_sd_dock_card">Dock بیرگەی دەرەکی</string>
   <string name="app_killed_message">بەرنامەکە کوژرا</string>
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>
@@ -135,8 +134,6 @@
   <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
   <string name="adb_both_active_notification_title">ABD سه‌روو USB وamp; هێڵ کارده‌کات</string>
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی USB (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
-  <string name="extmedia_format_message_cm" product="default">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی ناوه‌کی (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
   <string name="usb_storage_notification_manage_message">بە سووکی لێدە بۆ بەڕێوەبردن</string>
   <string name="sd_ext_media_nofs_notification_title">بیرگەی دەرەکی بەتاڵ</string>
   <string name="sd_ext_media_nofs_notification_message">بیرگەی دەرەکی بەتاڵە یان سیستەمی پەڕگە پشتگیری ناکرێت.</string>

@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">modifica azione tasto spegnimento</string>
   <string name="permdesc_preventpower">Consente all\'app di cambiare il comportamento del tasto di spegnimento</string>
   <string name="permlab_sendMockSms">invia messaggi SMS fittizi</string>
-  <string name="permdesc_sendMockSms">Consente all\'app di inviare messaggi SMS fittizi. Le app dannose potrebbero inviare messaggi in modo continuo, bloccando il sistema di notifica del dispositivo e disturbando l\'utente.</string>
+  <string name="permdesc_sendMockSms">Consente all\'app di inviare messaggi SMS fittizi, ovvero di inviare messaggi a applicazioni affidabili. Le applicazioni maligne potrebbero inviare messaggi in modo continuo, bloccando il sistema di notifica del dispositivo e disturbando l\'utente.</string>
   <string name="storage_sd_dock_card">Scheda SD dock</string>
   <string name="app_killed_message">App terminata</string>
   <string name="global_action_reboot">Riavvia</string>
@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
   <string name="permlab_useHardwareFramework">utilizza framework hardware</string>
   <string name="permdesc_useHardwareFramework">Consente all\'app di accedere al framework hardware di CM.</string>
-  <string name="permlab_keyguardApplicationWidget">imposta widget sulla schermata di sblocco</string>
-  <string name="permdesc_keyguardApplicationWidget">Consente all\'app di impostare un widget sulla schermata di sblocco.</string>
+  <string name="permlab_keyguardApplicationWidget">imposta widget dell\'app su schermata di blocco</string>
+  <string name="permdesc_keyguardApplicationWidget">Consente all\'app di visualizzare un widget sulla schermata di blocco.</string>
   <string name="immersive_mode_confirmation_bottom">Scorrere dal basso verso l\'alto per uscire dalla modalità schermo intero.</string>
   <string name="app_ops_access_camera">accedere alla fotocamera</string>
   <string name="app_ops_access_location">accedere alla posizione</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB attraverso la rete attivato</string>
   <string name="adb_both_active_notification_title">ADB attraverso USB &amp; rete attivato</string>
   <string name="adb_active_generic_notification_message">Tocca per disattivare il debug.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Tutti i dati sulla memoria USB (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
-  <string name="extmedia_format_message_cm" product="default">Tutti i dati sulla scheda (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
+  <string name="usb_extmedia_format_message">Tutti i dati sulla memoria USB (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
+  <string name="sd_extmedia_format_message">Tutti i dati sulla scheda (nel percorso \'%1$s\') verranno eliminati. Questa azione non è reversibile!</string>
   <string name="usb_storage_notification_manage_message">Tocca per gestire</string>
   <string name="sd_ext_media_checking_notification_title">Preparazione scheda SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Controllo errori su scheda SD\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Impossibile installare il tema</string>
   <string name="theme_install_error_message">Impossibile installare %s</string>
   <string name="storage_uicc">Memoria UICC</string>
+  <string name="sd_progress_unmounting">Smontaggio scheda SD\u2026</string>
+  <string name="sd_progress_erasing">Cancellazione scheda  SD\u2026</string>
+  <string name="sd_format_error">Impossibile cancellare scheda SD.</string>
+  <string name="sd_media_bad_removal">La scheda SD è stata rimossa prima di essere stata smontata.</string>
+  <string name="sd_media_checking">Controllo della scheda SD in corso.</string>
+  <string name="sd_media_removed">La scheda SD è stata rimossa.</string>
+  <string name="sd_media_shared">La scheda SD è attualmente utilizzata da un computer.</string>
+  <string name="usb_progress_unmounting">Smontaggio archivio USB\u2026</string>
+  <string name="usb_progress_erasing">Cancellazione memoria USB\u2026</string>
+  <string name="usb_format_error">Impossibile cancellare la memoria USB.</string>
+  <string name="usb_media_bad_removal">La memoria USB è stata rimossa prima di essere stata smontata.</string>
+  <string name="usb_media_checking">Controllo della memoria USB in corso.</string>
+  <string name="usb_media_removed">La memoria USB è stata rimossa.</string>
+  <string name="usb_media_shared">La memoria USB è attualmente utilizzata da un computer.</string>
 </resources>

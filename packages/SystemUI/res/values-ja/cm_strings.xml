@@ -61,7 +61,7 @@
   <string name="quick_settings_camera_error_connect">カメラに接続できません</string>
   <string name="navbar_dialog_title">割り当てる動作を選択</string>
   <string name="navbar_home_button">ホームボタン</string>
-  <string name="navbar_recent_button">履歴ボタン</string>
+  <string name="navbar_recent_button">最近使ったアプリボタン</string>
   <string name="navbar_search_button">検索ボタン</string>
   <string name="navbar_back_button">戻るボタン</string>
   <string name="navbar_empty_button">なし</string>

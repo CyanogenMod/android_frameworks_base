@@ -21,7 +21,7 @@
   <string name="quick_settings_screen_sleep">進入休眠</string>
   <string name="quick_settings_label_enabled">開啟</string>
   <string name="quick_settings_ringer_normal">聲音</string>
-  <string name="quick_settings_lockscreen">鎖定螢幕</string>
+  <string name="quick_settings_lockscreen">鎖定畫面</string>
   <string name="quick_settings_network_type">網絡模式</string>
   <string name="quick_settings_report_bug">報告錯誤</string>
   <string name="quick_settings_sync">同步</string>
@@ -49,6 +49,9 @@
   <string name="location_mode_sensors_only_title">僅限裝置</string>
   <string name="quick_settings_expanded_desktop">已擴展</string>
   <string name="quick_settings_expanded_desktop_off">正常</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="other">%1$d 已連綫</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">無法連接到相機</string>
   <string name="navbar_dialog_title">選擇要指定的操作</string>
   <string name="navbar_home_button">主頁按鈕</string>

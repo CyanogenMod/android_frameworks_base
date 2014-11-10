@@ -48,7 +48,6 @@
   <string name="permlab_preventpower">Verhoed krag knoppie</string>
   <string name="permdesc_preventpower">Laat die program toe om die krag knoppie se gebruik te verander.</string>
   <string name="permlab_sendMockSms">Stuur skyn-SMS boodskappe</string>
-  <string name="permdesc_sendMockSms">Laat die program toe om skyn-SMS boodskappe stuur. Dit laat \'n program toe om \'n SMS te stuur na betroubare programme. Kwaadwillige programme kan boodskappe voortdurend stuur, dit sal die kennisgewings stelsel blokkeer en die gebruiker ontwrig.</string>
   <string name="storage_sd_dock_card">Dok SD kaart</string>
   <string name="app_killed_message">Program beëindig</string>
   <string name="global_action_reboot">Herlaai</string>
@@ -134,8 +133,8 @@
   <string name="adb_net_active_notification_title">ADB oor netwerk is aktief</string>
   <string name="adb_both_active_notification_title">ADB oor USB &amp; netwerk is aktief</string>
   <string name="adb_active_generic_notification_message">Raak om ontfouting af te skakel.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Alle data op jou USB-berging (onder die pad \'%1$s\') sal uitgevee word. Hierdie aksie kan nie ontdoen word nie!</string>
-  <string name="extmedia_format_message_cm" product="default">Alle data op jou kaart (onder die pad \'%1$s\') sal uitgewis word. Hierdie aksie kan nie ontdoen word nie!</string>
+  <string name="usb_extmedia_format_message">Alle data op jou USB-berging (onder die pad \'%1$s\') sal uitgevee word. Hierdie aksie kan nie ontdoen word nie!</string>
+  <string name="sd_extmedia_format_message">Alle data op jou kaart (onder die pad \'%1$s\') sal uitgewis word. Hierdie aksie kan nie ontdoen word nie!</string>
   <string name="usb_storage_notification_manage_message">Raak om te bestuur</string>
   <string name="sd_ext_media_checking_notification_title">Voorbereiding van SD kaart\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Nagaan van SD kaart vir foute\u2026</string>
@@ -174,4 +173,19 @@
   <string name="stk_cc_ss_to_ss">SS versoek verander na nuwe SS versoek.</string>
   <string name="theme_install_error_title">Kon nie tema installeer</string>
   <string name="theme_install_error_message">%s kon nie geïnstalleer word nie</string>
+  <string name="storage_uicc">UICC stoor spasie</string>
+  <string name="sd_progress_unmounting">Besig om SD kaart te ontlaai\u2026</string>
+  <string name="sd_progress_erasing">Besig met skoonmaak van SD kaart\u2026</string>
+  <string name="sd_format_error">Kon nie SD kaart skoon maak nie.</string>
+  <string name="sd_media_bad_removal">SD kaart was verwyder voordat dit ontlaai was.</string>
+  <string name="sd_media_checking">SD kaart word huidiglik nagegaan.</string>
+  <string name="sd_media_removed">SD kaart is alreeds verwyder.</string>
+  <string name="sd_media_shared">SD kaart word huidiglik deer \'n rekenaar gebruik.</string>
+  <string name="usb_progress_unmounting">Besig om USB stoor spasie te ontlaai\u2026</string>
+  <string name="usb_progress_erasing">Besig met skoonmaak van USB stoor spasie\u2026</string>
+  <string name="usb_format_error">Kon nie USB stoor spasie skoonmaak nie.</string>
+  <string name="usb_media_bad_removal">USB stoor spasie is verwyder voordat dit ontheg was.</string>
+  <string name="usb_media_checking">USB stoor spasie word tans gekontroleer.</string>
+  <string name="usb_media_removed">USB stoor spasie is verwyder.</string>
+  <string name="usb_media_shared">USB stoor spasie is word tans gebruik deur \'n rekenaar.</string>
 </resources>

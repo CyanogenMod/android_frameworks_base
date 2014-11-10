@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Leidžia programai pakeisti ekrano užrakto foną.</string>
   <string name="permlab_useHardwareFramework">naudoti aparatinės įrangos sistemą</string>
   <string name="permdesc_useHardwareFramework">Leidžia programai pasiekti CM aparatinės įrangos sistemą.</string>
+  <string name="permlab_keyguardApplicationWidget">nustatyti klaviatūros apsaugos valdiklį</string>
+  <string name="permdesc_keyguardApplicationWidget">Leidžia programai nustatyti klaviatūros apsaugos valdiklį.</string>
   <string name="immersive_mode_confirmation_bottom">Braukite aukštyn iš apačios norėdami išeiti iš viso ekrano.</string>
   <string name="app_ops_access_camera">pasiekti fotoaparatą</string>
   <string name="app_ops_access_location">pasiekti jūsų vietą</string>
@@ -134,8 +136,8 @@
   <string name="adb_net_active_notification_title">USB derinimas per tinklą įjungtas</string>
   <string name="adb_both_active_notification_title">USB derinimas per USB / tinklą įjungtas</string>
   <string name="adb_active_generic_notification_message">Palieskite norėdami išjungti derinimą.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Visi („%1$s“) USB saugyklos duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
-  <string name="extmedia_format_message_cm" product="default">Visi („%1$s“) kortelės duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
+  <string name="usb_extmedia_format_message">Visi („%1$s“) USB saugyklos duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
+  <string name="sd_extmedia_format_message">Visi („%1$s“) kortelės duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
   <string name="usb_storage_notification_manage_message">Bakstelėkite norėdami valdyti</string>
   <string name="sd_ext_media_checking_notification_title">SD kortelė ruošiama\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD kortelėje ieškoma klaidų\u2026</string>
@@ -174,4 +176,19 @@
   <string name="stk_cc_ss_to_ss">SS užklausa pakeista į naują SS prašymą.</string>
   <string name="theme_install_error_title">Nepavyko įdiegti temos</string>
   <string name="theme_install_error_message">%s nepavyko įdiegti</string>
+  <string name="storage_uicc">UICC saugykla</string>
+  <string name="sd_progress_unmounting">Atjungiama SD kortelė\u2026</string>
+  <string name="sd_progress_erasing">Ištrinama SD kortelė\u2026</string>
+  <string name="sd_format_error">Nepavyko ištrinti SD kortelės.</string>
+  <string name="sd_media_bad_removal">SD kortelė buvo pašalinta prieš atjungiant.</string>
+  <string name="sd_media_checking">SD kortelė tikrinama.</string>
+  <string name="sd_media_removed">SD kortelė pašalinta.</string>
+  <string name="sd_media_shared">SD kortelė dabar naudojama kompiuterio.</string>
+  <string name="usb_progress_unmounting">Atjungiama USB saugykla\u2026</string>
+  <string name="usb_progress_erasing">Ištrinama USB saugykla\u2026</string>
+  <string name="usb_format_error">Nepavyko ištrinti USB saugyklos.</string>
+  <string name="usb_media_bad_removal">USB saugykla buvo pašalinta prieš atjungiant.</string>
+  <string name="usb_media_checking">USB saugykla tikrinama.</string>
+  <string name="usb_media_removed">USB saugykla pašalinta.</string>
+  <string name="usb_media_shared">USB saugykla dabar naudojama kompiuterio.</string>
 </resources>

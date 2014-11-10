@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
   <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
   <string name="permdesc_useHardwareFramework">CMハードウェアフレームワークへのアクセスをアプリに許可します。</string>
-  <string name="permlab_keyguardApplicationWidget">キーガードアプリケーションウィジェットの設定</string>
-  <string name="permdesc_keyguardApplicationWidget">キーガード上のアプリケーションウィジェットを設定することをアプリに許可します。</string>
+  <string name="permlab_keyguardApplicationWidget">キーガードアプリウィジェットの設置</string>
+  <string name="permdesc_keyguardApplicationWidget">キーガードにアプリウィジェットを設置することをアプリに許可します。</string>
   <string name="immersive_mode_confirmation_bottom">全画面表示を終了するには、上から下にスワイプ</string>
   <string name="app_ops_access_camera">カメラへのアクセス</string>
   <string name="app_ops_access_location">位置情報へのアクセス</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ネットワーク経由のADBが有効です</string>
   <string name="adb_both_active_notification_title">USBとネットワーク経由のADBが有効です</string>
   <string name="adb_active_generic_notification_message">タップしてデバッグを無効にします。</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">USBストレージ上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
-  <string name="extmedia_format_message_cm" product="default">カード上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
+  <string name="usb_extmedia_format_message">USBストレージ上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
+  <string name="sd_extmedia_format_message">カード上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
   <string name="usb_storage_notification_manage_message">タップして管理する</string>
   <string name="sd_ext_media_checking_notification_title">SDカードを準備中\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SDカードのエラーを確認しています\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">テーマをインストールできませんでした</string>
   <string name="theme_install_error_message">%sをインストールできませんでした</string>
   <string name="storage_uicc">UICCストレージ</string>
+  <string name="sd_progress_unmounting">SDカードのマウントを解除しています\u2026</string>
+  <string name="sd_progress_erasing">SDカードを消去しています\u2026</string>
+  <string name="sd_format_error">SDカードを消去できませんでした。</string>
+  <string name="sd_media_bad_removal">SDカードがマウントを解除する前に取り外されました。</string>
+  <string name="sd_media_checking">SDカードを現在確認しています。</string>
+  <string name="sd_media_removed">SDカードが取り外されました。</string>
+  <string name="sd_media_shared">SDカードは現在コンピュータで使用されています。</string>
+  <string name="usb_progress_unmounting">USBストレージのマウントを解除しています\u2026</string>
+  <string name="usb_progress_erasing">USBストレージを消去しています\u2026</string>
+  <string name="usb_format_error">USBストレージを消去できませんでした。</string>
+  <string name="usb_media_bad_removal">USBストレージがマウントを解除する前に取り外されました。</string>
+  <string name="usb_media_checking">USBストレージを現在確認しています。</string>
+  <string name="usb_media_removed">USBストレージが取り外されました。</string>
+  <string name="usb_media_shared">USBストレージは現在コンピュータで使用されています。</string>
 </resources>

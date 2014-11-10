@@ -16,15 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">鎖定畫面</string>
-  <string name="keyguard_discharging">已停止充電，<xliff:g id="number"> %d </xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <plurals name="missed_calls">
-    <item quantity="other">%d 個未接來電</item>
+  <plurals name="tethered_clients_connected">
+    <item quantity="zero">لا أجهزة متّصلة (%d)</item>
+    <item quantity="one">جهاز واحد متّصل (%d)</item>
+    <item quantity="two">جهازان متّصلان (%d)</item>
+    <item quantity="few">%d أجهزة متّصلة</item>
+    <item quantity="many">%d جهازًا متّصلًا</item>
+    <item quantity="other">%d جهاز متّصل</item>
   </plurals>
-  <plurals name="unread_messages">
-    <item quantity="other">%d 未讀訊息</item>
-  </plurals>
-  <string name="missed_call">未接來電</string>
-  <string name="message_from">訊息來自</string>
-  <string name="message_from_person">訊息來自 %1$s</string>
 </resources>

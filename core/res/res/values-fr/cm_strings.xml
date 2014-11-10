@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">outrepasser le bouton marche/arrêt</string>
   <string name="permdesc_preventpower">Permet à l\'application d\'outrepasser le bouton marche/arrêt</string>
   <string name="permlab_sendMockSms">envoyer des SMS simulés</string>
-  <string name="permdesc_sendMockSms">Permet à l\'application d\'envoyer des messages simulés. Cela permet à une application d\'envoyer des SMS à des applications de confiance. Des applications malveillantes peuvent envoyer des messages en permanence, bloquer le système de notification de l\'appareil et perturber l\'utilisateur.</string>
+  <string name="permdesc_sendMockSms">Permet à l\'application de simuler l\'envoi de SMS. Cela permet à une application d\'envoyer des messages à des applications de confiance. Des applications malveillantes pourraient envoyer des messages continuellement, bloquer le système de notification de l\'appareil et gêner l\'utilisateur.</string>
   <string name="storage_sd_dock_card">Dock carte SD</string>
   <string name="app_killed_message">Application arrêtée</string>
   <string name="global_action_reboot">Redémarrer</string>
@@ -65,26 +65,28 @@
   <string name="perf_profile_pwrsv">Économie d\'énergie</string>
   <string name="perf_profile_bal">Équilibré</string>
   <string name="perf_profile_perf">Performance</string>
-  <string name="permlab_interceptSmsSent">Intercepte les SMS sortants</string>
+  <string name="permlab_interceptSmsSent">intercepte les SMS sortants</string>
   <string name="permdesc_interceptSmsSent">Permet à l\'application d\'intercepter les SMS sortants. Des applications malveillantes peuvent utiliser cela pour empêcher l\'envoie de SMS.</string>
   <string name="permlab_resetBatteryStats">réinitialiser les statistiques de la batterie</string>
   <string name="permdesc_resetBatteryStats">Permet à une application de réinitialiser les données actuelles d\'utilisation de la batterie à faible niveau.</string>
   <string name="permgrouplab_security">Sécurité</string>
   <string name="permgroupdesc_security">Autorisations liées à des informations de sécurité de l\'appareil.</string>
   <string name="permlab_readPhoneBlacklist">lire la liste noire de téléphone</string>
-  <string name="permdesc_readPhoneBlacklist">Autorise une application de lire les informations sur les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
+  <string name="permdesc_readPhoneBlacklist">Permet à l\'application de lire les informations sur les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_changePhoneBlacklist">modifier la liste noire du téléphone</string>
-  <string name="permdesc_changePhoneBlacklist">Autorise une application à modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
+  <string name="permdesc_changePhoneBlacklist">Permet à l\'application de modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_accessThemeService">accéder au service de thème</string>
-  <string name="permdesc_accessThemeService">Autorise une application à accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
+  <string name="permdesc_accessThemeService">Permet à l\'application d\'accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
   <string name="permlab_readThemes">lire les informations de votre thème</string>
   <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
   <string name="permlab_writeThemes">modifier vos thèmes</string>
   <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
   <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran de verrouillage</string>
-  <string name="permdesc_setKeyguardWallpaper">Autorise une application à changer le fond de l\'écran de verrouillage.</string>
+  <string name="permdesc_setKeyguardWallpaper">Permet à l\'application de changer le fond de l\'écran de verrouillage.</string>
   <string name="permlab_useHardwareFramework">Utiliser le framework matériel</string>
   <string name="permdesc_useHardwareFramework">Permet à une application l\'accès au framework matériel de CM.</string>
+  <string name="permlab_keyguardApplicationWidget">définir le widget d\'écran de verrouillage</string>
+  <string name="permdesc_keyguardApplicationWidget">Permet à l\'application de définir un widget sur l\'écran de verrouillage.</string>
   <string name="immersive_mode_confirmation_bottom">Glisser de haut en bas pour quitter le mode plein écran.</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
   <string name="app_ops_access_location">accéder à votre localisation</string>
@@ -134,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB sur réseau activé</string>
   <string name="adb_both_active_notification_title">ADB sur USB et réseau activé</string>
   <string name="adb_active_generic_notification_message">Appuyez pour désactiver le débogage.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Toutes les données sur votre stockage USB (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
-  <string name="extmedia_format_message_cm" product="default">Toutes les données sur votre carte (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
+  <string name="usb_extmedia_format_message">Toutes les données sur votre stockage USB (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
+  <string name="sd_extmedia_format_message">Toutes les données sur votre carte (avec comme chemin d\'accès \'%1$s\') seront effacées. Cette action est irréversible !</string>
   <string name="usb_storage_notification_manage_message">Appuyez pour configurer</string>
   <string name="sd_ext_media_checking_notification_title">Préparation de la carte SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Vérification de la carte SD\u2026</string>
@@ -175,4 +177,18 @@
   <string name="theme_install_error_title">Impossible d\'installer le thème</string>
   <string name="theme_install_error_message">Impossible d\'installer %s</string>
   <string name="storage_uicc">Stockage de l\'UICC</string>
+  <string name="sd_progress_unmounting">Démontage de la carte SD\u2026</string>
+  <string name="sd_progress_erasing">Effacement de la carte SD\u2026</string>
+  <string name="sd_format_error">Impossible d\'effacer la carte SD.</string>
+  <string name="sd_media_bad_removal">La carte SD a été retirée avant d\'être démontée.</string>
+  <string name="sd_media_checking">Vérification de la carte SD.</string>
+  <string name="sd_media_removed">La carte SD a été retirée.</string>
+  <string name="sd_media_shared">La carte SD est actuellement utilisée par un ordinateur.</string>
+  <string name="usb_progress_unmounting">Démontage du stockage USB\u2026</string>
+  <string name="usb_progress_erasing">Effacement du stockage USB\u2026</string>
+  <string name="usb_format_error">Impossible d\'effacer le stockage USB.</string>
+  <string name="usb_media_bad_removal">Le stockage USB a été retiré avant d\'être démonté.</string>
+  <string name="usb_media_checking">Vérification du stockage USB.</string>
+  <string name="usb_media_removed">Le stockage USB a été retiré.</string>
+  <string name="usb_media_shared">Le stockage USB est actuellement utilisé par un ordinateur.</string>
 </resources>
