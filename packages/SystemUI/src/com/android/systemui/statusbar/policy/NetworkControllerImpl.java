@@ -65,7 +65,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         implements NetworkController, DemoMode {
     // debug
     static final String TAG = "StatusBar.NetworkController";
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final boolean CHATTY = false; // additional diagnostics, but not logspew
 
     // telephony
