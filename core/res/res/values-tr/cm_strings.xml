@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">güç tuşunu engelle</string>
   <string name="permdesc_preventpower">Uygulamanın güç tuşunun işlevini değiştirmesine izin verir.</string>
   <string name="permlab_sendMockSms">sahte SMS gönder</string>
-  <string name="permdesc_sendMockSms">Uygulamanın sahte SMSler göndermesine izin verir. Bir uygulamanın güvenilir uygulamalara SMS gönderimine olanak sağlar. Kötücül uygulamalar sürekli mesajlar gönderip, cihazınızın bildirim sistemini bozabilir ve kullanıcıyı rahatsız edebilir.</string>
+  <string name="permdesc_sendMockSms">Uygulamanın sahte SMSler göndermesine izin verir. Bir uygulamanın güvenilir uygulamalara SMS gönderimine olanak sağlar. Kötü amaçlı uygulamalar sürekli mesajlar gönderip, cihazınızın bildirim sistemini bozabilir ve kullanıcıyı rahatsız edebilir.</string>
   <string name="storage_sd_dock_card">SD kart genişletmesi</string>
   <string name="app_killed_message">Uygulama sonlandırıldı</string>
   <string name="global_action_reboot">Yeniden başlat</string>
@@ -87,8 +87,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permdesc_setKeyguardWallpaper">Bir uygulamanın kilit ekranı duvar kağıdını değiştirmesine izin verir.</string>
   <string name="permlab_useHardwareFramework">donanım altyapısını kullan</string>
   <string name="permdesc_useHardwareFramework">Uygulamanın CM donanım altyapısına erişimine izin verir.</string>
-  <string name="permlab_keyguardApplicationWidget">tuş kilidi uygulaması widgetinı ayarla</string>
-  <string name="permdesc_keyguardApplicationWidget">Uygulamalara kilit ekranındaki uygulama widgetlerını ayarlama izni verir.</string>
+  <string name="permlab_keyguardApplicationWidget">tuş kilidi uygulama widgetını ayarla</string>
+  <string name="permdesc_keyguardApplicationWidget">Bir uygulamanın tuş kilidine uygulama widgetı yerleştirmesine izin verir.</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıkmak için aşağıdan yukarı kaydırın.</string>
   <string name="app_ops_access_camera">kameraya eriş</string>
   <string name="app_ops_access_location">konuma erişim</string>
@@ -138,8 +138,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="adb_net_active_notification_title">Ağ üzerinden ADB etkin</string>
   <string name="adb_both_active_notification_title">USB &amp; Ağ üzerinden ADB etkin</string>
   <string name="adb_active_generic_notification_message">Hata ayıklamayı devre dışı bırakmak için dokunun.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">USB bellek (%1$s) alanınızdaki tüm veri silinecek. Bu işlem geri alınamaz!</string>
-  <string name="extmedia_format_message_cm" product="default">Kartınızdaki (%1$s) tüm veri silinecek. Bu işlem geri alınamaz!</string>
+  <string name="usb_extmedia_format_message">USB bellek (%1$s) alanınızdaki tüm veri silinecek. Bu işlem geri alınamaz!</string>
+  <string name="sd_extmedia_format_message">Kartınızdaki (%1$s) tüm veri silinecek. Bu işlem geri alınamaz!</string>
   <string name="usb_storage_notification_manage_message">Yönetmek için dokunun</string>
   <string name="sd_ext_media_checking_notification_title">SD kart hazırlanıyor\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD kart hataları denetleniyor\u2026</string>
@@ -179,4 +179,18 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="theme_install_error_title">Tema yüklenemedi</string>
   <string name="theme_install_error_message">%s yüklenemedi</string>
   <string name="storage_uicc">UICC depolama</string>
+  <string name="sd_progress_unmounting">SD kartın bağlantısı kesiliyor\u2026</string>
+  <string name="sd_progress_erasing">SD kart siliniyor\u2026</string>
+  <string name="sd_format_error">SD kart silinemedi.</string>
+  <string name="sd_media_bad_removal">SD kart bağlantısı kesilmeden önce kaldırıldı.</string>
+  <string name="sd_media_checking">SD kart kontrol ediliyor.</string>
+  <string name="sd_media_removed">SD kart kaldırıldı.</string>
+  <string name="sd_media_shared">SD kart şu anda bir bilgisayar tarafından kullanılıyor.</string>
+  <string name="usb_progress_unmounting">USB belleğin bağlantısı kesiliyor\u2026</string>
+  <string name="usb_progress_erasing">USB bellek siliniyor\u2026</string>
+  <string name="usb_format_error">USB bellek silinemedi.</string>
+  <string name="usb_media_bad_removal">USB bellek bağlantısı kesilmeden önce kaldırıldı.</string>
+  <string name="usb_media_checking">USB bellek kontrol ediliyor.</string>
+  <string name="usb_media_removed">USB bellek kaldırıldı.</string>
+  <string name="usb_media_shared">USB bellek şu anda bir bilgisayar tarafından kullanılıyor.</string>
 </resources>

@@ -47,7 +47,6 @@
   <string name="permlab_preventpower">vältida toitenuppu</string>
   <string name="permdesc_preventpower">Lubab rakendusel toitenuppu eirata</string>
   <string name="permlab_sendMockSms">saata võlts SMS sõnumeid</string>
-  <string name="permdesc_sendMockSms">Lubab rakendusel saata võlts-SMS\'e. See annab rakendusele loa saata SMS-e usaldatud rakendustele. Pahavaralised rakendused võivad saata sõnumeid pidevalt, takistades seadme teavitussüsteemi ja häirida kasutajat.</string>
   <string name="storage_sd_dock_card">Doki SD-kaart</string>
   <string name="app_killed_message">Rakendus lõpetatud</string>
   <string name="global_action_reboot">Taaskäivitamine</string>
@@ -134,6 +133,4 @@ muuta juba olemasolevaid.</string>
   <string name="adb_net_active_notification_title">ADB üle võrgu aktiveeritud</string>
   <string name="adb_both_active_notification_title">ADB üle USB &amp; võrgu aktiveeritud</string>
   <string name="adb_active_generic_notification_message">Puuduta debuggimise lõpetamiseks.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Kõik andmed sinu USB mälul (\'%1$s\' all) kustutatakse. Seda toimingut ei saa tagasi võtta!</string>
-  <string name="extmedia_format_message_cm" product="default">Kõik andmed sinu kaardil (\'%1$s\' all) kustutatakse. Seda toimingut ei saa tagasi võtta!</string>
 </resources>

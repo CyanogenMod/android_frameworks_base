@@ -72,5 +72,8 @@
   <string name="app_ops_use_notification_volume">d\'Notifikatiounslautstäerkt z\'änneren</string>
   <string name="app_ops_write_mms">eng MMS ze schreiwen</string>
   <string name="app_ops_write_sms">eng SMS ze schreiwen</string>
+  <string name="sd_ext_media_nofs_notification_title">Eidel SD-Kaart</string>
+  <string name="sd_ext_media_unmountable_notification_title">Feelerhaft SD-Kaart</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-Kaart erausgeholl</string>
   <string name="usb_ext_media_unmountable_notification_title">Feelerhaften USB-Späicher</string>
 </resources>

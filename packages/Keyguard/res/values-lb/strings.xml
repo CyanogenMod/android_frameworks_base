@@ -19,8 +19,8 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_password_enter_pin_code">PIN-Code antippen</string>
-  <string name="keyguard_password_enter_puk_code">SIM-PUK an nei PIN antippen</string>
+  <string name="keyguard_password_enter_pin_code">PIN-Code aginn</string>
+  <string name="keyguard_password_enter_puk_code">SIM-PUK an nei PIN aginn</string>
   <string name="keyguard_password_enter_puk_prompt">SIM-PUK-Code</string>
   <string name="keyguard_password_enter_pin_prompt">Neie SIM-PIN-Code</string>
   <string name="keyguard_password_entry_touch_hint"><font size="17">Dréck fir d\'Passwuert anzeginn</font></string>

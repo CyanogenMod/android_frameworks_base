@@ -42,7 +42,6 @@
   <string name="reboot_confirm" product="tablet">আপনার ট্যাবলেট পুনরায় চালু হবে।</string>
   <string name="reboot_confirm" product="default">আপনার ফোন পুনরায় চালু হবে।</string>
   <string name="permlab_sendMockSms">মক এসএমএস বার্তাসমূহ প্রেরণ করুন</string>
-  <string name="permdesc_sendMockSms">অ্যাপটিকে মক এসএমএস বার্তা প্রেরণ করার অনুমতি দিন। একটি অ্যাপের এই অনুমতি বিশ্বস্ত অ্যাপ্লিকেশনে এসএমএস পাঠাতে পারবে। ক্ষতিকর অ্যাপ ধারাবাহিকভাবে বার্তা পাঠাতে পারে, যা ডিভাইসের নোটিফিকেশন ব্যবস্থা অবরুদ্ধ এবং ব্যবহারকারীকে ব্যাহত করতে পারে।</string>
   <string name="global_action_reboot">পুনরায় চালু</string>
   <string name="global_action_choose_profile">প্রোফাইল</string>
   <string name="profile_picker_title">প্রোফাইলস</string>

@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">Отладка по сети разрешена</string>
   <string name="adb_both_active_notification_title">Отладка по сети и USB разрешена</string>
   <string name="adb_active_generic_notification_message">Нажмите, чтобы отключить отладку.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Все данные на USB-накопителе (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
-  <string name="extmedia_format_message_cm" product="default">Все данные на карте (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
+  <string name="usb_extmedia_format_message">Все данные на USB-накопителе (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
+  <string name="sd_extmedia_format_message">Все данные на карте (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
   <string name="usb_storage_notification_manage_message">Нажмите, чтобы открыть список опций.</string>
   <string name="sd_ext_media_checking_notification_title">Подготовка SD-карты\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Выполняется проверка карты на наличие ошибок\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Не удалось установить тему</string>
   <string name="theme_install_error_message">Сбой при установке «%s»</string>
   <string name="storage_uicc">Хранилище UICC</string>
+  <string name="sd_progress_unmounting">Отключение SD-карты\u2026</string>
+  <string name="sd_progress_erasing">Очистка SD-карты\u2026</string>
+  <string name="sd_format_error">Не удалось очистить SD-карту.</string>
+  <string name="sd_media_bad_removal">SD-карта была извлечена до отключения.</string>
+  <string name="sd_media_checking">Выполняется проверка SD-карты.</string>
+  <string name="sd_media_removed">SD-карта была отключена.</string>
+  <string name="sd_media_shared">Сейчас SD-карта используется компьютером.</string>
+  <string name="usb_progress_unmounting">Отключение USB-накопителя\u2026</string>
+  <string name="usb_progress_erasing">Очистка USB-накопителя\u2026</string>
+  <string name="usb_format_error">Не удалось очистить USB-накопитель.</string>
+  <string name="usb_media_bad_removal">USB-накопитель был извлечён до отключения.</string>
+  <string name="usb_media_checking">USB-накопитель проверяется.</string>
+  <string name="usb_media_removed">USB-накопитель извлечён.</string>
+  <string name="usb_media_shared">Сейчас USB-накопитель используется компьютером.</string>
 </resources>

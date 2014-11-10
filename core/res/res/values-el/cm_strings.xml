@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB μέσω δικτύου ενεργοποιημένο</string>
   <string name="adb_both_active_notification_title">ADB μέσω USB &amp; δικτύου ενεργοποιημένο</string>
   <string name="adb_active_generic_notification_message">Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Όλα τα αρχεία στον αποθηκευτικό σας χώρο USB (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
-  <string name="extmedia_format_message_cm" product="default">Όλα τα δεδομένα στην κάρτα σας (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
+  <string name="usb_extmedia_format_message">Όλα τα αρχεία στον αποθηκευτικό σας χώρο USB (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
+  <string name="sd_extmedia_format_message">Όλα τα δεδομένα στην κάρτα σας (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
   <string name="usb_storage_notification_manage_message">Πατήστε για διαχείριση</string>
   <string name="sd_ext_media_checking_notification_title">Προετοιμασία κάρτας SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Έλεγχος κάρτας SD για σφάλματα\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
   <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
   <string name="storage_uicc">Αποθ. χώρος UICC</string>
+  <string name="sd_progress_unmounting">Αποπροσάρτηση κάρτας SD\u2026</string>
+  <string name="sd_progress_erasing">Διαγραφή κάρτας SD\u2026</string>
+  <string name="sd_format_error">Δεν ήταν δυνατή η διαγραφή της κάρτας SD.</string>
+  <string name="sd_media_bad_removal">Η κάρτα SD αφαιρέθηκε πριν την αποπροσάρτησή της.</string>
+  <string name="sd_media_checking">Αυτή τη στιγμή γίνεται έλεγχος της κάρτας SD.</string>
+  <string name="sd_media_removed">Η κάρτα SD έχει αφαιρεθεί.</string>
+  <string name="sd_media_shared">Αυτή τη στιγμή η κάρτα SD χρησιμοποιείται από κάποιον υπολογιστή.</string>
+  <string name="usb_progress_unmounting">Αποπροσάρτηση αποθ. χώρου USB\u2026</string>
+  <string name="usb_progress_erasing">Διαγραφή αποθ. χώρου USB\u2026</string>
+  <string name="usb_format_error">Δεν ήταν δυνατή η διαγραφή του αποθ. χώρου USB.</string>
+  <string name="usb_media_bad_removal">Ο αποθ. χώρος USB αφαιρέθηκε πριν την αποπροσάρτησή του.</string>
+  <string name="usb_media_checking">Αυτή τη στιγμή γίνεται έλεγχος του αποθ. χώρου USB.</string>
+  <string name="usb_media_removed">Ο αποθ. χώρος USB έχει αφαιρεθεί.</string>
+  <string name="usb_media_shared">Αυτή τη στιγμή ο αποθ. χώρος USB χρησιμοποιείται από κάποιον υπολογιστή.</string>
 </resources>

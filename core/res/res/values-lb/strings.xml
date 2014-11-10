@@ -92,6 +92,7 @@
   <string name="serviceClassDataSync">Sync</string>
   <string name="serviceClassPacket">Pak</string>
   <string name="serviceClassPAD">PAD</string>
+  <string name="roamingText3">Aus der Noperschaft eraus</string>
   <string name="roamingText4">Aus dem Gebai eraus</string>
   <string name="roamingText5">Roaming - Preferéierte System</string>
   <string name="roamingText6">Roaming - Disponibele System</string>
@@ -104,8 +105,16 @@
   <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> no <xliff:g id="time_delay">{2}</xliff:g> Sekonnen</string>
   <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Net weidergeleet</string>
   <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Net weidergeleet</string>
+  <string name="fcComplete">Funktiounscode ofgeschloss.</string>
+  <string name="fcError">Connectiounsproblem oder ongëltege Funktiounscode.</string>
   <string name="httpErrorOk">OK</string>
+  <string name="httpError">Et gouf en Netzwierkfeeler.</string>
   <string name="httpErrorLookup">URL gouf net fonnt.</string>
+  <string name="httpErrorUnsupportedAuthScheme">Den Authentifizéierungsschema vun der Säit ass net ënnerstëtzt.</string>
+  <string name="httpErrorAuth">Konnt net authentifizéieren.</string>
+  <string name="httpErrorConnect">Konnt keng Connectioun mam Server hierstellen.</string>
+  <string name="httpErrorBadUrl">Konnt d\'Säit net opmaachen well d\'URL net gëlteg ass.</string>
+  <string name="httpErrorFile">Konnt net op de Fichier zougräifen.</string>
   <string name="httpErrorTooManyRequests">Et ginn ze vill Ufroe beaarbecht. Probéier méi spéit nees.</string>
   <string name="contentServiceSync">Sync</string>
   <string name="contentServiceSyncNotificationTitle">Sync</string>
@@ -143,6 +152,7 @@
   <string name="global_actions_airplane_mode_on_status">Fligermodus ass UN</string>
   <string name="global_actions_airplane_mode_off_status">Fligermodus ass AUS</string>
   <string name="status_bar_notification_info_overflow">999+</string>
+  <string name="safeMode">Séchere Modus</string>
   <string name="android_system_label">Android-System</string>
   <string name="permgrouplab_costMoney">Servicer déi Sue kaschten</string>
   <string name="permgrouplab_messages">Deng Messagen</string>
@@ -153,10 +163,13 @@
   <string name="permgroupdesc_socialInfo">Direkten Zougrëff op Informatiounen iwwer deng Kontakter a sozial Verbindungen.</string>
   <string name="permgrouplab_location">Däi Standuert</string>
   <string name="permgroupdesc_location">Iwwerwaacht däi physesche Standuert.</string>
+  <string name="permgrouplab_network">Netzwierk-Kommunikatioun</string>
   <string name="permgrouplab_bluetoothNetwork">Bluetooth</string>
+  <string name="permgroupdesc_bluetoothNetwork">Zougrëff op d\'Apparater an d\'Netzwierker iwwer Bluetooth.</string>
   <string name="permgrouplab_audioSettings">Tounastellungen</string>
   <string name="permgroupdesc_audioSettings">Tounastellungen änneren.</string>
   <string name="permgrouplab_affectsBattery">Auswierkungen op den Akku</string>
+  <string name="permgroupdesc_affectsBattery">Funktioune benotzen déi den Akku séier eidel maachen.</string>
   <string name="permgrouplab_calendar">Kalenner</string>
   <string name="permgrouplab_dictionary">Benotzer-Dictionnaire liesen</string>
   <string name="permgroupdesc_dictionary">Wierder am Benotzer-Dictionnaire liesen.</string>
@@ -171,16 +184,29 @@
   <string name="permgrouplab_camera">Fotoapparat</string>
   <string name="permgrouplab_screenlock">Schierm spären</string>
   <string name="permgrouplab_wallpaper">Hannergrondbild</string>
+  <string name="permgroupdesc_wallpaper">Astellunge vum Hannergrondbild vum Appart änneren.</string>
   <string name="permgrouplab_systemClock">Auer</string>
+  <string name="permgroupdesc_systemClock">Auerzäit oder Zäitzon vum Apparat änneren.</string>
   <string name="permgrouplab_statusBar">Statusleescht</string>
   <string name="permgrouplab_syncSettings">Sync-Astellungen</string>
+  <string name="permgroupdesc_syncSettings">Zougrëff op Synchroniséierungsastellungen.</string>
   <string name="permgrouplab_accounts">Deng Konten</string>
+  <string name="permgroupdesc_accounts">Zougrëff op déi disponibel Konten.</string>
+  <string name="permgrouplab_hardwareControls">Steierelementer fir Hardware</string>
   <string name="permgrouplab_phoneCalls">Uriff</string>
+  <string name="permgrouplab_systemTools">Systemgeschirer</string>
+  <string name="permgrouplab_developmentTools">Entwécklungsgeschirer</string>
   <string name="permgrouplab_storage">Späicher</string>
   <string name="permgroupdesc_storage" product="nosdcard">Op den USB-Späicher zougräifen.</string>
   <string name="permgroupdesc_storage" product="default">Op d\'SD-Kaart zougräifen.</string>
   <string name="permgrouplab_accessibilityFeatures">Funktioune fir d\'Zougänglechkeet</string>
   <string name="permgroupdesc_accessibilityFeatures">Funktiounen déi vun techneschen Hëllefsmëttele kënnen ugefrot ginn.</string>
+  <string name="permlab_statusBar">d\'Statusleescht desaktivéieren oder änneren</string>
+  <string name="permlab_statusBarService">Statusleescht</string>
+  <string name="permlab_expandStatusBar">d\'Statusleescht op-/zouklappen</string>
+  <string name="permlab_install_shortcut">Ofkierzungen installéieren</string>
+  <string name="permlab_uninstall_shortcut">Ofkierzungen desinstalléieren</string>
+  <string name="permlab_processOutgoingCalls">erausgoend Uriff ëmleeden</string>
   <string name="permlab_receiveSms">SMSen empfänken</string>
   <string name="permlab_receiveMms">MMSen empfänken</string>
   <string name="permlab_receiveEmergencyBroadcast">Noutfallwarnungen empfänken</string>
@@ -188,15 +214,48 @@
   <string name="permlab_readSms">SMSen oder MMSe liesen</string>
   <string name="permlab_writeSms">SMSen oder MMSen änneren</string>
   <string name="permlab_receiveWapPush">Textmessagen (WAP) empfänken</string>
+  <string name="permlab_getTasks">déi lafend Apps ausliesen</string>
+  <string name="permlab_interactAcrossUsers">tëscht Benotzer interagéieren</string>
   <string name="permlab_manageUsers">Benotzer verwalten</string>
+  <string name="permlab_reorderTasks">lafend Appen ëmzortéieren</string>
+  <string name="permlab_removeTasks">lafend Appe stoppen</string>
+  <string name="permlab_startAnyActivity">eng Aktivitéit starten</string>
+  <string name="permlab_forceBack">d\'Zoumaache vun der App erzwéngen</string>
+  <string name="permlab_dump">interne Systemstatus ausliesen</string>
+  <string name="permlab_temporary_enable_accessibility">Accessibilitéitsfunktiounen temporär aktivéieren</string>
+  <string name="permlab_retrieve_window_info">Fënsterinformatiounen ausliesen</string>
   <string name="permlab_filter_events">Rendezvouse filteren</string>
+  <string name="permlab_magnify_display">Schierm vergréisseren</string>
+  <string name="permlab_shutdown">partiellt Ausmaachen</string>
+  <string name="permlab_stopAppSwitches">App-Wiessel verhënneren</string>
+  <string name="permlab_batteryStats">Akkustatistiken ausliesen</string>
+  <string name="permlab_updateBatteryStats">Akkustatistiken änneren</string>
+  <string name="permlab_backup">Sécherung an Erëmhierstellung vum System steieren</string>
+  <string name="permlab_systemAlertWindow">iwwer aner Appen uweisen</string>
+  <string name="permlab_setAnimationScale">déi global Animatiounsvitess änneren</string>
   <string name="permlab_freezeScreen">Schierm fixéieren</string>
+  <string name="permlab_injectEvents">Tasten a Kontrollknäppercher drécken</string>
+  <string name="permlab_bindInputMethod">un eng Method fir anzeginn bannen</string>
+  <string name="permlab_bindAccessibilityService">un en Accessibilitéitsservice bannen</string>
+  <string name="permlab_bindNfcService">un en NFC-Service bannen</string>
+  <string name="permlab_bindTextService">un en Textservice bannen</string>
+  <string name="permlab_bindVpnService">un e VPN-Service bannen</string>
+  <string name="permlab_bindWallpaper">un en Hannergrondbild bannen</string>
+  <string name="permlab_signalPersistentProcesses">Linux-Signaler un d\'Appe schécken</string>
   <string name="permlab_clearAppUserData">Date vun aner Apps läschen</string>
+  <string name="permlab_getPackageSize">d\'Späicherplaz vun Appe moossen</string>
+  <string name="permlab_installPackages">Appen direkt installéieren</string>
+  <string name="permlab_setPreferredApplications">preferréiert Appen definéieren</string>
+  <string name="permlab_writeSettings">Systemastellungen änneren</string>
   <string name="permlab_receiveBootCompleted">Beim Start ausféieren</string>
   <string name="permlab_readContacts">d\'Kontakter liesen</string>
+  <string name="permlab_writeContacts">d\'Kontakter änneren</string>
   <string name="permlab_readCallLog">Urufflëscht liesen</string>
   <string name="permlab_writeCallLog">Urufflëscht änneren</string>
   <string name="permlab_readProfile">Deng eege Kontaktkaart liesen</string>
+  <string name="permlab_writeProfile">deng eege Kontaktkaart änneren</string>
+  <string name="permlab_configureWifiDisplay">WLAN-Schiermer konfiguréieren</string>
+  <string name="permlab_controlWifiDisplay">WLAN-Schiermer steieren</string>
   <string name="permlab_captureAudioOutput">Tounausgank ophuelen</string>
   <string name="permlab_captureVideoOutput">de Videoausgank ophuelen</string>
   <string name="permlab_modifyAudioSettings">d\'Tounastellungen änneren</string>
@@ -208,27 +267,47 @@
   <string name="permlab_reboot" product="default">Neistart vum Telefon forcéieren</string>
   <string name="permlab_mount_unmount_filesystems" product="nosdcard">op de Fichierssystem vum USB-Späicher zougräifen</string>
   <string name="permlab_mount_unmount_filesystems" product="default">op de Fichierssystem vun der SD-Kaart zougräifen</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard">USB-Späicher läschen</string>
+  <string name="permlab_mount_format_filesystems" product="default">SD-Kaart läschen</string>
+  <string name="permlab_asec_access">Informatiounen iwwer den interne Späicher ausliesen</string>
+  <string name="permlab_asec_create">interne Späicher erstellen</string>
+  <string name="permlab_asec_destroy">interne Späicher zerstéieren</string>
+  <string name="permlab_asec_rename">interne Späicher ëmbenennen</string>
+  <string name="permlab_vibrate">Vibratioun kontrolléieren</string>
+  <string name="permlab_flashlight">d\'Täscheluucht kontrolléieren</string>
+  <string name="permlab_accessMtp">MTP-Protokoll implementéieren</string>
+  <string name="permlab_hardware_test">Hardware testen</string>
+  <string name="permlab_bindGadget">Widgets auswielen</string>
+  <string name="permlab_modifyPhoneState">Telefonsstatus änneren</string>
+  <string name="permlab_wakeLock" product="tablet">den Tablet vum Schlofen ofhalen</string>
+  <string name="permlab_wakeLock" product="default">den Telefon vum Schlofen ofhalen</string>
+  <string name="permlab_transmitIr">Infrarout iwwerdroen</string>
+  <string name="permlab_setWallpaperHints">d\'Gréisst vum Hannergrondbild ajustéieren</string>
   <string name="permlab_setTime">Zäit setzen</string>
   <string name="permlab_setTimeZone">Zäitzon setzen</string>
+  <string name="permlab_getAccounts">Konten op dësem Apparat sichen</string>
   <string name="permlab_manageAccounts">Konten dobäisetzen oder ewechhuelen</string>
   <string name="permlab_createNetworkSockets">vollen Netzwierkzougrëff</string>
-  <string name="permlab_accessWifiState">WLAN-Connectioune weisen</string>
+  <string name="permlab_accessWifiState">WLAN-Connectioune uweisen</string>
   <string name="permlab_bluetoothAdmin">op d\'Bluetooth-Astellungen zougräifen</string>
   <string name="permlab_changeWimaxState">WiMAX-Status änneren</string>
   <string name="permlab_disableKeyguard">d\'Schiermspär desaktivéieren</string>
   <string name="permlab_sdcardRead" product="nosdcard">d\'Inhalter vun dengem USB-Späicher liesen</string>
   <string name="permlab_sdcardRead" product="default">d\'Inhalter vun denger SD-Kaart liesen</string>
+  <string name="permlab_use_sip">Interneturiff ofsetzen/empfänken</string>
   <string name="permlab_accessNotifications">op Notifikatiounen zougräifen</string>
+  <string name="policylab_resetPassword">D\'Entspärpasswuert änneren</string>
+  <string name="policylab_forceLock">De Schierm spären</string>
   <string name="policylab_wipeData">All Date läschen</string>
   <string-array name="phoneTypes">
     <item>Doheem</item>
-    <item>Mobile</item>
+    <item>Mobil</item>
     <item>Aarbecht</item>
     <item>Work Fax</item>
-    <item>Home Fax</item>
+    <item>Fax doheem</item>
     <item>Pager</item>
-    <item>Other</item>
-    <item>Custom</item>
+    <item>Aner</item>
+    <item>Personaliséiert</item>
   </string-array>
   <string-array name="emailAddressTypes">
     <item>Doheem</item>
@@ -328,8 +407,8 @@
   <string name="sipAddressTypeHome">Doheem</string>
   <string name="sipAddressTypeWork">Aarbecht</string>
   <string name="sipAddressTypeOther">Aner</string>
-  <string name="keyguard_password_enter_pin_code">PIN-Code antippen</string>
-  <string name="keyguard_password_enter_puk_code">PUK an neie PIN-Code antippen</string>
+  <string name="keyguard_password_enter_pin_code">PIN-Code aginn</string>
+  <string name="keyguard_password_enter_puk_code">PUK an neie PIN-Code aginn</string>
   <string name="keyguard_password_enter_puk_prompt">PUK-Code</string>
   <string name="keyguard_password_enter_pin_prompt">Neie PIN-Code</string>
   <string name="keyguard_password_entry_touch_hint"><font size="17">Drécke fir d\'Passwuert anzeginn</font></string>
@@ -346,6 +425,7 @@
   <string name="lockscreen_return_to_call">Zréck bei d\'Gespréich</string>
   <string name="lockscreen_pattern_correct">Korrekt!</string>
   <string name="lockscreen_pattern_wrong">Probéier nees</string>
+  <string name="lockscreen_password_wrong">Probéier nees</string>
   <string name="lockscreen_plugged_in">Gëtt opgelueden, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="lockscreen_charged">Opgelueden</string>
   <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
@@ -361,31 +441,43 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_transport_pause_description">Paus-Knäppchen</string>
   <string name="lockscreen_transport_play_description">Ofspill-Knäppchen</string>
   <string name="lockscreen_transport_stop_description">Stopp-Knäppchen</string>
-  <string name="emergency_calls_only" msgid="2485604591272668370">Nëmmen Noutriff</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">Just Noutriff</string>
+  <string name="lockscreen_network_locked_message">Netzwierk gespaart</string>
   <string name="lockscreen_sim_puk_locked_message">SIM-Kaart ass PUK-gespaart.</string>
   <string name="lockscreen_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
-  <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nach eng Kéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <string name="lockscreen_forgot_pattern_button_text">Muster vergiess?</string>
   <string name="lockscreen_glogin_forgot_pattern">Kont-Entspärung</string>
   <string name="lockscreen_glogin_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
   <string name="lockscreen_glogin_username_hint">Benotzernumm (E-Mail)</string>
   <string name="lockscreen_glogin_password_hint">Passwuert</string>
   <string name="lockscreen_glogin_submit_button">Aloggen</string>
   <string name="lockscreen_glogin_invalid_input">Ongëltege Benotzernumm oder Passwuert.</string>
+  <string name="lockscreen_glogin_account_recovery_hint">Benotzernumm oder Passwuert vergiess\?\nBesich <b>google.com/accounts/recovery</b>.</string>
   <string name="lockscreen_glogin_checking_password">Iwwerpréiwung\u2026</string>
   <string name="lockscreen_unlock_label">Entspären</string>
   <string name="lockscreen_sound_on_label">Toun un</string>
   <string name="lockscreen_sound_off_label">Toun aus</string>
+  <string name="lockscreen_access_pattern_start">Muster ugefaangen</string>
+  <string name="lockscreen_access_pattern_cleared">Muster geläscht</string>
   <string name="lockscreen_access_pattern_cell_added">Zell dobäigesat</string>
+  <string name="lockscreen_access_pattern_detected">Muster ofgeschloss</string>
   <string name="keyguard_accessibility_widget_changed">%1$s. Widget %2$d vu(n) %3$d.</string>
   <string name="keyguard_accessibility_add_widget">Widget dobäisetzen.</string>
   <string name="keyguard_accessibility_widget_empty_slot">Eidel</string>
+  <string name="keyguard_accessibility_unlock_area_expanded">Entspärberäich maximéiert.</string>
+  <string name="keyguard_accessibility_unlock_area_collapsed">Entspärberäich miniméiert.</string>
   <string name="keyguard_accessibility_user_selector">Benotzerauswiel</string>
   <string name="keyguard_accessibility_status">Status</string>
   <string name="keyguard_accessibility_camera">Kamera</string>
   <string name="keygaurd_accessibility_media_controls">Steierelementer fir Medien</string>
+  <string name="keyguard_accessibility_widget_reorder_start">Neiuerdnung vun de Widgets gestart.</string>
+  <string name="keyguard_accessibility_widget_reorder_end">Neiuerdnung vun de Widgets gestoppt.</string>
+  <string name="keyguard_accessibility_widget_deleted">Widget <xliff:g id="widget_index">%1$s</xliff:g> geläscht.</string>
+  <string name="keyguard_accessibility_pattern_unlock">Entspäre mat Muster.</string>
   <string name="keyguard_accessibility_face_unlock">Entspäre mam Gesiicht.</string>
   <string name="keyguard_accessibility_pin_unlock">Entspäre mat PIN.</string>
   <string name="keyguard_accessibility_password_unlock">Entspäre mat Passwuert.</string>
@@ -401,6 +493,8 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="factorytest_reboot">Nei starten</string>
   <string name="js_dialog_title_default">JavaScript</string>
   <string name="js_dialog_before_unload_title">Navigatioun bestätegen</string>
+  <string name="js_dialog_before_unload_positive_button">Dës Säit verloossen</string>
+  <string name="js_dialog_before_unload_negative_button">Op dëser Säit bleiwen</string>
   <string name="save_password_label">Bestätegen</string>
   <string name="autofill_address_name_separator">\u0020</string>
   <string name="autofill_address_summary_name_format">$1$2$3</string>
@@ -471,8 +565,42 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="searchview_description_clear">Ufro läschen</string>
   <string name="searchview_description_submit">Ufro schécken</string>
   <string name="oneMonthDurationPast">Virun 1 Mount</string>
+  <plurals name="num_seconds_ago">
+    <item quantity="one">1 Sekonn hier</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Sekonnen hier</item>
+  </plurals>
+  <plurals name="num_minutes_ago">
+    <item quantity="one">1 Minutt hier</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Minutten hier</item>
+  </plurals>
+  <plurals name="num_hours_ago">
+    <item quantity="one">1 Stonn hier</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Stonnen hier</item>
+  </plurals>
   <string name="last_month">Leschte Mount</string>
   <string name="older">Méi al</string>
+  <plurals name="num_days_ago">
+    <item quantity="one">gëschter</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Deeg hier</item>
+  </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+    <item quantity="one">1 Sek. hier</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Sek. hier</item>
+  </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+    <item quantity="one">1 Min. hier</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Min. hier</item>
+  </plurals>
+  <plurals name="abbrev_num_hours_ago">
+    <item quantity="one">1 Stonn hier</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Stonnen hier</item>
+  </plurals>
+  <plurals name="abbrev_num_days_ago">
+    <item quantity="one">gëschter</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Deeg hier</item>
+  </plurals>
+  <string name="preposition_for_date">um <xliff:g id="date" example="May 29">%s</xliff:g></string>
+  <string name="preposition_for_time">um <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
   <string name="preposition_for_year">am Joer <xliff:g id="year" example="2003">%s</xliff:g></string>
   <string name="day">Dag</string>
   <string name="days">Deeg</string>
@@ -504,6 +632,9 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
   <string name="noon">"Mëtteg"</string>
   <string name="Noon">"Mëtteg"</string>
+  <string name="midnight">"Hallefnuecht"</string>
+  <string name="Midnight">"Hallefnuecht"</string>
+  <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
   <string name="selectAll">All auswielen</string>
   <string name="copy">Kopéieren</string>
   <string name="paste">Apechen</string>
@@ -527,9 +658,18 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="capital_off">AUS</string>
   <string name="whichApplication">Aktioun duerchféiere mat</string>
   <string name="whichHomeApplication">Start-App auswielen</string>
+  <string name="chooseActivity">Wiel eng Aktioun aus</string>
+  <string name="chooseUsbActivity">Wiel eng App fir den USB-Apparat aus</string>
+  <string name="noApplications">Dës Aktioun ka vu kenger App duerchgefouert ginn.</string>
+  <string name="aerr_application">Leider huet <xliff:g id="application">%1$s</xliff:g> opgehale mat funktionéieren.</string>
+  <string name="aerr_process">Leider gouf de Prozess <xliff:g id="process">%1$s</xliff:g> gestoppt.</string>
+  <string name="anr_activity_application"><xliff:g id="application">%2$s</xliff:g> äntwert net.\n\nWëlls de d\'App zoumaachen?</string>
   <string name="force_close">OK</string>
   <string name="report">Bericht</string>
   <string name="wait">Waart</string>
+  <string name="webpage_unresponsive">D\'Säit reagéiert net méi.\n\nWëlls de se zoumaachen?</string>
+  <string name="launch_warning_title">App ëmgeleet</string>
+  <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> leeft elo.</string>
   <string name="screen_compat_mode_show">Ëmmer uweisen</string>
   <string name="android_upgrading_title">Android gëtt aktualiséiert\u2026</string>
   <string name="android_upgrading_apk">Optiméierung vun der App <xliff:g id="number" example="123">%1$d</xliff:g> / <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
@@ -537,6 +677,10 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="android_upgrading_complete">Start gëtt ofgeschloss.</string>
   <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> leeft</string>
   <string name="heavy_weight_switcher_title">Appe wiesselen?</string>
+  <string name="old_app_description">Déi nei App net starten.</string>
+  <string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> starten</string>
+  <string name="new_app_description">Déi al App ouni ze späichere stoppen.</string>
+  <string name="sendText">Aktioun fir Text auswielen</string>
   <string name="volume_ringtone">Schelltounlautstäerkt</string>
   <string name="volume_music">Medielautstäerkt</string>
   <string name="volume_music_hint_playing_through_bluetooth">Iwwer Bluetooth ofspillen</string>
@@ -552,11 +696,17 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="ringtone_silent">Keen</string>
   <string name="ringtone_picker_title">Schelltéin</string>
   <string name="ringtone_unknown">Onbekannte Schelltoun</string>
+  <string name="wifi_watchdog_network_disabled">Konnt net mam WLAN connectéieren</string>
+  <string name="wifi_watchdog_network_disabled_detailed">\u0020huet eng schwaach Internetconnectioun.</string>
   <string name="accept">Acceptéieren</string>
   <string name="decline">Refuséieren</string>
+  <string name="wifi_p2p_invitation_sent_title">Invitatioun geschéckt</string>
   <string name="wifi_p2p_from_message">Vun: </string>
   <string name="wifi_p2p_to_message">Un: </string>
+  <string name="wifi_p2p_enter_pin_message">Gëff de benéidegte PIN an: </string>
   <string name="wifi_p2p_show_pin_message">PIN: </string>
+  <string name="select_character">Zeechen aginn</string>
+  <string name="sms_control_title">SMS-Messagë gi geschéckt</string>
   <string name="sms_control_yes">Erlaben</string>
   <string name="sms_control_no">Verweigeren</string>
   <string name="sms_short_code_confirm_allow">Schécken</string>
@@ -564,6 +714,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="sms_short_code_remember_choice">Mäi Choix verhalen</string>
   <string name="sms_short_code_confirm_always_allow">Ëmmer erlaben</string>
   <string name="sms_short_code_confirm_never_allow">Ni erlaben</string>
+  <string name="sim_removed_title">SIM-Kaart erausgeholl</string>
   <string name="sim_done_button">Fäerdeg</string>
   <string name="sim_added_title">SIM-Kaart dobäigesat</string>
   <string name="sim_restart_button">Nei starten</string>
@@ -574,14 +725,21 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="perms_new_perm_prefix"><font size="12" fgcolor="#ff33b5e5">NEI: </font></string>
   <string name="usb_storage_activity_title">USB-Massespäicher</string>
   <string name="usb_storage_title">USB connectéiert</string>
+  <string name="usb_storage_button_mount">USB-Späicher aktivéieren</string>
   <string name="usb_storage_notification_title">USB connectéiert</string>
+  <string name="usb_storage_stop_notification_title">USB-Späicher desaktivéieren</string>
+  <string name="usb_storage_stop_button_mount">USB-Späicher desaktivéieren</string>
   <string name="dlg_confirm_kill_storage_users_title">USB-Späicher aktivéieren</string>
+  <string name="dlg_error_title">USB-Operatioun feelgeschloen</string>
   <string name="dlg_ok">OK</string>
+  <string name="extmedia_format_title" product="nosdcard">USB-Späicher formatéieren?</string>
   <string name="extmedia_format_title" product="default">SD-Kaart formatéieren?</string>
   <string name="extmedia_format_button_format">Format</string>
   <string name="configure_input_methods">Methode fir anzeginn astellen</string>
   <string name="use_physical_keyboard">Physesch Tastatur</string>
   <string name="hardware">Hardware</string>
+  <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+  <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
   <string name="candidates_style"><u>Kandidaten</u></string>
   <string name="ext_media_checking_notification_title" product="nosdcard">USB-Späicher gëtt preparéiert</string>
   <string name="ext_media_checking_notification_title" product="default">SD-Kaart gëtt preparéiert</string>
@@ -595,6 +753,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="ime_action_done">Fäerdeg</string>
   <string name="ime_action_previous">Zréck</string>
   <string name="ime_action_default">Ausféieren</string>
+  <string name="grant_permissions_header_text">Zougrëffsufro</string>
   <string name="allow">Erlaben</string>
   <string name="deny">Verweigeren</string>
   <string name="input_method_binding_label">Method fir anzeginn</string>
@@ -609,12 +768,21 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="back_button_label">Zréck</string>
   <string name="next_button_label">Weider</string>
   <string name="skip_button_label">Iwwersprangen</string>
+  <string name="find_on_page">Op der Säit fannen</string>
   <string name="action_mode_done">Fäerdeg</string>
+  <string name="format_error" product="nosdcard">Konnt den USB-Späicher net läschen.</string>
+  <string name="format_error" product="default">Konnt d\'SD-Kaart net läschen.</string>
   <string name="share">Deelen</string>
   <string name="gpsVerifYes">Jo</string>
   <string name="gpsVerifNo">Nee</string>
   <string name="add_account_label">"E Kont dobäisetzen"</string>
   <string name="add_account_button_label">Kont dobäisetzen</string>
+  <string name="time_picker_increment_hour_button">Stonn eropsetzen</string>
+  <string name="time_picker_decrement_hour_button">Stonn erofsetzen</string>
+  <string name="date_picker_increment_day_button">Dag eropsetzen</string>
+  <string name="date_picker_decrement_day_button">Dag erofsetzen</string>
+  <string name="date_picker_increment_year_button">Joer eropsetzen</string>
+  <string name="date_picker_decrement_year_button">Joer erofsetzen</string>
   <string name="keyboardview_keycode_cancel">Ofbriechen</string>
   <string name="keyboardview_keycode_delete">Läschen</string>
   <string name="keyboardview_keycode_done">Fäerdeg</string>
@@ -626,6 +794,8 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="description_target_silent">Roueg</string>
   <string name="description_target_soundon">Toun un</string>
   <string name="description_target_search">Sichen</string>
+  <string name="keyboard_password_character_no_headset">Punkt.</string>
+  <string name="action_bar_home_description">Heem navigéieren</string>
   <string name="action_menu_overflow_description">Méi Optiounen</string>
   <string name="action_bar_home_subtitle_description_format">%1$s, %2$s. %3$s</string>
   <string name="storage_internal">Interne Späicher</string>
@@ -637,10 +807,29 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="data_usage_4g_limit_title">4G-Daten desaktivéiert</string>
   <string name="data_usage_mobile_limit_title">Mobil Daten desaktivéiert</string>
   <string name="data_usage_wifi_limit_title">WLAN-Daten desaktivéiert</string>
+  <string name="data_usage_3g_limit_snoozed_title">2G- an 3G-Datelimitt iwwerschratt</string>
+  <string name="data_usage_4g_limit_snoozed_title">4G-Datelimitt iwwerschratt</string>
+  <string name="ssl_certificate">Sécherheetszertifikat</string>
+  <string name="ssl_certificate_is_valid">Dëst Zertifikat ass gëlteg.</string>
+  <string name="common_name">Allgemengen Numm:</string>
+  <string name="org_name">Organisatioun:</string>
+  <string name="org_unit">Eenheet an der Organisatioun:</string>
+  <string name="validity_period">Gëltegkeet:</string>
+  <string name="serial_number">Seriennummer:</string>
+  <string name="fingerprints">Fangerofdréck:</string>
+  <string name="sha256_fingerprint">SHA-256-Fangerofdrock:</string>
+  <string name="sha1_fingerprint">SHA-1-Fangerofdrock:</string>
+  <string name="activity_chooser_view_dialog_title_default">Aktivitéit auswielen</string>
+  <string name="share_action_provider_share_with">Deele mat</string>
   <string name="list_delimeter">", "</string>
   <string name="sending">Gëtt geschéckt\u2026</string>
+  <string name="launchBrowserDefault">Browser starten?</string>
+  <string name="SetupCallDefault">Uruff unhuelen?</string>
   <string name="activity_resolver_use_always">Ëmmer</string>
+  <string name="activity_resolver_use_once">Just eemol</string>
+  <string name="default_audio_route_name" product="tablet">Tablet</string>
   <string name="default_audio_route_name" product="default">Telefon</string>
+  <string name="default_media_route_name_hdmi">HDMI</string>
   <string name="default_audio_route_category_name">System</string>
   <string name="media_route_chooser_extended_settings">Astellungen</string>
   <string name="media_route_controller_disconnect">Deconnectéieren</string>
@@ -648,6 +837,8 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="media_route_status_connecting">Gëtt connectéiert...</string>
   <string name="media_route_status_available">Disponibel</string>
   <string name="media_route_status_in_use">Gëtt benotzt</string>
+  <string name="display_manager_hdmi_display_name">HDMI-Schierm</string>
+  <string name="display_manager_overlay_display_title"><xliff:g id="name">%1$s</xliff:g>: <xliff:g id="width">%2$d</xliff:g>x<xliff:g id="height">%3$d</xliff:g>, <xliff:g id="dpi">%4$d</xliff:g> dpi</string>
   <string name="display_manager_overlay_display_secure_suffix">, sécher</string>
   <string name="wifi_display_notification_connecting_title">Schierm gëtt iwwerdroen</string>
   <string name="wifi_display_notification_connecting_message">Connectioun mat <xliff:g id="name">%1$s</xliff:g> gëtt erstallt</string>
@@ -667,15 +858,112 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_invalid_sim_puk_hint">De PUK-Code misst 8 oder méi Zifferen hunn.</string>
   <string name="kg_invalid_puk">Gëff de korrekte PUK-Code nees an. Bei widderhuelende Versich gëtt d\'SIM permanent desaktivéiert.</string>
   <string name="kg_login_instructions">Fir z\'entspären, mell dech mat dengem Google-Kont un.</string>
+  <string name="kg_login_username_hint">Benotzernumm (E-Mail)</string>
+  <string name="kg_login_password_hint">Passwuert</string>
   <string name="kg_login_submit_button">Aloggen</string>
   <string name="kg_login_invalid_input">Ongëltege Benotzernumm oder Passwuert.</string>
+  <string name="kg_login_account_recovery_hint">Benotzernumm oder Passwuert vergiess\?\nBesich <b>google.com/accounts/recovery</b>.</string>
   <string name="kg_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
+  <string name="accessibility_enabled">Accessibilitéit aktivéiert.</string>
+  <string name="enable_accessibility_canceled">Accessibilitéit ofgebrach.</string>
   <string name="user_switched">Aktuelle Benotzer <xliff:g id="name" example="Bob">%1$s</xliff:g>.</string>
   <string name="owner_name" msgid="3879126011135546571">Besëtzer</string>
   <string name="error_message_title">Feeler</string>
+  <string name="mediasize_iso_a0">ISO A0</string>
+  <string name="mediasize_iso_a1">ISO A1</string>
+  <string name="mediasize_iso_a2">ISO A2</string>
+  <string name="mediasize_iso_a3">ISO A3</string>
+  <string name="mediasize_iso_a4">ISO A4</string>
+  <string name="mediasize_iso_a5">ISO A5</string>
+  <string name="mediasize_iso_a6">ISO A6</string>
+  <string name="mediasize_iso_a7">ISO A7</string>
+  <string name="mediasize_iso_a9">ISO A9</string>
+  <string name="mediasize_iso_a10">ISO A10</string>
+  <string name="mediasize_iso_b0">ISO B0</string>
+  <string name="mediasize_iso_b1">ISO B1</string>
+  <string name="mediasize_iso_b2">ISO B2</string>
+  <string name="mediasize_iso_b3">ISO B3</string>
+  <string name="mediasize_iso_b4">ISO B4</string>
+  <string name="mediasize_iso_b5">ISO B5</string>
+  <string name="mediasize_iso_b6">ISO B6</string>
+  <string name="mediasize_iso_b7">ISO B7</string>
+  <string name="mediasize_iso_b8">ISO B8</string>
+  <string name="mediasize_iso_b9">ISO B9</string>
+  <string name="mediasize_iso_b10">ISO B10</string>
+  <string name="mediasize_iso_c0">ISO C0</string>
+  <string name="mediasize_iso_c1">ISO C1</string>
+  <string name="mediasize_iso_c2">ISO C2</string>
+  <string name="mediasize_iso_c3">ISO C3</string>
+  <string name="mediasize_iso_c4">ISO C4</string>
+  <string name="mediasize_iso_c5">ISO C5</string>
+  <string name="mediasize_iso_c6">ISO C6</string>
+  <string name="mediasize_iso_c7">ISO C7</string>
+  <string name="mediasize_iso_c8">ISO C8</string>
+  <string name="mediasize_iso_c9">ISO C9</string>
+  <string name="mediasize_iso_c10">ISO C10</string>
+  <string name="mediasize_na_letter">Letter</string>
+  <string name="mediasize_na_gvrnmt_letter">Government Letter</string>
+  <string name="mediasize_na_legal">Legal</string>
+  <string name="mediasize_na_junior_legal">Junior Legal</string>
+  <string name="mediasize_na_ledger">Ledger</string>
+  <string name="mediasize_na_tabloid">Tabloid</string>
+  <string name="mediasize_na_index_3x5">Index Card 3x5</string>
+  <string name="mediasize_na_index_4x6">Index Card 4x6</string>
+  <string name="mediasize_na_index_5x8">Index Card 5x8</string>
+  <string name="mediasize_na_monarch">Monarch</string>
+  <string name="mediasize_na_quarto">Quarto</string>
+  <string name="mediasize_na_foolscap">Foolscap</string>
+  <string name="mediasize_chinese_roc_8k">ROC 8K</string>
+  <string name="mediasize_chinese_roc_16k">ROC 16K</string>
+  <string name="mediasize_chinese_prc_1">PRC 1</string>
+  <string name="mediasize_chinese_prc_2">PRC 2</string>
+  <string name="mediasize_chinese_prc_3">PRC 3</string>
+  <string name="mediasize_chinese_prc_4">PRC 4</string>
+  <string name="mediasize_chinese_prc_5">PRC 5</string>
+  <string name="mediasize_chinese_prc_6">PRC 6</string>
+  <string name="mediasize_chinese_prc_7">PRC 7</string>
+  <string name="mediasize_chinese_prc_8">PRC 8</string>
+  <string name="mediasize_chinese_prc_9">PRC 9</string>
+  <string name="mediasize_chinese_prc_10">PRC 10</string>
+  <string name="mediasize_chinese_prc_16k">PRC 16K</string>
+  <string name="mediasize_chinese_om_pa_kai">Pa Kai</string>
+  <string name="mediasize_chinese_om_dai_pa_kai">Dai Pa Kai</string>
+  <string name="mediasize_chinese_om_jurro_ku_kai">Jurro Ku Kai</string>
+  <string name="mediasize_japanese_jis_b10">JIS B10</string>
+  <string name="mediasize_japanese_jis_b9">JIS B9</string>
+  <string name="mediasize_japanese_jis_b8">JIS B8</string>
+  <string name="mediasize_japanese_jis_b7">JIS B7</string>
+  <string name="mediasize_japanese_jis_b6">JIS B6</string>
+  <string name="mediasize_japanese_jis_b5">JIS B5</string>
+  <string name="mediasize_japanese_jis_b4">JIS B4</string>
+  <string name="mediasize_japanese_jis_b3">JIS B3</string>
+  <string name="mediasize_japanese_jis_b2">JIS B2</string>
+  <string name="mediasize_japanese_jis_b1">JIS B1</string>
+  <string name="mediasize_japanese_jis_b0">JIS B0</string>
+  <string name="mediasize_japanese_jis_exec">JIS Exec</string>
+  <string name="mediasize_japanese_chou4">Chou4</string>
+  <string name="mediasize_japanese_chou3">c</string>
+  <string name="mediasize_japanese_chou2">Chou2</string>
+  <string name="mediasize_japanese_hagaki">Hagaki </string>
+  <string name="mediasize_japanese_oufuku">Oufuku </string>
+  <string name="mediasize_japanese_kahu">Kahu</string>
+  <string name="mediasize_japanese_kaku2">Kaku2</string>
+  <string name="mediasize_japanese_you4">You4</string>
+  <string name="write_fail_reason_cancelled">Ofgebrach</string>
+  <string name="write_fail_reason_cannot_write">Feeler beim Schreiwe vum Inhalt</string>
   <string name="reason_unknown">onbekannt</string>
   <string name="restr_pin_enter_pin">PIN aginn</string>
+  <string name="restr_pin_incorrect">Inkorrekt</string>
+  <string name="restr_pin_enter_old_pin">Aktuell PIN</string>
+  <string name="restr_pin_enter_new_pin">Nei PIN</string>
+  <string name="restr_pin_confirm_pin">Nei PIN bestätegen</string>
+  <string name="restr_pin_error_too_short">De PIN ass ze kuerz. E muss mindestens 4 Zifferen hunn.</string>
+  <plurals name="restr_pin_countdown">
+    <item quantity="one">Probéier nees an 1 Sekonn</item>
+    <item quantity="other">Probéier nees a(n) <xliff:g id="count">%d</xliff:g> Sekonnen</item>
+  </plurals>
+  <string name="restr_pin_try_later">Probéier méi spéit nees</string>
 </resources>

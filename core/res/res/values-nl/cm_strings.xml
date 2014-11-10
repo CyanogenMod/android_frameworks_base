@@ -82,9 +82,11 @@
   <string name="permlab_writeThemes">uw thema\'s aanpassen</string>
   <string name="permdesc_writeThemesDesc">Hiermee kan de app nieuwe thema\'s invoegen en wijzigen welk thema u hebt toegepast.</string>
   <string name="permlab_setKeyguardWallpaper">achtergrond van vergrendelingsscherm instellen</string>
-  <string name="permdesc_setKeyguardWallpaper">Hiermee kan een app de achtergrond van het vergrendelingsscherm aanpassen.</string>
+  <string name="permdesc_setKeyguardWallpaper">Hiermee kan de app de achtergrond van het vergrendelingsscherm aanpassen.</string>
   <string name="permlab_useHardwareFramework">hardware-framework gebruiken</string>
   <string name="permdesc_useHardwareFramework">Hiermee kan de app toegang krijgen tot het hardware-framework van CyanogenMod.</string>
+  <string name="permlab_keyguardApplicationWidget"> app-widget op vergrendelingsscherm instellen</string>
+  <string name="permdesc_keyguardApplicationWidget">Hiermee kan de app de app-widget van het vergrendelingsscherm aanpassen.</string>
   <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
   <string name="app_ops_access_camera">toegang tot camera</string>
   <string name="app_ops_access_location">toegang tot uw locatie</string>
@@ -134,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB over netwerk ingeschakeld</string>
   <string name="adb_both_active_notification_title">ADB over USB &amp; netwerk ingeschakeld</string>
   <string name="adb_active_generic_notification_message">Tik om foutopsporing uit te schakelen.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Alle gegevens op uw USB-opslag (pad \'%1$s\') worden gewist. Deze actie kan niet ongedaan worden gemaakt!</string>
-  <string name="extmedia_format_message_cm" product="default">Alle gegevens op uw kaart (pad \'%1$s\') worden gewist. Deze actie kan niet ongedaan worden gemaakt!</string>
+  <string name="usb_extmedia_format_message">Alle gegevens op uw USB-opslag (pad \'%1$s\') worden gewist. Deze actie kan niet ongedaan worden gemaakt!</string>
+  <string name="sd_extmedia_format_message">Alle gegevens op uw kaart (pad \'%1$s\') worden gewist. Deze actie kan niet ongedaan worden gemaakt!</string>
   <string name="usb_storage_notification_manage_message">Tik om te beheren</string>
   <string name="sd_ext_media_checking_notification_title">SD-kaart voorbereiden\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD-kaart controleren op fouten\u2026</string>
@@ -174,4 +176,19 @@
   <string name="stk_cc_ss_to_ss">SS-verzoek veranderd naar nieuw SS-verzoek.</string>
   <string name="theme_install_error_title">Thema installeren mislukt</string>
   <string name="theme_install_error_message">%s kan niet worden geïnstalleerd</string>
+  <string name="storage_uicc">UICC-opslag</string>
+  <string name="sd_progress_unmounting">SD-kaart ontkoppelen\u2026</string>
+  <string name="sd_progress_erasing">SD-kaart wissen\u2026</string>
+  <string name="sd_format_error">Kan SD-kaart niet wissen.</string>
+  <string name="sd_media_bad_removal">SD-kaart is verwijderd voordat deze werd ontkoppeld.</string>
+  <string name="sd_media_checking">SD-kaart wordt gecontroleerd.</string>
+  <string name="sd_media_removed">SD-kaart is verwijderd.</string>
+  <string name="sd_media_shared">SD-kaart is in gebruik door een computer.</string>
+  <string name="usb_progress_unmounting">USB-opslag ontkoppelen\u2026</string>
+  <string name="usb_progress_erasing">USB-opslag wissen\u2026</string>
+  <string name="usb_format_error">Kan USB-opslag niet wissen.</string>
+  <string name="usb_media_bad_removal">USB-opslag is verwijderd voordat deze werd ontkoppeld.</string>
+  <string name="usb_media_checking">USB-opslag wordt gecontroleerd.</string>
+  <string name="usb_media_removed">USB-opslag is verwijderd.</string>
+  <string name="usb_media_shared">USB-opslag is in gebruik door een computer.</string>
 </resources>

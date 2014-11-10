@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">Atslēgt izslēgšanas pogu</string>
   <string name="permdesc_preventpower">Atļaut lietotnei ignorēt izslēgšanas pogu</string>
   <string name="permlab_sendMockSms">sūtīt viltus īsziņas</string>
-  <string name="permdesc_sendMockSms">Ļauj sūtīt viltus īsziņas. Šī lietotne ļauj nosūtīt ziņas uzticamām lietotnēm. Ļaunprātīgas lietotnes var sūtīt ziņas nepārtraukti, traucējot sistēmas darbībai un lietotājam.</string>
+  <string name="permdesc_sendMockSms">Ļauj lietotnei sūtīt viltus īsziņas. Tas ļauj lietotnei nosūtīt ziņas uzticamām lietotnēm. Ļaunprātīgas lietotnes var sūtīt ziņas nepārtraukti, traucējot lietotāju un ziņošanas sistēmas darbību.</string>
   <string name="storage_sd_dock_card">Pieslēgt SD karti</string>
   <string name="app_killed_message">Lietotne izbeigta</string>
   <string name="global_action_reboot">Pārsāknēt</string>
@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Ļauj lietotnei manīt slēgekrāna tapeti.</string>
   <string name="permlab_useHardwareFramework">izmantot aparatūras ietvaru</string>
   <string name="permdesc_useHardwareFramework">Ļauj lietotnei piekļūt CM aparatūras ietvaram.</string>
+  <string name="permlab_keyguardApplicationWidget">iestatīt taustiņslēga lietotnes logrīku</string>
+  <string name="permdesc_keyguardApplicationWidget">Ļauj lietotnei iestatīt taustiņslēga logrīku.</string>
   <string name="immersive_mode_confirmation_bottom">Vēzēt no apakšas uz augšu, lai izietu no pilnekrāna režīma.</string>
   <string name="app_ops_access_camera">piekļuve kamerai</string>
   <string name="app_ops_access_location">piekļeve jūsu atrašanās vietai</string>
@@ -134,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB pa tīklu ieslēgts</string>
   <string name="adb_both_active_notification_title">ADB pa USB &amp; tīklu ieslēgts</string>
   <string name="adb_active_generic_notification_message">Pieskarieties, lai atslēgtu atkļūdošanu.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Visas jūsu USB krātuves (ar ceļu \"%1$s\") dati tiks izdzēstas. Šo darbību nevar atsaukt!</string>
-  <string name="extmedia_format_message_cm" product="default">Visi dati jūsu kartē (ar ceļu \'%1$s\') tiks izdzēsti. Šo darbību nevar atsaukt!</string>
+  <string name="usb_extmedia_format_message">Visi jūsu USB krātuves (ar ceļu \'%1$s\') dati tiks izdzēsti. Šo darbību nevar atsaukt!</string>
+  <string name="sd_extmedia_format_message">Visi dati jūsu kartē (ar ceļu \'%1$s\') tiks izdzēsti. Šo darbību nevar atsaukt!</string>
   <string name="usb_storage_notification_manage_message">Piesitiet, lai pārvaldītu</string>
   <string name="sd_ext_media_checking_notification_title">Sagatavo SD karti\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Pārbauda, vai SD kartē nav kļūdu\u2026</string>
@@ -174,4 +176,19 @@
   <string name="stk_cc_ss_to_ss">SS pieprasījums ir izmainīts uz jauno SS pieprasījumu.</string>
   <string name="theme_install_error_title">Neizdevās uzstādīt tēmu</string>
   <string name="theme_install_error_message">%s neizdevās uzstādīt</string>
+  <string name="storage_uicc">UICC krātuve</string>
+  <string name="sd_progress_unmounting">Nomontē SD karti\u2026</string>
+  <string name="sd_progress_erasing">Dzēš SD karti\u2026</string>
+  <string name="sd_format_error">Neizdevās izdzēst SD karti.</string>
+  <string name="sd_media_bad_removal">SD karte tika izņemta pirms nomontēšanas.</string>
+  <string name="sd_media_checking">Šobrīd pārbauda SD karti.</string>
+  <string name="sd_media_removed">SD karte ir izņemta.</string>
+  <string name="sd_media_shared">SD karti šobrīd lieto dators.</string>
+  <string name="usb_progress_unmounting">Nomontē USB krātuvi\u2026</string>
+  <string name="usb_progress_erasing">Dzēš USB krātuvi\u2026</string>
+  <string name="usb_format_error">Neizdevās izdzēst USB krātuvi.</string>
+  <string name="usb_media_bad_removal">USB krātuve tika izņemta pirms nomontēšanas.</string>
+  <string name="usb_media_checking">Pašreiz pārbauda USB krātuvi.</string>
+  <string name="usb_media_removed">USB krātuve ir noņemta.</string>
+  <string name="usb_media_shared">USB krātuvi pašreiz izmanto dators.</string>
 </resources>

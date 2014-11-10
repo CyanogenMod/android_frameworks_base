@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">阻止电源键</string>
   <string name="permdesc_preventpower">允许应用完全掌控电源键</string>
   <string name="permlab_sendMockSms">发送模拟短信</string>
-  <string name="permdesc_sendMockSms">允许应用发送模拟短信息。这将允许应用发送信息到受信任的应用。恶意应用可能连续发送短信，阻碍设备通知系统并骚扰用户。</string>
+  <string name="permdesc_sendMockSms">允许应用发送模拟短信。这将允许应用发送信息到受信任的应用。恶意应用可能连续发送短信，阻碍设备通知系统并骚扰用户。</string>
   <string name="storage_sd_dock_card">底座 SD 卡</string>
   <string name="app_killed_message">应用已被终止</string>
   <string name="global_action_reboot">重启</string>
@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
   <string name="permlab_useHardwareFramework">使用硬件框架</string>
   <string name="permdesc_useHardwareFramework">允许应用访问 CM 硬件框架。</string>
-  <string name="permlab_keyguardApplicationWidget">设置键盘锁应用挂件</string>
-  <string name="permdesc_keyguardApplicationWidget">允许应用在键盘锁上设置小部件。</string>
+  <string name="permlab_keyguardApplicationWidget">设置锁屏的应用小部件</string>
+  <string name="permdesc_keyguardApplicationWidget">允许应用设置锁屏的应用小部件。</string>
   <string name="immersive_mode_confirmation_bottom">从底部上划以退出全屏模式。</string>
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">网络 ADB 调试已启用</string>
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
-  <string name="extmedia_format_message_cm" product="default">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <string name="usb_extmedia_format_message">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <string name="sd_extmedia_format_message">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
   <string name="usb_storage_notification_manage_message">点击以管理</string>
   <string name="sd_ext_media_checking_notification_title">正在准备 SD 卡\u2026</string>
   <string name="sd_ext_media_checking_notification_message">正在检查 SD 卡是否有错误\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">安装主题失败</string>
   <string name="theme_install_error_message">%s 安装失败</string>
   <string name="storage_uicc">UICC 存储</string>
+  <string name="sd_progress_unmounting">正在卸载 SD 卡\u2026</string>
+  <string name="sd_progress_erasing">正在擦除 SD 卡\u2026</string>
+  <string name="sd_format_error">无法擦除 SD 卡。</string>
+  <string name="sd_media_bad_removal">SD 卡曾在未卸载的情况下就被移除。</string>
+  <string name="sd_media_checking">目前正在检查 SD 卡。</string>
+  <string name="sd_media_removed">SD 卡已移除。</string>
+  <string name="sd_media_shared">SD 卡目前正在被计算机使用。</string>
+  <string name="usb_progress_unmounting">正在卸载 USB 存储\u2026</string>
+  <string name="usb_progress_erasing">正在擦除 USB 存储\u2026</string>
+  <string name="usb_format_error">无法擦除 USB 存储。</string>
+  <string name="usb_media_bad_removal">USB 存储曾在未卸载的情况下被移除。</string>
+  <string name="usb_media_checking">目前正在检查 USB 存储。</string>
+  <string name="usb_media_removed">USB 存储已被移除。</string>
+  <string name="usb_media_shared">目前 USB 存储正在被计算机使用。</string>
 </resources>

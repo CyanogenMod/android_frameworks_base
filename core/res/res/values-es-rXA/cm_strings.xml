@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
   <string name="permlab_useHardwareFramework">usar marcu de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite que l\'aplicación acceda al marcu de hardware de CM.</string>
-  <string name="permlab_keyguardApplicationWidget">afitar el widget de l\'aplicación na pantalla de bloquéu</string>
-  <string name="permdesc_keyguardApplicationWidget">Permite a una aplicación definir el widget de l\'aplicación na pantalla de bloquéu.</string>
+  <string name="permlab_keyguardApplicationWidget">afitar widget d\'aplicación na pantalla de bloquéu</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite que l\'aplicación afite\'l widget d\'aplicación na pantalla de bloquéu.</string>
   <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB sobre rede habilitáu</string>
   <string name="adb_both_active_notification_title">ADB sobre USB y rede habilitáu</string>
   <string name="adb_active_generic_notification_message">Toca pa deshabilitar la depuración.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Va desaniciase tola información del almacenamientu USB (nel camín \u00AB%1$s\u00BB). ¡Esta aición nun pue desfacese!</string>
-  <string name="extmedia_format_message_cm" product="default">Van desaniciase tolos datos de la tarxeta (nel camín \'%1$s\'). Esta aición nun pue desfacese!</string>
+  <string name="usb_extmedia_format_message">Va desaniciase tola información del almacenamientu USB (nel camín \u00AB%1$s\u00BB) . ¡Esta aición nun pue desfacese!</string>
+  <string name="sd_extmedia_format_message">Van desaniciase tolos datos de la tarxeta (nel camín \'%1$s\'). ¡Esta aición nun pue desfacese!</string>
   <string name="usb_storage_notification_manage_message">Toca pa xestionar</string>
   <string name="sd_ext_media_checking_notification_title">Tresnando tarxeta SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Comprobando errores na tarxeta SD\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
   <string name="storage_uicc">Almacenamientu UICC</string>
+  <string name="sd_progress_unmounting">Desactivando tarxeta SD\u2026</string>
+  <string name="sd_progress_erasing">Desaniciando tarxeta SD\u2026</string>
+  <string name="sd_format_error">Nun pudo desaniciase la tarxeta SD.</string>
+  <string name="sd_media_bad_removal">La tarxeta SD estráxose enantes de desactivala.</string>
+  <string name="sd_media_checking">Ta comprobándose la tarxeta SD.</string>
+  <string name="sd_media_removed">Estráxose la tarxeta SD.</string>
+  <string name="sd_media_shared">Hai un equipu usando agora mesmo la tarxeta SD.</string>
+  <string name="usb_progress_unmounting">Desactivando almacenamientu USB\u2026</string>
+  <string name="usb_progress_erasing">Desaniciando almacenamientu USB\u2026</string>
+  <string name="usb_format_error">Nun pudo desaniciase l\'almacenamientu USB.</string>
+  <string name="usb_media_bad_removal">L\'almacenamientu USB estráxose enantes de desmontase.</string>
+  <string name="usb_media_checking">Ta comprobándose l\'almacenamientu USB.</string>
+  <string name="usb_media_removed">Estráxose l\'almacenamientu USB.</string>
+  <string name="usb_media_shared">Hai un equipu usando agora mesmo l\'almacenamientu USB.</string>
 </resources>

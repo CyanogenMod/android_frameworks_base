@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">undgå tænd/sluk-knappen</string>
   <string name="permdesc_preventpower">Tillader app\'en at tilsidesætte tænd/sluk-knappen</string>
   <string name="permlab_sendMockSms">Send imiterede SMS-beskeder</string>
-  <string name="permdesc_sendMockSms">Tillader app\'en at sende imiterede SMS-beskeder. Dette tillader betroede apps at sende SMS-beskeder. Ondsindede apps kan sende beskeder uafbrudt, der blokerer enhedens underretningssystem og forstyrrer brugeren.</string>
+  <string name="permdesc_sendMockSms">Tillader app\'en at sende imiterede SMS-beskeder. Dette tillader betroede apps at sende SMS-beskeder. Ondsindede apps kan konstant sende beskeder, der blokerer enhedens underretningssystem og forstyrrer brugeren.</string>
   <string name="storage_sd_dock_card">Dock SD-kort</string>
   <string name="app_killed_message">App lukket</string>
   <string name="global_action_reboot">Genstart</string>
@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Tillader en app at ændre baggrund for skærmlåsen.</string>
   <string name="permlab_useHardwareFramework">anvend hardware framework</string>
   <string name="permdesc_useHardwareFramework">Giver en app adgang til CM hardware framework.</string>
-  <string name="permlab_keyguardApplicationWidget">Placér applikationswidget på tastaturlåsen</string>
-  <string name="permdesc_keyguardApplicationWidget">Tillader en app at placere applikationens widget på tastaturlåsen.</string>
+  <string name="permlab_keyguardApplicationWidget">placér app-widget på tastaturlås</string>
+  <string name="permdesc_keyguardApplicationWidget">Gør det muligt for en app at placere appens widget på tastaturlåsen.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
   <string name="app_ops_access_camera">tilgå kameraet</string>
   <string name="app_ops_access_location">tilgå din placering</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB via netværk aktiveret</string>
   <string name="adb_both_active_notification_title">ADB via USB &amp; netværk aktiveret</string>
   <string name="adb_active_generic_notification_message">Tryk for at deaktivere fejlretning.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Alle data på dit USB-lager (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
-  <string name="extmedia_format_message_cm" product="default">Alle data på dit kort (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
+  <string name="usb_extmedia_format_message">Alle data på dit USB-lager (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
+  <string name="sd_extmedia_format_message">Alle data på dit kort (under stien \'%1$s\') vil blive slettet. Denne handling kan ikke fortrydes!</string>
   <string name="usb_storage_notification_manage_message">Tryk for at konfigurere</string>
   <string name="sd_ext_media_checking_notification_title">Forbereder SD-kort</string>
   <string name="sd_ext_media_checking_notification_message">Kontrollerer SD-kort for fejl\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Det lykkedes ikke at installere temaet</string>
   <string name="theme_install_error_message">%s kunne ikke installeres</string>
   <string name="storage_uicc">UICC lager</string>
+  <string name="sd_progress_unmounting">Frakobler SD-kort\u2026</string>
+  <string name="sd_progress_erasing">Sletter SD-kort\u2026</string>
+  <string name="sd_format_error">Kunne ikke slette SD-kort.</string>
+  <string name="sd_media_bad_removal">SD-kortet blev fjernet før det blev frakoblet.</string>
+  <string name="sd_media_checking">SD-kortet bliver i øjeblikket kontrolleret.</string>
+  <string name="sd_media_removed">SD-kortet er blevet fjernet.</string>
+  <string name="sd_media_shared">SD-kortet er i øjeblikket i brug af en computer.</string>
+  <string name="usb_progress_unmounting">Frakobler USB-lager\u2026</string>
+  <string name="usb_progress_erasing">Sletter USB-lager\u2026</string>
+  <string name="usb_format_error">Kunne ikke slette USB-lager.</string>
+  <string name="usb_media_bad_removal">USB-lageret blev fjernet før det blev frakoblet.</string>
+  <string name="usb_media_checking">USB-lageret bliver i øjeblikket kontrolleret.</string>
+  <string name="usb_media_removed">USB-lageret er blevet fjernet.</string>
+  <string name="usb_media_shared">USB-lageret er i øjeblikket i brug af en computer.</string>
 </resources>

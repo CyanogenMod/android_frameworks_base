@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">전원 키 방지</string>
   <string name="permdesc_preventpower">앱이 전원 키의 작동을 방지하도록 허용합니다</string>
   <string name="permlab_sendMockSms">모의 SMS 보내기</string>
-  <string name="permdesc_sendMockSms">앱이 모의 SMS를 보낼 수 있도록 허용합니다. 앱이 신뢰할 수 있는 앱에 SMS를 보낼 수 있도록 합니다. 악성 앱이 이 권한으로 메시지를 지속적으로 보내 알림 시스템을 차단하고 사용자를 방해할 수 있습니다.</string>
+  <string name="permdesc_sendMockSms">앱이 모의 SMS를 보낼 수 있도록 허용합니다. 이는 앱이 신뢰할 수 있는 앱에 SMS를 보낼 수 있도록 합니다. 악성 앱이 이 권한으로 메시지를 지속적으로 보내, 알림 시스템을 차단하고 사용자를 방해할 수 있습니다.</string>
   <string name="storage_sd_dock_card">독 SD 카드</string>
   <string name="app_killed_message">앱 종료됨</string>
   <string name="global_action_reboot">다시 시작</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">네트워크 ADB 활성화됨</string>
   <string name="adb_both_active_notification_title">USB 및 네트워크 ADB 활성화됨</string>
   <string name="adb_active_generic_notification_message">디버깅을 사용하지 않으려면 터치하세요.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">USB 저장소에 있는 모든 데이터(\'%1$s\'경로 아래)가 삭제 됩니다. 이 작업은 돌이킬 수 없습니다!</string>
-  <string name="extmedia_format_message_cm" product="default">카드에 있는 모든 데이터(\'%1$s\'경로 아래)가 삭제 됩니다. 이 작업은 돌이킬 수 없습니다!</string>
+  <string name="usb_extmedia_format_message">USB 저장소에 있는 모든 데이터(\'%1$s\' 경로 아래)가 삭제됩니다. 이 작업은 돌이킬 수 없습니다!</string>
+  <string name="sd_extmedia_format_message">카드에 있는 모든 데이터(\'%1$s\' 경로 아래)가 삭제됩니다. 이 작업은 돌이킬 수 없습니다!</string>
   <string name="usb_storage_notification_manage_message">탭하여 관리하기</string>
   <string name="sd_ext_media_checking_notification_title">SD 카드 준비 중\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD 카드의 오류를 확인 중입니다\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">테마 설치 실패</string>
   <string name="theme_install_error_message">%s을(를) 설치하지 못했습니다</string>
   <string name="storage_uicc">UICC 저장소</string>
+  <string name="sd_progress_unmounting">SD 카드 마운트 해제 중\u2026</string>
+  <string name="sd_progress_erasing">SD 카드 지우는 중\u2026</string>
+  <string name="sd_format_error">SD 카드를 지울 수 없습니다.</string>
+  <string name="sd_media_bad_removal">SD 카드가 마운트 해제되지 않고 제거되었습니다.</string>
+  <string name="sd_media_checking">SD 카드를 검사 중입니다.</string>
+  <string name="sd_media_removed">SD 카드가 제거되었습니다.</string>
+  <string name="sd_media_shared">SD 카드가 컴퓨터에서 사용되는 중입니다.</string>
+  <string name="usb_progress_unmounting">USB 저장소 마운트 해제 중\u2026</string>
+  <string name="usb_progress_erasing">USB 저장소 지우는 중\u2026</string>
+  <string name="usb_format_error">USB 저장소를 지울 수 없습니다.</string>
+  <string name="usb_media_bad_removal">USB 저장소가 마운트 해제되지 않고 제거되었습니다.</string>
+  <string name="usb_media_checking">USB 저장소를 검사 중입니다.</string>
+  <string name="usb_media_removed">USB 저장소가 제거되었습니다.</string>
+  <string name="usb_media_shared">USB 저장소가 컴퓨터에서 사용되는 중입니다.</string>
 </resources>

@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени позадину на закључаном екрану.</string>
   <string name="permlab_useHardwareFramework">користи хардверски оквир</string>
   <string name="permdesc_useHardwareFramework">Дозвољава апликацији приступ CM хардверском оквиру.</string>
-  <string name="permlab_keyguardApplicationWidget">постави додатак апликације закључаног екрана</string>
-  <string name="permdesc_keyguardApplicationWidget">Дозволи апликацији да постави апликациони додатак на закључани екран.</string>
+  <string name="permlab_keyguardApplicationWidget">Постави виџет закључаног екрана</string>
+  <string name="permdesc_keyguardApplicationWidget">Дозвољава апликацији да постави виџет на закључаном екрану.</string>
   <string name="immersive_mode_confirmation_bottom">Превуци нагоре од дна за излазак из целог екрана.</string>
   <string name="app_ops_access_camera">приступ камери</string>
   <string name="app_ops_access_location">приступ твојој локацији</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB преко мреже омогућено</string>
   <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућено</string>
   <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Сви подаци са твог USB складишта (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
-  <string name="extmedia_format_message_cm" product="default">Сви подаци са твоје картице (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
+  <string name="usb_extmedia_format_message">Сви подаци са твог USB складишта (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
+  <string name="sd_extmedia_format_message">Сви подаци са твоје картице (испод пута \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
   <string name="usb_storage_notification_manage_message">Додирни да управљаш</string>
   <string name="sd_ext_media_checking_notification_title">Припрема SD картице\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Провера SD картице за грешкама\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Инсталирање теме није успело</string>
   <string name="theme_install_error_message">%s инсталирање није успело</string>
   <string name="storage_uicc">UICC складиште</string>
+  <string name="sd_progress_unmounting">Демонтирање SD картице\u2026</string>
+  <string name="sd_progress_erasing">Брисање SD картице\u2026</string>
+  <string name="sd_format_error">Није могуће избрисати SD картицу.</string>
+  <string name="sd_media_bad_removal">SD картица је уклоњена пре демонтирања.</string>
+  <string name="sd_media_checking">SD картица се тренутно проверава.</string>
+  <string name="sd_media_removed">SD картица је уклоњена.</string>
+  <string name="sd_media_shared">SD картица је тренутно у употреби од стране рачунара.</string>
+  <string name="usb_progress_unmounting">Демонтажа USB складишта\u2026</string>
+  <string name="usb_progress_erasing">Брисање USB складишта\u2026</string>
+  <string name="usb_format_error">Није могуће избрисати USB складиште.</string>
+  <string name="usb_media_bad_removal">USB складиште је уклоњено пре демонтирања.</string>
+  <string name="usb_media_checking">USB складиште се тренутно проверава.</string>
+  <string name="usb_media_removed">USB складиште је уклоњено.</string>
+  <string name="usb_media_shared">USB складиште је тренутно у употреби од стране рачунара.</string>
 </resources>
