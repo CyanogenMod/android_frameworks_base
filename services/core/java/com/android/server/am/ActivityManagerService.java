@@ -83,6 +83,7 @@ import com.android.server.SystemServiceManager;
 import com.android.server.Watchdog;
 import com.android.server.am.ActivityStack.ActivityState;
 import com.android.server.firewall.IntentFirewall;
+import com.android.server.pm.Installer;
 import com.android.server.pm.UserManagerService;
 import com.android.server.wm.AppTransition;
 import com.android.server.wm.WindowManagerService;
@@ -372,6 +373,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     /** All system services */
     SystemServiceManager mSystemServiceManager;
+
+    private Installer mInstaller;
 
     /** Run all ActivityStacks through this */
     ActivityStackSupervisor mStackSupervisor;
@@ -2425,6 +2428,10 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     public void setSystemServiceManager(SystemServiceManager mgr) {
         mSystemServiceManager = mgr;
+    }
+
+    public void setInstaller(Installer installer) {
+        mInstaller = installer;
     }
 
     private void start() {
@@ -6409,6 +6416,18 @@ public final class ActivityManagerService extends ActivityManagerNative
                 return;
             }
             mCallFinishBooting = false;
+        }
+
+        ArraySet<String> completedIsas = new ArraySet<String>();
+        for (String abi : Build.SUPPORTED_ABIS) {
+            Process.establishZygoteConnectionForAbi(abi);
+            final String instructionSet = VMRuntime.getInstructionSet(abi);
+            if (!completedIsas.contains(instructionSet)) {
+                if (mInstaller.markBootComplete(VMRuntime.getInstructionSet(abi)) != 0) {
+                    Slog.e(TAG, "Unable to mark boot complete for abi: " + abi);
+                }
+                completedIsas.add(instructionSet);
+            }
         }
 
         // Register receivers to handle package update events
