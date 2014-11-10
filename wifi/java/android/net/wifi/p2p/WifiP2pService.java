@@ -1716,7 +1716,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
     class GroupCreatedState extends State {
         @Override
         public void enter() {
-            logd(getName() + "mPendingReformGroupIndication=" + mPendingReformGroupIndication);
+            logd(getName() + ": mPendingReformGroupIndication=" + mPendingReformGroupIndication);
             if (mPendingReformGroupIndication) {
                 mPendingReformGroupIndication = false;
                 if (mWifiNative.p2pGroupRemove(mGroup.getInterface())) {
