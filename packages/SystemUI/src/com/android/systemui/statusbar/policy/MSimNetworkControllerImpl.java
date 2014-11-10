@@ -63,7 +63,7 @@ import com.android.systemui.R;
 public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     // debug
     static final String TAG = "StatusBar.MSimNetworkController";
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
     // telephony
