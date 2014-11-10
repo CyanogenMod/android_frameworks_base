@@ -48,7 +48,6 @@
   <string name="permlab_preventpower">förhindra avstängningsknapp</string>
   <string name="permdesc_preventpower">Tillåter appen att åsidosätta avstängningsknappen</string>
   <string name="permlab_sendMockSms">skicka sken-SMS</string>
-  <string name="permdesc_sendMockSms">Tillåter appen att skicka sken-SMS. Detta tillåter en app att skicka SMS till betrodda applikationer. Illasinnade appar kan skicka meddelanden oavbrutet och därmed blockera enhetens aviseringssystem samt störa användaren.</string>
   <string name="storage_sd_dock_card">SD-kort i docka</string>
   <string name="app_killed_message">App tvångsavslutad</string>
   <string name="global_action_reboot">Omstart</string>
@@ -135,6 +134,4 @@ modifiera det tema som du har tillämpat.</string>
   <string name="adb_net_active_notification_title">ADB över nätverk aktiverat</string>
   <string name="adb_both_active_notification_title">ADB över USB och nätverk aktiverat</string>
   <string name="adb_active_generic_notification_message">Tryck på för att inaktivera felsökning.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Alla data på din USB-lagring (under sökvägen \'%1$s\') kommer att tas bort. Denna åtgärd kan inte ångras!</string>
-  <string name="extmedia_format_message_cm" product="default">All data på ditt minneskort (under sökvägen \'%1$s\') kommer att tas bort. Denna åtgärd kan inte ångras!</string>
 </resources>

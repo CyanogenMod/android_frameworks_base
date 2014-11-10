@@ -46,7 +46,7 @@
   <string name="reboot_confirm" product="tablet">Váš tablet bude reštartovaný.</string>
   <string name="reboot_confirm" product="default">Váš telefón bude reštartovaný.</string>
   <string name="permlab_preventpower">zabránenie klávesy napájania</string>
-  <string name="permdesc_preventpower">Povolí aplikácii prepísať klávesu napájania</string>
+  <string name="permdesc_preventpower">Umožňuje aplikácii prepísať klávesu napájania</string>
   <string name="permlab_sendMockSms">posielať falošné SMS správy</string>
   <string name="permdesc_sendMockSms">Umožňuje aplikácii odosielať falošné SMS správy. Toto povolenie umožňuje aplikácii posielať správy do dôveryhodných aplikácií. Škodlivé aplikácie môžu posielať správy nepretržite, blokovať oznamovací systém zariadenia a vyrušovať používateľa.</string>
   <string name="storage_sd_dock_card">Karta SD v doku</string>
@@ -86,7 +86,7 @@
   <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
   <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="permlab_keyguardApplicationWidget">nastaviť miniaplikáciu na obrazovke uzamknutia</string>
-  <string name="permdesc_keyguardApplicationWidget">Umožňuje nastaviť miniaplikáciu na obrazovke uzamknutia.</string>
+  <string name="permdesc_keyguardApplicationWidget">Umožňuje aplikácii nastaviť miniaplikáciu na obrazovke uzamknutia.</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB cez sieť povolené</string>
   <string name="adb_both_active_notification_title">ADB cez USB a sieť povolené</string>
   <string name="adb_active_generic_notification_message">Dotykom zakážate ladenie.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Vymažú sa všetky údaje na vašom USB  úložisku (cesta \"%1$s\"). Túto akciu nemožno vrátiť späť!</string>
-  <string name="extmedia_format_message_cm" product="default">Vymažú sa všetky údaje na vašej karte (cesta \"%1$s\"). Túto akciu nemožno vrátiť späť!</string>
+  <string name="usb_extmedia_format_message">Vymažú sa všetky údaje na vašom USB úložisku (cesta \'%1$s\'). Túto akciu nemožno vrátiť späť!</string>
+  <string name="sd_extmedia_format_message">Vymažú sa všetky údaje na vašej karte SD (cesta \'%1$s\'). Túto akciu nemožno vrátiť späť!</string>
   <string name="usb_storage_notification_manage_message">Dotykom spravovať</string>
   <string name="sd_ext_media_checking_notification_title">Príprava karty SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Kontrola chýb na karte SD\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Inštalácia témy zlyhala</string>
   <string name="theme_install_error_message">Nepodarilo sa nainštalovať tému %s</string>
   <string name="storage_uicc">Úložisko UICC</string>
+  <string name="sd_progress_unmounting">Odpájanie karty SD\u2026</string>
+  <string name="sd_progress_erasing">Vymazávanie karty SD\u2026</string>
+  <string name="sd_format_error">Nie je možné vymazať kartu SD.</string>
+  <string name="sd_media_bad_removal">Karta SD bola odstránená pred jej odpojením.</string>
+  <string name="sd_media_checking">Karta SD sa v súčasnosti kontroluje.</string>
+  <string name="sd_media_removed">Karta SD bola odstránená.</string>
+  <string name="sd_media_shared">Kartu SD v súčasnosti používa počítač.</string>
+  <string name="usb_progress_unmounting">Odpájanie USB úložiska\u2026</string>
+  <string name="usb_progress_erasing">Vymazávanie USB úložiska\u2026</string>
+  <string name="usb_format_error">Nie je možné vymazať USB úložisko.</string>
+  <string name="usb_media_bad_removal">USB úložisko bolo odstránené pred jeho odpojením.</string>
+  <string name="usb_media_checking">USB úložisko sa v súčasnosti kontroluje.</string>
+  <string name="usb_media_removed">USB úložisko bolo odstránené.</string>
+  <string name="usb_media_shared">USB úložisko v súčasnosti používa počítač.</string>
 </resources>

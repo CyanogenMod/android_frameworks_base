@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">impedeix la tecla d\'engegada</string>
   <string name="permdesc_preventpower">Permet que l\'app sobreescrigui la tecla d\'engegada</string>
   <string name="permlab_sendMockSms">envia missatges SMS simulats</string>
-  <string name="permdesc_sendMockSms">Permet a l\'app enviar missatges SMS simulats. Això permet a una app enviar missatges a aplicacions de confiança. Apps malicioses podrien enviar missatges continuament, bloquejant el sistema de notificacions del dispositiu, molestant l\'usuari.</string>
+  <string name="permdesc_sendMockSms">Permet a l\'app enviar missatges SMS simulats. Això permet a una app enviar missatges a apps de confiança. Apps malicioses podrien enviar missatges continuament, bloquejant el sistema de notificacions del dispositiu i molestant l\'usuari.</string>
   <string name="storage_sd_dock_card">Acopla targeta SD</string>
   <string name="app_killed_message">App matada</string>
   <string name="global_action_reboot">Reinicia</string>
@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Permet que una app estableixi el fons de la pantalla de bloqueig.</string>
   <string name="permlab_useHardwareFramework">utilitza el marc de hardware</string>
   <string name="permdesc_useHardwareFramework">Permet a una app accedir al marc de hardware de CM.</string>
-  <string name="permlab_keyguardApplicationWidget">Defineix el widget de l\'aplicació de bloqueig de pantalla</string>
-  <string name="permdesc_keyguardApplicationWidget">Permet a una app definir el widget de l\'aplicació de bloqueig de pantalla.</string>
+  <string name="permlab_keyguardApplicationWidget">estableix el widget de l\'app a la pantalla de bloqueig</string>
+  <string name="permdesc_keyguardApplicationWidget">Permet que una app estableixi el widget de l\'app a la pantalla de bloqueig.</string>
   <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB sobre xarxa habilitat</string>
   <string name="adb_both_active_notification_title">ADB sobre USB i xarxa habilitat</string>
   <string name="adb_active_generic_notification_message">Toca per deshabilitar la depuració.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">S\'esborraran totes les dades del teu emmagatzematge USB (a la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
-  <string name="extmedia_format_message_cm" product="default">S\'esborraran totes les dades de la teva targeta (a la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
+  <string name="usb_extmedia_format_message">S\'esborraran totes les dades del teu emmagatzematge USB (sota la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
+  <string name="sd_extmedia_format_message">S\'esborraran totes les dades de la teva targeta (sota la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
   <string name="usb_storage_notification_manage_message">Pica per gestionar</string>
   <string name="sd_ext_media_checking_notification_title">S\'està preparant la targeta SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">S\'està comprovant la targeta SD en busca d\'errors\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">No ha pogut instal·lar el tema</string>
   <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
   <string name="storage_uicc">Emmagatzematge UICC</string>
+  <string name="sd_progress_unmounting">S\'està desmuntant la targeta SD\u2026</string>
+  <string name="sd_progress_erasing">S\'està esborrant la targeta SD\u2026</string>
+  <string name="sd_format_error">No s\'ha pogut esborrar la targeta SD.</string>
+  <string name="sd_media_bad_removal">S\'ha extret la targeta SD abans de desmuntar-la.</string>
+  <string name="sd_media_checking">S\'està comprovant la targeta SD.</string>
+  <string name="sd_media_removed">S\'ha extret la targeta SD.</string>
+  <string name="sd_media_shared">La targeta SD està en ús per part d\'un ordinador.</string>
+  <string name="usb_progress_unmounting">S\'està desmuntant l\'emmagatzematge USB\u2026</string>
+  <string name="usb_progress_erasing">S\'esta esborrant l\'emmagatzematge USB\u2026</string>
+  <string name="usb_format_error">No s\'ha pogut esborrar l\'emmagatzematge USB.</string>
+  <string name="usb_media_bad_removal">S\'ha extret l\'emmagatzematge USB abans de desmuntar-lo.</string>
+  <string name="usb_media_checking">S\'està comprovant l\'emmagatzematge USB.</string>
+  <string name="usb_media_removed">S\'ha extret l\'emmagatzematge USB.</string>
+  <string name="usb_media_shared">L\'emmagatzematge USB està en ús per part d\'un ordinador.</string>
 </resources>

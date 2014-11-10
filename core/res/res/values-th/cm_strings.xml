@@ -48,7 +48,6 @@
   <string name="permlab_preventpower">ป้องกันไม่ให้ใช้ปุ่มเพาเวอร์</string>
   <string name="permdesc_preventpower">อนุญาตให้แอปเขียนทับปุ่มเพาเวอร์?</string>
   <string name="permlab_sendMockSms">ส่งข้อความ SMS จำลอง</string>
-  <string name="permdesc_sendMockSms">อนุญาติให้แอปส่งข้อความ SMS จำลอง\nการอนุญาตให้แอปส่ง SMS จำลอง แอปที่เป็นอันตรายอาจส่งข้อความอย่างต่อเนื่อง\nและอาจปิดกั้นระบบแจ้งเตือนของอุปกรณ์และอาจมีผลกระทบต่อผู้ใช้.</string>
   <string name="storage_sd_dock_card">แท่น SD card</string>
   <string name="app_killed_message">ปิดแอป</string>
   <string name="global_action_reboot">เริ่มระบบใหม่</string>
@@ -85,8 +84,6 @@
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
   <string name="permlab_useHardwareFramework">ใช้ฮาร์ดแวร์เฟรมเวิร์ค</string>
   <string name="permdesc_useHardwareFramework">อนุญาตให้แอปเข้าถึง CM ฮาร์ดแวร์เฟรมเวิร์ค</string>
-  <string name="permlab_keyguardApplicationWidget">ตั้งวิดเจ็ทล็อกหน้าจอ</string>
-  <string name="permdesc_keyguardApplicationWidget">อนุญาติให้แอปตั้งวิดเจ็ทล็อกหน้าจอได้</string>
   <string name="immersive_mode_confirmation_bottom">ปัดขึ้นจากด้านล่างเพื่อออกจากรูปแบบเต็มจอ</string>
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งของคุณ</string>
@@ -136,8 +133,8 @@
   <string name="adb_net_active_notification_title">ADB บนเครือข่ายถูกเปิดใช้งาน</string>
   <string name="adb_both_active_notification_title">ADB บน USB และ &amp; เครือข่ายถูกเปิดใช้งาน</string>
   <string name="adb_active_generic_notification_message">แตะเพื่อปิดใช้งานการแก้ไขข้อบกพร่อง</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">จะลบข้อมูลทั้งหมดในที่เก็บ USB ของคุณ (ในพาธ \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
-  <string name="extmedia_format_message_cm" product="default">จะลบข้อมูลทั้งหมดในที่เก็บการ์ดของคุณ (ในพาธ \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
+  <string name="usb_extmedia_format_message">จะลบข้อมูลทั้งหมดในที่เก็บ USB ของคุณ (ในพาธ \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
+  <string name="sd_extmedia_format_message">จะลบข้อมูลทั้งหมดในที่เก็บการ์ดของคุณ (ในพาธ \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
   <string name="usb_storage_notification_manage_message">แตะเพื่อจัดการ</string>
   <string name="sd_ext_media_checking_notification_title">เตรียม SD card\u2026</string>
   <string name="sd_ext_media_checking_notification_message">กำลังตรวสอบข้อผิดพลาดของ SD card\u2026</string>
@@ -177,4 +174,18 @@
   <string name="theme_install_error_title">การติดตั้งชุดรูปแบบล้มเหลว</string>
   <string name="theme_install_error_message">ชุดรูปแบบ %s ติดตั้งล้มเหลว</string>
   <string name="storage_uicc">ที่เก็บ UICC</string>
+  <string name="sd_progress_unmounting">กำลังยกเลิกเชื่อมต่อ SD card\u2026</string>
+  <string name="sd_progress_erasing">กำลังลบ SD card\u2026</string>
+  <string name="sd_format_error">ไม่สามารถลบ SD card</string>
+  <string name="sd_media_bad_removal">SD card ถูกนำออกก่อนที่จะยกเลิกการเชื่อมต่อ</string>
+  <string name="sd_media_checking">กำลังตรวจสอบ SD card</string>
+  <string name="sd_media_removed">SD card ได้ถูกนำออก</string>
+  <string name="sd_media_shared">SD card กำลังถูกใช้โดยคอมพิวเตอร์</string>
+  <string name="usb_progress_unmounting">กำลังยกเลิกการเชื่อมต่อที่เก็บข้อมูล USB\u2026</string>
+  <string name="usb_progress_erasing">กำลังลบที่เก็บข้อมูล USB\u2026</string>
+  <string name="usb_format_error">ไม่สามารถลบที่เก็บข้อมูล USB</string>
+  <string name="usb_media_bad_removal">ที่เก็บข้อมูล USB ถูกนำออกก่อนยกเลิกการเชื่อมต่อ</string>
+  <string name="usb_media_checking">กำลังตรวจสอบที่เก็บข้อมูล USB</string>
+  <string name="usb_media_removed">ที่เก็บข้อมูล USB ถูกนำออก</string>
+  <string name="usb_media_shared">ที่เก็บข้อมูล USB ถูกใช้โดยคอมพิวเตอร์</string>
 </resources>

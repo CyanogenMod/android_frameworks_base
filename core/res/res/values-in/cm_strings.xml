@@ -85,8 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah wallpaper layar kunci.</string>
   <string name="permlab_useHardwareFramework">gunakan hardware framework</string>
   <string name="permdesc_useHardwareFramework">Izinkan app untuk mengakses framework hardware CM.</string>
-  <string name="permlab_keyguardApplicationWidget">mengatur pengaman kunci widget aplikasi</string>
-  <string name="permdesc_keyguardApplicationWidget">Izinkan sebuah aplikasi untuk mengatur widget aplikasi pada pengaman kunci.</string>
+  <string name="permlab_keyguardApplicationWidget">atur widget aplikasi pada layar kunci</string>
+  <string name="permdesc_keyguardApplicationWidget">Izinkan sebuah aplikasi untuk mengatur widget aplikasi pada layar kunci.</string>
   <string name="immersive_mode_confirmation_bottom">Swipe dari bawah ke atas untuk keluar dari layar penuh.</string>
   <string name="app_ops_access_camera">mengakses kamera</string>
   <string name="app_ops_access_location">mengakses lokasi anda</string>
@@ -136,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB melalui jaringan diaktifkan</string>
   <string name="adb_both_active_notification_title">ADB melalui USB &amp; jaringan diaktifkan</string>
   <string name="adb_active_generic_notification_message">Sentuh untuk menonaktifkan debug.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Semua data pada penyimpanan USB Anda (di bawah jalur \'%1$s\') akan dihapus. Tindakan ini tidak dapat dikembalikan!</string>
-  <string name="extmedia_format_message_cm" product="default">Semua data pada kartu Anda (di bawah jalur \'%1$s\') akan dihapus. Tindakan ini tidak dapat dikembalikan!</string>
+  <string name="usb_extmedia_format_message">Semua data pada penyimpanan USB Anda (di bawah jalur \'%1$s\') akan dihapus. Tindakan ini tidak dapat dikembalikan!</string>
+  <string name="sd_extmedia_format_message">Semua data pada kartu Anda (di bawah jalur \'%1$s\') akan dihapus. Tindakan ini tidak dapat dikembalikan!</string>
   <string name="usb_storage_notification_manage_message">Tap untuk mengelola</string>
   <string name="sd_ext_media_checking_notification_title">Mempersiapkan kartu SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Memeriksa kesalahan pada kartu SD\u2026</string>
@@ -146,9 +146,9 @@
   <string name="sd_ext_media_unmountable_notification_title">Kartu SD rusak</string>
   <string name="sd_ext_media_unmountable_notification_message">Kartu SD rusak. Cobalah diformat ulang.</string>
   <string name="sd_ext_media_badremoval_notification_title">Kartu SD tiba-tiba dicabut</string>
-  <string name="sd_ext_media_badremoval_notification_message">Lepaskan kartu SD sebelum dicabut untuk menghindari kehilangan data.</string>
-  <string name="sd_ext_media_safe_unmount_notification_title">Kartu SD aman untuk dicabut</string>
-  <string name="sd_ext_media_safe_unmount_notification_message">Anda dapat dengan aman mencabut kartu SD.</string>
+  <string name="sd_ext_media_badremoval_notification_message">Lepaskan kartu SD sebelum dikeluarkan untuk menghindari kehilangan data.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Kartu SD aman untuk dikeluarkan</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Anda dapat dengan aman mengeluarkan kartu SD.</string>
   <string name="sd_ext_media_nomedia_notification_title">Kartu SD dicabut</string>
   <string name="sd_ext_media_nomedia_notification_message">Kartu SD dicabut. Masukkan yang baru.</string>
   <string name="usb_ext_media_checking_notification_title">Mempersiapkan penyimpanan USB\u2026</string>
@@ -158,9 +158,9 @@
   <string name="usb_ext_media_unmountable_notification_title">Penyimpanan USB rusak</string>
   <string name="usb_ext_media_unmountable_notification_message">Penyimpanan USB rusak. Cobalah diformat ulang.</string>
   <string name="usb_ext_media_badremoval_notification_title">Penyimpanan USB tiba-tiba dicabut</string>
-  <string name="usb_ext_media_badremoval_notification_message">Lepaskan penyimpanan USB sebelum dicabut untuk menghindari kehilangan data.</string>
-  <string name="usb_ext_media_safe_unmount_notification_title">Penyimpanan USB aman untuk dicabut</string>
-  <string name="usb_ext_media_safe_unmount_notification_message">Anda dapat dengan aman mencabut penyimpanan USB.</string>
+  <string name="usb_ext_media_badremoval_notification_message">Lepaskan penyimpanan USB sebelum dikeluarkan untuk menghindari kehilangan data.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Penyimpanan USB aman untuk dikeluarkan</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Anda dapat dengan aman mengeluarkan penyimpanan USB.</string>
   <string name="usb_ext_media_nomedia_notification_title">Penyimpanan USB dicabut</string>
   <string name="usb_ext_media_nomedia_notification_message">Penyimpanan USB dicabut. Masukkan yang baru.</string>
   <string name="progress_nomediapresent" product="default">Tidak ada piranti media yang dapat dilepas\u2026</string>
@@ -177,4 +177,18 @@
   <string name="theme_install_error_title">Gagal menginstal tema</string>
   <string name="theme_install_error_message">%s gagal untuk di instal</string>
   <string name="storage_uicc">Penyimpanan UICC</string>
+  <string name="sd_progress_unmounting">Melepaskan kartu SD\u2026</string>
+  <string name="sd_progress_erasing">Menghapus kartu SD\u2026</string>
+  <string name="sd_format_error">Tidak dapat menghapus kartu SD.</string>
+  <string name="sd_media_bad_removal">Kartu SD dikeluarkan sebelum dilepaskan.</string>
+  <string name="sd_media_checking">Kartu SD saat ini sedang diperiksa.</string>
+  <string name="sd_media_removed">Kartu SD telah dihapus.</string>
+  <string name="sd_media_shared">Kartu SD saat ini digunakan oleh komputer.</string>
+  <string name="usb_progress_unmounting">Melepaskan penyimpanan USB\u2026</string>
+  <string name="usb_progress_erasing">Menghapus penyimpanan USB\u2026</string>
+  <string name="usb_format_error">Tidak bisa menghapus penyimpanan USB.</string>
+  <string name="usb_media_bad_removal">Penyimpanan USB dikeluarkan sebelum di lepaskan.</string>
+  <string name="usb_media_checking">Penyimpanan USB saat ini sedang diperiksa.</string>
+  <string name="usb_media_removed">Penyimpanan USB telah dihapus.</string>
+  <string name="usb_media_shared">Penyimpanan USB saat ini digunakan oleh komputer.</string>
 </resources>

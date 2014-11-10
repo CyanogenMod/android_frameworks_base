@@ -134,8 +134,8 @@
   <string name="adb_net_active_notification_title">ADB şəbəkə üzərindən aktivdir</string>
   <string name="adb_both_active_notification_title">ADB USB &amp; şəbəkəsi üzərindən aktivdir</string>
   <string name="adb_active_generic_notification_message">Sazlamanı bağlamaq üçün toxunun.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">USB saxlama (\'%1$s\') yerinizdəki bütün verilənlər silənəcək. Bu hərəkətin geri dönüşü yoxdur!</string>
-  <string name="extmedia_format_message_cm" product="default">Kartınızdakı (\'%1$s\') bütün verilənlər silinəcək. Bu hərəkətin geri dönüşü yoxdur!</string>
+  <string name="usb_extmedia_format_message">USB yaddaş (\'%1$s\') sahəsindəki bütün məlumatlar silinəcək. Bu əməliyyatın geri dönüşü yoxdur!</string>
+  <string name="sd_extmedia_format_message">Kartınızdakı (\'%1$s\') bütün məlumatlar silinəcək. Bu əməliyyatın geri dönüşü yoxdur!</string>
   <string name="usb_storage_notification_manage_message">İdarə etmək üçün toxunun</string>
   <string name="sd_ext_media_checking_notification_title">SD kart hazırlanır\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD kart xətaları yoxlanılır\u2026</string>
@@ -172,4 +172,21 @@
   <string name="stk_cc_ss_to_dial">SS sorğusu DIAL sorğusu ilə əvəzləndi.</string>
   <string name="stk_cc_ss_to_ussd">SS sorğusu USSD sorğusu ilə əvəzlədi.</string>
   <string name="stk_cc_ss_to_ss">SS sorğusu yeni bir SS sorğusu ilə əvəzləndi.</string>
+  <string name="theme_install_error_title">Tema yüklənə bilmədi</string>
+  <string name="theme_install_error_message">%s yüklənə bilmədi</string>
+  <string name="storage_uicc">UICC saxlama</string>
+  <string name="sd_progress_unmounting">SD kartla əlaqə kəsilir\u2026</string>
+  <string name="sd_progress_erasing">SD kart silinir\u2026</string>
+  <string name="sd_format_error">SD kart silinə bilmədi.</string>
+  <string name="sd_media_bad_removal">SD kart əlaqə kəsilmədən çıxarıldı.</string>
+  <string name="sd_media_checking">SD kart hal-hazırda yoxlanılır.</string>
+  <string name="sd_media_removed">SD kart çıxarıldı.</string>
+  <string name="sd_media_shared">SD kart kompüter tərəfindən istifadə olunur.</string>
+  <string name="usb_progress_unmounting">USD yaddaşla əlaqə kəsilir\u2026</string>
+  <string name="usb_progress_erasing">USD yaddaş silinir\u2026</string>
+  <string name="usb_format_error">USB yaddaş silinə bilmədi.</string>
+  <string name="usb_media_bad_removal">USB yaddaş əlaqə kəsilmədən çıxarıldı.</string>
+  <string name="usb_media_checking">USB yaddaş hal-hazırda yoxlanılır.</string>
+  <string name="usb_media_removed">USB yaddaş çıxarıldı.</string>
+  <string name="usb_media_shared">USB yaddaş kompüter tərəfindən istifadə olunur.</string>
 </resources>

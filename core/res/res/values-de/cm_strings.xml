@@ -85,6 +85,8 @@
   <string name="permdesc_setKeyguardWallpaper">Ermöglicht der App, den Sperrbildschirm-Hintergrund zu ändern.</string>
   <string name="permlab_useHardwareFramework">Hardware-Framework verwenden</string>
   <string name="permdesc_useHardwareFramework">Ermöglicht der App, auf das CM-Hardware-Framework zuzugreifen.</string>
+  <string name="permlab_keyguardApplicationWidget">Sperrbildschirm-App-Widget festlegen</string>
+  <string name="permdesc_keyguardApplicationWidget">Ermöglicht der App, das App-Widget auf dem Sperrbildschirm festzulegen.</string>
   <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>
@@ -134,8 +136,8 @@
   <string name="adb_net_active_notification_title">ADB über Netzwerk aktiviert</string>
   <string name="adb_both_active_notification_title">ADB über USB &amp; Netzwerk aktiviert</string>
   <string name="adb_active_generic_notification_message">Berühren, um Debugging zu deaktivieren.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">Alle auf Ihrem USB-Speicher im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
-  <string name="extmedia_format_message_cm" product="default">Alle auf Ihrer SD-Karte im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
+  <string name="usb_extmedia_format_message">Alle auf Ihrem USB-Speicher im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
+  <string name="sd_extmedia_format_message">Alle auf Ihrer SD-Karte im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
   <string name="usb_storage_notification_manage_message">Zum Verwalten tippen</string>
   <string name="sd_ext_media_checking_notification_title">SD-Karte wird vorbereitet\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD-Karte wird auf Fehler überprüft\u2026</string>
@@ -175,4 +177,18 @@
   <string name="theme_install_error_title">Design konnte nicht intalliert werden</string>
   <string name="theme_install_error_message">%s konnte nicht installiert werden</string>
   <string name="storage_uicc">UICC-Speicher</string>
+  <string name="sd_progress_unmounting">SD-Karte wird ausgeworfen\u2026</string>
+  <string name="sd_progress_erasing">SD-Karte wird gelöscht\u2026</string>
+  <string name="sd_format_error">SD-Karte konnte nicht gelöscht werden.</string>
+  <string name="sd_media_bad_removal">Die SD-Karte wurde entfernt, bevor sie ausgeworfen werden konnte.</string>
+  <string name="sd_media_checking">Die SD-Karte wird gerade geprüft.</string>
+  <string name="sd_media_removed">SD-Karte wurde entfernt.</string>
+  <string name="sd_media_shared">Die SD-Karte wird momentan von einem Computer verwendet.</string>
+  <string name="usb_progress_unmounting">USB-Speicher wird ausgeworfen\u2026</string>
+  <string name="usb_progress_erasing">USB-Speicher wird gelöscht\u2026</string>
+  <string name="usb_format_error">USB-Speicher konnte nicht gelöscht werden.</string>
+  <string name="usb_media_bad_removal">USB-Speicher  wurde entfernt, bevor er ausgeworfen werden konnte.</string>
+  <string name="usb_media_checking">USB-Speicher wird gerade geprüft.</string>
+  <string name="usb_media_removed">USB-Speicher wurde entfernt.</string>
+  <string name="usb_media_shared">USB-Speicher wird momentan von einem Computer verwendet.</string>
 </resources>

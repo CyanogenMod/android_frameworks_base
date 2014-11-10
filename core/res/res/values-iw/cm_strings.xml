@@ -48,7 +48,6 @@
   <string name="permlab_preventpower">מניעת כפתור הכיבוי</string>
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
   <string name="permlab_sendMockSms">שליחת הודעות SMS מדומות</string>
-  <string name="permdesc_sendMockSms">אפשר ליישום לשלוח הודעות SMS מזויפות. זה מאפשר ליישום לשלוח SMS ליישומים מורשים. יישומים זדוניים יכולים להשתמש בכך שישלחו הודעות ללא הפסקה, יעצרו את שירות ההודעות במערכת ויפריע למשתמש.</string>
   <string name="storage_sd_dock_card">כרטיס SD של תחנת עגינה</string>
   <string name="app_killed_message">התהליך נסגר</string>
   <string name="global_action_reboot">הפעלה מחדש</string>
@@ -134,8 +133,6 @@
   <string name="adb_net_active_notification_title">ADB דרך הרשת מופעל</string>
   <string name="adb_both_active_notification_title">ADB דרך USB &amp; רשת מופעל</string>
   <string name="adb_active_generic_notification_message">הקש לביטול ADB.</string>
-  <string name="extmedia_format_message_cm" product="nosdcard">כל המידע על אחסון ה-USB (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
-  <string name="extmedia_format_message_cm" product="default">כל המידע על הכרטיס (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
   <string name="usb_storage_notification_manage_message">הקש לניהול</string>
   <string name="sd_ext_media_checking_notification_title">מכין כרטיס SD</string>
   <string name="sd_ext_media_checking_notification_message">בודק שגיאות בכרטיס ה-SD</string>

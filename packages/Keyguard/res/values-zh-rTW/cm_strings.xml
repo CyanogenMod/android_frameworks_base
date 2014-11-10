@@ -29,4 +29,6 @@
   <string name="message_from">訊息來自</string>
   <string name="message_from_person">來自 %1$s 的訊息</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
+  <string name="keyguard_password_pin_failed">PIN 碼操作失敗。</string>
+  <string name="keyguard_password_puk_failed">PUK 碼操作失敗。</string>
 </resources>
