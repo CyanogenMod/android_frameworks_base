@@ -288,6 +288,11 @@ public class WallpaperManager {
             }
         }
 
+        /** @hide */
+        public Bitmap peekFreshWallpaperBitmap(Context context) {
+            return getCurrentWallpaperLocked(context);
+        }
+
         /**
          * @hide
          */
@@ -698,6 +703,14 @@ public class WallpaperManager {
      */
     public Bitmap getBitmap() {
         return sGlobals.peekWallpaperBitmap(mContext, true);
+    }
+
+    /**
+     *
+     * @hide
+     */
+    public Bitmap getFreshBitmap() {
+        return sGlobals.peekFreshWallpaperBitmap(mContext);
     }
 
     /**
