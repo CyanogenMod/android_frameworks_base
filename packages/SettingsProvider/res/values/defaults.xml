@@ -231,4 +231,8 @@
 
     <!-- Default Blacklist values of Settings.System.HEADS_UP_NOTIFICATION -->
     <string name="def_heads_up_notification_blacklist_values"></string>
+
+    <!-- Default value of Settings.System.ENABLE_PEOPLE_LOOKUP -->
+    <integer name="def_people_lookup">1</integer>
+
 </resources>
