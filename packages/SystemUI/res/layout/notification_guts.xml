@@ -87,6 +87,16 @@
                 />
 
         <ImageButton style="@android:style/Widget.Material.Light.Button.Borderless.Small"
+                 android:id="@+id/notification_inspect_filter_notification"
+                 android:layout_width="52dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="0"
+                 android:gravity="center"
+                 android:src="@drawable/ic_ringer_mute"
+                 android:visibility="gone"
+                 />
+
+        <ImageButton style="@android:style/Widget.Material.Light.Button.Borderless.Small"
                 android:id="@+id/notification_inspect_item"
                 android:layout_width="52dp"
                 android:layout_height="match_parent"
