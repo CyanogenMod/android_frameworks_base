@@ -148,11 +148,13 @@ public class CallerInfo {
 
     private boolean mIsEmergency;
     private boolean mIsVoiceMail;
+    private boolean mIsBlacklisted;
 
     public CallerInfo() {
         // TODO: Move all the basic initialization here?
         mIsEmergency = false;
         mIsVoiceMail = false;
+        mIsBlacklisted = false;
     }
 
     /**
@@ -386,6 +388,10 @@ public class CallerInfo {
         return mIsVoiceMail;
     }
 
+    public boolean isBlacklistedNumber() {
+        return mIsBlacklisted;
+    }
+
     /**
      * Mark this CallerInfo as an emergency call.
      * @param context To lookup the localized 'Emergency Number' string.
@@ -441,6 +447,23 @@ public class CallerInfo {
         // TODO: There is no voicemail picture?
         // FIXME: FIND ANOTHER ICON
         // photoResource = android.R.drawable.badge_voicemail;
+        return this;
+    }
+
+    /**
+     * Mark this CallerInfo as a blacklist call
+     * @return this instance.
+     */
+    public CallerInfo markAsBlacklist() {
+        mIsBlacklisted = true;
+
+        try {
+            String blacklistLabel = "Blacklist";
+
+            phoneNumber = blacklistLabel;
+        } catch (SecurityException se) {
+            Rlog.e(TAG, "Cannot access Blacklist.", se);
+        }
         return this;
     }
 
