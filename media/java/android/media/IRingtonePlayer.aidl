@@ -36,4 +36,6 @@ interface IRingtonePlayer {
 
     /** Return the title of the media. */
     String getTitle(in Uri uri);
+
+    void setVolume(IBinder token, float volume);
 }
