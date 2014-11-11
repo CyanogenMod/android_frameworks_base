@@ -27,17 +27,11 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.DisplayMetrics;
 
 /**
  * A Parcelable class for Subscription Information.
  */
 public class SubscriptionInfo implements Parcelable {
-
-    /**
-     * Size of text to render on the icon.
-     */
-    private static final int TEXT_SIZE = 16;
 
     /**
      * Subscription Identifier, this is a device unique number
@@ -100,19 +94,16 @@ public class SubscriptionInfo implements Parcelable {
     /**
      * Mobile Network Code
      */
+    public int mStatus;
+    public int mNwMode;
     private int mMnc;
-
-    /**
-     * ISO Country code for the subscription's provider
-     */
-    private String mCountryIso;
 
     /**
      * @hide
      */
     public SubscriptionInfo(int id, String iccId, int simSlotIndex, CharSequence displayName,
             CharSequence carrierName, int nameSource, int iconTint, String number, int roaming,
-            Bitmap icon, int mcc, int mnc, String countryIso) {
+            Bitmap icon, int mcc, int mnc, int status, int nwMode) {
         this.mId = id;
         this.mIccId = iccId;
         this.mSimSlotIndex = simSlotIndex;
@@ -125,7 +116,8 @@ public class SubscriptionInfo implements Parcelable {
         this.mIconBitmap = icon;
         this.mMcc = mcc;
         this.mMnc = mnc;
-        this.mCountryIso = countryIso;
+        this.mStatus = status;
+        this.mNwMode = nwMode;
     }
 
     /**
@@ -165,7 +157,8 @@ public class SubscriptionInfo implements Parcelable {
     }
 
     /**
-     * @return the name displayed to the user that identifies Subscription provider name
+     * Returns the name displayed to the user that identifies Subscription provider name
+     * @hide
      */
     public CharSequence getCarrierName() {
         return this.mCarrierName;
@@ -199,10 +192,10 @@ public class SubscriptionInfo implements Parcelable {
     public Bitmap createIconBitmap(Context context) {
         int width = mIconBitmap.getWidth();
         int height = mIconBitmap.getHeight();
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 
         // Create a new bitmap of the same size because it will be modified.
-        Bitmap workingBitmap = Bitmap.createBitmap(metrics, width, height, mIconBitmap.getConfig());
+        Bitmap workingBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics(),
+                width, height, mIconBitmap.getConfig());
 
         Canvas canvas = new Canvas(workingBitmap);
         Paint paint = new Paint();
@@ -213,13 +206,10 @@ public class SubscriptionInfo implements Parcelable {
         paint.setColorFilter(null);
 
         // Write the sim slot index.
-        paint.setAntiAlias(true);
         paint.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
         paint.setColor(Color.WHITE);
-        // Set text size scaled by density
-        paint.setTextSize(TEXT_SIZE * metrics.density);
-        // Convert sim slot index to localized string
-        final String index = String.format("%d", mSimSlotIndex + 1);
+        paint.setTextSize(12);
+        final String index = Integer.toString(mSimSlotIndex);
         final Rect textBound = new Rect();
         paint.getTextBounds(index, 0, 1, textBound);
         final float xOffset = (width / 2.f) - textBound.centerX();
@@ -274,13 +264,6 @@ public class SubscriptionInfo implements Parcelable {
         return this.mMnc;
     }
 
-    /**
-     * @return the ISO country code
-     */
-    public String getCountryIso() {
-        return this.mCountryIso;
-    }
-
     public static final Parcelable.Creator<SubscriptionInfo> CREATOR = new Parcelable.Creator<SubscriptionInfo>() {
         @Override
         public SubscriptionInfo createFromParcel(Parcel source) {
@@ -295,11 +278,13 @@ public class SubscriptionInfo implements Parcelable {
             int dataRoaming = source.readInt();
             int mcc = source.readInt();
             int mnc = source.readInt();
-            String countryIso = source.readString();
+            int status = source.readInt();
+            int nwMode = source.readInt();
+
             Bitmap iconBitmap = Bitmap.CREATOR.createFromParcel(source);
 
-            return new SubscriptionInfo(id, iccId, simSlotIndex, displayName, carrierName,
-                    nameSource, iconTint, number, dataRoaming, iconBitmap, mcc, mnc, countryIso);
+            return new SubscriptionInfo(id, iccId, simSlotIndex, displayName, carrierName, nameSource,
+                    iconTint, number, dataRoaming, iconBitmap, mcc, mnc, status, nwMode);
         }
 
         @Override
@@ -321,7 +306,8 @@ public class SubscriptionInfo implements Parcelable {
         dest.writeInt(mDataRoaming);
         dest.writeInt(mMcc);
         dest.writeInt(mMnc);
-        dest.writeString(mCountryIso);
+        dest.writeInt(mStatus);
+        dest.writeInt(mNwMode);
         mIconBitmap.writeToParcel(dest, flags);
     }
 
@@ -336,6 +322,6 @@ public class SubscriptionInfo implements Parcelable {
                 + " displayName=" + mDisplayName + " carrierName=" + mCarrierName
                 + " nameSource=" + mNameSource + " iconTint=" + mIconTint
                 + " dataRoaming=" + mDataRoaming + " iconBitmap=" + mIconBitmap + " mcc " + mMcc
-                + " mnc " + mMnc + "}";
+                + " mnc " + mMnc + " mSubStatus=" + mStatus + " mNwMode=" + mNwMode + "}";
     }
 }
