@@ -159,6 +159,10 @@ public class CallLog {
         public static final int MISSED_TYPE = 3;
         /** Call log type for voicemails. */
         public static final int VOICEMAIL_TYPE = 4;
+        /** Call log type for blacklisted calls
+         * @hide
+         */
+        public static final int BLACKLIST_TYPE = 173;
 
         /**
          * Bit-mask describing features of the call (e.g. video).
