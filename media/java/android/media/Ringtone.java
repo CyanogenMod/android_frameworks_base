@@ -302,6 +302,21 @@ public class Ringtone {
         }
     }
 
+    /**
+     * @hide
+     */
+    public void setVolume(float volume) {
+        if (mLocalPlayer != null) {
+            mLocalPlayer.setVolume(volume);
+        } else if (mAllowRemote && mRemotePlayer != null) {
+            try {
+                mRemotePlayer.setVolume(mRemoteToken, volume);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Problem setting ringtone volume: " + e);
+            }
+        }
+    }
+
     private void destroyLocalPlayer() {
         if (mLocalPlayer != null) {
             mLocalPlayer.reset();
