@@ -41,6 +41,7 @@ public class Performance
 
     /* The following defined constants are to be used for PerfLock APIs*/
     /** @hide */ public static final int ALL_CPUS_PWR_CLPS_DIS = 0x100;
+    /** @hide */ public static final int ALL_CPUS_PC_DIS = 0x101;
 
     /* Please read the README.txt file for CPUx_FREQ usage and support*/
     /** @hide */ public static final int CPU0_FREQ_NONTURBO_MAX = 0x20A;
