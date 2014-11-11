@@ -975,8 +975,8 @@ public final class BatteryService extends IBatteryService.Stub {
                 }
             } else if (status == BatteryManager.BATTERY_STATUS_CHARGING
                         || status == BatteryManager.BATTERY_STATUS_FULL) {
-                if (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90) {
-                    // Battery is full or charging and nearly full
+                if (status == BatteryManager.BATTERY_STATUS_FULL) {
+                    // Battery is full
                     mBatteryLight.setColor(mBatteryFullARGB);
                 } else {
                     // Battery is charging and halfway full
