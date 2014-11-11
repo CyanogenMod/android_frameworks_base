@@ -19,6 +19,7 @@ package com.android.server.pm;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+import static android.content.pm.PackageManager.COMPONENT_VISIBLE_STATUS;
 
 import android.content.pm.PackageUserState;
 import android.util.SparseArray;
@@ -322,7 +323,8 @@ class PackageSettingBase extends GrantedPermissions {
     void setUserState(int userId, int enabled, boolean installed, boolean stopped,
             boolean notLaunched, boolean hidden,
             String lastDisableAppCaller, HashSet<String> enabledComponents,
-            HashSet<String> disabledComponents, boolean blockUninstall) {
+            HashSet<String> disabledComponents, boolean blockUninstall,
+            HashSet<String> protectedComponents, HashSet<String> visibleComponents) {
         PackageUserState state = modifyUserState(userId);
         state.enabled = enabled;
         state.installed = installed;
@@ -333,6 +335,8 @@ class PackageSettingBase extends GrantedPermissions {
         state.enabledComponents = enabledComponents;
         state.disabledComponents = disabledComponents;
         state.blockUninstall = blockUninstall;
+        state.protectedComponents = protectedComponents;
+        state.visibleComponents = visibleComponents;
     }
 
     HashSet<String> getEnabledComponents(int userId) {
@@ -368,6 +372,17 @@ class PackageSettingBase extends GrantedPermissions {
         }
         if (enabled && state.enabledComponents == null) {
             state.enabledComponents = new HashSet<String>(1);
+        }
+        return state;
+    }
+
+    PackageUserState modifyUserStateComponents(int userId) {
+        PackageUserState state = modifyUserState(userId);
+        if (state.protectedComponents == null) {
+           state.protectedComponents = new HashSet<String>(1);
+        }
+        if (state.visibleComponents == null) {
+            state.visibleComponents = new HashSet<String>(1);
         }
         return state;
     }
@@ -415,6 +430,27 @@ class PackageSettingBase extends GrantedPermissions {
         } else {
             return COMPONENT_ENABLED_STATE_DEFAULT;
         }
+    }
+
+    boolean protectComponentLPw(String componentClassName, boolean protect, int userId) {
+        PackageUserState state = modifyUserStateComponents(userId);
+        boolean changed = false;
+        if (protect == COMPONENT_VISIBLE_STATUS) {
+            changed = state.protectedComponents != null
+                    ? state.protectedComponents.remove(componentClassName) : false;
+            changed |= state.visibleComponents.add(componentClassName);
+        } else {
+            changed = state.visibleComponents != null
+                    ? state.visibleComponents.remove(componentClassName) : false;
+            changed |= state.protectedComponents.add(componentClassName);
+        }
+
+        return changed;
+    }
+
+    HashSet<String> getProtectedComponents(int userId) {
+        PackageUserState state = modifyUserStateComponents(userId);
+        return state.protectedComponents;
     }
 
     void removeUser(int userId) {
