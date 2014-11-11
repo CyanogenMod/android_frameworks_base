@@ -42,7 +42,6 @@ import android.util.Slog;
 import com.android.internal.telephony.IMms;
 
 import java.util.List;
-
 /**
  * This class is a proxy for MmsService APIs. We need this because MmsService runs
  * in phone process and may crash anytime. This manages a connection to the actual
@@ -205,6 +204,28 @@ public class MmsServiceBroker extends SystemService {
                     Context.TELEPHONY_SERVICE);
         }
         return mTelephonyManager;
+    }
+
+    private String getCallingPackageName() {
+        final String[] packages = getPackageManager().getPackagesForUid(Binder.getCallingUid());
+        if (packages != null && packages.length > 0) {
+            return packages[0];
+        }
+        return "unknown";
+    }
+
+    /*
+     * Throws a security exception unless the caller has carrier privilege.
+     */
+    private void enforceCarrierPrivilege() {
+        final String[] packages = getPackageManager().getPackagesForUid(Binder.getCallingUid());
+        for (String pkg : packages) {
+            if (getTelephonyManager().checkCarrierPrivilegesForPackage(pkg) ==
+                    TelephonyManager.CARRIER_PRIVILEGE_STATUS_HAS_ACCESS) {
+                return;
+            }
+        }
+        throw new SecurityException("No carrier privilege");
     }
 
     private String getCallingPackageName() {
