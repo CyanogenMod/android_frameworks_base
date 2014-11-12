@@ -3436,6 +3436,17 @@ public class TelephonyManager {
 
     /** @hide */
     @SystemApi
+    public boolean isDataPossibleForSubscription(long subId, String apnType) {
+        try {
+            return getITelephony().isDataPossibleForSubscription(subId, apnType);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelephony#isDataPossibleForSubscription", e);
+        }
+        return false;
+    }
+
+    /** @hide */
+    @SystemApi
     public boolean needsOtaServiceProvisioning() {
         try {
             return getITelephony().needsOtaServiceProvisioning();
