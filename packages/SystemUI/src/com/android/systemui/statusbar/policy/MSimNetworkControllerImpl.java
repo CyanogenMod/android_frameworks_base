@@ -1197,6 +1197,12 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 }
             }
         }
+
+        if (!mAirplaneMode && mMSimState[phoneId] == IccCardConstants.State.ABSENT) {
+            mMSimPhoneSignalIconId[phoneId] = mMSimDataSignalIconId[phoneId]
+                = mMSimDataTypeIconId[phoneId] = 0;
+        }
+
         if (DEBUG) {
             Slog.d(TAG, "refreshViews connected={"
                     + (mWifiConnected?" wifi":"")
