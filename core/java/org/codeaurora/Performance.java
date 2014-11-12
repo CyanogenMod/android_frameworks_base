@@ -72,6 +72,9 @@ public class Performance
     /** @hide */ public static final int CPUS_ON_LIMIT_2 = 0x8FD;
     /** @hide */ public static final int CPUS_ON_LIMIT_3 = 0x8FC;
 
+    /** @hide */ public static final int SCHED_PREFER_IDLE = 0x3E01;
+    /** @hide */ public static final int SCHED_MIGRATE_COST = 0x3F01;
+
     /* The following are the PerfLock API return values*/
     /** @hide */ public static final int REQUEST_FAILED = -1;
     /** @hide */ public static final int REQUEST_SUCCEEDED = 0;
