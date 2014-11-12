@@ -41,6 +41,7 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
     private boolean mKeyguardMode;
     final UserManager mUserManager;
+    private ActivityStarter mActivityStarter;
 
     public MultiUserSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -65,6 +66,10 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
         mKeyguardMode = keyguardShowing;
     }
 
+    public void setActivityStarter(ActivityStarter activityStarter) {
+        mActivityStarter = activityStarter;
+    }
+
     @Override
     public void onClick(View v) {
         if (UserSwitcherController.isUserSwitcherAvailable(mUserManager)) {
@@ -85,7 +90,11 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
             Intent intent = ContactsContract.QuickContact.composeQuickContactsIntent(
                     getContext(), v, ContactsContract.Profile.CONTENT_URI,
                     ContactsContract.QuickContact.MODE_LARGE, null);
-            getContext().startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            if (mActivityStarter != null) {
+                mActivityStarter.startActivity(intent, true /* dismissShade */);
+            } else {
+                getContext().startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            }
         }
     }
 
