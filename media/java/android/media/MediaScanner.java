@@ -1001,9 +1001,13 @@ public class MediaScanner
                 // notifications, ringtones, and alarms, because the rowId of the inserted file is
                 // needed.
                 if (mWasEmptyPriorToScan) {
-                    needToSetSettings = needToSetSettingsForNotification(entry)
-                            || needToSetSettingsForRingtone(entry)
-                            || needToSetSettingsForAlarm(entry);
+                    if (notifications && !mDefaultNotificationSet) {
+                        needToSetSettings = needToSetSettingsForNotification(entry);
+                    } else if (ringtones && !mDefaultRingtoneSet) {
+                        needToSetSettings = needToSetSettingsForRingtone(entry);
+                    } else if (alarms && !mDefaultAlarmSet) {
+                        needToSetSettings = needToSetSettingsForAlarm(entry);
+                    }
                 }
 
                 // New file, insert it.
@@ -1081,16 +1085,25 @@ public class MediaScanner
         }
 
         private boolean needToSetSettingsForNotification(FileEntry entry) {
-            return TextUtils.isEmpty(mDefaultNotificationFilename)
-                    || doesPathHaveFilename(entry.mPath, mDefaultNotificationFilename)
-                    || doesPathHaveFilename(entry.mPath, mDefaultMmsNotificationFilename);
+            boolean result = TextUtils.isEmpty(mDefaultNotificationFilename)
+                    || doesPathHaveFilename(entry.mPath, mDefaultNotificationFilename);
+            if (isSoundCustomized()) {
+                result = result || TextUtils.isEmpty(mDefaultMmsNotificationFilename)
+                        || doesPathHaveFilename(entry.mPath, mDefaultMmsNotificationFilename);
+            }
+            return result;
         }
 
         private boolean needToSetSettingsForRingtone(FileEntry entry) {
-            return TextUtils.isEmpty(mDefaultRingtoneFilename)
-                    || doesPathHaveFilename(entry.mPath, mDefaultRingtoneFilename)
-                    || doesPathHaveFilename(entry.mPath, mDefaultRingtone2Filename)
-                    || doesPathHaveFilename(entry.mPath, mDefaultRingtone3Filename);
+            boolean result = TextUtils.isEmpty(mDefaultRingtoneFilename)
+                    || doesPathHaveFilename(entry.mPath, mDefaultRingtoneFilename);
+            if (isSoundCustomized()) {
+                result = result || TextUtils.isEmpty(mDefaultRingtone2Filename)
+                        || doesPathHaveFilename(entry.mPath, mDefaultRingtone2Filename)
+                        || TextUtils.isEmpty(mDefaultRingtone3Filename)
+                        || doesPathHaveFilename(entry.mPath, mDefaultRingtone3Filename);
+            }
+            return result;
         }
 
         private boolean needToSetSettingsForAlarm(FileEntry entry) {
