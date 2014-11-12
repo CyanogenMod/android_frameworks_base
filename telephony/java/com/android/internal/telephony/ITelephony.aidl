@@ -322,6 +322,11 @@ interface ITelephony {
      */
     boolean isDataConnectivityPossible();
 
+    /**
+     * Report whether mms data connectivity is possible.
+     */
+    boolean isDataPossibleForSubscription(long subId, String apnType);
+
     Bundle getCellLocation();
 
     /**
