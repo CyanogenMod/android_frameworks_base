@@ -62,7 +62,6 @@ public class ThemeManager {
                             iterator.next().onProgress(progress);
                         } catch (Throwable e) {
                             Log.w(TAG, "Unable to update theme change progress", e);
-                            iterator.remove();
                         }
                     }
                 }
@@ -80,7 +79,6 @@ public class ThemeManager {
                             iterator.next().onFinish(isSuccess);
                         } catch (Throwable e) {
                             Log.w(TAG, "Unable to update theme change listener", e);
-                            iterator.remove();
                         }
                     }
                 }
@@ -100,8 +98,7 @@ public class ThemeManager {
                         try {
                             iterator.next().onFinishedProcessing(pkgName);
                         } catch (Throwable e) {
-                            Log.w(TAG, "Unable to update theme change progress", e);
-                            iterator.remove();
+                            Log.w(TAG, "Unable to update theme processing progress", e);
                         }
                     }
                 }
