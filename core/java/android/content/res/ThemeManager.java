@@ -24,7 +24,6 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,13 +55,11 @@ public class ThemeManager {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Iterator<ThemeChangeListener> iterator = mChangeListeners.iterator();
-                    while(iterator.hasNext()) {
+                    for (ThemeChangeListener listener : mChangeListeners) {
                         try {
-                            iterator.next().onProgress(progress);
+                            listener.onProgress(progress);
                         } catch (Throwable e) {
                             Log.w(TAG, "Unable to update theme change progress", e);
-                            iterator.remove();
                         }
                     }
                 }
@@ -74,13 +71,11 @@ public class ThemeManager {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Iterator<ThemeChangeListener> iterator = mChangeListeners.iterator();
-                    while(iterator.hasNext()) {
+                    for (ThemeChangeListener listener : mChangeListeners) {
                         try {
-                            iterator.next().onFinish(isSuccess);
+                            listener.onFinish(isSuccess);
                         } catch (Throwable e) {
                             Log.w(TAG, "Unable to update theme change listener", e);
-                            iterator.remove();
                         }
                     }
                 }
@@ -95,13 +90,11 @@ public class ThemeManager {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Iterator<ThemeProcessingListener> iterator = mProcessingListeners.iterator();
-                    while(iterator.hasNext()) {
+                    for (ThemeProcessingListener listener : mProcessingListeners) {
                         try {
-                            iterator.next().onFinishedProcessing(pkgName);
+                            listener.onFinishedProcessing(pkgName);
                         } catch (Throwable e) {
-                            Log.w(TAG, "Unable to update theme change progress", e);
-                            iterator.remove();
+                            Log.w(TAG, "Unable to update theme processing progress", e);
                         }
                     }
                 }
