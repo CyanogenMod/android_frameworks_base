@@ -19,6 +19,9 @@
 -->
 
 <resources>
+    <!-- The bottom margin for the GlowPadView container -->
+    <dimen name="glowpadcontainer_bottom_margin">-40dp</dimen>
+
     <!-- Shift emergency button from the left edge by this amount.  Used by landscape layout on
          phones -->
     <dimen name="kg_emergency_button_shift">30dp</dimen>
