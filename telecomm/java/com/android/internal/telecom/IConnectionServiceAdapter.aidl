@@ -53,7 +53,7 @@ oneway interface IConnectionServiceAdapter {
 
     void setRingbackRequested(String callId, boolean ringing);
 
-    void setCallCapabilities(String callId, int callCapabilities);
+    void setConnectionCapabilities(String callId, int connectionCapabilities);
 
     void setCallProperties(String callId, int callProperties);
 

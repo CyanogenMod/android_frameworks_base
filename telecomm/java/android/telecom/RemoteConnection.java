@@ -73,14 +73,21 @@ public final class RemoteConnection {
          */
         public void onRingbackRequested(RemoteConnection connection, boolean ringback) {}
 
+        /** @hide */
+        @Deprecated public void onCallCapabilitiesChanged(
+                RemoteConnection connection,
+                int callCapabilities) {}
+
         /**
          * Indicates that the call capabilities of this {@code RemoteConnection} have changed.
-         * See {@link #getCallCapabilities()}.
+         * See {@link #getConnectionCapabilities()}.
          *
          * @param connection The {@code RemoteConnection} invoking this method.
-         * @param callCapabilities The new call capabilities of the {@code RemoteConnection}.
+         * @param connectionCapabilities The new capabilities of the {@code RemoteConnection}.
          */
-        public void onCallCapabilitiesChanged(RemoteConnection connection, int callCapabilities) {}
+        public void onConnectionCapabilitiesChanged(
+                RemoteConnection connection,
+                int connectionCapabilities) {}
 
         /**
          * Indicates that the call properties of this {@code RemoteConnection} have changed.
@@ -418,7 +425,7 @@ public final class RemoteConnection {
     private DisconnectCause mDisconnectCause;
     private boolean mRingbackRequested;
     private boolean mConnected;
-    private int mCallCapabilities;
+    private int mConnectionCapabilities;
     private int mCallProperties;
     private int mVideoState;
     private int mCallSubstate;
@@ -455,7 +462,7 @@ public final class RemoteConnection {
         mState = connection.getState();
         mDisconnectCause = connection.getDisconnectCause();
         mRingbackRequested = connection.isRingbackRequested();
-        mCallCapabilities = connection.getCapabilities();
+        mConnectionCapabilities = connection.getConnectionCapabilities();
         mVideoState = connection.getVideoState();
         mVideoProvider = new RemoteConnection.VideoProvider(connection.getVideoProvider());
         mIsVoipAudioMode = connection.getIsVoipAudioMode();
@@ -512,20 +519,24 @@ public final class RemoteConnection {
     }
 
     /**
+     * Obtains the reason why this {@code RemoteConnection} may have been disconnected.
+     *
      * @return For a {@link Connection#STATE_DISCONNECTED} {@code RemoteConnection}, the
-     * disconnect cause expressed as a code chosen from among those declared in
-     * {@link DisconnectCause}.
+     *         disconnect cause expressed as a code chosen from among those declared in
+     *         {@link DisconnectCause}.
      */
     public DisconnectCause getDisconnectCause() {
         return mDisconnectCause;
     }
 
     /**
+     * Obtains the capabilities of this {@code RemoteConnection}.
+     *
      * @return A bitmask of the capabilities of the {@code RemoteConnection}, as defined in
-     *         {@link PhoneCapabilities}.
+     *         the {@code CAPABILITY_*} constants in class {@link Connection}.
      */
-    public int getCallCapabilities() {
-        return mCallCapabilities;
+    public int getConnectionCapabilities() {
+        return mConnectionCapabilities;
     }
 
     /**
@@ -537,6 +548,8 @@ public final class RemoteConnection {
     }
 
     /**
+     * Determines if the audio mode of this {@code RemoteConnection} is VOIP.
+     *
      * @return {@code true} if the {@code RemoteConnection}'s current audio mode is VOIP.
      */
     public boolean isVoipAudioMode() {
@@ -544,30 +557,38 @@ public final class RemoteConnection {
     }
 
     /**
+     * Obtains status hints pertaining to this {@code RemoteConnection}.
+     *
      * @return The current {@link StatusHints} of this {@code RemoteConnection},
-     * or {@code null} if none have been set.
+     *         or {@code null} if none have been set.
      */
     public StatusHints getStatusHints() {
         return mStatusHints;
     }
 
     /**
-     * @return The address (e.g., phone number) to which the {@code RemoteConnection} is currently
-     * connected.
+     * Obtains the address of this {@code RemoteConnection}.
+     *
+     * @return The address (e.g., phone number) to which the {@code RemoteConnection}
+     *         is currently connected.
      */
     public Uri getAddress() {
         return mAddress;
     }
 
     /**
-     * @return The presentation requirements for the address. See {@link TelecomManager} for valid
-     * values.
+     * Obtains the presentation requirements for the address of this {@code RemoteConnection}.
+     *
+     * @return The presentation requirements for the address. See
+     *         {@link TelecomManager} for valid values.
      */
     public int getAddressPresentation() {
         return mAddressPresentation;
     }
 
     /**
+     * Obtains the display name for this {@code RemoteConnection}'s caller.
+     *
      * @return The display name for the caller.
      */
     public CharSequence getCallerDisplayName() {
@@ -575,16 +596,20 @@ public final class RemoteConnection {
     }
 
     /**
+     * Obtains the presentation requirements for this {@code RemoteConnection}'s
+     * caller's display name.
+     *
      * @return The presentation requirements for the caller display name. See
-     * {@link TelecomManager} for valid values.
+     *         {@link TelecomManager} for valid values.
      */
     public int getCallerDisplayNamePresentation() {
         return mCallerDisplayNamePresentation;
     }
 
     /**
-     * @return The video state of the {@code RemoteConnection}. See
-     * {@link VideoProfile.VideoState}.
+     * Obtains the video state of this {@code RemoteConnection}.
+     *
+     * @return The video state of the {@code RemoteConnection}. See {@link VideoProfile.VideoState}.
      * @hide
      */
     public int getVideoState() {
@@ -600,6 +625,8 @@ public final class RemoteConnection {
     }
 
     /**
+     * Obtains the video provider of this {@code RemoteConnection}.
+     *
      * @return The video provider associated with this {@code RemoteConnection}.
      * @hide
      */
@@ -608,8 +635,10 @@ public final class RemoteConnection {
     }
 
     /**
+     * Determines whether this {@code RemoteConnection} is requesting ringback.
+     *
      * @return Whether the {@code RemoteConnection} is requesting that the framework play a
-     * ringback tone on its behalf.
+     *         ringback tone on its behalf.
      */
     public boolean isRingbackRequested() {
         return false;
@@ -851,10 +880,11 @@ public final class RemoteConnection {
     /**
      * @hide
      */
-    void setCallCapabilities(int callCapabilities) {
-        mCallCapabilities = callCapabilities;
+    void setConnectionCapabilities(int connectionCapabilities) {
+        mConnectionCapabilities = connectionCapabilities;
         for (Callback c : mCallbacks) {
-            c.onCallCapabilitiesChanged(this, callCapabilities);
+            c.onConnectionCapabilitiesChanged(this, connectionCapabilities);
+            c.onCallCapabilitiesChanged(this, connectionCapabilities);
         }
     }
 
