@@ -648,7 +648,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                         mLastWifiClientCount = mCurrentClientCount;
                         Intent intent = new Intent();
                         intent.setClassName("com.android.settings",
-                                "com.android.settings.TetheringSettings");
+                                "com.android.settings.TetherSettings");
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
                         PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0, intent, 0,
