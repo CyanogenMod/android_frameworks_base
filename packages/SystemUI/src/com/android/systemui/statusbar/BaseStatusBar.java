@@ -1251,6 +1251,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 || notification.vibrate != null;
         boolean isHighPriority = sbn.getScore() >= INTERRUPTION_THRESHOLD;
         boolean isFullscreen = notification.fullScreenIntent != null;
+        boolean hasTicker = !TextUtils.isEmpty(notification.tickerText);
         boolean isAllowed = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
                 Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
         boolean isOngoing = sbn.isOngoing();
@@ -1263,29 +1264,21 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         boolean isIMEShowing = inputMethodManager.isImeShowing();
-
-        boolean interrupt = (isFullscreen || (isHighPriority && isNoisy))
-                && isAllowed
-                && keyguardNotVisible
-                && !isOngoing
-                && !isIMEShowing
-                && mPowerManager.isScreenOn();
-
+        boolean isDreamShowing = false;
         try {
-            interrupt = interrupt && !mDreamManager.isDreaming();
+            isDreamShowing = mDreamManager.isDreaming();
         } catch (RemoteException e) {
             Log.d(TAG, "failed to query dream manager", e);
         }
 
-        // its below our threshold priority, we might want to always display
-        // notifications from certain apps
-        if (!isHighPriority && keyguardNotVisible && !isOngoing && !isIMEShowing) {
-            // However, we don't want to interrupt if we're in an application that is
-            // in Do Not Disturb
-            if (!isPackageInDnd(getTopLevelPackage())) {
-                return true;
-            }
-        }
+        boolean interrupt = (isFullscreen || !isHighPriority || isNoisy || hasTicker)
+                && isAllowed
+                && keyguardNotVisible
+                && !isOngoing
+                && !isIMEShowing
+                && mPowerManager.isScreenOn()
+                && !isDreamShowing
+                && !isPackageInDnd(getTopLevelPackage());
 
         if (DEBUG) Log.d(TAG, "interrupt: " + interrupt);
         return interrupt;
