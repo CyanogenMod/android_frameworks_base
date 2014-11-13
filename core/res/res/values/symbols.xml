@@ -1981,6 +1981,8 @@
   <!-- Proximity check timeout -->
   <java-symbol type="integer" name="config_proximityCheckTimeout" />
 
+  <java-symbol type="array" name="config_ignored_sms_packages" />
+
   <!-- USB OTG Notification -->
   <java-symbol type="string" name="usb_storage_notification_manage_message" />
 
