@@ -2267,4 +2267,7 @@
   <java-symbol type="string" name="android_installing_apk" />
   <java-symbol type="string" name="android_installing_title" />
 
+  <!-- Ignored sms packages -->
+  <java-symbol type="array" name="config_ignored_sms_packages" />
+
 </resources>
