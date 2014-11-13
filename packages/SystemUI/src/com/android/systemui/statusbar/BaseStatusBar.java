@@ -2211,6 +2211,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 || notification.vibrate != null;
         boolean isHighPriority = sbn.getScore() >= INTERRUPTION_THRESHOLD;
         boolean isFullscreen = notification.fullScreenIntent != null;
+        boolean hasTicker = !TextUtils.isEmpty(notification.tickerText);
         int asHeadsUp = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
                 Notification.HEADS_UP_NEVER);
         boolean isAllowed = asHeadsUp != Notification.HEADS_UP_NEVER;
@@ -2228,33 +2229,30 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         boolean isIMEShowing = inputMethodManager.isImeShowing();
 
-        // Possibly a heads up from an app with native support.
-        boolean interrupt = (isFullscreen || (isHighPriority && isNoisy) || isRequested)
-                && isAllowed
-                && mPowerManager.isScreenOn()
-                && (keyguardNotVisible || keyguardVisibleNotSecure);
-
-        // Possibly a heads up package set from the user.
-        interrupt = interrupt
-                || (!isOngoing
-                && mPowerManager.isScreenOn()
-                && (keyguardNotVisible || keyguardVisibleNotSecure));
-
+        boolean isDreamShowing = false;
         try {
-            interrupt = interrupt && !mDreamManager.isDreaming();
+            isDreamShowing = mDreamManager.isDreaming();
         } catch (RemoteException e) {
             Log.d(TAG, "failed to query dream manager", e);
         }
 
-        // its below our threshold priority, we might want to always display
-        // notifications from certain apps
-        if (!isHighPriority && keyguardNotVisible && !isOngoing && !isRequested) {
-            // However, we don't want to interrupt if we're in an application that is
-            // in Do Not Disturb
-            if (!isPackageInDnd(getTopLevelPackage())) {
-                return true;
-            }
-        }
+        // Possibly a heads up from an app with native support.
+        boolean interrupt = (isFullscreen || isHighPriority || isNoisy || hasTicker || isRequested)
+                && isAllowed
+                && mPowerManager.isScreenOn()
+                && !isDreamShowing
+                && !isIMEShowing
+                && (keyguardNotVisible || keyguardVisibleNotSecure)
+                && !isPackageInDnd(getTopLevelPackage());
+
+        // Possibly a heads up package set from the user.
+        interrupt = interrupt
+                || (!isOngoing
+                && (keyguardNotVisible || keyguardVisibleNotSecure))
+                && mPowerManager.isScreenOn()
+                && !isDreamShowing
+                && !isIMEShowing
+                && !isPackageInDnd(getTopLevelPackage());
 
         if (DEBUG) Log.d(TAG, "interrupt: " + interrupt);
         return interrupt;
