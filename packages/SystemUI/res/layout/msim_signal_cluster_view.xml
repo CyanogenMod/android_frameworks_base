@@ -88,7 +88,7 @@
             <View
                 android:layout_height="6dp"
                 android:layout_width="3dp"
-                android:id="@+id/spacer"
+                android:visibility="invisible"
                 />
             <TextView android:layout_gravity="bottom|right|center"
                 android:id="@+id/mobile_slot_label"
@@ -136,7 +136,7 @@
             <View
                 android:layout_height="6dp"
                 android:layout_width="3dp"
-                android:id="@+id/spacer"
+                android:visibility="invisible"
                 />
             <TextView android:layout_gravity="bottom|right|center"
                 android:id="@+id/mobile_slot_label_2"
@@ -184,7 +184,7 @@
             <View
                 android:layout_height="6dp"
                 android:layout_width="3dp"
-                android:id="@+id/spacer"
+                android:visibility="invisible"
                 />
             <TextView android:layout_gravity="bottom|right|center"
                 android:id="@+id/mobile_slot_label_3"

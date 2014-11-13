@@ -248,13 +248,10 @@ public class MSimSignalClusterView
             mAirplane.setVisibility(View.GONE);
         }
 
-        if (subscription != 0) {
-            if (mMobileVisible && mWifiVisible && ((mIsAirplaneMode) ||
-                    (mNoSimIconId[subscription] != 0))) {
-                mSpacer.setVisibility(View.INVISIBLE);
-            } else {
-                mSpacer.setVisibility(View.GONE);
-            }
+        if (mMobileVisible && (mWifiVisible || mIsAirplaneMode)) {
+            mSpacer.setVisibility(View.INVISIBLE);
+        } else {
+            mSpacer.setVisibility(View.GONE);
         }
     }
 
