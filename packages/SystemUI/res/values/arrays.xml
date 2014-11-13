@@ -78,7 +78,7 @@
         <!--NETWORK_TYPE_EVDO_B-->
         <item>drawable/stat_sys_data_fully_connected_3g</item>
         <!--NETWORK_TYPE_LTE-->
-        <item>drawable/stat_sys_data_fully_connected_3g</item>
+        <item>drawable/stat_sys_data_fully_connected_lte</item>
         <!--NETWORK_TYPE_EHRPD-->
         <item>drawable/stat_sys_data_fully_connected_3g</item>
         <!--NETWORK_TYPE_HSPAP-->
