@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (C) 2014-2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,10 +58,13 @@ public class PlatLogoActivity extends Activity {
     int mKeyCount;
     PathInterpolator mInterpolator = new PathInterpolator(0f, 0f, 0.5f, 1f);
 
+    private boolean mIsCM;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsCM = getIntent().hasExtra("is_cm");
         mLayout = new FrameLayout(this);
         setContentView(mLayout);
     }
@@ -89,7 +93,9 @@ public class PlatLogoActivity extends Activity {
         bgPaint.setColor(Color.HSBtoColor(hue, 0.4f, 1f));
         final Paint fgPaint = new Paint();
         fgPaint.setColor(Color.HSBtoColor(hue, 0.5f, 1f));
-        final Drawable M = getDrawable(com.android.internal.R.drawable.platlogo_m);
+        final Drawable M = getDrawable(mIsCM
+                ? com.android.internal.R.drawable.cm_platlogo
+                : com.android.internal.R.drawable.platlogo_m);
         final Drawable platlogo = new Drawable() {
             @Override
             public void setAlpha(int alpha) { }
@@ -153,6 +159,7 @@ public class PlatLogoActivity extends Activity {
                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                                     | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                     | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                                            .putExtra("is_cm", mIsCM)
                                             .addCategory("com.android.internal.category.PLATLOGO"));
                                 } catch (ActivityNotFoundException ex) {
                                     Log.e("PlatLogoActivity", "No more eggs.");

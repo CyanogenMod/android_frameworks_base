@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2014-2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1088,7 +1089,7 @@ public class MLand extends FrameLayout {
         public Player(Context context) {
             super(context);
 
-            setBackgroundResource(R.drawable.android);
+            setBackgroundResource(getEggPlayer());
             getBackground().setTintMode(PorterDuff.Mode.SRC_ATOP);
             color = sColors[(sNextColor++%sColors.length)];
             getBackground().setTint(color);
@@ -1437,5 +1438,9 @@ public class MLand extends FrameLayout {
             w = h = irand(PARAMS.STAR_SIZE_MIN, PARAMS.STAR_SIZE_MAX);
             v = z = 0;
         }
+    }
+
+    protected int getEggPlayer() {
+        return R.drawable.android;
     }
 }
