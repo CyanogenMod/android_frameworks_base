@@ -751,6 +751,9 @@ public class TelephonyManager {
     /** {@hide} */
     public static final String EMR_DIAL_ACCOUNT = "emr_dial_account";
 
+    /** {@hide} */
+    public static final String EXTRA_IS_FORWARDED = "is_forwarded";
+
     //
     //
     // Device Info
