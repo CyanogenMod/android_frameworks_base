@@ -237,4 +237,8 @@
     <!-- Theme reset notification -->
     <java-symbol type="string" name="theme_reset_notification_title" />
     <java-symbol type="string" name="theme_reset_notification_body" />
+
+    <!-- Ignored sms packages -->
+    <java-symbol type="array" name="config_ignored_sms_packages" />
+
 </resources>
