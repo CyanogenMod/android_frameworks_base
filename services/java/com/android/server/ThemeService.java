@@ -23,7 +23,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -122,9 +121,8 @@ public class ThemeService extends IThemeService.Stub {
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
         private static final int MESSAGE_APPLY_DEFAULT_THEME = 2;
-        private static final int MESSAGE_BUILD_ICON_CACHE = 3;
-        private static final int MESSAGE_QUEUE_THEME_FOR_PROCESSING = 4;
-        private static final int MESSAGE_DEQUEUE_AND_PROCESS_THEME = 5;
+        private static final int MESSAGE_QUEUE_THEME_FOR_PROCESSING = 3;
+        private static final int MESSAGE_DEQUEUE_AND_PROCESS_THEME = 4;
 
         public ThemeWorkerHandler(Looper looper) {
             super(looper);
@@ -139,9 +137,6 @@ public class ThemeService extends IThemeService.Stub {
                     break;
                 case MESSAGE_APPLY_DEFAULT_THEME:
                     doApplyDefaultTheme();
-                    break;
-                case MESSAGE_BUILD_ICON_CACHE:
-                    doBuildIconCache();
                     break;
                 case MESSAGE_QUEUE_THEME_FOR_PROCESSING:
                     String pkgName = (String) msg.obj;
@@ -351,7 +346,6 @@ public class ThemeService extends IThemeService.Stub {
                 mPM.updateIconMaps(null);
             } else {
                 mPM.updateIconMaps(pkgName);
-                mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
             }
         } catch (Exception e) {
             Log.w(TAG, "Changing icons failed", e);
@@ -1058,21 +1052,6 @@ public class ThemeService extends IThemeService.Stub {
             return (int) (lhs.lastModified() - rhs.lastModified());
         }
     };
-
-    private void doBuildIconCache() {
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> infos = mPM.queryIntentActivities(mainIntent, 0);
-        for(ResolveInfo info : infos) {
-            try {
-                mPM.getActivityIcon(
-                        new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
-            } catch (Exception e) {
-                Log.w(TAG, "Unable to fetch icon for " + info, e);
-            }
-        }
-    }
 
     private void processInstalledThemes() {
         final String defaultTheme = ThemeUtils.getDefaultThemePackageName(mContext);
