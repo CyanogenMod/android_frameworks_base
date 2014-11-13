@@ -40,9 +40,18 @@ import android.content.res.IThemeProcessingListener;
 import android.content.res.ThemeConfig;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.RectF;
+import android.graphics.Rect;
+import android.graphics.Matrix;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Point;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Bitmap.CompressFormat;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -64,6 +73,9 @@ import android.provider.ThemesContract.ThemesColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.URLUtil;
+import android.view.WindowManager;
+import android.view.Display;
+import android.view.View;
 
 import com.android.internal.R;
 
@@ -73,6 +85,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -189,6 +203,127 @@ public class ThemeService extends IThemeService.Stub {
                     Log.w(TAG, "Unknown message " + msg.what);
                     break;
             }
+        }
+    }
+
+	class ImageCropper {
+        protected static final int DEFAULT_COMPRESS_QUALITY = 90;
+
+        InputStream getOriginalInputStream(String pkgName) {
+            return null;
+        }
+
+        private void CloseInputStream(InputStream inputStream) {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                    ;
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        public InputStream getCroppedImageStream(String pkgName, int outWidth, int outHeight) {
+            InputStream inputStream = null;
+            BitmapFactory.Options options = null;
+            int imageWidth = 0;
+            int imageHeight = 0;
+            float ratio = (float) outWidth / outHeight;
+
+            Log.d(TAG, String.format("getCroppedImageStream: outWidth %d outHeight %d", outWidth, outHeight));
+            if (outWidth <= 0 || outHeight <= 0) {
+                Log.d(TAG, "Invalid outWidth or outHeight");
+                return null;
+            }
+
+            inputStream = getOriginalInputStream(pkgName);
+            if (inputStream == null) {
+                Log.d(TAG, "getOriginalInputStream returns null");
+                return null;
+            }
+            options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(inputStream, null, options);
+            imageWidth = options.outWidth;
+            imageHeight = options.outHeight;
+            CloseInputStream(inputStream);
+
+            if (imageWidth <= 0 || imageHeight <= 0) {
+                Log.e(TAG, String.format("invalid image size: imageWidth %d imageHeight %d", imageWidth, imageHeight));
+                return null;
+            }
+
+            // See how much we're reducing the size of the image
+            // If image's width and height are both bigger than the crop width and height, load a
+            // scaled version of it, otherwise crop a rect from the center of the image
+            int scaleDownSampleSize = Math.min(imageWidth / outWidth, imageHeight / outHeight);
+            if (scaleDownSampleSize > 0) {
+                outWidth *= scaleDownSampleSize;
+                outHeight *= scaleDownSampleSize;
+            } else if (imageWidth < outWidth || imageHeight < outHeight) {
+                if (imageWidth < imageHeight * ratio) {
+                    outWidth = imageWidth;
+                    outHeight = (int) (outWidth / ratio);
+                } else {
+                    outHeight = imageHeight;
+                    outWidth = (int) (outHeight * ratio);
+                }
+            }
+
+            int left = (imageWidth - outWidth) / 2;
+            int top = (imageHeight - outHeight) / 2;
+            Rect cropRect = new Rect(left, top, left + outWidth, top + outHeight);
+
+            // Attempt to open a region decoder
+            BitmapRegionDecoder decoder = null;
+            try {
+                inputStream = getOriginalInputStream(pkgName);
+                if (inputStream == null)
+                    return null;
+                decoder = BitmapRegionDecoder.newInstance(inputStream, true);
+                CloseInputStream(inputStream);
+            } catch (IOException e) {
+                Log.e(TAG, "cannot open region decoder for inputStream", e);
+            }
+
+            Bitmap cropepedBitmap = null;
+            if (decoder != null) {
+                // Do region decoding to get crop bitmap
+                options = new BitmapFactory.Options();
+                if (scaleDownSampleSize > 1)
+                    options.inSampleSize = scaleDownSampleSize;
+                cropepedBitmap = decoder.decodeRegion(cropRect, options);
+                decoder.recycle();
+            }
+
+            // BitmapRegionDecoder has failed, try to crop in-memory
+            if (cropepedBitmap == null) {
+                Bitmap fullSizeBitmap = null;
+                options = new BitmapFactory.Options();
+                if (scaleDownSampleSize > 1)
+                    options.inSampleSize = scaleDownSampleSize;
+                inputStream = getOriginalInputStream(pkgName);
+                if (inputStream == null)
+                    return null;
+                fullSizeBitmap = BitmapFactory.decodeStream(inputStream, null, options);
+                CloseInputStream(inputStream);
+                if (fullSizeBitmap != null) {
+                    cropepedBitmap = Bitmap.createBitmap(fullSizeBitmap, cropRect.left,
+                            cropRect.top, cropRect.width(), cropRect.height());
+                }
+            }
+
+            // Compress to byte array
+            InputStream croppedImageStream = null;
+            ByteArrayOutputStream tmpOut = new ByteArrayOutputStream(2048);
+            if (cropepedBitmap.compress(Bitmap.CompressFormat.JPEG, DEFAULT_COMPRESS_QUALITY, tmpOut)) {
+                byte[] outByteArray = tmpOut.toByteArray();
+
+                Log.d(TAG, "getCroppedImageStream: Compress to byte array ****");
+                croppedImageStream = new ByteArrayInputStream(outByteArray);
+            }
+
+            return croppedImageStream;
         }
     }
 
@@ -560,6 +695,26 @@ public class ThemeService extends IThemeService.Stub {
         return success;
     }
 
+	private InputStream getOriginalKeyguardStream(String pkgName) {
+        InputStream inputStream = null;
+
+        try {
+            //Get input WP stream from the theme
+            Context themeCtx = mContext.createPackageContext(pkgName,
+                    Context.CONTEXT_IGNORE_SECURITY);
+            AssetManager assetManager = themeCtx.getAssets();
+            String wpPath = ThemeUtils.getLockscreenWallpaperPath(assetManager);
+            if (wpPath == null)
+                Log.w(TAG, "Not setting lockscreen wp because wallpaper file was not found.");
+            else
+                inputStream = ThemeUtils.getInputStreamFromAsset(themeCtx,
+                        "file:///android_asset/" + wpPath);
+        } catch (Exception e) {
+            Log.e(TAG, "There was an error setting lockscreen wp for pkg " + pkgName, e);
+        }
+        return inputStream;
+    }
+
     private boolean setCustomLockScreenWallpaper(String pkgName) {
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
         try {
@@ -570,19 +725,23 @@ public class ThemeService extends IThemeService.Stub {
             } else if (TextUtils.isEmpty(pkgName)) {
                 wm.clearKeyguardWallpaper();
             } else {
-                //Get input WP stream from the theme
-                Context themeCtx = mContext.createPackageContext(pkgName,
-                        Context.CONTEXT_IGNORE_SECURITY);
-                AssetManager assetManager = themeCtx.getAssets();
-                String wpPath = ThemeUtils.getLockscreenWallpaperPath(assetManager);
-                if (wpPath == null) {
-                    Log.w(TAG, "Not setting lockscreen wp because wallpaper file was not found.");
-                    return false;
-                }
-                InputStream is = ThemeUtils.getInputStreamFromAsset(themeCtx,
-                        "file:///android_asset/" + wpPath);
-
-                wm.setKeyguardStream(is);
+                WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                Display display = windowManager.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int displayWidth = size.x;
+                int displayHeight = size.y;
+                // TODO: allow configuring the output size and crop area
+                int outWidth = displayWidth * 2;
+                int outHeight = displayHeight;
+                ImageCropper imageCropper = new ImageCropper() {
+                    InputStream getOriginalInputStream(String pkgName) {
+                        return getOriginalKeyguardStream(pkgName);
+                    }
+                };
+                Log.d(TAG, "setCustomLockScreenWallpaper: call getCroppedImageStream");
+                InputStream stream = imageCropper.getCroppedImageStream(pkgName, outWidth, outHeight);
+                wm.setKeyguardStream(stream);
             }
         } catch (Exception e) {
             Log.e(TAG, "There was an error setting lockscreen wp for pkg " + pkgName, e);
@@ -591,79 +750,95 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private boolean updateWallpaper(String pkgName) {
+	private InputStream getOrigianlWallpaperStream(String pkgName) {
+        InputStream inputStream = null;
         String selection = ThemesColumns.PKG_NAME + "= ?";
-        String[] selectionArgs = { pkgName };
+        String[] selectionArgs = {pkgName};
         Cursor c = mContext.getContentResolver().query(ThemesColumns.CONTENT_URI,
                 null, selection,
                 selectionArgs, null);
         c.moveToFirst();
+
+        try {
+            Context themeContext = mContext.createPackageContext(pkgName,
+                    Context.CONTEXT_IGNORE_SECURITY);
+            boolean isLegacyTheme = c.getInt(
+                    c.getColumnIndex(ThemesColumns.IS_LEGACY_THEME)) == 1;
+            if (!isLegacyTheme) {
+                String wallpaper = c.getString(
+                        c.getColumnIndex(ThemesColumns.WALLPAPER_URI));
+                if (wallpaper != null) {
+                    if (URLUtil.isAssetUrl(wallpaper)) {
+                        inputStream = ThemeUtils.getInputStreamFromAsset(themeContext, wallpaper);
+                    } else {
+                        inputStream = mContext.getContentResolver().openInputStream(
+                                Uri.parse(wallpaper));
+                    }
+                } else {
+                    // try and get the wallpaper directly from the apk if the URI was null
+                    Context themeCtx = mContext.createPackageContext(pkgName,
+                            Context.CONTEXT_IGNORE_SECURITY);
+                    AssetManager assetManager = themeCtx.getAssets();
+                    String wpPath = ThemeUtils.getWallpaperPath(assetManager);
+                    if (wpPath == null)
+                        Log.e(TAG, "Not setting wp because wallpaper file was not found.");
+                    else
+                        inputStream = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/"
+                                + wpPath);
+                }
+            } else {
+                Resources resources = mContext.getResources();
+                PackageInfo pi = mPM.getPackageInfo(pkgName, 0);
+
+                if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0)
+                    inputStream = resources.openRawResource(pi.legacyThemeInfos[0].wallpaperResourceId);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getWallpaperStream: " + e);
+        } finally {
+            c.close();
+        }
+
+        return inputStream;
+    }
+
+    private boolean updateWallpaper(String pkgName) {
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
-        if (HOLO_DEFAULT.equals(pkgName)) {
+
+        if (HOLO_DEFAULT.equals(pkgName) || TextUtils.isEmpty(pkgName)) {
             try {
                 wm.clear();
             } catch (IOException e) {
+                Log.e(TAG, "updateWallpaper: " + e);
                 return false;
-            } finally {
-                c.close();
-            }
-        } else if (TextUtils.isEmpty(pkgName)) {
-            try {
-                wm.clear(false);
-            } catch (IOException e) {
-                return false;
-            } finally {
-                c.close();
             }
         } else {
-            InputStream in = null;
             try {
-                Context themeContext = mContext.createPackageContext(pkgName,
-                        Context.CONTEXT_IGNORE_SECURITY);
-                boolean isLegacyTheme = c.getInt(
-                        c.getColumnIndex(ThemesColumns.IS_LEGACY_THEME)) == 1;
-                if (!isLegacyTheme) {
-                    String wallpaper = c.getString(
-                                c.getColumnIndex(ThemesColumns.WALLPAPER_URI));
-                    if (wallpaper != null) {
-                        if (URLUtil.isAssetUrl(wallpaper)) {
-                            in = ThemeUtils.getInputStreamFromAsset(themeContext, wallpaper);
-                        } else {
-                            in = mContext.getContentResolver().openInputStream(
-                                    Uri.parse(wallpaper));
-                        }
-                    } else {
-                        // try and get the wallpaper directly from the apk if the URI was null
-                        Context themeCtx = mContext.createPackageContext(pkgName,
-                                Context.CONTEXT_IGNORE_SECURITY);
-                        AssetManager assetManager = themeCtx.getAssets();
-                        String wpPath = ThemeUtils.getWallpaperPath(assetManager);
-                        if (wpPath == null) {
-                            Log.w(TAG, "Not setting wp because wallpaper file was not found.");
-                            return false;
-                        }
-                        in = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/"
-                                + wpPath);
+                WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                Display display = windowManager.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int displayWidth = size.x;
+                int displayHeight = size.y;
+                // TODO: allow configuring the output size and crop area
+                int outWidth = displayWidth * 2;
+                int outHeight = displayHeight;
+                ImageCropper imageCropper = new ImageCropper() {
+                    InputStream getOriginalInputStream(String pkgName) {
+                        return getOrigianlWallpaperStream(pkgName);
                     }
-                    wm.setStream(in);
-                } else {
-                    PackageInfo pi = mPM.getPackageInfo(pkgName, 0);
-                    if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0) {
-                        // we need to get an instance of the WallpaperManager using the theme's
-                        // context so it can retrieve the resource
-                        wm = WallpaperManager.getInstance(themeContext);
-                        wm.setResource(pi.legacyThemeInfos[0].wallpaperResourceId);
-                    } else {
-                        return false;
-                    }
-                }
+                };
+
+                InputStream stream = imageCropper.getCroppedImageStream(pkgName, outWidth, outHeight);
+                if (stream == null)
+                    return false;
+                wm.setStream(stream);
             } catch (Exception e) {
+                Log.e(TAG, "updateWallpaper: " + e);
                 return false;
-            } finally {
-                ThemeUtils.closeQuietly(in);
-                c.close();
             }
         }
+
         return true;
     }
 
