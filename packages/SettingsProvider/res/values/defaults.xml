@@ -238,4 +238,7 @@
     <!-- Default value of Settings.System.ENABLE_PEOPLE_LOOKUP -->
     <integer name="def_people_lookup">1</integer>
 
+    <!-- Default values for ignored sms packages of Settings.Secure.IGNORED_SMS_PACKAGES -->
+    <string-array name="def_ignored_sms_packages"></string-array>
+
 </resources>

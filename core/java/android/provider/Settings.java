@@ -4915,6 +4915,12 @@ public final class Settings {
         public static final String PROTECTED_SMS_ADDRESSES = "protected_sms_addresses";
 
         /**
+         * Ignored sms packages
+         * @hide
+         */
+        public static final String IGNORED_SMS_PACKAGES = "ignored_sms_packages";
+
+        /**
          * Settings classname to launch when Settings is clicked from All
          * Applications.  Needed because of user testing between the old
          * and new Settings apps.

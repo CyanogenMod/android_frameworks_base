@@ -2081,7 +2081,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] regAddresses = mContext.getResources()
                 .getStringArray(R.array.def_protected_sms_list_values);
         if (regAddresses.length > 0) {
-            loadSetting(stmt, Settings.Secure.PROTECTED_SMS_ADDRESSES, TextUtils.join("|", regAddresses));
+            loadSetting(stmt, Settings.Secure.PROTECTED_SMS_ADDRESSES,
+                    TextUtils.join("|", regAddresses));
+        }
+    }
+
+    private void loadIgnoredSmsPackages(SQLiteStatement stmt) {
+        String[] ignoredPackages = mContext.getResources()
+                .getStringArray(R.array.def_ignored_sms_packages);
+        if (ignoredPackages.length > 0) {
+            loadSetting(stmt, Settings.Secure.IGNORED_SMS_PACKAGES,
+                    TextUtils.join("|", ignoredPackages));
         }
     }
 
@@ -2302,6 +2312,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadDefaultThemeSettings(stmt);
 
             loadProtectedSmsSetting(stmt);
+
+            loadIgnoredSmsPackages(stmt);
         } finally {
             if (stmt != null) stmt.close();
         }
