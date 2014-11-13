@@ -520,7 +520,7 @@ public abstract class ConnectionService extends Service {
                 Conference conference,
                 int connectionProperties) {
             String id = mIdByConference.get(conference);
-            Log.d(this, "call capabilities: conference: %s",
+            Log.d(this, "call properties: conference: %s",
                     Connection.propertiesToString(connectionProperties));
             mAdapter.setConnectionProperties(id, connectionProperties);
         }

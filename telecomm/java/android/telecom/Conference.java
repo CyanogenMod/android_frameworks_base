@@ -656,9 +656,11 @@ public abstract class Conference extends Conferenceable {
     @Override
     public String toString() {
         return String.format(Locale.US,
-                "[State: %s,Capabilites: %s, VideoState: %s, VideoProvider: %s, ThisObject %s]",
+                "[State: %s, Capabilites: %s, Properties: %s, " +
+                "VideoState: %s, VideoProvider: %s, ThisObject %s]",
                 Connection.stateToString(mState),
                 Call.Details.capabilitiesToString(mConnectionCapabilities),
+                Call.Details.propertiesToString(mConnectionProperties),
                 getVideoState(),
                 getVideoProvider(),
                 super.toString());
