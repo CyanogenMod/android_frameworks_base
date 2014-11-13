@@ -1560,4 +1560,7 @@
     -->
     <bool name="config_proximityCheckOnWake">false</bool>
     <integer name="config_proximityCheckTimeout">250</integer>
+
+    <!-- Ignored sms packages -->
+    <string-array name="config_ignored_sms_packages"></string-array>
 </resources>

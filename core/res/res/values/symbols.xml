@@ -2034,6 +2034,8 @@
   <!-- Proximity check timeout -->
   <java-symbol type="integer" name="config_proximityCheckTimeout" />
 
+  <java-symbol type="array" name="config_ignored_sms_packages" />
+
   <!-- Last app switch animations -->
    <java-symbol type="anim" name="last_app_in" />
    <java-symbol type="anim" name="last_app_out" />
