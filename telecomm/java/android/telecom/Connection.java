@@ -277,6 +277,40 @@ public abstract class Connection extends Conferenceable {
     //**********************************************************************************************
 
     /**
+     * Whether the call was forwarded from another party (GSM only)
+     * @hide
+     */
+    public static final int PROPERTY_WAS_FORWARDED = 0x00000001;
+
+    /**
+     * Whether the call is held remotely
+     * @hide
+     */
+    public static final int PROPERTY_HELD_REMOTELY = 0x00000002;
+
+    /**
+     * Whether the dialing state is waiting for the busy remote side
+     * @hide
+     */
+    public static final int PROPERTY_DIALING_IS_WAITING = 0x00000004;
+
+    /**
+     * Whether an additional call came in and was forwarded while the call was active
+     * @hide
+     */
+    public static final int PROPERTY_ADDITIONAL_CALL_FORWARDED = 0x00000008;
+
+    /**
+     * Whether incoming calls are barred at the remote side
+     * @hide
+     */
+    public static final int PROPERTY_REMOTE_INCOMING_CALLS_BARRED = 0x00000010;
+
+    //******************************************************************************************
+    // Next PROPERTY value: 0x00000020
+    //******************************************************************************************
+
+    /**
      * Connection extra key used to store the last forwarded number associated with the current
      * connection.  Used to communicate to the user interface that the connection was forwarded via
      * the specified number.
@@ -351,7 +385,6 @@ public abstract class Connection extends Conferenceable {
     public void addCapability(int capability) {
         mConnectionCapabilities |= capability;
     }
-
 
     public static String capabilitiesToString(int capabilities) {
         StringBuilder builder = new StringBuilder();
@@ -429,6 +462,72 @@ public abstract class Connection extends Conferenceable {
         return builder.toString();
     }
 
+    /**
+     * Whether the given properties include the specified property.
+     *
+     * @param properties A property bit field.
+     * @param property The property to check properties for.
+     * @return Whether the specified property is present.
+     * @hide
+     */
+    public static boolean hasProperty(int properties, int property) {
+        return (properties & property) != 0;
+    }
+
+    /**
+     * Whether the properties of this {@code Connection} include the specified property.
+     *
+     * @param property The property to look for.
+     * @return Whether the specified property is present.
+     * @hide
+     */
+    public boolean hasProperty(int property) {
+        return hasProperty(mConnectionProperties, property);
+    }
+
+    /**
+     * Removes the specified property from the set of properties of this {@code Connection}.
+     *
+     * @param property The property to remove from the set.
+     * @hide
+     */
+    public void removeProperty(int property) {
+        mConnectionProperties &= ~property;
+    }
+
+    /**
+     * Adds the specified property to the set of propertes of this {@code Connection}.
+     *
+     * @param property The property to add to the set.
+     * @hide
+     */
+    public void addProperty(int property) {
+        mConnectionProperties |= property;
+    }
+
+    public static String propertiesToString(int properties) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Properties:");
+
+        if (hasProperty(properties, PROPERTY_WAS_FORWARDED)) {
+            builder.append(" PROPERTY_WAS_FORWARDED");
+        }
+        if (hasProperty(properties, PROPERTY_HELD_REMOTELY)) {
+            builder.append(" PROPERTY_HELD_REMOTELY");
+        }
+        if (hasProperty(properties, PROPERTY_DIALING_IS_WAITING)) {
+            builder.append(" PROPERTY_DIALING_IS_WAITING");
+        }
+        if (hasProperty(properties, PROPERTY_ADDITIONAL_CALL_FORWARDED)) {
+            builder.append(" PROPERTY_ADDITIONAL_CALL_FORWARDED");
+        }
+        if (hasProperty(properties, PROPERTY_REMOTE_INCOMING_CALLS_BARRED)) {
+            builder.append(" PROPERTY_REMOTE_INCOMING_CALLS_BARRED");
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
     /** @hide */
     public abstract static class Listener {
         public void onStateChanged(Connection c, int state) {}
@@ -442,6 +541,7 @@ public abstract class Connection extends Conferenceable {
         public void onRingbackRequested(Connection c, boolean ringback) {}
         public void onDestroyed(Connection c) {}
         public void onConnectionCapabilitiesChanged(Connection c, int capabilities) {}
+        public void onConnectionPropertiesChanged(Connection c, int properties) {}
         public void onVideoProviderChanged(
                 Connection c, VideoProvider videoProvider) {}
         public void onAudioModeIsVoipChanged(Connection c, boolean isVoip) {}
@@ -1109,6 +1209,7 @@ public abstract class Connection extends Conferenceable {
     private int mCallerDisplayNamePresentation;
     private boolean mRingbackRequested = false;
     private int mConnectionCapabilities;
+    private int mConnectionProperties;
     private VideoProvider mVideoProvider;
     private boolean mAudioModeIsVoip;
     private long mConnectTimeMillis = Conference.CONNECT_TIME_NOT_SPECIFIED;
@@ -1333,6 +1434,14 @@ public abstract class Connection extends Conferenceable {
     }
 
     /**
+     * Returns the connection's properties, as a bit mask of the {@code PROPERTY_*} constants.
+     * @hide
+     */
+    public final int getConnectionProperties() {
+        return mConnectionProperties;
+    }
+
+    /**
      * Sets the value of the {@link #getAddress()} property.
      *
      * @param address The new address.
@@ -1524,6 +1633,22 @@ public abstract class Connection extends Conferenceable {
             mConnectionCapabilities = connectionCapabilities;
             for (Listener l : mListeners) {
                 l.onConnectionCapabilitiesChanged(this, mConnectionCapabilities);
+            }
+        }
+    }
+
+    /**
+     * Sets the connection's properties as a bit mask of the {@code PROPERTY_*} constants.
+     *
+     * @param connectionProperties The new connection properties.
+     * @hide
+     */
+    public final void setConnectionProperties(int connectionProperties) {
+        checkImmutable();
+        if (mConnectionProperties != connectionProperties) {
+            mConnectionProperties = connectionProperties;
+            for (Listener l : mListeners) {
+                l.onConnectionPropertiesChanged(this, mConnectionProperties);
             }
         }
     }
