@@ -29,7 +29,14 @@ public class MLandActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mland);
+        final boolean isCM = getIntent().getBooleanExtra("is_cm", false);
+        if (isCM) {
+            setContentView(R.layout.cmland);
+            mLand = (CMLand) findViewById(R.id.world);
+        } else {
+            setContentView(R.layout.mland);
+            mLand = (MLand) findViewById(R.id.world);
+        }
         mLand = (MLand) findViewById(R.id.world);
         mLand.setScoreFieldHolder((ViewGroup) findViewById(R.id.scores));
         final View welcome = findViewById(R.id.welcome);
