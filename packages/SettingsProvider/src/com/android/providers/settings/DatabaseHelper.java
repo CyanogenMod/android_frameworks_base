@@ -2081,7 +2081,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] regAddresses = mContext.getResources()
                 .getStringArray(R.array.def_protected_sms_list_values);
         if (regAddresses.length > 0) {
-            loadSetting(stmt, Settings.Secure.PROTECTED_SMS_ADDRESSES, TextUtils.join("|", regAddresses));
+            loadSetting(stmt, Settings.Secure.PROTECTED_SMS_ADDRESSES,
+                    TextUtils.join("|", regAddresses));
         }
     }
 
