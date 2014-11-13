@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2014-2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +25,45 @@ import android.view.ViewGroup;
 import com.android.systemui.R;
 
 public class MLandActivity extends Activity {
-    MLand mLand;
+    CMLand cmLand = null;
+    MLand mLand = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mland);
-        mLand = (MLand) findViewById(R.id.world);
-        mLand.setScoreFieldHolder((ViewGroup) findViewById(R.id.scores));
+        final boolean isCM = getIntent().getBooleanExtra("is_cm", false);
+        setContentView(isCM ? R.layout.cmland : R.layout.mland);
+        if (isCM) {
+          cmLand = (CMLand) findViewById(R.id.world);
+        } else {
+          mLand = (MLand) findViewById(R.id.world);
+        }
+        getLand().setScoreFieldHolder((ViewGroup) findViewById(R.id.scores));
         final View welcome = findViewById(R.id.welcome);
-        mLand.setSplash(welcome);
-        final int numControllers = mLand.getGameControllers().size();
+        getLand().setSplash(welcome);
+        final int numControllers = getLand().getGameControllers().size();
         if (numControllers > 0) {
-            mLand.setupPlayers(numControllers);
+            getLand().setupPlayers(numControllers);
+        }
+    }
+
+    private MLand getLand() {
+        if (cmLand != null) {
+            return cmLand;
+        } else {
+            return mLand;
         }
     }
 
     public void updateSplashPlayers() {
-        final int N = mLand.getNumPlayers();
+        final int N = getLand().getNumPlayers();
         final View minus = findViewById(R.id.player_minus_button);
         final View plus = findViewById(R.id.player_plus_button);
         if (N == 1) {
             minus.setVisibility(View.INVISIBLE);
             plus.setVisibility(View.VISIBLE);
             plus.requestFocus();
-        } else if (N == mLand.MAX_PLAYERS) {
+        } else if (N == getLand().MAX_PLAYERS) {
             minus.setVisibility(View.VISIBLE);
             plus.setVisibility(View.INVISIBLE);
             minus.requestFocus();
@@ -60,7 +75,7 @@ public class MLandActivity extends Activity {
 
     @Override
     public void onPause() {
-        mLand.stop();
+        getLand().stop();
         super.onPause();
     }
 
@@ -68,24 +83,24 @@ public class MLandActivity extends Activity {
     public void onResume() {
         super.onResume();
 
-        mLand.onAttachedToWindow(); // resets and starts animation
+        getLand().onAttachedToWindow(); // resets and starts animation
         updateSplashPlayers();
-        mLand.showSplash();
+        getLand().showSplash();
     }
 
     public void playerMinus(View v) {
-        mLand.removePlayer();
+        getLand().removePlayer();
         updateSplashPlayers();
     }
 
     public void playerPlus(View v) {
-        mLand.addPlayer();
+        getLand().addPlayer();
         updateSplashPlayers();
     }
 
     public void startButtonPressed(View v) {
         findViewById(R.id.player_minus_button).setVisibility(View.INVISIBLE);
         findViewById(R.id.player_plus_button).setVisibility(View.INVISIBLE);
-        mLand.start(true);
+        getLand().start(true);
     }
 }
