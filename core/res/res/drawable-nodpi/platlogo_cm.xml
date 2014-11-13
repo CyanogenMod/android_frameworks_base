@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (c) 2015 The CyanogenMod Project
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48.0"
+    android:viewportHeight="48.0">
+
+    <path
+        android:name="body"
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,12L24,12L24,12L24,12L24,12c7.7,0,14,1.2,14.9,2.6c0,0,0,0,0,0c1,1.5,1.1,6.5,1.1,9.4s-0.1,7.8-1.1,9.4
+c0,0,0,0,0,0C38,34.8,31.7,36,24,36l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0c-7.7,0-14-1.2-14.9-2.6c0,0,0,0,0,0C8.1,31.8,8,26.9,8,24
+s0.1-7.8,1.1-9.4c0,0,0,0,0,0C10,13.2,16.3,12,24,12L24,12L24,12L24,12L24,12z" />
+    <path
+        android:name="top"
+        android:fillColor="#EBEBEB"
+        android:pathData="M39,15c0,1.7-6.7,3-15,3S9,16.7,9,15s6.7-3,15-3S39,13.3,39,15z" />
+    <path
+        android:name="r_ant"
+        android:fillColor="#FFFFFF"
+        android:pathData="M35,15c-0.1,0-0.3,0-0.4-0.1c-0.5-0.2-0.8-0.8-0.5-1.3l2-5c0.2-0.5,0.8-0.8,1.3-0.5
+c0.5,0.2,0.8,0.8,0.5,1.3l-2,5C35.7,14.8,35.3,15,35,15z" />
+    <path
+        android:name="l_ant"
+        android:fillColor="#FFFFFF"
+        android:pathData="M13,15c0.1,0,0.3,0,0.4-0.1c0.5-0.2,0.8-0.8,0.5-1.3l-2-5c-0.2-0.5-0.8-0.8-1.3-0.5
+c-0.5,0.2-0.8,0.8-0.5,1.3l2,5C12.3,14.8,12.7,15,13,15z" />
+    <path
+        android:name="smile"
+        android:fillColor="#EBEBEB"
+        android:pathData="M22,32C22,32,22,32.1,22,32c0,0.9,0.6,1.5,1.4,1.5h1.1c0.8,0,1.5-0.7,1.5-1.5c0,0,0-0.1,0-0.1H22z" />
+    <path
+        android:name="l_eye"
+        android:fillColor="#EBEBEB"
+        android:pathData="M16,20c-2.8,0-5,2.2-5,5c0,2.8,2.2,5,5,5c2.8,0,5-2.2,5-5C21,22.2,18.8,20,16,20z" />
+    <path
+        android:name="r_eye"
+        android:fillColor="#EBEBEB"
+        android:pathData="M32,20c-2.8,0-5,2.2-5,5c0,2.8,2.2,5,5,5c2.8,0,5-2.2,5-5C37,22.2,34.8,20,32,20z" />
+</vector>
