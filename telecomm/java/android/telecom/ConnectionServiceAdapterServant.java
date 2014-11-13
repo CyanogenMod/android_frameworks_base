@@ -62,6 +62,7 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_ON_POST_DIAL_CHAR = 22;
     private static final int MSG_SET_CONFERENCE_MERGE_FAILED = 23;
     private static final int MSG_SET_EXTRAS = 24;
+    private static final int MSG_SET_CONNECTION_PROPERTIES = 25;
 
     private final IConnectionServiceAdapter mDelegate;
 
@@ -115,6 +116,9 @@ final class ConnectionServiceAdapterServant {
                     break;
                 case MSG_SET_CONNECTION_CAPABILITIES:
                     mDelegate.setConnectionCapabilities((String) msg.obj, msg.arg1);
+                    break;
+                case MSG_SET_CONNECTION_PROPERTIES:
+                    mDelegate.setConnectionProperties((String) msg.obj, msg.arg1);
                     break;
                 case MSG_SET_IS_CONFERENCED: {
                     SomeArgs args = (SomeArgs) msg.obj;
@@ -296,6 +300,13 @@ final class ConnectionServiceAdapterServant {
         public void setConnectionCapabilities(String connectionId, int connectionCapabilities) {
             mHandler.obtainMessage(
                     MSG_SET_CONNECTION_CAPABILITIES, connectionCapabilities, 0, connectionId)
+                    .sendToTarget();
+        }
+
+        @Override
+        public void setConnectionProperties(String connectionId, int connectionProperties) {
+            mHandler.obtainMessage(
+                    MSG_SET_CONNECTION_PROPERTIES, connectionProperties, 0, connectionId)
                     .sendToTarget();
         }
 
