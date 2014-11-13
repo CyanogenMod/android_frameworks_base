@@ -162,27 +162,6 @@ final class ConnectionServiceAdapter implements DeathRecipient {
         }
     }
 
-     /**
-     * Sets a call's state to disconnected.
-     *
-     * @param callId The unique ID of the call whose state is changing to disconnected.
-     * @param disconnectCause The reason for the disconnection, any of
-     *            {@link android.telephony.DisconnectCause}.
-     * @param disconnectMessage Optional call-service-provided message about the disconnect.
-     * @param type Supplementary service notification type
-     * @param code Supplementary service notification code
-     */
-    void setDisconnectedWithSsNotification(String callId, int disconnectCause,
-            String disconnectMessage, int type, int code) {
-        for (IConnectionServiceAdapter adapter : mAdapters) {
-            try {
-                adapter.setDisconnectedWithSsNotification(callId, disconnectCause,
-                        disconnectMessage, type, code);
-            } catch (RemoteException e) {
-            }
-        }
-    }
-
     /**
      * Sets a call's state to be on hold.
      *
@@ -216,6 +195,15 @@ final class ConnectionServiceAdapter implements DeathRecipient {
         for (IConnectionServiceAdapter adapter : mAdapters) {
             try {
                 adapter.setConnectionCapabilities(callId, capabilities);
+            } catch (RemoteException ignored) {
+            }
+        }
+    }
+
+    void setCallProperties(String callId, int properties) {
+        for (IConnectionServiceAdapter adapter : mAdapters) {
+            try {
+                adapter.setCallProperties(callId, properties);
             } catch (RemoteException ignored) {
             }
         }

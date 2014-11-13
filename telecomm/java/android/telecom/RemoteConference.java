@@ -43,6 +43,7 @@ public final class RemoteConference {
         public void onConnectionCapabilitiesChanged(
                 RemoteConference conference,
                 int connectionCapabilities) {}
+        public void onPropertiesChanged(RemoteConference conference, int properties) {}
         public void onConferenceableConnectionsChanged(
                 RemoteConference conference,
                 List<RemoteConnection> conferenceableConnections) {}
@@ -137,6 +138,16 @@ public final class RemoteConference {
         }
     }
 
+    /** {@hide} */
+    void setCallProperties(int properties) {
+        if (mCallProperties != properties) {
+            mCallProperties = properties;
+            for (Callback c : mCallbacks) {
+                c.onPropertiesChanged(this, mCallProperties);
+            }
+        }
+    }
+
     /** @hide */
     void setConferenceableConnections(List<RemoteConnection> conferenceableConnections) {
         mConferenceableConnections.clear();
@@ -172,6 +183,10 @@ public final class RemoteConference {
 
     public final int getConnectionCapabilities() {
         return mConnectionCapabilities;
+    }
+
+    public final int getCallProperties() {
+        return mCallProperties;
     }
 
     public void disconnect() {

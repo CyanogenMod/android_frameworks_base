@@ -64,10 +64,6 @@ public final class RemoteConnection {
                 RemoteConnection connection,
                 DisconnectCause disconnectCause) {}
 
-        /** @hide */
-        public void setDisconnectedWithSsNotification(RemoteConnection connection,
-                int disconnectCause, String disconnectMessage, int type, int code) {}
-
         /**
          * Invoked when this {@code RemoteConnection} is requesting ringback. See
          * {@link #isRingbackRequested()}.
@@ -102,6 +98,7 @@ public final class RemoteConnection {
          * @hide
          */
         public void onCallPropertiesChanged(RemoteConnection connection, int callProperties) {}
+
         /**
          * Invoked when the post-dial sequence in the outgoing {@code Connection} has reached a
          * pause character. This causes the post-dial signals to stop pending user confirmation. An
@@ -562,6 +559,15 @@ public final class RemoteConnection {
     }
 
     /**
+     * @return A bitmask of the properties of the {@code RemoteConnection}, as defined in
+     *         {@link CallProperties}.
+     *  @hide
+     */
+    public int getCallProperties() {
+        return mCallProperties;
+    }
+
+    /**
      * Determines if the audio mode of this {@code RemoteConnection} is VOIP.
      *
      * @return {@code true} if the {@code RemoteConnection}'s current audio mode is VOIP.
@@ -879,15 +885,6 @@ public final class RemoteConnection {
         }
     }
 
-    /** @hide */
-   public void setDisconnectedWithSsNotification(int disconnectCause,
-                String disconnectMessage, int type, int code) {
-        for (Callback c : mCallbacks) {
-            c.setDisconnectedWithSsNotification(this, disconnectCause,
-                    disconnectMessage, type, code);
-        }
-    }
-
     /**
      * @hide
      */
@@ -910,6 +907,16 @@ public final class RemoteConnection {
             c.onCallCapabilitiesChanged(this, connectionCapabilities);
         }
     }
+    /**
+     * @hide
+     */
+    void setCallProperties(int callProperties) {
+        mCallProperties = callProperties;
+        for (Callback c : mCallbacks) {
+            c.onCallPropertiesChanged(this, callProperties);
+        }
+    }
+
     /**
      * @hide
      */

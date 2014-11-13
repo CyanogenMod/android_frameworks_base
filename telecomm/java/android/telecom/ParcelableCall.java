@@ -54,8 +54,6 @@ public final class ParcelableCall implements Parcelable {
     private final int mVideoState;
     private final List<String> mConferenceableCallIds;
     private final Bundle mExtras;
-    private int mNotificationType;
-    private int mCode;
     boolean mIsActiveSub;
     private int mCallSubstate;
 
@@ -80,8 +78,6 @@ public final class ParcelableCall implements Parcelable {
             int videoState,
             List<String> conferenceableCallIds,
             Bundle extras,
-            int notificationType,
-            int code,
             boolean isActiveSub,
             int callSubstate) {
         mId = id;
@@ -104,8 +100,6 @@ public final class ParcelableCall implements Parcelable {
         mVideoState = videoState;
         mConferenceableCallIds = Collections.unmodifiableList(conferenceableCallIds);
         mExtras = extras;
-        mNotificationType = notificationType;
-        mCode = code;
         mIsActiveSub = isActiveSub;
         mCallSubstate = callSubstate;
     }
@@ -244,14 +238,6 @@ public final class ParcelableCall implements Parcelable {
         return mExtras;
     }
 
-    public int getNotificationType() {
-        return mNotificationType;
-    }
-
-    public int getNotificationCode() {
-        return mCode;
-    }
-
     /**
      * The call substate.
      * @return The substate of the call.
@@ -290,8 +276,6 @@ public final class ParcelableCall implements Parcelable {
             List<String> conferenceableCallIds = new ArrayList<>();
             source.readList(conferenceableCallIds, classLoader);
             Bundle extras = source.readParcelable(classLoader);
-            int notificationType = source.readInt();
-            int code = source.readInt();
             boolean isActiveSub = (source.readInt() == 1) ? true : false;
             int callSubstate = source.readInt();
             return new ParcelableCall(
@@ -315,8 +299,6 @@ public final class ParcelableCall implements Parcelable {
                     videoState,
                     conferenceableCallIds,
                     extras,
-                    notificationType,
-                    code,
                     isActiveSub,
                     callSubstate);
         }
@@ -357,8 +339,6 @@ public final class ParcelableCall implements Parcelable {
         destination.writeInt(mVideoState);
         destination.writeList(mConferenceableCallIds);
         destination.writeParcelable(mExtras, 0);
-        destination.writeInt(mNotificationType);
-        destination.writeInt(mCode);
         destination.writeInt(mIsActiveSub ? 1 : 0);
         destination.writeInt(mCallSubstate);
     }
