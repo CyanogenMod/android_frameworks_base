@@ -31,6 +31,8 @@ package android.wipower;
 
 import android.util.Log;
 
+import android.os.SystemProperties;
+
 
 /**
   * Class holds the PRU Dynamic parameter and related attributes
@@ -53,7 +55,7 @@ public class WipowerDynamicParam {
         private byte mReserved2;
 
         private static final String LOGTAG = "WipowerDynamicParam";
-        private static final boolean VDBG = false;
+        private static boolean sDebug = false;
 
         private static final int MSB_MASK = 0xFF00;
         private static final int LSB_MASK = 0x00FF;
@@ -99,13 +101,14 @@ public class WipowerDynamicParam {
         * {@hide}
         */
         void print() {
-            if (VDBG) Log.v(LOGTAG, "mOptValidity " +  toHex(mOptValidity) +
+            sDebug = SystemProperties.getBoolean("persist.a4wp.logging", false);
+            if (sDebug) Log.v(LOGTAG, "mOptValidity " +  toHex(mOptValidity) +
               "mRectVoltage " +  toHex(mRectVoltage) +  "mRectCurrent " +
               toHex(mRectCurrent) + "mOutputVoltage " +  toHex(mOutputVoltage));
-            if (VDBG) Log.v(LOGTAG, "mOutputCurrent " +  toHex(mOutputCurrent) +
+            if (sDebug) Log.v(LOGTAG, "mOutputCurrent " +  toHex(mOutputCurrent) +
                "mTemperature " +  toHex(mTemperature) + "mMinRectVoltageDyn " +
                toHex(mMinRectVoltageDyn) + "mMaxRectVoltageDyn " +  toHex(mMaxRectVoltageDyn));
-            if (VDBG) Log.v(LOGTAG, "mSetRectVoltageDyn " +
+            if (sDebug) Log.v(LOGTAG, "mSetRectVoltageDyn " +
                toHex(mSetRectVoltageDyn) + "mAlert " +  toHex(mAlert) +
                "mReserved1 " +  toHex(mReserved1) + "mReserved2 " +  toHex(mReserved2));
         }
