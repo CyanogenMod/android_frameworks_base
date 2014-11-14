@@ -411,5 +411,11 @@
                 <action android:name="com.android.systemui.action.CLEAR_TUNER" />
             </intent-filter>
         </receiver>
+
+        <provider android:name=".cm.SpamMessageProvider"
+                  android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
+                  android:exported="true"
+                  android:authorities="com.cyanogenmod.spam" />
+
     </application>
 </manifest>
