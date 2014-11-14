@@ -40,4 +40,8 @@
      <!-- The title of the profile picker dialog. -->
      <string name="profile_picker_title">Profiles</string>
 
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Profile</string>
+
+
 </resources>
