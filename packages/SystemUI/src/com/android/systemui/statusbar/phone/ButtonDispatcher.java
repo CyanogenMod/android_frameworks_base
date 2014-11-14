@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Dispatches common view calls to multiple views.  This is used to handle
  * multiples of the same nav bar icon appearing.
  */
-public class ButtonDispatcher {
+public class ButtonDispatcher implements Drawable.Callback {
 
     private final ArrayList<View> mViews = new ArrayList<>();
 
@@ -74,6 +74,7 @@ public class ButtonDispatcher {
             ((ButtonInterface) view).setImageResource(mImageResource);
         } else if (mImageDrawable != null) {
             ((ButtonInterface) view).setImageDrawable(mImageDrawable);
+            updateDrawable();
         }
     }
 
@@ -96,6 +97,7 @@ public class ButtonDispatcher {
         for (int i = 0; i < N; i++) {
             ((ButtonInterface) mViews.get(i)).setImageDrawable(mImageDrawable);
         }
+        updateDrawable();
     }
 
     public void setImageResource(int resource) {
@@ -183,6 +185,36 @@ public class ButtonDispatcher {
             if (view instanceof ButtonInterface) {
                 ((ButtonInterface) view).setCarMode(carMode);
             }
+        }
+    }
+
+    private void updateDrawable() {
+        mImageDrawable.setCallback(this);
+        // one of our buttons will always be visible
+        mImageDrawable.setVisible(true, false);
+    }
+
+    @Override
+    public void invalidateDrawable(Drawable who) {
+        final int N = mViews.size();
+        for (int i = 0; i < N; i++) {
+            mViews.get(i).invalidateDrawable(who);
+        }
+    }
+
+    @Override
+    public void scheduleDrawable(Drawable who, Runnable what, long when) {
+        final int N = mViews.size();
+        for (int i = 0; i < N; i++) {
+            mViews.get(i).scheduleDrawable(who, what, when);
+        }
+    }
+
+    @Override
+    public void unscheduleDrawable(Drawable who, Runnable what) {
+        final int N = mViews.size();
+        for (int i = 0; i < N; i++) {
+            mViews.get(i).unscheduleDrawable(who, what);
         }
     }
 
