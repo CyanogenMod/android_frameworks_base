@@ -104,6 +104,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private static final String GLOBAL_ACTION_KEY_LOCKDOWN = "lockdown";
     private static final String GLOBAL_ACTION_KEY_VOICEASSIST = "voiceassist";
     private static final String GLOBAL_ACTION_KEY_ASSIST = "assist";
+    private static final String GLOBAL_ACTION_KEY_PROFILE = "profile";
 
     private final Context mContext;
     private final WindowManagerFuncs mWindowManagerFuncs;
@@ -301,37 +302,36 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mItems.add(getVoiceAssistAction());
             } else if (GLOBAL_ACTION_KEY_ASSIST.equals(actionKey)) {
                 mItems.add(getAssistAction());
+            } else if (GLOBAL_ACTION_KEY_PROFILE.equals(actionKey)) {
+                mItems.add(
+                        new ProfileChooseAction() {
+                            public void onPress() {
+                                createProfileDialog();
+                            }
+
+                            public boolean onLongPress() {
+                                return true;
+                            }
+
+                            public boolean showDuringKeyguard() {
+                                return false;
+                            }
+
+                            public boolean showBeforeProvisioning() {
+                                return false;
+                            }
+
+                            public CharSequence getLabelForAccessibility(Context context) {
+                                return null;
+                            }
+
+                        });
             } else {
                 Log.e(TAG, "Invalid global action key " + actionKey);
             }
             // Add here so we don't add more than one.
             addedKeys.add(actionKey);
         }
-
-        // next: profile
-        mItems.add(
-            new ProfileChooseAction() {
-                public void onPress() {
-                    createProfileDialog();
-                }
-
-                public boolean onLongPress() {
-                   return true;
-                }
-
-                public boolean showDuringKeyguard() {
-                    return false;
-                }
-
-                public boolean showBeforeProvisioning() {
-                    return false;
-                }
-
-                public CharSequence getLabelForAccessibility(Context context) {
-                    return null;
-                }
-
-            });
 
         mAdapter = new MyAdapter();
 
@@ -427,9 +427,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         abstract public void onPress();
 
         public View create(Context context, View convertView, ViewGroup parent, LayoutInflater inflater) {
-            View v = (convertView != null) ?
-                    convertView :
-                    inflater.inflate(R.layout.global_actions_item, parent, false);
+            View v = inflater.inflate(R.layout.global_actions_item, parent, false);
 
             ImageView icon = (ImageView) v.findViewById(R.id.icon);
             TextView messageView = (TextView) v.findViewById(R.id.message);
