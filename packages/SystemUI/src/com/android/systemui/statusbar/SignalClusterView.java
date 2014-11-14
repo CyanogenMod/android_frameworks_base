@@ -58,7 +58,7 @@ public class SignalClusterView
     private int mEthernetIconId = 0;
 
     ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane, mNoSimSlot,
+    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType, mAirplane,
         mEthernet;
     View mSpacer;
 
@@ -90,7 +90,6 @@ public class SignalClusterView
         mMobile         = (ImageView) findViewById(R.id.mobile_signal);
         mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
         mMobileType     = (ImageView) findViewById(R.id.mobile_type);
-        mNoSimSlot      = (ImageView) findViewById(R.id.no_sim);
         mSpacer         =             findViewById(R.id.spacer);
         mAirplane       = (ImageView) findViewById(R.id.airplane);
         mEthernet       = (ImageView) findViewById(R.id.ethernet);
@@ -107,7 +106,6 @@ public class SignalClusterView
         mMobile         = null;
         mMobileActivity = null;
         mMobileType     = null;
-        mNoSimSlot      = null;
         mSpacer         = null;
         mAirplane       = null;
         mEthernet       = null;
@@ -221,14 +219,13 @@ public class SignalClusterView
                     (mWifiVisible ? "VISIBLE" : "GONE"),
                     mWifiStrengthId, mWifiActivityId));
 
-        if (mMobileVisible && !mIsAirplaneMode) {
+        if ((mMobileVisible && mNoSimIconId == 0) && !mIsAirplaneMode) {
             mMobile.setImageResource(mMobileStrengthId);
             mMobileActivity.setImageResource(mMobileActivityId);
             mMobileType.setImageResource(mMobileTypeId);
 
             mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
             mMobileGroup.setVisibility(View.VISIBLE);
-            mNoSimSlot.setImageResource(mNoSimIconId);
         } else {
             mMobileGroup.setVisibility(View.GONE);
         }
@@ -240,8 +237,9 @@ public class SignalClusterView
             mAirplane.setVisibility(View.GONE);
         }
 
-        if (mMobileVisible && mWifiVisible &&
-                ((mIsAirplaneMode) || (mNoSimIconId != 0))) {
+        if ((mMobileVisible && mNoSimIconId != 0)
+                && mWifiVisible
+                && mIsAirplaneMode) {
             mSpacer.setVisibility(View.INVISIBLE);
         } else {
             mSpacer.setVisibility(View.GONE);
