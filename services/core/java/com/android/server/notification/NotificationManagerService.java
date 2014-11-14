@@ -42,7 +42,9 @@ import android.app.usage.UsageStatsManagerInternal;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -93,6 +95,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.AtomicFile;
 import android.util.Log;
+import android.util.LruCache;
 import android.util.Slog;
 import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
@@ -102,6 +105,9 @@ import android.widget.Toast;
 import com.android.internal.R;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.util.FastXmlSerializer;
+import com.android.internal.util.cm.SpamFilter;
+import com.android.internal.util.cm.SpamFilter.SpamContract.NotificationTable;
+import com.android.internal.util.cm.SpamFilter.SpamContract.PackageTable;
 import com.android.server.EventLogTags;
 import com.android.server.LocalServices;
 import com.android.server.SystemService;
@@ -141,6 +147,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 /** {@hide} */
 public class NotificationManagerService extends SystemService {
@@ -173,6 +181,8 @@ public class NotificationManagerService extends SystemService {
     static final int JUNK_SCORE = -1000;
     static final int NOTIFICATION_PRIORITY_MULTIPLIER = 10;
     static final int SCORE_DISPLAY_THRESHOLD = Notification.PRIORITY_MIN * NOTIFICATION_PRIORITY_MULTIPLIER;
+	private static final String IS_FILTERED_QUERY = NotificationTable.NORMALIZED_TEXT + "=? AND " +
+        PackageTable.PACKAGE_NAME + "=?";
 
     // Notifications with scores below this will not interrupt the user, either via LED or
     // sound or vibration
@@ -223,6 +233,19 @@ public class NotificationManagerService extends SystemService {
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
     boolean mSystemReady;
+
+    private final LruCache<Integer, FilterCacheInfo> mSpamCache;
+    private ExecutorService mSpamExecutor = Executors.newSingleThreadExecutor();
+
+    private static final Uri FILTER_MSG_URI = new Uri.Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(SpamFilter.AUTHORITY)
+            .appendPath("message")
+            .build();
+
+    private static final Uri UPDATE_MSG_URI = FILTER_MSG_URI.buildUpon()
+            .appendEncodedPath("inc_count")
+            .build();
 
     private boolean mDisableNotificationEffects;
     private int mCallState;
@@ -910,6 +933,7 @@ public class NotificationManagerService extends SystemService {
 
     public NotificationManagerService(Context context) {
         super(context);
+        mSpamCache = new LruCache<Integer, FilterCacheInfo>(100);
     }
 
     @Override
@@ -2239,6 +2263,11 @@ public class NotificationManagerService extends SystemService {
                         return;
                     }
 
+                    if (isNotificationSpam(notification, pkg)) {
+                        mArchive.record(r.sbn);
+                        return;
+                    }
+
                     int index = indexOfNotificationLocked(n.getKey());
                     if (index < 0) {
                         mNotificationList.add(r);
@@ -2814,6 +2843,51 @@ public class NotificationManagerService extends SystemService {
     // ============================================================================
     static int clamp(int x, int low, int high) {
         return (x < low) ? low : ((x > high) ? high : x);
+    }
+
+	private int getNotificationHash(Notification notification, String packageName) {
+        CharSequence message = SpamFilter.getNotificationContent(notification);
+        return (message + ":" + packageName).hashCode();
+    }
+
+    private static final class FilterCacheInfo {
+        String packageName;
+        int notificationId;
+    }
+
+    private boolean isNotificationSpam(Notification notification, String basePkg) {
+        Integer notificationHash = getNotificationHash(notification, basePkg);
+        boolean isSpam = false;
+        if (mSpamCache.get(notificationHash) != null) {
+            isSpam = true;
+        } else {
+            String msg = SpamFilter.getNotificationContent(notification);
+            Cursor c = getContext().getContentResolver().query(FILTER_MSG_URI, null, IS_FILTERED_QUERY,
+                    new String[]{SpamFilter.getNormalizedContent(msg), basePkg}, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    FilterCacheInfo info = new FilterCacheInfo();
+                    info.packageName = basePkg;
+                    int notifId = c.getInt(c.getColumnIndex(NotificationTable.ID));
+                    info.notificationId = notifId;
+                    mSpamCache.put(notificationHash, info);
+                    isSpam = true;
+                }
+                c.close();
+            }
+        }
+        if (isSpam) {
+            final int notifId = mSpamCache.get(notificationHash).notificationId;
+            mSpamExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    Uri updateUri = Uri.withAppendedPath(UPDATE_MSG_URI, String.valueOf(notifId));
+                    getContext().getContentResolver().update(updateUri, new ContentValues(),
+                            null, null);
+                }
+            });
+        }
+        return isSpam;
     }
 
     void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
