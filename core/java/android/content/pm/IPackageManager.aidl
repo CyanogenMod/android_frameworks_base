@@ -507,4 +507,8 @@ interface IPackageManager {
     boolean isPermissionRevokedByPolicy(String permission, String packageName, int userId);
 
     String getPermissionControllerPackageName();
+
+    /** Protected Apps */
+    void setComponentProtectedSetting(in ComponentName componentName,
+    in boolean newState, int userId);
 }
