@@ -203,6 +203,10 @@ public class CallLog {
          * @hide
          */
         public static final int ANSWERED_EXTERNALLY_TYPE = 7;
+        /** Call log type for blacklisted calls
+         * @hide
+         */
+        public static final int BLACKLIST_TYPE = 8;
 
         /**
          * Bit-mask describing features of the call (e.g. video).

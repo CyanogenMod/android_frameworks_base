@@ -250,6 +250,12 @@ public class DisconnectCause {
 
     public static final int NON_SELECTED_USER_CLEARING = 99;
 
+    /**
+     * Call was rejected due to number being blacklisted by user.
+     * {@@hide}
+     */
+    public static final int CALL_BLACKLISTED = 400;
+
     //*********************************************************************************************
     // When adding a disconnect type:
     // 1) Please assign the new type the next id value below.
@@ -374,7 +380,9 @@ public class DisconnectCause {
         case CDMA_ALREADY_ACTIVATED:
             return "CDMA_ALREADY_ACTIVATED";
         case VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED:
-                return "VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED";
+            return "VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED";
+        case CALL_BLACKLISTED:
+            return "CALL_BLACKLISTED";
         case NO_CIRCUIT_AVAIL:
             return "NO_CIRCUIT_AVAIL";
         case NO_ROUTE_TO_DESTINAON:
