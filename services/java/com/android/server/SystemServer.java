@@ -414,6 +414,7 @@ public final class SystemServer {
         ConsumerIrService consumerIr = null;
         AudioService audioService = null;
         MmsServiceBroker mmsService = null;
+        ProfileManagerService profile = null;
 
         boolean disableStorage = SystemProperties.getBoolean("config.disable_storage", false);
         boolean disableMedia = SystemProperties.getBoolean("config.disable_media", false);
@@ -792,6 +793,16 @@ public final class SystemServer {
                     ServiceManager.addService(Context.WALLPAPER_SERVICE, wallpaper);
                 } catch (Throwable e) {
                     reportWtf("starting Wallpaper Service", e);
+                }
+            }
+
+            if (!disableNonCoreServices) {
+                try {
+                    Slog.i(TAG, "Profile Manager");
+                    profile = new ProfileManagerService(context);
+                    ServiceManager.addService(Context.PROFILE_SERVICE, profile);
+                } catch (Throwable e) {
+                    reportWtf("Failure starting Profile Manager", e);
                 }
             }
 
