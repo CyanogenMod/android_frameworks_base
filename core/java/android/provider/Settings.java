@@ -6496,6 +6496,12 @@ public final class Settings {
                 "managed_profile_contact_remote_search";
 
         /**
+         * Whether to include options in power menu for rebooting into recovery or bootloader
+         * @hide
+         */
+        public static final String ADVANCED_REBOOT = "advanced_reboot";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -6568,7 +6574,8 @@ public final class Settings {
             PREFERRED_TTY_MODE,
             ENHANCED_VOICE_PRIVACY_ENABLED,
             TTY_MODE_ENABLED,
-            INCALL_POWER_BUTTON_BEHAVIOR
+            INCALL_POWER_BUTTON_BEHAVIOR,
+            ADVANCED_REBOOT
         };
 
         /**
@@ -7016,6 +7023,12 @@ public final class Settings {
          * Whether ADB is enabled.
          */
         public static final String ADB_ENABLED = "adb_enabled";
+
+        /**
+         * String to contain power menu actions
+         * @hide
+         */
+        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
 
         /**
          * Whether Views are allowed to save their attribute data.

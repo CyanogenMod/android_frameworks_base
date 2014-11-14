@@ -824,6 +824,7 @@
   <java-symbol type="string" name="reboot_safemode_confirm" />
   <java-symbol type="string" name="reboot_safemode_title" />
   <java-symbol type="string" name="reboot_title" />
+  <java-symbol type="string" name="reboot_progress" />
   <java-symbol type="string" name="relationTypeAssistant" />
   <java-symbol type="string" name="relationTypeBrother" />
   <java-symbol type="string" name="relationTypeChild" />
@@ -1469,6 +1470,8 @@
   <java-symbol type="array" name="config_safeModeEnabledVibePattern" />
   <java-symbol type="array" name="config_contextClickVibePattern" />
   <java-symbol type="array" name="config_virtualKeyVibePattern" />
+  <java-symbol type="array" name="shutdown_reboot_options" />
+  <java-symbol type="array" name="shutdown_reboot_actions" />
   <java-symbol type="attr" name="actionModePopupWindowStyle" />
   <java-symbol type="attr" name="dialogCustomTitleDecorLayout" />
   <java-symbol type="attr" name="dialogTitleDecorLayout" />
@@ -2637,5 +2640,11 @@
 
   <!-- Config.xml entries -->
   <java-symbol type="integer" name="config_backKillTimeout" />
+
+  <!-- Power menu -->
+  <java-symbol type="drawable" name="ic_lock_screenshot" />
+  <java-symbol type="string" name="global_action_screenshot" />
+  <java-symbol type="drawable" name="ic_lock_settings" />
+  <java-symbol type="drawable" name="ic_lock_user" />
 
 </resources>
