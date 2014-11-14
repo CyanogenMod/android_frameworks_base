@@ -20,6 +20,9 @@
     <!-- Long-press back kill application -->
     <string name="app_killed_message">Application killed</string>
 
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Screenshot</string>
+
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_security">Security</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -34,5 +37,34 @@
     <string name="permlab_changePhoneBlacklist">change phone blacklist</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changePhoneBlacklist">Allows an app to change the phone numbers that are blocked for incoming calls or messages.</string>
+
+    <!-- label for item that opens the profile choosing dialog -->
+    <string name="global_action_choose_profile">Profile</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Reboot</string>
+
+    <!-- Reboot menu -->
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reboot</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+    <!-- Button to soft reboot the device, within the Reboot Options dialog -->
+    <string name="reboot_soft">Soft reboot</string>
+
+    <!-- Title of dialog to confirm rebooting. -->
+    <string name="reboot_title">Reboot</string>
+
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm" product="tablet">Your tablet will reboot.</string>
+    <string name="reboot_confirm" product="default">Your phone will reboot.</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Rebooting\u2026</string>
 
 </resources>
