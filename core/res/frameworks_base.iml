@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/..">
+      <sourceFolder url="file://$MODULE_DIR$/../tests/notificationtests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/apks/version/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/utillib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/apks/version_nosys/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/UpdateExternalLocTestApp_v1_ext/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalLocAllPermsTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/SimpleTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/AutoLocTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/UpdateExtToIntLocTestApp_v2_int/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/VersatileTestApp_Internal/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/inputmethodtests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalLocVersionedTestApp_v2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/VersatileTestApp_Auto/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/InternalLocTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/DisabledTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/EnabledTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/NoLocVersionedTestApp_v2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/NoLocVersionedTestApp_v1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalLocPermsFLTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/DownloadManagerTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/ConnectivityManagerTest/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalSharedPerms/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/UpdateExternalLocTestApp_v2_none/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/UpdateExtToIntLocTestApp_v1_ext/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/overlaytests/OverlayTest/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/NoLocTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/VersatileTestApp_External/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/AutoLocVersionedTestApp_v2/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalSharedPermsFL/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/bluetoothtests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/systemproperties/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/benchmarks/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/apks/install_bad_dex/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/AutoLocVersionedTestApp_v1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/VersatileTestApp_None/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalLocVersionedTestApp_v1/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalLocTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalSharedPermsDiffKey/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/coretests/apks/install_complete_package_info/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/bandwidthtests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../tests/hosttests/test-apps/ExternalSharedPermsBT/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../tests" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../media">
+      <sourceFolder url="file://$MODULE_DIR$/../../media/mca/effect/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/mca/tests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/tests/SoundPoolTest/src/com/android" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/mca/filterfw/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/tests/ScoAudioTest/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/tests/EffectsTest/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/tests/CameraBrowser/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/lib/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/mca/filterpacks/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/tests/MediaDump/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/mca/samples/CameraEffectsRecordingSample/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../media/tests/MediaFrameworkTest/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../media/jni" />
+      <excludeFolder url="file://$MODULE_DIR$/../../media/mca" />
+      <excludeFolder url="file://$MODULE_DIR$/../../media/tests" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../packages/SettingsProvider">
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/SettingsProvider/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/SettingsProvider/res" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../policy">
+      <sourceFolder url="file://$MODULE_DIR$/../../policy/src" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../services">
+      <sourceFolder url="file://$MODULE_DIR$/../../services/tests/servicestests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../services/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

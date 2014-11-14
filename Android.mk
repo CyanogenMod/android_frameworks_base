@@ -66,6 +66,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/IInstrumentationWatcher.aidl \
 	core/java/android/app/INotificationManager.aidl \
 	core/java/android/app/IProcessObserver.aidl \
+	core/java/android/app/IProfileManager.aidl \
 	core/java/android/app/ISearchManager.aidl \
 	core/java/android/app/ISearchManagerCallback.aidl \
 	core/java/android/app/IServiceConnection.aidl \
@@ -370,6 +371,9 @@ aidl_files := \
 	frameworks/base/core/java/android/accounts/IAccountAuthenticatorResponse.aidl \
 	frameworks/base/core/java/android/app/Notification.aidl \
 	frameworks/base/core/java/android/app/PendingIntent.aidl \
+	frameworks/base/core/java/android/app/NotificationGroup.aidl \
+	frameworks/base/core/java/android/app/Profile.aidl \
+	frameworks/base/core/java/android/app/Profile.aidl \
 	frameworks/base/core/java/android/appwidget/AppWidgetProviderInfo.aidl \
 	frameworks/base/core/java/android/bluetooth/BluetoothDevice.aidl \
 	frameworks/base/core/java/android/bluetooth/BluetoothHealthAppConfiguration.aidl \

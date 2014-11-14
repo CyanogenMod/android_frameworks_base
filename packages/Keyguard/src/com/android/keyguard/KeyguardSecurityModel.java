@@ -17,6 +17,7 @@
  */
 package com.android.keyguard;
 
+import android.app.Profile;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.telephony.MSimTelephonyManager;
@@ -98,7 +99,7 @@ public class KeyguardSecurityModel {
         } else if (simState == IccCardConstants.State.PUK_REQUIRED
                 && mLockPatternUtils.isPukUnlockScreenEnable()) {
             mode = SecurityMode.SimPuk;
-        } else {
+        } else if (mLockPatternUtils.getActiveProfileLockMode() != Profile.LockMode.INSECURE) {
             final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
             switch (security) {
                 case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:

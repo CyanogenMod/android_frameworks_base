@@ -28,7 +28,12 @@ import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.app.Notification;
+import android.app.NotificationGroup;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Profile;
+import android.app.ProfileGroup;
+import android.app.ProfileManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -1841,6 +1846,16 @@ public class NotificationManagerService extends INotificationManager.Stub
                         // so that we do not play sounds, show lights, etc. for invalid notifications
                         Slog.e(TAG, "WARNING: In a future release this will crash the app: "
                                 + n.getPackageName());
+                    }
+
+                    try {
+                        final ProfileManager profileManager =
+                                (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
+
+                        ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+                        group.applyOverridesToNotification(notification);
+                    } catch (Throwable th) {
+                        Log.e(TAG, "An error occurred profiling the notification.", th);
                     }
 
                     // Have ring tone when received SMS when the device is CT mode

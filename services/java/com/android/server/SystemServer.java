@@ -211,6 +211,7 @@ class ServerThread {
             Slog.e("System", "******************************************");
             Slog.e("System", "************ Failure starting bootstrap service", e);
         }
+        ProfileManagerService profile = null;
 
         boolean disableStorage = SystemProperties.getBoolean("config.disable_storage", false);
         boolean disableMedia = SystemProperties.getBoolean("config.disable_media", false);
@@ -686,6 +687,16 @@ class ServerThread {
                     }
                 } catch (Throwable e) {
                     reportWtf("starting Wallpaper Service", e);
+                }
+            }
+
+            if (!disableNonCoreServices) {
+                try {
+                    Slog.i(TAG, "Profile Manager");
+                    profile = new ProfileManagerService(context);
+                    ServiceManager.addService(Context.PROFILE_SERVICE, profile);
+                } catch (Throwable e) {
+                    reportWtf("Failure starting Profile Manager", e);
                 }
             }
 
