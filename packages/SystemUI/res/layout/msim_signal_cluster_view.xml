@@ -116,11 +116,6 @@
                     android:layout_width="wrap_content"
                     android:layout_gravity="end|bottom"
                     />
-                <ImageView
-                    android:id="@+id/no_sim"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    />
             </FrameLayout>
         </LinearLayout>
     </FrameLayout>
@@ -164,11 +159,6 @@
                     android:layout_width="wrap_content"
                     android:layout_gravity="end|bottom"
                     />
-                <ImageView
-                    android:id="@+id/no_sim_slot2"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    />
             </FrameLayout>
         </LinearLayout>
     </FrameLayout>
@@ -211,11 +201,6 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_gravity="end|bottom"
-                    />
-                <ImageView
-                    android:id="@+id/no_sim_slot3"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
                     />
             </FrameLayout>
         </LinearLayout>
