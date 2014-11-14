@@ -190,6 +190,12 @@ public class DisconnectCause {
     /** call failed due to LTE to 3G/2G handover not feasible */
     public static final int HO_NOT_FEASIBLE = 50;
 
+    /**
+     * Call was rejected due to number being blacklisted by user.
+     * {@@hide}
+     */
+    public static final int CALL_BLACKLISTED = 400;
+
     //*********************************************************************************************
     // When adding a disconnect type:
     // 1) Please assign the new type the next id value below.
@@ -365,6 +371,8 @@ public class DisconnectCause {
             return "CDMA_ALREADY_ACTIVATED";
         case HO_NOT_FEASIBLE:
             return "HO_NOT_FEASIBLE";
+        case CALL_BLACKLISTED:
+            return "CALL_BLACKLISTED";
         default:
             return "INVALID: " + cause;
         }
