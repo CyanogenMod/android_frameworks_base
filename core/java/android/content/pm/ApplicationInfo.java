@@ -777,6 +777,13 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      */
     public int networkSecurityConfigRes;
 
+    /**
+     * When true, indicates that any one component within this application is
+     * protected.
+     * @hide
+     */
+    public boolean protect = false;
+
     public void dump(Printer pw, String prefix) {
         dump(pw, prefix, DUMP_FLAG_ALL);
     }
@@ -940,6 +947,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         backupAgentName = orig.backupAgentName;
         fullBackupContent = orig.fullBackupContent;
         networkSecurityConfigRes = orig.networkSecurityConfigRes;
+        protect = orig.protect;
     }
 
     public String toString() {
@@ -997,6 +1005,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeInt(uiOptions);
         dest.writeInt(fullBackupContent);
         dest.writeInt(networkSecurityConfigRes);
+        dest.writeInt(protect ? 1 : 0);
     }
 
     public static final Parcelable.Creator<ApplicationInfo> CREATOR
@@ -1054,6 +1063,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         uiOptions = source.readInt();
         fullBackupContent = source.readInt();
         networkSecurityConfigRes = source.readInt();
+        protect = source.readInt() != 0;
     }
 
     /**

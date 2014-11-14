@@ -110,6 +110,7 @@ class RecentTasks extends ArrayList<TaskRecord> {
             Slog.i(TAG, "Loading recents for user " + userId + " into memory.");
             addAll(mTaskPersister.restoreTasksForUserLocked(userId));
             cleanupLocked(userId);
+            cleanupProtectedComponentTasksLocked(userId);
             mUsersWithRecentsLoaded.put(userId, true);
         }
     }
@@ -269,6 +270,35 @@ class RecentTasks extends ArrayList<TaskRecord> {
             }
         }
 
+    }
+
+    /**
+     * Clear out protected tasks from the list
+     */
+    void cleanupProtectedComponentTasksLocked(int userId) {
+        int recentsCount = size();
+        if (recentsCount == 0) {
+            // Happens when called from the packagemanager broadcast before boot,
+            // or just any empty list.
+            return;
+        }
+
+        final IPackageManager pm = AppGlobals.getPackageManager();
+        for (int i = recentsCount - 1; i >= 0; i--) {
+            final TaskRecord task = get(i);
+            if (userId != UserHandle.USER_ALL && task.userId != userId) {
+                // Only look at tasks for the user ID of interest.
+                continue;
+            }
+            try {
+                if (task.realActivity != null &&
+                        pm.isComponentProtected(null, -1, task.realActivity, userId)) {
+                    remove(i);
+                    task.removedFromRecents();
+                }
+            } catch (RemoteException e) {
+            }
+        }
     }
 
     /**
