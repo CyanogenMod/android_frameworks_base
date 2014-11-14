@@ -2367,6 +2367,20 @@ public abstract class PackageManager {
             = "android.content.pm.extra.REQUEST_PERMISSIONS_RESULTS";
 
     /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has set to protected status
+     * @hide
+     */
+    public static final boolean COMPONENT_PROTECTED_STATUS = false;
+
+    /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has been explicitly set to visible status
+     * @hide
+     */
+    public static final boolean COMPONENT_VISIBLE_STATUS = true;
+
+    /**
      * String extra for {@link PackageInstallObserver} in the 'extras' Bundle in case of
      * {@link #INSTALL_FAILED_DUPLICATE_PERMISSION}.  This extra names the package which provides
      * the existing definition for the permission.
@@ -5595,6 +5609,19 @@ public abstract class PackageManager {
      * applications on the device.
      */
     public abstract @NonNull PackageInstaller getPackageInstaller();
+
+    /**
+     * Update Component protection state
+     * @hide
+     */
+    public abstract void setComponentProtectedSetting(ComponentName componentName, boolean newState);
+
+    /**
+     * Return whether or not a specific component is protected
+     * @hide
+     */
+    public abstract boolean isComponentProtected(String callingPackage, int callingUid,
+            ComponentName componentName);
 
     /**
      * Adds a {@code CrossProfileIntentFilter}. After calling this method all

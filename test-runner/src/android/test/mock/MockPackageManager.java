@@ -998,6 +998,23 @@ public class MockPackageManager extends PackageManager {
      * @hide
      */
     @Override
+    public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public boolean isComponentProtected(String callingPackage, int callingUid,
+            ComponentName componentName) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @hide
+     */
+    @Override
     public VerifierDeviceIdentity getVerifierDeviceIdentity() {
         throw new UnsupportedOperationException();
     }
