@@ -768,6 +768,13 @@ class ContextImpl extends Context {
                 IBinder b = ServiceManager.getService(APPWIDGET_SERVICE);
                 return new AppWidgetManager(ctx, IAppWidgetService.Stub.asInterface(b));
             }});
+
+        registerService(PROFILE_SERVICE, new ServiceFetcher() {
+            public Object createService(ContextImpl ctx) {
+                final Context outerContext = ctx.getOuterContext();
+                return new ProfileManager (outerContext, ctx.mMainThread.getHandler());
+            }
+        });
     }
 
     static ContextImpl getImpl(Context context) {

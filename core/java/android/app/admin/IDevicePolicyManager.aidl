@@ -198,4 +198,6 @@ interface IDevicePolicyManager {
     boolean getAutoTimeRequired();
 
     boolean isRemovingAdmin(in ComponentName adminReceiver, int userHandle);
+
+    boolean requireSecureKeyguard(int userHandle);
 }

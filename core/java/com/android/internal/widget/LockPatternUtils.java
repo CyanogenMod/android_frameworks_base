@@ -19,6 +19,8 @@ package com.android.internal.widget;
 import android.Manifest;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
+import android.app.Profile;
+import android.app.ProfileManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.trust.TrustManager;
 import android.appwidget.AppWidgetManager;
@@ -164,6 +166,7 @@ public class LockPatternUtils {
     private final ContentResolver mContentResolver;
     private DevicePolicyManager mDevicePolicyManager;
     private ILockSettings mLockSettingsService;
+    private ProfileManager mProfileManager;
 
     private final boolean mMultiUserMode;
 
@@ -194,6 +197,7 @@ public class LockPatternUtils {
     public LockPatternUtils(Context context) {
         mContext = context;
         mContentResolver = context.getContentResolver();
+        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
 
         // If this is being called by the system or by an application like keyguard that
         // has permision INTERACT_ACROSS_USERS, then LockPatternUtils will operate in multi-user
@@ -1548,7 +1552,18 @@ public class LockPatternUtils {
         final boolean secure =
                 isPattern && isLockPatternEnabled(userId) && savedPatternExists(userId)
                 || isPassword && savedPasswordExists(userId);
-        return secure;
+        return secure && getActiveProfileLockMode() == Profile.LockMode.DEFAULT;
+    }
+
+    public int getActiveProfileLockMode() {
+        // Check device policy
+        DevicePolicyManager dpm = getDevicePolicyManager();
+        if (dpm.requireSecureKeyguard(getCurrentOrCallingUserId())) {
+            // Always enforce lock screen
+            return Profile.LockMode.DEFAULT;
+        }
+        final Profile profile = mProfileManager.getActiveProfile();
+        return profile.getScreenLockMode();
     }
 
     /**

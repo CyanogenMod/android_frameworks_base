@@ -81,6 +81,7 @@ import android.security.IKeyChainService;
 import android.security.KeyChain;
 import android.security.KeyChain.KeyChainConnection;
 import android.text.TextUtils;
+import android.security.KeyStore;
 import android.service.persistentdata.PersistentDataBlockManager;
 import android.util.Log;
 import android.util.PrintWriterPrinter;
@@ -3804,6 +3805,36 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean requireSecureKeyguard(int userHandle) {
+       if (!mHasFeature) {
+            return false;
+        }
+
+        int passwordQuality = getPasswordQuality(null, userHandle);
+        if (passwordQuality > DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+            return true;
+        }
+
+        int encryptionStatus = getStorageEncryptionStatus(userHandle);
+        if (encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE
+                || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
+            return true;
+        }
+
+        // Keystore.isEmpty() requires system UID
+        long token = Binder.clearCallingIdentity();
+        try {
+            if (!KeyStore.getInstance().isEmpty()) {
+                return true;
+            }
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+
+        return false;
     }
 
     // Returns the active device owner or null if there is no device owner.
