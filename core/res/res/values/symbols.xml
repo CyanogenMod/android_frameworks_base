@@ -1139,6 +1139,7 @@
   <java-symbol type="drawable" name="cling_arrow_up" />
   <java-symbol type="drawable" name="cling_bg" />
   <java-symbol type="drawable" name="ic_lock_power_reboot" />
+  <java-symbol type="drawable" name="ic_lock_profile" />
 
   <java-symbol type="layout" name="action_bar_home" />
   <java-symbol type="layout" name="action_bar_title_item" />
@@ -1841,6 +1842,7 @@
   <java-symbol type="string" name="wildcardProfile" />
   <java-symbol type="string" name="profile_picker_title" />
   <java-symbol type="string" name="profile_none" />
+  <java-symbol type="string" name="global_action_choose_profile" />
 
   <!-- sim refresh for dual mode card -->
   <java-symbol type="bool" name="config_sim_refresh_for_dual_mode_card" />
