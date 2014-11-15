@@ -17315,6 +17315,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         mPendingPssProcesses.clear();
         for (int i=mLruProcesses.size()-1; i>=0; i--) {
             ProcessRecord app = mLruProcesses.get(i);
+            if (app.thread == null || app.curProcState < 0) {
+                continue;
+            }
             if (memLowered || now > (app.lastStateTime+ProcessList.PSS_ALL_INTERVAL)) {
                 app.pssProcState = app.setProcState;
                 app.nextPssTime = ProcessList.computeNextPssTime(app.curProcState, true,
