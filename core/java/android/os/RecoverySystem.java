@@ -402,6 +402,7 @@ public class RecoverySystem {
      *
      * @throws IOException  if writing the recovery command file
      * fails, or if the reboot itself fails.
+     * @hide
      */
     public static void rebootFormatUserData(Context context) throws IOException {
         doRebootWipeUserData(context, true);
