@@ -47,4 +47,8 @@ interface IAppOpsService {
     void setUserRestrictions(in Bundle restrictions, int userHandle);
     void removeUser(int userHandle);
     boolean isControlAllowed(int code, String packageName);
+
+    // Privacy guard methods
+    boolean getPrivacyGuardSettingForPackage(int uid, String packageName);
+    void setPrivacyGuardSettingForPackage(int uid, String packageName, boolean state);
 }
