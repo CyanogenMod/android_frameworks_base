@@ -238,4 +238,11 @@
     <!-- Default value of Settings.System.ENABLE_PEOPLE_LOOKUP -->
     <integer name="def_people_lookup">1</integer>
 
+    <integer name="def_volume_music">-1</integer>
+    <integer name="def_volume_ring">-1</integer>
+    <integer name="def_volume_system">-1</integer>
+    <integer name="def_volume_voice">-1</integer>
+    <integer name="def_volume_alarm">-1</integer>
+    <integer name="def_volume_notification">-1</integer>
+    <integer name="def_volume_btsco">-1</integer>
 </resources>
