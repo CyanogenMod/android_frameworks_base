@@ -27,6 +27,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -1952,26 +1953,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
                     + " VALUES(?,?);");
 
+            Resources res = mContext.getResources();
+
+            int defaultVolume = res.getInteger(R.integer.def_volume_music);
             loadSetting(stmt, Settings.System.VOLUME_MUSIC,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_MUSIC]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_MUSIC]));
+
+            defaultVolume = res.getInteger(R.integer.def_volume_ring);
             loadSetting(stmt, Settings.System.VOLUME_RING,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_RING]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_RING]));
+
+            defaultVolume = res.getInteger(R.integer.def_volume_system);
             loadSetting(stmt, Settings.System.VOLUME_SYSTEM,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_SYSTEM]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_SYSTEM]));
+
+            defaultVolume = res.getInteger(R.integer.def_volume_voice);
             loadSetting(
                     stmt,
                     Settings.System.VOLUME_VOICE,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_VOICE_CALL]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_VOICE_CALL]));
+
+            defaultVolume = res.getInteger(R.integer.def_volume_alarm);
             loadSetting(stmt, Settings.System.VOLUME_ALARM,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_ALARM]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_ALARM]));
+
+            defaultVolume = res.getInteger(R.integer.def_volume_notification);
             loadSetting(
                     stmt,
                     Settings.System.VOLUME_NOTIFICATION,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_NOTIFICATION]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_NOTIFICATION]));
+
+            defaultVolume = res.getInteger(R.integer.def_volume_btsco);
             loadSetting(
                     stmt,
                     Settings.System.VOLUME_BLUETOOTH_SCO,
-                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_BLUETOOTH_SCO]);
+                    (defaultVolume >= 0 ? defaultVolume :
+                    AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_BLUETOOTH_SCO]));
 
             // By default:
             // - ringtones, notification, system and music streams are affected by ringer mode
