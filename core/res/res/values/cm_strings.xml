@@ -128,7 +128,7 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_modifyProtectedSmsList">modify protected SMS list</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_modifyProtectedSmsList">Allows the app to modify the protected sms address list.</string>
+    <string name="permdesc_modifyProtectedSmsList">Allows the app to modify the protected SMS address list.</string>
 
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_resetBatteryStats">reset battery statistics</string>
