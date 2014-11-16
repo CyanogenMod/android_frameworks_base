@@ -16,39 +16,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static com.android.internal.util.cm.QSConstants.TILES_DEFAULT;
-import static com.android.internal.util.cm.QSConstants.TILE_AIRPLANE;
-import static com.android.internal.util.cm.QSConstants.TILE_AUTOROTATE;
-import static com.android.internal.util.cm.QSConstants.TILE_BATTERY;
-import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
-import static com.android.internal.util.cm.QSConstants.TILE_BRIGHTNESS;
-import static com.android.internal.util.cm.QSConstants.TILE_CAMERA;
-import static com.android.internal.util.cm.QSConstants.TILE_COMPASS;
-import static com.android.internal.util.cm.QSConstants.TILE_DELIMITER;
-import static com.android.internal.util.cm.QSConstants.TILE_EXPANDEDDESKTOP;
-import static com.android.internal.util.cm.QSConstants.TILE_GPS;
-import static com.android.internal.util.cm.QSConstants.TILE_HEADS_UP;
-import static com.android.internal.util.cm.QSConstants.TILE_LOCKSCREEN;
-import static com.android.internal.util.cm.QSConstants.TILE_LTE;
-import static com.android.internal.util.cm.QSConstants.TILE_MOBILEDATA;
-import static com.android.internal.util.cm.QSConstants.TILE_NETWORKADB;
-import static com.android.internal.util.cm.QSConstants.TILE_NETWORKMODE;
-import static com.android.internal.util.cm.QSConstants.TILE_NFC;
-import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
-import static com.android.internal.util.cm.QSConstants.TILE_PERFORMANCE_PROFILE;
-import static com.android.internal.util.cm.QSConstants.TILE_QUIETHOURS;
-import static com.android.internal.util.cm.QSConstants.TILE_RINGER;
-import static com.android.internal.util.cm.QSConstants.TILE_SCREENTIMEOUT;
-import static com.android.internal.util.cm.QSConstants.TILE_SETTINGS;
-import static com.android.internal.util.cm.QSConstants.TILE_SLEEP;
-import static com.android.internal.util.cm.QSConstants.TILE_SYNC;
-import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
-import static com.android.internal.util.cm.QSConstants.TILE_USER;
-import static com.android.internal.util.cm.QSConstants.TILE_VOLUME;
-import static com.android.internal.util.cm.QSConstants.TILE_WIFI;
-import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
-import static com.android.internal.util.cm.QSConstants.TILE_WIMAX;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -70,49 +37,15 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.android.internal.util.cm.QSUtils;
 import com.android.systemui.R;
-import com.android.systemui.quicksettings.AirplaneModeTile;
-import com.android.systemui.quicksettings.AlarmTile;
-import com.android.systemui.quicksettings.AutoRotateTile;
-import com.android.systemui.quicksettings.BatteryTile;
-import com.android.systemui.quicksettings.BluetoothTile;
-import com.android.systemui.quicksettings.BrightnessTile;
-import com.android.systemui.quicksettings.BugReportTile;
-import com.android.systemui.quicksettings.CameraTile;
-import com.android.systemui.quicksettings.CompassTile;
-import com.android.systemui.quicksettings.DockBatteryTile;
-import com.android.systemui.quicksettings.EqualizerTile;
-import com.android.systemui.quicksettings.ExpandedDesktopTile;
-import com.android.systemui.quicksettings.GPSTile;
-import com.android.systemui.quicksettings.HeadsUpTile;
-import com.android.systemui.quicksettings.InputMethodTile;
-import com.android.systemui.quicksettings.LteTile;
-import com.android.systemui.quicksettings.MobileNetworkTile;
-import com.android.systemui.quicksettings.MobileNetworkTypeTile;
-import com.android.systemui.quicksettings.NetworkAdbTile;
-import com.android.systemui.quicksettings.NfcTile;
-import com.android.systemui.quicksettings.PerformanceProfileTile;
-import com.android.systemui.quicksettings.PreferencesTile;
-import com.android.systemui.quicksettings.ProfileTile;
-import com.android.systemui.quicksettings.QuickSettingsTile;
-import com.android.systemui.quicksettings.QuietHoursTile;
-import com.android.systemui.quicksettings.RingerModeTile;
-import com.android.systemui.quicksettings.ScreenTimeoutTile;
-import com.android.systemui.quicksettings.SleepScreenTile;
-import com.android.systemui.quicksettings.SyncTile;
-import com.android.systemui.quicksettings.ToggleLockscreenTile;
-import com.android.systemui.quicksettings.TorchTile;
-import com.android.systemui.quicksettings.UsbTetherTile;
-import com.android.systemui.quicksettings.UserTile;
-import com.android.systemui.quicksettings.VolumeTile;
-import com.android.systemui.quicksettings.RemoteDisplayTile;
-import com.android.systemui.quicksettings.WiFiTile;
-import com.android.systemui.quicksettings.WifiAPTile;
+import com.android.systemui.quicksettings.*;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView.QSSize;
 import com.android.systemui.statusbar.policy.NetworkController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static com.android.internal.util.cm.QSConstants.*;
 
 public class QuickSettingsController {
     private static String TAG = "QuickSettingsController";
@@ -297,6 +230,8 @@ public class QuickSettingsController {
                 qs = new CompassTile(mContext, this);
             } else if (tile.equals(TILE_HEADS_UP)) {
                 qs = new HeadsUpTile(mContext, this);
+            } else if (tile.equals(TILE_THEMES)) {
+                qs = new ThemesTile(mContext, this);
             }
 
             if (qs != null) {
