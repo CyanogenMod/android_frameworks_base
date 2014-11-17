@@ -112,4 +112,7 @@
     <string name="sim_slot_3" translatable="false">3</string>
 
     <string name="status_bar_notification_spam_item_title">Ignore messages like this</string>
+
+    <string name="protected_app_notification_title">Protected app notification</string>
+    <string name="protected_app_notification_summary">Tap to open notification from protected app</string>
 </resources>
