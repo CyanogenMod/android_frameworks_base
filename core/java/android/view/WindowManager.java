@@ -1115,6 +1115,9 @@ public interface WindowManager extends ViewManager {
          */
         public static final int PRIVATE_FLAG_KEYGUARD = 0x00000400;
 
+        public static final int PRIVATE_FLAG_WAS_NOT_FULLSCREEN = 0x00000800;
+        public static final int PRIVATE_FLAG_FORCE_IMMERSIVE = 0x00001000;
+
         /**
          * Control flags that are private to the platform.
          * @hide

@@ -583,6 +583,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_LAUNCH_VOICE_ASSIST_WITH_WAKE_LOCK = 12;
     boolean mWifiDisplayConnected = false;
     int     mWifiDisplayCustomRotation = -1;
+    private boolean mClearedBecauseOfForceShow;
+    private boolean mTopWindowIsKeyguard;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -3262,9 +3264,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         dcf.setEmpty();  // Decor frame N/A for system bars.
 
         if (isDefaultDisplay) {
+            WindowState topWindow = mFocusedWindow != null
+                    ? mFocusedWindow : mTopFullscreenOpaqueWindowState;
             // For purposes of putting out fake window up to steal focus, we will
             // drive nav being hidden only by whether it is requested.
-            final int sysui = mLastSystemUiFlags;
+            int sysui = mLastSystemUiFlags;
+            if (topWindow != null) {
+                sysui |= PolicyControl.getSystemUiVisibility(topWindow, topWindow.getAttrs());
+            }
             boolean navVisible = (sysui & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
             boolean navTranslucent = (sysui
                     & (View.NAVIGATION_BAR_TRANSLUCENT | View.SYSTEM_UI_TRANSPARENT)) != 0;
@@ -3544,6 +3551,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         final int fl = PolicyControl.getWindowFlags(win, attrs);
+        final int pfl = PolicyControl.getPrivateWindowFlags(win, attrs);
         final int sim = attrs.softInputMode;
         final int sysUiFl = PolicyControl.getSystemUiVisibility(win, null);
 
@@ -3715,14 +3723,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         of.bottom = mUnrestrictedScreenTop + mUnrestrictedScreenHeight;
                     }
 
-                    if ((fl & FLAG_FULLSCREEN) == 0) {
+                    if ((fl & FLAG_FULLSCREEN) == 0
+                            || (pfl & PRIVATE_FLAG_WAS_NOT_FULLSCREEN) != 0) {
                         if (win.isVoiceInteraction()) {
                             cf.left = mVoiceContentLeft;
                             cf.top = mVoiceContentTop;
                             cf.right = mVoiceContentRight;
                             cf.bottom = mVoiceContentBottom;
                         } else {
-                            if (adjust != SOFT_INPUT_ADJUST_RESIZE) {
+                            if ((pfl & PRIVATE_FLAG_FORCE_IMMERSIVE) != 0) {
+                                cf.left = mContentLeft;
+                                cf.top = mUnrestrictedScreenTop;
+                                cf.right = mContentRight;
+                                cf.bottom = mContentBottom;
+                            } else if (adjust != SOFT_INPUT_ADJUST_RESIZE) {
                                 cf.left = mDockLeft;
                                 cf.top = mDockTop;
                                 cf.right = mDockRight;
@@ -3745,7 +3759,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         cf.bottom = mRestrictedScreenTop + mRestrictedScreenHeight;
                     }
                     applyStableConstraints(sysUiFl, fl, cf);
-                    if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
+                    if ((pfl & PRIVATE_FLAG_FORCE_IMMERSIVE) != 0) {
+                        vf.left = mCurLeft;
+                        vf.top = mUnrestrictedScreenTop;
+                        vf.right = mCurRight;
+                        vf.bottom = mCurBottom;
+                    } else if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
                         vf.left = mCurLeft;
                         vf.top = mCurTop;
                         vf.right = mCurRight;
@@ -3858,7 +3877,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
                 applyStableConstraints(sysUiFl, fl, cf);
 
-                if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
+                if ((pfl & PRIVATE_FLAG_FORCE_IMMERSIVE) != 0) {
+                    vf.left = mCurLeft;
+                    vf.top = mUnrestrictedScreenTop;
+                    vf.right = mCurRight;
+                    vf.bottom = mCurBottom;
+                } else if (adjust != SOFT_INPUT_ADJUST_NOTHING) {
                     vf.left = mCurLeft;
                     vf.top = mCurTop;
                     vf.right = mCurRight;
@@ -4738,11 +4762,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_POWER: {
                 result &= ~ACTION_PASS_TO_USER;
                 if (down) {
-                    boolean panic = mImmersiveModeConfirmation.onPowerKeyDown(interactive,
-                            event.getDownTime(), isImmersiveMode(mLastSystemUiFlags));
-                    if (panic) {
-                        mHandler.post(mRequestTransientNav);
-                    }
                     if (interactive && !mPowerKeyTriggered
                             && (event.getFlags() & KeyEvent.FLAG_FALLBACK) == 0) {
                         mPowerKeyTriggered = true;
@@ -6083,9 +6102,34 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int tmpVisibility = PolicyControl.getSystemUiVisibility(win, null)
                 & ~mResettingSystemUiFlags
                 & ~mForceClearedSystemUiFlags;
+        boolean wasCleared = mClearedBecauseOfForceShow;
         if (mForcingShowNavBar && win.getSurfaceLayer() < mForcingShowNavBarLayer) {
-            tmpVisibility &= ~PolicyControl.adjustClearableFlags(win, View.SYSTEM_UI_CLEARABLE_FLAGS);
+            tmpVisibility &=
+                    ~PolicyControl.adjustClearableFlags(win, View.SYSTEM_UI_CLEARABLE_FLAGS);
+            mClearedBecauseOfForceShow = true;
+        } else {
+            mClearedBecauseOfForceShow = false;
         }
+
+        // The window who requested navbar force showing disappeared and next window wants
+        // to hide navbar. Instead of hiding we will make it transient. SystemUI will take care
+        // about hiding after timeout. This should not happen if next window is keyguard because
+        // transient state have more priority than translucent (why?) and cause bad UX
+        if (wasCleared && !mClearedBecauseOfForceShow
+                && (tmpVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
+            mNavigationBarController.showTransient();
+            tmpVisibility |= View.NAVIGATION_BAR_TRANSIENT;
+            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
+        }
+
+        boolean topWindowWasKeyguard = mTopWindowIsKeyguard;
+        mTopWindowIsKeyguard = (win.getAttrs().privateFlags & PRIVATE_FLAG_KEYGUARD) != 0;
+        if (topWindowWasKeyguard && !mTopWindowIsKeyguard) {
+            mStatusBarController.showTransient();
+            tmpVisibility |= View.STATUS_BAR_TRANSIENT;
+            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.STATUS_BAR_TRANSIENT);
+        }
+
         final int visibility = updateSystemBarsLw(win, mLastSystemUiFlags, tmpVisibility);
         final int diff = visibility ^ mLastSystemUiFlags;
         final boolean needsMenu = win.getNeedsMenuLw(mTopFullscreenOpaqueWindowState);
