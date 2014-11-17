@@ -1128,6 +1128,23 @@ public interface WindowManager extends ViewManager {
         public static final int PRIVATE_FLAG_FORCE_STATUS_BAR_VISIBLE_TRANSPARENT = 0x00001000;
 
         /**
+         * {@hide}
+         */
+        public static final int PRIVATE_FLAG_STATUS_HIDE_FORCED = 0x00800000;
+
+        /**
+         * {@hide}
+         */
+        public static final int PRIVATE_FLAG_NAV_HIDE_FORCED = 0x01000000;
+
+        /**
+         * The window had not set FULLSCREEN flag so don't handle it as fullscreen in layoutWindowLw
+         *
+         * {@hide}
+         */
+        public static final int PRIVATE_FLAG_WAS_NOT_FULLSCREEN = 0x02000000;
+
+        /**
          * Window flag: Overrides default power key behavior
          * {@hide}
          */
