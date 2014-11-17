@@ -2564,4 +2564,8 @@
     <string-array translatable="false" name="config_defaultPinnerServiceFiles">
     </string-array>
 
+    <!-- Timeout in MS for how long you have to long-press the back key to
+         kill the foreground app. -->
+    <integer name="config_backKillTimeout">2000</integer>
+
 </resources>
