@@ -22,6 +22,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -33,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import com.android.systemui.recents.Constants;
 import com.android.systemui.recents.RecentsConfiguration;
 import com.android.systemui.recents.misc.Console;
@@ -276,6 +278,19 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             mSearchBar.measure(
                     MeasureSpec.makeMeasureSpec(searchBarSpaceBounds.width(), MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(searchBarSpaceBounds.height(), MeasureSpec.EXACTLY));
+        }
+
+        if (mClearRecents != null) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
+                    mClearRecents.getLayoutParams();
+
+            if (getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_LANDSCAPE) {
+                params.rightMargin = mConfig.systemInsets.right;
+            } else {
+                params.bottomMargin = mConfig.systemInsets.bottom;
+            }
+            mClearRecents.setLayoutParams(params);
         }
 
         Rect taskStackBounds = new Rect();
