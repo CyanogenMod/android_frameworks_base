@@ -2184,4 +2184,11 @@
 
   <!-- Gesture Sensor -->
   <java-symbol type="bool" name="config_enableGestureService" />
+
+  <!-- Developer settings - Kill app back press -->
+  <java-symbol type="string" name="app_killed_message" />
+
+  <!-- Config.xml entries -->
+  <java-symbol type="integer" name="config_backKillTimeout" />
+
 </resources>
