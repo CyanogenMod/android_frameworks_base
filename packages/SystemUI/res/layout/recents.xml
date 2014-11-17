@@ -34,7 +34,7 @@
         <!-- Recents View -->
         <com.android.systemui.recents.views.RecentsView
             android:id="@+id/recents_view"
-            android:layout_width="match_parent" 
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:focusable="true" />
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="?android:attr/actionBarSize"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:drawableStart="@drawable/clear_recents"
@@ -52,7 +52,7 @@
             android:textSize="16dp"
             android:textColor="@color/clear_recents_text_color"
             android:text="@string/clear_recents" />
-                                                                                            
+
     </LinearLayout>
 
     <!-- Empty View -->
