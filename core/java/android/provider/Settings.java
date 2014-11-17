@@ -6482,13 +6482,6 @@ public final class Settings {
                 "wifi_scan_always_enabled";
 
        /**
-        * Setting to allow enable or disable rssi threshold.
-        * @hide
-        */
-       public static final String WIFI_RSSI_THRESHOLD =
-                "wifi_rssi_threshold";
-
-       /**
         * Used to save the Wifi_ON state prior to tethering.
         * This state will be checked to restore Wifi after
         * the user turns off tethering.
