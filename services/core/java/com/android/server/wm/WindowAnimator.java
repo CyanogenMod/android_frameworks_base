@@ -234,9 +234,9 @@ public class WindowAnimator {
                 if ((win.mAttrs.privateFlags & PRIVATE_FLAG_KEYGUARD) != 0) {
                     if (!winAnimator.mAnimating) {
                         // Create a new animation to delay until keyguard is gone on its own.
-                        winAnimator.mAnimation = new AlphaAnimation(1.0f, 1.0f);
-                        winAnimator.mAnimation.setDuration(KEYGUARD_ANIM_TIMEOUT_MS);
-                        winAnimator.mAnimationIsEntrance = false;
+//                        winAnimator.mAnimation = new AlphaAnimation(1.0f, 1.0f);
+//                        winAnimator.mAnimation.setDuration(KEYGUARD_ANIM_TIMEOUT_MS);
+//                        winAnimator.mAnimationIsEntrance = false;
                     }
                 } else {
                     mKeyguardGoingAway = false;
