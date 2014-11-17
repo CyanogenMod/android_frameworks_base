@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManagerPolicy.WindowState;
 
+import com.android.expandeddesktop.PolicyControl;
 import com.android.internal.statusbar.IStatusBarService;
 
 import java.io.PrintWriter;
