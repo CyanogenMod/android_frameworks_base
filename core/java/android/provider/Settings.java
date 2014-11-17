@@ -6789,7 +6789,7 @@ public final class Settings {
         /**
          * Defines global runtime overrides to window policy.
          *
-         * See {@link com.android.internal.policy.impl.PolicyControl} for value format.
+         * See {@link com.android.expandeddesktop.PolicyControl} for value format.
          *
          * @hide
          */
