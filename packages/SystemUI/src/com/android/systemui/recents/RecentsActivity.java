@@ -33,6 +33,7 @@ import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.android.systemui.R;
 import com.android.systemui.recents.misc.DebugTrigger;
@@ -249,6 +250,7 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
                 mEmptyView.setVisibility(View.GONE);
             }
             findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
+            fitClearRecentsView();
             if (mRecentsView.hasSearchBar()) {
                 mRecentsView.setSearchBarVisibility(View.VISIBLE);
             } else {
@@ -258,6 +260,14 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
 
         // Animate the SystemUI scrims into view
         mScrimViews.prepareEnterRecentsAnimation();
+    }
+
+    void fitClearRecentsView() {
+        View clearRecents = findViewById(R.id.clear_recents);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)
+                clearRecents.getLayoutParams();
+        params.bottomMargin = RecentsConfiguration.getInstance().systemInsets.bottom;
+        clearRecents.setLayoutParams(params);
     }
 
     /** Attempts to allocate and bind the search bar app widget */
