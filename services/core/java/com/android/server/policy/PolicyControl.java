@@ -125,6 +125,10 @@ public class PolicyControl {
         }
     }
 
+    public static boolean isImmersiveFiltersActive() {
+        return sImmersiveStatusFilter != null || sImmersiveNavigationFilter != null;
+    }
+
     public static void dump(String prefix, PrintWriter pw) {
         dump("sImmersiveStatusFilter", sImmersiveStatusFilter, prefix, pw);
         dump("sImmersiveNavigationFilter", sImmersiveNavigationFilter, prefix, pw);
