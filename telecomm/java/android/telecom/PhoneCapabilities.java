@@ -106,6 +106,12 @@ public final class PhoneCapabilities {
      */
     public static final int VOICE_PRIVACY = 0x00008000;
 
+    /**
+     * Call type can be modified for IMS call
+     * @hide
+     */
+    public static final int CALL_TYPE_MODIFIABLE = 0x00010000;
+
     public static String toString(int capabilities) {
         StringBuilder builder = new StringBuilder();
         builder.append("[Capabilities:");
@@ -147,6 +153,9 @@ public final class PhoneCapabilities {
         }
         if ((capabilities & VOICE_PRIVACY) != 0) {
             builder.append(" VOICE_PRIVACY");
+        }
+        if ((capabilities & CALL_TYPE_MODIFIABLE) != 0) {
+            builder.append(" CALL_TYPE_MODIFIABLE");
         }
 
         builder.append("]");
