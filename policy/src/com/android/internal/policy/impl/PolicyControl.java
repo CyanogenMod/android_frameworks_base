@@ -96,6 +96,17 @@ public class PolicyControl {
         return flags;
     }
 
+    public static int getPrivateWindowFlags(WindowState win, LayoutParams attrs) {
+        attrs = attrs != null ? attrs : win.getAttrs();
+        int privateFlags = attrs.privateFlags;
+        if (sImmersiveStatusFilter != null && sImmersiveStatusFilter.matches(attrs)
+                && (attrs.flags & LayoutParams.FLAG_FULLSCREEN) == 0) {
+            privateFlags |= LayoutParams.PRIVATE_FLAG_WAS_NOT_FULLSCREEN
+                    | LayoutParams.PRIVATE_FLAG_FORCE_IMMERSIVE;
+        }
+        return privateFlags;
+    }
+
     public static int adjustClearableFlags(WindowState win, int clearableFlags) {
         final LayoutParams attrs = win != null ? win.getAttrs() : null;
         if (sImmersiveStatusFilter != null && sImmersiveStatusFilter.matches(attrs)) {
@@ -123,6 +134,10 @@ public class PolicyControl {
         } catch (Throwable t) {
             Slog.w(TAG, "Error loading policy control, value=" + value, t);
         }
+    }
+
+    public static boolean isImmersiveFiltersActive() {
+        return sImmersiveStatusFilter != null || sImmersiveNavigationFilter != null;
     }
 
     public static void dump(String prefix, PrintWriter pw) {
