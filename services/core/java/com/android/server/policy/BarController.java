@@ -27,6 +27,7 @@ import android.view.WindowManagerPolicy.WindowState;
 
 import com.android.server.LocalServices;
 import com.android.server.statusbar.StatusBarManagerInternal;
+import android.view.WindowManagerPolicyControl;
 
 import java.io.PrintWriter;
 
@@ -121,7 +122,7 @@ public class BarController {
         if (mWin != null) {
             if (win != null && (win.getAttrs().privateFlags
                     & WindowManager.LayoutParams.PRIVATE_FLAG_INHERIT_TRANSLUCENT_DECOR) == 0) {
-                int fl = PolicyControl.getWindowFlags(win, null);
+                int fl = WindowManagerPolicyControl.getWindowFlags(win, null);
                 if ((fl & mTranslucentWmFlag) != 0) {
                     vis |= mTranslucentFlag;
                 } else {
