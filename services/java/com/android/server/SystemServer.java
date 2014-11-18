@@ -189,6 +189,7 @@ class ServerThread {
         TelephonyRegistry telephonyRegistry = null;
         MSimTelephonyRegistry msimTelephonyRegistry = null;
         ConsumerIrService consumerIr = null;
+        ThemeService themeService = null;
 
         // Create a handler thread just for the window manager to enjoy.
         HandlerThread wmHandlerThread = new HandlerThread("WindowManager");
@@ -264,6 +265,14 @@ class ServerThread {
             if (!display.waitForDefaultDisplay()) {
                 reportWtf("Timeout waiting for default display to be initialized.",
                         new Throwable());
+            }
+
+            try {
+                Slog.i(TAG, "Theme Service");
+                themeService = new ThemeService(context);
+                ServiceManager.addService(Context.THEME_SERVICE, themeService);
+            } catch (Throwable e) {
+                reportWtf("starting Theme Service", e);
             }
 
             Slog.i(TAG, "Package Manager");
@@ -402,7 +411,6 @@ class ServerThread {
         PrintManagerService printManager = null;
         GestureService gestureService = null;
         MediaRouterService mediaRouter = null;
-        ThemeService themeService = null;
         EdgeGestureService edgeGestureService = null;
 
         // Bring up services needed for UI.
@@ -920,13 +928,6 @@ class ServerThread {
                 reportWtf("starting Print Service", e);
             }
 
-            try {
-                Slog.i(TAG, "Theme Service");
-                themeService = new ThemeService(context);
-                ServiceManager.addService(Context.THEME_SERVICE, themeService);
-            } catch (Throwable e) {
-                reportWtf("starting Theme Service", e);
-            }
             if (!disableNonCoreServices) {
                 try {
                     Slog.i(TAG, "Media Router Service");
