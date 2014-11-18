@@ -1983,10 +1983,9 @@ public class TelephonyManager {
      * for display purpose only, for example, displayed in Phone Status. It won't
      * change the actual MSISDN/MDN. To unset alphatag or number, pass in a null
      * value.
-     * <p>
-     * Requires Permission:
-     *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
-     * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
+     *
+     * <p>Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
      *
      * @param alphaTag alpha-tagging of the dailing nubmer
      * @param number The dialing number
@@ -2001,10 +2000,9 @@ public class TelephonyManager {
      * for display purpose only, for example, displayed in Phone Status. It won't
      * change the actual MSISDN/MDN. To unset alphatag or number, pass in a null
      * value.
-     * <p>
-     * Requires Permission:
-     *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
-     * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
+     *
+     * <p>Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
      *
      * @param subId the subscriber that the alphatag and dialing number belongs to.
      * @param alphaTag alpha-tagging of the dailing nubmer
@@ -2163,10 +2161,9 @@ public class TelephonyManager {
 
     /**
      * Sets the voice mail number.
-     * <p>
-     * Requires Permission:
-     *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
-     * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
+     *
+     * <p>Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
      *
      * @param alphaTag The alpha tag to display.
      * @param number The voicemail number.
@@ -2177,10 +2174,9 @@ public class TelephonyManager {
 
     /**
      * Sets the voicemail number for the given subscriber.
-     * <p>
-     * Requires Permission:
-     *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
-     * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
+     *
+     * <p>Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
      *
      * @param subId The subscription id.
      * @param alphaTag The alpha tag to display.
@@ -3331,15 +3327,11 @@ public class TelephonyManager {
      *
      * TODO: Add a link to documentation.
      *
-     * @return CARRIER_PRIVILEGE_STATUS_HAS_ACCESS if the app has carrier privileges.
-     *         CARRIER_PRIVILEGE_STATUS_NO_ACCESS if the app does not have carrier privileges.
-     *         CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED if the carrier rules are not loaded.
-     *         CARRIER_PRIVILEGE_STATUS_ERROR_LOADING_RULES if there was an error loading carrier
-     *             rules (or if there are no rules).
+     * @return true if the app has carrier privileges.
      */
     public boolean hasCarrierPrivileges() {
         try {
-            return getITelephony().hasCarrierPrivileges() ==
+            return getITelephony().getCarrierPrivilegeStatus() ==
                 CARRIER_PRIVILEGE_STATUS_HAS_ACCESS;
         } catch (RemoteException ex) {
             Rlog.e(TAG, "hasCarrierPrivileges RemoteException", ex);
@@ -3357,9 +3349,8 @@ public class TelephonyManager {
      * brand value input. To unset the value, the same function should be
      * called with a null brand value.
      *
-     * <p>Requires Permission:
-     *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
-     *  or has to be carrier app - see #hasCarrierPrivileges.
+     * <p>Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
      *
      * @param brand The brand name to display/set.
      * @return true if the operation was executed correctly.
@@ -3454,9 +3445,9 @@ public class TelephonyManager {
         try {
             return getITelephony().checkCarrierPrivilegesForPackage(pkgname);
         } catch (RemoteException ex) {
-            Rlog.e(TAG, "hasCarrierPrivileges RemoteException", ex);
+            Rlog.e(TAG, "checkCarrierPrivilegesForPackage RemoteException", ex);
         } catch (NullPointerException ex) {
-            Rlog.e(TAG, "hasCarrierPrivileges NPE", ex);
+            Rlog.e(TAG, "checkCarrierPrivilegesForPackage NPE", ex);
         }
         return CARRIER_PRIVILEGE_STATUS_NO_ACCESS;
     }

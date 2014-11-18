@@ -819,7 +819,7 @@ interface ITelephony {
      *
      * @return carrier privilege status defined in TelephonyManager.
      */
-    int hasCarrierPrivileges();
+    int getCarrierPrivilegeStatus();
 
     /**
      * Similar to above, but check for pkg whose name is pkgname.
