@@ -1563,4 +1563,10 @@
 
     <!-- Ignored sms packages -->
     <string-array name="config_ignored_sms_packages"></string-array>
+
+    <!-- Whether to always request audio focus for incoming calls.
+         Default is false: silent and vibrate modes will not request audio focus.
+         true: all incoming calls will request audio focus (overriding any active music)
+    -->
+    <bool name="config_alwaysRequestAudioFocusForCalls">false</bool>
 </resources>
