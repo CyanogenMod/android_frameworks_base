@@ -162,7 +162,7 @@ public class CallLog {
         /** Call log type for blacklisted calls
          * @hide
          */
-        public static final int BLACKLIST_TYPE = 173;
+        public static final int BLACKLIST_TYPE = 5;
 
         /**
          * Bit-mask describing features of the call (e.g. video).
