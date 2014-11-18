@@ -2384,6 +2384,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadStringSetting(stmt, Settings.System.DATE_FORMAT,
                     R.string.def_date_format);
+
+            loadBooleanSetting(stmt, Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
+                    R.bool.def_status_bar_show_battery_percent);
         } finally {
             if (stmt != null) stmt.close();
         }
