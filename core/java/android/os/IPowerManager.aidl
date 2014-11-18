@@ -69,4 +69,9 @@ interface IPowerManager
     void updateBlockedUids(int uid, boolean isBlocked);
 
     oneway void cpuBoost(int duration);
+
+    void setKeyboardVisibility(boolean visible);
+
+    void setKeyboardLight(boolean on, int key);
+
 }
