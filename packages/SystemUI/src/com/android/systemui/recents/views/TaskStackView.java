@@ -480,15 +480,27 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
     }
 
     public void dismissAllTasks() {
-        final int count = mStack.getTasks().size();
-        final ArrayList<Task> tasks = mStack.getTasks();
         post(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < count; i++) {
-                    Task t = tasks.get(i);
-                    TaskView tv = getChildViewForTask(t);
+                ArrayList<Task> tasks = new ArrayList<Task>();
+                tasks.addAll(mStack.getTasks());
+
+                // Remove visible TaskViews
+                int childCount = getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    TaskView tv = (TaskView) getChildAt(i);
+                    tasks.remove(tv.getTask());
                     tv.dismissTask();
+                }
+
+                int size = tasks.size();
+                // Remove any other Tasks
+                for (int i = 0; i < size; i++) {
+                    Task t = tasks.get(i);
+                    if (mStack.getTasks().contains(t)) {
+                        mStack.removeTask(t);
+                    }
                 }
             }
         });
