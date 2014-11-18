@@ -200,7 +200,7 @@ public final class Installer {
 
         try {
             synchronized (mResponses) {
-                long startWaitTime = System.currentTimeMillis();
+                long startWaitTime = System.nanoTime();
                 while(mResponses.get(transactionId) == null) {
                     synchronized (mPendingRequests) {
                         if (!mPendingRequests.contains(transactionId)) {
@@ -227,11 +227,11 @@ public final class Installer {
                             checkPoller();
                         }
                     }
-                    final long timeToWait = startWaitTime - System.currentTimeMillis() + 300000;
+                    final long timeToWait = startWaitTime - System.nanoTime() + 1000000000000L;
                     if (timeToWait > 0) {
-                        mResponses.wait(300000);
+                        mResponses.wait(1000000);
                     } else {
-                        Slog.e(TAG, "timeout wating for response");
+                        Slog.e(TAG, "timeout waiting for response");
                         break;
                     }
                 }
