@@ -1293,7 +1293,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
             intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
             if (DBG) Log.d(TAG,"Bluetooth State Change Intent: " + prevState + " -> " + newState);
-            mContext.sendBroadcastAsUser(intent, UserHandle.ALL,
+            mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT,
                     BLUETOOTH_PERM);
         }
     }
