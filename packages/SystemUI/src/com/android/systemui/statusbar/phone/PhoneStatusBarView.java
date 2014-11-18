@@ -50,9 +50,7 @@ public class PhoneStatusBarView extends PanelBar {
     PanelView mNotificationPanel, mSettingsPanel;
     private boolean mShouldFade;
     private final PhoneStatusBarTransitions mBarTransitions;
-
     private GestureDetector mDoubleTapGesture;
-    boolean mDoubleTapEnabled;
 
     private boolean mUseGFX;
 
@@ -70,6 +68,20 @@ public class PhoneStatusBarView extends PanelBar {
         mFullWidthNotifications = mSettingsPanelDragzoneFrac <= 0f;
         mBarTransitions = new PhoneStatusBarTransitions(this);
 
+        mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                Log.d(TAG, "Gesture!!");
+                if(pm != null)
+                    pm.goToSleep(e.getEventTime());
+                else
+                    Log.d(TAG, "getSystemService returned null PowerManager");
+
+                return true;
+            }
+        });
+
         mUseGFX = ActivityManager.isHighEndGfx();
     }
 
@@ -79,28 +91,6 @@ public class PhoneStatusBarView extends PanelBar {
 
     public void setBar(PhoneStatusBar bar) {
         mBar = bar;
-    }
-
-    public void setGestureListener(boolean enabled) {
-        mDoubleTapEnabled = enabled;
-
-        if (enabled) {
-            mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onDoubleTap(MotionEvent e) {
-                    PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                    Log.d(TAG, "Gesture!!");
-                    if(pm != null)
-                        pm.goToSleep(e.getEventTime());
-                    else
-                        Log.d(TAG, "getSystemService returned null PowerManager");
-
-                    return true;
-                }
-            });
-        } else {
-            mDoubleTapGesture = null;
-        }
     }
 
     public boolean hasFullWidthNotifications() {
@@ -253,7 +243,9 @@ public class PhoneStatusBarView extends PanelBar {
             }
         }
 
-        if (mDoubleTapEnabled) mDoubleTapGesture.onTouchEvent(event);
+        if (mBar.isDoubleTapEnabled())
+            mDoubleTapGesture.onTouchEvent(event);
+
         return barConsumedEvent || super.onTouchEvent(event);
     }
 
