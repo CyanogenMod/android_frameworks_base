@@ -227,9 +227,9 @@ public final class Installer {
                             checkPoller();
                         }
                     }
-                    final long timeToWait = startWaitTime - System.currentTimeMillis() + 100000;
+                    final long timeToWait = startWaitTime - System.currentTimeMillis() + 300000;
                     if (timeToWait > 0) {
-                        mResponses.wait(100000);
+                        mResponses.wait(300000);
                     } else {
                         Slog.e(TAG, "timeout wating for response");
                         break;
