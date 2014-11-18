@@ -66,7 +66,6 @@ public class MSimSignalClusterView
     ViewGroup mWifiGroup;
     ViewGroup[] mMobileGroup;
     ImageView mWifi, mWifiActivity, mAirplane;
-    ImageView[] mNoSimSlot;
     TextView[] mMobileSlot;
     ImageView[] mMobile;
     ImageView[] mMobileActivity;
@@ -84,7 +83,6 @@ public class MSimSignalClusterView
                                         R.id.mobile_inout_sub3};
     private int[] mMobileTypeResourceId = {R.id.mobile_type, R.id.mobile_type_sub2,
                                          R.id.mobile_type_sub3};
-    private int[] mNoSimSlotResourceId = {R.id.no_sim, R.id.no_sim_slot2, R.id.no_sim_slot3};
     private int mNumPhones = MSimTelephonyManager.getDefault().getPhoneCount();
 
     public MSimSignalClusterView(Context context) {
@@ -103,7 +101,6 @@ public class MSimSignalClusterView
         mMobileActivityId = new int[mNumPhones];
         mNoSimIconId = new int[mNumPhones];
         mMobileGroup = new ViewGroup[mNumPhones];
-        mNoSimSlot = new ImageView[mNumPhones];
         mMobileSlot = new TextView[mNumPhones];
         mMobile = new ImageView[mNumPhones];
         mMobileActivity = new ImageView[mNumPhones];
@@ -137,7 +134,6 @@ public class MSimSignalClusterView
             mMobile[i]         = (ImageView) findViewById(mMobileResourceId[i]);
             mMobileActivity[i] = (ImageView) findViewById(mMobileActResourceId[i]);
             mMobileType[i]     = (ImageView) findViewById(mMobileTypeResourceId[i]);
-            mNoSimSlot[i]      = (ImageView) findViewById(mNoSimSlotResourceId[i]);
         }
         applySubscription(MSimTelephonyManager.getDefault().getDefaultSubscription());
     }
@@ -155,7 +151,6 @@ public class MSimSignalClusterView
             mMobile[i]         = null;
             mMobileActivity[i] = null;
             mMobileType[i]     = null;
-            mNoSimSlot[i]      = null;
         }
         super.onDetachedFromWindow();
     }
@@ -226,7 +221,7 @@ public class MSimSignalClusterView
                 String.format("wifi: %s sig=%d act=%d",
                 (mWifiVisible ? "VISIBLE" : "GONE"), mWifiStrengthId, mWifiActivityId));
 
-        if (mMobileVisible && !mIsAirplaneMode) {
+        if ((mMobileVisible && mNoSimIconId[subscription] == 0) && !mIsAirplaneMode) {
             mMobileGroup[subscription].setVisibility(View.VISIBLE);
             mMobileSlot[subscription].setText(mMobileSlotString[subscription]);
             mMobile[subscription].setImageResource(mMobileStrengthId[subscription]);
@@ -236,7 +231,6 @@ public class MSimSignalClusterView
             mMobileType[subscription].setImageResource(mMobileTypeId[subscription]);
             mMobileType[subscription].setVisibility(
                 !mWifiVisible ? View.VISIBLE : View.GONE);
-            mNoSimSlot[subscription].setImageResource(mNoSimIconId[subscription]);
         } else {
             mMobileGroup[subscription].setVisibility(View.GONE);
         }
@@ -248,13 +242,10 @@ public class MSimSignalClusterView
             mAirplane.setVisibility(View.GONE);
         }
 
-        if (subscription != 0) {
-            if (mMobileVisible && mWifiVisible && ((mIsAirplaneMode) ||
-                    (mNoSimIconId[subscription] != 0))) {
-                mSpacer.setVisibility(View.INVISIBLE);
-            } else {
-                mSpacer.setVisibility(View.GONE);
-            }
+        if (mMobileVisible && (mWifiVisible || mIsAirplaneMode)) {
+            mSpacer.setVisibility(View.INVISIBLE);
+        } else {
+            mSpacer.setVisibility(View.GONE);
         }
     }
 

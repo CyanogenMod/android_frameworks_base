@@ -250,14 +250,6 @@
     </string-array>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
-         p2p Go interfaces.  If the device doesn't want to support tethering over P2p this
-         should be empty. -->
-    <string-array translatable="false" name="config_tether_p2p_regexs">
-        <item>"p2p0"</item>
-    </string-array>
-
-
-    <!-- List of regexpressions describing the interface (if any) that represent tetherable
          WiMAX interfaces.  If the device doesn't want to support tethering over Wifi this
          should be empty.  An example would be "softap.*" -->
     <string-array translatable="false" name="config_tether_wimax_regexs">
@@ -1568,4 +1560,13 @@
     -->
     <bool name="config_proximityCheckOnWake">false</bool>
     <integer name="config_proximityCheckTimeout">250</integer>
+
+    <!-- Ignored sms packages -->
+    <string-array name="config_ignored_sms_packages"></string-array>
+
+    <!-- Whether to always request audio focus for incoming calls.
+         Default is false: silent and vibrate modes will not request audio focus.
+         true: all incoming calls will request audio focus (overriding any active music)
+    -->
+    <bool name="config_alwaysRequestAudioFocusForCalls">false</bool>
 </resources>

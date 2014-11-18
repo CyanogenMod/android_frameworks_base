@@ -23,7 +23,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -103,6 +102,7 @@ public class ThemeService extends IThemeService.Stub {
 
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
+    private ResourceProcessingHandler mResourceProcessingHandler;
     private Context mContext;
     private PackageManager mPM;
     private int mProgress;
@@ -122,9 +122,6 @@ public class ThemeService extends IThemeService.Stub {
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
         private static final int MESSAGE_APPLY_DEFAULT_THEME = 2;
-        private static final int MESSAGE_BUILD_ICON_CACHE = 3;
-        private static final int MESSAGE_QUEUE_THEME_FOR_PROCESSING = 4;
-        private static final int MESSAGE_DEQUEUE_AND_PROCESS_THEME = 5;
 
         public ThemeWorkerHandler(Looper looper) {
             super(looper);
@@ -140,9 +137,24 @@ public class ThemeService extends IThemeService.Stub {
                 case MESSAGE_APPLY_DEFAULT_THEME:
                     doApplyDefaultTheme();
                     break;
-                case MESSAGE_BUILD_ICON_CACHE:
-                    doBuildIconCache();
+                default:
+                    Log.w(TAG, "Unknown message " + msg.what);
                     break;
+            }
+        }
+    }
+
+    private class ResourceProcessingHandler extends Handler {
+        private static final int MESSAGE_QUEUE_THEME_FOR_PROCESSING = 3;
+        private static final int MESSAGE_DEQUEUE_AND_PROCESS_THEME = 4;
+
+        public ResourceProcessingHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
                 case MESSAGE_QUEUE_THEME_FOR_PROCESSING:
                     String pkgName = (String) msg.obj;
                     synchronized (mThemesToProcessQueue) {
@@ -199,6 +211,12 @@ public class ThemeService extends IThemeService.Stub {
         mWorker.start();
         mHandler = new ThemeWorkerHandler(mWorker.getLooper());
         Log.i(TAG, "Spawned worker thread");
+
+        HandlerThread processingThread = new HandlerThread("ResourceProcessingThread",
+                Process.THREAD_PRIORITY_BACKGROUND);
+        processingThread.start();
+        mResourceProcessingHandler =
+                new ResourceProcessingHandler(processingThread.getLooper());
 
         // create the theme directory if it does not exist
         ThemeUtils.createThemeDirIfNotExists();
@@ -351,7 +369,6 @@ public class ThemeService extends IThemeService.Stub {
                 mPM.updateIconMaps(null);
             } else {
                 mPM.updateIconMaps(pkgName);
-                mHandler.sendEmptyMessage(ThemeWorkerHandler.MESSAGE_BUILD_ICON_CACHE);
             }
         } catch (Exception e) {
             Log.w(TAG, "Changing icons failed", e);
@@ -888,7 +905,7 @@ public class ThemeService extends IThemeService.Stub {
                         // We want to make sure these resources are taken care of first so
                         // send the dequeue message and place it in the front of the queue
                         msg = mHandler.obtainMessage(
-                                ThemeWorkerHandler.MESSAGE_DEQUEUE_AND_PROCESS_THEME);
+                                ResourceProcessingHandler.MESSAGE_DEQUEUE_AND_PROCESS_THEME);
                         mHandler.sendMessageAtFrontOfQueue(msg);
                     }
                 }
@@ -964,9 +981,9 @@ public class ThemeService extends IThemeService.Stub {
             return false;
         }
         // Obtain a message and send it to the handler to process this theme
-        Message msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
-                                     0, 0, themePkgName);
-        mHandler.sendMessage(msg);
+        Message msg = mResourceProcessingHandler.obtainMessage(
+                ResourceProcessingHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING, 0, 0, themePkgName);
+        mResourceProcessingHandler.sendMessage(msg);
         return true;
     }
 
@@ -1059,38 +1076,25 @@ public class ThemeService extends IThemeService.Stub {
         }
     };
 
-    private void doBuildIconCache() {
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> infos = mPM.queryIntentActivities(mainIntent, 0);
-        for(ResolveInfo info : infos) {
-            try {
-                mPM.getActivityIcon(
-                        new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
-            } catch (Exception e) {
-                Log.w(TAG, "Unable to fetch icon for " + info, e);
-            }
-        }
-    }
-
     private void processInstalledThemes() {
         final String defaultTheme = ThemeUtils.getDefaultThemePackageName(mContext);
         Message msg;
         // Make sure the default theme is the first to get processed!
         if (!ThemeConfig.HOLO_DEFAULT.equals(defaultTheme)) {
-            msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+            msg = mHandler.obtainMessage(
+                    ResourceProcessingHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
                     0, 0, defaultTheme);
-            mHandler.sendMessage(msg);
+            mResourceProcessingHandler.sendMessage(msg);
         }
         // Iterate over all installed packages and queue up the ones that are themes or icon packs
         List<PackageInfo> packages = mPM.getInstalledPackages(0);
         for (PackageInfo info : packages) {
             if (!defaultTheme.equals(info.packageName) &&
                     (info.isThemeApk || info.isLegacyThemeApk || info.isLegacyIconPackApk)) {
-                msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+                msg = mHandler.obtainMessage(
+                        ResourceProcessingHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
                         0, 0, info.packageName);
-                mHandler.sendMessage(msg);
+                mResourceProcessingHandler.sendMessage(msg);
             }
         }
     }

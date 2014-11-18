@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -36,7 +37,7 @@ import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.WindowManager;
@@ -57,14 +58,15 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
 public class CameraTile extends QuickSettingsTile implements
-        QuickSettingsTileView.OnPrepareListener {
+        QuickSettingsTileView.OnPrepareListener, TextureView.SurfaceTextureListener,
+        Camera.PreviewCallback {
     private static final String DEFAULT_IMAGE_FILE_NAME_FORMAT = "'IMG'_yyyyMMdd_HHmmss";
     private static final int CAMERA_ID = 0;
 
     private Handler mHandler;
     private View mIconContainer;
     private FrameLayout mSurfaceLayout;
-    private SurfaceView mSurfaceView;
+    private TextureView mTextureView;
     private View mFlashView;
 
     private Camera mCamera;
@@ -144,9 +146,10 @@ public class CameraTile extends QuickSettingsTile implements
             final View parent = (View) mContainer.getParent();
 
             mIconContainer.setVisibility(View.GONE);
-            mSurfaceView = new CameraPreview(mContext, mCamera);
-            mSurfaceView.setVisibility(View.VISIBLE);
-            mSurfaceLayout.addView(mSurfaceView, 0);
+            mTextureView = new TextureView(mContext);
+            mTextureView.setVisibility(View.VISIBLE);
+            mSurfaceLayout.addView(mTextureView, 0);
+            mTextureView.setSurfaceTextureListener(CameraTile.this);
         }
     };
 
@@ -230,9 +233,10 @@ public class CameraTile extends QuickSettingsTile implements
             mCameraOrientationListener.disable();
 
             mIconContainer.setVisibility(View.VISIBLE);
-            mSurfaceView.setVisibility(View.GONE);
-            mSurfaceLayout.removeView(mSurfaceView);
-            mSurfaceView = null;
+            mTextureView.setVisibility(View.GONE);
+            mSurfaceLayout.removeView(mTextureView);
+            mTextureView.setSurfaceTextureListener(null);
+            mTextureView = null;
         }
     };
 
@@ -240,7 +244,13 @@ public class CameraTile extends QuickSettingsTile implements
         @Override
         public void run() {
             if (mCameraStarted) {
-                mCamera.autoFocus(null);
+                try {
+                    mCamera.autoFocus(null);
+                } catch (RuntimeException e) {
+                    // In the case that autofocus throws a {@link RuntimeException}
+                    // here, we should handle it gracefully instead of taking down systemui
+                    Log.wtf(CameraTile.class.getSimpleName(), "Unable to autofocus");
+                }
             }
         }
     };
@@ -373,6 +383,11 @@ public class CameraTile extends QuickSettingsTile implements
         mCamera.setDisplayOrientation(cameraOrientation);
     }
 
+    @Override
+    public void onPreviewFrame(byte[] bytes, Camera camera) {
+        mHandler.post(mAutoFocusRunnable);
+    }
+
     private class CameraOrientationListener extends OrientationEventListener {
         public CameraOrientationListener(Context context) {
             super(context);
@@ -389,40 +404,35 @@ public class CameraTile extends QuickSettingsTile implements
         }
     }
 
-    private class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-        private SurfaceHolder mHolder;
-        private Camera mCamera;
-
-        public CameraPreview(Context context, Camera camera) {
-            super(context);
-            mCamera = camera;
-
-            // Install a SurfaceHolder.Callback so we get notified when the
-            // underlying surface is created and destroyed.
-            mHolder = getHolder();
-            mHolder.addCallback(this);
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        // The Surface has been created, now tell the camera where
+        // to draw the preview.
+        try {
+            mCamera.setOneShotPreviewCallback(this);
+            mCamera.setPreviewTexture(surface);
+            mCamera.startPreview();
+            mCameraStarted = true;
+            mCameraBusy = false;
+        } catch (IOException e) {
+            // Try release camera
+            mCamera.release();
         }
+    }
 
-        public void surfaceCreated(SurfaceHolder holder) {
-            // The Surface has been created, now tell the camera where
-            // to draw the preview.
-            try {
-                mCamera.setPreviewDisplay(holder);
-                mCamera.startPreview();
-                mCameraStarted = true;
-                mCameraBusy = false;
-                mHandler.postDelayed(mAutoFocusRunnable, 200);
-            } catch (IOException e) {
-                // Try release camera
-                mCamera.release();
-            }
-        }
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
 
-        public void surfaceDestroyed(SurfaceHolder holder) {
-        }
+    }
 
-        public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        }
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
     }
 
     private class Storage {

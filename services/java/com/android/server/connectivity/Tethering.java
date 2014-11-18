@@ -116,7 +116,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     // TODO - remove both of these - should be part of interface inspection/selection stuff
     private String[] mTetherableUsbRegexs;
     private String[] mTetherableWifiRegexs;
-    private String[] mTetherableP2pRegexs;
     private String[] mTetherableBluetoothRegexs;
     private Collection<Integer> mUpstreamIfaceTypes;
 
@@ -151,12 +150,11 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
     private String[] mDhcpRange;
     private static final int TETHER_RETRY_UPSTREAM_LIMIT = 5;
-    // P2p GO is 192.168.49.1 and 255.255.255.0
     private static final String[] DHCP_DEFAULT_RANGE = {
         "192.168.42.2", "192.168.42.254", "192.168.43.2", "192.168.43.254",
         "192.168.44.2", "192.168.44.254", "192.168.45.2", "192.168.45.254",
         "192.168.46.2", "192.168.46.254", "192.168.47.2", "192.168.47.254",
-        "192.168.48.2", "192.168.48.254", "192.168.49.2", "192.168.49.254"
+        "192.168.48.2", "192.168.48.254",
     };
 
     private String[] mDefaultDnsServers;
@@ -233,8 +231,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 com.android.internal.R.array.config_tether_usb_regexs);
         String[] tetherableWifiRegexs = mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_tether_wifi_regexs);
-        String[] tetherableP2pRegexs = mContext.getResources().getStringArray(
-                com.android.internal.R.array.config_tether_p2p_regexs);
         String[] tetherableBluetoothRegexs = mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_tether_bluetooth_regexs);
 
@@ -273,7 +269,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         synchronized (mPublicSync) {
             mTetherableUsbRegexs = tetherableUsbRegexs;
             mTetherableWifiRegexs = tetherableWifiRegexs;
-            mTetherableP2pRegexs = tetherableP2pRegexs;
             mTetherableBluetoothRegexs = tetherableBluetoothRegexs;
             mUpstreamIfaceTypes = upstreamIfaceTypes;
         }
@@ -288,8 +283,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         boolean usb = false;
         synchronized (mPublicSync) {
             if (isWifi(iface)) {
-                found = true;
-            } else if (isP2p(iface)) {
                 found = true;
             } else if (isUsb(iface)) {
                 found = true;
@@ -342,15 +335,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
     }
 
-    public boolean isP2p(String iface) {
-        synchronized (mPublicSync) {
-            for (String regex : mTetherableP2pRegexs) {
-                if (iface.matches(regex)) return true;
-            }
-            return false;
-        }
-    }
-
     public boolean isBluetooth(String iface) {
         synchronized (mPublicSync) {
             for (String regex : mTetherableBluetoothRegexs) {
@@ -366,9 +350,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         boolean usb = false;
         synchronized (mPublicSync) {
             if (isWifi(iface)) {
-                found = true;
-            }
-            if (isP2p(iface)) {
                 found = true;
             }
             if (isUsb(iface)) {
@@ -480,7 +461,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         ArrayList<String> erroredList = new ArrayList<String>();
 
         boolean wifiTethered = false;
-        boolean p2pTethered = false;
         boolean usbTethered = false;
         boolean bluetoothTethered = false;
 
@@ -498,9 +478,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                             usbTethered = true;
                         } else if (isWifi((String)iface)) {
                             wifiTethered = true;
-                        } else if (isP2p((String)iface)) {
-                            p2pTethered = true;
-                        } else if (isBluetooth((String)iface)) {
+                      } else if (isBluetooth((String)iface)) {
                             bluetoothTethered = true;
                         }
                         activeList.add((String)iface);
@@ -648,7 +626,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                         mLastWifiClientCount = mCurrentClientCount;
                         Intent intent = new Intent();
                         intent.setClassName("com.android.settings",
-                                "com.android.settings.TetheringSettings");
+                                "com.android.settings.TetherSettings");
                         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
                         PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0, intent, 0,
@@ -782,10 +760,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
     public String[] getTetherableWifiRegexs() {
         return mTetherableWifiRegexs;
-    }
-
-    public String[] getTetherableP2pRegexs() {
-        return mTetherableP2pRegexs;
     }
 
     public String[] getTetherableBluetoothRegexs() {

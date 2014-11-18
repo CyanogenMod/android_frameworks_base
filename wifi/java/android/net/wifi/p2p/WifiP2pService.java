@@ -109,7 +109,6 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
 
     INetworkManagementService mNwService;
     private DhcpStateMachine mDhcpStateMachine;
-    private ConnectivityManager mCm;
 
     private P2pStateMachine mP2pStateMachine;
     private AsyncChannel mReplyChannel = new AsyncChannel();
@@ -230,7 +229,9 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
     /* clients(application) information list. */
     private HashMap<Messenger, ClientInfo> mClientInfoList = new HashMap<Messenger, ClientInfo>();
 
-    /* The range defined in Tethering.java include range for P2P group*/
+    /* Is chosen as a unique range to avoid conflict with
+       the range defined in Tethering.java */
+    private static final String[] DHCP_RANGE = {"192.168.49.2", "192.168.49.254"};
     private static final String SERVER_ADDRESS = "192.168.49.1";
 
     /**
@@ -2136,29 +2137,16 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
     }
 
-    private void checkAndSetConnectivityInstance() {
-        if (mCm == null) {
-            mCm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        }
-    }
-
     private void startDhcpServer(String intf) {
         InterfaceConfiguration ifcg = null;
-
-        checkAndSetConnectivityInstance();
-
         try {
             ifcg = mNwService.getInterfaceConfig(intf);
-            if (ifcg != null) {
-                ifcg.setLinkAddress(new LinkAddress(NetworkUtils.numericToInetAddress(
-                            SERVER_ADDRESS), 24));
-                ifcg.setInterfaceUp();
-                mNwService.setInterfaceConfig(intf, ifcg);
-                if (mCm.tether(intf) != ConnectivityManager.TETHER_ERROR_NO_ERROR) {
-                    loge("Error tethering on " + intf);
-                     return;
-                }
-             }
+            ifcg.setLinkAddress(new LinkAddress(NetworkUtils.numericToInetAddress(
+                        SERVER_ADDRESS), 24));
+            ifcg.setInterfaceUp();
+            mNwService.setInterfaceConfig(intf, ifcg);
+            /* This starts the dnsmasq server */
+            mNwService.startTethering(DHCP_RANGE);
         } catch (Exception e) {
             loge("Error configuring interface " + intf + ", :" + e);
             return;
@@ -2168,11 +2156,8 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
    }
 
     private void stopDhcpServer(String intf) {
-        checkAndSetConnectivityInstance();
         try {
-            if (mCm.untether(intf) != ConnectivityManager.TETHER_ERROR_NO_ERROR) {
-                loge("Error Untether on " + intf);
-            }
+            mNwService.stopTethering();
         } catch (Exception e) {
             loge("Error stopping Dhcp server" + e);
             return;
