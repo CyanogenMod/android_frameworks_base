@@ -7586,7 +7586,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (Binder.getCallingUid() != Process.SYSTEM_UID) {
                Iterator<ResolveInfo> itr = list.iterator();
                 while (itr.hasNext()) {
-                    if (itr.next().activityInfo.applicationInfo.protect) {
+                    if (itr.next().activityInfo != null &&
+                        itr.next().activityInfo.applicationInfo.protect) {
                         itr.remove();
                     }
                 }
