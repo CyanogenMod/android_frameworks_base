@@ -621,16 +621,6 @@ public final class ActivityStackSupervisor {
                         rInfo.targetComponentName);
             }
 
-            // Store the actual target component in an extra field of the intent.
-            // This will be set in case the receiver of the intent wants to retarget the
-            // intent. Ideally we should have a new extra field, but resusing the
-            // changed_component_name_list for now.
-            if (rInfo != null && rInfo.targetComponentName != null) {
-                // Not creating a list to save an unnecessary object.
-                intent.putExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST,
-                        rInfo.targetComponentName);
-            }
-
             // Don't debug things in the system process
             if ((startFlags&ActivityManager.START_FLAG_DEBUG) != 0) {
                 if (!aInfo.processName.equals("system")) {
