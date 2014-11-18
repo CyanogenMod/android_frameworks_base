@@ -7181,7 +7181,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                     (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0) {
                Iterator<ResolveInfo> itr = list.iterator();
                 while (itr.hasNext()) {
-                    if (itr.next().activityInfo.applicationInfo.protect) {
+                    if (itr.next().activityInfo != null &&
+                        itr.next().activityInfo.applicationInfo.protect) {
                         itr.remove();
                     }
                 }
