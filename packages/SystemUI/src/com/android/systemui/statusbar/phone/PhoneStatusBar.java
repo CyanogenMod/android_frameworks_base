@@ -281,9 +281,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public QuickSettingsContainerView mSettingsContainer; //PA PIE
     int mSettingsPanelGravity;
 
-    // DoubleTap to Sleep
-    boolean mDoubleTapToSleep = false;
-
     // Ribbon settings
     private boolean mHasQuickAccessSettings;
     private boolean mQuickAccessLayoutLinked = true;
@@ -873,6 +870,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     inflateRibbon();
                     mRibbonView.setVisibility(View.VISIBLE);
                 }
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE))) {
+                mStatusBarView.setGestureListener(Settings.System.getInt(
+                        mContext.getContentResolver(), Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 
+                        0, UserHandle.USER_CURRENT) == 1;
             } else if (uri != null && uri.equals(Settings.System.getUriFor(
                     Settings.System.QUICK_SETTINGS_RIBBON_TILES))) {
                 cleanupRibbon();
@@ -892,15 +894,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBrightnessControl = !autoBrightness && Settings.System.getIntForUser(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
                     0, UserHandle.USER_CURRENT) == 1;
-
-            //update GestureListener only if something has changed
-            final boolean doubleTapToSleep = Settings.System.getIntForUser(
-                    resolver, Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 
-                        0, UserHandle.USER_CURRENT) == 1;
-            if (doubleTapToSleep != mDoubleTapToSleep) {
-                mStatusBarView.setGestureListener(doubleTapToSleep);
-                mDoubleTapToSleep = doubleTapToSleep;
-            }
 
             String notificationShortcutsIsActive = Settings.System.getStringForUser(resolver,
                     Settings.System.NOTIFICATION_SHORTCUTS_CONFIG, UserHandle.USER_CURRENT);
@@ -4974,8 +4967,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (shadeEntry != null) {
             addNotificationViews(shadeEntry);
         }
-
-        mDoubleTapToSleep=false;
 
         setAreThereNotifications();
 
