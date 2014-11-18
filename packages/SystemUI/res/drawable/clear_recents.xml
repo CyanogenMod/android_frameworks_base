@@ -14,10 +14,7 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true"
-         android:drawable="@drawable/clear_recents_pressed" />
-    <item
-         android:drawable="@drawable/clear_recents_normal" />
-</selector>
-
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="#ffffffff">
+    <item android:drawable="@drawable/ic_action_clear_recents" />
+</ripple>
