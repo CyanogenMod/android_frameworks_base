@@ -59,6 +59,7 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_SET_CONFERENCEABLE_CONNECTIONS = 20;
     private static final int MSG_SET_DISCONNECTED_WITH_SUPP_NOTIFICATION = 21;
     private static final int MSG_SET_PHONE_ACCOUNT = 22;
+    private static final int MSG_SET_CALL_SUBSTATE = 23;
 
     private final IConnectionServiceAdapter mDelegate;
 
@@ -220,6 +221,10 @@ final class ConnectionServiceAdapterServant {
                     } finally {
                         args.recycle();
                     }
+                    break;
+                }
+                case MSG_SET_CALL_SUBSTATE: {
+                    mDelegate.setCallSubstate((String) msg.obj, msg.arg1);
                     break;
                 }
             }
@@ -389,6 +394,12 @@ final class ConnectionServiceAdapterServant {
             args.arg1 = connectionId;
             args.arg2 = pHandle;
             mHandler.obtainMessage(MSG_SET_PHONE_ACCOUNT, args).sendToTarget();
+        }
+
+        @Override
+        public void setCallSubstate(String connectionId, int callSubstate) {
+            mHandler.obtainMessage(MSG_SET_CALL_SUBSTATE, callSubstate, 0,
+                connectionId).sendToTarget();
         }
     };
 

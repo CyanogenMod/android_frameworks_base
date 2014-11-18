@@ -57,6 +57,7 @@ public final class ParcelableCall implements Parcelable {
     private int mNotificationType;
     private int mCode;
     boolean mIsActiveSub;
+    private int mCallSubstate;
 
     public ParcelableCall(
             String id,
@@ -81,7 +82,8 @@ public final class ParcelableCall implements Parcelable {
             Bundle extras,
             int notificationType,
             int code,
-            boolean isActiveSub) {
+            boolean isActiveSub,
+            int callSubstate) {
         mId = id;
         mState = state;
         mDisconnectCause = disconnectCause;
@@ -105,6 +107,7 @@ public final class ParcelableCall implements Parcelable {
         mNotificationType = notificationType;
         mCode = code;
         mIsActiveSub = isActiveSub;
+        mCallSubstate = callSubstate;
     }
 
     /** The unique ID of the call. */
@@ -249,6 +252,14 @@ public final class ParcelableCall implements Parcelable {
         return mCode;
     }
 
+    /**
+     * The call substate.
+     * @return The substate of the call.
+     */
+    public int getCallSubstate() {
+        return mCallSubstate;
+    }
+
     /** Responsible for creating ParcelableCall objects for deserialized Parcels. */
     public static final Parcelable.Creator<ParcelableCall> CREATOR =
             new Parcelable.Creator<ParcelableCall> () {
@@ -282,6 +293,7 @@ public final class ParcelableCall implements Parcelable {
             int notificationType = source.readInt();
             int code = source.readInt();
             boolean isActiveSub = (source.readInt() == 1) ? true : false;
+            int callSubstate = source.readInt();
             return new ParcelableCall(
                     id,
                     state,
@@ -305,7 +317,8 @@ public final class ParcelableCall implements Parcelable {
                     extras,
                     notificationType,
                     code,
-                    isActiveSub);
+                    isActiveSub,
+                    callSubstate);
         }
 
         @Override
@@ -347,6 +360,7 @@ public final class ParcelableCall implements Parcelable {
         destination.writeInt(mNotificationType);
         destination.writeInt(mCode);
         destination.writeInt(mIsActiveSub ? 1 : 0);
+        destination.writeInt(mCallSubstate);
     }
 
     @Override
