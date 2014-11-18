@@ -1799,6 +1799,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    private boolean isBuiltInKeyboardVisible() {
+        return mHaveBuiltInKeyboard && !isHidden(mLidKeyboardAccessibility);
+    }
+
     /** {@inheritDoc} */
     @Override
     public void adjustConfigurationLw(Configuration config, int keyboardPresence,
@@ -5883,6 +5887,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void applyLidSwitchState() {
+        mPowerManager.setKeyboardVisibility(isBuiltInKeyboardVisible());
+
         if (mLidState == LID_CLOSED && mLidControlsSleep) {
             mPowerManager.goToSleep(SystemClock.uptimeMillis(),
                     PowerManager.GO_TO_SLEEP_REASON_LID_SWITCH,
