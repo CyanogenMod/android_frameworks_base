@@ -18,12 +18,13 @@ package com.android.systemui.recents.views;
 
 import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Outline;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.UserHandle;
@@ -31,20 +32,19 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import com.android.systemui.R;
 import com.android.systemui.recents.Constants;
 import com.android.systemui.recents.RecentsConfiguration;
-import com.android.systemui.recents.misc.Console;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.RecentsPackageMonitor;
 import com.android.systemui.recents.model.RecentsTaskLoader;
 import com.android.systemui.recents.model.Task;
 import com.android.systemui.recents.model.TaskStack;
-
-import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -284,11 +284,17 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
                 mConfig.systemInsets.right, taskStackBounds);
 
         if (mClearRecents != null) {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
                     mClearRecents.getLayoutParams();
-
-            params.bottomMargin = mConfig.systemInsets.bottom;
+            params.topMargin = taskStackBounds.top;
             mClearRecents.setLayoutParams(params);
+            mClearRecents.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    // Set the outline to match the FAB background
+                    outline.setOval(0, 0, mClearRecents.getWidth(), mClearRecents.getHeight());
+                }
+            });
         }
 
         // Measure each TaskStackView with the full width and height of the window since the 
