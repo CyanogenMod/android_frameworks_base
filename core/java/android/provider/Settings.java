@@ -2014,6 +2014,12 @@ public final class Settings {
         public static final String SCREEN_BRIGHTNESS = "screen_brightness";
 
         /**
+         * @hide
+         * Control whether to display the battery text on the status bar in a standalone TextView.
+         */
+        public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
+
+        /**
          * Control whether to enable automatic brightness mode.
          */
         public static final String SCREEN_BRIGHTNESS_MODE = "screen_brightness_mode";
