@@ -229,7 +229,7 @@ class TelephonyIcons {
     static final int SIGNAL_STRENGTH_TYPE_CDMA = 7;
     static final int SIGNAL_STRENGTH_TYPE_UMTS = 8;
 
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final int DEFAULT_SUB = 0;
     static final String TAG = "TelephonyIcons";
     static final String NS = "com.android.systemui";
