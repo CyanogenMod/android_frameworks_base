@@ -1396,10 +1396,14 @@ class MountService extends IMountService.Stub
         mContext.registerReceiver(mUserReceiver, userFilter, null, mHandler);
 
         // Watch for USB changes on primary volume
-        final StorageVolume primary = getPrimaryPhysicalVolume();
-        if (primary != null && primary.allowMassStorage()) {
-            mContext.registerReceiver(
-                    mUsbReceiver, new IntentFilter(UsbManager.ACTION_USB_STATE), null, mHandler);
+        final StorageVolume[] storageVolumes = getVolumeList();
+        for(StorageVolume volume : storageVolumes) {
+            if (volume.allowMassStorage()) {
+                mContext.registerReceiver(
+                        mUsbReceiver,
+                        new IntentFilter(UsbManager.ACTION_USB_STATE), null, mHandler);
+                break;
+            }
         }
 
         // Watch for idle maintenance changes
@@ -1569,9 +1573,6 @@ class MountService extends IMountService.Stub
     public void setUsbMassStorageEnabled(boolean enable) {
         waitForReady();
         validatePermission(android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
-
-        final StorageVolume primary = getPrimaryPhysicalVolume();
-        if (primary == null) return;
 
         // TODO: Add support for multiple share methods
 
