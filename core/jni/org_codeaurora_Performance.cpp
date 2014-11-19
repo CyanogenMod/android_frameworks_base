@@ -76,6 +76,8 @@ org_codeaurora_performance_native_init()
         return;
     }
 
+    dlerror();
+
     perf_lock_acq = (int (*) (int, int, int[], int))dlsym(dlhandle, "perf_lock_acq");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
@@ -150,6 +152,7 @@ org_codeaurora_performance_native_perf_lock_rel(JNIEnv *env, jobject clazz, jint
 static JNINativeMethod gMethods[] = {
     {"native_perf_lock_acq",  "(II[I)I",               (int *)org_codeaurora_performance_native_perf_lock_acq},
     {"native_perf_lock_rel",  "(I)I",                  (int *)org_codeaurora_performance_native_perf_lock_rel},
+    {"native_deinit",         "()V",                   (void *)org_codeaurora_performance_native_deinit},
 };
 
 
