@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 113;
+    private static final int DATABASE_VERSION = 114;
 
     private Context mContext;
     private int mUserHandle;
@@ -1573,37 +1573,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (upgradeVersion == 100) {
             // note: LOCK_SCREEN_SHOW_NOTIFICATIONS now handled in version 106
-            if (mUserHandle == UserHandle.USER_OWNER) {
-                db.beginTransaction();
-                SQLiteStatement stmt = null;
-                try {
-                    stmt = db.compileStatement("INSERT OR REPLACE INTO global(name,value)"
-                            + " VALUES(?,?);");
-                    loadIntegerSetting(stmt, Global.HEADS_UP_NOTIFICATIONS_ENABLED,
-                            R.integer.def_heads_up_enabled);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                    if (stmt != null) stmt.close();
-                }
-            }
+            upgradeHeadsUpSettingFromNone(db);
             upgradeVersion = 101;
         }
 
         if (upgradeVersion == 101) {
-            if (mUserHandle == UserHandle.USER_OWNER) {
-                db.beginTransaction();
-                SQLiteStatement stmt = null;
-                try {
-                    stmt = db.compileStatement("INSERT OR IGNORE INTO global(name,value)"
-                            + " VALUES(?,?);");
-                    loadSetting(stmt, Settings.Global.DEVICE_NAME, getDefaultDeviceName());
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                    if (stmt != null) stmt.close();
-                }
-            }
+            upgradeDeviceNameFromNone(db);
             upgradeVersion = 102;
         }
 
@@ -1831,6 +1806,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 113;
         }
 
+        /************* The following are CM-12.0 changes ************/
+
+        if (upgradeVersion < 114) {
+            // Artificially bump our upgrade version to handle
+            // migration path from cm-11.0 to cm-12.0
+            // without this, heads up would never work if
+            // a user did not wipe data
+            upgradeHeadsUpSettingFromNone(db);
+            upgradeDeviceNameFromNone(db);
+
+            upgradeVersion = 114;
+        }
+
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -1980,6 +1968,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } else {
             c.close();
+        }
+    }
+
+    private void upgradeHeadsUpSettingFromNone(SQLiteDatabase db) {
+        if (mUserHandle == UserHandle.USER_OWNER) {
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR REPLACE INTO global(name,value)"
+                        + " VALUES(?,?);");
+                loadIntegerSetting(stmt, Global.HEADS_UP_NOTIFICATIONS_ENABLED,
+                        R.integer.def_heads_up_enabled);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+        }
+    }
+
+    private void upgradeDeviceNameFromNone(SQLiteDatabase db) {
+        if (mUserHandle == UserHandle.USER_OWNER) {
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR IGNORE INTO global(name,value)"
+                        + " VALUES(?,?);");
+                loadSetting(stmt, Settings.Global.DEVICE_NAME, getDefaultDeviceName());
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
         }
     }
 
