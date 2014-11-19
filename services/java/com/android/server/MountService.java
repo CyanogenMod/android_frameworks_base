@@ -1570,6 +1570,9 @@ class MountService extends IMountService.Stub
         waitForReady();
         validatePermission(android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
 
+        final StorageVolume primary = getPrimaryPhysicalVolume();
+        if (primary == null) return;
+
         // TODO: Add support for multiple share methods
 
         for (String path : getShareableVolumes()) {
