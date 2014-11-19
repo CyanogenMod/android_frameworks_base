@@ -74,11 +74,11 @@ public abstract class Connection {
                 Connection c, String callerDisplayName, int presentation) {}
         public void onVideoStateChanged(Connection c, int videoState) {}
         public void onDisconnected(Connection c, DisconnectCause disconnectCause) {}
-        public void onSsNotificationData(int type, int code) {}
         public void onPostDialWait(Connection c, String remaining) {}
         public void onRingbackRequested(Connection c, boolean ringback) {}
         public void onDestroyed(Connection c) {}
         public void onCallCapabilitiesChanged(Connection c, int callCapabilities) {}
+        public void onCallPropertiesChanged(Connection c, int callProperties) {}
         public void onVideoProviderChanged(
                 Connection c, VideoProvider videoProvider) {}
         public void onAudioModeIsVoipChanged(Connection c, boolean isVoip) {}
@@ -493,6 +493,7 @@ public abstract class Connection {
     private int mCallerDisplayNamePresentation;
     private boolean mRingbackRequested = false;
     private int mCallCapabilities;
+    private int mCallProperties;
     private VideoProvider mVideoProvider;
     private boolean mAudioModeIsVoip;
     private StatusHints mStatusHints;
@@ -678,6 +679,13 @@ public abstract class Connection {
     }
 
     /**
+     * Returns the connection's {@link CallProperties}
+     */
+    public final int getCallProperties() {
+        return mCallProperties;
+    }
+
+    /**
      * Sets the value of the {@link #getAddress()} property.
      *
      * @param address The new address.
@@ -803,14 +811,6 @@ public abstract class Connection {
         }
     }
 
-    /** @hide */
-    public final void setSsNotificationData(int type, int code) {
-        Log.d(this, "setSsNotificationData = "+ type +" "+ code);
-        for (Listener l : mListeners) {
-            l.onSsNotificationData(type, code);
-        }
-    }
-
     /**
      * TODO: Needs documentation.
      */
@@ -845,6 +845,20 @@ public abstract class Connection {
             mCallCapabilities = callCapabilities;
             for (Listener l : mListeners) {
                 l.onCallCapabilitiesChanged(this, mCallCapabilities);
+            }
+        }
+    }
+
+    /**
+     * Sets the connection's {@link CallProperties}.
+     *
+     * @param callProperties The new call properties.
+     */
+    public final void setCallProperties(int callProperties) {
+        if (mCallProperties != callProperties) {
+            mCallProperties = callProperties;
+            for (Listener l : mListeners) {
+                l.onCallPropertiesChanged(this, mCallProperties);
             }
         }
     }

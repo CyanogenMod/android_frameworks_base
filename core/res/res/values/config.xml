@@ -1852,6 +1852,9 @@
 
     <bool name="config_auto_attach_data_on_creation">true</bool>
 
+    <!-- True if the gesture service should be started at system start -->
+    <bool name="config_enableGestureService">false</bool>
+
     <!-- Values for GPS configuration -->
     <string-array translatable="false" name="config_gpsParameters">
         <item>SUPL_HOST=supl.google.com</item>
