@@ -158,7 +158,7 @@ public class BatteryMeterView extends View implements DemoMode,
     private ContentObserver mObserver = new ContentObserver(new Handler()) {
         public void onChange(boolean selfChange, Uri uri) {
             mShowPercent = ENABLE_PERCENT && 0 != Settings.System.getInt(
-                getContext().getContentResolver(), "status_bar_show_battery_percent", 0);
+                getContext().getContentResolver(), Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0);
             postInvalidate();
         }
     };
@@ -412,7 +412,7 @@ public class BatteryMeterView extends View implements DemoMode,
         float pctX = 0, pctY = 0;
         String pctText = null;
         if (!tracker.plugged && level > mCriticalLevel && (mShowPercent
-                || !(tracker.level == 100 && !SHOW_100_PERCENT))) {
+                && !(tracker.level == 100 && !SHOW_100_PERCENT))) {
             mTextPaint.setColor(getColorForLevel(level));
             mTextPaint.setTextSize(height *
                     (SINGLE_DIGIT_PERCENT ? 0.75f
