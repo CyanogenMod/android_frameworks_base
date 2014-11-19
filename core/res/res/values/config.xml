@@ -2057,4 +2057,8 @@
     <integer name="launchboost_pcdisbl_param">0</integer>
     <integer name="launchboost_ksmboost_param">0</integer>
 
+   <bool name="config_enablePerfBoostForAnimation">false</bool>
+   <integer name="animationboost_timeout_param">0</integer>
+   <integer name="animationboost_schedboost_param">0</integer>
+   <integer name="animationboost_cpuboost_param">0</integer>
 </resources>
