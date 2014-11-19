@@ -32,4 +32,14 @@
 
     <!-- Left padding of num pad key on keyguard -->
     <dimen name="kg_num_pad_key_padding_left">10dp</dimen>
+
+    <!-- Top margin of lock pattern on keyguard -->
+    <dimen name="kg_pattern_top_margin">-8dp</dimen>
+
+    <!-- Bottom margin of lock pattern on keyguard -->
+    <dimen name="kg_pattern_bottom_margin">-8dp</dimen>
+
+    <!-- EmergencyCarrierArea overlap - amount to overlap the emergency button and carrier text.
+         Should be 0 on devices with plenty of room (e.g. tablets) -->
+    <dimen name="eca_overlap">-20dp</dimen>
 </resources>
