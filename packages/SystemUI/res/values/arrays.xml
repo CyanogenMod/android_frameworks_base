@@ -782,9 +782,9 @@
     <!--no sim-->
     <!--Add three items to support TSTS-->
     <string-array name="multi_no_sim">
-        <item>drawable/ic_qs_no_sim</item>
-        <item>drawable/ic_qs_no_sim</item>
-        <item>drawable/ic_qs_no_sim</item>
+        <item>drawable/stat_sys_no_sim</item>
+        <item>drawable/stat_sys_no_sim</item>
+        <item>drawable/stat_sys_no_sim</item>
     </string-array>
 
     <!--reserved for overlay-->
