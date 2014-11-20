@@ -5554,13 +5554,15 @@ public class PackageManagerService extends IPackageManager.Stub {
                         deletePackageLI(pkg.packageName, null, true, null, null, 0, null, false);
                         return null;
                     }
-                } else if (!isBootScan) {
-                    // Pass this off to the ThemeService for processing
-                    ThemeManager tm =
-                            (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
-                    if (tm != null) {
-                        tm.processThemeResources(pkg.packageName);
-                    }
+                }
+            }
+
+            if (!isBootScan && (pkg.mIsThemeApk || pkg.mIsLegacyThemeApk)) {
+                // Pass this off to the ThemeService for processing
+                ThemeManager tm =
+                        (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
+                if (tm != null) {
+                    tm.processThemeResources(pkg.packageName);
                 }
             }
 
