@@ -2001,6 +2001,9 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
         if (widget.views != null) {
             pw.print("    views="); pw.println(widget.views);
         }
+        if (widget.options != null) {
+            pw.print("    options="); pw.println(widget.options);
+        }
     }
 
     private static void serializeProvider(XmlSerializer out, Provider p) throws IOException {
