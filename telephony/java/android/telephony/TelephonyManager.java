@@ -23,6 +23,7 @@ import android.annotation.SystemApi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.AppOpsManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -3667,6 +3668,27 @@ public class TelephonyManager {
         return -1;
     }
 
+    /** @hide */
+    @SystemApi
+    public void enableVideoCalling(boolean enable) {
+        try {
+            getITelephony().enableVideoCalling(enable);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelephony#enableVideoCalling", e);
+        }
+    }
+
+    /** @hide */
+    @SystemApi
+    public boolean isVideoCallingEnabled() {
+        try {
+            return getITelephony().isVideoCallingEnabled();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelephony#isVideoCallingEnabled", e);
+        }
+        return false;
+    }
+
     /**
      * This function retrieves value for setting "name+subId", and if that is not found
      * retrieves value for setting "name", and if that is not found uses def as default
@@ -3689,8 +3711,6 @@ public class TelephonyManager {
         } catch (SettingNotFoundException e) {
             try {
                 int val = Settings.Global.getInt(cr, name);
-                Settings.Global.putInt(cr, name + subId, val);
-
                 /* We are now moving from 'setting' to 'setting+subId', and using the value stored
                  * for 'setting' as default. Reset the default (since it may have a user set
                  * value). */
@@ -3698,9 +3718,6 @@ public class TelephonyManager {
                 if (name.equals(Settings.Global.MOBILE_DATA)) {
                     default_val = "true".equalsIgnoreCase(
                             SystemProperties.get("ro.com.android.mobiledata", "true")) ? 1 : 0;
-                } else if (name.equals(Settings.Global.DATA_ROAMING)) {
-                    default_val = "true".equalsIgnoreCase(
-                            SystemProperties.get("ro.com.android.dataroaming", "false")) ? 1 : 0;
                 }
 
                 if (default_val != val) {
@@ -3713,5 +3730,4 @@ public class TelephonyManager {
             }
         }
     }
-
 }
