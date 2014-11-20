@@ -26,7 +26,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.hardware.usb.UsbManager;
 import android.net.ConnectivityManager;
-import android.net.IConnectivityManager;
+import android.net.NetworkRequest;
+import android.net.ConnectivityManager.NetworkCallback;
+import android.net.NetworkCapabilities;
 import android.net.INetworkStatsService;
 import android.net.InterfaceConfiguration;
 import android.net.LinkAddress;
@@ -60,6 +62,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1442,6 +1445,9 @@ public class Tethering extends BaseNetworkObserver {
         private static final int UPSTREAM_SETTLE_TIME_MS     = 10000;
         private static final int CELL_CONNECTION_RENEW_MS    = 40000;
 
+        private NetworkCallback mNetworkCallback = null;
+        boolean prevIPV6Connected = false;
+
         TetherMasterSM(String name, Looper looper) {
             super(name, looper);
 
@@ -1588,30 +1594,161 @@ public class Tethering extends BaseNetworkObserver {
                 }
             }
 
-            boolean isIpv6Connected(IConnectivityManager cm, LinkProperties linkProps) {
+            private boolean isIpv6Connected(LinkProperties lp) {
                 boolean ret = false;
                 Collection <InetAddress> addresses = null;
-
-                if (cm == null || linkProps == null) {
+                if ( lp == null) {
                     return false;
                 }
-                addresses = linkProps.getAddresses();
-                for (InetAddress addr: addresses) {
-                    if (addr instanceof java.net.Inet6Address) {
-                        java.net.Inet6Address i6addr = (java.net.Inet6Address) addr;
-                        if (!i6addr.isAnyLocalAddress() && !i6addr.isLinkLocalAddress() &&
-                                !i6addr.isLoopbackAddress() && !i6addr.isMulticastAddress()) {
-                            ret = true;
-                            break;
+                try {
+                    addresses = lp.getAddresses();
+                    for (InetAddress addr: addresses) {
+                        if (addr instanceof java.net.Inet6Address) {
+                            java.net.Inet6Address i6addr = (java.net.Inet6Address) addr;
+                            if (!i6addr.isAnyLocalAddress() && !i6addr.isLinkLocalAddress() &&
+                                    !i6addr.isLoopbackAddress() && !i6addr.isMulticastAddress()) {
+                                ret = true;
+                                break;
+                            }
                         }
                     }
+                } catch(Exception e) {
+                    Log.e(TAG, "Exception getting LinkProperties", e);
                 }
                 return ret;
             }
 
+            private NetworkRequest getNetworkRequest(int upType) {
+                if (VDBG) Log.d(TAG, "getNetworkRequest upType=" + upType);
+                int ncType = -1, transportType = -1;
+                switch (upType) {
+                    case ConnectivityManager.TYPE_MOBILE:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_INTERNET;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_WIFI:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_INTERNET;
+                        transportType = NetworkCapabilities.TRANSPORT_WIFI;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_MMS:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_MMS;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_SUPL:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_SUPL;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_DUN:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_DUN;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_HIPRI:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_INTERNET;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_BLUETOOTH:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_INTERNET;
+                        transportType = NetworkCapabilities.TRANSPORT_BLUETOOTH;
+                        break;
+                    case ConnectivityManager.TYPE_ETHERNET:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_INTERNET;
+                        transportType = NetworkCapabilities.TRANSPORT_ETHERNET;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_FOTA:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_FOTA;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_IMS:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_IMS;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_CBS:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_CBS;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_WIFI_P2P:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_WIFI_P2P;
+                        transportType = NetworkCapabilities.TRANSPORT_WIFI;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_IA:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_IA;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    case ConnectivityManager.TYPE_MOBILE_EMERGENCY:
+                        ncType = NetworkCapabilities.NET_CAPABILITY_EIMS;
+                        transportType = NetworkCapabilities.TRANSPORT_CELLULAR;
+                        break;
+                    default:
+                        ncType = -1;
+                }
+                if (VDBG) Log.d(TAG, "ncType =" + ncType + " transportType = " + transportType);
+                NetworkRequest networkRequest = new NetworkRequest.Builder()
+                                .addCapability(ncType)
+                                .addTransportType(transportType)
+                                .build();
+                return networkRequest;
+            }
+
+            private NetworkCallback getNetworkCallback() {
+                return new ConnectivityManager.NetworkCallback() {
+                   String currentUpstreamIface, lastUpstreamIface = null;
+                   boolean currentIPV6Connected =false;
+                   @Override
+                    public void onAvailable(Network network) {
+                        if (DBG) Log.d(TAG, "network available: " + network);
+                        try {
+                            LinkProperties lp = getConnectivityManager().getLinkProperties(network);
+                            currentIPV6Connected = isIpv6Connected(lp);
+                            currentUpstreamIface = lp.getInterfaceName();
+                            lastUpstreamIface = currentUpstreamIface;
+                            if( prevIPV6Connected != currentIPV6Connected ) {
+                                if( currentIPV6Connected ) {
+                                    addUpstreamV6Interface(currentUpstreamIface);
+                                }
+                            }
+                        } catch(Exception e) {
+                            Log.e(TAG, "Exception querying ConnectivityManager", e);
+                        }
+                        prevIPV6Connected = currentIPV6Connected;
+                    }
+
+                    @Override
+                    public void onLost(Network network) {
+                        if (DBG) Log.d(TAG, "network lost: " + network.toString());
+
+                        if( mNetworkCallback != null) {
+                            removeUpstreamV6Interface(lastUpstreamIface);
+                            if (DBG) Log.d(TAG, "Unregistering NetworkCallback()");
+                            getConnectivityManager().unregisterNetworkCallback(mNetworkCallback);
+                            mNetworkCallback = null;
+                            prevIPV6Connected = false;
+                            lastUpstreamIface = null;
+                        }
+                    }
+
+                    @Override
+                    public void onLinkPropertiesChanged(Network network, LinkProperties lp) {
+                        currentIPV6Connected = isIpv6Connected(lp);
+                        currentUpstreamIface = lp.getInterfaceName();
+                        lastUpstreamIface = currentUpstreamIface;
+                        if (VDBG) Log.d(TAG, "NetworkCallback.onLinkPropertiesChanged: network="
+                                + network + ", LP = " + lp + "currentIPV6Connected="
+                                + currentIPV6Connected + "prevIPV6Connected =" + prevIPV6Connected);
+                        Collection <InetAddress> addresses = lp.getAddresses();
+
+                        if( prevIPV6Connected != currentIPV6Connected ) {
+                            if( currentIPV6Connected ) {
+                                addUpstreamV6Interface(currentUpstreamIface);
+                            } else {
+                                removeUpstreamV6Interface(currentUpstreamIface);
+                            }
+                            prevIPV6Connected = currentIPV6Connected;
+                        }
+                    }
+                };
+            }
+
             protected void chooseUpstreamType(boolean tryCell) {
-                IBinder b = ServiceManager.getService(Context.CONNECTIVITY_SERVICE);
-                IConnectivityManager cm = IConnectivityManager.Stub.asInterface(b);
                 int upType = ConnectivityManager.TYPE_NONE;
                 String iface = null;
 
@@ -1626,30 +1763,21 @@ public class Tethering extends BaseNetworkObserver {
                     }
 
                     for (Integer netType : mUpstreamIfaceTypes) {
-                        NetworkInfo info = null;
-                        LinkProperties props = null;
-                        boolean isV6Connected = false;
-                        try {
-                            info = cm.getNetworkInfo(netType.intValue());
-                            if (info != null) {
-                                props = cm.getLinkPropertiesForType(info.getType());
-                                isV6Connected = isIpv6Connected(cm, props);
-                            }
-                        } catch (RemoteException e) { }
+                        NetworkInfo info =
+                                getConnectivityManager().getNetworkInfo(netType.intValue());
                         if ((info != null) && info.isConnected()) {
                             upType = netType.intValue();
-                            if (isV6Connected) {
-                                addUpstreamV6Interface(props.getInterfaceName());
-                            }
                             break;
                         }
                     }
                 }
-
                 if (DBG) {
                     Log.d(TAG, "chooseUpstreamType(" + tryCell + "), preferredApn ="
                             + mPreferredUpstreamMobileApn + ", got type=" + upType);
                 }
+
+                LinkProperties linkProperties =
+                            getConnectivityManager().getLinkProperties(upType);
 
                 // if we're on DUN, put our own grab on it
                 if (upType == ConnectivityManager.TYPE_MOBILE_DUN ||
@@ -1676,8 +1804,21 @@ public class Tethering extends BaseNetworkObserver {
                         sendMessageDelayed(CMD_RETRY_UPSTREAM, UPSTREAM_SETTLE_TIME_MS);
                     }
                 } else {
-                    LinkProperties linkProperties =
-                            getConnectivityManager().getLinkProperties(upType);
+                    try {
+                        NetworkInfo info =
+                                    getConnectivityManager().getNetworkInfo(upType);
+                        if ((info != null) && info.isConnected() && mNetworkCallback == null ) {
+                            mNetworkCallback = getNetworkCallback();
+                            NetworkRequest networkRequest = getNetworkRequest(upType);
+                            //  Register for Network Callback to receive IPV6 information
+                            if(DBG) Log.d(TAG, "Registering NetworkCallback");
+                            getConnectivityManager().registerNetworkCallback(
+                                                     networkRequest, mNetworkCallback );
+                        }
+                    } catch (Exception e) {
+                            Log.e(TAG, "Exception querying ConnectivityManager", e);
+                    }
+
                     if (linkProperties != null) {
                         // Find the interface with the default IPv4 route. It may be the
                         // interface described by linkProperties, or one of the interfaces
@@ -1820,19 +1961,8 @@ public class Tethering extends BaseNetworkObserver {
                     case CMD_UPSTREAM_CHANGED:
                         if(VDBG) Log.d(TAG, "CMD_UPSTREAM_CHANGED event received");
                         // need to try DUN immediately if Wifi goes down
-                        NetworkInfo info = (NetworkInfo) message.obj;
                         mTryCell = !WAIT_FOR_NETWORK_TO_SETTLE;
                         chooseUpstreamType(mTryCell);
-                        if ((info != null) && (!info.isConnected())) {
-                            IBinder b = ServiceManager.getService(Context.CONNECTIVITY_SERVICE);
-                            IConnectivityManager cm = IConnectivityManager.Stub.asInterface(b);
-                            try {
-                                LinkProperties props = cm.getLinkPropertiesForType(info.getType());
-                                removeUpstreamV6Interface(props.getInterfaceName());
-                            } catch(RemoteException e) {
-                                Log.e(TAG, "Exception querying ConnectivityManager", e);
-                            }
-                        }
                         mTryCell = !mTryCell;
                         break;
                     case CMD_CELL_CONNECTION_RENEW:
