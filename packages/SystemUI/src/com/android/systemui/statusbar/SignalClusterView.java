@@ -402,7 +402,8 @@ public class SignalClusterView
 
         if (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT) {
             mMobileType.setVisibility(
-                    (mRoaming || mMobileTypeId != 0) ? View.VISIBLE : View.GONE);
+                    ((mRoaming || mMobileTypeId != 0) && !mWifiVisible) ?
+                    View.VISIBLE : View.GONE);
         } else {
             mMobileType.setVisibility(View.GONE);
         }
