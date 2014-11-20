@@ -90,6 +90,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private static final int MESSAGE_USER_SWITCHED = 300;
     private static final int MAX_SAVE_RETRIES=3;
     private static final int MAX_ERROR_RESTART_RETRIES=6;
+    private static final int WAIT_NORMAL = 10;
+    private static final int WAIT_USERSWITCH = 30;
 
     // Bluetooth persisted setting is off
     private static final int BLUETOOTH_OFF=0;
@@ -778,7 +780,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                             }
                         }
                     }
-                    if (mBluetooth != null) waitForOnOff(true, false);
+                    if (mBluetooth != null) waitForOnOff(true, false, WAIT_NORMAL);
                     synchronized(mConnection) {
                         if (mBluetooth != null) {
                             String name =  null;
@@ -823,7 +825,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                             mHandler.sendMessage(getMsg);
                         }
                     }
-                    if (!mEnable && mBluetooth != null) waitForOnOff(false, true);
+                    if (!mEnable && mBluetooth != null) waitForOnOff(false, true, WAIT_NORMAL);
                     if (unbind) {
                         unbindAndFinish();
                     }
@@ -841,10 +843,10 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 case MESSAGE_DISABLE:
                     mHandler.removeMessages(MESSAGE_RESTART_BLUETOOTH_SERVICE);
                     if (mEnable && mBluetooth != null) {
-                        waitForOnOff(true, false);
+                        waitForOnOff(true, false, WAIT_NORMAL);
                         mEnable = false;
                         handleDisable();
-                        waitForOnOff(false, false);
+                        waitForOnOff(false, false, WAIT_NORMAL);
                     } else {
                         mEnable = false;
                         handleDisable();
@@ -968,9 +970,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     }
 
                     if (!mEnable) {
-                        waitForOnOff(true, false);
+                        waitForOnOff(true, false, WAIT_NORMAL);
                         handleDisable();
-                        waitForOnOff(false, false);
+                        waitForOnOff(false, false, WAIT_NORMAL);
                     }
                     break;
                 }
@@ -1108,7 +1110,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                             mState = BluetoothAdapter.STATE_TURNING_ON;
                         }
 
-                        waitForOnOff(true, false);
+                        waitForOnOff(true, false, WAIT_USERSWITCH);
 
                         if (mState == BluetoothAdapter.STATE_TURNING_ON) {
                             bluetoothStateChangeHandler(mState, BluetoothAdapter.STATE_ON);
@@ -1120,7 +1122,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                         bluetoothStateChangeHandler(BluetoothAdapter.STATE_ON,
                                                     BluetoothAdapter.STATE_TURNING_OFF);
 
-                        waitForOnOff(false, true);
+                        waitForOnOff(false, true, WAIT_USERSWITCH);
 
                         bluetoothStateChangeHandler(BluetoothAdapter.STATE_TURNING_OFF,
                                                     BluetoothAdapter.STATE_OFF);
@@ -1303,9 +1305,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
      *  if off is true, wait for state become OFF
      *  if both on and off are false, wait for state not ON
      */
-    private boolean waitForOnOff(boolean on, boolean off) {
+    private boolean waitForOnOff(boolean on, boolean off, int loop) {
         int i = 0;
-        while (i < 10) {
+        while (i < loop) {
             synchronized(mConnection) {
                 try {
                     if (mBluetooth == null) break;
@@ -1377,7 +1379,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         // disable
         handleDisable();
 
-        waitForOnOff(false, true);
+        waitForOnOff(false, true, WAIT_NORMAL);
 
         sendBluetoothServiceDownCallback();
         sendQBluetoothServiceDownCallback();
