@@ -23,8 +23,11 @@ import android.annotation.SystemApi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.AppOpsManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -3641,5 +3644,68 @@ public class TelephonyManager {
         } catch (NullPointerException ex) {
         }
         return -1;
+    }
+
+    /** @hide */
+    @SystemApi
+    public void enableVideoCalling(boolean enable) {
+        try {
+            getITelephony().enableVideoCalling(enable);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelephony#enableVideoCalling", e);
+        }
+    }
+
+    /** @hide */
+    @SystemApi
+    public boolean isVideoCallingEnabled() {
+        try {
+            return getITelephony().isVideoCallingEnabled();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelephony#isVideoCallingEnabled", e);
+        }
+        return false;
+    }
+
+    /**
+     * This function retrieves value for setting "name+subId", and if that is not found
+     * retrieves value for setting "name", and if that is not found uses def as default
+     *
+     * @hide */
+    public static int getIntWithSubId(ContentResolver cr, String name, int subId, int def) {
+        return Settings.Global.getInt(cr, name + subId, Settings.Global.getInt(cr, name, def));
+    }
+
+    /**
+     * This function retrieves value for setting "name+subId", and if that is not found
+     * retrieves value for setting "name", and if that is not found throws
+     * SettingNotFoundException
+     *
+     * @hide */
+    public static int getIntWithSubId(ContentResolver cr, String name, int subId)
+            throws SettingNotFoundException {
+        try {
+            return Settings.Global.getInt(cr, name + subId);
+        } catch (SettingNotFoundException e) {
+            try {
+                int val = Settings.Global.getInt(cr, name);
+                /* We are now moving from 'setting' to 'setting+subId', and using the value stored
+                 * for 'setting' as default. Reset the default (since it may have a user set
+                 * value). */
+                int default_val = val;
+                if (name.equals(Settings.Global.MOBILE_DATA)) {
+                    default_val = "true".equalsIgnoreCase(
+                            SystemProperties.get("ro.com.android.mobiledata", "true")) ? 1 : 0;
+                }
+
+                if (default_val != val) {
+                    Settings.Global.putInt(cr, name, default_val);
+                }
+
+                return val;
+            } catch (SettingNotFoundException exc) {
+                throw new SettingNotFoundException(name);
+            }
+        }
     }
 }
