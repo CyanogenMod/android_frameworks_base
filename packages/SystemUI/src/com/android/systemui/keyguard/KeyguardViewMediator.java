@@ -23,6 +23,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.app.StatusBarManager;
+import android.app.trust.TrustManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -184,8 +185,9 @@ public class KeyguardViewMediator extends SystemUI {
     /** High level access to the window manager for dismissing keyguard animation */
     private IWindowManager mWM;
 
-    /** UserManager for querying number of users */
-    private UserManager mUserManager;
+
+    /** TrustManager for letting it know when we change visibility */
+    private TrustManager mTrustManager;
 
     /** SearchManager for determining whether or not search assistant is available */
     private SearchManager mSearchManager;
@@ -477,7 +479,8 @@ public class KeyguardViewMediator extends SystemUI {
     private void setup() {
         mPM = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWM = WindowManagerGlobal.getWindowManagerService();
-        mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+        mTrustManager = (TrustManager) mContext.getSystemService(Context.TRUST_SERVICE);
+
         mShowKeyguardWakeLock = mPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "show keyguard");
         mShowKeyguardWakeLock.setReferenceCounted(false);
 
@@ -493,8 +496,8 @@ public class KeyguardViewMediator extends SystemUI {
         mLockPatternUtils.setCurrentUser(ActivityManager.getCurrentUser());
 
         // Assume keyguard is showing (unless it's disabled) until we know for sure...
-        mShowing = (mUpdateMonitor.isDeviceProvisioned() || mLockPatternUtils.isSecure())
-                && !mLockPatternUtils.isLockScreenDisabled();
+        mShowing = !shouldWaitForProvisioning() && !mLockPatternUtils.isLockScreenDisabled();
+        mTrustManager.reportKeyguardShowingChanged();
 
         mStatusBarKeyguardViewManager = new StatusBarKeyguardViewManager(mContext,
                 mViewMediatorCallback, mLockPatternUtils);
@@ -929,7 +932,7 @@ public class KeyguardViewMediator extends SystemUI {
         if (mLockPatternUtils.checkVoldPassword()) {
             if (DEBUG) Log.d(TAG, "Not showing lock screen since just decrypted");
             // Without this, settings is not enabled until the lock screen first appears
-            mShowing = false;
+            setShowing(false);
             hideLocked();
             return;
         }
@@ -1251,6 +1254,8 @@ public class KeyguardViewMediator extends SystemUI {
             mHiding = false;
             mShowing = true;
             mKeyguardDonePending = false;
+            setShowing(true);
+            resetKeyguardDonePendingLocked();
             mHideAnimationRun = false;
             updateActivityLockScreenState();
             adjustStatusBarLocked();
@@ -1327,8 +1332,8 @@ public class KeyguardViewMediator extends SystemUI {
             }
 
             mStatusBarKeyguardViewManager.hide(startTime, fadeoutDuration);
-            mShowing = false;
-            mKeyguardDonePending = false;
+            setShowing(false);
+            resetKeyguardDonePendingLocked();
             mHideAnimationRun = false;
             updateActivityLockScreenState();
             adjustStatusBarLocked();
@@ -1388,7 +1393,7 @@ public class KeyguardViewMediator extends SystemUI {
         synchronized (KeyguardViewMediator.this) {
             if (DEBUG) Log.d(TAG, "handleVerifyUnlock");
             mStatusBarKeyguardViewManager.verifyUnlock();
-            mShowing = true;
+            setShowing(true);
             updateActivityLockScreenState();
         }
     }
@@ -1463,6 +1468,14 @@ public class KeyguardViewMediator extends SystemUI {
         private StartKeyguardExitAnimParams(long startTime, long fadeoutDuration) {
             this.startTime = startTime;
             this.fadeoutDuration = fadeoutDuration;
+        }
+    }
+
+    private void setShowing(boolean showing) {
+        boolean changed = (showing != mShowing);
+        mShowing = showing;
+        if (changed) {
+            mTrustManager.reportKeyguardShowingChanged();
         }
     }
 }
