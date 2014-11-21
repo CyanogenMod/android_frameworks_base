@@ -197,6 +197,17 @@ final class ProcessList {
             FOREGROUND_APP_ADJ, VISIBLE_APP_ADJ, PERCEPTIBLE_APP_ADJ,
             BACKUP_APP_ADJ, CACHED_APP_MIN_ADJ, CACHED_APP_MAX_ADJ
     };
+
+    // These are the low-end OOM level limits for 32bit 1 GB RAM
+    private final int[] mOomMinFreeLow32Bit = new int[] {
+            12288, 18432, 24576,
+            36864, 43008, 49152
+    };
+    // These are the high-end OOM level limits for 32bit 1 GB RAM
+    private final int[] mOomMinFreeHigh32Bit = new int[] {
+            61440, 76800, 92160,
+            107520, 137660, 174948
+    };
     // These are the low-end OOM level limits.  This is appropriate for an
     // HVGA or smaller phone with less than 512MB.  Values are in KB.
     private final int[] mOomMinFreeLow = new int[] {
@@ -265,15 +276,24 @@ final class ProcessList {
             Slog.i("XXXXXX", "minfree_adj=" + minfree_adj + " minfree_abs=" + minfree_abs);
         }
 
+        // We've now baked in the increase to the basic oom values above, since
+        // they seem to be useful more generally for devices that are tight on
+        // memory than just for 64 bit.  This should probably have some more
+        // tuning done, so not deleting it quite yet...
         final boolean is64bit = Build.SUPPORTED_64_BIT_ABIS.length > 0;
 
         for (int i=0; i<mOomAdj.length; i++) {
             int low = mOomMinFreeLow[i];
             int high = mOomMinFreeHigh[i];
             if (is64bit) {
+                Slog.i("XXXXXX", "choosing minFree values for 64 Bit");
                 // Increase the high min-free levels for cached processes for 64-bit
                 if (i == 4) high = (high*3)/2;
                 else if (i == 5) high = (high*7)/4;
+            } else {
+                Slog.i("XXXXXX", "choosing minFree values for 32 Bit");
+                low = mOomMinFreeLow32Bit[i];
+                high = mOomMinFreeHigh32Bit[i];
             }
             mOomMinFree[i] = (int)(low + ((high-low)*scale));
         }
