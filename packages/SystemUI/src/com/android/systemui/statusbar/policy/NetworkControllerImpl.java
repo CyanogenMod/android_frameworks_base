@@ -1321,16 +1321,16 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 switch (mWifiActivity) {
                 case WifiManager.DATA_ACTIVITY_IN:
-                    mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
+                    mWifiActivityIconId = R.drawable.stat_sys_signal_in;
                     break;
                 case WifiManager.DATA_ACTIVITY_OUT:
-                    mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
+                    mWifiActivityIconId = R.drawable.stat_sys_signal_out;
                     break;
                 case WifiManager.DATA_ACTIVITY_INOUT:
-                    mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
+                    mWifiActivityIconId = R.drawable.stat_sys_signal_inout;
                     break;
                 case WifiManager.DATA_ACTIVITY_NONE:
-                    mWifiActivityIconId = 0;
+                    mWifiActivityIconId = R.drawable.stat_sys_signal_none;
                     break;
                 }
             }
