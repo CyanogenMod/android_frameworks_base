@@ -29,6 +29,8 @@
 package org.codeaurora;
 
 import android.util.Log;
+import android.view.MotionEvent;
+import android.util.DisplayMetrics;
 
 public class Performance
 {
@@ -85,6 +87,143 @@ public class Performance
     /** &hide */
     public int perfLockAcquire(int duration, int... list) {
         int rc = REQUEST_SUCCEEDED;
+        handle = native_perf_lock_acq(handle, duration, list);
+        if (handle == 0)
+            rc = REQUEST_FAILED;
+        return rc;
+    }
+
+    private static boolean isFlingEnabled = false;
+
+    /* Tunables Begin. Can be moved to config.xml */
+    /* Division factor */
+    private int mDivFact = 6;
+    /* Min drag in horizontal,vertical (abs pixels) */
+    private int mWDragPix = 12;
+    private int mHDragPix = 12;
+    /* fling boost duration (msec) */
+    private int mFlingBoostDuration = 1500;
+    /* Tunables End. */
+
+    class TouchInfo {
+        /* Touch start position */
+        private int mStartX = 0;
+        private int mStartY = 0;
+
+        /* Touch current position */
+        private int mCurX = 0;
+        private int mCurY = 0;
+
+        /* Width, Height to declare fling */
+        private int mMinFlingW = 0;
+        private int mMinFlingH = 0;
+
+        /* Width, Height to declare drag */
+        private int mMinDragW = 0;
+        private int mMinDragH = 0;
+
+        /* Note: All coordinates are density normalized values */
+        private void reset() {
+            mStartX = mStartY = mCurX = mCurY = 0;
+            mMinFlingH = mMinFlingW = mMinDragH = mMinDragW = 0;
+            isFlingEnabled = false;
+        }
+        /* update current x,y coordinates */
+        private void setXY(int dx, int dy) {
+            mCurX = dx;
+            mCurY = dy;
+        }
+        /* Set fling min width, height */
+        private void setFlingWH(int dw, int dh) {
+            mMinFlingW = dw;
+            mMinFlingH = dh;
+        }
+        /* Set drag min width, height */
+        private void setDragWH(int dw, int dh) {
+            mMinDragW = dw;
+            mMinDragH = dh;
+        }
+        private void setStartXY(int dx, int dy) {
+            mStartX = mCurX = dx;
+            mStartY = mCurY = dy;
+        }
+    };
+    private static TouchInfo mTouchInfo = null;
+
+
+    /* The following two functions are the PerfLock APIs*/
+    /** &hide */
+    public int perfLockAcquireTouch(MotionEvent ev, DisplayMetrics metrics, int duration, int... list) {
+        int rc = REQUEST_FAILED;
+        if (mTouchInfo == null)
+            mTouchInfo = new TouchInfo();
+        final int actionMasked = ev.getActionMasked();
+        final int pointerIndex = ev.getActionIndex();
+
+        final int y = (int) ev.getY(pointerIndex);
+        final int x = (int) ev.getX(pointerIndex);
+
+        int dx = (int)((x * 1f)/metrics.density);
+        int dy = (int)((y * 1f)/metrics.density);
+
+        boolean ret = true;
+
+        switch (actionMasked) {
+            case MotionEvent.ACTION_DOWN: {
+                mTouchInfo.reset();
+                mTouchInfo.setStartXY(dx, dy);
+                mTouchInfo.setFlingWH(
+                       (int)((metrics.widthPixels * 1f)/(mDivFact * metrics.density)),
+                       (int)((metrics.heightPixels * 1f)/(mDivFact * metrics.density)));
+                mTouchInfo.setDragWH((int)(mWDragPix * 1f/metrics.density),
+                                     (int)(mHDragPix * 1f/metrics.density));
+                return rc;
+            }
+
+            case MotionEvent.ACTION_MOVE: {
+                int xdiff = dx - mTouchInfo.mCurX;
+                int ydiff = dy - mTouchInfo.mCurY;
+                if (xdiff < 0) xdiff *= -1;
+                if (ydiff < 0) ydiff *= -1;
+
+                mTouchInfo.setXY(dx, dy);
+                if ((xdiff > mTouchInfo.mMinDragW) ||
+                    (ydiff > mTouchInfo.mMinDragH)){
+                    ret = false;
+                }
+
+                if (ret == true)
+                    return rc;
+                break;
+            }
+
+            case MotionEvent.ACTION_UP: {
+                int xdiff = dx - mTouchInfo.mCurX;
+                int ydiff = dy - mTouchInfo.mCurY;
+                if (xdiff < 0) xdiff *= -1;
+                if (ydiff < 0) ydiff *= -1;
+                if ((xdiff > mTouchInfo.mMinDragW) ||
+                    (ydiff > mTouchInfo.mMinDragH)){
+                    ret = false;
+                }
+
+                mTouchInfo.reset();
+                if (ret == true){
+                    return rc;
+                }
+                break;
+            }
+
+            case MotionEvent.ACTION_CANCEL: {
+                mTouchInfo.reset();
+                return rc;
+            }
+
+            default:
+                return rc;
+        }
+
+        rc = REQUEST_SUCCEEDED;
         handle = native_perf_lock_acq(handle, duration, list);
         if (handle == 0)
             rc = REQUEST_FAILED;
