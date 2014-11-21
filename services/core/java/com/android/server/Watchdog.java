@@ -460,6 +460,26 @@ public class Watchdog extends Thread {
                 dropboxThread.join(2000);  // wait up to 2 seconds for it to return.
             } catch (InterruptedException ignored) {}
 
+            // At times, when user space watchdog traces don't give an indication on
+            // which component held a lock, because of which other threads are blocked,
+            // (thereby causing Watchdog), crash the device to analyze RAM dumps
+            boolean crashOnWatchdog = SystemProperties
+                                        .getBoolean("persist.sys.crashOnWatchdog", false);
+            if (crashOnWatchdog) {
+                // wait until the above blocked threads be dumped into kernel log
+                SystemClock.sleep(3000);
+
+                // now try to crash the target
+                try {
+                    FileWriter sysrq_trigger = new FileWriter("/proc/sysrq-trigger");
+                    sysrq_trigger.write("c");
+                    sysrq_trigger.close();
+                } catch (IOException e) {
+                    Slog.e(TAG, "Failed to write 'c' to /proc/sysrq-trigger");
+                    Slog.e(TAG, e.getMessage());
+                }
+            }
+
             IActivityController controller;
             synchronized (this) {
                 controller = mController;
