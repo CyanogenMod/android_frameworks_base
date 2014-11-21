@@ -35,6 +35,10 @@ public class BatteryController extends BroadcastReceiver {
     private final ArrayList<BatteryStateChangeCallback> mChangeCallbacks = new ArrayList<>();
     private final PowerManager mPowerManager;
 
+    private int mBatteryLevel = 0;
+    private int mBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
+    private boolean mBatteryPlugged = false;
+
     private int mLevel;
     private boolean mPluggedIn;
     private boolean mCharging;
@@ -64,7 +68,7 @@ public class BatteryController extends BroadcastReceiver {
 
     public void addStateChangedCallback(BatteryStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
-        cb.onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+        cb.onBatteryLevelChanged(mLevel, mPluggedIn, mBatteryStatus);
     }
 
     public void removeStateChangedCallback(BatteryStateChangeCallback cb) {
@@ -79,11 +83,11 @@ public class BatteryController extends BroadcastReceiver {
                     / intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
             mPluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
 
-            final int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+            mBatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
                     BatteryManager.BATTERY_STATUS_UNKNOWN);
             mCharged = status == BatteryManager.BATTERY_STATUS_FULL;
             mCharging = mCharged || status == BatteryManager.BATTERY_STATUS_CHARGING;
-
+            
             fireBatteryLevelChanged();
         } else if (action.equals(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)) {
             updatePowerSave();
@@ -122,7 +126,7 @@ public class BatteryController extends BroadcastReceiver {
     }
 
     public interface BatteryStateChangeCallback {
-        void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging);
+        void onBatteryLevelChanged(int level, boolean pluggedIn, int status, boolean charging);
         void onPowerSaveChanged();
     }
 }

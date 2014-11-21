@@ -85,6 +85,17 @@
 
             <include layout="@layout/system_icons" />
 
+            <com.android.systemui.statusbar.policy.CircleBattery
+                    android:id="@+id/circle_battery"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="4dip"
+                    android:layout_marginBottom="2px"
+                    android:textAppearance="@style/TextAppearance.StatusBar.Battery"
+                    android:singleLine="true"
+                    android:gravity="bottom"
+                    />
+
             <com.android.systemui.statusbar.policy.Clock
                 android:id="@+id/clock"
                 android:textAppearance="@style/TextAppearance.StatusBar.Clock"
