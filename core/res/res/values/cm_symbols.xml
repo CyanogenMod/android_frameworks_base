@@ -182,7 +182,6 @@
     <java-symbol type="string" name="app_killed_message" />
 
     <!-- Config.xml entries -->
-    <java-symbol type="integer" name="config_backKillTimeout" />
     <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
     <java-symbol type="bool" name="config_samsung_stk" />
     <java-symbol type="bool" name="config_hasRemovableLid" />
