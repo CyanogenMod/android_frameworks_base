@@ -18,5 +18,7 @@ Copyright (C) 2014 The Android Open Source Project
         android:height="17dp"
         android:viewportWidth="12.0"
         android:viewportHeight="24.0">
-    <!-- no path, drawable is intended to be transparent -->
+    <!-- Dummy path to allow proper loading -->
+    <path
+        android:pathData=""/>
 </vector>
