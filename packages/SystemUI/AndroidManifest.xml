@@ -144,6 +144,9 @@
             android:process=":screenshot"
             android:exported="false" />
 
+        <receiver android:name=".screenshot.DeleteScreenshot"
+                android:exported="true" />
+
         <service android:name=".LoadAverageService"
                 android:exported="true" />
 
