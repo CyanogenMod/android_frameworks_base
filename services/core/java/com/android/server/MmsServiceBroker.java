@@ -206,14 +206,6 @@ public class MmsServiceBroker extends SystemService {
         return mTelephonyManager;
     }
 
-    private String getCallingPackageName() {
-        final String[] packages = getPackageManager().getPackagesForUid(Binder.getCallingUid());
-        if (packages != null && packages.length > 0) {
-            return packages[0];
-        }
-        return "unknown";
-    }
-
     /*
      * Throws a security exception unless the caller has carrier privilege.
      */
