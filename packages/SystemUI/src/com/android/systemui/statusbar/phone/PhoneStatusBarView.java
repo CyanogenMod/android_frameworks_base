@@ -34,7 +34,7 @@ import com.android.systemui.R;
 public class PhoneStatusBarView extends PanelBar {
     private static final String TAG = "PhoneStatusBarView";
     private static final boolean DEBUG = PhoneStatusBar.DEBUG;
-    private static final boolean DEBUG_GESTURES = true;
+    private static final boolean DEBUG_GESTURES = false;
 
     PhoneStatusBar mBar;
 
