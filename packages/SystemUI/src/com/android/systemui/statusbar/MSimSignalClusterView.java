@@ -45,7 +45,7 @@ public class MSimSignalClusterView
         extends LinearLayout
         implements MSimNetworkControllerImpl.MSimSignalCluster {
 
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final String TAG = "MSimSignalClusterView";
 
     private final int STATUS_BAR_STYLE_ANDROID_DEFAULT = 0;
