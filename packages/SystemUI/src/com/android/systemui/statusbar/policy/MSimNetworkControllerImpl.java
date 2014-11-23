@@ -273,7 +273,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     private int getPhoneId(long subId) {
         int phoneId;
         phoneId = SubscriptionManager.getPhoneId(subId);
-        Slog.d(TAG, "getPhoneId phoneId: " +phoneId);
+        if (DEBUG) Slog.d(TAG, "getPhoneId phoneId: " +phoneId);
         return phoneId;
     }
 
@@ -697,7 +697,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     }
 
     private final void updateTelephonySignalStrength(int phoneId) {
-        Slog.d(TAG, "updateTelephonySignalStrength: phoneId =" + phoneId);
+        if (DEBUG) Slog.d(TAG, "updateTelephonySignalStrength: phoneId =" + phoneId);
         int dataSub = SubscriptionManager.getPhoneId(
                 SubscriptionManager.getDefaultDataSubId());
         if ((!hasService(phoneId) &&
@@ -854,18 +854,18 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     }
 
     private void updateIconSet(int phoneId) {
-        Slog.d(TAG, "updateIconSet, phoneId = " + phoneId);
+        if (DEBUG) Slog.d(TAG, "updateIconSet, phoneId = " + phoneId);
         int voiceNetorkType = mMSimServiceState[phoneId].getVoiceNetworkType();
         int dataNetorkType =  mMSimServiceState[phoneId].getDataNetworkType();
-        Slog.d(TAG, "updateIconSet, voice network type is: " + voiceNetorkType
+
+        if (DEBUG) Slog.d(TAG, "updateIconSet, voice network type is: " + voiceNetorkType
             + "/" + TelephonyManager.getNetworkTypeName(voiceNetorkType)
             + ", data network type is: " + dataNetorkType
             + "/" + TelephonyManager.getNetworkTypeName(dataNetorkType));
-
         int chosenNetworkType = ((dataNetorkType == TelephonyManager.NETWORK_TYPE_UNKNOWN)
                     ? voiceNetorkType : dataNetorkType);
 
-        Slog.d(TAG, "updateIconSet, chosenNetworkType=" + chosenNetworkType
+        if (DEBUG) Slog.d(TAG, "updateIconSet, chosenNetworkType=" + chosenNetworkType
             + " hspaDataDistinguishable=" + String.valueOf(mHspaDataDistinguishable)
             + " hspapDistinguishable=" + "false"
             + " showAtLeastThreeGees=" + String.valueOf(mShowAtLeastThreeGees));
@@ -875,27 +875,27 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     }
 
     private final void updateDataIcon(int phoneId) {
-        Slog.d(TAG,"updateDataIcon phoneId =" + phoneId);
+        if (DEBUG) Slog.d(TAG,"updateDataIcon phoneId =" + phoneId);
         int iconId = 0;
         boolean visible = true;
         int dataSub = SubscriptionManager.getPhoneId(
                 SubscriptionManager.getDefaultDataSubId());
 
-        Slog.d(TAG,"updateDataIcon dataSub =" + dataSub);
+        if (DEBUG) Slog.d(TAG,"updateDataIcon dataSub =" + dataSub);
         // DSDS case: Data is active only on DDS. Clear the icon for NON-DDS
         if (phoneId != dataSub) {
             mMSimDataConnected[phoneId] = false;
-            Slog.d(TAG,"updateDataIconi: phoneId" + phoneId
+            if (DEBUG) Slog.d(TAG,"updateDataIconi: phoneId" + phoneId
                      + " is not DDS.  Clear the mMSimDataConnected Flag and return");
             return;
         }
 
-        Slog.d(TAG,"updateDataIcon  when SimState =" + mMSimState[phoneId]);
+        if (DEBUG) Slog.d(TAG,"updateDataIcon  when SimState =" + mMSimState[phoneId]);
         if (mDataNetType == TelephonyManager.NETWORK_TYPE_UNKNOWN) {
             // If data network type is unknown do not display data icon
             visible = false;
         } else if (!isCdma(phoneId)) {
-             Slog.d(TAG,"updateDataIcon  when gsm mMSimState =" + mMSimState[phoneId]);
+            if (DEBUG) Slog.d(TAG,"updateDataIcon  when gsm mMSimState =" + mMSimState[phoneId]);
             // GSM case, we have to check also the sim state
             if (mMSimState[phoneId] == IccCardConstants.State.READY ||
                 mMSimState[phoneId] == IccCardConstants.State.UNKNOWN) {
@@ -908,7 +908,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     visible = false;
                 }
             } else {
-                Slog.d(TAG,"updateDataIcon when no sim");
+                if (DEBUG) Slog.d(TAG,"updateDataIcon when no sim");
                 mNoSim = true;
                 iconId = TelephonyIcons.getNoSimIcon();
                 visible = false; // no SIM? no data
@@ -928,7 +928,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mMSimDataConnected[phoneId] = visible;
         mDataConnected = visible;
 
-        Slog.d(TAG,"updateDataIcon when mMSimDataConnected[" + phoneId + "] ="
+        if (DEBUG) Slog.d(TAG,"updateDataIcon when mMSimDataConnected[" + phoneId + "] ="
             + mMSimDataConnected[phoneId]
             + " mMSimMobileActivityIconId[" + phoneId +"] = "
             + mMSimMobileActivityIconId[phoneId]);
@@ -1031,9 +1031,11 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         String mobileLabel = "";
         String wifiLabel = "";
         int N;
-        Slog.d(TAG,"refreshViews phoneId =" + phoneId + "mMSimDataConnected ="
-                + mMSimDataConnected[phoneId]);
-        Slog.d(TAG,"refreshViews mMSimDataActivity =" + mMSimDataActivity[phoneId]);
+        if (DEBUG) {
+            Slog.d(TAG,"refreshViews phoneId =" + phoneId + "mMSimDataConnected ="
+                    + mMSimDataConnected[phoneId]);
+            Slog.d(TAG,"refreshViews mMSimDataActivity =" + mMSimDataActivity[phoneId]);
+        }
         int dataSub = SubscriptionManager.getPhoneId(
                 SubscriptionManager.getDefaultDataSubId());
         if (!mHasMobileDataFeature) {
@@ -1186,8 +1188,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         }
 
         if (!mMSimDataConnected[phoneId]) {
-            Slog.d(TAG, "refreshViews: Data not connected!! Set no data type icon / Roaming for"
-                    + " phoneId: " + phoneId);
+            if (DEBUG) Slog.d(TAG, "refreshViews: Data not connected!!"
+                    + " Set no data type icon / Roaming for phoneId: " + phoneId);
             mMSimDataTypeIconId[phoneId] = 0;
             if (phoneId == dataSub) {
                 mQSDataTypeIconId = 0;
