@@ -16,8 +16,12 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.util.Log;
@@ -44,12 +48,17 @@ public class PhoneStatusBarView extends PanelBar {
     private ScrimController mScrimController;
     private GestureDetector mDoubleTapGesture;
 
+    private Handler mHandler = new Handler();
+    private SettingsObserver mSettingsObserver;
+    private boolean mDoubleTapToSleepEnabled;
+
     public PhoneStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         Resources res = getContext().getResources();
         mBarTransitions = new PhoneStatusBarTransitions(this);
 
+        mSettingsObserver = new SettingsObserver(mHandler);
         mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
@@ -159,9 +168,9 @@ public class PhoneStatusBarView extends PanelBar {
             }
         }
 
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0) == 1)
+        if (mDoubleTapToSleepEnabled) {
             mDoubleTapGesture.onTouchEvent(event);
+        }
 
         return barConsumedEvent || super.onTouchEvent(event);
     }
@@ -195,5 +204,51 @@ public class PhoneStatusBarView extends PanelBar {
         super.panelExpansionChanged(panel, frac, expanded);
         mScrimController.setPanelExpansion(frac);
         mBar.updateCarrierLabelVisibility(false);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mSettingsObserver.observe();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mSettingsObserver.unobserve();
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this);
+            update();
+        }
+
+        void unobserve() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mDoubleTapToSleepEnabled = Settings.System.getInt(
+                    resolver, Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 1) == 1;
+        }
     }
 }
