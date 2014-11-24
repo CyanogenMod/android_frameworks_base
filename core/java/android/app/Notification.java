@@ -523,6 +523,21 @@ public class Notification implements Parcelable
     public int priority;
 
     /**
+     * Default.
+     * Show all notifications from an app on keyguard.
+     *
+     * @hide
+     */
+    public static final int SHOW_ALL_NOTI_ON_KEYGUARD = 0x01;
+
+    /**
+     * Show only notifications from an app which are not ongoing ones.
+     *
+     * @hide
+     */
+    public static final int SHOW_NO_ONGOING_NOTI_ON_KEYGUARD = 0x02;
+
+    /**
      * Accent color (an ARGB integer like the constants in {@link android.graphics.Color})
      * to be applied by the standard Style templates when presenting this notification.
      *
