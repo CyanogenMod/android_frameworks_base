@@ -57,6 +57,7 @@ public class RankingHelper implements RankingConfig {
     private static final String ATT_IMPORTANCE = "importance";
     private static final String ATT_TOPIC_ID = "id";
     private static final String ATT_TOPIC_LABEL = "label";
+    private static final String ATT_KEYGUARD = "keyguard";
 
     private static final int DEFAULT_PRIORITY = Notification.PRIORITY_DEFAULT;
     private static final int DEFAULT_VISIBILITY = Ranking.VISIBILITY_NO_OVERRIDE;
@@ -166,6 +167,11 @@ public class RankingHelper implements RankingConfig {
                         r.importance = safeInt(parser, ATT_IMPORTANCE, DEFAULT_IMPORTANCE);
                         r.priority = safeInt(parser, ATT_PRIORITY, DEFAULT_PRIORITY);
                         r.visibility = safeInt(parser, ATT_VISIBILITY, DEFAULT_VISIBILITY);
+
+                        int keyguard = safeInt(parser, ATT_KEYGUARD, DEFAULT_VISIBILITY);
+                        if (keyguard != Notification.SHOW_ALL_NOTI_ON_KEYGUARD) {
+                            r.keyguard = keyguard;
+                        }
                     }
                 }
             }
@@ -213,6 +219,10 @@ public class RankingHelper implements RankingConfig {
                 }
                 if (r.visibility != DEFAULT_VISIBILITY) {
                     out.attribute(null, ATT_VISIBILITY, Integer.toString(r.visibility));
+                }
+
+                if (r.keyguard != Notification.SHOW_ALL_NOTI_ON_KEYGUARD) {
+                    out.attribute(null, ATT_KEYGUARD, Integer.toBinaryString(r.keyguard));
                 }
 
                 if (!forBackup) {
@@ -371,6 +381,22 @@ public class RankingHelper implements RankingConfig {
             return;
         }
         setImportance(packageName, uid, enabled ? DEFAULT_IMPORTANCE : Ranking.IMPORTANCE_NONE);
+    }
+
+    @Override
+    public int getShowNotificationForPackageOnKeyguard(String packageName, int uid) {
+        final Record r = mRecords.get(recordKey(packageName, uid));
+        return r != null ? r.keyguard : Notification.SHOW_ALL_NOTI_ON_KEYGUARD;
+    }
+
+    @Override
+    public void setShowNotificationForPackageOnKeyguard(
+                String packageName, int uid, int keyguard) {
+        if (keyguard == getShowNotificationForPackageOnKeyguard(packageName, uid)) {
+            return;
+        }
+        getOrCreateRecord(packageName, uid).keyguard = keyguard;
+        updateConfig();
     }
 
     public void dump(PrintWriter pw, String prefix, NotificationManagerService.DumpFilter filter) {
@@ -538,5 +564,7 @@ public class RankingHelper implements RankingConfig {
         int importance = DEFAULT_IMPORTANCE;
         int priority = DEFAULT_PRIORITY;
         int visibility = DEFAULT_VISIBILITY;
-   }
+        int keyguard = Notification.SHOW_ALL_NOTI_ON_KEYGUARD;
+    }
+
 }

@@ -28,4 +28,9 @@ public interface RankingConfig {
     void setImportance(String packageName, int uid, int importance);
 
     int getImportance(String packageName, int uid);
+
+    void setShowNotificationForPackageOnKeyguard(String packageName, int uid, int status);
+
+    int getShowNotificationForPackageOnKeyguard(String packageName, int uid);
+
 }

@@ -19,6 +19,7 @@ package android.app;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.SdkConstant;
+import android.app.Notification;
 import android.app.Notification.Builder;
 import android.content.ComponentName;
 import android.content.Context;
@@ -700,6 +701,16 @@ public class NotificationManager
             throw e.rethrowFromSystemServer();
         }
         return new ArraySet<>();
+    }
+
+    /** @hide */
+    public int getShowNotificationForPackageOnKeyguard(String pkg, int uid) {
+        INotificationManager service = getService();
+        try {
+            return getService().getShowNotificationForPackageOnKeyguard(pkg, uid);
+        } catch (RemoteException e) {
+            return Notification.SHOW_ALL_NOTI_ON_KEYGUARD;
+        }
     }
 
     private Context mContext;
