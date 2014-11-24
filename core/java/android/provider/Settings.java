@@ -2884,6 +2884,12 @@ public final class Settings {
         public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
 
         /**
+         * Whether to wake the screen with the home key, the value is boolean.
+         * @hide
+         */
+        public static final String HOME_WAKE_SCREEN = "home_wake_screen";
+
+        /**
          * Action to perform when the menu key is pressed. (Default is 1)
          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
          * @hide
