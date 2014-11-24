@@ -1,6 +1,10 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+ifneq ($(BOARD_USB_MTP_DEVICE),)
+	LOCAL_CFLAGS += -DUSB_MTP_DEVICE=$(BOARD_USB_MTP_DEVICE)
+endif
+
 LOCAL_SRC_FILES:= \
     android_media_ImageReader.cpp \
     android_media_MediaCrypto.cpp \
