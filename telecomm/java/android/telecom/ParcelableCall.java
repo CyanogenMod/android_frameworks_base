@@ -278,7 +278,6 @@ public final class ParcelableCall implements Parcelable {
             Bundle extras = source.readParcelable(classLoader);
             int notificationType = source.readInt();
             int code = source.readInt();
-            boolean isActiveSub = (source.readInt() == 1) ? true : false;
             int callSubstate = source.readInt();
             boolean isActiveSub = source.readInt() == 1;
             return new ParcelableCall(
@@ -302,11 +301,8 @@ public final class ParcelableCall implements Parcelable {
                     videoState,
                     conferenceableCallIds,
                     extras,
-                    notificationType,
-                    code,
                     isActiveSub,
-                    callSubstate,
-                    isActiveSub);
+                    callSubstate);
         }
 
         @Override

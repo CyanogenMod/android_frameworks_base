@@ -63,8 +63,7 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_SET_CALL_SUBSTATE = 23;
     private static final int MSG_SET_EXTRAS = 24;
     private static final int MSG_ADD_EXISTING_CONNECTION = 25;
-    private static final int MSG_SET_PHONE_ACCOUNT = 21;
-    private static final int MSG_SET_CALL_PROPERTIES = 22;
+    private static final int MSG_SET_CALL_PROPERTIES = 26;
 
     private final IConnectionServiceAdapter mDelegate;
 
