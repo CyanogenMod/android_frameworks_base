@@ -511,6 +511,14 @@ final class ProcessList {
                 : (first
                         ? sFirstAwakePssTimes
                         : sSameAwakePssTimes);
+
+        // handle an invalid state scenario
+        if ((procState < 0) || (procState >= table.length)) {
+            Slog.w(ActivityManagerService.TAG,
+                    "Invalid Process State within computeNextPssTime");
+            return now + PSS_MIN_TIME_FROM_STATE_CHANGE;
+        }
+
         return now + table[procState];
     }
 
