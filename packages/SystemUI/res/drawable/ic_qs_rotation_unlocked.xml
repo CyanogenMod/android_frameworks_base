@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2014 The Android Open Source Project
+    Copyright (C) 2014 The Android Open Source Project
 
-   Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
@@ -13,12 +14,22 @@ Copyright (C) 2014 The Android Open Source Project
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="64dp"
-        android:height="64dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M16.600000,2.500000c3.300000,1.500000 5.600000,4.700000 6.000000,8.500000l1.500000,0.000000c-0.600000,-6.200000 -5.700000,-11.000000 -12.000000,-11.000000c-0.200000,0.000000 -0.400000,0.000000 -0.700000,0.000000l3.800000,3.800000L16.600000,2.500000zM10.300000,1.700000c-0.600000,-0.600000 -1.500000,-0.600000 -2.100000,0.000000L1.800000,8.100000c-0.600000,0.600000 -0.600000,1.500000 0.000000,2.100000l12.000000,12.000000c0.600000,0.600000 1.500000,0.600000 2.100000,0.000000l6.400000,-6.400000c0.600000,-0.600000 0.600000,-1.500000 0.000000,-2.100000L10.300000,1.700000zM13.400000,19.700001l-9.200000,-9.200000l6.400000,-6.400000l9.200000,9.200000L13.400000,19.700001zM7.600000,21.500000C4.300000,20.000000 2.000000,16.799999 1.600000,13.000000L0.200000,13.000000c0.500000,6.200000 5.600000,11.000000 11.900000,11.000000c0.200000,0.000000 0.400000,0.000000 0.700000,0.000000L9.000000,20.200001L7.600000,21.500000z"/>
-</vector>
+<animation-list
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:oneshot="true">
+    <item android:drawable="@drawable/ic_qs_rotation_15" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_14" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_13" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_12" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_11" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_10" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_09" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_08" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_07" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_06" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_05" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_04" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_03" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_02" android:duration="16" />
+    <item android:drawable="@drawable/ic_qs_rotation_01" android:duration="16" />
+</animation-list>
