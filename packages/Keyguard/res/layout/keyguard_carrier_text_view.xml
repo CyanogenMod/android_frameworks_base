@@ -44,7 +44,7 @@
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorSecondary"
-        android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+        android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 
     <TextView
@@ -61,7 +61,7 @@
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorSecondary"
-        android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+        android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 
     <TextView
@@ -69,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="gone" />
 
     <TextView
@@ -85,7 +86,7 @@
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorSecondary"
-        android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+        android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 
     <TextView
@@ -93,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="gone" />
 
     <TextView
@@ -109,6 +111,6 @@
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorSecondary"
-        android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+        android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 </merge>

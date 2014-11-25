@@ -17,11 +17,13 @@
 package com.android.keyguard;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.text.method.SingleLineTransformationMethod;
 import android.text.TextUtils;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,6 +162,21 @@ public class CarrierText extends LinearLayout {
             updateCarrierView.setText(text != null ? text.toString() : null);
         }
     }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        final int[] carrierTextViewId = { R.id.airplane_mode, R.id.carrier1, R.id.carrier2,
+                R.id.carrier3, R.id.carrier_divider1, R.id.carrier_divider2 };
+        for (int i = 0; i < carrierTextViewId.length; i++) {
+            TextView carrierTextView = (TextView)findViewById(carrierTextViewId[i]);
+            if (carrierTextView != null) {
+                carrierTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimensionPixelSize(
+                                com.android.internal.R.dimen.text_size_small_material));
+           }
+       }
+   }
 
     @Override
     protected void onFinishInflate() {
