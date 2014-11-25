@@ -2191,7 +2191,7 @@ public class MediaPlayer implements SubtitleController.Listener
 
         Context context = ActivityThread.currentApplication();
         // A MediaPlayer created by a VideoView should already have its mSubtitleController set.
-        if (mSubtitleController == null) {
+        if (mSubtitleController == null && mSurfaceHolder != null) {
             mSubtitleController = new SubtitleController(context, mTimeProvider, this);
             mSubtitleController.setAnchor(new Anchor() {
                 @Override
@@ -2205,63 +2205,80 @@ public class MediaPlayer implements SubtitleController.Listener
             });
         }
 
-        if (!mSubtitleController.hasRendererFor(fFormat)) {
-            // test and add not atomic
-            mSubtitleController.registerRenderer(new SRTRenderer(context, mEventHandler));
+        if (mSubtitleController != null) {
+            if (!mSubtitleController.hasRendererFor(fFormat)) {
+                // test and add not atomic
+                mSubtitleController.registerRenderer(new SRTRenderer(context, mEventHandler));
+            }
+            final SubtitleTrack track = mSubtitleController.addTrack(fFormat);
+            mOutOfBandSubtitleTracks.add(track);
+
+            final FileDescriptor fd3 = fd2;
+            final long offset2 = offset;
+            final long length2 = length;
+            final HandlerThread thread = new HandlerThread(
+                    "TimedTextReadThread",
+                    Process.THREAD_PRIORITY_BACKGROUND + Process.THREAD_PRIORITY_MORE_FAVORABLE);
+            thread.start();
+            Handler handler = new Handler(thread.getLooper());
+            handler.post(new Runnable() {
+                private int addTrack() {
+                    InputStream is = null;
+                    final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    try {
+                        Libcore.os.lseek(fd3, offset2, OsConstants.SEEK_SET);
+                        byte[] buffer = new byte[4096];
+                        for (long total = 0; total < length2; ) {
+                            int bytesToRead = (int) Math.min(buffer.length, length2 - total);
+                            int bytes = IoBridge.read(fd3, buffer, 0, bytesToRead);
+                            if (bytes < 0) {
+                                break;
+                            } else {
+                                bos.write(buffer, 0, bytes);
+                                total += bytes;
+                            }
+                        }
+                        track.onData(bos.toByteArray(), true /* eos */, ~0 /* runID: keep forever */);
+                        return MEDIA_INFO_EXTERNAL_METADATA_UPDATE;
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage(), e);
+                        return MEDIA_INFO_TIMED_TEXT_ERROR;
+                    } finally {
+                        if (is != null) {
+                            try {
+                                is.close();
+                            } catch (IOException e) {
+                                Log.e(TAG, e.getMessage(), e);
+                            }
+                        }
+                    }
+                }
+
+                public void run() {
+                    int res = addTrack();
+                    if (mEventHandler != null) {
+                        Message m = mEventHandler.obtainMessage(MEDIA_INFO, res, 0, null);
+                        mEventHandler.sendMessage(m);
+                    }
+                    thread.getLooper().quitSafely();
+                }
+            });
+        } else {
+            Parcel request = Parcel.obtain();
+            Parcel reply = Parcel.obtain();
+            try {
+                request.writeInterfaceToken(IMEDIA_PLAYER);
+                request.writeInt(INVOKE_ID_ADD_EXTERNAL_SOURCE_FD);
+                request.writeFileDescriptor(fd);
+                request.writeLong(offset);
+                request.writeLong(length);
+                request.writeString(mime);
+                invoke(request, reply);
+            } finally {
+                request.recycle();
+                reply.recycle();
+            }
         }
-        final SubtitleTrack track = mSubtitleController.addTrack(fFormat);
-        mOutOfBandSubtitleTracks.add(track);
-
-        final FileDescriptor fd3 = fd2;
-        final long offset2 = offset;
-        final long length2 = length;
-        final HandlerThread thread = new HandlerThread(
-                "TimedTextReadThread",
-                Process.THREAD_PRIORITY_BACKGROUND + Process.THREAD_PRIORITY_MORE_FAVORABLE);
-        thread.start();
-        Handler handler = new Handler(thread.getLooper());
-        handler.post(new Runnable() {
-            private int addTrack() {
-                InputStream is = null;
-                final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                try {
-                    Libcore.os.lseek(fd3, offset2, OsConstants.SEEK_SET);
-                    byte[] buffer = new byte[4096];
-                    for (long total = 0; total < length2;) {
-                        int bytesToRead = (int) Math.min(buffer.length, length2 - total);
-                        int bytes = IoBridge.read(fd3, buffer, 0, bytesToRead);
-                        if (bytes < 0) {
-                            break;
-                        } else {
-                            bos.write(buffer, 0, bytes);
-                            total += bytes;
-                        }
-                    }
-                    track.onData(bos.toByteArray(), true /* eos */, ~0 /* runID: keep forever */);
-                    return MEDIA_INFO_EXTERNAL_METADATA_UPDATE;
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage(), e);
-                    return MEDIA_INFO_TIMED_TEXT_ERROR;
-                } finally {
-                    if (is != null) {
-                        try {
-                            is.close();
-                        } catch (IOException e) {
-                            Log.e(TAG, e.getMessage(), e);
-                        }
-                    }
-                }
-            }
-
-            public void run() {
-                int res = addTrack();
-                if (mEventHandler != null) {
-                    Message m = mEventHandler.obtainMessage(MEDIA_INFO, res, 0, null);
-                    mEventHandler.sendMessage(m);
-                }
-                thread.getLooper().quitSafely();
-            }
-        });
     }
 
     /**
