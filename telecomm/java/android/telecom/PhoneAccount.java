@@ -95,6 +95,15 @@ public class PhoneAccount implements Parcelable {
     public static final int CAPABILITY_PLACE_EMERGENCY_CALLS = 0x10;
 
     /**
+     * Flag indicating that this {@code PhoneAccount} is capable of being used by all users. This
+     * should only be used by system apps (and will be ignored for all other apps trying to use it).
+     * <p>
+     * See {@link #getCapabilities}
+     * @hide
+     */
+    public static final int CAPABILITY_MULTI_USER = 0x20;
+
+    /**
      * URI scheme for telephone number URIs.
      */
     public static final String SCHEME_TEL = "tel";
@@ -184,6 +193,18 @@ public class PhoneAccount implements Parcelable {
             mSupportedUriSchemes.addAll(phoneAccount.getSupportedUriSchemes());
         }
 
+        /** @hide */
+        public Builder setAccountHandle(PhoneAccountHandle accountHandle) {
+            mAccountHandle = accountHandle;
+            return this;
+        }
+
+        /**
+         * Sets the address. See {@link PhoneAccount#getAddress}.
+         *
+         * @param value The address of the phone account.
+         * @return The builder.
+         */
         public Builder setAddress(Uri value) {
             this.mAddress = value;
             return this;
