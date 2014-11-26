@@ -124,7 +124,9 @@ org_codeaurora_performance_native_perf_lock_acq(JNIEnv *env, jobject clazz, jint
     if (perf_lock_acq == NULL) {
         org_codeaurora_performance_native_init();
     }
-    ret = (*perf_lock_acq)(handle, duration, buf, listlen);
+    if (perf_lock_acq) {
+        ret = (*perf_lock_acq)(handle, duration, buf, listlen);
+    }
     pthread_mutex_unlock(&dl_mutex);
     return ret;
 }
@@ -137,7 +139,9 @@ org_codeaurora_performance_native_perf_lock_rel(JNIEnv *env, jobject clazz, jint
     if (perf_lock_rel == NULL) {
         org_codeaurora_performance_native_init();
     }
-    ret = (*perf_lock_rel)(handle);
+    if (perf_lock_rel) {
+        ret = (*perf_lock_rel)(handle);
+    }
     pthread_mutex_unlock(&dl_mutex);
     return ret;
 }
