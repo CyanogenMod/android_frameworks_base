@@ -2564,8 +2564,6 @@
 
     <!-- Shown in the lock screen when there is emergency calls only mode. -->
     <string name="emergency_calls_only" msgid="2485604591272668370">Emergency calls only</string>
-    <!-- Shown in the lock screen when there is SIM card IO error. -->
-    <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
 
     <!-- When the user inserts a sim card from an unsupported network, it becomes network
          locked -->
@@ -2585,9 +2583,6 @@
          whether it is valid, and to unlock the sim if it is valid.  we display a
          progress dialog in the meantime.  this is the emssage. -->
     <string name="lockscreen_sim_unlock_progress_dialog_message">Unlocking SIM card\u2026</string>
-
-    <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
-    <string name="lockscreen_airplane_mode_on">Airplane Mode</string>
 
     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts at
          drawing the unlock pattern -->
@@ -3759,8 +3754,6 @@
     <string name="usb_mtp_notification_title">Connected as a media device</string>
     <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in PTP mode.  This is the title -->
     <string name="usb_ptp_notification_title">Connected as a camera</string>
-    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
-    <string name="usb_charging_notification_title">Connected in charging mode</string>
     <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
     <string name="usb_cd_installer_notification_title">Connected as an installer</string>
     <!-- USB_PREFERENCES: Notification for when a USB accessory is attached.  This is the title -->
@@ -4038,9 +4031,6 @@
     <!-- Shown when the device is tethered -->
     <string name="tethered_notification_title">Tethering or hotspot active</string>
     <string name="tethered_notification_message">Touch to set up.</string>
-    <string name="tethered_notification_no_device_message">No connected device</string>
-    <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connected device</string>
-    <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connected devices</string>
 
     <!--  Strings for possible PreferenceActivity Back/Next buttons -->
     <string name="back_button_label">Back</string>
@@ -4072,8 +4062,6 @@
     <string name="progress_unmounting" product="nosdcard">Unmounting USB storage\u2026</string>
     <!-- Text for progress dialog while unmounting SD card [CHAR LIMIT=NONE] -->
     <string name="progress_unmounting" product="default">Unmounting SD card\u2026</string>
-    <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
-    <string name="progress_nomediapresent" product="default">No removable media present\u2026</string>
     <!-- Text for progress dialog while erasing USB storage volume [CHAR LIMIT=NONE] -->
     <string name="progress_erasing" product="nosdcard">Erasing USB storage\u2026</string>
     <!-- Text for progress dialog while erasing SD card [CHAR LIMIT=NONE] -->
@@ -4250,9 +4238,6 @@
 
     <!-- Storage description for USB storage. [CHAR LIMIT=NONE] -->
     <string name="storage_usb">USB storage</string>
-
-    <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
-    <string name="storage_uicc">UICC storage</string>
 
     <!-- Button text for the edit menu in input method extract mode. [CHAR LIMIT=16] -->
     <string name="extract_edit_menu_button">Edit</string>
@@ -4901,29 +4886,4 @@
 
     <!-- Zen mode condition: no exit criteria. [CHAR LIMIT=NONE] -->
     <string name="zen_mode_forever">Indefinitely</string>
-
-    <!-- Displayed when the USSD/SS request is modified by STK CC to a
-    different request. This will be displayed in a toast. -->
-    <string name="stk_cc_ussd_to_dial">USSD request is modified to DIAL request.</string>
-    <string name="stk_cc_ussd_to_ss">USSD request is modified to SS request.</string>
-    <string name="stk_cc_ussd_to_ussd">USSD request is modified to new USSD request.</string>
-    <string name="stk_cc_ss_to_dial">SS request is modified to DIAL request.</string>
-    <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
-    <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
-
-    <!-- Carrier Name -->
-    <string name="China_Mobile">China Mobile</string>
-    <string name="China_Unicom">China Unicom</string>
-    <string name="China_Telecom">China Telecom</string>
-
-    <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
-    <string name="permission_remember_choice">Remember</string>
-    <string name="permission">Permission</string>
-
-    <!-- Default wi-fi hotspot ssid -->
-    <string name="def_wifi_wifihotspot_ssid" translatable="false"></string>
-    <!-- Default wi-fi hotspot pass -->
-    <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
-    <!-- Default wi-fi direct name -->
-    <string name="def_wifi_direct_name" translatable="false"></string>
 </resources>
