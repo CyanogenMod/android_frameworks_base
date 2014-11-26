@@ -30,4 +30,32 @@
     <string name="advanced_dev_option_force_stop">Force stop</string>
     <string name="advanced_dev_option_uninstall">Uninstall</string>
 
+    <!-- Content description of the mobile data tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_data_off">Mobile data off.</string>
+    <!-- Content description of the mobile data tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_data_on">Mobile data on.</string>
+    <!-- Content description of the roaming tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_roaming_off">Roaming off.</string>
+    <!-- Content description of the roaming tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_roaming_on">Roaming on.</string>
+
+    <!-- QuickSettings: Mobile data [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_mobile_data_label">Mobile data</string>
+    <!-- QuickSettings: Roaming [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_roaming_label">Roaming</string>
+
+    <!-- QuickSettings: Apn switch button label [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_apn_switch_label">APN switch</string>
+
+    <!-- QuickSettings: Dds [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_dds_sub">Card <xliff:g id="number">%d</xliff:g> data</string>
+    <string name="quick_settings_data_off">Data off</string>
+
+    <!-- Task Manager -->
+    <string name="tasklistview_title">Task Manager</string>
+    <string name="message_switch_fail">Can not switch to this task, because it has no interface.</string>
+    <string name="tasklist_killall">Kill All</string>
+    <string name="tasklist_memory_usage">"Free/Total Memory: [<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
+    <string name="message_keep_one_launcher">Should keep at lease one home activity!</string>
+
 </resources>
