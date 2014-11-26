@@ -3718,6 +3718,7 @@ class BackupManagerService extends IBackupManager.Stub {
                             if (MORE_DEBUG) {
                                 Slog.w(TAG, "Dropping invalid path " + info.path);
                             }
+                            result = RESULT_UNKNOWN_ERROR;
                             okay = false;
                         }
 
@@ -3902,7 +3903,7 @@ class BackupManagerService extends IBackupManager.Stub {
                 result = RESULT_UNKNOWN_ERROR;
             }
 
-            return result;
+            return (info == null) ? result : CONTINUE_RESTORE;
         }
 
         void setUpPipes() throws IOException {
