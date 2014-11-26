@@ -31,4 +31,6 @@
     <bool name="allow_stacked_button_bar">false</bool>
     <!-- Whether to enable softap extention feature -->
     <bool name="config_softap_extention">true</bool>
+    <!-- Whether to enable auto connection feature -->
+    <bool name="wifi_autocon">false</bool>
 </resources>

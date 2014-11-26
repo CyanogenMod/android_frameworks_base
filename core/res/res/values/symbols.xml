@@ -2357,4 +2357,6 @@
   <java-symbol type="integer" name="ascrollboost_timeout" />
   <java-symbol type="array" name="ascrollboost_param_value" />
 
+  <!-- for wifi auto connection -->
+  <java-symbol type="bool" name="wifi_autocon" />
 </resources>
