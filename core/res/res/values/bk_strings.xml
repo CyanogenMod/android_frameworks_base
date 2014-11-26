@@ -79,10 +79,4 @@
     <string name="permlab_fakePackageSignature">mimic package signature</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Allows the app to use mimic another app\'s package signature.</string>
-
-    <!-- Floating Window -->
-    <string name="floating_window_snap_top">Snap top</string>
-    <string name="floating_window_snap_bottom">Snap bottom</string>
-    <string name="floating_window_snap_left">Snap left</string>
-    <string name="floating_window_snap_right">Snap right</string>
 </resources>

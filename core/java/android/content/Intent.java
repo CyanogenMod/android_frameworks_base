@@ -731,20 +731,6 @@ public class Intent implements Parcelable, Cloneable {
     public static final String TOGGLE_GESTURE_ACTIONS = "vanir.TOGGLE_GESTURE_PANEL";
 
     /**
-     * Registered and foreground services only
-     * @hide
-     */
-    public static final String ACTION_ACTIVITY_LAUNCH_DETECTOR =
-            "android.intent.action.ACTIVITY_LAUNCH_DETECTOR";
-
-    /**
-     * Registered and foreground services only
-     * @hide
-     */
-    public static final String ACTION_ACTIVITY_END_DETECTOR =
-        "android.intent.action.ACTIVITY_END_DETECTOR";
-
-    /**
      * Represents a shortcut/live folder icon resource.
      *
      * @see Intent#ACTION_CREATE_SHORTCUT
@@ -3719,15 +3705,14 @@ public class Intent implements Parcelable, Cloneable {
      * in mutil window scenarios.
      * @hide
      */
-    public static final int FLAG_FLOATING_WINDOW = 0x00000200;
-
+    public static final int FLAG_FLOATING_WINDOW = 0x00002000;
     /**
      * If set in an Intent passed to {@link Context#startActivity Context.startActivity()},
      * this flag will cause a newly launching task to be resized according to the split
      * view metrics, making it running alongside another app.
      * @hide
      */
-    public static final int FLAG_ACTIVITY_SPLIT_VIEW = 0x00000100;
+    public static final int FLAG_ACTIVITY_SPLIT_VIEW = 0x00001000;
 
     /**
      * If set, when sending a broadcast only registered receivers will be

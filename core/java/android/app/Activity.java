@@ -19,10 +19,8 @@ package android.app;
 import android.util.ArrayMap;
 import android.util.SuperNotCalledException;
 import com.android.internal.app.ActionBarImpl;
-import com.android.internal.widget.FloatingWindowView;
 import com.android.internal.policy.PolicyManager;
 
-import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -80,7 +78,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
@@ -91,7 +88,6 @@ import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -675,9 +671,6 @@ public class Activity extends ContextThemeWrapper
     private static final String SAVED_DIALOG_KEY_PREFIX = "android:dialog_";
     private static final String SAVED_DIALOG_ARGS_KEY_PREFIX = "android:dialog_args_";
 
-    private static final String SAVED_WINDOW_LAYOUT_IDS_KEY = "android:savedWindowLayoutIds";
-    private static final String SAVED_WINDOW_LAYOUT_TAG = "android:savedWindowLayout";
-
     private static class ManagedDialog {
         Dialog mDialog;
         Bundle mArgs;
@@ -719,9 +712,8 @@ public class Activity extends ContextThemeWrapper
         ArrayList<Fragment> fragments;
         ArrayMap<String, LoaderManagerImpl> loaders;
     }
-
     /* package */ NonConfigurationInstances mLastNonConfigurationInstances;
-
+    
     private Window mWindow;
 
     private WindowManager mWindowManager;
@@ -743,10 +735,10 @@ public class Activity extends ContextThemeWrapper
             return Activity.this.findViewById(id);
         }
     };
-
+    
     ArrayMap<String, LoaderManagerImpl> mAllLoaderManagers;
     LoaderManagerImpl mLoaderManager;
-
+    
     private static final class ManagedCursor {
         ManagedCursor(Cursor cursor) {
             mCursor = cursor;
@@ -758,7 +750,6 @@ public class Activity extends ContextThemeWrapper
         private boolean mReleased;
         private boolean mUpdated;
     }
-
     private final ArrayList<ManagedCursor> mManagedCursors =
         new ArrayList<ManagedCursor>();
 
@@ -783,49 +774,6 @@ public class Activity extends ContextThemeWrapper
 
     private Rect mOriginalBounds;
     private boolean mIsSplitView;
-
-    private final int UNKNOWN = -10000;
-    private final int SNAP_NONE = 0;
-    private final int SNAP_LEFT = 1;
-    private final int SNAP_TOP = 2;
-    private final int SNAP_RIGHT = 3;
-    private final int SNAP_BOTTOM = 4;
-    private final int MOVE_MAX_RANGE = 10;
-
-    private Runnable mRunnable;
-    private Runnable mLayoutRunnable;
-    private int mRange = 100;
-    private int mSensitivity = 50;
-    private int mSnap = SNAP_NONE;
-    private int[] mSnapParam = new int[3]; // w,h,g
-    private int[] mOldParam = new int[2]; // w,h
-    private boolean mSnapped;
-    private int[] mOldLayout;
-    private int[] mLastLayout;
-    private boolean mTimeoutRunning;
-    private boolean mTimeoutDone;
-    private boolean mRestorePosition;
-    private boolean mChangedPreviousRange;
-    private float[] mPreviousRange = new float[2];
-
-    private Float screenX;
-    private Float screenY;
-    private Float viewX;
-    private Float viewY;
-    private Float leftFromScreen;
-    private Float topFromScreen;
-    private int mCurrentScreenHeight;
-    private int mCurrentScreenWidth;
-    private int mPreviousOrientation;
-    private int mAppMinimumWidth;
-    private int mAppMinimumHeight;
-    private int mAppFloatViewWidth;
-    private int mAppFloatViewHeight;
-    private boolean mChangedFlags = false;
-    private boolean isAlreadyAttachToWindow = false;
-    private boolean mIsFullscreenApp = false;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private FloatingWindowView mFloatingWindowView;
 
     /** Return the intent that started this activity. */
     public Intent getIntent() {
@@ -855,7 +803,7 @@ public class Activity extends ContextThemeWrapper
     public final boolean isChild() {
         return mParent != null;
     }
-
+    
     /** Return the parent activity if this view is an embedded child. */
     public final Activity getParent() {
         return mParent;
@@ -905,7 +853,7 @@ public class Activity extends ContextThemeWrapper
         }
         return lm;
     }
-
+    
     /**
      * Calls {@link android.view.Window#getCurrentFocus} on the
      * Window of this Activity to return the currently focused view.
@@ -965,10 +913,6 @@ public class Activity extends ContextThemeWrapper
         mFragments.dispatchCreate();
         getApplication().dispatchActivityCreated(this, savedInstanceState);
         mCalled = true;
-        mPreviousOrientation = getResources().getConfiguration().orientation;
-        sendAppLaunchBroadcast();
-        mScaleGestureDetector = new ScaleGestureDetector(getApplicationContext(), mScaleGestureListener);
-        mScaleGestureDetector.setQuickScaleEnabled(false);
     }
 
     /**
@@ -982,7 +926,6 @@ public class Activity extends ContextThemeWrapper
     final void performRestoreInstanceState(Bundle savedInstanceState) {
         onRestoreInstanceState(savedInstanceState);
         restoreManagedDialogs(savedInstanceState);
-        restoreManagedWindowLayout(savedInstanceState);
     }
 
     /**
@@ -1013,55 +956,7 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
-
-    private void restoreManagedWindowLayout(Bundle savedInstanceState) {
-        final Bundle b = savedInstanceState.getBundle(SAVED_WINDOW_LAYOUT_TAG);
-        if (b == null) {
-            return;
-        }
-
-        if (mWindow == null) {
-            return;
-        }
-
-        if (!mWindow.mIsFloatingWindow) {
-            return;
-        }
-
-        final int[] ids = b.getIntArray(SAVED_WINDOW_LAYOUT_IDS_KEY);
-        final int x = ids[0];
-        final int y = ids[1];
-        final int width = ids[2];
-        final int height = ids[3];
-        mSnap = ids[4];
-        WindowManager.LayoutParams params = mWindow.getAttributes();
-        params.x = x;
-        params.y = y;
-        switch (mSnap) {
-              case SNAP_LEFT:
-                   params.width = (mCurrentScreenWidth / 2);
-                   params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                   break;
-              case SNAP_RIGHT:
-                   params.width = (mCurrentScreenWidth / 2);
-                   params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                   break;
-              case SNAP_TOP:
-                   params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                   params.height = (mCurrentScreenHeight / 2);
-                   break;
-              case SNAP_BOTTOM:
-                   params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                   params.height = (mCurrentScreenHeight / 2);
-                   break;
-              case SNAP_NONE:
-                   params.width = width;
-                   params.height = height;
-                   break;
-        }
-        mWindow.setAttributes(params);
-    }
-
+    
     /**
      * Restore the state of any saved managed dialogs.
      *
@@ -1149,7 +1044,6 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onStart() {
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onStart " + this);
-        setupFloatingActionBar(false);
         mCalled = true;
         
         if (!mLoadersStarted) {
@@ -1163,40 +1057,6 @@ public class Activity extends ContextThemeWrapper
         }
 
         getApplication().dispatchActivityStarted(this);
-    }
-
-    private void setupFloatingActionBar(boolean reload) {
-        if (mWindow == null) {
-            return;
-        }
-
-        if (!mWindow.mIsFloatingWindow) {
-            return;
-        }
-
-        if (mWindow.peekDecorView() == null) {
-            return;
-        }
-
-        FrameLayout decorFloatingView = (FrameLayout) mWindow.peekDecorView().getRootView();
-        if (decorFloatingView == null) {
-            return;
-        }
-        if (!reload) {
-            decorFloatingView.setFitsSystemWindows(true);
-            mFloatingWindowView = new FloatingWindowView(this, getActionBarHeight(true));
-            decorFloatingView.addView(mFloatingWindowView, -1, FloatingWindowView.getParams());
-            decorFloatingView.setTagInternal(android.R.id.extractArea, mFloatingWindowView);
-        } else {
-            mFloatingWindowView = (FloatingWindowView) decorFloatingView.getTag(android.R.id.extractArea);
-            decorFloatingView.bringChildToFront(mFloatingWindowView);
-        }
-        if (mActionBar != null) {
-            mActionBar.setFloatingWindowBar(mFloatingWindowView);
-            if (reload && mActionBar.isShowing()) {
-                mActionBar.changeColorFromActionBar();
-            }
-        }
     }
 
     /**
@@ -1245,7 +1105,6 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onResume() {
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onResume " + this);
-        setupFloatingActionBar(true);
         getApplication().dispatchActivityResumed(this);
         mCalled = true;
     }
@@ -1305,7 +1164,6 @@ public class Activity extends ContextThemeWrapper
     final void performSaveInstanceState(Bundle outState) {
         onSaveInstanceState(outState);
         saveManagedDialogs(outState);
-        saveManagedWindowLayout(outState);
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onSaveInstanceState " + this + ": " + outState);
     }
 
@@ -1398,28 +1256,6 @@ public class Activity extends ContextThemeWrapper
     }
 
 
-    private void saveManagedWindowLayout(Bundle outState) {
-        if (mWindow == null) {
-            return;
-        }
-
-        if (!mWindow.mIsFloatingWindow) {
-            return;
-        }
-
-        Bundle windowLayoutState = new Bundle();
-
-        int[] ids = new int[5];
-        WindowManager.LayoutParams params = mWindow.getAttributes();
-        ids[0] = params.x;
-        ids[1] = params.y;
-        ids[2] = params.width;
-        ids[3] = params.height;
-        ids[4] = mSnap;
-        windowLayoutState.putIntArray(SAVED_WINDOW_LAYOUT_IDS_KEY, ids);
-        outState.putBundle(SAVED_WINDOW_LAYOUT_TAG, windowLayoutState);
-    }
-
     /**
      * Called as part of the activity lifecycle when an activity is going into
      * the background, but has not (yet) been killed.  The counterpart to
@@ -1481,23 +1317,23 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onUserLeaveHint() {
     }
-
+    
     /**
      * Generate a new thumbnail for this activity.  This method is called before
      * pausing the activity, and should draw into <var>outBitmap</var> the
      * imagery for the desired thumbnail in the dimensions of that bitmap.  It
      * can use the given <var>canvas</var>, which is configured to draw into the
      * bitmap, for rendering if desired.
-     *
+     * 
      * <p>The default implementation returns fails and does not draw a thumbnail;
      * this will result in the platform creating its own thumbnail if needed.
-     *
+     * 
      * @param outBitmap The bitmap to contain the thumbnail.
      * @param canvas Can be used to render into the bitmap.
-     *
+     * 
      * @return Return true if you have drawn into the bitmap; otherwise after
      *         you return it will be filled with a default thumbnail.
-     *
+     * 
      * @see #onCreateDescription
      * @see #onSaveInstanceState
      * @see #onPause
@@ -1510,15 +1346,15 @@ public class Activity extends ContextThemeWrapper
      * Generate a new description for this activity.  This method is called
      * before pausing the activity and can, if desired, return some textual
      * description of its current state to be displayed to the user.
-     *
+     * 
      * <p>The default implementation returns null, which will cause you to
      * inherit the description from the previous activity.  If all activities
      * return null, generally the label of the top activity will be used as the
      * description.
-     *
+     * 
      * @return A description of what the user is doing.  It should be short and
      *         sweet (only a few words).
-     *
+     * 
      * @see #onCreateThumbnail
      * @see #onSaveInstanceState
      * @see #onPause
@@ -1598,7 +1434,6 @@ public class Activity extends ContextThemeWrapper
      */
     protected void onDestroy() {
         if (DEBUG_LIFECYCLE) Slog.v(TAG, "onDestroy " + this);
-        sendAppEndBroadcast();
         mCalled = true;
 
         // dismiss any dialogs we are managing.
@@ -1682,19 +1517,7 @@ public class Activity extends ContextThemeWrapper
             // Pass the configuration changed event to the window
             mWindow.onConfigurationChanged(newConfig);
             if (mWindow.mIsFloatingWindow) {
-                refreshAppLayoutSize();
-                Configuration config = getResources().getConfiguration();
-                if (config.orientation != mPreviousOrientation) {
-                    WindowManager.LayoutParams params = mWindow.getAttributes();
-                    final int old_x = params.x;
-                    final int old_y = params.y;
-                    params.x = old_y;
-                    params.y = old_x;
-                    params.width = mAppFloatViewWidth;
-                    params.height = mAppFloatViewHeight;
-                    mWindow.setAttributes(params);
-                    mPreviousOrientation = config.orientation;
-                }
+                scaleFloatingWindow(null);
             }
         }
 
@@ -1704,7 +1527,7 @@ public class Activity extends ContextThemeWrapper
             mActionBar.onConfigurationChanged(newConfig);
         }
     }
-
+    
     /**
      * If this activity is being destroyed because it can not handle a
      * configuration parameter being changed (and thus its
@@ -1714,7 +1537,7 @@ public class Activity extends ContextThemeWrapper
      * destroyed.  Note that there is no guarantee that these will be
      * accurate (other changes could have happened at any time), so you should
      * only use this as an optimization hint.
-     *
+     * 
      * @return Returns a bit field of the configuration parameters that are
      * changing, as defined by the {@link android.content.res.Configuration}
      * class.
@@ -1722,21 +1545,21 @@ public class Activity extends ContextThemeWrapper
     public int getChangingConfigurations() {
         return mConfigChangeFlags;
     }
-
+    
     /**
      * Retrieve the non-configuration instance data that was previously
      * returned by {@link #onRetainNonConfigurationInstance()}.  This will
      * be available from the initial {@link #onCreate} and
      * {@link #onStart} calls to the new instance, allowing you to extract
      * any useful dynamic state from the previous instance.
-     *
+     * 
      * <p>Note that the data you retrieve here should <em>only</em> be used
      * as an optimization for handling configuration changes.  You should always
      * be able to handle getting a null pointer back, and an activity must
      * still be able to restore itself to its previous state (through the
      * normal {@link #onSaveInstanceState(Bundle)} mechanism) even if this
      * function returns null.
-     *
+     * 
      * @return Returns the object previously returned by
      * {@link #onRetainNonConfigurationInstance()}.
      *
@@ -2341,7 +2164,7 @@ public class Activity extends ContextThemeWrapper
                     case DEFAULT_KEYS_DIALER:
                         Intent intent = new Intent(Intent.ACTION_DIAL,  Uri.parse("tel:" + str));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        startActivity(intent);    
                         break;
                     case DEFAULT_KEYS_SEARCH_LOCAL:
                         startSearch(str, false, null, false);
@@ -2518,7 +2341,7 @@ public class Activity extends ContextThemeWrapper
      */
     public void onUserInteraction() {
     }
-
+    
     public void onWindowAttributesChanged(WindowManager.LayoutParams params) {
         // Update window manager if: we have a view, that view is
         // attached to its parent (which will be a RootView), and
@@ -2655,49 +2478,50 @@ public class Activity extends ContextThemeWrapper
      * @return boolean Return true if this event was consumed.
      */
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (mWindow.mIsFloatingWindow) {
-            if (isUnSnap()) {
-                mScaleGestureDetector.onTouchEvent(ev);
-            }
-            int actionBarHeight = getActionBarHeight(false);
-            switch (ev.getAction()) {
-                  case MotionEvent.ACTION_DOWN:
-                       setTouchViewDown(ev.getX(), ev.getY());
-                       onUserInteraction();
-                       updateFocusApp();
-                       if (viewY < actionBarHeight) {
-                           if (!mChangedPreviousRange) {
-                               setPreviousTouchRange(ev.getRawX(), ev.getRawY());
-                               mChangedPreviousRange = true;
-                           }
-                       }
-                       break;
-                  case MotionEvent.ACTION_MOVE:
-                       if (viewY < actionBarHeight) {
-                           changeFlagsLayoutParams();
-                           setTouchViewMove(ev.getRawX(), ev.getRawY());
-                           if (mRestorePosition && moveRangeAboveLimit(ev)) {
-                               restoreOldPosition();
-                           }
-                           showSnap((int) ev.getRawX(), (int) ev.getRawY());
-                       }
-                       break;
-                  case MotionEvent.ACTION_UP:
-                       if (viewY < actionBarHeight) {
-                           mChangedFlags = false;
-                           finishSnap(isValidSnap() && mTimeoutDone);
-                           discardTimeout();
-                           mChangedPreviousRange = false;
-                       }
-                       break;
-             }
-        } else {
-             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-                 onUserInteraction();
-             }
+        WindowManager.LayoutParams attrs = mWindow.getAttributes();
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                onUserInteraction();
+                if (mWindow.mIsFloatingWindow) {
+                    Log.d(TAG, "Y: " + ev.getY() + " Raw: " + ev.getRawY());
+                    if (ev.getX() >= attrs.width - 50) scaleW = true;
+                    if (ev.getY() >= attrs.height - 50) scaleH = true;
+                    if (ev.getY() <= 50) move = true;
+                    if (move || scaleW || scaleH) {
+                        lastPos = new Point((int)ev.getRawX(), (int)ev.getRawY());
+                        return true;
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mWindow.mIsFloatingWindow && lastPos != null) {
+                    int x = attrs.x;
+                    int y = attrs.y;
+                    Point screenSize = new Point();
+                    mWindowManager.getDefaultDisplay().getSize(screenSize);
+                    if (move) {
+                        Log.e(TAG, "Move!");
+                        x = attrs.x + ((int)ev.getRawX() - lastPos.x);
+                        y = attrs.y + ((int)ev.getRawY() - lastPos.y);
+                    }
+                    int width = (int) (scaleW ? attrs.width + ((int)ev.getRawX() - lastPos.x) : attrs.width);
+                    int height = (int) (scaleH ? attrs.height + ((int)ev.getRawY() - lastPos.y) : attrs.height);
+                    mWindow.setLayout(Math.max(0, Math.min(x, screenSize.x - width)), Math.max(0, Math.min(y, screenSize.y - height)), 
+                            Math.min(width, screenSize.x), Math.min(height, screenSize.y));
+                    lastPos.x = (int)ev.getRawX();
+                    lastPos.y = (int)ev.getRawY();
+                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                boolean ret = scaleW || scaleH || move;
+                scaleW = scaleH = move = false;
+                lastPos = null;
+                if (ret) return true;
+                break;
         }
 
-        if (mIsSplitView && ev.getAction() == MotionEvent.ACTION_DOWN) {
+        if (mIsSplitView) {
             IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
             try {
                 wm.notifyActivityTouched(mToken, false);
@@ -2710,487 +2534,6 @@ public class Activity extends ContextThemeWrapper
         }
         return onTouchEvent(ev);
     }
-
-    /**
-     * @hide
-     */
-    public void setTouchViewDown(float x , float y) {
-        viewX = x;
-        viewY = y;
-    }
-
-    /**
-     * @hide
-     */
-    public void setPreviousTouchRange(float x , float y) {
-        mPreviousRange[0] = x;
-        mPreviousRange[1] = y;
-    }
-
-    /**
-     * @hide
-     */
-    public void setTouchViewMove(float x , float y) {
-        screenX = x;
-        screenY = y;
-        leftFromScreen = (screenX - viewX);
-        topFromScreen = (screenY - viewY);
-        initLayoutParams(leftFromScreen, topFromScreen);
-    }
-
-    /**
-     * @hide
-     */
-    public void setChangedPreviousRange(boolean needed) {
-        mChangedPreviousRange = needed;
-    }
-
-    /**
-     * @hide
-     */
-    public boolean getChangedPreviousRange() {
-        return mChangedPreviousRange;
-    }
-
-    private int getActionBarHeight(boolean smaller) {
-        ActionBar actionBar = getActionBar();
-        int actionBarHeight = (actionBar != null) ? actionBar.getHeight()
-                          : getAppDimensionPixel(smaller);
-        return (smaller ? getAppDimensionPixel(smaller) : actionBarHeight);
-    }
-
-    /**
-     * @hide
-     */
-    public void updateFocusApp() {
-        IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-        try {
-             wm.notifyFloatActivityTouched(mToken, false);
-        } catch (RemoteException e) {
-             Log.e(TAG, "Cannot notify activity touched", e);
-        }
-    }
-
-    private void initLayoutParams(float x , float y) {
-        WindowManager.LayoutParams param = mWindow.getAttributes();
-        param.x = (int) x;
-        param.y = (int) y;
-        mWindow.setAttributes(param);
-    }
-
-    /**
-     * @hide
-     */
-    public void changeFlagsLayoutParams() {
-        mWindow.setGravity(Gravity.LEFT | Gravity.TOP);
-        if (!mChangedFlags) {
-            mChangedFlags = true;
-            mWindow.setCloseOnTouchOutside(false);
-            mWindow.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-            mWindow.addFlags(WindowManager.LayoutParams.FLAG_SPLIT_TOUCH);
-            if (ActivityManager.isHighEndGfx()) {
-                mWindow.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
-            }
-        }
-    }
-
-    /**
-     * @hide
-     */
-    public void setChangedFlags(boolean changed) {
-        mChangedFlags = changed;
-    }
-
-    /**
-     * @hide
-     */
-    public boolean moveRangeAboveLimit(MotionEvent event) {
-        final float x = event.getRawX();
-        final float y = event.getRawY();
-
-        boolean returnValue = false;
-        if (Math.abs(mPreviousRange[0] - x) > MOVE_MAX_RANGE) {
-            returnValue = true;
-        } else if (Math.abs(mPreviousRange[1] - y) > MOVE_MAX_RANGE) {
-            returnValue = true;
-        }
-        return returnValue;
-    }
-
-    /**
-     * @hide
-     */
-    public void showSnap(int x, int y) {
-        initSnappable(x, y);
-        calculateSnap();
-        if (isValidSnap()) {
-            setupTimeout();
-        }
-    }
-
-    /**
-     * @hide
-     */
-    public void finishSnap(boolean apply) {
-        if (apply) {
-            if (saveOldPosition()) {
-                mRestorePosition = true;
-            }
-	    WindowManager.LayoutParams lpp = mWindow.getAttributes();
-	    lpp.width = mSnapParam[0];
-	    lpp.height = mSnapParam[1];
-	    int gravity = mSnapParam[2];
-	    lpp.x = (gravity == Gravity.RIGHT) ? (mCurrentScreenWidth / 2) : 0;
-	    lpp.y = (gravity == Gravity.BOTTOM) ? (mCurrentScreenHeight / 2) : 0;
-	    mWindow.setAttributes(lpp);
-        } else {
-	    mSnap = SNAP_NONE;
-        }
-    }
-
-    /**
-     * @hide
-     */
-    public boolean isValidSnap() {
-        return (mSnapParam[0] != UNKNOWN) &&
-                (mSnapParam[1] != UNKNOWN) &&
-                 (mSnapParam[2] != UNKNOWN);
-    }
-
-    private boolean saveOldPosition() {
-        if (mRestorePosition) return true;
-        if (mSnapped) {
-            return (isUnSnap() || mTimeoutRunning);
-        }
-        mSnapped = true;
-        final WindowManager.LayoutParams params = mWindow.getAttributes();
-        int[] layout = { params.x, params.y, params.width, params.height };
-        mOldLayout = layout;
-        return true;
-    }
-
-    private boolean isUnSnap() {
-        return (mSnap == SNAP_NONE);
-    }
-
-    /**
-     * @hide
-     */
-    public boolean restoreOldPosition() {
-        if (!mSnapped) return false;
-        restoreOldPositionWithoutRefresh();
-        return true;
-    }
-
-    private void restoreOldPositionWithoutRefresh() {
-        if (!mSnapped) return;
-        WindowManager.LayoutParams params = mWindow.getAttributes();
-        params.x = mOldLayout[0];
-        params.y = mOldLayout[1];
-        params.width = mOldLayout[2];
-        params.height = mOldLayout[3];
-        mWindow.setAttributes(params);
-        mSnapped = false;
-        mRestorePosition = false;
-    }
-
-    /**
-     * @hide
-     */
-    public boolean getRestorePosition() {
-        return mRestorePosition;
-    }
-
-    private boolean initSnappable(int x, int y) {
-        if ((Math.abs(mOldParam[0] - x) > mSensitivity) ||
-              (Math.abs(mOldParam[1] - y) > mSensitivity)) {
-            mOldParam[0] = x;
-            mOldParam[1] = y;
-            return false;
-        }
-        mOldParam[0] = x;
-        mOldParam[1] = y;
-
-        if (x < mRange) {
-            mSnap = SNAP_LEFT;
-        } else if (x > (mCurrentScreenWidth - mRange)) {
-            mSnap = SNAP_RIGHT;
-        } else if (y < mRange) {
-            mSnap = SNAP_TOP;
-        } else if (y > (mCurrentScreenHeight - mRange)) {
-            mSnap = SNAP_BOTTOM;
-        } else {
-            mSnap = SNAP_NONE;
-            return false;
-        }
-        return true;
-    }
-
-    private void refreshAppLayoutSize() {
-        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-
-        try {
-            Rect windowFloatViewBounds = wm.getFloatViewRect();
-            mAppFloatViewWidth = (windowFloatViewBounds.right - windowFloatViewBounds.left);
-            mAppFloatViewHeight = (windowFloatViewBounds.bottom - windowFloatViewBounds.top);
-
-            Rect windowCurrentScreenBounds = wm.getAppFullscreenViewRect();
-            mCurrentScreenWidth = (windowCurrentScreenBounds.right - windowCurrentScreenBounds.left);
-            mCurrentScreenHeight = (windowCurrentScreenBounds.bottom - windowCurrentScreenBounds.top);
-
-            Rect windowMinimumBounds = wm.getAppMinimumViewRect();
-            mAppMinimumWidth = (windowMinimumBounds.right - windowMinimumBounds.left);
-            mAppMinimumHeight = (windowMinimumBounds.bottom - windowMinimumBounds.top);
-
-        } catch (RemoteException e) {
-            Log.e(TAG, "Could not perform get size view layout", e);
-        }
-    }
-
-    private void refreshAppFloatViewSize() {
-        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-
-        try {
-            Rect windowBounds = wm.getFloatViewRect();
-            mAppFloatViewWidth = (windowBounds.right - windowBounds.left);
-            mAppFloatViewHeight = (windowBounds.bottom - windowBounds.top);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Could not perform float view layout", e);
-        }
-    }
-
-    private void refreshCurrentScreenSize() {
-        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-
-        try {
-            Rect windowBounds = wm.getAppFullscreenViewRect();
-            mCurrentScreenWidth = (windowBounds.right - windowBounds.left);
-            mCurrentScreenHeight = (windowBounds.bottom - windowBounds.top);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Could not perform get app fullscreen view layout", e);
-        }
-    }
-
-    /**
-     * @hide
-     */
-    public void forceSnap(int side) {
-        if (side == SNAP_NONE) {
-            restoreOldPosition();
-            return;
-        }
-        if (mSnapped) {
-            restoreOldPositionWithoutRefresh();
-        }
-        mSnap = side;
-        calculateSnap();
-        finishSnap(true);
-    }
-
-    private void calculateSnap() {
-        switch (mSnap) {
-              case SNAP_LEFT:
-                   mSnapParam[0] = (mCurrentScreenWidth / 2);
-                   mSnapParam[1] = ViewGroup.LayoutParams.MATCH_PARENT;
-                   mSnapParam[2] = Gravity.TOP | Gravity.LEFT;
-                   break;
-              case SNAP_RIGHT:
-                   mSnapParam[0] = (mCurrentScreenWidth / 2);
-                   mSnapParam[1] = ViewGroup.LayoutParams.MATCH_PARENT;
-                   mSnapParam[2] = Gravity.RIGHT;
-                   break;
-              case SNAP_TOP:
-                   mSnapParam[0] = ViewGroup.LayoutParams.MATCH_PARENT;
-                   mSnapParam[1] = (mCurrentScreenHeight / 2);
-                   mSnapParam[2] = Gravity.TOP;
-                   break;
-              case SNAP_BOTTOM:
-                   mSnapParam[0] = ViewGroup.LayoutParams.MATCH_PARENT;
-                   mSnapParam[1] = (mCurrentScreenHeight / 2);
-                   mSnapParam[2] = Gravity.BOTTOM;
-                   break;
-              case SNAP_NONE:
-                   mSnapParam[0] = UNKNOWN;
-                   mSnapParam[1] = UNKNOWN;
-                   mSnapParam[2] = UNKNOWN;
-                   break;
-        }
-    }
-
-    /**
-     * @hide
-     */
-    public boolean getTimeoutDone() {
-        return mTimeoutDone;
-    }
-
-    /**
-     * @hide
-     */
-    public void discardTimeout() {
-        mTimeoutDone = false;
-        mTimeoutRunning = false;
-        mHandler.removeCallbacks(mRunnable);
-    }
-
-    private void setupTimeout() {
-        if (mTimeoutRunning) return;
-        if (mRunnable == null) {
-            mRunnable = new Runnable() {
-                  @Override
-                  public void run() {
-                      mHandler.postDelayed(new Runnable() {
-                               @Override
-                               public void run() {
-                                   mTimeoutRunning = false;
-                                   mTimeoutDone = true;
-                               }
-                      }, 250);
-                  }
-            };
-        }
-        mTimeoutRunning = true;
-        mHandler.postDelayed(mRunnable, 750);
-    }
-
-    private int getAppDimensionPixel(boolean smaller) {
-        float scale = getResources().getDisplayMetrics().density;
-        int sized = smaller ? 32 : 48;
-        int pixel = (int) (sized * scale + 0.5f);
-        return pixel;
-    }
-
-    private void refreshAppMinimumSize() {
-        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-
-        try {
-            Rect windowBounds = wm.getAppMinimumViewRect();
-            mAppMinimumWidth = (windowBounds.right - windowBounds.left);
-            mAppMinimumHeight = (windowBounds.bottom - windowBounds.top);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Could not perform get app minimum view layout", e);
-        }
-    }
-
-    private void sendAppLaunchBroadcast() {
-        Intent appIntent = new Intent(Intent.ACTION_ACTIVITY_LAUNCH_DETECTOR);
-        appIntent.putExtra("packagename", getPackageName());
-        appIntent.addFlags(
-                Intent.FLAG_RECEIVER_REGISTERED_ONLY | Intent.FLAG_RECEIVER_FOREGROUND);
-        sendBroadcast(appIntent);
-    }
-
-    private void sendAppEndBroadcast() {
-        Intent endIntent = new Intent(Intent.ACTION_ACTIVITY_END_DETECTOR);
-        endIntent.putExtra("packagename", getPackageName());
-        endIntent.addFlags(
-                Intent.FLAG_RECEIVER_REGISTERED_ONLY | Intent.FLAG_RECEIVER_FOREGROUND);
-        sendBroadcast(endIntent);
-    }
-
-    private void setProgressLayoutApp() {
-        if (mLayoutRunnable == null) {
-            mLayoutRunnable = new Runnable() {
-                  @Override
-                  public void run() {
-                      setCurrentLayoutApp();
-                  }
-            };
-        }
-        mHandler.postDelayed(mLayoutRunnable, 500);
-    }
-
-    private void discardLayoutProgress() {
-        mHandler.removeCallbacks(mLayoutRunnable);
-    }
-
-    private void setCurrentLayoutApp() {
-        if (isUnSnap()) {
-            final WindowManager.LayoutParams params = mWindow.getAttributes();
-            final int width = params.width;
-            final int height = params.height;
-            if (width >= mCurrentScreenWidth) {
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            } else if (width <= mAppMinimumWidth) {
-                params.width = mAppMinimumWidth;
-            }
-            if (height >= mCurrentScreenHeight) {
-                params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            } else if (height <= mAppMinimumHeight) {
-                params.height = mAppMinimumHeight;
-            }
-            mWindow.setAttributes(params);
-        }
-        mHandler.removeCallbacks(mLayoutRunnable);
-    }
-
-    /**
-     * @hide
-     */
-    public void setFullscreenApp() {
-        if (mIsFullscreenApp) {
-            return;
-        }
-        WindowManager.LayoutParams params = mWindow.getAttributes();
-        int[] layout = { params.x, params.y, params.width, params.height };
-        mLastLayout = layout;
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        mWindow.setAttributes(params);
-        mIsFullscreenApp = true;
-    }
-
-    /**
-     * @hide
-     */
-    public void restorePreviousLayoutApp() {
-        if (!mIsFullscreenApp) {
-            return;
-        }
-        WindowManager.LayoutParams params = mWindow.getAttributes();
-        params.x = mLastLayout[0];
-        params.y = mLastLayout[1];
-        params.width = mLastLayout[2];
-        params.height = mLastLayout[3];
-        mWindow.setAttributes(params);
-        mIsFullscreenApp = false;
-    }
-
-    private final ScaleGestureDetector.OnScaleGestureListener mScaleGestureListener
-            = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-
-        private float lastSpanX;
-        private float lastSpanY;
-        private WindowManager.LayoutParams params;
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
-            discardLayoutProgress();
-            lastSpanX = scaleGestureDetector.getCurrentSpanX();
-            lastSpanY = scaleGestureDetector.getCurrentSpanY();
-            params = mWindow.getAttributes();
-            return true;
-        }
-
-        @Override
-        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
-            float spanX = scaleGestureDetector.getCurrentSpanX();
-            float spanY = scaleGestureDetector.getCurrentSpanY();
-            float newWidth = spanX / lastSpanX * (float) params.width;
-            float newHeight = spanY / lastSpanY * (float) params.height;
-            params.width = (int) newWidth;
-            params.height = (int) newHeight;
-            mWindow.setAttributes(params);
-            lastSpanX = spanX;
-            lastSpanY = spanY;
-            return true;
-        }
-
-        @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
-            setProgressLayoutApp();
-        }
-    };
     
     /**
      * Called to process trackball events.  You can override this to
@@ -5964,7 +5307,7 @@ public class Activity extends ContextThemeWrapper
         mWindowManager = mWindow.getWindowManager();
         mCurrentConfig = config;
 
-        if (((intent.getFlags() & Intent.FLAG_ACTIVITY_SPLIT_VIEW) != 0) && !mWindow.mIsFloatingWindow) {
+        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_SPLIT_VIEW) != 0) {
             final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
             updateSplitViewMetrics(true);
         }
@@ -5991,13 +5334,8 @@ public class Activity extends ContextThemeWrapper
             // Create our new window
             mWindow = PolicyManager.makeNewWindow(this);
             mWindow.mIsFloatingWindow = true;
-            if (!isAlreadyAttachToWindow) {
-                isAlreadyAttachToWindow = true;
-                mWindow.setCloseOnTouchOutsideIfNotSet(false);
-                mWindow.setGravity(Gravity.CENTER);
-                // Scale it
-                scaleFloatingWindow();
-            }
+            mWindow.setCloseOnTouchOutsideIfNotSet(false);
+            mWindow.setGravity(Gravity.TOP | Gravity.LEFT);
 
             //int flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
             //    mWindow.setFlags(flags, flags);
@@ -6005,17 +5343,9 @@ public class Activity extends ContextThemeWrapper
             //params.alpha = 1f;
             //mWindow.setAttributes(params);
 
-            WindowManager.LayoutParams params = mWindow.getAttributes();
-            params.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
-            if (android.os.Process.myUid() == android.os.Process.SYSTEM_UID) {
-                mWindow.setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
-                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                params.alpha = 1f;
-                params.dimAmount = 0.25f;
-            }
-            mWindow.setAttributes(params);
+            // Scale it
+            scaleFloatingWindow(context);
 
-            refreshAppLayoutSize();
             return true;
         } else {
             mWindow = PolicyManager.makeNewWindow(this);
@@ -6024,16 +5354,25 @@ public class Activity extends ContextThemeWrapper
         }
     }
 
-    private void scaleFloatingWindow() {
-        final IWindowManager wm = (IWindowManager) WindowManagerGlobal.getWindowManagerService();
-
-        try {
-            Rect windowBounds = wm.getFloatViewRect();
-            mWindow.setLayout(windowBounds.right - windowBounds.left,
-                    windowBounds.bottom - windowBounds.top);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Could not perform float view layout", e);
+    private void scaleFloatingWindow(Context context) {
+        if (!mWindow.mIsFloatingWindow) {
+            return;
         }
+        WindowManager wm = null;
+        if (context != null) {
+            wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        } else {
+            wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        }
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        boolean portrait = metrics.heightPixels > metrics.widthPixels;
+        int width = (int)(metrics.widthPixels * (portrait ? 0.9f : 0.7f));
+        int height = (int)(metrics.heightPixels * (portrait ? 0.7f : 0.9f));
+        int x = (metrics.widthPixels - width) / 2;
+        int y = (metrics.heightPixels - height) / 2;
+        mWindow.setLayout(x, y, width, height);
     }
 
     /** @hide */
@@ -6138,7 +5477,7 @@ public class Activity extends ContextThemeWrapper
                 com.android.internal.R.styleable.Window_windowNoDisplay, false);
         mFragments.dispatchActivityCreated();
     }
-
+    
     final void performStart() {
         mFragments.noteStateNotSaved();
         mCalled = false;
@@ -6163,7 +5502,7 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
-
+    
     final void performRestart() {
         mFragments.noteStateNotSaved();
         if (!mWindow.mIsFloatingWindow) {
@@ -6205,14 +5544,14 @@ public class Activity extends ContextThemeWrapper
             performStart();
         }
     }
-
+    
     final void performResume() {
         performRestart();
-
+        
         mFragments.execPendingActions();
-
+        
         mLastNonConfigurationInstances = null;
-
+        
         mCalled = false;
         // mResumed is set by the instrumentation
         mInstrumentation.callActivityOnResume(this);
@@ -6224,10 +5563,10 @@ public class Activity extends ContextThemeWrapper
 
         // Now really resume, and install the current status bar and menu.
         mCalled = false;
-
+        
         mFragments.dispatchResume();
         mFragments.execPendingActions();
-
+        
         onPostResume();
         if (!mCalled) {
             throw new SuperNotCalledException(
@@ -6250,12 +5589,12 @@ public class Activity extends ContextThemeWrapper
         }
         mResumed = false;
     }
-
+    
     final void performUserLeaving() {
         onUserInteraction();
         onUserLeaveHint();
     }
-
+    
     final void performStop() {
         mDoReportFullyDrawn = false;
         if (mLoadersStarted) {
@@ -6268,7 +5607,7 @@ public class Activity extends ContextThemeWrapper
                 }
             }
         }
-
+        
         if (!mStopped) {
             if (mWindow != null) {
                 mWindow.closeAllPanels();
@@ -6277,9 +5616,9 @@ public class Activity extends ContextThemeWrapper
             if (mToken != null && mParent == null) {
                 WindowManagerGlobal.getInstance().setStoppedState(mToken, true);
             }
-
+            
             mFragments.dispatchStop();
-
+            
             mCalled = false;
             mInstrumentation.callActivityOnStop(this);
             if (!mCalled) {
@@ -6287,7 +5626,7 @@ public class Activity extends ContextThemeWrapper
                     "Activity " + mComponent.toShortString() +
                     " did not call through to super.onStop()");
             }
-
+    
             synchronized (mManagedCursors) {
                 final int N = mManagedCursors.size();
                 for (int i=0; i<N; i++) {
@@ -6298,7 +5637,7 @@ public class Activity extends ContextThemeWrapper
                     }
                 }
             }
-
+    
             mStopped = true;
         }
         mResumed = false;
@@ -6321,7 +5660,7 @@ public class Activity extends ContextThemeWrapper
             mLoaderManager.doDestroy();
         }
     }
-
+    
     /**
      * @hide
      */
