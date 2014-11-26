@@ -435,14 +435,6 @@
     <string name="accessibility_quick_settings_airplane_changed_off">Airplane mode turned off.</string>
     <!-- Announcement made when the airplane mode changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_airplane_changed_on">Airplane mode turned on.</string>
-    <!-- Content description of the mobile data tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_data_off">Mobile data off.</string>
-    <!-- Content description of the mobile data tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_data_on">Mobile data on.</string>
-    <!-- Content description of the roaming tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_roaming_off">Roaming off.</string>
-    <!-- Content description of the roaming tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_roaming_on">Roaming on.</string>
     <!-- Content description of the bluetooth tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_bluetooth_off">Bluetooth off.</string>
     <!-- Content description of the bluetooth tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -567,10 +559,6 @@
 
     <!-- QuickSettings: Airplane mode [CHAR LIMIT=NONE] -->
     <string name="quick_settings_airplane_mode_label">Airplane mode</string>
-    <!-- QuickSettings: Mobile data [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_mobile_data_label">Mobile data</string>
-    <!-- QuickSettings: Roaming [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_roaming_label">Roaming</string>
     <!-- QuickSettings: Battery Charging [CHAR LIMIT=NONE] -->
     <string name="quick_settings_battery_charging_label">Charging, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <!-- QuickSettings: Battery Charged [CHAR LIMIT=NONE] -->
@@ -639,8 +627,6 @@
     <string name="quick_settings_brightness_dialog_title">Brightness</string>
     <!-- QuickSettings: Brightness dialog auto brightness button [CHAR LIMIT=NONE] -->
     <string name="quick_settings_brightness_dialog_auto_brightness_label">AUTO</string>
-    <!-- QuickSettings: Apn switch button label [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_apn_switch_label">APN switch</string>
     <!-- QuickSettings: Label for the toggle that controls whether display inversion is enabled. [CHAR LIMIT=NONE] -->
     <string name="quick_settings_inversion_label">Invert colors</string>
     <!-- QuickSettings: Label for the toggle that controls whether display color correction is enabled. [CHAR LIMIT=NONE] -->
@@ -675,9 +661,6 @@
     <string name="quick_settings_cellular_detail_data_limit"><xliff:g id="data_limit" example="2.0 GB">%s</xliff:g> limit</string>
     <!-- QuickSettings: Cellular detail panel, data warning format string [CHAR LIMIT=NONE] -->
     <string name="quick_settings_cellular_detail_data_warning"><xliff:g id="data_limit" example="2.0 GB">%s</xliff:g> warning</string>
-    <!-- QuickSettings: Dds [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_dds_sub">Card <xliff:g id="number">%d</xliff:g> data</string>
-    <string name="quick_settings_data_off">Data off</string>
 
     <!-- Recents: The empty recents string. [CHAR LIMIT=NONE] -->
     <string name="recents_empty_message">Your recent screens appear here</string>
@@ -850,13 +833,6 @@
 
     <!-- Text which is shown in the notification shade when there are no notifications. [CHAR LIMIT=30] -->
     <string name="empty_shade_text">No notifications</string>
-
-    <!-- Task Manager -->
-    <string name="tasklistview_title">Task Manager</string>
-    <string name="message_switch_fail">Can not switch to this task, because it has no interface.</string>
-    <string name="tasklist_killall">Kill All</string>
-    <string name="tasklist_memory_usage">"Free/Total Memory: [<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
-    <string name="message_keep_one_launcher">Should keep at lease one home activity!</string>
 
     <!-- Footer device owned text [CHAR LIMIT=50] -->
     <string name="device_owned_footer">Device may be monitored</string>
