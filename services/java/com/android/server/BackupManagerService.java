@@ -3714,7 +3714,8 @@ class BackupManagerService extends IBackupManager.Stub {
                         }
 
                         // The path needs to be canonical
-                        if (info.path.contains("..") || info.path.contains("//")) {
+                        // but only if the operations hasn't already failed
+                        if (okay && (info.path.contains("..") || info.path.contains("//"))) {
                             if (MORE_DEBUG) {
                                 Slog.w(TAG, "Dropping invalid path " + info.path);
                             }
