@@ -42,11 +42,12 @@ import android.view.View;
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.policy.BatteryController;
 
+import cyanogenmod.providers.CMSettings;
+
 public class BatteryMeterView extends View implements DemoMode,
         BatteryController.BatteryStateChangeCallback {
     public static final String TAG = BatteryMeterView.class.getSimpleName();
     public static final String ACTION_LEVEL_TEST = "com.android.systemui.BATTERY_LEVEL_TEST";
-    public static final String SHOW_PERCENT_SETTING = "status_bar_show_battery_percent";
 
     private static final boolean SINGLE_DIGIT_PERCENT = false;
 
@@ -181,7 +182,7 @@ public class BatteryMeterView extends View implements DemoMode,
         }
         mBatteryController.addStateChangedCallback(this);
         getContext().getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(SHOW_PERCENT_SETTING), false, mSettingObserver);
+                CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT), false, mSettingObserver);
     }
 
     @Override
@@ -233,8 +234,8 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     private void updateShowPercent() {
-        mShowPercent = 0 != Settings.System.getInt(getContext().getContentResolver(),
-                SHOW_PERCENT_SETTING, 0);
+        mShowPercent = 1 == CMSettings.System.getInt(getContext().getContentResolver(),
+                CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0);
     }
 
     private int getColorForLevel(int percent) {
