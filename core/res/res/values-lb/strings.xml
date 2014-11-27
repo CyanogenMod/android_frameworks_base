@@ -100,6 +100,7 @@
   <string name="roamingText8">Roaming - Premiumpartner</string>
   <string name="roamingText11">Roaming-Banner Un</string>
   <string name="roamingText12">Roaming-Banner Aus</string>
+  <string name="roamingTextSearching">E Service gëtt gesicht</string>
   <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: Net weidergeleet</string>
   <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
   <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> no <xliff:g id="time_delay">{2}</xliff:g> Sekonnen</string>
@@ -115,6 +116,7 @@
   <string name="httpErrorConnect">Konnt keng Connectioun mam Server hierstellen.</string>
   <string name="httpErrorBadUrl">Konnt d\'Säit net opmaachen well d\'URL net gëlteg ass.</string>
   <string name="httpErrorFile">Konnt net op de Fichier zougräifen.</string>
+  <string name="httpErrorFileNotFound">Konnt den ugefrote Fichier net fannen.</string>
   <string name="httpErrorTooManyRequests">Et ginn ze vill Ufroe beaarbecht. Probéier méi spéit nees.</string>
   <string name="contentServiceSync">Sync</string>
   <string name="contentServiceSyncNotificationTitle">Sync</string>
@@ -164,6 +166,7 @@
   <string name="permgrouplab_location">Däi Standuert</string>
   <string name="permgroupdesc_location">Iwwerwaacht däi physesche Standuert.</string>
   <string name="permgrouplab_network">Netzwierk-Kommunikatioun</string>
+  <string name="permgroupdesc_network">Zougrëff op verschidden Netzwierkfunktiounen.</string>
   <string name="permgrouplab_bluetoothNetwork">Bluetooth</string>
   <string name="permgroupdesc_bluetoothNetwork">Zougrëff op d\'Apparater an d\'Netzwierker iwwer Bluetooth.</string>
   <string name="permgrouplab_audioSettings">Tounastellungen</string>
@@ -182,7 +185,11 @@
   <string name="permgrouplab_microphone">Mikro</string>
   <string name="permgroupdesc_microphone">Direkten Zougrëff op de Mikro fir Toun opzehuelen.</string>
   <string name="permgrouplab_camera">Fotoapparat</string>
+  <string name="permgroupdesc_camera">Direkten Zougrëff op d\'Kamera fir Biller oder Videoen opzehuelen.</string>
   <string name="permgrouplab_screenlock">Schierm spären</string>
+  <string name="permgroupdesc_screenlock">Afloss op d\'Behuele vun der Schiermspär op dengem Apparat.</string>
+  <string name="permgrouplab_appInfo">Informatiounen zu dengen Appen</string>
+  <string name="permgroupdesc_appInfo">Afloss op d\'Behuele vun Appen op dengem Apparat.</string>
   <string name="permgrouplab_wallpaper">Hannergrondbild</string>
   <string name="permgroupdesc_wallpaper">Astellunge vum Hannergrondbild vum Appart änneren.</string>
   <string name="permgrouplab_systemClock">Auer</string>
@@ -201,8 +208,13 @@
   <string name="permgroupdesc_storage" product="default">Op d\'SD-Kaart zougräifen.</string>
   <string name="permgrouplab_accessibilityFeatures">Funktioune fir d\'Zougänglechkeet</string>
   <string name="permgroupdesc_accessibilityFeatures">Funktiounen déi vun techneschen Hëllefsmëttele kënnen ugefrot ginn.</string>
+  <string name="capability_title_canRetrieveWindowContent">Fënsterinhalter ofruffen</string>
+  <string name="capability_desc_canRetrieveWindowContent">D\'Inhalter vun der Fënster mat där s du interagéiers ginn ofgeruff.</string>
+  <string name="capability_title_canRequestFilterKeyEvents">Text bei der Agab observéieren</string>
+  <string name="capability_desc_canRequestFilterKeyEvents">Huet perséinlech Date wéi Kreditkaartennummeren a Passwierder als Inhalt.</string>
   <string name="permlab_statusBar">d\'Statusleescht desaktivéieren oder änneren</string>
   <string name="permlab_statusBarService">Statusleescht</string>
+  <string name="permdesc_statusBarService">Erlaabt der App d\'Statusleescht ze sinn.</string>
   <string name="permlab_expandStatusBar">d\'Statusleescht op-/zouklappen</string>
   <string name="permlab_install_shortcut">Ofkierzungen installéieren</string>
   <string name="permlab_uninstall_shortcut">Ofkierzungen desinstalléieren</string>
@@ -661,7 +673,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="chooseActivity">Wiel eng Aktioun aus</string>
   <string name="chooseUsbActivity">Wiel eng App fir den USB-Apparat aus</string>
   <string name="noApplications">Dës Aktioun ka vu kenger App duerchgefouert ginn.</string>
-  <string name="aerr_application">Leider huet <xliff:g id="application">%1$s</xliff:g> opgehale mat funktionéieren.</string>
+  <string name="aerr_application">Leider huet <xliff:g id="application">%1$s</xliff:g> opgehale mat Funktionéieren.</string>
   <string name="aerr_process">Leider gouf de Prozess <xliff:g id="process">%1$s</xliff:g> gestoppt.</string>
   <string name="anr_activity_application"><xliff:g id="application">%2$s</xliff:g> äntwert net.\n\nWëlls de d\'App zoumaachen?</string>
   <string name="force_close">OK</string>

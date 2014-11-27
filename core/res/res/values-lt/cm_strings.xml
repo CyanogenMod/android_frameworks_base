@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Našumas</string>
   <string name="permlab_interceptSmsSent">Perimti siunčiamus SMS</string>
   <string name="permdesc_interceptSmsSent">Leisti programai perimti siunčiamus SMS. Kenkėjiškos programos gali tuo pasinaudoti, kad būtų užkirstas kelias siunčiamiems SMS.</string>
+  <string name="permlab_receiveProtectedSms">gauti apsaugotus SMS</string>
+  <string name="permdesc_receiveProtectedSms">Leidžia programai gauti įeinančius apsaugotus SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">keisti apsaugotų SMS sąrašą</string>
+  <string name="permdesc_modifyProtectedSmsList">Leidžia programai keisti apsaugotų SMS adresų sąrašą.</string>
   <string name="permlab_resetBatteryStats">Atkurti akumuliatoriaus statistiką</string>
   <string name="permdesc_resetBatteryStats">Leidžia programai atkurti dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
   <string name="permgrouplab_security">Sauga</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Leidžia programai pasiekti CM aparatinės įrangos sistemą.</string>
   <string name="permlab_keyguardApplicationWidget">nustatyti klaviatūros apsaugos valdiklį</string>
   <string name="permdesc_keyguardApplicationWidget">Leidžia programai nustatyti klaviatūros apsaugos valdiklį.</string>
+  <string name="permlab_interceptPackageLaunch">perimti programos paleidimą</string>
+  <string name="permdesc_interceptPackageLaunch">Leidžia programai perimti kitų programų paleidimą</string>
   <string name="immersive_mode_confirmation_bottom">Braukite aukštyn iš apačios norėdami išeiti iš viso ekrano.</string>
   <string name="app_ops_access_camera">pasiekti fotoaparatą</string>
   <string name="app_ops_access_location">pasiekti jūsų vietą</string>

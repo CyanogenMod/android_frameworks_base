@@ -67,6 +67,8 @@
   <string name="perf_profile_perf">Mehr Leistung</string>
   <string name="permlab_interceptSmsSent">verschickte SMS abfangen</string>
   <string name="permdesc_interceptSmsSent">Ermöglicht der App, verschickte SMS abzufangen. Schädliche Apps können so das Versenden von SMS verhindern.</string>
+  <string name="permlab_receiveProtectedSms">geschützte SMS empfangen</string>
+  <string name="permdesc_receiveProtectedSms">Ermöglicht der App, eine eingehende, geschützte SMS zu empfangen.</string>
   <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
   <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen</string>
   <string name="permgrouplab_security">Sicherheit</string>
@@ -87,6 +89,8 @@
   <string name="permdesc_useHardwareFramework">Ermöglicht der App, auf das CM-Hardware-Framework zuzugreifen.</string>
   <string name="permlab_keyguardApplicationWidget">Sperrbildschirm-App-Widget festlegen</string>
   <string name="permdesc_keyguardApplicationWidget">Ermöglicht der App, das App-Widget auf dem Sperrbildschirm festzulegen.</string>
+  <string name="permlab_interceptPackageLaunch">Abfangen von App-Starts</string>
+  <string name="permdesc_interceptPackageLaunch">Ermöglicht der App, Starts anderer Anwendungen abzufangen</string>
   <string name="immersive_mode_confirmation_bottom">Von unten nach oben wischen, um den Vollbildmodus zu verlassen</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>

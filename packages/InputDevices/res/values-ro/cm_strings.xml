@@ -17,11 +17,11 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyboard_layout_armenian_eastern_label">Östarmenisk</string>
-  <string name="keyboard_layout_arabic">Arabiska</string>
-  <string name="keyboard_layout_greek">Grekiska</string>
-  <string name="keyboard_layout_hebrew">Hebreiska</string>
-  <string name="keyboard_layout_lithuanian">Litauiska</string>
-  <string name="keyboard_layout_spanish_latin">Spanska (Latinamerika)</string>
-  <string name="keyboard_layout_latvian">Lettiska</string>
+  <string name="keyboard_layout_armenian_eastern_label">Armeană estică</string>
+  <string name="keyboard_layout_arabic">Arabă</string>
+  <string name="keyboard_layout_greek">Greacă</string>
+  <string name="keyboard_layout_hebrew">Ebraică</string>
+  <string name="keyboard_layout_lithuanian">Lituaniană</string>
+  <string name="keyboard_layout_spanish_latin">Spaniolă (latină)</string>
+  <string name="keyboard_layout_latvian">Letonă</string>
 </resources>

@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">Inicializando\u2026</string>
   <string name="quick_settings_heads_up_on">Notificaciones emergentes</string>
   <string name="quick_settings_heads_up_off">Notificaciones emergentes</string>
+  <string name="quick_settings_themes">Temas</string>
   <string name="location_mode_high_accuracy_title">Alta precisión</string>
   <string name="location_mode_battery_saving_title">Ahorro de batería</string>
   <string name="location_mode_sensors_only_title">Solo en dispositivo</string>
@@ -77,4 +78,6 @@
   <string name="screenshot_delete_confirmation">Captura eliminada.</string>
   <string name="accessibility_desc_add_quick_settings">Añadir controles rápidos.</string>
   <string name="status_bar_notification_spam_item_title">Ignorar notificaciones como estas</string>
+  <string name="protected_app_notification_title">Notificación de aplicación protegida</string>
+  <string name="protected_app_notification_summary">Toca para abrir la notificación de la aplicación protegida</string>
 </resources>

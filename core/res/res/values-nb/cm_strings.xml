@@ -67,6 +67,9 @@
   <string name="perf_profile_perf">Ytelse</string>
   <string name="permlab_interceptSmsSent">Avbryt utgående SMS</string>
   <string name="permdesc_interceptSmsSent">Lar programmet å avbryte utgående SMSer. Skadelige programmer kan bruke dette til å hindre utgående SMS meldinger.</string>
+  <string name="permlab_receiveProtectedSms">motta beskyttet SMS</string>
+  <string name="permdesc_receiveProtectedSms">Lar programmet motta innkommende beskyttede SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">endre beskyttede SMS-listen</string>
   <string name="permlab_resetBatteryStats">tilbakestill batteri statistikk</string>
   <string name="permdesc_resetBatteryStats">Tillater et program å tilbakestille gjeldende bruksdata for batteriet.</string>
   <string name="permgrouplab_security">Sikkerhet</string>
@@ -87,6 +90,8 @@
   <string name="permdesc_useHardwareFramework">Gir en app tilgang til CM maskinvaren.</string>
   <string name="permlab_keyguardApplicationWidget">Angi keyguard app widget</string>
   <string name="permdesc_keyguardApplicationWidget">Tillat en app å sette opp app widgeten på keyguard.</string>
+  <string name="permlab_interceptPackageLaunch">Fang opp applikasjonsstart</string>
+  <string name="permdesc_interceptPackageLaunch">Lar en app å forhindre oppstart av andre programmer</string>
   <string name="immersive_mode_confirmation_bottom">Swipe opp fra bunn for å gå ut av fullskjerm.</string>
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>

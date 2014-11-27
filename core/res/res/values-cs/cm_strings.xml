@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Výkonný</string>
   <string name="permlab_interceptSmsSent">zachytit odchozí SMS</string>
   <string name="permdesc_interceptSmsSent">Umožní odchytit odchozí SMS. Škodlivé aplikace mohou pomocí odchycení SMS zabránit její odeslání příjemci.</string>
+  <string name="permlab_receiveProtectedSms">přijímat chráněné SMS</string>
+  <string name="permdesc_receiveProtectedSms">Umožňuje přijímat příchozí chráněné SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">upravit seznam chráněných SMS</string>
+  <string name="permdesc_modifyProtectedSmsList">Umožňuje změnit seznam adres chráněných SMS.</string>
   <string name="permlab_resetBatteryStats">obnovení statistiky baterie</string>
   <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
   <string name="permgrouplab_security">Zabezpečení</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Umožní aplikaci přistupovat přímo k hardware zařízení.</string>
   <string name="permlab_keyguardApplicationWidget">nastavení widgetu zámku obrazovky</string>
   <string name="permdesc_keyguardApplicationWidget">Umožní změnit widget na zámku obrazovky.</string>
+  <string name="permlab_interceptPackageLaunch">zachytit spuštění aplikace</string>
+  <string name="permdesc_interceptPackageLaunch">Umožňuje zachytit spuštění ostatních aplikací.</string>
   <string name="immersive_mode_confirmation_bottom">Tažením od spodního okraje nahoru opustíte režim celé obrazovky.</string>
   <string name="app_ops_access_camera">používat fotoaparát</string>
   <string name="app_ops_access_location">zjišťovat polohu</string>

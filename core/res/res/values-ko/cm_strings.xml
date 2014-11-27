@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">성능</string>
   <string name="permlab_interceptSmsSent">송신 SMS 가로채기</string>
   <string name="permdesc_interceptSmsSent">앱이 송신되는 SMS를 가로챌 수 있도록 허용합니다. 악성 앱이 이 권한으로 SMS 송신을 방해할 수 있습니다.</string>
+  <string name="permlab_receiveProtectedSms">보안 SMS 수신</string>
+  <string name="permdesc_receiveProtectedSms">앱이 들어오는 보안 SMS를 수신할 수 있도록 허용합니다.</string>
+  <string name="permlab_modifyProtectedSmsList">보안 SMS 목록 수정</string>
+  <string name="permdesc_modifyProtectedSmsList">앱이 보안 SMS 주소 목록을 수정할 수 있도록 허용합니다.</string>
   <string name="permlab_resetBatteryStats">배터리 통계 재설정</string>
   <string name="permdesc_resetBatteryStats">앱이 현재의 로우레벨 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
   <string name="permgrouplab_security">보안</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">앱이 CM 하드웨어 프레임워크에 접근할 수 있도록 허용합니다.</string>
   <string name="permlab_keyguardApplicationWidget">잠금 화면 위젯 설정</string>
   <string name="permdesc_keyguardApplicationWidget">앱이 잠금 화면 위젯을 설정할 수 있도록 허용합니다.</string>
+  <string name="permlab_interceptPackageLaunch">애플리케이션 실행 차단</string>
+  <string name="permdesc_interceptPackageLaunch">앱이 다른 앱의 실행을 차단할 수 있도록 허용합니다.</string>
   <string name="immersive_mode_confirmation_bottom">전체화면을 종료하려면 아래쪽에서 위로 스와이프합니다.</string>
   <string name="app_ops_access_camera">카메라에 액세스</string>
   <string name="app_ops_access_location">위치 정보에 액세스</string>

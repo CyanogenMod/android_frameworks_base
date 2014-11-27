@@ -162,6 +162,10 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däin Netzbedreiwer kontaktéiere fir däin Apparat z\'entspären.</string>
+  <plurals name="kg_password_wrong_pin_code">
+    <item quantity="one">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier s de däin Netzbedreiwer kontaktéiere muss fir däin Apparat z\'entspären.</item>
+    <item quantity="other">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg.</item>
+  </plurals>
   <string name="kg_password_wrong_puk_code_dead">D\'SIM ass onbrauchbar. Kontaktéier däin Netzbedreiwer.</string>
   <plurals name="kg_password_wrong_puk_code">
     <item quantity="one">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>
