@@ -102,6 +102,7 @@
         <item>@string/app_ops_delete_contacts</item>
         <item>@string/app_ops_delete_call_log</item>
         <item>@string/app_ops_toggle_mobile_data</item>
+        <item>@string/app_ops_alarm_wakeup</item>
     </string-array>
 
 </resources>
