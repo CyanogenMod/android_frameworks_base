@@ -213,4 +213,8 @@ interface IAudioService {
     void getRemoteControlClientNowPlayingEntries();
 
     void setRemoteControlClientPlayItem(long uid, int scope);
+
+    void updateRemoteControllerOnExistingMediaPlayers();
+
+    void addMediaPlayerAndUpdateRemoteController(String packageName);
 }
