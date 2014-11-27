@@ -1,53 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.android.systemui.recent.model.SlidingLayer
-        android:id="@+id/sliding_layer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <!--slidingLayer:shadowDrawable="@drawable/sidebar_shadow"
-        slidingLayer:shadowWidth="@dimen/shadow_width"
-        slidingLayer:offsetWidth="@dimen/offset_width"
-        slidingLayer:stickTo="auto|right|left|middle"
-        slidingLayer:closeOnTapEnabled="true">-->
-
-	<RelativeLayout
-		android:id="@+id/person_bubble"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-            	android:background="#14ad8f">
-		<TextView
-			android:id="@+id/person_name"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/person_bubble_corner"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textColor="@color/person_bubble_name"
-			android:textStyle="bold"
-			style="@style/PersonBubbleText"
-			android:ellipsize="end"
-			android:singleLine = "true"
-			android:shadowDx="0"
-			android:shadowDy="2"
-			android:shadowRadius="5"
-			/>
-		<TextView
-			android:id="@+id/person_status"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textColor="@color/person_bubble_status"
-			android:shadowDx="0"
-			android:shadowDy="2"
-			android:shadowRadius="5"
-			style="@style/PersonBubbleText"
-			/>
-	</RelativeLayout>
-
-    </com.android.systemui.recent.model.SlidingLayer>
-
-</RelativeLayout>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/person_bubble"
+	android:layout_width="@dimen/person_bubble_width"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:padding="@dimen/person_bubble_corner"
+	>
+	<TextView
+		android:id="@+id/person_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/person_bubble_corner"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="@color/person_bubble_name"
+		android:textStyle="bold"
+		style="@style/PersonBubbleText"
+		android:ellipsize="end"
+		android:singleLine = "true"
+		android:shadowDx="0"
+		android:shadowDy="2"
+		android:shadowRadius="5"
+		/>
+	<TextView
+		android:id="@+id/person_status"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textColor="@color/person_bubble_status"
+		android:shadowDx="0"
+		android:shadowDy="2"
+		android:shadowRadius="5"
+		style="@style/PersonBubbleText"
+		/>
+</LinearLayout>

@@ -38,8 +38,7 @@ import com.android.systemui.R;
 import java.util.List;
 import java.util.ArrayList;
 
-//import com.android.systemui.recent.PersonBubbleActivity;
-import com.android.systemui.recent.PersonSlideActivity;
+import com.android.systemui.recent.PersonBubbleActivity;
 
 public final class People extends PersonUtils{
 
@@ -144,7 +143,7 @@ public final class People extends PersonUtils{
             @Override
             public void onSingleClick(View v) {
                 Context context = v.getContext();
-                context.startActivity(PersonSlideActivity.createIntent(context, v, (Person)v.getTag()));
+                context.startActivity(PersonBubbleActivity.createIntent(context, v, (Person)v.getTag()));
             }
             @Override
             public void onDoubleClick(View v) {
