@@ -51,6 +51,7 @@
   <string name="quick_settings_compass_init">Покретање\u2026</string>
   <string name="quick_settings_heads_up_on">Heads up омогућено</string>
   <string name="quick_settings_heads_up_off">Нема прекидања</string>
+  <string name="quick_settings_themes">Теме</string>
   <string name="location_mode_high_accuracy_title">Велика прецизност</string>
   <string name="location_mode_battery_saving_title">Уштеда батерије</string>
   <string name="location_mode_sensors_only_title">Само уређај</string>
@@ -80,4 +81,6 @@
   <string name="screenshot_delete_confirmation">Снимак екрана је избрисан.</string>
   <string name="accessibility_desc_add_quick_settings">Додај Брза подешавања.</string>
   <string name="status_bar_notification_spam_item_title">Игнориши овакве поруке</string>
+  <string name="protected_app_notification_title">Обавештење заштићених апликација</string>
+  <string name="protected_app_notification_summary">Додирните да отворите обавештења из заштићене апликације</string>
 </resources>

@@ -33,6 +33,8 @@
   <string name="quick_settings_usb_tether_off_label">已中斷連接</string>
   <string name="quick_settings_usb_tether_connected_label">網絡共享關閉</string>
   <string name="quick_settings_usb_tether_on_label">網絡共享</string>
+  <string name="quick_settings_wifiap">Wi-Fi 無綫基地台</string>
+  <string name="quick_settings_wifiap_off">Wi-Fi 無綫基地台關閉</string>
   <string name="quick_settings_quiethours">安靜時段</string>
   <string name="quick_settings_quiethours_off">安靜時段關閉</string>
   <string name="quick_settings_lte">LTE</string>
@@ -44,6 +46,9 @@
   <string name="quick_settings_equalizer">等化器</string>
   <string name="quick_settings_compass_off">指南針關閉</string>
   <string name="quick_settings_compass_init">正在初始化\u2026</string>
+  <string name="quick_settings_heads_up_on">浮動通知已啟用</string>
+  <string name="quick_settings_heads_up_off">無中斷</string>
+  <string name="quick_settings_themes">主題</string>
   <string name="location_mode_high_accuracy_title">高精確度</string>
   <string name="location_mode_battery_saving_title">節省耗電量</string>
   <string name="location_mode_sensors_only_title">僅限裝置</string>
@@ -64,8 +69,10 @@
   <string name="navbar_menu_big_button">功能表按鈕</string>
   <string name="advanced_dev_option_wipe_app">擦除應用程式數據</string>
   <string name="advanced_dev_option_force_stop">強制停止</string>
+  <string name="advanced_dev_option_uninstall">解除安裝</string>
   <string name="accessibility_dock_battery_level">座架電池 <xliff:g id="number">%d</xliff:g>%%。</string>
   <string name="screenshot_delete_action">刪除</string>
   <string name="screenshot_delete_confirmation">螢幕截圖已刪除。</string>
   <string name="accessibility_desc_add_quick_settings">新增快速設定。</string>
+  <string name="status_bar_notification_spam_item_title">忽略這樣的訊息</string>
 </resources>

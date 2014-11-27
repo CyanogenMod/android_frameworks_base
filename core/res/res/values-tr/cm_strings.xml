@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Performans</string>
   <string name="permlab_interceptSmsSent">giden SMS\'i durdur</string>
   <string name="permdesc_interceptSmsSent">Uygulamanın giden bir SMS\'i durdurmasına olanak verir. Kötücül uygulamalar giden SMSleri engellemek için bu özelliği kullanabilir.</string>
+  <string name="permlab_receiveProtectedSms">korumalı SMS al</string>
+  <string name="permdesc_receiveProtectedSms">Uygulamaya korumalı bir SMS alma izni verir.</string>
+  <string name="permlab_modifyProtectedSmsList">korumalı SMS listesini değiştir</string>
+  <string name="permdesc_modifyProtectedSmsList">Uygulamaya korumalı SMS adres listesini değiştirme izni verir.</string>
   <string name="permlab_resetBatteryStats">pil istatistiklerini sıfırla</string>
   <string name="permdesc_resetBatteryStats">Bir uygulamanın düşük batarya kullanım bilgisini sıfırlamasına izin verir.</string>
   <string name="permgrouplab_security">Güvenlik</string>
@@ -89,6 +93,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permdesc_useHardwareFramework">Uygulamanın CM donanım altyapısına erişimine izin verir.</string>
   <string name="permlab_keyguardApplicationWidget">tuş kilidi uygulama widgetını ayarla</string>
   <string name="permdesc_keyguardApplicationWidget">Bir uygulamanın tuş kilidine uygulama widgetı yerleştirmesine izin verir.</string>
+  <string name="permlab_interceptPackageLaunch">uygulama başlatmayı önle</string>
+  <string name="permdesc_interceptPackageLaunch">Uygulamaya diğer uygulamaların başlamasını engelleme izni verir</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıkmak için aşağıdan yukarı kaydırın.</string>
   <string name="app_ops_access_camera">kameraya eriş</string>
   <string name="app_ops_access_location">konuma erişim</string>

@@ -85,7 +85,7 @@
   <string name="permdesc_setKeyguardWallpaper">Hiermee kan de app de achtergrond van het vergrendelingsscherm aanpassen.</string>
   <string name="permlab_useHardwareFramework">hardware-framework gebruiken</string>
   <string name="permdesc_useHardwareFramework">Hiermee kan de app toegang krijgen tot het hardware-framework van CyanogenMod.</string>
-  <string name="permlab_keyguardApplicationWidget"> app-widget op vergrendelingsscherm instellen</string>
+  <string name="permlab_keyguardApplicationWidget">app-widget op vergrendelingsscherm instellen</string>
   <string name="permdesc_keyguardApplicationWidget">Hiermee kan de app de app-widget van het vergrendelingsscherm aanpassen.</string>
   <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
   <string name="app_ops_access_camera">toegang tot camera</string>

@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">Başlatılıyor\u2026</string>
   <string name="quick_settings_heads_up_on">Bildirim Pencereleri etkin</string>
   <string name="quick_settings_heads_up_off">Bild. Pnc. kapat</string>
+  <string name="quick_settings_themes">Temalar</string>
   <string name="location_mode_high_accuracy_title">Yüksek doğruluk</string>
   <string name="location_mode_battery_saving_title">Pil tasarrufu</string>
   <string name="location_mode_sensors_only_title">Sadece cihaz</string>
@@ -76,4 +77,6 @@
   <string name="screenshot_delete_confirmation">Ekran görüntüsü silindi.</string>
   <string name="accessibility_desc_add_quick_settings">Hızlı ayarları ekle.</string>
   <string name="status_bar_notification_spam_item_title">Bunun gibi mesajları yok say</string>
+  <string name="protected_app_notification_title">Korumalı uygulama bildirimi</string>
+  <string name="protected_app_notification_summary">Korumalı uygulama bildirimini açmak için dokunun</string>
 </resources>

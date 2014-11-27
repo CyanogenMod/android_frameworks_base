@@ -19,6 +19,6 @@
   <plurals name="tethered_clients_connected">
     <item quantity="one">%d client conectat</item>
     <item quantity="few">%d clienți conectați</item>
-    <item quantity="other">%d de clienți conectați</item>
+    <item quantity="other">%d clienți conectați</item>
   </plurals>
 </resources>

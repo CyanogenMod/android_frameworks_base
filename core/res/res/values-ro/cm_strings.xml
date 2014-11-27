@@ -33,8 +33,8 @@
   <string name="global_actions_toggle_expanded_desktop_mode">Ecran extins</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Activat</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Dezactivat</string>
-  <string name="reboot_system" product="tablet">Reporniți tableta</string>
-  <string name="reboot_system" product="default">Reporniți telefonul</string>
+  <string name="reboot_system" product="tablet">Repornire tabletă</string>
+  <string name="reboot_system" product="default">Repornire telefon</string>
   <string name="reboot_reboot">Repornire</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -45,45 +45,54 @@
   <string name="reboot_progress">Repornire\u2026</string>
   <string name="reboot_confirm" product="tablet">Tableta va reporni.</string>
   <string name="reboot_confirm" product="default">Telefonul dvs. va reporni.</string>
-  <string name="permlab_preventpower">Împiedica tasta de pornire</string>
+  <string name="permlab_preventpower">împiedica tasta de pornire</string>
   <string name="permdesc_preventpower">Permite aplicației să ignore tasta de pornire</string>
   <string name="permlab_sendMockSms">Trimite mesaje SMS false</string>
-  <string name="storage_sd_dock_card">Dock card SD</string>
+  <string name="permdesc_sendMockSms">Permite aplicației să trimită mesaje SMS false. Aceasta permite unei aplicații să trimită mesaje SMS către aplicații de încredere. Aplicațiile rău intenționate pot trimite mesaje continuu, blocând sistemul de notificări al sistemului și întrerupând utilizatorul.</string>
+  <string name="storage_sd_dock_card">Docare card SD</string>
   <string name="app_killed_message">Aplicație oprită</string>
   <string name="global_action_reboot">Repornire</string>
   <string name="global_action_choose_profile">Profil</string>
-  <string name="toast_rotation_unlocked">Rotire Ecran Deblocată</string>
-  <string name="toast_rotation_locked">Rotire Ecran Blocată</string>
+  <string name="toast_rotation_unlocked">Rotire ecran deblocată</string>
+  <string name="toast_rotation_locked">Rotire ecran blocată</string>
   <string name="stylus_app_not_installed">%s nu este instalată</string>
   <string name="permlab_changePrivacyGuardState">activează sau dezactivează Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Permite aplicației să stabilească dacă o altă aplicație rulează cu garda de confidențialitate. Când o aplicație rulează cu garda de confidențialitate, nu va avea acces la date personale, cum ar fi contacte, jurnalul de apeluri sau mesaje.</string>
-  <string name="privacy_guard_notification">Garda de confidențialitate activă</string>
+  <string name="privacy_guard_notification">Protejarea datelor activată</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nu va putea accesa datele personale</string>
   <string name="profile_picker_title">Profiluri</string>
   <string name="profile_none">Niciunul</string>
   <string name="perf_profile_pwrsv">Economisire baterie</string>
-  <string name="perf_profile_bal">Balansat</string>
+  <string name="perf_profile_bal">Echilibrat</string>
   <string name="perf_profile_perf">Performanță</string>
   <string name="permlab_interceptSmsSent">interceptează SMS-uri trimise</string>
   <string name="permdesc_interceptSmsSent">Permite aplicației să intercepteze un SMS trimis. Aplicațiile rău intenționate pot folosi aceasta pentru a preveni trimiterea SMS-urilor.</string>
+  <string name="permlab_receiveProtectedSms">primește SMS-uri protejate</string>
+  <string name="permdesc_receiveProtectedSms">Permite aplicației să primească un SMS protejat.</string>
+  <string name="permlab_modifyProtectedSmsList">modifică lista de SMS-uri protejate</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite aplicației să modifice lista adreselor SMS protejate.</string>
   <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
-  <string name="permdesc_resetBatteryStats">Permite unei aplicații să reseteze datele de utilizare curente la nivel de bază ale bateriei.</string>
+  <string name="permdesc_resetBatteryStats">Permite unei aplicații să reseteze datele de utilizare curente la nivelul de bază al bateriei.</string>
   <string name="permgrouplab_security">Securitate</string>
-  <string name="permgroupdesc_security">Permisiunile legate de informația de securitate a dispozitivului.</string>
+  <string name="permgroupdesc_security">Permisiunile legate de informațiile de securitate ale dispozitivului.</string>
   <string name="permlab_readPhoneBlacklist">citește lista neagră a telefonului</string>
   <string name="permdesc_readPhoneBlacklist">Permite unei aplicații să citească informații despre numerele de telefon care sunt blocate pentru primirea de apeluri sau de mesaje.</string>
   <string name="permlab_changePhoneBlacklist">schimbă lista neagră a telefonului</string>
-  <string name="permdesc_changePhoneBlacklist">Permite unei aplicații să schimbe nr de telefon care sunt blocate pentru primirea de apeluri sau mesaje.</string>
+  <string name="permdesc_changePhoneBlacklist">Permite unei aplicații să schimbe numere de telefon care sunt blocate pentru primirea de apeluri sau mesaje.</string>
   <string name="permlab_accessThemeService">accesare serviciul pentru teme</string>
   <string name="permdesc_accessThemeService">Permite unei aplicații să acceseze serviciul pentru teme. Aplicațiile normale nu au nevoie.</string>
   <string name="permlab_readThemes">citește informații despre temă</string>
-  <string name="permdesc_readThemesDesc">Permite aplicației să citească temele tale și să determine pe care ai activat-o.</string>
+  <string name="permdesc_readThemesDesc">Permite aplicației să citească temele dumneavoastră și să determine pe care ați aplicat-o.</string>
   <string name="permlab_writeThemes">modifică teme</string>
-  <string name="permdesc_writeThemesDesc">Permite aplicațieie să adauge teme noi și să le modifice pe cele aplicate.</string>
-  <string name="permlab_setKeyguardWallpaper">Setarea fundal keyguard</string>
+  <string name="permdesc_writeThemesDesc">Permite aplicației să adauge teme noi și să le modifice pe cele aplicate.</string>
+  <string name="permlab_setKeyguardWallpaper">setare fundal ecran de blocare</string>
   <string name="permdesc_setKeyguardWallpaper">Permite unei aplicații să schimbe imaginea de fundal a ecranului  de blocare.</string>
   <string name="permlab_useHardwareFramework">folosește framework-ul hardware</string>
   <string name="permdesc_useHardwareFramework">Permite unei aplicații să acceseze framework-ul hardware.</string>
+  <string name="permlab_keyguardApplicationWidget">setare widget pe ecranul de blocare</string>
+  <string name="permdesc_keyguardApplicationWidget">Permite unei aplicații să-și seteze widgetul pe ecranul de blocare.</string>
+  <string name="permlab_interceptPackageLaunch">interceptează lansarea aplicației</string>
+  <string name="permdesc_interceptPackageLaunch">Permite unei aplicații să intercepteze lansarea altor aplicaţii</string>
   <string name="immersive_mode_confirmation_bottom">Glisează de jos în sus pentru a ieși din ecran complet.</string>
   <string name="app_ops_access_camera">accesează camera</string>
   <string name="app_ops_access_location">accesează locația</string>
@@ -91,7 +100,7 @@
   <string name="app_ops_alarm_wakeup">trezește dispozitivul</string>
   <string name="app_ops_draw_on_top">afișează în prim-plan</string>
   <string name="app_ops_keep_device_awake">ține dispozitivul deschis</string>
-  <string name="app_ops_make_phone_call">face un apel telefonic</string>
+  <string name="app_ops_make_phone_call">inițiază un apel telefonic</string>
   <string name="app_ops_modify_calendar">actualizează calendarul</string>
   <string name="app_ops_modify_call_log">actualizează jurnalul de apeluri</string>
   <string name="app_ops_modify_clipboard">modifică clipboard</string>
@@ -129,11 +138,13 @@
   <string name="notify_turn_wifi_off_title">Oprire Wi-Fi</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> dorește să <xliff:g id="op">%2$s</xliff:g>.</string>
-  <string name="permission_remember_choice">Amintește-ți alegerea mea</string>
+  <string name="permission_remember_choice">Memorează alegerea mea</string>
   <string name="adb_net_active_notification_title">ADB prin rețea activ</string>
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
-  <string name="usb_storage_notification_manage_message">Atinge pentru a gestiona</string>
+  <string name="usb_extmedia_format_message">Toate datele de pe dispozitivul de stocare USB (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
+  <string name="sd_extmedia_format_message">Toate datele de pe card (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
+  <string name="usb_storage_notification_manage_message">Atingeţi pentru a gestiona</string>
   <string name="sd_ext_media_checking_notification_title">Se pregătește cardul SD\u2026</string>
   <string name="sd_ext_media_checking_notification_message">Se verifică cardul SD pentru erori\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">Card SD gol</string>
@@ -141,8 +152,8 @@
   <string name="sd_ext_media_unmountable_notification_title">Card SD deteriorat</string>
   <string name="sd_ext_media_unmountable_notification_message">Cardul SD este deteriorat. Încercați reformatarea acestuia.</string>
   <string name="sd_ext_media_badremoval_notification_title">Cardul SD înlăturat în mod neașteptat</string>
-  <string name="sd_ext_media_badremoval_notification_message">Demontază cardul SD înainte de a fi scos pentru a evita pierderea de date.</string>
-  <string name="sd_ext_media_safe_unmount_notification_title">Cardul SD poate fii înlăturat în condiții de siguranță</string>
+  <string name="sd_ext_media_badremoval_notification_message">Demontați cardul SD înainte de a fi scos pentru a evita pierderea de date.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Cardul SD poate fi înlăturat în condiții de siguranță</string>
   <string name="sd_ext_media_safe_unmount_notification_message">Puteți elimina în condiții de siguranță cardul SD.</string>
   <string name="sd_ext_media_nomedia_notification_title">Card SD eliminat</string>
   <string name="sd_ext_media_nomedia_notification_message">Card SD eliminat. Inserați unul nou.</string>
@@ -153,13 +164,13 @@
   <string name="usb_ext_media_unmountable_notification_title">Mediu de stocare USB deteriorat</string>
   <string name="usb_ext_media_unmountable_notification_message">Mediul de stocare USB este deteriorat. Încercați reformatarea acestuia.</string>
   <string name="usb_ext_media_badremoval_notification_title">Mediu de stocare USB eliminat în mod neaşteptat</string>
-  <string name="usb_ext_media_badremoval_notification_message">Demontază mediul de stocare USB înainte de a înlaturare pentru a evita pierderea de date.</string>
-  <string name="usb_ext_media_safe_unmount_notification_title">Mediul de stocare USB poate fi înlaturat în siguranță</string>
+  <string name="usb_ext_media_badremoval_notification_message">Demontați mediul de stocare USB înainte de înlăturare pentru a evita pierderea de date.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Mediul de stocare USB poate fi înlăturat în siguranță</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Puteți elimina în condiții de siguranță mediul de stocare USB.</string>
   <string name="usb_ext_media_nomedia_notification_title">Mediul de stocare USB eliminat</string>
   <string name="usb_ext_media_nomedia_notification_message">Mediul de stocare USB eliminat. Introduceți mediu nou.</string>
   <string name="progress_nomediapresent" product="default">Nu este prezentă nicio unitate detașabilă\u2026</string>
-  <string name="lockscreen_sim_error_message_short">Cartelă invalidă.</string>
+  <string name="lockscreen_sim_error_message_short">Cartelă incorectă.</string>
   <string name="lockscreen_airplane_mode_on">Mod Avion</string>
   <string name="lockscreen_sim_locked_message_cm">Cardul SIM/RUIM este blocat.</string>
   <string name="pinpuk_attempts">\nÎncercări rămase:</string>
@@ -171,4 +182,19 @@
   <string name="stk_cc_ss_to_ss">Cererea SS este modificată într-o cerere nouă SS.</string>
   <string name="theme_install_error_title">Instalarea temei a eșuat</string>
   <string name="theme_install_error_message">%s au eșuat să fie instalate</string>
+  <string name="storage_uicc">Stocare UICC</string>
+  <string name="sd_progress_unmounting">Demontarea cardului SD\u2026</string>
+  <string name="sd_progress_erasing">Ştergerea cardului SD\u2026</string>
+  <string name="sd_format_error">Nu s-a putut şterge cardul SD.</string>
+  <string name="sd_media_bad_removal">Cardul SD a fost înlăturat înainte de a fi demontat.</string>
+  <string name="sd_media_checking">Cardul SD este în curs de verificare.</string>
+  <string name="sd_media_removed">Cardul SD a fost înlăturat.</string>
+  <string name="sd_media_shared">Cardul SD este în prezent utilizat de un computer.</string>
+  <string name="usb_progress_unmounting">Demontarea mediul de stocare USB\u2026</string>
+  <string name="usb_progress_erasing">Ştergerea mediului de stocare USB\u2026</string>
+  <string name="usb_format_error">Nu s-a putut şterge mediul de stocare USB.</string>
+  <string name="usb_media_bad_removal">Mediul de stocare USB a fost înlăturat înainte de a fi demontat.</string>
+  <string name="usb_media_checking">Mediul stocare USB este în curs de verificare.</string>
+  <string name="usb_media_removed">Mediul de stocare USB a fost înlaturat.</string>
+  <string name="usb_media_shared">Mediul de stocare USB este în prezent utilizat de un computer.</string>
 </resources>

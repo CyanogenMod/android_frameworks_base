@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">Inicijuojama\u2026</string>
   <string name="quick_settings_heads_up_on">Plaukiojantys pranešimai įjungti</string>
   <string name="quick_settings_heads_up_off">Be pertrūkių</string>
+  <string name="quick_settings_themes">Temos</string>
   <string name="location_mode_high_accuracy_title">Didelis tikslumas</string>
   <string name="location_mode_battery_saving_title">Akumuliatoriaus tausojimas</string>
   <string name="location_mode_sensors_only_title">Tik įrenginys</string>
@@ -78,4 +79,6 @@
   <string name="screenshot_delete_confirmation">Ekranvaizdis ištrintas.</string>
   <string name="accessibility_desc_add_quick_settings">Pridėti greituosius nustatymus.</string>
   <string name="status_bar_notification_spam_item_title">Nepaisyti pranešimų kaip šis</string>
+  <string name="protected_app_notification_title">Apsaugotos programos pranešimas</string>
+  <string name="protected_app_notification_summary">Bakstelėkite norėdami atidaryti pranešimą iš apsaugotos programos</string>
 </resources>

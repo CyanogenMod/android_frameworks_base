@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Výkonný</string>
   <string name="permlab_interceptSmsSent">zachytiť odchádzajúce SMS</string>
   <string name="permdesc_interceptSmsSent">Umožňuje aplikácii zachytiť odchádzajúce SMS. Škodlivé aplikácie môžu pomocou tohto povolenia zabrániť odchodu SMS správ.</string>
+  <string name="permlab_receiveProtectedSms">prijímať chránené SMS</string>
+  <string name="permdesc_receiveProtectedSms">Umožňuje aplikácii prijímať chránené prichádzajúce SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">upraviť zoznam chránených SMS</string>
+  <string name="permdesc_modifyProtectedSmsList">Umožňuje aplikácii upraviť zoznam chránených SMS adries.</string>
   <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
   <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
   <string name="permgrouplab_security">Zabezpečenie</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="permlab_keyguardApplicationWidget">nastaviť miniaplikáciu na obrazovke uzamknutia</string>
   <string name="permdesc_keyguardApplicationWidget">Umožňuje aplikácii nastaviť miniaplikáciu na obrazovke uzamknutia.</string>
+  <string name="permlab_interceptPackageLaunch">zachytiť spustenie aplikácie</string>
+  <string name="permdesc_interceptPackageLaunch">Umožňuje aplikácii zachytiť spustenie ďalších aplikácií</string>
   <string name="immersive_mode_confirmation_bottom">Režim celej obrazovky ukončíte posunutím nahor.</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>

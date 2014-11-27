@@ -67,6 +67,9 @@
   <string name="perf_profile_perf">ක්‍රියාකාරීත්වය</string>
   <string name="permlab_interceptSmsSent">යවන කෙටි පනිවිඩ අතුරුවැරීම</string>
   <string name="permdesc_interceptSmsSent">යවන කෙටි පනිවිඩ අතුරුවැරීම සඳහා යෙදුමට අවසර දෙන්න. ද්වේෂසහගත යෙදුම් විසින් යවන කෙටි පනිවිඩ වැලැක්වීම සඳහා මෙය යොදා ගැනීමට පුළුවන.</string>
+  <string name="permlab_receiveProtectedSms">ආරක්‍ෂිත SMS ලබන්න</string>
+  <string name="permdesc_receiveProtectedSms">එන ආරක්‍ෂිත SMS ලැබීමට යෙදුමට ඉඩ දෙයි.</string>
+  <string name="permlab_modifyProtectedSmsList">ආරක්‍ෂිත SMS ලැයිස්තුව විකරණය කරන්න</string>
   <string name="permlab_resetBatteryStats">බැටරි සංඛ්‍යාති යලි පිහිටුවන්න</string>
   <string name="permdesc_resetBatteryStats">වත්මන් බැටරි භාවිතයේ පහත්-තල දත්ත යලි පිහිටුවීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="permgrouplab_security">ආරක්ෂාව</string>
@@ -87,6 +90,8 @@
   <string name="permdesc_useHardwareFramework">යෙදුමක් CM දෘඩාංග රාමුව පරිශීලනය කිරීම අනුමත කරයි.</string>
   <string name="permlab_keyguardApplicationWidget">යතුරු රැක්මේ යෙදුම් විජටය සකසන්න</string>
   <string name="permdesc_keyguardApplicationWidget">යතුරු රැක්ම මත යෙදුම් විජටය සැකසීම සඳහා යෙදුමකට අවසර දෙයි.</string>
+  <string name="permlab_interceptPackageLaunch">යෙදුම දියත්කරණය අතර මගදී නවත්වන්න</string>
+  <string name="permdesc_interceptPackageLaunch">වෙනත් යෙදුම් දියත්කරණය අතර මගදී නැවැත්වීමට යෙදුමකට ඉඩ දෙයි</string>
   <string name="immersive_mode_confirmation_bottom">පුන් තිරයෙන් පිටවීමට පතුලේ සිට උඩට අතුල්ලන්න.</string>
   <string name="app_ops_access_camera">කැමරාව පරිශීලනය</string>
   <string name="app_ops_access_location">ඔබගේ ස්ථානය පරිශීලනය</string>
