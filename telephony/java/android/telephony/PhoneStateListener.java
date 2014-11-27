@@ -232,7 +232,7 @@ public class PhoneStateListener {
     /**
      * Create a PhoneStateListener for the Phone with the default subscription.
      * This class requires Looper.myLooper() not return null. To supply your
-     * own non-null looper use PhoneStateListener(Looper looper) below.
+     * own non-null looper use {@link #PhoneStateListener(Looper looper)} below.
      */
     public PhoneStateListener() {
         this(SubscriptionManager.DEFAULT_SUB_ID, Looper.myLooper());
@@ -241,7 +241,6 @@ public class PhoneStateListener {
     /**
      * Create a PhoneStateListener for the Phone with the default subscription
      * using a particular non-null Looper.
-     * @hide
      */
     public PhoneStateListener(Looper looper) {
         this(SubscriptionManager.DEFAULT_SUB_ID, looper);
