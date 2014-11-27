@@ -281,6 +281,8 @@ public class SystemConfig {
                     if (fname == null) {
                         Slog.w(TAG, "<feature> without name at "
                                 + parser.getPositionDescription());
+                    } else if (isLowRamDevice() && "android.software.managed_users".equals(fname)) {
+                        Slog.w(TAG, "Feature not supported on low memory device "+fname);
                     } else {
                         //Log.i(TAG, "Got feature " + fname);
                         FeatureInfo fi = new FeatureInfo();
@@ -359,5 +361,9 @@ public class SystemConfig {
             }
             XmlUtils.skipCurrentTag(parser);
         }
+    }
+
+    boolean isLowRamDevice() {
+        return "true".equals(SystemProperties.get("ro.config.low_ram", "false"));
     }
 }
