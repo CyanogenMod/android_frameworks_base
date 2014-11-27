@@ -498,7 +498,7 @@ public class SignalStrength implements Parcelable {
         int level = 0;
 
         if (isGsm) {
-            level = getLteLevel();
+            level = getAlternateLteLevel();
             if (level == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
                 level = getTdScdmaLevel();
                 if (level == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
@@ -531,7 +531,7 @@ public class SignalStrength implements Parcelable {
     public int getAsuLevel() {
         int asuLevel = 0;
         if (isGsm) {
-            if (getLteLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
+            if (getAlternateLteLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
                 if (getTdScdmaLevel() == SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
                     asuLevel = getGsmAsuLevel();
                 } else {
