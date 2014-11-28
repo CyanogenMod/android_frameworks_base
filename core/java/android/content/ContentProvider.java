@@ -278,7 +278,13 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
                         throw new OperationApplicationException("App op not allowed", 0);
                     }
                 }
-                if (operation.isWriteOperation()) {
+
+                if (operation.isDeleteOperation()) {
+                    if (enforceDeletePermission(callingPkg, uri)
+                            != AppOpsManager.MODE_ALLOWED) {
+                        throw new OperationApplicationException("App op not allowed", 0);
+                    }
+                } else if (operation.isWriteOperation()) {
                     if (enforceWritePermission(callingPkg, uri)
                             != AppOpsManager.MODE_ALLOWED) {
                         throw new OperationApplicationException("App op not allowed", 0);
