@@ -2392,6 +2392,9 @@
   <!-- Gesture Sensor -->
   <java-symbol type="bool" name="config_enableGestureService" />
 
+  <!-- Config.xml entries -->
+  <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
+
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveNotificationLed" />
   <java-symbol type="bool" name="config_multiColorNotificationLed" />

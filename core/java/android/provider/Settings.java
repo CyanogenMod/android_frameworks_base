@@ -2454,6 +2454,12 @@ public final class Settings {
         public static final int SCREEN_BRIGHTNESS_MODE_AUTOMATIC = 1;
 
         /**
+         * Whether to show the IME switcher in the status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
+
+        /**
          * The keyboard brightness to be used while the screen is on.
          * Valid value range is between 0 and {@link PowerManager#getMaximumKeyboardBrightness()}
          * @hide
