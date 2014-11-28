@@ -276,7 +276,11 @@ final public class MediaMuxer {
                 values[i] = entry.getValue();
                 ++i;
             }
-            trackIndex = nativeAddTrack(mNativeObject, keys, values);
+            try {
+                trackIndex = nativeAddTrack(mNativeObject, keys, values);
+            } catch (IllegalStateException ex) {
+                throw new IllegalArgumentException("format not supported");
+            }
         } else {
             throw new IllegalArgumentException("format must not be empty.");
         }
