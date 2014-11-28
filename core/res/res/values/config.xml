@@ -2057,6 +2057,9 @@
 
     </string-array>
 
+    <!-- Configuration to add vibrate with ringtone option -->
+    <bool name="config_addVibrateWithRingtoneOption">false</bool>
+
     <!-- Configuartion to set zen mode when silent mode is on -->
     <bool name="config_setZenModeWhenSilentModeOn">false</bool>
 
