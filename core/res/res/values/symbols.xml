@@ -2173,6 +2173,7 @@
   <java-symbol type="integer" name="flingboost_cpuboost_param" />
   <java-symbol type="integer" name="flingboost_pcdisbl_param" />
   <java-symbol type="integer" name="flingboost_ksmboost_param" />
+  <java-symbol type="integer" name="flingboost_preferidle_param" />
 
   <!-- cpu boost for horizontal scroll -->
   <java-symbol type="bool" name="config_enableCpuBoostForScroller" />
@@ -2181,6 +2182,7 @@
   <java-symbol type="integer" name="scrollboost_cpuboost_param" />
   <java-symbol type="integer" name="scrollboost_pcdisbl_param" />
   <java-symbol type="integer" name="scrollboost_ksmboost_param" />
+  <java-symbol type="integer" name="scrollboost_preferidle_param" />
 
   <!-- Data Connectivity Error Configurations -->
   <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />

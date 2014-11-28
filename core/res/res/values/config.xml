@@ -2034,6 +2034,7 @@
     <integer name="flingboost_cpuboost_param">0</integer>
     <integer name="flingboost_pcdisbl_param">0</integer>
     <integer name="flingboost_ksmboost_param">0</integer>
+    <integer name="flingboost_preferidle_param">0</integer>
 
     <!-- Whether cpu boost is enabled for horizontal scroll. -->
     <bool name="config_enableCpuBoostForScroller">false</bool>
@@ -2042,6 +2043,7 @@
     <integer name="scrollboost_cpuboost_param">0</integer>
     <integer name="scrollboost_pcdisbl_param">0</integer>
     <integer name="scrollboost_ksmboost_param">0</integer>
+    <integer name="scrollboost_preferidle_param">0</integer>
 
     <!-- Configuration to enable non-default PDP during IWLAN -->
     <bool name="config_feature_iwlan_enabled">false</bool>

@@ -121,6 +121,7 @@ public class Scroller  {
     private int lBoostSchedBoost = 0;
     private int lBoostPcDisblBoost = 0;
     private int lBoostKsmBoost = 0;
+    private int lBoostPreferIdle =0;
 
 
     // A context-specific coefficient adjusted to physical values.
@@ -207,6 +208,8 @@ public class Scroller  {
                com.android.internal.R.integer.scrollboost_pcdisbl_param);
         lBoostKsmBoost = context.getResources().getInteger(
                com.android.internal.R.integer.scrollboost_ksmboost_param);
+        lBoostPreferIdle = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_preferidle_param);
         }
 
 
@@ -437,7 +440,7 @@ public class Scroller  {
                 lBoostTimeOut = mDuration;
             }
             mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                          lBoostCpuBoost, lBoostKsmBoost);
+                                          lBoostCpuBoost, lBoostKsmBoost,lBoostPreferIdle);
         }
     }
 
