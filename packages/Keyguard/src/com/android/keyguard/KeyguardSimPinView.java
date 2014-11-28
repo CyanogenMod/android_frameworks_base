@@ -394,18 +394,9 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             mSecurityMessageDisplay.setMessage(getPinPasswordErrorMessage(
                     mRemainingAttempts, true), true);
             return;
+        } else {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
         }
-        new CheckSimPin("") {
-            void onSimCheckResponse(final int result, final int attemptsRemaining) {
-                Log.d(LOG_TAG, "onSimCheckResponse " + " dummy One result" + result +
-                        " attemptsRemaining=" + attemptsRemaining);
-                if (attemptsRemaining >= 0) {
-                    mRemainingAttempts = attemptsRemaining;
-                    mSecurityMessageDisplay.setMessage(
-                            getPinPasswordErrorMessage(attemptsRemaining, true), true);
-                }
-            }
-        }.start();
     }
 }
 
