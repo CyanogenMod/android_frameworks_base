@@ -208,6 +208,11 @@ public class ContentProviderOperation implements Parcelable {
         return mType;
     }
 
+    /** @hide */
+    public boolean isDeleteOperation() {
+        return mType == TYPE_DELETE;
+    }
+
     public boolean isWriteOperation() {
         return mType == TYPE_DELETE || mType == TYPE_INSERT || mType == TYPE_UPDATE;
     }
