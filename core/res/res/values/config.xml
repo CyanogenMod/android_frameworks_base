@@ -2101,9 +2101,6 @@
          service state to display signal strength bars -->
     <bool name="config_combined_signal">true</bool>
 
-	<!-- Boolean to enable stk functionality on Samsung phones -->
-    <bool name="config_samsung_stk">false</bool>
-
     <!-- Default value for proximity check on screen wake
          NOTE ! - Enable for devices that have a fast response proximity sensor (ideally < 300ms)
     -->
