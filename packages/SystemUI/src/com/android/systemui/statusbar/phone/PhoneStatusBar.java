@@ -1733,24 +1733,20 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // Emergency calls only is shown in the expanded header now.
         final boolean emergencyCallsShownElsewhere = mContext.getResources().getBoolean(
                 R.bool.config_showEmergencyCallLabelOnly);
-
-        final boolean makeVisible ;
+        final boolean forceShowCarrierLabel = mContext.getResources().getBoolean(
+                R.bool.config_forceShowCarrierLabel);
+        final boolean isEmergencyOnly;
         if (isMSim()) {
-            makeVisible =
-            !(emergencyCallsShownElsewhere && mMSimNetworkController.isEmergencyOnly())
-            && mStackScroller.getHeight() < (mNotificationPanel.getHeight()
-                    - mCarrierLabelHeight - mStatusBarHeaderHeight)
-            && mStackScroller.getVisibility() == View.VISIBLE
-            && mState != StatusBarState.KEYGUARD;
+            isEmergencyOnly = mMSimNetworkController.isEmergencyOnly();
         } else {
-            makeVisible =
-            !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
-            && mStackScroller.getHeight() < (mNotificationPanel.getHeight()
-                    - mCarrierLabelHeight - mStatusBarHeaderHeight)
-            && mStackScroller.getVisibility() == View.VISIBLE
-            && mState != StatusBarState.KEYGUARD;
+            isEmergencyOnly = mNetworkController.isEmergencyOnly();
         }
-
+        final boolean makeVisible =
+                !(emergencyCallsShownElsewhere && isEmergencyOnly)
+                && (forceShowCarrierLabel || mStackScroller.getHeight() < (mNotificationPanel
+                        .getHeight() - mCarrierLabelHeight - mStatusBarHeaderHeight))
+                && mStackScroller.getVisibility() == View.VISIBLE
+                && mState != StatusBarState.KEYGUARD;
 
         if (force || mCarrierLabelVisible != makeVisible) {
             mCarrierLabelVisible = makeVisible;
