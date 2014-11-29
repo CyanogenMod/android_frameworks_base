@@ -2063,4 +2063,14 @@
    <integer name="animationboost_timeout_param">0</integer>
    <integer name="animationboost_schedboost_param">0</integer>
    <integer name="animationboost_cpuboost_param">0</integer>
+
+   <!-- Activities list for boost -->
+   <string-array translatable="false" name="boost_activityList">
+   </string-array>
+
+   <!-- Activity scroll boost params -->
+   <integer name="ascrollboost_timeout">0</integer>
+   <integer name="ascrollboost_schedboost">0</integer>
+   <integer name="ascrollboost_cpuboost">0</integer>
+   <integer name="ascrollboost_pcdisbl">0</integer>
 </resources>
