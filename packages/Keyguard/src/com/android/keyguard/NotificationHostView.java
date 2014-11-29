@@ -541,15 +541,7 @@ public class NotificationHostView extends FrameLayout {
             v.onAnimationEnd = new Runnable() {
                 public void run() {
                     if (dismiss) {
-                        if (sbn != null && sbn.isClearable()) {
-                            INotificationManager nm = INotificationManager.Stub.asInterface(
-                                    ServiceManager.getService(Context.NOTIFICATION_SERVICE));
-                            try {
-                                nm.cancelNotificationFromListener(NotificationViewManager.NotificationListener, sbn.getPackageName(), sbn.getTag(), sbn.getId());
-                            } catch (RemoteException ex) {
-                                Log.e(TAG, "Failed to cancel notification: " + sbn.getPackageName());
-                            }
-                        }
+                        dismiss(sbn);
                     }
                     mNotifView.removeView(v);
                     mNotifView.requestLayout();
@@ -560,10 +552,23 @@ public class NotificationHostView extends FrameLayout {
     }
 
     public void onButtonClick(int buttonId) {
-        if (mShownNotifications == mNotifications.size()) {
-            dismissAll();
+        if (mShownNotifications == mNotifications.size())
         for (NotificationView nv : mNotifications.values()) {
             if (nv.canBeDismissed()) removeNotification(nv.statusBarNotification);
+        } else {
+            showAllNotifications();
+        }
+    }
+
+    private void dismiss(StatusBarNotification sbn) {
+        if (sbn != null && sbn.isClearable()) {
+            INotificationManager nm = INotificationManager.Stub.asInterface(
+                    ServiceManager.getService(Context.NOTIFICATION_SERVICE));
+            try {
+                nm.cancelNotificationFromListener(NotificationViewManager.NotificationListener, sbn.getPackageName(), sbn.getTag(), sbn.getId());
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Failed to cancel notification: " + sbn.getPackageName());
+            }
         }
     }
 
