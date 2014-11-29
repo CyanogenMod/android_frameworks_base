@@ -873,14 +873,15 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     if (mShowRsrpSignalLevelforLTE) {
                         if (mServiceState.getDataNetworkType() ==
                                 TelephonyManager.NETWORK_TYPE_LTE) {
-                            int level = mSignalStrength.getAlternateLteLevel();
-                            mLastSignalLevel = iconLevel = (level == -1 ? 0 : level);
+                            mLastSignalLevel = iconLevel = mSignalStrength.getAlternateLteLevel();
+
                             Log.d(TAG, "updateTelephonySignalStrength, data type is lte, level = "
                                 + level + " | " + mSignalStrength);
                         }
                     }
                 }
-
+                if (iconLevel == -1)
+                    mLastSignalLevel = iconLevel = 0;
                 mPhoneSignalIconId = TelephonyIcons.getSignalStrengthIcon(mInetCondition,
                         iconLevel, isRoaming());
                 mDataSignalIconId = mPhoneSignalIconId;
