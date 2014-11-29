@@ -699,9 +699,9 @@ public class LLand extends FrameLayout {
         public Player(Context context) {
             super(context);
 
-            setBackgroundResource(R.drawable.android);
+            setBackgroundResource(getEggPlayer());
             getBackground().setTintMode(PorterDuff.Mode.SRC_ATOP);
-            getBackground().setTint(0xFF00FF00);
+            getBackground().setTint(getEggPlayerColor());
             setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
@@ -945,5 +945,13 @@ public class LLand extends FrameLayout {
             w = h = irand(PARAMS.STAR_SIZE_MIN, PARAMS.STAR_SIZE_MAX);
             v = z = 0;
         }
+    }
+
+    protected int getEggPlayer() {
+        return R.drawable.android;
+    }
+
+    protected int getEggPlayerColor() {
+        return 0xFF00FF00;
     }
 }
