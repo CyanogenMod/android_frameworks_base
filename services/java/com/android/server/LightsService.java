@@ -97,7 +97,7 @@ public class LightsService {
 
         public void pulse(int color, int onMS) {
             synchronized (this) {
-                if (mColor == 0) {
+                if (mColor == 0 && !mFlashing) {
                     setLightLocked(color, LIGHT_FLASH_HARDWARE, onMS, 1000, BRIGHTNESS_MODE_USER);
                     mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMS);
                 }
@@ -107,6 +107,12 @@ public class LightsService {
         public void turnOff() {
             synchronized (this) {
                 setLightLocked(0, LIGHT_FLASH_NONE, 0, 0, 0);
+            }
+        }
+
+        private void stopFlashing() {
+            synchronized (this) {
+                setLightLocked(mColor, LIGHT_FLASH_NONE, 0, 0, BRIGHTNESS_MODE_USER);
             }
         }
 
@@ -127,6 +133,7 @@ public class LightsService {
         private int mMode;
         private int mOnMS;
         private int mOffMS;
+        private boolean mFlashing;
     }
 
     /* This class implements an obsolete API that was removed after eclair and re-added during the
@@ -193,7 +200,7 @@ public class LightsService {
         @Override
         public void handleMessage(Message msg) {
             Light light = (Light)msg.obj;
-            light.turnOff();
+            light.stopFlashing();
         }
     };
 
