@@ -144,6 +144,24 @@ class TelephonyIcons {
                 R.drawable.ic_qs_signal_h
     };
 
+    //HSPA+
+    static final int[][] DATA_HP = {
+            { R.drawable.stat_sys_data_fully_connected_hp,
+              R.drawable.stat_sys_data_fully_connected_hp,
+              R.drawable.stat_sys_data_fully_connected_hp,
+              R.drawable.stat_sys_data_fully_connected_hp },
+            { R.drawable.stat_sys_data_fully_connected_hp,
+              R.drawable.stat_sys_data_fully_connected_hp,
+              R.drawable.stat_sys_data_fully_connected_hp,
+              R.drawable.stat_sys_data_fully_connected_hp }
+    };
+
+    static final int[] QS_DATA_HP = {
+                R.drawable.ic_qs_signal_hp,
+                R.drawable.ic_qs_signal_hp
+
+    };
+
     //CDMA
     // Use 3G icons for EVDO data and 1x icons for 1XRTT data
     static final int[][] DATA_1X = {
@@ -413,22 +431,12 @@ class TelephonyIcons {
                 }
                 break;
             case TelephonyManager.NETWORK_TYPE_HSPAP:
-                if (hspaDistinguishable) {
-                    mSelectedDataActivityIndex[sub] = DATA_TYPE_HP;
-                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
-                            dataTypeArray[type], null, NS);
-                    mSelectedQSDataTypeIcon[sub] = QS_DATA_H[inetCondition];
-                    mSelectedDataTypeDesc[sub] = mDataTypeDescriptionArray[type];
-                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_HP;
-                } else {
-                    mSelectedDataActivityIndex[sub] = DATA_TYPE_3G;
-                    mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
-                            mDataTypeGenerationArray[0], null, NS);
-                    mSelectedQSDataTypeIcon[sub] = QS_DATA_3G[inetCondition];
-                    mSelectedDataTypeDesc[sub] = mDataTypeGenerationDescArray[0];
-                    mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_3G;
-
-                }
+                mSelectedDataActivityIndex[sub] = DATA_TYPE_HP;
+                mSelectedDataTypeIcon[sub] = mRes.getIdentifier(
+                        dataTypeArray[type], null, NS);
+                mSelectedQSDataTypeIcon[sub] = QS_DATA_HP[inetCondition];
+                mSelectedDataTypeDesc = mDataTypeDescriptionArray[type];
+                mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_HP;
                 break;
             case TelephonyManager.NETWORK_TYPE_CDMA:
                 if (!showAtLeast3G) {

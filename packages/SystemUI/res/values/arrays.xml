@@ -82,7 +82,7 @@
         <!--NETWORK_TYPE_EHRPD-->
         <item>drawable/stat_sys_data_fully_connected_3g</item>
         <!--NETWORK_TYPE_HSPAP-->
-        <item>drawable/stat_sys_data_fully_connected_h</item>
+        <item>drawable/stat_sys_data_fully_connected_hp</item>
         <!--NETWORK_TYPE_GSM-->
         <item>drawable/stat_sys_data_fully_connected_g</item>
         <!--NETWORK_TYPE_TD_SCDMA-->
