@@ -67,6 +67,7 @@ import com.google.android.collect.Lists;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -1246,15 +1247,28 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             final String plmn = intent.getStringExtra(TelephonyIntents.EXTRA_PLMN);
             String strEmergencyCallOnly = mContext.getResources().getText(
                     com.android.internal.R.string.emergency_calls_only).toString();
-            if (mContext.getResources().getBoolean(
-                    R.bool.config_showEmergencyCallOnlyInLockScreen)
-                && plmn.equalsIgnoreCase(strEmergencyCallOnly)) {
-                    return getDefaultPlmn();
+            if (mContext.getResources().getBoolean(R.bool.config_showEmergencyButton)
+                    && plmn.equalsIgnoreCase(strEmergencyCallOnly)
+                    && !canMakeEmergencyCall()) {
+                return getDefaultPlmn();
             } else {
                 return (plmn != null) ? plmn : getDefaultPlmn();
             }
         }
         return null;
+    }
+
+    private boolean canMakeEmergencyCall() {
+        Iterator iter = mServiceState.entrySet().iterator();
+        while (iter.hasNext()) {
+            HashMap.Entry entry = (HashMap.Entry) iter.next();
+            ServiceState state = (ServiceState) entry.getValue();
+            if ((state != null) && (state.isEmergencyOnly() ||
+                    state.getVoiceRegState() != ServiceState.STATE_OUT_OF_SERVICE)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
