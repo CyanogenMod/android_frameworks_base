@@ -19,6 +19,7 @@ package com.android.server.wm;
 import com.android.server.input.InputManagerService;
 import com.android.server.input.InputApplicationHandle;
 import com.android.server.input.InputWindowHandle;
+import com.android.server.display.DigitalPenOffScreenDisplayAdapter;
 
 import android.app.ActivityManagerNative;
 import android.graphics.Rect;
@@ -177,7 +178,21 @@ final class InputMonitor implements InputManagerService.WindowManagerCallbacks {
         if (modal && child.mAppToken != null) {
             // Limit the outer touch to the activity stack region.
             flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-            child.getStackBounds(mTmpRect);
+
+            DisplayContent offScreenDisplayContent =
+                mService.getDigitalPenOffScreenDisplayContentLocked();
+
+            if ((!DigitalPenOffScreenDisplayAdapter.isDigitalPenDisabled())
+                && (null != offScreenDisplayContent)
+                && (child.getDisplayId() == offScreenDisplayContent.getDisplayId())) {
+                // If the window is located on the digital pen extended off-screen
+                // display, make the touchable region the entire frame. Using
+                // getStackBounds() will yield the bounds of the activity which
+                // is on the main display - not what we want.
+                mTmpRect = child.getFrameLw();
+            } else {
+                child.getStackBounds(mTmpRect);
+            }
             inputWindowHandle.touchableRegion.set(mTmpRect);
         } else {
             // Not modal or full screen modal
