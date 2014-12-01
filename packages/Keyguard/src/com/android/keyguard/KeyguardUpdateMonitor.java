@@ -248,6 +248,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 case MSG_SUBINFO_CONTENT_CHANGE:
                     handleSubInfoContentChange((SubInfoContent) msg.obj);
                     break;
+                case MSG_SERVICE_STATE_CHANGED:
+                    handleServiceStateChanged((ServiceState) msg.obj, (long) msg.arg1);
+                    break;
             }
         }
     };
@@ -461,6 +464,11 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                         mShowSpn.get(subId) + " showPlmn:" + mShowPlmn.get(subId) +
                         " mServiceState: " + mServiceState.get(subId));
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE, subId));
+
+                final Message message = mHandler.obtainMessage(
+                        MSG_SERVICE_STATE_CHANGED, mServiceState.get(subId));
+                message.arg1 = (int) subId;
+                mHandler.sendMessage(message);
             } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
                 Log.d(TAG, "Received CONFIGURATION_CHANGED intent");
                 for (int i = 0; i < mNumPhones; i++) {
@@ -1125,6 +1133,15 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
     }
 
+    private void handleServiceStateChanged(ServiceState state, long sub) {
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onServiceStateChanged(state, sub);
+            }
+        }
+    }
+
     /**
      * Handle {@link #MSG_CLOCK_VISIBILITY_CHANGED}
      */
@@ -1335,6 +1352,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
     public IccCardConstants.State getSimState(long subId) {
         return mSimState.get(subId);
+    }
+
+    public HashMap<Long, ServiceState> getServiceStates() {
+        return mServiceState;
     }
 
     /**

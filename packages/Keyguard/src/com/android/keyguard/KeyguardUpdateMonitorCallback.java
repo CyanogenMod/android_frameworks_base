@@ -20,6 +20,7 @@ import android.app.admin.DevicePolicyManager;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.os.SystemClock;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.view.WindowManagerPolicy;
 
@@ -133,6 +134,11 @@ public class KeyguardUpdateMonitorCallback {
      * @param subId The subscription id which SIM state changed.
      */
     public void onSimStateChanged(long subId, IccCardConstants.State simState) {}
+
+    /**
+     * Called when the sevice state changes.
+     */
+    void onServiceStateChanged(ServiceState state, long sub) { }
 
     /**
      * Called when a user is removed.
