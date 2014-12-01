@@ -405,6 +405,9 @@ public final class PowerManagerService extends SystemService
     // A bitfield of battery conditions under which to make the screen stay on.
     private int mStayOnWhilePluggedInSetting;
 
+    // True if the device should wake up when plugged or unplugged
+    private int mWakeUpWhenPluggedOrUnpluggedSetting;
+
     // True if the device should stay on.
     private boolean mStayOn;
 
@@ -709,6 +712,9 @@ public final class PowerManagerService extends SystemService
             resolver.registerContentObserver(CMSettings.Secure.getUriFor(
                     CMSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT),
                     false, mSettingsObserver, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.Global.getUriFor(
+                    CMSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
+                    false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
             readConfigurationLocked();
@@ -784,6 +790,9 @@ public final class PowerManagerService extends SystemService
                 Settings.Global.STAY_ON_WHILE_PLUGGED_IN, BatteryManager.BATTERY_PLUGGED_AC);
         mTheaterModeEnabled = Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.THEATER_MODE_ON, 0) == 1;
+        mWakeUpWhenPluggedOrUnpluggedSetting = CMSettings.Global.getInt(resolver,
+                CMSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
+                (mWakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0));
 
         if (mSupportsDoubleTapWakeConfig) {
             boolean doubleTapWakeEnabled = Settings.Secure.getIntForUser(resolver,
@@ -1533,7 +1542,7 @@ public final class PowerManagerService extends SystemService
     private boolean shouldWakeUpWhenPluggedOrUnpluggedLocked(
             boolean wasPowered, int oldPlugType, boolean dockedOnWirelessCharger) {
         // Don't wake when powered unless configured to do so.
-        if (!mWakeUpWhenPluggedOrUnpluggedConfig) {
+        if (mWakeUpWhenPluggedOrUnpluggedSetting == 0) {
             return false;
         }
 
