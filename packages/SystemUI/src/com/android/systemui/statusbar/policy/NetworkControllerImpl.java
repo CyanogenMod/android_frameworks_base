@@ -78,6 +78,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
     int mDataState = TelephonyManager.DATA_DISCONNECTED;
     int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
     ServiceState mServiceState;
+    ServiceState mLastServiceState = new ServiceState();
     SignalStrength mSignalStrength;
     int[] mDataIconList = TelephonyIcons.DATA_G[0];
     String mNetworkName;
@@ -1481,7 +1482,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
          || mLastLocale                     != mLocale
          || mLastConnectedNetworkType       != mConnectedNetworkType
          || mLastSimIconId                  != mNoSimIconId
-         || mLastMobileActivityIconId       != mMobileActivityIconId)
+         || mLastMobileActivityIconId       != mMobileActivityIconId
+         || mLastServiceState.getVoiceNetworkType() != getVoiceNetworkType())
         {
             // NB: the mLast*s will be updated later
             for (SignalCluster cluster : mSignalClusters) {
@@ -1616,6 +1618,11 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     v.setContentDescription(mContentDescriptionDataType);
                 }
             }
+        }
+
+        // the service state
+        if (mLastServiceState != mServiceState) {
+            mLastServiceState = mServiceState;
         }
 
         // the combinedLabel in the notification panel
