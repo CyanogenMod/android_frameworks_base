@@ -16,6 +16,7 @@
 package android.app;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -601,6 +602,23 @@ public class IconPackHelper {
         private static String getCachedIconPath(String pkgName, int resId, int density) {
             return String.format("%s/%s", ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR,
                     getCachedIconName(pkgName, resId, density));
+        }
+
+
+        // Returns paths for all densities
+        public static String[] getCachedIconPaths(String pkgName) {
+            File iconCache = new File(ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR);
+            final String prefix = String.format("%s", pkgName);
+
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return filename.startsWith(prefix);
+                }
+            };
+
+            String[] validPaths = iconCache.list(filter);
+            return validPaths != null ? validPaths : new String[0];
         }
 
         private static String getCachedIconName(String pkgName, int resId, int density) {
