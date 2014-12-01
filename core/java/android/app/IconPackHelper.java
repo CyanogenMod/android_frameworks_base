@@ -603,6 +603,24 @@ public class IconPackHelper {
                     getCachedIconName(pkgName, resId, density));
         }
 
+
+        // Returns paths for all densities
+        public static List<String> getCachedIconPaths(String pkgName) {
+            List<String> iconPaths = new ArrayList<String>();
+            File iconCache = new File(ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR);
+            String prefix = String.format("%s", pkgName);
+            String[] files = iconCache.list();
+
+            for(String filename : files) {
+                if (filename.startsWith(prefix)) {
+                    File file = new File(iconCache, filename);
+                    iconPaths.add(file.getAbsolutePath());
+                }
+            }
+
+            return iconPaths;
+        }
+
         private static String getCachedIconName(String pkgName, int resId, int density) {
             return String.format("%s_%08x_%d.png", pkgName, resId, density);
         }
