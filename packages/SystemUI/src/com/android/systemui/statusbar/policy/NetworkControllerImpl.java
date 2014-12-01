@@ -873,7 +873,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     if (mShowRsrpSignalLevelforLTE) {
                         if (mServiceState.getDataNetworkType() ==
                                 TelephonyManager.NETWORK_TYPE_LTE) {
-                            int level = mSignalStrength.getAlternateLteLevel();
+                            int level = mSignalStrength.getLteRsrpLevel();
                             mLastSignalLevel = iconLevel = (level == -1 ? 0 : level);
                             Log.d(TAG, "updateTelephonySignalStrength, data type is lte, level = "
                                 + level + " | " + mSignalStrength);

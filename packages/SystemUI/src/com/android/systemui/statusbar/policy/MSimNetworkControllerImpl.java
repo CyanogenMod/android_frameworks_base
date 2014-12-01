@@ -739,7 +739,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     if (mShowRsrpSignalLevelforLTE) {
                         if (mMSimServiceState[phoneId].getDataNetworkType() ==
                                 TelephonyManager.NETWORK_TYPE_LTE) {
-                            int level = mMSimSignalStrength[phoneId].getAlternateLteLevel();
+                            int level = mMSimSignalStrength[phoneId].getLteRsrpLevel();
                             mLastSignalLevel = iconLevel = (level == -1 ? 0 : level);
                             Slog.d(TAG, "updateTelephonySignalStrength, data type is lte, level = "
                                 + level + " | " + mMSimSignalStrength[phoneId]);

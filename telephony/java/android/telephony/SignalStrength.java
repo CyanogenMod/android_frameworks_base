@@ -770,14 +770,15 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get LTE as level 0..4
+     * Get LTE Rsrp as level 0..4
      *
      * @hide
      */
-    public int getAlternateLteLevel() {
+    public int getLteRsrpLevel() {
         int rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        if (mLteRsrp > -44) rsrpIconLevel = -1;
+        // treating invalid as unknown
+        if (mLteRsrp > -44) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
         else if (mLteRsrp >= -97) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
         else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
         else if (mLteRsrp >= -113) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
