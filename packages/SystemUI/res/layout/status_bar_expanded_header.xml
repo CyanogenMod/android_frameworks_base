@@ -89,6 +89,18 @@
     </LinearLayout>
 
     <TextView
+            android:id="@+id/weather_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/multi_user_switch"
+            android:layout_gravity="center_vertical"
+            android:paddingEnd="16dp"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/battery_level_text_size"
+            android:importantForAccessibility="noHideDescendants"/>
+
+    <TextView
         android:id="@+id/header_emergency_calls_only"
         android:layout_height="@dimen/status_bar_header_height"
         android:layout_width="wrap_content"
