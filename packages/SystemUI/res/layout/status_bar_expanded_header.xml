@@ -113,6 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/clock_collapsed_bottom_margin"
+        android:background="@drawable/ripple_drawable"
         android:layout_alignParentBottom="true">
         <com.android.systemui.statusbar.policy.DateView android:id="@+id/date_collapsed"
             android:layout_width="wrap_content"
@@ -135,13 +136,18 @@
             />
     </FrameLayout>
 
-    <include layout="@layout/split_clock_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_above="@id/date_group"
-        android:id="@+id/clock"
-        />
+    <FrameLayout
+            android:id="@+id/clock"
+            android:layout_marginStart="16dp"
+            android:layout_above="@id/date_group"
+            android:background="@drawable/ripple_drawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <include layout="@layout/split_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+    </FrameLayout>
 
     <com.android.systemui.statusbar.AlphaOptimizedButton android:id="@+id/alarm_status"
         android:layout_width="wrap_content"
