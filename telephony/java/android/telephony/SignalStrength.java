@@ -770,7 +770,8 @@ public class SignalStrength implements Parcelable {
     }
 
     /**
-     * Get LTE as level 0..4
+     * Get LTE Rsrp as level 0..4
+     * Returns -1 if mLteRsrp is INVALID
      *
      * @hide
      */
