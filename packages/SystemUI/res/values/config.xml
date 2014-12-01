@@ -168,6 +168,7 @@
         <item>0</item>
     </integer-array>
     <bool name="config_showRsrpSignalLevelforLTE">false</bool>
+    <bool name="config_show_battery_charging_anim">false</bool>
 
     <!-- The duration in seconds to wait before the dismiss buttons are shown. -->
     <integer name="recents_task_bar_dismiss_delay_seconds">1</integer>
