@@ -5178,6 +5178,17 @@ public class PackageManagerService extends IPackageManager.Stub {
                 pkg.applicationInfo.themedIcon = id;
             }
 
+            // Clear out any icon in the cache so it can be recomopsed if needed
+            final boolean isBootScan = (scanMode & SCAN_BOOTING) != 0;
+            if (!isBootScan) {
+                String[] iconPaths =
+                        IconPackHelper.IconCustomizer.getCachedIconPaths(pkg.packageName);
+                for(String iconPath : iconPaths) {
+                    File file = new File(ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR, iconPath);
+                    file.delete();
+                }
+            }
+
             // Add the new setting to mPackages
             mPackages.put(pkg.applicationInfo.packageName, pkg);
             // Make sure we don't accidentally delete its data.
@@ -5495,7 +5506,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             pkgSetting.setTimeStamp(scanFileTime);
 
-            final boolean isBootScan = (scanMode & SCAN_BOOTING) != 0;
             // Generate resources & idmaps if pkg is NOT a theme
             // We must compile resources here because during the initial boot process we may get
             // here before a default theme has had a chance to compile its resources
