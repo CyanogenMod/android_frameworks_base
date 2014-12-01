@@ -6600,6 +6600,7 @@ public final class Settings {
         public static final String CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED =
                 "camera_double_tap_power_gesture_disabled";
 
+
         /**
          * This are the settings to be backed up.
          *
@@ -6657,7 +6658,7 @@ public final class Settings {
             SLEEP_TIMEOUT,
             DOUBLE_TAP_TO_WAKE,
             ADVANCED_REBOOT,
-            CAMERA_GESTURE_DISABLED,
+            CAMERA_GESTURE_DISABLED
         };
 
         /**

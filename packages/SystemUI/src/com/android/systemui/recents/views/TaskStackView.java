@@ -17,18 +17,27 @@
 package com.android.systemui.recents.views;
 
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.IPackageDataObserver;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
@@ -85,6 +94,9 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
     boolean mDismissAllButtonAnimating;
     int mFocusedTaskIndex = -1;
     int mPrevAccessibilityFocusedIndex = -1;
+
+    private PopupMenu mPopup;
+
     // Optimizations
     int mStackViewsAnimationDuration;
     boolean mStackViewsDirty = true;
@@ -1370,6 +1382,85 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
             MetricsLogger.count(getContext(), "overview_app_info", 1);
         }
     }
+
+    @Override
+    public void onTaskViewLongClicked(final TaskView tv) {
+        final PopupMenu popup = new PopupMenu(getContext(), tv.mHeaderView.mApplicationIcon);
+        mPopup = popup;
+        popup.getMenuInflater().inflate(R.menu.recent_popup_menu, popup.getMenu());
+
+        final Task task = tv.getTask();
+        final String packageName = task.key.baseIntent.getComponent().getPackageName();
+
+        try {
+            PackageManager pm = (PackageManager) getContext().getPackageManager();
+            ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
+            DevicePolicyManager dpm = (DevicePolicyManager) getContext()
+                    .getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+            boolean hasActiveAdmins = dpm.packageHasActiveAdmins(packageName);
+            boolean isClearable = (appInfo.flags &
+                    (ApplicationInfo.FLAG_ALLOW_CLEAR_USER_DATA | ApplicationInfo.FLAG_SYSTEM)) !=
+                    ApplicationInfo.FLAG_SYSTEM;
+            if (!isClearable || hasActiveAdmins) {
+                popup.getMenu().findItem(R.id.recent_wipe_app).setEnabled(false);
+                popup.getMenu().findItem(R.id.recent_uninstall).setEnabled(false);
+            }
+        } catch (PackageManager.NameNotFoundException ex) {
+        }
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.recent_remove_item:
+                        onTaskViewDismissed(tv);
+                        break;
+                    case R.id.recent_inspect_item:
+                        onTaskViewAppInfoClicked(tv);
+                        break;
+                    case R.id.recent_force_stop:
+                    {
+                        ActivityManager am = (ActivityManager) getContext()
+                                .getSystemService(Context.ACTIVITY_SERVICE);
+                        am.forceStopPackage(packageName);
+                        onTaskViewDismissed(tv);
+                        break;
+                    }
+                    case R.id.recent_wipe_app:
+                    {
+                        ActivityManager am = (ActivityManager) getContext()
+                                .getSystemService(Context.ACTIVITY_SERVICE);
+                        am.clearApplicationUserData(packageName, new IPackageDataObserver.Stub() {
+                            @Override
+                            public void onRemoveCompleted(String packageName, boolean succeeded) {}
+                        });
+                        onTaskViewDismissed(tv);
+                        break;
+                    }
+                    case R.id.recent_uninstall:
+                    {
+                        Uri packageUri = Uri.parse("package:" + packageName);
+                        Intent uninstallIntent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageUri);
+                        uninstallIntent.putExtra(Intent.EXTRA_UNINSTALL_ALL_USERS, true);
+                        getContext().startActivity(uninstallIntent);
+                        onTaskViewDismissed(tv);
+                        break;
+                    }
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        });
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                mPopup = null;
+            }
+        });
+        popup.show();
+    }
+
 
     @Override
     public void onTaskViewClicked(TaskView tv, Task task, boolean lockToTask) {
