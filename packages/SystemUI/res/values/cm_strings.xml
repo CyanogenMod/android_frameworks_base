@@ -25,4 +25,9 @@
     <string name="screenshot_delete_action">Delete</string>
     <string name="screenshot_delete_confirmation">Screenshot deleted.</string>
 
+    <!-- Development shortcuts -->
+    <string name="advanced_dev_option_wipe_app">Wipe app data</string>
+    <string name="advanced_dev_option_force_stop">Force stop</string>
+    <string name="advanced_dev_option_uninstall">Uninstall</string>
+
 </resources>
