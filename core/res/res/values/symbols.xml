@@ -2200,4 +2200,9 @@
   <java-symbol type="integer" name="launchboost_ksmboost_param" />
 
   <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
+  <!-- cpu boost for Animationboost -->
+  <java-symbol type="bool" name="config_enablePerfBoostForAnimation" />
+  <java-symbol type="integer" name="animationboost_timeout_param" />
+  <java-symbol type="integer" name="animationboost_schedboost_param" />
+  <java-symbol type="integer" name="animationboost_cpuboost_param" />
 </resources>

@@ -2060,4 +2060,8 @@
     <!-- Support for disabling to fetch APN from OMH card
          for some cdma carriers -->
     <bool name="config_fetch_apn_from_omh_card">true</bool>
+   <bool name="config_enablePerfBoostForAnimation">false</bool>
+   <integer name="animationboost_timeout_param">0</integer>
+   <integer name="animationboost_schedboost_param">0</integer>
+   <integer name="animationboost_cpuboost_param">0</integer>
 </resources>
