@@ -462,6 +462,9 @@
 
     <!-- If this is true, key chords can be used to take a screenshot on the device. -->
     <bool name="config_enableScreenshotChord">true</bool>
+    
+    <!-- enable support screen off gesture -->
+    <bool name="g_offscreenGestureSupport">false</bool>
 
     <!-- Auto-rotation behavior -->
 
