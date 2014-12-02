@@ -3041,6 +3041,12 @@ public final class Settings {
         public static final String KEY_APP_SWITCH_LONG_PRESS_ACTION = "key_app_switch_long_press_action";
 
         /**
+         * Whether to wake the screen with the home key, the value is boolean.
+         * @hide
+         */
+        public static final String HOME_WAKE_SCREEN = "home_wake_screen";
+
+        /**
          * Whether the phone ringtone should be played in an increasing manner
          * @hide
          */
@@ -3072,6 +3078,12 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
+
+        /**
+         * Status bar battery % text
+         * @hide
+         */
+        public static final String STATUS_BAR_SHOW_BATTERY_TEXT = "status_bar_show_battery_text";
 
         /**
          *  Enable statusbar double tap gesture on to put device to sleep
