@@ -1247,8 +1247,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
          || mMSimLastSimIconId[phoneId] != mNoMSimIconId[phoneId]
          || mMSimLastcombinedActivityIconId[phoneId]
                 != mMSimcombinedActivityIconId[phoneId]
-        || mMSimLastServiceState[phoneId].getVoiceNetworkType()
-                != getVoiceNetworkType(phoneId))
+         || getLastVoiceNetworkType() != getVoiceNetworkType(phoneId))
         {
             // NB: the mLast*s will be updated later
             for (MSimSignalCluster cluster : mSimSignalClusters) {
@@ -1344,6 +1343,13 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             return TelephonyManager.NETWORK_TYPE_UNKNOWN;
         }
         return mMSimServiceState[sub].getVoiceNetworkType();
+    }
+
+    public int getLastVoiceNetworkType(int sub) {
+        if (mMSimLastServiceState[sub] == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        return mMSimLastServiceState[sub].getVoiceNetworkType();
     }
 
     public int getDataNetworkType(int sub) {
