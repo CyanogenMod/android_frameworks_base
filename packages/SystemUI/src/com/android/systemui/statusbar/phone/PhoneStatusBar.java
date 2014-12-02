@@ -24,6 +24,7 @@ import static android.app.StatusBarManager.NAVIGATION_HINT_IME_SHOWN;
 import static android.app.StatusBarManager.WINDOW_STATE_HIDDEN;
 import static android.app.StatusBarManager.WINDOW_STATE_SHOWING;
 import static android.app.StatusBarManager.windowStateToString;
+import static com.android.systemui.settings.BrightnessController.BRIGHTNESS_ADJ_RESOLUTION;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OUT;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_OPAQUE;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_SEMI_TRANSPARENT;
@@ -133,6 +134,7 @@ import com.android.systemui.doze.DozeHost;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.qs.QSPanel;
+import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.statusbar.ActivatableNotificationView;
 import com.android.systemui.statusbar.BackDropView;
 import com.android.systemui.statusbar.BaseStatusBar;
@@ -367,6 +369,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     int[] mAbsPos = new int[2];
     ArrayList<Runnable> mPostCollapseRunnables = new ArrayList<>();
 
+    private boolean mAutomaticBrightness;
     private boolean mBrightnessControl;
     private boolean mBrightnessChanged;
     private float mScreenWidth;
@@ -421,10 +424,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            boolean autoBrightness = Settings.System.getInt(
-                    resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, 0) ==
-                    Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-            mBrightnessControl = !autoBrightness && Settings.System.getInt(
+            int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                            Settings.System.SCREEN_BRIGHTNESS_MODE,
+                            Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
+                            UserHandle.USER_CURRENT);
+            mAutomaticBrightness = mode != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+            mBrightnessControl = Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
         }
     }
@@ -2666,19 +2671,41 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 Math.max(BRIGHTNESS_CONTROL_PADDING, raw));
         float value = (padded - BRIGHTNESS_CONTROL_PADDING) /
                 (1 - (2.0f * BRIGHTNESS_CONTROL_PADDING));
-
-        int newBrightness = mMinBrightness + (int) Math.round(value *
-                (android.os.PowerManager.BRIGHTNESS_ON - mMinBrightness));
-        newBrightness = Math.min(newBrightness, android.os.PowerManager.BRIGHTNESS_ON);
-        newBrightness = Math.max(newBrightness, mMinBrightness);
-
         try {
             IPowerManager power = IPowerManager.Stub.asInterface(
                     ServiceManager.getService("power"));
             if (power != null) {
-                power.setTemporaryScreenBrightnessSettingOverride(newBrightness);
-                Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS, newBrightness);
+                if (mAutomaticBrightness) {
+                    float adj = (value * 100) / (BRIGHTNESS_ADJ_RESOLUTION / 2f) - 1;
+                    adj = Math.max(adj, -1);
+                    adj = Math.min(adj, 1);
+                    final float val = adj;
+                    power.setTemporaryScreenAutoBrightnessAdjustmentSettingOverride(val);
+                    AsyncTask.execute(new Runnable() {
+                        public void run() {
+                            Settings.System.putFloatForUser(mContext.getContentResolver(),
+                                    Settings.System.SCREEN_AUTO_BRIGHTNESS_ADJ, val,
+                                    UserHandle.USER_CURRENT);
+                        }
+                    });
+                } else {
+                    int newBrightness = mMinBrightness + (int) Math.round(value *
+                            (android.os.PowerManager.BRIGHTNESS_ON - mMinBrightness));
+                    newBrightness = Math.min(newBrightness, android.os.PowerManager.BRIGHTNESS_ON);
+                    newBrightness = Math.max(newBrightness, mMinBrightness);
+                    final int val = newBrightness;
+                    power.setTemporaryScreenBrightnessSettingOverride(val);
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Settings.System.putFloatForUser(mContext.getContentResolver(),
+                                    Settings.System.SCREEN_BRIGHTNESS, val,
+                                    UserHandle.USER_CURRENT);
+                        }
+                    });
+                }
+
+
             }
         } catch (RemoteException e) {
             Log.w(TAG, "Setting Brightness failed: " + e);
