@@ -908,6 +908,11 @@ public abstract class Connection implements IConferenceable {
         return mConnectionCapabilities;
     }
 
+    /** @hide */
+    @SystemApi @Deprecated public final int getCallCapabilities() {
+        return getConnectionCapabilities();
+    }
+
     /**
      * Returns the connection's {@link CallProperties}
      */
