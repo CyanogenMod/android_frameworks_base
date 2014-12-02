@@ -30,6 +30,7 @@ package org.codeaurora;
 
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.util.DisplayMetrics;
 
 public class Performance
@@ -101,8 +102,9 @@ public class Performance
     /* Min drag in horizontal,vertical (abs pixels) */
     private int mWDragPix = 12;
     private int mHDragPix = 12;
-    /* fling boost duration (msec) */
-    private int mFlingBoostDuration = 1500;
+    /* Min/Max velocity pixel/second values */
+    private int mMinVelocity = 150;
+    private int mMaxVelocity = 24000;
     /* Tunables End. */
 
     class TouchInfo {
@@ -114,10 +116,6 @@ public class Performance
         private int mCurX = 0;
         private int mCurY = 0;
 
-        /* Width, Height to declare fling */
-        private int mMinFlingW = 0;
-        private int mMinFlingH = 0;
-
         /* Width, Height to declare drag */
         private int mMinDragW = 0;
         private int mMinDragH = 0;
@@ -125,18 +123,13 @@ public class Performance
         /* Note: All coordinates are density normalized values */
         private void reset() {
             mStartX = mStartY = mCurX = mCurY = 0;
-            mMinFlingH = mMinFlingW = mMinDragH = mMinDragW = 0;
+            mMinDragH = mMinDragW = 0;
             isFlingEnabled = false;
         }
         /* update current x,y coordinates */
         private void setXY(int dx, int dy) {
             mCurX = dx;
             mCurY = dy;
-        }
-        /* Set fling min width, height */
-        private void setFlingWH(int dw, int dh) {
-            mMinFlingW = dw;
-            mMinFlingH = dh;
         }
         /* Set drag min width, height */
         private void setDragWH(int dw, int dh) {
@@ -149,84 +142,120 @@ public class Performance
         }
     };
     private static TouchInfo mTouchInfo = null;
-
+    private static VelocityTracker mVelocityTracker = null;
 
     /* The following two functions are the PerfLock APIs*/
     /** &hide */
-    public int perfLockAcquireTouch(MotionEvent ev, DisplayMetrics metrics, int duration, int... list) {
+    public int perfLockAcquireTouch(MotionEvent ev, DisplayMetrics metrics,
+                                                        int duration, int... list) {
         int rc = REQUEST_FAILED;
-        if (mTouchInfo == null)
-            mTouchInfo = new TouchInfo();
         final int actionMasked = ev.getActionMasked();
         final int pointerIndex = ev.getActionIndex();
-
+        final int pointerId = ev.getPointerId(pointerIndex);
         final int y = (int) ev.getY(pointerIndex);
         final int x = (int) ev.getX(pointerIndex);
 
         int dx = (int)((x * 1f)/metrics.density);
         int dy = (int)((y * 1f)/metrics.density);
 
-        boolean ret = true;
+        boolean isBoostRequired = false;
 
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN: {
-                mTouchInfo.reset();
-                mTouchInfo.setStartXY(dx, dy);
-                mTouchInfo.setFlingWH(
-                       (int)((metrics.widthPixels * 1f)/(mDivFact * metrics.density)),
-                       (int)((metrics.heightPixels * 1f)/(mDivFact * metrics.density)));
-                mTouchInfo.setDragWH((int)(mWDragPix * 1f/metrics.density),
-                                     (int)(mHDragPix * 1f/metrics.density));
-                return rc;
+                if(mVelocityTracker == null) {
+                    // Retrieve a new VelocityTracker object to watch the velocity of a motion.
+                    mVelocityTracker = VelocityTracker.obtain();
+                }
+                else {
+                    // Reset the velocity tracker back to its initial state.
+                    mVelocityTracker.clear();
+                }
+
+                if(mVelocityTracker != null) {
+                    // Add a user's movement to the tracker.
+                    mVelocityTracker.addMovement(ev);
+                }
+                if (mTouchInfo == null) {
+                    mTouchInfo = new TouchInfo();
+                }
+                if (mTouchInfo != null) {
+                    // Reset drag boost params
+                    mTouchInfo.reset();
+                    // set start, current position
+                    mTouchInfo.setStartXY(dx, dy);
+                    // set drag movement thresholds
+                    mTouchInfo.setDragWH((int)(mWDragPix * 1f/metrics.density),
+                                         (int)(mHDragPix * 1f/metrics.density));
+                }
+                break;
             }
 
             case MotionEvent.ACTION_MOVE: {
-                int xdiff = dx - mTouchInfo.mCurX;
-                int ydiff = dy - mTouchInfo.mCurY;
-                if (xdiff < 0) xdiff *= -1;
-                if (ydiff < 0) ydiff *= -1;
-
-                mTouchInfo.setXY(dx, dy);
-                if ((xdiff > mTouchInfo.mMinDragW) ||
-                    (ydiff > mTouchInfo.mMinDragH)){
-                    ret = false;
+                if(mVelocityTracker != null) {
+                    // Add a user's movement to the tracker.
+                    mVelocityTracker.addMovement(ev);
                 }
 
-                if (ret == true)
-                    return rc;
+                if(mTouchInfo != null) {
+                    int xdiff = Math.abs(dx - mTouchInfo.mCurX);
+                    int ydiff = Math.abs(dy - mTouchInfo.mCurY);
+                    //set current position
+                    mTouchInfo.setXY(dx, dy);
+
+                    if ((xdiff > mTouchInfo.mMinDragW) ||
+                        (ydiff > mTouchInfo.mMinDragH)) {
+                        //drag detected. Boost it.
+                        isBoostRequired = true;
+                    }
+                }
                 break;
             }
 
             case MotionEvent.ACTION_UP: {
-                int xdiff = dx - mTouchInfo.mCurX;
-                int ydiff = dy - mTouchInfo.mCurY;
-                if (xdiff < 0) xdiff *= -1;
-                if (ydiff < 0) ydiff *= -1;
-                if ((xdiff > mTouchInfo.mMinDragW) ||
-                    (ydiff > mTouchInfo.mMinDragH)){
-                    ret = false;
+                if(mVelocityTracker != null) {
+                    // Add a user's movement to the tracker
+                    mVelocityTracker.addMovement(ev);
+                    // compute velocity (pixel per second)
+                    mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
+                    final int initialVelocity =
+                        Math.abs((int) mVelocityTracker.getYVelocity(pointerId));
+                    if (initialVelocity > mMinVelocity) {
+                        //Velocity is more than min velocity.Calculate fling boost duration.
+                        duration *=  ((1f * initialVelocity)/(1f * mMinVelocity));
+                        //Enable boost
+                        isBoostRequired = true;
+                        break;
+                    }
                 }
+                if(mTouchInfo != null) {
+                    int xdiff = Math.abs(dx - mTouchInfo.mCurX);
+                    int ydiff = Math.abs(dy - mTouchInfo.mCurY);
 
-                mTouchInfo.reset();
-                if (ret == true){
-                    return rc;
+                    if ((xdiff > mTouchInfo.mMinDragW) ||
+                        (ydiff > mTouchInfo.mMinDragH)) {
+                        //Only drag boost. Boost it.
+                        isBoostRequired = true;
+                    }
                 }
                 break;
             }
 
             case MotionEvent.ACTION_CANCEL: {
-                mTouchInfo.reset();
-                return rc;
+                if(mTouchInfo != null) {
+                    mTouchInfo.reset();
+                }
+                break;
             }
 
             default:
-                return rc;
+                break;
         }
-
-        rc = REQUEST_SUCCEEDED;
-        handle = native_perf_lock_acq(handle, duration, list);
-        if (handle == 0)
-            rc = REQUEST_FAILED;
+        if(isBoostRequired ==  true) {
+            handle = native_perf_lock_acq(handle, duration, list);
+            if (handle != 0) {
+               rc = REQUEST_SUCCEEDED;
+            }
+        }
         return rc;
     }
 
