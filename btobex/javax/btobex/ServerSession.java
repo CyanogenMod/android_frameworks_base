@@ -285,10 +285,21 @@ public final class ServerSession extends ObexSession implements Runnable {
                 if (VERBOSE) Log.v(TAG, "handlePutRequest pre != HTTP_OK sendReply");
                 op.sendReply(response, false, false);
             } else if (!op.isAborted) {
+                String nameHeader = (String)op.replyHeader.getHeader(HeaderSet.NAME);
+                if (!op.finalBitSet && nameHeader != null) {
+                    if (VERBOSE) Log.v(TAG, "handlePutRequest Saved: "+nameHeader);
+                    //Donot Include NameHeader in CONTINUE
+                    op.replyHeader.setHeader(HeaderSet.NAME, null);
+                }
                 // wait for the final bit
                 while (!op.finalBitSet) {
                     if (VERBOSE) Log.v(TAG, "handlePutRequest pre looped sendReply");
                     op.sendReply(ResponseCodes.OBEX_HTTP_CONTINUE, op.mSingleResponseActive, false);
+                }
+                if (nameHeader != null) {
+                    if (VERBOSE) Log.v(TAG, "handlePutRequest SETHeader: "+nameHeader);
+                    //PUT NameHeader in Final Packet
+                    op.replyHeader.setHeader(HeaderSet.NAME, nameHeader);
                 }
                 op.sendReply(response, false,false);
             }
