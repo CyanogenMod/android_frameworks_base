@@ -7284,6 +7284,13 @@ public final class Settings {
 
 
         /**
+          * Subscription to be used for handling legacy TelephonyManager/other aidl API calls.
+          *  Valid subId values are greater than 0.
+          * @hide
+          */
+        public static final String MULTI_SIM_DEFAULT_SUBSCRIPTION = "multi_sim_default_sub";
+
+        /**
           * Subscription to be used for voice call on a multi sim device. The supported values
           * are 0 = SUB1, 1 = SUB2 and etc.
           * @hide
