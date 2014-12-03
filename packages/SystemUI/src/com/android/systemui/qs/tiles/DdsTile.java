@@ -84,9 +84,7 @@ public class DdsTile extends QSTile<QSTile.State> {
                     SubscriptionManager.getDefaultDataSubId());
         }
 
-        ConnectivityManager cm =
-                (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null && cm.getMobileDataEnabled() && !isAirplaneModeOn()) {
+        if (isDefaultDataEnabled() && !isAirplaneModeOn()) {
             if (DEBUG) Log.d(TAG, "mobile data is on.");
             switch(dataPhoneId) {
                 case PhoneConstants.SUB1:
@@ -120,6 +118,11 @@ public class DdsTile extends QSTile<QSTile.State> {
             state.label = mContext.getString(R.string.quick_settings_data_off);
             state.contentDescription = mContext.getString(R.string.quick_settings_data_off);
         }
+    }
+
+    private boolean isDefaultDataEnabled() {
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MOBILE_DATA + SubscriptionManager.getDefaultDataPhoneId(), 0) != 0;
     }
 
     public void setListening(boolean listening) {
@@ -160,9 +163,12 @@ public class DdsTile extends QSTile<QSTile.State> {
         }
 
         public void startObserving() {
-            mContext.getContentResolver().registerContentObserver(
-                    Settings.Global.getUriFor(Settings.Global.MOBILE_DATA),
-                    false, this);
+            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+            for (int i = 0; i < phoneCount; i++) {
+                mContext.getContentResolver().registerContentObserver(
+                        Settings.Global.getUriFor(Settings.Global.MOBILE_DATA + i),
+                        false, this);
+            }
             mContext.getContentResolver().registerContentObserver(
                     Settings.Global.getUriFor(
                     Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION),

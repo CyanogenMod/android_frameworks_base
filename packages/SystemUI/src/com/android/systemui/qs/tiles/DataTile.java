@@ -80,18 +80,13 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
                 Settings.Global.AIRPLANE_MODE_ON, 0) != 0 || !hasIccCard()) {
             return;
         }
-        int phoneCount = mTelephonyManager.getPhoneCount();
-        for (int i = 0; i < phoneCount; i++) {
-            Settings.Global.putInt(mContext.getContentResolver(),
-                    Settings.Global.MOBILE_DATA + i, (enabled) ? 1 : 0);
-            long[] subId = SubscriptionManager.getSubId(i);
-            mTelephonyManager.setDataEnabledUsingSubId(subId[0], enabled);
-        }
+        mTelephonyManager.setDataEnabledUsingSubId(
+                SubscriptionManager.getDefaultDataSubId(), enabled);
     }
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final boolean dataOn = mTelephonyManager.getDataEnabled()
+        final boolean dataOn = isDefaultDataEnabled()
                 && !isAirplaneModeOn() && hasIccCard();
         state.value = dataOn;
         state.visible = true;
@@ -105,6 +100,11 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_data_off);
         }
+    }
+
+    private boolean isDefaultDataEnabled() {
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.MOBILE_DATA + SubscriptionManager.getDefaultDataPhoneId(), 0) != 0;
     }
 
     public void setListening(boolean listening) {
@@ -130,9 +130,18 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
         }
 
         public void startObserving() {
-            mContext.getContentResolver().registerContentObserver(
-                    Settings.Global.getUriFor(Settings.Global.MOBILE_DATA),
-                    false, this);
+            int phoneCount = mTelephonyManager.getPhoneCount();
+            for (int i = 0; i < phoneCount; i++) {
+                mContext.getContentResolver().registerContentObserver(
+                        Settings.Global.getUriFor(Settings.Global.MOBILE_DATA + i),
+                        false, this);
+            }
+            if (mTelephonyManager.isMultiSimEnabled()) {
+                mContext.getContentResolver().registerContentObserver(
+                        Settings.Global.getUriFor(
+                        Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION),
+                        false, this);
+            }
             mContext.getContentResolver().registerContentObserver(
                     Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON),
                     false, this);
