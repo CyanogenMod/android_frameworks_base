@@ -2628,6 +2628,13 @@ public final class Settings {
         public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
 
         /**
+         * Whether to wake the screen with the volume keys, the value is boolean.
+         *
+         * @hide
+         */
+        public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
+
+        /**
          * Microphone mute (int 1 = mute, 0 = not muted).
          *
          * @hide
