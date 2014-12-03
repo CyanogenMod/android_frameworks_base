@@ -632,6 +632,11 @@ public abstract class ConnectionService extends Service {
             Log.i(this, "Adapter onPhoneAccountChanged %s, %s", c, pHandle);
             mAdapter.setPhoneAccountHandle(id, pHandle);
         }
+
+        public void onCdmaConnectionTimeReset(Connection c) {
+            String id = mIdByConnection.get(c);
+            mAdapter.resetCdmaConnectionTime(id);
+        }
     };
 
     /** {@inheritDoc} */

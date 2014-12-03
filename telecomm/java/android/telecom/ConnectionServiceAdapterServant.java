@@ -437,6 +437,10 @@ final class ConnectionServiceAdapterServant {
             args.arg2 = pHandle;
             mHandler.obtainMessage(MSG_SET_PHONE_ACCOUNT, args).sendToTarget();
         }
+
+        @Override
+        public void resetCdmaConnectionTime(String callId) {
+        }
     };
 
     public ConnectionServiceAdapterServant(IConnectionServiceAdapter delegate) {

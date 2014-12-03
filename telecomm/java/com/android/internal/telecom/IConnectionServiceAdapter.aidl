@@ -89,4 +89,6 @@ oneway interface IConnectionServiceAdapter {
     void setExtras(String callId, in Bundle extras);
 
     void setPhoneAccountHandle(String callId, in PhoneAccountHandle pHandle);
+
+    void resetCdmaConnectionTime(String callId);
 }

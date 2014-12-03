@@ -335,6 +335,10 @@ final class RemoteConnectionService {
             findConnectionForAction(callId, "setPhoneAccountHandle")
                     .setPhoneAccountHandle(pHandle);
         }
+
+        @Override
+        public void resetCdmaConnectionTime(String callId) {
+        }
     };
 
     private final ConnectionServiceAdapterServant mServant =
