@@ -183,4 +183,11 @@ interface ISub {
     long getOnDemandDataSubId();
  
     int[] getActiveSubIdList();
+
+    /**
+     * Get the SIM state for the subscriber
+     * @return SIM state as the ordinal of IccCardConstants.State
+     */
+    int getSimStateForSubscriber(int subId);
+
 }
