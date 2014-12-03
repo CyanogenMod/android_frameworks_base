@@ -306,7 +306,7 @@ public final class ScanFilter implements Parcelable {
         }
 
         // Manufacturer data match.
-        if (mManufacturerId >= 0) {
+        if (mManufacturerId >= 0 && null != scanRecord) {
             if (!matchesPartialData(mManufacturerData, mManufacturerDataMask,
                     scanRecord.getManufacturerSpecificData(mManufacturerId))) {
                 return false;
@@ -350,7 +350,7 @@ public final class ScanFilter implements Parcelable {
 
     // Check whether the data pattern matches the parsed data.
     private boolean matchesPartialData(byte[] data, byte[] dataMask, byte[] parsedData) {
-        if (parsedData == null || parsedData.length < data.length) {
+        if (parsedData == null || data == null || parsedData.length < data.length) {
             return false;
         }
         if (dataMask == null) {
