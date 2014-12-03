@@ -119,6 +119,7 @@ public abstract class Connection implements IConferenceable {
         /** @hide */
         public void onConferenceParticipantsChanged(Connection c,
                 List<ConferenceParticipant> participants) {}
+        public void onCdmaConnectionTimeReset(Connection c) {}
     }
 
     /** @hide */
@@ -1026,6 +1027,15 @@ public abstract class Connection implements IConferenceable {
             }
         }
         fireOnConferenceableConnectionsChanged();
+    }
+
+    /**
+     * Resets the cdma connection time.
+     */
+    public final void resetCdmaConnectionTime() {
+        for (Listener l : mListeners) {
+            l.onCdmaConnectionTimeReset(this);
+        }
     }
 
     /**
