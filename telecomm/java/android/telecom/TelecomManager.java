@@ -752,6 +752,13 @@ public class TelecomManager {
      */
     @SystemApi
     public boolean hasVoiceMailNumber(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().hasVoiceMailNumber(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#hasVoiceMailNumber.", e);
+        }
         return false;
     }
 
