@@ -726,6 +726,26 @@ public class TelecomManager {
     }
 
     /**
+     * Return whether a given phone account has a voicemail number configured.
+     *
+     * @param accountHandle The handle for the account to check for a voicemail number.
+     * @return {@code true} If the given phone account has a voicemail number.
+     *
+     * @hide
+     */
+    @SystemApi
+    public boolean hasVoiceMailNumber(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().hasVoiceMailNumber(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling isInCall().", e);
+        }
+        return false;
+    }
+
+    /**
      * Returns whether there is an ongoing phone call (can be in dialing, ringing, active or holding
      * states).
      * <p>
@@ -982,10 +1002,8 @@ public class TelecomManager {
      * @param accountHandle The handle for the account the MMI code should apply to.
      * @param dialString The digits to dial.
      * @return True if the digits were processed as an MMI code, false otherwise.
-     *
      * @hide
      */
-    @SystemApi
     public boolean handleMmi(PhoneAccountHandle accountHandle, String dialString) {
         ITelecomService service = getTelecomService();
         if (service != null) {
@@ -1005,7 +1023,6 @@ public class TelecomManager {
      * for the the content retrieve.
      * @hide
      */
-    @SystemApi
     public Uri getAdnUriForPhoneAccount(PhoneAccountHandle accountHandle) {
         ITelecomService service = getTelecomService();
         if (service != null && accountHandle != null) {
