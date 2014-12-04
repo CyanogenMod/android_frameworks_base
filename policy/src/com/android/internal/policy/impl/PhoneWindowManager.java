@@ -488,6 +488,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHomePressed;
     boolean mHomeConsumed;
     boolean mHomeDoubleTapPending;
+    boolean mHomeAnswerWhenRinging;
     boolean mMenuPressed;
     boolean mAppSwitchLongPressed;
     Intent mHomeIntent;
@@ -696,6 +697,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.POLICY_CONTROL), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_ANSWER_RINGING_CALL), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -1496,6 +1500,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mImmersiveModeConfirmation != null) {
                 mImmersiveModeConfirmation.loadSetting(mCurrentUserId);
             }
+
+            // Home answer call
+            mHomeAnswerWhenRinging = (Settings.System.getIntForUser(resolver,
+                    Settings.System.KEY_HOME_ANSWER_RINGING_CALL, 0, UserHandle.USER_CURRENT) == 1);
+
             PolicyControl.reloadFromSetting(mContext);
         }
         if (updateRotation) {
@@ -2421,7 +2430,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // and his ONLY options are to answer or reject the call.)
                 TelecomManager telecomManager = getTelecommService();
                 if (telecomManager != null && telecomManager.isRinging()) {
-                    Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
+                    if (mHomeAnswerWhenRinging) {
+                        Log.i(TAG, "Answering call with HOME; there's a ringing incoming call.");
+                        telecomManager.acceptRingingCall();
+                    } else {
+                        Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
+                    }
                     return -1;
                 }
 
@@ -6432,6 +6446,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mLockScreenTimerActive="); pw.println(mLockScreenTimerActive);
         pw.print(prefix); pw.print("mEndcallBehavior="); pw.print(mEndcallBehavior);
                 pw.print(" mIncallPowerBehavior="); pw.print(mIncallPowerBehavior);
+                pw.print(" mHomeAnswerWhenRinging="); pw.print(mHomeAnswerWhenRinging);
                 pw.print(" mLongPressOnHomeBehavior="); pw.println(mLongPressOnHomeBehavior);
         pw.print(prefix); pw.print("mLandscapeRotation="); pw.print(mLandscapeRotation);
                 pw.print(" mSeascapeRotation="); pw.println(mSeascapeRotation);

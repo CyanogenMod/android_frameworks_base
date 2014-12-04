@@ -2823,6 +2823,13 @@ public final class Settings {
         public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
 
         /**
+         * Whether to answer an incoming call using the home button or not
+         *
+         * @hide
+         */
+        public static final String KEY_HOME_ANSWER_RINGING_CALL = "key_home_answer_ringing_call";
+
+        /**
          * Action to perform when the home key is long-pressed.
          * (Default can be configured via config_longPressOnHomeBehavior)
          * 0 - Nothing
