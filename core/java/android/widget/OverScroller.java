@@ -616,6 +616,7 @@ public class OverScroller {
         private int lBoostSchedBoost = 0;
         private int lBoostPcDisblBoost = 0;
         private int lBoostKsmBoost = 0;
+        private int lBoostPreferIdle = 0;
 
         static {
             float x_min = 0.0f;
@@ -675,6 +676,8 @@ public class OverScroller {
                    com.android.internal.R.integer.flingboost_pcdisbl_param);
             lBoostKsmBoost = context.getResources().getInteger(
                    com.android.internal.R.integer.flingboost_ksmboost_param);
+            lBoostPreferIdle = context.getResources().getInteger(
+                   com.android.internal.R.integer.flingboost_preferidle_param);
             }
         }
 
@@ -808,7 +811,7 @@ public class OverScroller {
                         lBoostTimeOut = mDuration;
                     }
                     mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                          lBoostCpuBoost, lBoostKsmBoost);
+                                          lBoostCpuBoost, lBoostKsmBoost,lBoostPreferIdle);
 
                 }
             }

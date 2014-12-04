@@ -672,8 +672,14 @@ class MountService extends IMountService.Stub
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String usbMode = new UsbManager(null, null).getDefaultFunction();
+            final boolean isUmsMode = UsbManager.USB_FUNCTION_MASS_STORAGE.equals(usbMode);
             boolean available = (intent.getBooleanExtra(UsbManager.USB_CONNECTED, false) &&
                     intent.getBooleanExtra(UsbManager.USB_FUNCTION_MASS_STORAGE, false));
+            //only take UMS mode as available when property is true
+            if (SystemProperties.getBoolean("persist.sys.ums", true)) {
+                available = available && isUmsMode;
+            }
             notifyShareAvailabilityChange(available);
         }
     };
@@ -761,16 +767,17 @@ class MountService extends IMountService.Stub
     }
 
     private void disbaleEnableUMSAfterStorageChanged(String state){
+        if (!SystemProperties.getBoolean("persist.sys.ums", true)) {
+            //Do nothing if property is false
+            return;
+        }
+
         if (state.equals(Environment.MEDIA_SHARED)) {
             if (!mUmsAvailable) {
                 setUsbMassStorageEnabled(false);
             }
-        } else if (state.equals(Environment.MEDIA_MOUNTED)) {
-            String usbMode = new UsbManager(null, null).getDefaultFunction();
-            final boolean isUmsMode = UsbManager.USB_FUNCTION_MASS_STORAGE.equals(usbMode);
-            if (mUmsAvailable && isUmsMode) {
-                setUsbMassStorageEnabled(true);
-            }
+        } else if (state.equals(Environment.MEDIA_MOUNTED) && mUmsAvailable) {
+            setUsbMassStorageEnabled(true);
         }
     }
 

@@ -2034,6 +2034,7 @@
     <integer name="flingboost_cpuboost_param">0</integer>
     <integer name="flingboost_pcdisbl_param">0</integer>
     <integer name="flingboost_ksmboost_param">0</integer>
+    <integer name="flingboost_preferidle_param">0</integer>
 
     <!-- Whether cpu boost is enabled for horizontal scroll. -->
     <bool name="config_enableCpuBoostForScroller">false</bool>
@@ -2042,6 +2043,7 @@
     <integer name="scrollboost_cpuboost_param">0</integer>
     <integer name="scrollboost_pcdisbl_param">0</integer>
     <integer name="scrollboost_ksmboost_param">0</integer>
+    <integer name="scrollboost_preferidle_param">0</integer>
 
     <!-- Configuration to enable non-default PDP during IWLAN -->
     <bool name="config_feature_iwlan_enabled">false</bool>
@@ -2064,4 +2066,14 @@
    <integer name="animationboost_timeout_param">0</integer>
    <integer name="animationboost_schedboost_param">0</integer>
    <integer name="animationboost_cpuboost_param">0</integer>
+
+   <!-- Activities list for boost -->
+   <string-array translatable="false" name="boost_activityList">
+   </string-array>
+
+   <!-- Activity scroll boost params -->
+   <integer name="ascrollboost_timeout">0</integer>
+   <integer name="ascrollboost_schedboost">0</integer>
+   <integer name="ascrollboost_cpuboost">0</integer>
+   <integer name="ascrollboost_pcdisbl">0</integer>
 </resources>
