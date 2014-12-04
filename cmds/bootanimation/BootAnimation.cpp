@@ -797,20 +797,22 @@ bool BootAnimation::movie()
 
     }
 
-    ALOGD("waiting for media player to complete.");
-    struct timespec timeout;
-    clock_gettime(CLOCK_REALTIME, &timeout);
-    timeout.tv_sec += 5; //timeout after 5s.
+    if (isMPlayerPrepared) {
+        ALOGD("waiting for media player to complete.");
+        struct timespec timeout;
+        clock_gettime(CLOCK_REALTIME, &timeout);
+        timeout.tv_sec += 5; //timeout after 5s.
 
-    pthread_mutex_lock(&mp_lock);
-    while (!isMPlayerCompleted) {
-        int err = pthread_cond_timedwait(&mp_cond, &mp_lock, &timeout);
-        if (err == ETIMEDOUT) {
-            break;
+        pthread_mutex_lock(&mp_lock);
+        while (!isMPlayerCompleted) {
+            int err = pthread_cond_timedwait(&mp_cond, &mp_lock, &timeout);
+            if (err == ETIMEDOUT) {
+                break;
+            }
         }
+        pthread_mutex_unlock(&mp_lock);
+        ALOGD("media player is completed.");
     }
-    pthread_mutex_unlock(&mp_lock);
-    ALOGD("media player is completed.");
 
     pthread_cond_destroy(&mp_cond);
     pthread_mutex_destroy(&mp_lock);
