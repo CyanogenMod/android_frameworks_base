@@ -437,6 +437,21 @@ public abstract class ConnectionService extends Service {
                     PhoneCapabilities.toString(capabilities));
             mAdapter.setCallCapabilities(id, capabilities);
         }
+
+        @Override
+        public void onVideoStateChanged(Conference c, int videoState) {
+            String id = mIdByConference.get(c);
+            Log.d(this, "onVideoStateChanged set video state %d", videoState);
+            mAdapter.setVideoState(id, videoState);
+        }
+
+        @Override
+        public void onVideoProviderChanged(Conference c, Connection.VideoProvider videoProvider) {
+            String id = mIdByConference.get(c);
+            Log.d(this, "onVideoProviderChanged: Connection: %s, VideoProvider: %s", c,
+                    videoProvider);
+            mAdapter.setVideoProvider(id, videoProvider);
+        }
     };
 
     private final Connection.Listener mConnectionListener = new Connection.Listener() {
@@ -539,6 +554,8 @@ public abstract class ConnectionService extends Service {
         @Override
         public void onVideoProviderChanged(Connection c, Connection.VideoProvider videoProvider) {
             String id = mIdByConnection.get(c);
+            Log.d(this, "onVideoProviderChanged: Connection: %s, VideoProvider: %s", c,
+                    videoProvider);
             mAdapter.setVideoProvider(id, videoProvider);
         }
 
@@ -939,6 +956,8 @@ public abstract class ConnectionService extends Service {
      * @param conference The new conference object.
      */
     public final void addConference(Conference conference) {
+        Log.d(this, "addConference: conference=%s", conference);
+
         String id = addConferenceInternal(conference);
         if (id != null) {
             List<String> connectionIds = new ArrayList<>(2);
@@ -951,8 +970,14 @@ public abstract class ConnectionService extends Service {
                     conference.getPhoneAccountHandle(),
                     conference.getState(),
                     conference.getCapabilities(),
-                    connectionIds);
+                    connectionIds,
+                    conference.getVideoProvider() == null ?
+                            null : conference.getVideoProvider().getInterface(),
+                    conference.getVideoState()
+                    );
             mAdapter.addConferenceCall(id, parcelableConference);
+            mAdapter.setVideoProvider(id, conference.getVideoProvider());
+            mAdapter.setVideoState(id, conference.getVideoState());
 
             // Go through any child calls and set the parent.
             for (Connection connection : conference.getConnections()) {
