@@ -2998,6 +2998,13 @@ public final class Settings {
         public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
 
         /**
+         * Whether to answer an incoming call using the home button or not
+         *
+         * @hide
+         */
+        public static final String KEY_HOME_ANSWER_RINGING_CALL = "key_home_answer_ringing_call";
+
+        /**
          * Action to perform when the menu key is pressed. (Default is 1)
          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
          * @hide
