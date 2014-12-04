@@ -509,6 +509,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHomePressed;
     boolean mHomeConsumed;
     boolean mHomeDoubleTapPending;
+    boolean mHomeAnswerWhenRinging;
     boolean mMenuPressed;
     boolean mAppSwitchLongPressed;
     Intent mHomeIntent;
@@ -727,7 +728,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HOME_WAKE_SCREEN), false, this,
                     UserHandle.USER_ALL);
-
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.VOLUME_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_ANSWER_RINGING_CALL), false, this,
+                    UserHandle.USER_ALL);
             updateSettings();
         }
 
@@ -1679,6 +1685,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mImmersiveModeConfirmation != null) {
                 mImmersiveModeConfirmation.loadSetting(mCurrentUserId);
             }
+
+            // Volume wake
+            mVolumeWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+
+             // Home answer call
+            mHomeAnswerWhenRinging = (Settings.System.getIntForUser(resolver,
+                    Settings.System.KEY_HOME_ANSWER_RINGING_CALL, 0, UserHandle.USER_CURRENT) == 1);
+
             PolicyControl.reloadFromSetting(mContext);
         }
         if (updateRotation) {
@@ -2612,6 +2627,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // and his ONLY options are to answer or reject the call.)
                 TelecomManager telecomManager = getTelecommService();
                 if (telecomManager != null && telecomManager.isRinging()) {
+                    if (mHomeAnswerWhenRinging) {
+                        telecomManager.acceptRingingCall();
+                    }
                     Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
                     return -1;
                 }
