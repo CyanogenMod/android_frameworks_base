@@ -101,6 +101,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.codeaurora.Performance;
 
 /**
  * An activity is a single, focused thing that the user can do.  Almost all
@@ -662,7 +663,15 @@ public class Activity extends ContextThemeWrapper
         Window.Callback, KeyEvent.Callback,
         OnCreateContextMenuListener, ComponentCallbacks2,
         Window.OnWindowDismissedCallback {
+
+    private static Performance mPerf = null;
+    private static int mDragBoostPossible = -1;
+    private static int mPerfLockDuration = -1;
+    private static int mAsCpuBoost = -1;
+    private static int mAsSchedBoost = -1;
+    private static int mAsPcDisblBoost = -1;
     private static final String TAG = "Activity";
+
     private static final boolean DEBUG_LIFECYCLE = false;
 
     /** Standard activity result: operation canceled. */
@@ -2733,6 +2742,42 @@ public class Activity extends ContextThemeWrapper
      * @return boolean Return true if this event was consumed.
      */
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        String currentActivity = getPackageName();
+        if(mDragBoostPossible == -1)
+        {
+            mDragBoostPossible = 0;
+            String[] activityList = getResources().getStringArray(
+                com.android.internal.R.array.boost_activityList);
+            if(activityList != null){
+                for (String match : activityList) {
+                    if (currentActivity.indexOf(match) != -1){
+                        mDragBoostPossible = 1;
+                        break;
+                    }
+                }
+            }
+        }
+        if (mDragBoostPossible == 1)
+        {
+            if (mPerf == null){
+                mPerf = new Performance();
+            }
+            if(mPerfLockDuration == -1){
+                mPerfLockDuration = getResources().getInteger(
+                    com.android.internal.R.integer.ascrollboost_timeout);
+                mAsCpuBoost = getResources().getInteger(
+                    com.android.internal.R.integer.ascrollboost_cpuboost);
+                mAsSchedBoost = getResources().getInteger(
+                    com.android.internal.R.integer.ascrollboost_schedboost);
+                mAsPcDisblBoost = getResources().getInteger(
+                    com.android.internal.R.integer.ascrollboost_pcdisbl);
+            }
+            mPerf.perfLockAcquireTouch(ev,
+                getResources().getDisplayMetrics(),
+                mPerfLockDuration,
+                mAsSchedBoost, mAsCpuBoost, mAsPcDisblBoost);
+        }
+
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             onUserInteraction();
         }
