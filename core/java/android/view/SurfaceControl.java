@@ -199,6 +199,11 @@ public class SurfaceControl {
      */
     private static final int SURFACE_OPAQUE = 0x02;
 
+    /**
+     * Surface flag: Fully transparent, drop in composition if possible
+     * @hide
+     */
+    private static final int SURFACE_TRANSPARENT = 0x80;
 
     /* built-in physical display ids (keep in sync with ISurfaceComposer.h)
      * these are different from the logical display ids used elsewhere in the framework */
@@ -386,6 +391,16 @@ public class SurfaceControl {
     public void show() {
         checkNotReleased();
         nativeSetFlags(mNativeObject, 0, SURFACE_HIDDEN);
+    }
+
+    public void setTransparent(boolean isTransparent) {
+        checkNotReleased();
+        if(isTransparent) {
+            nativeSetFlags(mNativeObject, SURFACE_TRANSPARENT,
+                    SURFACE_TRANSPARENT);
+        } else {
+            nativeSetFlags(mNativeObject, 0, SURFACE_TRANSPARENT);
+        }
     }
 
     public void setTransparentRegionHint(Region region) {
