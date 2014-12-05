@@ -4046,6 +4046,11 @@ public final class Settings {
                 "bluetooth_hci_log";
 
         /**
+         * @hide
+         */
+        public static final String SHOW_ALARM_ICON = "show_alarm_icon";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#DEVICE_PROVISIONED} instead
          */
         @Deprecated
