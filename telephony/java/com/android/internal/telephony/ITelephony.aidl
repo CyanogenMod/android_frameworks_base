@@ -776,7 +776,7 @@ interface ITelephony {
      *
      * @param enable true to turn on, else false
      */
-    void setDataEnabled(boolean enable);
+    void setDataEnabled(int subId, boolean enable);
 
     /**
      * User enable/disable Mobile Data per subscription.
@@ -790,7 +790,7 @@ interface ITelephony {
      *
      * @return true on enabled
      */
-    boolean getDataEnabled();
+    boolean getDataEnabled(int subId);
 
     /**
      * Get P-CSCF address from PCO after data connection is established or modified.
