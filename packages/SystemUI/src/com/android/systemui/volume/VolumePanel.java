@@ -30,6 +30,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioAttributes;
@@ -46,6 +47,7 @@ import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -79,6 +81,8 @@ import java.io.PrintWriter;
 public class VolumePanel extends Handler {
     private static final String TAG = "VolumePanel";
     private static boolean LOGD = Log.isLoggable(TAG, Log.DEBUG);
+
+    private static final boolean BLUR_UI_ENABLED = true;
 
     private static final int PLAY_SOUND_DELAY = AudioService.PLAY_SOUND_DELAY;
 
@@ -261,6 +265,8 @@ public class VolumePanel extends Handler {
     private static AlertDialog sSafetyWarning;
     private static Object sSafetyWarningLock = new Object();
 
+    private boolean mBlurUiEnabled;
+
     private static class SafetyWarning extends SystemUIDialog
             implements DialogInterface.OnDismissListener, DialogInterface.OnClickListener {
         private final Context mContext;
@@ -441,6 +447,41 @@ public class VolumePanel extends Handler {
 
         registerReceiver();
 
+        mBlurUiSettingObserver.onChange(true);
+        mContext.getContentResolver().registerContentObserver(
+            Settings.System.getUriFor(Settings.System.BLUR_EFFECT_VOLUMECONTROL), false,
+            mBlurUiSettingObserver);
+    }
+
+    private ContentObserver mBlurUiSettingObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            mBlurUiEnabled = 1 == Settings.System.getInt(
+                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_VOLUMECONTROL, 1);
+            setupVolumePanelBlur(mBlurUiEnabled);
+        }
+    };
+
+    private void setupVolumePanelBlur(boolean blurEnabled) {
+        if (mDialog == null || mDialog.getWindow() == null) return;
+
+        Window window = mDialog.getWindow();
+        if (blurEnabled) {
+            window.addPrivateFlags(WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING);
+            window.setBlurMaskAlphaThreshold(0.48f);
+        } else {
+            window.clearPrivateFlags(WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING);
+        }
+
+        View mainContainer = window.findViewById(com.android.systemui.R.id.volume_dialog_bg_container);
+        mainContainer.setBackgroundResource(blurEnabled ?
+                com.android.systemui.R.drawable.volume_dialog_bg_translucent :
+                com.android.systemui.R.drawable.qs_background_primary);
+
+        View v1 = mSliderPanel;
+        v1.setBackground(null);
+        View v2 = window.findViewById(com.android.systemui.R.id.zen_mode_panel_bg_container);
+        v2.setBackground(null);
     }
 
     public VolumePanel(Context context, ZenModeController zenController) {
