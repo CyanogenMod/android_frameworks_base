@@ -2511,6 +2511,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return mScreenOnComingFromTouch;
     }
 
+    void setBlur(float b){
+        mStatusBarWindowManager.setBlur(b);
+    }
+
     public boolean isFalsingThresholdNeeded() {
         boolean onKeyguard = getBarState() == StatusBarState.KEYGUARD;
         boolean isMethodInsecure = mUnlockMethodCache.isMethodInsecure();
