@@ -2757,4 +2757,6 @@
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
   <java-symbol type="bool" name="config_useSystemClockforRotationSensor" />
+
+  <java-symbol type="fraction" name="config_blurBehindFadeDuration" />
 </resources>
