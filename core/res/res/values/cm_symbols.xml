@@ -75,4 +75,7 @@
     <java-symbol type="string" name="global_action_current_user" />
     <java-symbol type="dimen" name="global_actions_avatar_size" />
 
+    <!-- Blur effects -->
+    <java-symbol type="bool" name="config_ui_blur_enabled" />
+
 </resources>
