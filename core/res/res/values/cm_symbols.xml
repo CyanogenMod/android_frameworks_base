@@ -120,4 +120,8 @@
     <java-symbol type="string" name="privacy_guard_notification_detail" />
     <java-symbol type="string" name="privacy_guard_dialog_title" />
     <java-symbol type="string" name="privacy_guard_dialog_summary" />
+
+    <!-- Blur effects -->
+    <java-symbol type="bool" name="config_ui_blur_enabled" />
+
 </resources>
