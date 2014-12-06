@@ -2825,6 +2825,24 @@ public final class Settings {
          * @hide
          */
         public static final String BATTERY_LIGHT_FULL_COLOR = "battery_light_full_color";
+        
+        /**
+          * Whether the lockscreen blurring is enabled. The value is boolean (1 or 0).
+          * @hide
+          */
+        public static final String BLUR_EFFECT_LOCKSCREEN = "blur_lockscreen";
+
+        /**
+          * Whether the globalaction dialog background blurring is enabled. The value is boolean (1 or 0).
+          * @hide
+          */
+        public static final String BLUR_EFFECT_GLOBALACTION = "blur_globalaction";
+
+        /**
+          * Whether the volumen control content area blurring is enabled. The value is boolean (1 or 0).
+          * @hide
+          */
+        public static final String BLUR_EFFECT_VOLUMECONTROL = "blur_volume";
 
         /**
          * Show pointer location on screen?
