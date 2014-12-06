@@ -1134,6 +1134,19 @@ public interface WindowManager extends ViewManager {
         public static final int PRIVATE_FLAG_PREVENT_POWER_KEY = 0x20000000;
 
         /**
+         * Window flag: adding additional blur layer and set this as masking layer
+         * {@hide}
+         */
+        public static final int PRIVATE_FLAG_BLUR_WITH_MASKING = 0x40000000;
+
+        /**
+         * Window flag: adding additional blur layer and set this as masking layer.
+         * This is faster and ugglier than non-scaled version.
+         * {@hide}
+         */
+        public static final int PRIVATE_FLAG_BLUR_WITH_MASKING_SCALED = 0x80000000;
+
+        /**
          * Control flags that are private to the platform.
          * @hide
          */
@@ -1395,6 +1408,15 @@ public interface WindowManager extends ViewManager {
         public float dimAmount = 1.0f;
 
         /**
+         * When {@link #FLAG_BLUR_BEHIND} is set, this is the amount of blur
+         * to apply.  Range is from 1.0 for maximum to 0.0 for no
+         * blur.
+         * @hide
+         */
+        public float blurAmount = 1.0f;
+
+
+        /**
          * Default value for {@link #screenBrightness} and {@link #buttonBrightness}
          * indicating that the brightness value is not overridden for this window
          * and normal brightness policy should be used.
@@ -1587,6 +1609,14 @@ public interface WindowManager extends ViewManager {
          */
         public long userActivityTimeout = -1;
 
+        /**
+         * Threshold value that blur masking layer uses to determine whether
+         * to use or discard the blurred color.
+         * Value should be between 0.0 and 1.0
+         * @hide
+         */
+        public float blurMaskAlphaThreshold = 0.0f;
+
         public LayoutParams() {
             super(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             type = TYPE_APPLICATION;
@@ -1673,6 +1703,7 @@ public interface WindowManager extends ViewManager {
             out.writeInt(windowAnimations);
             out.writeFloat(alpha);
             out.writeFloat(dimAmount);
+            out.writeFloat(blurAmount);
             out.writeFloat(screenBrightness);
             out.writeFloat(buttonBrightness);
             out.writeInt(rotationAnimation);
@@ -1693,6 +1724,7 @@ public interface WindowManager extends ViewManager {
             out.writeInt(surfaceInsets.bottom);
             out.writeInt(hasManualSurfaceInsets ? 1 : 0);
             out.writeInt(needsMenuKey);
+            out.writeFloat(blurMaskAlphaThreshold);
         }
 
         public static final Parcelable.Creator<LayoutParams> CREATOR
@@ -1723,6 +1755,7 @@ public interface WindowManager extends ViewManager {
             windowAnimations = in.readInt();
             alpha = in.readFloat();
             dimAmount = in.readFloat();
+            blurAmount = in.readFloat();
             screenBrightness = in.readFloat();
             buttonBrightness = in.readFloat();
             rotationAnimation = in.readInt();
@@ -1743,6 +1776,7 @@ public interface WindowManager extends ViewManager {
             surfaceInsets.bottom = in.readInt();
             hasManualSurfaceInsets = in.readInt() != 0;
             needsMenuKey = in.readInt();
+            blurMaskAlphaThreshold = in.readFloat();
         }
 
         @SuppressWarnings({"PointlessBitwiseExpression"})
@@ -1781,6 +1815,10 @@ public interface WindowManager extends ViewManager {
         public static final int NEEDS_MENU_KEY_CHANGED = 1 << 22;
         /** {@hide} */
         public static final int PREFERRED_DISPLAY_MODE_ID = 1 << 23;
+        /** {@hide} */
+        public static final int BLUR_AMOUNT_CHANGED = 1 << 29;
+        /** {@hide} */
+        public static final int BLUR_MASK_ALPHA_THRESHOLD_CHANGED = 1 << 30;
         /** {@hide} */
         public static final int EVERYTHING_CHANGED = 0xffffffff;
 
@@ -1876,6 +1914,10 @@ public interface WindowManager extends ViewManager {
                 dimAmount = o.dimAmount;
                 changes |= DIM_AMOUNT_CHANGED;
             }
+            if (blurAmount != o.blurAmount) {
+                blurAmount = o.blurAmount;
+                changes |= BLUR_AMOUNT_CHANGED;
+            }
             if (screenBrightness != o.screenBrightness) {
                 screenBrightness = o.screenBrightness;
                 changes |= SCREEN_BRIGHTNESS_CHANGED;
@@ -1939,6 +1981,11 @@ public interface WindowManager extends ViewManager {
             if (needsMenuKey != o.needsMenuKey) {
                 needsMenuKey = o.needsMenuKey;
                 changes |= NEEDS_MENU_KEY_CHANGED;
+            }
+
+            if (blurMaskAlphaThreshold != o.blurMaskAlphaThreshold) {
+                blurMaskAlphaThreshold = o.blurMaskAlphaThreshold;
+                changes |= BLUR_MASK_ALPHA_THRESHOLD_CHANGED;
             }
 
             return changes;

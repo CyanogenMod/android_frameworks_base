@@ -199,6 +199,7 @@ public abstract class Window {
 
     private boolean mHaveWindowFormat = false;
     private boolean mHaveDimAmount = false;
+    private boolean mHaveBlurAmount = false;
     private int mDefaultWindowFormat = PixelFormat.OPAQUE;
 
     private boolean mHasSoftInputMode = false;
@@ -805,6 +806,13 @@ public abstract class Window {
         setPrivateFlags(flags, flags);
     }
 
+    /** @hide */
+    public void setBlurMaskAlphaThreshold(float alpha) {
+        final WindowManager.LayoutParams attrs = getAttributes();
+        attrs.blurMaskAlphaThreshold = alpha;
+        dispatchWindowAttributesChanged(attrs);
+    }
+
     /**
      * Convenience function to clear the flag bits as specified in flags, as
      * per {@link #setFlags}.
@@ -882,6 +890,19 @@ public abstract class Window {
         final WindowManager.LayoutParams attrs = getAttributes();
         attrs.dimAmount = amount;
         mHaveDimAmount = true;
+        dispatchWindowAttributesChanged(attrs);
+    }
+
+    /**
+     * Set the amount of blur behind the window when using
+     * {@link WindowManager.LayoutParams#FLAG_BLUR_BEHIND}.
+     * This feature may not be supported by all devices.
+     * {@hide}
+     */
+    public void setBlurAmount(float amount) {
+        final WindowManager.LayoutParams attrs = getAttributes();
+        attrs.blurAmount = amount;
+        mHaveBlurAmount = true;
         dispatchWindowAttributesChanged(attrs);
     }
 
@@ -1393,6 +1414,11 @@ public abstract class Window {
     /** @hide */
     protected boolean haveDimAmount() {
         return mHaveDimAmount;
+    }
+
+    /** @hide */
+    protected boolean haveBlurAmount() {
+        return mHaveBlurAmount;
     }
 
     public abstract void setChildDrawable(int featureId, Drawable drawable);

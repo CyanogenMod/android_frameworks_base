@@ -4071,6 +4071,15 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 params.dimAmount = a.getFloat(
                         android.R.styleable.Window_backgroundDimAmount, 0.5f);
             }
+            /* And some blur too, if available */
+            if (context.getResources().getBoolean(
+                        com.android.internal.R.bool.config_ui_blur_enabled)) {
+                params.flags |= WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+                if (!haveBlurAmount()) {
+                    params.blurAmount = 0.35f;
+                }
+            }
+
         }
 
         if (params.windowAnimations == 0) {

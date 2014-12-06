@@ -19,18 +19,24 @@ package com.android.systemui.statusbar.phone;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.SystemProperties;
 import android.view.Gravity;
+import android.view.Display;
+import android.view.SurfaceSession;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy;
 
 import com.android.keyguard.R;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.StatusBarState;
+import com.android.systemui.statusbar.policy.KeyguardMonitor;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -39,7 +45,7 @@ import java.lang.reflect.Field;
 /**
  * Encapsulates all logic for the status bar window state management.
  */
-public class StatusBarWindowManager {
+public class StatusBarWindowManager implements KeyguardMonitor.Callback {
 
     private final Context mContext;
     private final WindowManager mWindowManager;
@@ -49,14 +55,33 @@ public class StatusBarWindowManager {
     private int mBarHeight;
     private final boolean mKeyguardScreenRotation;
     private final float mScreenBrightnessDoze;
+
+    private boolean mKeyguardBlurEnabled;
+    private boolean mShowingMedia;
+    private BlurLayer mKeyguardBlur;
+    private final SurfaceSession mFxSession;
+
+    private final KeyguardMonitor mKeyguardMonitor;
+
+    private static final int TYPE_LAYER_MULTIPLIER = 10000; // refer to WindowManagerService.TYPE_LAYER_MULTIPLIER
+    private static final int TYPE_LAYER_OFFSET = 1000;      // refer to WindowManagerService.TYPE_LAYER_OFFSET
+
+    private static final int STATUS_BAR_LAYER = 16 * TYPE_LAYER_MULTIPLIER + TYPE_LAYER_OFFSET;
+
     private final State mCurrentState = new State();
 
-    public StatusBarWindowManager(Context context) {
+    public StatusBarWindowManager(Context context, KeyguardMonitor kgm) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
         mScreenBrightnessDoze = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDoze) / 255f;
+
+        mKeyguardMonitor = kgm;
+        mKeyguardMonitor.addCallback(this);
+        mKeyguardBlurEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
+        mFxSession = new SurfaceSession();
     }
 
     private boolean shouldEnableKeyguardScreenRotation() {
@@ -95,15 +120,30 @@ public class StatusBarWindowManager {
         mWindowManager.addView(mStatusBarView, mLp);
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
+
+        if (mKeyguardBlurEnabled) {
+            Display display = mWindowManager.getDefaultDisplay();
+            Point xy = new Point();
+            display.getRealSize(xy);
+            mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
+            if (mKeyguardBlur != null) {
+                mKeyguardBlur.setLayer(STATUS_BAR_LAYER - 2);
+            }
+        }
     }
 
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
-            mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (!mKeyguardBlurEnabled) {
+                mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            }
         } else {
             mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (mKeyguardBlurEnabled) {
+                mKeyguardBlur.hide();
+            }
         }
     }
 
@@ -216,13 +256,33 @@ public class StatusBarWindowManager {
         }
     }
 
+    private void applyKeyguardBlurShow(){
+        boolean isblur = false;
+        if (mCurrentState.keyguardShowing && mKeyguardBlurEnabled
+                && !mCurrentState.keyguardOccluded
+                && !mShowingMedia) {
+            isblur = true;
+        }
+        if (mKeyguardBlur != null) {
+            if (isblur) {
+                mKeyguardBlur.show();
+            } else {
+                mKeyguardBlur.hide();
+            }
+        }
+    }
+
     public void setKeyguardShowing(boolean showing) {
         mCurrentState.keyguardShowing = showing;
         apply(mCurrentState);
     }
 
     public void setKeyguardOccluded(boolean occluded) {
+        final boolean oldOccluded = mCurrentState.keyguardOccluded;
         mCurrentState.keyguardOccluded = occluded;
+        if (oldOccluded != occluded) {
+            applyKeyguardBlurShow();
+        }
         apply(mCurrentState);
     }
 
@@ -262,6 +322,23 @@ public class StatusBarWindowManager {
         apply(mCurrentState);
     }
 
+    void setBlur(float b){
+        if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
+            float minBlur = mKeyguardMonitor.isSecure() ? 1.0f : 0.0f;
+            if (b < minBlur) {
+                b = minBlur;
+            } else if (b > 1.0f) {
+                b = 1.0f;
+            }
+            mKeyguardBlur.setBlur(b);
+        }
+    }
+
+    public void setShowingMedia(boolean showingMedia) {
+        mShowingMedia = showingMedia;
+        applyKeyguardBlurShow();
+    }
+
     /**
      * @param state The {@link StatusBarState} of the status bar.
      */
@@ -297,6 +374,11 @@ public class StatusBarWindowManager {
     public void setForceDozeBrightness(boolean forceDozeBrightness) {
         mCurrentState.forceDozeBrightness = forceDozeBrightness;
         apply(mCurrentState);
+    }
+
+    @Override
+    public void onKeyguardChanged() {
+        applyKeyguardBlurShow();
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
