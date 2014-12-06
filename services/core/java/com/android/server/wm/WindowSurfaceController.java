@@ -58,8 +58,11 @@ class WindowSurfaceController {
     private float mSurfaceH = 0;
 
     private float mSurfaceAlpha = 0;
+    private float mSurfaceBlur = 0;
 
     private int mSurfaceLayer = 0;
+
+    private int mFlags = 0;
 
     // Surface flinger doesn't support crop rectangles where width or height is non-positive.
     // However, we need to somehow handle the situation where the cropping would completely hide
@@ -76,6 +79,8 @@ class WindowSurfaceController {
 
         mSurfaceW = w;
         mSurfaceH = h;
+
+        mFlags = flags;
 
         title = name;
 
@@ -140,6 +145,7 @@ class WindowSurfaceController {
 
                 mSurfaceControl.setLayer(layer);
                 mSurfaceControl.setAlpha(0);
+                mSurfaceControl.setBlur(0);
                 mSurfaceShown = false;
             } catch (RuntimeException e) {
                 Slog.w(TAG, "Error creating surface in " + this, e);
@@ -498,6 +504,7 @@ class WindowSurfaceController {
         pw.print(prefix); pw.print("Surface: shown="); pw.print(mSurfaceShown);
         pw.print(" layer="); pw.print(mSurfaceLayer);
         pw.print(" alpha="); pw.print(mSurfaceAlpha);
+        pw.print(" blur="); pw.print(mSurfaceBlur);
         pw.print(" rect=("); pw.print(mSurfaceX);
         pw.print(","); pw.print(mSurfaceY);
         pw.print(") "); pw.print(mSurfaceW);
@@ -515,6 +522,7 @@ class WindowSurfaceController {
         final static ArrayList<SurfaceTrace> sSurfaces = new ArrayList<SurfaceTrace>();
 
         private float mSurfaceTraceAlpha = 0;
+        private float mSurfaceTraceBlur = 0;
         private int mLayer;
         private final PointF mPosition = new PointF();
         private final Point mSize = new Point();
@@ -547,6 +555,16 @@ class WindowSurfaceController {
                 mSurfaceTraceAlpha = alpha;
             }
             super.setAlpha(alpha);
+        }
+
+        @Override
+        public void setBlur(float blur) {
+            if (mSurfaceTraceBlur != blur) {
+                if (LOG_SURFACE_TRACE) Slog.v(SURFACE_TAG, "setBlur(" + blur + "): OLD:" + this +
+                        ". Called by " + Debug.getCallers(3));
+                mSurfaceTraceBlur = blur;
+            }
+            super.setBlur(blur);
         }
 
         @Override
@@ -729,7 +747,8 @@ class WindowSurfaceController {
                             pw.print(" mLayer="); pw.println(s.mLayer);
                     pw.print("    mShown="); pw.print(s.mShown); pw.print(" mAlpha=");
                             pw.print(s.mSurfaceTraceAlpha); pw.print(" mIsOpaque=");
-                            pw.println(s.mIsOpaque);
+                            pw.println(s.mIsOpaque); pw.print(" mBlur=");
+                            pw.print(s.mSurfaceTraceBlur);
                     pw.print("    mPosition="); pw.print(s.mPosition.x); pw.print(",");
                             pw.print(s.mPosition.y);
                             pw.print(" mSize="); pw.print(s.mSize.x); pw.print("x");
@@ -747,7 +766,8 @@ class WindowSurfaceController {
         public String toString() {
             return "Surface " + Integer.toHexString(System.identityHashCode(this)) + " "
                     + mName + " (" + mLayerStack + "): shown=" + mShown + " layer=" + mLayer
-                    + " alpha=" + mSurfaceTraceAlpha + " " + mPosition.x + "," + mPosition.y
+                    + " alpha=" + mSurfaceTraceAlpha + " blur=" + mSurfaceTraceBlur
+                    + " " + mPosition.x + "," + mPosition.y
                     + " " + mSize.x + "x" + mSize.y
                     + " crop=" + mWindowCrop.toShortString()
                     + " opaque=" + mIsOpaque
