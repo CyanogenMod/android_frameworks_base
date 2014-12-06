@@ -19,13 +19,19 @@ package com.android.systemui.statusbar.phone;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.SystemProperties;
 import android.view.Gravity;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.SurfaceSession;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy;
 
+import com.android.internal.policy.PolicyManager;
 import com.android.keyguard.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.StatusBarState;
@@ -42,12 +48,30 @@ public class StatusBarWindowManager {
     private int mBarHeight;
     private final boolean mKeyguardScreenRotation;
 
+    private boolean mKeyguardBlurEnabled;
+    private final int mStatusBarLayer;
+    private BlurLayer mKeyguardBlur;
+    private final SurfaceSession mFxSession;
+    private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
+
+    private final PhoneStatusBar mBar;
+
+    private static final int TYPE_LAYER_MULTIPLIER = 10000; // refer to WindowManagerService.TYPE_LAYER_MULTIPLIER
+    private static final int TYPE_LAYER_OFFSET = 1000;      // refer to WindowManagerService.TYPE_LAYER_OFFSET
+
     private final State mCurrentState = new State();
 
-    public StatusBarWindowManager(Context context) {
+    public StatusBarWindowManager(Context context, PhoneStatusBar bar) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
+        mBar = bar;
+
+        mKeyguardBlurEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
+        mFxSession = new SurfaceSession();
+        mStatusBarLayer = mPolicy.windowTypeToLayerLw(WindowManager.LayoutParams.TYPE_STATUS_BAR)
+                          * TYPE_LAYER_MULTIPLIER + TYPE_LAYER_OFFSET;
     }
 
     private boolean shouldEnableKeyguardScreenRotation() {
@@ -84,15 +108,30 @@ public class StatusBarWindowManager {
         mStatusBarView = statusBarView;
         mBarHeight = barHeight;
         mWindowManager.addView(mStatusBarView, mLp);
+
+        if (mKeyguardBlurEnabled) {
+            Display display = mWindowManager.getDefaultDisplay();
+            Point xy = new Point();
+            display.getRealSize(xy);
+            mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
+            if (mKeyguardBlur != null) {
+                mKeyguardBlur.setLayer(mStatusBarLayer -2);
+            }
+        }
     }
 
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
-            mLp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (!mKeyguardBlurEnabled) {
+                mLp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            }
         } else {
             mLp.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLp.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (mKeyguardBlurEnabled) {
+                mKeyguardBlur.hide();
+            }
         }
     }
 
@@ -167,13 +206,35 @@ public class StatusBarWindowManager {
         mWindowManager.updateViewLayout(mStatusBarView, mLp);
     }
 
+    private void applyKeyguardBlurShow(){
+        boolean isblur = false;
+        if (mCurrentState.keyguardShowing && mKeyguardBlurEnabled && !mCurrentState.keyguardOccluded) {
+            isblur = true;
+        }
+        if (mKeyguardBlur != null) {
+            if (isblur) {
+                mKeyguardBlur.show();
+            } else {
+                mKeyguardBlur.hide();
+            }
+        }
+    }
+
     public void setKeyguardShowing(boolean showing) {
         mCurrentState.keyguardShowing = showing;
         apply(mCurrentState);
     }
 
+    void onScreenTurnedOn(){
+        applyKeyguardBlurShow();
+    }
+
     public void setKeyguardOccluded(boolean occluded) {
+        final boolean oldOccluded = mCurrentState.keyguardOccluded;
         mCurrentState.keyguardOccluded = occluded;
+        if (oldOccluded != occluded) {
+            applyKeyguardBlurShow();
+        }
         apply(mCurrentState);
     }
 
@@ -211,6 +272,18 @@ public class StatusBarWindowManager {
     public void setQsExpanded(boolean expanded) {
         mCurrentState.qsExpanded = expanded;
         apply(mCurrentState);
+    }
+
+    void setBlur(float b){
+        if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
+            float minBlur = mBar.isSecure() ? 1.0f : 0.0f;
+            if (b < minBlur) {
+                b = minBlur;
+            } else if (b > 1.0f) {
+                b = 1.0f;
+            }
+            mKeyguardBlur.setBlur(b);
+        }
     }
 
     /**
