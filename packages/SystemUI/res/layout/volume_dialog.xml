@@ -17,6 +17,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/volume_dialog_bg_container"
     android:layout_marginStart="@dimen/notification_side_padding"
     android:layout_marginEnd="@dimen/notification_side_padding"
     android:background="@drawable/qs_background_primary"

@@ -2315,4 +2315,8 @@
 
     <!-- Ignored sms packages -->
     <string-array name="config_ignored_sms_packages"></string-array>
+
+    <!-- Support in Surfaceflinger for blur layers.
+         NOTE: This requires additional hardware-specific code. -->
+    <bool name="config_ui_blur_enabled">false</bool>
 </resources>
