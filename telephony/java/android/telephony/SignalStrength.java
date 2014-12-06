@@ -378,7 +378,11 @@ public class SignalStrength implements Parcelable {
     public void validateInput() {
         if (DBG) log("Signal before validate=" + this);
         // TS 27.007 8.5
-        mGsmSignalStrength = mGsmSignalStrength >= 0 ? mGsmSignalStrength : 99;
+
+        if(!(mGsmSignalStrength >= 0 && mGsmSignalStrength <= 31)){
+            mGsmSignalStrength =  99;
+        }
+
         // BER no change;
 
         mCdmaDbm = mCdmaDbm > 0 ? -mCdmaDbm : -120;
@@ -853,7 +857,7 @@ public class SignalStrength implements Parcelable {
 
     }
     /**
-     * Get the LTE signal level as an asu value between 0..97, 99 is unknown
+     * Get the LTE signal level as an asu value between 0..97, 255 is unknown
      * Asu is calculated based on 3GPP RSRP. Refer to 3GPP 27.007 (Ver 10.3.0) Sec 8.69
      *
      * @hide
