@@ -265,6 +265,8 @@ final class ActivityStack {
 
     final Handler mHandler;
 
+    private final boolean mTopStaysActive;
+
     final class ActivityStackHandler extends Handler {
         //public Handler() {
         //    if (localLOGV) Slog.v(TAG, "Handler started!");
@@ -356,6 +358,8 @@ final class ActivityStack {
         mWindowManager = mService.mWindowManager;
         mStackId = activityContainer.mStackId;
         mCurrentUser = mService.mCurrentUserId;
+        mTopStaysActive = mService.mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
     }
 
     /**
@@ -1000,7 +1004,13 @@ final class ActivityStack {
                 } else if (!hasVisibleBehindActivity()) {
                     // If we were visible then resumeTopActivities will release resources before
                     // stopping.
-                    mStackSupervisor.mStoppingActivities.add(prev);
+                    ActivityRecord top = topRunningActivityLocked(null);
+                    if (mTopStaysActive && top != null && top.equals(prev)
+                            && mService.isSleepingOrShuttingDown()){
+                        Slog.d(TAG, "Top activity keeps the pause state. top : "+top);
+                    } else {
+                        mStackSupervisor.mStoppingActivities.add(prev);
+                    }
                     if (mStackSupervisor.mStoppingActivities.size() > 3 ||
                             prev.frontOfTask && mTaskHistory.size() <= 1) {
                         // If we already have a few activities waiting to stop,
