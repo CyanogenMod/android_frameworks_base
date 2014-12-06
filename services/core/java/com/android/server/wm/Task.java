@@ -44,7 +44,7 @@ import com.android.server.EventLogTags;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-class Task implements DimLayer.DimLayerUser {
+class Task implements DimLayer.DimLayerUser, BlurLayer.BlurLayerUser {
     static final String TAG = TAG_WITH_CLASS_NAME ? "Task" : TAG_WM;
     // Return value from {@link setBounds} indicating no change was made to the Task bounds.
     static final int BOUNDS_CHANGE_NONE = 0;
@@ -148,6 +148,7 @@ class Task implements DimLayer.DimLayerUser {
         DisplayContent content = getDisplayContent();
         if (content != null) {
             content.mDimLayerController.removeDimLayerUser(this);
+            content.mBlurLayerController.removeBlurLayerUser(this);
         }
         mStack.removeTask(this);
         mService.mTaskIdToTask.delete(mTaskId);
@@ -254,6 +255,7 @@ class Task implements DimLayer.DimLayerUser {
         mRotation = rotation;
         if (displayContent != null) {
             displayContent.mDimLayerController.updateDimLayer(this);
+            displayContent.mBlurLayerController.updateBlurLayer(this);
         }
         mOverrideConfig = mFullscreen ? Configuration.EMPTY : config;
         return boundsChange;
@@ -523,6 +525,11 @@ class Task implements DimLayer.DimLayerUser {
         displayContent.getLogicalDisplayRect(out);
     }
 
+    @Override
+    public void getBlurBounds(Rect out) {
+        out.set(mBounds);
+    }
+
     void setDragResizing(boolean dragResizing, int dragResizeMode) {
         if (mDragResizing != dragResizing) {
             if (!DragResizeMode.isModeAllowedForStack(mStack.mStackId, dragResizeMode)) {
@@ -760,6 +767,11 @@ class Task implements DimLayer.DimLayerUser {
 
     @Override
     public boolean dimFullscreen() {
+        return isHomeTask() || isFullscreen();
+    }
+
+    @Override
+    public boolean blurFullscreen() {
         return isHomeTask() || isFullscreen();
     }
 

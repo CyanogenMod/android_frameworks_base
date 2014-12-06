@@ -406,6 +406,12 @@ public interface WindowManagerPolicy {
         public boolean isDimming();
 
         /**
+         * Check whether the window is currently blurring.
+         * @hide
+         */
+        public boolean isBlurring();
+
+        /**
          * @return the stack id this windows belongs to, or {@link StackId#INVALID_STACK_ID} if
          *         not attached to any stack.
          */
@@ -710,6 +716,11 @@ public interface WindowManagerPolicy {
      * Return the window that is hiding the keyguard, if such a thing exists.
      */
     public WindowState getWinShowWhenLockedLw();
+
+    /**
+     * Returns the current keyguard panel, if such a thing exists.
+     */
+    public WindowState getWinKeyguardPanelLw();
 
     /**
      * Called when the system would like to show a UI to indicate that an
