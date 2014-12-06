@@ -65,4 +65,8 @@
     <java-symbol type="drawable" name="stat_notify_protected" />
     <java-symbol type="string" name="notify_package_component_protected_title" />
     <java-symbol type="string" name="notify_package_component_protected_text" />
+
+    <!-- Blur effects -->
+    <java-symbol type="bool" name="config_ui_blur_enabled" />
+
 </resources>

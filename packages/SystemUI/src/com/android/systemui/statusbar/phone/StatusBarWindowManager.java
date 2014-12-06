@@ -18,20 +18,30 @@ package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.graphics.Point;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.view.Gravity;
+import android.view.Display;
+import android.view.SurfaceSession;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy;
 
 import com.android.keyguard.R;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.RemoteInputController;
 import com.android.systemui.statusbar.StatusBarState;
+import com.android.systemui.statusbar.policy.KeyguardMonitor;
+
+import cyanogenmod.providers.CMSettings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -40,7 +50,8 @@ import java.lang.reflect.Field;
 /**
  * Encapsulates all logic for the status bar window state management.
  */
-public class StatusBarWindowManager implements RemoteInputController.Callback {
+public class StatusBarWindowManager implements RemoteInputController.Callback,
+       KeyguardMonitor.Callback {
 
     private final Context mContext;
     private final WindowManager mWindowManager;
@@ -50,14 +61,35 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
     private int mBarHeight;
     private boolean mKeyguardScreenRotation;
     private final float mScreenBrightnessDoze;
+    private final boolean mBlurSupported;
+
+    private boolean mKeyguardBlurEnabled;
+    private boolean mShowingMedia;
+    private BlurLayer mKeyguardBlur;
+    private final SurfaceSession mFxSession;
+
+    private final KeyguardMonitor mKeyguardMonitor;
+    private int mCurrentOrientation;
+
+    private static final int TYPE_LAYER_MULTIPLIER = 10000; // refer to WindowManagerService.TYPE_LAYER_MULTIPLIER
+    private static final int TYPE_LAYER_OFFSET = 1000;      // refer to WindowManagerService.TYPE_LAYER_OFFSET
+
+    private static final int STATUS_BAR_LAYER = 16 * TYPE_LAYER_MULTIPLIER + TYPE_LAYER_OFFSET;
+
     private final State mCurrentState = new State();
 
-    public StatusBarWindowManager(Context context) {
+    public StatusBarWindowManager(Context context, KeyguardMonitor kgm) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
         mScreenBrightnessDoze = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDoze) / 255f;
+        mBlurSupported = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
+
+        mKeyguardMonitor = kgm;
+        mKeyguardMonitor.addCallback(this);
+        mFxSession = new SurfaceSession();
     }
 
     private boolean shouldEnableKeyguardScreenRotation() {
@@ -103,6 +135,20 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
 
+        mKeyguardBlurEnabled = mBlurSupported ?
+                CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
+        if (mBlurSupported) {
+            Display display = mWindowManager.getDefaultDisplay();
+            Point xy = new Point();
+            display.getRealSize(xy);
+            mCurrentOrientation = mContext.getResources().getConfiguration().orientation;
+            mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
+            if (mKeyguardBlur != null) {
+                mKeyguardBlur.setLayer(STATUS_BAR_LAYER - 2);
+            }
+        }
+
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe(mContext);
     }
@@ -110,8 +156,14 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
             mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (!mKeyguardBlurEnabled || mShowingMedia) {
+                mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            }
         } else {
             mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
+                mKeyguardBlur.hide();
+            }
         }
 
         if (state.keyguardShowing && !state.backdropShowing) {
@@ -233,13 +285,33 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
         }
     }
 
+    private void applyKeyguardBlurShow(){
+        boolean isblur = false;
+        if (mCurrentState.keyguardShowing && mKeyguardBlurEnabled
+                && !mCurrentState.keyguardOccluded
+                && !mShowingMedia) {
+            isblur = true;
+        }
+        if (mKeyguardBlur != null) {
+            if (isblur) {
+                mKeyguardBlur.show();
+            } else {
+                mKeyguardBlur.hide();
+            }
+        }
+    }
+
     public void setKeyguardShowing(boolean showing) {
         mCurrentState.keyguardShowing = showing;
         apply(mCurrentState);
     }
 
     public void setKeyguardOccluded(boolean occluded) {
+        final boolean oldOccluded = mCurrentState.keyguardOccluded;
         mCurrentState.keyguardOccluded = occluded;
+        if (oldOccluded != occluded) {
+            applyKeyguardBlurShow();
+        }
         apply(mCurrentState);
     }
 
@@ -289,6 +361,33 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
         apply(mCurrentState);
     }
 
+    void setBlur(float b){
+        if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
+            float minBlur = mKeyguardMonitor.isSecure() ? 1.0f : 0.0f;
+            if (b < minBlur) {
+                b = minBlur;
+            } else if (b > 1.0f) {
+                b = 1.0f;
+            }
+            mKeyguardBlur.setBlur(b);
+        }
+    }
+
+    public void setShowingMedia(boolean showingMedia) {
+        mShowingMedia = showingMedia;
+        applyKeyguardBlurShow();
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (mKeyguardBlur != null && newConfig.orientation != mCurrentOrientation) {
+            Display display = mWindowManager.getDefaultDisplay();
+            Point xy = new Point();
+            display.getRealSize(xy);
+            mKeyguardBlur.setSize(xy.x, xy.y);
+            mCurrentOrientation = newConfig.orientation;
+        }
+    }
+
     /**
      * @param state The {@link StatusBarState} of the status bar.
      */
@@ -335,6 +434,11 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
     public void setBarHeight(int barHeight) {
         mBarHeight = barHeight;
         apply(mCurrentState);
+    }
+
+    @Override
+    public void onKeyguardChanged() {
+        applyKeyguardBlurShow();
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -415,6 +519,10 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
                     CMSettings.System.getUriFor(CMSettings.System.LOCKSCREEN_ROTATION),
                     false,
                     this);
+            context.getContentResolver().registerContentObserver(
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED),
+                    false,
+                    this);
         }
 
         public void unobserve(Context context) {
@@ -423,6 +531,9 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
 
         @Override
         public void onChange(boolean selfChange) {
+            mKeyguardBlurEnabled = mBlurSupported ?
+                    CMSettings.Secure.getInt(mContext.getContentResolver(),
+                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
             mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
             // update the state
             apply(mCurrentState);

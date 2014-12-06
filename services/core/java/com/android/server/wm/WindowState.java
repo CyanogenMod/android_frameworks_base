@@ -66,6 +66,7 @@ import static android.view.ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_
 import static android.view.ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_VISIBLE;
 import static android.view.WindowManager.LayoutParams.FIRST_SUB_WINDOW;
 import static android.view.WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON;
+import static android.view.WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
 import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 import static android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
 import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
@@ -1483,6 +1484,18 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         }
     }
 
+    void scheduleAnimationIfBlurring() {
+        if (mDisplayContent == null) {
+            return;
+        }
+        final BlurLayer.BlurLayerUser blurLayerUser = getBlurLayerUser();
+        if (blurLayerUser != null && mDisplayContent.mBlurLayerController.isBlurring(
+                blurLayerUser, mWinAnimator)) {
+            // Force an animation pass just to update the mBlurLayer layer.
+            mService.scheduleAnimationLocked();
+        }
+    }
+
     /**
      * Notifies this window that the corresponding task has just moved in the stack.
      * <p>
@@ -1597,6 +1610,30 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         return getStack();
     }
 
+    void applyBlurLayerIfNeeded() {
+        // When the app is terminated (eg. from Recents), the task might have already been
+        // removed with the window pending removal. Don't apply blur in such cases, as there
+        // will be no more updateDimLayer() calls, which leaves the dimlayer invalid.
+        final AppWindowToken token = mAppToken;
+        if (token != null && token.removed) {
+            return;
+        }
+
+        if ((mAttrs.flags & FLAG_BLUR_BEHIND) != 0
+                && mDisplayContent != null && !mAnimatingExit && isVisibleUnchecked()) {
+            mDisplayContent.mBlurLayerController.applyBlurBehind(getBlurLayerUser(), mWinAnimator);
+        }
+    }
+
+    BlurLayer.BlurLayerUser getBlurLayerUser() {
+        Task task = getTask();
+        if (task != null) {
+            return task;
+        }
+        return getStack();
+    }
+
+ 
     void maybeRemoveReplacedWindow() {
         if (mAppToken == null) {
             return;
@@ -1607,6 +1644,9 @@ final class WindowState implements WindowManagerPolicy.WindowState {
                 if (DEBUG_ADD_REMOVE) Slog.d(TAG, "Removing replaced window: " + win);
                 if (win.isDimming()) {
                     win.transferDimToReplacement();
+                }
+                if (win.isBlurring()) {
+                    win.transferBlurToReplacement();
                 }
                 win.mWillReplaceWindow = false;
                 final boolean animateReplacingWindow = win.mAnimateReplacingWindow;
@@ -2151,6 +2191,13 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         final DimLayer.DimLayerUser dimLayerUser = getDimLayerUser();
         return dimLayerUser != null && mDisplayContent != null &&
                 mDisplayContent.mDimLayerController.isDimming(dimLayerUser, mWinAnimator);
+    }
+
+    @Override
+    public boolean isBlurring() {
+        final BlurLayer.BlurLayerUser blurLayerUser = getBlurLayerUser();
+        return blurLayerUser != null && mDisplayContent != null &&
+                mDisplayContent.mBlurLayerController.isBlurring(blurLayerUser, mWinAnimator);
     }
 
     public void setShowToOwnerOnlyLocked(boolean showToOwnerOnly) {
@@ -2885,6 +2932,15 @@ final class WindowState implements WindowManagerPolicy.WindowState {
             mDisplayContent.mDimLayerController.applyDim(dimLayerUser,
                     mReplacingWindow.mWinAnimator,
                     (mAttrs.flags & FLAG_DIM_BEHIND) != 0 ? true : false);
+        }
+    }
+
+    void transferBlurToReplacement() {
+        final BlurLayer.BlurLayerUser blurLayerUser = getBlurLayerUser();
+        if (blurLayerUser != null && mDisplayContent != null) {
+            mDisplayContent.mBlurLayerController.applyBlur(blurLayerUser,
+                    mReplacingWindow.mWinAnimator,
+                    (mAttrs.flags & FLAG_BLUR_BEHIND) != 0 ? true : false);
         }
     }
 
