@@ -280,7 +280,17 @@ public class WindowManagerService extends IWindowManager.Stub
     /**
      * Dim surface layer is immediately below target window.
      */
-    static final int LAYER_OFFSET_DIM = 1;
+    static final int LAYER_OFFSET_DIM = 1+1;
+
+    /**
+     * Blur surface layer is immediately below dim layer.
+     */
+    static final int LAYER_OFFSET_BLUR = 2+1;
+
+    /**
+      * Blur_with_masking layer is immediately below blur layer.
+      */
+    static final int LAYER_OFFSET_BLUR_WITH_MASKING = 1;
 
     /**
      * Animation thumbnail is as far as possible below the window above
@@ -3703,7 +3713,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 final DisplayContent displayContent = getDefaultDisplayContentLocked();
                 displayContent.layoutNeeded = true;
                 int anim[] = new int[2];
-                if (displayContent.isDimming()) {
+                if (displayContent.isDimming() || displayContent.isBlurring()) {
                     anim[0] = anim[1] = 0;
                 } else {
                     mPolicy.selectRotationAnimationLw(anim);
@@ -6681,7 +6691,7 @@ public class WindowManagerService extends IWindowManager.Stub
         final DisplayContent displayContent = getDefaultDisplayContentLocked();
         displayContent.layoutNeeded = true;
         final int[] anim = new int[2];
-        if (displayContent.isDimming()) {
+        if (displayContent.isDimming() || displayContent.isBlurring()) {
             anim[0] = anim[1] = 0;
         } else {
             mPolicy.selectRotationAnimationLw(anim);
@@ -9879,7 +9889,9 @@ public class WindowManagerService extends IWindowManager.Stub
             DisplayInfo displayInfo = displayContent.getDisplayInfo();
             // Get rotation animation again, with new top window
             boolean isDimming = displayContent.isDimming();
-            if (!mPolicy.validateRotationAnimationLw(mExitAnimId, mEnterAnimId, isDimming)) {
+            boolean isBlurring = displayContent.isBlurring();
+            if (!mPolicy.validateRotationAnimationLw(mExitAnimId, mEnterAnimId,
+                        (isBlurring || isDimming))) {
                 mExitAnimId = mEnterAnimId = 0;
             }
             if (screenRotationAnimation.dismiss(mFxSession, MAX_ANIMATION_DURATION,
