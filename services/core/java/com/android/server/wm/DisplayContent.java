@@ -113,6 +113,7 @@ class DisplayContent {
     final DockedStackDividerController mDividerControllerLocked;
 
     final DimLayerController mDimLayerController;
+    final BlurLayerController mBlurLayerController;
 
     final ArrayList<WindowState> mTapExcludedWindows = new ArrayList<>();
 
@@ -130,6 +131,7 @@ class DisplayContent {
         initializeDisplayBaseInfo();
         mDividerControllerLocked = new DockedStackDividerController(service, this);
         mDimLayerController = new DimLayerController(this);
+        mBlurLayerController = new BlurLayerController(this);
     }
 
     int getDisplayId() {
@@ -275,6 +277,7 @@ class DisplayContent {
 
     void detachStack(TaskStack stack) {
         mDimLayerController.removeDimLayerUser(stack);
+        mBlurLayerController.removeBlurLayerUser(stack);
         mStacks.remove(stack);
     }
 
@@ -474,8 +477,25 @@ class DisplayContent {
         mDimLayerController.stopDimmingIfNeeded();
     }
 
+    boolean animateBlurLayers() {
+        return mBlurLayerController.animateBlurLayers();
+    }
+
+    void resetBlurring() {
+        mBlurLayerController.resetBlurring();
+    }
+
+    boolean isBlurring() {
+        return mBlurLayerController.isBlurring();
+    }
+
+    void stopBlurringIfNeeded() {
+        mBlurLayerController.stopBlurringIfNeeded();
+    }
+
     void close() {
         mDimLayerController.close();
+        mBlurLayerController.close();
         for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
             mStacks.get(stackNdx).close();
         }
@@ -604,6 +624,8 @@ class DisplayContent {
         }
         pw.println();
         mDimLayerController.dump(prefix + "  ", pw);
+        pw.println();
+        mBlurLayerController.dump(prefix + " ", pw);
         pw.println();
         mDividerControllerLocked.dump(prefix + "  ", pw);
     }

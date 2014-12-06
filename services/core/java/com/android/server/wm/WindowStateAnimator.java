@@ -148,6 +148,10 @@ class WindowStateAnimator {
     float mAlpha = 0;
     float mLastAlpha = 0;
 
+    float mShownBlur = 0;
+    float mBlur = 0;
+    float mLastBlur = 0;
+
     boolean mHasClipRect;
     Rect mClipRect = new Rect();
     Rect mTmpClipRect = new Rect();
@@ -1505,6 +1509,7 @@ class WindowStateAnimator {
             mAnimator.setPendingLayoutChanges(w.getDisplayId(),
                     WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER);
             w.applyDimLayerIfNeeded();
+            w.applyBlurLayerIfNeeded();
         }
 
     }
