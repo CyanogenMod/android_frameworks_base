@@ -45,6 +45,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.telephony.VoLteServiceState;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.TelephonyIntents;
@@ -318,7 +319,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
                         | PhoneStateListener.LISTEN_CALL_STATE
                         | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-                        | PhoneStateListener.LISTEN_DATA_ACTIVITY);
+                        | PhoneStateListener.LISTEN_DATA_ACTIVITY
+                        | PhoneStateListener.LISTEN_VOLTE_STATE);
     }
 
     public void addPhoneSignalIconView(ImageView v) {
@@ -688,6 +690,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
             mDataActivity = direction;
             updateDataIcon();
             refreshViews();
+        }
+
+        @Override
+        public void onVoLteServiceStateChanged(VoLteServiceState stateInfo) {
+            if (stateInfo.getSrvccState() == VoLteServiceState.IMS_REGISTERED) {
+                updateImsRegistrationForNewtorkName(true);
+                refreshViews();
+            } else if (stateInfo.getSrvccState() == VoLteServiceState.IMS_UNREGISTERED) {
+                updateImsRegistrationForNewtorkName(false);
+                refreshViews();
+            }
         }
     };
 
@@ -1072,6 +1085,20 @@ public class NetworkControllerImpl extends BroadcastReceiver
         }
         return opeartorName;
     }
+
+    public void updateImsRegistrationForNewtorkName(boolean registered) {
+        String hdTag = mContext.getResources().getString(R.string.high_definiation_voice);
+        Log.d(TAG, "updateIMSRegistrationForNewtorkName " + hdTag
+                + ";" + registered);
+        if (registered) {
+            mNetworkName = mNetworkName + hdTag;
+        } else {
+            if (mNetworkName.contains(hdTag)) {
+                mNetworkName = mNetworkName.replace(hdTag, "");
+            }
+        }
+    }
+
     // ===== Wifi ===================================================================
 
     class WifiHandler extends Handler {

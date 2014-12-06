@@ -45,6 +45,8 @@ import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubInfoRecord;
 import android.telephony.TelephonyManager;
+import android.telephony.VoLteServiceState;
+
 import android.text.TextUtils;
 import android.util.Slog;
 import android.view.View;
@@ -253,7 +255,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                                         | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
                                         | PhoneStateListener.LISTEN_CALL_STATE
                                         | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-                                        | PhoneStateListener.LISTEN_DATA_ACTIVITY);
+                                        | PhoneStateListener.LISTEN_DATA_ACTIVITY
+                                        | PhoneStateListener.LISTEN_VOLTE_STATE);
                     } else {
                         mMSimPhoneStateListener[i] = null;
                     }
@@ -604,6 +607,18 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 mDataActivity = direction;
                 updateDataIcon(phoneId);
                 refreshViews(phoneId);
+            }
+
+            @Override
+            public void onVoLteServiceStateChanged(VoLteServiceState stateInfo) {
+                int phoneId = getPhoneId(mSubId);
+                if (stateInfo.getSrvccState() == VoLteServiceState.IMS_REGISTERED) {
+                    updateImsRegistrationForNewtorkName(true);
+                    refreshViews(phoneId);
+                } else if (stateInfo.getSrvccState() == VoLteServiceState.IMS_UNREGISTERED) {
+                    updateImsRegistrationForNewtorkName(false);
+                    refreshViews(phoneId);
+                }
             }
         };
         return mMSimPhoneStateListener;
