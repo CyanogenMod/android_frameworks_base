@@ -617,6 +617,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private PorterDuffXfermode mSrcXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC);
     private PorterDuffXfermode mSrcOverXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
 
+    private boolean mKeyguardShowingMedia = false;
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
     private String mMediaNotificationKey;
@@ -2301,6 +2302,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         boolean hideBecauseOccluded = mStatusBarKeyguardViewManager != null
                 && mStatusBarKeyguardViewManager.isOccluded();
 
+        mKeyguardShowingMedia = artworkDrawable != null;
+        if (mStatusBarWindowManager != null) {
+            mStatusBarWindowManager.setShowingMedia(mKeyguardShowingMedia);
+        }
+
         final boolean hasArtwork = artworkDrawable != null;
 
         if ((hasArtwork || DEBUG_MEDIA_FAKE_ARTWORK)
@@ -2563,6 +2569,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public boolean isWakeUpComingFromTouch() {
         return mWakeUpComingFromTouch;
+    }
+
+    void setBlur(float b){
+        mStatusBarWindowManager.setBlur(b);
     }
 
     public boolean isFalsingThresholdNeeded() {
@@ -3561,9 +3571,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void addStatusBarWindow() {
         makeStatusBarView();
-        mStatusBarWindowManager = new StatusBarWindowManager(mContext);
+        mStatusBarWindowManager = new StatusBarWindowManager(mContext, mKeyguardMonitor);
         mRemoteInputController = new RemoteInputController(mStatusBarWindowManager,
                 mHeadsUpManager);
+        mStatusBarWindowManager.setShowingMedia(mKeyguardShowingMedia);
         mStatusBarWindowManager.add(mStatusBarWindow, getStatusBarHeight());
     }
 
@@ -3771,6 +3782,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mIconController.defineSlots();
         mScreenPinningRequest.onConfigurationChanged();
         mNetworkController.onConfigurationChanged();
+        mStatusBarWindowManager.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -4367,6 +4379,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mGestureWakeLock.isHeld()) {
             mGestureWakeLock.release();
         }
+    }
+
+    boolean isSecure() {
+        return mStatusBarKeyguardViewManager != null && mStatusBarKeyguardViewManager.isSecure();
     }
 
     public long calculateGoingToFullShadeDelay() {
