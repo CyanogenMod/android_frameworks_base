@@ -2726,4 +2726,14 @@
     <!-- Allow the gesture to tap the power button N times to start
          the Emergency Call while the device is non-interactive. -->
     <bool name="config_emergencyCallOnPowerkeyTapGestureEnabled">false</bool>
+
+    <!-- Support in Surfaceflinger for blur layers.
+         NOTE: This requires additional hardware-specific code. -->
+    <bool name="config_ui_blur_enabled">false</bool>
+
+    <!-- Duration for the blur animation behind a dialog.  This may be either
+         a percentage, which is relative to the duration of the enter/open
+         animation of the window being shown that is blurring behind, or it may
+         be an integer for a constant duration. -->
+    <fraction name="config_blurBehindFadeDuration">100%</fraction>
 </resources>
