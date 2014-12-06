@@ -379,6 +379,7 @@ public class SignalStrength implements Parcelable {
         if (DBG) log("Signal before validate=" + this);
         // TS 27.007 8.5
         mGsmSignalStrength = mGsmSignalStrength >= 0 ? mGsmSignalStrength : 99;
+        mGsmSignalStrength = mGsmSignalStrength < = 31 ? mGsmSignalStrength : 99;
         // BER no change;
 
         mCdmaDbm = mCdmaDbm > 0 ? -mCdmaDbm : -120;
