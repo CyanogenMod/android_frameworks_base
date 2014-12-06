@@ -1119,6 +1119,15 @@ public interface WindowManager extends ViewManager {
          * {@hide} */
         public static final int PRIVATE_FLAG_FULLY_TRANSPARENT = 0x10000000;
 
+        /** Window flag: adding additional blur layer and set this as masking layer
+          * {@hide} */
+        public static final int PRIVATE_FLAG_BLUR_WITH_MASKING = 0x40000000;
+
+        /** Window flag: adding additional blur layer and set this as masking layer.
+          * This is faster and ugglier than non-scaled version.
+          * {@hide} */
+        public static final int PRIVATE_FLAG_BLUR_WITH_MASKING_SCALED = 0x80000000;
+
         /**
          * Control flags that are private to the platform.
          * @hide
@@ -1509,6 +1518,14 @@ public interface WindowManager extends ViewManager {
          */
         public long userActivityTimeout = -1;
 
+        /**
+         * Threshold value that blur masking layer uses to determine whether
+         * to use or discard the blurred color.
+         * Value should be between 0.0 and 1.0
+         * @hide
+         */
+        public float blurMaskAlphaThreshold = 0.0f;
+
         public LayoutParams() {
             super(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             type = TYPE_APPLICATION;
@@ -1600,6 +1617,7 @@ public interface WindowManager extends ViewManager {
             out.writeInt(surfaceInsets.top);
             out.writeInt(surfaceInsets.right);
             out.writeInt(surfaceInsets.bottom);
+            out.writeFloat(blurMaskAlphaThreshold);
         }
         
         public static final Parcelable.Creator<LayoutParams> CREATOR
@@ -1647,6 +1665,7 @@ public interface WindowManager extends ViewManager {
             surfaceInsets.top = in.readInt();
             surfaceInsets.right = in.readInt();
             surfaceInsets.bottom = in.readInt();
+            blurMaskAlphaThreshold = in.readFloat();
         }
     
         @SuppressWarnings({"PointlessBitwiseExpression"})
@@ -1681,6 +1700,8 @@ public interface WindowManager extends ViewManager {
         public static final int SURFACE_INSETS_CHANGED = 1<<20;
         /** {@hide} */
         public static final int PREFERRED_REFRESH_RATE_CHANGED = 1 << 21;
+        /** {@hide} */
+        public static final int BLUR_MASK_ALPHA_THRESHOLD_CHANGED = 1 << 30;
         /** {@hide} */
         public static final int EVERYTHING_CHANGED = 0xffffffff;
 
@@ -1824,6 +1845,11 @@ public interface WindowManager extends ViewManager {
             if (!surfaceInsets.equals(o.surfaceInsets)) {
                 surfaceInsets.set(o.surfaceInsets);
                 changes |= SURFACE_INSETS_CHANGED;
+            }
+
+            if (blurMaskAlphaThreshold != o.blurMaskAlphaThreshold) {
+                blurMaskAlphaThreshold = o.blurMaskAlphaThreshold;
+                changes |= BLUR_MASK_ALPHA_THRESHOLD_CHANGED;
             }
 
             return changes;

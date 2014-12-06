@@ -3350,12 +3350,26 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         // Non-floating windows on high end devices must put up decor beneath the system bars and
         // therefore must know about visibility changes of those.
         if (!mIsFloating && ActivityManager.isHighEndGfx()) {
-            if (!targetPreL && a.getBoolean(
-                    R.styleable.Window_windowDrawsSystemBarBackgrounds,
-                    false)) {
-                setFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
-                        FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS & ~getForcedWindowFlags());
-            }
+            //////////////////////////////////////////
+            // NOTE: mod for Blurred lockscreen
+            //
+            // When blurred lockscreen comes up, some one have to draw statusbar area on top
+            // and navigation bar area on bottom.
+            // We make all app window to draw that area with appropriate color by setting
+            // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flags.
+            // Lollipop apps will draw it with its primaryColorDark, and apps targetting kitkat or
+            // lower will draw it with black.
+            //
+            //if (!targetPreL && a.getBoolean(
+            //        R.styleable.Window_windowDrawsSystemBarBackgrounds,
+            //        false)) {
+            //    setFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+            //            FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS & ~getForcedWindowFlags());
+            //}
+            setFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                    FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS & ~getForcedWindowFlags());
+            //
+            //////////////////////////////////////////
         }
         if (!mForcedStatusBarColor) {
             mStatusBarColor = a.getColor(R.styleable.Window_statusBarColor, 0xFF000000);
