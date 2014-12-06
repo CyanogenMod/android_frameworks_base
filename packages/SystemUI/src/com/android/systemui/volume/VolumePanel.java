@@ -265,6 +265,8 @@ public class VolumePanel extends Handler {
     private static AlertDialog sSafetyWarning;
     private static Object sSafetyWarningLock = new Object();
 
+    private boolean mBlurUiEnabled;
+
     private ContentObserver mSettingsObserver = new ContentObserver(this) {
         @Override
         public void onChange(boolean selfChange) {
@@ -272,7 +274,6 @@ public class VolumePanel extends Handler {
                     Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
         }
     };
-
 
     private static class SafetyWarning extends SystemUIDialog
             implements DialogInterface.OnDismissListener, DialogInterface.OnClickListener {
@@ -422,6 +423,7 @@ public class VolumePanel extends Handler {
                     | LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
                     | LayoutParams.FLAG_HARDWARE_ACCELERATED);
             mView = window.findViewById(R.id.content);
+
             Interaction.register(mView, new Interaction.Callback() {
                 @Override
                 public void onInteraction() {
@@ -461,6 +463,19 @@ public class VolumePanel extends Handler {
 
         registerReceiver();
 
+        boolean blurEnabled = false && context.getResources().getBoolean(R.bool.config_ui_blur_enabled);
+        if (blurEnabled && mDialog != null && mDialog.getWindow() != null) {
+            Window window = mDialog.getWindow();
+            window.addPrivateFlags(WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING);
+            window.setBlurMaskAlphaThreshold(0.48f);
+            View mainContainer = window.findViewById(com.android.systemui.R.id.volume_dialog_bg_container);
+            mainContainer.setBackgroundResource(
+                com.android.systemui.R.drawable.volume_dialog_bg_translucent);
+
+            mSliderPanel.setBackground(null);
+            window.findViewById(com.android.systemui.R.id.zen_mode_panel_bg_container)
+                .setBackground(null);
+        }
     }
 
     public VolumePanel(Context context, ZenModeController zenController) {

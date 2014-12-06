@@ -92,6 +92,8 @@ public class WindowAnimator {
     boolean mKeyguardGoingAwayDisableWindowAnimations;
     boolean mKeyguardGoingAwayShowingMedia;
 
+    private final boolean mBlurUiEnabled;
+
     // forceHiding states.
     static final int KEYGUARD_NOT_SHOWN     = 0;
     static final int KEYGUARD_ANIMATING_IN  = 1;
@@ -113,6 +115,9 @@ public class WindowAnimator {
         mService = service;
         mContext = service.mContext;
         mPolicy = service.mPolicy;
+
+        mBlurUiEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
 
         mAnimationRunnable = new Runnable() {
             @Override
@@ -236,7 +241,8 @@ public class WindowAnimator {
                     if (!winAnimator.mAnimating) {
                         // Create a new animation to delay until keyguard is gone on its own.
                         winAnimator.mAnimation = new AlphaAnimation(1.0f, 1.0f);
-                        winAnimator.mAnimation.setDuration(KEYGUARD_ANIM_TIMEOUT_MS);
+                        winAnimator.mAnimation.setDuration(
+                                mBlurUiEnabled ? 0 : KEYGUARD_ANIM_TIMEOUT_MS);
                         winAnimator.mAnimationIsEntrance = false;
                     }
                 } else {
@@ -301,14 +307,18 @@ public class WindowAnimator {
                         mKeyguardGoingAway = false;
                     }
                     if (win.isReadyForDisplay()) {
-                        if (nowAnimating) {
-                            if (winAnimator.mAnimationIsEntrance) {
-                                mForceHiding = KEYGUARD_ANIMATING_IN;
-                            } else {
-                                mForceHiding = KEYGUARD_ANIMATING_OUT;
-                            }
+                        if (mBlurUiEnabled) {
+                            mForceHiding = KEYGUARD_NOT_SHOWN;
                         } else {
-                            mForceHiding = win.isDrawnLw() ? KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
+                            if (nowAnimating) {
+                                if (winAnimator.mAnimationIsEntrance) {
+                                    mForceHiding = KEYGUARD_ANIMATING_IN;
+                                } else {
+                                    mForceHiding = KEYGUARD_ANIMATING_OUT;
+                                }
+                            } else {
+                                mForceHiding = win.isDrawnLw() ? KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
+                            }
                         }
                     }
                     if (WindowManagerService.DEBUG_VISIBILITY) Slog.v(TAG,
@@ -615,6 +625,7 @@ public class WindowAnimator {
                 }
 
                 mAnimating |= mService.getDisplayContentLocked(displayId).animateDimLayers();
+                mAnimating |= mService.getDisplayContentLocked(displayId).animateBlurLayers();
 
                 //TODO (multidisplay): Magnification is supported only for the default display.
                 if (mService.mAccessibilityController != null

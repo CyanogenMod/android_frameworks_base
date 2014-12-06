@@ -219,12 +219,17 @@ public class WindowManagerService extends IWindowManager.Stub
     /**
      * Dim surface layer is immediately below target window.
      */
-    static final int LAYER_OFFSET_DIM = 1;
+    static final int LAYER_OFFSET_DIM = 1+1;
 
     /**
      * Blur surface layer is immediately below dim layer.
      */
-    static final int LAYER_OFFSET_BLUR = 2;
+    static final int LAYER_OFFSET_BLUR = 2+1;
+
+    /**
+      * Blur_with_masking layer is immediately below blur layer.
+      */
+    static final int LAYER_OFFSET_BLUR_WITH_MASKING = 1;
 
     /**
      * FocusedStackFrame layer is immediately above focused window.
@@ -8663,7 +8668,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 anyLayerChanged = true;
             }
             final TaskStack stack = w.getStack();
-            if (layerChanged && stack != null && stack.isDimming(winAnimator)) {
+            if (layerChanged && stack != null && (stack.isDimming(winAnimator) || stack.isBlurring(winAnimator))) {
                 // Force an animation pass just to update the mDimLayer layer.
                 scheduleAnimationLocked();
             }
@@ -9510,6 +9515,31 @@ public class WindowManagerService extends IWindowManager.Stub
         winAnimator.updateFullyTransparent(attrs);
     }
 
+    private void handleFlagBlurBehind(WindowState w) {
+        final WindowManager.LayoutParams attrs = w.mAttrs;
+        if ((attrs.flags & FLAG_BLUR_BEHIND) != 0
+                && w.isDisplayedLw()
+                && !w.mExiting) {
+            final WindowStateAnimator winAnimator = w.mWinAnimator;
+            final TaskStack stack = w.getStack();
+            if (stack == null) {
+                return;
+            }
+            stack.setBlurringTag();
+            if (!stack.isBlurring(winAnimator)) {
+                if (localLOGV) Slog.v(TAG, "Win " + w + " start blurring");
+                stack.startBlurringIfNeeded(winAnimator);
+            }
+        }
+    }
+
+    private void handlePrivateFlagBlurWithMasking(WindowState w) {
+        final WindowManager.LayoutParams attrs = w.mAttrs;
+        boolean hideForced = !w.isDisplayedLw() || w.mExiting;
+        final WindowStateAnimator winAnimator = w.mWinAnimator;
+        winAnimator.updateBlurWithMaskingState(attrs, hideForced);
+    }
+
     private void updateAllDrawnLocked(DisplayContent displayContent) {
         // See if any windows have been drawn, so they (and others
         // associated with them) can now be shown.
@@ -9687,6 +9717,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 mInnerFields.mObscured = false;
                 mInnerFields.mSyswin = false;
                 displayContent.resetDimming();
+                displayContent.resetBlurring();
 
                 // Only used if default window
                 final boolean someoneLosingFocus = !mLosingFocus.isEmpty();
@@ -9712,6 +9743,11 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
 
                     handlePrivateFlagFullyTransparent(w);
+
+                    if (stack != null && !stack.testBlurringTag()) {
+                        handleFlagBlurBehind(w);
+                    }
+                    handlePrivateFlagBlurWithMasking(w);
 
                     if (isDefaultDisplay && obscuredChanged && (mWallpaperTarget == w)
                             && w.isVisibleLw()) {
@@ -9846,6 +9882,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         true /* inTraversal, must call performTraversalInTrans... below */);
 
                 getDisplayContentLocked(displayId).stopDimmingIfNeeded();
+                getDisplayContentLocked(displayId).stopBlurringIfNeeded();
 
                 if (updateAllDrawn) {
                     updateAllDrawnLocked(displayContent);

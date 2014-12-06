@@ -2505,6 +2505,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return mScreenOnComingFromTouch;
     }
 
+    void setBlur(float b){
+        mStatusBarWindowManager.setBlur(b);
+    }
+
     public boolean isFalsingThresholdNeeded() {
         boolean onKeyguard = getBarState() == StatusBarState.KEYGUARD;
         boolean isMethodInsecure = mUnlockMethodCache.isMethodInsecure();
@@ -3476,7 +3480,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private void addStatusBarWindow() {
         makeStatusBarView();
         mStatusBarWindow.addContent(mStatusBarWindowContent);
-        mStatusBarWindowManager = new StatusBarWindowManager(mContext);
+        mStatusBarWindowManager = new StatusBarWindowManager(mContext, this);
         mStatusBarWindowManager.add(mStatusBarWindow, getStatusBarHeight());
     }
 
@@ -4222,6 +4226,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         updateKeyguardState(staying, false /* fromShadeLocked */);
         return staying;
+    }
+
+    boolean isSecure() {
+        return mStatusBarKeyguardViewManager != null && mStatusBarKeyguardViewManager.isSecure();
     }
 
     public long calculateGoingToFullShadeDelay() {
