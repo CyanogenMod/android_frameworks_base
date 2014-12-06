@@ -2268,4 +2268,6 @@
   <java-symbol type="string" name="android_installing_apk" />
   <java-symbol type="string" name="android_installing_title" />
 
+  <!-- Blur effects -->
+  <java-symbol type="bool" name="config_ui_blur_enabled" />
 </resources>
