@@ -54,6 +54,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class TaskStack implements DimLayer.DimLayerUser,
+        BlurLayer.BlurLayerUser,
         BoundsAnimationController.AnimateBoundsUser {
     /** Minimum size of an adjusted stack bounds relative to original stack bounds. Used to
      * restrict IME adjustment so that a min portion of top stack remains visible.*/
@@ -61,6 +62,9 @@ public class TaskStack implements DimLayer.DimLayerUser,
 
     /** Dimming amount for non-focused stack when stacks are IME-adjusted. */
     private static final float IME_ADJUST_DIM_AMOUNT = 0.25f;
+    
+    private static final int DEFAULT_BLUR_DURATION = 50;
+    private static final float MAX_BLUR_AMOUNT = 1.0f;
 
     /** Unique identifier */
     final int mStackId;
@@ -290,6 +294,7 @@ public class TaskStack implements DimLayer.DimLayerUser,
 
         if (mDisplayContent != null) {
             mDisplayContent.mDimLayerController.updateDimLayer(this);
+            mDisplayContent.mBlurLayerController.updateBlurLayer(this);
             mAnimationBackgroundSurface.setBounds(bounds);
         }
 
@@ -344,6 +349,11 @@ public class TaskStack implements DimLayer.DimLayerUser,
     /** Bounds of the stack with other system factors taken into consideration. */
     @Override
     public void getDimBounds(Rect out) {
+        getBounds(out);
+    }
+
+    @Override
+    public void getBlurBounds(Rect out) {
         getBounds(out);
     }
 
@@ -812,7 +822,6 @@ public class TaskStack implements DimLayer.DimLayerUser,
         if (doAnotherLayoutPass) {
             mService.mWindowPlacerLocked.requestTraversal();
         }
-
         close();
     }
 
@@ -1164,6 +1173,11 @@ public class TaskStack implements DimLayer.DimLayerUser,
 
     @Override
     public boolean dimFullscreen() {
+        return mStackId == HOME_STACK_ID || isFullscreen();
+    }
+
+    @Override
+    public boolean blurFullscreen() {
         return mStackId == HOME_STACK_ID || isFullscreen();
     }
 
