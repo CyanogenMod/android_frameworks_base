@@ -1190,6 +1190,7 @@ public interface WindowManagerPolicy {
      * Specifies whether there is an on-screen navigation bar separate from the status bar.
      */
     public boolean hasNavigationBar();
+    public boolean hasPermanentMenuKey();
 
     /**
      * Specifies whether the device needs a navigation bar (because it has no hardware buttons)
