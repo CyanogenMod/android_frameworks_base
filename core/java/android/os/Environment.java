@@ -743,6 +743,9 @@ public class Environment {
         return getExternalStorageState(path);
     }
 
+    /**
+     * @hide
+     */
     public static String getSecondaryStorageState() {
         final File externalDir = sCurrentUser.getExternalDirsForApp()[1];
         return getStorageState(externalDir);
