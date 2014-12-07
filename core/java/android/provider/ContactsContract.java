@@ -1112,14 +1112,20 @@ public final class ContactsContract {
     }
 
     /**
+     * @hide
+     */
+    public interface InternalContactCounts extends ContactCounts {
+        // Just a placeholder interface to don't break the public api, while expose ContactCounts
+        // for internal use
+    }
+
+    /**
      * URI parameter and cursor extras that return counts of rows grouped by the
      * address book index, which is usually the first letter of the sort key.
      * When this parameter is supplied, the row counts are returned in the
      * cursor extras bundle.
-     *
-     * @hide
      */
-    public interface ContactCounts {
+    interface ContactCounts {
 
         /**
          * Add this query parameter to a URI to get back row counts grouped by the address book
@@ -1147,8 +1153,6 @@ public final class ContactsContract {
          * }
          * </pre>
          * </p>
-         *
-         * @hide
          */
         public static final String EXTRA_ADDRESS_BOOK_INDEX =
                 "android.provider.extra.ADDRESS_BOOK_INDEX";
@@ -1157,8 +1161,6 @@ public final class ContactsContract {
          * The array of address book index titles, which are returned in the
          * same order as the data in the cursor.
          * <p>TYPE: String[]</p>
-         *
-         * @hide
          */
         public static final String EXTRA_ADDRESS_BOOK_INDEX_TITLES =
                 "android.provider.extra.ADDRESS_BOOK_INDEX_TITLES";
@@ -1167,8 +1169,6 @@ public final class ContactsContract {
          * The array of group counts for the corresponding group.  Contains the same number
          * of elements as the EXTRA_ADDRESS_BOOK_INDEX_TITLES array.
          * <p>TYPE: int[]</p>
-         *
-         * @hide
          */
         public static final String EXTRA_ADDRESS_BOOK_INDEX_COUNTS =
                 "android.provider.extra.ADDRESS_BOOK_INDEX_COUNTS";
