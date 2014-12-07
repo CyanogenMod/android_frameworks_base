@@ -132,4 +132,12 @@ interface IImsConfig {
      * @throws ImsException if calling the IMS service results in an error.
      */
      oneway void setVideoQuality(int quality, ImsConfigListener listener);
+
+    /**
+     * Gets the value for IMS volte provisioned.
+     * This should be the same as the operator provisioned value if applies.
+     *
+     * @return void
+     */
+    boolean getVolteProvisioned();
 }
