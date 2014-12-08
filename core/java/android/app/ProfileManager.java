@@ -426,7 +426,7 @@ public class ProfileManager {
     /** @hide */
     public ProfileGroup getActiveProfileGroup(String packageName) {
         NotificationGroup notificationGroup = getNotificationGroupForPackage(packageName);
-        if(notificationGroup == null){
+        if (notificationGroup == null) {
             ProfileGroup defaultGroup = getActiveProfile().getDefaultGroup();
             return defaultGroup;
         }
