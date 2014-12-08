@@ -2651,23 +2651,34 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
-    private static boolean isUidSystem(int uid) {
-        final int appid = UserHandle.getAppId(uid);
-        return (appid == Process.SYSTEM_UID || appid == Process.PHONE_UID || uid == 0);
+    private int getUidForPackage(String packageName) {
+        int uid = -1;
+        try {
+            uid = getContext().getPackageManager().getPackageUid(packageName,
+                    UserHandle.getCallingUserId());
+        } catch (NameNotFoundException e) {
+        }
+        return uid;
     }
 
-    private static boolean isCallerSystem() {
+    private boolean isUidSystem(int uid) {
+        final int appid = UserHandle.getAppId(uid);
+        return (appid == Process.SYSTEM_UID || appid == Process.PHONE_UID || uid == 0
+            || appid == getUidForPackage("com.android.systemui"));
+    }
+
+    private boolean isCallerSystem() {
         return isUidSystem(Binder.getCallingUid());
     }
 
-    private static void checkCallerIsSystem() {
+    private void checkCallerIsSystem() {
         if (isCallerSystem()) {
             return;
         }
         throw new SecurityException("Disallowed call for uid " + Binder.getCallingUid());
     }
 
-    private static void checkCallerIsSystemOrSameApp(String pkg) {
+    private void checkCallerIsSystemOrSameApp(String pkg) {
         if (isCallerSystem()) {
             return;
         }
