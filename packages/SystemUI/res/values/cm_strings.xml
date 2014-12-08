@@ -20,4 +20,11 @@
     <!-- The text for the button in the notification window-shade that clears
          all of the currently visible notifications. [CHAR LIMIT=10]-->
     <string name="clear_recents">Close all recent</string>
+
+    <string name="stop_notification_dialog_positive">Yes</string>
+    <string name="stop_notification_dialog_negative">No</string>
+    <string name="stop_notification_dialog_title">Disable notifications</string>
+    <string name="stop_notification_dialog_message">Are you sure you want to never show
+        notifications from this application?</string>
+
 </resources>
