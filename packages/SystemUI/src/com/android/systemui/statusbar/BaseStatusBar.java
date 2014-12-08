@@ -21,6 +21,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
+import android.app.AlertDialog;
+import android.app.INotificationManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -29,6 +31,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -778,7 +781,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             stub.inflate();
         }
         final StatusBarNotification sbn = row.getStatusBarNotification();
-        PackageManager pmUser = getPackageManagerForUser(
+        final PackageManager pmUser = getPackageManagerForUser(
                 sbn.getUser().getIdentifier());
         row.setTag(sbn.getPackageName());
         final View guts = row.findViewById(R.id.notification_guts);
@@ -805,6 +808,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         final View settingsButton = guts.findViewById(R.id.notification_inspect_item);
         final View appSettingsButton
                 = guts.findViewById(R.id.notification_inspect_app_provided_settings);
+        final View stopNotificationsButton
+                = guts.findViewById(R.id.notification_stop_notifications);
         if (appUid >= 0) {
             final int appUidF = appUid;
             settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -812,6 +817,24 @@ public abstract class BaseStatusBar extends SystemUI implements
                     startAppNotificationSettingsActivity(pkg, appUidF);
                 }
             });
+
+            ApplicationInfo appInfo = null;
+            try {
+                appInfo = pmUser.getApplicationInfo(pkg, 0);
+            } catch (NameNotFoundException nnfe) {
+                // we'll check if it's null below
+            }
+
+            final ApplicationInfo info = appInfo;
+            if (info != null && (info.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                stopNotificationsButton.setVisibility(View.VISIBLE);
+                stopNotificationsButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showStopNotificationDialog(pkg, sbn, info.uid);
+                    }
+                });
+            }
 
             final Intent appSettingsQueryIntent
                     = new Intent(Intent.ACTION_MAIN)
@@ -843,6 +866,34 @@ public abstract class BaseStatusBar extends SystemUI implements
             appSettingsButton.setVisibility(View.GONE);
         }
 
+    }
+
+    private void showStopNotificationDialog(final String pkg, final StatusBarNotification sbn,
+                                            final int uid) {
+        // Collapse statusbar
+        animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE, true /* force */);
+        // Show dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(R.string.stop_notification_dialog_title);
+        builder.setMessage(R.string.stop_notification_dialog_message);
+        builder.setPositiveButton(R.string.stop_notification_dialog_positive,
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                INotificationManager nm = INotificationManager.Stub.asInterface(
+                        ServiceManager.getService(Context.NOTIFICATION_SERVICE));
+                try {
+                    nm.setNotificationsEnabledForPackage(pkg, uid, false);
+                    removeNotification(sbn.getKey(), null);
+                } catch (Exception ex) {
+                    Log.e(TAG, "Unable to stop notification for " + pkg, ex);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.stop_notification_dialog_negative, null);
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
+        dialog.show();
     }
 
     protected SwipeHelper.LongPressListener getNotificationLongClicker() {
