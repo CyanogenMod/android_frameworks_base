@@ -26,12 +26,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -389,19 +392,34 @@ public abstract class BaseStatusBar extends SystemUI implements
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final String packageNameF = (String) v.getTag();
+                final Bundle bundle = (Bundle) v.getTag();
+                if (bundle == null) return false;
+                final String packageNameF = bundle.getString("pkg");
                 if (packageNameF == null) return false;
                 if (v.getWindowToken() == null) return false;
                 mNotificationBlamePopup = new PopupMenu(mContext, v);
                 mNotificationBlamePopup.getMenuInflater().inflate(
                         R.menu.notification_popup_menu,
                         mNotificationBlamePopup.getMenu());
+                if (mContext.getResources().getBoolean(R.bool.config_showDisableNotificaton)
+                        && !isSystemPackage(packageNameF)) {
+                    mNotificationBlamePopup.getMenu().add(0,
+                            R.string.status_bar_notification_disable_item_title, 0,
+                            R.string.status_bar_notification_disable_item_title);
+                }
                 mNotificationBlamePopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.notification_inspect_item) {
                             startApplicationDetailsActivity(packageNameF);
                             animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
-                        } else {
+                        } else if (item.getItemId()
+                                    == R.string.status_bar_notification_disable_item_title) {
+                            int uid = bundle.getInt("uid");
+                            Intent intent = new Intent("action.disable.notification");
+                            intent.putExtra("extra.package.name", packageNameF);
+                            intent.putExtra("extra.uid", uid);
+                            mContext.sendBroadcast(intent);
+                         } else {
                             return false;
                         }
                         return true;
@@ -412,6 +430,22 @@ public abstract class BaseStatusBar extends SystemUI implements
                 return true;
             }
         };
+    }
+
+    private boolean isSystemPackage(String packageName) {
+        PackageInfo pkgInfo = null;
+        PackageManager pm = mContext.getPackageManager();
+        try {
+            pkgInfo = pm.getPackageInfo(packageName,
+                    PackageManager.GET_DISABLED_COMPONENTS |
+                    PackageManager.GET_UNINSTALLED_PACKAGES |
+                    PackageManager.GET_SIGNATURES);
+            PackageInfo sys = pm.getPackageInfo("android", PackageManager.GET_SIGNATURES);
+            return (pkgInfo != null && pkgInfo.signatures != null &&
+                    sys.signatures[0].equals(pkgInfo.signatures[0]));
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     public void dismissPopups() {
@@ -632,7 +666,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                 R.layout.status_bar_notification_row, parent, false);
 
         // for blaming (see SwipeHelper.setLongPressListener)
-        row.setTag(sbn.getPackageName());
+        Bundle bundle = new Bundle();
+        bundle.putString("pkg", sbn.getPackageName());
+        bundle.putInt("uid", sbn.getUid());
+        row.setTag(bundle);
 
         workAroundBadLayerDrawableOpacity(row);
         View vetoButton = updateNotificationVetoButton(row, sbn);
