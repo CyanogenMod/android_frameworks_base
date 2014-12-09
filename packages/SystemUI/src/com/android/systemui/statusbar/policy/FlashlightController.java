@@ -35,6 +35,10 @@ import android.view.Surface;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.File;
+
+import com.android.systemui.R;
 
 /**
  * Manages the flashlight.
@@ -65,30 +69,71 @@ public class FlashlightController {
     private CameraCaptureSession mSession;
     private SurfaceTexture mSurfaceTexture;
     private Surface mSurface;
+    private FileWriter mFlashDeviceWriter;
+    private String mFlashDevice;
+    private boolean useCameraInterface;
+    private int torchBrightness;
+    private Context mContext;
 
     public FlashlightController(Context mContext) {
+
+        this.mContext = mContext;
+
+        useCameraInterface = mContext.getResources().getBoolean(R.bool.config_useCameraInterface);
+
         mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+
         initialize();
     }
 
     public void initialize() {
-        try {
-            mCameraId = getCameraId();
-        } catch (Throwable e) {
-            Log.e(TAG, "Couldn't initialize.", e);
-            return;
-        }
+        if (useCameraInterface) {
+            try {
+                mCameraId = getCameraId();
+            } catch (Throwable e) {
+                Log.e(TAG, "Couldn't initialize.", e);
+                return;
+            }
 
-        if (mCameraId != null) {
-            ensureHandler();
-            mCameraManager.registerAvailabilityCallback(mAvailabilityCallback, mHandler);
+            if (mCameraId != null) {
+                ensureHandler();
+                mCameraManager.registerAvailabilityCallback(mAvailabilityCallback, mHandler);
+            }
+        } else {
+
+                mFlashDevice = mContext.getResources().getString(R.string.config_flashDevice);
+
+                try {
+                    mFlashDeviceWriter = new FileWriter(mFlashDevice);
+                } catch (Exception e) {Log.e(TAG, "Error creating  mFlashDeviceWriter", e);}
         }
     }
 
     public synchronized void setFlashlight(boolean enabled) {
-        if (mFlashlightEnabled != enabled) {
-            mFlashlightEnabled = enabled;
-            postUpdateFlashlight();
+        if (useCameraInterface) {
+            if (mFlashlightEnabled != enabled) {
+                mFlashlightEnabled = enabled;
+                postUpdateFlashlight();
+            }
+        } else {
+
+        torchBrightness = mContext.getResources().getInteger(R.integer.config_torchBrightness);
+
+        if (mFlashDeviceWriter == null)
+
+            try {
+                    mFlashDeviceWriter = new FileWriter(mFlashDevice);
+                } catch (Exception e) {Log.e(TAG, "Error creating  mFlashDeviceWriter", e);
+        }
+
+            try {
+                //if (enabled) {mFlashDeviceWriter.write(String.valueOf(torchBrightness));} else {mFlashDeviceWriter.write("0");}
+            mFlashDeviceWriter.write(enabled ? String.valueOf(torchBrightness) : "0");
+            mFlashDeviceWriter.flush();
+            mFlashDeviceWriter.close();
+            mFlashDeviceWriter = null;
+        } catch (Exception e) {Log.e(TAG, "Error writing the led sysfs", e);}
+
         }
     }
 
@@ -103,7 +148,11 @@ public class FlashlightController {
     }
 
     public synchronized boolean isAvailable() {
-        return mCameraAvailable;
+        if (useCameraInterface) {
+            return mCameraAvailable;
+        }
+
+        return new File(mFlashDevice).exists();
     }
 
     public void addListener(FlashlightListener l) {
