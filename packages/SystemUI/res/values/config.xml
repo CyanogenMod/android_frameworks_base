@@ -69,6 +69,16 @@
     <!-- Show rotation lock toggle in System UI-->
     <bool name="config_showRotationLock">true</bool>
 
+    <!-- Use camera interface for the flashlight. If set to false, you must specify
+    config_flashDevice and config_torchBrightness too -->
+    <bool translatable="false" name="config_useCameraInterface">true</bool>
+
+    <!-- Torch led brightness value for led on (1 - 255). Usable with config_useCameraInterface=true -->
+    <integer translatable="false" name="config_torchBrightness">1</integer>
+
+    <!-- Defines the sysfs path to the torch led to be used as a flashlight. Usable with config_useCameraInterface=false -->
+    <string translatable="false" name="config_flashDevice">/sys/class/leds/torch-sec1/brightness</string>
+
     <!-- Amount of time to hold off before showing the search panel when the user presses home -->
     <integer name="config_show_search_delay">200</integer>
 
