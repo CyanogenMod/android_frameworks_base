@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.media.AudioManager;
@@ -73,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 114;
+    private static final int DATABASE_VERSION = 115;
 
     private static final String HEADSET = "_headset";
     private static final String SPEAKER = "_speaker";
@@ -1825,6 +1826,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 114;
         }
 
+        if (upgradeVersion < 115) {
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            Cursor c = null;
+            try {
+                // The STATS_COLLECTION setting is becoming per-user rather
+                // than device-system.
+                try {
+                    c = db.rawQuery("SELECT stats_collection from " + TABLE_SYSTEM, null);
+                    // if this row exists, then we do work
+                    if (c != null) {
+                        if (c.moveToNext()) {
+                            // The row exists so we can migrate the
+                            // entry from there to the secure table, preserving its value.
+                            String[] settingToSecure = {
+                                    Settings.Secure.STATS_COLLECTION
+                            };
+                            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                                    settingToSecure, true);
+                        }
+                    } else {
+                        // Otherwise our dbs don't have STATS_COLLECTION in secure so institute the
+                        // default.
+                        stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
+                                + " VALUES(?,?);");
+                        loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
+                                R.bool.def_cm_stats_collection);
+                    }
+                } catch (SQLiteException ex) {
+                    // This is bad, just bump the version and add the setting to secure
+                    stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
+                            + " VALUES(?,?);");
+                    loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
+                            R.bool.def_cm_stats_collection);
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                if (c != null) c.close();
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 115;
+        }
+
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -2560,6 +2605,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.integer.def_enable_accessiblity);
             loadStringSetting(stmt, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
                     R.string.def_enable_accessiblity_services);
+
+            loadBooleanSetting(stmt, Settings.Secure.STATS_COLLECTION,
+                    R.bool.def_cm_stats_collection);
         } finally {
             if (stmt != null) stmt.close();
         }
