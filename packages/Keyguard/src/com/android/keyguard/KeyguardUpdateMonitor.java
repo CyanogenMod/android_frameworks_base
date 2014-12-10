@@ -54,6 +54,7 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 
@@ -516,9 +517,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
                 int subId = intent.getIntExtra(PhoneConstants.SUBSCRIPTION_KEY, INVALID_SUBID);
                 mServiceState.put(subId, ServiceState.newFromBundle(intent.getExtras()));
-                Log.d(TAG, "ACTION_SERVICE_STATE_CHANGED on sub: " + subId + " showSpn:" +
-                        mShowSpn.get(subId) + " showPlmn:" + mShowPlmn.get(subId) +
-                        " mServiceState: " + mServiceState.get(subId));
+                Log.d(TAG, "ACTION_SERVICE_STATE_CHANGED on sub: " + subId + " mServiceState: "
+                        + mServiceState.get(subId));
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE, subId));
             } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
                 Log.d(TAG, "Received CONFIGURATION_CHANGED intent");
@@ -1143,14 +1143,14 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
     }
 
-    private void concatenate(boolean showSpn, boolean showPlmn, int subId,
+    private void concatenate(Boolean showSpn, Boolean showPlmn, int subId,
             ServiceState state) {
         int phoneId = SubscriptionManager.getPhoneId(subId);
         String rat = getRadioTech(state, phoneId);
-        if (showSpn) {
+        if (Boolean.TRUE.equals(showSpn) && !TextUtils.isEmpty(mSpn.get(subId))) {
             mSpn.put(subId, new StringBuilder().append(mSpn.get(subId)).append(rat));
         }
-        if (showPlmn) {
+        if (Boolean.TRUE.equals(showPlmn) && !TextUtils.isEmpty(mPlmn.get(subId))) {
             mPlmn.put(subId, new StringBuilder().append(mPlmn.get(subId)).append(rat));
         }
     }
