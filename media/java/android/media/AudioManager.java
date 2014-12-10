@@ -2478,14 +2478,6 @@ public class AudioManager {
             return;
         }
 
-        IAudioService service = getService();
-        try {
-            service.addMediaPlayerAndUpdateRemoteController(
-                                    eventReceiver.getPackageName());
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error in calling Audioservice interface " +
-                        "addMediaPlayerAndUpdateRemoteController()" + e);
-        }
         // construct a PendingIntent for the media button and register it
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.addFlags(mediaButtonIntent.FLAG_RECEIVER_FOREGROUND);
@@ -2651,6 +2643,24 @@ public class AudioManager {
             return;
         }
         rctlr.stopListeningToSessions();
+    }
+
+    /**
+     * @hide
+     */
+    public void updateMediaPlayerList(String packageName, boolean toAdd) {
+        IAudioService service = getService();
+        try {
+            if (toAdd) {
+                Log.d(TAG, "updateMediaPlayerList: Add RCC " + packageName + " to List");
+                service.addMediaPlayerAndUpdateRemoteController(packageName);
+            } else {
+                Log.d(TAG, "updateMediaPlayerList: Remove RCC " + packageName + " from List");
+                service.removeMediaPlayerAndUpdateRemoteController(packageName);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Exception while executing updateMediaPlayerList: " + e);
+        }
     }
 
     /**
