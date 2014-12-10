@@ -433,6 +433,19 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     updateDataIcon(i);
                     refreshViews(i);
                 }
+        } else if (action.equals(TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED)) {
+            // Update data in QS
+            long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, -1);
+
+            if (subId == -1) {
+                Slog.e(TAG, "No subId in ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED");
+                return;
+            }
+
+            int phoneId = getPhoneId(subId);
+            updateTelephonySignalStrength(phoneId);
+            updateDataNetType(phoneId);
+            refreshViews(phoneId);
         }
     }
 
