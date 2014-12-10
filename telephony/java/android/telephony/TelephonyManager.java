@@ -3742,7 +3742,18 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public void setDataEnabled(boolean enable) {
-        setDataEnabled(SubscriptionManager.getDefaultDataSubId(), enable);
+        try {
+            AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
+            if (enable) {
+                if (appOps.noteOp(AppOpsManager.OP_DATA_CONNECT_CHANGE) != AppOpsManager.MODE_ALLOWED) {
+                    Log.w(TAG, "Permission denied by user.");
+                    return;
+                }
+            }
+            setDataEnabled(SubscriptionManager.getDefaultDataSubId(), enable);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling setDataEnabled", e);
+        }
     }
 
     /** @hide */
