@@ -802,7 +802,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 mMSimContentDescriptionDataType[phoneId] =
                         TelephonyIcons.getDataTypeDesc();
                 mQSDataTypeIconId =
-                        TelephonyIcons.getQSDataTypeIcon();
+                        TelephonyIcons.getQSDataTypeIcon(dataSub);
             }
         }
 
