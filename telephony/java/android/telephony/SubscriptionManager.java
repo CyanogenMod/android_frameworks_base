@@ -419,7 +419,7 @@ public class SubscriptionManager {
      */
     public SubscriptionInfo getActiveSubscriptionInfo(int subId) {
         if (VDBG) logd("[getActiveSubscriptionInfo]+ subId=" + subId);
-        if (!isValidSubId(subId)) {
+        if (!isValidSubscriptionId(subId)) {
             logd("[getActiveSubscriptionInfo]- invalid subId");
             return null;
         }
@@ -654,7 +654,7 @@ public class SubscriptionManager {
      */
     public int setIconTint(int tint, int subId) {
         if (VDBG) logd("[setIconTint]+ tint:" + tint + " subId:" + subId);
-        if (!isValidSubId(subId)) {
+        if (!isValidSubscriptionId(subId)) {
             logd("[setIconTint]- fail");
             return -1;
         }
@@ -699,7 +699,7 @@ public class SubscriptionManager {
             logd("[setDisplayName]+  displayName:" + displayName + " subId:" + subId
                     + " nameSource:" + nameSource);
         }
-        if (!isValidSubId(subId)) {
+        if (!isValidSubscriptionId(subId)) {
             logd("[setDisplayName]- fail");
             return -1;
         }
@@ -727,7 +727,7 @@ public class SubscriptionManager {
      * @hide
      */
     public int setDisplayNumber(String number, int subId) {
-        if (number == null || !isValidSubId(subId)) {
+        if (number == null || !isValidSubscriptionId(subId)) {
             logd("[setDisplayNumber]- fail");
             return -1;
         }
@@ -756,7 +756,7 @@ public class SubscriptionManager {
      */
     public int setDataRoaming(int roaming, int subId) {
         if (VDBG) logd("[setDataRoaming]+ roaming:" + roaming + " subId:" + subId);
-        if (roaming < 0 || !isValidSubId(subId)) {
+        if (roaming < 0 || !isValidSubscriptionId(subId)) {
             logd("[setDataRoaming]- fail");
             return -1;
         }
@@ -782,7 +782,7 @@ public class SubscriptionManager {
      * @hide
      */
     public static int getSlotId(int subId) {
-        if (!isValidSubId(subId)) {
+        if (!isValidSubscriptionId(subId)) {
             logd("[getSlotId]- fail");
         }
 
@@ -824,7 +824,7 @@ public class SubscriptionManager {
 
     /** @hide */
     public static int getPhoneId(int subId) {
-        if (!isValidSubId(subId)) {
+        if (!isValidSubscriptionId(subId)) {
             logd("[getPhoneId]- fail");
             return INVALID_PHONE_INDEX;
         }
@@ -1038,13 +1038,13 @@ public class SubscriptionManager {
     //FIXME this is vulnerable to race conditions
     /** @hide */
     public boolean allDefaultsSelected() {
-        if (getDefaultDataSubId() == INVALID_SUBSCRIPTION_ID) {
+        if (!isValidSubscriptionId(getDefaultDataSubId())) {
             return false;
         }
-        if (getDefaultSmsSubId() == INVALID_SUBSCRIPTION_ID) {
+        if (!isValidSubscriptionId(getDefaultSmsSubId())) {
             return false;
         }
-        if (getDefaultVoiceSubId() == INVALID_SUBSCRIPTION_ID) {
+        if (!isValidSubscriptionId(getDefaultVoiceSubId())) {
             return false;
         }
         return true;
@@ -1071,7 +1071,7 @@ public class SubscriptionManager {
      * @return true if a valid subId else false
      * @hide
      */
-    public static boolean isValidSubId(int subId) {
+    public static boolean isValidSubscriptionId(int subId) {
         return subId > INVALID_SUBSCRIPTION_ID ;
     }
 
