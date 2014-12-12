@@ -24,6 +24,7 @@ import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -92,6 +93,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mFitThumbnailToXY;
     private int mRecentItemLayoutId;
     private boolean mHighEndGfx;
+    private TextView mClearRecents;
 
     public static interface RecentsScrollView {
         public int numItemsInOneScreenful();
@@ -101,6 +103,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         public View findViewForTask(int persistentTaskId);
         public void drawFadedEdges(Canvas c, int left, int right, int top, int bottom);
         public void setOnScrollListener(Runnable listener);
+        public void removeAllViewsInLayout();
     }
 
     private final class OnLongClickDelegate implements View.OnLongClickListener {
@@ -345,6 +348,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                     && (mRecentTaskDescriptions.size() == 0);
             mRecentsNoApps.setAlpha(1f);
             mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
+            if (mClearRecents != null) {
+                mClearRecents.setEnabled(noApps ? false : true);
+            }
 
             onAnimationEnd(null);
             setFocusable(true);
@@ -452,6 +458,37 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         mRecentsScrim = findViewById(R.id.recents_bg_protect);
         mRecentsNoApps = findViewById(R.id.recents_no_apps);
 
+        if (getResources().getBoolean(R.bool.config_showRecentsBottomButtons)) {
+            View bottomButtons = (View) findViewById(R.id.recents_bottom_buttons);
+            if (bottomButtons != null) {
+                bottomButtons.setVisibility(View.VISIBLE);
+            }
+            mClearRecents = (TextView) findViewById(R.id.recents_clear);
+            if (mClearRecents != null){
+                mClearRecents.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mRecentsContainer.removeAllViewsInLayout();
+                    }
+                });
+            }
+            TextView taskManagerView = (TextView) findViewById(R.id.task_manager);
+            if (taskManagerView != null) {
+                taskManagerView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        show(false);
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(
+                            "com.android.systemui",
+                            "com.android.systemui.recent.TaskManagerActivity"));
+                        mContext.startActivity(intent);
+                        ((RecentsActivity) mContext).finish();
+                    }
+                });
+            }
+        }
+
         if (mRecentsScrim != null) {
             mHighEndGfx = ActivityManager.isHighEndGfx();
             if (!mHighEndGfx) {
@@ -460,6 +497,23 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 // In order to save space, we make the background texture repeat in the Y direction
                 ((BitmapDrawable) mRecentsScrim.getBackground()).setTileModeY(TileMode.REPEAT);
             }
+        }
+    }
+
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (getResources().getBoolean(R.bool.config_showRecentsBottomButtons)) {
+            setMarginsAfterMeasure();
+        }
+    }
+
+    private void setMarginsAfterMeasure() {
+        if (mRecentsContainer != null) {
+            MarginLayoutParams marginLayoutParams =
+                    (MarginLayoutParams) ((ViewGroup) mRecentsContainer).getLayoutParams();
+            marginLayoutParams.bottomMargin =
+                    getResources().getDimensionPixelSize(R.dimen.tasklist_app_icon_size);
         }
     }
 

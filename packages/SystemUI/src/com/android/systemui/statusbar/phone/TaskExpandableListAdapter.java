@@ -18,6 +18,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.os.SystemClock;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
@@ -149,6 +150,10 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
         mHomeIntent.addCategory(Intent.CATEGORY_HOME);
     }
 
+    public void unregisterReceiver() {
+        if (mPackageReceiver != null) ctx.unregisterReceiver(mPackageReceiver);
+    }
+
     public static interface OnTaskActionListener {
         public void onTaskKilled();
         public void onTaskBroughtToFront();
@@ -200,16 +205,18 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = mInflater.inflate(R.layout.tasklist_item, null);
         }
         TextView textView = (TextView)convertView.findViewById(R.id.taskname);
-        ImageView imageView = (ImageView)convertView.findViewById(R.id.kill);
+        TextView memSizeView = (TextView)convertView.findViewById(R.id.memorysize);
+        TextView textViewKill = (TextView)convertView.findViewById(R.id.kill);
         ImageView imageView2 = (ImageView)convertView.findViewById(R.id.icon);
         final DetailProcess dp = getChild(groupPosition, childPosition);
         if (dp != null) {
             final String name = dp.getTitle();
             textView.setText(name);
+            memSizeView.setText(dp.getMemSizeStr());
             textView.setTag("taskitem-" + childPosition);
             //textView.setLayoutParams(lpChild);
-            imageView.setTag("killchild-" + childPosition);
-            imageView.setOnClickListener(new OnClickListener() {
+            textViewKill.setTag("killchild-" + childPosition);
+            textViewKill.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     final String tag = (String)v.getTag();
                     if (tag.startsWith("killchild-")) {
@@ -641,6 +648,15 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
         private PackageManager pm;
         private Intent intent = null;
         private boolean isHome;
+        private String memSizeStr = null;
+
+        public void setMemSizeStr(String sizeStr) {
+            memSizeStr = sizeStr;
+        }
+
+        public String getMemSizeStr() {
+            return memSizeStr != null ? memSizeStr : "";
+        }
 
         public DetailProcess(Context ctx, ActivityManager.RunningTaskInfo info) {
             taskinfo = info;
@@ -783,6 +799,8 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
             final List<RunningTaskInfo> listrti = am.getRunningTasks(MAX_TASK_NUM);
             listdp = new ArrayList<DetailProcess>();
 
+            List<ActivityManager.RunningAppProcessInfo> procs = am.getRunningAppProcesses();
+
             if (DEBUG) {
                 for (RunningTaskInfo rti : listrti) {
                     Log.d(TAG,"RunningTaskInfo getPackageName() "
@@ -807,7 +825,8 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
                 final String psPackageName = dp.getPackageName();
                 boolean needshow = true;
 
-                if (FILTER_LAUNCHER) {
+                if (FILTER_LAUNCHER
+                        || ctx.getResources().getBoolean(R.bool.config_showRecentsBottomButtons)) {
                     // Skip the current home activity.
                     if (mHomeResolveList!= null) {
                         final int count = mHomeResolveList.size();
@@ -823,11 +842,6 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
                     // mark home activity.
                     if (DEBUG) {
                         Log.d(TAG,"getRunningProcess psPackageName " + psPackageName);
-                    }
-                    if (FILTER_ON) {
-                        if (appNeedHide(psPackageName)) {
-                            needshow = false;
-                        }
                     }
                     if (needshow) {
                         if (mHomeResolveList!= null) {
@@ -852,11 +866,25 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
                         }
                     }
                 }
+                if (FILTER_ON) {
+                    if (needshow && appNeedHide(psPackageName)) {
+                        needshow = false;
+                    }
+                }
                 if (needshow && !dp.filter()) {
                     //get title at the first time when we load running task to avoid some sync problem
                     dp.getTitle();
                     //get icon at the first time when we load running task to avoid some sync problem
                     dp.getIcon();
+
+                    for (ActivityManager.RunningAppProcessInfo proc : procs) {
+                        final String pname = proc.processName;
+                        if (pname.equals(psPackageName)) {
+                            dp.setMemSizeStr(getMemSizeStr(proc.pid));
+                            break;
+                        }
+                    }
+
                     listdp.add(dp);
                 }
             }
@@ -865,6 +893,15 @@ public class TaskExpandableListAdapter extends BaseExpandableListAdapter {
             if (DEBUG) {
                 Log.d(TAG,"getRunningProcess end time " + SystemClock.uptimeMillis());
             }
+        }
+
+        private String getMemSizeStr(int pid) {
+            int pids[] = {pid};
+            Debug.MemoryInfo[] dinfos = am.getProcessMemoryInfo(pids);
+            int size = dinfos != null ? dinfos[0].getTotalPss() : 0;
+            // getTotalPss() return total PSS memory usage in kB. Change it to B.
+            size = 1024 * size;
+            return Formatter.formatShortFileSize(ctx, size);
         }
 
         public ArrayList<DetailProcess> getList() {

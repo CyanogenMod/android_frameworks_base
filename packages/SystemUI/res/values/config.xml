@@ -150,5 +150,7 @@
     <bool name="config_showRingerModeSwitch">false</bool>
     <bool name="config_showAlternateRsrpSignalLevelforLTE">false</bool>
     <bool name="config_showDisableNotificaton">true</bool>
+    <!-- When true, show clear all recents and task manager buttons on recents panel -->
+    <bool name="config_showRecentsBottomButtons">true</bool>
 </resources>
 

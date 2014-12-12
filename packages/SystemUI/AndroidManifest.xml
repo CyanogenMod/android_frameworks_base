@@ -140,6 +140,11 @@
           </intent-filter>
         </activity>
 
+        <activity android:name=".recent.TaskManagerActivity"
+                android:theme="@style/TaskManagerStyle"
+                android:excludeFromRecents="true">
+        </activity>
+
         <receiver
             android:name=".recent.RecentsPreloadReceiver"
             android:exported="false">
