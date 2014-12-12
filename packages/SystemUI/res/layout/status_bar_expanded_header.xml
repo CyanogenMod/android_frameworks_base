@@ -161,6 +161,36 @@
         android:visibility="gone"
         />
 
+    <LinearLayout
+        android:id="@+id/weather_container"
+        android:background="@drawable/ripple_drawable"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/clock_collapsed_bottom_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content">
+    <TextView
+            android:id="@+id/weather_line_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:gravity="right"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/weather_text_size"
+            android:importantForAccessibility="noHideDescendants"/>
+    <TextView
+            android:id="@+id/weather_line_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="16dp"
+            android:gravity="right"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/weather_text_size"
+            android:importantForAccessibility="noHideDescendants"/>
+    </LinearLayout>
+
     <include
         android:id="@+id/qs_detail_header"
         layout="@layout/qs_detail_header"
