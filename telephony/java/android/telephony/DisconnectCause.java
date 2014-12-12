@@ -175,6 +175,11 @@ public class DisconnectCause {
      * {@hide}
      */
     public static final int DIAL_MODIFIED_TO_DIAL          = 47;
+    /**
+     * Call was rejected due to number being blacklisted by user.
+     * {@@hide}
+     */
+    public static final int CALL_BLACKLISTED = 400;
 
     public static final int NO_CIRCUIT_AVAIL = 48;
     public static final int NO_ROUTE_TO_DESTINAON = 49;
@@ -350,6 +355,8 @@ public class DisconnectCause {
             return "OUTGOING_CANCELED";
         case IMS_MERGED_SUCCESSFULLY:
             return "IMS_MERGED_SUCCESSFULLY";
+        case CALL_BLACKLISTED:
+            return "CALL_BLACKLISTED";
         default:
             return "INVALID: " + cause;
         }
