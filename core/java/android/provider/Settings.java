@@ -2848,15 +2848,6 @@ public final class Settings {
         public static final String KEY_HOME_ANSWER_RINGING_CALL = "key_home_answer_ringing_call";
 
         /**
-         * End the call with power key (Default is 0)
-         * 0 - No
-         * 1 - Yes
-         *
-         * @hide
-         */
-        public static final String KEY_POWER_END_CALL = "key_power_end_call";
-
-        /**
          * Action to perform when the home key is long-pressed.
          * (Default can be configured via config_longPressOnHomeBehavior)
          * 0 - Nothing

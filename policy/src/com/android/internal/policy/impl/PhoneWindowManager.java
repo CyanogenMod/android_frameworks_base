@@ -549,7 +549,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mVolumeDownKeyConsumedByScreenshotChord;
     private boolean mVolumeUpKeyTriggered;
     private boolean mPowerKeyTriggered;
-    private boolean mPowerKeyEndCall;
     private long mVolumeUpKeyTime;
     private boolean mVolumeUpKeyConsumedByScreenshotChord;
     private long mPowerKeyTime;
@@ -1519,10 +1518,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHomeAnswerWhenRinging = (Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_HOME_ANSWER_RINGING_CALL, 0, UserHandle.USER_CURRENT) == 1);
 
-            // End call with power key
-            mPowerKeyEndCall = (Settings.System.getIntForUser(resolver,
-                    Settings.System.KEY_POWER_END_CALL, 0, UserHandle.USER_CURRENT) == 1);
-
             PolicyControl.reloadFromSetting(mContext);
         }
         if (updateRotation) {
@@ -2377,15 +2372,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
                     + repeatCount + " keyguardOn=" + keyguardOn + " mHomePressed=" + mHomePressed
                     + " canceled=" + canceled);
-        }
-
-        if (keyCode == KeyEvent.KEYCODE_POWER) {
-            if (mPowerKeyEndCall) {
-                TelecomManager telecomManager = getTelecommService();
-                if (telecomManager != null && telecomManager.isInCall()) {
-                    telecomManager.endCall();
-                }
-            }
         }
 
         // If we think we might have a volume down & power key chord on the way
