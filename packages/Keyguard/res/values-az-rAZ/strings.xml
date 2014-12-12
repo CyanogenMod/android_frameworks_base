@@ -105,7 +105,10 @@
     <string name="kg_puk_enter_pin_hint" msgid="7871604527429602024">"İstədiyiniz PİN kodu daxil edin"</string>
     <string name="kg_enter_confirm_pin_hint" msgid="325676184762529976">"İstədiyiniz PIN kodu təsdiqləyin"</string>
     <string name="kg_sim_unlock_progress_dialog_message" msgid="8950398016976865762">"SİM kartın kilidi açılır..."</string>
-    <string name="kg_password_wrong_pin_code" msgid="1139324887413846912">"Yanlış PİN kod."</string>
+    <plurals name="kg_password_wrong_pin_code">
+        <item quantity="one">"Yanlış PİN kod."</item>
+        <item quantity="other">"Yanlış PİN kod."</item>
+    </plurals>
     <string name="kg_invalid_sim_pin_hint" msgid="8795159358110620001">"4-dən 8-ə qədər rəqəmi olan PIN yazın."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="7553388325654369575">"PUK kod 8 rəqəm və ya daha çox olmalıdır."</string>
     <string name="kg_invalid_puk" msgid="3638289409676051243">"Düzgün PUK kodu yenidən daxil edin. Təkrarlanan cəhdlər SIM\'i birdəfəlik sıradan çıxaracaq."</string>

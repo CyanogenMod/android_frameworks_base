@@ -115,6 +115,7 @@
     <string name="keyguard_accessibility_widget"><xliff:g id="widget_index">%1$s</xliff:g> widget.</string>
     <!-- Accessibility description of the lock screen user selector widget. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_user_selector">User selector</string>
+    <string name="keyguard_accessibility_status">"Status"</string>
     <!-- Accessibility description of the camera widget. [CHAR_LIMIT=none] -->
     <string name="keyguard_accessibility_camera">Camera</string>
     <!-- Accessibility description of the lock media control widget. [CHAR_LIMIT=none] -->
