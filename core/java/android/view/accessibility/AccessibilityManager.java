@@ -642,7 +642,11 @@ public final class AccessibilityManager {
         }
         final int listenerCount = mAccessibilityStateChangeListeners.size();
         for (int i = 0; i < listenerCount; i++) {
-            mAccessibilityStateChangeListeners.get(i).onAccessibilityStateChanged(isEnabled);
+            try {
+                mAccessibilityStateChangeListeners.get(i).onAccessibilityStateChanged(isEnabled);
+            } catch (IndexOutOfBoundsException e) {
+                Log.e(LOG_TAG, "Error while notifying Accessibility State Change : " + e);
+            }
         }
     }
 
