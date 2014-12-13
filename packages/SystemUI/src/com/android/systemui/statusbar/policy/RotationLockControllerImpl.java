@@ -64,7 +64,7 @@ public final class RotationLockControllerImpl implements RotationLockController 
     }
 
     public boolean isRotationLockAffordanceVisible() {
-        return RotationPolicy.isRotationLockToggleVisible(mContext);
+        return RotationPolicy.isRotationSupported(mContext);
     }
 
     @Override
