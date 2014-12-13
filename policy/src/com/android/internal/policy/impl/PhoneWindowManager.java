@@ -199,6 +199,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             .build();
 
     /**
+     * Broadcast Action: WiFi Display video is enabled or disabled
+     *
+     * <p>The intent will have the following extra values:
+     * <ul>
+     *   <li><em>state</em> - 0 for disabled, 1 for enabled. </li>
+     * </ul>
+     */
+
+    private static final String ACTION_WIFI_DISPLAY_VIDEO =
+            "org.codeaurora.intent.action.WIFI_DISPLAY_VIDEO";
+
+    /**
      * Keyguard stuff
      */
     private WindowState mKeyguardScrim;
@@ -1130,8 +1142,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 
         // register for WIFI Display intents
-        IntentFilter wifiDisplayFilter = new IntentFilter(
-                                                Intent.ACTION_WIFI_DISPLAY_VIDEO);
+        IntentFilter wifiDisplayFilter = new IntentFilter(ACTION_WIFI_DISPLAY_VIDEO);
+
         Intent wifidisplayIntent = context.registerReceiver(
                                       mWifiDisplayReceiver, wifiDisplayFilter);
 
@@ -4866,7 +4878,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     BroadcastReceiver mWifiDisplayReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-            if (action.equals(Intent.ACTION_WIFI_DISPLAY_VIDEO)) {
+            if (action.equals(ACTION_WIFI_DISPLAY_VIDEO)) {
                 int state = intent.getIntExtra("state", 0);
                 if(state == 1) {
                     mWifiDisplayConnected = true;

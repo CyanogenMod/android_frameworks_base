@@ -2232,18 +2232,6 @@ public class Intent implements Parcelable, Cloneable {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_HEADSET_PLUG = android.media.AudioManager.ACTION_HEADSET_PLUG;
 
-    /**
-     * Broadcast Action: WiFi Display video is enabled or disabled
-     *
-     * <p>The intent will have the following extra values:
-     * <ul>
-     *   <li><em>state</em> - 0 for disabled, 1 for enabled. </li>
-     * </ul>
-     * @hide
-     */
-
-    public static final String ACTION_WIFI_DISPLAY_VIDEO =
-            "org.codeaurora.intent.action.WIFI_DISPLAY_VIDEO";
 
     /**
      * <p>Broadcast Action: The user has switched on advanced settings in the settings app:</p>
