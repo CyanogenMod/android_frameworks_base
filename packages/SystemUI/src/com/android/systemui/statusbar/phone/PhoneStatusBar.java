@@ -131,7 +131,7 @@ import com.android.internal.util.cm.ActionUtils;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.BatteryMeterView;
-import com.android.systemui.BatteryLevelTextView;
+import com.android.systemui.BatteryMeterView.BatteryMeterMode;
 import com.android.systemui.DemoMode;
 import com.android.systemui.EventLogTags;
 import com.android.systemui.FontSizeUtils;
@@ -258,6 +258,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     BluetoothControllerImpl mBluetoothController;
     SecurityControllerImpl mSecurityController;
     BatteryController mBatteryController;
+    private BatteryMeterView mBatteryView;
     LocationControllerImpl mLocationController;
     NetworkControllerImpl mNetworkController;
     HotspotControllerImpl mHotspotController;
@@ -421,6 +422,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BATTERY_STYLE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BATTERY_STYLE_SHOW_PERCENT), false, this);
             update();
         }
 
@@ -438,6 +443,39 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mAutomaticBrightness = mode != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
             mBrightnessControl = Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
+
+
+            int batteryStyle = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_BATTERY_STYLE, 0, mCurrentUserId);
+            BatteryMeterMode meterMode = BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT;
+            switch (batteryStyle) {
+                case 2:
+                    meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
+                    break;
+
+                case 4:
+                    meterMode = BatteryMeterMode.BATTERY_METER_GONE;
+                    break;
+
+                case 5:
+                    meterMode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
+                    break;
+
+                case 6:
+                    meterMode = BatteryMeterMode.BATTERY_METER_TEXT;
+                    break;
+
+                default:
+                    break;
+            }
+
+            boolean showPercent = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_BATTERY_STYLE_SHOW_PERCENT, 0, mCurrentUserId) == 1;
+
+            // Update Battery
+            mBatteryView.setMode(meterMode);
+            mBatteryView.setShowPercent(showPercent);
+
         }
     }
 
@@ -1114,10 +1152,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mUserInfoController.reloadUserInfo();
 
         mHeader.setBatteryController(mBatteryController);
-        ((BatteryMeterView) mStatusBarView.findViewById(R.id.battery)).setBatteryController(
-                mBatteryController);
-        ((BatteryLevelTextView) mStatusBarView.findViewById(R.id.battery_level_text))
-                .setBatteryController(mBatteryController);
+        mBatteryView = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
+        mBatteryView.setBatteryController(mBatteryController);
         mKeyguardStatusBar.setBatteryController(mBatteryController);
         mHeader.setNextAlarmController(mNextAlarmController);
 
