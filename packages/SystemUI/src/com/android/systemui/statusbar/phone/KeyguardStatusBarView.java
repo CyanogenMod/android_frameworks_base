@@ -46,6 +46,8 @@ import com.android.systemui.statusbar.policy.UserInfoController;
 public class KeyguardStatusBarView extends RelativeLayout
         implements BatteryController.BatteryStateChangeCallback {
 
+    private static final String STATUS_BAR_BATTERY_STYLE_SHOW_PERCENT = "status_bar_battery_style_show_percent";
+
     private boolean mBatteryCharging;
     private boolean mKeyguardUserSwitcherShowing;
     private boolean mBatteryListening;
@@ -77,7 +79,7 @@ public class KeyguardStatusBarView extends RelativeLayout
 
     private void loadShowBatteryTextSetting() {
         mShowBatteryText = 2 == Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0);
+                Settings.System.STATUS_BAR_BATTERY_STYLE_SHOW_PERCENT, 0);
     }
 
     @Override
@@ -259,7 +261,7 @@ public class KeyguardStatusBarView extends RelativeLayout
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                "status_bar_show_battery_percent"), false, mObserver);
+                STATUS_BAR_BATTERY_STYLE_SHOW_PERCENT), false, mObserver);
     }
 
     @Override
