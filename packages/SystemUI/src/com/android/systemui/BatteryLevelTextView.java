@@ -49,6 +49,11 @@ public class BatteryLevelTextView extends TextView implements
                 Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0);
     }
 
+    public void setShowPercent(boolean show) {
+        mShow = show;
+        setVisibility(mShow ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
         setText(getResources().getString(R.string.battery_level_template, level));
