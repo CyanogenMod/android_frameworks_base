@@ -314,6 +314,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private DozeServiceHost mDozeServiceHost;
     private boolean mScreenOnComingFromTouch;
     private PointF mScreenOnTouchLocation;
+    private BatteryMeterView mBatteryView;
+    private BatteryLevelTextView mBatteryTextView;
 
     int mPixelFormat;
     Object mQueueLock = new Object();
@@ -1070,10 +1072,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mUserInfoController.reloadUserInfo();
 
         mHeader.setBatteryController(mBatteryController);
-        ((BatteryMeterView) mStatusBarView.findViewById(R.id.battery)).setBatteryController(
-                mBatteryController);
-        ((BatteryLevelTextView) mStatusBarView.findViewById(R.id.battery_level_text))
-                .setBatteryController(mBatteryController);
+        mBatteryView = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
+        mBatteryView.setBatteryController(mBatteryController);
+        mBatteryTextView = (BatteryLevelTextView) mStatusBarView.findViewById(R.id.battery_level_text);
+        mBatteryTextView.setBatteryController(mBatteryController);
         mKeyguardStatusBar.setBatteryController(mBatteryController);
         mHeader.setNextAlarmController(mNextAlarmController);
         mHeader.setWeatherController(mWeatherController);
