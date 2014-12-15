@@ -261,7 +261,9 @@ public class AppOpsManager {
     /** @hide */
     public static final int OP_DATA_CONNECT_CHANGE = 67;
     /** @hide */
-    public static final int _NUM_OP = 68;
+    public static final int OP_SU = 68;
+    /** @hide */
+    public static final int _NUM_OP = 69;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -370,6 +372,8 @@ public class AppOpsManager {
             "android:nfc_change";
     private static final String OPSTR_DATA_CONNECT_CHANGE =
             "android:data_connect_change";
+    private static final String OPSTR_SU =
+            "android:su";
 
     /**
      * This maps each operation to the operation that serves as the
@@ -448,6 +452,7 @@ public class AppOpsManager {
             OP_BOOT_COMPLETED,
             OP_NFC_CHANGE,
             OP_DATA_CONNECT_CHANGE,
+            OP_SU
     };
 
     /**
@@ -523,6 +528,7 @@ public class AppOpsManager {
             OPSTR_BOOT_COMPLETED,
             OPSTR_NFC_CHANGE,
             OPSTR_DATA_CONNECT_CHANGE,
+            OPSTR_SU,
     };
 
     /**
@@ -598,6 +604,7 @@ public class AppOpsManager {
             "BOOT_COMPLETED",
             "NFC_CHANGE",
             "DATA_CONNECT_CHANGE",
+            "SU",
     };
 
     /**
@@ -673,6 +680,7 @@ public class AppOpsManager {
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
             Manifest.permission.NFC,
             Manifest.permission.MODIFY_PHONE_STATE,
+            null,
     };
 
     /**
@@ -749,6 +757,7 @@ public class AppOpsManager {
             null, //BOOT_COMPLETED
             null, //NFC_CHANGE
             null, //DATA_CONNECT_CHANGE
+            UserManager.DISALLOW_SU, //SU TODO: this should really be investigated.
     };
 
     /**
@@ -824,6 +833,7 @@ public class AppOpsManager {
             false, // BOOT_COMPLETED
             false, // NFC_CHANGE
             false, //DATA_CONNECT_CHANGE
+            false, //SU
     };
 
     /**
@@ -898,6 +908,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
             AppOpsManager.MODE_ALLOWED, // OP_NFC_CHANGE
             AppOpsManager.MODE_ALLOWED,
+            AppOpsManager.MODE_ASK, // OP_SU
     };
 
     /**
@@ -973,6 +984,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
             AppOpsManager.MODE_ASK,     // OP_NFC_CHANGE
             AppOpsManager.MODE_ASK,     // OP_DATA_CONNECT_CHANGE
+            AppOpsManager.MODE_ASK,     // OP_SU
     };
 
     /**
@@ -1047,6 +1059,7 @@ public class AppOpsManager {
         false,    // OP_BOOT_COMPLETED
         true,     // OP_NFC_CHANGE
         true,     // OP_DATA_CONNECT_CHANGE
+        true,     // OP_SU
     };
 
     /**
@@ -1125,6 +1138,7 @@ public class AppOpsManager {
             false,     // OP_BOOT_COMPLETED
             false,     // OP_NFC_CHANGE
             false,     // OP_DATA_CONNECT_CHANGE
+            false,     // OP_SU
     };
 
     /**
