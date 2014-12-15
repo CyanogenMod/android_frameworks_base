@@ -89,5 +89,6 @@
         <item>Trying to start at bootup</item>
         <item>Trying to turn on/off NFC</item>
         <item>Trying to turn on mobile data</item>
+        <item>Trying to get Superuser access</item>
     </string-array>
 </resources>
