@@ -489,6 +489,18 @@ public class UserManager {
      */
     public static final String KEY_RESTRICTIONS_PENDING = "restrictions_pending";
 
+    /**
+     * Specifies if the user is not allowed to use SU commands.
+     * The default value is <code>false</code>.
+     *
+     * <p/>Key for user restrictions.
+     * <p/>Type: Boolean
+     * @see #setUserRestrictions(Bundle)
+     * @see #getUserRestrictions()
+     * @hide
+     */
+    public static final String DISALLOW_SU = "no_su";
+
     /** @hide */
     public static final int PIN_VERIFICATION_FAILED_INCORRECT = -3;
     /** @hide */
@@ -853,6 +865,7 @@ public class UserManager {
                 Bundle guestRestrictions = mService.getDefaultGuestRestrictions();
                 guestRestrictions.putBoolean(DISALLOW_SMS, true);
                 guestRestrictions.putBoolean(DISALLOW_INSTALL_UNKNOWN_SOURCES, true);
+                guestRestrictions.putBoolean(DISALLOW_SU, true);
                 mService.setUserRestrictions(guestRestrictions, guest.id);
             } catch (RemoteException re) {
                 Log.w(TAG, "Could not update guest restrictions");
@@ -892,6 +905,7 @@ public class UserManager {
     private static void addDefaultUserRestrictions(Bundle restrictions) {
         restrictions.putBoolean(DISALLOW_OUTGOING_CALLS, true);
         restrictions.putBoolean(DISALLOW_SMS, true);
+        restrictions.putBoolean(DISALLOW_SU, true);
     }
 
     /**
