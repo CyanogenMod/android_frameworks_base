@@ -103,6 +103,7 @@
         <item>@string/app_ops_delete_call_log</item>
         <item>@string/app_ops_toggle_mobile_data</item>
         <item>@string/app_ops_alarm_wakeup</item>
+        <item>@string/app_ops_su</item>
     </string-array>
 
     <!-- Performance profiles -->
