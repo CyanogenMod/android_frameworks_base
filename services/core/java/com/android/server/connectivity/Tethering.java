@@ -687,9 +687,9 @@ public class Tethering extends BaseNetworkObserver {
                 } else {
                     return;
                 }
+            }
             notificationManager.cancelAsUser(null, mTetheredNotification.icon,
                     UserHandle.ALL);
-            }
         }
 
         Intent intent = new Intent();
