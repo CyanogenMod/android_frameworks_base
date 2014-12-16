@@ -2731,7 +2731,12 @@ public class NotificationManagerService extends SystemService {
     }
 
     // lock on mNotificationList
-    void updateLightsLocked()
+    void updateLightsLocked() {
+        // repeat until light is off or color is non-zero
+        while (!updateLightsRealLocked());
+    }
+
+    private boolean updateLightsRealLocked()
     {
         // handle notification lights
         if (mLedNotification == null) {
@@ -2782,6 +2787,13 @@ public class NotificationManagerService extends SystemService {
                 ledOffMS = ledno.ledOffMS;
             }
 
+            // if the resultant rgb is black, pull entry out of mLights
+            // and return false to find the next best color.
+            if (ledARGB == 0xFF000000 && mLights.remove(mLedNotification.getKey())) {
+                mLedNotification = null;
+                return false;
+            }
+
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
                 mNotificationLight.setFlashing(ledARGB, Light.LIGHT_FLASH_TIMED,
@@ -2791,6 +2803,9 @@ public class NotificationManagerService extends SystemService {
             // let SystemUI make an independent decision
             mStatusBar.notificationLightPulse(ledARGB, ledOnMS, ledOffMS);
         }
+
+        // consider this a successful update
+        return true;
     }
 
     private void parseNotificationPulseCustomValuesString(String customLedValuesString) {
