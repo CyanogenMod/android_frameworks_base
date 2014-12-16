@@ -39,5 +39,5 @@
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#ffffff</item>
-    </style>   
+    </style>
 </resources>
