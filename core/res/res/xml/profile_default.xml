@@ -299,21 +299,4 @@
             <lightsMode>DEFAULT</lightsMode>
         </profileGroup>
     </profile>
-    <notificationGroup nameres="profileGroupPhone" uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
-        <package>com.android.phone</package>
-    </notificationGroup>
-    <notificationGroup nameres="profileGroupCalendar" uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
-        <package>com.android.calendar</package>
-        <package>com.google.android.calendar</package>
-    </notificationGroup>
-    <notificationGroup nameres="profileGroupGmail" uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
-        <package>com.google.android.gm</package>
-    </notificationGroup>
-    <notificationGroup nameres="profileGroupEmail" uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
-        <package>com.android.email</package>
-    </notificationGroup>
-    <notificationGroup nameres="profileGroupSMS" uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
-        <package>com.android.mms</package>
-        <package>com.google.android.talk</package>
-    </notificationGroup>
 </profiles>
