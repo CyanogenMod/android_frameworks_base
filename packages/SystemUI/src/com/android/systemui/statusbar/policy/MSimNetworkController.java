@@ -663,11 +663,6 @@ public class MSimNetworkController extends NetworkController {
         // DSDS case: Data is active only on DDS. Clear the icon for NON-DDS
         int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
 
-        // Clear roaming if we're always showing an indicator
-        if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
-            mMSimDataRoamIconId[subscription] = 0;
-        }
-
         if (subscription != dataSub) {
             if (DEBUG) {
                 Slog.d(TAG,"updateDataNetType: SUB" + subscription
@@ -845,6 +840,8 @@ public class MSimNetworkController extends NetworkController {
             }
             if (subscription == dataSub) mQSDataTypeIconId =
                     TelephonyIcons.QS_DATA_R[mInetCondition];
+        } else if (!mPhone.isNetworkRoaming(subscription)) {
+            mMSimDataRoamIconId[subscription] = 0;
         }
     }
 
@@ -1058,11 +1055,6 @@ public class MSimNetworkController extends NetworkController {
         final boolean emergencyOnly = isEmergencyOnly(); // All sims are emergency only
         int dataSub = MSimTelephonyManager.getDefault().getPreferredDataSubscription();
 
-        // Clear roaming if we're always showing an indicator
-        if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
-            mMSimDataRoamIconId[subscription] = 0;
-        }
-
         if (DEBUG) {
             Slog.d(TAG,"refreshViews subscription =" + subscription + "mMSimDataConnected ="
                     + mMSimDataConnected[subscription]);
@@ -1243,6 +1235,8 @@ public class MSimNetworkController extends NetworkController {
                 }
                 if (subscription == dataSub) mQSDataTypeIconId =
                         TelephonyIcons.QS_DATA_R[mInetCondition];
+            } else if (!mPhone.isNetworkRoaming(subscription)) {
+                    mMSimDataRoamIconId[subscription] = 0;
             }
         }
 
