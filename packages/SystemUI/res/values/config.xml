@@ -149,5 +149,6 @@
     <bool name="config_showDdsSwitch">false</bool>
     <bool name="config_showRingerModeSwitch">false</bool>
     <bool name="config_showAlternateRsrpSignalLevelforLTE">false</bool>
+    <bool name="config_showDisableNotificaton">true</bool>
 </resources>
 

@@ -81,6 +81,8 @@
     <!-- Add for switch the APN -->
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" />
 
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATIONS" />
+
     <application
         android:persistent="true"
         android:allowClearUserData="false"
