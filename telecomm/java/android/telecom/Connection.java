@@ -318,6 +318,7 @@ public abstract class Connection implements IConferenceable {
         public void onDisconnected(Connection c, DisconnectCause disconnectCause) {}
         public void onSsNotificationData(int type, int code) {}
         public void onPostDialWait(Connection c, String remaining) {}
+        public void onPostDialChar(Connection c, char nextChar) {}
         public void onRingbackRequested(Connection c, boolean ringback) {}
         public void onDestroyed(Connection c) {}
         public void onCallPropertiesChanged(Connection c, int callProperties) {}
@@ -1156,6 +1157,23 @@ public abstract class Connection implements IConferenceable {
         checkImmutable();
         for (Listener l : mListeners) {
             l.onPostDialWait(this, remaining);
+        }
+    }
+
+    /**
+     * Informs listeners that this {@code Connection} has processed a character in the post-dial
+     * started state. This is done when (a) the {@code Connection} is issuing a DTMF sequence;
+     * (b) it has encountered a "wait" character; and (c) it wishes to signal Telecom to play
+     * the corresponding DTMF tone locally.
+     *
+     * @param nextChar The DTMF character that was just processed by the {@code Connection}.
+     *
+     * @hide
+     */
+    public final void setNextPostDialWaitChar(char nextChar) {
+        checkImmutable();
+        for (Listener l : mListeners) {
+            l.onPostDialChar(this, nextChar);
         }
     }
 
