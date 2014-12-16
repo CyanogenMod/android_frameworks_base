@@ -707,9 +707,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.KEY_HOME_ANSWER_RINGING_CALL), false, this,
                     UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.KEY_POWER_END_CALL), false, this,
-                    UserHandle.USER_ALL);
             updateSettings();
         }
 
