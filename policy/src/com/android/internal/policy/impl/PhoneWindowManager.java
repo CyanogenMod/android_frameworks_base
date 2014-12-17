@@ -4646,7 +4646,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                                 mKeyguardDelegate.isShowingAndNotHidden() :
                                                 mKeyguardDelegate.isShowing()));
 
-        if (keyCode == KeyEvent.KEYCODE_POWER) {
+        if ((keyCode == KeyEvent.KEYCODE_POWER) || ((keyCode == KeyEvent.KEYCODE_HOME) && mHomeWakeScreen)) {
             policyFlags |= WindowManagerPolicy.FLAG_WAKE;
         }
         final boolean isWakeKey = (policyFlags
