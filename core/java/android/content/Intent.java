@@ -2748,6 +2748,9 @@ public class Intent implements Parcelable, Cloneable {
     /** {@hide} */
     public static final String ACTION_MASTER_CLEAR = "android.intent.action.MASTER_CLEAR";
 
+    /** {@hide */
+    public static final String ACTION_SU_SESSION_CHANGED = "android.intent.action.SU_SESSION_CHANGED";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
