@@ -30,6 +30,7 @@
        <item><xliff:g id="id">cast</xliff:g></item>
        <item><xliff:g id="id">hotspot</xliff:g></item>
        <item><xliff:g id="id">location</xliff:g></item>
+       <item><xliff:g id="id">su</xliff:g></item>
        <item><xliff:g id="id">bluetooth</xliff:g></item>
        <item><xliff:g id="id">nfc</xliff:g></item>
        <item><xliff:g id="id">tty</xliff:g></item>
