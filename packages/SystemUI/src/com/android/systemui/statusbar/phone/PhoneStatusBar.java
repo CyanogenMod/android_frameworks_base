@@ -180,6 +180,7 @@ import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
 import com.android.systemui.statusbar.policy.RotationLockControllerImpl;
 import com.android.systemui.statusbar.policy.SecurityControllerImpl;
+import com.android.systemui.statusbar.policy.SuControllerImpl;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.statusbar.policy.WeatherControllerImpl;
@@ -279,6 +280,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     AccessibilityController mAccessibilityController;
     MSimNetworkControllerImpl mMSimNetworkController;
     WeatherControllerImpl mWeatherController;
+    SuControllerImpl mSuController;
 
     int mNaturalBarHeight = -1;
     int mIconSize = -1;
@@ -771,7 +773,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         // Lastly, call to the icon policy to install/update all the icons.
-        mIconPolicy = new PhoneStatusBarPolicy(mContext, mCastController);
+        mIconPolicy = new PhoneStatusBarPolicy(mContext, mCastController, mSuController);
         mSettingsObserver.onChange(false); // set up
 
         mHeadsUpObserver.onChange(true); // set up
@@ -1012,6 +1014,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mVolumeComponent = getComponent(VolumeComponent.class);
         mZenModeController = mVolumeComponent.getZenController();
         mCastController = new CastControllerImpl(mContext);
+        mSuController = new SuControllerImpl(mContext);
 
         if (isMSim()) {
             mMSimNetworkController = new MSimNetworkControllerImpl(mContext);
