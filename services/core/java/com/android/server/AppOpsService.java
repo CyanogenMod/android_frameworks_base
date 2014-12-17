@@ -36,6 +36,7 @@ import android.app.ActivityThread;
 import android.app.AppOpsManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
@@ -715,6 +716,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                 op.time = System.currentTimeMillis();
                 op.rejectTime = 0;
                 op.allowedCount++;
+                if (op.op == AppOpsManager.OP_SU) {
+                    mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+                }
                 return AppOpsManager.MODE_ALLOWED;
             } else {
                 if (Looper.myLooper() == mLooper) {
@@ -731,7 +735,12 @@ public class AppOpsService extends IAppOpsService.Stub {
                 req = askOperationLocked(code, uid, packageName, switchOp);
             }
         }
-        return req.get();
+
+        int result = req.get();
+        if (code == AppOpsManager.OP_SU) {
+            mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+        }
+        return result;
     }
 
     @Override
@@ -779,6 +788,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                 if (client.mStartedOps != null) {
                     client.mStartedOps.add(op);
                 }
+                if (op.op == AppOpsManager.OP_SU) {
+                    mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+                }
                 return AppOpsManager.MODE_ALLOWED;
             } else {
                 if (Looper.myLooper() == mLooper) {
@@ -797,7 +809,11 @@ public class AppOpsService extends IAppOpsService.Stub {
                 req = askOperationLocked(code, uid, packageName, switchOp);
             }
         }
-        return req.get();
+        int result = req.get();
+        if (code == AppOpsManager.OP_SU) {
+            mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+        }
+        return result;
     }
 
     @Override
@@ -833,6 +849,10 @@ public class AppOpsService extends IAppOpsService.Stub {
             op.nesting = 0;
         } else {
             op.nesting--;
+        }
+
+        if (op.op == AppOpsManager.OP_SU) {
+            mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
         }
     }
 
