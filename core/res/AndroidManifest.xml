@@ -77,6 +77,7 @@
     <protected-broadcast android:name="android.intent.action.USER_FOREGROUND" />
     <protected-broadcast android:name="android.intent.action.USER_SWITCHED" />
     <protected-broadcast android:name="android.intent.action.INTENT_FILTER_NEEDS_VERIFICATION" />
+    <protected-broadcast android:name="android.intent.action.SU_SESSION_CHANGED" />
 
     <protected-broadcast android:name="android.os.action.POWER_SAVE_MODE_CHANGED" />
     <protected-broadcast android:name="android.os.action.POWER_SAVE_MODE_CHANGING" />
