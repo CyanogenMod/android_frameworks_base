@@ -103,6 +103,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.server.LocalServices;
 import com.android.server.am.ActivityStack.ActivityState;
 import com.android.server.wm.WindowManagerService;
+import com.android.internal.os.BinderInternal;
 
 
 import java.io.FileDescriptor;
@@ -2665,6 +2666,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
             mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
                                   lBoostCpuBoost, lBoostKsmBoost);
         }
+        /* Delay Binder Explicit GC during application launch */
+        BinderInternal.modifyDelayedGcParams();
 
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
