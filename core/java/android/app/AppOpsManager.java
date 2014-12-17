@@ -73,6 +73,10 @@ public class AppOpsManager {
      * will do this for you).
      */
 
+    /** {@hide */
+    public static final String ACTION_SU_SESSION_CHANGED =
+            "android.intent.action.SU_SESSION_CHANGED";
+
     final Context mContext;
     final IAppOpsService mService;
     final ArrayMap<OnOpChangedListener, IAppOpsCallback> mModeWatchers
