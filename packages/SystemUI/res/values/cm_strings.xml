@@ -2,6 +2,7 @@
 <!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
+ * Copyright (c) 2015, The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
@@ -20,4 +21,7 @@
 
     <!-- Weather string format in expanded statusbar header -->
     <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+
+    <!-- Content description of the superuser tile -->
+    <string name="accessibility_su_active">Superuser session active</string>
 </resources>
