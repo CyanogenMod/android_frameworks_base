@@ -233,7 +233,7 @@ public class ImsReasonInfo implements Parcelable {
      * mExtraMessage may have these values.
      */
     public static final String EXTRA_MSG_SERVICE_NOT_AUTHORIZED
-            = "Forbidden - Not authorized for service";
+            = "Forbidden. Not Authorized for Service";
 
     // For reason type
     public int mReasonType;
