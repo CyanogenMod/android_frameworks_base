@@ -2610,6 +2610,12 @@ public final class Settings {
         private static final Validator VOLUME_MASTER_MUTE_VALIDATOR = sBooleanValidator;
 
         /**
+         * Whether or not volume button music controls should be enabled to seek media tracks
+         * @hide
+         */
+        public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
+
+        /**
          * Microphone mute (int 1 = mute, 0 = not muted).
          *
          * @hide
