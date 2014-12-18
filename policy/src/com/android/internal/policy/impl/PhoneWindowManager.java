@@ -407,6 +407,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // Volume wake control flag
     boolean mVolumeWakeScreen;
+    boolean mVolumeWakeTriggered;
 
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
@@ -4910,6 +4911,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_MUTE: {
+                if (isWakeKey && mVolumeWakeScreen && !isMusicActive()) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    mVolumeWakeTriggered = true;
+                    break;
+                }
+                if (mVolumeWakeTriggered) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    if (!down) {
+                        mVolumeWakeTriggered = false;
+                    }
+                    break;
+                }
                 if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (down) {
                         if (interactive && !mVolumeDownKeyTriggered
