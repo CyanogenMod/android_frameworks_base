@@ -984,4 +984,8 @@ interface ITelephony {
       *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
       */
     String getDeviceId();
+    /**
+     * Get IMS Registration Status
+     */
+    boolean isImsRegistered();
 }
