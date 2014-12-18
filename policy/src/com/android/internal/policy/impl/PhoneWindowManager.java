@@ -403,6 +403,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mMenuWakeScreen;
     boolean mVolumeWakeScreen;
 
+    // During wakeup by volume keys, we still need to capture subsequent events
+    // until the key is released. This is required since the beep sound is produced
+    // post keypressed.
+    boolean mVolumeWakeTriggered;
+
     int mPointerLocationMode = 0; // guarded by mLock
 
     int mLongPressPoweronTime = DEFAULT_LONG_PRESS_POWERON_TIME;
@@ -4958,6 +4963,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_MUTE: {
+                if (isWakeKey && mVolumeWakeScreen && !isMusicActive()) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    mVolumeWakeTriggered = true;
+                    break;
+                }
+                if (mVolumeWakeTriggered) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    if (!down) {
+                        mVolumeWakeTriggered = false;
+                    }
+                    break;
+                }
                 if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (down) {
                         if (interactive && !mVolumeDownKeyTriggered
