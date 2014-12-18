@@ -161,6 +161,25 @@ public class CallLog {
         public static final int VOICEMAIL_TYPE = 4;
 
         /**
+         *  Call log type for incoming ims calls
+         * <P>Type: INTEGER (int)</P>
+         * @hide
+         */
+        public static final int INCOMING_IMS_TYPE = 5;
+        /**
+         *  Call log type for outgoing ims calls
+         * <P>Type: INTEGER (int)</P>
+         * @hide
+         */
+        public static final int OUTGOING_IMS_TYPE = 6;
+        /**
+         *  Call log type for missed ims calls
+         * <P>Type: INTEGER (int)</P>
+         * @hide
+         */
+        public static final int MISSED_IMS_TYPE = 7;
+
+        /**
          * Bit-mask describing features of the call (e.g. video).
          *
          * <P>Type: INTEGER (int)</P>
