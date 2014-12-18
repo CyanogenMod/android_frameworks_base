@@ -3139,6 +3139,7 @@ public final class Settings {
 
         /**
          * Boolean value on whether to show weather in the statusbar
+         * @hide
          */
         public static final String STATUS_BAR_SHOW_WEATHER = "status_bar_show_weather";
 
