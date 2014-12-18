@@ -670,6 +670,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             for (SubInfoRecord subInfo: activeSubInfos) {
                 //subId for the slot initially initiazed to invalid value
                 //Got intent with correct subId for the slot now.
+                if (subInfo.slotId > getNumPhones() - 1) {
+                    continue;
+                }
                 if (mSubIdForSlot[subInfo.slotId] != subInfo.subId) {
                     long subId = mSubIdForSlot[subInfo.slotId];
                     mSimState.put(subInfo.subId, mSimState.get(subId));
