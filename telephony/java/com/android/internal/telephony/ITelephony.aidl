@@ -963,4 +963,8 @@ interface ITelephony {
      * @return {@code True} if the user has enabled video calling, {@code false} otherwise.
      */
     boolean isVideoCallingEnabled();
+    /**
+     * Get IMS Registration Status
+     */
+    boolean isImsRegistered();
 }
