@@ -402,6 +402,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mMenuWakeScreen;
     boolean mVolumeWakeScreen;
 
+    // During volume key wakeup this allows us to capture event when the key is released
+    boolean mVolumeWakeTriggered;
+
     int mPointerLocationMode = 0; // guarded by mLock
 
     int mLongPressPoweronTime = DEFAULT_LONG_PRESS_POWERON_TIME;
@@ -4918,6 +4921,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_MUTE: {
+                if (isWakeKey && mVolumeWakeScreen && !isMusicActive()) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    mVolumeWakeTriggered = true;
+                    break;
+                }
+                if (mVolumeWakeTriggered) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    if (!down) {
+                        mVolumeWakeTriggered = false;
+                    }
+                    break;
+                }
                 if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (down) {
                         if (interactive && !mVolumeDownKeyTriggered
