@@ -2252,4 +2252,11 @@
 
   <!-- Array of default activities with custom power management -->
   <java-symbol type="array" name="config_auto_perf_activities" />
+
+  <!-- Power menu -->
+  <java-symbol type="drawable" name="ic_lock_screenshot" />
+  <java-symbol type="string" name="global_action_screenshot" />
+  <java-symbol type="drawable" name="ic_lock_settings" />
+  <java-symbol type="drawable" name="ic_lock_user" />
+
 </resources>
