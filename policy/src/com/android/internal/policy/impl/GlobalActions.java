@@ -33,6 +33,7 @@ import android.app.ProfileManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -131,6 +132,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private final boolean mShowSilentToggle;
     private Profile mChosenProfile;
 
+    // Power menu customizations
+    String mActions;
+    boolean mProfilesEnabled;
+
     /**
      * @param context everything needs a context :(
      */
@@ -145,6 +150,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.UPDATE_POWER_MENU);
         filter.addAction(TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED);
         context.registerReceiver(mBroadcastReceiver, filter);
 
@@ -164,6 +170,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mShowSilentToggle = SHOW_SILENT_TOGGLE && !mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
+
+        updatePowerMenuActions();
     }
 
     /**
@@ -176,9 +184,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         if (mDialog != null) {
             mDialog.dismiss();
             mDialog = null;
+            mDialog = createDialog();
             // Show delayed, so that the dismiss of the previous dialog completes
             mHandler.sendEmptyMessage(MESSAGE_SHOW);
         } else {
+            mDialog = createDialog();
             handleShow();
         }
     }
@@ -197,7 +207,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void handleShow() {
         awakenIfNecessary();
-        mDialog = createDialog();
         prepareDialog();
 
         // If we only have 1 item and it's a simple press action, just do this action.
@@ -269,12 +278,18 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         onAirplaneModeChanged();
 
         mItems = new ArrayList<Action>();
-        String[] defaultActions = mContext.getResources().getStringArray(
-                com.android.internal.R.array.config_globalActionsList);
+
+        String[] actionsArray;
+        if (mActions == null) {
+            actionsArray = mContext.getResources().getStringArray(
+                    com.android.internal.R.array.config_globalActionsList);
+        } else {
+            actionsArray = mActions.split("\\|");
+        }
 
         ArraySet<String> addedKeys = new ArraySet<String>();
-        for (int i = 0; i < defaultActions.length; i++) {
-            String actionKey = defaultActions[i];
+        for (int i = 0; i < actionsArray.length; i++) {
+            String actionKey = actionsArray[i];
             if (addedKeys.contains(actionKey)) {
                 // If we already have added this, don't add it again.
                 continue;
@@ -295,14 +310,13 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     mItems.add(mSilentModeAction);
                 }
             } else if (GLOBAL_ACTION_KEY_USERS.equals(actionKey)) {
-                if (SystemProperties.getBoolean("fw.power_user_switcher", false)) {
-                    addUsersToMenu(mItems);
-                }
+                addUsersToMenu(mItems);
             } else if (GLOBAL_ACTION_KEY_SETTINGS.equals(actionKey)) {
                 mItems.add(getSettingsAction());
             } else if (GLOBAL_ACTION_KEY_LOCKDOWN.equals(actionKey)) {
                 mItems.add(getLockdownAction());
             } else if (GLOBAL_ACTION_KEY_PROFILE.equals(actionKey)) {
+                if (!mProfilesEnabled) continue;
                 mItems.add(
                         new ProfileChooseAction() {
                             public void onPress() {
@@ -432,12 +446,17 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             ImageView icon = (ImageView) v.findViewById(R.id.icon);
             TextView messageView = (TextView) v.findViewById(R.id.message);
             TextView statusView = (TextView) v.findViewById(R.id.status);
-            statusView.setVisibility(View.VISIBLE);
-            statusView.setText(mProfileManager.getActiveProfile().getName());
+            if (statusView != null) {
+                statusView.setVisibility(View.VISIBLE);
+                statusView.setText(mProfileManager.getActiveProfile().getName());
+            }
 
-            icon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_lock_profile));
-            messageView.setText(R.string.global_action_choose_profile);
-
+            if (icon != null) {
+                icon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_lock_profile));
+            }
+            if (messageView != null) {
+                messageView.setText(R.string.global_action_choose_profile);
+            }
             return v;
         }
     }
@@ -563,7 +582,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     }
 
     private Action getSettingsAction() {
-        return new SinglePressAction(com.android.internal.R.drawable.ic_settings,
+        return new SinglePressAction(com.android.internal.R.drawable.ic_lock_settings,
                 R.string.global_action_settings) {
 
             @Override
@@ -1136,9 +1155,19 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     mIsWaitingForEcmExit = false;
                     changeAirplaneModeSystemSetting(true);
                 }
+            } else if (Intent.UPDATE_POWER_MENU.equals(action)) {
+                updatePowerMenuActions();
             }
         }
     };
+
+    protected void updatePowerMenuActions() {
+        ContentResolver resolver = mContext.getContentResolver();
+        mActions = Settings.Global.getStringForUser(resolver,
+                Settings.Global.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
+        mProfilesEnabled = Settings.System.getInt(resolver,
+                Settings.System.SYSTEM_PROFILES_ENABLED, 1) != 0;
+    }
 
     PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
