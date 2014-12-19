@@ -15,5 +15,5 @@
 -->
 
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_lock_lock_alpha"
+    android:src="@drawable/ic_settings"
     android:tint="?attr/colorControlNormal" />
