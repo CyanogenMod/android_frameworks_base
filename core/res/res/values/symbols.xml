@@ -2199,4 +2199,7 @@
   <java-symbol type="integer" name="launchboost_ksmboost_param" />
 
   <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
+  <!-- Configuration to play sms ringtone during MO/MT call -->
+  <java-symbol type="bool" name="config_sms_ringtone_incall" />
+
 </resources>

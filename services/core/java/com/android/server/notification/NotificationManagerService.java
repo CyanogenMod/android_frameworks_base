@@ -1856,7 +1856,9 @@ public class NotificationManagerService extends SystemService {
         if (disableEffects != null) {
             ZenLog.traceDisableEffects(record, disableEffects);
         }
-        if (disableEffects == null
+        boolean smsRingtone = getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_sms_ringtone_incall);
+        if ((disableEffects == null || (smsRingtone && mInCall))
                 && (!(record.isUpdate
                     && (notification.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0 ))
                 && (record.getUserId() == UserHandle.USER_ALL ||
