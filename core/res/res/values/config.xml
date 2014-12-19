@@ -2117,7 +2117,7 @@
    <bool name="config_reject_call_via_sms_enabled">true</bool>
 
    <!-- Should the device show AM/PM in unlock screen -->
-   <bool name="config_show_ampm_in_unlock_screen">false</bool>
+   <bool name="config_show_ampm_in_unlock_screen">true</bool>
    <!-- Configuration to play sms ringtone during MO/MT call -->
    <bool name="config_sms_ringtone_incall">false</bool>
 </resources>
