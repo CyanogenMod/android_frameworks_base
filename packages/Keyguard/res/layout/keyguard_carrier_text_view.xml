@@ -36,14 +36,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
+        android:gravity="start"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 
@@ -53,14 +51,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
+        android:gravity="start"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 
@@ -70,6 +66,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:visibility="gone" />
 
     <TextView
@@ -78,14 +76,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
+        android:gravity="start"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 
@@ -95,6 +91,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:visibility="gone" />
 
     <TextView
@@ -103,14 +101,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
+        android:gravity="start"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textDirection = "locale"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/kg_status_line_font_size"
         android:visibility="gone" />
 </merge>
