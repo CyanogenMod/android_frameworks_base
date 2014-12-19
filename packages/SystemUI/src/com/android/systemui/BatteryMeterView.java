@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2013-14 The Android Open Source Project
+ * Copyright (C) 2013 The Android Open Source Project
+ * Copyright (C) 2014 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +54,7 @@ public class BatteryMeterView extends View implements DemoMode,
     private static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
     private static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
-    public static final boolean ENABLE_PERCENT = true;
+    private static final boolean ENABLE_PERCENT = true;
     private static final boolean SINGLE_DIGIT_PERCENT = false;
     private static final boolean SHOW_100_PERCENT = false;
 
@@ -120,7 +121,6 @@ public class BatteryMeterView extends View implements DemoMode,
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             final String action = intent.getAction();
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 if (testmode && ! intent.getBooleanExtra("testmode", false)) return;
@@ -250,20 +250,16 @@ public class BatteryMeterView extends View implements DemoMode,
             case 2:
                 meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
                 break;
-
             case 4:
                 meterMode = BatteryMeterMode.BATTERY_METER_GONE;
                 break;
-
             case 5:
                 meterMode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
                 break;
-
             case 6:
                 meterMode = BatteryMeterMode.BATTERY_METER_TEXT;
                 showInsidePercent = false;
                 break;
-
             default:
                 break;
         }
@@ -320,13 +316,8 @@ public class BatteryMeterView extends View implements DemoMode,
         switch (mode) {
             case BATTERY_METER_CIRCLE:
                 return new CircleBatteryMeterDrawable(res);
-
-            //case BATTERY_METER_TEXT:
-            //    return new TextBatteryMeterDrawable(res);
-
             case BATTERY_METER_ICON_LANDSCAPE:
                 return new NormalBatteryMeterDrawable(res, true);
-
             default:
                 return new NormalBatteryMeterDrawable(res, false);
         }
@@ -338,6 +329,7 @@ public class BatteryMeterView extends View implements DemoMode,
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
         if (mMeterMode == BatteryMeterMode.BATTERY_METER_CIRCLE) {
+            height += (CircleBatteryMeterDrawable.STROKE_WITH / 3);
             width = height;
         } else if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
             onSizeChanged(width, height, 0, 0); // Force a size changed event
@@ -399,7 +391,8 @@ public class BatteryMeterView extends View implements DemoMode,
 
         mMeterMode = mode;
         BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
-        if (mode == BatteryMeterMode.BATTERY_METER_GONE || mode == BatteryMeterMode.BATTERY_METER_TEXT) {
+        if (mode == BatteryMeterMode.BATTERY_METER_GONE ||
+                mode == BatteryMeterMode.BATTERY_METER_TEXT) {
             setVisibility(View.GONE);
             synchronized (mLock) {
                 mBatteryMeterDrawable = null;
@@ -487,8 +480,8 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     protected class NormalBatteryMeterDrawable implements BatteryMeterDrawable {
-        public static final boolean SINGLE_DIGIT_PERCENT = false;
-        public static final boolean SHOW_100_PERCENT = false;
+        private static final boolean SINGLE_DIGIT_PERCENT = false;
+        private static final boolean SHOW_100_PERCENT = false;
 
         private boolean mDisposed;
 
@@ -548,10 +541,10 @@ public class BatteryMeterView extends View implements DemoMode,
             if (level == BatteryTracker.UNKNOWN_LEVEL) return;
 
             float drawFrac = (float) level / 100f;
-            final int pt = getPaddingTop();
+            final int pt = getPaddingTop() + (mHorizontal ? (int)(mHeight * 0.12f) : 0);
             final int pl = getPaddingLeft();
             final int pr = getPaddingRight();
-            final int pb = getPaddingBottom();
+            final int pb = getPaddingBottom() + (mHorizontal ? (int)(mHeight * 0.08f) : 0);
             final int height = mHeight - pt - pb;
             final int width = mWidth - pl - pr;
 
@@ -563,12 +556,10 @@ public class BatteryMeterView extends View implements DemoMode,
             if (mHorizontal) {
                 mButtonFrame.set(
                         /*cover frame border of intersecting area*/
-                //set(float left, float top, float right, float bottom)
                         width - buttonHeight - mFrame.left,
                         mFrame.top + Math.round(height * 0.25f),
                         mFrame.right,
                         mFrame.bottom - Math.round(height * 0.25f));
-                        //mFrame.bottom);
 
                 mButtonFrame.top += mSubpixelSmoothingLeft;
                 mButtonFrame.bottom -= mSubpixelSmoothingRight;
@@ -669,7 +660,8 @@ public class BatteryMeterView extends View implements DemoMode,
                             mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
                 }
 
-                float boltPct = (mBoltFrame.bottom - levelTop) / (mBoltFrame.bottom - mBoltFrame.top);
+                float boltPct = (mBoltFrame.bottom - levelTop) /
+                        (mBoltFrame.bottom - mBoltFrame.top);
                 boltPct = Math.min(Math.max(boltPct, 0), 1);
                 if (boltPct <= BOLT_LEVEL_THRESHOLD) {
                     // draw the bolt if opaque
@@ -766,9 +758,8 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     protected class CircleBatteryMeterDrawable implements BatteryMeterDrawable {
-        public static final boolean SINGLE_DIGIT_PERCENT = false;
-        public static final boolean SHOW_100_PERCENT = false;
-        public static final boolean ENABLE_PERCENT = true;
+        private static final boolean SINGLE_DIGIT_PERCENT = false;
+        private static final boolean SHOW_100_PERCENT = false;
 
         private static final int FULL = 96;
 
@@ -820,7 +811,6 @@ public class BatteryMeterView extends View implements DemoMode,
             mBackPaint.setDither(true);
             mBackPaint.setStrokeWidth(0);
             mBackPaint.setStyle(Paint.Style.STROKE);
-            mBackPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
 
             mWarningTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mWarningTextPaint.setColor(mColors[1]);
