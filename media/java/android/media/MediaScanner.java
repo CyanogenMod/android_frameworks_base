@@ -1008,10 +1008,15 @@ public class MediaScanner
                     // memorize default system ringtone persistently
                     setSettingIfNotSet(Settings.System.DEFAULT_RINGTONE, tableUri, rowId);
 
+                    // set default ringtone uri for at least three slots
+                    // irrespective of how many sim cards are actually supported
                     setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
+                    setSettingIfNotSet(Settings.System.RINGTONE_2, tableUri, rowId);
+                    setSettingIfNotSet(Settings.System.RINGTONE_3, tableUri, rowId);
+
                     if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                         int phoneCount = MSimTelephonyManager.getDefault().getPhoneCount();
-                        for (int i = MSimConstants.SUB2; i < phoneCount; i++) {
+                        for (int i = MSimConstants.SUB3+1; i < phoneCount; i++) {
                             // Set the default setting to the given URI for multi SIMs
                             setSettingIfNotSet((Settings.System.RINGTONE + "_" + (i+1)), tableUri, rowId);
                         }
