@@ -2233,4 +2233,7 @@
   <java-symbol type="bool" name="config_show_ampm_in_unlock_screen" />
   <!-- for wifi auto connection -->
   <java-symbol type="bool" name="wifi_autocon" />
+
+  <!-- Configuration to play sms ringtone during MO/MT call -->
+  <java-symbol type="bool" name="config_sms_ringtone_incall" />
 </resources>
