@@ -20,9 +20,11 @@
   <string name="keyguard_discharging">Şarj azalıyor, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="keyguard_low_battery_cm">Şarj cihazınızı bağlayın, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <plurals name="missed_calls">
+    <item quantity="one">%d cevapsız arama</item>
     <item quantity="other">%d cevapsız arama</item>
   </plurals>
   <plurals name="unread_messages">
+    <item quantity="one">%d okunmamış mesaj</item>
     <item quantity="other">%d okunmamış mesaj</item>
   </plurals>
   <string name="missed_call">cevapsız arama</string>

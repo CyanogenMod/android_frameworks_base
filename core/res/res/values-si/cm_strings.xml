@@ -51,7 +51,7 @@
   <string name="permdesc_sendMockSms">විහිළු කෙටි පනිවිඩ යැවීම සඳහා යෙදුමට අවසර ලැබේ. මෙමගින් විශ්වාසදායී යෙදුම් වෙත පණිවිඩ යැවීම සඳහා යෙදුමට අවසර ලැබේ. උපාංගයේ දැනුම්දීමේ පද්ධතිය අවහිර කරමින් සහ පරිශීලකට භේද ඇතිකරමින් නොනවත්වා පණිවිඩ යැවීමට ද්වේෂසහගත යෙදුම් වලට පුළුවනි.</string>
   <string name="storage_sd_dock_card">SD කාඩ්පත ඈඳන්න</string>
   <string name="app_killed_message">යෙදුම නසන ලදී</string>
-  <string name="global_action_reboot">නැවත පනගන්වන්න</string>
+  <string name="global_action_reboot">යළි පණගන්වන්න</string>
   <string name="global_action_choose_profile">පැතිකඩ</string>
   <string name="toast_rotation_unlocked">දර්ශනයේ භ්‍රමණය අගුළු ඇර ඇත</string>
   <string name="toast_rotation_locked">දර්ශනයේ භ්‍රමණය අගුළු දමා ඇත</string>
@@ -70,6 +70,7 @@
   <string name="permlab_receiveProtectedSms">ආරක්‍ෂිත SMS ලබන්න</string>
   <string name="permdesc_receiveProtectedSms">එන ආරක්‍ෂිත SMS ලැබීමට යෙදුමට ඉඩ දෙයි.</string>
   <string name="permlab_modifyProtectedSmsList">ආරක්‍ෂිත SMS ලැයිස්තුව විකරණය කරන්න</string>
+  <string name="permdesc_modifyProtectedSmsList">ආරක්‍ෂිත SMS ලිපින ලැයිස්තුව විකරණය කිරීමට යෙදුමට ඉඩ දෙයි.</string>
   <string name="permlab_resetBatteryStats">බැටරි සංඛ්‍යාති යලි පිහිටුවන්න</string>
   <string name="permdesc_resetBatteryStats">වත්මන් බැටරි භාවිතයේ පහත්-තල දත්ත යලි පිහිටුවීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="permgrouplab_security">ආරක්ෂාව</string>

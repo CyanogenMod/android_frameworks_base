@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">初始化中\u2026</string>
   <string name="quick_settings_heads_up_on">浮動通知已啟用</string>
   <string name="quick_settings_heads_up_off">無中斷</string>
+  <string name="quick_settings_themes">主題</string>
   <string name="location_mode_high_accuracy_title">高精確度</string>
   <string name="location_mode_battery_saving_title">節約耗電量</string>
   <string name="location_mode_sensors_only_title">僅限裝置</string>
@@ -76,4 +77,6 @@
   <string name="screenshot_delete_confirmation">已刪除螢幕擷取畫面。</string>
   <string name="accessibility_desc_add_quick_settings">新增快速設定。</string>
   <string name="status_bar_notification_spam_item_title">忽略這樣的消息</string>
+  <string name="protected_app_notification_title">受保護應用程式的通知</string>
+  <string name="protected_app_notification_summary">輕觸以開啟受保護應用程式的通知</string>
 </resources>

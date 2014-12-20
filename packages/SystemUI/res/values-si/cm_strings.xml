@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">අරඹමින්\u2026</string>
   <string name="quick_settings_heads_up_on">හිස් එසවීම සබලයි</string>
   <string name="quick_settings_heads_up_off">බාධා නොමැත</string>
+  <string name="quick_settings_themes">තේමා</string>
   <string name="location_mode_high_accuracy_title">ඉහළ නිරවද්‍යතාව</string>
   <string name="location_mode_battery_saving_title">බැටරි සුරැකීම</string>
   <string name="location_mode_sensors_only_title">සංවේදක පමණි</string>
@@ -77,4 +78,6 @@
   <string name="screenshot_delete_confirmation">තිර සේයාව මකා දැමුණි.</string>
   <string name="accessibility_desc_add_quick_settings">ඉක්මන් සැකසීම් එකතු කරන්න.</string>
   <string name="status_bar_notification_spam_item_title">මෙවැනි පණිවිඩ නොසලකා හරින්න</string>
+  <string name="protected_app_notification_title">ආරක්‍ෂිත යෙදුම් දැනුම්දීම</string>
+  <string name="protected_app_notification_summary">ආරක්‍ෂිත යෙදුමෙන් ලැබුණු දැනුම්දීම විවෘත කිරීමට තට්ටු කරන්න</string>
 </resources>

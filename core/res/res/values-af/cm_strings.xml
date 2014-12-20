@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Werkverrigting</string>
   <string name="permlab_interceptSmsSent">Onderskep uitgaande SMS</string>
   <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
+  <string name="permlab_receiveProtectedSms">ontvang beskermde SMS</string>
+  <string name="permdesc_receiveProtectedSms">Laat die program toe om \'n beskermde inkomende SMS te ontvang.</string>
+  <string name="permlab_modifyProtectedSmsList">verander beskermde SMS lys</string>
+  <string name="permdesc_modifyProtectedSmsList">Laat die program toe om die beskermde SMS adres lys te verander.</string>
   <string name="permlab_resetBatteryStats">battery statistieke terugstel</string>
   <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data terugtestel.</string>
   <string name="permgrouplab_security">Sekuriteit</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Laat program toegang tot die CM hardeware raamwerk.</string>
   <string name="permlab_keyguardApplicationWidget">stel slot skerm program legkaart</string>
   <string name="permdesc_keyguardApplicationWidget">Laat \'n program toe om \'n legstuk op die slot skerm te plaas.</string>
+  <string name="permlab_interceptPackageLaunch">onderskep die begin van \'n program</string>
+  <string name="permdesc_interceptPackageLaunch">Laat toe dat \'n program die begin van ander programme onderskep</string>
   <string name="immersive_mode_confirmation_bottom">Skyf van die onderkant om vol skerm toe te maak.</string>
   <string name="app_ops_access_camera">toegang tot die kamera</string>
   <string name="app_ops_access_location">toegang tot jou ligging</string>

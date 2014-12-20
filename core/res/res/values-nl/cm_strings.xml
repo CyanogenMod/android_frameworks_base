@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Prestaties</string>
   <string name="permlab_interceptSmsSent">uitgaande sms-berichten onderscheppen</string>
   <string name="permdesc_interceptSmsSent">Hiermee kan de app een uitgaand sms-bericht onderscheppen. Schadelijke apps kunnen dit gebruiken om uitgaande sms-berichten te blokkeren</string>
+  <string name="permlab_receiveProtectedSms">beschermd sms-bericht ontvangen</string>
+  <string name="permdesc_receiveProtectedSms">Hiermee kan de app een inkomend beschermd sms-bericht ontvangen.</string>
+  <string name="permlab_modifyProtectedSmsList">beschermde sms-berichtenlijst wijzigen</string>
+  <string name="permdesc_modifyProtectedSmsList">Hiermee kan de app de lijst van beschermde sms-adressen wijzigen.</string>
   <string name="permlab_resetBatteryStats">accustatistieken resetten</string>
   <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
   <string name="permgrouplab_security">Beveiliging</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Hiermee kan de app toegang krijgen tot het hardware-framework van CyanogenMod.</string>
   <string name="permlab_keyguardApplicationWidget">app-widget op vergrendelingsscherm instellen</string>
   <string name="permdesc_keyguardApplicationWidget">Hiermee kan de app de app-widget van het vergrendelingsscherm aanpassen.</string>
+  <string name="permlab_interceptPackageLaunch">starten van apps opvangen</string>
+  <string name="permdesc_interceptPackageLaunch">Hiermee kan de app het starten van andere apps opvangen</string>
   <string name="immersive_mode_confirmation_bottom">Veeg omhoog vanaf de onderkant om het volledige scherm te sluiten.</string>
   <string name="app_ops_access_camera">toegang tot camera</string>
   <string name="app_ops_access_location">toegang tot uw locatie</string>

@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Suorituskyky</string>
   <string name="permlab_interceptSmsSent">estä lähtevät tekstiviestit</string>
   <string name="permdesc_interceptSmsSent">Sallii sovelluksen pysäyttää lähtevät tekstiviestit. Haitalliset sovellukset saattavat käyttää tätä estääkseen kaikki lähtevät tekstiviestit.</string>
+  <string name="permlab_receiveProtectedSms">vastaanota suojattuja tekstiviestejä</string>
+  <string name="permdesc_receiveProtectedSms">Sallii sovelluksen vastaanottaa suojattuja tekstiviestejä.</string>
+  <string name="permlab_modifyProtectedSmsList">muokkaa suojattujen tekstiviestien listaa</string>
+  <string name="permdesc_modifyProtectedSmsList">Sallii sovelluksen muokata suojattujen tekstiviestien osoiteluetteloa.</string>
   <string name="permlab_resetBatteryStats">nollaa akun tilastot</string>
   <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset akun käytön tilastot.</string>
   <string name="permgrouplab_security">Turvallisuus</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Sallii sovelluksen pääsyn CM-laitteiston kehykseen.</string>
   <string name="permlab_keyguardApplicationWidget">aseta näppäinlukon sovelluswidget</string>
   <string name="permdesc_keyguardApplicationWidget">Antaa sovelluksen asettaa widgetin näppäinlukkoon.</string>
+  <string name="permlab_interceptPackageLaunch">sieppaa sovelluksen käynnistys</string>
+  <string name="permdesc_interceptPackageLaunch">Sallii sovelluksen siepata toisen sovelluksen käynnistyksen</string>
   <string name="immersive_mode_confirmation_bottom">Pyyhkäise alhaalta ylös poistuaksesi koko näytön tilasta.</string>
   <string name="app_ops_access_camera">käyttää kameraa</string>
   <string name="app_ops_access_location">käyttää sijaintia</string>

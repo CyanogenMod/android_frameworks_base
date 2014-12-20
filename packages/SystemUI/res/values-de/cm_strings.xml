@@ -74,4 +74,6 @@
   <string name="screenshot_delete_confirmation">Bildschirmfoto wurde gelöscht</string>
   <string name="accessibility_desc_add_quick_settings">Schnelleinstellungen hinzufügen</string>
   <string name="status_bar_notification_spam_item_title">Ähnliche Benachrichtigungen ignorieren</string>
+  <string name="protected_app_notification_title">Geschützte App-Benachrichtigung</string>
+  <string name="protected_app_notification_summary">Berühren, um die Benachrichtigung der geschützten App zu öffnen</string>
 </resources>

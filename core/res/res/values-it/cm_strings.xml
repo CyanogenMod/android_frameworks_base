@@ -67,9 +67,9 @@
   <string name="perf_profile_perf">Prestazioni</string>
   <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
   <string name="permdesc_interceptSmsSent">Consente all\'app di intercettare un SMS in uscita. Le app dannose potrebbero usarlo per impedire la spedizione di SMS.</string>
-  <string name="permlab_receiveProtectedSms">Ricevi SMS protetti</string>
+  <string name="permlab_receiveProtectedSms">ricevere SMS protetti</string>
   <string name="permdesc_receiveProtectedSms">Consenti all\'app di ricevere SMS protetti.</string>
-  <string name="permlab_modifyProtectedSmsList">Modifica la lista di SMS protetti</string>
+  <string name="permlab_modifyProtectedSmsList">modifica la lista di SMS protetti</string>
   <string name="permdesc_modifyProtectedSmsList">Consente all\'app di modificare la lista degli indirizzi degli SMS protetti.</string>
   <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
   <string name="permdesc_resetBatteryStats">Consente all\'app di reimpostare i dati di utilizzo della batteria a basso livello.</string>
@@ -91,7 +91,7 @@
   <string name="permdesc_useHardwareFramework">Consente all\'app di accedere al framework hardware di CM.</string>
   <string name="permlab_keyguardApplicationWidget">imposta widget dell\'app su schermata di blocco</string>
   <string name="permdesc_keyguardApplicationWidget">Consente all\'app di visualizzare un widget sulla schermata di blocco.</string>
-  <string name="permlab_interceptPackageLaunch">Intercetta avvio delle app</string>
+  <string name="permlab_interceptPackageLaunch">intercetta avvio delle app</string>
   <string name="permdesc_interceptPackageLaunch">Consentire all\'app di intercettare l\'avvio delle altre app</string>
   <string name="immersive_mode_confirmation_bottom">Scorrere dal basso verso l\'alto per uscire dalla modalità schermo intero.</string>
   <string name="app_ops_access_camera">accedere alla fotocamera</string>

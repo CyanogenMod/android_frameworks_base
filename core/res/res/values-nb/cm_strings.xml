@@ -70,6 +70,7 @@
   <string name="permlab_receiveProtectedSms">motta beskyttet SMS</string>
   <string name="permdesc_receiveProtectedSms">Lar programmet motta innkommende beskyttede SMS.</string>
   <string name="permlab_modifyProtectedSmsList">endre beskyttede SMS-listen</string>
+  <string name="permdesc_modifyProtectedSmsList">Lar programmet endre adressen for beskyttet sms.</string>
   <string name="permlab_resetBatteryStats">tilbakestill batteri statistikk</string>
   <string name="permdesc_resetBatteryStats">Tillater et program å tilbakestille gjeldende bruksdata for batteriet.</string>
   <string name="permgrouplab_security">Sikkerhet</string>

@@ -57,6 +57,7 @@
   <string name="quick_settings_expanded_desktop">Genişletilmiş</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
   <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d cihaz bağlı</item>
     <item quantity="other">%1$d cihaz bağlı</item>
   </plurals>
   <string name="quick_settings_camera_error_connect">Kamera\'ya bağlanılamıyor</string>

@@ -69,6 +69,8 @@
   <string name="permdesc_interceptSmsSent">Ermöglicht der App, verschickte SMS abzufangen. Schädliche Apps können so das Versenden von SMS verhindern.</string>
   <string name="permlab_receiveProtectedSms">geschützte SMS empfangen</string>
   <string name="permdesc_receiveProtectedSms">Ermöglicht der App, eine eingehende, geschützte SMS zu empfangen.</string>
+  <string name="permlab_modifyProtectedSmsList">Liste der geschützten SMS ändern</string>
+  <string name="permdesc_modifyProtectedSmsList">Ermöglicht der App, die Liste der geschützten SMS zu ändern.</string>
   <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
   <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen</string>
   <string name="permgrouplab_security">Sicherheit</string>

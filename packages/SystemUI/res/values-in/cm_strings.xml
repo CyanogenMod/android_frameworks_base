@@ -77,4 +77,6 @@
   <string name="screenshot_delete_confirmation">Tangkapan layar dihapus.</string>
   <string name="accessibility_desc_add_quick_settings">Tambah pengaturan cepat.</string>
   <string name="status_bar_notification_spam_item_title">Abaikan pesan seperti ini</string>
+  <string name="protected_app_notification_title">Pemberitahuan aplikasi yang dilindungi</string>
+  <string name="protected_app_notification_summary">Ketuk untuk membuka pemberitahuan dari aplikasi yang dilindungi</string>
 </resources>

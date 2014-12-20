@@ -70,6 +70,7 @@
   <string name="permlab_receiveProtectedSms">接收受保护的短信</string>
   <string name="permdesc_receiveProtectedSms">允许应用接收受保护的短信。</string>
   <string name="permlab_modifyProtectedSmsList">修改受保护的短信列表</string>
+  <string name="permdesc_modifyProtectedSmsList">允许应用修改受保护的短信地址列表。</string>
   <string name="permlab_resetBatteryStats">重置电池统计信息</string>
   <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
   <string name="permgrouplab_security">安全</string>

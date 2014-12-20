@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">Alustetaan\u2026</string>
   <string name="quick_settings_heads_up_on">Heads up käytössä</string>
   <string name="quick_settings_heads_up_off">Ei keskeytyksiä</string>
+  <string name="quick_settings_themes">Teemat</string>
   <string name="location_mode_high_accuracy_title">Korkea tarkkuus</string>
   <string name="location_mode_battery_saving_title">Virransäästö</string>
   <string name="location_mode_sensors_only_title">Vain laite</string>
@@ -77,4 +78,6 @@
   <string name="screenshot_delete_confirmation">Kuvakaappaus poistettu.</string>
   <string name="accessibility_desc_add_quick_settings">Lisää pika-asetukset.</string>
   <string name="status_bar_notification_spam_item_title">Älä huomioi tämänlaisia viestejä</string>
+  <string name="protected_app_notification_title">Suojatun sovelluksen ilmoitus</string>
+  <string name="protected_app_notification_summary">Napauta avataksesi ilmoituksen suojatusta sovelluksesta</string>
 </resources>

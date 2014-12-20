@@ -989,8 +989,6 @@
   <string name="permlab_readHistoryBookmarks">تور خەتكۈچى ۋە تارىخ خاتىرىڭىزنى ئوقۇيدۇ</string>
   <string name="permdesc_readHistoryBookmarks">ئەپنىڭ توركۆرگۈدىكى بارلىق ئادرېس ۋە خەتكۈچلەرنى ئوقۇشىغا يول قويىدۇ. دىققەت:  بۇ ھوقۇق ئۈچىنچى تەرەپ توركۆرگۈ ياكى تور بەت كۆرۈش ئىقتىدارى بار باشقا ئەپكە ماس كەلمەسلىكى مۇمكىن</string>
   <string name="permlab_writeHistoryBookmarks">تور خەتكۈچى ۋە تارىخ خاتىرىسى يازىدۇ</string>
-  <string name="permdesc_writeHistoryBookmarks" product="tablet">ئەپنىڭ تاختا كومپيۇتېردا ساقلانغان توركۆرگۈدىكى بارلىق ئادرېس ۋە خەتكۈچلەرنى ئۆزگەرتىشىگە يول قويىدۇ. بۇ ھوقۇق ئارقىلىق ئەپ توركۆرگۈ سانلىق مەلۇماتىنى ئۆزگەرتىۋېتىشى ياكى ئۆچۈرۈۋېتىشى مۇمكىن. دىققەت:  بۇ ھوقۇق ئۈچىنچى تەرەپ توركۆرگۈ ياكى تور بەت كۆرۈش ئىقتىدارى بار باشقا ئەپكە ماس كەلمەسلىكى مۇمكىن</string>
-  <string name="permdesc_writeHistoryBookmarks" product="default">ئەپنىڭ تېلېفوندا ساقلانغان توركۆرگۈدىكى بارلىق ئادرېس ۋە خەتكۈچلەرنى ئۆزگەرتىشىگە يول قويىدۇ. بۇ ھوقۇق ئارقىلىق ئەپ توركۆرگۈ سانلىق مەلۇماتىنى ئۆزگەرتىۋېتىشى ياكى ئۆچۈرۈۋېتىشى مۇمكىن. دىققەت:  بۇ ھوقۇق ئۈچىنچى تەرەپ توركۆرگۈ ياكى تور بەت كۆرۈش ئىقتىدارى بار باشقا ئەپكە ماس كەلمەسلىكى مۇمكىن</string>
   <string name="permlab_setAlarm">قوڭغۇراق تەڭشەك</string>
   <string name="permdesc_setAlarm">ئەپنىڭ ئورنىتىلغان قوڭغۇراق سائەت ئەپلىرىدىكى ئاگاھلاندۇرۇش تەڭشىشىگە يول قويىدۇ. بەزى قوڭغۇراقلىق سائەت ئەپلىرى بۇ ئىقتىدارنى ئەمەلگە ئاشۇرمىغان.</string>
   <string name="permlab_addVoicemail">ئۈنخەت قوش</string>
@@ -1325,9 +1323,7 @@
   <string name="permlab_route_media_output">ۋاستە چىقىرىش يولىنى ئۆزگەرت</string>
   <string name="permdesc_route_media_output">ئەپنىڭ ۋاستە چىقىرىش يولىنى ئۆزگەرتىپ باشقا سىرتقى ئۈسكۈنىگە چىقىرىشىغا يول قويىدۇ.</string>
   <string name="permlab_access_keyguard_secure_storage">ئاچقۇچلۇق قوغدالغان بىخەتەر ساقلىغۇچ بوشلۇقىنى زىيارەت قىلىدۇ</string>
-  <string name="permdesc_access_keyguard_secure_storage">ئەپنىڭ ئاچقۇچلۇق قوغدالغان بىخەتەر ساقلىغۇچ بوشلۇقىنى زىيارەت قىلىشىغا يول قويىدۇ.</string>
   <string name="permlab_control_keyguard">ئاچقۇچلۇق قوغداشنى كۆرسىتىش ۋە يوشۇرۇشنى تىزگىنلەيدۇ</string>
-  <string name="permdesc_control_keyguard">ئەپنىڭ ئاچقۇچلۇق قوغداشنى تىزگىنلىشىگە يول قويىدۇ.</string>
   <string name="tutorial_double_tap_to_zoom_message_short">قوش چىكىپ يىراق-يېقىنلىقىنى باشقۇرغىلى بولىدۇ.</string>
   <string name="gadget_host_error_inflating">ئەپچە قوشالمىدى</string>
   <string name="ime_action_go">يۆتكەل</string>
