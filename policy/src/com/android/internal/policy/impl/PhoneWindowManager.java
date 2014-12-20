@@ -402,10 +402,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHomeWakeScreen;
     boolean mBackWakeScreen;
     boolean mMenuWakeScreen;
+    boolean mAssistWakeScreen;
+    boolean mAppSwitchWakeScreen;
     boolean mVolumeWakeScreen;
     boolean useHomeWake;
     boolean useBackWake;
     boolean useMenuWake;
+    boolean useAssistWake;
+    boolean useAppSwitchWake;
     boolean useVolumeWake;
 
     // During wakeup by volume keys, we still need to capture subsequent events
@@ -767,6 +771,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.MENU_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ASSIST_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.APP_SWITCH_WAKE_SCREEN), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_WAKE_SCREEN), false, this,
@@ -1440,6 +1450,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         useHomeWake = (activeHardwareWakeKeys & KEY_MASK_HOME) != 0;
         useBackWake = (activeHardwareWakeKeys & KEY_MASK_BACK) != 0;
         useMenuWake = (activeHardwareWakeKeys & KEY_MASK_MENU) != 0;
+        useAssistWake = (activeHardwareWakeKeys & KEY_MASK_ASSIST) != 0;
+        useAppSwitchWake = (activeHardwareWakeKeys & KEY_MASK_APP_SWITCH) != 0;
         useVolumeWake = (activeHardwareWakeKeys & KEY_MASK_VOLUME) != 0;
 
         final ContentResolver resolver = mContext.getContentResolver();
@@ -1661,6 +1673,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.BACK_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mMenuWakeScreen = (Settings.System.getIntForUser(resolver,
                     Settings.System.MENU_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+            mAssistWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.ASSIST_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+            mAppSwitchWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.APP_SWITCH_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolumeWakeScreen = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
@@ -5312,6 +5328,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return (mBackWakeScreen && useBackWake);
             case KeyEvent.KEYCODE_MENU:
                 return (mMenuWakeScreen && useMenuWake);
+            case KeyEvent.KEYCODE_ASSIST:
+                return (mAssistWakeScreen && useAssistWake);
+            case KeyEvent.KEYCODE_APP_SWITCH:
+                return (mAppSwitchWakeScreen && useAppSwitchWake);
         }
         return true;
     }
