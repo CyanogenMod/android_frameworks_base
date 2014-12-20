@@ -858,7 +858,7 @@ class AlarmManagerService extends SystemService {
             }
 
             setImpl(type, triggerAtTime, windowLength, interval, operation,
-                    false, workSource, alarmClock);
+                    windowLength == AlarmManager.WINDOW_EXACT, workSource, alarmClock);
         }
 
         @Override
@@ -1585,12 +1585,9 @@ class AlarmManagerService extends SystemService {
                             maxTriggerTime(nowELAPSED, nextElapsed, alarm.repeatInterval),
                             alarm.repeatInterval, alarm.operation, batch.standalone, true,
                             alarm.workSource, alarm.alarmClock, alarm.userId, false);
+                }
 
-                    // For now we count this as a wakeup alarm, meaning it needs to be
-                    // delivered immediately.  In the future we should change this, but
-                    // that required delaying when we reschedule the repeat...!
-                    hasWakeup = false;
-                } else if (alarm.wakeup) {
+                if (alarm.wakeup) {
                     hasWakeup = true;
                 }
 
