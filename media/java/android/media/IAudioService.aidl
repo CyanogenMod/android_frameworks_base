@@ -217,4 +217,6 @@ interface IAudioService {
     void updateRemoteControllerOnExistingMediaPlayers();
 
     void addMediaPlayerAndUpdateRemoteController(String packageName);
+
+    void removeMediaPlayerAndUpdateRemoteController(String packageName);
 }

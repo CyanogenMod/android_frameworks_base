@@ -1089,6 +1089,8 @@ import java.util.List;
         synchronized (mInfoLock) {
             if (controller == null) {
                 if (mCurrentSession != null) {
+                    Log.v(TAG, "Updating current controller as null");
+                    mAudioManager.updateMediaPlayerList(mCurrentSession.getPackageName(), false);
                     mCurrentSession.unregisterCallback(mSessionCb);
                     mCurrentSession = null;
                     sendMsg(mEventHandler, MSG_CLIENT_CHANGE, SENDMSG_REPLACE,
@@ -1098,12 +1100,20 @@ import java.util.List;
                     || !controller.getSessionToken()
                             .equals(mCurrentSession.getSessionToken())) {
                 if (mCurrentSession != null) {
+                    Log.v(TAG, "Updating current controller package as " +
+                     controller.getPackageName() + " from " + mCurrentSession.getPackageName());
                     mCurrentSession.unregisterCallback(mSessionCb);
+                } else {
+                    Log.v(TAG, "Updating current controller package as " +
+                      controller.getPackageName() + " from null");
                 }
+
                 sendMsg(mEventHandler, MSG_CLIENT_CHANGE, SENDMSG_REPLACE,
                         0 /* genId */, 0 /* clearing */, null /* obj */, 0 /* delay */);
                 mCurrentSession = controller;
                 mCurrentSession.registerCallback(mSessionCb, mEventHandler);
+
+                mAudioManager.updateMediaPlayerList(mCurrentSession.getPackageName(), true);
 
                 PlaybackState state = controller.getPlaybackState();
                 sendMsg(mEventHandler, MSG_NEW_PLAYBACK_STATE, SENDMSG_REPLACE,
