@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+**
+** Copyright 2012, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License")
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+
+<resources>
+    <!-- Keyguard PIN pad styles -->
+    <style name="Widget.Button.NumPadKey"
+            parent="@android:style/Widget.Button">
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textSize">32dp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:paddingTop">@dimen/kg_num_pad_key_padding_top</item>
+        <item name="android:paddingBottom">@dimen/kg_num_pad_key_padding_bottom</item>
+        <item name="android:paddingLeft">@dimen/kg_num_pad_key_padding_left</item>
+        <item name="android:paddingRight">6dp</item>
+    </style>
+    <style name="TextAppearance.NumPadKey"
+            parent="@android:style/TextAppearance">
+        <item name="android:textSize">32dp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+</resources>
