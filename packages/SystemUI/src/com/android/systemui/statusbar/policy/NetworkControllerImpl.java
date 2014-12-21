@@ -915,7 +915,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
             mContentDescriptionDataType = mContext.getString(
                     R.string.accessibility_data_connection_4g);
         } else {
-            mDataTypeIconId = TelephonyIcons.getDataTypeIcon();
+            inetCondition = inetConditionForNetwork(ConnectivityManager.TYPE_MOBILE);
+            final boolean showDataTypeIcon = (inetCondition > 0);
+            mDataTypeIconId = showDataTypeIcon ? TelephonyIcons.getDataTypeIcon() : 0;
             mContentDescriptionDataType = TelephonyIcons.getDataTypeDesc();
             mQSDataTypeIconId = TelephonyIcons.getQSDataTypeIcon();
         }
