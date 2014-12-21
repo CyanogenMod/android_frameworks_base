@@ -150,17 +150,10 @@ public class CarrierText extends LinearLayout {
                 com.android.internal.R.string.lockscreen_airplane_mode_on);
         CharSequence text = getCarrierTextForSimState(simState, plmn, spn);
         TextView updateCarrierView = mOperatorName[phoneId];
-        if (mContext.getResources().getBoolean(R.bool.kg_use_all_caps)) {
-            if (mAirplaneModeText != null && mShowAPM) {
-                mAirplaneModeText.setText(airplaneMode.toUpperCase());
-            }
-            updateCarrierView.setText(text != null ? text.toString().toUpperCase() : null);
-        } else {
-            if (mAirplaneModeText != null && mShowAPM) {
-                mAirplaneModeText.setText(airplaneMode);
-            }
-            updateCarrierView.setText(text != null ? text.toString() : null);
+        if (mAirplaneModeText != null && mShowAPM) {
+            mAirplaneModeText.setText(airplaneMode);
         }
+        updateCarrierView.setText(text != null ? text.toString() : null);
     }
 
     @Override
