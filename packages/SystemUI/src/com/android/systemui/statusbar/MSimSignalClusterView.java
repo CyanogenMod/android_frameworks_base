@@ -458,7 +458,7 @@ public class MSimSignalClusterView
 
         if (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT) {
             mMobileType[phoneId].setVisibility(
-                    !mWifiVisible ? View.VISIBLE : View.GONE);
+                    (mMobileTypeId[phoneId] != 0) ? View.VISIBLE : View.GONE);
         } else {
             mMobileType[phoneId].setVisibility(View.GONE);
         }

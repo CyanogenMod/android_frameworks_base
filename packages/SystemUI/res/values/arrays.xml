@@ -475,11 +475,11 @@
     </string-array>
 
     <string-array name="signal_strength_g_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_g_fully_sim1">
@@ -491,11 +491,11 @@
     </string-array>
 
      <string-array name="signal_strength_g_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_g_fully_roaming_sim1">
@@ -507,11 +507,11 @@
     </string-array>
 
     <string-array name="signal_strength_e_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_e_fully_sim1">
@@ -523,11 +523,11 @@
     </string-array>
 
      <string-array name="signal_strength_e_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_e_fully_roaming_sim1">
@@ -539,11 +539,11 @@
     </string-array>
 
     <string-array name="signal_strength_3g_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_3g_fully_sim1">
@@ -555,11 +555,11 @@
     </string-array>
 
      <string-array name="signal_strength_3g_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_3g_fully_roaming_sim1">
@@ -571,11 +571,11 @@
     </string-array>
 
     <string-array name="signal_strength_4g_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_4g_fully_sim1">
@@ -587,11 +587,11 @@
     </string-array>
 
      <string-array name="signal_strength_4g_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_4g_fully_roaming_sim1">
@@ -603,11 +603,11 @@
     </string-array>
 
     <string-array name="signal_strength_h_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_h_fully_sim1">
@@ -619,11 +619,11 @@
     </string-array>
 
      <string-array name="signal_strength_h_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_h_fully_roaming_sim1">
@@ -635,11 +635,11 @@
     </string-array>
 
     <string-array name="signal_strength_hp_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_hp_fully_sim1">
@@ -651,11 +651,11 @@
     </string-array>
 
      <string-array name="signal_strength_hp_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_hp_fully_roaming_sim1">
@@ -667,11 +667,11 @@
     </string-array>
 
     <string-array name="signal_strength_1x_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_1x_fully_sim1">
@@ -683,11 +683,11 @@
     </string-array>
 
      <string-array name="signal_strength_1x_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_1x_fully_roaming_sim1">
@@ -699,11 +699,11 @@
     </string-array>
 
     <string-array name="signal_strength_cdma_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_cdma_fully_sim1">
@@ -715,11 +715,11 @@
     </string-array>
 
      <string-array name="signal_strength_cdma_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_cdma_fully_roaming_sim1">
@@ -731,11 +731,11 @@
     </string-array>
 
     <string-array name="signal_strength_umts_normal_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_umts_fully_sim1">
@@ -747,11 +747,11 @@
     </string-array>
 
      <string-array name="signal_strength_umts_normal_roaming_sim1">
-        <item>drawable/stat_sys_signal_0_fully</item>
-        <item>drawable/stat_sys_signal_1_fully</item>
-        <item>drawable/stat_sys_signal_2_fully</item>
-        <item>drawable/stat_sys_signal_3_fully</item>
-        <item>drawable/stat_sys_signal_4_fully</item>
+        <item>drawable/stat_sys_signal_0</item>
+        <item>drawable/stat_sys_signal_1</item>
+        <item>drawable/stat_sys_signal_2</item>
+        <item>drawable/stat_sys_signal_3</item>
+        <item>drawable/stat_sys_signal_4</item>
     </string-array>
 
     <string-array name="signal_strength_umts_fully_roaming_sim1">

@@ -516,6 +516,13 @@ class TelephonyIcons {
                     mSelectedSignalStreagthIndex[sub] = SIGNAL_STRENGTH_TYPE_G;
                 break;
         }
+
+        if (inetCondition == 0) {
+            // Don't show data type if we're not connected via mobile network
+            mSelectedDataTypeIcon[sub] = 0;
+            mSelectedQSDataTypeIcon[sub] = 0;
+        }
+
         log(TAG, "updateDataType "
                 + String.format(
                 "mSelectedDataTypeIcon[%d]=%d, mSelectedDataActivityIndex=%d",
