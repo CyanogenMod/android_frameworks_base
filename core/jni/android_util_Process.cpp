@@ -53,6 +53,13 @@ static pthread_key_t gBgKey = -1;
 
 // For both of these, err should be in the errno range (positive), not a status_t (negative)
 
+enum cgroup_task_id {
+    CGROUP_TASK_PERSISTENT=-12,
+    CGROUP_TASK_DEFAULT=-1,
+    CGROUP_TASK_FOREGROUND=0,
+    CGROUP_TASK_BACKGROUND=9
+};
+
 static void signalExceptionForPriorityError(JNIEnv* env, int err)
 {
     switch (err) {
@@ -362,14 +369,20 @@ jboolean android_os_Process_setOomAdj(JNIEnv* env, jobject clazz,
 }
 
 jboolean android_os_Process_setSwappiness(JNIEnv *env, jobject clazz,
-                                          jint pid, jboolean is_increased)
+                                          jint pid, jint adj)
 {
     char text[64];
 
-    if (is_increased) {
-        strcpy(text, "/sys/fs/cgroup/memory/sw/tasks");
-    } else {
-        strcpy(text, "/sys/fs/cgroup/memory/tasks");
+    ALOGD("android_os_Process_setSwappiness start, pid = %d, adj = %d",pid,adj) ;
+
+    if (adj == CGROUP_TASK_FOREGROUND) {
+         strcpy(text, "/sys/fs/cgroup/memory/foreground/tasks");
+    } else if (adj == CGROUP_TASK_BACKGROUND){
+         strcpy(text, "/sys/fs/cgroup/memory/background/tasks");
+    } else if (adj == CGROUP_TASK_PERSISTENT){
+         strcpy(text, "/sys/fs/cgroup/memory/persistent/tasks");
+    } else if (adj == CGROUP_TASK_DEFAULT){
+	 strcpy(text, "/sys/fs/cgroup/memory/tasks");
     }
 
     struct stat st;
@@ -383,7 +396,7 @@ jboolean android_os_Process_setSwappiness(JNIEnv *env, jobject clazz,
         write(fd, text, strlen(text));
         close(fd);
     }
-
+    ALOGD("android_os_Process_setSwappiness end, pid = %d, adj = %d",pid,adj);
     return true;
 }
 
@@ -1024,7 +1037,7 @@ static const JNINativeMethod methods[] = {
     {"setProcessGroup",     "(II)V", (void*)android_os_Process_setProcessGroup},
     {"getProcessGroup",     "(I)I", (void*)android_os_Process_getProcessGroup},
     {"setOomAdj",   "(II)Z", (void*)android_os_Process_setOomAdj},
-    {"setSwappiness",   "(IZ)Z", (void*)android_os_Process_setSwappiness},
+    {"setSwappiness",   "(II)Z", (void*)android_os_Process_setSwappiness},
     {"setArgV0",    "(Ljava/lang/String;)V", (void*)android_os_Process_setArgV0},
     {"setUid", "(I)I", (void*)android_os_Process_setUid},
     {"setGid", "(I)I", (void*)android_os_Process_setGid},
