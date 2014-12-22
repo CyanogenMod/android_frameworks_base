@@ -2079,4 +2079,7 @@
    <integer name="ascrollboost_schedboost">0</integer>
    <integer name="ascrollboost_cpuboost">0</integer>
    <integer name="ascrollboost_pcdisbl">0</integer>
+
+   <!-- Controlling respond call via sms feature via config item -->
+   <bool name="config_reject_call_via_sms_enabled">true</bool>
 </resources>

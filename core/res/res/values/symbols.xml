@@ -2217,4 +2217,5 @@
   <java-symbol type="integer" name="ascrollboost_schedboost" />
   <java-symbol type="integer" name="ascrollboost_cpuboost" />
   <java-symbol type="integer" name="ascrollboost_pcdisbl" />
+  <java-symbol type="bool" name="config_reject_call_via_sms_enabled"/>
 </resources>
