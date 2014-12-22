@@ -923,14 +923,14 @@ public class Process {
      * Adjust the swappiness level for a process.
      *
      * @param pid The process identifier to set.
-     * @param is_increased Whether swappiness should be increased or default.
+     * @param adj The process type for which swappiness to be set.
      *
      * @return Returns true if the underlying system supports this
      *         feature, else false.
      *
      * {@hide}
      */
-    public static final native boolean setSwappiness(int pid, boolean is_increased);
+    public static final native boolean setSwappiness(int pid, int adj);
 
     /**
      * Change this process's argv[0] parameter.  This can be useful to show

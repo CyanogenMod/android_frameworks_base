@@ -15377,7 +15377,21 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         if (app.curAdj != app.setAdj) {
             if (Process.setOomAdj(app.pid, app.curAdj)) {
-                if (DEBUG_SWITCH || DEBUG_OOM_ADJ) Slog.v(
+		if (app.curAdj >= ProcessList.CACHED_APP_MIN_ADJ) {
+			Process.setSwappiness(app.pid,ProcessList.CACHED_APP_MIN_ADJ);
+		} else
+		if (app.curAdj == ProcessList.FOREGROUND_APP_ADJ) {
+			Process.setSwappiness(app.pid,ProcessList.FOREGROUND_APP_ADJ);
+		} else
+		if (app.curAdj == ProcessList.PERSISTENT_PROC_ADJ) {
+			Process.setSwappiness(app.pid,ProcessList.PERSISTENT_PROC_ADJ);
+		} else
+		if (app.curAdj == ProcessList.HOME_APP_ADJ) {
+	                Process.setSwappiness(app.pid,ProcessList.FOREGROUND_APP_ADJ);
+		} else {
+			Process.setSwappiness(app.pid,-1);
+		}
+	        if (DEBUG_SWITCH || DEBUG_OOM_ADJ) Slog.v(
                     TAG, "Set " + app.pid + " " + app.processName +
                     " adj " + app.curAdj + ": " + app.adjType);
                 app.setAdj = app.curAdj;
@@ -15415,8 +15429,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                         }
                     }
                 }
-                Process.setSwappiness(app.pid,
-                        app.curSchedGroup <= Process.THREAD_GROUP_BG_NONINTERACTIVE);
             }
         }
         if (app.repProcState != app.curProcState) {
