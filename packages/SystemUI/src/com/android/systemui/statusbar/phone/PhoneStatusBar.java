@@ -1928,6 +1928,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     - mCarrierLabelHeight - mStatusBarHeaderHeight)
             && mStackScroller.getVisibility() == View.VISIBLE
             && mState != StatusBarState.KEYGUARD;
+
+            if (mState == StatusBarState.KEYGUARD) {
+                // The subs are already displayed on the top bar
+                mSubsLabel.setVisibility(View.INVISIBLE);
+            } else {
+                mSubsLabel.setVisibility(View.VISIBLE);
+            }
         } else {
             makeVisible =
             !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
