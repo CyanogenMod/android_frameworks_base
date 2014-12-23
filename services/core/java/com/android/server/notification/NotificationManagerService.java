@@ -33,6 +33,9 @@ import android.app.ITransientNotification;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Profile;
+import android.app.ProfileGroup;
+import android.app.ProfileManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -123,6 +126,7 @@ public class NotificationManagerService extends SystemService {
     static final String TAG = "NotificationService";
     static final boolean DBG = false;
 
+    static final String SYSTEM_UI_PACKAGE_NAME = "com.android.systemui";
     static final int MAX_PACKAGE_NOTIFICATIONS = 50;
 
     // message codes
@@ -1850,7 +1854,17 @@ public class NotificationManagerService extends SystemService {
         } finally {
             Binder.restoreCallingIdentity(token);
         }
+/* hharte
+        try {
+            final ProfileManager profileManager =
+                    (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
 
+            ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+            notification = group.processNotification(notification);
+        } catch(Throwable th) {
+            Log.e(TAG, "An error occurred profiling the notification.", th);
+        }
+*/
         // If we're not supposed to beep, vibrate, etc. then don't.
         final String disableEffects = disableNotificationEffects(record);
         if (disableEffects != null) {
@@ -2638,23 +2652,34 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
-    private static boolean isUidSystem(int uid) {
-        final int appid = UserHandle.getAppId(uid);
-        return (appid == Process.SYSTEM_UID || appid == Process.PHONE_UID || uid == 0);
+    private int getUidForPackage(String packageName) {
+        int uid = -1;
+        try {
+            uid = getContext().getPackageManager().getPackageUid(packageName,
+                    UserHandle.getCallingUserId());
+        } catch (NameNotFoundException e) {
+        }
+        return uid;
     }
 
-    private static boolean isCallerSystem() {
+    private boolean isUidSystem(int uid) {
+        final int appid = UserHandle.getAppId(uid);
+        return (appid == Process.SYSTEM_UID || appid == Process.PHONE_UID || uid == 0
+            || appid == getUidForPackage(SYSTEM_UI_PACKAGE_NAME));
+    }
+
+    private boolean isCallerSystem() {
         return isUidSystem(Binder.getCallingUid());
     }
 
-    private static void checkCallerIsSystem() {
+    private void checkCallerIsSystem() {
         if (isCallerSystem()) {
             return;
         }
         throw new SecurityException("Disallowed call for uid " + Binder.getCallingUid());
     }
 
-    private static void checkCallerIsSystemOrSameApp(String pkg) {
+    private void checkCallerIsSystemOrSameApp(String pkg) {
         if (isCallerSystem()) {
             return;
         }

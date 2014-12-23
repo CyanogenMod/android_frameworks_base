@@ -455,4 +455,8 @@ interface IPackageManager {
     KeySet getSigningKeySet(String packageName);
     boolean isPackageSignedByKeySet(String packageName, in KeySet ks);
     boolean isPackageSignedByKeySetExactly(String packageName, in KeySet ks);
+
+    /** Protected Apps */
+    void setComponentProtectedSetting(in ComponentName componentName,
+    in boolean newState, int userId);
 }

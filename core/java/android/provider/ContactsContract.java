@@ -1111,6 +1111,20 @@ public final class ContactsContract {
         public static final String SORT_KEY_ALTERNATIVE = "sort_key_alt";
     }
 
+    /**
+     * @hide
+     */
+    public interface InternalContactCounts extends ContactCounts {
+        // Just a placeholder interface to don't break the public api, while expose ContactCounts
+        // for internal use
+    }
+
+    /**
+     * URI parameter and cursor extras that return counts of rows grouped by the
+     * address book index, which is usually the first letter of the sort key.
+     * When this parameter is supplied, the row counts are returned in the
+     * cursor extras bundle.
+     */
     interface ContactCounts {
 
         /**
@@ -5457,6 +5471,31 @@ public final class ContactsContract {
              * <P>Type: TEXT</P>
              */
             public static final String LABEL = DataColumns.DATA3;
+        }
+
+        /** @hide */
+        public static final class LocalGroup implements DataColumnsWithJoins {
+            /** @hide */
+            private LocalGroup() {
+            }
+
+            /** @hide */
+            public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/local-groups";
+
+            /** @hide */
+            public static final String GROUP = DATA1;
+
+            /** @hide */
+            public static final Uri CONTENT_URI = Uri.withAppendedPath(Data.CONTENT_URI,
+                    "local-groups");
+
+            /** @hide */
+            public static final Uri CONTENT_LOOKUP_URI = Uri
+                    .withAppendedPath(CONTENT_URI, "lookup");
+
+            /** @hide */
+            public static final Uri CONTENT_FILTER_URI = Uri
+                    .withAppendedPath(CONTENT_URI, "filter");
         }
 
         /**

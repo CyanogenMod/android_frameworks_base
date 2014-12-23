@@ -89,8 +89,6 @@ public abstract class ConnectionService extends Service {
             new RemoteConnectionManager(this);
     private final List<Runnable> mPreInitializationConnectionRequests = new ArrayList<>();
     private final ConnectionServiceAdapter mAdapter = new ConnectionServiceAdapter();
-    private int mSsNotificationType = 0xFF;
-    private int mSsNotificationCode = 0xFF;
 
     private boolean mAreAccountsInitialized = false;
     private Conference sNullConference;
@@ -493,15 +491,7 @@ public abstract class ConnectionService extends Service {
         public void onDisconnected(Connection c, DisconnectCause disconnectCause) {
             String id = mIdByConnection.get(c);
             Log.d(this, "Adapter set disconnected %s", disconnectCause);
-            if (mSsNotificationType == 0xFF && mSsNotificationCode == 0xFF) {
-                mAdapter.setDisconnected(id, disconnectCause);
-            } else {
-                mAdapter.setDisconnectedWithSsNotification(id, disconnectCause.getCode(),
-                        disconnectCause.getReason(),
-                        mSsNotificationType, mSsNotificationCode);
-                mSsNotificationType = 0xFF;
-                mSsNotificationCode = 0xFF;
-            }
+            mAdapter.setDisconnected(id, disconnectCause);
         }
 
         @Override
@@ -552,6 +542,13 @@ public abstract class ConnectionService extends Service {
         }
 
         @Override
+        public void onCallPropertiesChanged(Connection c, int properties) {
+            String id = mIdByConnection.get(c);
+            Log.d(this, "properties: parcelableconnection: %x", properties);
+            mAdapter.setCallProperties(id, properties);
+        }
+
+        @Override
         public void onVideoProviderChanged(Connection c, Connection.VideoProvider videoProvider) {
             String id = mIdByConnection.get(c);
             Log.d(this, "onVideoProviderChanged: Connection: %s, VideoProvider: %s", c,
@@ -589,12 +586,6 @@ public abstract class ConnectionService extends Service {
                 }
                 mAdapter.setIsConferenced(id, conferenceId);
             }
-        }
-
-        @Override
-        public void onSsNotificationData(int type, int code) {
-            mSsNotificationType = type;
-            mSsNotificationCode = code;
         }
 
         @Override
@@ -655,10 +646,11 @@ public abstract class ConnectionService extends Service {
 
         Uri address = connection.getAddress();
         String number = address == null ? "null" : address.getSchemeSpecificPart();
-        Log.v(this, "createConnection, number: %s, state: %s, capabilities: %s",
+        Log.v(this, "createConnection, number: %s, state: %s, capabilities: %s, properties: 0x%x",
                 Connection.toLogSafePhoneNumber(number),
                 Connection.stateToString(connection.getState()),
-                PhoneCapabilities.toString(connection.getCallCapabilities()));
+                PhoneCapabilities.toString(connection.getCallCapabilities()),
+                connection.getCallProperties());
 
         Log.d(this, "createConnection, calling handleCreateConnectionSuccessful %s", callId);
         mAdapter.handleCreateConnectionComplete(
@@ -668,6 +660,7 @@ public abstract class ConnectionService extends Service {
                         getAccountHandle(request, connection),
                         connection.getState(),
                         connection.getCallCapabilities(),
+                        connection.getCallProperties(),
                         connection.getAddress(),
                         connection.getAddressPresentation(),
                         connection.getCallerDisplayName(),
@@ -1007,6 +1000,7 @@ public abstract class ConnectionService extends Service {
                     phoneAccountHandle,
                     connection.getState(),
                     connection.getCallCapabilities(),
+                    connection.getCallProperties(),
                     connection.getAddress(),
                     connection.getAddressPresentation(),
                     connection.getCallerDisplayName(),
