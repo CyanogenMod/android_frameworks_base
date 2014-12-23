@@ -396,6 +396,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mBackKillTimeout;
 
     int mDeviceHardwareKeys;
+    int mDeviceHardwareWakeKeys;
 
     // Button wake control flags
     boolean mHomeWakeScreen;
@@ -1296,6 +1297,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.bool.config_enableTranslucentDecor);
         mDeviceHardwareKeys = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
+        mDeviceHardwareWakeKeys = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_deviceHardwareWakeKeys);
         mBackKillTimeout = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_backKillTimeout);
 
@@ -1642,13 +1645,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.RING_HOME_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
             mHomeWakeScreen = (Settings.System.getIntForUser(resolver,
-                    Settings.System.HOME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+                    Settings.System.HOME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
+                    ((mDeviceHardwareWakeKeys & KEY_MASK_HOME) != 0);
             mBackWakeScreen = (Settings.System.getIntForUser(resolver,
-                    Settings.System.BACK_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+                    Settings.System.BACK_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
+                    ((mDeviceHardwareWakeKeys & KEY_MASK_BACK) != 0);
             mMenuWakeScreen = (Settings.System.getIntForUser(resolver,
-                    Settings.System.MENU_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+                    Settings.System.MENU_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
+                    ((mDeviceHardwareWakeKeys & KEY_MASK_MENU) != 0);
             mVolumeWakeScreen = (Settings.System.getIntForUser(resolver,
-                    Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
+                    Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
+                    ((mDeviceHardwareWakeKeys & KEY_MASK_VOLUME) != 0);
             mVolBtnMusicControls = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
 
