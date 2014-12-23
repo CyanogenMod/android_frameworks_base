@@ -35,6 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Rozłączony</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering wył.</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
+  <string name="quick_settings_wifiap">Hotspot Wi-Fi</string>
+  <string name="quick_settings_wifiap_off">Hotspot Wi-Fi wyłączony</string>
   <string name="quick_settings_quiethours">Godziny ciszy</string>
   <string name="quick_settings_quiethours_off">Godziny ciszy wył.</string>
   <string name="quick_settings_lte">LTE</string>
@@ -48,6 +50,7 @@
   <string name="quick_settings_compass_init">Inicjalizowanie\u2026</string>
   <string name="quick_settings_heads_up_on">Wyskakujące powiadomienia włączone</string>
   <string name="quick_settings_heads_up_off">Bez przerywania</string>
+  <string name="quick_settings_themes">Motywy</string>
   <string name="location_mode_high_accuracy_title">Wysoka dokładność</string>
   <string name="location_mode_battery_saving_title">Oszczędzanie baterii</string>
   <string name="location_mode_sensors_only_title">Tylko urządzenie</string>
@@ -65,9 +68,12 @@
   <string name="navbar_menu_big_button">Przycisk Menu</string>
   <string name="advanced_dev_option_wipe_app">Usuń dane aplikacji</string>
   <string name="advanced_dev_option_force_stop">Wymuś zamknięcie</string>
+  <string name="advanced_dev_option_uninstall">Odinstaluj</string>
   <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="screenshot_delete_action">Usuń</string>
   <string name="screenshot_delete_confirmation">Zrzut ekranu został usunięty.</string>
   <string name="accessibility_desc_add_quick_settings">Dodaj szybkie ustawienia.</string>
   <string name="status_bar_notification_spam_item_title">Ignoruj wiadomości tego typu</string>
+  <string name="protected_app_notification_title">Powiadomienie chronionej aplikacji</string>
+  <string name="protected_app_notification_summary">Dotknij, aby otworzyć powiadomienie z chronionej aplikacji</string>
 </resources>

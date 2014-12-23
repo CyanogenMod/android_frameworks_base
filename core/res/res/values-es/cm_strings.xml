@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Alto rendimiento</string>
   <string name="permlab_interceptSmsSent">interceptar mensajes SMS salientes</string>
   <string name="permdesc_interceptSmsSent">Permite que la aplicación intercepte mensajes SMS salientes. Las aplicaciones maliciosas pueden impedir los mensajes SMS salientes.</string>
+  <string name="permlab_receiveProtectedSms">recibir SMS protegidos</string>
+  <string name="permdesc_receiveProtectedSms">Permite que la aplicación reciba mensajes SMS entrantes protegidos.</string>
+  <string name="permlab_modifyProtectedSmsList">modificar lista de SMS protegidos</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite que la aplicación modifique la lista de direcciones de mensajes SMS protegidos.</string>
   <string name="permlab_resetBatteryStats">restablecer estadísticas de batería</string>
   <string name="permdesc_resetBatteryStats">Permite que la aplicación restablezca los datos del uso de la batería.</string>
   <string name="permgrouplab_security">Seguridad</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Permite que la aplicación acceda al marco de hardware de CM.</string>
   <string name="permlab_keyguardApplicationWidget">establecer widget de aplicación en la pantalla de bloqueo</string>
   <string name="permdesc_keyguardApplicationWidget">Permite que la aplicación establezca el widget de aplicación en la pantalla de bloqueo.</string>
+  <string name="permlab_interceptPackageLaunch">interceptar ejecución de aplicación</string>
+  <string name="permdesc_interceptPackageLaunch">Permite que la aplicación intercepte la ejecución de otras aplicaciones.</string>
   <string name="immersive_mode_confirmation_bottom">Desliza el dedo hacia arriba desde el borde inferior para salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a tu ubicación</string>

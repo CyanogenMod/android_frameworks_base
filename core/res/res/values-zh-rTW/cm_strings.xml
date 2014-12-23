@@ -66,6 +66,7 @@
   <string name="perf_profile_perf">效能</string>
   <string name="permlab_interceptSmsSent">攔截送出簡訊</string>
   <string name="permdesc_interceptSmsSent">允許應用程式攔截送出簡訊。惡意應用程式可能會藉此阻止送出簡訊。</string>
+  <string name="permlab_modifyProtectedSmsList">修改受保護的簡訊清單</string>
   <string name="permlab_resetBatteryStats">重設電池統計資訊</string>
   <string name="permdesc_resetBatteryStats">允許應用程式重設目前低電量的電池使用資料。</string>
   <string name="permgrouplab_security">安全</string>
@@ -134,6 +135,8 @@
   <string name="adb_both_active_notification_title">USB 及網絡 ADB 已啟用</string>
   <string name="adb_active_generic_notification_message">輕觸來停用調試。</string>
   <string name="usb_storage_notification_manage_message">點擊進行管理</string>
+  <string name="sd_ext_media_checking_notification_title">正在準備 SD 卡\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">正在檢查 SD 卡的錯誤\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">SD 卡為空白</string>
   <string name="sd_ext_media_nofs_notification_message">SD 卡無內容，或使用不受支援的檔案系統。</string>
   <string name="sd_ext_media_unmountable_notification_title">USB 儲存裝置已損壞</string>
@@ -144,6 +147,8 @@
   <string name="sd_ext_media_safe_unmount_notification_message">您現在可以安全地移除 SD 卡。</string>
   <string name="sd_ext_media_nomedia_notification_title">已移除 SD 卡</string>
   <string name="sd_ext_media_nomedia_notification_message">SD 卡已移除，請插入新的 SD 卡。</string>
+  <string name="usb_ext_media_checking_notification_title">正在準備 USB 儲存裝置\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">正在檢查 USB 儲存裝置的錯誤\u2026</string>
   <string name="usb_ext_media_nofs_notification_title">USB 儲存裝置為空白</string>
   <string name="usb_ext_media_nofs_notification_message">USB 儲存裝置無內容，或使用不受支援的檔案系統。</string>
   <string name="usb_ext_media_unmountable_notification_title">USB 儲存裝置已損壞</string>
@@ -156,4 +161,15 @@
   <string name="usb_ext_media_nomedia_notification_message"> USB 儲存裝置已移除，請插入新的 USB 儲存裝置。</string>
   <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
   <string name="lockscreen_airplane_mode_on">飛航模式</string>
+  <string name="theme_install_error_title">主題安裝失敗</string>
+  <string name="theme_install_error_message">%s 安裝失敗</string>
+  <string name="storage_uicc">UICC 儲存</string>
+  <string name="sd_progress_unmounting">卸載 SD 卡\u2026</string>
+  <string name="sd_progress_erasing">格式化 SD 卡\u2026</string>
+  <string name="sd_format_error">無法格式化 SD 卡。</string>
+  <string name="usb_progress_unmounting">正在卸載 USB 儲存裝置\u2026</string>
+  <string name="usb_progress_erasing">正在格式化 USB 儲存裝置\u2026</string>
+  <string name="usb_format_error">無法格式化 USB 儲存裝置。</string>
+  <string name="usb_media_checking">正在檢查 USB 儲存裝置。</string>
+  <string name="usb_media_shared">USB 儲存裝置正被電腦使用中。</string>
 </resources>

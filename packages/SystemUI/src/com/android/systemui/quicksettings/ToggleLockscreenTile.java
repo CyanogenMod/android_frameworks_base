@@ -42,7 +42,7 @@ public class ToggleLockscreenTile extends QuickSettingsTile implements
         mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startSettingsActivity("android.settings.SECURITY_SETTINGS");
+                startSettingsActivity("android.settings.LOCKSCREEN_INTERFACE");
                 return true;
             }
         };

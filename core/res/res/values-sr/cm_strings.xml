@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Перформансе</string>
   <string name="permlab_interceptSmsSent">пресретни одлазни SMS</string>
   <string name="permdesc_interceptSmsSent">Дозвољава апликацији да пресретне одлазни SMS. Злонамерне апликације могу да користе ово да спрече одлазне SMS поруке.</string>
+  <string name="permlab_receiveProtectedSms">прими заштићени SMS</string>
+  <string name="permdesc_receiveProtectedSms">Дозволи да апликације приме долазећи заштићени SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">измените заштићену SMS листу</string>
+  <string name="permdesc_modifyProtectedSmsList">Дозвољава апликацији да мења заштићену SMS листу адреса.</string>
   <string name="permlab_resetBatteryStats">ресетуј статистику батерије</string>
   <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
   <string name="permgrouplab_security">Безбедност</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Дозвољава апликацији приступ CM хардверском оквиру.</string>
   <string name="permlab_keyguardApplicationWidget">Постави виџет закључаног екрана</string>
   <string name="permdesc_keyguardApplicationWidget">Дозвољава апликацији да постави виџет на закључаном екрану.</string>
+  <string name="permlab_interceptPackageLaunch">пресретање покретања апликација</string>
+  <string name="permdesc_interceptPackageLaunch">Дозвољава апликацији да пресретне покретање других апликација</string>
   <string name="immersive_mode_confirmation_bottom">Превуци нагоре од дна за излазак из целог екрана.</string>
   <string name="app_ops_access_camera">приступ камери</string>
   <string name="app_ops_access_location">приступ твојој локацији</string>

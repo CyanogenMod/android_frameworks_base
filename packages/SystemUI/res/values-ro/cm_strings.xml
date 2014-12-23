@@ -35,6 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Deconectat</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering oprit</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
+  <string name="quick_settings_wifiap">Hotspot Wi-Fi</string>
+  <string name="quick_settings_wifiap_off">Hotspot Wi-Fi oprit</string>
   <string name="quick_settings_quiethours">Ore de liniște</string>
   <string name="quick_settings_quiethours_off">Ore de liniște oprite</string>
   <string name="quick_settings_lte">LTE</string>
@@ -48,11 +50,17 @@
   <string name="quick_settings_compass_init">Inițializare\u2026</string>
   <string name="quick_settings_heads_up_on">Heads Up activat</string>
   <string name="quick_settings_heads_up_off">Fără întreruperi</string>
+  <string name="quick_settings_themes">Teme</string>
   <string name="location_mode_high_accuracy_title">Precizie ridicată</string>
   <string name="location_mode_battery_saving_title">Economisire baterie</string>
   <string name="location_mode_sensors_only_title">Doar dispozitivul</string>
   <string name="quick_settings_expanded_desktop">Extins</string>
   <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d conectat</item>
+    <item quantity="few">%1$d conectate</item>
+    <item quantity="other">%1$d conectate</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Nu mă pot conecta la cameră</string>
   <string name="navbar_dialog_title">Alege o acțiune pentru a o asocia</string>
   <string name="navbar_home_button">Butonul Acasă</string>
@@ -65,9 +73,12 @@
   <string name="navbar_menu_big_button">Buton Meniu</string>
   <string name="advanced_dev_option_wipe_app">Șterge datele aplicației</string>
   <string name="advanced_dev_option_force_stop">Oprire forțată</string>
+  <string name="advanced_dev_option_uninstall">Dezinstalaţi</string>
   <string name="accessibility_dock_battery_level">Andocare procent <xliff:g id="number">%d</xliff:g> baterie.</string>
   <string name="screenshot_delete_action">Șterge</string>
   <string name="screenshot_delete_confirmation">Captură ecran ștearsă.</string>
-  <string name="accessibility_desc_add_quick_settings">Setări Adăugare Rapidă.</string>
+  <string name="accessibility_desc_add_quick_settings">Adăugare scurtături.</string>
   <string name="status_bar_notification_spam_item_title">Ignoră mesajele de acest gen</string>
+  <string name="protected_app_notification_title">Notificare aplicații protejate</string>
+  <string name="protected_app_notification_summary">Atingeţi pentru a deschide notificarea aplicației protejate</string>
 </resources>

@@ -48,6 +48,7 @@
   <string name="permlab_preventpower">ป้องกันไม่ให้ใช้ปุ่มเพาเวอร์</string>
   <string name="permdesc_preventpower">อนุญาตให้แอปเขียนทับปุ่มเพาเวอร์?</string>
   <string name="permlab_sendMockSms">ส่งข้อความ SMS จำลอง</string>
+  <string name="permdesc_sendMockSms">อนุญาติให้แอปส่งข้อความ SMS จำลอง การอนุญาตเช่นนี้ทำให้แอปส่งข้อความไปยังแอปที่เชื่อถือได้ แอปที่เป็นอันตรายอาจส่งข้อความอย่างต่อเนื่อง ปิดกั้นระบบแจ้งเตือนของอุปกรณ์และสร้างผลกระทบต่อผู้ใช้</string>
   <string name="storage_sd_dock_card">แท่น SD card</string>
   <string name="app_killed_message">ปิดแอป</string>
   <string name="global_action_reboot">เริ่มระบบใหม่</string>
@@ -66,6 +67,10 @@
   <string name="perf_profile_perf">ประสิทธิภาพ</string>
   <string name="permlab_interceptSmsSent">ขัดขวางการส่ง SMS</string>
   <string name="permdesc_interceptSmsSent">อนุญาติให้แอป ขัดขวางการส่ง SMS แอปอันตรายอาจจะใช้วิธีนี้เพื่อป้องกันไม่ให้ส่งข้อความออก</string>
+  <string name="permlab_receiveProtectedSms">รับ SMS ที่ได้รับการป้องกัน</string>
+  <string name="permdesc_receiveProtectedSms">อนุญาตให้แอปรับ SMS ที่ได้รับการป้องกัน</string>
+  <string name="permlab_modifyProtectedSmsList">แก้ไขรายการ SMS ที่ได้รับการป้องกัน</string>
+  <string name="permdesc_modifyProtectedSmsList">อนุญาตให้แอปแก้ไขรายการ SMS ที่ได้รับการป้องกัน</string>
   <string name="permlab_resetBatteryStats">ล้างค่าสถิติแบตเตอรี่</string>
   <string name="permdesc_resetBatteryStats">อนุญาตให้แอปล้างข้อมูลการใช้แบตเตอรี</string>
   <string name="permgrouplab_security">ความปลอดภัย</string>
@@ -84,6 +89,10 @@
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
   <string name="permlab_useHardwareFramework">ใช้ฮาร์ดแวร์เฟรมเวิร์ค</string>
   <string name="permdesc_useHardwareFramework">อนุญาตให้แอปเข้าถึง CM ฮาร์ดแวร์เฟรมเวิร์ค</string>
+  <string name="permlab_keyguardApplicationWidget">ตั้งค่าวิดเจ็ทล็อคหน้าจอ</string>
+  <string name="permdesc_keyguardApplicationWidget">อนุญาตให้แอปตั้งวิดเจ็ทล็อคหน้าจอ</string>
+  <string name="permlab_interceptPackageLaunch">ขัดขวางแอปอื่น</string>
+  <string name="permdesc_interceptPackageLaunch">อนุญาตให้แอปขัดขวางการทำงานของแอปอื่น</string>
   <string name="immersive_mode_confirmation_bottom">ปัดขึ้นจากด้านล่างเพื่อออกจากรูปแบบเต็มจอ</string>
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งของคุณ</string>

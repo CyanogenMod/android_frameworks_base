@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Performa</string>
   <string name="permlab_interceptSmsSent">cegah SMS keluar</string>
   <string name="permdesc_interceptSmsSent">Perbolehkan aplikasi untuk mencegah SMS keluar. Aplikasi berbahaya dapat menggunakan ini untuk mencegah pesan SMS keluar.</string>
+  <string name="permlab_receiveProtectedSms">terima SMS yang dilindungi</string>
+  <string name="permdesc_receiveProtectedSms">Izinkan aplikasi untuk menerima SMS masuk yang dilindungi.</string>
+  <string name="permlab_modifyProtectedSmsList">modifikasi daftar SMS yang dilindungi</string>
+  <string name="permdesc_modifyProtectedSmsList">Izinkan aplikasi untuk mengubah daftar alamat SMS yang dilindungi.</string>
   <string name="permlab_resetBatteryStats">atur ulang statistik baterai</string>
   <string name="permdesc_resetBatteryStats">Izinkan sebuah aplikasi menset ulang data penggunaan baterai lemah saat ini.</string>
   <string name="permgrouplab_security">Keamanan</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Izinkan app untuk mengakses framework hardware CM.</string>
   <string name="permlab_keyguardApplicationWidget">atur widget aplikasi pada layar kunci</string>
   <string name="permdesc_keyguardApplicationWidget">Izinkan sebuah aplikasi untuk mengatur widget aplikasi pada layar kunci.</string>
+  <string name="permlab_interceptPackageLaunch">Mencegat peluncuran aplikasi</string>
+  <string name="permdesc_interceptPackageLaunch">Izinkan sebuah aplikasi untuk mencegat peluncuran aplikasi lain</string>
   <string name="immersive_mode_confirmation_bottom">Swipe dari bawah ke atas untuk keluar dari layar penuh.</string>
   <string name="app_ops_access_camera">mengakses kamera</string>
   <string name="app_ops_access_location">mengakses lokasi anda</string>

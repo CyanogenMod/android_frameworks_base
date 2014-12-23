@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Teljesítménycentrikus</string>
   <string name="permlab_interceptSmsSent">kimenő SMS üzenetek elfogása</string>
   <string name="permdesc_interceptSmsSent">Lehetővé teszi az alkalmazás számára, hogy elfogja a kimenő SMS üzeneteket. A rosszindulatú alkalmazások ezt felhasználhatják az SMS-küldés blokkolására.</string>
+  <string name="permlab_receiveProtectedSms">védett SMS fogadása</string>
+  <string name="permdesc_receiveProtectedSms">Lehetővé teszi az alkalmazás számára, hogy védett SMS-t fogadjon.</string>
+  <string name="permlab_modifyProtectedSmsList">védett SMS lista módosítása</string>
+  <string name="permdesc_modifyProtectedSmsList">Lehetővé teszi az alkalmazás számára, hogy módosítsa a védett SMS címlistát.</string>
   <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
   <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse az akkumulátor használati adatokat</string>
   <string name="permgrouplab_security">Biztonság</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Lehetővé teszi az alkalmazás számára, hogy a CM hardver hozzáférjen a keretrendszerhez.</string>
   <string name="permlab_keyguardApplicationWidget">zárképernyő alkalmazás modul beállítása</string>
   <string name="permdesc_keyguardApplicationWidget">Lehetővé teszi az alkalmazás számára, hogy a zárképernyőn alkalmazás modult állításon be.</string>
+  <string name="permlab_interceptPackageLaunch">alkalmazás indítás megakadályozása</string>
+  <string name="permdesc_interceptPackageLaunch">Lehetővé teszi az alkalmazás számára, hogy megakadályozza más alkalmazások elindítását</string>
   <string name="immersive_mode_confirmation_bottom">Csúsztasson lentről felfelé a teljesképernyős módból való kilépéshez.</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
   <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>

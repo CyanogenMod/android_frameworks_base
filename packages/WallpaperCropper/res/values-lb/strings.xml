@@ -15,5 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crop_wallpaper">Hannergrondbild schneiden</string>
   <string name="wallpaper_instructions">Hannergrondbild setzen</string>
+  <string name="wallpaper_load_fail">D\'Bild konnt net als Hannergrondbild geluede ginn</string>
 </resources>

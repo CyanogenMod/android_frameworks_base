@@ -17,6 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="tethered_clients_connected">
+    <item quantity="one">%d istemci bağlandı</item>
     <item quantity="other">%d istemci bağlandı</item>
   </plurals>
 </resources>

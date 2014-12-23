@@ -134,4 +134,16 @@ modifiera det tema som du har tillämpat.</string>
   <string name="adb_net_active_notification_title">ADB över nätverk aktiverat</string>
   <string name="adb_both_active_notification_title">ADB över USB och nätverk aktiverat</string>
   <string name="adb_active_generic_notification_message">Tryck på för att inaktivera felsökning.</string>
+  <string name="usb_storage_notification_manage_message">Tryck för att hantera</string>
+  <string name="sd_ext_media_checking_notification_title">Förbereder SD-kortet\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">Kontrollerar SD-kort, söker efter fel\u2026</string>
+  <string name="sd_ext_media_nofs_notification_title">Tomt SD-kort</string>
+  <string name="sd_ext_media_unmountable_notification_title">Skadat SD-kort</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Det är nu säkert att ta bort SD-kortet</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Du kan säkert ta bort SD-kortet.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Tog bort SD-kortet</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kortet borttaget. Sätt in ett nytt.</string>
+  <string name="lockscreen_sim_error_message_short">Ogiltigt kort.</string>
+  <string name="lockscreen_airplane_mode_on">Flygplansläge</string>
+  <string name="pinpuk_attempts">\nFörsök kvar:</string>
 </resources>

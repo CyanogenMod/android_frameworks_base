@@ -2791,14 +2791,14 @@
     <string name="permdesc_writeHistoryBookmarks" product="tablet">Allows the
         app to modify the Browser\'s history or bookmarks stored on your tablet.
         This may allow the app to erase or modify Browser data.  Note: this
-        permission may note be enforced by third-party browsers or other
+        permission may not be enforced by third-party browsers or other
         applications with web browsing capabilities.</string>
     <!-- Description of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
     <string name="permdesc_writeHistoryBookmarks" product="default">Allows the
         app to modify the Browser\'s history or bookmarks stored on your phone.
         This may allow the app to erase or modify Browser data.  Note:
-        this permission may note be enforced by third-party browsers or other
+        this permission may not be enforced by third-party browsers or other
         applications with web browsing capabilities.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether
@@ -3627,12 +3627,12 @@
     <!-- Title of an application permission that lets an application access keyguard secure storage. -->
     <string name="permlab_access_keyguard_secure_storage">Access keyguard secure storage</string>
     <!-- Description of an application permission that lets an application access keyguard secure storage. -->
-    <string name="permdesc_access_keyguard_secure_storage">Allows an application to access keguard secure storage.</string>
+    <string name="permdesc_access_keyguard_secure_storage">Allows an application to access keyguard secure storage.</string>
 
     <!-- Title of an application permission that lets it control keyguard. -->
     <string name="permlab_control_keyguard">Control displaying and hiding keyguard</string>
     <!-- Description of an application permission that lets it control keyguard. -->
-    <string name="permdesc_control_keyguard">Allows an application to control keguard.</string>
+    <string name="permdesc_control_keyguard">Allows an application to control keyguard.</string>
 
     <!-- Shown in the tutorial for tap twice for zoom control. -->
     <string name="tutorial_double_tap_to_zoom_message_short">Touch twice for zoom control</string>

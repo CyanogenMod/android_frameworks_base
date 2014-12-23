@@ -45,7 +45,7 @@
   <string name="reboot_progress">再起動中\u2026</string>
   <string name="reboot_confirm" product="tablet">タブレットは再起動します。</string>
   <string name="reboot_confirm" product="default">携帯電話は再起動します。</string>
-  <string name="permlab_preventpower">電源キーを無効にする</string>
+  <string name="permlab_preventpower">電源キーの無効化</string>
   <string name="permdesc_preventpower">電源キーの無効化をアプリに許可します。</string>
   <string name="permlab_sendMockSms">疑似SMSメッセージの送信</string>
   <string name="permdesc_sendMockSms">疑似SMSメッセージの送信をアプリに許可します。これによりアプリは、信頼されたアプリケーションにメッセージを送信できるようになります。悪意のあるアプリが連続的にメッセージを送信したり、端末の通知システムをブロックしたり、ユーザーを混乱させるおそれがあります。</string>
@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">パフォーマンス</string>
   <string name="permlab_interceptSmsSent">送信するSMSの傍受</string>
   <string name="permdesc_interceptSmsSent">送信するSMSの傍受をアプリに許可します。悪意のあるアプリがメッセージの送信を阻止するおそれがあります。</string>
+  <string name="permlab_receiveProtectedSms">保護されたSMSの受信</string>
+  <string name="permdesc_receiveProtectedSms">保護されたSMSの受信をアプリに許可します。</string>
+  <string name="permlab_modifyProtectedSmsList">保護されたSMSリストの変更</string>
+  <string name="permdesc_modifyProtectedSmsList">保護されたSMSアドレスリストの変更をアプリに許可します。</string>
   <string name="permlab_resetBatteryStats">電池統計情報のリセット</string>
   <string name="permdesc_resetBatteryStats">現在の電池消費量の低レベルデータをリセットすることをアプリに許可します。</string>
   <string name="permgrouplab_security">セキュリティ</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">CMハードウェアフレームワークへのアクセスをアプリに許可します。</string>
   <string name="permlab_keyguardApplicationWidget">キーガードアプリウィジェットの設置</string>
   <string name="permdesc_keyguardApplicationWidget">キーガードにアプリウィジェットを設置することをアプリに許可します。</string>
+  <string name="permlab_interceptPackageLaunch">アプリケーションの起動の傍受</string>
+  <string name="permdesc_interceptPackageLaunch">他のアプリケーションの起動の傍受をアプリに許可します。</string>
   <string name="immersive_mode_confirmation_bottom">全画面表示を終了するには、上から下にスワイプ</string>
   <string name="app_ops_access_camera">カメラへのアクセス</string>
   <string name="app_ops_access_location">位置情報へのアクセス</string>

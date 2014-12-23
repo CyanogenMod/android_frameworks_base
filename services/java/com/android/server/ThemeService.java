@@ -43,7 +43,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.FileUtils;
@@ -62,9 +61,9 @@ import android.provider.ThemesContract.MixnMatchColumns;
 import android.provider.ThemesContract.ThemesColumns;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.URLUtil;
 
 import com.android.internal.R;
+import com.android.internal.util.cm.ImageUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -587,19 +586,11 @@ public class ThemeService extends IThemeService.Stub {
             } else if (TextUtils.isEmpty(pkgName)) {
                 wm.clearKeyguardWallpaper();
             } else {
-                //Get input WP stream from the theme
-                Context themeCtx = mContext.createPackageContext(pkgName,
-                        Context.CONTEXT_IGNORE_SECURITY);
-                AssetManager assetManager = themeCtx.getAssets();
-                String wpPath = ThemeUtils.getLockscreenWallpaperPath(assetManager);
-                if (wpPath == null) {
-                    Log.w(TAG, "Not setting lockscreen wp because wallpaper file was not found.");
-                    return false;
+                InputStream in = ImageUtils.getCroppedKeyguardStream(pkgName, mContext);
+                if (in != null) {
+                    wm.setKeyguardStream(in);
+                    ThemeUtils.closeQuietly(in);
                 }
-                InputStream is = ThemeUtils.getInputStreamFromAsset(themeCtx,
-                        "file:///android_asset/" + wpPath);
-
-                wm.setKeyguardStream(is);
             }
         } catch (Exception e) {
             Log.e(TAG, "There was an error setting lockscreen wp for pkg " + pkgName, e);
@@ -635,45 +626,9 @@ public class ThemeService extends IThemeService.Stub {
         } else {
             InputStream in = null;
             try {
-                Context themeContext = mContext.createPackageContext(pkgName,
-                        Context.CONTEXT_IGNORE_SECURITY);
-                boolean isLegacyTheme = c.getInt(
-                        c.getColumnIndex(ThemesColumns.IS_LEGACY_THEME)) == 1;
-                if (!isLegacyTheme) {
-                    String wallpaper = c.getString(
-                                c.getColumnIndex(ThemesColumns.WALLPAPER_URI));
-                    if (wallpaper != null) {
-                        if (URLUtil.isAssetUrl(wallpaper)) {
-                            in = ThemeUtils.getInputStreamFromAsset(themeContext, wallpaper);
-                        } else {
-                            in = mContext.getContentResolver().openInputStream(
-                                    Uri.parse(wallpaper));
-                        }
-                    } else {
-                        // try and get the wallpaper directly from the apk if the URI was null
-                        Context themeCtx = mContext.createPackageContext(pkgName,
-                                Context.CONTEXT_IGNORE_SECURITY);
-                        AssetManager assetManager = themeCtx.getAssets();
-                        String wpPath = ThemeUtils.getWallpaperPath(assetManager);
-                        if (wpPath == null) {
-                            Log.w(TAG, "Not setting wp because wallpaper file was not found.");
-                            return false;
-                        }
-                        in = ThemeUtils.getInputStreamFromAsset(themeCtx, "file:///android_asset/"
-                                + wpPath);
-                    }
+                in = ImageUtils.getCroppedWallpaperStream(pkgName, mContext);
+                if (in != null)
                     wm.setStream(in);
-                } else {
-                    PackageInfo pi = mPM.getPackageInfo(pkgName, 0);
-                    if (pi.legacyThemeInfos != null && pi.legacyThemeInfos.length > 0) {
-                        // we need to get an instance of the WallpaperManager using the theme's
-                        // context so it can retrieve the resource
-                        wm = WallpaperManager.getInstance(themeContext);
-                        wm.setResource(pi.legacyThemeInfos[0].wallpaperResourceId);
-                    } else {
-                        return false;
-                    }
-                }
             } catch (Exception e) {
                 return false;
             } finally {

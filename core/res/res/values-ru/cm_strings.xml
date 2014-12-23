@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Высокая производит.</string>
   <string name="permlab_interceptSmsSent">Перехват исходящих SMS</string>
   <string name="permdesc_interceptSmsSent">Приложение сможет перехватывать исходящие SMS. Вредоносные приложения могут использовать это разрешение, чтобы препятствовать отправке SMS-сообщений.</string>
+  <string name="permlab_receiveProtectedSms">Получение защищённых SMS</string>
+  <string name="permdesc_receiveProtectedSms">Приложение сможет получать входящие защищённые SMS-сообщения.</string>
+  <string name="permlab_modifyProtectedSmsList">Изменение списка защищённых SMS</string>
+  <string name="permdesc_modifyProtectedSmsList">Приложение сможет изменять список адресатов защищённых SMS-сообщений.</string>
   <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
   <string name="permdesc_resetBatteryStats">Приложение сможет очищать данные об использовании аккумуляторной батареи устройства.</string>
   <string name="permgrouplab_security">Безопасность</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Приложение сможет получать доступ к подсистеме аппаратных абстракций CyanogenMod.</string>
   <string name="permlab_keyguardApplicationWidget">установка виджета быстрого запуска для экрана блокировки</string>
   <string name="permdesc_keyguardApplicationWidget">Приложение сможет изменять виджет быстрого запуска на экране блокировки.</string>
+  <string name="permlab_interceptPackageLaunch">Перехват запуска приложений</string>
+  <string name="permdesc_interceptPackageLaunch">Приложение сможет перехватывать запуск других приложений на устройстве.</string>
   <string name="immersive_mode_confirmation_bottom">Чтобы вернуться в обычный режим, проведите пальцем вверх.</string>
   <string name="app_ops_access_camera">получить доступ к камере</string>
   <string name="app_ops_access_location">получить доступ к местоположению устройства</string>

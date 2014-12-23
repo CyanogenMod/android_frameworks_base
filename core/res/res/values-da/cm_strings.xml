@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Ydeevne</string>
   <string name="permlab_interceptSmsSent">blokér udgående SMS\'er</string>
   <string name="permdesc_interceptSmsSent">Tillader app\'en at blokere en udgående SMS. Ondsindede apps kan bruge dette til at forhindre udgående SMS-beskeder.</string>
+  <string name="permlab_receiveProtectedSms">modtag beskyttet SMS</string>
+  <string name="permdesc_receiveProtectedSms">Tillader at app\'en kan modtage en indgående beskyttet SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">rediger beskyttet SMS liste</string>
+  <string name="permdesc_modifyProtectedSmsList">Tillader at app\'en kan ændre den beskyttede SMS adresseliste.</string>
   <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
   <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
   <string name="permgrouplab_security">Sikkerhed</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Giver en app adgang til CM hardware framework.</string>
   <string name="permlab_keyguardApplicationWidget">placér app-widget på tastaturlås</string>
   <string name="permdesc_keyguardApplicationWidget">Gør det muligt for en app at placere appens widget på tastaturlåsen.</string>
+  <string name="permlab_interceptPackageLaunch">Opfang applikationsopstart</string>
+  <string name="permdesc_interceptPackageLaunch">Tillader en app at opfange opstarten af andre applikationer</string>
   <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen.</string>
   <string name="app_ops_access_camera">tilgå kameraet</string>
   <string name="app_ops_access_location">tilgå din placering</string>

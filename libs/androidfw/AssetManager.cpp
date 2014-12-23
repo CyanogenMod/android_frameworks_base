@@ -462,6 +462,7 @@ String8 AssetManager::getPkgName(const char *apkPath) {
 
         }
 
+        tree.uninit();
         manifestAsset->close();
         return pkgName;
     }

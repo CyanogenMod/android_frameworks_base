@@ -993,7 +993,11 @@
   <string name="permlab_readHistoryBookmarks">consultar l\'historial y marcadores web</string>
   <string name="permdesc_readHistoryBookmarks">Permite que l\'aplicación consulte l\'historial de toles URL visitaes pol restolador web y tolos sos marcadores. Nota: esti permisu nun puen usalu restoladores esternos nin otres aplicaciones que tengan funciones de navegación per Internet.</string>
   <string name="permlab_writeHistoryBookmarks">escribir nel historial y nos marcadores web</string>
-  <string name="permdesc_writeHistoryBookmarks" product="tablet">Permite que l\'aplicación modifique l\'historial o los marcadores del restolador almacenaos na tablet. L\'aplicación pue usar esti permisu pa desaniciar o modificar datos del restolador. Nota: esti permisu nun puen usalu restoladores esternos nin otres aplicaciones que tengan funciones de navegación per Internet.</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">Permite que
+        l\'app modificar l\'historial o los marcadores almacenaos na tableta del restolador.
+        Esto pue permitir a l\'app desaniciar o modificar datos del restolador: Nota: esti
+        permisu nun se pue facer cumplir en navegadores de terceros o otres apps
+        aplicaciones con capacidaes de navegación web.</string>
   <string name="permdesc_writeHistoryBookmarks" product="default">Permite que l\'aplicación modifique l\'historial o los marcadores del restolador almacenaos nel teléfonu. L\'aplicación pue usar esti permisu pa desaniciar o modificar datos del navegador. Nota: esti permisu nun puen usalu restoladores esternos nin otres aplicaciones que tengan funciones de navegación per Internet.</string>
   <string name="permlab_setAlarm">afitar una alarma</string>
   <string name="permdesc_setAlarm">Permite que l\'aplicación afite una alarma nuna aplicación de reló instalada. Ye dable que dalgunes aplicaciones de reló nun incluyan esta función.</string>

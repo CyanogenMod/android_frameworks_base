@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Επιδόσεις</string>
   <string name="permlab_interceptSmsSent">παρεμπόδιση εξερχόμενων SMS</string>
   <string name="permdesc_interceptSmsSent">Επιτρέπει στην εφαρμογή να παρεμποδίσει τα εξερχόμενα SMS. Κακόβουλες εφαρμογές μπορεί να το χρησιμοποιήσουν για να εμποδίσουν τη αποστολή SMS.</string>
+  <string name="permlab_receiveProtectedSms">λήψη προστατευμένων SMS</string>
+  <string name="permdesc_receiveProtectedSms">Επιτρέπει στην εφαρμογή να λαμβάνει εισερχόμενα προστατευμένα SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">τροποποίηση λίστας προστατευμένων SMS</string>
+  <string name="permdesc_modifyProtectedSmsList">Επιτρέπει στην εφαρμογή την τροποποίηση της λίστας προστατευμένων SMS.</string>
   <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
   <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
   <string name="permgrouplab_security">Ασφάλεια</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Επιτρέπει σε μια εφαρμογή την πρόσβαση στο πλαίσιο υλικού του CM.</string>
   <string name="permlab_keyguardApplicationWidget">ορισμός widget εφαρμογής οθόνης κλειδώματος</string>
   <string name="permdesc_keyguardApplicationWidget">Επιτρέπει σε μια εφαρμογή να ορίζει το widget εφαρμογής στην οθόνη κλειδώματος.</string>
+  <string name="permlab_interceptPackageLaunch">παρεμπόδιση έναρξης εφαρμογών</string>
+  <string name="permdesc_interceptPackageLaunch">Επιτρέπει σε μια εφαρμογή να παρεμποδίσει την έναρξη άλλων εφαρμογών</string>
   <string name="immersive_mode_confirmation_bottom">Σύρετε από το κάτω μέρος προς τα πάνω για να βγείτε από την πλήρη οθόνη</string>
   <string name="app_ops_access_camera">πρόσβαση στην φωτογρ. μηχανή</string>
   <string name="app_ops_access_location">πρόσβαση στην τοποθεσία σας</string>

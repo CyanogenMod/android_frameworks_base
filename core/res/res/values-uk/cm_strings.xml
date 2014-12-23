@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Продуктивність</string>
   <string name="permlab_interceptSmsSent">перехоплювати вихідні SMS</string>
   <string name="permdesc_interceptSmsSent">Дозволити програмі перехоплювати вихідні SMS. Небезпечні програми можуть використати цей доступ, щоб перешкоджати надсиланню вихідних SMS-повідомлень.</string>
+  <string name="permlab_receiveProtectedSms">отримувати захищені SMS</string>
+  <string name="permdesc_receiveProtectedSms">Дозволяє програмі отримувати захищені SMS.</string>
+  <string name="permlab_modifyProtectedSmsList">змінювати список захищених SMS</string>
+  <string name="permdesc_modifyProtectedSmsList">Дозволяє програмі змінювати список адрес захищених SMS.</string>
   <string name="permlab_resetBatteryStats">скинути статистику акумулятора</string>
   <string name="permdesc_resetBatteryStats">Дозволити програмі витирати дані про використання батареї пристрою.</string>
   <string name="permgrouplab_security">Безпека</string>
@@ -89,6 +93,8 @@
   <string name="permdesc_useHardwareFramework">Програма може отримувати доступ до підсистемних апаратних абстракцій CyanogenMod.</string>
   <string name="permlab_keyguardApplicationWidget">встановлення віджета швидкого запуску для екрану блокування</string>
   <string name="permdesc_keyguardApplicationWidget">Дозволити програмі змінювати віджет швидкого запуску на екрані блокування.</string>
+  <string name="permlab_interceptPackageLaunch">перехоплення запуску програми</string>
+  <string name="permdesc_interceptPackageLaunch">Дозволяє програмі перехоплювати запуск інших програм</string>
   <string name="immersive_mode_confirmation_bottom">Свайп вверх щоб вийти з повноекранного режиму</string>
   <string name="app_ops_access_camera">доступ до камери</string>
   <string name="app_ops_access_location">доступ до місцезнаходження</string>

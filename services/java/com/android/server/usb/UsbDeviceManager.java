@@ -649,8 +649,6 @@ public class UsbDeviceManager {
                 case MSG_UPDATE_STATE:
                     mConnected = (msg.arg1 == 1);
                     mConfigured = (msg.arg2 == 1);
-                    StorageManager storageManager = StorageManager.from(mContext);
-                    storageManager.setUsbMassStorageEnabled(mConnected);
                     updateUsbNotification();
                     updateAdbNotification();
                     if (containsFunction(mCurrentFunctions,

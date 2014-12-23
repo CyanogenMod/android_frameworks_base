@@ -17,5 +17,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Decupare fundal</string>
   <string name="wallpaper_instructions">Setare fundal</string>
-  <string name="wallpaper_load_fail">Nu am putut încărca imaginea ca fundal</string>
+  <string name="wallpaper_load_fail">Nu s-a putut încărca imaginea ca fundal</string>
 </resources>
