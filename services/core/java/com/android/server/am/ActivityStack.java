@@ -2515,9 +2515,24 @@ final class ActivityStack {
             ActivityRecord next = topRunningActivityLocked(null);
             if (next != r) {
                 final TaskRecord task = r.task;
-                if (r.frontOfTask && task == topTask() && task.isOverHomeStack()) {
-                    mStackSupervisor.moveHomeStackTaskToTop(task.getTaskToReturnTo(),
-                            reason + " adjustFocus");
+                if ((next == null || next.task != task) && r.frontOfTask) {
+                    if (task.isOverHomeStack() && task == topTask()) {
+                        mStackSupervisor.moveHomeStackTaskToTop(task.getTaskToReturnTo(),
+                                reason + " adjustFocus");
+                    } else {
+                        for (int taskNdx = mTaskHistory.size() - 1; taskNdx >= 0; --taskNdx) {
+                            final TaskRecord tr  = mTaskHistory.get(taskNdx);
+                            if (tr.getTopActivity() == null) {
+                                if (tr.isOverHomeStack()) {
+                                    mStackSupervisor.moveHomeStackTaskToTop(
+                                        task.getTaskToReturnTo(), reason + " adjustFocus");
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             ActivityRecord top = mStackSupervisor.topRunningActivityLocked();
