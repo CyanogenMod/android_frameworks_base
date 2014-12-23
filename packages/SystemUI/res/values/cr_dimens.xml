@@ -5,6 +5,6 @@
     <dimen name="net_traffic_single_text_size">12dp</dimen>
 
     <!-- Network traffic monitor multi-line text size -->
-    <dimen name="net_traffic_multi_text_size">9dp</dimen>
+    <dimen name="net_traffic_multi_text_size">7dp</dimen>
 
 </resources>
