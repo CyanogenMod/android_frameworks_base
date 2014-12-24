@@ -155,6 +155,13 @@ public abstract class Conference implements IConferenceable {
     public void onSeparate(Connection connection) {}
 
     /**
+     * Invoked when the conference adds a participant to the conference call.
+     *
+     * @param participant The participant to be added with conference call.
+     */
+    public void onAddParticipant(String participant) {}
+
+    /**
      * Invoked when the specified {@link Connection} should merged with the conference call.
      *
      * @param connection The {@code Connection} to merge.
