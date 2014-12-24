@@ -30,7 +30,13 @@ extern "C" {
 #define TYPE_DRM_CONTENT            0x49    /**< The mime type is "application/vnd.oma.drm.content" */
 #define TYPE_DRM_RIGHTS_XML         0x4a    /**< The mime type is "application/vnd.oma.drm.rights+xml" */
 #define TYPE_DRM_RIGHTS_WBXML       0x4b    /**< The mime type is "application/vnd.oma.drm.rights+wbxml" */
+#define TYPE_DRM_FL_CONTENT         0x50    /**< The mime type is fake, indicating forward locking encrypted content */
+#define TYPE_DRM_CD_CONTENT         0x51    /**< The mime type is fake, indicating combined forward encrypted content */
 #define TYPE_DRM_UNKNOWN            0xff    /**< The mime type is unknown */
+#define MIMETYPE_DRM_MESSAGE        "application/vnd.oma.drm.message"
+#define MIMETYPE_DRM_CONTENT        "application/vnd.oma.drm.content"
+#define MIMETYPE_DRM_RIGHTS_XML     "application/vnd.oma.drm.rights+xml"
+#define MIMETYPE_DRM_RIGHTS_WBXML   "applicatoin/vnd.oma.drm.rights+wbxml"
 
 /**
  * Define the delivery methods.
@@ -39,6 +45,7 @@ extern "C" {
 #define COMBINED_DELIVERY           2       /**< Combined delivery */
 #define SEPARATE_DELIVERY           3       /**< Separate delivery */
 #define SEPARATE_DELIVERY_FL        4       /**< Separate delivery but DCF is forward-lock */
+#define JAVA_APK                    5       /**< java apk */
 
 /**
  * Define the permissions.
@@ -73,6 +80,8 @@ extern "C" {
 #define DRM_RIGHTS_PENDING          -8
 #define DRM_RIGHTS_EXPIRED          -9
 #define DRM_UNKNOWN_DATA_LEN        -10
+#define DRM_MIMETYPE_INVALID        -11
+#define DRM_ROLLBACK_CLOCK          -12
 
 /**
  * The input DRM data structure, include DM, DCF, DR, DRC.
@@ -81,7 +90,7 @@ typedef struct _T_DRM_Input_Data {
     /**
      * The handle of the input DRM data.
      */
-    int32_t inputHandle;
+    int64_t inputHandle;
 
     /**
      * The mime type of the DRM data, if the mime type set to unknown, DRM engine
@@ -100,7 +109,7 @@ typedef struct _T_DRM_Input_Data {
      *      -A positive integer indicate the length of input data.
      *      -0, if some error occurred.
      */
-    int32_t (*getInputDataLength)(int32_t inputHandle);
+    int32_t (*getInputDataLength)(int64_t inputHandle);
 
     /**
      * The function to read the input data, this function should be implement by out module,
@@ -115,7 +124,7 @@ typedef struct _T_DRM_Input_Data {
      *      -0, if some error occurred.
      *      -(-1), if reach to the end of the data.
      */
-    int32_t (*readInputData)(int32_t inputHandle, uint8_t* buf, int32_t bufLen);
+    int32_t (*readInputData)(int64_t inputHandle, uint8_t* buf, int32_t bufLen);
 
     /**
      * The function to seek the current file pointer, this function should be implement by out module,
@@ -128,7 +137,7 @@ typedef struct _T_DRM_Input_Data {
      *      -0, if seek operation success.
      *      -(-1), if seek operation fail.
      */
-    int32_t (*seekInputData)(int32_t inputHandle, int32_t offset);
+    int32_t (*seekInputData)(int64_t inputHandle, int32_t offset);
 } T_DRM_Input_Data;
 
 /**
@@ -136,6 +145,7 @@ typedef struct _T_DRM_Input_Data {
  */
 typedef struct _T_DRM_Constraint_Info {
     uint8_t indicator;          /**< Whether there is a right */
+    uint8_t valid;              /**For rollback clock */
     uint8_t unUsed[3];
     int32_t count;              /**< The constraint of count */
     int32_t startDate;          /**< The constraint of start date */
@@ -151,6 +161,7 @@ typedef struct _T_DRM_Constraint_Info {
  */
 typedef struct _T_DRM_Rights_Info {
     uint8_t roId[256];                     /**< The unique id for a specially rights object */
+    int32_t bIsUnlimited;                   /**< Is unlimited */
     T_DRM_Constraint_Info playRights;       /**< Constraint of play */
     T_DRM_Constraint_Info displayRights;    /**< Constraint of display */
     T_DRM_Constraint_Info executeRights;    /**< Constraint of execute */
@@ -164,6 +175,19 @@ typedef struct _T_DRM_Rights_Info_Node {
     T_DRM_Rights_Info roInfo;
     struct _T_DRM_Rights_Info_Node *next;
 } T_DRM_Rights_Info_Node;
+
+typedef struct _DRM_ENC_CONTEXT {
+    int64_t handle;
+    void* ctx;
+} DRM_ENC_CONTEXT;
+
+typedef struct _DRM_DEC_CONTEXT {
+    char* buf;
+    int32_t pos;
+    int32_t id;
+    int32_t len;
+    int32_t type;
+} DRM_DEC_CONTEXT;
 
 /**
  * Install a rights object to DRM engine, include the rights in Combined Delivery cases.
@@ -216,6 +240,19 @@ int32_t SVC_drm_getDeliveryMethod(int32_t session);
  *      -DRM_FAILURE, when some other error occured.
  */
 int32_t SVC_drm_getContentType(int32_t session, uint8_t* mediaType);
+
+/**
+ * Get DRM object media object content ID.
+ *
+ * \param session   The handle for this DRM object session.
+ * \param contentID The buffer to save the content ID string, 256 bytes is enough.
+ *
+ * \return
+ *      -DRM_SUCCESS, when get the media object content type successfully.
+ *      -DRM_SESSION_NOT_OPENED, when the session is not opened or has been closed.
+ *      -DRM_FAILURE, when some other error occured.
+ */
+int32_t SVC_drm_getContentType(int32_t session, uint8_t* contentID);
 
 /**
  * Check whether a specific DRM object has the specific permission rights or not.
@@ -368,6 +405,16 @@ int32_t SVC_drm_freeRightsInfoList(T_DRM_Rights_Info_Node *pRightsHeader);
  *      -DRM_FAILURE, when some other error occured.
  */
 int32_t SVC_drm_deleteRights(uint8_t* roId);
+
+int32_t SVC_drm_installDRMObject(const uint8_t *filepath, const uint8_t *mime);
+
+int32_t SVC_drm_canBeAutoUsed(int32_t session, int32_t permission);
+
+int32_t SVC_drm_getContentRightsNum(int32_t session, int32_t* roAmount);
+
+int32_t SVC_drm_getContentRightsList(int32_t session, T_DRM_Rights_Info_Node** ppRightsInfo);
+
+int32_t SVC_drm_getContentID(int32_t session, uint8_t* contentID);
 
 #ifdef __cplusplus
 }

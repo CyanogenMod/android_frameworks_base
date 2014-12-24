@@ -194,7 +194,7 @@ int32_t DRM_file_exists(const uint16_t* name,
 int32_t DRM_file_open(const uint16_t* name,
                       int32_t nameChars,
                       int32_t mode,
-                      int32_t* handle);
+                      int64_t* handle);
 
 /**
  * Deletes a file given its name, UCS-2 encoded. The file or directory is
@@ -225,7 +225,7 @@ int32_t DRM_file_delete(const uint16_t* name,
  * @return #DRM_FILE_WOULDBLOCK, #DRM_FILE_SUCCESS, #DRM_FILE_FAILURE, #DRM_FILE_EOF
  *         or the number of bytes that were read, i.e. in the range 0..length.
  */
-int32_t DRM_file_read(int32_t handle,
+int32_t DRM_file_read(int64_t handle,
                       uint8_t* dst,
                       int32_t length);
 
@@ -246,7 +246,7 @@ int32_t DRM_file_read(int32_t handle,
  *         that were written. This number must be in the range 0..length.
  *         Returns #DRM_FILE_FAILURE when storage is full or exceeds quota.
  */
-int32_t DRM_file_write(int32_t handle,
+int32_t DRM_file_write(int64_t handle,
                        const uint8_t* src,
                        int32_t length);
 
@@ -258,7 +258,7 @@ int32_t DRM_file_write(int32_t handle,
  * @param handle File handle as returned by DRM_file_open().
  * @return #DRM_FILE_WOULDBLOCK, #DRM_FILE_SUCCESS, #DRM_FILE_FAILURE.
  */
-int32_t DRM_file_close(int32_t handle);
+int32_t DRM_file_close(int64_t handle);
 
 /**
  * Sets the current position in an opened file.
@@ -274,7 +274,7 @@ int32_t DRM_file_close(int32_t handle);
  * @return #DRM_FILE_WOULDBLOCK, #DRM_FILE_SUCCESS, #DRM_FILE_FAILURE.
  *         Returns #DRM_FILE_FAILURE when storage is full or exceeds quota.
  */
-int32_t DRM_file_setPosition(int32_t handle, int32_t value);
+int32_t DRM_file_setPosition(int64_t handle, int32_t value);
 
 /**
  * Creates a directory with the assigned name and full file permissions on
@@ -288,6 +288,9 @@ int32_t DRM_file_setPosition(int32_t handle, int32_t value);
  */
 int32_t DRM_file_mkdir(const uint16_t* name,
                        int32_t nameChars);
+
+int32_t DRM_file_copy (int64_t sourceHandle, int64_t targetHandle);
+int32_t DRM_file_truncate (uint64_t handle, uint32_t  start, int32_t end);
 
 #ifdef __cplusplus
 }

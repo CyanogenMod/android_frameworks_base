@@ -19,8 +19,13 @@
 #include <svc_drm.h>
 #include "log.h"
 
+#define LOG_TAG "libdrm:parse_dm"
+#define LOG_NDEBUG 0
+
 #define DRM_SKIP_SPACE_TAB(p) while( (*(p) == ' ') || (*(p) == '\t') ) \
                                   p++
+#define DRM_ERASE_TAIL_SPACE_TAB(p) while( ((p)[strlen((char *)p) - 1] == ' ') || ((p)[strlen((char *)p) - 1] == '\t') ) \
+                                        (p)[strlen((char *)p) - 1] = 0x0
 
 typedef enum _DM_PARSE_STATUS {
     DM_PARSE_START,
@@ -90,12 +95,16 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
     /* if can not find the CRLF, return FALSE */
     if (NULL == pEnd)
         return FALSE;
+    if ((pEnd - pStart) >= MAX_CONTENT_BOUNDARY_LEN)
+        return FALSE;
     strncpy((char *)pDmInfo->boundary, (char *)pStart, pEnd - pStart);
+    pDmInfo->boundary[MAX_CONTENT_BOUNDARY_LEN - 1] = 0;
     boundaryLen = strlen((char *)pDmInfo->boundary) + 2; /* 2 means: '\r' and '\n' */
 
     pEnd += 2; /* skip the '\r' and '\n' */
     pStart = pEnd;
     leftLen = pBufferEnd - pStart;
+    int32_t count = 0;
     do {
         pDmInfo->transferEncoding = DRM_MESSAGE_CODING_7BIT; /* According RFC2045 chapter 6.1, the default value should be 7bit.*/
         strcpy((char *)pDmInfo->contentType, "text/plain");  /* According RFC2045 chapter 5.2, the default value should be "text/plain". */
@@ -108,6 +117,10 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
 
             if (0 != pDmInfo->deliveryType) { /* This means the delivery type has been confirmed */
                 if (0 == strncmp((char *)pStart, HEADERS_TRANSFER_CODING, HEADERS_TRANSFER_CODING_LEN)) {
+                    if (count == 1 ) {
+                        status = DM_PARSING_CONTENT;
+                    }
+                    count++;
                     pStart += HEADERS_TRANSFER_CODING_LEN;
                     DRM_SKIP_SPACE_TAB(pStart);
 
@@ -126,6 +139,8 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
                     DRM_SKIP_SPACE_TAB(pStart);
 
                     if (pEnd - pStart > 0) {
+                        if ((pEnd - pStart) >= MAX_CONTENT_TYPE_LEN)
+                            return FALSE;
                         strncpy((char *)pDmInfo->contentType, (char *)pStart, pEnd - pStart);
                         pDmInfo->contentType[pEnd - pStart] = '\0';
                     }
@@ -146,13 +161,16 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
 
                     /* Change the format from <...> to cid:... */
                     if (NULL != (pTmp = (uint8_t *)memchr((char *)pStart, '<', pEnd - pStart))) {
+                        if ((pEnd - pTmp - 1) >= (int) sizeof(tmpBuf))
+                            return FALSE;
                         strncpy((char *)tmpBuf, (char *)(pTmp + 1), pEnd - pTmp - 1);
+                        tmpBuf[MAX_CONTENT_ID - 1] = 0;
 
                         if (NULL != (pTmp = (uint8_t *)memchr((char *)tmpBuf, '>', pEnd - pTmp - 1))) {
                             *pTmp = '\0';
 
                             memset(pDmInfo->contentID, 0, MAX_CONTENT_ID);
-                            sprintf((char *)pDmInfo->contentID, "%s%s", "cid:", (int8_t *)tmpBuf);
+                            snprintf((char *)pDmInfo->contentID, MAX_CONTENT_ID, "%s%s", "cid:", (int8_t *)tmpBuf);
                         }
                     }
                 }
@@ -165,6 +183,9 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
                         strncpy((char *)pDmInfo->contentType, (char *)pStart, pEnd - pStart);
                         pDmInfo->contentType[pEnd - pStart] = '\0';
                     }
+                    DRM_ERASE_TAIL_SPACE_TAB(pDmInfo->contentType);
+                    ALOGD ("pDmInfo->contentType [%s], len [%d]", pDmInfo->contentType, strlen ((char *)pDmInfo->contentType));
+                    ALOGD ("---------pDmInfo->contentID[%s]----",pDmInfo->contentID);
 
                     if (0 == strcmp((char *)pDmInfo->contentType, DRM_MIME_TYPE_RIGHTS_XML)) {
                         pDmInfo->deliveryType = COMBINED_DELIVERY;
@@ -232,7 +253,9 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
             {
                 T_DRM_DCF_Info dcfInfo;
                 uint8_t* pEncData = NULL;
-
+                /*these 2 only for sd-fl case*/
+                pDmInfo->dcfLen = contentLen;
+                pDmInfo->dcfOffset = pStart - buffer;
                 memset(&dcfInfo, 0, sizeof(T_DRM_DCF_Info));
                 if (DRM_UNKNOWN_DATA_LEN == contentLen)
                     contentLen = pEnd - pStart;
@@ -268,4 +291,79 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
     } while (DM_PARSE_END != status);
 
     return TRUE;
+}
+
+int32_t
+drm_findEndBoundary (uint64_t handle, uint8_t *boundary, uint32_t startOffset, uint32_t *endOffset)
+{
+    int32_t  pos;
+    //According to RFC2046, boundary delimiter must be no longer than 70 bytes.
+    uint8_t   endBoundary[MAX_CONTENT_BOUNDARY_LEN + 1] = {0x0};
+    uint32_t  boundaryLen = 0;
+    uint32_t  readBytes = 0;
+    uint8_t   crlf[2] = {0x0};
+    uint32_t  curPos;
+    ALOGD ("In drm_findEndBoundary, boundary [%s], startOffset [%d] \n", boundary, startOffset);
+    boundaryLen = strlen ((char *)boundary);
+    ALOGD ("boundary [%s], len [%d]", boundary, boundaryLen);
+
+    /*    From RFC2046
+     *
+     *    The boundary delimiter line following the last body part is a
+     *    distinguished delimiter that indicates that no further body parts
+     *    will follow.  Such a delimiter line is identical to the previous
+     *    delimiter lines, with the addition of two more hyphens after the
+     *    boundary parameter value.
+     *
+     *    --gc0pJq0M:08jU534c0p--
+     */
+    pos = -(boundaryLen + 2);
+
+    do {
+        ALOGD ("seek pos [%d] against the end\n", pos);
+        curPos = lseek (handle, pos, SEEK_END);
+        if (curPos <= startOffset) {
+            ALOGE ("Didn't found out the end boundary delimiter, curPos [%d], startOffset [%d]\n",
+                    curPos, startOffset);
+            return -1;
+        }
+
+        readBytes = read (handle, endBoundary, boundaryLen + 2);
+        if (readBytes < (boundaryLen + 2)) {
+            ALOGE ("read the end boundary delimiter, read buf len [%d]", readBytes);
+            continue;
+        }
+
+        ALOGD ("endBoundary [%s]", endBoundary);
+        if ((strncmp ((char *)endBoundary, (char *)boundary, boundaryLen) == 0)
+                && (endBoundary[boundaryLen] == '-')
+                && (endBoundary[boundaryLen + 1] == '-')) {
+            ALOGD ("Found out the end boundary delimiter !!!");
+            break;
+        }
+        pos--;
+    } while(1);
+
+    //CRLF should be parsed
+    curPos -= 2;
+    curPos = lseek (handle, curPos, SEEK_SET);
+    readBytes = read (handle, crlf, 2);
+    if (readBytes < 2) {
+        ALOGE ("read the end boundary delimiter error, read buf len [%d]", readBytes);
+        return -1;
+    }
+    if ((crlf[0] != 13) || (crlf[1] != 10)) {
+        ALOGE ("CRLF didn't found");
+        return -1;
+    }
+    ALOGD ("start positin [%d], end position [%d] of real content\n", startOffset, curPos);
+    if (curPos < startOffset) {
+        ALOGE ("curPos [%d] < startOffset [%d]", curPos, startOffset);
+        return -1;
+    }
+
+    *endOffset = curPos;
+
+    ALOGD ("end boundary offset [%d]", *endOffset);
+    return 0;
 }

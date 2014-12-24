@@ -22,7 +22,16 @@
 #include <drm_rights_manager.h>
 #include <drm_time.h>
 #include <drm_decoder.h>
+#include <drm_file.h>
+#include <drm_i18n.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <stdio.h>
 #include "log.h"
+
+#define LOG_TAG "libdrm:drm_api"
+#define LOG_NDEBUG 0
 
 /**
  * Current id.
@@ -33,6 +42,58 @@ static int32_t curID = 0;
  * The header pointer for the session list.
  */
 static T_DRM_Session_Node* sessionTable = NULL;
+
+#define TEMP_PATH "/data/local/.Drm/.drmtmp"
+
+#define USING_MIX_SOLUTION
+
+/*
+ * license StartTime is current server time, device time maybe delay with server time.
+ * for customer experience, have a grace time period.
+ */
+#define    DRM_GRACE_TIME_PERIOD        5*60
+
+static void dumpRights(T_DRM_Rights rights);
+
+#ifdef DRM_ROLLBACKCLOCK
+static int32_t drm_checkRollBackClock (T_DRM_Rights_Constraint *XXConstraint)
+{
+    T_DB_TIME_SysTime curDateTime;
+    T_DRM_DATETIME CurrentTime;
+
+    ALOGD ("Enter drm_checkRollBackClock");
+
+    if (0 == (XXConstraint->Indicator & (DRM_START_TIME_CONSTRAINT | DRM_END_TIME_CONSTRAINT))) {
+        ALOGD ("Leave drm_checkRollBackClock, Not a date-time right");
+        return DRM_SUCCESS;
+    }
+
+    DRM_time_getSysTime(&curDateTime);
+
+    if (-1 == drm_checkDate(curDateTime.year, curDateTime.month, curDateTime.day,
+                            curDateTime.hour, curDateTime.min, curDateTime.sec))
+        return DRM_FAILURE;
+
+    YMD_HMS_2_INT(curDateTime.year, curDateTime.month, curDateTime.day,
+                  CurrentTime.date, curDateTime.hour, curDateTime.min,
+                  curDateTime.sec, CurrentTime.time);
+
+    if (XXConstraint->SavedDatetime.date > CurrentTime.date
+            || (XXConstraint->SavedDatetime.date == CurrentTime.date
+                    && XXConstraint->SavedDatetime.time > CurrentTime.time)) {
+        ALOGE ("clock rollback, current date [%d] time [%d], saved date [%d] time [%d]",
+                  CurrentTime.date, CurrentTime.time, XXConstraint->SavedDatetime.date,
+                  XXConstraint->SavedDatetime.time);
+        return DRM_ROLLBACK_CLOCK;
+    }
+
+    XXConstraint->SavedDatetime.date = CurrentTime.date;
+    XXConstraint->SavedDatetime.time = CurrentTime.time;
+
+    ALOGD ("Leave drm_checkRollBackClock, No rollback clock");
+    return DRM_SUCCESS;
+}
+#endif //DRM_ROLLBACKCLOCK
 
 /**
  * New a session.
@@ -152,6 +213,14 @@ static int32_t getMimeType(const uint8_t *buf, int32_t bufLen)
     if (0x01 == *p)
         return TYPE_DRM_CONTENT;
 
+    /* check if it is DRM Forward Lock encrypted content */
+    if (0xfe == *p)
+        return TYPE_DRM_FL_CONTENT;
+
+    /* check if it is DRM Combined Delivery encrypted content */
+    if (0xff == *p)
+        return TYPE_DRM_CD_CONTENT;
+
     /* check if it is DRM Message, only check the first two bytes, it must be the start flag of boundary: "--" */
     if (bufLen >= 2 && '-' == *p && '-' == *(p + 1))
         return TYPE_DRM_MESSAGE;
@@ -219,9 +288,27 @@ static int32_t drm_getLicenseInfo(T_DRM_Rights* pRights, T_DRM_Rights_Info* lice
 {
     if (NULL != licenseInfo && NULL != pRights) {
         strcpy((char *)licenseInfo->roId, (char *)pRights->uid);
+        if (TRUE == pRights->bIsUnlimited) {
+            licenseInfo->bIsUnlimited = TRUE;
+            licenseInfo->displayRights.indicator = pRights->DisplayConstraint.Indicator;
+            licenseInfo->playRights.indicator = pRights->PlayConstraint.Indicator;
+            licenseInfo->executeRights.indicator = pRights->ExecuteConstraint.Indicator;
+            licenseInfo->printRights.indicator = pRights->PrintConstraint.Indicator;
+
+            return TRUE;
+        }
 
         if (1 == pRights->bIsDisplayable) {
             licenseInfo->displayRights.indicator = pRights->DisplayConstraint.Indicator;
+            #ifdef DRM_ROLLBACKCLOCK
+            if (drm_checkRollBackClock (&pRights->DisplayConstraint) != DRM_SUCCESS)
+                licenseInfo->displayRights.valid = FALSE;
+            else
+                licenseInfo->displayRights.valid = TRUE;
+            #else
+                licenseInfo->displayRights.valid = TRUE;
+            #endif //DRM_ROLLBACKCLOCK
+
             licenseInfo->displayRights.count =
                 pRights->DisplayConstraint.Count;
             licenseInfo->displayRights.startDate =
@@ -239,6 +326,14 @@ static int32_t drm_getLicenseInfo(T_DRM_Rights* pRights, T_DRM_Rights_Info* lice
         }
         if (1 == pRights->bIsPlayable) {
             licenseInfo->playRights.indicator = pRights->PlayConstraint.Indicator;
+            #ifdef DRM_ROLLBACKCLOCK
+            if (drm_checkRollBackClock (&(pRights->PlayConstraint)) != DRM_SUCCESS)
+                licenseInfo->playRights.valid = FALSE;
+            else
+                licenseInfo->playRights.valid = TRUE;
+            #else
+                licenseInfo->playRights.valid = TRUE;
+            #endif //DRM_ROLLBACKCLOCK
             licenseInfo->playRights.count = pRights->PlayConstraint.Count;
             licenseInfo->playRights.startDate =
                 pRights->PlayConstraint.StartTime.date;
@@ -255,6 +350,14 @@ static int32_t drm_getLicenseInfo(T_DRM_Rights* pRights, T_DRM_Rights_Info* lice
         }
         if (1 == pRights->bIsExecuteable) {
             licenseInfo->executeRights.indicator = pRights->ExecuteConstraint.Indicator;
+            #ifdef DRM_ROLLBACKCLOCK
+            if (drm_checkRollBackClock (&pRights->ExecuteConstraint) != DRM_SUCCESS)
+                licenseInfo->executeRights.valid = FALSE;
+            else
+                licenseInfo->executeRights.valid = TRUE;
+            #else
+                licenseInfo->executeRights.valid = TRUE;
+            #endif //DRM_ROLLBACKCLOCK
             licenseInfo->executeRights.count =
                 pRights->ExecuteConstraint.Count;
             licenseInfo->executeRights.startDate =
@@ -272,6 +375,14 @@ static int32_t drm_getLicenseInfo(T_DRM_Rights* pRights, T_DRM_Rights_Info* lice
         }
         if (1 == pRights->bIsPrintable) {
             licenseInfo->printRights.indicator = pRights->PrintConstraint.Indicator;
+            #ifdef DRM_ROLLBACKCLOCK
+            if (drm_checkRollBackClock (&pRights->PrintConstraint) != DRM_SUCCESS)
+                licenseInfo->printRights.valid = FALSE;
+            else
+                licenseInfo->printRights.valid = TRUE;
+            #else
+                licenseInfo->printRights.valid = TRUE;
+            #endif //DRM_ROLLBACKCLOCK
             licenseInfo->printRights.count =
                 pRights->PrintConstraint.Count;
             licenseInfo->printRights.startDate =
@@ -353,6 +464,17 @@ static int32_t drm_startConsumeRights(int32_t * bIsXXable,
                       curDateTime.sec, CurrentTime.time);
     }
 
+/* Implemented RollBack Clock.*/
+    #ifdef DRM_ROLLBACKCLOCK
+    if (drm_checkRollBackClock (XXConstraint) != DRM_SUCCESS) {
+        *writeFlag = 1;
+        *bIsXXable = 1; /* Assume have valid rights, but can't consume it as rollback clock */
+        return DRM_ROLLBACK_CLOCK;
+    }
+    *writeFlag = 1;
+    #endif //DRM_ROLLBACKCLOCK
+
+#if 0
     if (0 != (uint8_t)(XXConstraint->Indicator & DRM_COUNT_CONSTRAINT)) { /* Have count restrict? */
         *writeFlag = 1;
         /* If it has only one time for use, after use this function, we will delete this rights */
@@ -366,11 +488,12 @@ static int32_t drm_startConsumeRights(int32_t * bIsXXable,
             countFlag = 1;
         }
     }
+#endif
 
     if (0 != (uint8_t)(XXConstraint->Indicator & DRM_START_TIME_CONSTRAINT)) {
         if (XXConstraint->StartTime.date > CurrentTime.date ||
             (XXConstraint->StartTime.date == CurrentTime.date &&
-             XXConstraint->StartTime.time >= CurrentTime.time)) {
+             XXConstraint->StartTime.time >= CurrentTime.time + DRM_GRACE_TIME_PERIOD)) {
             *bIsXXable = 1;
             return DRM_RIGHTS_PENDING;
         }
@@ -390,7 +513,7 @@ static int32_t drm_startConsumeRights(int32_t * bIsXXable,
         int32_t year, mon, day, hour, min, sec, date, time;
         int32_t ret;
 
-        XXConstraint->Indicator |= DRM_END_TIME_CONSTRAINT;
+        XXConstraint->Indicator |= (DRM_START_TIME_CONSTRAINT | DRM_END_TIME_CONSTRAINT);
         XXConstraint->Indicator &= ~DRM_INTERVAL_CONSTRAINT; /* Write off interval right */
         *writeFlag = 1;
 
@@ -400,6 +523,15 @@ static int32_t drm_startConsumeRights(int32_t * bIsXXable,
         }
         date = CurrentTime.date + XXConstraint->Interval.date;
         time = CurrentTime.time + XXConstraint->Interval.time;
+
+        if ((XXConstraint->EndTime.date != 0)
+                && (XXConstraint->EndTime.date < date
+                        || (XXConstraint->EndTime.date == date
+                                && XXConstraint->EndTime.time <= time))) {
+             date = XXConstraint->EndTime.date;
+             time = XXConstraint->EndTime.time;
+        }
+
         INT_2_YMD_HMS(year, mon, day, date, hour, min, sec, time);
 
         if (sec > 59) {
@@ -432,10 +564,26 @@ static int32_t drm_startConsumeRights(int32_t * bIsXXable,
         }
         YMD_HMS_2_INT(year, mon, day, XXConstraint->EndTime.date, hour,
                       min, sec, XXConstraint->EndTime.time);
+        XXConstraint->StartTime = CurrentTime;
     }
 
-    if (1 != countFlag)
-        *bIsXXable = 1; /* Can go here ,so  right must be valid */
+    if (0 != (uint8_t) (XXConstraint->Indicator & DRM_COUNT_CONSTRAINT)) { /* Have count restrict? */
+        *writeFlag = 1;
+        ALOGD("Before count %d\n", XXConstraint->Count);
+
+        if (XXConstraint->Count-- <= 1) {
+            XXConstraint->Indicator &= ~DRM_COUNT_CONSTRAINT;
+            countFlag = 1;
+            *bIsXXable = 0;
+            ALOGD("remain the last time, *bIsXXable  [%d]\n", *bIsXXable );
+            return DRM_SUCCESS;
+        }
+
+        ALOGD("After count %d\n", XXConstraint->Count);
+    }
+    //if (1 != countFlag)
+    *bIsXXable = 1; /* Can go here ,so  right must be valid */
+
     return DRM_SUCCESS;
 }
 
@@ -450,11 +598,17 @@ static int32_t drm_startCheckRights(int32_t * bIsXXable,
     if (NULL == bIsXXable || 0 == *bIsXXable || NULL == XXConstraint)
         return DRM_FAILURE;
 
-    if (0 != (uint8_t)(XXConstraint->Indicator & DRM_NO_CONSTRAINT)) /* Have utter right? */
+    if (0 != (uint8_t)(XXConstraint->Indicator & DRM_NO_CONSTRAINT)) { /* Have utter right? */
+        *bIsXXable = 1;
+        ALOGD ("Leave %s, rights is valid", __FUNCTION__);
         return DRM_SUCCESS;
+    }
 
     *bIsXXable = 0; /* Assume have invalid rights at first */
-
+    #ifdef DRM_ROLLBACKCLOCK
+    if (drm_checkRollBackClock (XXConstraint) != DRM_SUCCESS)
+        return DRM_ROLLBACK_CLOCK;
+    #endif //DRM_ROLLBACKCLOCK
     if (0 != (XXConstraint->Indicator & (DRM_START_TIME_CONSTRAINT | DRM_END_TIME_CONSTRAINT))) {
         DRM_time_getSysTime(&curDateTime);
 
@@ -466,18 +620,18 @@ static int32_t drm_startCheckRights(int32_t * bIsXXable,
                       CurrentTime.date, curDateTime.hour, curDateTime.min,
                       curDateTime.sec, CurrentTime.time);
     }
-
+#if 0
     if (0 != (uint8_t)(XXConstraint->Indicator & DRM_COUNT_CONSTRAINT)) { /* Have count restrict? */
         if (XXConstraint->Count <= 0) {
             XXConstraint->Indicator &= ~DRM_COUNT_CONSTRAINT;
             return DRM_RIGHTS_EXPIRED;
         }
     }
-
+#endif
     if (0 != (uint8_t)(XXConstraint->Indicator & DRM_START_TIME_CONSTRAINT)) {
         if (XXConstraint->StartTime.date > CurrentTime.date ||
             (XXConstraint->StartTime.date == CurrentTime.date &&
-             XXConstraint->StartTime.time >= CurrentTime.time)) {
+             XXConstraint->StartTime.time >= CurrentTime.time + DRM_GRACE_TIME_PERIOD)) {
             *bIsXXable = 1;
             return DRM_RIGHTS_PENDING;
         }
@@ -487,18 +641,24 @@ static int32_t drm_startCheckRights(int32_t * bIsXXable,
         if (XXConstraint->EndTime.date < CurrentTime.date ||
             (XXConstraint->EndTime.date == CurrentTime.date &&
              XXConstraint->EndTime.time <= CurrentTime.time)) {
-            XXConstraint->Indicator &= ~DRM_END_TIME_CONSTRAINT;
+            XXConstraint->Indicator = DRM_NO_PERMISSION;
             return DRM_RIGHTS_EXPIRED;
         }
     }
 
     if (0 != (uint8_t)(XXConstraint->Indicator & DRM_INTERVAL_CONSTRAINT)) { /* Have interval time restrict? */
         if (XXConstraint->Interval.date == 0 && XXConstraint->Interval.time == 0) {
-            XXConstraint->Indicator &= ~DRM_INTERVAL_CONSTRAINT;
+            XXConstraint->Indicator = DRM_NO_PERMISSION;
             return DRM_RIGHTS_EXPIRED;
         }
     }
-
+    if (0 != (uint8_t)(XXConstraint->Indicator & DRM_COUNT_CONSTRAINT)) { /* Have count restrict? */
+        if (XXConstraint->Count <= 0) {
+            ALOGD("Count [%d], invalid right", XXConstraint->Count);
+            *bIsXXable = 1;
+            return DRM_SUCCESS;
+        }
+    }
     *bIsXXable = 1;
     return DRM_SUCCESS;
 }
@@ -537,6 +697,7 @@ int32_t drm_checkRoAndUpdate(int32_t id, int32_t permission)
 
     /** check the right priority */
     pNumOfPriority = malloc(sizeof(int32_t) * roAmount);
+    memset(pNumOfPriority, 0, sizeof(int32_t) * roAmount);
     for(i = 0; i < roAmount; i++) {
         iNum = roAmount - 1;
         for(j = 0; j < roAmount; j++) {
@@ -636,6 +797,8 @@ int32_t drm_checkRoAndUpdate(int32_t id, int32_t permission)
             flag =
                 drm_startConsumeRights(&pCurRo->bIsPlayable,
                                        &pCurRo->PlayConstraint, &writeFlag);
+            ALOGD ("after drm_startConsumeRights, pCurRo->bIsPlayable [%d], writeFlag [%d], count [%d], indicator [%x]",
+                      pCurRo->bIsPlayable, writeFlag, pCurRo->PlayConstraint.Count, pCurRo->PlayConstraint.Indicator);
             break;
         case DRM_PERMISSION_DISPLAY:
             flag =
@@ -703,6 +866,445 @@ int32_t drm_checkRoAndUpdate(int32_t id, int32_t permission)
     return flag;
 }
 
+static int32_t convertMimetype(const uint8_t *mimetype)
+{
+    if (mimetype == NULL)
+        return TYPE_DRM_UNKNOWN;
+
+    if (strncmp((const char*)mimetype, MIMETYPE_DRM_MESSAGE, sizeof(MIMETYPE_DRM_MESSAGE)) == 0)
+        return TYPE_DRM_MESSAGE;
+    else if (strncmp((const char*)mimetype, MIMETYPE_DRM_CONTENT, sizeof(MIMETYPE_DRM_CONTENT)) == 0)
+        return TYPE_DRM_CONTENT;
+    else if (strncmp((const char*)mimetype, MIMETYPE_DRM_RIGHTS_XML, sizeof(MIMETYPE_DRM_RIGHTS_XML)) == 0)
+        return TYPE_DRM_RIGHTS_XML;
+    else if (strncmp((const char*)mimetype, MIMETYPE_DRM_RIGHTS_WBXML, sizeof(MIMETYPE_DRM_RIGHTS_WBXML)) == 0)
+        return TYPE_DRM_RIGHTS_WBXML;
+    else
+        return TYPE_DRM_UNKNOWN;
+}
+
+static int32_t getDRMObjectDataLength(int64_t handle)
+{
+    struct stat sbuf;
+
+    if (fstat((int)handle, &sbuf) != 0) {
+        ALOGE("Failed to stat %d file information\n", handle);
+        return 0;
+    }
+
+    if (sbuf.st_size >= INT32_MAX) {
+        ALOGE("DRM_file_getFileLength: file too big");
+        return 0;
+    }
+
+    return (int32_t)sbuf.st_size;
+}
+
+static int32_t readDRMObjectData(int64_t handle,uint8_t *buf, int32_t bufLen)
+{
+    int32_t result;
+
+    result = read(handle, buf, bufLen);
+
+    if (result > 0 )
+        return result;
+
+    return (result == 0) ? -1 : 0;
+}
+
+static int32_t seekDRMObjectData(int64_t handle, int32_t offset)
+{
+    off_t result;
+
+    result = lseek( (int)handle, (off_t)offset, SEEK_SET);
+    return ( result == (off_t)-1 ) ? -1 : 0;
+}
+
+static void dumpDM(const T_DRM_DM_Info *dmInfo)
+{
+    ALOGD("DRM Message struct info:%p\n", dmInfo);
+    ALOGD("\t content type:%s\n", dmInfo->contentType);
+    ALOGD("\t content id:%s\n", dmInfo->contentID);
+    ALOGD("\t boundary:%s\n", dmInfo->boundary);
+    ALOGD("\t delivery type %d\n", dmInfo->deliveryType);
+    ALOGD("\t transferEncoding:%d\n", dmInfo->transferEncoding);
+    ALOGD("\t content offset:0x%0x\n", dmInfo->contentOffset);
+    ALOGD("\t content length:%d\n", dmInfo->contentLen);
+    ALOGD("\t dcf offset:0x%0x\n", dmInfo->dcfOffset);
+    ALOGD("\t dcf length:%d\n", dmInfo->dcfLen);
+    ALOGD("\t right offset:0x%0x\n", dmInfo->rightsOffset);
+    ALOGD("\t rightsLen:%d\n", dmInfo->rightsLen);
+    ALOGD("\t rightsURL:%s\n", dmInfo->rightsIssuer);
+}
+
+static void dumpDCF(T_DRM_DCF_Info info)
+{
+    ALOGD("info.Version %d\n", info.Version);
+    ALOGD("info.ContentTypeLen %d\n", info.ContentTypeLen);
+    ALOGD("info.ContentURILen %d\n", info.ContentURILen);
+    ALOGD("info.ContentType %s\n", info.ContentType);
+    ALOGD("info.ContentURI %s\n", info.ContentURI);
+    ALOGD("info.HeadersLen %d\n", info.HeadersLen);
+    ALOGD("info.EncryptedDataLen %d\n", info.EncryptedDataLen);
+    ALOGD("info.Encryption_Method %s\n", info.Encryption_Method);
+    ALOGD("info.Rights_Issuer %s\n", info.Rights_Issuer);
+    ALOGD("info.Content_Name %s\n", info.Content_Name);
+    ALOGD("info.ContentDescription %s\n", info.ContentDescription);
+    ALOGD("info.ContentVendor %s\n", info.ContentVendor);
+    ALOGD("info.Icon_URI %s\n", info.Icon_URI);
+}
+
+static void dumpRights(T_DRM_Rights rights)
+{
+    ALOGD("rights.Version: %s\n", rights.Version);
+    ALOGD("rights.uid: %s\n", rights.uid);
+//  ALOGD("rights.KeyValue: %s\n", rights.KeyValue);
+    ALOGD("rights.bIsPlayable: %d\n", rights.bIsPlayable);
+    ALOGD("rights.bIsDisplayable: %d\n", rights.bIsDisplayable);
+    ALOGD("rights.bIsExcuteable: %d\n", rights.bIsExecuteable);
+    ALOGD("rights.bIsPrintable: %d\n", rights.bIsPrintable);
+
+    if (rights.bIsPlayable) {
+        ALOGD("rights.PlayConstraint.Indicator: 0x%x\n", rights.PlayConstraint.Indicator);
+#ifdef DRM_ROLLBACKCLOCK
+        ALOGD("rights.PlayConstraint.SavedDatetime.date: %d\n", rights.PlayConstraint.SavedDatetime.date);
+        ALOGD("rights.PlayConstraint.SavedDatetime.time: %d\n", rights.PlayConstraint.SavedDatetime.time);
+#endif //DRM_ROLLBACKCLOCK
+        ALOGD("rights.PlayConstraint.Count: %d\n", rights.PlayConstraint.Count);
+        ALOGD("rights.PlayConstraint.StartTime.date: %d\n", rights.PlayConstraint.StartTime.date);
+        ALOGD("rights.PlayConstraint.StartTime.time: %d\n", rights.PlayConstraint.StartTime.time);
+        ALOGD("rights.PlayConstraint.EndTime.date: %d\n", rights.PlayConstraint.EndTime.date);
+        ALOGD("rights.PlayConstraint.EndTime.time: %d\n", rights.PlayConstraint.EndTime.time);
+        ALOGD("rights.PlayConstraint.Interval.date: %d\n", rights.PlayConstraint.Interval.date);
+        ALOGD("rights.PlayConstraint.Interval.time: %d\n", rights.PlayConstraint.Interval.time);
+    }
+
+    if (rights.bIsDisplayable) {
+        ALOGD("rights.DisplayConstraint.Indicator: 0x%x\n", rights.DisplayConstraint.Indicator);
+#ifdef DRM_ROLLBACKCLOCK
+        ALOGD("rights.PlayConstraint.SavedDatetime.date: %d\n", rights.PlayConstraint.SavedDatetime.date);
+        ALOGD("rights.PlayConstraint.SavedDatetime.time: %d\n", rights.PlayConstraint.SavedDatetime.time);
+#endif //DRM_ROLLBACKCLOCK
+        ALOGD("rights.DisplayConstraint.Count: %d\n", rights.DisplayConstraint.Count);
+        ALOGD("rights.DisplayConstraint.StartTime.date: %d\n", rights.DisplayConstraint.StartTime.date);
+        ALOGD("rights.DisplayConstraint.StartTime.time: %d\n", rights.DisplayConstraint.StartTime.time);
+        ALOGD("rights.DisplayConstraint.EndTime.date: %d\n", rights.DisplayConstraint.EndTime.date);
+        ALOGD("rights.DisplayConstraint.EndTime.time: %d\n", rights.DisplayConstraint.EndTime.time);
+        ALOGD("rights.DisplayConstraint.Interval.date: %d\n", rights.DisplayConstraint.Interval.date);
+        ALOGD("rights.DisplayConstraint.Interval.time: %d\n", rights.DisplayConstraint.Interval.time);
+    }
+
+    if (rights.bIsExecuteable) {
+        ALOGD("rights.ExecuteConstraint.Indicator: 0x%x\n", rights.ExecuteConstraint.Indicator);
+#ifdef DRM_ROLLBACKCLOCK
+        ALOGD("rights.PlayConstraint.SavedDatetime.date: %d\n", rights.PlayConstraint.SavedDatetime.date);
+        ALOGD("rights.PlayConstraint.SavedDatetime.time: %d\n", rights.PlayConstraint.SavedDatetime.time);
+#endif //DRM_ROLLBACKCLOCK
+        ALOGD("rights.ExecuteConstraint.Count: %d\n", rights.ExecuteConstraint.Count);
+        ALOGD("rights.ExecuteConstraint.StartTime.date: %d\n", rights.ExecuteConstraint.StartTime.date);
+        ALOGD("rights.ExecuteConstraint.StartTime.time: %d\n", rights.ExecuteConstraint.StartTime.time);
+        ALOGD("rights.ExecuteConstraint.EndTime.date: %d\n", rights.ExecuteConstraint.EndTime.date);
+        ALOGD("rights.ExecuteConstraint.EndTime.time: %d\n", rights.ExecuteConstraint.EndTime.time);
+        ALOGD("rights.ExecuteConstraint.Interval.date: %d\n", rights.ExecuteConstraint.Interval.date);
+        ALOGD("rights.ExecuteConstraint.Interval.time: %d\n", rights.ExecuteConstraint.Interval.time);
+    }
+
+    if (rights.bIsPrintable) {
+        ALOGD("rights.PrintConstraint.Indicator: 0x%x\n", rights.PrintConstraint.Indicator);
+#ifdef DRM_ROLLBACKCLOCK
+        ALOGD("rights.PlayConstraint.SavedDatetime.date: %d\n", rights.PlayConstraint.SavedDatetime.date);
+        ALOGD("rights.PlayConstraint.SavedDatetime.time: %d\n", rights.PlayConstraint.SavedDatetime.time);
+#endif //DRM_ROLLBACKCLOCK
+        ALOGD("rights.PrintConstraint.Count: %d\n", rights.PrintConstraint.Count);
+        ALOGD("rights.PrintConstraint.StartTime.date: %d\n", rights.PrintConstraint.StartTime.date);
+        ALOGD("rights.PrintConstraint.StartTime.time: %d\n", rights.PrintConstraint.StartTime.time);
+        ALOGD("rights.PrintConstraint.EndTime.date: %d\n", rights.PrintConstraint.EndTime.date);
+        ALOGD("rights.PrintConstraint.EndTime.time: %d\n", rights.PrintConstraint.EndTime.time);
+        ALOGD("rights.PrintConstraint.Interval.date: %d\n", rights.PrintConstraint.Interval.date);
+        ALOGD("rights.PrintConstraint.Interval.time: %d\n", rights.PrintConstraint.Interval.time);
+    }
+}
+
+static int32_t drm_installDRMMessage(const uint8_t *filepath)
+{
+    int32_t ret = DRM_FAILURE;
+    uint8_t *rawContent = NULL;
+    uint8_t *tmpBuf = NULL;
+//  uint8_t dcfFileName[MAX_FILENAME_LEN + 4] = {'\0'}; //+".dcf"
+    int64_t handle = -1;
+    int32_t bytesConsumed;
+    int32_t fileRes;
+    int32_t fileLength;
+    int32_t rawContentLen = 0;
+    int64_t tmpHandle = -1;
+    int32_t tmpFileLen = 0;
+    int32_t result;
+    int32_t len = 0;
+    mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+
+    T_DRM_DM_Info dmInfo;
+    T_DRM_Enc_Context *ctx = NULL;
+    T_DRM_Rights* pRights = NULL;
+    uint32_t  endBoundaryOffset = 0;
+
+    ALOGD("drm_installDRMMessage : Going to install DRM Message, filepath = %s", filepath);
+
+    handle = open((char*) filepath, O_RDWR);
+    ALOGI("handle value = %d", handle);
+    if (handle < 0) {
+        ALOGE("Failed to open file %s", filepath);
+        return DRM_FAILURE;
+    }
+
+    fileLength = getDRMObjectDataLength(handle);
+    if (fileLength <= 0){
+        ALOGE("Invalid file length");
+        ret = DRM_FAILURE;
+        goto exit;
+    }
+
+    ALOGD("Got the file length %d", fileLength);
+
+    /*remove the tmp file first to make sure there is no files*/
+    unlink(TEMP_PATH);
+    tmpHandle = open(TEMP_PATH, O_RDWR | O_CREAT, mode);
+    if (tmpHandle < 0) {
+        ALOGE("Failed to open tmp file ");
+        ret = DRM_FAILURE;
+        goto exit;
+    }
+
+    //assumed that 50k is enough for mime head or CD right
+    if (fileLength > DRM_MAX_MALLOC_LEN)
+        rawContentLen = DRM_MAX_MALLOC_LEN;
+    else
+        rawContentLen = fileLength;
+
+    rawContent = (uint8_t*) malloc(rawContentLen);
+    if (rawContent == NULL) {
+        ALOGE("No enough memory for the file content");
+        ret = DRM_FAILURE;
+        goto exit;
+    }
+
+    fileRes = read(handle, rawContent, rawContentLen);
+    ALOGD("Got %d from DRM_file_read", fileRes);
+    if (fileRes != rawContentLen) {
+        ALOGE("readed buf length [%d] < to read buf length [%d]", fileRes, rawContentLen);
+        ret = DRM_FAILURE;
+        goto exit;
+
+    }
+
+    ALOGI("Going to install DRM Message");
+
+    memset(&dmInfo, 0, sizeof(T_DRM_DM_Info));
+
+    if (FALSE == drm_parseDM(rawContent, fileRes, &dmInfo)) {
+        ALOGE("Oooh, parse DRM Message failed");
+
+        ret = DRM_FAILURE;
+        goto exit;
+    }
+
+    ALOGI("ParseDm success");
+
+    //For file size is more than 50k, find out the real content length
+    if (dmInfo.contentLen == DRM_UNKNOWN_DATA_LEN) {
+        if (drm_findEndBoundary (handle, dmInfo.boundary, dmInfo.contentOffset, &endBoundaryOffset)) {
+            ret = DRM_FAILURE;
+            goto exit;
+        }
+
+        dmInfo.contentLen = endBoundaryOffset - dmInfo.contentOffset;
+    }
+
+    dumpDM(&dmInfo);
+
+    if (COMBINED_DELIVERY == dmInfo.deliveryType) {
+        ALOGE("It is combined delivery, parse the right first.\n");
+        pRights = (T_DRM_Rights*)malloc(sizeof(T_DRM_Rights));
+        memset(pRights, 0, sizeof(T_DRM_Rights));
+        if (drm_relParser(rawContent + dmInfo.rightsOffset, dmInfo.rightsLen, TYPE_DRM_RIGHTS_XML, pRights) == FALSE) {
+            ret = DRM_FAILURE;
+            goto exit;
+        }
+        memset(dmInfo.contentID, 0, MAX_CONTENT_ID);
+        strcpy((char *)dmInfo.contentID , (char *)pRights->uid);
+        dumpRights(*pRights);
+    }
+
+    if (SEPARATE_DELIVERY_FL == dmInfo.deliveryType) {
+        //For file size is more than 50k, find out the real content length
+        if (dmInfo.dcfLen == DRM_UNKNOWN_DATA_LEN) {
+            if (drm_findEndBoundary(handle, dmInfo.boundary, dmInfo.dcfOffset, &endBoundaryOffset)) {
+                ret = DRM_FAILURE;
+                goto exit;
+            }
+
+            dmInfo.dcfLen = endBoundaryOffset - dmInfo.dcfOffset;
+        }
+
+        ALOGD ("FLSD dcfOffset [%d], dcfLen [%d]", dmInfo.dcfOffset, dmInfo.dcfLen);
+
+        if (DRM_file_truncate(handle, dmInfo.dcfOffset, dmInfo.dcfOffset + dmInfo.dcfLen) != 0)
+            ret = DRM_FAILURE;
+        else
+            ret = DRM_SUCCESS;
+
+        goto exit;
+    }
+
+    
+    result = drm_initEncSession(&ctx, &dmInfo, pRights, tmpHandle);
+    ALOGI("initEncSession, result = %d", result);
+    if (result < 0) {
+        ALOGE("Failed to initEncSession with %d\n", result);
+        ret = DRM_FAILURE;
+        goto exit;
+    }
+
+    result = drm_generateDCFHeader(ctx);
+    ALOGI("generateDCFHeader, retult = %d", result);
+    if (result < 0) {
+        ALOGE("Failed to generateDcfHeader with %d\n", result);
+        ret = DRM_FAILURE;
+        drm_abortEncSession(ctx);
+        goto exit;
+    }
+
+    ALOGD("(fileRes:dmInfo.contentOffset:dmInfo.contentLen)(%d:%d:%d)\n",
+            fileRes, dmInfo.contentOffset, dmInfo.contentLen);
+
+    result = drm_encContent(ctx, handle);
+    ALOGI("encContent , result = %d", result);
+    if (result < 0) {
+        ALOGE("Failed to encrypt content with %d\n", result);
+        ret = DRM_FAILURE;
+        drm_abortEncSession(ctx);
+        goto exit;
+    }
+
+    drm_releaseEncSession(ctx);
+
+    //Copy the encrypted content from temp file to original file
+    DRM_file_copy (tmpHandle, handle);
+
+    ret = DRM_SUCCESS;
+
+exit:
+    if (handle >= 0) {
+        close(handle);
+    }
+
+    if (rawContent != NULL) {
+        free(rawContent);
+    }
+
+    if (tmpHandle >= 0) {
+        close(tmpHandle);
+    }
+
+    if (tmpBuf != NULL)
+        free(tmpBuf);
+
+    if (pRights) {
+        free(pRights);
+    }
+
+    unlink(TEMP_PATH);
+
+    if (ret == DRM_SUCCESS) {
+        //returning drm type in case of success
+        ALOGE("returing dmInfo.deliveryType = %d\n", dmInfo.deliveryType);
+        ret = dmInfo.deliveryType;
+    }
+    return ret;
+}
+
+static int32_t drm_installDRMRights(const uint8_t *filepath, int32_t mimetype)
+{
+    int32_t ret = DRM_FAILURE;
+    int64_t handle = -1;
+    T_DRM_Input_Data data;
+    T_DRM_Rights_Info rightsInfo;
+
+    ALOGD("Going to install DRM rights\n");
+
+    handle = open((char*)filepath, O_RDONLY);
+    if (handle < 0) {
+        ALOGE("Failed to open file %s\n", filepath);
+        return DRM_FAILURE;
+    }
+    ALOGD("Going to install Rights object\n");
+
+    memset(&data, 0, sizeof(data));
+    memset(&rightsInfo, 0, sizeof(rightsInfo));
+
+    data.inputHandle = (int64_t)handle;
+    data.mimeType = mimetype;
+    data.getInputDataLength = getDRMObjectDataLength;
+    data.readInputData = readDRMObjectData;
+    data.seekInputData = seekDRMObjectData;
+
+    ALOGD("Going to SVC_drm_installRights\n");
+
+    ret = SVC_drm_installRights(data, &rightsInfo);
+
+    ALOGD("SVC_drm_installRights with result %d\n",ret);
+
+exit:
+    if (handle >= 0)
+        close(handle);
+    unlink((char*)filepath);
+
+    return ret;
+}
+
+/*
+ * Public Interface to install DRM Object
+ */
+int32_t SVC_drm_installDRMObject(const uint8_t *filepath, const uint8_t *mime)
+{
+    ALOGI("SVC_drm_installDRMObject");
+    int32_t mimetype;
+
+    if (filepath == NULL || mime == NULL) {
+        ALOGE("Invalid argument for filepath %p, mimetype %p\n", filepath, mime);
+        return DRM_MIMETYPE_INVALID;
+    }
+
+    ALOGD("Going to install DRM object with filepath %s, mimetype %s\n", filepath, mime);
+
+    mimetype = convertMimetype(mime);
+    if (mimetype == TYPE_DRM_UNKNOWN) {
+        ALOGE("Failed to parse the mimetype with result %d\n", mimetype);
+        return DRM_MIMETYPE_INVALID;
+    }
+
+    ALOGD("New interface to install DRM Object\n");
+
+    switch (mimetype) {
+        case TYPE_DRM_MESSAGE:
+            return drm_installDRMMessage(filepath);
+
+        case TYPE_DRM_CONTENT:
+            ALOGD("Going to install DRM content, nothing special\n");
+            /*
+             * Need not anything special
+             */
+            //return DRM_SUCCESS;
+            return SEPARATE_DELIVERY;
+        case TYPE_DRM_RIGHTS_XML:
+        case TYPE_DRM_RIGHTS_WBXML:
+            return drm_installDRMRights(filepath, mimetype);
+
+        default:
+            ALOGD("Ahhh, not support mimetype %d\n", mimetype);
+
+            return DRM_FAILURE;
+    }
+}
 
 /* see svc_drm.h */
 int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsInfo)
@@ -710,7 +1312,7 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
     uint8_t *buf;
     int32_t dataLen, bufLen;
     T_DRM_Rights rights;
-
+    ALOGD("Into SVC_drm_installRights\n");
     if (0 == data.inputHandle)
         return DRM_RIGHTS_DATA_INVALID;
 
@@ -770,6 +1372,7 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
             free(buf);
             return DRM_RIGHTS_DATA_INVALID;
         }
+        dumpRights(rights);
         break;
     case TYPE_DRM_CONTENT: /* DCF should not using "SVC_drm_installRights", it should be used to open a session. */
     case TYPE_DRM_UNKNOWN:
@@ -786,7 +1389,7 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
 
     memset(pRightsInfo, 0, sizeof(T_DRM_Rights_Info));
     drm_getLicenseInfo(&rights, pRightsInfo);
-
+    ALOGD("SVC_drm_installRights Success\n");
     return DRM_SUCCESS;
 }
 
@@ -797,18 +1400,24 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
     int32_t dataLen;
     T_DRM_Session_Node* s;
 
-    if (0 == data.inputHandle)
+    if (FALSE == data.inputHandle) {
+        ALOGE("Fail! data.inputHandle = 0");
         return DRM_MEDIA_DATA_INVALID;
+    }
 
+    ALOGI("Get input data length");
     /* Get input data length */
     dataLen = data.getInputDataLength(data.inputHandle);
-    if (dataLen <= 0)
+    if (dataLen <= 0){
+        ALOGE("Fail! Invalide data. dataLen <= 0 ");
         return DRM_MEDIA_DATA_INVALID;
+    }
 
     s = newSession(data);
     if (NULL == s)
         return DRM_FAILURE;
 
+    ALOGI("Check if the length is larger than DRM max malloc length ");
     /* Check if the length is larger than DRM max malloc length */
     if (dataLen > DRM_MAX_MALLOC_LEN)
         s->rawContentLen = DRM_MAX_MALLOC_LEN;
@@ -819,16 +1428,18 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
     if (NULL == s->rawContent)
         return DRM_FAILURE;
 
+    ALOGI("Read input data to buffer");
     /* Read input data to buffer */
     if (0 >= data.readInputData(data.inputHandle, s->rawContent, s->rawContentLen)) {
         freeSession(s);
         return DRM_MEDIA_DATA_INVALID;
     }
 
+    ALOGI("if the input mime type is unknown, DRM engine will try to recognize it.");
     /* if the input mime type is unknown, DRM engine will try to recognize it. */
     if (TYPE_DRM_UNKNOWN == data.mimeType)
         data.mimeType = getMimeType(s->rawContent, s->rawContentLen);
-
+    ALOGD("Got the mime type is %d\n", data.mimeType);
     switch(data.mimeType) {
     case TYPE_DRM_MESSAGE:
         {
@@ -841,6 +1452,21 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
             }
 
             s->deliveryMethod = dmInfo.deliveryType;
+            if (COMBINED_DELIVERY == dmInfo.deliveryType) {
+                T_DRM_Rights* pRights = NULL;
+                ALOGE("It is combined delivery, parse the right first.\n");
+                pRights = (T_DRM_Rights*)malloc(sizeof(T_DRM_Rights));
+                memset(pRights, 0, sizeof(T_DRM_Rights));
+                if (drm_relParser(s->rawContent + dmInfo.rightsOffset, dmInfo.rightsLen, TYPE_DRM_RIGHTS_XML, pRights) == FALSE) {
+                    return DRM_FAILURE;
+                }
+                memset(dmInfo.contentID, 0, MAX_CONTENT_ID);
+                strcpy((char *)dmInfo.contentID , (char *)pRights->uid);
+                strcpy((char *)s->contentID , (char *)pRights->uid);
+                dumpRights(*pRights);
+                if (pRights) free(pRights);
+                pRights = NULL;
+            }
 
             if (SEPARATE_DELIVERY_FL == s->deliveryMethod)
                 s->contentLength = DRM_UNKNOWN_DATA_LEN;
@@ -1025,21 +1651,36 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
             }
         }
         break;
+    case TYPE_DRM_FL_CONTENT:
+    case TYPE_DRM_CD_CONTENT:
+            s->isEncrypted = 1;
+        /** Fall through */
     case TYPE_DRM_CONTENT:
         {
             T_DRM_DCF_Info dcfInfo;
             uint8_t* pEncData = NULL;
 
             memset(&dcfInfo, 0, sizeof(T_DRM_DCF_Info));
+            ALOGI("start dcf parser");
             if (FALSE == drm_dcfParser(s->rawContent, s->rawContentLen, &dcfInfo, &pEncData)) {
                 freeSession(s);
+                ALOGD("DRM_MEDIA_DATA_INVALID");
                 return DRM_MEDIA_DATA_INVALID;
             }
+            dumpDCF(dcfInfo);
 
             s->infoStruct = (T_DRM_Dcf_Node *)malloc(sizeof(T_DRM_Dcf_Node));
             if (NULL == s->infoStruct)
                 return DRM_FAILURE;
             memset(s->infoStruct, 0, sizeof(T_DRM_Dcf_Node));
+            ALOGD("data.mimeType is %d\n", data.mimeType);
+            //s->deliveryMethod = SEPARATE_DELIVERY;
+            if (data.mimeType == TYPE_DRM_FL_CONTENT)
+                s->deliveryMethod = FORWARD_LOCK;
+            else if (data.mimeType == TYPE_DRM_CD_CONTENT)
+                s->deliveryMethod = COMBINED_DELIVERY;
+            else
+                s->deliveryMethod = SEPARATE_DELIVERY;
 
             s->deliveryMethod = SEPARATE_DELIVERY;
             s->contentLength = dcfInfo.DecryptedDataLen;
@@ -1048,6 +1689,8 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
             strcpy((char *)s->contentType, (char *)dcfInfo.ContentType);
             strcpy((char *)s->contentID, (char *)dcfInfo.ContentURI);
             strcpy((char *)((T_DRM_Dcf_Node *)(s->infoStruct))->rightsIssuer, (char *)dcfInfo.Rights_Issuer);
+            ALOGD ("try to cache content key");
+            drm_getKey(s->contentID, s->key);
         }
         break;
     case TYPE_DRM_RIGHTS_XML:   /* rights object should using "SVC_drm_installRights", it can not open a session */
@@ -1066,8 +1709,32 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
 
         if (TRUE == drm_getKey(s->contentID, keyValue)) {
             seekPos = s->contentOffset + ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength - DRM_TWO_AES_BLOCK_LEN;
+            //when the file size is bigger than 50K, we will read the two last bolcks
+            //to calculate file size.
+            //when google give another solution that can resolve 50K issues, then please
+            //remove this codes.   b073/Wei Yongqiang
+#ifdef USING_GOOGLE_SOLUTION
+            ALOGD("Restore to google solution with delivery method %d\n", s->deliveryMethod);
             memcpy(lastDcfBuf, s->rawContent + seekPos, DRM_TWO_AES_BLOCK_LEN);
-
+#elif defined( USING_MIX_SOLUTION)
+            //ALOGD("Using mixed solution with deliverMethod %d\n", s->deliveryMethod); //Incorrect log
+            if (s->seekInputDataFunc != NULL) {
+                s->seekInputDataFunc(s->inputHandle, seekPos);
+                if (-1 == s->readInputDataFunc(s->inputHandle, lastDcfBuf, DRM_TWO_AES_BLOCK_LEN)) {
+                    ALOGE("SVC_drm_getContentLength read fail");
+                    return DRM_MEDIA_DATA_INVALID;
+                }
+            } else{
+                memcpy(lastDcfBuf, s->rawContent + seekPos, DRM_TWO_AES_BLOCK_LEN);
+            }
+#else
+            ALOGD("Using the seek solution instead of google with delivery method %d\n", s->deliveryMethod);
+            s->seekInputDataFunc(s->inputHandle, seekPos);
+            if (-1 == s->readInputDataFunc(s->inputHandle, lastDcfBuf, DRM_TWO_AES_BLOCK_LEN)) {
+                LOGE("SVC_drm_getContentLength read fail");
+                return DRM_MEDIA_DATA_INVALID;
+            }
+#endif
             if (TRUE == drm_updateDcfDataLen(lastDcfBuf, keyValue, &moreBytes)) {
                 s->contentLength = ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength;
                 s->contentLength -= moreBytes;
@@ -1101,6 +1768,9 @@ int32_t SVC_drm_getDeliveryMethod(int32_t session)
 int32_t SVC_drm_getContentType(int32_t session, uint8_t* mediaType)
 {
     T_DRM_Session_Node* s;
+    uint8_t *pSemicolon = NULL;
+
+    ALOGD("Enter in SVC_drm_getContentType.\n");
 
     if (session < 0 || NULL == mediaType)
         return DRM_FAILURE;
@@ -1111,6 +1781,40 @@ int32_t SVC_drm_getContentType(int32_t session, uint8_t* mediaType)
 
     strcpy((char *)mediaType, (char *)s->contentType);
 
+    /*
+     * According RFC2045 chapter 5.1, Syntax of Content-Type Header Field
+     *      content := "Content-Type" ":" type "/" subtype
+     *                 *(";" parameter)
+     *                 ; Matching of media type and subtype
+     *                 ; is ALWAYS case-insensitive.
+     *
+     * Only get the string "type/subtype", omit the remaining string
+     */
+
+    pSemicolon = strstr(mediaType, DRM_SEMICOLON);
+    if (pSemicolon)
+        *pSemicolon = '\0';
+
+    ALOGD("Leave SVC_drm_getContentType, contentType = [%s]", mediaType);
+
+    return DRM_SUCCESS;
+}
+
+/* see svc_drm.h */
+int32_t SVC_drm_getContentID(int32_t session, uint8_t* contentID)
+{
+    T_DRM_Session_Node* s;
+    ALOGD("Enter in SVC_drm_getContentID.\n");
+
+    if (session < 0 || NULL == contentID)
+        return DRM_FAILURE;
+
+    s = getSession(session);
+    if (NULL == s)
+        return DRM_SESSION_NOT_OPENED;
+
+    strcpy((char *)contentID, (char *)s->contentID);
+
     return DRM_SUCCESS;
 }
 
@@ -1120,7 +1824,7 @@ int32_t SVC_drm_checkRights(int32_t session, int32_t permission)
     T_DRM_Session_Node* s;
     int32_t id;
     T_DRM_Rights *pRo, *pCurRo;
-    int32_t roAmount;
+    int32_t roAmount, position;
     int32_t i;
     int32_t res = DRM_FAILURE;
 
@@ -1187,6 +1891,12 @@ int32_t SVC_drm_checkRights(int32_t session, int32_t permission)
         if (DRM_SUCCESS == res) {
             free(pRo);
             return DRM_SUCCESS;
+        } else {
+            position = i + 1;
+            if (FALSE == drm_writeOrReadInfo(id, pCurRo, &position, SAVE_A_RO)) {
+                return DRM_FAILURE;
+            }
+            ALOGD("=========position is %d\n", position);
         }
         pCurRo++;
     }
@@ -1200,6 +1910,9 @@ int32_t SVC_drm_consumeRights(int32_t session, int32_t permission)
 {
     T_DRM_Session_Node* s;
     int32_t id;
+    int32_t re;
+
+    ALOGD("Enter in SVC_drm_consumeRights.\n");
 
     if (session < 0)
         return DRM_FAILURE;
@@ -1221,7 +1934,15 @@ int32_t SVC_drm_consumeRights(int32_t session, int32_t permission)
     if (FALSE == drm_readFromUidTxt(s->contentID, &id, GET_ID))
         return DRM_FAILURE;
 
-    return drm_checkRoAndUpdate(id, permission);
+    //return drm_checkRoAndUpdate(id, permission);
+    if ((re = drm_checkRoAndUpdate(id, permission)) != DRM_SUCCESS) {
+        ALOGE ("update RO failed");
+        memset (s->key, 0x0, DRM_KEY_LEN);
+    }
+
+    ALOGD("Leave SVC_drm_consumeRights, re [%d]\n", re);
+
+    return re;
 }
 
 /* see svc_drm.h */
@@ -1235,24 +1956,69 @@ int32_t SVC_drm_getContentLength(int32_t session)
     s = getSession(session);
     if (NULL == s)
         return DRM_SESSION_NOT_OPENED;
-
+    //when the file size is bigger than 50K, we will read the two last bolcks
+    //to calculate file size.
+    //when google give another solution that can resolve 50K issues, then please
+    //remove this codes.   b073/Wei Yongqiang
+#ifdef USING_GOOGLE_SOLUTION
+    ALOGD("Restore to google solution with deliver method %d\n", s->deliveryMethod);
+    ALOGD("DRM_UNKNOWN_DATA_LEN 0x%x, content length: 0x%x, offset 0x%x, encContentLength 0x%x, Max Length 0x%x\n",
+            DRM_UNKNOWN_DATA_LEN,
+            s->contentLength,
+            s->contentOffset,
+            ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength,
+            DRM_MAX_MALLOC_LEN);
     if (DRM_UNKNOWN_DATA_LEN == s->contentLength && s->contentOffset + ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength <= DRM_MAX_MALLOC_LEN &&
         (SEPARATE_DELIVERY == s->deliveryMethod || SEPARATE_DELIVERY_FL == s->deliveryMethod)) {
+#else //MIX solution and Seek solution
+    ALOGD("Using Seek solution instead of google solution with deliver method %d\n", s->deliveryMethod);
+
+    if (DRM_UNKNOWN_DATA_LEN == s->contentLength && (SEPARATE_DELIVERY == s->deliveryMethod || SEPARATE_DELIVERY_FL == s->deliveryMethod)) {
+#endif
         uint8_t keyValue[DRM_KEY_LEN];
         uint8_t lastDcfBuf[DRM_TWO_AES_BLOCK_LEN];
         int32_t seekPos, moreBytes;
 
+        ALOGI("Got valide data! contentID=%d, deliveryMethod = %d , contentLength=%d", s->contentID, s->deliveryMethod, s->contentLength );
         if (TRUE == drm_getKey(s->contentID, keyValue)) {
             seekPos = s->contentOffset + ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength - DRM_TWO_AES_BLOCK_LEN;
+#ifdef USING_GOOGLE_SOLUTION
+            ALOGD("Restore to google solution with delive method %d\n", s->deliveryMethod);
             memcpy(lastDcfBuf, s->rawContent + seekPos, DRM_TWO_AES_BLOCK_LEN);
+#elif defined(USING_MIX_SOLUTION)
+            ALOGD("Using Mix solution with deliveryMethod %d\n", s->deliveryMethod);
+            if (s->seekInputDataFunc != NULL) {
+                s->seekInputDataFunc(s->inputHandle, seekPos);
+                if (-1 == s->readInputDataFunc(s->inputHandle, lastDcfBuf, DRM_TWO_AES_BLOCK_LEN)) {
+                    ALOGE("SVC_drm_getContentLength read fail");
+                    return DRM_MEDIA_DATA_INVALID;
+                }
+            } else {
+                if (s->contentOffset + ((T_DRM_Dcf_Node*)(s->infoStruct))->encContentLength <= DRM_MAX_MALLOC_LEN) {
+                    memcpy(lastDcfBuf, s->rawContent + seekPos, DRM_TWO_AES_BLOCK_LEN);
+                } else {
+                    ALOGE("Overflow with buffer, exit\n");
+                    goto out;
+                }
+            }
+#else
+            ALOGD("Using Seek solution instead of google solution with delivery method %d\n", s->deliveryMethod);
 
+            s->seekInputDataFunc(s->inputHandle, seekPos);
+            if (-1 == s->readInputDataFunc(s->inputHandle, lastDcfBuf, DRM_TWO_AES_BLOCK_LEN)) {
+                ALOGE("SVC_drm_getContentLength read fail");
+                return DRM_MEDIA_DATA_INVALID;
+            }
+#endif
+            ALOGD("Going to updateDCFDataLen\n");
             if (TRUE == drm_updateDcfDataLen(lastDcfBuf, keyValue, &moreBytes)) {
                 s->contentLength = ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength;
                 s->contentLength -= moreBytes;
             }
         }
     }
-
+out:
+    ALOGD("Going out with content length %d of the session %p\n", s->contentLength, s);
     return s->contentLength;
 }
 
@@ -1478,13 +2244,13 @@ static int32_t drm_readBinaryContentFromInputStream(T_DRM_Session_Node* s, int32
 
     if (NULL != s->readBuf && s->readBufLen > 0) { /* read from backup buffer */
         if (leftLen <= s->readBufLen) {
-            memcpy(mediaBuf + readBytes, s->readBuf + s->readBufOff, leftLen);
+            memcpy(mediaBuf, s->readBuf + s->readBufOff, leftLen);
             s->readBufOff += leftLen;
             s->readBufLen -= leftLen;
             readBytes += leftLen;
             leftLen = 0;
         } else {
-            memcpy(mediaBuf + readBytes, s->readBuf + s->readBufOff, s->readBufLen);
+            memcpy(mediaBuf, s->readBuf + s->readBufOff, s->readBufLen);
             s->readBufOff += s->readBufLen;
             leftLen -= s->readBufLen;
             readBytes += s->readBufLen;
@@ -1575,12 +2341,19 @@ static int32_t drm_readAesContent(T_DRM_Session_Node* s, int32_t offset, uint8_t
     uint8_t keyValue[DRM_KEY_LEN];
     uint8_t buf[DRM_TWO_AES_BLOCK_LEN];
     int32_t readBytes = 0;
-    int32_t bufLen, piece, i, copyBytes, leftBytes;
+    int32_t bufLen, piece, i, copyBytes = 0, leftBytes;
     int32_t aesStart, mediaStart, mediaBufOff;
     AES_KEY key;
-
+#if 0
     if (FALSE == drm_getKey(s->contentID, keyValue))
         return DRM_NO_RIGHTS;
+#endif
+    memset (keyValue, 0x0, DRM_KEY_LEN);
+    if (!memcmp (s->key, keyValue, DRM_KEY_LEN)) {
+        ALOGE ("cann't get content key");
+        return DRM_NO_RIGHTS;
+    }
+    memcpy (keyValue, s->key, DRM_KEY_LEN);
 
     /* when the content length has been well-known */
     if (s->contentLength > 0) {
@@ -1603,8 +2376,27 @@ static int32_t drm_readAesContent(T_DRM_Session_Node* s, int32_t offset, uint8_t
         mediaBufOff = 0;
         leftBytes = readBytes;
 
+        //Here might be updated to support following case:
+        //when the file size is bigger than 50K, we will read the two last bolcks
+        //to calculate file size.
+        //when google give another solution that can resolve 50K issues, then please
+        //remove this codes.   b073
+
         for (i = 0; i < piece - 1; i++) {
+#ifdef USING_GOOGLE_SOLUTION
             memcpy(buf, s->rawContent + aesStart + i * DRM_ONE_AES_BLOCK_LEN, DRM_TWO_AES_BLOCK_LEN);
+#elif defined (USING_MIX_SOLUTION)
+            if (s->seekInputDataFunc != NULL) {
+                s->seekInputDataFunc(s->inputHandle, (aesStart + i * DRM_ONE_AES_BLOCK_LEN));
+                s->readInputDataFunc(s->inputHandle, buf, DRM_TWO_AES_BLOCK_LEN);
+            } else {
+                memcpy(buf, s->rawContent + aesStart + i * DRM_ONE_AES_BLOCK_LEN, DRM_TWO_AES_BLOCK_LEN);
+            }
+#else
+            s->seekInputDataFunc(s->inputHandle, (aesStart + i * DRM_ONE_AES_BLOCK_LEN));
+            s->readInputDataFunc(s->inputHandle, buf, DRM_TWO_AES_BLOCK_LEN);
+#endif
+
             bufLen = DRM_TWO_AES_BLOCK_LEN;
 
             if (drm_aesDecBuffer(buf, &bufLen, &key) < 0)
@@ -1664,9 +2456,6 @@ static int32_t drm_readAesContent(T_DRM_Session_Node* s, int32_t offset, uint8_t
 
             if (drm_aesDecBuffer(buf, &bufLen, &key) < 0)
                 return DRM_MEDIA_DATA_INVALID;
-
-            drm_discardPaddingByte(buf, &bufLen);
-
             if (bufLen <= leftBytes)
                 copyBytes = bufLen;
             else
@@ -1683,6 +2472,10 @@ static int32_t drm_readAesContent(T_DRM_Session_Node* s, int32_t offset, uint8_t
         ((T_DRM_Dcf_Node *)(s->infoStruct))->aesDecDataOff = copyBytes;
 
         if (aesStart - s->contentOffset > ((T_DRM_Dcf_Node *)(s->infoStruct))->encContentLength - DRM_TWO_AES_BLOCK_LEN && ((T_DRM_Dcf_Node *)(s->infoStruct))->aesDecDataOff == ((T_DRM_Dcf_Node *)(s->infoStruct))->aesDecDataLen) {
+            ALOGD("end of data in drm_readAesContent.\n");
+            drm_discardPaddingByte(buf, &bufLen);
+            readBytes -= (DRM_ONE_AES_BLOCK_LEN - bufLen);
+            ALOGD("readBytes is %d\n", readBytes);
             s->bEndData = TRUE;
             if (0 == readBytes)
                 return DRM_MEDIA_EOF;
@@ -1692,14 +2485,60 @@ static int32_t drm_readAesContent(T_DRM_Session_Node* s, int32_t offset, uint8_t
     return readBytes;
 }
 
+static int32_t drm_getContentRightsList(uint8_t* roId, int32_t* pRoAmount, T_DRM_Rights** ppRightsList)
+{
+    int32_t id = 0;
+
+    if (roId == NULL)
+        return DRM_FAILURE;
+
+    if (FALSE == drm_readFromUidTxt(roId, &id, GET_ID))
+        return DRM_FAILURE;
+
+    drm_writeOrReadInfo(id, NULL, pRoAmount, GET_ROAMOUNT);
+
+    if (*pRoAmount <= 0)
+        return DRM_FAILURE;
+
+    *ppRightsList = malloc((*pRoAmount) * sizeof(T_DRM_Rights));
+    if (NULL == ppRightsList)
+        return DRM_FAILURE;
+
+    drm_writeOrReadInfo(id, *ppRightsList, pRoAmount, GET_ALL_RO);
+
+    return DRM_SUCCESS;
+}
+
+static int32_t drm_canBeAutoUsed(int32_t bIsXXable, T_DRM_Rights_Constraint XXConstraint)
+{
+    if (bIsXXable == FALSE)
+        return DRM_FAILURE;
+
+    if (XXConstraint.Indicator & DRM_NO_CONSTRAINT)
+        return DRM_SUCCESS;
+
+    if (XXConstraint.Indicator & DRM_START_TIME_CONSTRAINT
+            || XXConstraint.Indicator & DRM_END_TIME_CONSTRAINT
+            || XXConstraint.Indicator & DRM_INTERVAL_CONSTRAINT) {
+        if (drm_startCheckRights(&bIsXXable, &XXConstraint) == DRM_SUCCESS)
+            return DRM_SUCCESS;
+        else
+            return DRM_FAILURE;
+    }
+
+    return DRM_FAILURE;
+}
+
 /* see svc_drm.h */
 int32_t SVC_drm_getContent(int32_t session, int32_t offset, uint8_t* mediaBuf, int32_t mediaBufLen)
 {
     T_DRM_Session_Node* s;
-    int32_t readBytes;
+    int32_t readBytes = 0;
 
-    if (session < 0 || offset < 0 || NULL == mediaBuf || mediaBufLen <= 0)
+    if (session < 0 || offset < 0 || NULL == mediaBuf || mediaBufLen <= 0){
+        ALOGE("SVC_drm_getContent: invalide params value");
         return DRM_FAILURE;
+    }
 
     s = getSession(session);
     if (NULL == s)
@@ -1711,6 +2550,10 @@ int32_t SVC_drm_getContent(int32_t session, int32_t offset, uint8_t* mediaBuf, i
     switch(s->deliveryMethod) {
     case FORWARD_LOCK:
     case COMBINED_DELIVERY:
+        if (1 == s->isEncrypted) {
+            readBytes = drm_readAesContent(s, offset, mediaBuf, mediaBufLen);
+            break;
+        }
         if (DRM_MESSAGE_CODING_BASE64 == s->transferEncoding)
             readBytes = drm_readBase64Content(s, offset, mediaBuf, mediaBufLen);
         else /* binary */
@@ -1720,9 +2563,13 @@ int32_t SVC_drm_getContent(int32_t session, int32_t offset, uint8_t* mediaBuf, i
     case SEPARATE_DELIVERY_FL:
         readBytes = drm_readAesContent(s, offset, mediaBuf, mediaBufLen);
         break;
-    default:
-        return DRM_FAILURE;
+    default: {
+            ALOGE("SVC_drm_getContent: Invalde delivery methord type");
+            return DRM_FAILURE;
+        }
     }
+
+    ALOGV("SVC_drm_getContent: return readBytes =%d", readBytes);
 
     return readBytes;
 }
@@ -1752,7 +2599,7 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
 {
     T_DRM_Session_Node* s;
     T_DRM_Rights rightsInfo;
-    int32_t roAmount, id;
+    int32_t roAmount, id, i, pos;
 
     if (session < 0 || NULL == rights)
         return DRM_FAILURE;
@@ -1762,6 +2609,19 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
         return DRM_SESSION_NOT_OPENED;
 
     if (FORWARD_LOCK == s->deliveryMethod) {
+        strcpy((char *)rights->roId, "ForwardLock");
+        rights->displayRights.indicator = DRM_NO_CONSTRAINT;
+        rights->playRights.indicator = DRM_NO_CONSTRAINT;
+        rights->executeRights.indicator = DRM_NO_CONSTRAINT;
+        rights->printRights.indicator = DRM_NO_CONSTRAINT;
+        rights->displayRights.valid = TRUE;
+        rights->playRights.valid = TRUE;
+        rights->executeRights.valid = TRUE;
+        rights->printRights.valid = TRUE;
+        return DRM_SUCCESS;
+    }
+
+    if (TRUE == s->deliveryMethod) {
         strcpy((char *)rights->roId, "ForwardLock");
         rights->displayRights.indicator = DRM_NO_CONSTRAINT;
         rights->playRights.indicator = DRM_NO_CONSTRAINT;
@@ -1781,22 +2641,37 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
 
     /* some rights has been installed, but now there is no valid rights */
     if (0 == roAmount) {
-        strcpy((char *)rights->roId, s->contentID);
+        strcpy((char *)rights->roId, (char*)s->contentID);
         rights->displayRights.indicator = DRM_NO_PERMISSION;
         rights->playRights.indicator = DRM_NO_PERMISSION;
         rights->executeRights.indicator = DRM_NO_PERMISSION;
         rights->printRights.indicator = DRM_NO_PERMISSION;
+        rights->displayRights.valid = FALSE;
+        rights->playRights.valid = FALSE;
+        rights->executeRights.valid = FALSE;
+        rights->printRights.valid = FALSE;
         return DRM_SUCCESS;
     }
 
-    roAmount = 1;
-    memset(&rightsInfo, 0, sizeof(T_DRM_Rights));
-    if (FALSE == drm_writeOrReadInfo(id, &rightsInfo, &roAmount, GET_A_RO))
-        return DRM_FAILURE;
+    for(i = 0; i < roAmount; i++) {
+        ALOGD("getRightsInfo, i is %d\n", i);
+        memset(&rightsInfo, 0, sizeof(T_DRM_Rights));
+        pos = i + 1;
+        if (FALSE == drm_writeOrReadInfo(id, &rightsInfo, &pos, GET_A_RO))
+            return DRM_FAILURE;
 
-    memset(rights, 0, sizeof(T_DRM_Rights_Info));
-    drm_getLicenseInfo(&rightsInfo, rights);
-    return DRM_SUCCESS;
+        if (rightsInfo.PlayConstraint.Indicator != DRM_NO_PERMISSION
+                || rightsInfo.DisplayConstraint.Indicator != DRM_NO_PERMISSION
+                || rightsInfo.ExecuteConstraint.Indicator != DRM_NO_PERMISSION
+                || rightsInfo.PrintConstraint.Indicator != DRM_NO_PERMISSION) {
+            memset(rights, 0, sizeof(T_DRM_Rights_Info));
+            drm_getLicenseInfo(&rightsInfo, rights);
+
+            return DRM_SUCCESS;
+        }
+    }
+
+    return DRM_FAILURE;
 }
 
 /* see svc_drm.h */
@@ -1883,6 +2758,107 @@ int32_t SVC_drm_freeRightsInfoList(T_DRM_Rights_Info_Node *pRightsHeader)
     return DRM_SUCCESS;
 }
 
+int32_t SVC_drm_deleteUnusedRights (uint8_t* roId)
+{
+    int32_t roAmount, id;
+    T_DRM_Rights *pAllRights = NULL, *pCurRight = NULL;
+    int32_t delFlag;
+    int32_t usedRoAmount;
+    int32_t i;
+
+    ALOGD("Enter in %s, roId = 0x%x\n", __FUNCTION__, roId);
+
+    if (NULL == roId)
+        return DRM_FAILURE;
+
+    if (FALSE == drm_readFromUidTxt(roId, &id, GET_ID)) {
+        return DRM_NO_RIGHTS;
+    }
+
+    ALOGD ("roId = %s, id = %d", roId, id);
+
+    if (FALSE == drm_writeOrReadInfo(id, NULL, &roAmount, GET_ROAMOUNT)) {
+        return DRM_FAILURE;
+    }
+
+    ALOGD ("roAmount = %d", roAmount);
+
+    if (roAmount == 0)
+        return DRM_SUCCESS;
+
+    pAllRights = (T_DRM_Rights *)malloc(roAmount * sizeof(T_DRM_Rights));
+    if (NULL == pAllRights)
+        return DRM_FAILURE;
+
+    drm_writeOrReadInfo(id, pAllRights, &roAmount, GET_ALL_RO);
+
+    drm_writeOrReadInfo(id, NULL, NULL, DELETE_ALL_RO);
+    ALOGD ("delete all ROs from file after to read all ROs into memory");
+
+    usedRoAmount = 0;
+    for (i = 0; i < roAmount; i++) {
+        pCurRight = pAllRights + i;
+//      dumpRights (*pCurRight);
+
+        delFlag = 1;
+        if (pCurRight->bIsPlayable) {
+            if (pCurRight->PlayConstraint.Indicator == DRM_COUNT_CONSTRAINT
+                    && pCurRight->PlayConstraint.Count == 0) {
+                delFlag = 1;
+                pCurRight->bIsPlayable = 0;
+                pCurRight->PlayConstraint.Indicator = ~DRM_COUNT_CONSTRAINT;
+            } else {
+                delFlag = 0;
+            }
+        }
+
+        if (pCurRight->bIsDisplayable) {
+            if (pCurRight->DisplayConstraint.Indicator == DRM_COUNT_CONSTRAINT
+                    && pCurRight->DisplayConstraint.Count == 0) {
+                delFlag = 1;
+                pCurRight->bIsDisplayable = 0;
+                pCurRight->DisplayConstraint.Indicator = ~DRM_COUNT_CONSTRAINT;
+            } else {
+                delFlag = 0;
+            }
+        }
+
+        if (pCurRight->bIsExecuteable) {
+            if (pCurRight->ExecuteConstraint.Indicator == DRM_COUNT_CONSTRAINT
+                    && pCurRight->ExecuteConstraint.Count == 0) {
+                delFlag = 1;
+                pCurRight->bIsExecuteable = 0;
+                pCurRight->ExecuteConstraint.Indicator = ~DRM_COUNT_CONSTRAINT;
+            } else {
+                delFlag = 0;
+            }
+        }
+
+        if (pCurRight->bIsPrintable) {
+            if (pCurRight->PrintConstraint.Indicator == DRM_COUNT_CONSTRAINT
+                    && pCurRight->PrintConstraint.Count == 0) {
+                delFlag = 1;
+                pCurRight->bIsPrintable = 0;
+                pCurRight->PrintConstraint.Indicator = ~DRM_COUNT_CONSTRAINT;
+            } else {
+                delFlag = 0;
+            }
+        }
+
+        //This right is valid, save into right file
+        if (!delFlag) {
+            usedRoAmount++;
+            drm_writeOrReadInfo(id, pCurRight, &usedRoAmount, SAVE_A_RO);
+        }
+        ALOGD ("right delFlag [%d], usedRoAmount [%d]", delFlag, usedRoAmount);
+    }
+
+    free (pAllRights);
+
+    ALOGD ("Leave %s, usedRoAmount [%d]", __FUNCTION__, usedRoAmount);
+    return DRM_SUCCESS;
+}
+
 /* see svc_drm.h */
 int32_t SVC_drm_deleteRights(uint8_t* roId)
 {
@@ -1940,4 +2916,108 @@ int32_t SVC_drm_deleteRights(uint8_t* roId)
     }
 
     return DRM_FAILURE;
+}
+
+int32_t SVC_drm_canBeAutoUsed(int32_t session, int32_t permission)
+{
+    T_DRM_Session_Node* s = NULL;
+    T_DRM_Rights* pRightsList = NULL;
+    int32_t roAmount = 0;
+    int32_t ret = DRM_FAILURE;
+    int32_t i = 0;
+
+    ALOGD("session: %d, permission: %d\n", session, permission);
+
+    if ((permission != DRM_PERMISSION_PLAY) && (permission != DRM_PERMISSION_DISPLAY))
+        return DRM_FAILURE;
+
+    if (session < 0 )
+        return DRM_FAILURE;
+
+    s = getSession(session);
+
+    if (s == NULL)
+        return DRM_SESSION_NOT_OPENED;
+
+    if (drm_getContentRightsList(s->contentID, &roAmount, &pRightsList) != DRM_SUCCESS)
+        return DRM_FAILURE;
+
+    if (permission == DRM_PERMISSION_PLAY) {
+        for (i = 0; i < roAmount; i++) {
+            if ((ret = drm_canBeAutoUsed(pRightsList[i].bIsPlayable, pRightsList[i].PlayConstraint)) == DRM_SUCCESS)
+                break;
+        }
+    } else if (permission == DRM_PERMISSION_DISPLAY) {
+        for(i = 0; i < roAmount; i++) {
+            if ((ret = drm_canBeAutoUsed(pRightsList[i].bIsDisplayable, pRightsList[i].DisplayConstraint)) == DRM_SUCCESS)
+                break;
+        }
+    } else {
+        ALOGD("There are only play and display til now.\n");
+        return DRM_FAILURE;
+    }
+
+    ALOGD("SVC_drm_canBeAutoUse return with ret %d\n", ret);
+
+    return ret;
+}
+
+int32_t SVC_drm_getContentRightsNum(int32_t session, int32_t* roAmount)
+{
+    T_DRM_Session_Node* s = NULL;
+    int32_t id = 0;
+
+    ALOGD("enter in SVC_drm_getContentRightsNum.\n");
+
+    if (session < 0)
+        return DRM_FAILURE;
+
+    s = getSession(session);
+
+    if (s == NULL)
+        return DRM_SESSION_NOT_OPENED;
+
+    if (FALSE == drm_readFromUidTxt(s->contentID, &id, GET_ID))
+        return DRM_FAILURE;
+
+    drm_writeOrReadInfo(id, NULL, roAmount, GET_ROAMOUNT);
+    ALOGD("roAmount: %d\n", *roAmount);
+
+    return DRM_SUCCESS;
+}
+
+int32_t SVC_drm_getContentRightsList(int32_t session, T_DRM_Rights_Info_Node** ppRightsInfo)
+{
+    T_DRM_Session_Node* s = NULL;
+    T_DRM_Rights* pRightsList = NULL;
+    T_DRM_Rights_Info_Node rightsNode;
+    int32_t roAmount = 0;
+    int32_t i;
+
+    if (session < 0)
+        return DRM_FAILURE;
+
+    s = getSession(session);
+
+    if (s == NULL)
+        return DRM_SESSION_NOT_OPENED;
+
+    if (drm_getContentRightsList(s->contentID, &roAmount, &pRightsList) != DRM_SUCCESS)
+        return DRM_FAILURE;
+
+    *ppRightsInfo = NULL;
+
+    for (i = 0; i < roAmount; i++) {
+        memset(&rightsNode, 0, sizeof(T_DRM_Rights_Info_Node));
+        dumpRights(pRightsList[i]);
+
+        if (drm_getLicenseInfo(&(pRightsList[i]), &(rightsNode.roInfo)) == FALSE)
+            return DRM_FAILURE;
+
+        if (drm_addRightsNodeToList(ppRightsInfo, &rightsNode) == FALSE)
+            return DRM_FAILURE;
+    }
+
+    free(pRightsList);
+    return DRM_SUCCESS;
 }

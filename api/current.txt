@@ -10170,6 +10170,14 @@ package android.drm {
     field public static final java.lang.String REMAINING_REPEAT_COUNT = "remaining_repeat_count";
   }
 
+  public static class DrmStore.DrmDeliveryType {
+    ctor public DrmStore.DrmDeliveryType();
+    field public static final int COMBINED_DELIVERY = 2; // 0x2
+    field public static final int FORWARD_LOCK = 1; // 0x1
+    field public static final int SEPARATE_DELIVERY = 3; // 0x3
+    field public static final int SEPARATE_DELIVERY_FL = 4; // 0x4
+  }
+
   public static class DrmStore.DrmObjectType {
     ctor public deprecated DrmStore.DrmObjectType();
     field public static final int CONTENT = 1; // 0x1
@@ -10499,15 +10507,23 @@ package android.graphics {
   public class BitmapFactory {
     ctor public BitmapFactory();
     method public static android.graphics.Bitmap decodeByteArray(byte[], int, int, android.graphics.BitmapFactory.Options);
+    method public static android.graphics.Bitmap decodeByteArray(byte[], int, int, android.graphics.BitmapFactory.Options, boolean);
     method public static android.graphics.Bitmap decodeByteArray(byte[], int, int);
+    method public static android.graphics.Bitmap decodeByteArray(byte[], int, int, boolean);
     method public static android.graphics.Bitmap decodeFile(java.lang.String, android.graphics.BitmapFactory.Options);
+    method public static android.graphics.Bitmap decodeFile(java.lang.String, android.graphics.BitmapFactory.Options, boolean);
     method public static android.graphics.Bitmap decodeFile(java.lang.String);
     method public static android.graphics.Bitmap decodeFileDescriptor(java.io.FileDescriptor, android.graphics.Rect, android.graphics.BitmapFactory.Options);
+    method public static android.graphics.Bitmap decodeFileDescriptor(java.io.FileDescriptor, android.graphics.Rect, android.graphics.BitmapFactory.Options, boolean);
     method public static android.graphics.Bitmap decodeFileDescriptor(java.io.FileDescriptor);
     method public static android.graphics.Bitmap decodeResource(android.content.res.Resources, int, android.graphics.BitmapFactory.Options);
+    method public static android.graphics.Bitmap decodeResource(android.content.res.Resources, int, android.graphics.BitmapFactory.Options, boolean);
     method public static android.graphics.Bitmap decodeResource(android.content.res.Resources, int);
+    method public static android.graphics.Bitmap decodeResource(android.content.res.Resources, int, boolean);
     method public static android.graphics.Bitmap decodeResourceStream(android.content.res.Resources, android.util.TypedValue, java.io.InputStream, android.graphics.Rect, android.graphics.BitmapFactory.Options);
+    method public static android.graphics.Bitmap decodeResourceStream(android.content.res.Resources, android.util.TypedValue, java.io.InputStream, android.graphics.Rect, android.graphics.BitmapFactory.Options, boolean);
     method public static android.graphics.Bitmap decodeStream(java.io.InputStream, android.graphics.Rect, android.graphics.BitmapFactory.Options);
+    method public static android.graphics.Bitmap decodeStream(java.io.InputStream, android.graphics.Rect, android.graphics.BitmapFactory.Options, boolean);
     method public static android.graphics.Bitmap decodeStream(java.io.InputStream);
   }
 

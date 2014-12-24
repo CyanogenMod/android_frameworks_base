@@ -24,10 +24,14 @@ extern "C" {
 #include <openssl/aes.h>
 #include <drm_common_types.h>
 #include <parser_rel.h>
+#include "svc_drm.h"
+#include "parser_dm.h"
+
+#define DRM_DEVICE_ARCH_ARM 64  // Declared Temporary use only
 
 #ifdef DRM_DEVICE_ARCH_ARM
-#define ANDROID_DRM_CORE_PATH   "/data/drm/rights/"
-#define DRM_UID_FILE_PATH       "/data/drm/rights/uid.txt"
+#define ANDROID_DRM_CORE_PATH   "/data/local/.Drm/rights/"
+#define DRM_UID_FILE_PATH       "/data/local/.Drm/rights/uid.txt"
 #else
 #define ANDROID_DRM_CORE_PATH   "/home/user/golf/esmertec/device/out/debug/host/linux-x86/product/sim/data/data/com.android.drm.mobile1/"
 #define DRM_UID_FILE_PATH       "/home/user/golf/esmertec/device/out/debug/host/linux-x86/product/sim/data/data/com.android.drm.mobile1/uid.txt"
@@ -43,6 +47,22 @@ extern "C" {
 #define SAVE_ALL_RO         3
 #define GET_A_RO            4
 #define SAVE_A_RO           5
+#define DELETE_ALL_RO       6
+
+#define DRM_ONE_AES_BLOCK_LEN 16
+
+typedef struct _T_DRM_Enc_Context {
+    uint8_t encKey[DRM_ONE_AES_BLOCK_LEN];
+    //aes_encrypt_ctx encCtx[1];
+    AES_KEY enKey;
+    int64_t dcfHandle;
+    T_DRM_DM_Info* dmInfo;
+    T_DRM_Rights* rights;
+    uint8_t aesBlockAhead[DRM_ONE_AES_BLOCK_LEN]; /*remained for xoring*/
+    uint8_t rawBackupData[DRM_ONE_AES_BLOCK_LEN];
+    uint32_t rawBackupDataLen;
+    uint32_t curEncDataLen; /*the length of encrypted, but not include the first IV block*/
+} T_DRM_Enc_Context;
 
 /**
  * Get the id or uid from the "uid.txt" file.
@@ -175,6 +195,12 @@ int32_t drm_updateDcfDataLen(uint8_t* pDcfLastData, uint8_t* keyValue, int32_t* 
  *      -DRM_RIGHTS_FAILURE, if there is some other error occur.
  */
 int32_t drm_checkRoAndUpdate(int32_t id, int32_t permission);
+
+int32_t drm_initEncSession(T_DRM_Enc_Context** ctx, T_DRM_DM_Info* dmInfo, T_DRM_Rights* rights, int64_t dcfHandle);
+int32_t drm_generateDCFHeader(T_DRM_Enc_Context* ctx);
+int32_t drm_encContent(T_DRM_Enc_Context* ctx, int64_t handle);
+int32_t drm_releaseEncSession(T_DRM_Enc_Context* ctx);
+void drm_abortEncSession(T_DRM_Enc_Context* ctx);
 
 #ifdef __cplusplus
 }

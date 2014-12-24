@@ -49,6 +49,7 @@ extern "C" {
 #define DRM_KEY_LEN         16
 
 #define XML_DOM_PARSER
+#define DRM_ROLLBACKCLOCK
 
 typedef struct _T_DRM_DATETIME {
     int32_t date; /**< year * 10000 + mon *100 + day */
@@ -58,6 +59,9 @@ typedef struct _T_DRM_DATETIME {
 typedef struct _T_DRM_Rights_Constraint {
     uint8_t Indicator;          /**< Indicate which is constrainted, the first one indicate 0001, second one indicate 0010 */
     uint8_t unUsed[3];
+#ifdef DRM_ROLLBACKCLOCK
+    T_DRM_DATETIME SavedDatetime; /**recode current time, to check rollback clock*/
+#endif //DRM_ROLLBACKCLOCK
     int32_t Count;              /**< The times that can be used */
     T_DRM_DATETIME StartTime;   /**< The starting time */
     T_DRM_DATETIME EndTime;     /**< The ending time */
@@ -68,6 +72,7 @@ typedef struct _T_DRM_Rights {
     uint8_t Version[8];                         /**< Version number */
     uint8_t uid[256];                           /**< record the rights object name */
     uint8_t KeyValue[16];                       /**< Decode base64 */
+    int32_t bIsUnlimited;                       /**< Is unlimited */
     int32_t bIsPlayable;                        /**< Is playable */
     int32_t bIsDisplayable;                     /**< Is displayable */
     int32_t bIsExecuteable;                     /**< Is executeable */
