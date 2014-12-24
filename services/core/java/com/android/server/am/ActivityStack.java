@@ -1016,7 +1016,12 @@ final class ActivityStack {
                 } else if (!hasVisibleBehindActivity()) {
                     // If we were visible then resumeTopActivities will release resources before
                     // stopping.
-                    mStackSupervisor.mStoppingActivities.add(prev);
+                    ActivityRecord top = topRunningActivityLocked(null);
+                    if (top != null && top.equals(prev) && mService.isSleepingOrShuttingDown()){
+                        Slog.d(TAG, "Top activity keeps the pause sate. top : "+top);
+                    } else {
+                        mStackSupervisor.mStoppingActivities.add(prev);
+                    }
                     if (mStackSupervisor.mStoppingActivities.size() > 3 ||
                             prev.frontOfTask && mTaskHistory.size() <= 1) {
                         // If we already have a few activities waiting to stop,

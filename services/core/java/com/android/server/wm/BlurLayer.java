@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,34 +35,34 @@ public class BlurLayer {
     /** Reference to the owner of this object. */
     final DisplayContent mDisplayContent;
 
-    /** Actual surface that dims */
-    SurfaceControl mDimSurface;
+    /** Actual surface that blurs */
+    SurfaceControl mBlurSurface;
 
-    /** Last value passed to mDimSurface.setAlpha() */
-    float mAlpha = 0;
+    /** Last value passed to mBlurSurface.setBlur() */
+    float mBlur = 0;
 
-    /** Last value passed to mDimSurface.setLayer() */
+    /** Last value passed to mBlurSurface.setLayer() */
     int mLayer = -1;
 
-    /** Next values to pass to mDimSurface.setPosition() and mDimSurface.setSize() */
+    /** Next values to pass to mBlurSurface.setPosition() and mBlurSurface.setSize() */
     Rect mBounds = new Rect();
 
-    /** Last values passed to mDimSurface.setPosition() and mDimSurface.setSize() */
+    /** Last values passed to mBlurSurface.setPosition() and mBlurSurface.setSize() */
     Rect mLastBounds = new Rect();
 
-    /** True after mDimSurface.show() has been called, false after mDimSurface.hide(). */
+    /** True after mBlurSurface.show() has been called, false after mBlurSurface.hide(). */
     private boolean mShowing = false;
 
-    /** Value of mAlpha when beginning transition to mTargetAlpha */
-    float mStartAlpha = 0;
+    /** Value of mBlur when beginning transition to mTargetBlur */
+    float mStartBlur = 0;
 
-    /** Final value of mAlpha following transition */
-    float mTargetAlpha = 0;
+    /** Final value of mBlur following transition */
+    float mTargetBlur = 0;
 
     /** Time in units of SystemClock.uptimeMillis() at which the current transition started */
     long mStartTime;
 
-    /** Time in milliseconds to take to transition from mStartAlpha to mTargetAlpha */
+    /** Time in milliseconds to take to transition from mStartBlur to mTargetBlur */
     long mDuration;
 
     /** Owning stack */
@@ -73,44 +76,44 @@ public class BlurLayer {
         SurfaceControl.openTransaction();
         try {
             if (WindowManagerService.DEBUG_SURFACE_TRACE) {
-                mDimSurface = new WindowStateAnimator.SurfaceTrace(service.mFxSession,
-                    "DimSurface",
+                mBlurSurface = new WindowStateAnimator.SurfaceTrace(service.mFxSession,
+                    "BlurSurface",
                     16, 16, PixelFormat.OPAQUE,
-                    SurfaceControl.FX_SURFACE_DIM | SurfaceControl.HIDDEN);
+                    SurfaceControl.FX_SURFACE_BLUR | SurfaceControl.HIDDEN);
             } else {
-                mDimSurface = new SurfaceControl(service.mFxSession, TAG,
+                mBlurSurface = new SurfaceControl(service.mFxSession, TAG,
                     16, 16, PixelFormat.OPAQUE,
-                    SurfaceControl.FX_SURFACE_DIM | SurfaceControl.HIDDEN);
+                    SurfaceControl.FX_SURFACE_BLUR | SurfaceControl.HIDDEN);
             }
             if (WindowManagerService.SHOW_TRANSACTIONS ||
                     WindowManagerService.SHOW_SURFACE_ALLOC) Slog.i(TAG,
-                            "  DIM " + mDimSurface + ": CREATE");
-            mDimSurface.setLayerStack(displayId);
+                            "  BLUR " + mBlurSurface + ": CREATE");
+            mBlurSurface.setLayerStack(displayId);
         } catch (Exception e) {
-            Slog.e(WindowManagerService.TAG, "Exception creating Dim surface", e);
+            Slog.e(WindowManagerService.TAG, "Exception creating Blur surface", e);
         } finally {
             SurfaceControl.closeTransaction();
         }
     }
 
-    /** Return true if dim layer is showing */
-    boolean isDimming() {
-        return mTargetAlpha != 0;
+    /** Return true if blur layer is showing */
+    boolean isBlurring() {
+        return mTargetBlur != 0;
     }
 
     /** Return true if in a transition period */
     boolean isAnimating() {
-        return mTargetAlpha != mAlpha;
+        return mTargetBlur != mBlur;
     }
 
-    float getTargetAlpha() {
-        return mTargetAlpha;
+    float getTargetBlur() {
+        return mTargetBlur;
     }
 
     void setLayer(int layer) {
         if (mLayer != layer) {
             mLayer = layer;
-            mDimSurface.setLayer(layer);
+            mBlurSurface.setLayer(layer);
         }
     }
 
@@ -118,31 +121,27 @@ public class BlurLayer {
         return mLayer;
     }
 
-    private void setAlpha(float alpha) {
-        if (mAlpha != alpha) {
-            if (DEBUG) Slog.v(TAG, "setAlpha alpha=" + alpha);
+    private void setBlur(float blur) {
+        if (mBlur != blur) {
+            if (DEBUG) Slog.v(TAG, "setBlur blur=" + blur);
             try {
-                mDimSurface.setAlpha(alpha);
-                if (alpha == 0 && mShowing) {
-                    if (DEBUG) Slog.v(TAG, "setAlpha hiding");
-                    mDimSurface.hide();
+                mBlurSurface.setBlur(blur);
+                if (blur == 0 && mShowing) {
+                    if (DEBUG) Slog.v(TAG, "setBlur hiding");
+                    mBlurSurface.hide();
                     mShowing = false;
-                } else if (alpha > 0 && !mShowing) {
-                    if (DEBUG) Slog.v(TAG, "setAlpha showing");
-                    mDimSurface.show();
+                } else if (blur > 0 && !mShowing) {
+                    if (DEBUG) Slog.v(TAG, "setBlur showing");
+                    mBlurSurface.show();
                     mShowing = true;
                 }
             } catch (RuntimeException e) {
-                Slog.w(TAG, "Failure setting alpha immediately", e);
+                Slog.w(TAG, "Failure setting blur immediately", e);
             }
-            mAlpha = alpha;
+            mBlur = blur;
         }
     }
 
-    /**
-     * @param layer The new layer value.
-     * @param inTransaction Whether the call is made within a surface transaction.
-     */
     void adjustSurface(int layer, boolean inTransaction) {
         final int dw, dh;
         final float xPos, yPos;
@@ -154,22 +153,19 @@ public class BlurLayer {
         } else {
             // Set surface size to screen size.
             final DisplayInfo info = mDisplayContent.getDisplayInfo();
-            // Multiply by 1.5 so that rotating a frozen surface that includes this does not expose
-            // a corner.
-            dw = (int) (info.logicalWidth * 1.5);
-            dh = (int) (info.logicalHeight * 1.5);
-            // back off position so 1/4 of Surface is before and 1/4 is after.
-            xPos = -1 * dw / 6;
-            yPos = -1 * dh / 6;
+            dw = info.logicalWidth;
+            dh = info.logicalHeight;
+            xPos = 0;
+            yPos = 0;
         }
 
         try {
             if (!inTransaction) {
                 SurfaceControl.openTransaction();
             }
-            mDimSurface.setPosition(xPos, yPos);
-            mDimSurface.setSize(dw, dh);
-            mDimSurface.setLayer(layer);
+            mBlurSurface.setPosition(xPos, yPos);
+            mBlurSurface.setSize(dw, dh);
+            mBlurSurface.setLayer(layer);
         } catch (RuntimeException e) {
             Slog.w(TAG, "Failure setting size or layer", e);
         } finally {
@@ -181,10 +177,9 @@ public class BlurLayer {
         mLayer = layer;
     }
 
-    // Assumes that surface transactions are currently closed.
     void setBounds(Rect bounds) {
         mBounds.set(bounds);
-        if (isDimming() && !mLastBounds.equals(bounds)) {
+        if (isBlurring() && !mLastBounds.equals(bounds)) {
             adjustSurface(mLayer, false);
         }
     }
@@ -202,7 +197,7 @@ public class BlurLayer {
     void show() {
         if (isAnimating()) {
             if (DEBUG) Slog.v(TAG, "show: immediate");
-            show(mLayer, mTargetAlpha, 0);
+            show(mLayer, mTargetBlur, 0);
         }
     }
 
@@ -211,16 +206,16 @@ public class BlurLayer {
      * NOTE: Must be called with Surface transaction open.
      *
      * @param layer The layer to set the surface to.
-     * @param alpha The dim value to end at.
+     * @param blur The dim value to end at.
      * @param duration How long to take to get there in milliseconds.
      */
-    void show(int layer, float alpha, long duration) {
-        if (DEBUG) Slog.v(TAG, "show: layer=" + layer + " alpha=" + alpha
+    void show(int layer, float blur, long duration) {
+        if (DEBUG) Slog.v(TAG, "show: layer=" + layer + " blur=" + blur
                 + " duration=" + duration);
-        if (mDimSurface == null) {
+        if (mBlurSurface == null) {
             Slog.e(TAG, "show: no Surface");
             // Make sure isAnimating() returns false.
-            mTargetAlpha = mAlpha = 0;
+            mTargetBlur = mBlur = 0;
             return;
         }
 
@@ -230,20 +225,20 @@ public class BlurLayer {
 
         long curTime = SystemClock.uptimeMillis();
         final boolean animating = isAnimating();
-        if ((animating && (mTargetAlpha != alpha || durationEndsEarlier(duration)))
-                || (!animating && mAlpha != alpha)) {
+        if ((animating && (mTargetBlur != blur || durationEndsEarlier(duration)))
+                || (!animating && mBlur != blur)) {
             if (duration <= 0) {
                 // No animation required, just set values.
-                setAlpha(alpha);
+                setBlur(blur);
             } else {
                 // Start or continue animation with new parameters.
-                mStartAlpha = mAlpha;
+                mStartBlur = mBlur;
                 mStartTime = curTime;
                 mDuration = duration;
             }
         }
-        if (DEBUG) Slog.v(TAG, "show: mStartAlpha=" + mStartAlpha + " mStartTime=" + mStartTime);
-        mTargetAlpha = alpha;
+        if (DEBUG) Slog.v(TAG, "show: mStartBlur=" + mStartBlur + " mStartTime=" + mStartTime);
+        mTargetBlur = blur;
     }
 
     /** Immediate hide.
@@ -262,7 +257,7 @@ public class BlurLayer {
      * @param duration Time to fade in milliseconds.
      */
     void hide(long duration) {
-        if (mShowing && (mTargetAlpha != 0 || durationEndsEarlier(duration))) {
+        if (mShowing && (mTargetBlur != 0 || durationEndsEarlier(duration))) {
             if (DEBUG) Slog.v(TAG, "hide: duration=" + duration);
             show(mLayer, 0, duration);
         }
@@ -275,24 +270,24 @@ public class BlurLayer {
      * @return True if animation is still required after this step.
      */
     boolean stepAnimation() {
-        if (mDimSurface == null) {
+        if (mBlurSurface == null) {
             Slog.e(TAG, "stepAnimation: null Surface");
             // Ensure that isAnimating() returns false;
-            mTargetAlpha = mAlpha = 0;
+            mTargetBlur = mBlur = 0;
             return false;
         }
 
         if (isAnimating()) {
             final long curTime = SystemClock.uptimeMillis();
-            final float alphaDelta = mTargetAlpha - mStartAlpha;
-            float alpha = mStartAlpha + alphaDelta * (curTime - mStartTime) / mDuration;
-            if (alphaDelta > 0 && alpha > mTargetAlpha ||
-                    alphaDelta < 0 && alpha < mTargetAlpha) {
+            final float blurDelta = mTargetBlur - mStartBlur;
+            float blur = mStartBlur + blurDelta * (curTime - mStartTime) / mDuration;
+            if (blurDelta > 0 && blur > mTargetBlur ||
+                    blurDelta < 0 && blur < mTargetBlur) {
                 // Don't exceed limits.
-                alpha = mTargetAlpha;
+                blur = mTargetBlur;
             }
-            if (DEBUG) Slog.v(TAG, "stepAnimation: curTime=" + curTime + " alpha=" + alpha);
-            setAlpha(alpha);
+            if (DEBUG) Slog.v(TAG, "stepAnimation: curTime=" + curTime + " blur=" + blur);
+            setBlur(blur);
         }
 
         return isAnimating();
@@ -301,23 +296,23 @@ public class BlurLayer {
     /** Cleanup */
     void destroySurface() {
         if (DEBUG) Slog.v(TAG, "destroySurface.");
-        if (mDimSurface != null) {
-            mDimSurface.destroy();
-            mDimSurface = null;
+        if (mBlurSurface != null) {
+            mBlurSurface.destroy();
+            mBlurSurface = null;
         }
     }
 
     public void printTo(String prefix, PrintWriter pw) {
-        pw.print(prefix); pw.print("mDimSurface="); pw.print(mDimSurface);
+        pw.print(prefix); pw.print("mBlurSurface="); pw.print(mBlurSurface);
                 pw.print(" mLayer="); pw.print(mLayer);
-                pw.print(" mAlpha="); pw.println(mAlpha);
+                pw.print(" mBlur="); pw.println(mBlur);
         pw.print(prefix); pw.print("mLastBounds="); pw.print(mLastBounds.toShortString());
                 pw.print(" mBounds="); pw.println(mBounds.toShortString());
         pw.print(prefix); pw.print("Last animation: ");
                 pw.print(" mDuration="); pw.print(mDuration);
                 pw.print(" mStartTime="); pw.print(mStartTime);
                 pw.print(" curTime="); pw.println(SystemClock.uptimeMillis());
-        pw.print(prefix); pw.print(" mStartAlpha="); pw.print(mStartAlpha);
-                pw.print(" mTargetAlpha="); pw.println(mTargetAlpha);
+        pw.print(prefix); pw.print(" mStartBlur="); pw.print(mStartBlur);
+                pw.print(" mTargetBlur="); pw.println(mTargetBlur);
     }
 }

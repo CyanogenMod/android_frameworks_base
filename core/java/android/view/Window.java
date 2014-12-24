@@ -768,6 +768,13 @@ public abstract class Window {
         setPrivateFlags(flags, flags);
     }
 
+    /** @hide */
+    public void setBlurMaskAlphaThreshold(float alpha) {
+        final WindowManager.LayoutParams attrs = getAttributes();
+        attrs.blurMaskAlphaThreshold = alpha;
+        dispatchWindowAttributesChanged(attrs);
+    }
+
     /**
      * Convenience function to clear the flag bits as specified in flags, as
      * per {@link #setFlags}.
@@ -777,6 +784,11 @@ public abstract class Window {
      */
     public void clearFlags(int flags) {
         setFlags(0, flags);
+    }
+
+    /** @hide */
+    public void clearPrivateFlags(int flags) {
+        setPrivateFlags(0, flags);
     }
 
     /**
