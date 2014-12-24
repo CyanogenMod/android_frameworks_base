@@ -64,10 +64,6 @@ public final class RemoteConnection {
                 RemoteConnection connection,
                 DisconnectCause disconnectCause) {}
 
-        /** @hide */
-        public void setDisconnectedWithSsNotification(RemoteConnection connection,
-                int disconnectCause, String disconnectMessage, int type, int code) {}
-
         /**
          * Invoked when this {@code RemoteConnection} is requesting ringback. See
          * {@link #isRingbackRequested()}.
@@ -85,6 +81,15 @@ public final class RemoteConnection {
          * @param callCapabilities The new call capabilities of the {@code RemoteConnection}.
          */
         public void onCallCapabilitiesChanged(RemoteConnection connection, int callCapabilities) {}
+
+        /**
+         * Indicates that the call properties of this {@code RemoteConnection} have changed.
+         * See {@link #getCallProperties()}.
+         *
+         * @param connection The {@code RemoteConnection} invoking this method.
+         * @param callProperties The new call properties of the {@code RemoteConnection}.
+         */
+        public void onCallPropertiesChanged(RemoteConnection connection, int callProperties) {}
 
         /**
          * Invoked when the post-dial sequence in the outgoing {@code Connection} has reached a
@@ -414,6 +419,7 @@ public final class RemoteConnection {
     private boolean mRingbackRequested;
     private boolean mConnected;
     private int mCallCapabilities;
+    private int mCallProperties;
     private int mVideoState;
     private int mCallSubstate;
     private VideoProvider mVideoProvider;
@@ -520,6 +526,14 @@ public final class RemoteConnection {
      */
     public int getCallCapabilities() {
         return mCallCapabilities;
+    }
+
+    /**
+     * @return A bitmask of the properties of the {@code RemoteConnection}, as defined in
+     *         {@link CallProperties}.
+     */
+    public int getCallProperties() {
+        return mCallProperties;
     }
 
     /**
@@ -822,15 +836,6 @@ public final class RemoteConnection {
         }
     }
 
-    /** @hide */
-   public void setDisconnectedWithSsNotification(int disconnectCause,
-                String disconnectMessage, int type, int code) {
-        for (Callback c : mCallbacks) {
-            c.setDisconnectedWithSsNotification(this, disconnectCause,
-                    disconnectMessage, type, code);
-        }
-    }
-
     /**
      * @hide
      */
@@ -850,6 +855,16 @@ public final class RemoteConnection {
         mCallCapabilities = callCapabilities;
         for (Callback c : mCallbacks) {
             c.onCallCapabilitiesChanged(this, callCapabilities);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    void setCallProperties(int callProperties) {
+        mCallProperties = callProperties;
+        for (Callback c : mCallbacks) {
+            c.onCallPropertiesChanged(this, callProperties);
         }
     }
 
