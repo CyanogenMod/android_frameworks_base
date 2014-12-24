@@ -41,7 +41,7 @@ void DRM_time_getSysTime(T_DB_TIME_SysTime *time_ptr)
     struct tm *tm_t;
 
     time(&t);
-    tm_t = gmtime(&t);
+    tm_t = localtime(&t);
 
     time_ptr->year = tm_t->tm_year + 1900;
     time_ptr->month = tm_t->tm_mon + 1;

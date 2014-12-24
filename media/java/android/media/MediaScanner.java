@@ -477,8 +477,10 @@ public class MediaScanner
     private final MyMediaScannerClient mClient = new MyMediaScannerClient();
 
     private boolean isDrmEnabled() {
-        String prop = SystemProperties.get("drm.service.enabled");
-        return prop != null && prop.equals("true");
+        /* UnComment next two lines and return true, if drm.service.enabled is set in system properties */
+        //String prop = SystemProperties.get("drm.service.enabled");
+        //return prop != null && prop.equals("true");
+        return true;
     }
 
     private class MyMediaScannerClient implements MediaScannerClient {
@@ -533,7 +535,7 @@ public class MediaScanner
                     }
                 }
 
-                if (isDrmEnabled() && MediaFile.isDrmFileType(mFileType)) {
+                if (isDrmEnabled() && path != null && (path.endsWith(".dcf") || path.endsWith(".dm"))) {
                     mFileType = getFileTypeFromDrm(path);
                 }
             }
@@ -799,7 +801,7 @@ public class MediaScanner
             try {
                 mBitmapOptions.outWidth = 0;
                 mBitmapOptions.outHeight = 0;
-                BitmapFactory.decodeFile(path, mBitmapOptions);
+                BitmapFactory.decodeFile(path, mBitmapOptions, false);
                 mWidth = mBitmapOptions.outWidth;
                 mHeight = mBitmapOptions.outHeight;
             } catch (Throwable th) {
@@ -1146,9 +1148,10 @@ public class MediaScanner
                 mDrmManagerClient = new DrmManagerClient(mContext);
             }
 
-            if (mDrmManagerClient.canHandle(path, null)) {
+            String realpath = path.replace("/storage/emulated/0", "/storage/emulated/legacy");
+            if (mDrmManagerClient.canHandle(realpath, null)) {
                 mIsDrm = true;
-                String drmMimetype = mDrmManagerClient.getOriginalMimeType(path);
+                String drmMimetype = mDrmManagerClient.getOriginalMimeType(realpath);
                 if (drmMimetype != null) {
                     mMimeType = drmMimetype;
                     resultFileType = MediaFile.getFileTypeForMimeType(drmMimetype);

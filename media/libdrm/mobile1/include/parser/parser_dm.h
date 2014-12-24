@@ -43,6 +43,8 @@ extern "C" {
 #define DRM_UID_TYPE_FORWORD_LOCK                           "forwardlock"
 #define DRM_NEW_LINE_CRLF                                   "\r\n"
 
+#define DRM_SEMICOLON                                       ";"
+
 #define HEADERS_TRANSFER_CODING_LEN                         26
 #define HEADERS_CONTENT_TYPE_LEN                            13
 #define HEADERS_CONTENT_ID_LEN                              11
@@ -63,6 +65,8 @@ typedef struct _T_DRM_DM_Info {
     uint8_t transferEncoding;                   /**< Transfer encoding type */
     int32_t contentOffset;                      /**< The offset of the media content from the original DRM data */
     int32_t contentLen;                         /**< The length of the media content */
+    int32_t dcfOffset;                          /**< The offset of the dcf, only used by SD-FL case */
+    int32_t dcfLen;                             /**< The length of the dcf, only used by SD-FL case */
     int32_t rightsOffset;                       /**< The offset of the rights object in case of combined delivery */
     int32_t rightsLen;                          /**< The length of the rights object in case of combined delivery */
     uint8_t rightsIssuer[MAX_RIGHTS_ISSUER_LEN];/**< The rights issuer address in case of separate delivery */
@@ -93,6 +97,7 @@ const uint8_t* drm_strnstr(const uint8_t* str, const uint8_t* strSearch, int32_t
  *      -FALSE, when failed
  */
 int32_t drm_parseDM(const uint8_t* buffer, int32_t bufferLen, T_DRM_DM_Info* pDmInfo);
+int32_t drm_findEndBoundary (uint64_t handle, uint8_t *boundary, uint32_t startOffset, uint32_t *endOffset);
 
 #ifdef __cplusplus
 }

@@ -35,7 +35,7 @@ extern "C" {
 /**
  * Define the max malloc length for a DRM.
  */
-#define DRM_MAX_MALLOC_LEN          (50 * 1024) /* 50K */
+#define DRM_MAX_MALLOC_LEN          (110 * 1024)  /* 50K */
 
 #define DRM_ONE_AES_BLOCK_LEN       16
 #define DRM_TWO_AES_BLOCK_LEN       32
@@ -62,12 +62,13 @@ typedef struct _T_DRM_Dcf_Node {
 
 typedef struct _T_DRM_Session_Node {
     int32_t sessionId;
-    int32_t inputHandle;
+    int64_t inputHandle;
     int32_t mimeType;
-    int32_t (*getInputDataLengthFunc)(int32_t inputHandle);
-    int32_t (*readInputDataFunc)(int32_t inputHandle, uint8_t* buf, int32_t bufLen);
-    int32_t (*seekInputDataFunc)(int32_t inputHandle, int32_t offset);
+    int32_t (*getInputDataLengthFunc)(int64_t inputHandle);
+    int32_t (*readInputDataFunc)(int64_t inputHandle, uint8_t* buf, int32_t bufLen);
+    int32_t (*seekInputDataFunc)(int64_t inputHandle, int32_t offset);
     int32_t deliveryMethod;
+    int32_t isEncrypted;
     int32_t transferEncoding;
     uint8_t contentType[64];
     int32_t contentLength;
@@ -81,6 +82,7 @@ typedef struct _T_DRM_Session_Node {
     int32_t readBufOff;
     void* infoStruct;
     struct _T_DRM_Session_Node* next;
+    uint8_t key[16];
 } T_DRM_Session_Node;
 
 #ifdef __cplusplus
