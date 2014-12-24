@@ -78,6 +78,7 @@ public abstract class ConnectionService extends Service {
     private static final int MSG_SET_LOCAL_HOLD = 20;
     private static final int MSG_SET_ACTIVE_SUB = 21;
     private static final int MSG_DEFLECT = 22;
+    private static final int MSG_ADD_PARTICIPANT_WITH_CONFERENCE = 23;
 
     private static Connection sNullConnection;
 
@@ -209,6 +210,14 @@ public abstract class ConnectionService extends Service {
         @Override
         public void splitFromConference(String callId) {
             mHandler.obtainMessage(MSG_SPLIT_FROM_CONFERENCE, callId).sendToTarget();
+        }
+
+        @Override
+        public void addParticipantWithConference(String callId, String participant) {
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = callId;
+            args.arg2 = participant;
+            mHandler.obtainMessage(MSG_ADD_PARTICIPANT_WITH_CONFERENCE, args).sendToTarget();
         }
 
         @Override
@@ -350,6 +359,17 @@ public abstract class ConnectionService extends Service {
                 case MSG_SPLIT_FROM_CONFERENCE:
                     splitFromConference((String) msg.obj);
                     break;
+                case MSG_ADD_PARTICIPANT_WITH_CONFERENCE: {
+                    SomeArgs args = (SomeArgs) msg.obj;
+                    try {
+                        String callId = (String) args.arg1;
+                        String participant = (String) args.arg2;
+                        addParticipantWithConference(callId, participant);
+                    } finally {
+                        args.recycle();
+                    }
+                    break;
+                }
                 case MSG_MERGE_CONFERENCE:
                     mergeConference((String) msg.obj);
                     break;
@@ -836,6 +856,14 @@ public abstract class ConnectionService extends Service {
         Conference conference = connection.getConference();
         if (conference != null) {
             conference.onSeparate(connection);
+        }
+    }
+
+    private void addParticipantWithConference(String callId, String participant) {
+        Log.d(this, "ConnectionService addParticipantWithConference(%s, %s)", participant, callId);
+        Conference conference = findConferenceForAction(callId, "addParticipantWithConference");
+        if (conference != null) {
+            conference.onAddParticipant(participant);
         }
     }
 
