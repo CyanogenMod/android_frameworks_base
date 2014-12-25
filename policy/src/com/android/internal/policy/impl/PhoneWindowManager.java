@@ -45,6 +45,7 @@ import android.graphics.Rect;
 import android.hardware.input.InputManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.AudioSystem;
 import android.media.IAudioService;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -4697,6 +4698,43 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return am.isMusicActive();
     }
 
+    /**
+     * Tell the audio service to adjust the volume appropriate to the event.
+     * @param keycode
+     */
+    void handleVolumeKey(int stream, int keycode) {
+        IAudioService audioService = getAudioService();
+        if (audioService == null) {
+            return;
+        }
+        try {
+            // when audio is playing locally, we shouldn't have to hold a wake lock
+            // during the call, but we do it as a precaution for the rare possibility
+            // that the music stops right before we call this.
+            // Otherwise we might also be in a remote playback case.
+            // TODO: Actually handle MUTE.
+            mBroadcastWakeLock.acquire();
+            if (stream == AudioSystem.STREAM_MUSIC) {
+                audioService.adjustLocalOrRemoteStreamVolume(stream,
+                        keycode == KeyEvent.KEYCODE_VOLUME_UP
+                                ? AudioManager.ADJUST_RAISE
+                                : AudioManager.ADJUST_LOWER,
+                        mContext.getOpPackageName());
+            } else {
+                audioService.adjustStreamVolume(stream,
+                        keycode == KeyEvent.KEYCODE_VOLUME_UP
+                                ? AudioManager.ADJUST_RAISE
+                                : AudioManager.ADJUST_LOWER,
+                        0,
+                        mContext.getOpPackageName());
+            }
+        } catch (RemoteException e) {
+            Log.w(TAG, "IAudioService.adjust*StreamVolume() threw RemoteException " + e);
+        } finally {
+            mBroadcastWakeLock.release();
+        }
+    }
+
     final Object mScreenshotLock = new Object();
     ServiceConnection mScreenshotConnection = null;
 
@@ -4981,32 +5019,40 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                 }
 
+                boolean mayChangeVolume = false;
+
                 if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
-                    if (mVolBtnMusicControls && down && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
-                        mIsLongPress = false;
-                        int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
-                                KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-                        Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK,
-                                new KeyEvent(event.getDownTime(), event.getEventTime(), event.getAction(), newKeyCode, 0));
-                        msg.setAsynchronous(true);
-                        mHandler.sendMessageDelayed(msg, ViewConfiguration.getLongPressTimeout());
-                        break;
-                    } else {
-                        if (mVolBtnMusicControls && !down) {
+                    if (mVolBtnMusicControls && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
+                        // Detect long key presses.
+                        if (down) {
+                            mIsLongPress = false;
+                            // TODO: Long press of MUTE could be mapped to KEYCODE_MEDIA_PLAY_PAUSE
+                            int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
+                                    KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+                            scheduleLongPressKeyEvent(event, newKeyCode);
+                            // Consume key down events of all presses.
+                            break;
+                        } else {
                             mHandler.removeMessages(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK);
+                            // Consume key up events of long presses only.
                             if (mIsLongPress) {
                                 break;
                             }
+                            // Change volume only on key up events of short presses.
+                            mayChangeVolume = true;
                         }
+                    } else {
+                        // Long key press detection not applicable, change volume only
+                        // on key down events
+                        mayChangeVolume = down;
                     }
                 }
-
-                if ((result & ACTION_PASS_TO_USER) == 0) {
-                    // If we aren't passing to the user and no one else
-                    // handled it send it to the session manager to figure
-                    // out.
-                    MediaSessionLegacyHelper.getHelper(mContext)
-                            .sendVolumeKeyEvent(event, true);
+                if (!interactive && mVolumeWakeScreen) {
+                    isWakeKey = true;
+                    break;
+                }
+                if (mayChangeVolume) {
+                    handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
                     break;
                 }
                 }
@@ -5180,6 +5226,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mPowerManager.wakeUp(event.getEventTime());
         }
         return result;
+    }
+
+    private void scheduleLongPressKeyEvent(KeyEvent origEvent, int keyCode) {
+        KeyEvent event = new KeyEvent(origEvent.getDownTime(), origEvent.getEventTime(),
+                origEvent.getAction(), keyCode, 0);
+        Message msg = mHandler.obtainMessage(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK, event);
+        msg.setAsynchronous(true);
+        mHandler.sendMessageDelayed(msg, ViewConfiguration.getLongPressTimeout());
     }
 
     /**

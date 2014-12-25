@@ -1020,6 +1020,18 @@ public class AudioService extends IAudioService.Stub {
                 Binder.getCallingUid());
     }
 
+    /** @see AudioManager#adjustLocalOrRemoteStreamVolume(int, int) with current assumption
+     *  on streamType: fixed to STREAM_MUSIC */
+    public void adjustLocalOrRemoteStreamVolume(int streamType, int direction,
+            String callingPackage) {
+        if (DEBUG_VOL) Log.d(TAG, "adjustLocalOrRemoteStreamVolume(dir="+direction+")");
+        if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC, 0)) {
+            adjustStreamVolume(AudioSystem.STREAM_MUSIC, direction, 0, callingPackage);
+        } else if (mMediaFocusControl.checkUpdateRemoteStateIfActive(AudioSystem.STREAM_MUSIC)) {
+            mMediaFocusControl.adjustRemoteVolume(AudioSystem.STREAM_MUSIC, direction, 0);
+        }
+    }
+
     private void adjustSuggestedStreamVolume(int direction, int suggestedStreamType, int flags,
             String callingPackage, int uid) {
         if (DEBUG_VOL) Log.d(TAG, "adjustSuggestedStreamVolume() stream="+suggestedStreamType
@@ -5637,6 +5649,16 @@ public class AudioService extends IAudioService.Stub {
                 mController.volumeChanged(streamType, flags);
             } catch (RemoteException e) {
                 Log.w(TAG, "Error calling volumeChanged", e);
+            }
+        }
+
+        public void postRemoteVolumeChanged(int streamType, int flags) {
+            if (mController == null)
+                return;
+            try {
+                mController.RemoteVolumeChanged(streamType, flags);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Error calling RemoteVolumeChanged", e);
             }
         }
 
