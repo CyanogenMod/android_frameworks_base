@@ -52,6 +52,7 @@ import android.os.Bundle;
 import android.os.FactoryTest;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.IHardwareService;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
@@ -266,6 +267,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final Object mLock = new Object();
     private final Object mQuickBootLock = new Object();
 
+    private boolean mButtonLightEnabled;
+
     Context mContext;
     IWindowManager mWindowManager;
     WindowManagerFuncs mWindowManagerFuncs;
@@ -276,6 +279,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mPreloadedRecentApps;
     final Object mServiceAquireLock = new Object();
     Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
+    IHardwareService mLight;
     SearchManager mSearchManager;
     AccessibilityManager mAccessibilityManager;
 
@@ -1177,6 +1181,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mAccessibilityManager = (AccessibilityManager) context.getSystemService(
                 Context.ACCESSIBILITY_SERVICE);
+
+        mButtonLightEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_button_light_enabled);
+
+        if (mButtonLightEnabled) {
+            mLight = IHardwareService.Stub.asInterface(
+                    ServiceManager.getService("hardware"));
+
+            if(mLight == null) mButtonLightEnabled = false;
+        }
 
         // register for dock events
         IntentFilter filter = new IntentFilter();
@@ -2381,6 +2395,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
                     + repeatCount + " keyguardOn=" + keyguardOn + " mHomePressed=" + mHomePressed
                     + " canceled=" + canceled);
+        }
+
+        if (mButtonLightEnabled && (down && repeatCount == 0 && (keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU
+                || keyCode == KeyEvent.KEYCODE_SEARCH))) {
+            try {
+                mLight.setButtonLightEnabled(true);
+            } catch(RemoteException e) {
+                Slog.e(TAG, "remote call for turn on button light failed.");
+            }
         }
 
         // If we think we might have a volume down & power key chord on the way
@@ -4785,6 +4809,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mPowerKeyTime = event.getDownTime();
                         interceptScreenshotChord();
                         interceptScreenshotLog();
+
+                        if (mButtonLightEnabled) {
+                            try {
+                                mLight.setButtonLightEnabled(false);
+                            } catch(RemoteException e) {
+                                Slog.e(TAG, "remote call for turn off button light failed.");
+                            }
+                        }
                     }
 
                     TelecomManager telecomManager = getTelecommService();
