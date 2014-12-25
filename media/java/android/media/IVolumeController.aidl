@@ -27,6 +27,8 @@ oneway interface IVolumeController {
 
     void volumeChanged(int streamType, int flags);
 
+    void RemoteVolumeChanged(int streamType, int flags);
+
     void masterVolumeChanged(int flags);
 
     void masterMuteChanged(int flags);
