@@ -15474,7 +15474,6 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         }
 
         // Set up drawable properties that are view-independent.
-        renderNode.setLeftTopRightBottom(bounds.left, bounds.top, bounds.right, bounds.bottom);
         renderNode.setProjectBackwards(drawable.isProjected());
         renderNode.setProjectionReceiver(true);
         renderNode.setClipToBounds(false);
