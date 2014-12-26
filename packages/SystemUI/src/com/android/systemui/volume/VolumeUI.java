@@ -162,6 +162,12 @@ public class VolumeUI extends SystemUI {
         }
 
         @Override
+        public void RemoteVolumeChanged(int streamType, int flags)
+                throws RemoteException {
+            mPanel.postRemoteVolumeChanged(streamType, flags);
+        }
+
+        @Override
         public void masterVolumeChanged(int flags) throws RemoteException {
             mPanel.postMasterVolumeChanged(flags);
         }

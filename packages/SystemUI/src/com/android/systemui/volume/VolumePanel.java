@@ -894,6 +894,17 @@ public class VolumePanel extends Handler {
         obtainMessage(MSG_REMOTE_VOLUME_CHANGED, flags, 0, controller).sendToTarget();
     }
 
+    public void postRemoteVolumeChanged(int streamType, int flags) {
+        if (hasMessages(MSG_REMOTE_VOLUME_CHANGED)) return;
+        synchronized (this) {
+            if (mStreamControls == null) {
+                createSliders();
+            }
+        }
+        removeMessages(MSG_FREE_RESOURCES);
+        obtainMessage(MSG_REMOTE_VOLUME_CHANGED, flags, 0, streamType).sendToTarget();
+    }
+
     public void postRemoteSliderVisibility(boolean visible) {
         obtainMessage(MSG_SLIDER_VISIBILITY_CHANGED,
                 STREAM_REMOTE_MUSIC, visible ? 1 : 0).sendToTarget();
