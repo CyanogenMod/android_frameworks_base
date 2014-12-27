@@ -85,6 +85,41 @@ public final class ParcelableConnection implements Parcelable {
         mCallSubstate = callSubstate;
     }
 
+    /* @hide */
+    public ParcelableConnection(
+            PhoneAccountHandle phoneAccount,
+            int state,
+            int capabilities,
+            Uri address,
+            int addressPresentation,
+            String callerDisplayName,
+            int callerDisplayNamePresentation,
+            IVideoProvider videoProvider,
+            int videoState,
+            boolean ringbackRequested,
+            boolean isVoipAudioMode,
+            StatusHints statusHints,
+            DisconnectCause disconnectCause,
+            List<String> conferenceableConnectionIds,
+            int callSubstate) {
+               mPhoneAccount = phoneAccount;
+        mState = state;
+        mCapabilities = capabilities;
+        mProperties = 0;
+        mAddress = address;
+        mAddressPresentation = addressPresentation;
+        mCallerDisplayName = callerDisplayName;
+        mCallerDisplayNamePresentation = callerDisplayNamePresentation;
+        mVideoProvider = videoProvider;
+        mVideoState = videoState;
+        mRingbackRequested = ringbackRequested;
+        mIsVoipAudioMode = isVoipAudioMode;
+        mStatusHints = statusHints;
+        mDisconnectCause = disconnectCause;
+        this.mConferenceableConnectionIds = conferenceableConnectionIds;
+        mCallSubstate = callSubstate;
+    } 
+
     public PhoneAccountHandle getPhoneAccount() {
         return mPhoneAccount;
     }
