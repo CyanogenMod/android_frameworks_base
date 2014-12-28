@@ -2787,7 +2787,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            Settings.System.putFloatForUser(mContext.getContentResolver(),
+                            Settings.System.putIntForUser(mContext.getContentResolver(),
                                     Settings.System.SCREEN_BRIGHTNESS, val,
                                     UserHandle.USER_CURRENT);
                         }
