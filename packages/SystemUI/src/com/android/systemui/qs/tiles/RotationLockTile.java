@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +17,17 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.provider.Settings;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.RotationLockController.RotationLockControllerCallback;
+
+import cyanogenmod.providers.CMSettings;
 
 /** Quick settings tile: Rotation **/
 public class RotationLockTile extends QSTile<QSTile.BooleanState> {
@@ -36,11 +41,20 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
     private final AnimationIcon mAutoToLandscape
             = new AnimationIcon(R.drawable.ic_landscape_from_auto_rotate_animation);
 
+    private static final Intent DISPLAY_SETTINGS = new Intent(Settings.ACTION_DISPLAY_SETTINGS);
+    private static final Intent DISPLAY_ROTATION_SETTINGS =
+            new Intent("android.settings.DISPLAY_ROTATION_SETTINGS");
+
     private final RotationLockController mController;
+
+    private final boolean mAdvancedMode;
 
     public RotationLockTile(Host host) {
         super(host);
         mController = host.getRotationLockController();
+
+        mAdvancedMode = CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.ADVANCED_MODE, 1) == 1;
     }
 
     @Override
@@ -64,6 +78,15 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
         final boolean newState = !mState.value;
         mController.setRotationLocked(newState);
         refreshState(newState ? UserBoolean.USER_TRUE : UserBoolean.USER_FALSE);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        if (!mAdvancedMode) {
+            mHost.startActivityDismissingKeyguard(DISPLAY_SETTINGS);
+        } else {
+            mHost.startActivityDismissingKeyguard(DISPLAY_ROTATION_SETTINGS);
+        }
     }
 
     @Override

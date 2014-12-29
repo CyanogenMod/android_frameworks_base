@@ -155,6 +155,7 @@ public class QSTileView extends ViewGroup {
             mDualLabel.setClickable(true);
             mDualLabel.setFocusable(true);
             mDualLabel.setOnClickListener(mClickSecondary);
+            mDualLabel.setOnLongClickListener(mLongClick);
             if (labelText != null) {
                 mDualLabel.setText(labelText);
             }
@@ -194,10 +195,13 @@ public class QSTileView extends ViewGroup {
 
         if (dual) {
             mTopBackgroundView.setOnClickListener(mClickPrimary);
+            mTopBackgroundView.setOnLongClickListener(mLongClick);
             setOnClickListener(null);
+            setOnLongClickListener(null);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         } else {
             mTopBackgroundView.setOnClickListener(null);
+            mTopBackgroundView.setOnLongClickListener(null);
             setOnClickListener(mClickPrimary);
             setOnLongClickListener(mLongClick);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
