@@ -16,6 +16,9 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Intent;
+import android.provider.Settings;
+
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
@@ -24,6 +27,7 @@ import com.android.systemui.statusbar.policy.LocationController.LocationSettings
 
 /** Quick settings tile: Location **/
 public class LocationTile extends QSTile<QSTile.BooleanState> {
+    private static final Intent LOCATION_SETTINGS = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
     private final LocationController mController;
     private final KeyguardMonitor mKeyguard;
@@ -55,6 +59,11 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
     protected void handleClick() {
         final boolean wasEnabled = (Boolean) mState.value;
         mController.setLocationEnabled(!wasEnabled);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(LOCATION_SETTINGS);
     }
 
     @Override

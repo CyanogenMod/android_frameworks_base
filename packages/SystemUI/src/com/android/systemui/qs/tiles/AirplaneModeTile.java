@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 
 import com.android.systemui.R;
@@ -29,6 +30,7 @@ import com.android.systemui.qs.QSTile;
 
 /** Quick settings tile: Airplane mode **/
 public class AirplaneModeTile extends QSTile<QSTile.BooleanState> {
+    private static final Intent WIRELESS_SETTINGS = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
     private final GlobalSetting mSetting;
 
     private boolean mListening;
@@ -52,6 +54,11 @@ public class AirplaneModeTile extends QSTile<QSTile.BooleanState> {
     @Override
     public void handleClick() {
         setEnabled(!mState.value);
+    }
+
+    @Override
+    public void handleLongClick() {
+        mHost.startSettingsActivity(WIRELESS_SETTINGS);
     }
 
     private void setEnabled(boolean enabled) {

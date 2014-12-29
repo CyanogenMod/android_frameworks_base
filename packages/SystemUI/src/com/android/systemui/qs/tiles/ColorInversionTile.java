@@ -16,6 +16,8 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Intent;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
 
 import com.android.systemui.R;
@@ -25,6 +27,7 @@ import com.android.systemui.qs.UsageTracker;
 
 /** Quick settings tile: Invert colors **/
 public class ColorInversionTile extends QSTile<QSTile.BooleanState> {
+    private static final Intent ACCESSIBILITY_SETTINGS = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     private final SecureSetting mSetting;
     private final UsageTracker mUsageTracker;
@@ -78,6 +81,11 @@ public class ColorInversionTile extends QSTile<QSTile.BooleanState> {
     @Override
     protected void handleClick() {
         mSetting.setValue(mState.value ? 0 : 1);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(ACCESSIBILITY_SETTINGS);
     }
 
     @Override
