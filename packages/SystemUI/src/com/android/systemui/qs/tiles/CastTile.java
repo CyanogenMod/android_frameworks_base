@@ -91,6 +91,11 @@ public class CastTile extends QSTile<QSTile.BooleanState> {
     }
 
     @Override
+    protected void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(CAST_SETTINGS);
+    }
+
+    @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.visible = !mKeyguard.isSecure() || !mKeyguard.isShowing()
                 || mKeyguard.canSkipBouncer();

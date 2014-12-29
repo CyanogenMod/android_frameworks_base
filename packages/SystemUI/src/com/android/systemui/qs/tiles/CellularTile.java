@@ -89,6 +89,15 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
+    protected void handleLongClick() {
+        Intent mobileNetworkIntent = new Intent();
+        mobileNetworkIntent.setAction("android.intent.MAIN");
+        mobileNetworkIntent.setClassName("com.android.phone",
+                "com.androidphone.MobileNetworkSettings");
+        mHost.startActivityDismissingKeyguard(mobileNetworkIntent);
+    }
+
+    @Override
     protected void handleUpdateState(SignalState state, Object arg) {
         state.visible = mController.hasMobileDataFeature();
         if (!state.visible) return;
