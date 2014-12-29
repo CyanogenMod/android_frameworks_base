@@ -33,6 +33,7 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
             new AnimationIcon(R.drawable.ic_hotspot_enable_animation);
     private final AnimationIcon mDisable =
             new AnimationIcon(R.drawable.ic_hotspot_disable_animation);
+
     private final HotspotController mController;
     private final Callback mCallback = new Callback();
     private final UsageTracker mUsageTracker;
