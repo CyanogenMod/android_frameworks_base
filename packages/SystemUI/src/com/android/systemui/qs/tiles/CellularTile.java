@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.android.systemui.statusbar.policy.NetworkController.NetworkSignalChan
 public class CellularTile extends QSTile<QSTile.SignalState> {
     private static final Intent CELLULAR_SETTINGS = new Intent().setComponent(new ComponentName(
             "com.android.settings", "com.android.settings.Settings$DataUsageSummaryActivity"));
+    private static final Intent WIRELESS_SETTINGS = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
 
     private final NetworkController mController;
     private final CellularDetailAdapter mDetailAdapter;
@@ -77,6 +79,11 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
         } else {
             mHost.startSettingsActivity(CELLULAR_SETTINGS);
         }
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(WIRELESS_SETTINGS);
     }
 
     @Override
