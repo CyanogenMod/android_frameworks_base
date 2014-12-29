@@ -46,6 +46,7 @@ import com.android.systemui.qs.QSTile;
 
 /** Quick settings tile: Mobile data switch **/
 public class DataTile extends QSTile<QSTile.BooleanState> {
+    private static final Intent WIRELESS_SETTINGS = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
     TelephonyManager mTelephonyManager;
     private DataObserver mDataObserver;
     private boolean mListening = false;
@@ -72,6 +73,11 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
                     "com.android.settings.Settings$DataUsageSummaryActivity"));
             mHost.startSettingsActivity(intent);
         }
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(WIRELESS_SETTINGS);
     }
 
     private void setEnabled(boolean enabled) {
