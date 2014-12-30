@@ -328,6 +328,7 @@ public abstract class Conference implements IConferenceable {
         }
     }
 
+    /** @hide */
     public final void setVideoProvider(Connection c, Connection.VideoProvider videoProvider) {
         Log.d(this, "setVideoProvider Conference: %s Connection: %s VideoState: %s",
                 this, c, videoProvider);
