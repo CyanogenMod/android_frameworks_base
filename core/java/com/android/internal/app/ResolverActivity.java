@@ -92,6 +92,7 @@ public class ResolverActivity extends Activity {
     private boolean mSafeForwardingMode;
     private boolean mAlwaysUseOption;
     private AbsListView mAdapterView;
+    private ViewGroup mFilteredItemContainer;
     private Button mAlwaysButton;
     private Button mOnceButton;
     private View mProfileView;
@@ -299,6 +300,21 @@ public class ResolverActivity extends Activity {
         }
 
         if (mAdapter.hasFilteredItem()) {
+            mFilteredItemContainer = (ViewGroup) findViewById(R.id.filtered_item_container);
+            mFilteredItemContainer.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    DisplayResolveInfo filteredItem = mAdapter.getFilteredItem();
+
+                    if (filteredItem == null) {
+                        return false;
+                    }
+
+                    showAppDetails(filteredItem.getResolveInfo());
+                    return true;
+                }
+            });
+
             setAlwaysButtonEnabled(true, mAdapter.getFilteredPosition(), false);
             mOnceButton.setEnabled(true);
         }
