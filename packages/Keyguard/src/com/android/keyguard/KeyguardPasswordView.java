@@ -147,6 +147,14 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
                 if (mCallback != null) {
                     mCallback.userActivity();
                 }
+                if (mLockPatternUtils.getQuickUnlockControl()) {
+                    String entry = getPasswordText();
+                    if (entry.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
+                            && mLockPatternUtils.checkPassword(entry)) {
+                        mCallback.reportUnlockAttempt(true);
+                        mCallback.dismiss(true);
+                    }
+                }
             }
         });
 
