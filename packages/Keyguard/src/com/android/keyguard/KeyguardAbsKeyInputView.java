@@ -115,10 +115,16 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     }
 
     protected void verifyPasswordAndUnlock() {
+        verifyPasswordAndUnlock(false);
+    }
+
+    protected void verifyPasswordAndUnlock(final boolean quickUnlock) {
         if (mDismissing) return; // already verified but haven't been dismissed; don't do it again.
 
         final String entry = getPasswordText();
-        setPasswordEntryInputEnabled(false);
+        if (!quickUnlock) {
+            setPasswordEntryInputEnabled(false);
+        }
         if (mPendingLockCheck != null) {
             mPendingLockCheck.cancel(false);
         }
@@ -126,8 +132,10 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
         if (entry.length() <= MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT) {
             // to avoid accidental lockout, only count attempts that are long enough to be a
             // real password. This may require some tweaking.
-            setPasswordEntryInputEnabled(true);
-            onPasswordChecked(false /* matched */, 0, false /* not valid - too short */);
+            if (!quickUnlock) {
+                setPasswordEntryInputEnabled(true);
+                onPasswordChecked(false /* matched */, 0, false /* not valid - too short */);
+            }
             return;
         }
 
@@ -138,6 +146,9 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
                 new LockPatternChecker.OnCheckCallback() {
                     @Override
                     public void onChecked(boolean matched, int timeoutMs) {
+                        if (!matched && quickUnlock) {
+                            return;
+                        }
                         setPasswordEntryInputEnabled(true);
                         mPendingLockCheck = null;
                         onPasswordChecked(matched, timeoutMs, true /* isValidPassword */);
