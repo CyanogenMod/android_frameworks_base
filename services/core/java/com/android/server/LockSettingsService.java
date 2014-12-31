@@ -194,6 +194,29 @@ public class LockSettingsService extends ILockSettings.Stub {
         } catch (RemoteException re) {
             Slog.e(TAG, "Unable to migrate old data", re);
         }
+        migrateOldCMData();
+    }
+
+    private void migrateOldCMData() {
+        try {
+            // These Settings moved before multi-user was enabled, so we only have to do it for the
+            // root user.
+            if (getString("migrated_cm", null, 0) == null) {
+                final ContentResolver cr = mContext.getContentResolver();
+
+                // lockscreen quick unlock
+                String cmSetting = "lockscreen_quick_unlock_control";
+                String value = Settings.System.getString(cr, cmSetting);
+                if (value != null) {
+                    setString(LockPatternUtils.LOCKSCREEN_QUICK_UNLOCK_CONTROL, value, 0);
+                }
+
+                setString("migrated_cm", "true", 0);
+                Slog.i(TAG, "Migrated CM lock settings to new location");
+            }
+        } catch (RemoteException re) {
+            Slog.e(TAG, "Unable to migrate old CM data", re);
+        }
     }
 
     private final void checkWritePermission(int userId) {
