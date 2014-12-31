@@ -33,6 +33,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.android.internal.widget.LockPatternUtils.RequestThrottledException;
+import com.android.keyguard.PasswordTextView.QuickUnlockListener;
 import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.settingslib.animation.DisappearAnimationUtils;
 
@@ -53,6 +55,8 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
     private View[][] mViews;
 
     private static List<Integer> sNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
+
+    private final int userId = KeyguardUpdateMonitor.getCurrentUser();
 
     public KeyguardPINView(Context context) {
         this(context, null);
@@ -112,6 +116,9 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                         null, mEcaView, null
                 }};
 
+        boolean quickUnlock = (Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+
         boolean scramblePin = (Settings.System.getInt(getContext().getContentResolver(),
                 Settings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
 
@@ -137,6 +144,16 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                 NumPadKey view = views.get(i);
                 view.setDigit(sNumbers.get(i));
             }
+        }
+
+        if (quickUnlock) {
+            mPasswordEntry.setQuickUnlockListener(new QuickUnlockListener() {
+                public void onValidateQuickUnlock(String password) {
+                    validateQuickUnlock(password);
+                }
+            });
+        } else {
+            mPasswordEntry.setQuickUnlockListener(null);
         }
     }
 
@@ -196,5 +213,24 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    private void validateQuickUnlock(String password) {
+        if (password != null) {
+            if (password.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
+                    && kpvCheckPassword(password)) {
+                mCallback.reportUnlockAttempt(true, userId);
+                mCallback.dismiss(true);
+                resetPasswordText(true);
+            }
+        }
+    }
+
+    private boolean kpvCheckPassword(String password) {
+        try {
+            return mLockPatternUtils.checkPassword(password, userId);
+        } catch (RequestThrottledException ex) {
+            return false;
+        }
     }
 }
