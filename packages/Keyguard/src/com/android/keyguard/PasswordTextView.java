@@ -92,6 +92,20 @@ public class PasswordTextView extends View {
     private Interpolator mDisappearInterpolator;
     private Interpolator mFastOutSlowInInterpolator;
     private boolean mShowPassword;
+    protected QuickUnlockListener mQuickUnlockListener;
+
+    /* Quick unlock management for PIN view. */
+    public interface QuickUnlockListener {
+        /**
+         * Validate current password and prepare callback if verified.
+         * @param password The password string to be verified.
+         */
+        void onValidateQuickUnlock(String password);
+    }
+
+    public void setQuickUnlockListener(QuickUnlockListener listener) {
+        mQuickUnlockListener = listener;
+    }
 
     public PasswordTextView(Context context) {
         this(context, null);
@@ -204,6 +218,10 @@ public class PasswordTextView extends View {
         }
         userActivity();
         sendAccessibilityEventTypeViewTextChanged(textbefore, textbefore.length(), 0, 1);
+
+        if (mQuickUnlockListener != null) {
+            mQuickUnlockListener.onValidateQuickUnlock(mText);
+        }
     }
 
     private void userActivity() {

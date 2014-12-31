@@ -21,6 +21,7 @@ package com.android.keyguard;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -139,6 +140,9 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
 
         boolean imeOrDeleteButtonVisible = false;
 
+        final boolean quickUnlock = (Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+
         mImm = (InputMethodManager) getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
@@ -169,6 +173,15 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
             public void afterTextChanged(Editable s) {
                 if (mCallback != null) {
                     mCallback.userActivity();
+                }
+                if (quickUnlock) {
+                    String entry = getPasswordText();
+                    if (entry.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
+                            && mLockPatternUtils.checkPassword(entry)) {
+                        mCallback.reportUnlockAttempt(true);
+                        mCallback.dismiss(true);
+                        resetPasswordText(true);
+                    }
                 }
             }
         });
