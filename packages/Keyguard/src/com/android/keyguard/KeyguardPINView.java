@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.android.internal.widget.LockPatternUtils;
 import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.settingslib.animation.DisappearAnimationUtils;
 
@@ -117,6 +118,9 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
         boolean scramblePin = (CMSettings.System.getInt(getContext().getContentResolver(),
                 CMSettings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
 
+        boolean quickUnlock = (CMSettings.System.getInt(getContext().getContentResolver(),
+                CMSettings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+
         if (scramblePin) {
             Collections.shuffle(sNumbers);
             // get all children who are NumPadKey's
@@ -139,6 +143,16 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                 NumPadKey view = views.get(i);
                 view.setDigit(sNumbers.get(i));
             }
+        }
+
+        if (quickUnlock) {
+            mPasswordEntry.setQuickUnlockListener(new PasswordTextView.QuickUnlockListener() {
+                public void onValidateQuickUnlock(String password) {
+                    validateQuickUnlock(password);
+                }
+            });
+        } else {
+            mPasswordEntry.setQuickUnlockListener(null);
         }
     }
 
@@ -198,5 +212,21 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    private void validateQuickUnlock(String password) {
+        if (password != null) {
+            try {
+                if (password.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
+                        && mLockPatternUtils.checkPassword(password,
+                        KeyguardUpdateMonitor.getCurrentUser())) {
+                    mCallback.reportUnlockAttempt(true, 0);
+                    mCallback.dismiss(true);
+                    resetPasswordText(true);
+                }
+            } catch (LockPatternUtils.RequestThrottledException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
