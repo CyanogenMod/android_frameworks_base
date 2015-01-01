@@ -609,10 +609,25 @@ public class PackageParser {
             }
         }
         if ((flags&PackageManager.GET_SIGNATURES) != 0) {
-           int N = (p.mSignatures != null) ? p.mSignatures.length : 0;
-           if (N > 0) {
-                pi.signatures = new Signature[N];
-                System.arraycopy(p.mSignatures, 0, pi.signatures, 0, N);
+            boolean handledFakeSignature = false;
+            try {
+                String perm = android.Manifest.permission.FAKE_PACKAGE_SIGNATURE;
+                if (p.requestedPermissions.contains(perm) && p.mAppMetaData != null
+                        && p.mAppMetaData.get("fake-signature") instanceof String) {
+                    String fakeSig = p.mAppMetaData.getString("fake-signature");
+                    pi.signatures = new Signature[] {new Signature(fakeSig)};
+                    handledFakeSignature = true;
+                }
+            } catch (Throwable t) {
+                // We should never die because of any failures, this is system code!
+                Log.w("PackageParser.FAKE_PACKAGE_SIGNATURE", t);
+            }
+            if (!handledFakeSignature) {
+                int N = (p.mSignatures != null) ? p.mSignatures.length : 0;
+                if (N > 0) {
+                    pi.signatures = new Signature[N];
+                    System.arraycopy(p.mSignatures, 0, pi.signatures, 0, N);
+                }
             }
         }
         return pi;
