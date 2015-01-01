@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="clear_recents">Stäng alla nyligen</string>
+    <string name="screenshot_delete_action">Radera</string>
+    <string name="screenshot_delete_confirmation">Skärmbild raderad.</string>
+    <string name="advanced_dev_option_wipe_app">Radera app data</string>
+    <string name="advanced_dev_option_force_stop">Tvingad avslutning</string>
+    <string name="advanced_dev_option_uninstall">Avinstallera</string>
+    <string name="accessibility_quick_settings_data_off">Mobildata av.</string>
+    <string name="accessibility_quick_settings_data_on">Mobildata på.</string>
+    <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
+    <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
+    <string name="quick_settings_mobile_data_label">Mobildata</string>
+    <string name="quick_settings_roaming_label">Roaming</string>
+    <string name="quick_settings_apn_switch_label">APN omkopplare</string>
+    <string name="quick_settings_dds_sub">Kort <xliff:g id="number">%d</xliff:g> data</string>
+    <string name="quick_settings_data_off">Data av</string>
+    <string name="tasklistview_title">Aktivitetshanteraren</string>
+    <string name="message_switch_fail">Kan inte byta till denna uppgift, eftersom den inte har något gränssnitt.</string>
+    <string name="tasklist_killall">Döda Alla</string>
+    <string name="tasklist_memory_usage">"Ledigt/Totalt Minne: [<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
+    <string name="message_keep_one_launcher">Bör hålla minst en hem aktivitet kvar!</string>
+</resources>
