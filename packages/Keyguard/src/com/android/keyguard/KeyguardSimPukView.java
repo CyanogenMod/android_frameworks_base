@@ -412,6 +412,8 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
         if (subId != mSubId) {
             mSubId = subId;
             handleSubInfoChange();
+            mRemainingAttempts = -1;
+            mShowDefaultMessage = true;
         }
     }
 
