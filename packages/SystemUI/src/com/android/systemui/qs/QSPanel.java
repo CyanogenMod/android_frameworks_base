@@ -25,8 +25,9 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,8 @@ public class QSPanel extends ViewGroup {
 
     private QSFooter mFooter;
     private boolean mGridContentVisible = true;
+
+    private boolean mUseMainTiles = false;
 
     public QSPanel(Context context) {
         this(context, null);
@@ -204,6 +207,8 @@ public class QSPanel extends ViewGroup {
     }
 
     private void refreshAllTiles() {
+        mUseMainTiles = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.QS_USE_MAIN_TILES, 1, UserHandle.myUserId()) == 1;
         for (TileRecord r : mRecords) {
             r.tile.refreshState();
         }
@@ -394,21 +399,22 @@ public class QSPanel extends ViewGroup {
         int r = -1;
         int c = -1;
         int rows = 0;
-        boolean rowIsDual = false;
         for (TileRecord record : mRecords) {
             if (record.tileView.getVisibility() == GONE) continue;
             // wrap to next column if we've reached the max # of columns
-            // also don't allow dual + single tiles on the same row
-            if (r == -1 || c == (mColumns - 1) || rowIsDual != record.tile.supportsDualTargets()) {
+            if (mUseMainTiles && r == 0 && c == 1) {
+                r = 1;
+                c = 0;
+            } else if (r == -1 || c == (mColumns - 1)) {
                 r++;
                 c = 0;
-                rowIsDual = record.tile.supportsDualTargets();
             } else {
                 c++;
             }
             record.row = r;
             record.col = c;
             rows = r + 1;
+
         }
 
         for (TileRecord record : mRecords) {
@@ -441,6 +447,12 @@ public class QSPanel extends ViewGroup {
                 mBrightnessPaddingTop + mBrightnessView.getMeasuredHeight());
         boolean isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
         for (TileRecord record : mRecords) {
+            // Only set as main tiles if the option is enabled
+            if(mUseMainTiles && record.row == 0) {
+                record.tile.setmLargeTile(true);
+            } else {
+                record.tile.setmLargeTile(false);
+            }
             if (record.tileView.getVisibility() == GONE) continue;
             final int cols = getColumnCount(record.row);
             final int cw = record.row == 0 ? mLargeCellWidth : mCellWidth;
