@@ -1738,6 +1738,9 @@ final class ActivityStack {
                     mWindowManager.prepareAppTransition(prev.task == next.task
                             ? AppTransition.TRANSIT_ACTIVITY_CLOSE
                             : AppTransition.TRANSIT_TASK_CLOSE, false);
+                    if (prev.task != next.task) {
+                        mStackSupervisor.mPm.cpuBoost(2000 * 1000);
+                    }
                 }
                 mWindowManager.setAppWillBeHidden(prev.appToken);
                 mWindowManager.setAppVisibility(prev.appToken, false);
@@ -1752,6 +1755,9 @@ final class ActivityStack {
                             : next.mLaunchTaskBehind
                                     ? AppTransition.TRANSIT_TASK_OPEN_BEHIND
                                     : AppTransition.TRANSIT_TASK_OPEN, false);
+                    if (prev.task != next.task) {
+                        mStackSupervisor.mPm.cpuBoost(2000 * 1000);
+                    }
                 }
             }
             if (false) {
