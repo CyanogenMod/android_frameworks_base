@@ -2097,6 +2097,19 @@ public final class Settings {
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
 
         /**
+         * List of QS tile names
+         * @hide
+         */
+        public static final String QS_TILES = "sysui_qs_tiles";
+
+        /**
+         * Use "main" tiles on the first row of the quick settings panel
+         * 0 = no, 1 = yes
+         * @hide
+         */
+        public static final String QS_USE_MAIN_TILES = "sysui_qs_main_tiles";
+
+        /**
          * Control whether the process CPU usage meter should be shown.
          *
          * @deprecated Use {@link Global#SHOW_PROCESSES} instead
