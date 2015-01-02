@@ -124,7 +124,9 @@ public class QSTileView extends ViewGroup {
         }
         if (mDualLabel != null) {
             labelText = mDualLabel.getText();
-            labelDescription = mLabel.getContentDescription();
+            if (mLabel != null) {
+                labelDescription = mLabel.getContentDescription();
+            }
             removeView(mDualLabel);
             mDualLabel = null;
         }
@@ -169,9 +171,6 @@ public class QSTileView extends ViewGroup {
     public void setDual(boolean dual) {
         final boolean changed = dual != mDual;
         mDual = dual;
-        if (changed) {
-            recreateLabel();
-        }
         Drawable tileBackground = getTileBackground();
         if (tileBackground instanceof RippleDrawable) {
             setRipple((RippleDrawable) tileBackground);
@@ -194,6 +193,10 @@ public class QSTileView extends ViewGroup {
         mTopBackgroundView.setFocusable(dual);
         setFocusable(!dual);
         mDivider.setVisibility(dual ? VISIBLE : GONE);
+        if (changed) {
+            recreateLabel();
+            updateTopPadding();
+        }
         postInvalidate();
     }
 
