@@ -109,7 +109,7 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
      *
      * @return true if attempt to change setting was successful.
      */
-    public boolean setLocationEnabled(boolean enabled) {
+    public boolean setLocationNextState() {
         int currentUserId = ActivityManager.getCurrentUser();
         if (isUserLocationRestricted(currentUserId)) {
             return false;
@@ -117,12 +117,43 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
         final ContentResolver cr = mContext.getContentResolver();
         // When enabling location, a user consent dialog will pop up, and the
         // setting won't be fully enabled until the user accepts the agreement.
-        int mode = enabled
-                ? Settings.Secure.LOCATION_MODE_HIGH_ACCURACY : Settings.Secure.LOCATION_MODE_OFF;
+        // Get current location mode, set default return value to -1 so we know if something gone wrong
+        int currentMode = Settings.Secure.getIntForUser(cr, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF, currentUserId);
+        int mode;
+
+        // Switch to next state
+        switch (currentMode) {
+            case Settings.Secure.LOCATION_MODE_OFF:
+                mode = Settings.Secure.LOCATION_MODE_BATTERY_SAVING;
+                break;
+            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                mode = Settings.Secure.LOCATION_MODE_SENSORS_ONLY;
+                break;
+            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                mode = Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
+                break;
+            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                mode = Settings.Secure.LOCATION_MODE_OFF;
+                break;
+            default:
+                mode = Settings.Secure.LOCATION_MODE_OFF;
+        }
+
         // QuickSettings always runs as the owner, so specifically set the settings
         // for the current foreground user.
-        return Settings.Secure
-                .putIntForUser(cr, Settings.Secure.LOCATION_MODE, mode, currentUserId);
+        return Settings.Secure.putIntForUser(cr, Settings.Secure.LOCATION_MODE, mode, currentUserId);
+    }
+
+    /**
+     * Returns int corresponding to location mode in settings.
+     */
+    public int getLocationCurrentState() {
+        int currentUserId = ActivityManager.getCurrentUser();
+        if (isUserLocationRestricted(currentUserId)) {
+            return Settings.Secure.LOCATION_MODE_OFF;
+        }
+        final ContentResolver cr = mContext.getContentResolver();
+        return Settings.Secure.getIntForUser(cr, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF, currentUserId);
     }
 
     /**

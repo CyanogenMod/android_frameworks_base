@@ -18,7 +18,8 @@ package com.android.systemui.statusbar.policy;
 
 public interface LocationController {
     boolean isLocationEnabled();
-    boolean setLocationEnabled(boolean enabled);
+    boolean setLocationNextState();
+    int getLocationCurrentState();
     void addSettingsChangedCallback(LocationSettingsChangeCallback cb);
     void removeSettingsChangedCallback(LocationSettingsChangeCallback cb);
 
