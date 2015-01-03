@@ -30,7 +30,7 @@
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">Cits</string>
   <string name="global_action_screenshot">Ekrānattēls</string>
-  <string name="global_actions_toggle_expanded_desktop_mode">Izplesta darbavirsma</string>
+  <string name="global_actions_toggle_expanded_desktop_mode">Izvērsta darbavirsma</string>
   <string name="global_actions_expanded_desktop_mode_on_status">Ieslēgts</string>
   <string name="global_actions_expanded_desktop_mode_off_status">Atslēgts</string>
   <string name="reboot_system" product="tablet">Pārsāknēt planšeti</string>
@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Veiktspēja</string>
   <string name="permlab_interceptSmsSent">Pārtvert izejošās SMS</string>
   <string name="permdesc_interceptSmsSent">Ļauj lietotnei pārtvert izejošās SMS. Kaitīgas lietotnes varētu šo izmantot, lai novērstu SMS nogādāšanu.</string>
+  <string name="permlab_receiveProtectedSms">saņemt aizsargātu īsziņu</string>
+  <string name="permdesc_receiveProtectedSms">Ļauj lietotnēm saņemt aizsargātu ienākošo īsziņu.</string>
+  <string name="permlab_modifyProtectedSmsList">mainīt aizsargāto īsziņu sarakstu</string>
+  <string name="permdesc_modifyProtectedSmsList">Ļauj lietotnei mainīt aizsargāto īsziņu adrešu sarakstu.</string>
   <string name="permlab_resetBatteryStats">atstatīt baterijas statistiku</string>
   <string name="permdesc_resetBatteryStats">Ļauj lietotnei atstatīt esošo zema līmeņa baterijas lietošanas datus.</string>
   <string name="permgrouplab_security">Drošība</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Ļauj lietotnei piekļūt CM aparatūras ietvaram.</string>
   <string name="permlab_keyguardApplicationWidget">iestatīt taustiņslēga lietotnes logrīku</string>
   <string name="permdesc_keyguardApplicationWidget">Ļauj lietotnei iestatīt taustiņslēga logrīku.</string>
+  <string name="permlab_interceptPackageLaunch">Pārtvert lietotnes palaišanu</string>
+  <string name="permdesc_interceptPackageLaunch">Ļauj lietotnei pārtvert citu lietotņu palaišanu</string>
   <string name="immersive_mode_confirmation_bottom">Vēzēt no apakšas uz augšu, lai izietu no pilnekrāna režīma.</string>
   <string name="app_ops_access_camera">piekļuve kamerai</string>
   <string name="app_ops_access_location">piekļeve jūsu atrašanās vietai</string>

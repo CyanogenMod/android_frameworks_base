@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">Inicializē\u2026</string>
   <string name="quick_settings_heads_up_on">Galvas augšup ieslēgts</string>
   <string name="quick_settings_heads_up_off">Bez pārtraukumiem</string>
+  <string name="quick_settings_themes">Tēmas</string>
   <string name="location_mode_high_accuracy_title">Augsta precizitāte</string>
   <string name="location_mode_battery_saving_title">Akumulatora taupīšana</string>
   <string name="location_mode_sensors_only_title">Tikai iekārtu</string>
@@ -78,4 +79,6 @@
   <string name="screenshot_delete_confirmation">Ekrānattēls izdzēsts.</string>
   <string name="accessibility_desc_add_quick_settings">Pievienot ātros iestatījumus.</string>
   <string name="status_bar_notification_spam_item_title">Ignorēt līdzīgus paziņojumus</string>
+  <string name="protected_app_notification_title">Aizsargāts lietotnes ziņojums</string>
+  <string name="protected_app_notification_summary">Piesitiet, lai atvērtu ziņu no aizsargātas lietotnes</string>
 </resources>

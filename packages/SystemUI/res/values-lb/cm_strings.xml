@@ -19,7 +19,7 @@
   <string name="accessibility_dpad_left">Cursor lénks</string>
   <string name="accessibility_dpad_right">Cursor riets</string>
   <string name="dessert_case_settings_cm_title">CM-Maskottchen uweisen</string>
-  <string name="dessert_case_settings_cm_summary">Esouwuel d\'CM-Maskottchen wéi och d\'Android-Séissegkeeten am \"Dram\" uweisen</string>
+  <string name="dessert_case_settings_cm_summary">Souwuel d\'CM-Maskottchen wéi och d\'Android-Séissegkeeten am \"Dram\" uweisen</string>
   <string name="quick_settings_screen_sleep">Standby</string>
   <string name="quick_settings_label_enabled">Un</string>
   <string name="quick_settings_ringer_normal">Toun</string>
@@ -72,12 +72,12 @@
   <string name="navbar_menu_big_button">Menüknäppchen</string>
   <string name="advanced_dev_option_wipe_app">Applikatiounsdate läschen</string>
   <string name="advanced_dev_option_force_stop">Zoumaachen zwéngen</string>
-  <string name="advanced_dev_option_uninstall">Deinstalléieren</string>
+  <string name="advanced_dev_option_uninstall">Desinstalléieren</string>
   <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
   <string name="screenshot_delete_action">Läschen</string>
   <string name="screenshot_delete_confirmation">Schiermfoto geläscht.</string>
-  <string name="accessibility_desc_add_quick_settings">Schnellastellungen dobäisetzen.</string>
-  <string name="status_bar_notification_spam_item_title">Ähnlech Messagen ignoréieren</string>
+  <string name="accessibility_desc_add_quick_settings">Séier Astellungen dobäisetzen.</string>
+  <string name="status_bar_notification_spam_item_title">Ähnlech Notifikatiounen ignoréieren</string>
   <string name="protected_app_notification_title">Notifikatioun vun enger geschützer App</string>
   <string name="protected_app_notification_summary">Dréck fir d\'Notifikatioun vun der geschützter App opzemaachen</string>
 </resources>

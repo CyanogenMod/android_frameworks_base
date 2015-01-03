@@ -24,8 +24,8 @@
   <string name="keyguard_password_enter_puk_prompt">SIM-PUK-Code</string>
   <string name="keyguard_password_enter_pin_prompt">Neie SIM-PIN-Code</string>
   <string name="keyguard_password_entry_touch_hint"><font size="17">Dréck fir d\'Passwuert anzeginn</font></string>
-  <string name="keyguard_password_enter_password_code">Passwuert antippe fir z\'entspären</string>
-  <string name="keyguard_password_enter_pin_password_code">PIN antippe fir z\'entspären</string>
+  <string name="keyguard_password_enter_password_code">Passwuert agi fir z\'entspären</string>
+  <string name="keyguard_password_enter_pin_password_code">PIN agi fir z\'entspären</string>
   <string name="keyguard_password_wrong_pin_code">Falsche PIN-Code.</string>
   <string name="keyguard_label_text">Menü an dann 0 drécke fir z\'entspären.</string>
   <string name="faceunlock_multiple_failures">Maximal Unzuel u Versich fir mam Gesiicht z\'entspären iwwerschratt</string>
@@ -112,7 +112,7 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_puk_enter_pin_hint">Gëff de gewënschte PIN-Code an</string>
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
   <string name="kg_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
-  <string name="kg_invalid_sim_pin_hint">Tipp e PIN deen tëscht 4 an 8 Zifferen huet.</string>
+  <string name="kg_invalid_sim_pin_hint">Gëff e PIN an, deen tëscht 4 an 8 Zifferen huet.</string>
   <string name="kg_invalid_sim_puk_hint">De PUK-Code misst 8 oder méi Zifferen hunn.</string>
   <string name="kg_invalid_puk">Gëff de korrekte PUK-Code nees an. Bei widderhuelende Versich gëtt d\'SIM permanent desaktivéiert.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">D\'PIN-Codë stëmmen net iwwereneen</string>
@@ -124,10 +124,7 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_login_invalid_input">Ongëltege Benotzernumm oder Passwuert.</string>
   <string name="kg_login_account_recovery_hint">Benotzernumm oder Passwuert vergiess\?\nBesich <b>google.com/accounts/recovery</b>.</string>
   <string name="kg_login_checking_password">Kont gëtt iwwerpréift\u2026</string>
-  <string name="kg_too_many_failed_pin_attempts_dialog_message">
-        Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.
-        \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
-    </string>
+  <string name="kg_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.

@@ -15,9 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="prompt"><xliff:g id="app">%s</xliff:g>
-        Versich fir eng VPN-Connectioun opzebauen.
-    </string>
+  <string name="prompt"><xliff:g id="app">%s</xliff:g>  Versich fir eng VPN-Connectioun opzebauen.</string>
   <string name="warning">Wann s du weiderméchs, gëss du dëser Applikatioun
         d\'Recht de ganzen Netzwierktrafic ofzefänken.
         <b>Acceptéier dat NET wann s de der Applikatioun net traus.</b>

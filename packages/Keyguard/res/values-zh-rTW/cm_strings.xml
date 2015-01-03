@@ -33,5 +33,9 @@
   <string name="keyguard_password_wrong_puk_code">錯誤的 PUK 碼。</string>
   <string name="keyguard_password_pin_failed">PIN 碼操作失敗。</string>
   <string name="keyguard_password_puk_failed">PUK 碼操作失敗。</string>
+  <string name="pinpuk_attempts">\n剩餘嘗試次數：</string>
+  <string name="lockscreen_sim_error_message_short">無效的 SIM 卡。</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM 卡已被鎖定</string>
   <string name="msim_kg_sim_pin_msg_format">SIM：<xliff:g id="number">%d</xliff:g>：<xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">最後使用的應用程式</string>
 </resources>

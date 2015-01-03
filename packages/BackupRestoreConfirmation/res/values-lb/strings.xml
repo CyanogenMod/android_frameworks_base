@@ -20,7 +20,7 @@
   <string name="backup_confirm_text">Eng komplett Sécherung  vun allen Daten op en ugeschlossene Büroscomputer ass gefrot ginn. Wëlls du dat zouloossen\?\n\nFalls du dës Sécherung net gefrot hues, dann erlab dës Operatioun net.</string>
   <string name="allow_backup_button_label">Meng Date sécheren</string>
   <string name="deny_backup_button_label">Net sécheren</string>
-  <string name="restore_confirm_text">Eng komplett Erëmhierstellung vun allen Daten op en ugeschlossene Büroscomputer ass gefrot ginn. Wëlls du dat zouloossen\?\n\nFalls du dës Erëmhierstellung net gefrot hues, dann erlab dës Operatioun net!</string>
+  <string name="restore_confirm_text">Eng komplett Erëmhierstellung vun allen Daten op en ugeschlosse Büroscomputer ass gefrot ginn. Wëlls du dat zouloossen\?\n\nFalls du dës Erëmhierstellung net gefrot hues, dann erlab dës Operatioun net!</string>
   <string name="allow_restore_button_label">Meng Daten erëmhierstellen</string>
   <string name="deny_restore_button_label">Net erëmhierstellen</string>
   <string name="current_password_text">Gëff w.e.g. däin aktuellt Sécherungspasswuert an:</string>
