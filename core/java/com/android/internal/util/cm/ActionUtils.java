@@ -55,6 +55,7 @@ public class ActionUtils {
 
             IActivityManager am = ActivityManagerNative.getDefault();
             List<ActivityManager.RunningAppProcessInfo> apps = am.getRunningAppProcesses();
+            if (am.isInLockTaskMode()) return false;
             for (ActivityManager.RunningAppProcessInfo appInfo : apps) {
                 int uid = appInfo.uid;
                 // Make sure it's a foreground user application (not system,
