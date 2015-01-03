@@ -61,7 +61,8 @@ public class ActionUtils {
                 // root, phone, etc.)
                 if (uid >= Process.FIRST_APPLICATION_UID && uid <= Process.LAST_APPLICATION_UID
                         && appInfo.importance ==
-                        ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                        ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                                && !ActivityManagerNative.getDefault().isInLockTaskMode()) {
                     if (appInfo.pkgList != null && (appInfo.pkgList.length > 0)) {
                         for (String pkg : appInfo.pkgList) {
                             if (!pkg.equals("com.android.systemui")
