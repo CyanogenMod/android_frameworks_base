@@ -239,6 +239,7 @@ public abstract class BroadcastReceiver {
         final boolean mInitialStickyHint;
         final IBinder mToken;
         final int mSendingUser;
+        final int mFlags;
         
         int mResultCode;
         String mResultData;
@@ -247,8 +248,8 @@ public abstract class BroadcastReceiver {
         boolean mFinished;
 
         /** @hide */
-        public PendingResult(int resultCode, String resultData, Bundle resultExtras,
-                int type, boolean ordered, boolean sticky, IBinder token, int userId) {
+        public PendingResult(int resultCode, String resultData, Bundle resultExtras, int type,
+                boolean ordered, boolean sticky, IBinder token, int userId, int flags) {
             mResultCode = resultCode;
             mResultData = resultData;
             mResultExtras = resultExtras;
@@ -257,6 +258,7 @@ public abstract class BroadcastReceiver {
             mInitialStickyHint = sticky;
             mToken = token;
             mSendingUser = userId;
+            mFlags = flags;
         }
         
         /**
@@ -418,11 +420,11 @@ public abstract class BroadcastReceiver {
                     }
                     if (mOrderedHint) {
                         am.finishReceiver(mToken, mResultCode, mResultData, mResultExtras,
-                                mAbortBroadcast);
+                                mAbortBroadcast, mFlags);
                     } else {
                         // This broadcast was sent to a component; it is not ordered,
                         // but we still need to tell the activity manager we are done.
-                        am.finishReceiver(mToken, 0, null, null, false);
+                        am.finishReceiver(mToken, 0, null, null, false, mFlags);
                     }
                 } catch (RemoteException ex) {
                 }
