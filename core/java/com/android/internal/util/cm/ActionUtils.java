@@ -25,6 +25,20 @@ public class ActionUtils {
     private static final String SYSTEMUI_PACKAGE = "com.android.systemui";
 
     /**
+     * Return whether currently in lock task mode.  When in this mode
+     * no new tasks can be created or switched to.
+     *
+     * @see Activity#startLockTask()
+     */
+    public static boolean isInLockTaskMode() {
+        try {
+            return ActivityManagerNative.getDefault().isInLockTaskMode();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+
+    /**
      * Kills the top most / most recent user application, but leaves out the launcher.
      * This is function governed by {@link Settings.Secure.KILL_APP_LONGPRESS_BACK}.
      *
@@ -61,7 +75,7 @@ public class ActionUtils {
                 // root, phone, etc.)
                 if (uid >= Process.FIRST_APPLICATION_UID && uid <= Process.LAST_APPLICATION_UID
                         && appInfo.importance ==
-                        ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                        ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && !isInLockTaskMode()) {
                     if (appInfo.pkgList != null && (appInfo.pkgList.length > 0)) {
                         for (String pkg : appInfo.pkgList) {
                             if (!pkg.equals("com.android.systemui")
