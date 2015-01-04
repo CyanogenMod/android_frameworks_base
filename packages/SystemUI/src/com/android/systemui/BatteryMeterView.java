@@ -27,8 +27,6 @@ import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -820,7 +818,6 @@ public class BatteryMeterView extends View implements DemoMode,
             mBackPaint.setDither(true);
             mBackPaint.setStrokeWidth(0);
             mBackPaint.setStyle(Paint.Style.STROKE);
-            mBackPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
 
             mWarningTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mWarningTextPaint.setColor(mColors[1]);
