@@ -397,6 +397,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private String mDefaultApn;
 
+    // true for old GPS HALs
+    private boolean mLegacyGpsHAL = false;
+
     // Wakelocks
     private final static String WAKELOCK_KEY = "GpsLocationProvider";
     private final PowerManager.WakeLock mWakeLock;
@@ -747,6 +750,10 @@ public class GpsLocationProvider implements LocationProviderInterface {
         // Battery statistics service to be notified when GPS turns on or off
         mBatteryStats = IBatteryStats.Stub.asInterface(ServiceManager.getService(
                 BatteryStats.SERVICE_NAME));
+
+        // Check if we have a legacy GPS HAL
+        mLegacyGpsHAL = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_legacyGpsHAL);
 
         // Load GPS configuration.
         mProperties = new Properties();
@@ -1121,7 +1128,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
         if (mSuplServerHost != null
                 && mSuplServerPort > TCP_MIN_PORT
-                && mSuplServerPort <= TCP_MAX_PORT) {
+                && mSuplServerPort <= TCP_MAX_PORT
+                && !mLegacyGpsHAL) {
             native_set_agps_server(AGPS_TYPE_SUPL, mSuplServerHost, mSuplServerPort);
         }
     }

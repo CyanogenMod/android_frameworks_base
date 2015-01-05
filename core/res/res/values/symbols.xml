@@ -348,6 +348,7 @@
   <java-symbol type="bool" name="config_restricted_merge" />
 
   <java-symbol type="integer" name="config_wifi_framework_current_network_boost" />
+  <java-symbol type="bool" name="config_legacyGpsHAL" />
 
   <java-symbol type="integer" name="config_bluetooth_max_advertisers" />
   <java-symbol type="integer" name="config_bluetooth_max_scan_filters" />
