@@ -5953,8 +5953,33 @@ public class PackageManagerService extends IPackageManager.Stub {
                     if (isAsec) {
                         copyRet = NativeLibraryHelper.findSupportedAbi(handle, abiList);
                     } else {
-                        copyRet = NativeLibraryHelper.copyNativeBinariesForSupportedAbi(handle,
-                                nativeLibraryRoot, abiList, useIsaSpecificSubdirs);
+                        final int preCopyRet = NativeLibraryHelper.findSupportedAbi(handle, abiList);
+
+                        if (preCopyRet < 0 && preCopyRet != PackageManager.NO_NATIVE_LIBRARIES) {
+                            throw new PackageManagerException(INSTALL_FAILED_INTERNAL_ERROR,
+                                    "Error unpackaging native libs for app, errorCode=" + preCopyRet);
+                        }
+
+                        String primaryCpuAbi;
+                        if (preCopyRet >= 0) {
+                            primaryCpuAbi = abiList[preCopyRet];
+                        } else {
+                            primaryCpuAbi = abiList[0];
+                        }
+
+                        final String instructionSet = VMRuntime.getInstructionSet(primaryCpuAbi);
+                        final String dexCodeInstructionSet = getDexCodeInstructionSet(instructionSet);
+                        final byte dexoptRequired = DexFile.isDexOptNeededInternal(pkg.baseCodePath, pkg.packageName, dexCodeInstructionSet, false);
+                        final boolean isDexOptNeeded =  dexoptRequired != DexFile.UP_TO_DATE;
+
+                        boolean isCopyNativeBinariesNeeded = isDexOptNeeded || isUpdatedSystemApp(pkg);
+                        if (isCopyNativeBinariesNeeded) {
+                            copyRet = NativeLibraryHelper.copyNativeBinariesForSupportedAbi(handle,
+                                    nativeLibraryRoot, abiList, useIsaSpecificSubdirs);
+                        }
+                        else {
+                            copyRet = preCopyRet;
+                        }
                     }
 
                     if (copyRet < 0 && copyRet != PackageManager.NO_NATIVE_LIBRARIES) {
