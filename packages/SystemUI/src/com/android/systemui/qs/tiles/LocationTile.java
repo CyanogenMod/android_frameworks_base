@@ -57,8 +57,7 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleClick() {
-        final boolean wasEnabled = (Boolean) mState.value;
-        mController.setLocationEnabled(!wasEnabled);
+        mController.setLocationNextState();
     }
 
     @Override
@@ -68,7 +67,8 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final boolean locationEnabled =  mController.isLocationEnabled();
+        final int currentState = mController.getLocationCurrentState();
+        final boolean locationEnabled = currentState != Settings.Secure.LOCATION_MODE_OFF;
 
         // Work around for bug 15916487: don't show location tile on top of lock screen. After the
         // bug is fixed, this should be reverted to only hiding it on secure lock screens:
@@ -77,14 +77,30 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
         state.value = locationEnabled;
         if (locationEnabled) {
             state.iconId = R.drawable.ic_qs_location_on;
-            state.label = mContext.getString(R.string.quick_settings_location_label);
-            state.contentDescription = mContext.getString(
-                    R.string.accessibility_quick_settings_location_on);
         } else {
             state.iconId = R.drawable.ic_qs_location_off;
-            state.label = mContext.getString(R.string.quick_settings_location_label);
-            state.contentDescription = mContext.getString(
-                    R.string.accessibility_quick_settings_location_off);
+        }
+
+        switch (currentState) {
+            case Settings.Secure.LOCATION_MODE_OFF:
+                state.label = mContext.getString(R.string.quick_settings_location_off_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_off);
+                break;
+            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                state.label = mContext.getString(R.string.quick_settings_location_battery_saving_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_battery_saving);
+                break;
+            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                state.label = mContext.getString(R.string.quick_settings_location_gps_only_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_gps_only);
+                break;
+            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                state.label = mContext.getString(R.string.quick_settings_location_high_accuracy_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_high_accuracy);
+                break;
+            default:
+                state.label = mContext.getString(R.string.quick_settings_location_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_on);
         }
     }
 
