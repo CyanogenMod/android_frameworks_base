@@ -194,4 +194,11 @@ public class PhoneConstants {
 
     // Initial MTU value.
     public static final int UNSET_MTU = 0;
+
+    /**
+     * Values for the adb property "persist.radio.ims.audio.output"
+     */
+    public static final int IMS_AUDIO_OUTPUT_ENABLE_SPEAKER = 0;
+    public static final int IMS_AUDIO_OUTPUT_DISABLE_SPEAKER = 1;
+    public static final int IMS_AUDIO_OUTPUT_DEFAULT = IMS_AUDIO_OUTPUT_ENABLE_SPEAKER;
 }
