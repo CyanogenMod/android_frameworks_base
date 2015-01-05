@@ -1911,6 +1911,9 @@
         <item>SUPL_MODE=1</item>
     </string-array>
 
+    <!-- Enable support for legacy GPS HALs -->
+    <bool name="config_legacyGpsHAL">false</bool>
+
     <!-- If there is no preload VM number in the sim card, carriers such as
          Verizon require to load a default vm number from the configurantion.
          Define config_default_vm_number for this purpose. And there are two
