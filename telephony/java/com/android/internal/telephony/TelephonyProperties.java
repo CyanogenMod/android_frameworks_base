@@ -235,4 +235,12 @@ public interface TelephonyProperties
 
     static final String EXTRA_SKIP_SCHEMA_PARSING =
             "org.codeaurora.extra.SKIP_SCHEMA_PARSING";
+
+    /**
+     * Controls audio route for VT calls.
+     * 0 - Use the default audio routing strategy.
+     * 1 - Disable the speaker. Route the audio to Headset or Bluetooth
+     *     or Earpiece, based on the default audio routing strategy.
+     */
+    static final String PROPERTY_IMS_AUDIO_OUTPUT = "persist.radio.ims.audio.output";
 }
