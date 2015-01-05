@@ -351,6 +351,7 @@
   <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
   <java-symbol type="bool" name="set_wifi_hotspot_security_none" />
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
+  <java-symbol type="bool" name="config_legacyGpsHAL" />
 
   <java-symbol type="bool" name="config_feature_iwlan_enabled" />
   <java-symbol type="bool" name="def_telephony_spn_spec_enabled" />
