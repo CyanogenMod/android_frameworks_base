@@ -55,7 +55,7 @@ import java.lang.reflect.Method;
 
 public class CaptivePortalLoginActivity extends Activity {
     private static final String TAG = "CaptivePortalLogin";
-    private static final String DEFAULT_SERVER = "clients3.google.com";
+    private static final String DEFAULT_SERVER = "g.cn/generate_204";
     private static final int SOCKET_TIMEOUT_MS = 10000;
 
     // Keep this in sync with NetworkMonitor.
@@ -78,7 +78,7 @@ public class CaptivePortalLoginActivity extends Activity {
         String server = Settings.Global.getString(getContentResolver(), "captive_portal_server");
         if (server == null) server = DEFAULT_SERVER;
         try {
-            mURL = new URL("http://" + server + "/generate_204");
+            mURL = new URL("http://" + server);
         } catch (MalformedURLException e) {
             done(true);
         }
