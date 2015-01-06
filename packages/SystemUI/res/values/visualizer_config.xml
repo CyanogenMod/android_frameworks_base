@@ -30,4 +30,22 @@
     <!-- width of how much of the visualizer should be visible in the tile -->
     <dimen name="qs_tile_icon_size_visualizer_width">36dp</dimen>
     <dimen name="qs_tile_icon_size_visualizer_height">24dp</dimen>
+
+    <!-- Height of each filled in block in each eq bar -->
+    <dimen name="kg_visualizer_path_effect_1">8dp</dimen>
+    <!-- Height of each empty block in each eq bar -->
+    <dimen name="kg_visualizer_path_effect_2">1dp</dimen>
+    <!-- Width of each eq bar -->
+    <dimen name="kg_visualizer_path_stroke_width">20dp</dimen>
+
+    <!-- Color for the Equalizer tile -->
+    <color name="equalizer_fill_color">#32ffffff</color>
+
+    <!-- The amount of divisions to make for eq bars -->
+    <integer name="kg_visualizer_divisions">16</integer>
+
+    <!-- fudge factors to tweak display for various configs
+        ends up being dB = (dB * fuzz_factor + db_fuzz) -->
+    <integer name="kg_visualizer_db_fuzz_factor">0</integer>
+    <integer name="kg_visualizer_db_fuzz">0</integer>
 </resources>
