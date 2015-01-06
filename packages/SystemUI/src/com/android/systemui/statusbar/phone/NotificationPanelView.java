@@ -1640,6 +1640,7 @@ public class NotificationPanelView extends PanelView implements
             public void run() {
                 mHintAnimationRunning = false;
                 mStatusBar.onHintFinished();
+//                mKeyguardBottomArea.requestVisualizer(true, 500);
             }
         });
         boolean start = getLayoutDirection() == LAYOUT_DIRECTION_RTL ? right : !right;

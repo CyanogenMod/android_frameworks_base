@@ -189,6 +189,7 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout.OnChil
 import com.android.systemui.statusbar.stack.StackScrollAlgorithm;
 import com.android.systemui.statusbar.stack.StackScrollState.ViewState;
 import com.android.systemui.volume.VolumeComponent;
+import com.pheelicks.visualizer.VisualizerView;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -573,6 +574,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private ImageView mBackdropFront, mBackdropBack;
     private PorterDuffXfermode mSrcXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC);
     private PorterDuffXfermode mSrcOverXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
+
+
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;

@@ -208,6 +208,22 @@ public class StatusBarWindowView extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        if (mService.getBarState() == StatusBarState.KEYGUARD) {
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.d(TAG, "onTouchEvent DOWN");
+                    mService.mKeyguardBottomArea.requestVisualizer(false, 0);
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    Log.d(TAG, "onTouchEvent UP");
+
+                    mService.mKeyguardBottomArea.requestVisualizer(true, 500);
+                    break;
+            }
+        }
+
         boolean intercept = false;
         if (mDoubleTapToSleepEnabled
                 && ev.getY() < mStatusBarHeaderHeight) {
@@ -239,6 +255,7 @@ public class StatusBarWindowView extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
         boolean handled = false;
         if (mService.getBarState() == StatusBarState.KEYGUARD && !mService.isQsExpanded()) {
             handled = mDragDownHelper.onTouchEvent(ev);
