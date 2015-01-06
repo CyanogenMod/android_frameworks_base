@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.QSTileView;
+import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.pheelicks.visualizer.AudioData;
 import com.pheelicks.visualizer.FFTData;
 import com.pheelicks.visualizer.VisualizerView;
@@ -47,10 +48,11 @@ import java.util.List;
 import java.util.Map;
 
 public class VisualizerTile extends QSTile<QSTile.State>
-        implements MediaSessionManager.OnActiveSessionsChangedListener {
+        implements MediaSessionManager.OnActiveSessionsChangedListener, KeyguardMonitor.Callback {
 
     private Map<MediaSession.Token, CallbackInfo> mCallbacks = new HashMap<>();
     private MediaSessionManager mMediaSessionManager;
+    private KeyguardMonitor mKeyguardMonitor;
     private VisualizerView mVisualizer;
     private ImageView mStaticVisualizerIcon;
     private boolean mLinked;
@@ -61,6 +63,8 @@ public class VisualizerTile extends QSTile<QSTile.State>
         super(host);
         mMediaSessionManager = (MediaSessionManager)
                 mContext.getSystemService(Context.MEDIA_SESSION_SERVICE);
+        mKeyguardMonitor = host.getKeyguardMonitor();
+        mKeyguardMonitor.addCallback(this);
 
         // initialize state
         List<MediaController> activeSessions = mMediaSessionManager.getActiveSessions(null);
@@ -177,53 +181,9 @@ public class VisualizerTile extends QSTile<QSTile.State>
             entry.getValue().unregister();
         }
         mCallbacks.clear();
+        mKeyguardMonitor.removeCallback(this);
     }
 
-    private final Runnable mRefreshStateRunnable = new Runnable() {
-        @Override
-        public void run() {
-            refreshState();
-        }
-    };
-
-    private final Runnable mUpdateVisibilities = new Runnable() {
-        @Override
-        public void run() {
-            mVisualizer.animate().cancel();
-            mVisualizer.animate()
-                    .setDuration(200)
-                    .alpha(mIsAnythingPlaying ? 1.f : 0.f);
-
-            mStaticVisualizerIcon.animate().cancel();
-            mStaticVisualizerIcon.animate()
-                    .setDuration(200)
-                    .alpha(mIsAnythingPlaying ? 0.f : 1.f);
-        }
-    };
-
-    private final Runnable mLinkVisualizer = new Runnable() {
-        @Override
-        public void run() {
-            if (mVisualizer != null) {
-                if (!mLinked) {
-                    mVisualizer.link(0);
-                    mLinked = true;
-                }
-            }
-        }
-    };
-
-    private final Runnable mUnlinkVisualizer = new Runnable() {
-        @Override
-        public void run() {
-            if (mVisualizer != null) {
-                if (mLinked) {
-                    mVisualizer.unlink();
-                    mLinked = false;
-                }
-            }
-        }
-    };
 
     private void checkIfPlaying() {
         boolean anythingPlaying = false;
@@ -245,6 +205,71 @@ public class VisualizerTile extends QSTile<QSTile.State>
             mHandler.postDelayed(mRefreshStateRunnable, 50);
         }
     }
+
+    @Override
+    public void onKeyguardChanged() {
+        if (mKeyguardMonitor.isShowing()) {
+            if (mLinked) {
+                // explicitly unlink
+                AsyncTask.execute(mUnlinkVisualizer);
+            }
+        } else {
+            // no keyguard, relink if there's something playing
+            if (mIsAnythingPlaying && !mLinked) {
+                AsyncTask.execute(mLinkVisualizer);
+            } else if (!mIsAnythingPlaying && mLinked) {
+                AsyncTask.execute(mUnlinkVisualizer);
+            }
+        }
+        refreshState();
+    }
+
+    private final Runnable mRefreshStateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshState();
+        }
+    };
+
+    private final Runnable mUpdateVisibilities = new Runnable() {
+        @Override
+        public void run() {
+            boolean showVz = mIsAnythingPlaying && !mKeyguardMonitor.isShowing();
+            mVisualizer.animate().cancel();
+            mVisualizer.animate()
+                    .setDuration(200)
+                    .alpha(showVz ? 1.f : 0.f);
+
+            mStaticVisualizerIcon.animate().cancel();
+            mStaticVisualizerIcon.animate()
+                    .setDuration(200)
+                    .alpha(showVz ? 0.f : 1.f);
+        }
+    };
+
+    private final Runnable mLinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null) {
+                if (!mLinked && !mKeyguardMonitor.isShowing()) {
+                    mVisualizer.link(0);
+                    mLinked = true;
+                }
+            }
+        }
+    };
+
+    private final Runnable mUnlinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null) {
+                if (mLinked) {
+                    mVisualizer.unlink();
+                    mLinked = false;
+                }
+            }
+        }
+    };
 
     private class CallbackInfo {
         MediaController.Callback mCallback;
