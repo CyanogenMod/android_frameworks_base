@@ -19,4 +19,19 @@
         ends up being dB = (dB * fuzz_factor + db_fuzz) -->
     <integer name="visualizer_db_fuzz_factor">2</integer>
     <integer name="visualizer_db_fuzz">-10</integer>
+
+    <!-- Height of each filled in block in each eq bar -->
+    <dimen name="kg_visualizer_path_effect_1">8dp</dimen>
+    <!-- Height of each empty block in each eq bar -->
+    <dimen name="kg_visualizer_path_effect_2">1dp</dimen>
+    <!-- Width of each eq bar -->
+    <dimen name="kg_visualizer_path_stroke_width">20dp</dimen>
+
+    <!-- The amount of divisions to make for eq bars -->
+    <integer name="kg_visualizer_divisions">16</integer>
+
+    <!-- fudge factors to tweak display for various configs
+        ends up being dB = ((dB * fuzz_factor) + db_fuzz) -->
+    <integer name="kg_visualizer_db_fuzz_factor">35</integer>
+    <integer name="kg_visualizer_db_fuzz">0</integer>
 </resources>
