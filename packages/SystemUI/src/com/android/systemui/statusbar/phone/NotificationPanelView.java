@@ -971,6 +971,7 @@ public class NotificationPanelView extends PanelView implements
     private void setKeyguardBottomAreaVisibility(int statusBarState,
             boolean goingToFullShade) {
         if (goingToFullShade) {
+            mKeyguardBottomArea.requestVisualizer(false, 0);
             mKeyguardBottomArea.animate().cancel();
             mKeyguardBottomArea.animate()
                     .alpha(0f)
@@ -1009,6 +1010,7 @@ public class NotificationPanelView extends PanelView implements
                         .setDuration(mStatusBar.getKeyguardFadingAwayDuration()/2)
                         .start();
             }
+            mKeyguardBottomArea.requestVisualizer(false, 0);
         } else if (mStatusBarState == StatusBarState.SHADE_LOCKED
                 && statusBarState == StatusBarState.KEYGUARD) {
             mKeyguardStatusView.animate().cancel();
@@ -1021,6 +1023,7 @@ public class NotificationPanelView extends PanelView implements
                     .setDuration(320)
                     .setInterpolator(PhoneStatusBar.ALPHA_IN)
                     .withEndAction(mAnimateKeyguardStatusViewVisibleEndRunnable);
+            mKeyguardBottomArea.requestVisualizer(true, 320);
         } else if (statusBarState == StatusBarState.KEYGUARD) {
             mKeyguardStatusView.animate().cancel();
             mKeyguardStatusViewAnimating = false;
@@ -1663,6 +1666,13 @@ public class NotificationPanelView extends PanelView implements
     }
 
     @Override
+    public void onSwipingAnimationFinished(boolean snappingBack) {
+        if (snappingBack) {
+            mKeyguardBottomArea.requestVisualizer(true, 300);
+        }
+    }
+
+    @Override
     public KeyguardAffordanceView getLeftIcon() {
         return getLayoutDirection() == LAYOUT_DIRECTION_RTL
                 ? mKeyguardBottomArea.getCameraView()
@@ -1777,6 +1787,9 @@ public class NotificationPanelView extends PanelView implements
     }
 
     public void setEmptyDragAmount(float amount) {
+        if (amount == 0 && mStatusBarState == StatusBarState.KEYGUARD) {
+            mKeyguardBottomArea.requestVisualizer(true, 300);
+        }
         float factor = 0.8f;
         if (mNotificationStackScroller.getNotGoneChildCount() > 0) {
             factor = 0.4f;
