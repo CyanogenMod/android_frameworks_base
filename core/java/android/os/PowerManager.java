@@ -1235,7 +1235,6 @@ public final class PowerManager {
         } else {
             if (PowerSaveSate != 1) setPowerSaveMode(false);
         }
-        }
     }
 
     /**
