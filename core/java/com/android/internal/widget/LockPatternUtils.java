@@ -1253,7 +1253,7 @@ public class LockPatternUtils {
             return Profile.LockMode.DEFAULT;
         }
         final Profile profile = mProfileManager.getActiveProfile();
-        return profile.getScreenLockMode();
+        return profile == null ? Profile.LockMode.DEFAULT : profile.getScreenLockMode();
     }
 
     /**
