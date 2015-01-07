@@ -16,10 +16,15 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.systemui.R;
+import com.android.systemui.qs.QSDetailItems;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.LocationController;
@@ -30,13 +35,20 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
     private static final Intent LOCATION_SETTINGS = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
     private final LocationController mController;
+    private final LocationDetailAdapter mDetailAdapter;
     private final KeyguardMonitor mKeyguard;
     private final Callback mCallback = new Callback();
 
     public LocationTile(Host host) {
         super(host);
         mController = host.getLocationController();
+        mDetailAdapter = new LocationDetailAdapter();
         mKeyguard = host.getKeyguardMonitor();
+    }
+
+    @Override
+    public DetailAdapter getDetailAdapter() {
+        return mDetailAdapter;
     }
 
     @Override
@@ -57,8 +69,11 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleClick() {
-        final boolean wasEnabled = (Boolean) mState.value;
-        mController.setLocationEnabled(!wasEnabled);
+        if(mController.isAdvancedSettingsEnabled()) {
+            showDetail(true);
+        } else {
+            mController.setLocationEnabled(!mController.isLocationEnabled());
+        }
     }
 
     @Override
@@ -68,23 +83,39 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final boolean locationEnabled =  mController.isLocationEnabled();
+        final int currentState = mController.getLocationCurrentState();
+        final boolean locationEnabled = currentState != Settings.Secure.LOCATION_MODE_OFF;
 
         // Work around for bug 15916487: don't show location tile on top of lock screen. After the
         // bug is fixed, this should be reverted to only hiding it on secure lock screens:
         // state.visible = !(mKeyguard.isSecure() && mKeyguard.isShowing());
         state.visible = !mKeyguard.isShowing();
         state.value = locationEnabled;
-        if (locationEnabled) {
-            state.iconId = R.drawable.ic_qs_location_on;
-            state.label = mContext.getString(R.string.quick_settings_location_label);
-            state.contentDescription = mContext.getString(
-                    R.string.accessibility_quick_settings_location_on);
-        } else {
-            state.iconId = R.drawable.ic_qs_location_off;
-            state.label = mContext.getString(R.string.quick_settings_location_label);
-            state.contentDescription = mContext.getString(
-                    R.string.accessibility_quick_settings_location_off);
+
+        switch (currentState) {
+            case Settings.Secure.LOCATION_MODE_OFF:
+                state.label = mContext.getString(R.string.quick_settings_location_off_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_off);
+                state.iconId = R.drawable.ic_qs_location_off;
+                break;
+            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                state.label = mContext.getString(R.string.quick_settings_location_battery_saving_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_battery_saving);
+                state.iconId = R.drawable.ic_qs_location_battery_saving;
+                break;
+            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                state.label = mContext.getString(R.string.quick_settings_location_gps_only_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_gps_only);
+                state.iconId = R.drawable.ic_qs_location_on;
+                break;
+            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                state.label = mContext.getString(R.string.quick_settings_location_high_accuracy_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_high_accuracy);
+                state.iconId = R.drawable.ic_qs_location_on;
+                break;
+            default:
+                state.label = mContext.getString(R.string.quick_settings_location_label);
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_on);
         }
     }
 
@@ -101,6 +132,8 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
             KeyguardMonitor.Callback {
         @Override
         public void onLocationSettingsChanged(boolean enabled) {
+            mDetailAdapter.setLocationEnabled(enabled);
+            mDetailAdapter.setLocationMode(mController.getLocationCurrentState());
             refreshState();
         }
 
@@ -109,4 +142,47 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
             refreshState();
         }
     };
+
+    private class LocationDetailAdapter implements DetailAdapter {
+
+        private LocationDetailView mLocationDetailView;
+
+        @Override
+        public int getTitle() {
+            return R.string.quick_settings_location_detail_title;
+        }
+
+        @Override
+        public Boolean getToggleState() {
+            return mController.getLocationCurrentState() != Settings.Secure.LOCATION_MODE_OFF;
+        }
+
+        @Override
+        public Intent getSettingsIntent() {
+            return LOCATION_SETTINGS;
+        }
+
+        @Override
+        public void setToggleState(boolean state) {
+            mController.setLocationEnabled(state);
+        }
+
+        @Override
+        public View createDetailView(Context context, View convertView, ViewGroup parent) {
+            final LocationDetailView v = (LocationDetailView) (LayoutInflater.from(mContext).inflate(R.layout.location, parent, false));
+            mLocationDetailView = v;
+            mLocationDetailView.setLocationController(mController);
+            setLocationMode(mController.getLocationCurrentState());
+            return v;
+        }
+
+        public void setLocationEnabled(boolean enabled) {
+            fireToggleStateChanged(enabled);
+        }
+
+        public void setLocationMode(int mode) {
+            if(mLocationDetailView != null)
+                mLocationDetailView.setLocationMode(mode);
+        }
+    }
 }
