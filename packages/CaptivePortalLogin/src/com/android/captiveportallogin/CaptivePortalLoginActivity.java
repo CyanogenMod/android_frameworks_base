@@ -75,10 +75,8 @@ public class CaptivePortalLoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean CaptivePortalState = 1 == Settings.Global.getString(getContentResolver(),
-               Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED, 0);
         String server = Settings.Global.getString(getContentResolver(), "captive_portal_server");
-        if (server == null && CaptivePortalState) server = DEFAULT_SERVER;
+        if (server == null) server = DEFAULT_SERVER;
         try {
             mURL = new URL("http://" + server + "/generate_204");
         } catch (MalformedURLException e) {
