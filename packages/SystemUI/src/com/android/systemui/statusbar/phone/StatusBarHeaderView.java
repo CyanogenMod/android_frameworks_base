@@ -876,7 +876,9 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
             final boolean showingDetail = detail != null;
             transition(mClock, !showingDetail);
             transition(mDateGroup, !showingDetail);
-            transition(mWeatherContainer, !showingDetail);
+            if (mShowWeather) {
+                transition(mWeatherContainer, !showingDetail);
+            }
             if (mAlarmShowing) {
                 transition(mAlarmStatus, !showingDetail);
             }
