@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.content.ContentResolver;
+import android.provider.Settings;
 
 /**
  * This class gives you control of the power state of the device.
@@ -587,6 +589,7 @@ public final class PowerManager {
     public void userActivity(long when, int event, int flags) {
         try {
             mService.userActivity(when, event, flags);
+            UpdatePhoneState(1);
         } catch (RemoteException e) {
         }
     }
@@ -638,6 +641,7 @@ public final class PowerManager {
     public void goToSleep(long time, int reason, int flags) {
         try {
             mService.goToSleep(time, reason, flags);
+            UpdatePhoneState(0);
         } catch (RemoteException e) {
         }
     }
@@ -1218,6 +1222,21 @@ public final class PowerManager {
                     + Integer.toHexString(System.identityHashCode(this))
                     + " held=" + mHeld + ", refCount=" + mCount + "}";
             }
+        }
+    }
+    
+    public void UpdatePhoneState(int state)
+    {
+        try {
+            ContentResolver resolver = mContext.getContentResolver();
+            int PowerSaveSate = Settings.System.getInt(
+                resolver, Settings.System.POWER_SAVE_SETTINGS, 0);
+            if (state == 0 && PowerSaveSate == 2) {
+                setPowerSaveMode(true);
+            } else {
+                if (PowerSaveSate != 1) setPowerSaveMode(false);
+            }
+        } catch (RemoteException e) {
         }
     }
 
