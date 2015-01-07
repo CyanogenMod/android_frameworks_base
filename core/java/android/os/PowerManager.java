@@ -1227,16 +1227,14 @@ public final class PowerManager {
     
     public void UpdatePhoneState(int state)
     {
-        try {
-            ContentResolver resolver = mContext.getContentResolver();
-            int PowerSaveSate = Settings.System.getInt(
+        ContentResolver resolver = mContext.getContentResolver();
+        int PowerSaveSate = Settings.System.getInt(
                 resolver, Settings.System.POWER_SAVE_SETTINGS, 0);
-            if (state == 0 && PowerSaveSate == 2) {
-                setPowerSaveMode(true);
-            } else {
-                if (PowerSaveSate != 1) setPowerSaveMode(false);
-            }
-        } catch (RemoteException e) {
+        if (state == 0 && PowerSaveSate == 2) {
+            setPowerSaveMode(true);
+        } else {
+            if (PowerSaveSate != 1) setPowerSaveMode(false);
+        }
         }
     }
 
