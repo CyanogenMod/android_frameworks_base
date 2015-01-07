@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<com.android.systemui.qs.tiles.LocationDetailView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.QS.DataUsage"
+        android:text="@string/quick_settings_location_detail_menu_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical" >
+
+        <RadioGroup
+            android:id="@+id/radiogroup_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <RadioButton android:id="@+id/radio_high_accuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="20sp"
+            android:text="@string/quick_settings_location_detail_mode_high_accuracy_title" />
+        <RadioButton android:id="@+id/radio_battery_saving"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="20sp"
+            android:text="@string/quick_settings_location_detail_mode_battery_saving_title" />
+        <RadioButton android:id="@+id/radio_sensors_only"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="20sp"
+            android:text="@string/quick_settings_location_detail_mode_sensors_only_title" />
+        </RadioGroup>
+    </LinearLayout>
+
+</com.android.systemui.qs.tiles.LocationDetailView>
