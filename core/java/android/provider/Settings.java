@@ -3177,6 +3177,16 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
+        
+        /**
+         × New One PowerSave Settings
+         * Settingb Power Save
+         * 0: Off the Power Save
+         * 1: On the Power Save
+         * 2: On the Power Save Off screen
+         * @hide
+         */
+        public static final String POWER_SAVE_SETTINGS = "power_save_settings";
 
         /**
          *  Enable statusbar double tap gesture on to put device to sleep
