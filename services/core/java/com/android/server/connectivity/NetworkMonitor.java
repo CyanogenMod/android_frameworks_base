@@ -64,7 +64,7 @@ import java.util.List;
 public class NetworkMonitor extends StateMachine {
     private static final boolean DBG = true;
     private static final String TAG = "NetworkMonitor";
-    private static final String DEFAULT_SERVER = "clients3.google.com";
+    private static final String DEFAULT_SERVER = "g.cn";
     private static final int SOCKET_TIMEOUT_MS = 10000;
     public static final String ACTION_NETWORK_CONDITIONS_MEASURED =
             "android.net.conn.NETWORK_CONDITIONS_MEASURED";
