@@ -199,7 +199,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_SLEEP = 7;
     private static final int KEY_ACTION_LAST_APP = 8;
     private static final int KEY_ACTION_SCREENSHOT = 9;
-    private static final int KEY_ACTION_REBOOT_MENU = 10;
+    private static final int KEY_ACTION_POWER_MENU = 10;
 
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
@@ -1227,7 +1227,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 case KEY_ACTION_SCREENSHOT:
                 mHandler.postDelayed(mScreenshotRunnable, getScreenshotChordLongPressDelay());
                 break;
-            case KEY_ACTION_REBOOT_MENU:
+            case KEY_ACTION_POWER_MENU:
                 showGlobalActions();
                 break;
             default:
