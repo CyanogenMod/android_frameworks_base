@@ -537,6 +537,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         ThemeConfig currentTheme = mContext.getResources().getConfiguration().themeConfig;
         if (currentTheme != null) {
             mCurrentTheme = (ThemeConfig)currentTheme.clone();
+        } else {
+            mCurrentTheme = ThemeConfig.getSystemTheme();
         }
 
         mLocationController = new LocationController(mContext);
