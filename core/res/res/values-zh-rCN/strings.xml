@@ -1853,6 +1853,8 @@
         <item>试图删除联系人</item>
         <item>试图删除通话记录</item>
         <item>试图打开移动数据</item>
+        <item>试图定时唤醒设备</item>
+        <item>试图获取超级用户权限</item>
     </string-array>
 
     <!-- Carrier Name -->
