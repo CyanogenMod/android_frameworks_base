@@ -30,18 +30,12 @@ import com.android.systemui.R;
 import com.android.systemui.qs.DataUsageGraph;
 import com.android.systemui.statusbar.policy.NetworkController;
 
-import java.text.DecimalFormat;
-
+import android.text.format.Formatter;
 /**
  * Layout for the data usage detail in quick settings.
  */
 public class DataUsageDetailView extends LinearLayout {
 
-    private static final double KB = 1024;
-    private static final double MB = 1024 * KB;
-    private static final double GB = 1024 * MB;
-
-    private final DecimalFormat FORMAT = new DecimalFormat("#.##");
 
     public DataUsageDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -68,35 +62,46 @@ public class DataUsageDetailView extends LinearLayout {
         int usageColor = R.color.system_accent_color;
         final String top;
         String bottom = null;
-        if (info.usageLevel < info.warningLevel || info.limitLevel <= 0) {
+        if (info.usageLevel < info.warningLevel) {
             // under warning, or no limit
-            titleId = R.string.quick_settings_cellular_detail_data_usage;
+            titleId = R.string.quick_settings_has_data_usage;
             bytes = info.usageLevel;
             top = res.getString(R.string.quick_settings_cellular_detail_data_warning,
-                    formatBytes(info.warningLevel));
+                    Formatter.formatFileSize(mContext,info.warningLevel));
+            if (info.limitLevel <= 0) {
+                bottom = res.getString(R.string.quick_settings_data_Package_Set);
+            } else {
+                bottom = res.getString(R.string.quick_settings_data_Package,
+                        Formatter.formatFileSize(mContext,info.limitLevel));
+            }
         } else if (info.usageLevel <= info.limitLevel) {
             // over warning, under limit
-            titleId = R.string.quick_settings_cellular_detail_remaining_data;
-            bytes = info.limitLevel - info.usageLevel;
-            top = res.getString(R.string.quick_settings_cellular_detail_data_used,
-                    formatBytes(info.usageLevel));
-            bottom = res.getString(R.string.quick_settings_cellular_detail_data_limit,
-                    formatBytes(info.limitLevel));
+            titleId = R.string.quick_settings_has_data_usage;
+            bytes = info.usageLevel;
+            top = res.getString(R.string.quick_settings_remaining_data_usage,
+                    Formatter.formatFileSize(mContext,info.limitLevel - info.usageLevel));
+            bottom = res.getString(R.string.quick_settings_data_Package,
+                    Formatter.formatFileSize(mContext,info.limitLevel));
         } else {
             // over limit
             titleId = R.string.quick_settings_cellular_detail_over_limit;
             bytes = info.usageLevel - info.limitLevel;
             top = res.getString(R.string.quick_settings_cellular_detail_data_used,
-                    formatBytes(info.usageLevel));
-            bottom = res.getString(R.string.quick_settings_cellular_detail_data_limit,
-                    formatBytes(info.limitLevel));
+                    Formatter.formatFileSize(mContext,info.usageLevel));
+            if (info.limitLevel > 0) {
+                bottom = res.getString(R.string.quick_settings_data_Package_limit,
+                        Formatter.formatFileSize(mContext,info.usageLevel - info.limitLevel));
+            } else {
+                bottom = res.getString(R.string.quick_settings_data_Package_limit,
+                        Formatter.formatFileSize(mContext,info.usageLevel - info.warningLevel));
+            }
             usageColor = R.color.system_warning_color;
         }
 
         final TextView title = (TextView) findViewById(android.R.id.title);
         title.setText(titleId);
         final TextView usage = (TextView) findViewById(R.id.usage_text);
-        usage.setText(formatBytes(bytes));
+        usage.setText(Formatter.formatFileSize(mContext,bytes));
         usage.setTextColor(res.getColor(usageColor));
         final DataUsageGraph graph = (DataUsageGraph) findViewById(R.id.usage_graph);
         graph.setLevels(info.limitLevel, info.warningLevel, info.usageLevel);
@@ -112,20 +117,5 @@ public class DataUsageDetailView extends LinearLayout {
         infoBottom.setText(bottom);
     }
 
-    private String formatBytes(long bytes) {
-        final long b = Math.abs(bytes);
-        double val;
-        String suffix;
-        if (b > 100 * MB) {
-            val = b / GB;
-            suffix = "GB";
-        } else if (b > 100 * KB) {
-            val = b / MB;
-            suffix = "MB";
-        } else {
-            val = b / KB;
-            suffix = "KB";
-        }
-        return FORMAT.format(val * (bytes < 0 ? -1 : 1)) + " " + suffix;
-    }
 }
+
