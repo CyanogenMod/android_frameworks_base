@@ -18,88 +18,60 @@ package com.android.keyguard;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.text.method.SingleLineTransformationMethod;
 import android.text.TextUtils;
-import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.telephony.IccCardConstants;
-import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.widget.LockPatternUtils;
 
 import java.util.Locale;
-import java.util.HashMap;
-import android.util.Log;
 
-public class CarrierText extends LinearLayout {
+public class CarrierText extends TextView {
     private static final String TAG = "CarrierText";
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
-    private static final int mNumPhones = TelephonyManager.getDefault().getPhoneCount();
-    private static CharSequence mSeparator;
+    private static final int PHONE_COUNT = TelephonyManager.getDefault().getPhoneCount();
 
+    private static CharSequence sSeparator;
     private LockPatternUtils mLockPatternUtils;
-
-    private boolean mShowAPM;
-
     private KeyguardUpdateMonitor mUpdateMonitor;
-    private TextView mOperatorName[];
-    private TextView mOperatorSeparator[];
-    private TextView mAirplaneModeText;
+
+    private boolean mDisplayAirplaneMode;
+    private boolean mAirplaneModeActive;
 
     private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onRefreshCarrierInfo(long subId, CharSequence plmn, CharSequence spn) {
-            updateCarrierText(mUpdateMonitor.getSimState(subId), plmn, spn, subId);
+            updateCarrierText();
         }
 
         @Override
         public void onSimStateChanged(long subId, IccCardConstants.State simState) {
-            updateCarrierText(simState, mUpdateMonitor.getTelephonyPlmn(subId),
-                mUpdateMonitor.getTelephonySpn(subId), subId);
+            updateCarrierText();
         }
 
         @Override
         void onAirplaneModeChanged(boolean on) {
-            if (on && mShowAPM) {
-                for (int i = 0; i < mNumPhones; i++) {
-                    mOperatorName[i].setVisibility(View.GONE);
-                    if (i < mNumPhones-1) {
-                        mOperatorSeparator[i].setVisibility(View.GONE);
-                    }
-                }
-                if (mAirplaneModeText != null) {
-                    mAirplaneModeText.setVisibility(View.VISIBLE);
-                }
-            } else {
-                for (int i = 0; i < mNumPhones; i++) {
-                    mOperatorName[i].setVisibility(View.VISIBLE);
-                    if (i < mNumPhones-1) {
-                        mOperatorSeparator[i].setVisibility(View.VISIBLE);
-                    }
-                }
-                if (mAirplaneModeText != null) {
-                    mAirplaneModeText.setVisibility(View.GONE);
-                }
+            mAirplaneModeActive = on;
+            if (mDisplayAirplaneMode) {
+                updateCarrierText();
             }
         }
 
         public void onScreenTurnedOff(int why) {
-            for (int i = 0; i < mNumPhones; i++) {
-                mOperatorName[i].setSelected(false);
-            }
+            setSelected(false);
         };
 
         public void onScreenTurnedOn() {
-            for (int i = 0; i < mNumPhones; i++) {
-                mOperatorName[i].setSelected(true);
-            }
+            setSelected(true);
         };
     };
+
     /**
      * The status of this lock screen. Primarily used for widgets on LockScreen.
      */
@@ -121,59 +93,32 @@ public class CarrierText extends LinearLayout {
 
     public CarrierText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-            inflater.inflate(R.layout.keyguard_carrier_text_view, this, true);
 
         mLockPatternUtils = new LockPatternUtils(mContext);
         mUpdateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
 
-        mOperatorName = new TextView[mNumPhones];
-        mOperatorSeparator = new TextView[mNumPhones-1];
-
-        mShowAPM = context.getResources().getBoolean(R.bool.config_display_APM);
-    }
-
-    protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn,
-            long subId) {
-        if(DEBUG) Log.d(TAG, "updateCarrierText, simState=" + simState + " plmn=" + plmn
-            + " spn=" + spn +" subId=" + subId);
-        int phoneId = mUpdateMonitor.getPhoneIdBySubId(subId);
-        if (!mUpdateMonitor.isValidPhoneId(phoneId)) {
-            if(DEBUG) Log.d(TAG, "updateCarrierText, invalidate phoneId=" + phoneId);
-            return;
+        boolean useAllCaps;
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs, R.styleable.CarrierText, 0, 0);
+        try {
+            useAllCaps = a.getBoolean(R.styleable.CarrierText_allCaps, false);
+        } finally {
+            a.recycle();
         }
-
-        String airplaneMode = getResources().getString(
-                com.android.internal.R.string.lockscreen_airplane_mode_on);
-        CharSequence text = getCarrierTextForSimState(simState, plmn, spn);
-        TextView updateCarrierView = mOperatorName[phoneId];
-        if (mAirplaneModeText != null && mShowAPM) {
-            mAirplaneModeText.setText(airplaneMode);
-        }
-        updateCarrierView.setText(text != null ? text.toString() : null);
+        setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mSeparator = getResources().getString(R.string.kg_text_message_separator);
-        int[] operatorNameId = {R.id.carrier1, R.id.carrier2, R.id.carrier3};
-        int[] operatorSepId = {R.id.carrier_divider1, R.id.carrier_divider2};
+        if (sSeparator == null) {
+            sSeparator = getResources().getString(R.string.kg_text_message_separator);
+        }
+        mDisplayAirplaneMode = getResources().getBoolean(R.bool.config_display_APM);
+
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();
         setSelected(screenOn); // Allow marquee to work.
-
-        for (int i = 0; i < mNumPhones; i++) {
-            mOperatorName[i] = (TextView) findViewById(operatorNameId[i]);
-            mOperatorName[i].setVisibility(View.VISIBLE);
-            mOperatorName[i].setSelected(true);
-            if (i < mNumPhones-1) {
-                mOperatorSeparator[i] = (TextView) findViewById(operatorSepId[i]);
-                mOperatorSeparator[i].setVisibility(View.VISIBLE);
-                mOperatorSeparator[i].setText("|");
-            }
-        }
-        mAirplaneModeText = (TextView) findViewById(R.id.airplane_mode);
+        updateCarrierText();
     }
 
     @Override
@@ -186,6 +131,39 @@ public class CarrierText extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mCallback);
+    }
+
+    private void updateCarrierText() {
+        if (mDisplayAirplaneMode && mAirplaneModeActive) {
+            setText(com.android.internal.R.string.lockscreen_airplane_mode_on);
+            return;
+        }
+
+        StringBuilder text = new StringBuilder();
+
+        for (int i = 0; i < PHONE_COUNT; i++) {
+            long subId = mUpdateMonitor.getSubIdByPhoneId(i);
+            if (subId == SubscriptionManager.INVALID_SUB_ID) {
+                continue;
+            }
+
+            CharSequence carrierText = getCarrierTextForSimState(
+                    mUpdateMonitor.getSimState(subId),
+                    mUpdateMonitor.getTelephonyPlmn(subId),
+                    mUpdateMonitor.getTelephonySpn(subId));
+            if (DEBUG) Log.d(TAG, "getCarrierTextForSimState(sub " + subId
+                    + "): carrierText=" + carrierText);
+            if (carrierText == null) {
+                continue;
+            }
+
+            if (text.length() > 0) {
+                text.append(" | ");
+            }
+            text.append(carrierText);
+        }
+
+        setText(text);
     }
 
     /**
@@ -256,7 +234,6 @@ public class CarrierText extends LinearLayout {
                 break;
         }
 
-        if (DEBUG) Log.d(TAG, "getCarrierTextForSimState: carrierText=" + carrierText);
         return carrierText;
     }
 
@@ -317,7 +294,7 @@ public class CarrierText extends LinearLayout {
             if (plmn.equals(spn)) {
                 return plmn;
             } else {
-                return new StringBuilder().append(plmn).append(mSeparator).append(spn).toString();
+                return new StringBuilder().append(plmn).append(sSeparator).append(spn).toString();
             }
         } else if (plmnValid) {
             return plmn;
