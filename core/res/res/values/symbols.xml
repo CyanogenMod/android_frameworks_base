@@ -1699,6 +1699,7 @@
   <java-symbol type="string" name="aerr_application" />
   <java-symbol type="string" name="aerr_process" />
   <java-symbol type="string" name="aerr_title" />
+  <java-symbol type="string" name="android_upgrading_fstrim" />
   <java-symbol type="string" name="android_upgrading_apk" />
   <java-symbol type="string" name="android_upgrading_complete" />
   <java-symbol type="string" name="android_upgrading_starting_apps" />
@@ -2202,4 +2203,5 @@
   <!-- Configuration to play sms ringtone during MO/MT call -->
   <java-symbol type="bool" name="config_sms_ringtone_incall" />
 
+  <java-symbol type="array" name="config_sms_convert_destination_number_support" />
 </resources>
