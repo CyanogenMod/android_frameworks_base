@@ -927,7 +927,6 @@
     <string name="lockscreen_sim_puk_locked_instructions" msgid="8127916255245181063">"请参阅《用户指南》或与客服人员联系。"</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM卡已被锁定。"</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"正在解锁SIM卡..."</string>
-    <string name="lockscreen_airplane_mode_on">"飞行模式"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="6481623830344107222">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地绘制了解锁图案。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="2725973286239344555">"您已经 <xliff:g id="NUMBER_0">%d</xliff:g> 次错误地输入了密码。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6216672706545696955">"您已经<xliff:g id="NUMBER_0">%d</xliff:g>次输错了PIN码。\n\n请在<xliff:g id="NUMBER_1">%d</xliff:g>秒后重试。"</string>
@@ -1341,7 +1340,6 @@
     <string name="dlg_error_title" msgid="7323658469626514207">"USB操作失败"</string>
     <string name="dlg_ok" msgid="7376953167039865701">"确定"</string>
     <string name="usb_mtp_notification_title" msgid="3699913097391550394">"已作为媒体设备连接"</string>
-    <string name="usb_charging_notification_title">以充电方式连接</string>
     <string name="usb_ptp_notification_title" msgid="1960817192216064833">"作为相机连接"</string>
     <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"作为安装程序连接"</string>
     <string name="usb_accessory_notification_title" msgid="7848236974087653666">"已连接到USB配件"</string>
@@ -1453,9 +1451,6 @@
     <string name="car_mode_disable_notification_message" msgid="8035230537563503262">"触摸可退出车载模式。"</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"网络共享或热点已启用"</string>
     <string name="tethered_notification_message" msgid="6857031760103062982">"触摸可进行设置。"</string>
-    <string name="tethered_notification_no_device_message">"没有设备已连接。"</string>
-    <string name="tethered_notification_one_device_message">""<xliff:g id="count">%1$s</xliff:g>"个设备已连接。"</string>
-    <string name="tethered_notification_multi_device_message">""<xliff:g id="count">%1$s</xliff:g>"个设备已连接。"</string>
     <string name="back_button_label" msgid="2300470004503343439">"上一步"</string>
     <string name="next_button_label" msgid="1080555104677992408">"下一步"</string>
     <string name="skip_button_label" msgid="1275362299471631819">"跳过"</string>
@@ -1536,7 +1531,6 @@
     <string name="storage_internal" msgid="4891916833657929263">"内部存储设备"</string>
     <string name="storage_sd_card" msgid="3282948861378286745">"SD卡"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB存储器"</string>
-    <string name="storage_uicc">"电话卡存储设备"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"修改"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"流量警告"</string>
     <string name="data_usage_warning_body" msgid="2814673551471969954">"触摸可查看使用情况和设置。"</string>
@@ -1789,74 +1783,4 @@
     <item quantity="other" msgid="5408537517529822157">"%d小时"</item>
   </plurals>
     <string name="zen_mode_forever" msgid="4316804956488785559">"无限期"</string>
-    <!-- App Ops -->
-    <string name="permission_remember_choice">记住</string>
-    <string name="permission">权限</string>
-    <string-array name="app_ops_labels">
-        <item>试图获取位置信息</item>
-        <item>试图获取位置信息</item>
-        <item>试图获取位置信息</item>
-        <item>试图使用震动器</item>
-        <item>试图读取联系人</item>
-        <item>试图写联系人</item>
-        <item>试图读取通话记录</item>
-        <item>试图写通话记录</item>
-        <item>试图读取日程表</item>
-        <item>试图修改日程表</item>
-        <item>试图获取位置信息</item>
-        <item>试图发出通知</item>
-        <item>试图获取位置信息</item>
-        <item>试图拨打电话</item>
-        <item>试图读取短信</item>
-        <item>试图写短信</item>
-        <item>试图收取短信</item>
-        <item>试图收取短信</item>
-        <item>试图收取彩信</item>
-        <item>试图收取短信</item>
-        <item>试图发送短信</item>
-        <item>试图读取短信</item>
-        <item>试图写短信</item>
-        <item>试图修改设置</item>
-        <item>试图在顶层绘图</item>
-        <item>试图获取通知</item>
-        <item>试图使用摄像头</item>
-        <item>试图录音</item>
-        <item>试图放音</item>
-        <item>试图读取剪贴板</item>
-        <item>试图修改剪贴板</item>
-        <item>试图控制多媒体按钮</item>
-        <item>试图控制音频焦点</item>
-        <item>试图控制主音量</item>
-        <item>试图控制语音音量</item>
-        <item>试图控制铃声音量</item>
-        <item>试图控制多媒体音量</item>
-        <item>试图控制闹钟音量</item>
-        <item>试图控制通知音量</item>
-        <item>试图控制蓝牙音量</item>
-        <item>试图阻止手机休眠</item>
-        <item>试图获取位置信息</item>
-        <item>试图获取位置信息</item>
-        <item>试图获取使用情况统计信息</item>
-        <item>试图使麦克风静音</item>
-        <item>试图弹出提示窗口</item>
-        <item>试图投影媒体</item>
-        <item>试图激活VPN</item>
-        <item>试图开关WLAN</item>
-        <item>试图开关蓝牙</item>
-        <item>试图发送彩信</item>
-        <item>试图读取彩信</item>
-        <item>试图写彩信</item>
-        <item>试图自启动</item>
-        <item>试图开关NFC</item>
-        <item>试图删除短信</item>
-        <item>试图删除彩信</item>
-        <item>试图删除联系人</item>
-        <item>试图删除通话记录</item>
-        <item>试图打开移动数据</item>
-    </string-array>
-
-    <!-- Carrier Name -->
-    <string name="China_Mobile">中国移动</string>
-    <string name="China_Unicom">中国联通</string>
-    <string name="China_Telecom">中国电信</string>
 </resources>
