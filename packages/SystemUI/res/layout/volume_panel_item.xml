@@ -71,4 +71,12 @@
         android:scaleType="center"
         android:background="@drawable/btn_borderless_rect"
         android:contentDescription="@null" />
+
+    <ImageView
+        android:id="@+id/further_options"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="center"
+        android:background="@drawable/btn_borderless_rect"
+        android:src="@drawable/ic_expand_slider_panel" />
 </LinearLayout>
