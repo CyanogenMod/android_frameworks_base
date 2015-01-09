@@ -1628,14 +1628,14 @@ public class NetworkControllerImpl extends BroadcastReceiver
         public int getActivityIconId(boolean connected) {
             if (connected) {
                 if (mCurrentState.activityIn && mCurrentState.activityOut) {
-                    return R.drawable.stat_sys_signal_inout;
+                    return R.drawable.stat_sys_wifi_inout;
                 } else if (mCurrentState.activityIn) {
-                    return R.drawable.stat_sys_signal_in;
+                    return R.drawable.stat_sys_wifi_in;
                 } else if (mCurrentState.activityOut) {
-                    return R.drawable.stat_sys_signal_out;
+                    return R.drawable.stat_sys_wifi_out;
                 }
             }
-            return R.drawable.stat_sys_signal_none;
+            return 0;
         }
 
         /**
