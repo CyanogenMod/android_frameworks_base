@@ -2910,6 +2910,12 @@ public final class Settings {
          */
         @Deprecated
         public static final String UNLOCK_SOUND = Global.UNLOCK_SOUND;
+        
+        /**
+         * show traffic in statusbar. The value is
+         * int (0: Hide  or 1: Only Rx 2: Rx&Tx).
+         */
+        public static final String STATUS_BAR_NETWORK_TRAFFIC_STYLE = "STATUS_BAR_NETWORK_TRAFFIC_STYLE";
 
         /**
          * Receive incoming SIP calls?
