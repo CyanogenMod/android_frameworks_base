@@ -276,10 +276,8 @@ public final class ParcelableCall implements Parcelable {
             List<String> conferenceableCallIds = new ArrayList<>();
             source.readList(conferenceableCallIds, classLoader);
             Bundle extras = source.readParcelable(classLoader);
-            int notificationType = source.readInt();
-            int code = source.readInt();
+            boolean isActiveSub = (source.readInt() == 1) ? true : false;
             int callSubstate = source.readInt();
-            boolean isActiveSub = source.readInt() == 1;
             return new ParcelableCall(
                     id,
                     state,
