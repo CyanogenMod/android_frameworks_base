@@ -72,8 +72,8 @@ public class NetworkTraffic extends TextView {
     private int KB = KILOBYTE;
     private int MB = KB * KB;
     private int GB = MB * KB;
-    private String mUp = " \u25B2";
-    private String mDown = " \u25BC";
+    private String mUp = "↑";
+    private String mDown = "↓";
 
     private Handler mTrafficHandler = new Handler() {
         @Override
