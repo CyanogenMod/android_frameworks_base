@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - 2015 The MoKee OpenSource Project
+ * Copyright (C) 2015 The New One Android
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.util.Locale;
 * @hide
 */
 
-public class MoKeeUtils {
+public class OneUtils {
 
     public static boolean isSupportLanguage(boolean excludeTW) {
         Configuration configuration = Resources.getSystem().getConfiguration();
