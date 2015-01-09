@@ -3247,6 +3247,12 @@ public final class Settings {
          */
         public static final String NAVBAR_LEFT_IN_LANDSCAPE = "navigation_bar_left";
 
+        /**         
+         * open/close phone answer.
+         * @hide
+         */        
+        public static final String ANSWER_VOLUME_BUTTON_BEHAVIOR_ANSWER = "call_volume_answer";
+
         /**
          * Locale for secondary overlay on dialer for t9 search input
          * @hide
@@ -5326,12 +5332,6 @@ public final class Settings {
          * @hide
          */
         public static final String DOZE_ENABLED = "doze_enabled";
-        
-        /**
-         * open/close phone answer.
-         * @hide
-         */
-        public static final String ANSWER_VOLUME_BUTTON_BEHAVIOR_ANSWER = "call_volume_answer";
 
         /**
          * What happens when the user presses the Home button when the

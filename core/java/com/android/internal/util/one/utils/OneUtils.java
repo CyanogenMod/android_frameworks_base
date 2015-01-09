@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.one.utils;
+package com.android.internal.util.one;
 
 import android.content.Context;
 import android.content.res.Configuration;
