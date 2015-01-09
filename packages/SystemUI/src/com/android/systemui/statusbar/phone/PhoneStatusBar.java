@@ -350,6 +350,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     int mKeyguardMaxNotificationCount;
     
     private boolean mPowerSaveState;
+    
+    // Status bar carrier
+    private boolean mShowStatusBarCarrier;
 
     // carrier/wifi label
     private TextView mCarrierLabel;
@@ -428,6 +431,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CARRIER), false, this);
             update();
         }
 
@@ -447,6 +452,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
             mPowerSaveState = 1 == Settings.System.getInt(resolver,
                   Settings.System.POWER_SAVE_SETTINGS, 0);
+            mShowStatusBarCarrier = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_CARRIER, 0, mCurrentUserId) == 1;
+            showStatusBarCarrierLabel(mShowStatusBarCarrier);
             setPowerSaveSettings(mPowerSaveState);
 
             if (mNavigationBarView != null) {
@@ -3505,6 +3513,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
     };
+    
+    public void showStatusBarCarrierLabel(boolean show) {
+        if (mStatusBarView == null) return;
+        ContentResolver resolver = mContext.getContentResolver();
+        View statusBarCarrierLabel = mStatusBarView.findViewById(R.id.status_bar_carrier_label);
+        if (statusBarCarrierLabel != null) {
+            statusBarCarrierLabel.setVisibility(show ? (mShowStatusBarCarrier ? View.VISIBLE : View.GONE) : View.GONE);
+        }
+    }
     
     public void setPowerSaveSettings(boolean state) {
         PowerManager mPowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
