@@ -161,6 +161,7 @@ import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.SpeedBumpView;
 import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.StatusBarState;
+import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
@@ -353,6 +354,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     
     // Status bar carrier
     private boolean mShowStatusBarCarrier;
+    
+    // Status bar Network traffic;
+    private NetworkTraffic mNetworkTraffic;
 
     // carrier/wifi label
     private TextView mCarrierLabel;
@@ -886,6 +890,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mMoreIcon = mStatusBarView.findViewById(R.id.moreIcon);
         mNotificationIcons.setOverflowIndicator(mMoreIcon);
         mStatusBarContents = (LinearLayout)mStatusBarView.findViewById(R.id.status_bar_contents);
+        mNetworkTraffic = (NetworkTraffic)mStatusBarView.findViewById(R.id.network_traffic);
 
         mStackScroller = (NotificationStackScrollLayout) mStatusBarWindow.findViewById(
                 R.id.notification_stack_scroller);
@@ -3583,6 +3588,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (MULTIUSER_DEBUG) mNotificationPanelDebugText.setText("USER " + newUserId);
         animateCollapsePanels();
         updateNotifications();
+        mNetworkTraffic.updateSettings();
         resetUserSetupObserver();
         setControllerUsers();
     }
