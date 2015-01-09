@@ -262,7 +262,7 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
 
     private String getWrongPasswordMessage() {
         String msg = getContext().getString(R.string.kg_wrong_pattern);
-        if (getRemainingCount() >= 0) {
+        if ((mMaxCountdownTimes > 0) && (getRemainingCount() >= 0)) {
             msg += " - " + getContext().getResources().getString(R.string.kg_remaining_attempts,
                     getRemainingCount());
         }
