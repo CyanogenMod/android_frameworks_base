@@ -888,7 +888,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             int signalClustersLength = mSignalClusters.size();
             for (int i = 0; i < signalClustersLength; i++) {
                 mSignalClusters.get(i).setWifiIndicators(wifiVisible, getCurrentIconId(),
-                        getActivityIconId(ssidPresent), contentDescription);
+                        getActivityIconId(ssidPresent, false), contentDescription);
             }
         }
 
@@ -1226,7 +1226,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 mSignalClusters.get(i).setMobileDataIndicators(
                         mCurrentState.enabled && !mCurrentState.airplaneMode,
                         getCurrentIconId(),
-                        getActivityIconId(mCurrentState.dataConnected),
+                        getActivityIconId(mCurrentState.dataConnected, true),
                         typeIcon,
                         contentDescription,
                         dataContentDescription,
@@ -1615,17 +1615,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
             }
         }
 
-        public int getActivityIconId(boolean connected) {
+        public int getActivityIconId(boolean connected, boolean mobile) {
             if (connected) {
                 if (mCurrentState.activityIn && mCurrentState.activityOut) {
-                    return R.drawable.stat_sys_signal_inout;
+                    return mobile ? R.drawable.stat_sys_signal_inout : R.drawable.stat_sys_wifi_inout;
                 } else if (mCurrentState.activityIn) {
-                    return R.drawable.stat_sys_signal_in;
+                    return mobile ? R.drawable.stat_sys_signal_in : R.drawable.stat_sys_wifi_in;
                 } else if (mCurrentState.activityOut) {
-                    return R.drawable.stat_sys_signal_out;
+                    return mobile ? R.drawable.stat_sys_signal_out : R.drawable.stat_sys_wifi_out;
                 }
             }
-            return R.drawable.stat_sys_signal_none;
+            return 0;
         }
 
         /**
