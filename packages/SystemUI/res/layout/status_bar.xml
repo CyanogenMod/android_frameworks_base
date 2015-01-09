@@ -92,6 +92,13 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             >
+            
+            <com.android.systemui.statusbar.policy.NetworkTraffic
+                android:id="@+id/network_traffic"
+                android:textAppearance="@style/TextAppearance.StatusBar.NetworkTraffic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"/>
 
             <include layout="@layout/system_icons" />
 
