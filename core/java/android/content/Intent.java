@@ -2162,6 +2162,21 @@ public class Intent implements Parcelable, Cloneable {
 
     // *** NOTE: @todo(*) The following really should go into a more domain-specific
     // location; they are not general-purpose actions.
+    
+    /**
+     * <p>Broadcast Action: The user has changed carrier label:</p>
+     * <ul>
+     *   <li><em>state</em> - String value.</li>
+     * </ul>
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     *
+     * @hide
+     */
+    //@SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_CUSTOM_CARRIER_LABEL_CHANGED
+            = "android.intent.action.CUSTOM_CARRIER_LABEL";
 
     /**
      * Broadcast Action: A GTalk connection has been established.
