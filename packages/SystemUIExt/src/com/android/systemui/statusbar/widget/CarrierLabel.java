@@ -21,7 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.mokee.utils.MoKeeUtils;
+import android.one.utils.OneUtils;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -94,7 +94,7 @@ public class CarrierLabel extends TextView {
                         intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
                         intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),
                         intent.getStringExtra(TelephonyIntents.EXTRA_PLMN));
-                isCN = MoKeeUtils.isSupportLanguage(false);
+                isCN = OneUtils.isSupportLanguage(false);
             }
         }
     };

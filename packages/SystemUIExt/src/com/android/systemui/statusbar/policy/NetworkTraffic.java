@@ -26,7 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
-import android.mokee.utils.MoKeeUtils;
+import android.one.utils.OneUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
@@ -243,7 +243,7 @@ public class NetworkTraffic extends TextView {
         GB = MB * KB;
 
         if (isSet(mState, MASK_UP) || isSet(mState, MASK_DOWN)) {
-            if (MoKeeUtils.isOnline(mContext)) {
+            if (OneUtils.isOnline(mContext)) {
                 if (mAttached) {
                     totalRxBytes = TrafficStats.getTotalRxBytes();
                     lastUpdateTime = SystemClock.elapsedRealtime();
