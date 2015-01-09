@@ -720,6 +720,13 @@ public class Environment {
      */
     public static final String MEDIA_UNMOUNTABLE = "unmountable";
 
+     /**
+     * Storage state if the media is present and in formatting state.
+     *
+     * @hide
+     */
+    public static final String MEDIA_FORMATTING = "formatting";
+
     /**
      * Returns the current state of the primary "external" storage device.
      * 
