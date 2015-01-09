@@ -18,7 +18,8 @@
     android:id="@+id/visible_panel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:animateLayoutChanges="true" >
 
     <FrameLayout
         android:id="@+id/slider_panel"
@@ -34,5 +35,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/zen_mode_panel" />
+
+    <LinearLayout
+        android:id="@+id/expanded_panel"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        android:visibility="gone" />
 
 </LinearLayout>
