@@ -2734,11 +2734,22 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             ContentResolver resolver = context.getContentResolver();
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.HTTP_PROXY), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.DNS_ENCRYPTION_TOGGLE), false, this);
         }
 
         @Override
         public void onChange(boolean selfChange) {
             mHandler.obtainMessage(mWhat).sendToTarget();
+            int i = Settings.Secure.getIntForUser(getContentObserver(),
+                        Settings.Secure.DNS_ENCRYPTION_TOGGLE, UserHandle.CURRENT);
+            String server_value = Settings.Secure.getStringForUser(getContentObserver(),
+                                    Settings.Secure.DNS_ENCRYPTION_SERVER, UserHandle.CURRENT);
+            boolean enable = i ? true : false;
+            if (enable != LocalDnsEnabled) {
+                LocalDnsEnabled = enable;
+                forceLocalDns(LocalDnsEnabled);
+            }
         }
     }
 
@@ -3700,7 +3711,31 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
         return !routeDiff.added.isEmpty() || !routeDiff.removed.isEmpty();
     }
+
+    private int mNetId;
+    private String mDomain;
+    private boolean LocalDnsEnabled = false;
+
+    private void forceLocalDns(boolean local) {
+        Collection<InetAddress> own_dnses = new ArrayList();
+        String own_domain;
+        if (local) {
+            own_dnses.add(NetworkUtils.numericToInetAddress("127.0.0.1"));
+            own_domain = "";
+        } else {
+            own_dnses.add(NetworkUtils.numericToInetAddress("4.2.2.1"));
+	        own_domain = mDomain;
+        }
+        log("edward- forceLocalDns netId="+ mNetId + "  to " + own_dnses +" domain: "+ own_domain +"!!!!!!!!!!!!! ");
+        try {
+            mNetd.setDnsServersForNetwork(mNetId, NetworkUtils.makeStrings(own_dnses), own_domain);
+        } catch (Exception e) {
+                loge("Exception in setDnsServersForNetwork: " + e);
+        }
+    }
+
     private void updateDnses(LinkProperties newLp, LinkProperties oldLp, int netId, boolean flush) {
+        log("edward- Setting Dns servers for network!!!!!!!!!!!!! ");
         if (oldLp == null || (newLp.isIdenticalDnses(oldLp) == false)) {
             Collection<InetAddress> dnses = newLp.getDnsServers();
             if (dnses.size() == 0 && mDefaultDns != null) {
@@ -3710,16 +3745,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     loge("no dns provided for netId " + netId + ", so using defaults");
                 }
             }
-            if (DBG) log("Setting Dns servers for network " + netId + " to " + dnses);
-            try {
-                mNetd.setDnsServersForNetwork(netId, NetworkUtils.makeStrings(dnses),
-                    newLp.getDomains());
-            } catch (Exception e) {
-                loge("Exception in setDnsServersForNetwork: " + e);
-            }
-            NetworkAgentInfo defaultNai = mNetworkForRequestId.get(mDefaultRequest.requestId);
-            if (defaultNai != null && defaultNai.network.netId == netId) {
-                setDefaultDnsSystemProperties(dnses);
+            log("edward- Setting Dns servers for network " + netId + " to " + dnses);
+
+            mNetId = netId;
+            mDomain = newLp.getDomains();
+
+            if (!LocalDnsEnabled) {
+                if (DBG) log("Setting Dns servers for network " + netId + " to " + dnses);
+                try {
+                    mNetd.setDnsServersForNetwork(netId, NetworkUtils.makeStrings(dnses),
+                        newLp.getDomains());
+                } catch (Exception e) {
+                    loge("Exception in setDnsServersForNetwork: " + e);
+                }
+                NetworkAgentInfo defaultNai = mNetworkForRequestId.get(mDefaultRequest.requestId);
+                if (defaultNai != null && defaultNai.network.netId == netId) {
+                    setDefaultDnsSystemProperties(dnses);
+                }
             }
             flushVmDnsCache();
         } else if (flush) {
