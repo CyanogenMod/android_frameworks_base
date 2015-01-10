@@ -621,6 +621,12 @@ public abstract class ConnectionService extends Service {
             Log.d(this, "Adapter set call substate %d", callSubstate);
             mAdapter.setCallSubstate(id, callSubstate);
         }
+
+        @Override
+        public void onCdmaConnectionTimeReset(Connection c) {
+            String id = mIdByConnection.get(c);
+            mAdapter.resetCdmaConnectionTime(id);
+        }
     };
 
     /** {@inheritDoc} */

@@ -327,6 +327,10 @@ final class RemoteConnectionService {
 
             mOurConnectionServiceImpl.addRemoteExistingConnection(remoteConnction);
         }
+
+        @Override
+        public void resetCdmaConnectionTime(String callId) {
+        }
     };
 
     private final ConnectionServiceAdapterServant mServant =
