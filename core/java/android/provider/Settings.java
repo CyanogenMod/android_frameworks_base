@@ -3897,6 +3897,28 @@ public final class Settings {
     public static final class Secure extends NameValueTable {
         public static final String SYS_PROP_SETTING_VERSION = "sys.settings_secure_version";
 
+        // DNS Encryption
+
+        /**
+         * @hide
+         */
+        public static final String DNS_ENCRYPTION_TOGGLE = "dns_enc_toggle";
+
+        /**
+         * @hide
+         */
+        public static final int DNS_ENCRYPTION_TOGGLE_DEFAULT = 0;
+
+        /**
+         * @hide
+         */
+        public static final String DNS_ENCRYPTION_SERVER = "dns_enc_server";
+
+        /**
+         * @hide
+         */
+        public static final String DNS_ENCRYPTION_SERVER_DEFAULT = "cyngn";
+
         /**
          * The content:// style URL for this table
          */
