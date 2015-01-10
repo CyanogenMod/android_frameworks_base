@@ -89,6 +89,8 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.provider.Settings.Secure;
+import android.provider.Settings.SettingNotFoundException;
 import android.security.Credentials;
 import android.security.KeyStore;
 import android.telephony.TelephonyManager;
@@ -178,6 +180,9 @@ public class ConnectivityService extends IConnectivityManager.Stub
     private static final String ACTION_PKT_CNT_SAMPLE_INTERVAL_ELAPSED =
             "android.net.ConnectivityService.action.PKT_CNT_SAMPLE_INTERVAL_ELAPSED";
 
+    private static final String NETID_UPDATE =
+        "org.codeaurora.NETID_UPDATE";
+
     private static final String EXTRA_NETWORK_TYPE = "netType";
 
     private static final String EXTRA_NETID = "netID";
@@ -247,6 +252,16 @@ public class ConnectivityService extends IConnectivityManager.Stub
 
     private static final int ENABLED  = 1;
     private static final int DISABLED = 0;
+
+    // DNS Encryption variables
+    private static final String DNSCRYPT_SERVICE = "dnscrypt-proxy";
+    private static final String LOOPBACK_ADDR = "127.0.0.1";
+    private static final String NULL_DOMAIN = "";
+    private boolean mDnsEncryptionEnabled = false;
+    private String mDnsEncryptionServer = Secure.DNS_ENCRYPTION_SERVER_DEFAULT;
+    private Collection<InetAddress> mActualDnses = new ArrayList<InetAddress>();
+    private int mNetId = -1;
+    private String mActualDomains = null;
 
     // Arguments to rematchNetworkAndRequests()
     private enum NascentState {
@@ -2964,7 +2979,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         }
     }
 
-    private static class SettingsObserver extends ContentObserver {
+    private class SettingsObserver extends ContentObserver {
         private int mWhat;
         private Handler mHandler;
         SettingsObserver(Handler handler, int what) {
@@ -2977,12 +2992,80 @@ public class ConnectivityService extends IConnectivityManager.Stub
             ContentResolver resolver = context.getContentResolver();
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.HTTP_PROXY), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Secure.DNS_ENCRYPTION_TOGGLE), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(Secure
+                    .DNS_ENCRYPTION_SERVER), false, this);
+            onPreferencesChanged();
         }
 
         @Override
         public void onChange(boolean selfChange) {
             mHandler.obtainMessage(mWhat).sendToTarget();
+            onPreferencesChanged();
         }
+    }
+
+    /**
+     * Called when preference are updated from Settings
+     * {@hide}
+     */
+    private void onPreferencesChanged() {
+       setDnsEncryptionDns();
+    }
+
+    /**
+     * Updates the DNS to either encrypted or regular
+     */
+    private void setDnsEncryptionDns() {
+        try {
+            mDnsEncryptionEnabled = Secure.getIntForUser(mContext.getContentResolver(),
+                    Secure.DNS_ENCRYPTION_TOGGLE, UserHandle.USER_CURRENT) != 0;
+        } catch (SettingNotFoundException e) {
+            loge("Exception getting dns enabled setting: " + e);
+        }
+        String serverName = Secure.getStringForUser(mContext.getContentResolver(),
+                Secure.DNS_ENCRYPTION_SERVER, UserHandle.USER_CURRENT);
+        serverName = (TextUtils.isEmpty(serverName)) ? Secure.DNS_ENCRYPTION_SERVER_DEFAULT :
+                serverName;
+
+        // If they aren't equal, then we have a change!
+        boolean changed = !mDnsEncryptionServer.equals(serverName);
+
+        // Set last server name
+        mDnsEncryptionServer = serverName;
+
+        log("DNS Encryption Enabled: " + mDnsEncryptionEnabled);
+        Collection<InetAddress> dnses = mActualDnses;
+        String domains = mActualDomains;
+        if (mDnsEncryptionEnabled) {
+            if (changed) {
+                // If we had a server change, need to restart service to pick up new server
+                SystemProperties.set("ctl.stop", DNSCRYPT_SERVICE);
+                SystemProperties.set("net.dnscrypt_resolver", mDnsEncryptionServer);
+            }
+            SystemProperties.set("ctl.start", DNSCRYPT_SERVICE);
+            dnses = new ArrayList<InetAddress>();
+            dnses.add(NetworkUtils.numericToInetAddress(LOOPBACK_ADDR));
+            domains = NULL_DOMAIN;
+        } else {
+            SystemProperties.set("ctl.stop", DNSCRYPT_SERVICE);
+        }
+        updateDnsesInternal(dnses, mNetId, domains);
+    }
+
+    private void updateDnsesInternal(Collection<InetAddress> dnses, int netId, String domains) {
+        if (DBG) log("Setting Dns servers for network " + netId + " to " + dnses);
+        try {
+            mNetd.setDnsServersForNetwork(netId, NetworkUtils.makeStrings(dnses), domains);
+        } catch (Exception e) {
+            loge("Exception in setDnsServersForNetwork: " + e);
+        }
+        NetworkAgentInfo defaultNai = mNetworkForRequestId.get(mDefaultRequest.requestId);
+        if (defaultNai != null && defaultNai.network.netId == netId) {
+            setDefaultDnsSystemProperties(dnses);
+        }
+        flushVmDnsCache();
     }
 
     private static void log(String s) {
@@ -3937,27 +4020,28 @@ public class ConnectivityService extends IConnectivityManager.Stub
     }
     private void updateDnses(LinkProperties newLp, LinkProperties oldLp, int netId,
                              boolean flush, boolean useDefaultDns) {
-        if (oldLp == null || (newLp.isIdenticalDnses(oldLp) == false)) {
-            Collection<InetAddress> dnses = newLp.getDnsServers();
+        if (oldLp == null || !newLp.isIdenticalDnses(oldLp)) {
+           Collection<InetAddress> dnses = newLp.getDnsServers();
             if (dnses.size() == 0 && mDefaultDns != null && useDefaultDns) {
-                dnses = new ArrayList();
+                dnses = new ArrayList<InetAddress>();
                 dnses.add(mDefaultDns);
                 if (DBG) {
                     loge("no dns provided for netId " + netId + ", so using defaults");
                 }
             }
-            if (DBG) log("Setting Dns servers for network " + netId + " to " + dnses);
-            try {
-                mNetd.setDnsServersForNetwork(netId, NetworkUtils.makeStrings(dnses),
-                    newLp.getDomains());
-            } catch (Exception e) {
-                loge("Exception in setDnsServersForNetwork: " + e);
+
+            // Set tracking fields
+            mNetId = netId;
+            mActualDnses = dnses;
+            mActualDomains = newLp.getDomains();
+
+            String domains = mActualDomains;
+            if (mDnsEncryptionEnabled) {
+                dnses = new ArrayList<InetAddress>();
+                dnses.add(NetworkUtils.numericToInetAddress(LOOPBACK_ADDR));
+                domains = NULL_DOMAIN;
             }
-            NetworkAgentInfo defaultNai = mNetworkForRequestId.get(mDefaultRequest.requestId);
-            if (defaultNai != null && defaultNai.network.netId == netId) {
-                setDefaultDnsSystemProperties(dnses);
-            }
-            flushVmDnsCache();
+            updateDnsesInternal(dnses, netId, domains);
         } else if (flush) {
             try {
                 mNetd.flushNetworkDnsCache(netId);
