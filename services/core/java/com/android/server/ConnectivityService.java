@@ -41,6 +41,7 @@ import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_METERED;
 
 import android.app.AlarmManager;
+import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -152,6 +153,7 @@ import dalvik.system.DexClassLoader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -2721,7 +2723,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
     }
 
-    private static class SettingsObserver extends ContentObserver {
+    private class SettingsObserver extends ContentObserver {
         private int mWhat;
         private Handler mHandler;
         SettingsObserver(Handler handler, int what) {
@@ -2734,11 +2736,26 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             ContentResolver resolver = context.getContentResolver();
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.HTTP_PROXY), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.DNS_ENCRYPTION_TOGGLE), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.DNS_ENCRYPTION_SERVER), false, this);
+            onDnsPreferenceChanged();
         }
 
         @Override
         public void onChange(boolean selfChange) {
+
+            // Register for SU access
+            int uid = Process.myUid();
+            AppOpsManager appOps =
+                (AppOpsManager) mContext.getSystemService(Context.APP_OPS_SERVICE);
+            appOps.setMode(AppOpsManager.OP_SU, uid, "com.android.server", AppOpsManager
+                    .MODE_ALLOWED);
+
+
             mHandler.obtainMessage(mWhat).sendToTarget();
+            onDnsPreferenceChanged();
         }
     }
 
@@ -3700,7 +3717,117 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
         return !routeDiff.added.isEmpty() || !routeDiff.removed.isEmpty();
     }
+
+    private int mNetId;
+    private Collection<InetAddress> mDnses;
+    private String mDomain;
+    private boolean mLocalDnsEnabled = false;
+    private String mDnsCryptServer;
+
+    private static final String LOOPBACK_ADDR = "127.0.0.1";
+    private static final String NULL_DOMAIN = "";
+
+    private static final String CMD_START = "/system/bin/dnscrypt-proxy -L /system/etc/dnscrypt-resolvers.csv -R %s";
+    private static final String CMD_STOP = "pkill dnscrypt-proxy";
+
+    private void updatednses_interanal(int netId, Collection<InetAddress> dnses, String Domains) {
+        try {
+            mNetd.setDnsServersForNetwork(netId, NetworkUtils.makeStrings(dnses), Domains);
+        } catch (Exception e) {
+            loge("Exception in setDnsServersForNetwork: " + e);
+        }
+        NetworkAgentInfo defaultNai = mNetworkForRequestId.get(mDefaultRequest.requestId);
+        if (defaultNai != null && defaultNai.network.netId == netId) {
+            setDefaultDnsSystemProperties(dnses);
+        }
+        flushVmDnsCache();
+    }
+
+    private void forceLocalDns(boolean localDns) {
+        Collection<InetAddress> own_dnses = new ArrayList();
+        String own_domain;
+
+        if (localDns) {
+            own_dnses.add(NetworkUtils.numericToInetAddress(LOOPBACK_ADDR));
+            own_domain = NULL_DOMAIN;
+        } else {
+            own_dnses = mDnses;
+            own_domain = mDomain;
+        }
+        log("edward- forceLocalDns netId="+ mNetId + "  to " + own_dnses +
+            " domain: "+ own_domain +"!!!!!!!!!!!!! ");
+
+        updatednses_interanal(mNetId, own_dnses, own_domain);
+    }
+
+    private void startDnsCryptDaemon() throws IOException {
+        String[] cmds = new String[] { String.format(CMD_START, mDnsCryptServer) };
+        runAsRoot(cmds);
+    }
+
+    private void stopDnsCryptDaemon() throws IOException {
+        String[] cmds = new String[] { CMD_STOP };
+        runAsRoot(cmds);
+    }
+
+    private void runAsRoot(String cmds[]) throws IOException {
+        java.lang.Process p = Runtime.getRuntime().exec("su");
+        DataOutputStream os = new DataOutputStream(p.getOutputStream());
+        try {
+            for (String tmpCmd : cmds) {
+                os.writeBytes(tmpCmd + "\n");
+            }
+            os.writeBytes("exit\n");
+        } finally {
+            os.flush();
+            os.close();
+        }
+    }
+
+    private void onDnsPreferenceChanged() {
+        boolean localDnsEnabled = false;
+        try {
+            localDnsEnabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.DNS_ENCRYPTION_TOGGLE, UserHandle.USER_CURRENT) != 0;
+        } catch (Exception e) {
+            loge("Exception in  onDnsPreferenceToggled: " + e);
+        }
+        String dnsCryptServer = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                                Settings.Secure.DNS_ENCRYPTION_SERVER, UserHandle.USER_CURRENT);
+        if (localDnsEnabled != mLocalDnsEnabled) {
+            if (localDnsEnabled) {
+                mDnsCryptServer = dnsCryptServer;
+                try {
+                    startDnsCryptDaemon();
+                } catch (IOException e) {
+                    loge("Failed to start dns crypt daemon!");
+                }
+            } else {
+                try {
+                    stopDnsCryptDaemon();
+                } catch (IOException e) {
+                    loge("Failed to stop dns crypt daemon!");
+                }
+            }
+            mLocalDnsEnabled = localDnsEnabled;
+            forceLocalDns(mLocalDnsEnabled);
+        } else if (localDnsEnabled && !mDnsCryptServer.equalsIgnoreCase(dnsCryptServer)) {
+            try {
+                stopDnsCryptDaemon();
+            } catch (IOException e) {
+                loge("Failed to stop dns crypt daemon!");
+            }
+            mDnsCryptServer = dnsCryptServer;
+            try {
+                startDnsCryptDaemon();
+            } catch (IOException e) {
+                loge("Failed to start dns crypt daemon!");
+            }
+        }
+    }
+
     private void updateDnses(LinkProperties newLp, LinkProperties oldLp, int netId, boolean flush) {
+        log("edward- Setting Dns servers for network!!!!!!!!!!!!! ");
         if (oldLp == null || (newLp.isIdenticalDnses(oldLp) == false)) {
             Collection<InetAddress> dnses = newLp.getDnsServers();
             if (dnses.size() == 0 && mDefaultDns != null) {
@@ -3710,18 +3837,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     loge("no dns provided for netId " + netId + ", so using defaults");
                 }
             }
-            if (DBG) log("Setting Dns servers for network " + netId + " to " + dnses);
-            try {
-                mNetd.setDnsServersForNetwork(netId, NetworkUtils.makeStrings(dnses),
-                    newLp.getDomains());
-            } catch (Exception e) {
-                loge("Exception in setDnsServersForNetwork: " + e);
+            log("edward- Setting Dns servers for network " + netId + " to " + dnses);
+
+            mNetId = netId;
+            mDnses = dnses;
+            mDomain = newLp.getDomains();
+
+            if (!mLocalDnsEnabled) {
+                updatednses_interanal(netId, dnses, newLp.getDomains());
             }
-            NetworkAgentInfo defaultNai = mNetworkForRequestId.get(mDefaultRequest.requestId);
-            if (defaultNai != null && defaultNai.network.netId == netId) {
-                setDefaultDnsSystemProperties(dnses);
-            }
-            flushVmDnsCache();
         } else if (flush) {
             try {
                 mNetd.flushNetworkDnsCache(netId);
