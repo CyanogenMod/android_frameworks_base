@@ -239,4 +239,13 @@
     <!-- Theme installation error notification -->
     <string name="theme_install_error_title">Failed to install theme</string>
     <string name="theme_install_error_message">%s failed to install</string>
+
+    <!-- [CHAR LIMIT=NONE] Message shown in dialog on first boot after clean install for each .apk that is optimized. -->
+    <string name="android_installing_apk">Installing app
+        <xliff:g id="number" example="123">%1$d</xliff:g> of
+        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+
+    <!-- [CHAR LIMIT=40] Title of dialog that is shown when performing a system install. -->
+    <string name="android_installing_title">Android is installing\u2026</string>
+
 </resources>
