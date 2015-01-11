@@ -32,5 +32,12 @@
   <string name="message_from_person">نامه‌یه‌ک له‌لایه‌ن %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEMMMMd</string>
   <string name="kg_invalid_sim_puk_hint_cm">PUK کۆد ئەبێت لە ٨ ژمارە کەمتر نەبێت.</string>
+  <string name="keyguard_password_wrong_puk_code">PUK کۆد ڕاستنیە.</string>
+  <string name="keyguard_password_pin_failed">پرۆسەی PIN شکستی هێنا.</string>
+  <string name="keyguard_password_puk_failed">پرۆسەی PUK شکستی هێنا.</string>
+  <string name="pinpuk_attempts">\nهه‌وڵه‌کان ماون:</string>
   <string name="lockscreen_sim_error_message_short">کارتی تیا نیە.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM is Perso قوفڵکراوە</string>
+  <string name="msim_kg_sim_pin_msg_format">سیم: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">بەرنامەی کۆتای بەکارهێنرا</string>
 </resources>

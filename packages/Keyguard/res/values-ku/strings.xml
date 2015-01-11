@@ -31,7 +31,6 @@
   <string name="faceunlock_multiple_failures">هه‌وڵی زۆر درا بۆ کردنه‌وه‌ له‌ڕێی ڕوخساره‌وه‌</string>
   <string name="keyguard_charged">بارگاویی بوو</string>
   <string name="keyguard_plugged_in">بارگاویی بوون، <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="keyguard_low_battery">بیبەستە بە بارگاویکه‌ر.</string>
   <string name="keyguard_instructions_when_pattern_disabled">دەست بنێ بە پێڕستدا بۆ کردنه‌وه‌.</string>
   <string name="keyguard_network_locked_message">تۆڕی نێت داخرا</string>
   <string name="keyguard_missing_sim_message_short">سیمکارتی تێدا نییە</string>
@@ -53,7 +52,6 @@
   <string name="keyguard_accessibility_widget"><xliff:g id="widget_index">%1$s</xliff:g> ورده‌واڵه‌.</string>
   <string name="keyguard_accessibility_user_selector">هەڵبژاردەی بەکارهێنەر</string>
   <string name="keyguard_accessibility_status">ڕه‌وش</string>
-  <string name="keyguard_accessibility_camera">کامێرا</string>
   <string name="keygaurd_accessibility_media_controls">کۆنترۆڵه‌کانی ڕاگه‌یاندن</string>
   <string name="keyguard_accessibility_widget_reorder_start">ڕیزکردنه‌وه‌ی ورده‌واڵه‌کان ده‌ستی پێکرد.</string>
   <string name="keyguard_accessibility_widget_reorder_end">ڕیزکردنه‌وه‌ی ورده‌واڵه‌کان کۆتایی هات.</string>
@@ -65,7 +63,6 @@
   <string name="keyguard_accessibility_pin_unlock">کردنه‌وه‌ی پین.</string>
   <string name="keyguard_accessibility_password_unlock">کردنه‌وه‌ی تێپه‌ڕه‌وشه‌.</string>
   <string name="keyguard_accessibility_pattern_area">ناوچەی خه‌تکێشان.</string>
-  <string name="keyguard_accessibility_slide_area">ناوچەی لادان.</string>
   <string name="keyguard_accessibility_transport_prev_description">دوگمەی تراکی پێشوو</string>
   <string name="keyguard_accessibility_transport_next_description">دوگمەی تراکی داهاتوو</string>
   <string name="keyguard_accessibility_transport_pause_description">دوگمەی وەستان</string>
@@ -78,9 +75,6 @@
   <string name="keyguard_accessibility_hide_bouncer">داگیرساندن پوچەڵکرایەوە</string>
   <string name="keyguard_accessibility_delete_widget_start"><xliff:g id="widget_index">%1$s</xliff:g> نوقمکه‌ بۆ سڕینەوە.</string>
   <string name="keyguard_accessibility_delete_widget_end"><xliff:g id="widget_index">%1$s</xliff:g> ناسڕێتەوە.</string>
-  <string name="password_keyboard_label_symbol_key">\?123</string>
-  <string name="password_keyboard_label_alpha_key">ABC</string>
-  <string name="password_keyboard_label_alt_key">ALT</string>
   <string name="keyboardview_keycode_alt">Alt</string>
   <string name="keyboardview_keycode_cancel">پوچەڵ</string>
   <string name="keyboardview_keycode_delete">سڕینه‌وه‌</string>
@@ -89,7 +83,6 @@
   <string name="keyboardview_keycode_shift">شوێنگۆڕین</string>
   <string name="keyboardview_keycode_enter">دانان</string>
   <string name="description_target_unlock">کردنه‌وه‌</string>
-  <string name="description_target_camera">کامێرا</string>
   <string name="description_target_silent">بێدەنگ</string>
   <string name="description_target_soundon">ده‌نگ کردنه‌وه‌</string>
   <string name="description_target_search">گەڕان</string>

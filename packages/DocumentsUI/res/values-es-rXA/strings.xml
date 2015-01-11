@@ -37,7 +37,7 @@
   <string name="save_error">Fallu al guardar documentu</string>
   <string name="create_error">Fallu al crear carpeta</string>
   <string name="query_error">Fallu al solicitar documentos</string>
-  <string name="root_recent">Reciente</string>
+  <string name="root_recent">Recién</string>
   <string name="root_available_bytes"><xliff:g id="size" example="3GB">%1$s</xliff:g> d\'espaciu llibre</string>
   <string name="root_type_service">Servicios d\'almacenamientu</string>
   <string name="root_type_shortcut">Atayos</string>

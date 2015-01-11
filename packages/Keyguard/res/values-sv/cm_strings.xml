@@ -34,7 +34,10 @@
   <string name="kg_invalid_sim_puk_hint_cm">PUK-kod skall innehålla 8 siffror.</string>
   <string name="keyguard_password_wrong_puk_code">Felaktig PUK-kod.</string>
   <string name="keyguard_password_pin_failed">PIN-åtgärd misslyckades.</string>
+  <string name="keyguard_password_puk_failed">PUK-operation misslyckades.</string>
   <string name="pinpuk_attempts">\nFörsök kvar:</string>
   <string name="lockscreen_sim_error_message_short">Ogiltigt kort.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM är Perso-låst</string>
   <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">Senaste app</string>
 </resources>

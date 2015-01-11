@@ -48,6 +48,7 @@
   <string name="permlab_preventpower">מניעת כפתור הכיבוי</string>
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
   <string name="permlab_sendMockSms">שליחת הודעות SMS מדומות</string>
+  <string name="permdesc_sendMockSms">מאפשר ליישום לשלוח הודעות SMS מזויפות. זה מאפשר ליישום לשלוח SMS ליישומים מורשים. יישומים זדוניים יכולים להשתמש בכך שישלחו הודעות ללא הפסקה, יעצרו את שירות ההודעות במערכת ויפריע למשתמש.</string>
   <string name="storage_sd_dock_card">כרטיס SD של תחנת עגינה</string>
   <string name="app_killed_message">התהליך נסגר</string>
   <string name="global_action_reboot">הפעלה מחדש</string>
@@ -66,6 +67,10 @@
   <string name="perf_profile_perf">ביצועים</string>
   <string name="permlab_interceptSmsSent">עצור הודעות SMS יוצאות</string>
   <string name="permdesc_interceptSmsSent">אפשר ליישום ליירט הודעות SMS יוצאות. יישומים זדוניים יכולים להשתמש בזה על מנת למנוע יציאת הודעות SMS לחלוטין.</string>
+  <string name="permlab_receiveProtectedSms">קבלת הודעות טקסט מוגנות</string>
+  <string name="permdesc_receiveProtectedSms">מאפשר לאפליקציה לקבל הודעות טקסט מוגנות.</string>
+  <string name="permlab_modifyProtectedSmsList">שנה את רשימת הודעות הטקסט המוגנות</string>
+  <string name="permdesc_modifyProtectedSmsList">מאפשר לאפליקציה לשנות את רשימת הכתובות של הודעות הטקסט המוגנות.</string>
   <string name="permlab_resetBatteryStats">אפס סטטיסטיקת סוללה</string>
   <string name="permdesc_resetBatteryStats">אפשר ליישום לאפס את הפעולות בסוללה נמוכה.</string>
   <string name="permgrouplab_security">אבטחה</string>
@@ -84,6 +89,10 @@
   <string name="permdesc_setKeyguardWallpaper">אפשר ליישום לשנות את הרקע של מסך הנעילה.</string>
   <string name="permlab_useHardwareFramework">השתמש במסגרת חומרתית</string>
   <string name="permdesc_useHardwareFramework">אפשר ליישום לגשת למסגרת החומרתית של CM.</string>
+  <string name="permlab_keyguardApplicationWidget">הגדרת יישומון למסך הנעילה</string>
+  <string name="permdesc_keyguardApplicationWidget">מאפשר לאפליקציה להגדיר יישומון במסך הנעילה.</string>
+  <string name="permlab_interceptPackageLaunch">עצור פתיחת אפליקציה</string>
+  <string name="permdesc_interceptPackageLaunch">מאפשר ליישום ליצור פתיחה של יישומים אחרים</string>
   <string name="immersive_mode_confirmation_bottom">החלק למעלה מהתחתית כדי לצאת ממסך מלא.</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
@@ -133,6 +142,8 @@
   <string name="adb_net_active_notification_title">ADB דרך הרשת מופעל</string>
   <string name="adb_both_active_notification_title">ADB דרך USB &amp; רשת מופעל</string>
   <string name="adb_active_generic_notification_message">הקש לביטול ADB.</string>
+  <string name="usb_extmedia_format_message">כל המידע על אחסון ה-USB (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
+  <string name="sd_extmedia_format_message">כל המידע על הכרטיס (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
   <string name="usb_storage_notification_manage_message">הקש לניהול</string>
   <string name="sd_ext_media_checking_notification_title">מכין כרטיס SD</string>
   <string name="sd_ext_media_checking_notification_message">בודק שגיאות בכרטיס ה-SD</string>
@@ -169,4 +180,21 @@
   <string name="stk_cc_ss_to_dial">בקשת SS שונתה לבקשת חיוג.</string>
   <string name="stk_cc_ss_to_ussd">בקשת SS שונתה לבקשת USSD.</string>
   <string name="stk_cc_ss_to_ss">בקשת SS שונתה לבקשת SS חדשה.</string>
+  <string name="theme_install_error_title">התקנת ערכת הנושא נכשלה</string>
+  <string name="theme_install_error_message">התקנת %s נכשלה</string>
+  <string name="storage_uicc">אחסון UICC</string>
+  <string name="sd_progress_unmounting">מבטל טעינת כרטיס זיכרון\u2026</string>
+  <string name="sd_progress_erasing">מוחק כרטיס SD</string>
+  <string name="sd_format_error">כרטיס הזיכרון לא היה ניתן למחיקה.</string>
+  <string name="sd_media_bad_removal">כרטיס ה-SD הוסר לפני ביטול הטעינה.</string>
+  <string name="sd_media_checking">כרטיס הזיכרון נמצא כעת בבדיקה.</string>
+  <string name="sd_media_removed">כרטיס הזיכרון הוסר.</string>
+  <string name="sd_media_shared">כרטיס הSD כרגע נמצא בשימוש מחשב.</string>
+  <string name="usb_progress_unmounting">מסיר כרטיס SD</string>
+  <string name="usb_progress_erasing">מוחק כרטיס SD</string>
+  <string name="usb_format_error">לא ניתן למחוק את כרטיס ה-SD.</string>
+  <string name="usb_media_bad_removal">כרטיס SD הוסר לפני להיות שטעינתו בוטלה.</string>
+  <string name="usb_media_checking">החסן ה-USB נבדק כעת.</string>
+  <string name="usb_media_removed">אחסון USB הוסר.</string>
+  <string name="usb_media_shared">אחסון USB נמצא כעת בשימוש על-ידי מחשב.</string>
 </resources>

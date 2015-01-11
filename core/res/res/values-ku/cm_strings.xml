@@ -48,6 +48,7 @@
   <string name="permlab_preventpower">بەرگری لە کلیلی هێز</string>
   <string name="permdesc_preventpower">ڕێگە دان بە بەرنامەکە</string>
   <string name="permlab_sendMockSms">ناردنی په‌یام پۆش</string>
+  <string name="permdesc_sendMockSms">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ناردنی په‌یام پۆش. ئه‌مه‌ ڕێگه‌ به‌ به‌رنامه‌کان ده‌دات بۆ ناردنی نامه‌ بۆ به‌رنامه‌ باوه‌ڕپێکراوه‌کان.ئاگاداربه‌ به‌رنامه‌ ناحه‌زه‌کان بۆ کاری خراپ به‌کاری نه‌هێنن، وه‌ک ڕاگرتنی ئاگاداری ئامێر و بێزارکردنی به‌کارهێنه‌ر.</string>
   <string name="storage_sd_dock_card">Dock بیرگەی دەرەکی</string>
   <string name="app_killed_message">بەرنامەکە کوژرا</string>
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>
@@ -66,6 +67,10 @@
   <string name="perf_profile_perf">ئەنجامدان</string>
   <string name="permlab_interceptSmsSent">کۆسپ بۆ SMS</string>
   <string name="permdesc_interceptSmsSent">ڕێگە دان بۆ بەرنامەکە بۆ کۆسپ دروستکردن لە چوونی SMS ،بەرنامە ڤایرۆسیەکان لەوە ئەچێت ئەمە بەکار بهێنن.</string>
+  <string name="permlab_receiveProtectedSms">وەرگرتنی کورتەنامەی پارێزراو</string>
+  <string name="permdesc_receiveProtectedSms">ڕێگە بە بەرنامەکە بدە کە کورتەنامە پارێزراوەکەی داهاتوو وەربگرێت.</string>
+  <string name="permlab_modifyProtectedSmsList">دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان</string>
+  <string name="permdesc_modifyProtectedSmsList">ڕێگە بە بەرنامەکە بدە بۆ دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان.</string>
   <string name="permlab_resetBatteryStats">ڕێکخستنەوەی ئاماری باتریە</string>
   <string name="permdesc_resetBatteryStats">ڕێگەدان بە بەرنامەکە بۆ ڕێکخستنەوەی کەمی باتری بەکارهێنانی داتا.</string>
   <string name="permgrouplab_security">ئاسایش</string>
@@ -85,6 +90,10 @@
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
   <string name="permlab_useHardwareFramework">به‌کارهێنانی هاردوێر بۆ کاری چوارچێوه‌</string>
   <string name="permdesc_useHardwareFramework">ڕێگه‌دان به‌ به‌رنامه‌یه‌ک بۆ ده‌سته‌ڵاتی چوارچێوه‌ کاری CM.</string>
+  <string name="permlab_keyguardApplicationWidget">دانانی ویجێتی بەرنامە لەسەر کلیل پارێز</string>
+  <string name="permdesc_keyguardApplicationWidget">ڕێگە بە بەرنامەکە بدە بۆ دانانی ویجێتی بەرنامە لەسەر کلیل پارێز.</string>
+  <string name="permlab_interceptPackageLaunch">ڕێگرتن لە داگیرساندنی بەرنامە</string>
+  <string name="permdesc_interceptPackageLaunch">ڕێگە بە بەرنامەکە بدە بۆ نەهێشتن لە داگیرساندنی دیکەی بەرنامەکان</string>
   <string name="immersive_mode_confirmation_bottom">بیسووە بەرەو خوارەوە بۆ دەرچوون لە پڕ ڕوونما.</string>
   <string name="app_ops_access_camera">ڕێگەدان بەکامێرا</string>
   <string name="app_ops_access_location">ڕێگەی ناوچەی</string>
@@ -134,7 +143,11 @@
   <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
   <string name="adb_both_active_notification_title">ABD سه‌روو USB وamp; هێڵ کارده‌کات</string>
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
+  <string name="usb_extmedia_format_message">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی USB (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
+  <string name="sd_extmedia_format_message">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی ناوه‌کی (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
   <string name="usb_storage_notification_manage_message">بە سووکی لێدە بۆ بەڕێوەبردن</string>
+  <string name="sd_ext_media_checking_notification_title">ئامادەکردنی کارتی دەرەکی\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">پشکنینی بیرگەی دەرەکی بۆ هەڵەکان\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">بیرگەی دەرەکی بەتاڵ</string>
   <string name="sd_ext_media_nofs_notification_message">بیرگەی دەرەکی بەتاڵە یان سیستەمی پەڕگە پشتگیری ناکرێت.</string>
   <string name="sd_ext_media_unmountable_notification_title">بیرگەی دەرەکی تێکشکاو</string>
@@ -145,6 +158,8 @@
   <string name="sd_ext_media_safe_unmount_notification_message">تۆ دەتوانیت بە دڵنیایی لەخۆگری بیرگەی USB لابەریت.</string>
   <string name="sd_ext_media_nomedia_notification_title">بیرگەی دەرەکی لابرا</string>
   <string name="sd_ext_media_nomedia_notification_message">بیرگەی دەرەکی لابرا. دانەیەکی نوێ بخە ناو.</string>
+  <string name="usb_ext_media_checking_notification_title">ئاماده‌کردنی بیرگه‌ی USB\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">پشکنینی کۆگای USB بۆ هەڵەکان\u2026</string>
   <string name="usb_ext_media_nofs_notification_title">لەخۆگری USB بەتاڵ</string>
   <string name="usb_ext_media_nofs_notification_message">لەخۆگری USB بەتاڵە یان سیستەمی پەڕگە پشتگیری نەکراوە.</string>
   <string name="usb_ext_media_unmountable_notification_title">لەخۆگری USB تێکشکاو</string>
@@ -155,4 +170,32 @@
   <string name="usb_ext_media_safe_unmount_notification_message">تۆ دەتوانی بە دڵنیایی لەخۆگری بیرگەی USB لابەری.</string>
   <string name="usb_ext_media_nomedia_notification_title">لەخۆگەی بیرگەی USB لابرا</string>
   <string name="usb_ext_media_nomedia_notification_message">لەخۆگری بیرگەی USB لابرا. ڕەنگاڵەیەکی نوێ بخە ناو.</string>
+  <string name="progress_nomediapresent" product="default">ناتوانرێت بسڕێته‌وه‌ میدیا\u2026</string>
+  <string name="lockscreen_sim_error_message_short">کارت نادرووستە.</string>
+  <string name="lockscreen_airplane_mode_on">باری فڕۆکه‌</string>
+  <string name="lockscreen_sim_locked_message_cm">SIM/RUIM قفڵکراوە.</string>
+  <string name="pinpuk_attempts">\nهه‌وڵ ماوە:</string>
+  <string name="stk_cc_ussd_to_dial">USSDداواکه‌ لابراوه‌ بۆ لێدانی داواکردن.</string>
+  <string name="stk_cc_ussd_to_ss">USSDداواکه‌ لابراوه‌ بۆ لێدانی داواکردنss.</string>
+  <string name="stk_cc_ussd_to_ussd">USSDداواکه‌ لابراوه‌ بۆ لێدانی داواکردنssd.</string>
+  <string name="stk_cc_ss_to_dial">داواکاری گۆڕینی SS بۆ لێدان.</string>
+  <string name="stk_cc_ss_to_ussd">داواکاری گۆڕینی SS بۆ لێدانی USSD.</string>
+  <string name="stk_cc_ss_to_ss">داواکاری گۆڕینی SS بۆ SS نوێ.</string>
+  <string name="theme_install_error_title">دابەزاندنی ڕووکار سەرکەوتو نەبوو</string>
+  <string name="theme_install_error_message">%s دانەبەزێنرا</string>
+  <string name="storage_uicc">UICC بیرگه‌ی</string>
+  <string name="sd_progress_unmounting">جێگیرنەکردنی بیرگەی دەرەکی\u2026</string>
+  <string name="sd_progress_erasing">سڕینەوەی بیرگەی دەرەکی\u2026</string>
+  <string name="sd_format_error">ناتوانرێت بیرگەی دەرەکی بسڕێتەوە.</string>
+  <string name="sd_media_bad_removal">کارتی هەڵگرتنی لابرا پێش ئەوەی دەربهێنرێت.</string>
+  <string name="sd_media_checking">کارتی هەڵگرتنی لەم کاتەدا تاقیکراوەتەوە.</string>
+  <string name="sd_media_removed">کارتی هەڵگرتنی لابرا.</string>
+  <string name="sd_media_shared">کارتی هەڵگرتنی لەم کاتەدا لەلایەن کۆمپیوتەرێک بەکاردەهێنرێت.</string>
+  <string name="usb_progress_unmounting">جێگیرنەکردنی بیرگەی USB\u2026</string>
+  <string name="usb_progress_erasing">سڕینەوەی بیرگەیUSB\u2026</string>
+  <string name="usb_format_error">ناتوانرێت بیرگەی USB بسڕێتەوە.</string>
+  <string name="usb_media_bad_removal">کۆگای USB لابرابوو پێش ئەوەی ناجێگیر بکرێت.</string>
+  <string name="usb_media_checking">بیرگەی USB لەم کاتەدا تاقیکراوەتەوە.</string>
+  <string name="usb_media_removed">کۆگای USB لابردرا.</string>
+  <string name="usb_media_shared">بیرگەی USB لەم کاتەدا لەلایەن کۆمپیوتەرێک بەکاردەهێنرێت.</string>
 </resources>

@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Типово</string>
+  <string name="profileNameDefault">Стандартний</string>
   <string name="profileNameWork">Робота</string>
   <string name="profileNameHome">Дім</string>
   <string name="profileNameSilent">Беззвучний</string>
@@ -72,7 +72,7 @@
   <string name="permlab_modifyProtectedSmsList">змінювати список захищених SMS</string>
   <string name="permdesc_modifyProtectedSmsList">Дозволяє програмі змінювати список адрес захищених SMS.</string>
   <string name="permlab_resetBatteryStats">скинути статистику акумулятора</string>
-  <string name="permdesc_resetBatteryStats">Дозволити програмі витирати дані про використання батареї пристрою.</string>
+  <string name="permdesc_resetBatteryStats">Дозволити програмі витирати дані про використання акумулятора пристрою.</string>
   <string name="permgrouplab_security">Безпека</string>
   <string name="permgroupdesc_security">Дозволи, пов\'язані з безпекою даних на пристрії.</string>
   <string name="permlab_readPhoneBlacklist">перегляд чорного списку</string>
@@ -167,7 +167,7 @@
   <string name="usb_ext_media_unmountable_notification_message">USB-носій пошкоджений. Спробуйте переформатувати.</string>
   <string name="usb_ext_media_badremoval_notification_title">USB-носій несподівано демонтовано</string>
   <string name="usb_ext_media_badremoval_notification_message">Від\'єднайте USB-носій перед демонтуванням, щоб уникнути втрати даних.</string>
-  <string name="usb_ext_media_safe_unmount_notification_title">USB-носій можна безпечно днмонтувати</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-носій можна безпечно демонтувати</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Ви можете безпечно демонтувати USB-носій.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB-носій відключенно</string>
   <string name="usb_ext_media_nomedia_notification_message">USB-носій відключенно. Вставте новий пристрій.</string>

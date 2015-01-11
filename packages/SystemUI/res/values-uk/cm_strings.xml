@@ -64,7 +64,7 @@
   <string name="quick_settings_camera_error_connect">Неможливо підключитися до камери</string>
   <string name="navbar_dialog_title">Виберіть дію щоб призначити</string>
   <string name="navbar_home_button">Кнопка Додому</string>
-  <string name="navbar_recent_button">Запущені програми</string>
+  <string name="navbar_recent_button">Останні програми</string>
   <string name="navbar_search_button">Кнопка Пошук</string>
   <string name="navbar_back_button">Кнопка Назад</string>
   <string name="navbar_empty_button">Пуста кнопка</string>

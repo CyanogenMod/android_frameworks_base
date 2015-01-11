@@ -18,8 +18,18 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">شاشة القفل</string>
   <string name="keyguard_discharging">تفريغ, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">قم بوصل الشاحن، <xliff:g id="number">%d </xliff:g> <xliff:g id="percent">%% </xliff:g></string>
   <string name="missed_call">مكالمة فائتة</string>
   <string name="message_from">رسالة من</string>
   <string name="message_from_person">رسالة من %1$s</string>
   <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
+  <string name="kg_invalid_sim_puk_hint_cm">رمز PUK يجب أن يكون مكوناً من 8 أرقام.</string>
+  <string name="keyguard_password_wrong_puk_code">رمز PUK غير صحيح.</string>
+  <string name="keyguard_password_pin_failed">عملية PIN فشلت.</string>
+  <string name="keyguard_password_puk_failed">عملية PUK فشلت.</string>
+  <string name="pinpuk_attempts">\nالمحاولات المتبقية:</string>
+  <string name="lockscreen_sim_error_message_short">بطاقة غير صالحة.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM مقفل للإعدادات المخصصة</string>
+  <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
+  <string name="keyguard_accessibility_application_widget">آخر تطبيق استُخدِم</string>
 </resources>

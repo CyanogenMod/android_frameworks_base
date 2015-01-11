@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">Un-/Ausschalttast ëmdefinéieren</string>
   <string name="permdesc_preventpower">Erlaabt d\'App, d\'Un-/Aus-Tast eng aner Funktioun zouzeweisen</string>
   <string name="permlab_sendMockSms">Simuléiert SMS schécken</string>
-  <string name="permdesc_sendMockSms">Erlaabt der App, simuléiert SMSen u vertrauenswierdeg Apps ze schécken. Béiswëlleg Apps kéinte pauselos Messagë schécken, an den Apparat sou blockéieren oder duerch ze vill Notifikatiounen de Benotzer stéieren.</string>
+  <string name="permdesc_sendMockSms">Erlaabt der App, simuléiert SMSen u vertrauenswierdeg Appen ze schécken. Béiswëlleg Appe kéinte pauselos Messagë schécken, an den Apparat sou blockéieren oder duerch ze vill Notifikatiounen de Benotzer stéieren.</string>
   <string name="storage_sd_dock_card">SD-Kaart vum Dock</string>
   <string name="app_killed_message">App gekillt</string>
   <string name="global_action_reboot">Nei starten</string>
@@ -66,7 +66,7 @@
   <string name="perf_profile_bal">Ausgeglach</string>
   <string name="perf_profile_perf">Leeschtung</string>
   <string name="permlab_interceptSmsSent">Erausgoend SMSen offänken</string>
-  <string name="permdesc_interceptSmsSent">Erlaabt der App, erausgoend SMSen z\'interceptéieren. Béiswëlleg Apps kënnen dat benotze fir erausgoen SMSen ze blockéieren.</string>
+  <string name="permdesc_interceptSmsSent">Erlaabt der App, erausgoend SMSen z\'interceptéieren. Béiswëlleg Appe kënnen dat benotze fir erausgoen SMSen ze blockéieren.</string>
   <string name="permlab_receiveProtectedSms">Geschützten SMSen empfänken</string>
   <string name="permdesc_receiveProtectedSms">Erlaabt der App, erakommend geschützten SMS z\'empfänken.</string>
   <string name="permlab_modifyProtectedSmsList">Lëscht vun de geschützten SMSen änneren</string>
@@ -80,7 +80,7 @@
   <string name="permlab_changePhoneBlacklist">Schwaarz Lëscht änneren</string>
   <string name="permdesc_changePhoneBlacklist">Erlaabt der App, d\'blockéiert Telefonsnummeren fir erakommend Uriff oder Messagen z\'änneren.</string>
   <string name="permlab_accessThemeService">Op den Design-Service zougräifen</string>
-  <string name="permdesc_accessThemeService">Erlaabt der App den Accès op den Design-Service. Dat misst fir normal Apps ni gebraucht ginn.</string>
+  <string name="permdesc_accessThemeService">Erlaabt der App den Accès op den Design-Service. Dat misst fir normal Appen ni gebraucht ginn.</string>
   <string name="permlab_readThemes">Design-Info liesen</string>
   <string name="permdesc_readThemesDesc">Erlaabt der App, d\'Designen auszeliesen an ze kucke wéi en Design applizéiert ass.</string>
   <string name="permlab_writeThemes">Aktiven Design änneren</string>

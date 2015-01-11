@@ -127,7 +127,6 @@
   <string name="accessibility_data_connection_cdma">CDMA</string>
   <string name="accessibility_data_connection_roaming">كەزمە</string>
   <string name="accessibility_data_connection_edge">Edge</string>
-  <string name="accessibility_data_connection_wifi">Wi-Fi</string>
   <string name="accessibility_no_sim">SIM كارتا يوق.</string>
   <string name="accessibility_bluetooth_tether">كۆكچىش ھەمبەھىر</string>
   <string name="accessibility_airplane_mode">ئايروپىلان ھالىتى</string>
@@ -190,7 +189,6 @@
   <string name="quick_settings_settings_label">تەڭشەكلەر</string>
   <string name="quick_settings_time_label">ۋاقىت</string>
   <string name="quick_settings_user_label">مەن</string>
-  <string name="quick_settings_wifi_label">Wi-Fi</string>
   <string name="quick_settings_wifi_not_connected">باغلانمىدى</string>
   <string name="quick_settings_wifi_no_network">تور يوق</string>
   <string name="quick_settings_wifi_off_label">Wi-Fi تاقاق</string>

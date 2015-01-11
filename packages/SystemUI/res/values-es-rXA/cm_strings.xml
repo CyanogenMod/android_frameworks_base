@@ -50,6 +50,7 @@
   <string name="quick_settings_compass_init">Anicializando\u2026</string>
   <string name="quick_settings_heads_up_on">Testera habilitada</string>
   <string name="quick_settings_heads_up_off">Ensin interrupción</string>
+  <string name="quick_settings_themes">Temes</string>
   <string name="location_mode_high_accuracy_title">Precisión alta</string>
   <string name="location_mode_battery_saving_title">Aforru de batería</string>
   <string name="location_mode_sensors_only_title">Namái preséu</string>
@@ -77,4 +78,6 @@
   <string name="screenshot_delete_confirmation">Captura desaniciada.</string>
   <string name="accessibility_desc_add_quick_settings">Amestar controles rápidos.</string>
   <string name="status_bar_notification_spam_item_title">Inorar mensaxes como esti</string>
+  <string name="protected_app_notification_title">Notificación d\'aplicación protexida</string>
+  <string name="protected_app_notification_summary">Toca p\'abrir la notificación de l\'aplicación protexida</string>
 </resources>

@@ -1571,7 +1571,7 @@
   <string name="kg_sim_unlock_progress_dialog_message">Desbloquiando tarxeta SIM…</string>
   <string name="kg_password_wrong_pin_code">Códigu PIN incorreutu</string>
   <string name="kg_invalid_sim_pin_hint">Introduz un códigu PIN con una llonxitú comprendida ente cuatro y ocho díxitos.</string>
-  <string name="kg_invalid_sim_puk_hint">El códigu PUK tien de tener ocho númberos como mínimu.</string>
+  <string name="kg_invalid_sim_puk_hint">El códigu PUK tien de tener 8 númberos o más.</string>
   <string name="kg_invalid_puk">Vuelvi a introducir el códigu PUK correutu. Si introduces un códigu incorreutu delles vegaes, va inhabilitase la tarxeta SIM.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">Los códigos PIN nun concasen.</string>
   <string name="kg_login_too_many_attempts">Abondos intentos incorreutos de crear el patrón</string>

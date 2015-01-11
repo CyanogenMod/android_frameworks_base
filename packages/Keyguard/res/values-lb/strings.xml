@@ -55,8 +55,8 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="keyguard_accessibility_status">Status</string>
   <string name="keyguard_accessibility_camera">Fotoapparat</string>
   <string name="keygaurd_accessibility_media_controls">Steierelementer fir Medien</string>
-  <string name="keyguard_accessibility_widget_reorder_start">Neiuerdnung vun de Widgets gestart.</string>
-  <string name="keyguard_accessibility_widget_reorder_end">Neiuerdnung vun de Widgets gestoppt.</string>
+  <string name="keyguard_accessibility_widget_reorder_start">Neiuerdnung vun de Widgete gestart.</string>
+  <string name="keyguard_accessibility_widget_reorder_end">Neiuerdnung vun de Widgete gestoppt.</string>
   <string name="keyguard_accessibility_widget_deleted">Widget <xliff:g id="widget_index">%1$s</xliff:g> geläscht.</string>
   <string name="keyguard_accessibility_expand_lock_area">Erweider den Entspärberäich.</string>
   <string name="keyguard_accessibility_slide_unlock">Entspäre mat Fangerbeweegung.</string>
@@ -99,7 +99,7 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="description_direction_right">No riets réckele fir ze <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
   <string name="user_switched">Aktuelle Benotzer <xliff:g id="name" example="Bob">%1$s</xliff:g>.</string>
   <string name="kg_emergency_call_label">Noutruff</string>
-  <string name="kg_forgot_pattern_button_text">Muster vergiessen</string>
+  <string name="kg_forgot_pattern_button_text">Muster vergiess</string>
   <string name="kg_wrong_pattern">Falscht Muster</string>
   <string name="kg_wrong_password">Falscht Passwuert</string>
   <string name="kg_wrong_pin">Falsche PIN</string>
@@ -130,22 +130,10 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">
-       Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären.
-       No <xliff:g id="number">%d</xliff:g> weider Versich gëtt den Tablet op Wierksastellungen zréckgesat an all d\'Benotzerdate si verluer.
-    </string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="default">
-       Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären.
-       No <xliff:g id="number">%d</xliff:g> weider Versich gëtt den Telefon op Wierksastellungen zréckgesat an all d\'Benotzerdate si verluer.
-    </string>
-  <string name="kg_failed_attempts_now_wiping" product="tablet">
-       Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären.
-       E gëtt elo op Wierksastellungen zréckgesat.
-    </string>
-  <string name="kg_failed_attempts_now_wiping" product="default">
-       Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären.
-       E gëtt elo op Wierksastellungen zréckgesat.
-    </string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
+  <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">
        Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
        No <xliff:g id="number">%d</xliff:g> weider Versich gëss du gefrot däin Tablet duerch en E-Mail-Kont z\'entspären.
@@ -156,7 +144,7 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
        No <xliff:g id="number">%d</xliff:g> weider Versich gëss du gefrot däin Telefon duerch en E-Mail-Kont z\'entspären.
        Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
-  <string name="kg_text_message_separator" product="default">" \u2014 "</string>
+  <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däin Netzbedreiwer kontaktéiere fir däin Apparat z\'entspären.</string>
   <plurals name="kg_password_wrong_pin_code">

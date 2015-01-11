@@ -48,6 +48,7 @@
   <string name="permlab_preventpower">منع زر الطاقة</string>
   <string name="permdesc_preventpower">يسمح التطبيق لتجاوز زر الطاقة</string>
   <string name="permlab_sendMockSms">إرسال رسائل زائفة قصيرة</string>
+  <string name="permdesc_sendMockSms">يسمح للتطبيق بإرسال رسائل نصية قصيرة زائفة . وهذا يسمح  للتطبيق بإرسال رسائل نصية قصيرة للتطبيقات الموثوق بها. التطبيقات الخبيثة يمكنها إرسال الرسائل بشكل مستمر، فتعيق نظام الإشعار بالجهاز وتعطل المستخدم.</string>
   <string name="storage_sd_dock_card">بطاقة ذاكرة في منصّة الإرساء</string>
   <string name="app_killed_message">التطبيق قد قتل</string>
   <string name="global_action_reboot">إعادة التشغيل</string>
@@ -66,6 +67,10 @@
   <string name="perf_profile_perf">الأداء</string>
   <string name="permlab_interceptSmsSent">اعتراض الرسائل القصيرة الصادرة</string>
   <string name="permdesc_interceptSmsSent">يسمح التطبيق لاعتراض الرسائل قصيرة صادرة. قد تستخدم تطبيقات خبيثة هذا إلى منع الرسائل القصيرة الصادرة.</string>
+  <string name="permlab_receiveProtectedSms">استلام رسائل نصية قصيرة محمية</string>
+  <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية.</string>
+  <string name="permlab_modifyProtectedSmsList">تعديل قائمة الرسائل النصية القصيرة المحمية</string>
+  <string name="permdesc_modifyProtectedSmsList">يسمح للتطبيق بتعديل قائمة عناوين الرسائل النصية القصيرة المحمية.</string>
   <string name="permlab_resetBatteryStats">إعادة تعيين إحصائيات البطارية</string>
   <string name="permdesc_resetBatteryStats">يسمح لتطبيق بإعادة تعيين بيانات استخدام بطارية ذات المستوى المنخفض الحالي.</string>
   <string name="permgrouplab_security">الحماية</string>
@@ -84,6 +89,10 @@
   <string name="permdesc_setKeyguardWallpaper">يسمح ااتطبيق بتغيير خلفية شاشة القفل.</string>
   <string name="permlab_useHardwareFramework">استخدام نظام الأجهزة</string>
   <string name="permdesc_useHardwareFramework">يسمح لتطبيق وصول إلى نظام أجهزة CM.</string>
+  <string name="permlab_keyguardApplicationWidget">تعيين شاشة التطبيق المصغرة على شاشة القفل</string>
+  <string name="permdesc_keyguardApplicationWidget">يسمح للتطبيق بوضع شاشة التطبيق المضغرة على شاشة القفل.</string>
+  <string name="permlab_interceptPackageLaunch">اعتراض بدء تشغيل التطبيق</string>
+  <string name="permdesc_interceptPackageLaunch">يسمح للتطبيق باعتراض بدء تشغيل التطبيقات الأخرى</string>
   <string name="immersive_mode_confirmation_bottom">مرر أعلى من الجزء السفلي للخروج من وضع ملء الشاشة.</string>
   <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
   <string name="app_ops_access_location">الوصول إلى الموقع الخاص بك</string>
@@ -133,7 +142,11 @@
   <string name="adb_net_active_notification_title">ADB تمكين عبر الشبكة</string>
   <string name="adb_both_active_notification_title">ADB عبر USB &amp; network ممكن</string>
   <string name="adb_active_generic_notification_message">إللمس لتعطيل التصحيح.</string>
+  <string name="usb_extmedia_format_message">سيتم مسح كافة البيانات الموجودة على جهاز تخزين USB (في إطار المسار \'%1$s). لا يمكن التراجع عن هذا الإجراء!</string>
+  <string name="sd_extmedia_format_message">سيتم مسح كافة البيانات الموجودة في بطاقة الذاكرة (في إطار المسار\'%1$s\'). لا يمكن التراجع عن هذا الإجراء!</string>
   <string name="usb_storage_notification_manage_message">اضغط لإدارة الخيارات</string>
+  <string name="sd_ext_media_checking_notification_title">يتم إعداد بطاقة الذاكرة\u2026</string>
+  <string name="sd_ext_media_checking_notification_message">يجري فحص الأخطاء في بطاقة الذاكرة\u2026</string>
   <string name="sd_ext_media_nofs_notification_title">بطاقة SD فارغة</string>
   <string name="sd_ext_media_nofs_notification_message">بطاقة SD  فارغ أو غير معتمد من نظام الملفات.</string>
   <string name="sd_ext_media_unmountable_notification_title">بطاقة SD معطوبة</string>
@@ -144,6 +157,8 @@
   <string name="sd_ext_media_safe_unmount_notification_message">يمكنك بأمان إزالة بطاقة الذاكرة SD.</string>
   <string name="sd_ext_media_nomedia_notification_title">إزالة بطاقة الذاكرة SD</string>
   <string name="sd_ext_media_nomedia_notification_message">SDتم إزالة بطاقة الذاكرة SD. أدخل الجديدة.</string>
+  <string name="usb_ext_media_checking_notification_title">يجري إعداد وسيط تخزين USB\u2026</string>
+  <string name="usb_ext_media_checking_notification_message">يجري فحص الأخطاء في وسيط تخزين USB\u2026</string>
   <string name="usb_ext_media_nofs_notification_title">تخزين USB فارغ</string>
   <string name="usb_ext_media_nofs_notification_message">تخزين USB فارغ أو غير معتمد من نظام الملفات.</string>
   <string name="usb_ext_media_unmountable_notification_title">تخزين USB معطوب</string>
@@ -154,4 +169,32 @@
   <string name="usb_ext_media_safe_unmount_notification_message">يمكنك بأمان إزالة وحدة تخزين USB.</string>
   <string name="usb_ext_media_nomedia_notification_title">إزالة وحدة تخزين USB</string>
   <string name="usb_ext_media_nomedia_notification_message">إزالة وحدة تخزين USB. قم بإدراج وسائط وسائط جديدة.</string>
+  <string name="progress_nomediapresent" product="default">لاتوجد وسائط قابلة للإزالة في الوقت الحالى \u2026</string>
+  <string name="lockscreen_sim_error_message_short">البطاقة غير صالحة.</string>
+  <string name="lockscreen_airplane_mode_on">نمط الطيران</string>
+  <string name="lockscreen_sim_locked_message_cm">بطاقة SIM/RUIM مقفولة.</string>
+  <string name="pinpuk_attempts">\nعدد المحاولات المتبقيّة:</string>
+  <string name="stk_cc_ussd_to_dial">تم تعديل طلب USSD إلى طلب اتصال هاتفي.</string>
+  <string name="stk_cc_ussd_to_ss">تم تعديل طلب USSD إلى طلب SS.</string>
+  <string name="stk_cc_ussd_to_ussd">تم تعديل طلب USSD إلى طلب USSD جديد.</string>
+  <string name="stk_cc_ss_to_dial">تم تعديل طلب SS إلى طلب اتصال هاتفي.</string>
+  <string name="stk_cc_ss_to_ussd">تم تعديل طلب SS إلى طلب USSD.</string>
+  <string name="stk_cc_ss_to_ss">تم تعديل طلب SS إلى طلب SS جديد.</string>
+  <string name="theme_install_error_title">فشل تثبيت السمة</string>
+  <string name="theme_install_error_message">فشل تثبيت %s</string>
+  <string name="storage_uicc">تخزين UICC</string>
+  <string name="sd_progress_unmounting">يتم إلغاء تحميل بطاقة الذاكرة الرقمية المؤمنة /u2026</string>
+  <string name="sd_progress_erasing">يتم مسح محتويات بطاقة الذاكرة الرقمية المؤمنة /u2026</string>
+  <string name="sd_format_error">لم أتمكن من مسح بطاقة الذاكرة الرقمية المؤمنة.</string>
+  <string name="sd_media_bad_removal">تم إزالة بطاقة الذاكرة الرقمية المؤمنة قبل إلغاء تحميلها.</string>
+  <string name="sd_media_checking">يتم فحص بطاقة الذاكرة الرقمية المؤمنة.</string>
+  <string name="sd_media_removed">تم إزالة بطاقة الذاكرة الرقمية المؤمنة.</string>
+  <string name="sd_media_shared">بطاقة الذاكرة الرقمية المؤمنة تستعمل حالياً بواسطة كمبيوتر.</string>
+  <string name="usb_progress_unmounting">يتم إلغاء تحميل USB</string>
+  <string name="usb_progress_erasing">يتم مسح بيانات USB</string>
+  <string name="usb_format_error">لم أنمكن من مسح بيانات USB.</string>
+  <string name="usb_media_bad_removal">تم إزالة USB قبل أن يتم إلغاء تحميلها.</string>
+  <string name="usb_media_checking">يتم فحص USB حالياً.</string>
+  <string name="usb_media_removed">تم إزالة USB.</string>
+  <string name="usb_media_shared">يتم استعمال USB بواسطة كمبيوتر.</string>
 </resources>

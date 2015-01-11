@@ -16,5 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">Pantalla de bloqueo</string>
   <string name="keyguard_discharging">Descargando <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_low_battery_cm">Conectar ao cargador, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="missed_call">chamada perdida</string>
+  <string name="message_from">mensaxe de</string>
+  <string name="message_from_person">mensaxe de %1$s</string>
+  <string name="kg_invalid_sim_puk_hint_cm">O código PUK debería ter 8 números.</string>
+  <string name="keyguard_password_wrong_puk_code">O código PUK é incorrecto.</string>
+  <string name="keyguard_password_pin_failed">Fallou a operación de PIN.</string>
+  <string name="keyguard_password_puk_failed">Fallou a operación de PUK.</string>
+  <string name="lockscreen_sim_error_message_short">Tarxeta incorrecta.</string>
 </resources>

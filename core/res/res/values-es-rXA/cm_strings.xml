@@ -67,6 +67,10 @@
   <string name="perf_profile_perf">Rindimientu</string>
   <string name="permlab_interceptSmsSent">interceutar mensaxes SMS salientes</string>
   <string name="permdesc_interceptSmsSent">Permite que l\'aplicación interceute mensaxes SMS salientes. Les aplicaciones malicioses puen impedir los mensaxes SMS salientes.</string>
+  <string name="permlab_receiveProtectedSms">recibir SMS protexíos</string>
+  <string name="permdesc_receiveProtectedSms">Permite que l\'aplicación reciba mensaxes SMS entrantes protexíos.</string>
+  <string name="permlab_modifyProtectedSmsList">modificar llista de SMS protexíos</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite que l\'aplicación modifique la llista de direiciones de mensaxes SMS protexíos.</string>
   <string name="permlab_resetBatteryStats">restablecer estadístiques de batería</string>
   <string name="permdesc_resetBatteryStats">Permite que l\'aplicación restableza los datos del usu de la batería.</string>
   <string name="permgrouplab_security">Seguridá</string>
@@ -87,6 +91,8 @@
   <string name="permdesc_useHardwareFramework">Permite que l\'aplicación acceda al marcu de hardware de CM.</string>
   <string name="permlab_keyguardApplicationWidget">afitar widget d\'aplicación na pantalla de bloquéu</string>
   <string name="permdesc_keyguardApplicationWidget">Permite que l\'aplicación afite\'l widget d\'aplicación na pantalla de bloquéu.</string>
+  <string name="permlab_interceptPackageLaunch">interceutar execución d\'aplicación</string>
+  <string name="permdesc_interceptPackageLaunch">Permite que l\'aplicación interceute la execución d\'otres aplicaciones</string>
   <string name="immersive_mode_confirmation_bottom">Esliza\'l deu hacia arriba dende\'l borde inferior pa salir de la pantalla completa</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>

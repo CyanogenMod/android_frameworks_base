@@ -64,7 +64,7 @@
   <string name="screenshot_saving_title">Schiermfoto gëtt gespäichert\u2026</string>
   <string name="screenshot_saving_text">Schiermfoto gëtt gespäichert.</string>
   <string name="screenshot_saved_title">Schiermfoto opgeholl.</string>
-  <string name="screenshot_saved_text">Drécke fir d\'Schiermfoto ze kucken.</string>
+  <string name="screenshot_saved_text">Drécke fir d\'Schiermfoto unzekucken.</string>
   <string name="screenshot_failed_title">Schiermfoto konnt net opgeholl ginn.</string>
   <string name="screenshot_failed_text">Schiermfoto konnt net gespäichert ginn. Eventuell gëtt de Späicher grad benotzt.</string>
   <string name="usb_preference_title">USB-Dateiiwwerdroungsoptiounen</string>

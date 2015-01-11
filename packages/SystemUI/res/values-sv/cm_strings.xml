@@ -35,6 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Frånkopplad</string>
   <string name="quick_settings_usb_tether_connected_label">Tethering av</string>
   <string name="quick_settings_usb_tether_on_label">Tethering</string>
+  <string name="quick_settings_wifiap">Wi-Fi-surfzon</string>
+  <string name="quick_settings_wifiap_off">Wi-Fi-surfzon avstängd</string>
   <string name="quick_settings_quiethours">Tysta timmar</string>
   <string name="quick_settings_quiethours_off">Tysta timmar av</string>
   <string name="quick_settings_lte">LTE</string>
@@ -48,6 +50,7 @@
   <string name="quick_settings_compass_init">Initierar\u2026</string>
   <string name="quick_settings_heads_up_on">Heads up aktiverat</string>
   <string name="quick_settings_heads_up_off">Inga avbrott</string>
+  <string name="quick_settings_themes">Teman</string>
   <string name="location_mode_high_accuracy_title">Hög precision</string>
   <string name="location_mode_battery_saving_title">Batterisparläge</string>
   <string name="location_mode_sensors_only_title">Endast enhet</string>
@@ -71,4 +74,6 @@
   <string name="screenshot_delete_confirmation">Skärmdump borttagen.</string>
   <string name="accessibility_desc_add_quick_settings">Lägg till snabbinställningar.</string>
   <string name="status_bar_notification_spam_item_title">Ignorera meddelanden som detta</string>
+  <string name="protected_app_notification_title">Meddelanden om skyddade appar</string>
+  <string name="protected_app_notification_summary">Tryck för att öppna meddelandet från den skyddade appen</string>
 </resources>

@@ -31,7 +31,6 @@
   <string name="faceunlock_multiple_failures">چىرايدا قۇلۇپ ئاچقۇچنى سىناش قېتىم سانىنىڭ يۇقىرى چېكىدىن ئېشىپ كەتتى</string>
   <string name="keyguard_charged">توكلاندى</string>
   <string name="keyguard_plugged_in">توكلاۋاتىدۇ، <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g></string>
-  <string name="keyguard_low_battery">توكلىغۇچنى ئۇلاڭ.</string>
   <string name="keyguard_instructions_when_pattern_disabled">Menu نى بېسىپ قۇلۇپنى ئېچىڭ.</string>
   <string name="keyguard_network_locked_message">تور قۇلۇپلانغان</string>
   <string name="keyguard_missing_sim_message_short">SIM كارتا يوق</string>
@@ -78,15 +77,10 @@
   <string name="keyguard_accessibility_delete_widget_start"><xliff:g id="WIDGET_INDEX">%1$s</xliff:g> تاشلانسا ئۆچۈرىدۇ.</string>
   <string name="keyguard_accessibility_delete_widget_end"><xliff:g id="WIDGET_INDEX">%1$s</xliff:g> ئۆچۈرۈلمەيدۇ</string>
   <string name="password_keyboard_label_symbol_key">\?123</string>
-  <string name="password_keyboard_label_alpha_key">ABC</string>
-  <string name="password_keyboard_label_alt_key">ALT</string>
-  <string name="keyboardview_keycode_alt">Alt</string>
   <string name="keyboardview_keycode_cancel">ۋاز كەچ</string>
   <string name="keyboardview_keycode_delete">ئۆچۈر</string>
   <string name="keyboardview_keycode_done">تامام</string>
   <string name="keyboardview_keycode_mode_change">ھالەت ئۆزگەرت</string>
-  <string name="keyboardview_keycode_shift">Shift</string>
-  <string name="keyboardview_keycode_enter">Enter</string>
   <string name="description_target_unlock">قۇلۇپ ئاچ</string>
   <string name="description_target_camera">كامېرا</string>
   <string name="description_target_silent">ئۈنسىز</string>

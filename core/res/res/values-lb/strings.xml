@@ -121,7 +121,7 @@
   <string name="httpErrorConnect">Konnt keng Connectioun mam Server hierstellen.</string>
   <string name="httpErrorIO">Konnt net mam Server kommunikéieren. Probéier méi spéit nees.</string>
   <string name="httpErrorTimeout">Zäitiwwerschreidung bei der Connectioun mam Server.</string>
-  <string name="httpErrorRedirectLoop">D\'Säit enthält zevill Serverweiderleedungen.</string>
+  <string name="httpErrorRedirectLoop">D\'Säit huet zevill Serverweiderleedungen.</string>
   <string name="httpErrorUnsupportedScheme">De Protokoll ass net ënnerstëtzt.</string>
   <string name="httpErrorFailedSslHandshake">Konnt keng sécher Connectioun hierstellen.</string>
   <string name="httpErrorBadUrl">Konnt d\'Säit net opmaachen well d\'URL net gëlteg ass.</string>
@@ -274,7 +274,7 @@
   <string name="permdesc_writeSms" product="tablet">Erlaabt der App, SMS-Messagen déi um Tablet oder op der SIM-Kaart gespäichert sinn ze beaarbechten. Béiswëlleg Appe kéinten deng Message läschen.</string>
   <string name="permdesc_writeSms" product="default">Erlaabt der App, SMS-Messagen déi um Telefon oder op der SIM-Kaart gespäichert sinn ze beaarbechten. Béiswëlleg Appe kéinten deng Message läschen.</string>
   <string name="permlab_receiveWapPush">Textmessagen (WAP) empfänken</string>
-  <string name="permdesc_receiveWapPush">Erlaabt der App, WAP-Messagen z\'empfänken an ze beaarbechten. Dës Berechtegung enthält d\'Fäegkeet, Messagen déi s du geschéckt kriss z\'iwwerwaachen oder ze läschen, ouni datt s du se ze gesi kriss.</string>
+  <string name="permdesc_receiveWapPush">Erlaabt der App, WAP-Messagen z\'empfänken an ze beaarbechten. Dës Berechtegung huet d\'Fäegkeet, Messagen déi s du geschéckt kriss z\'iwwerwaachen oder ze läschen, ouni datt s du se ze gesi kriss.</string>
   <string name="permlab_getTasks">Lafend Appen ausliesen</string>
   <string name="permdesc_getTasks">Erlaabt der App, Informatiounen iwwer Aufgaben ofzeruffen déi grad lafen oder viru kuerzem gelaf sinn. Dat kéint der App erméiglechen, Informatiounen z\'entdecken iwwer d\'Appen déi um Apparat benotzt ginn.</string>
   <string name="permlab_interactAcrossUsers">Tëscht Benotzer interagéieren</string>
@@ -549,8 +549,8 @@
   <string name="permdesc_locationUpdates">Erlaabt der App, Notifikatioune fir Standuertaktualiséierungen z\'aktivéieren/desaktivéieren. Net fir normal Appe geduecht.</string>
   <string name="permlab_checkinProperties">Op Check-In-Eegeschaften zougräifen</string>
   <string name="permdesc_checkinProperties">Erlaabt der App, Schreif-/Lieszougrëff op Elementer déi vum Check-In-Service eropgeluede goufen. Net fir normal Appe virgesinn.</string>
-  <string name="permlab_bindGadget">Widgets auswielen</string>
-  <string name="permdesc_bindGadget">Erlaabt der App, dem System virzeschreiwe wéi eng Widgets vu wéi enger App benotzt kënne ginn. Eng App mat dëser Berechtegung kann den Zougrëff op perséinlech Date un aner Appe weiderginn. Net fir normal Appe virgesinn.</string>
+  <string name="permlab_bindGadget">Widgeten auswielen</string>
+  <string name="permdesc_bindGadget">Erlaabt der App, dem System virzeschreiwe wéi eng Widgete vu wéi enger App benotzt kënne ginn. Eng App mat dëser Berechtegung kann den Zougrëff op perséinlech Date un aner Appe weiderginn. Net fir normal Appe virgesinn.</string>
   <string name="permlab_modifyPhoneState">Telefonsstatus änneren</string>
   <string name="permdesc_modifyPhoneState">Erlaabt der App, d\'Telefonsfunktiounen um Apparat ze steieren. Eng App mat dëser Berechtegung kann d\'Netzwierker wiesselen, de Radio un- an ausschalten an ähnleches ouni datt s du et matkriss.</string>
   <string name="permlab_readPhoneState">Status an Identitéit vum Telefon liesen</string>
@@ -592,7 +592,7 @@
   <string name="permdesc_manageAccounts">Erlaabt der App, Operatioune wéi d\'Dobäisetzen a Läsche vu Konten an d\'Läsche vun hirem Passwuert.</string>
   <string name="permlab_useCredentials">Konten um Apparat benotzen</string>
   <string name="permdesc_useCredentials">Erlaabt der App, Authentifizéierungs-Token unzefroen.</string>
-  <string name="permlab_accessNetworkState">Netzwierkconnectioune kucken</string>
+  <string name="permlab_accessNetworkState">Netzwierkconnectiounen ukucken</string>
   <string name="permdesc_accessNetworkState">Erlaabt der App, Informatiounen iwwer Netzwierkconnectiounen auszeliesen, wéi z. B. wéi eng Netzwierker existéieren a wéi eng verbonne sinn.</string>
   <string name="permlab_createNetworkSockets">Vollen Netzwierkzougrëff</string>
   <string name="permdesc_createNetworkSockets">Erlaabt der App, Netzwierk-Sockets z\'erstellen an eegen Netzwierkprotokoller ze benotzen. De Browser an aner Appe bidden Méiglechkeeten, Daten iwwer den Internet ze verschécken. Dohier ass dës Berechtegung net néideg fir Daten iwwer den Internet ze schécken.</string>
@@ -604,7 +604,7 @@
   <string name="permdesc_changeTetherState">Erlaabt der App, de Status vun der getetherter Netzwierkconnectivitéit z\'änneren.</string>
   <string name="permlab_changeBackgroundDataSetting">Benotzungsastellunge vun der Hannergronddatebenotzung änneren</string>
   <string name="permdesc_changeBackgroundDataSetting">Erlaabt der App, d\'Benotzungsastellunge vun der Hannergronddatebenotzung z\'änneren.</string>
-  <string name="permlab_accessWifiState">WLAN-Connectioune uweisen</string>
+  <string name="permlab_accessWifiState">WLAN-Connectiounen uweisen</string>
   <string name="permdesc_accessWifiState">Erlaabt der App, Informatiounen iwwer d\'WLAN-Netzwierker auszeliesen. Beispillsweis ob WLAN un ass a wéi eng Nimm déi connectéiert WLAN-Apparaten hunn.</string>
   <string name="permlab_changeWifiState">WLAN-Connectioun hierstellen an trennen</string>
   <string name="permdesc_changeWifiState">Erlaabt der App, Connectioune mat WLAN-Zougankspunkten hierzestellen an ze trennen a fir Ännerungen un der Konfiguratioun vun de WLAN-Netzwierker virzehuelen.</string>
@@ -648,7 +648,7 @@
   <string name="permdesc_sdcardRead" product="nosdcard">Erlaabt der App, d\'Inhalter vum USB-Späicher ze liesen.</string>
   <string name="permdesc_sdcardRead" product="default">Erlaabt der App, d\'Inhalter vun der SD-Kaart ze liesen.</string>
   <string name="permlab_sdcardWrite" product="nosdcard">Inhalt vum USB-Späicher änneren oder läschen</string>
-  <string name="permlab_sdcardWrite" product="default">Inhalt vun der SD-Kaart änneren oder läschen</string>
+  <string name="permlab_sdcardWrite" product="default">Inhalter vun der SD-Kaart änneren oder läschen</string>
   <string name="permdesc_sdcardWrite" product="nosdcard">Erlaabt der App, op den USB-Späicher ze schreiwen.</string>
   <string name="permdesc_sdcardWrite" product="default">Erlaabt der App, op d\'SD-Kaart ze schreiwen.</string>
   <string name="permlab_mediaStorageWrite" product="default">Inhalter um interne Mediespäicher änneren/läschen</string>
@@ -814,7 +814,7 @@
   <string name="sipAddressTypeHome">Doheem</string>
   <string name="sipAddressTypeWork">Aarbecht</string>
   <string name="sipAddressTypeOther">Aner</string>
-  <string name="quick_contacts_not_available">Keng Applikatioun fonnt fir dëse Kontakt ze kucken.</string>
+  <string name="quick_contacts_not_available">Keng Applikatioun fonnt fir dëse Kontakt unzekucken.</string>
   <string name="keyguard_password_enter_pin_code">PIN-Code aginn</string>
   <string name="keyguard_password_enter_puk_code">PUK an neie PIN-Code aginn</string>
   <string name="keyguard_password_enter_puk_prompt">PUK-Code</string>
@@ -856,7 +856,7 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="emergency_calls_only" msgid="2485604591272668370">Just Noutriff</string>
   <string name="lockscreen_network_locked_message">Netzwierk gespaart</string>
   <string name="lockscreen_sim_puk_locked_message">SIM-Kaart ass PUK-gespaart.</string>
-  <string name="lockscreen_sim_puk_locked_instructions">D\'Benotzerhandbuch kucken oder de Clientsservice kontaktéieren.</string>
+  <string name="lockscreen_sim_puk_locked_instructions">D\'Benotzerhandbuch ukucken oder de Clientsservice kontaktéieren.</string>
   <string name="lockscreen_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
@@ -894,10 +894,10 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="keyguard_accessibility_widget"><xliff:g id="widget_index">%1$s</xliff:g> Widget.</string>
   <string name="keyguard_accessibility_user_selector">Benotzerauswiel</string>
   <string name="keyguard_accessibility_status">Status</string>
-  <string name="keyguard_accessibility_camera">Kamera</string>
+  <string name="keyguard_accessibility_camera">Fotoapparat</string>
   <string name="keygaurd_accessibility_media_controls">Steierelementer fir Medien</string>
-  <string name="keyguard_accessibility_widget_reorder_start">Neiuerdnung vun de Widgets gestart.</string>
-  <string name="keyguard_accessibility_widget_reorder_end">Neiuerdnung vun de Widgets gestoppt.</string>
+  <string name="keyguard_accessibility_widget_reorder_start">Neiuerdnung vun de Widgete gestart.</string>
+  <string name="keyguard_accessibility_widget_reorder_end">Neiuerdnung vun de Widgete gestoppt.</string>
   <string name="keyguard_accessibility_widget_deleted">Widget <xliff:g id="widget_index">%1$s</xliff:g> geläscht.</string>
   <string name="keyguard_accessibility_expand_lock_area">Erweider den Entspärberäich.</string>
   <string name="keyguard_accessibility_slide_unlock">Entspäre mat Fangerbeweegung.</string>
@@ -1514,7 +1514,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="wifi_display_notification_connected_message">Verbonne mat <xliff:g id="name">%1$s</xliff:g></string>
   <string name="wifi_display_notification_disconnect">Deconnectéieren</string>
   <string name="kg_emergency_call_label">Noutruff</string>
-  <string name="kg_forgot_pattern_button_text">Muster vergiessen</string>
+  <string name="kg_forgot_pattern_button_text">Muster vergiess</string>
   <string name="kg_wrong_pattern">Falscht Muster</string>
   <string name="kg_wrong_password">Falscht Passwuert</string>
   <string name="kg_wrong_pin">Falsche PIN</string>
@@ -1544,12 +1544,12 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
   <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g> mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere Versich gëss de gefrot däin Tablet mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
   <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g> mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere Versich gëss de gefrot däin Telefon mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
-  <string name="kg_text_message_separator" product="default">" \u2014 "</string>
+  <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="safe_media_volume_warning" product="default">D\'Lautstäerkt iwwer de recommandéierten Niveau erhéijen?\nIwwer laang Periode bei héijer Lautstäerkt Musek lauschtere kéint däi Gehéier schiedegen.</string>
   <string name="continue_to_enable_accessibility">Mat zwee Fangeren drécke fir d\'Benotzungshëllefen z\'aktivéieren.</string>

@@ -856,7 +856,6 @@
   <string name="lockscreen_network_locked_message">تور قۇلۇپلانغان</string>
   <string name="lockscreen_sim_puk_locked_message">SIM كارتا PUK نۇمۇر ئارقىلىق قۇلۇپلانغان.</string>
   <string name="lockscreen_sim_puk_locked_instructions">ئىشلەتكۈچىلەر قوللانمىسىنى كۆرۈڭ ياكى مۇلازىمەتچى بىلەن ئالاقىلىشىڭ.</string>
-  <string name="lockscreen_sim_locked_message">SIM كارتا قۇلۇپلانغان.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">SIM كارتا قۇلۇپىنى ئېچىۋاتىدۇ…</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">سىز قۇلۇپ ئېچىش ئەندىزىسىنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا سىزدىڭىز.\n\n <xliff:g id="NUMBER_1">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ.</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">سىز قۇلۇپ ئېچىش ئىمنى <xliff:g id="NUMBER_0">%d</xliff:g> قېتىم خاتا كىرگۈزدىڭىز.\n\n <xliff:g id="NUMBER_1">%d</xliff:g> سېكۇنتتىن كېيىن قايتا سىناڭ.</string>
@@ -1540,7 +1539,6 @@
   <string name="kg_sim_unlock_progress_dialog_message">SIM كارتا قۇلۇپىنى ئېچىۋاتىدۇ…</string>
   <string name="kg_password_wrong_pin_code">PIN كودى خاتا.</string>
   <string name="kg_invalid_sim_pin_hint">4-8 خانىلىق PIN نى كىرگۈزۈڭ.</string>
-  <string name="kg_invalid_sim_puk_hint">بۇ PUK كودىدا ئاز دېگەندە 8 ياكى ئۇنىڭدىن كۆپ سان بولىدۇ.</string>
   <string name="kg_invalid_puk">توغرا PUK كودىنى قايتا كىرگۈزۈڭ. ئەگەر خاتا كىرگۈزۈشنىڭ قېتىم سانى بەك كۆپ بولۇپ كەتسە SIM كارتا مەڭگۈلۈك توختىتىلىدۇ.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">بۇ PIN كودى ماسلاشمىدى</string>
   <string name="kg_login_too_many_attempts">ئەندىزىسىنى سىناش قېتىم سانى بەك كۆپ بولۇپ كەتتى</string>
