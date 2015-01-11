@@ -118,6 +118,25 @@ public class QSPanel extends ViewGroup {
         });
     }
 
+    /**
+     * Enable/disable brightness slider.
+     */
+    private boolean showBrightnessSlider() {
+        boolean brightnessSliderEnabled = Settings.System.getIntForUser(
+            mContext.getContentResolver(), Settings.System.QS_SHOW_BRIGHTNESS_SLIDER,
+                1, UserHandle.USER_CURRENT) == 1;
+        ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
+        if (brightnessSliderEnabled) {
+            mBrightnessView.setVisibility(VISIBLE);
+            brightnessSlider.setVisibility(VISIBLE);
+        } else {
+            mBrightnessView.setVisibility(GONE);
+            brightnessSlider.setVisibility(GONE);
+        }
+        updateResources();
+        return brightnessSliderEnabled;
+    }
+
     private void updateDetailText() {
         mDetailDoneButton.setText(R.string.quick_settings_done);
         mDetailSettingsButton.setText(R.string.quick_settings_more_settings);
@@ -206,7 +225,7 @@ public class QSPanel extends ViewGroup {
         if (mListening) {
             refreshAllTiles();
         }
-        if (listening) {
+        if (listening && showBrightnessSlider()) {
             mBrightnessController.registerCallbacks();
         } else {
             mBrightnessController.unregisterCallbacks();
@@ -433,7 +452,7 @@ public class QSPanel extends ViewGroup {
                 tileRecord.tileView.setVisibility(newVis);
             }
         }
-        mBrightnessView.setVisibility(newVis);
+        mBrightnessView.setVisibility(showBrightnessSlider() ? newVis : GONE);
         if (mGridContentVisible != visible) {
             MetricsLogger.visibility(mContext, MetricsLogger.QS_PANEL, newVis);
         }
