@@ -4778,7 +4778,14 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (DEBUG_DEXOPT) {
             Log.i(TAG, "Optimizing app " + curr + " of " + total + ": " + pkg.packageName);
         }
-        if (!isFirstBoot()) {
+        if (isFirstBoot()) {
+            try {
+                ActivityManagerNative.getDefault().showBootMessage(
+                        mContext.getResources().getString(R.string.android_installing_apk,
+                                curr, total), true);
+            } catch (RemoteException e) {
+            }
+        } else {
             try {
                 ActivityManagerNative.getDefault().showBootMessage(
                         mContext.getResources().getString(R.string.android_upgrading_apk,

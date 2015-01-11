@@ -219,4 +219,9 @@
     <string name="perf_profile_bal">Balanced</string>
     <string name="perf_profile_perf">Performance</string>
 
+    <!-- [CHAR LIMIT=NONE] Message shown in dialog on first boot after clean install for each .apk that is optimized. -->
+    <string name="android_installing_apk">Installing app
+        <xliff:g id="number" example="123">%1$d</xliff:g> of
+        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+
 </resources>
