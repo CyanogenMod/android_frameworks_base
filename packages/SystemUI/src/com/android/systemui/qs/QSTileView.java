@@ -277,7 +277,7 @@ public class QSTileView extends ViewGroup {
     private void updateRippleSize(int width, int height) {
         // center the touch feedback on the center of the icon, and dial it down a bit
         final int cx = width / 2;
-        final int cy = mDual ? mIcon.getTop() + mIcon.getHeight() / 2 : height / 2;
+        final int cy = mDual ? mIcon.getTop() + mIcon.getHeight() : height / 2;
         final int rad = (int)(mIcon.getHeight() * 1.25f);
         mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
     }
