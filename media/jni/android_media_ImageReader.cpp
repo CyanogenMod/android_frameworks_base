@@ -338,6 +338,9 @@ static int32_t applyFormatOverrides(int32_t bufferFormat, int32_t readerCtxForma
 static void Image_getLockedBufferInfo(JNIEnv* env, CpuConsumer::LockedBuffer* buffer, int idx,
                                 uint8_t **base, uint32_t *size, int32_t readerFormat)
 {
+    enum {
+        HAL_PIXEL_FORMAT_RAW10 = 0x25,
+    };
     ALOG_ASSERT(buffer != NULL, "Input buffer is NULL!!!");
     ALOG_ASSERT(base != NULL, "base is NULL!!!");
     ALOG_ASSERT(size != NULL, "size is NULL!!!");
@@ -482,6 +485,9 @@ static void Image_getLockedBufferInfo(JNIEnv* env, CpuConsumer::LockedBuffer* bu
 static jint Image_imageGetPixelStride(JNIEnv* env, CpuConsumer::LockedBuffer* buffer, int idx,
         int32_t readerFormat)
 {
+    enum {
+        HAL_PIXEL_FORMAT_RAW10 = 0x25,
+    };
     ALOGV("%s: buffer index: %d", __FUNCTION__, idx);
     ALOG_ASSERT((idx < IMAGE_READER_MAX_NUM_PLANES) && (idx >= 0), "Index is out of range:%d", idx);
 
@@ -543,6 +549,9 @@ static jint Image_imageGetPixelStride(JNIEnv* env, CpuConsumer::LockedBuffer* bu
 static jint Image_imageGetRowStride(JNIEnv* env, CpuConsumer::LockedBuffer* buffer, int idx,
         int32_t readerFormat)
 {
+    enum {
+        HAL_PIXEL_FORMAT_RAW10 = 0x25,
+    };
     ALOGV("%s: buffer index: %d", __FUNCTION__, idx);
     ALOG_ASSERT((idx < IMAGE_READER_MAX_NUM_PLANES) && (idx >= 0));
 
