@@ -38,6 +38,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -632,9 +633,29 @@ public class WallpaperCropActivity extends Activity {
                     return false;
                 }
 
+                // Get screen dimensions.
+                bounds = getImageBounds();
+                if (bounds == null) {
+                    Log.w(LOGTAG, "Cannot get bounds for image");
+                    failure = true;
+                    return false;
+                }
+                DisplayMetrics metrics = new DisplayMetrics();
+                ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                int screenWidth = metrics.widthPixels;
+                int screenHeight = metrics.heightPixels;
+
                 // See how much we're reducing the size of the image
-                int scaleDownSampleSize = Math.max(1, Math.min(roundedTrueCrop.width() / mOutWidth,
+                int scaleDownSampleSize;
+                //If image is smaller than screen dimensions
+                if (bounds.x < screenWidth && bounds.y < screenHeight) {
+                    scaleDownSampleSize = 1;
+                }
+                else {
+                    scaleDownSampleSize = Math.max(2, Math.min(roundedTrueCrop.width() / mOutWidth,
                         roundedTrueCrop.height() / mOutHeight));
+                }
+
                 // Attempt to open a region decoder
                 BitmapRegionDecoder decoder = null;
                 InputStream is = null;
