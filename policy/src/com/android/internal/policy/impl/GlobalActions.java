@@ -303,6 +303,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             } else if (GLOBAL_ACTION_KEY_LOCKDOWN.equals(actionKey)) {
                 mItems.add(getLockdownAction());
             } else if (GLOBAL_ACTION_KEY_PROFILE.equals(actionKey)) {
+                if (Settings.System.getInt(activity.getContentResolver(),
+                        Settings.System.SYSTEM_PROFILES_ENABLED, 1) == 0) continue;
                 mItems.add(
                         new ProfileChooseAction() {
                             public void onPress() {
