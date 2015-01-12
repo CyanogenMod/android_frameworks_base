@@ -177,7 +177,7 @@ public class SubscriptionInfo implements Parcelable {
     }
 
     /**
-     * Returns the name displayed to the user that identifies Subscription provider name
+     * @return the name displayed to the user that identifies Subscription provider name
      */
     public CharSequence getCarrierName() {
         return this.mCarrierName;
@@ -266,8 +266,8 @@ public class SubscriptionInfo implements Parcelable {
     }
 
     /**
-     * @return the data roaming state for this subscription, either
-     * {@link SubscriptionManager#DATA_ROAMING_ENABLE} or {@link SubscriptionManager#DATA_ROAMING_DISABLE}.
+     * @return the data roaming state for this subscription, either DATA_ROAMING_ENABLE or
+     * DATA_ROAMING_DISABLE.
      */
     public int getDataRoaming() {
         return this.mDataRoaming;
@@ -288,7 +288,22 @@ public class SubscriptionInfo implements Parcelable {
     }
 
     /**
-     * Returns the ISO country code
+     * Returns the subscrition status.
+     * @hide
+     */
+    public int getStatus() {
+        return this.mStatus;
+    }
+    /**
+     * Returns the Network mode.
+     * @hide
+     */
+    public int getNwMode() {
+        return this.mNwMode;
+    }
+
+    /**
+     * @return the ISO country code
      */
     public String getCountryIso() {
         return this.mCountryIso;
