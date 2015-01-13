@@ -1011,6 +1011,15 @@ public class LockPatternUtils {
         }
     }
 
+    public long getLockPasswordSize() {
+    	try {
+            return getLockSettings().getLockPasswordSize(getCurrentOrCallingUserId());
+	} catch (RemoteException re) {
+	    return -1;
+	}
+    }
+
+
     /**
      * Set the pattern lockscreen size
      */

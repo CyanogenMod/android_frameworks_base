@@ -158,7 +158,12 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
                 }
                 if (mQuickUnlock) {
                     String entry = mPasswordEntry.getText().toString();
-                    if (entry.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
+                    if (entry.length() == mLockPatternUtils.getLockPasswordSize() && !mLockPatternUtils.checkPassword(entry)) {
+			verifyPasswordAndUnlock();
+			//mCallback.reportFailedUnlockAttempt();
+			//mCallback.dismiss(true);
+		    }	 
+		    if (entry.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
                             && mLockPatternUtils.checkPassword(entry)) {
                         mCallback.reportSuccessfulUnlockAttempt();
                         mCallback.dismiss(true);
