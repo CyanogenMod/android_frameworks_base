@@ -3580,9 +3580,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mHeadsUpNotificationView.setVisibility(vis ? View.VISIBLE : View.GONE);
     }
 
-    public void onHeadsUpDismissed() {
-        mHeadsUpNotificationView.dismiss();
-    }
+    public void onHeadsUpDismissed(boolean direction) {
+        // If direction == true we know that the notification
+        // was dismissed to the right. So we just hide it that
+        // the notification will stay in our notification
+        // drawer. Left swipe as usual dismisses the notification
+        // completely if the notification is clearable.
+        if (direction) {
+            scheduleHeadsUpClose();
+        } else {
+            mHeadsUpNotificationView.dismiss();
+        }
+     }
 
     /**
      * Reload some of our resources when the configuration changes.
