@@ -700,6 +700,9 @@ public abstract class ConnectionService extends Service {
                         connection.getDisconnectCause(),
                         createIdList(connection.getConferenceables()),
                         connection.getCallSubstate()));
+        if (isUnknown) {
+            triggerConferenceRecalculate();
+        }
     }
 
     /** @hide */
@@ -1076,6 +1079,14 @@ public abstract class ConnectionService extends Service {
             PhoneAccountHandle connectionManagerPhoneAccount,
             ConnectionRequest request) {
         return null;
+    }
+
+    /**
+     * Trigger recalculate functinality for conference calls. This is used when a Telephony
+     * Connection is part of a conference controller but is not yet added to Connection
+     * Service and hence cannot be added to the conference call.
+     */
+    public void triggerConferenceRecalculate() {
     }
 
     /**
