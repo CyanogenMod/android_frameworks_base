@@ -1012,7 +1012,7 @@ public class LockPatternUtils {
     }
 
     public long getLockPasswordSize() {
-    	try {
+        try {
             return getLockSettings().getLockPasswordSize(getCurrentOrCallingUserId());
 	} catch (RemoteException re) {
 	    return -1;

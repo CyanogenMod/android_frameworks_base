@@ -240,7 +240,7 @@ public class LockSettingsService extends ILockSettings.Stub {
 		return size;
 	    }
 	} catch (RemoteException re) {
-	    //Any invalid size 
+	    //Any invalid size handled below 
 	}
 	return -1;
     }
@@ -327,7 +327,7 @@ public class LockSettingsService extends ILockSettings.Stub {
         checkWritePermission(userId);
 
         maybeUpdateKeystore(password, userId);
-    
+
  	writeFile(getLockPasswordFilename(userId), mLockPatternUtils.passwordToHash(password));
 
 	if (!TextUtils.isEmpty(password)) {
