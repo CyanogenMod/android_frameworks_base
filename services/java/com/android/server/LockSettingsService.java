@@ -232,6 +232,19 @@ public class LockSettingsService extends ILockSettings.Stub {
         return LockPatternUtils.PATTERN_SIZE_DEFAULT;
     }
 
+    @Override
+    public long getLockPasswordSize(int userId) {
+	try {
+	    long size = getLong("lockscreen.password.length", -1, userId);
+	    if (size > 0 && size < 128) {
+		return size;
+	    }
+	} catch (RemoteException re) {
+	    //Any invalid size handled below
+	}
+	return -1;
+    }
+
     private boolean isDefaultSize(int userId) {
         return getLockPatternSize(userId) == LockPatternUtils.PATTERN_SIZE_DEFAULT;
     }
@@ -315,7 +328,11 @@ public class LockSettingsService extends ILockSettings.Stub {
 
         maybeUpdateKeystore(password, userId);
 
-        writeFile(getLockPasswordFilename(userId), mLockPatternUtils.passwordToHash(password));
+	writeFile(getLockPasswordFilename(userId), mLockPatternUtils.passwordToHash(password));
+
+	if (!TextUtils.isEmpty(password)) {
+	    setLong("lockscreen.password.length", password.length(), userId);
+	}
     }
 
     @Override
