@@ -3182,7 +3182,7 @@ public class TelephonyManager {
      * @return true on success; false on any failure.
      * @hide
      */
-    public boolean setGlobalPreferredNetworkType() {
+    public boolean setPreferredNetworkTypeToGlobal() {
         return setPreferredNetworkType(RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA);
     }
 
