@@ -2215,6 +2215,7 @@
   <java-symbol type="integer" name="launchboost_cpuboost_param" />
   <java-symbol type="integer" name="launchboost_pcdisbl_param" />
   <java-symbol type="integer" name="launchboost_ksmboost_param" />
+  <java-symbol type="integer" name="launchboost_preferidle_param" />
 
   <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
   <!-- cpu boost for Animationboost -->
