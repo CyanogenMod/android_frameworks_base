@@ -947,4 +947,13 @@ interface ITelephony {
      * Shutdown Mobile Radios
      */
     void shutdownMobileRadios();
+
+    /**
+      * Returns the unique device ID of phone, for example, the IMEI for
+      * GSM and the MEID for CDMA phones. Return null if device ID is not available.
+      *
+      * <p>Requires Permission:
+      *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
+      */
+    String getDeviceId();
 }
