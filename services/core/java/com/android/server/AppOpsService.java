@@ -126,6 +126,14 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     final SparseArray<UidState> mUidStates = new SparseArray<>();
 
+    private Runnable mSuSessionChangedRunner = new Runnable() {
+        @Override
+        public void run() {
+            mContext.sendBroadcastAsUser(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED),
+                    UserHandle.ALL);
+        }
+    };
+
     private final SparseArray<boolean[]> mOpRestrictions = new SparseArray<boolean[]>();
 
     private static final class UidState {
@@ -2100,7 +2108,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     private void broadcastOpIfNeeded(int op) {
         switch (op) {
             case AppOpsManager.OP_SU:
-                mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+                mHandler.post(mSuSessionChangedRunner);
                 break;
             default:
                 break;
