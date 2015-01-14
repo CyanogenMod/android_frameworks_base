@@ -1606,7 +1606,14 @@ public class AppOpsService extends IAppOpsService.Stub {
     private void broadcastOpIfNeeded(int op) {
         switch (op) {
             case AppOpsManager.OP_SU:
-                mContext.sendBroadcast(new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED));
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mContext.sendBroadcastAsUser(
+                                new Intent(AppOpsManager.ACTION_SU_SESSION_CHANGED),
+                                        UserHandle.ALL);
+                    }
+                });
                 break;
             default:
                 break;
