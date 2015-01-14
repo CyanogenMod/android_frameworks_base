@@ -31,8 +31,9 @@
     <integer name="config_max_unlock_countdown_times">0</integer>
 
     <!-- True if we need to show on "Slide" lock screen -->
-    <bool name="config_showEmergencyButton">true</bool>
+    <bool name="config_showEmergencyButton">false</bool>
 
+    <!-- True if Emergency call button to be displayed on lock screen -->
     <bool name="config_showEmergencyCallOnlyInLockScreen">false</bool>
 
     <!-- display airplane mode in lock sreen when phone is in APM mode -->
