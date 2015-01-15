@@ -3198,11 +3198,18 @@ public final class Settings {
          */
         public static final String STATUS_BAR_SHOW_WEATHER = "status_bar_show_weather";
 
+
+        /**
+        * Hide notification instead of remove when swiping headsup
+        * @hide
+        */
+        public static final String HEADS_UP_SWYPE_ACTION = "heads_up_swype_action";
+
         /**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
           * 1 - Volume up/down moves cursor left/right
-          * 2 - Volume up/down moves cursor right/left
+          * 2 - e
           * @hide
           */
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
@@ -3232,6 +3239,27 @@ public final class Settings {
          * @hide
          */
         public static final String T9_SEARCH_INPUT_LOCALE = "t9_search_input_locale";
+
+        /**
+         * Heads Up Notifications
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
+
+        /**
+         * Which applications to disable heads up notifications for
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_CUSTOM_VALUES = "heads_up_custom_values";
+
+        /**
+         * Which applications to disable heads up notifications for
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
