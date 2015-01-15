@@ -1827,6 +1827,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeHeadsUpSettingFromNone(db);
             upgradeDeviceNameFromNone(db);
 
+            // Removal of back/recents is no longer supported
+            // due to pinned apps
+            db.execSQL("DELETE FROM system WHERE name='"
+                    + Settings.System.NAV_BUTTONS + "'");
+
             upgradeVersion = 114;
         }
 
