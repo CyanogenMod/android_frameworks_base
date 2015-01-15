@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.android.systemui.statusbar.policy;
+package com.android.internal.util.cm;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -48,7 +44,8 @@ public class WeatherControllerImpl implements WeatherController {
     public static final String[] WEATHER_PROJECTION = new String[]{
             "temperature",
             "city",
-            "condition"
+            "condition",
+            "condition_code"
     };
 
     private final ArrayList<Callback> mCallbacks = new ArrayList<Callback>();
@@ -96,6 +93,7 @@ public class WeatherControllerImpl implements WeatherController {
                 mCachedInfo.temp = c.getString(0);
                 mCachedInfo.city = c.getString(1);
                 mCachedInfo.condition = c.getString(2);
+                mCachedInfo.conditionCode = c.getInt(3);
             } finally {
                 c.close();
             }
