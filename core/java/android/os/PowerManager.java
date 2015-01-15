@@ -399,8 +399,9 @@ public final class PowerManager {
      * @hide
      */
     public int getMaximumScreenBrightnessSetting() {
-        return mContext.getResources().getInteger(
+        int maxBrightness = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessSettingMaximum);
+        return SystemProperties.getInt("persist.power.max.brightness", maxBrightness);
     }
 
     /**
