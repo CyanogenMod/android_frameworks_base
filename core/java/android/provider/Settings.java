@@ -1782,6 +1782,13 @@ public final class Settings {
          */
         public static final String QS_LOCATION_ADVANCED = "qs_location_advanced";
 
+        /*
+         * Navigation controls to Use
+         *
+         * @hide
+         */
+        public static final String NAV_BUTTONS = "nav_buttons";
+
         /**
          * @deprecated Use {@link android.provider.Settings.Global#AIRPLANE_MODE_ON} instead
          */
