@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.android.systemui.statusbar.policy;
+package com.android.internal.util.cm;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -48,8 +47,10 @@ public class WeatherControllerImpl implements WeatherController {
     public static final String[] WEATHER_PROJECTION = new String[]{
             "temperature",
             "city",
-            "condition"
+            "condition",
+            "condition_code"
     };
+    public static final String LOCK_CLOCK_PACKAGE_NAME = "com.cyanogenmod.lockclock";
 
     private final ArrayList<Callback> mCallbacks = new ArrayList<Callback>();
     private final Receiver mReceiver = new Receiver();
@@ -79,6 +80,17 @@ public class WeatherControllerImpl implements WeatherController {
         mCallbacks.remove(callback);
     }
 
+    private Drawable getIcon(int conditionCode) {
+        try {
+            Resources resources =
+                    mContext.createPackageContext(LOCK_CLOCK_PACKAGE_NAME, 0).getResources();
+            return resources.getDrawable(resources.getIdentifier("weather_" + conditionCode,
+                    "drawable", LOCK_CLOCK_PACKAGE_NAME));
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+    }
+
     @Override
     public WeatherInfo getWeatherInfo() {
         return mCachedInfo;
@@ -96,6 +108,8 @@ public class WeatherControllerImpl implements WeatherController {
                 mCachedInfo.temp = c.getString(0);
                 mCachedInfo.city = c.getString(1);
                 mCachedInfo.condition = c.getString(2);
+                mCachedInfo.conditionCode = c.getInt(3);
+                mCachedInfo.conditionDrawable = getIcon(mCachedInfo.conditionCode);
             } finally {
                 c.close();
             }
