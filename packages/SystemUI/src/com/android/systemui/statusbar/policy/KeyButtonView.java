@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
@@ -41,6 +42,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.NavbarEditor;
 
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_LONG_CLICK;
@@ -54,10 +56,12 @@ public class KeyButtonView extends ImageView {
 
     private long mDownTime;
     private int mCode;
+    private boolean mIsSmall;
     private int mTouchSlop;
     private float mDrawingAlpha = 1f;
     private float mQuiescentAlpha = DEFAULT_QUIESCENT_ALPHA;
     private boolean mSupportsLongpress = true;
+    private boolean mInEditMode;
     private AudioManager mAudioManager;
     private Animator mAnimateToQuiescent = new ObjectAnimator();
     private KeyButtonRipple mRipple;
@@ -175,7 +179,57 @@ public class KeyButtonView extends ImageView {
         mDrawingAlpha = x;
     }
 
+    public void setEditMode(boolean editMode) {
+        mInEditMode = editMode;
+        updateVisibility();
+    }
+
+    public void setInfo(NavbarEditor.ButtonInfo item, boolean isVertical, boolean isSmall) {
+        final Resources res = getResources();
+        final int keyDrawableResId;
+
+        setTag(item);
+        setContentDescription(res.getString(item.contentDescription));
+        mCode = item.keyCode;
+        mIsSmall = isSmall;
+
+        if (isSmall) {
+            keyDrawableResId = item.sideResource;
+        } else if (!isVertical) {
+            keyDrawableResId = item.portResource;
+        } else {
+            keyDrawableResId = item.landResource;
+        }
+        // The reason for setImageDrawable vs setImageResource is because setImageResource calls
+        // relayout() w/o any checks. setImageDrawable performs size checks and only calls relayout
+        // if necessary. We rely on this because otherwise the setX/setY attributes which are post
+        // layout cause it to mess up the layout.
+        setImageDrawable(res.getDrawable(keyDrawableResId));
+        updateVisibility();
+    }
+
+    private void updateVisibility() {
+        if (mInEditMode) {
+            setVisibility(View.VISIBLE);
+            return;
+        }
+
+        NavbarEditor.ButtonInfo info = (NavbarEditor.ButtonInfo) getTag();
+        if (info == NavbarEditor.NAVBAR_EMPTY) {
+            setVisibility(mIsSmall ? View.INVISIBLE : View.GONE);
+        } else if (info == NavbarEditor.NAVBAR_CONDITIONAL_MENU) {
+            setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private boolean supportsLongPress() {
+        return mSupportsLongpress && getTag() != NavbarEditor.NAVBAR_HOME;
+    }
+
     public boolean onTouchEvent(MotionEvent ev) {
+        if (mInEditMode) {
+            return false;
+        }
         final int action = ev.getAction();
         int x, y;
 
@@ -193,7 +247,7 @@ public class KeyButtonView extends ImageView {
                     // Provide the same haptic feedback that the system offers for virtual keys.
                     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 }
-                if (mSupportsLongpress) {
+                if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
                     postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
                 }
@@ -214,7 +268,7 @@ public class KeyButtonView extends ImageView {
                 if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_UP, KeyEvent.FLAG_CANCELED);
                 }
-                if (mSupportsLongpress) {
+                if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
                 }
                 break;
@@ -235,7 +289,7 @@ public class KeyButtonView extends ImageView {
                         performClick();
                     }
                 }
-                if (mSupportsLongpress) {
+                if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
                 }
                 mPerformedLongClick = false;
