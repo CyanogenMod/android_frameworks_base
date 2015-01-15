@@ -120,6 +120,13 @@ final class ProcessList {
     // without empty apps being able to push them out of memory.
     static final int MIN_CACHED_APPS = 2;
 
+    // Min aging threshold in milliseconds to consider a B services for propagation to higher adj
+    static final int MIN_BSERVICE_AGING_TIME = SystemProperties.getInt("ro.sys.fw.bservice_age",5000);
+    // Threshold for B Services when in memory pressure
+    static final int BSERVICE_APP_THRESHOLD = SystemProperties.getInt("ro.sys.fw.bservice_limit",5);
+    // Enable B service aging propagation on memory pressure.
+    static final boolean ENABLE_B_SERVICE_PROPAGATION = SystemProperties.getBoolean("ro.sys.fw.bservice_enable",false);
+
     // The maximum number of cached processes we will keep around before killing them.
     // NOTE: this constant is *only* a control to not let us go too crazy with
     // keeping around processes on devices with large amounts of RAM.  For devices that
