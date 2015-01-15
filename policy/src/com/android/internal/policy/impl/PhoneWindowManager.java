@@ -246,6 +246,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             "org.codeaurora.intent.action.WIFI_DISPLAY_VIDEO";
 
     /**
+     * The key indicate whether this is in power off alarm mode.
+     */
+    private static final String POWER_OFF_ALARM_MODE = "POWER_OFF_ALARM_MODE";
+
+    /**
+     * The full power off alarm class name.
+     */
+    private static final String ALARM_CLASS_NAME = "com.android.deskclock.alarms.AlarmActivity";
+
+    /**
      * Keyguard stuff
      */
     private WindowState mKeyguardScrim;
@@ -2904,6 +2914,25 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
                     + repeatCount + " keyguardOn=" + keyguardOn + " mHomePressed=" + mHomePressed
                     + " canceled=" + canceled);
+        }
+
+        // If the boot mode is power off alarm, we should not dispatch the several physical key
+        // in power off alarm UI.
+        String isAlarmBoot = Settings.System.getString(mContext.getContentResolver(),
+                POWER_OFF_ALARM_MODE);
+        if (DEBUG_INPUT) { Log.d(TAG, "intercept Dispatching isAlarmBoot = " + isAlarmBoot); }
+
+        if (isAlarmBoot!= null && isAlarmBoot.equals("true") && (keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_SEARCH
+                || keyCode == KeyEvent.KEYCODE_MENU)) {
+            if (isAlarmViewTopActivity()) {
+                return -1;  // ignore the physical key here
+            } else {
+                // Since power off alarm UI is not top activity, we should not ignore physical key
+                // dispatch, even it is still power off alarm mode.
+                Settings.System.putString(mContext.getContentResolver(), POWER_OFF_ALARM_MODE,
+                        "false");
+            }
         }
 
         // If we think we might have a volume down & power key chord on the way
@@ -7338,5 +7367,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mOrientationListener != null) {
             mOrientationListener.dump(pw, prefix);
         }
+    }
+
+    /**
+     * Check whether power off alarm view is on top of the activity stack.
+     */
+    private boolean isAlarmViewTopActivity() {
+        List<ActivityManager.RunningTaskInfo> taskList;
+
+        try {
+            taskList = ActivityManagerNative.getDefault().getTasks(1, 0);
+        } catch (RemoteException e) {
+            Log.e(TAG, "isAlarmViewTopActivity get the activity stack failed");
+            return false;
+        }
+
+        if ((taskList != null)
+                && (taskList.get(0) != null)
+                && (taskList.get(0).topActivity != null)
+                && (taskList.get(0).topActivity.getClassName() != null)
+                && (taskList.get(0).topActivity.getClassName().equals(ALARM_CLASS_NAME))) {
+
+            return true;
+        }
+
+        return false;
     }
 }
