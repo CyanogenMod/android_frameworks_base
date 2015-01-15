@@ -1777,6 +1777,13 @@ public final class Settings {
         public static final int ADVANCED_SETTINGS_DEFAULT = 0;
 
         /**
+         * Navigation controls to Use
+         *
+         * @hide
+         */
+        public static final String NAV_BUTTONS = "nav_buttons";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#AIRPLANE_MODE_ON} instead
          */
         @Deprecated
