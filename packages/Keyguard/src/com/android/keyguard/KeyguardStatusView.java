@@ -19,9 +19,10 @@ package com.android.keyguard;
 import android.app.AlarmManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.provider.AlarmClock;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -30,23 +31,32 @@ import android.util.Slog;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import com.android.internal.util.cm.WeatherController;
+import com.android.internal.util.cm.WeatherControllerImpl;
 import com.android.internal.widget.LockPatternUtils;
 
 import java.util.Locale;
 
-public class KeyguardStatusView extends GridLayout {
+public class KeyguardStatusView extends GridLayout implements
+        WeatherController.Callback  {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardStatusView";
 
     private LockPatternUtils mLockPatternUtils;
 
+    private ImageView mWeatherIcon;
     private TextView mAlarmStatusView;
     private TextClock mDateView;
     private TextClock mClockView;
     private TextView mOwnerInfo;
+    private TextView mTemperatureText;
+    private TextView mWeatherCity;
+
+    private WeatherController mWeatherController;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -106,6 +116,11 @@ public class KeyguardStatusView extends GridLayout {
         mDateView = (TextClock) findViewById(R.id.date_view);
         mClockView = (TextClock) findViewById(R.id.clock_view);
         mOwnerInfo = (TextView) findViewById(R.id.owner_info);
+        mWeatherIcon = (ImageView) findViewById(R.id.weather_image);
+        mWeatherCity = (TextView) findViewById(R.id.city);
+        mTemperatureText = (TextView) findViewById(R.id.temperature);
+        mWeatherController = new WeatherControllerImpl(mContext);
+        mWeatherController.addCallback(this);
         mLockPatternUtils = new LockPatternUtils(getContext());
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();
         setEnableMarquee(screenOn);
@@ -205,6 +220,31 @@ public class KeyguardStatusView extends GridLayout {
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    @Override
+    public void onWeatherChanged(WeatherController.WeatherInfo info) {
+        if (info.temp == null || info.condition == null) {
+            mTemperatureText.setText(null);
+            mTemperatureText.setText(0);
+            mWeatherCity.setText("--");
+            mWeatherIcon.setImageDrawable(null);
+        } else {
+            mTemperatureText.setText(info.temp);
+            mWeatherCity.setText(info.city);
+            mWeatherIcon.setImageDrawable(getIcon(info.conditionCode));
+        }
+    }
+
+    private Drawable getIcon(int conditionCode) {
+        try {
+            Resources resources =
+                    mContext.createPackageContext("com.cyanogenmod.lockclock", 0).getResources();
+            return resources.getDrawable(resources.getIdentifier("weather_" + conditionCode,
+                    "drawable", "com.cyanogenmod.lockclock"));
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
