@@ -34,17 +34,27 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:orientation="vertical" >
-        <TextClock
-            android:id="@+id/clock_view"
+        <LinearLayout
+            android:id="@+id/keyguard_clock_and_weather_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/clock_white"
-            android:singleLine="true"
-            style="@style/widget_big_thin"
-            android:format12Hour="@string/keyguard_widget_12_hours_format"
-            android:format24Hour="@string/keyguard_widget_24_hours_format"
-            android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+            android:orientation="horizontal"  >
+            <TextClock
+                android:id="@+id/clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/clock_white"
+                android:singleLine="true"
+                style="@style/widget_big_thin"
+                android:format12Hour="@string/keyguard_widget_12_hours_format"
+                android:format24Hour="@string/keyguard_widget_24_hours_format"
+                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+
+            <include layout="@layout/keyguard_weather_view" />
+
+        </LinearLayout>
 
         <include layout="@layout/keyguard_status_area" />
         <TextView
