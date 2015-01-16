@@ -424,4 +424,8 @@
 
     <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
     <dimen name="edge_gesture_trigger_thickness">12dp</dimen>
+
+    <dimen name="glowpadview_inner_radius">15dip</dimen>
+    <dimen name="glowpadview_glow_radius">75dip</dimen>
+
 </resources>
