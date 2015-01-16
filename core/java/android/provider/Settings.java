@@ -6004,6 +6004,7 @@ public final class Settings {
          * might be 19. ThemeService would then change the value to 21. This is useful
          * when an API change breaks a theme. Themeservice can identify old themes and
          * unapply them from the system.
+         * @hide
          */
         public static final String THEME_PREV_BOOT_API_LEVEL = "theme_prev_boot_api_level";
 
