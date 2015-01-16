@@ -2266,4 +2266,20 @@
   <java-symbol type="string" name="android_installing_apk" />
   <java-symbol type="string" name="android_installing_title" />
 
+  <!-- Navigation Ring -->
+  <java-symbol type="drawable" name="ic_navigation_ring_blank_normal" />
+  <java-symbol type="drawable" name="ic_navigation_ring_blank_activated" />
+  <java-symbol type="drawable" name="ic_navigation_ring_empty" />
+  <java-symbol type="drawable" name="ic_navigation_ring_ime_switcher" />
+  <java-symbol type="drawable" name="ic_navigation_ring_killtask" />
+  <java-symbol type="drawable" name="ic_navigation_ring_power" />
+  <java-symbol type="drawable" name="ic_navigation_ring_screenshot" />
+  <java-symbol type="drawable" name="ic_navigation_ring_silent" />
+  <java-symbol type="drawable" name="ic_navigation_ring_sound_on" />
+  <java-symbol type="drawable" name="ic_navigation_ring_torch_on" />
+  <java-symbol type="drawable" name="ic_navigation_ring_torch_off" />
+  <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
+
+  <java-symbol type="drawable" name="ic_action_assist_generic" />
+
 </resources>
