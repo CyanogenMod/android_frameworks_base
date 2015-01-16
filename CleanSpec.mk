@@ -247,3 +247,4 @@ $(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/bin/libaapt_t
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/obj/EXECUTABLES/aapt_intermediates)
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/bin/aapt)
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/symbols/system/bin/aapt)
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/obj32/STATIC_LIBRARIES/libaapt_intermediates)
