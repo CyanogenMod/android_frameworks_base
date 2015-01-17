@@ -161,4 +161,8 @@
     <item quantity="other" msgid="2215723361575359486">"输入 SIM PIN，您还有<xliff:g id="NUMBER">%d</xliff:g>次尝试机会。"</item>
   </plurals>
     <string name="kg_remaining_attempts">剩余次数: <xliff:g id="number">%d</xliff:g></string>
+    <string name="kg_failed_pin_attempts_now_wiping">您输入了<xliff:g id="number">%d</xliff:g>次错误的PIN, 是否重启并恢复出厂设置?</string>
+    <string name="kg_failed_password_attempts_now_wiping">您输入了<xliff:g id="number">%d</xliff:g>次错误的密码, 是否重启并恢复出厂设置?</string>
+    <string name="kg_failed_pattern_attempts_now_wiping">您输入了<xliff:g id="number">%d</xliff:g>次错误图案, 是否重启并恢复出厂设置?</string>
+    <string name="kg_failed_attempts_now_wiping_confirm">将要清除您设备上的全部用户数据并且设备恢复成出厂设置。</string>
 </resources>

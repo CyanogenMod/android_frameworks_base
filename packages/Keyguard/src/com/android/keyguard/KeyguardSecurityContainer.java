@@ -16,8 +16,11 @@
 package com.android.keyguard;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
@@ -43,6 +46,8 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
     private SecurityCallback mSecurityCallback;
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
+
+    private WipeConfirmListener mWipeConfirmListener = null;
 
     // Used to notify the container when something interesting happens.
     public interface SecurityCallback {
@@ -218,6 +223,64 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         showDialog(null, message);
     }
 
+    private void showCountdownWipeDialog(int attempts) {
+        int msgId = R.string.kg_failed_attempts_now_wiping;
+        switch (mSecurityModel.getSecurityMode()) {
+            case PIN:
+                msgId = R.string.kg_failed_pin_attempts_now_wiping;
+                break;
+            case Password:
+                msgId = R.string.kg_failed_password_attempts_now_wiping;
+                break;
+            case Pattern:
+                msgId = R.string.kg_failed_pattern_attempts_now_wiping;
+                break;
+        }
+        if (mWipeConfirmListener == null) {
+            mWipeConfirmListener = new WipeConfirmListener();
+        }
+        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+            .setMessage(mContext.getString(msgId, attempts))
+            .setNegativeButton(com.android.internal.R.string.gpsVerifYes,// reuse public Yes/No
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            showWipeConfirmDialog();
+                        }
+                    })
+            .setPositiveButton(com.android.internal.R.string.gpsVerifNo, mWipeConfirmListener)
+            .setCancelable(false)
+            .create();
+        if (!(mContext instanceof Activity)) {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+        }
+        dialog.show();
+    }
+
+    private void showWipeConfirmDialog() {
+        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+            .setMessage(R.string.kg_failed_attempts_now_wiping_confirm)
+            .setNegativeButton(com.android.internal.R.string.gpsVerifYes, mWipeConfirmListener)
+            .setPositiveButton(com.android.internal.R.string.gpsVerifNo, mWipeConfirmListener)
+            .setCancelable(false)
+            .create();
+        if (!(mContext instanceof Activity)) {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+        }
+        dialog.show();
+    }
+
+    private class WipeConfirmListener implements DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int which) {
+            if (DialogInterface.BUTTON_POSITIVE == which) {
+                KeyguardUpdateMonitor.getInstance(mContext).clearFailedUnlockAttempts();
+            } else {
+                if (ActivityManager.isUserAMonkey()) return;
+                Intent wipeIntent = new Intent("android.intent.action.MASTER_CLEAR");
+                mContext.sendBroadcast(wipeIntent);
+            }
+        }
+    }
+
     private void showAlmostAtAccountLoginDialog() {
         final int timeoutInSeconds = (int) LockPatternUtils.FAILED_ATTEMPT_TIMEOUT_MS / 1000;
         final int count = LockPatternUtils.FAILED_ATTEMPTS_BEFORE_RESET
@@ -235,6 +298,12 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
 
         SecurityMode mode = mSecurityModel.getSecurityMode();
         final boolean usingPattern = mode == KeyguardSecurityModel.SecurityMode.Pattern;
+        final boolean usingPIN = mode == KeyguardSecurityModel.SecurityMode.PIN;
+        final boolean usingPassword = mode == KeyguardSecurityModel.SecurityMode.Password;
+        final int maxCountdownTimes = mContext.getResources()
+                .getInteger(R.integer.config_max_unlock_countdown_times);
+        final boolean enableTimesCounter = maxCountdownTimes > 0 && (usingPattern || usingPIN
+                || usingPassword);
 
         final int failedAttemptsBeforeWipe = mLockPatternUtils.getDevicePolicyManager()
                 .getMaximumFailedPasswordsForWipe(null, mLockPatternUtils.getCurrentUser());
@@ -247,7 +316,9 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
                 : Integer.MAX_VALUE; // because DPM returns 0 if no restriction
 
         boolean showTimeout = false;
-        if (remainingBeforeWipe < LockPatternUtils.FAILED_ATTEMPTS_BEFORE_WIPE_GRACE) {
+        if (enableTimesCounter && (failedAttempts >= maxCountdownTimes)) {
+            showCountdownWipeDialog(failedAttempts);
+        } else if (remainingBeforeWipe < LockPatternUtils.FAILED_ATTEMPTS_BEFORE_WIPE_GRACE) {
             // The user has installed a DevicePolicyManager that requests a user/profile to be wiped
             // N attempts. Once we get below the grace period, we post this dialog every time as a
             // clear warning until the deletion fires.
@@ -263,8 +334,8 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
                 showWipeDialog(failedAttempts);
             }
         } else {
-            showTimeout =
-                (failedAttempts % LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT) == 0;
+            showTimeout = !enableTimesCounter &&
+                ((failedAttempts % LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT) == 0);
             if (usingPattern && mEnableFallback) {
                 if (failedAttempts == failedAttemptWarning) {
                     showAlmostAtAccountLoginDialog();
