@@ -125,7 +125,7 @@ public class StatusBarWindowManager {
         @Override
         public void onChange(boolean selfChange) {
             mKeyguardBlurEnabled = 1 == Settings.System.getInt(
-                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_LOCKSCREEN, 1);
+                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_LOCKSCREEN, 0);
         }
     };
 

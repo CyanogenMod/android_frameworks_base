@@ -457,7 +457,7 @@ public class VolumePanel extends Handler {
         @Override
         public void onChange(boolean selfChange) {
             mBlurUiEnabled = 1 == Settings.System.getInt(
-                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_VOLUMECONTROL, 1);
+                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_VOLUMECONTROL, 0);
             setupVolumePanelBlur(mBlurUiEnabled);
         }
     };
