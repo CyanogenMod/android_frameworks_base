@@ -45,11 +45,9 @@
                 android:layout_height="@dimen/navbar_search_panel_height"
                 android:layout_alignParentBottom="true"
                 android:gravity="top"
-
                 prvandroid:targetDrawables="@array/navbar_search_targets"
                 prvandroid:targetDescriptions="@array/navbar_search_target_descriptions"
                 prvandroid:directionDescriptions="@array/navbar_search_direction_descriptions"
-                prvandroid:outerRingDrawable="@drawable/navbar_search_outerring"
                 prvandroid:outerRadius="@dimen/navbar_search_outerring_radius"
                 prvandroid:innerRadius="@dimen/glowpadview_inner_radius"
                 prvandroid:snapMargin="@dimen/navbar_search_snap_margin"
