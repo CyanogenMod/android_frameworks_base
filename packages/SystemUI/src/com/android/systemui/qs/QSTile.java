@@ -51,7 +51,7 @@ import java.util.Objects;
  */
 public abstract class QSTile<TState extends State> implements Listenable {
     protected final String TAG = "QSTile." + getClass().getSimpleName();
-    protected static final boolean DEBUG = Log.isLoggable("QSTile", Log.DEBUG);
+    protected static final boolean DEBUG = true; //Log.isLoggable("QSTile", Log.DEBUG);
 
     protected final Host mHost;
     protected final Context mContext;
