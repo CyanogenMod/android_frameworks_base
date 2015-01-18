@@ -34,7 +34,7 @@ public class TargetDrawable {
                 -android.R.attr.state_focused };
     public static final int[] STATE_FOCUSED =
             { android.R.attr.state_enabled, -android.R.attr.state_active,
-                android.R.attr.state_focused };
+                android.R.attr.state_focused, android.R.attr.state_pressed };
 
     private float mTranslationX = 0.0f;
     private float mTranslationY = 0.0f;

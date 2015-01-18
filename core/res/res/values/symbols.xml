@@ -2267,6 +2267,7 @@
   <java-symbol type="string" name="android_installing_title" />
 
   <!-- Navigation Ring -->
+  <java-symbol type="drawable" name="ic_navigation_ring_blank_ripple" />
   <java-symbol type="drawable" name="ic_navigation_ring_blank_normal" />
   <java-symbol type="drawable" name="ic_navigation_ring_blank_activated" />
   <java-symbol type="drawable" name="ic_navigation_ring_empty" />

@@ -1,0 +1,6 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#DDDDDD">
+    <item
+        android:drawable="@*android:drawable/ic_navigation_ring_blank_normal">
+    </item>
+</ripple>

@@ -170,9 +170,9 @@ public class NavigationRingHelpers {
 
     private static TargetDrawable createDrawableForActivity(Resources res, Drawable activityIcon) {
         Drawable iconBg = res.getDrawable(
-                com.android.internal.R.drawable.ic_navigation_ring_blank_normal);
+                com.android.internal.R.drawable.ic_navigation_ring_blank_ripple);
         Drawable iconBgActivated = res.getDrawable(
-                com.android.internal.R.drawable.ic_navigation_ring_blank_activated);
+                com.android.internal.R.drawable.ic_navigation_ring_blank_ripple);
 
         // Get the size for the base icon and the activity icon
         int iconSize = (int) res.getDimension(
@@ -190,7 +190,29 @@ public class NavigationRingHelpers {
         Bitmap scaledActivityIconBitmap =
                 Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(scaledActivityIconBitmap);
-        activityIcon.setBounds(margin, margin, iconSize - margin, iconSize - margin);
+
+        int new_width = activityIcon.getIntrinsicWidth();
+        int new_height = activityIcon.getIntrinsicHeight();
+        // first check if we need to scale width
+        if (activityIcon.getIntrinsicWidth() > activityIconSize) {
+            //scale width to fit
+            new_width = activityIconSize;
+            //scale height to maintain aspect ratio
+            new_height = (new_width * activityIcon.getIntrinsicHeight()) / activityIcon.getIntrinsicWidth();
+        }
+
+        // then check if we need to scale even with the new height
+        if (new_height > activityIconSize) {
+            //scale height to fit instead
+            new_height = activityIconSize;
+            //scale width to maintain aspect ratio
+            new_width = (new_height * activityIcon.getIntrinsicWidth()) / activityIcon.getIntrinsicHeight();
+        }
+
+        activityIcon.setBounds(margin + ((activityIconSize - new_width) / 2),
+                margin + ((activityIconSize - new_height) / 2),
+                iconSize - margin - ((activityIconSize - new_width) / 2),
+                iconSize - margin - ((activityIconSize - new_height) / 2));
         activityIcon.setColorFilter(grayscaleFilter);
         activityIcon.draw(canvas);
 
@@ -308,6 +330,9 @@ public class NavigationRingHelpers {
                                 d.getStateDrawable(activeIndex));
                         target.setDrawable(selector);
                     }
+                } else if (drawable instanceof BitmapDrawable) {
+                    TargetDrawable d = createDrawableForActivity(context.getResources(), drawable);
+                    target.setDrawable(d.getDrawable());
                 }
                 break;
             }
