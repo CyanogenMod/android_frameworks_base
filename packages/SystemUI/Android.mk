@@ -7,9 +7,12 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src) \
     src/com/android/systemui/EventLogTags.logtags
 
 LOCAL_STATIC_JAVA_LIBRARIES := Keyguard \
-    org.cyanogenmod.platform.sdk
+    org.cyanogenmod.platform.sdk \
+    android-support-v7-palette \
+    android-support-v4
 
 LOCAL_JAVA_LIBRARIES := telephony-common
+LOCAL_FULL_LIBS_MANIFEST_FILES := $(LOCAL_PATH)/AndroidManifest_cm.xml
 
 LOCAL_PACKAGE_NAME := SystemUI
 LOCAL_CERTIFICATE := platform
