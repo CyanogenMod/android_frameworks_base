@@ -29,6 +29,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,6 +55,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.internal.util.cm.LockscreenShortcutsHelper;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -65,6 +70,8 @@ import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
 
+import java.util.List;
+
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 
@@ -73,7 +80,7 @@ import static android.view.accessibility.AccessibilityNodeInfo.AccessibilityActi
  * text.
  */
 public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickListener,
-        UnlockMethodCache.OnUnlockMethodChangedListener,
+        UnlockMethodCache.OnUnlockMethodChangedListener, LockscreenShortcutsHelper.OnChangeListener,
         AccessibilityController.AccessibilityStateChangedCallback, View.OnLongClickListener {
 
     final static String TAG = "PhoneStatusBar/KeyguardBottomAreaView";
@@ -105,6 +112,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private KeyguardIndicationController mIndicationController;
     private AccessibilityController mAccessibilityController;
     private PhoneStatusBar mPhoneStatusBar;
+    private LockscreenShortcutsHelper mShortcutHelper;
 
     private final Interpolator mLinearOutSlowInInterpolator;
     private boolean mUserSetupComplete;
@@ -193,7 +201,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mLockIcon = (LockIcon) findViewById(R.id.lock_icon);
         mIndicationText = (TextView) findViewById(R.id.keyguard_indication_text);
         watchForCameraPolicyChanges();
-        updateCameraVisibility();
         mUnlockMethodCache = UnlockMethodCache.getInstance(getContext());
         mUnlockMethodCache.addListener(this);
         mLockIcon.update();
@@ -206,6 +213,35 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mCameraImageView.setOnClickListener(this);
         mLeftAffordanceView.setOnClickListener(this);
         initAccessibility();
+        mShortcutHelper = new LockscreenShortcutsHelper(mContext, this);
+        updateCustomShortcuts();
+    }
+
+    private void updateCustomShortcuts() {
+        KeyguardAffordanceView[] targets = new KeyguardAffordanceView[] {
+                mLeftAffordanceView, mCameraImageView};
+        List<LockscreenShortcutsHelper.TargetInfo> items = mShortcutHelper.getDrawablesForTargets();
+        for (int i = 0; i < targets.length; i++) {
+            LockscreenShortcutsHelper.TargetInfo item = items.get(i);
+            KeyguardAffordanceView v = targets[i];
+            v.setDefaultFilter(item.colorFilter);
+            v.setImageDrawable(getScaledDrawable(item.icon));
+        }
+        updateCameraVisibility();
+        updateLeftAffordanceIcon();
+    }
+
+    private Drawable getScaledDrawable(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            Resources res = mContext.getResources();
+            int width = res.getDimensionPixelSize(R.dimen.keyguard_affordance_icon_width);
+            int height = res.getDimensionPixelSize(R.dimen.keyguard_affordance_icon_height);
+            return new BitmapDrawable(mContext.getResources(),
+                    Bitmap.createScaledBitmap(((BitmapDrawable) drawable).getBitmap(),
+                            width, height, true));
+        } else {
+            return drawable;
+        }
     }
 
     private void initAccessibility() {
@@ -275,6 +311,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         boolean visible = !isCameraDisabledByDpm() && resolved != null
                 && getResources().getBoolean(R.bool.config_keyguardShowCameraAffordance)
                 && mUserSetupComplete;
+        visible = visible || mShortcutHelper.isTargetCustom(
+                LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT);
         mCameraImageView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
@@ -291,6 +329,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             drawableId = R.drawable.ic_phone_24dp;
             contentDescription = R.string.accessibility_phone_button;
         }
+        visible = visible || mShortcutHelper.isTargetCustom(
+                LockscreenShortcutsHelper.Shortcuts.LEFT_SHORTCUT);
         mLeftAffordanceView.setVisibility(visible ? View.VISIBLE : View.GONE);
         mLeftAffordanceView.setImageDrawable(mContext.getDrawable(drawableId));
         mLeftAffordanceView.setContentDescription(mContext.getString(contentDescription));
@@ -412,7 +452,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void launchCamera() {
-        final Intent intent = getCameraIntent();
+        final Intent intent;
+        if (!mShortcutHelper.isTargetCustom(LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT)) {
+            intent = getCameraIntent();
+        } else {
+            intent = mShortcutHelper.getIntent(LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT);
+        }
         boolean wouldLaunchResolverActivity = PreviewInflater.wouldLaunchResolverActivity(
                 mContext, intent, KeyguardUpdateMonitor.getCurrentUser());
         if (intent == SECURE_CAMERA_INTENT && !wouldLaunchResolverActivity) {
@@ -461,7 +506,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void launchLeftAffordance() {
-        if (mLeftIsVoiceAssist) {
+        if (mShortcutHelper.isTargetCustom(LockscreenShortcutsHelper.Shortcuts.LEFT_SHORTCUT)) {
+            Intent intent = mShortcutHelper.getIntent(
+                    LockscreenShortcutsHelper.Shortcuts.LEFT_SHORTCUT);
+            mActivityStarter.startActivity(intent, false /* dismissShade */);
+        } else if (mLeftIsVoiceAssist) {
             launchVoiceAssist();
         } else {
             launchPhone();
@@ -485,6 +534,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     private boolean canLaunchVoiceAssist() {
+        if (mAssistManager == null) {
+            return false;
+        }
         return mAssistManager.canVoiceAssistBeLaunchedFromKeyguard();
     }
 
@@ -698,5 +750,52 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     public void updateLeftAffordance() {
         updateLeftAffordanceIcon();
         updateLeftPreview();
+    }
+
+    private String getIndexHint(LockscreenShortcutsHelper.Shortcuts shortcut) {
+        if (mShortcutHelper.isTargetCustom(shortcut)) {
+            String label = mShortcutHelper.getFriendlyNameForUri(shortcut);
+            int resId = 0;
+            switch (shortcut) {
+                case LEFT_SHORTCUT:
+                    resId = R.string.left_shortcut_hint;
+                    break;
+                case RIGHT_SHORTCUT:
+                    resId = R.string.right_shortcut_hint;
+                    break;
+            }
+            return mContext.getString(resId, label);
+        } else {
+            return null;
+        }
+    }
+
+    public String getLeftHint() {
+        String label = getIndexHint(LockscreenShortcutsHelper.Shortcuts.LEFT_SHORTCUT);
+        if (label == null) {
+            if (isLeftVoiceAssist()) {
+                label = mContext.getString(R.string.voice_hint);
+            } else {
+                label = mContext.getString(R.string.phone_hint);
+            }
+        }
+        return label;
+    }
+
+    public String getRightHint() {
+        String label = getIndexHint(LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT);
+        if (label == null) {
+            label = mContext.getString(R.string.camera_hint);
+        }
+        return label;
+    }
+
+    public boolean isTargetCustom(LockscreenShortcutsHelper.Shortcuts shortcut) {
+        return mShortcutHelper.isTargetCustom(shortcut);
+    }
+
+    @Override
+    public void onChange() {
+        updateCustomShortcuts();
     }
 }
