@@ -433,6 +433,20 @@ public class SurfaceTextureRenderer {
         EGL14.eglChooseConfig(mEGLDisplay, attribList, /*offset*/ 0, configs, /*offset*/ 0,
                 configs.length, numConfigs, /*offset*/ 0);
         checkEglError("eglCreateContext RGB888+recordable ES2");
+        if (numConfigs[0] == 0) {
+            Log.w(TAG, "eglChooseConfig returned no configs, retrying without EGL_RECORDABLE_ANDROID");
+            int[] attribList2 = {
+                    EGL14.EGL_RED_SIZE, EGL_COLOR_BITLENGTH,
+                    EGL14.EGL_GREEN_SIZE, EGL_COLOR_BITLENGTH,
+                    EGL14.EGL_BLUE_SIZE, EGL_COLOR_BITLENGTH,
+                    EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+                    EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT | EGL14.EGL_WINDOW_BIT,
+                    EGL14.EGL_NONE
+            };
+            EGL14.eglChooseConfig(mEGLDisplay, attribList2, /*offset*/ 0, configs, /*offset*/ 0,
+                    configs.length, numConfigs, /*offset*/ 0);
+            checkEglError("eglCreateContext RGB888 ES2");
+        }
         mConfigs = configs[0];
         int[] attrib_list = {
                 EGL14.EGL_CONTEXT_CLIENT_VERSION, GLES_VERSION,
