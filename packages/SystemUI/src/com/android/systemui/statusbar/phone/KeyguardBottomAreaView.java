@@ -22,16 +22,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.graphics.Bitmap;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -40,8 +50,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.internal.util.cm.LockscreenShortcutsHelpers;
+import com.android.internal.util.cm.NavigationRingConstants;
+import com.android.internal.util.cm.NavigationRingHelpers;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.EmergencyButton;
 import com.android.keyguard.KeyguardUpdateMonitor;
@@ -53,6 +67,9 @@ import com.android.systemui.statusbar.KeyguardIndicationController;
 import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
+
+import java.net.URISyntaxException;
+import java.util.List;
 
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
@@ -96,6 +113,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private final TrustDrawable mTrustDrawable;
 
     private int mLastUnlockIconRes = 0;
+    private List<String> mTargetActivities;
 
     public KeyguardBottomAreaView(Context context) {
         this(context, null);
@@ -176,6 +194,41 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mCameraImageView.setOnClickListener(this);
         mPhoneImageView.setOnClickListener(this);
         initAccessibility();
+        updateIcons();
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.LOCKSCREEN_TARGETS), false, mTargetObserver);
+    }
+
+    private ContentObserver mTargetObserver = new ContentObserver(null) {
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            updateIcons();
+        }
+    };
+
+    private void updateIcons() {
+        mTargetActivities = Settings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                Settings.Secure.LOCKSCREEN_TARGETS, "|");
+        KeyguardAffordanceView[] targets = new KeyguardAffordanceView[] {mPhoneImageView, mCameraImageView};
+        List<LockscreenShortcutsHelpers.TargetInfo> items = LockscreenShortcutsHelpers.getDrawablesForTargets(mContext);
+        for (int i = 0; i < targets.length; i++) {
+            LockscreenShortcutsHelpers.TargetInfo item = items.get(i);
+            KeyguardAffordanceView v = targets[i];
+            v.setDefaultFilter(item.colorFilter);
+            v.setImageDrawable(getScaledDrawable(item.icon));
+        }
+    }
+
+    private Drawable getScaledDrawable(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            Resources res = mContext.getResources();
+            int width = res.getDimensionPixelSize(R.dimen.keyguard_affordance_icon_width);
+            int height = res.getDimensionPixelSize(R.dimen.keyguard_affordance_icon_height);
+            return new BitmapDrawable(mContext.getResources(),
+                    Bitmap.createScaledBitmap(((BitmapDrawable) drawable).getBitmap(), width, height, true));
+        } else {
+            return drawable;
+        }
     }
 
     private void initAccessibility() {
@@ -326,8 +379,18 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void launchCamera() {
+        Thread.dumpStack();
         mFlashlightController.killFlashlight();
-        Intent intent = getCameraIntent();
+        Intent intent = null;
+        if (mTargetActivities.get(1).equals(NavigationRingConstants.ACTION_NONE)) {
+            intent = getCameraIntent();
+        } else {
+            try {
+                intent = Intent.parseUri(mTargetActivities.get(1), 0);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
         boolean wouldLaunchResolverActivity = PreviewInflater.wouldLaunchResolverActivity(
                 mContext, intent, mLockPatternUtils.getCurrentUser());
         if (intent == SECURE_CAMERA_INTENT && !wouldLaunchResolverActivity) {
@@ -341,16 +404,25 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void launchPhone() {
-        final TelecomManager tm = TelecomManager.from(mContext);
-        if (tm.isInCall()) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    tm.showInCallScreen(false /* showDialpad */);
-                }
-            });
+        if (mTargetActivities.get(0).equals(NavigationRingConstants.ACTION_NONE)) {
+            final TelecomManager tm = TelecomManager.from(mContext);
+            if (tm.isInCall()) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        tm.showInCallScreen(false /* showDialpad */);
+                    }
+                });
+            } else {
+                mActivityStarter.startActivity(PHONE_INTENT, false /* dismissShade */);
+            }
         } else {
-            mActivityStarter.startActivity(PHONE_INTENT, false /* dismissShade */);
+            try {
+                Intent intent = Intent.parseUri(mTargetActivities.get(0), 0);
+                mActivityStarter.startActivity(intent, false /* dismissShade */);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -406,7 +478,34 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         updateLockIconClickability();
     }
 
+    private String getIndexHint(int index) {
+        if (!mTargetActivities.isEmpty() &&
+                !mTargetActivities.get(index).equals(NavigationRingConstants.ACTION_NONE)) {
+            String uri = mTargetActivities.get(index);
+            String label = LockscreenShortcutsHelpers.getFriendlyNameForUri(mContext, uri);
+            int resId = index == LockscreenShortcutsHelpers.LEFT_INDEX ?
+                    R.string.left_shortcut_hint : R.string.right_shortcut_hint;
+            return mContext.getString(resId, label);
+        } else {
+            return null;
+        }
+    }
 
+    public String getLeftHint() {
+        String label = getIndexHint(LockscreenShortcutsHelpers.LEFT_INDEX);
+        if (label == null) {
+            label = mContext.getString(R.string.phone_hint);
+        }
+        return label;
+    }
+
+    public String getRightHint() {
+        String label = getIndexHint(LockscreenShortcutsHelpers.RIGHT_INDEX);
+        if (label == null) {
+            label = mContext.getString(R.string.camera_hint);
+        }
+        return label;
+    }
 
     public KeyguardAffordanceView getPhoneView() {
         return mPhoneImageView;
@@ -497,6 +596,10 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mIndicationController = keyguardIndicationController;
     }
 
+    public boolean isTargetCustom(int index) {
+        return !mTargetActivities.isEmpty() &&
+                !mTargetActivities.get(index).equals(NavigationRingConstants.ACTION_NONE);
+    }
 
     /**
      * A wrapper around another Drawable that overrides the intrinsic size.
