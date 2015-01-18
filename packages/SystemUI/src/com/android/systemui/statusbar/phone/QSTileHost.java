@@ -29,11 +29,13 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.android.internal.util.cm.QSUtils;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.ApnTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
+import com.android.systemui.qs.tiles.CameraTile;
 import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
@@ -276,6 +278,8 @@ public class QSTileHost implements QSTile.Host {
             return new DdsTile(this);
         else if (tileSpec.equals("apn")) return new ApnTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
+        else if ((tileSpec.equals("camera")) && QSUtils.deviceSupportsCamera())
+            return new CameraTile(this);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
 
