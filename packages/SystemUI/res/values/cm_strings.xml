@@ -94,4 +94,7 @@
 
     <!-- Weather string format in expanded statusbar header -->
     <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+
+    <!-- QuickSettings: Camera title [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_camera_title">Camera</string>
 </resources>
