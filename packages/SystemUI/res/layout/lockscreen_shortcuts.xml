@@ -1,0 +1,65 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ImageView
+        android:id="@+id/phone_button"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/lockscreen_shortcuts_phone_background" />
+
+    <TextView
+        android:textSize="15sp"
+        android:textColor="#424242"
+        android:gravity="center"
+        android:layout_below="@id/phone_button"
+        android:layout_alignStart="@id/phone_button"
+        android:layout_alignEnd="@id/phone_button"
+        android:text="@string/lockscreen_message"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_alignEnd="@id/phone_button"
+        android:layout_alignStart="@id/phone_button"
+        android:layout_alignBottom="@id/phone_button"
+        android:layout_marginStart="@dimen/phone_side_padding"
+        android:layout_marginEnd="@dimen/phone_side_padding"
+        android:paddingBottom="@dimen/phone_bottom_padding"
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/phone_height">
+        <ImageView
+            android:layout_marginStart="@dimen/lockscreen_icon_side_padding"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:clickable="true"
+            android:scaleType="center"
+            android:id="@+id/left_button"
+            android:layout_width="@dimen/keyguard_affordance_width"
+            android:layout_height="@dimen/keyguard_affordance_height" />
+        <ImageView
+            android:id="@+id/middle_button"
+            android:tint="#666666"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_lock_24dp"
+            android:layout_width="@dimen/keyguard_affordance_width"
+            android:layout_height="@dimen/keyguard_affordance_height" />
+        <ImageView
+            android:layout_marginEnd="@dimen/lockscreen_icon_side_padding"
+            android:id="@+id/right_button"
+            android:clickable="true"
+            android:scaleType="center"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="@dimen/keyguard_affordance_width"
+            android:layout_height="@dimen/keyguard_affordance_height" />
+        </RelativeLayout>
+</RelativeLayout>
