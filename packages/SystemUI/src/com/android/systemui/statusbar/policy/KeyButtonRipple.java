@@ -188,7 +188,7 @@ public class KeyButtonRipple extends Drawable {
         }
     }
 
-    private void cancelAnimations() {
+    /* package */ void cancelAnimations() {
         mTmpArray.addAll(mRunningAnimations);
         int size = mTmpArray.size();
         for (int i = 0; i < size; i++) {
