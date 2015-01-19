@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
             String targetPackagePath = piTarget.applicationInfo.sourceDir;
             String prefixPath = ThemeUtils.getOverlayPathToTarget(basePackageName);
 
-            String resCachePath = ThemeUtils.getResDir(basePackageName, piTheme);
+            String resCachePath = ThemeUtils.getTargetCacheDir(basePackageName, piTheme);
             String resTablePath = resCachePath + "/resources.arsc";
             String resApkPath = resCachePath + "/resources.apk";
             int cookie = assets.addOverlayPath(themePath, resTablePath, resApkPath,
@@ -160,7 +160,7 @@ public class MainActivity extends Activity {
         }
 
         if (!piTarget.isThemeApk && piTheme.mOverlayTargets.contains("android")) {
-            String resCachePath= ThemeUtils.getResDir(piAndroid.packageName, piTheme);
+            String resCachePath= ThemeUtils.getTargetCacheDir(piAndroid.packageName, piTheme);
             String prefixPath = ThemeUtils.getOverlayPathToTarget(piAndroid.packageName);
             String targetPackagePath = piAndroid.applicationInfo.publicSourceDir;
             String resTablePath = resCachePath + "/resources.arsc";
