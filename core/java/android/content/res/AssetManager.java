@@ -647,15 +647,15 @@ public final class AssetManager implements AutoCloseable {
      * {@hide}
      */
      // TODO: change the signature of this method to match addOverlayPathNative
-    public final int addOverlayPath(String idmapPath,
+    public final int addOverlayPath(String idmapPath, String themeApkPath,
             String resApkPath, String targetPkgPath, String prefixPath) {
         synchronized (this) {
-            return addOverlayPathNative(idmapPath, resApkPath, targetPkgPath,
+            return addOverlayPathNative(idmapPath, themeApkPath, resApkPath, targetPkgPath,
                     prefixPath);
         }
     }
 
-    private native final int addOverlayPathNative(String idmapPath,
+    private native final int addOverlayPathNative(String idmapPath, String themeApkPath,
             String resApkPath, String targetPkgPath, String prefixPath);
 
     /**
@@ -663,14 +663,14 @@ public final class AssetManager implements AutoCloseable {
      *
      * {@hide}
      */
-    public final int addCommonOverlayPath(String idmapPath,
+    public final int addCommonOverlayPath(String themeApkPath,
             String resApkPath, String prefixPath) {
         synchronized (this) {
-            return addCommonOverlayPathNative(idmapPath, resApkPath, prefixPath);
+            return addCommonOverlayPathNative(themeApkPath, resApkPath, prefixPath);
         }
     }
 
-    private native final int addCommonOverlayPathNative(String idmapPath,
+    private native final int addCommonOverlayPathNative(String themeApkPath,
             String resApkPath, String prefixPath);
 
     /**

@@ -157,7 +157,8 @@ fail:
     }
 
     int create_idmap(const char *target_apk_path, const char *overlay_apk_path,
-            uint32_t target_hash, uint32_t overlay_hash, uint32_t **data, size_t *size)
+            const char *cache_path, uint32_t target_hash, uint32_t overlay_hash, uint32_t **data,
+            size_t *size)
     {
         uint32_t target_crc, overlay_crc;
 
@@ -168,13 +169,14 @@ fail:
         overlay_crc = 0;
 
         AssetManager am;
-        bool b = am.createIdmap(target_apk_path, overlay_apk_path, target_crc, overlay_crc,
-                target_hash, overlay_hash, data, size);
+        bool b = am.createIdmap(target_apk_path, overlay_apk_path, cache_path, target_crc,
+                overlay_crc, target_hash, overlay_hash, data, size);
         return b ? 0 : -1;
     }
 
     int create_and_write_idmap(const char *target_apk_path, const char *overlay_apk_path,
-            uint32_t target_hash, uint32_t overlay_hash, int fd, bool check_if_stale)
+            const char *cache_path, uint32_t target_hash, uint32_t overlay_hash, int fd,
+            bool check_if_stale)
     {
         if (check_if_stale) {
             if (!is_idmap_stale_fd(target_apk_path, overlay_apk_path, fd)) {
@@ -186,7 +188,7 @@ fail:
         uint32_t *data = NULL;
         size_t size;
 
-        if (create_idmap(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
+        if (create_idmap(target_apk_path, overlay_apk_path, cache_path, target_hash, overlay_hash,
                 &data, &size) == -1) {
             return -1;
         }
@@ -202,7 +204,7 @@ fail:
 }
 
 int idmap_create_path(const char *target_apk_path, const char *overlay_apk_path,
-        uint32_t target_hash, uint32_t overlay_hash,
+        const char *cache_path, uint32_t target_hash, uint32_t overlay_hash,
         const char *idmap_path)
 {
     if (!is_idmap_stale_path(target_apk_path, overlay_apk_path, idmap_path)) {
@@ -215,8 +217,8 @@ int idmap_create_path(const char *target_apk_path, const char *overlay_apk_path,
         return EXIT_FAILURE;
     }
 
-    int r = create_and_write_idmap(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
-            fd, false);
+    int r = create_and_write_idmap(target_apk_path, overlay_apk_path, cache_path,
+                    target_hash, overlay_hash, fd, false);
     close(fd);
     if (r != 0) {
         unlink(idmap_path);
@@ -225,10 +227,9 @@ int idmap_create_path(const char *target_apk_path, const char *overlay_apk_path,
 }
 
 int idmap_create_fd(const char *target_apk_path, const char *overlay_apk_path,
-        uint32_t target_hash, uint32_t overlay_hash,
-        int fd)
+        const char *cache_path, uint32_t target_hash, uint32_t overlay_hash, int fd)
 {
-    return create_and_write_idmap(target_apk_path, overlay_apk_path, target_hash, overlay_hash,
-            fd, true) == 0 ?
+    return create_and_write_idmap(target_apk_path, overlay_apk_path, cache_path, target_hash,
+                overlay_hash, fd, true) == 0 ?
         EXIT_SUCCESS : EXIT_FAILURE;
 }

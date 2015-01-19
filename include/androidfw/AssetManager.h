@@ -101,7 +101,7 @@ public:
      * newly-added asset source.
      */
     bool addAssetPath(const String8& path, int32_t* cookie);
-    bool addOverlayPath(const String8& path, int32_t* cookie,
+    bool addOverlayPath(const String8& idmapPath, const String8& overlayApkpath, int32_t* cookie,
                  const String8& resApkPath, const String8& targetPkgPath,
                  const String8& prefixPath);
     bool addCommonOverlayPath(const String8& path, int32_t* cookie,
@@ -238,7 +238,7 @@ public:
      * Generate idmap data to translate resources IDs between a package and a
      * corresponding overlay package.
      */
-    bool createIdmap(const char* targetApkPath, const char* overlayApkPath,
+    bool createIdmap(const char* targetApkPath, const char* overlayApkPath, const char* cache_path,
         uint32_t targetCrc, uint32_t overlayCrc,
         time_t targetMtime, time_t overlayMtime,
         uint32_t** outData, size_t* outSize);
@@ -307,7 +307,7 @@ private:
 
     String8 getPkgName(const char *apkPath);
 
-    String8 getOverlayResPath(const char* targetApkPath, const char* overlayApkPath);
+    String8 getOverlayResPath(const char* cachePath);
 
     class SharedZip : public RefBase {
     public:
