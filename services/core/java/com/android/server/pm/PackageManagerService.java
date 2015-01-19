@@ -365,8 +365,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     private static String sPreferredInstructionSet;
 
     final ServiceThread mHandlerThread;
-    private static final String IDMAP_PREFIX = "/data/resource-cache/";
-    private static final String IDMAP_SUFFIX = "@idmap";
 
     //Where overlays are be found in a theme APK
     private static final String APK_PATH_TO_OVERLAY = "assets/overlays/";
@@ -375,7 +373,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     private static final String APK_PATH_TO_ICONS = "assets/icons/";
 
     private static final String COMMON_OVERLAY = ThemeUtils.COMMON_RES_TARGET;
-    private static final String APK_PATH_TO_COMMON_OVERLAY = APK_PATH_TO_OVERLAY + COMMON_OVERLAY;
 
     private static final long PACKAGE_HASH_EXPIRATION = 3*60*1000; // 3 minutes
     private static final long COMMON_RESOURCE_EXPIRATION = 3*60*1000; // 3 minutes
@@ -1445,6 +1442,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         mInstaller = installer;
 
         getDefaultDisplayMetrics(context, mMetrics);
+
+        removeLegacyResourceCache();
 
         SystemConfig systemConfig = SystemConfig.getInstance();
         mGlobalGids = systemConfig.getGlobalGids();
@@ -4226,7 +4225,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
-        if (mInstaller.idmap(pkg.baseCodePath, opkg.baseCodePath, sharedGid,
+        final String cachePath =
+                ThemeUtils.getTargetCacheDir(pkg.packageName, opkg.packageName);
+        if (mInstaller.idmap(pkg.baseCodePath, opkg.baseCodePath, cachePath, sharedGid,
                 getPackageHashCode(pkg), getPackageHashCode(opkg)) != 0) {
             Slog.e(TAG, "Failed to generate idmap for " + pkg.baseCodePath +
                     " and " + opkg.baseCodePath);
@@ -6760,14 +6761,12 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         if (hasCommonResources(pkg)
                 && shouldCompileCommonResources(pkg)) {
-            ThemeUtils.createResourcesDirIfNotExists(COMMON_OVERLAY,
-                    pkg.applicationInfo.publicSourceDir);
+            ThemeUtils.createResourcesDirIfNotExists(COMMON_OVERLAY, pkg.packageName);
             compileResources(COMMON_OVERLAY, pkg);
             mAvailableCommonResources.put(pkg.packageName, System.currentTimeMillis());
         }
 
-        ThemeUtils.createResourcesDirIfNotExists(target,
-                pkg.applicationInfo.publicSourceDir);
+        ThemeUtils.createResourcesDirIfNotExists(target, pkg.packageName);
         compileResources(target, pkg);
     }
 
@@ -6847,7 +6846,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     private void compileResourcesWithAapt(String target, PackageParser.Package pkg)
             throws Exception {
         String internalPath = APK_PATH_TO_OVERLAY + target;
-        String resPath = ThemeUtils.getResDir(target, pkg);
+        String resPath = ThemeUtils.getTargetCacheDir(target, pkg);
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
         int pkgId;
         if ("android".equals(target)) {
@@ -6861,7 +6860,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         boolean hasCommonResources = (hasCommonResources(pkg) && !COMMON_OVERLAY.equals(target));
         if (mInstaller.aapt(pkg.baseCodePath, internalPath, resPath, sharedGid, pkgId,
                 pkg.applicationInfo.targetSdkVersion,
-                hasCommonResources ? ThemeUtils.getResDir(COMMON_OVERLAY, pkg)
+                hasCommonResources ? ThemeUtils.getTargetCacheDir(COMMON_OVERLAY, pkg)
                         + File.separator + "resources.apk" : "") != 0) {
             throw new AaptException("Failed to run aapt");
         }
@@ -6889,21 +6888,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                     mOverlays.remove(target);
                 }
             }
-
-            PackageParser.Package targetPkg = mPackages.get(target);
-            if (targetPkg != null) {
-                String idmapPath = getIdmapPath(targetPkg, opkg);
-                new File(idmapPath).delete();
-            }
-
-            // recursively delete the cached resource directory
-            String resPath = ThemeUtils.getResDir(target, opkg);
-            recursiveDelete(new File(resPath));
         }
 
-        // Cleanup icons
-        String iconResources = ThemeUtils.getIconPackDir(opkg.packageName);
-        recursiveDelete(new File(iconResources));
+        // Now simply delete the root overlay cache directory and all its contents
+        recursiveDelete(new File(ThemeUtils.getOverlayResourceCacheDir(opkg.packageName)));
     }
 
     private void uninstallThemeForApp(PackageParser.Package appPkg) {
@@ -6911,8 +6899,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (map == null) return;
 
         for(PackageParser.Package opkg : map.values()) {
-           String idmapPath = getIdmapPath(appPkg, opkg);
-           new File(idmapPath).delete();
+           String cachePath = ThemeUtils.getTargetCacheDir(appPkg.packageName, opkg.packageName);
+           recursiveDelete(new File(cachePath));
         }
     }
 
@@ -6950,20 +6938,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         resFile.delete();
     }
 
-    private String getIdmapPath(PackageParser.Package targetPkg, PackageParser.Package overlayPkg) {
-        String targetPathFlat = targetPkg.baseCodePath.replaceAll("/", "@");
-        if (targetPathFlat.startsWith("@")) targetPathFlat = targetPathFlat.substring(1);
-
-        String overlayPkgFlat = overlayPkg.baseCodePath.replaceAll("/", "@");
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(ThemeUtils.IDMAP_PREFIX);
-        sb.append(targetPathFlat);
-        sb.append(overlayPkgFlat);
-        sb.append(ThemeUtils.IDMAP_SUFFIX);
-        return sb.toString();
-    }
-
     /**
      * Checks for existance of resources.arsc in target apk, then
      * Compares the 32 bit hash of the target and overlay to those stored
@@ -6994,7 +6968,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         int targetHash = getPackageHashCode(targetPkg);
         int overlayHash = getPackageHashCode(overlayPkg);
 
-        File idmap = new File(getIdmapPath(targetPkg, overlayPkg));
+        File idmap =
+                new File(ThemeUtils.getIdmapPath(targetPkg.packageName, overlayPkg.packageName));
         if (!idmap.exists())
             return true;
 
@@ -14328,5 +14303,24 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return 0;
+    }
+
+    /**
+     * The new resource cache structure does not flatten the paths for idmaps, so this method
+     * checks for files that end with @idmap and assumes this indicates the older format and
+     * removes all files and directories from the resource cache so that it can be rebuilt
+     * using the new format.
+     */
+    private static void removeLegacyResourceCache() {
+        File cacheDir = new File(ThemeUtils.RESOURCE_CACHE_DIR);
+        if (cacheDir.exists()) {
+            for (File f : cacheDir.listFiles()) {
+                if (f.getName().endsWith(ThemeUtils.IDMAP_SUFFIX)) {
+                    Log.i(TAG, "Removing old resource cache");
+                    FileUtils.deleteContents(new File(ThemeUtils.RESOURCE_CACHE_DIR));
+                    return;
+                }
+            }
+        }
     }
 }
