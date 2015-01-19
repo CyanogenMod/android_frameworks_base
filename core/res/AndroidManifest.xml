@@ -2473,7 +2473,26 @@
         android:description="@string/permdesc_interceptSmsSent"
         android:protectionLevel="signature" />
 
-    <!-- Allows an application to broadcast an SMS receipt notification -->
+    <!-- Allows an application to add an address to the whitelisted protected sms
+         list
+         @hide -->
+    <permission android:name="android.permission.MODIFY_PROTECTED_SMS_LIST"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_modifyProtectedSmsList"
+        android:description="@string/permdesc_modifyProtectedSmsList"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to receive sms (usually for auth or registration)
+         from whitelisted addresses
+         @hide -->
+    <permission android:name="android.permission.RECEIVE_PROTECTED_SMS"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_receiveProtectedSms"
+        android:description="@string/permdesc_receiveProtectedSms"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to broadcast an SMS receipt notification.
+         Not for use by third-party applications. -->
     <permission android:name="android.permission.BROADCAST_SMS"
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_broadcastSmsReceived"

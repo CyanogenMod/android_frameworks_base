@@ -234,5 +234,6 @@
 
     <!-- Default value of Settings.System.ENABLE_PEOPLE_LOOKUP -->
     <integer name="def_people_lookup">1</integer>
-
+    <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
+    <string-array name="def_protected_sms_list_values"></string-array>
 </resources>
