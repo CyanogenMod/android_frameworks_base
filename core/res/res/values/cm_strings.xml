@@ -45,6 +45,16 @@
     <!-- label for item that screenshots in phone options dialog -->
     <string name="global_action_screenshot">Screenshot</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveProtectedSms">receive protected SMS</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveProtectedSms">Allows the app to receive an incoming protected SMS.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_modifyProtectedSmsList">modify protected SMS list</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_modifyProtectedSmsList">Allows the app to modify the protected sms address list.</string>
+
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_security">Security</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->

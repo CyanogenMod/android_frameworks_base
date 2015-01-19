@@ -4599,6 +4599,12 @@ public final class Settings {
         public static final String PARENTAL_CONTROL_REDIRECT_URL = "parental_control_redirect_url";
 
         /**
+         * Known good originating source sms addresses
+         * @hide
+         */
+        public static final String PROTECTED_SMS_ADDRESSES = "protected_sms_addresses";
+
+        /**
          * Settings classname to launch when Settings is clicked from All
          * Applications.  Needed because of user testing between the old
          * and new Settings apps.
