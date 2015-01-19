@@ -77,9 +77,12 @@ static const char* kAssetsRoot = "assets";
 static const char* kAppZipName = NULL; //"classes.jar";
 static const char* kSystemAssets = "framework/framework-res.apk";
 static const char* kCMSDKAssets = "framework/org.cyanogenmod.platform-res.apk";
-static const char* kResourceCache = "resource-cache";
 static const char* kAndroidManifest = "AndroidManifest.xml";
 static const int   kComposedIconAsset = 128;
+
+#ifdef HAVE_ANDROID_OS
+static const char* kResourceCache = "resource-cache";
+#endif
 
 static const char* kExcludeExtension = ".EXCLUDE";
 
@@ -96,49 +99,6 @@ const char* AssetManager::IDMAP_DIR = "/data/resource-cache";
 const char* AssetManager::APK_EXTENSION = ".apk";
 
 namespace {
-    String8 idmapPathForPackagePath(const String8& pkgPath, const String8& targetPkgPath)
-    {
-        const char* root = getenv("ANDROID_DATA");
-        LOG_ALWAYS_FATAL_IF(root == NULL, "ANDROID_DATA not set");
-        String8 path(root);
-        path.appendPath(kResourceCache);
-
-        char buf[256]; // 256 chars should be enough for anyone...
-        strncpy(buf, targetPkgPath.string(), 255);
-        buf[255] = '\0';
-        char* filename = buf;
-        while (*filename && *filename == '/') {
-            ++filename;
-        }
-        char* p = filename;
-        while (*p) {
-            if (*p == '/') {
-                *p = '@';
-            }
-            ++p;
-        }
-        path.appendPath(filename);
-        path.append("@");
-
-        strncpy(buf, pkgPath.string(), 255);
-        buf[255] = '\0';
-        filename = buf;
-        while (*filename && *filename == '/') {
-            ++filename;
-        }
-        p = filename;
-        while (*p) {
-            if (*p == '/') {
-                *p = '@';
-            }
-            ++p;
-        }
-        path.append(filename);
-        path.append("@idmap");
-
-        return path;
-    }
-
     /*
      * Like strdup(), but uses C++ "new" operator instead of malloc.
      */
@@ -155,13 +115,6 @@ namespace {
         memcpy(newStr, str, len+1);
 
         return newStr;
-    }
-
-    static String8 flatten_path(const char *path)
-    {
-        String16 tmp(path);
-        tmp.replaceAll('/', '@');
-        return String8(tmp);
     }
 }
 
@@ -289,16 +242,14 @@ bool AssetManager::addAssetPath(const String8& path, int32_t* cookie)
  * Our resources.arsc will reference foo.png's path as "res/drawable/foo.png"
  * so we need "assets/com.android.launcher/" as a prefix
  */
-bool AssetManager::addOverlayPath(const String8& packagePath, int32_t* cookie,
-        const String8& resApkPath, const String8& targetPkgPath,
+bool AssetManager::addOverlayPath(const String8& idmapPath, const String8& overlayPackagePath,
+        int32_t* cookie, const String8& resApkPath, const String8& targetPkgPath,
         const String8& prefixPath)
 {
-    const String8 idmapPath = idmapPathForPackagePath(packagePath, targetPkgPath);
-
     AutoMutex _l(mLock);
 
-    ALOGV("package path: %s, idmap Path: %s, resApkPath %s, targetPkgPath: %s",
-           packagePath.string(), idmapPath.string(),
+    ALOGV("overlayApkPath: %s, idmap Path: %s, resApkPath %s, targetPkgPath: %s",
+           overlayPackagePath.string(), idmapPath.string(),
            resApkPath.string(),
            targetPkgPath.string());
 
@@ -325,9 +276,9 @@ bool AssetManager::addOverlayPath(const String8& packagePath, int32_t* cookie,
     }
     delete idmap;
 
-    if (overlayPath != packagePath) {
+    if (overlayPath != overlayPackagePath) {
         ALOGW("idmap file %s inconcistent: expected path %s does not match actual path %s\n",
-                idmapPath.string(), packagePath.string(), overlayPath.string());
+                idmapPath.string(), overlayPackagePath.string(), overlayPath.string());
         return false;
     }
     if (access(targetPath.string(), R_OK) != 0) {
@@ -363,25 +314,25 @@ bool AssetManager::addOverlayPath(const String8& packagePath, int32_t* cookie,
     return true;
  }
 
-bool AssetManager::addCommonOverlayPath(const String8& packagePath, int32_t* cookie,
+bool AssetManager::addCommonOverlayPath(const String8& themePackagePath, int32_t* cookie,
         const String8& resApkPath, const String8& prefixPath)
 {
     AutoMutex _l(mLock);
 
-    ALOGV("targetApkPath: %s, resApkPath %s, prefixPath %s",
-            packagePath.string(), resApkPath.string(), prefixPath.string());
+    ALOGV("themePackagePath: %s, resApkPath %s, prefixPath %s",
+            themePackagePath.string(), resApkPath.string(), prefixPath.string());
 
     // Skip if we have it already.
     for (size_t i = 0; i < mAssetPaths.size(); ++i) {
-        if (mAssetPaths[i].path == packagePath && mAssetPaths[i].resApkPath == resApkPath) {
+        if (mAssetPaths[i].path == themePackagePath && mAssetPaths[i].resApkPath == resApkPath) {
             *cookie = static_cast<int32_t>(i + 1);
             return true;
         }
     }
 
     asset_path oap;
-    oap.path = packagePath;
-    oap.type = ::getFileType(packagePath.string());
+    oap.path = themePackagePath;
+    oap.type = ::getFileType(themePackagePath.string());
     oap.resApkPath = resApkPath;
     oap.prefixPath = prefixPath;
     mAssetPaths.add(oap);
@@ -494,19 +445,9 @@ String8 AssetManager::getBasePackageName(uint32_t index)
     return mBasePackageName;
 }
 
-String8 AssetManager::getOverlayResPath(const char* targetApkPath, const char* overlayApkPath)
+String8 AssetManager::getOverlayResPath(const char* cachePath)
 {
-    //Remove leading '/'
-    if (strlen(overlayApkPath) >= 2 && *overlayApkPath == '/') {
-        overlayApkPath++;
-    }
-    String8 overlayApkPathFlat = flatten_path(overlayApkPath);
-    String8 targetPkgName = getPkgName(targetApkPath);
-
-    String8 resPath(AssetManager::IDMAP_DIR);
-    resPath.appendPath(overlayApkPathFlat);
-    resPath.append("@");
-    resPath.append(targetPkgName);
+    String8 resPath(cachePath);
     resPath.append("/");
     resPath.append("resources");
     resPath.append(AssetManager::APK_EXTENSION);
@@ -514,7 +455,7 @@ String8 AssetManager::getOverlayResPath(const char* targetApkPath, const char* o
 }
 
 bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApkPath,
-        uint32_t targetCrc, uint32_t overlayCrc,
+        const char *cache_path, uint32_t targetCrc, uint32_t overlayCrc,
         time_t targetMtime, time_t overlayMtime,
         uint32_t** outData, size_t* outSize)
 {
@@ -523,7 +464,7 @@ bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApk
     ResTable tables[2];
 
     //Our overlay APK might use an external restable
-    String8 resPath = getOverlayResPath(targetApkPath, overlayApkPath);
+    String8 resPath = getOverlayResPath(cache_path);
 
     for (int i = 0; i < 2; ++i) {
         asset_path ap;

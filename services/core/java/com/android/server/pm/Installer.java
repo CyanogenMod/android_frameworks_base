@@ -97,13 +97,15 @@ public final class Installer extends SystemService {
                 debuggable, outputPath);
     }
 
-    public int idmap(String targetApkPath, String overlayApkPath, int uid,
-                     int targetHash, int overlayHash) {
+    public int idmap(String targetApkPath, String overlayApkPath, String cachePath,
+            int uid, int targetHash, int overlayHash) {
         StringBuilder builder = new StringBuilder("idmap");
         builder.append(' ');
         builder.append(targetApkPath);
         builder.append(' ');
         builder.append(overlayApkPath);
+        builder.append(' ');
+        builder.append(cachePath);
         builder.append(' ');
         builder.append(uid);
         builder.append(' ');
