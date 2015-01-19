@@ -157,8 +157,8 @@ public class ImageUtils {
                 return null;
             }
             WallpaperManager wm = WallpaperManager.getInstance(context);
-            int outWidth = wm.getDesiredMinimumWidth();
-            int outHeight = wm.getDesiredMinimumHeight();
+            int outWidth = 1080;//wm.getDesiredMinimumWidth();
+            int outHeight = 1280;//wm.getDesiredMinimumHeight();
             stream = getOriginalKeyguardStream(pkgName, context);
             if (stream == null) {
                 return null;
