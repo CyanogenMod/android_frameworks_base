@@ -124,7 +124,7 @@
   <string name="app_ops_toggle_wifi">WLAN ein-/auszuschalten</string>
   <string name="app_ops_toggle_nfc">NFC an-/auszuschalten</string>
   <string name="app_ops_use_alarm_volume">die Weckerlautstärke zu ändern</string>
-  <string name="app_ops_use_audio_focus">denm Audiofokus zu ändern</string>
+  <string name="app_ops_use_audio_focus">den Audiofokus zu ändern</string>
   <string name="app_ops_use_bluetooth_volume">die Bluetooth-Laustärke zu ändern</string>
   <string name="app_ops_use_master_volume">die Gesamtlautstärke zu ändern</string>
   <string name="app_ops_use_media_buttons">Medienschaltflächen zu nutzen</string>

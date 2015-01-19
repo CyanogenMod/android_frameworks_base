@@ -264,7 +264,7 @@
   <string name="permlab_readCellBroadcasts">Messagë vun Zelliwwerdrounge liesen</string>
   <string name="permdesc_readCellBroadcasts">Erlaabt der App, Messagë vun Zelliwwerdroungen ze liesen déi vun dengem Apparat empfaange ginn. Zelliwwerdrounge ginn op verschiddene Plaze verschéckt fir virun Noutfallsituatiounen ze warnen. Béisaarteg Appe kéinten d\'Leeschtung oder de Betrieb vun dengem Apparat beanträchtege wann eng Noutfall-Zelliwwerdroung empfaange gëtt.</string>
   <string name="permlab_sendSms">SMS-Messagë schécken</string>
-  <string name="permdesc_sendSms">Erlaabt der App, SMSen ze schécken. Doduerch kéinten onerwaarte Käschten entstoen. Béiswëllen Appe kéinten dech Sue kaschten andeem se Messagen ouni deng Bestätegung verschécken.</string>
+  <string name="permdesc_sendSms">Erlaabt der App, SMSen ze schécken. Doduerch kéinten onerwaart Käschten entstoen. Béiswëlleg Appe kéinten dech Sue kaschten andeem se Messagen ouni deng Bestätegung verschécken.</string>
   <string name="permlab_sendRespondViaMessageRequest">Äntwert-iwwer-SMS/MMS-Rendezvouse schécken</string>
   <string name="permdesc_sendRespondViaMessageRequest">Erlaabt der App, Ufroen un aner SMS/MMS-Appen ze schécken, fir Äntwert-per-SMS/MMS-Evenementer fir erakommend Uriff ze veraarbechten.</string>
   <string name="permlab_readSms">SMSen oder MMSe liesen</string>
@@ -539,7 +539,7 @@
   <string name="permlab_hardware_test">Hardware testen</string>
   <string name="permdesc_hardware_test">Erlaabt der App, verschidde Peripherie-Apparaten ze steieren, fir d\'Hardware ze testen.</string>
   <string name="permlab_callPhone">Telefonsnummeren direkt uruffen</string>
-  <string name="permdesc_callPhone">Erlaabt der App, Telefonsnummeren ouni deng Awierkung unzeruffen. Doduerch kéinten onerwaarte Käschten oder Uriff entstoen. D\'App kann heiduerch awer keng Noutfallnummeren uruffen. Béiswëlleg Appe kéinte Käschte verursaachen andeem se Nummeren ouni deng Bestätegung uruffen.</string>
+  <string name="permdesc_callPhone">Erlaabt der App, Telefonsnummeren ouni deng Awierkung unzeruffen. Doduerch kéinten onerwaart Käschten oder Uriff entstoen. D\'App kann heiduerch awer keng Noutfallnummeren uruffen. Béiswëlleg Appe kéinte Käschte verursaachen andeem se Nummeren ouni deng Bestätegung uruffen.</string>
   <string name="permlab_callPrivileged">All Telefonsnummeren direkt uruffen</string>
   <string name="permdesc_callPrivileged">Erlaabt der App, ouni däin Agräifen eng Telefonsnummer oder Noutruffnummer ze wielen. Schiedlech Appe kënne sou onnéideg an illegal Noutriff maachen.</string>
   <string name="permlab_performCdmaProvisioning" product="tablet">CDMA-Tabletariichtung direkt starten</string>

@@ -975,7 +975,13 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="emailTypeMobile">مۆبایل</string>
   <string name="postalTypeCustom">تایبەت</string>
   <string name="postalTypeHome">ماڵەوە</string>
+  <string name="postalTypeWork">کار</string>
+  <string name="postalTypeOther">دیکە</string>
+  <string name="imTypeCustom">ده‌ستکرد</string>
   <string name="imTypeHome">ماڵه‌وه‌</string>
+  <string name="imTypeWork">کار</string>
+  <string name="imTypeOther">دیکە</string>
+  <string name="imProtocolCustom">دەستکرد</string>
   <string name="imProtocolAim">AIM</string>
   <string name="imProtocolMsn">Windows Live</string>
   <string name="imProtocolYahoo">یاهوو</string>
@@ -985,6 +991,11 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="imProtocolIcq">ICQ</string>
   <string name="imProtocolJabber">Jabber</string>
   <string name="imProtocolNetMeeting">NetMeeting</string>
+  <string name="orgTypeWork">کار</string>
+  <string name="orgTypeOther">دیکە</string>
+  <string name="orgTypeCustom">دەستکرد</string>
+  <string name="relationTypeCustom">دەستکرد</string>
+  <string name="relationTypeAssistant">یاریدەدەر</string>
   <string name="relationTypeBrother">برا</string>
   <string name="relationTypeChild">مناڵ</string>
   <string name="relationTypeDomesticPartner">هاوبەشی خۆماڵی</string>
@@ -998,6 +1009,10 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="relationTypeRelative">خزم</string>
   <string name="relationTypeSister">خوشک</string>
   <string name="relationTypeSpouse">هاوسەر</string>
+  <string name="sipAddressTypeCustom">دەستکرد</string>
+  <string name="sipAddressTypeHome">ماڵەوە</string>
+  <string name="sipAddressTypeWork">کار</string>
+  <string name="sipAddressTypeOther">دیکە</string>
   <string name="quick_contacts_not_available">هیچ به‌رنامه‌یه‌ک نه‌دۆزرایه‌وه‌ بۆ بینینی ئه‌م په‌یوه‌ندییه‌.</string>
   <string name="keyguard_password_enter_pin_code">نوسینی PIN کۆد</string>
   <string name="keyguard_password_enter_puk_code">نووسینی PUK لەگەڵ PIN کۆدی نوێ</string>
@@ -1040,6 +1055,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="lockscreen_network_locked_message">تۆڕ قوفڵکراوە</string>
   <string name="lockscreen_sim_puk_locked_message">سیمکارتەکە PUK-قوفڵکراوە.</string>
   <string name="lockscreen_sim_puk_locked_instructions">بینینی تێبینی بەکارهێنەر یان پەیوەندی بکە بە خزمەتگوزاری یارمەتیدەرەوە.</string>
+  <string name="lockscreen_sim_locked_message">سیمکارتەکە داخراوه‌.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">کردنەوەی سیمکارت\u2026</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">
         تۆ قوفڵی کێشانەکەت بە هەڵە لێداوە <xliff:g id="number">%d</xliff:g> جار.
@@ -1112,6 +1128,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="keyguard_accessibility_widget"><xliff:g id="کورته‌وێنه‌_index">%1$s</xliff:g> widget.</string>
   <string name="keyguard_accessibility_user_selector">هەڵبژاردەی بەکارهێنەر</string>
   <string name="keyguard_accessibility_status">ئاست</string>
+  <string name="keyguard_accessibility_camera">کامێرا</string>
   <string name="keygaurd_accessibility_media_controls">کۆنترۆڵی ڕاگه‌یێنه‌کان</string>
   <string name="keyguard_accessibility_widget_reorder_start">دوبارە کورته‌وێنه‌ەکە داوابکە.</string>
   <string name="keyguard_accessibility_widget_reorder_end">داواکردنی وێدجەکان کۆتایهات.</string>
@@ -1152,6 +1169,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="autofill_address_name_separator">\u0020</string>
   <string name="autofill_address_summary_name_format">$1$2$3</string>
   <string name="autofill_address_summary_separator">,\u0020</string>
+  <string name="autofill_address_summary_format">$1$2$3</string>
   <string name="autofill_attention_ignored_re">سەرنجدان|attn</string>
   <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
   <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
@@ -1211,6 +1229,16 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
      هیماکراوەکان. تێبینی: ئەم ڕێدانە لەوە ئەچێ پابەند نەبێت بە وێبگەڕە یاریدەدەرەکانەوە
      یان ئەو بەرنامانەی کە توانایی گەڕانی وێبیان هەبێت.</string>
   <string name="permlab_writeHistoryBookmarks">نوسینی په‌رتوکنیشانکه‌ری وێبگه‌ر و مێژو</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">ڕێگە بە
+        بەرنامە بدە کە گۆڕانکاری لە مێژووی گەڕانی وێنگەڕ و وێبگەنیشانەکراوەکانی ناو تابلێتەکەت بکات.
+        لەوانەیە ئەمە ڕێگە بە بەرنامە بدات کە دراوەی گەڕان بگۆڕێت یان پاکی بکاتەوە.  تێبینی:ئەم
+        ڕێگەپێدانە لەوانەیە کار نەکاتە سەر وێبگەڕە نابنەڕەتییەکان و دیکەی
+        ئەو بەرنامانەی کە توانستی وێبگەڕانیان هەیە.</string>
+  <string name="permdesc_writeHistoryBookmarks" product="default">ڕێگە بە
+        بەرنامە بدە کە گۆڕانکاری لە مێژووی گەڕانی وێنگەڕ و وێبگەنیشانەکراوەکانی ناو تابلێتەکەت بکات.
+        لەوانەیە ئەمە ڕێگە بە بەرنامە بدات کە دراوەی گەڕان بگۆڕێت یان پاکی بکاتەوە.  تێبینی:ئەم
+        ڕێگەپێدانە لەوانەیە کار نەکاتە سەر وێبگەڕە نابنەڕەتییەکان و دیکەی
+        ئەو بەرنامانەی کە توانستی وێبگەڕانیان هەیە.</string>
   <string name="permlab_setAlarm">دانانی زەنگ</string>
   <string name="permdesc_setAlarm">ڕێگە بە بەرنامە بدە بۆ دانانی زەنگی هۆشیارچالاککردن لە ناو
       بەرنامەیەکی دامەزراوی کاژێری هۆشیارکەرەوە. چەند بەرنامەیەکی کاژێری هۆشیارکەرەوە
@@ -1306,6 +1334,10 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
     <item quantity="one">1 چرکە پێشی ئێستا</item>
     <item quantity="other">1 چرکە پێشی ئێستا</item>
   </plurals>
+  <plurals name="abbrev_num_hours_ago">
+    <item quantity="one">١ کاتژمێر لەمەوپێش</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> کاتژمێر لەمەوپێش</item>
+  </plurals>
   <plurals name="abbrev_num_days_ago">
     <item quantity="one">دوێنێ</item>
     <item quantity="other"><xliff:g id="count">%d</xliff:g> ڕۆژ له‌مه‌وبه‌ر</item>
@@ -1328,6 +1360,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="VideoView_error_title">کێشەی ڤیدیۆ</string>
   <string name="VideoView_error_text_invalid_progressive_playback">ڤیدیۆکە لەکارە نیە لەسەر ئەم ئامێرە.</string>
   <string name="VideoView_error_text_unknown">ناتوانرێت ئەم ڤیدیۆیە لێدرێت</string>
+  <string name="VideoView_error_button">باشه‌</string>
   <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
   <string name="noon">"نیوەڕۆ"</string>
   <string name="Noon">"نیوەڕۆ"</string>
@@ -1354,7 +1387,10 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
         لە کارە</string>
   <string name="app_running_notification_text">دەستلێدان بۆ زانیاری زیاتر
 یان بەرنامەکە بوەستێنە.</string>
+  <string name="ok">باشه‌</string>
   <string name="cancel">هەڵوەشاندنەوە</string>
+  <string name="yes">باشه‌</string>
+  <string name="no">هەڵوەشاندنەوە</string>
   <string name="dialog_alert_title">ئاگاداری</string>
   <string name="loading">دامەزراندنی\u2026</string>
   <string name="capital_on">چالاککردن</string>
@@ -1372,6 +1408,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="anr_activity_process">چالاکی<xliff:g id="activity">%1$s</xliff:g> وەڵام ناداتەوە.\n\nئەتەوێت دایخەیت?</string>
   <string name="anr_application_process"><xliff:g id="application">%1$s</xliff:g> وەڵام ناداتەوە ئەتەوێت دایخەیت?</string>
   <string name="anr_process">پرۆسەکە<xliff:g id="پرۆسەکە">%1$s</xliff:g>وەڵام نادرێتەوە .\n\nئەتەوێت دایخەیت?</string>
+  <string name="force_close">باشه‌</string>
   <string name="report">ڕاپۆرت</string>
   <string name="wait">چاوەڕێ</string>
   <string name="webpage_unresponsive">ئەم پەڕەیە کارا نەماوە.\n\nئایا دەتەوێ دایبخەی؟</string>
@@ -1457,6 +1494,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="sms_short_code_details">ئەم <font fgcolor="#ffffb060">لەوە ئەچێ باڵانسی</font> مۆبایلەکەت بخوات.</string>
   <string name="sms_premium_short_code_details"><font fgcolor="#ffffb060">ئەمە باڵانسی مۆبایلەکەت دەخوات.</font></string>
   <string name="sms_short_code_confirm_allow">ناردن</string>
+  <string name="sms_short_code_confirm_deny">هەڵوەشاندنەوە</string>
   <string name="sms_short_code_remember_choice">بیرم بهێنەوە هەڵبژاردەکەم</string>
   <string name="sms_short_code_remember_undo_instruction">ئەتوانی ئەمە دواتر بگۆڕیت لە ڕێکخستن\u00A0وgt;\u00A0Apps\"</string>
   <string name="sms_short_code_confirm_always_allow">هەمیشە ڕێگە بدە</string>
@@ -1470,6 +1508,7 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="time_picker_dialog_title">دیاریکردنی کات</string>
   <string name="date_picker_dialog_title">دیاریکردنی ڕۆژ</string>
   <string name="date_time_set">دانان</string>
+  <string name="date_time_done">کراو</string>
   <string name="perms_new_perm_prefix"><font size="12" fgcolor="#ff33b5e5">تازە: </font></string>
   <string name="perms_description_app">ئامادەکرا لەلایەن <xliff:g id="app_name">%1$s</xliff:g>.</string>
   <string name="no_permissions">هیچ یارمەتیەک داوانەکراوە</string>
@@ -1481,15 +1520,19 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="usb_storage_button_mount">هەڵکردنی بیرگه‌ی USB</string>
   <string name="usb_storage_error_message" product="nosdcard">هەڵەیەک هەیە لە بەکار هێنانی بیرگەی USB بۆ بیرگه‌ی USB.</string>
   <string name="usb_storage_error_message" product="default">هەڵەیەک هەیە لە بەکار هێنانی بیرگەی هەڵگرتنی بۆ بیرگه‌ی USB.</string>
+  <string name="usb_storage_notification_title">USB بەسترایەوە</string>
   <string name="usb_storage_notification_message">دەست لێدە بۆ کۆپی کردنی فایلەکان بۆ/لە ناو کۆمپیوتەرەکەتدا.</string>
   <string name="usb_storage_stop_notification_title">کوژاندنەوەی بیرگه‌ی USB</string>
   <string name="usb_storage_stop_notification_message">دەست لێدە بۆ کوژاندنەوەی بیرگه‌ی USB.</string>
   <string name="usb_storage_stop_title">بیرگەی USB لە کارادایە</string>
   <string name="usb_storage_stop_message" product="nosdcard">پێش ئەوەی بیرگەی USB بکووژێنیتەوە، بیرگەی USB ئەندرۆیدەکەت لە ناو کۆمپیوتەرەکەت (\"بهێنەدەر\") دەربکێشە.</string>
   <string name="usb_storage_stop_message" product="default">پێش ئەوەی بیرگەی USB بکووژێنیتەوە، بیرگەی کارتی هەڵگرتنی ئەندرۆیدەکەت لە ناو کۆمپیوتەرەکەت (\"بهێنەدەر\") دەربکێشە.</string>
+  <string name="usb_storage_stop_button_mount">کوژاندنەوەی کۆگای USB</string>
   <string name="usb_storage_stop_error_message">هەڵەیەک ڕوویدا کاتی کووژاندنەوەی بیرگه‌ی USB. بزانە بیرگەی USB و هەڵگرتنی دەرهێنراون، پاشان دووبارە هەوڵبدەوە.</string>
+  <string name="dlg_confirm_kill_storage_users_title">هەڵکردنی کۆگای USB</string>
   <string name="dlg_confirm_kill_storage_users_text">ئەگەر بیرگه‌ی USB هەڵبکەیت، هەندێک بەرنامە کە لە ئێستادا بەکاریان ئەهێنی ئەوێستن و لەوە ئەچێ بەردەستیش نەبن تاکو بیرگه‌ی USB دەکوژێنیتەوە.</string>
   <string name="dlg_error_title">سەرکەوتو نەبوو USB فرمانی</string>
+  <string name="dlg_ok">باشه‌</string>
   <string name="usb_mtp_notification_title">په‌یوه‌ست کرا وەک ئامێری میدیا</string>
   <string name="usb_ptp_notification_title">پێکەوەبەستراوە وەک کامیرا</string>
   <string name="usb_cd_installer_notification_title">په‌یوه‌ست کرا وەک دابەزێنەر</string>
@@ -1542,12 +1585,16 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permlab_route_media_output">ڕێپیشاندەری بەرهەمی میدیا بە</string>
   <string name="permdesc_route_media_output">ڕێگە بە بەرنامەیەک بدە تاکو ڕێپیشاندەری بەرهەمی میدیا بکات بۆ دیکەی ئامێرە دەرەکییەکان.</string>
   <string name="permlab_access_keyguard_secure_storage">بەدەست گەیشتنی بیرگەی پارێزراوی تەختەکلیل</string>
+  <string name="permdesc_access_keyguard_secure_storage">ڕێگە بە بەرنامەیەک بدە تاکو دەست پێ ڕاگەیشتنی ببێت بۆ بیرگەی پارێزراوی کلیلەوشە.</string>
   <string name="permlab_control_keyguard">چاودێری پیشاندان و شاردنەوەی کلیل پارێز</string>
+  <string name="permdesc_control_keyguard">ڕێگە بە بەرنامەیەک بدە تاوەکو چاودێریی کلیلەوشە بکات.</string>
   <string name="tutorial_double_tap_to_zoom_message_short">دووجار دەست لێدە بۆ چاودێری گەورەکردنەوە</string>
   <string name="gadget_host_error_inflating">ناتوانرێت کورتە وێنۆچک‌ زیادبکرێت.</string>
   <string name="ime_action_go">بڕۆ</string>
+  <string name="ime_action_search">گه‌ڕان</string>
   <string name="ime_action_send">ناردن</string>
   <string name="ime_action_next">دواتر</string>
+  <string name="ime_action_done">کراو</string>
   <string name="ime_action_previous">پێشوو</string>
   <string name="ime_action_default">بەجێهێنان</string>
   <string name="dial_number_using">ژمارە بگرە\nبە بەکارهێنانی <xliff:g id="number" example="555">%s</xliff:g></string>
@@ -1659,7 +1706,11 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="description_direction_down">لادان بۆ خوارۆ بۆ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
   <string name="description_direction_left">\"لادانی چەپ بۆ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
   <string name="description_direction_right">لادانی ڕاست بۆ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
+  <string name="description_target_unlock">کردنەوە</string>
+  <string name="description_target_camera">کامێرا</string>
   <string name="description_target_silent">بێدەنگ</string>
+  <string name="description_target_soundon">کردنەوەی دەنگ</string>
+  <string name="description_target_search">گه‌ڕان</string>
   <string name="description_target_unlock_tablet">لایدە بۆ چالاککردن.</string>
   <string name="keyboard_headset_required_to_hear_password">بیستۆک ببەستەوە بۆ بیستنی دەنگی کلیلەکان کاتی نوسینی نهێنوشە.</string>
   <string name="keyboard_password_character_no_headset">خاڵ.</string>
@@ -1737,6 +1788,8 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="wifi_display_notification_connecting_message">پەیوەندی کردن بە <xliff:g id="name">%1$s</xliff:g></string>
   <string name="wifi_display_notification_connected_title">هاويشتنی شاشە</string>
   <string name="wifi_display_notification_connected_message">پەیوەندی کرا بە <xliff:g id="name">%1$s</xliff:g></string>
+  <string name="wifi_display_notification_disconnect">پچڕانی پەیوەندی</string>
+  <string name="kg_emergency_call_label">پەیوەندیی فریاگوزاری</string>
   <string name="kg_forgot_pattern_button_text">بیرچونی کێشانەکە</string>
   <string name="kg_wrong_pattern">کێشان هەڵە</string>
   <string name="kg_wrong_password">تێپەڕەوشەی هەڵە</string>
@@ -1749,16 +1802,60 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="kg_puk_enter_puk_hint">سیمکارتەکە لە کارکەوتوە ئێستا.PUK لێ بدە بۆ بەردەوام بوون. بۆ وردەکاری زیاتر پەیوەندی بکە بە ئۆپەراتۆر.</string>
   <string name="kg_puk_enter_pin_hint">کۆدێکی PIN بەخواستی خۆت دابنێ</string>
   <string name="kg_enter_confirm_pin_hint">کۆدی PIN دوپاتکەرەوە</string>
+  <string name="kg_sim_unlock_progress_dialog_message">کردنەوەی سیمکارت\u2026</string>
+  <string name="kg_password_wrong_pin_code">کۆدی PIN ناڕاستە.</string>
   <string name="kg_invalid_sim_pin_hint">(PIN)ەک بنووسه‌ که‌ ٤ بۆ ٨ ژماره‌ بێت.</string>
+  <string name="kg_invalid_sim_puk_hint">کۆدی PUK ده‌بێت 8 ژمارە یان زیاتر بێت.</string>
   <string name="kg_invalid_puk">دوبارە کۆدی PUK دروست تێبنووسەوە. هەوڵدانە دوبارەکراوەکان بۆ هەمیشە سیمکارتەکەت لاچالاک ئەکات.</string>
   <string name="kg_invalid_confirm_pin_hint" product="default">کۆدەکانی PIN لە یەکتر ناچن</string>
   <string name="kg_login_too_many_attempts">هەوڵی کێشانی ئێجگار زۆری شێوەئاسا</string>
   <string name="kg_login_instructions">بۆ کردنەوە، بە هەژماری گوگڵ بچۆ ژووره‌وه‌.</string>
   <string name="kg_login_username_hint">ناوی بەکارهێنەر (ئیمەیڵ)</string>
+  <string name="kg_login_password_hint">تێپەڕەوشە</string>
   <string name="kg_login_submit_button">چوونەژوورەوە</string>
   <string name="kg_login_invalid_input">ناو یان تێپه‌ڕوشه‌ ڕاست نییه‌.</string>
   <string name="kg_login_account_recovery_hint">ناو یان تێپەڕەوشەت لە بیرچووە\?\nVisit <b>google.com/accounts/recovery</b>.</string>
   <string name="kg_login_checking_password">تاقیکردنەوەی ئەژمێر\u2026</string>
+  <string name="kg_too_many_failed_pin_attempts_dialog_message">
+        بە هەڵە <xliff:g id="number">%d</xliff:g> جار PIN ت نووسیوە.
+        \n\nله‌ <xliff:g id="number">%d</xliff:g> چرکه‌دا سەرلەنوێ هەوڵبدەوە.
+    
+    .
+    </string>
+  <string name="kg_too_many_failed_password_attempts_dialog_message">
+        بەهەڵە <xliff:g id="number">%d</xliff:g> جار تێپەڕەوشەت لێداوە.
+        \n\nله‌ <xliff:g id="number">%d</xliff:g> چرکه‌دا سەرلەنوێ هەوڵبدەوە.
+    
+    .
+    </string>
+  <string name="kg_too_many_failed_pattern_attempts_dialog_message">
+        تۆ بە ناڕاست <xliff:g id="number">%d</xliff:g> جار چنراوی کردنەوەت کێشاوە.
+        \n\nلە <xliff:g id="number">%d</xliff:g> چرکەدا سەرلەنوێ هەوڵبدەوە.
+    </string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">
+       تۆ بە ناڕاست <xliff:g id="number">%d</xliff:g> times جار هەوڵی کردنەوەی تابلێته‌که‌ت داوە.
+       پاش <xliff:g id="number">%d</xliff:g> هه‌وڵی سه‌رنه‌که‌وتووی زیاتر،
+       تابلێته‌که‌ ڕێکدەخرێتەوە بۆ بنەڕەتی کارگە هەروەها هه‌موو دراوەکانی به‌کارهێنه‌ر بزر دەبن.
+    
+         
+    .
+    </string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="default">
+       تۆ بە ناڕاست <xliff:g id="number">%d</xliff:g> times جار هەوڵی کردنەوەی مۆبایلەکەت داوە.
+       پاش <xliff:g id="number">%d</xliff:g> هه‌وڵی سه‌رنه‌که‌وتووی زیاتر،
+       مۆبایلەکە ڕێکدەخرێتەوە بۆ بنەڕەتی کارگە هەروەها هه‌موو دراوەکانی به‌کارهێنه‌ر بزر دەبن.
+    
+         
+    .
+    </string>
+  <string name="kg_failed_attempts_now_wiping" product="tablet">
+       تۆ بە ناڕاست <xliff:g id="number">%d</xliff:g> جار هەوڵی کردنەوەی تابلێتەکەت داوە.
+       تابلێتەکە ڕێکدەسرێتەوە بۆ بنەڕەتی کارگە.
+    </string>
+  <string name="kg_failed_attempts_now_wiping" product="default">
+       تۆ بە ناڕاست <xliff:g id="number">%d</xliff:g> جار هەوڵی کردنەوەی مۆبایلەکەت داوە.
+       مۆبایلەکە ڕێکدەسرێتەوە بۆ بنەڕەتی کارگە.
+    </string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">
        تۆ بەهەڵە شیوازی کردنەوەت <xliff:g id="number">%d</xliff:g> جار کێشاوە.
        دوای <xliff:g id="number">%d</xliff:g> جاری دیکە هەوڵدانی هەڵە,

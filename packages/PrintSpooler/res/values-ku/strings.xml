@@ -18,6 +18,7 @@
   <string name="app_label">بەڕێوەبەری چاپکەر</string>
   <string name="advanced_settings_button">رێکخستنی چاپکەر</string>
   <string name="print_button">چاپکردن</string>
+  <string name="save_button">پاشەکەوتکردن</string>
   <string name="label_destination">ئامانج</string>
   <string name="label_copies">لەبەرگرتنەوەکان</string>
   <string name="label_paper_size">قەبارەی کاغەز</string>
