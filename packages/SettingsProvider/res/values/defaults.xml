@@ -231,4 +231,7 @@
     <!-- Default theme -->
     <string name="def_theme_package"></string>
     <string name="def_theme_components"></string>
+
+    <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
+    <string-array name="def_protected_sms_list_values"></string-array>
 </resources>
