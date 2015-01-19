@@ -111,10 +111,6 @@ public class KeyguardStatusView extends GridLayout {
         setEnableMarquee(screenOn);
         refresh();
         updateOwnerInfo();
-
-        // Disable elegant text height because our fancy colon makes the ymin value huge for no
-        // reason.
-        mClockView.setElegantTextHeight(false);
     }
 
     @Override
@@ -236,10 +232,6 @@ public class KeyguardStatusView extends GridLayout {
             }
 
             clockView24 = DateFormat.getBestDateTimePattern(locale, clockView24Skel);
-
-            // Use fancy colon.
-            clockView24 = clockView24.replace(':', '\uee01');
-            clockView12 = clockView12.replace(':', '\uee01');
 
             cacheKey = key;
         }
