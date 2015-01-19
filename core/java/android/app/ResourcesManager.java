@@ -228,7 +228,7 @@ public class ResourcesManager {
 
         if (overlayDirs != null) {
             for (String idmapPath : overlayDirs) {
-                assets.addOverlayPath(idmapPath, null, null, null);
+                assets.addOverlayPath(idmapPath, null, null, null, null);
             }
         }
 
@@ -579,9 +579,10 @@ public class ResourcesManager {
             String targetPackagePath = piTarget.applicationInfo.sourceDir;
             String prefixPath = ThemeUtils.getOverlayPathToTarget(basePackageName);
 
-            String resCachePath = ThemeUtils.getResDir(basePackageName, piTheme);
+            String resCachePath = ThemeUtils.getTargetCacheDir(piTarget.packageName, piTheme);
             String resApkPath = resCachePath + "/resources.apk";
-            int cookie = assets.addOverlayPath(themePath, resApkPath,
+            String idmapPath = ThemeUtils.getIdmapPath(piTarget.packageName, piTheme.packageName);
+            int cookie = assets.addOverlayPath(idmapPath, themePath, resApkPath,
                     targetPackagePath, prefixPath);
 
             if (cookie != 0) {
@@ -591,11 +592,12 @@ public class ResourcesManager {
         }
 
         if (!piTarget.isThemeApk && piTheme.mOverlayTargets.contains("android")) {
-            String resCachePath= ThemeUtils.getResDir(piAndroid.packageName, piTheme);
+            String resCachePath= ThemeUtils.getTargetCacheDir(piAndroid.packageName, piTheme);
             String prefixPath = ThemeUtils.getOverlayPathToTarget(piAndroid.packageName);
             String targetPackagePath = piAndroid.applicationInfo.publicSourceDir;
             String resApkPath = resCachePath + "/resources.apk";
-            int cookie = assets.addOverlayPath(themePath,
+            String idmapPath = ThemeUtils.getIdmapPath("android", piTheme.packageName);
+            int cookie = assets.addOverlayPath(idmapPath, themePath,
                     resApkPath, targetPackagePath, prefixPath);
             if (cookie != 0) {
                 assets.setThemePackageName(themePackageName);
@@ -692,7 +694,8 @@ public class ResourcesManager {
         if (themePackageName != null && !themePackageName.isEmpty()) {
             String themePath =  piTheme.applicationInfo.publicSourceDir;
             String prefixPath = ThemeUtils.COMMON_RES_PATH;
-            String resCachePath = ThemeUtils.getResDir(ThemeUtils.COMMON_RES_TARGET, piTheme);
+            String resCachePath =
+                    ThemeUtils.getTargetCacheDir(ThemeUtils.COMMON_RES_TARGET, piTheme);
             String resApkPath = resCachePath + "/resources.apk";
             int cookie = assets.addCommonOverlayPath(themePath, resApkPath,
                     prefixPath);
