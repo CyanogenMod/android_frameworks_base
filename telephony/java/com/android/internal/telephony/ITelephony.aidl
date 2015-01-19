@@ -504,6 +504,16 @@ interface ITelephony {
     void setCellInfoListRate(int rateInMillis);
 
     /**
+     * Adds a protected sms address to the {@link Settings.Secure.PROTECTED_SMS_ADDRESSES}
+     */
+    void addProtectedSmsAddress(String address);
+
+    /**
+     * Revokes a protected sms address from {@link Settings.Secure.PROTECTED_SMS_ADDRESSES}
+     */
+    boolean revokeProtectedSmsAddress(String address);
+
+    /**
      * get default sim
      * @return sim id
      */
