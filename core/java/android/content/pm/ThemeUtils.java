@@ -15,7 +15,6 @@
  */
 package android.content.pm;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -27,7 +26,6 @@ import android.content.res.Configuration;
 import android.content.res.ThemeConfig;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.FileUtils;
@@ -73,8 +71,7 @@ public class ThemeUtils {
     public static final String ICONS_PATH = "assets/icons/";
     public static final String COMMON_RES_PATH = "assets/overlays/common/";
     public static final String FONT_XML = "fonts.xml";
-    public static final String RESTABLE_EXTENSION = ".arsc";
-    public static final String IDMAP_PREFIX = "/data/resource-cache/";
+    public static final String RESOURCE_CACHE_DIR = "/data/resource-cache/";
     public static final String IDMAP_SUFFIX = "@idmap";
     public static final String COMMON_RES_SUFFIX = ".common";
     public static final String COMMON_RES_TARGET = "common";
@@ -143,8 +140,16 @@ public class ThemeUtils {
     }
 
     public static String getResTablePath(String targetPkgName, String overlayApkPath) {
-        String restablePath = getResDir(targetPkgName, overlayApkPath) + "/resources.arsc";
+        String restablePath = getTargetCacheDir(targetPkgName, overlayApkPath) + "/resources.arsc";
         return restablePath;
+    }
+
+    public static String getOverlayResourceCacheDir(String overlayPkgName) {
+        return RESOURCE_CACHE_DIR + overlayPkgName;
+    }
+
+    public static String getExternalResApkPath(String targetPkgName, String overlayPkgName) {
+        return getTargetCacheDir(targetPkgName, overlayPkgName) + File.separator + "resources.apk";
     }
 
     /*
@@ -153,22 +158,20 @@ public class ThemeUtils {
      * at install time and stored in the data partition.
      *
      */
-    public static String getResDir(String targetPkgName, PackageInfo overlayPkg) {
-        return getResDir(targetPkgName, overlayPkg.applicationInfo.publicSourceDir);
+    public static String getTargetCacheDir(String targetPkgName, PackageInfo overlayPkg) {
+        return getTargetCacheDir(targetPkgName, overlayPkg.packageName);
     }
 
-    public static String getResDir(String targetPkgName, PackageParser.Package overlayPkg) {
-        return getResDir(targetPkgName, overlayPkg.applicationInfo.publicSourceDir);
+    public static String getTargetCacheDir(String targetPkgName, PackageParser.Package overlayPkg) {
+        return getTargetCacheDir(targetPkgName, overlayPkg.packageName);
     }
 
-    public static String getResDir(String targetPkgName, String overlayApkPath) {
-        String restableName = overlayApkPath.replaceAll("/", "@") + "@" + targetPkgName;
-        if (restableName.startsWith("@")) restableName = restableName.substring(1);
-        return IDMAP_PREFIX + restableName;
+    public static String getTargetCacheDir(String targetPkgName, String overlayPkgName) {
+        return getOverlayResourceCacheDir(overlayPkgName) + File.separator + targetPkgName;
     }
 
     public static String getIconPackDir(String pkgName) {
-      return IDMAP_PREFIX + pkgName;
+      return getOverlayResourceCacheDir(pkgName) + File.separator + "icons";
     }
 
     public static String getIconHashFile(String pkgName) {
@@ -181,6 +184,10 @@ public class ThemeUtils {
 
     public static String getIconPackResPath(String pkgName) {
         return getIconPackDir(pkgName) + "/resources.arsc";
+    }
+
+    public static String getIdmapPath(String targetPkgName, String overlayPkgName) {
+        return getTargetCacheDir(targetPkgName, overlayPkgName) + File.separator + "idmap";
     }
 
     public static String getOverlayPathToTarget(String targetPkgName) {
@@ -198,7 +205,7 @@ public class ThemeUtils {
     }
 
     public static void createCacheDirIfNotExists() throws IOException {
-        File file = new File(IDMAP_PREFIX);
+        File file = new File(RESOURCE_CACHE_DIR);
         if (!file.exists() && !file.mkdir()) {
             throw new IOException("Could not create dir: " + file.toString());
         }
@@ -206,9 +213,10 @@ public class ThemeUtils {
                 | FileUtils.S_IRWXG | FileUtils.S_IROTH | FileUtils.S_IXOTH, -1, -1);
     }
 
-    public static void createResourcesDirIfNotExists(String targetPkgName, String overlayApkPath)
+    public static void createResourcesDirIfNotExists(String targetPkgName, String overlayPkgName)
             throws IOException {
-        File file = new File(getResDir(targetPkgName, overlayApkPath));
+        createDirIfNotExists(getOverlayResourceCacheDir(overlayPkgName));
+        File file = new File(getTargetCacheDir(targetPkgName, overlayPkgName));
         if (!file.exists() && !file.mkdir()) {
             throw new IOException("Could not create dir: " + file.toString());
         }
@@ -217,6 +225,7 @@ public class ThemeUtils {
     }
 
     public static void createIconDirIfNotExists(String pkgName) throws IOException {
+        createDirIfNotExists(getOverlayResourceCacheDir(pkgName));
         File file = new File(getIconPackDir(pkgName));
         if (!file.exists() && !file.mkdir()) {
             throw new IOException("Could not create dir: " + file.toString());
@@ -286,13 +295,19 @@ public class ThemeUtils {
         deleteFilesInDir(SYSTEM_THEME_ICON_CACHE_DIR);
     }
 
-    //Note: will not delete populated subdirs
+    //Note: WILL delete populated subdirs
     public static void deleteFilesInDir(String dirPath) {
-        File fontDir = new File(dirPath);
-        File[] files = fontDir.listFiles();
+        File dir = new File(dirPath);
+        File[] files = dir.listFiles();
         if (files != null) {
-            for(File file : fontDir.listFiles()) {
-                file.delete();
+            for(File file : files) {
+                if (file.isDirectory()) {
+                    deleteFilesInDir(file.getAbsolutePath());
+                }
+
+                if (!file.delete()) {
+                    Log.w(TAG, "Unable to delete " + file.getAbsolutePath());
+                }
             }
         }
     }
