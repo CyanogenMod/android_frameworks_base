@@ -1783,6 +1783,11 @@ public final class Settings {
         public static final String QS_LOCATION_ADVANCED = "qs_location_advanced";
 
         /**
+         * @hide
+         */
+        public static final String QS_WIFI_DETAIL = "qs_wifi_detail";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#AIRPLANE_MODE_ON} instead
          */
         @Deprecated
