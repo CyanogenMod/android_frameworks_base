@@ -40,6 +40,7 @@ import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
+import com.android.systemui.qs.tiles.CompassTile;
 import com.android.systemui.qs.tiles.DataTile;
 import com.android.systemui.qs.tiles.DdsTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
@@ -302,6 +303,8 @@ public class QSTileHost implements QSTile.Host {
                 return new RoamingTile(this);
             case QSConstants.TILE_DDS:
                 return new DdsTile(this);
+            case QSConstants.TILE_COMPASS:
+                return new CompassTile(this);
             case QSConstants.TILE_APN:
                 return new ApnTile(this);
             case QSConstants.TILE_PROFILES:
