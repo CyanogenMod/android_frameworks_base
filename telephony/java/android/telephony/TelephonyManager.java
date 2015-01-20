@@ -631,6 +631,8 @@ public class TelephonyManager {
             return getITelephony().getDeviceId();
         } catch (RemoteException ex) {
             return null;
+        } catch (NullPointerException ex) {
+            return null;
         }
     }
 
