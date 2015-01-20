@@ -19,10 +19,9 @@ package com.android.keyguard;
 import android.app.AlarmManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import android.provider.AlarmClock;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -31,32 +30,23 @@ import android.util.Slog;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
-import com.android.internal.util.cm.WeatherController;
-import com.android.internal.util.cm.WeatherControllerImpl;
 import com.android.internal.widget.LockPatternUtils;
 
 import java.util.Locale;
 
-public class KeyguardStatusView extends GridLayout implements
-        WeatherController.Callback  {
+public class KeyguardStatusView extends GridLayout {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardStatusView";
 
     private LockPatternUtils mLockPatternUtils;
 
-    private ImageView mWeatherIcon;
     private TextView mAlarmStatusView;
     private TextClock mDateView;
     private TextClock mClockView;
     private TextView mOwnerInfo;
-    private TextView mTemperatureText;
-    private TextView mWeatherCity;
-
-    private WeatherController mWeatherController;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -101,7 +91,6 @@ public class KeyguardStatusView extends GridLayout implements
 
     public KeyguardStatusView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mWeatherController = new WeatherControllerImpl(mContext);
     }
 
     private void setEnableMarquee(boolean enabled) {
@@ -117,9 +106,6 @@ public class KeyguardStatusView extends GridLayout implements
         mDateView = (TextClock) findViewById(R.id.date_view);
         mClockView = (TextClock) findViewById(R.id.clock_view);
         mOwnerInfo = (TextView) findViewById(R.id.owner_info);
-        mWeatherIcon = (ImageView) findViewById(R.id.weather_image);
-        mWeatherCity = (TextView) findViewById(R.id.city);
-        mTemperatureText = (TextView) findViewById(R.id.temperature);
         mLockPatternUtils = new LockPatternUtils(getContext());
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();
         setEnableMarquee(screenOn);
@@ -194,14 +180,12 @@ public class KeyguardStatusView extends GridLayout implements
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
-        mWeatherController.addCallback(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
-        mWeatherController.removeCallback(this);
     }
 
     public int getAppWidgetId() {
@@ -221,20 +205,6 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     public boolean hasOverlappingRendering() {
         return false;
-    }
-
-    @Override
-    public void onWeatherChanged(WeatherController.WeatherInfo info) {
-        if (info.temp == null || info.condition == null) {
-            mTemperatureText.setText(null);
-            mTemperatureText.setText(0);
-            mWeatherCity.setText("--");
-            mWeatherIcon.setImageDrawable(null);
-        } else {
-            mTemperatureText.setText(info.temp);
-            mWeatherCity.setText(info.city);
-            mWeatherIcon.setImageDrawable(info.conditionDrawable);
-        }
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
