@@ -49,8 +49,6 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.android.internal.util.cm.WeatherController;
-import com.android.internal.util.cm.WeatherControllerImpl;
 import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.BatteryLevelTextView;
@@ -61,6 +59,8 @@ import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.UserInfoController;
+import com.android.systemui.statusbar.policy.WeatherController;
+import com.android.systemui.statusbar.policy.WeatherControllerImpl;
 
 /**
  * The view to manage the header area in the expanded status bar.
