@@ -85,6 +85,10 @@
     <!-- [CHAR LIMIT=130] Location detail panel, description for sensors only mode -->
     <string name="quick_settings_location_detail_mode_sensors_only_description">Use GPS to determine your location</string>
 
+
+    <string name="quick_settings_compass_value" translatable="false"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_off">Compass off</string>
+    <string name="quick_settings_compass_init">Initializing\u2026</string>
     <!-- Task Manager -->
     <string name="tasklistview_title">Task Manager</string>
     <string name="message_switch_fail">Can not switch to this task, because it has no interface.</string>
