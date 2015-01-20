@@ -31,6 +31,7 @@ import android.provider.ThemesContract;
 import android.provider.ThemesContract.ThemesColumns;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.WindowManager;
 import android.webkit.URLUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -159,8 +160,12 @@ public class ImageUtils {
                 return null;
             }
             WallpaperManager wm = WallpaperManager.getInstance(context);
-            int outWidth = wm.getDesiredMinimumWidth();
-            int outHeight = wm.getDesiredMinimumHeight();
+            WindowManager service = (WindowManager) context.getSystemService(
+                    Context.WINDOW_SERVICE);
+            Point size = new Point();
+            service.getDefaultDisplay().getSize(size);
+            int outWidth = size.x;
+            int outHeight = size.y;
             stream = getOriginalKeyguardStream(pkgName, context);
             if (stream == null) {
                 return null;
