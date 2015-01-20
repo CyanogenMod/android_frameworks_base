@@ -237,6 +237,7 @@ public class KeyguardStatusView extends GridLayout implements
     public void onWeatherChanged(WeatherController.WeatherInfo info) {
         if (info.temp == null || info.condition == null) {
             mTemperatureText.setText(null);
+            mTemperatureText.setText(0);
             mWeatherCity.setText("--");
             mWeatherIcon.setImageDrawable(null);
         } else {
