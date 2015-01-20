@@ -29,6 +29,8 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.android.internal.util.cm.QSConstants;
+import com.android.internal.util.cm.QSUtils;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
@@ -244,7 +246,10 @@ public class QSTileHost implements QSTile.Host {
         }
         final LinkedHashMap<String, QSTile<?>> newTiles = new LinkedHashMap<>();
         for (String tileSpec : tileSpecs) {
-            newTiles.put(tileSpec, createTile(tileSpec));
+            QSTile<?> t = createTile(tileSpec);
+            if (t != null) {
+                newTiles.put(tileSpec, t);
+            }
         }
 
         mTiles.clear();
@@ -255,28 +260,49 @@ public class QSTileHost implements QSTile.Host {
     }
 
     private QSTile<?> createTile(String tileSpec) {
-        if (tileSpec.equals("wifi")) return new WifiTile(this);
-        else if (tileSpec.equals("bt")) return new BluetoothTile(this);
-        else if (tileSpec.equals("inversion")) return new ColorInversionTile(this);
-        else if (tileSpec.equals("cell")) return new CellularTile(this);
-        else if (tileSpec.equals("airplane")) return new AirplaneModeTile(this);
-        else if (tileSpec.equals("rotation")) return new RotationLockTile(this);
-        else if (tileSpec.equals("flashlight")) return new FlashlightTile(this);
-        else if (tileSpec.equals("location")) return new LocationTile(this);
-        else if (tileSpec.equals("cast")) return new CastTile(this);
-        else if (tileSpec.equals("hotspot")) return new HotspotTile(this);
-        else if (tileSpec.equals("notifications")) return new NotificationsTile(this);
-        else if (tileSpec.equals("data")
-                && mConnectivityManager.isNetworkSupported(ConnectivityManager.TYPE_MOBILE))
-            return new DataTile(this);
-        else if (tileSpec.equals("roaming")) return new RoamingTile(this);
-        else if (tileSpec.equals("dds") && mTelephonyManager.isMultiSimEnabled()
-                && (mTelephonyManager.getMultiSimConfiguration()
-                == TelephonyManager.MultiSimVariants.DSDA))
-            return new DdsTile(this);
-        else if (tileSpec.equals("apn")) return new ApnTile(this);
-        else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
-        else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
+        if (tileSpec.startsWith(IntentTile.PREFIX)) {
+            return IntentTile.create(this, tileSpec);
+        }
+
+        // Ensure tile is supported on this device
+        if (!QSUtils.getAvailableTiles(mContext).contains(tileSpec)) {
+            return null;
+        }
+
+        switch (tileSpec) {
+            case QSConstants.TILE_WIFI:
+                return new WifiTile(this);
+            case QSConstants.TILE_BLUETOOTH:
+                return new BluetoothTile(this);
+            case QSConstants.TILE_INVERSION:
+                return new ColorInversionTile(this);
+            case QSConstants.TILE_CELLULAR:
+                return new CellularTile(this);
+            case QSConstants.TILE_AIRPLANE:
+                return new AirplaneModeTile(this);
+            case QSConstants.TILE_ROTATION:
+                return new RotationLockTile(this);
+            case QSConstants.TILE_FLASHLIGHT:
+                return new FlashlightTile(this);
+            case QSConstants.TILE_LOCATION:
+                return new LocationTile(this);
+            case QSConstants.TILE_CAST:
+                return new CastTile(this);
+            case QSConstants.TILE_HOTSPOT:
+                return new HotspotTile(this);
+            case QSConstants.TILE_NOTIFICATIONS:
+                return new NotificationsTile(this);
+            case QSConstants.TILE_DATA:
+                return new DataTile(this);
+            case QSConstants.TILE_ROAMING:
+                return new RoamingTile(this);
+            case QSConstants.TILE_DDS:
+                return new DdsTile(this);
+            case QSConstants.TILE_APN:
+                return new ApnTile(this);
+            default:
+                throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
+        }
     }
 
     private List<String> loadTileSpecs() {
