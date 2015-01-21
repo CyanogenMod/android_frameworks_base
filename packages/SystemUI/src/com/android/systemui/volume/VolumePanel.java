@@ -784,6 +784,7 @@ public class VolumePanel extends Handler implements DemoMode {
                 @Override
                 public void onClick(View v) {
                     expandVolumePanel();
+                    resetTimeout();
                 }
             });
             sc.seekbarView.setMax(getStreamMaxVolume(streamType));
