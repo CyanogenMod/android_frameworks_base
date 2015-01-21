@@ -50,7 +50,9 @@ import static android.net.NetworkTemplate.MATCH_ETHERNET;
 import static android.net.NetworkTemplate.MATCH_MOBILE_3G_LOWER;
 import static android.net.NetworkTemplate.MATCH_MOBILE_4G;
 import static android.net.NetworkTemplate.MATCH_MOBILE_ALL;
+import static android.net.NetworkTemplate.MATCH_MOBILE_WILDCARD;
 import static android.net.NetworkTemplate.MATCH_WIFI;
+import static android.net.NetworkTemplate.MATCH_WIFI_WILDCARD;
 import static android.net.NetworkTemplate.buildTemplateMobileAll;
 import static android.net.TrafficStats.MB_IN_BYTES;
 import static android.net.wifi.WifiManager.CHANGE_REASON_ADDED;
@@ -987,7 +989,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             final NetworkPolicy policy = mNetworkPolicy.valueAt(i);
             // shortcut when policy has no limit
             if (policy.limitBytes == LIMIT_DISABLED || !policy.hasCycle()) {
-                setNetworkTemplateEnabled(policy.template, true);
+                try {
+                    setNetworkTemplateEnabled(policy.template, true);
+                } catch (IllegalArgumentException e) {
+                    Slog.e(TAG, "", e);
+                }
                 continue;
             }
 
@@ -1000,7 +1006,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     && policy.lastLimitSnooze < start;
             final boolean networkEnabled = !overLimitWithoutSnooze;
 
-            setNetworkTemplateEnabled(policy.template, networkEnabled);
+            try {
+                setNetworkTemplateEnabled(policy.template, networkEnabled);
+            } catch (IllegalArgumentException e) {
+                Slog.e(TAG, "", e);
+            }
         }
     }
 
@@ -1028,6 +1038,12 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 break;
             case MATCH_ETHERNET:
                 setPolicyDataEnable(TYPE_ETHERNET, enabled);
+                break;
+            case MATCH_MOBILE_WILDCARD:
+                if (LOGV) Slog.v(TAG, "MOBILE_WILDCARD NetworkTemplate");
+                break;
+            case MATCH_WIFI_WILDCARD:
+                if (LOGV) Slog.v(TAG, "WIFI_WILDCARD NetworkTemplate");
                 break;
             default:
                 throw new IllegalArgumentException("unexpected template");
