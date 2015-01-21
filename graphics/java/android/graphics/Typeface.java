@@ -67,6 +67,8 @@ public class Typeface {
 
     static final String FONTS_CONFIG = "fonts.xml";
 
+    static final String SANS_SERIF_FAMILY_NAME = "sans-serif";
+
     /**
      * @hide
      */
@@ -269,6 +271,90 @@ public class Typeface {
         return fontFamily;
     }
 
+    /**
+     * Adds any fonts in src that do not exist in dst
+     * @param src Source font family
+     * @param dst Destination font family
+     */
+    private static void addMissingFamilyFonts(Family src, Family dst) {
+        final int N = dst.fonts.size();
+        for (FontListParser.Font srcFont : src.fonts) {
+            boolean addFont = true;
+            for (int i = 0; i < N && addFont; i++) {
+                final String dstFontName = dst.fonts.get(i).fontName;
+                if (dstFontName != null && dstFontName.equals(srcFont.fontName)) {
+                    addFont = false;
+                    break;
+                }
+            }
+            if (addFont) {
+                dst.fonts.add(srcFont);
+            }
+        }
+    }
+
+    private static void addMissingFontsForFamilyName(FontListParser.Config src,
+            FontListParser.Config dst, String familyName) {
+        for (Family srcFamily : src.families) {
+            for (Family dstFamily : dst.families) {
+                final String dstFamilyName = dstFamily.name;
+                if (familyName.equals(dstFamilyName) && familyName.equals(srcFamily.name)) {
+                    addMissingFamilyFonts(srcFamily, dstFamily);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds any font families in src that do not exist in dst
+     * @param src Source font config
+     * @param dst Destination font config
+     */
+    private static void addMissingFontFamilies(FontListParser.Config src,
+            FontListParser.Config dst) {
+        final int N = dst.families.size();
+        // add missing families
+        for (Family srcFamily : src.families) {
+            boolean addFamily = true;
+            for (int i = 0; i < N && addFamily; i++) {
+                final Family dstFamily = dst.families.get(i);
+                final String dstFamilyName = dstFamily.name;
+                if (dstFamilyName != null && dstFamilyName.equals(srcFamily.name)) {
+                    addFamily = false;
+                    break;
+                }
+            }
+            if (addFamily) {
+                dst.families.add(srcFamily);
+            }
+        }
+    }
+
+    /**
+     * Adds any aliases in src that do not exist in dst
+     * @param src Source font config
+     * @param dst Destination font config
+     */
+    private static void addMissingFontAliases(FontListParser.Config src,
+            FontListParser.Config dst) {
+        final int N = dst.aliases.size();
+        // add missing aliases
+        for (FontListParser.Alias alias : src.aliases) {
+            boolean addAlias = true;
+            for (int i = 0; i < N && addAlias; i++) {
+                final String dstAliasName = dst.aliases.get(i).name;
+                if (dstAliasName != null && dstAliasName.equals(alias.name)) {
+                    addAlias = false;
+                    break;
+                }
+            }
+            if (addAlias) {
+                dst.aliases.add(alias);
+            }
+        }
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -279,22 +365,33 @@ public class Typeface {
         File systemFontConfigLocation = getSystemFontConfigLocation();
         File themeFontConfigLocation = getThemeFontConfigLocation();
 
-        File systemConfigFilename = new File(systemFontConfigLocation, FONTS_CONFIG);
-        File themeConfigFilename = new File(themeFontConfigLocation, FONTS_CONFIG);
-        File configFilename = null;
+        File systemConfigFile = new File(systemFontConfigLocation, FONTS_CONFIG);
+        File themeConfigFile = new File(themeFontConfigLocation, FONTS_CONFIG);
+        File configFile = null;
         File fontDir;
 
 
-        if (themeConfigFilename.exists()) {
-            configFilename = themeConfigFilename;
+        if (themeConfigFile.exists()) {
+            configFile = themeConfigFile;
             fontDir = getThemeFontConfigLocation();
         } else {
-            configFilename = systemConfigFilename;
+            configFile = systemConfigFile;
             fontDir = getSystemFontDirLocation();
         }
 
         try {
-            FontListParser.Config fontConfig = FontListParser.parse(configFilename, fontDir);
+            FontListParser.Config fontConfig = FontListParser.parse(configFile, fontDir);
+
+            // If the fonts are coming from a theme, we will need to make sure that we include
+            // any font families from the system fonts that the theme did not include.
+            // NOTE: All the system font families without names ALWAYS get added.
+            if (configFile == themeConfigFile) {
+                FontListParser.Config systemFontConfig = FontListParser.parse(systemConfigFile,
+                        getSystemFontDirLocation());
+                addMissingFontFamilies(systemFontConfig, fontConfig);
+                addMissingFontsForFamilyName(systemFontConfig, fontConfig, SANS_SERIF_FAMILY_NAME);
+                addMissingFontAliases(systemFontConfig, fontConfig);
+            }
 
             List<FontFamily> familyList = new ArrayList<FontFamily>();
             // Note that the default typeface is always present in the fallback list;
@@ -305,6 +402,7 @@ public class Typeface {
                     familyList.add(makeFamilyFromParsed(f));
                 }
             }
+
             sFallbackFonts = familyList.toArray(new FontFamily[familyList.size()]);
             setDefault(Typeface.createFromFamilies(sFallbackFonts));
 
@@ -340,11 +438,11 @@ public class Typeface {
             Log.w(TAG, "Didn't create default family (most likely, non-Minikin build)", e);
             // TODO: normal in non-Minikin case, remove or make error when Minikin-only
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "Error opening " + configFilename);
+            Log.e(TAG, "Error opening " + configFile);
         } catch (IOException e) {
-            Log.e(TAG, "Error reading " + configFilename);
+            Log.e(TAG, "Error reading " + configFile);
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "XML parse exception for " + configFilename);
+            Log.e(TAG, "XML parse exception for " + configFile);
         }
     }
 
