@@ -344,6 +344,8 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         if (SubscriptionManager.isValidSubId(subId) && (subId != mSubId)) {
             mSubId = subId;
             handleSubInfoChange();
+            mRemainingAttempts = -1;
+            mShowDefaultMessage = true;
         }
     }
 
