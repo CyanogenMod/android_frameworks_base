@@ -2925,6 +2925,17 @@ public abstract class Context {
     public static final String MEDIA_PROJECTION_SERVICE = "media_projection";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link android.hardware.CmhwManager} for controlling
+     * hw specific features
+     *
+     * @see #getSystemService
+     * @see android.hardware.CmhwManager
+     * @hide
+     */
+    public static final String CMHW_SERVICE = "cmhw";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *

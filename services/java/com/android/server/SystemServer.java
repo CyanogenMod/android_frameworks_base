@@ -1014,6 +1014,15 @@ public final class SystemServer {
 
             }
 
+            if (!disableNonCoreServices) {
+                try {
+                    Slog.i(TAG, "CmhwService");
+                    ServiceManager.addService(Context.CMHW_SERVICE, new CmhwService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting CMHW Service", e);
+                }
+            }
+
             mSystemServiceManager.startService(LauncherAppsService.class);
 
             boolean isWipowerEnabled = SystemProperties.getBoolean("ro.bluetooth.wipower", false);
