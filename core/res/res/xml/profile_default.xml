@@ -1,5 +1,9 @@
 <profiles>
     <profile nameres="profileNameDefault">
+        <ringModeDescriptor>
+            <value>normal</value>
+            <override>true</override>
+        </ringModeDescriptor>
         <profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
             <sound>content://settings/system/notification_sound</sound>
             <ringer>content://settings/system/ringtone</ringer>
@@ -116,6 +120,10 @@
             <value>1</value>
             <override>true</override>
         </connectionDescriptor>
+        <ringModeDescriptor>
+            <value>normal</value>
+            <override>true</override>
+        </ringModeDescriptor>
         <profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
             <sound>content://settings/system/notification_sound</sound>
             <ringer>content://settings/system/ringtone</ringer>
