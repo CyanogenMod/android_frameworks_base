@@ -30,6 +30,10 @@ public class KeyguardServiceDelegate {
     public static final String KEYGUARD_PACKAGE = "com.android.systemui";
     public static final String KEYGUARD_CLASS = "com.android.systemui.keyguard.KeyguardService";
 
+    private static final String ACTION_STATE_CHANGE =
+            "com.android.internal.action.KEYGUARD_SERVICE_STATE_CHANGED";
+    private static final String EXTRA_ACTIVE = "active";
+
     private static final String TAG = "KeyguardServiceDelegate";
     private static final boolean DEBUG = true;
 
@@ -125,6 +129,12 @@ public class KeyguardServiceDelegate {
         }
     }
 
+    private void sendStateChangeBroadcast(boolean bound) {
+        Intent i = new Intent(ACTION_STATE_CHANGE);
+        i.putExtra(EXTRA_ACTIVE, bound);
+        mScrim.getContext().sendStickyBroadcast(i);
+    }
+
     private final ServiceConnection mKeyguardConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -138,6 +148,7 @@ public class KeyguardServiceDelegate {
                 mKeyguardService.onScreenTurnedOn(new KeyguardShowDelegate(
                         mShowListenerWhenConnect));
                 mShowListenerWhenConnect = null;
+                sendStateChangeBroadcast(true);
             }
             if (mKeyguardState.bootCompleted) {
                 mKeyguardService.onBootCompleted();
@@ -148,6 +159,7 @@ public class KeyguardServiceDelegate {
         public void onServiceDisconnected(ComponentName name) {
             if (DEBUG) Log.v(TAG, "*** Keyguard disconnected (boo!)");
             mKeyguardService = null;
+            sendStateChangeBroadcast(false);
         }
 
     };
@@ -264,6 +276,7 @@ public class KeyguardServiceDelegate {
         } else {
             mKeyguardState.systemIsReady = true;
         }
+        sendStateChangeBroadcast(true);
     }
 
     public void doKeyguardTimeout(Bundle options) {
