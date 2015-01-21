@@ -55,6 +55,7 @@ import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.PerfProfileTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
+import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.policy.BluetoothController;
@@ -321,6 +322,8 @@ public class QSTileHost implements QSTile.Host {
                 return new LockscreenToggleTile(this);
             case QSConstants.TILE_LTE:
                 return new LteTile(this);
+            case QSConstants.TILE_VISUALIZER:
+                return new VisualizerTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }
