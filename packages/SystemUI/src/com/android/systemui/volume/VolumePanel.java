@@ -708,8 +708,23 @@ public class VolumePanel extends Handler {
             sc.expandPanel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    expandVolumePanel();
-                    resetTimeout();
+                    Runnable r = new Runnable() {
+                    public void run() {
+                        mView.setY(-mView.getHeight());
+                        mView.animate().y(0).setDuration(ANIMATION_DURATION)
+                            .withStartAction(new Runnable() {
+                                public void run() {
+                                    expandVolumePanel();
+                                    resetTimeout();
+                                }
+                            });
+                        }
+                    };
+                    if (mView.getHeight() == 0) {
+                        new Handler().post(r);
+                    } else {
+                        r.run();
+                    }
                 }
             });
             sc.seekbarView.setMax(getStreamMaxVolume(streamType));
