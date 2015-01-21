@@ -45,6 +45,7 @@ import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.LockscreenToggleTile;
 import com.android.systemui.qs.tiles.NotificationsTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
@@ -300,6 +301,8 @@ public class QSTileHost implements QSTile.Host {
                 return new DdsTile(this);
             case QSConstants.TILE_APN:
                 return new ApnTile(this);
+            case QSConstants.TILE_LOCKSCREEN:
+                return new LockscreenToggleTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }
