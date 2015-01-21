@@ -115,6 +115,9 @@ public class PreviewInflater {
         }
         ResolveInfo resolved = packageManager.resolveActivityAsUser(intent,
                 PackageManager.MATCH_DEFAULT_ONLY | PackageManager.GET_META_DATA, currentUserId);
+        if (resolved == null || resolved.activityInfo == null) {
+            return true;
+        }
         return wouldLaunchResolverActivity(resolved, appList);
     }
 
