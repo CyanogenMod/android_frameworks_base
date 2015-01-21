@@ -48,6 +48,7 @@ import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.NotificationsTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
+import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.policy.BluetoothController;
@@ -300,6 +301,8 @@ public class QSTileHost implements QSTile.Host {
                 return new DdsTile(this);
             case QSConstants.TILE_APN:
                 return new ApnTile(this);
+            case QSConstants.TILE_VISUALIZER:
+                return new VisualizerTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }
