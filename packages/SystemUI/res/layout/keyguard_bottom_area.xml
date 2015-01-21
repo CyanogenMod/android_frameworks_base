@@ -59,37 +59,14 @@
         android:scaleType="center"
         android:contentDescription="@string/accessibility_phone_button" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <com.android.systemui.statusbar.KeyguardAffordanceView
+        android:id="@+id/lock_icon"
+        android:layout_width="@dimen/keyguard_affordance_width"
+        android:layout_height="@dimen/keyguard_affordance_height"
         android:layout_gravity="bottom|center_horizontal"
-        android:orientation="vertical" >
-
-        <com.android.systemui.statusbar.KeyguardAffordanceView
-            android:id="@+id/lock_icon"
-            android:layout_width="@dimen/keyguard_affordance_width"
-            android:layout_height="@dimen/keyguard_affordance_height"
-            android:layout_gravity="bottom|center_horizontal"
-            android:src="@drawable/ic_lock_24dp"
-            android:scaleType="center"
-            android:tint="#ffffffff"
-            android:contentDescription="@string/accessibility_unlock_button" />
-
-        <com.android.keyguard.EmergencyButton
-            android:id="@+id/emergency_call_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/eca_overlap"
-            android:drawableBottom="@drawable/lockscreen_emergency_button"
-            android:text="@string/kg_emergency_call_label"
-            style="?android:attr/buttonBarButtonStyle"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="@dimen/kg_status_line_font_size"
-            android:textColor="?android:attr/textColorSecondary"
-            android:drawablePadding="8dip"
-            android:textAllCaps="@bool/kg_use_all_caps" />
-       </LinearLayout>
+        android:src="@drawable/ic_lock_24dp"
+        android:scaleType="center"
+        android:tint="#ffffffff"
+        android:contentDescription="@string/accessibility_unlock_button" />
 
 </com.android.systemui.statusbar.phone.KeyguardBottomAreaView>
