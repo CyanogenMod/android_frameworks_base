@@ -155,7 +155,7 @@ public class EmergencyButton extends Button {
                         mContext.getResources().getBoolean(R.bool.config_showEmergencyButton);
             }
         }
-        if (mContext.getResources().getBoolean(R.bool.config_showEmergencyButton)) {
+        if (mContext.getResources().getBoolean(R.bool.config_hideEmergencyButtonInOOS)) {
             enabled = enabled && canMakeEmergencyCall();
         }
         mLockPatternUtils.updateEmergencyCallButtonState(this, enabled, false);
