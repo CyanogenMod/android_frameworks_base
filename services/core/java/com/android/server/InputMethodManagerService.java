@@ -774,9 +774,9 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         if (defIm == null && mMethodList.size() > 0) {
             defIm = InputMethodUtils.getMostApplicableDefaultIME(
                     mSettings.getEnabledInputMethodListLocked());
-            Slog.i(TAG, "No default found, using " + defIm.getId());
         }
         if (defIm != null) {
+            Slog.i(TAG, "No default found, using " + defIm.getId());
             setSelectedInputMethodAndSubtypeLocked(defIm, NOT_A_SUBTYPE_ID, false);
         }
     }
