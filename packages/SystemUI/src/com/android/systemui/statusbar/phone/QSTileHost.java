@@ -43,6 +43,7 @@ import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.LockscreenToggleTile;
 import com.android.systemui.qs.tiles.NotificationsTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
@@ -275,6 +276,7 @@ public class QSTileHost implements QSTile.Host {
                 == TelephonyManager.MultiSimVariants.DSDA))
             return new DdsTile(this);
         else if (tileSpec.equals("apn")) return new ApnTile(this);
+        else if (tileSpec.equals("lockscreen")) return new LockscreenToggleTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }

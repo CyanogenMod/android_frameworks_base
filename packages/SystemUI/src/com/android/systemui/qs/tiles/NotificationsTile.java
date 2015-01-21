@@ -29,6 +29,7 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
