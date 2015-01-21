@@ -678,6 +678,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 //Got intent with correct subId for the slot now.
                 if (mSubIdForSlot[subInfo.slotId] != subInfo.subId) {
                     long subId = mSubIdForSlot[subInfo.slotId];
+                    mSubIdForSlot[subInfo.slotId] = subInfo.subId;
                     mPlmn.put(subInfo.subId, mPlmn.get(subId));
                     mSpn.put(subInfo.subId, mSpn.get(subId));
 
@@ -689,7 +690,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                         }
                     }
                 }
-                mSubIdForSlot[subInfo.slotId] = subInfo.subId;
                 if (DEBUG) {
                     Log.d(TAG, "handleSubInfoRecordUpdate mSubIdForSlot["
                         + subInfo.slotId + "] = " + subInfo.subId);
