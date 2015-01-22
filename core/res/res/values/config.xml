@@ -2094,6 +2094,7 @@
     <integer name="launchboost_cpuboost_param">0</integer>
     <integer name="launchboost_pcdisbl_param">0</integer>
     <integer name="launchboost_ksmboost_param">0</integer>
+    <integer name="launchboost_preferidle_param">0</integer>
 
     <!-- Support for disabling to fetch APN from OMH card
          for some cdma carriers -->
