@@ -14,8 +14,18 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <dimen name="weather_text_size">12sp</dimen>
-     <dimen name="detail_radio_group_padding_left">16dp</dimen>
-     <dimen name="detail_radio_group_padding">8dp</dimen>
-</resources>
+<com.android.systemui.qs.tiles.ProfilesDetailView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="vertical">
+
+    <ListView
+            android:id="@android:id/list"
+            android:divider="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</com.android.systemui.qs.tiles.ProfilesDetailView>

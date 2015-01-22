@@ -85,6 +85,10 @@
     <!-- [CHAR LIMIT=130] Location detail panel, description for sensors only mode -->
     <string name="quick_settings_location_detail_mode_sensors_only_description">Use GPS to determine your location</string>
 
+    <string name="quick_settings_profile_detail_menu_title">Select Profile:</string>
+    <string name="quick_settings_profiles_title">System profiles</string>
+    <string name="quick_settings_profiles_disabled">Profiles disabled</string>
+
     <!-- Task Manager -->
     <string name="tasklistview_title">Task Manager</string>
     <string name="message_switch_fail">Can not switch to this task, because it has no interface.</string>
