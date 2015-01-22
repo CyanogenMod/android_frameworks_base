@@ -7288,7 +7288,7 @@ public class WindowManagerService extends IWindowManager.Stub
             }
             if (hardKeyboardAvailable != mHardKeyboardAvailable) {
                 mHardKeyboardAvailable = hardKeyboardAvailable;
-                mShowImeWithHardKeyboard = hardKeyboardAvailable;
+                updateShowImeWithHardKeyboard();
                 mH.removeMessages(H.REPORT_HARD_KEYBOARD_STATUS_CHANGE);
                 mH.sendEmptyMessage(H.REPORT_HARD_KEYBOARD_STATUS_CHANGE);
             }
