@@ -37,6 +37,7 @@ public class QSConstants {
     public static final String TILE_DDS = "dds";
     public static final String TILE_APN = "apn";
     public static final String TILE_NFC = "nfc";
+    public static final String TILE_PROFILES = "profiles";
 
     // Order matters
     protected static final ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
@@ -64,5 +65,6 @@ public class QSConstants {
         TILES_AVAILABLE.add(TILE_DDS);
         TILES_AVAILABLE.add(TILE_APN);
         TILES_AVAILABLE.add(TILE_NFC);
+        TILES_AVAILABLE.add(TILE_PROFILES);
     }
 }
