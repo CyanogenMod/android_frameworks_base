@@ -98,4 +98,7 @@
     <string name="left_shortcut_hint">Swipe right for %1$s</string>
     <string name="right_shortcut_hint">Swipe left for %1$s</string>
 
+    <!-- QuickSettings: LteTile -->
+    <string name="quick_settings_lte">Lte on</string>
+    <string name="quick_settings_lte_off">Lte off</string>
 </resources>

@@ -24,6 +24,7 @@ import android.hardware.camera2.CameraManager;
 import android.net.ConnectivityManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import com.android.internal.telephony.PhoneConstants;
 
 import java.util.Iterator;
 import java.util.List;
@@ -74,6 +75,9 @@ public class QSUtils {
                     case QSConstants.TILE_BLUETOOTH:
                         removeTile = !deviceSupportsBluetooth();
                         break;
+                    case QSConstants.TILE_LTE:
+                        removeTile = !deviceSupportsLte(context);
+                        break;
                 }
                 if (removeTile) {
                     iterator.remove();
@@ -83,6 +87,13 @@ public class QSUtils {
 
             sAvailableTilesFiltered = true;
         }
+    }
+
+    public static boolean deviceSupportsLte(Context ctx) {
+        final TelephonyManager tm = (TelephonyManager)
+                ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        return (tm.getLteOnCdmaMode() == PhoneConstants.LTE_ON_CDMA_TRUE)
+                || tm.getLteOnGsmMode() != 0;
     }
 
     private static boolean deviceSupportsDdsSupported(Context context) {
