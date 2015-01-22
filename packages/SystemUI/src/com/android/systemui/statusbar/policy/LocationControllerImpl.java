@@ -187,15 +187,10 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
     }
 
     /**
-     *
+     * Check if advanced location tile is enabled in settings
      */
     public boolean isAdvancedSettingsEnabled() {
-        ContentResolver resolver = mContext.getContentResolver();
-        // QuickSettings always runs as the owner, so specifically retrieve the settings
-        // for the current foreground user.
-        int mode = Settings.Secure.getIntForUser(resolver, Settings.Secure.LOCATION_MODE,
-                Settings.Secure.LOCATION_MODE_OFF, ActivityManager.getCurrentUser());
-        return Settings.System.getIntForUser(resolver, Settings.System.QS_LOCATION_ADVANCED, 0, ActivityManager.getCurrentUser()) == 1;
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(), Settings.Secure.QS_LOCATION_ADVANCED, 0, ActivityManager.getCurrentUser()) == 1;
     }
 
     /**
