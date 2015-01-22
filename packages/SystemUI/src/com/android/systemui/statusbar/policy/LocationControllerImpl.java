@@ -159,7 +159,8 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
         // setting won't be fully enabled until the user accepts the agreement.   
         // QuickSettings always runs as the owner, so specifically set the settings
         // for the current foreground user.
-        return Settings.Secure.putIntForUser(cr, Settings.Secure.LOCATION_MODE, mode, currentUserId);
+        return Settings.Secure.putIntForUser(cr, Settings.Secure.LOCATION_MODE,
+                mode, currentUserId);
     }
 
     /**
@@ -171,7 +172,8 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
             return Settings.Secure.LOCATION_MODE_OFF;
         }
         final ContentResolver cr = mContext.getContentResolver();
-        return Settings.Secure.getIntForUser(cr, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF, currentUserId);
+        return Settings.Secure.getIntForUser(cr, Settings.Secure.LOCATION_MODE,
+                Settings.Secure.LOCATION_MODE_OFF, currentUserId);
     }
 
     /**
@@ -187,15 +189,11 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
     }
 
     /**
-     *
+     * Check if advanced location tile is enabled in settings
      */
     public boolean isAdvancedSettingsEnabled() {
-        ContentResolver resolver = mContext.getContentResolver();
-        // QuickSettings always runs as the owner, so specifically retrieve the settings
-        // for the current foreground user.
-        int mode = Settings.Secure.getIntForUser(resolver, Settings.Secure.LOCATION_MODE,
-                Settings.Secure.LOCATION_MODE_OFF, ActivityManager.getCurrentUser());
-        return Settings.System.getIntForUser(resolver, Settings.System.QS_LOCATION_ADVANCED, 0, ActivityManager.getCurrentUser()) == 1;
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.QS_LOCATION_ADVANCED, 0, ActivityManager.getCurrentUser()) == 1;
     }
 
     /**
