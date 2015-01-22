@@ -650,11 +650,7 @@ public class ThemeService extends IThemeService.Stub {
     private boolean setCustomLockScreenWallpaper(String pkgName) {
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
         try {
-            if (SYSTEM_DEFAULT.equals(pkgName)) {
-                final Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(),
-                        com.android.internal.R.drawable.default_wallpaper);
-                wm.setKeyguardBitmap(bmp);
-            } else if (TextUtils.isEmpty(pkgName)) {
+            if (SYSTEM_DEFAULT.equals(pkgName) || TextUtils.isEmpty(pkgName)) {
                 wm.clearKeyguardWallpaper();
             } else {
                 InputStream in = ImageUtils.getCroppedKeyguardStream(pkgName, mContext);
