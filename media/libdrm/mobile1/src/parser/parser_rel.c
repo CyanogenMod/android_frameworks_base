@@ -20,6 +20,10 @@
 #include <wbxml_tinyparser.h>
 #include <drm_decoder.h>
 #include <svc_drm.h>
+#include "log.h"
+
+#define LOG_TAG "libdrm:parse_rel"
+#define LOG_NDEBUG 0
 
 /* See parser_rel.h */
 int32_t drm_monthDays(int32_t year, int32_t month)
@@ -308,9 +312,12 @@ static int32_t drm_getRightValue(uint8_t * buffer, int32_t bufferLen,
     }
 
     CHECK_VALIDITY(ret);
-    if (ret == NULL)
+    if (ret == NULL) {
+        WRITE_RO_FLAG(*bIsAble, 1, pConstraint->Indicator, DRM_NO_CONSTRAINT); /* If exit first assume have utter rights */
+        ro->bIsUnlimited = TRUE;
+        ALOGD("Set License to unlimited, as o-ex:constraint tag is absent");
         return TRUE;
-
+    }
     if(TRUE == drm_checkWhetherHasUnknowConstraint(ret))
         return FALSE;
 
@@ -498,8 +505,11 @@ static int32_t drm_getRightValue(uint8_t * buffer, int32_t bufferLen,
         flag = 3;
     }
 
-    if (2 == flag)
+    if (2 == flag) {
         WRITE_RO_FLAG(*bIsAble, 1, pConstraint->Indicator, DRM_NO_CONSTRAINT); /* If exit first assume have utter rights */
+        ro->bIsUnlimited = TRUE;
+        ALOGD("Set License to unlimited as no constraint item present in o-ex-constraint tag");
+    }
     return TRUE;
 }
 

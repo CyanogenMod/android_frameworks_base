@@ -16,6 +16,10 @@
 
 #include <parser_dcf.h>
 #include <svc_drm.h>
+#include "log.h"
+
+#define LOG_TAG "libdrm:parser_dcf"
+#define LOG_NDEBUG 0
 
 static int32_t drm_parseUintVar(uint8_t * buffer, uint8_t * len)
 {
@@ -45,40 +49,65 @@ static int32_t drm_parseUintVar(uint8_t * buffer, uint8_t * len)
 int32_t drm_dcfParser(uint8_t *buffer, int32_t bufferLen, T_DRM_DCF_Info *pDcfInfo,
                       uint8_t **ppEncryptedData)
 {
+    ALOGI("Coming into drm_dcfParser");
     uint8_t *tmpBuf;
     uint8_t *pStart, *pEnd;
     uint8_t *pHeader, *pData;
     uint8_t varLen;
 
-    if (NULL == buffer || bufferLen <= 0 || NULL == pDcfInfo)
+    if (NULL == buffer || bufferLen <= 0 || NULL == pDcfInfo) {
+        ALOGE("got nvalide data");
         return FALSE;
+    }
 
     tmpBuf = buffer;
+    ALOGI("Parse the version, content-type and content-url");
     /* 1. Parse the version, content-type and content-url */
     pDcfInfo->Version = *(tmpBuf++);
-    if (0x01 != pDcfInfo->Version) /* Because it is OMA DRM v1.0, the vension must be 1 */
+    if (0x01 != pDcfInfo->Version) { /* Because it is OMA DRM v1.0, the vension must be 1 */
+        ALOGE("Invalid drm version");
         return FALSE;
+    }
+
     pDcfInfo->ContentTypeLen = *(tmpBuf++);
+    if (pDcfInfo->ContentTypeLen >= MAX_CONTENT_TYPE_LEN) {
+         ALOGE("ContentTypeLen is > MAX_CONTENT_TYPE_LEN");
+        return FALSE;
+    }
+
     pDcfInfo->ContentURILen = *(tmpBuf++);
+    if (pDcfInfo->ContentURILen >= MAX_CONTENT_URI_LEN) {
+        ALOGE("ContentURILen is > MAX_CONTENT_URI_LEN");
+        return FALSE;
+    }
+
     strncpy((char *)pDcfInfo->ContentType, (char *)tmpBuf, pDcfInfo->ContentTypeLen);
+    pDcfInfo->ContentType[MAX_CONTENT_TYPE_LEN - 1] = 0;
     tmpBuf += pDcfInfo->ContentTypeLen;
     strncpy((char *)pDcfInfo->ContentURI, (char *)tmpBuf, pDcfInfo->ContentURILen);
+    pDcfInfo->ContentURI[MAX_CONTENT_URI_LEN - 1] = 0;
     tmpBuf += pDcfInfo->ContentURILen;
 
+    ALOGI("Get the headers length and data length ");
     /* 2. Get the headers length and data length */
     pDcfInfo->HeadersLen = drm_parseUintVar(tmpBuf, &varLen);
-    if (DRM_UINT_VAR_ERR == pDcfInfo->HeadersLen)
+    if (DRM_UINT_VAR_ERR == pDcfInfo->HeadersLen) {
+        ALOGE("HeadersLen == DRM_UINT_VAR_ERR");
         return FALSE;
+    }
     tmpBuf += varLen;
     pDcfInfo->DecryptedDataLen = DRM_UNKNOWN_DATA_LEN;
     pDcfInfo->EncryptedDataLen = drm_parseUintVar(tmpBuf, &varLen);
-    if (DRM_UINT_VAR_ERR == pDcfInfo->EncryptedDataLen)
+    if (DRM_UINT_VAR_ERR == pDcfInfo->EncryptedDataLen) {
+         ALOGE("EncryptedDataLen == DRM_UINT_VAR_ERR");
         return FALSE;
+    }
     tmpBuf += varLen;
     pHeader = tmpBuf;
     tmpBuf += pDcfInfo->HeadersLen;
     pData = tmpBuf;
 
+    ALOGI(" Parse the headers ");
     /* 3. Parse the headers */
     pStart = pHeader;
     while (pStart < pData) {
@@ -86,30 +115,61 @@ int32_t drm_dcfParser(uint8_t *buffer, int32_t bufferLen, T_DRM_DCF_Info *pDcfIn
         while ('\r' != *pEnd && pEnd < pData)
             pEnd++;
 
-        if (0 == strncmp((char *)pStart, HEADER_ENCRYPTION_METHOD, HEADER_ENCRYPTION_METHOD_LEN))
+        if (0 == strncmp((char *)pStart, HEADER_ENCRYPTION_METHOD, HEADER_ENCRYPTION_METHOD_LEN)) {
+            if ((pEnd - pStart - HEADER_ENCRYPTION_METHOD_LEN) >= MAX_ENCRYPTION_METHOD_LEN) {
+                ALOGE("MAX_ENCRYPTION_METHOD_LEN");
+                return FALSE;
+            }
             strncpy((char *)pDcfInfo->Encryption_Method,
                          (char *)(pStart + HEADER_ENCRYPTION_METHOD_LEN),
                          pEnd - pStart - HEADER_ENCRYPTION_METHOD_LEN);
-        else if (0 == strncmp((char *)pStart, HEADER_RIGHTS_ISSUER, HEADER_RIGHTS_ISSUER_LEN))
+            pDcfInfo->Encryption_Method[MAX_ENCRYPTION_METHOD_LEN - 1] = 0;
+        } else if (0 == strncmp((char *)pStart, HEADER_RIGHTS_ISSUER, HEADER_RIGHTS_ISSUER_LEN)) {
+            if ((pEnd - pStart - HEADER_RIGHTS_ISSUER_LEN) >= MAX_RIGHTS_ISSUER_LEN) {
+                ALOGE("MAX_RIGHTS_ISSUER_LEN");
+                return FALSE;
+            }
             strncpy((char *)pDcfInfo->Rights_Issuer,
                          (char *)(pStart + HEADER_RIGHTS_ISSUER_LEN),
                          pEnd - pStart - HEADER_RIGHTS_ISSUER_LEN);
-        else if (0 == strncmp((char *)pStart, HEADER_CONTENT_NAME, HEADER_CONTENT_NAME_LEN))
+            pDcfInfo->Rights_Issuer[MAX_RIGHTS_ISSUER_LEN - 1] = 0;
+        } else if (0 == strncmp((char *)pStart, HEADER_CONTENT_NAME, HEADER_CONTENT_NAME_LEN)) {
+            if ((pEnd - pStart - HEADER_CONTENT_NAME_LEN) >= MAX_CONTENT_NAME_LEN){
+                ALOGE("MAX_CONTENT_NAME_LEN");
+                return FALSE;
+            }
             strncpy((char *)pDcfInfo->Content_Name,
                          (char *)(pStart + HEADER_CONTENT_NAME_LEN),
                          pEnd - pStart - HEADER_CONTENT_NAME_LEN);
-        else if (0 == strncmp((char *)pStart, HEADER_CONTENT_DESCRIPTION, HEADER_CONTENT_DESCRIPTION_LEN))
+            pDcfInfo->Content_Name[MAX_CONTENT_NAME_LEN - 1] = 0;
+        } else if (0 == strncmp((char *)pStart, HEADER_CONTENT_DESCRIPTION, HEADER_CONTENT_DESCRIPTION_LEN)) {
+            if ((pEnd - pStart - HEADER_CONTENT_DESCRIPTION_LEN) >= MAX_CONTENT_DESCRIPTION_LEN) {
+                ALOGE("MAX_CONTENT_DESCRIPTION_LEN");
+                return FALSE;
+            }
             strncpy((char *)pDcfInfo->ContentDescription,
                          (char *)(pStart + HEADER_CONTENT_DESCRIPTION_LEN),
                          pEnd - pStart - HEADER_CONTENT_DESCRIPTION_LEN);
-        else if (0 == strncmp((char *)pStart, HEADER_CONTENT_VENDOR, HEADER_CONTENT_VENDOR_LEN))
+            pDcfInfo->ContentDescription[MAX_CONTENT_DESCRIPTION_LEN - 1] = 0;
+        } else if (0 == strncmp((char *)pStart, HEADER_CONTENT_VENDOR, HEADER_CONTENT_VENDOR_LEN)) {
+            if ((pEnd - pStart - HEADER_CONTENT_VENDOR_LEN) >= MAX_CONTENT_VENDOR_LEN) {
+                ALOGE("MAX_CONTENT_VENDOR_LEN");
+                return FALSE;
+            }
             strncpy((char *)pDcfInfo->ContentVendor,
                          (char *)(pStart + HEADER_CONTENT_VENDOR_LEN),
                          pEnd - pStart - HEADER_CONTENT_VENDOR_LEN);
-        else if (0 == strncmp((char *)pStart, HEADER_ICON_URI, HEADER_ICON_URI_LEN))
+            pDcfInfo->ContentVendor[MAX_CONTENT_VENDOR_LEN - 1] = 0;
+        } else if (0 == strncmp((char *)pStart, HEADER_ICON_URI, HEADER_ICON_URI_LEN)) {
+            if ((pEnd - pStart - HEADER_ICON_URI_LEN) >= MAX_ICON_URI_LEN){
+                ALOGE("MAX_ICON_URI_LEN");
+                return FALSE;
+            }
             strncpy((char *)pDcfInfo->Icon_URI,
                          (char *)(pStart + HEADER_ICON_URI_LEN),
                          pEnd - pStart - HEADER_ICON_URI_LEN);
+            pDcfInfo->Icon_URI[MAX_ICON_URI_LEN - 1] = 0;
+        }
 
         if ('\n' == *(pEnd + 1))
             pStart = pEnd + 2;  /* Two bytes: a '\r' and a '\n' */
@@ -120,6 +180,7 @@ int32_t drm_dcfParser(uint8_t *buffer, int32_t bufferLen, T_DRM_DCF_Info *pDcfIn
     /* 4. Give out the location of encrypted data */
     if (NULL != ppEncryptedData)
         *ppEncryptedData = pData;
+    ALOGI("drm_dcfParser complete");
 
     return TRUE;
 }
