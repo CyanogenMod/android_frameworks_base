@@ -2137,4 +2137,7 @@
     <string-array translatable="false" name="config_sms_convert_destination_number_support">
         <item>false</item>
     </string-array>
+
+    <!-- config SPN display for some CDMA carriers -->
+    <bool name="config_show_spn">false</bool>
 </resources>
