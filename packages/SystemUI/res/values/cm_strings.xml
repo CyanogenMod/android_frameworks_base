@@ -110,5 +110,7 @@
 
     <string name="quick_settings_network_adb_enabled_label">Enabled</string>
     <string name="quick_settings_network_adb_disabled_label">Disabled</string>
-
+    <!-- QuickSettings: LteTile -->
+    <string name="quick_settings_lte">On</string>
+    <string name="quick_settings_lte_off">Off</string>
 </resources>
