@@ -1864,4 +1864,12 @@
     <string name="China_Mobile">中国移动</string>
     <string name="China_Unicom">中国联通</string>
     <string name="China_Telecom">中国电信</string>
+    <string name="lockscreen_sim_error_message_short">SIM 卡无效。</string>
+    <string name="stk_cc_ussd_to_ussd">USSD 请求已修改为新的 USSD 请求。</string>
+    <string name="stk_cc_ss_to_ss">SS 请求已修改为新的 SS 请求。</string>
+    <string name="stk_cc_ss_to_ussd">SS 请求已修改为 USSD 请求。</string>
+    <string name="stk_cc_ss_to_dial">SS 请求已修改为 DIAL 请求。</string>
+    <string name="stk_cc_ussd_to_dial">USSD 请求已修改为 DIAL 请求。</string>
+    <string name="stk_cc_ussd_to_ss">USSD 请求已修改为 SS 请求。</string>
+    <string name="progress_nomediapresent">没有可移动媒体\u2026</string>
 </resources>
