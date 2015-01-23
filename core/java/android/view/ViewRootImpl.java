@@ -1324,7 +1324,7 @@ public final class ViewRootImpl implements ViewParent,
 
         boolean insetsChanged = false;
 
-        boolean layoutRequested = mLayoutRequested && !mStopped;
+        boolean layoutRequested = mLayoutRequested /*&& !mStopped */;
         if (layoutRequested) {
 
             final Resources res = mView.getContext().getResources();
@@ -1822,7 +1822,7 @@ public final class ViewRootImpl implements ViewParent,
             }
         }
 
-        final boolean didLayout = layoutRequested && !mStopped;
+        final boolean didLayout = layoutRequested /*&& !mStopped*/ ;
         boolean triggerGlobalLayoutListener = didLayout
                 || mAttachInfo.mRecomputeGlobalAttributes;
         if (didLayout) {
