@@ -233,4 +233,8 @@
     <!-- First boot install dialog -->
     <java-symbol type="string" name="android_installing_apk" />
     <java-symbol type="string" name="android_installing_title" />
+
+    <!-- Theme reset notification -->
+    <java-symbol type="string" name="theme_reset_notification_title" />
+    <java-symbol type="string" name="theme_reset_notification_body" />
 </resources>
