@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012-2015 The CyanogenMod Project
+     Copyright (c) 2013, The Linux Foundation. All rights reserved.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <!-- We don't want to publish private symbols in android.R as part of the
+         SDK.  Instead, put them here. -->
+    <private-symbols package="com.android.internal" />
+
+    <!-- Private symbols that we need to reference from framework code.  See
+         frameworks/base/core/res/MakeJavaSymbols.sed for how to easily generate
+         this.
+    -->
+    <java-symbol type="id" name="permission_text" />
+    <java-symbol type="id" name="permission_remember_layout" />
+    <java-symbol type="id" name="permission_remember_choice_checkbox" />
+    <java-symbol type="id" name="permission_remember_choice_text" />
+    <java-symbol type="id" name="filtered_item_container" />
+
+    <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
+    <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
+    <java-symbol type="bool" name="config_ascii_7bit_support_for_long_message" />
+    <java-symbol type="bool" name="config_lte_capable" />
+    <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
+    <java-symbol type="bool" name="set_wifi_hotspot_security_none" />
+    <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
+    <java-symbol type="bool" name="config_feature_iwlan_enabled" />
+    <java-symbol type="bool" name="def_telephony_spn_spec_enabled" />
+
+    <java-symbol type="integer" name="config_wifi_scan_interval_wfd_connected" />
+
+    <java-symbol type="string" name="def_wifi_wifihotspot_ssid" />
+    <java-symbol type="string" name="def_wifi_wifihotspot_pass" />
+    <java-symbol type="string" name="def_wifi_direct_name" />
+    <java-symbol type="string" name="allow" />
+    <java-symbol type="string" name="deny" />
+    <java-symbol type="string" name="lockscreen_sim_error_message_short" />
+    <java-symbol type="string" name="progress_nomediapresent" />
+    <java-symbol type="string" name="reboot_confirm" />
+    <java-symbol type="string" name="reboot_title" />
+    <java-symbol type="string" name="reboot_progress" />
+    <java-symbol type="string" name="stk_cc_ss_to_dial" />
+    <java-symbol type="string" name="stk_cc_ss_to_ss" />
+    <java-symbol type="string" name="stk_cc_ss_to_ussd" />
+    <java-symbol type="string" name="stk_cc_ussd_to_dial" />
+    <java-symbol type="string" name="stk_cc_ussd_to_ss" />
+    <java-symbol type="string" name="stk_cc_ussd_to_ussd" />
+
+    <java-symbol type="drawable" name="cm_platlogo" />
+
+    <java-symbol type="layout" name="permission_confirmation_dialog" />
+
+    <!-- From android.policy -->
+    <java-symbol type="array" name="shutdown_reboot_options" />
+    <java-symbol type="array" name="shutdown_reboot_actions" />
+
+    <java-symbol type="drawable" name="ic_lock_power_reboot" />
+
+    <java-symbol type="integer" name="config_deviceHardwareKeys" />
+    <java-symbol type="integer" name="config_deviceHardwareWakeKeys" />
+    <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
+
+    <java-symbol type="string" name="global_action_reboot" />
+    <java-symbol type="string" name="lockscreen_missing_sim_message_short" />
+    <java-symbol type="string" name="lockscreen_permanent_disabled_sim_message_short" />
+    <java-symbol type="string" name="lockscreen_sim_locked_message" />
+    <java-symbol type="string" name="lockscreen_sim_puk_locked_message" />
+    <java-symbol type="string" name="lockscreen_airplane_mode_on" />
+
+    <!-- From services -->
+    <java-symbol type="array" name="app_ops_labels" />
+
+    <java-symbol type="bool" name="config_setZenModeWhenSilentModeOn" />
+    <java-symbol type="bool" name="config_deviceHasVariableButtonBrightness" />
+
+    <java-symbol type="integer" name="config_buttonBrightnessSettingDefault" />
+    <java-symbol type="integer" name="config_keyboardBrightnessSettingDefault" />
+
+    <java-symbol type="string" name="config_geofenceServicesProvider" />
+    <java-symbol type="string" name="config_comboNetworkLocationProvider" />
+    <java-symbol type="string" name="tethered_notification_no_device_message" />
+    <java-symbol type="string" name="tethered_notification_one_device_message" />
+    <java-symbol type="string" name="tethered_notification_multi_device_message" />
+    <java-symbol type="string" name="usb_choose_notification_title" />
+    <java-symbol type="string" name="usb_charging_notification_title" />
+
+    <!-- Profiles -->
+    <java-symbol type="xml" name="profile_default" />
+    <java-symbol type="string" name="wildcardProfile" />
+    <java-symbol type="string" name="profile_picker_title" />
+    <java-symbol type="string" name="profile_none" />
+    <java-symbol type="string" name="global_action_choose_profile" />
+    <java-symbol type="drawable" name="ic_lock_profile" />
+
+    <!-- From SystemUI -->
+    <java-symbol type="anim" name="lock_screen_wallpaper_exit_noop" />
+
+    <java-symbol type="bool" name="config_combined_signal" />
+
+    <!-- Config.xml entries -->
+    <java-symbol type="string" name="config_deviceKeyHandlerLib" />
+    <java-symbol type="string" name="config_deviceKeyHandlerClass" />
+
+    <!-- From various Material changes -->
+    <java-symbol type="array" name="config_sms_convert_destination_number_support" />
+    <java-symbol type="string" name="config_partial_segment_expire_age" />
+    <java-symbol type="bool" name="config_global_phone_enabled" />
+    <java-symbol type="bool" name="use_motion_accel" />
+
+    <!-- sim refresh for dual mode card -->
+    <java-symbol type="bool" name="config_sim_refresh_for_dual_mode_card" />
+
+    <!-- config 2G/3G/4G RAT strings for carriers -->
+    <java-symbol type="string" name="config_rat_2g" />
+    <java-symbol type="string" name="config_rat_3g" />
+    <java-symbol type="string" name="config_rat_4g" />
+
+    <!-- spn display control -->
+    <java-symbol type="bool" name="config_spn_display_control" />
+
+    <!-- monitor locale change -->
+    <java-symbol type="bool" name="config_monitor_locale_change" />
+
+    <!-- display for radio tech -->
+    <java-symbol type="bool" name="config_display_rat" />
+
+    <java-symbol type="array" name="origin_carrier_names" />
+    <java-symbol type="array" name="locale_carrier_names" />
+
+    <!-- Enabled ESN Tracker -->
+    <java-symbol type="bool" name="config_telephony_ESN_Tracker_enabled" />
+
+    <!-- Data Connectivity Error Configurations -->
+    <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />
+    <java-symbol type="bool" name="config_protocol_errors_perm_failure" />
+
+    <!-- Data Connectivity Error Configurations -->
+    <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />
+    <java-symbol type="bool" name="config_protocol_errors_perm_failure" />
+    <!-- config softap extention feature -->
+    <java-symbol type="bool" name="config_softap_extention" />
+
+    <java-symbol type="bool" name="config_enable_mms_with_mobile_data_off" />
+
+    <java-symbol type="bool" name="config_wifiApFirmwareReload" />
+
+    <!-- EdgeGesture service -->
+    <java-symbol type="dimen" name="edge_gesture_trigger_distance" />
+    <java-symbol type="dimen" name="edge_gesture_perpendicular_distance" />
+    <java-symbol type="dimen" name="edge_gesture_trigger_thickness" />
+
+    <!-- Gesture Sensor -->
+    <java-symbol type="bool" name="config_enableGestureService" />
+
+    <!-- Privacy Guard -->
+    <java-symbol type="drawable" name="stat_notify_privacy_guard" />
+    <java-symbol type="string" name="privacy_guard_notification" />
+    <java-symbol type="string" name="privacy_guard_notification_detail" />
+    <java-symbol type="string" name="privacy_guard_dialog_title" />
+    <java-symbol type="string" name="privacy_guard_dialog_summary" />
+
+    <!-- Proximity check on screen on -->
+    <java-symbol type="bool" name="config_proximityCheckOnWake" />
+
+    <!-- Proximity check timeout -->
+    <java-symbol type="integer" name="config_proximityCheckTimeout" />
+
+    <!-- Developer settings - Kill app back press -->
+    <java-symbol type="string" name="app_killed_message" />
+
+    <!-- Config.xml entries -->
+    <java-symbol type="integer" name="config_backKillTimeout" />
+    <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
+    <java-symbol type="bool" name="config_samsung_stk" />
+    <java-symbol type="bool" name="config_hasRemovableLid" />
+
+    <!-- Notification and battery light -->
+    <java-symbol type="bool" name="config_intrusiveNotificationLed" />
+    <java-symbol type="bool" name="config_multiColorNotificationLed" />
+    <java-symbol type="bool" name="config_intrusiveBatteryLed" />
+    <java-symbol type="bool" name="config_multiColorBatteryLed" />
+    <java-symbol type="array" name="notification_light_package_mapping" />
+    <java-symbol type="array" name="config_notificationNoAlertsVibePattern" />
+
+    <!-- ADB notification -->
+    <java-symbol type="string" name="adb_net_active_notification_title" />
+    <java-symbol type="string" name="adb_both_active_notification_title" />
+    <java-symbol type="string" name="adb_active_generic_notification_message" />
+
+    <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
+
+    <!-- Theme install failure notification -->
+    <java-symbol type="string" name="theme_install_error_title" />
+    <java-symbol type="string" name="theme_install_error_message" />
+    <!-- Package Manager -->
+    <java-symbol type="array" name="config_disabledComponents" />
+
+    <!-- Last app switch animations -->
+    <java-symbol type="anim" name="last_app_in" />
+    <java-symbol type="anim" name="last_app_out" />
+
+    <!-- Performance Profiles -->
+    <java-symbol type="string" name="config_perf_profile_prop" />
+    <java-symbol type="string" name="config_perf_profile_default_entry" />
+    <java-symbol type="array" name="perf_profile_entries" />
+    <java-symbol type="array" name="perf_profile_values" />
+    <java-symbol type="string" name="perf_profile_pwrsv" />
+    <java-symbol type="string" name="perf_profile_bal" />
+    <java-symbol type="string" name="perf_profile_perf" />
+
+    <!-- Array of default activities with custom power management -->
+    <java-symbol type="array" name="config_auto_perf_activities" />
+
+    <!-- Power menu -->
+    <java-symbol type="drawable" name="ic_lock_screenshot" />
+    <java-symbol type="string" name="global_action_screenshot" />
+    <java-symbol type="drawable" name="ic_lock_settings" />
+    <java-symbol type="drawable" name="ic_lock_user" />
+
+    <!-- First boot install dialog -->
+    <java-symbol type="string" name="android_installing_apk" />
+    <java-symbol type="string" name="android_installing_title" />
+</resources>
