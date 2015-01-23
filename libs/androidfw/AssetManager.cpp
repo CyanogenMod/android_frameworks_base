@@ -361,8 +361,8 @@ bool AssetManager::addCommonOverlayPath(const String8& themePackagePath, int32_t
 {
     AutoMutex _l(mLock);
 
-    ALOGV("targetApkPath: %s, resArscPath %s, resApkPath %s, prefixPath %s",
-            themePackagePath.string());
+    ALOGV("targetApkPath: %s, resApkPath %s, prefixPath %s",
+            themePackagePath.string(), resApkPath.string(), prefixPath.string());
 
     // Skip if we have it already.
     for (size_t i = 0; i < mAssetPaths.size(); ++i) {
@@ -370,6 +370,16 @@ bool AssetManager::addCommonOverlayPath(const String8& themePackagePath, int32_t
             *cookie = static_cast<int32_t>(i + 1);
             return true;
         }
+    }
+
+    if (access(themePackagePath.string(), R_OK) != 0) {
+        ALOGW("failed to access file %s: %s\n", themePackagePath.string(), strerror(errno));
+        return false;
+    }
+
+    if (access(resApkPath.string(), R_OK) != 0) {
+        ALOGW("failed to access file %s: %s\n", resApkPath.string(), strerror(errno));
+        return false;
     }
 
     asset_path oap;
