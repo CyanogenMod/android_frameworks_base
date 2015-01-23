@@ -88,4 +88,7 @@
 
     <string name="quick_settings_custom_tile_detail_title">Custom Tile</string>
     <string name="quick_settings_remove">Remove tile</string>
+    <string name="quick_settings_network_adb_enabled_label">Enabled</string>
+    <string name="quick_settings_network_adb_disabled_label">Disabled</string>
+    <string name="qs_tile_adb_over_network">ADB over network</string>
 </resources>
