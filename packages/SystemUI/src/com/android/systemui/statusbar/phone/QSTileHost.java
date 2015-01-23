@@ -36,6 +36,7 @@ import com.android.internal.logging.MetricsLogger;
 import android.widget.RemoteViews;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
+import com.android.systemui.qs.tiles.AdbOverNetworkTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
@@ -398,6 +399,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("cast")) return R.string.quick_settings_cast_title;
         else if (spec.equals("hotspot")) return R.string.quick_settings_hotspot_label;
         else if (spec.equals("edit")) return R.string.quick_settings_edit_label;
+        else if (spec.equals("adb_network")) return R.string.qs_tile_adb_over_network;
         return 0;
     }
 
