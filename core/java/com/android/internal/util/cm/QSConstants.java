@@ -38,6 +38,7 @@ public class QSConstants {
     public static final String TILE_APN = "apn";
     public static final String TILE_PROFILES = "profiles";
     public static final String TILE_PERFORMANCE = "performance";
+    public static final String TILE_ADB_NETWORK = "adb_network";
 
     // Order matters
     protected static final ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
@@ -66,5 +67,6 @@ public class QSConstants {
         TILES_AVAILABLE.add(TILE_APN);
         TILES_AVAILABLE.add(TILE_PROFILES);
         TILES_AVAILABLE.add(TILE_PERFORMANCE);
+        TILES_AVAILABLE.add(TILE_ADB_NETWORK);
     }
 }
