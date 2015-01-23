@@ -2846,13 +2846,15 @@ public class Intent implements Parcelable, Cloneable {
      * Could indicate that curently applied theme is malicious.
      * @hide
      */
-    public static final String ACTION_APP_LAUNCH_FAILURE = "com.tmobile.intent.action.APP_LAUNCH_FAILURE";
+    public static final String ACTION_APP_FAILURE =
+            "com.tmobile.intent.action.APP_FAILURE";
 
     /**
      * Broadcast Action: Request to reset the unrecoverable errors count to 0.
      * @hide
      */
-    public static final String ACTION_APP_LAUNCH_FAILURE_RESET = "com.tmobile.intent.action.APP_LAUNCH_FAILURE_RESET";
+    public static final String ACTION_APP_FAILURE_RESET =
+            "com.tmobile.intent.action.APP_FAILURE_RESET";
 
     /**
      * Activity Action: Shows the brightness setting dialog.
