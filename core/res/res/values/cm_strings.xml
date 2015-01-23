@@ -250,4 +250,6 @@
     <!-- [CHAR LIMIT=40] Title of dialog that is shown when performing a system install. -->
     <string name="android_installing_title">Android is installing\u2026</string>
 
+    <string name="theme_reset_notification_title">Theme reset</string>
+    <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
 </resources>

@@ -58,6 +58,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.SparseIntArray;
 
+import android.view.InflateException;
 import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.app.IAppOpsService;
@@ -11626,6 +11627,28 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
+    private void sendAppFailureBroadcast(String pkgName) {
+        Intent intent = new Intent(Intent.ACTION_APP_FAILURE,
+                (pkgName != null)? Uri.fromParts("package", pkgName, null) : null);
+        mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT_OR_SELF);
+    }
+
+    /**
+     * A possible theme crash is one that throws one of the following exceptions
+     * {@link android.content.res.Resources.NotFoundException}
+     * {@link android.view.InflateException}
+     *
+     * @param exceptionClassName
+     * @return True if exceptionClassName is one of the above exceptions
+     */
+    private boolean isPossibleThemeCrash(String exceptionClassName) {
+        if (Resources.NotFoundException.class.getName().equals(exceptionClassName) ||
+                InflateException.class.getName().equals(exceptionClassName)) {
+            return true;
+        }
+        return false;
+    }
+
     private boolean handleAppCrashLocked(ProcessRecord app, String shortMsg, String longMsg,
             String stackTrace) {
         long now = SystemClock.uptimeMillis();
@@ -11636,6 +11659,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         } else {
             crashTime = null;
         }
+
+        if (isPossibleThemeCrash(shortMsg)) sendAppFailureBroadcast(app.info.packageName);
+
         if (crashTime != null && now < crashTime+ProcessList.MIN_CRASH_INTERVAL) {
             // This process loses!
             Slog.w(TAG, "Process " + app.info.processName
