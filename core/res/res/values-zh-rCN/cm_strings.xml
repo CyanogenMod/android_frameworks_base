@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="profileNameSilent">静音</string>
+    <string name="profile_none">无</string>
+    <string name="permgroupdesc_security">与设备安全信息相关的权限。</string>
+    <string name="profileGroupPhone">电话</string>
+    <string name="profileNameNight">夜晚</string>
+    <string name="profileGroupCalendar">日历</string>
+    <string name="profileGroupSMS">短信</string>
+    <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
+    <string name="permgrouplab_security">安全</string>
+    <string name="profileNameHome">住宅</string>
+    <string name="permlab_readPhoneBlacklist">读取手机黑名单</string>
+    <string name="profileGroupEmail">电子邮件</string>
+    <string name="global_action_choose_profile">情景模式</string>
+    <string name="profileNameAutomobile">汽车</string>
+    <string name="permdesc_readPhoneBlacklist">允许应用读取有关被阻止来电或信息的电话号码的信息。</string>
+    <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameDefault">默认</string>
+    <string name="wildcardProfile">其他</string>
+    <string name="profile_picker_title">情景模式</string>
+</resources>
