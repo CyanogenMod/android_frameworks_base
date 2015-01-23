@@ -271,14 +271,14 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 mLockPatternUtils.getCurrentUser());
         boolean visible = !isCameraDisabledByDpm() && resolved != null
                 && getResources().getBoolean(R.bool.config_keyguardShowCameraAffordance);
-        visible = visible || mShortcutHelper.isTargetCustom(
+        visible = visible ||  mShortcutHelper != null && mShortcutHelper.isTargetCustom(
                 LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT);
         mCameraImageView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     private void updatePhoneVisibility() {
         boolean visible = isPhoneVisible();
-        visible = visible || mShortcutHelper.isTargetCustom(
+        visible = visible || mShortcutHelper != null && mShortcutHelper.isTargetCustom(
                 LockscreenShortcutsHelper.Shortcuts.LEFT_SHORTCUT);
         mPhoneImageView.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
