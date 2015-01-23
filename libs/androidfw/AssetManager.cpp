@@ -330,6 +330,16 @@ bool AssetManager::addCommonOverlayPath(const String8& themePackagePath, int32_t
         }
     }
 
+    if (access(themePackagePath.string(), R_OK) != 0) {
+        ALOGW("failed to access file %s: %s\n", themePackagePath.string(), strerror(errno));
+        return false;
+    }
+
+    if (access(resApkPath.string(), R_OK) != 0) {
+        ALOGW("failed to access file %s: %s\n", resApkPath.string(), strerror(errno));
+        return false;
+    }
+
     asset_path oap;
     oap.path = themePackagePath;
     oap.type = ::getFileType(themePackagePath.string());
