@@ -271,9 +271,6 @@ bool ResourceCache::recycleLocked(SkBitmap* resource) {
  * by the various destructor() and recycle() methods which call this method).
  */
 void ResourceCache::deleteResourceReferenceLocked(const void* resource, ResourceReference* ref) {
-    if (ref->recycled && ref->resourceType == kBitmap) {
-        ((SkBitmap*) resource)->setPixels(NULL, NULL);
-    }
     if (ref->destroyed || ref->resourceType == kLayer) {
         switch (ref->resourceType) {
             case kBitmap: {
