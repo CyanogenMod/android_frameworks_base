@@ -71,4 +71,7 @@
     <java-symbol type="bool" name="config_stylusGestures" />
     <java-symbol type="string" name="stylus_app_not_installed" />
 
+    <!-- Theme reset notification -->
+    <java-symbol type="string" name="theme_reset_notification_title" />
+    <java-symbol type="string" name="theme_reset_notification_body" />
 </resources>
