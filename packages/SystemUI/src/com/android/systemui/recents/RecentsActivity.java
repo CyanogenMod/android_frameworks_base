@@ -243,12 +243,20 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
             }
             mEmptyView.setVisibility(View.VISIBLE);
             mRecentsView.setSearchBarVisibility(View.GONE);
+            if (getResources().getBoolean(R.bool.config_showRecentsTopButtons)) {
+                findViewById(R.id.recents_clear).setEnabled(false);
+            }
             findViewById(R.id.clear_recents).setVisibility(View.GONE);
         } else {
             if (mEmptyView != null) {
                 mEmptyView.setVisibility(View.GONE);
             }
-            findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
+            if (getResources().getBoolean(R.bool.config_showRecentsTopButtons)) {
+                findViewById(R.id.clear_recents).setVisibility(View.GONE);
+                findViewById(R.id.recents_clear).setEnabled(true);
+            } else {
+                findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
+            }
             if (mRecentsView.hasSearchBar()) {
                 mRecentsView.setSearchBarVisibility(View.VISIBLE);
             } else {
@@ -382,6 +390,12 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
         mEmptyViewStub = (ViewStub) findViewById(R.id.empty_view_stub);
         mDebugOverlayStub = (ViewStub) findViewById(R.id.debug_overlay_stub);
         mScrimViews = new SystemBarScrimViews(this, mConfig);
+        if (getResources().getBoolean(R.bool.config_showRecentsTopButtons)) {
+            View topButtons = (View) findViewById(R.id.recents_top_buttons);
+            if (topButtons != null) {
+                topButtons.setVisibility(View.VISIBLE);
+            }
+        }
         inflateDebugOverlay();
 
         // Bind the search app widget when we first start up

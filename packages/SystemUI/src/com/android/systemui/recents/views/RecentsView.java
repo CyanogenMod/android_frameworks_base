@@ -282,12 +282,16 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         mConfig.getTaskStackBounds(width, height, mConfig.systemInsets.top,
                 mConfig.systemInsets.right, taskStackBounds);
 
-        if (mClearRecents != null) {
+        View clearView = mClearRecents;
+        if (getResources().getBoolean(R.bool.config_showRecentsTopButtons)) {
+           clearView = ((View)getParent()).findViewById(R.id.recents_top_buttons);
+        }
+        if (clearView != null) {
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
-                    mClearRecents.getLayoutParams();
+                    clearView.getLayoutParams();
             params.topMargin = taskStackBounds.top;
             params.rightMargin = width - taskStackBounds.right;
-            mClearRecents.setLayoutParams(params);
+            clearView.setLayoutParams(params);
         }
 
         // Measure each TaskStackView with the full width and height of the window since the 
@@ -315,7 +319,24 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     @Override
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
-        mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
+        if (getResources().getBoolean(R.bool.config_showRecentsTopButtons)) {
+            mClearRecents = ((View)getParent()).findViewById(R.id.recents_clear);
+            View taskManagerView = ((View)getParent()).findViewById(R.id.task_manager);
+            if (taskManagerView != null) {
+                taskManagerView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(
+                            "com.android.systemui",
+                            "com.android.systemui.recents.TaskManagerActivity"));
+                        getContext().startActivity(intent);
+                    }
+                });
+            }
+        } else {
+            mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
+        }
         mClearRecents.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dismissAllTasksAnimated();
