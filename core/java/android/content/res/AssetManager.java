@@ -21,6 +21,7 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -666,7 +667,11 @@ public final class AssetManager implements AutoCloseable {
     public final int addCommonOverlayPath(String themeApkPath,
             String resApkPath, String prefixPath) {
         synchronized (this) {
-            return addCommonOverlayPathNative(themeApkPath, resApkPath, prefixPath);
+            if ((new File(themeApkPath).exists()) && (new File(resApkPath).exists())) {
+                return addCommonOverlayPathNative(themeApkPath, resApkPath, prefixPath);
+            }
+
+            return 0;
         }
     }
 
