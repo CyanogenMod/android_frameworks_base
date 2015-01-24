@@ -31,6 +31,7 @@ import android.os.SystemProperties;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.SubInfoRecord;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Slog;
@@ -94,7 +95,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     String[] mSpn;
     String[] mPlmn;
     int mPhoneCount = 0;
-    private HashMap<Long, Integer> mSubIdPhoneIdMap;
+    private HashMap<Integer, Long> mPhoneIdSubIdMap;
     ArrayList<MSimSignalCluster> mSimSignalClusters = new ArrayList<MSimSignalCluster>();
     ArrayList<TextView> mSubsLabelViews = new ArrayList<TextView>();
 
@@ -216,19 +217,19 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     protected void registerPhoneStateListener(Context context) {
         // telephony
         mPhone = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        mSubIdPhoneIdMap = new HashMap<Long, Integer>();
+        mPhoneIdSubIdMap = new HashMap<Integer, Long>();
         mPhoneCount = TelephonyManager.getDefault().getPhoneCount();
         Slog.d(TAG, "registerPhoneStateListener: " + mPhoneCount);
         mMSimPhoneStateListener = new PhoneStateListener[mPhoneCount];
         for (int i = 0; i < mPhoneCount; i++) {
             long[] subIdtemp = SubscriptionManager.getSubId(i);
             if (subIdtemp != null) {
-                long subId = subIdtemp[0];
-                Slog.d(TAG, "registerPhoneStateListener subId: " + subId);
+                long subid = subIdtemp[0];
+                Slog.d(TAG, "registerPhoneStateListener subId: "+ subid);
                 Slog.d(TAG, "registerPhoneStateListener slotId: " + i);
-                if (subId > 0) {
-                    mSubIdPhoneIdMap.put(subId, i);
-                    mMSimPhoneStateListener[i] = getPhoneStateListener(subId,
+                if (subid > 0) {
+                    mPhoneIdSubIdMap.put(i, subid);
+                    mMSimPhoneStateListener[i] = getPhoneStateListener(subid,
                             i);
                     mPhone.listen(mMSimPhoneStateListener[i],
                             PhoneStateListener.LISTEN_SERVICE_STATE
@@ -965,7 +966,11 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 something = true;
             }
         }
-        if (something) {
+        Long sub = mPhoneIdSubIdMap.get(phoneId);
+        if (sub != null) {
+            SubInfoRecord sir = SubscriptionManager.getSubInfoForSubscriber(sub);
+            mMSimNetworkName[phoneId] = sir.displayName;
+        } else if (something) {
             mMSimNetworkName[phoneId] = str.toString();
         } else {
             mMSimNetworkName[phoneId] = mNetworkNameDefault;
