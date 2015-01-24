@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -57,7 +58,15 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         state.visible = true;
         state.profile = arg == null ? getCurrentProfileIndex() : (Integer) arg;
         state.label = mEntries[state.profile];
-        state.iconId = mEntryIconRes[state.profile];
+        state.icon = mContext.getDrawable(mEntryIconRes[state.profile]);
+        if (state.icon instanceof AnimatedVectorDrawable) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((AnimatedVectorDrawable) getState().icon).start();
+                }
+            });
+        }
     }
 
     @Override
