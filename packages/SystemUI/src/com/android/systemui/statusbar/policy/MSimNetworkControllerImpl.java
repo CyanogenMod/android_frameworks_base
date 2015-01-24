@@ -57,7 +57,6 @@ import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.util.AsyncChannel;
-
 import com.android.systemui.R;
 
 public class MSimNetworkControllerImpl extends NetworkControllerImpl {
@@ -107,7 +106,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     int mPhoneCount = 0;
     int PHONE_ID1 = PhoneConstants.PHONE_ID1;
     int PHONE_ID2 = PhoneConstants.PHONE_ID2;
-    private HashMap<Long, Integer> mSubIdPhoneIdMap;
+    private HashMap<Integer, Long> mSubIdPhoneIdMap;
     ArrayList<MSimSignalCluster> mSimSignalClusters = new ArrayList<MSimSignalCluster>();
     ArrayList<TextView> mSubsLabelViews = new ArrayList<TextView>();
 
@@ -230,7 +229,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         //List<SubInfoRecord> subInfoList = SubscriptionManager.getActivatedSubInfoList(context);
         //if (subInfoList != null) {
             //int subCount = subInfoList.size();
-            mSubIdPhoneIdMap = new HashMap<Long, Integer>();
+            mSubIdPhoneIdMap = new HashMap<Integer, Long>();
             mPhoneCount = TelephonyManager.getDefault().getPhoneCount();
              Slog.d(TAG, "registerPhoneStateListener: " + mPhoneCount);
             mMSimPhoneStateListener = new PhoneStateListener[mPhoneCount];
@@ -242,7 +241,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     Slog.d(TAG, "registerPhoneStateListener slotId: "+ i);
                     //if (subInfoList.get(i).mSubId >= 0) {
                     if (subId > 0) {
-                        mSubIdPhoneIdMap.put(subId, i);
+                    mSubIdPhoneIdMap.put(i,subId);
                         mMSimPhoneStateListener[i] = getPhoneStateListener(subId,
                                 i);
                         mPhone.listen(mMSimPhoneStateListener[i],
@@ -987,7 +986,11 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 something = true;
             }
         }
-        if (something) {
+        Long sub = mSubIdPhoneIdMap.get(phoneId);
+        if (sub != null) {
+            SubInfoRecord sir = SubscriptionManager.getSubInfoForSubscriber(sub);
+            mMSimNetworkName[phoneId] = sir.displayName;
+        } else if (something) {
             mMSimNetworkName[phoneId] = str.toString();
         } else {
             mMSimNetworkName[phoneId] = mNetworkNameDefault;
