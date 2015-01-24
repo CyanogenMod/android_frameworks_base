@@ -169,7 +169,8 @@ LOCAL_SRC_FILES:= \
 	com_android_internal_os_Zygote.cpp \
 	com_android_internal_util_VirtualRefBasePtr.cpp \
 	com_android_internal_view_animation_NativeInterpolatorFactoryHelper.cpp \
-	org_codeaurora_Performance.cpp
+	org_codeaurora_Performance.cpp \
+	com_android_internal_app_ActivityTrigger.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
