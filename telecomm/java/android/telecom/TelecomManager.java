@@ -685,7 +685,7 @@ public class TelecomManager {
                 getTelecomService().clearAccounts(packageName);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelecomService#clearAccountsForPackage()", e);
+            Log.e(TAG, "Error calling ITelecomService#clearAccountsForPackage", e);
         }
     }
 
@@ -720,7 +720,7 @@ public class TelecomManager {
                 return getTelecomService().isVoiceMailNumber(accountHandle, number);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, "RemoteException calling isInCall().", e);
+            Log.e(TAG, "RemoteException calling ITelecomService#isVoiceMailNumber.", e);
         }
         return false;
     }
@@ -743,6 +743,26 @@ public class TelecomManager {
             Log.e(TAG, "RemoteException calling isInCall().", e);
         }
         return false;
+     }
+
+     /**
+     * Return the line 1 phone number for given phone account.
+     *
+     * @param accountHandle The handle for the account retrieve a number for.
+     * @return A string representation of the line 1 phone number.
+     *
+     * @hide
+     */
+    @SystemApi
+    public String getLine1Number(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().getLine1Number(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#getLine1Number.", e);
+        }
+        return null;
     }
 
     /**
