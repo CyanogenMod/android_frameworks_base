@@ -1959,7 +1959,7 @@ public class NotificationManagerService extends SystemService {
         final ProfileManager profileManager =
                 (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
 
-        ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+        ProfileGroup group = profileManager.getActiveProfileGroup(mContext.getPackageName());
         if (group != null) {
             group.applyOverridesToNotification(notification);
         }
