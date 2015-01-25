@@ -22,13 +22,6 @@
     android:paddingEnd="16dp"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@android:id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.QS.DataUsage"
-        android:text="@string/quick_settings_location_detail_menu_title" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +43,7 @@
             android:paddingRight="@dimen/detail_radio_group_padding"
             android:paddingBottom="@dimen/detail_radio_group_padding"
             android:textAppearance="@style/TextAppearance.QS.DetailItemPrimary"
-            android:text="@string/quick_settings_location_detail_mode_high_accuracy_title" />
+            android:text="@string/quick_settings_location_high_accuracy_label" />
         <RadioButton android:id="@+id/radio_battery_saving"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +52,7 @@
             android:paddingRight="@dimen/detail_radio_group_padding"
             android:paddingBottom="@dimen/detail_radio_group_padding"
             android:textAppearance="@style/TextAppearance.QS.DetailItemPrimary"
-            android:text="@string/quick_settings_location_detail_mode_battery_saving_title" />
+            android:text="@string/quick_settings_location_battery_saving_label" />
         <RadioButton android:id="@+id/radio_sensors_only"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,7 +61,7 @@
             android:paddingRight="@dimen/detail_radio_group_padding"
             android:paddingBottom="@dimen/detail_radio_group_padding"
             android:textAppearance="@style/TextAppearance.QS.DetailItemPrimary"
-            android:text="@string/quick_settings_location_detail_mode_sensors_only_title" />
+            android:text="@string/quick_settings_location_gps_only_label" />
         </RadioGroup>
     </LinearLayout>
 
