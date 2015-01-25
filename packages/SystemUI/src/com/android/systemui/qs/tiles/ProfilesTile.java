@@ -116,7 +116,7 @@ public class ProfilesTile extends QSTile<QSTile.State> {
 
         @Override
         public int getTitle() {
-            return R.string.quick_settings_profiles_title;
+            return R.string.quick_settings_profiles_detail_title;
         }
 
         @Override
