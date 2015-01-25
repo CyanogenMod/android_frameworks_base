@@ -702,7 +702,7 @@ public class TelecomManager {
                 getTelecomService().clearAccounts(packageName);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelecomService#clearAccountsForPackage()", e);
+            Log.e(TAG, "Error calling ITelecomService#clearAccountsForPackage", e);
         }
     }
 
@@ -737,7 +737,7 @@ public class TelecomManager {
                 return getTelecomService().isVoiceMailNumber(accountHandle, number);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, "RemoteException calling isInCall().", e);
+            Log.e(TAG, "RemoteException calling ITelecomService#isVoiceMailNumber.", e);
         }
         return false;
     }
@@ -765,6 +765,13 @@ public class TelecomManager {
      */
     @SystemApi
     public String getLine1Number(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().getLine1Number(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#getLine1Number.", e);
+        }
         return null;
     }
 
