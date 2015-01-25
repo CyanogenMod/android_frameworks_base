@@ -114,7 +114,7 @@ public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEv
             }
         } else {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_compass_off);
-            state.label = mContext.getString(R.string.quick_settings_compass_off);
+            state.label = mContext.getString(R.string.quick_settings_compass_label);
             mImage.setRotation(0);
         }
     }
