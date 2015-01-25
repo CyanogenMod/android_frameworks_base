@@ -95,8 +95,7 @@ public class NfcTile extends QSTile<QSTile.BooleanState> {
         state.visible = mNfcAdapter != null;
         state.value = mNfcAdapter != null && isEnabled();
         state.iconId = state.value ? R.drawable.ic_qs_nfc_on : R.drawable.ic_qs_nfc_off;
-        state.label = mContext.getString(state.value
-                ? R.string.quick_settings_nfc : R.string.quick_settings_nfc_off);
+        state.label = mContext.getString(R.string.quick_settings_nfc_label);
     }
 
     @Override
