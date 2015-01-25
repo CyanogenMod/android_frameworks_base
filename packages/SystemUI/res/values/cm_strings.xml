@@ -30,9 +30,6 @@
          [CHAR LIMIT=4] -->
     <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
 
-    <!-- Content description of the superuser tile -->
-    <string name="accessibility_su_active">Superuser session active</string>
-
     <!-- Strings for lockscreen shortcut hints -->
     <string name="left_shortcut_hint">Swipe right for %1$s</string>
     <string name="right_shortcut_hint">Swipe left for %1$s</string>
@@ -57,10 +54,6 @@
     <string name="accessibility_dpad_right">Cursor right</string>
 
     <!-- Development shortcuts -->
-    <!-- Title shown in recents popup for removing an application from the list -->
-    <string name="status_bar_recent_remove_item_title">Remove from list</string>
-    <!-- Title shown in recents popup for inspecting an application's properties -->
-    <string name="status_bar_recent_inspect_item_title">App info</string>
     <!-- Title shown in recents popup for wiping application's data -->
     <string name="advanced_dev_option_wipe_app">Wipe app data</string>
     <!-- Title shown in recents popup for force stopping the application -->
@@ -82,7 +75,6 @@
     <string name="accessibility_quick_settings_profiles_changed">Profile changed to <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
 
     <string name="quick_settings_compass_value" translatable="false"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_off">Compass off</string>
     <string name="quick_settings_compass_init">Initializing\u2026</string>
 
     <!-- Lights settings, LED notification -->
@@ -104,12 +96,9 @@
 
     <string name="quick_settings_custom_tile_detail_title">Custom tile</string>
     <string name="quick_settings_remove">Remove tile</string>
-    <string name="quick_settings_network_adb_enabled_label">Enabled</string>
-    <string name="quick_settings_network_adb_disabled_label">Disabled</string>
-    <string name="qs_tile_adb_over_network">ADB over network</string>
-    <string name="qs_tile_compass">Compass</string>
-    <string name="quick_settings_nfc">NFC</string>
-    <string name="quick_settings_nfc_off">NFC off</string>
+    <string name="quick_settings_network_adb_label">ADB over network</string>
+    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_nfc_label">NFC</string>
     <string name="quick_settings_profiles">System profiles</string>
     <string name="quick_settings_profiles_off">Profiles disabled</string>
 
@@ -183,7 +172,7 @@
     <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>
     <string name="dynamic_qs_tile_next_alarm_label">Next alarm</string>
     <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
-    <string name="dynamic_qs_tile_su_label">Root</string>
+    <string name="dynamic_qs_tile_su_label">Root access</string>
     <string name="dynamic_qs_tile_adb_label" translatable="false">ADB</string>
 
     <!-- LiveDisplay strings -->
@@ -207,29 +196,15 @@
     <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
 
+    <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_location_detail_title">Location mode</string>
     <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_location_battery_saving_label">Battery saving</string>
     <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_location_gps_only_label">GPS only</string>
+    <string name="quick_settings_location_gps_only_label">Device only</string>
     <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_location_high_accuracy_label">High accuracy</string>
 
-    <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_location_detail_title">Location</string>
-    <!-- QuickSettings: Location detail panel menu title [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_location_detail_menu_title">Select mode:</string>
-    <!-- [CHAR LIMIT=30] Location detail panel, high accuracy location mode -->
-    <string name="quick_settings_location_detail_mode_high_accuracy_title">High accuracy</string>
-    <!-- [CHAR LIMIT=30] Location detail panel, battery saving location mode -->
-    <string name="quick_settings_location_detail_mode_battery_saving_title">Battery saving</string>
-    <!-- [CHAR LIMIT=30] Location detail panel, device only location mode -->
-    <string name="quick_settings_location_detail_mode_sensors_only_title">Device only</string>
-    <!-- [CHAR LIMIT=130] Location detail panel, description for high accuracy mode -->
-    <string name="quick_settings_location_detail_mode_high_accuracy_description">Use GPS, Wi\u2011Fi, and cellular networks to determine location </string>
-    <!-- [CHAR LIMIT=130] Location detail panel, description for battery saving mode -->
-    <string name="quick_settings_location_detail_mode_battery_saving_description">Use Wi\u2011Fi and cellular networks to determine location</string>
-    <!-- [CHAR LIMIT=130] Location detail panel, description for sensors only mode -->
-    <string name="quick_settings_location_detail_mode_sensors_only_description">Use GPS to determine your location</string>
     <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_location_changed_battery_saving">Location reporting changed to battery saving mode.</string>
     <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
