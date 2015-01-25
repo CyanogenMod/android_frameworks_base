@@ -428,9 +428,9 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("cast")) return R.string.quick_settings_cast_title;
         else if (spec.equals("hotspot")) return R.string.quick_settings_hotspot_label;
         else if (spec.equals("edit")) return R.string.quick_settings_edit_label;
-        else if (spec.equals("adb_network")) return R.string.qs_tile_adb_over_network;
-        else if (spec.equals("compass")) return R.string.qs_tile_compass;
-        else if (spec.equals("nfc")) return R.string.quick_settings_nfc;
+        else if (spec.equals("adb_network")) return R.string.quick_settings_network_adb_label;
+        else if (spec.equals("compass")) return R.string.quick_settings_compass_label;
+        else if (spec.equals("nfc")) return R.string.quick_settings_nfc_label;
         else if (spec.equals("profiles")) return R.string.quick_settings_profiles;
         else if (spec.equals("sync")) return R.string.quick_settings_sync_label;
         else if (spec.equals("volume_panel")) return R.string.quick_settings_volume_panel_label;
