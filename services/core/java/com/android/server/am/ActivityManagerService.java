@@ -11375,6 +11375,14 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
 
+            // Only set at first time boot up for a fresh new phone
+            boolean firstLaunch = SystemProperties.getBoolean("persist.sys.sw.firstLaunch", true);
+            if(firstLaunch){
+                SystemProperties.set("persist.sys.sw.firstLaunch", "false");
+
+                setDefaultLauncher();
+            }
+
             // Start up initial activity.
             mBooting = true;
             startHomeActivityLocked(mCurrentUserId);
@@ -19227,6 +19235,61 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Binder.restoreCallingIdentity(origId);
                 }
             }
+        }
+    }
+
+    private void setDefaultLauncher() {
+        IPackageManager pm = ActivityThread.getPackageManager();
+
+        //clear default launcher preference
+        ArrayList<IntentFilter> intentList = new ArrayList<IntentFilter>();
+        ArrayList<ComponentName> cnList = new ArrayList<ComponentName>();
+        mContext.getPackageManager().getPreferredActivities(intentList, cnList, null);
+        IntentFilter dhIF;
+        for(int i = 0; i < cnList.size(); i++) {
+            dhIF = intentList.get(i);
+            if(dhIF.hasAction(Intent.ACTION_MAIN) && dhIF.hasCategory(Intent.CATEGORY_HOME)) {
+                mContext.getPackageManager().clearPackagePreferredActivities(
+                        cnList.get(i).getPackageName());
+            }
+        }
+
+        //get all launcher activity
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        List<ResolveInfo> list = new ArrayList<ResolveInfo>();
+        try {
+            list = pm.queryIntentActivities(intent,
+                intent.resolveTypeIfNeeded(mContext.getContentResolver()),
+                PackageManager.MATCH_DEFAULT_ONLY, UserHandle.getCallingUserId());
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+
+        // get all components and the best match
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_MAIN);
+        filter.addCategory(Intent.CATEGORY_HOME);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        final int N = list.size();
+        ComponentName[] set = new ComponentName[N];
+        int bestMatch = 0;
+        for (int i = 0; i < N; i++) {
+            ResolveInfo r = list.get(i);
+            set[i] = new ComponentName(r.activityInfo.packageName, r.activityInfo.name);
+            Slog.d(TAG, "packageName = " + r.activityInfo.packageName + " :: name = "
+                    + r.activityInfo.name);
+            if (r.match > bestMatch) bestMatch = r.match;
+        }
+
+        //define and set default launcher
+        String packageName = "com.cyanogenmod.trebuchet";//default launcher package name
+        String className = "com.android.launcher3.Launcher";////default launcher entrance
+        ComponentName launcher = new ComponentName(packageName, className);
+        try {
+            pm.addPreferredActivity(filter,bestMatch,set,launcher,UserHandle.getCallingUserId());
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
         }
     }
 }
