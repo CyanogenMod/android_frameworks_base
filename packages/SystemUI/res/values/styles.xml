@@ -20,6 +20,10 @@
         <item name="android:windowAnimationStyle">@style/Animation.RecentsActivity</item>
     </style>
 
+    <style name="TaskManagerStyle" parent="@android:Theme.Holo">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="RecentsTheme" parent="@android:style/Theme">
         <!-- NoTitle -->
         <item name="android:windowNoTitle">true</item>
