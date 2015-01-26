@@ -23,17 +23,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
+import android.widget.ListView;
 import com.android.systemui.R;
-import com.android.systemui.qs.QSDetailItems;
+import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationSettingsChangeCallback;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /** Quick settings tile: Location **/
 public class LocationTile extends QSTile<QSTile.BooleanState> {
-    private static final Intent LOCATION_SETTINGS = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+    private static final Intent LOCATION_SETTINGS_INTENT
+            = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+    public static final Integer[] LOCATION_SETTINGS = new Integer[]{
+            Settings.Secure.LOCATION_MODE_BATTERY_SAVING,
+            Settings.Secure.LOCATION_MODE_SENSORS_ONLY,
+            Settings.Secure.LOCATION_MODE_HIGH_ACCURACY
+    };
 
+    private final List<Integer> mLocationList = new ArrayList<>();
     private final LocationController mController;
     private final LocationDetailAdapter mDetailAdapter;
     private final KeyguardMonitor mKeyguard;
@@ -78,7 +94,7 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleLongClick() {
-        mHost.startSettingsActivity(LOCATION_SETTINGS);
+        mHost.startSettingsActivity(LOCATION_SETTINGS_INTENT);
     }
 
     @Override
@@ -91,31 +107,47 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
         // state.visible = !(mKeyguard.isSecure() && mKeyguard.isShowing());
         state.visible = !mKeyguard.isShowing();
         state.value = locationEnabled;
+        state.label = mContext.getString(getStateLabelRes(currentState));
 
         switch (currentState) {
             case Settings.Secure.LOCATION_MODE_OFF:
-                state.label = mContext.getString(R.string.quick_settings_location_off_label);
-                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_off);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_location_off);
                 state.iconId = R.drawable.ic_qs_location_off;
                 break;
             case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
-                state.label = mContext.getString(R.string.quick_settings_location_battery_saving_label);
-                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_battery_saving);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_location_battery_saving);
                 state.iconId = R.drawable.ic_qs_location_battery_saving;
                 break;
             case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
-                state.label = mContext.getString(R.string.quick_settings_location_gps_only_label);
-                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_gps_only);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_location_gps_only);
                 state.iconId = R.drawable.ic_qs_location_on;
                 break;
             case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
-                state.label = mContext.getString(R.string.quick_settings_location_high_accuracy_label);
-                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_high_accuracy);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_location_high_accuracy);
                 state.iconId = R.drawable.ic_qs_location_on;
                 break;
             default:
-                state.label = mContext.getString(R.string.quick_settings_location_label);
-                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_on);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_location_on);
+        }
+    }
+
+    private int getStateLabelRes(int currentState) {
+        switch (currentState) {
+            case Settings.Secure.LOCATION_MODE_OFF:
+                return R.string.quick_settings_location_off_label;
+            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                return R.string.quick_settings_location_battery_saving_label;
+            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                return R.string.quick_settings_location_gps_only_label;
+            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                return R.string.quick_settings_location_high_accuracy_label;
+            default:
+                return R.string.quick_settings_location_label;
         }
     }
 
@@ -132,8 +164,6 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
             KeyguardMonitor.Callback {
         @Override
         public void onLocationSettingsChanged(boolean enabled) {
-            mDetailAdapter.setLocationEnabled(enabled);
-            mDetailAdapter.setLocationMode(mController.getLocationCurrentState());
             refreshState();
         }
 
@@ -143,9 +173,25 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
         }
     };
 
-    private class LocationDetailAdapter implements DetailAdapter {
+    private class AdvancedLocationAdapter extends ArrayAdapter<Integer> {
+        public AdvancedLocationAdapter(Context context) {
+            super(context, android.R.layout.simple_list_item_single_choice, mLocationList);
+        }
 
-        private LocationDetailView mLocationDetailView;
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            CheckedTextView label = (CheckedTextView) inflater.inflate(
+                    android.R.layout.simple_list_item_single_choice, parent, false);
+            label.setText(getStateLabelRes(getItem(position)));
+            return label;
+        }
+    }
+
+    private class LocationDetailAdapter implements DetailAdapter, AdapterView.OnItemClickListener {
+
+        private AdvancedLocationAdapter mAdapter;
+        private QSDetailItemsList mDetails;
 
         @Override
         public int getTitle() {
@@ -154,35 +200,52 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
         @Override
         public Boolean getToggleState() {
-            return mController.getLocationCurrentState() != Settings.Secure.LOCATION_MODE_OFF;
+            boolean state = mController.getLocationCurrentState()
+                    != Settings.Secure.LOCATION_MODE_OFF;
+            rebuildLocationList(state);
+            return state;
         }
 
         @Override
         public Intent getSettingsIntent() {
-            return LOCATION_SETTINGS;
+            return LOCATION_SETTINGS_INTENT;
         }
 
         @Override
         public void setToggleState(boolean state) {
             mController.setLocationEnabled(state);
+            rebuildLocationList(state);
+            fireToggleStateChanged(state);
         }
 
         @Override
         public View createDetailView(Context context, View convertView, ViewGroup parent) {
-            final LocationDetailView v = (LocationDetailView) (LayoutInflater.from(mContext).inflate(R.layout.location, parent, false));
-            mLocationDetailView = v;
-            mLocationDetailView.setLocationController(mController);
-            setLocationMode(mController.getLocationCurrentState());
-            return v;
+            mDetails = QSDetailItemsList.convertOrInflate(context, convertView, parent);
+            mDetails.setEmptyState(R.drawable.ic_qs_location_off,
+                    R.string.accessibility_quick_settings_location_off);
+            mAdapter = new LocationTile.AdvancedLocationAdapter(context);
+            mDetails.setAdapter(mAdapter);
+
+            final ListView list = mDetails.getListView();
+            list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+            list.setOnItemClickListener(this);
+
+            return mDetails;
         }
 
-        public void setLocationEnabled(boolean enabled) {
-            fireToggleStateChanged(enabled);
+        private void rebuildLocationList(boolean populate) {
+            mLocationList.clear();
+            if (populate) {
+                mLocationList.addAll(Arrays.asList(LOCATION_SETTINGS));
+                mDetails.getListView().setItemChecked(mAdapter.getPosition(
+                        mController.getLocationCurrentState()), true);
+            }
+            mAdapter.notifyDataSetChanged();
         }
 
-        public void setLocationMode(int mode) {
-            if(mLocationDetailView != null)
-                mLocationDetailView.setLocationMode(mode);
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            mController.setLocationMode((Integer) parent.getItemAtPosition(position));
         }
     }
 }
