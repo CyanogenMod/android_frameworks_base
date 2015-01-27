@@ -43,7 +43,9 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.app.WallpaperManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -1428,8 +1430,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
+
+        mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);
+        mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsTouchListener);
+        mNavigationBarView.getRecentsButton().setLongClickable(true);
+        mNavigationBarView.getRecentsButton().setOnLongClickListener(mLongPressBackRecentsListener);
+        mNavigationBarView.getBackButton().setLongClickable(true);
+        mNavigationBarView.getBackButton().setOnLongClickListener(mLongPressBackRecentsListener);
+        mNavigationBarView.getHomeButton().setOnTouchListener(mHomeActionListener);
         mNavigationBarView.setListeners(mRecentsClickListener, mRecentsPreloadOnTouchListener,
                 mLongPressBackRecentsListener, mHomeActionListener);
+
         updateSearchPanel();
     }
 
@@ -4577,11 +4588,131 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
 
             if (hijackRecentsLongPress) {
-                ActionUtils.switchToLastApp(mContext, mCurrentUserId);
+                handleLongPressRecents();
             }
         } catch (RemoteException e) {
             Log.d(TAG, "Unable to reach activity manager", e);
         }
+    }
+
+    private void handleDefaultLongPress() {
+        ActionUtils.switchToLastApp(mContext, mCurrentUserId);
+    }
+
+    private boolean mRecentsLongPressed = false;
+
+    // OnTouchListener that does some cleanup before calling the real recents listener
+    private View.OnTouchListener mRecentsTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP ||
+                                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                recentsTouchCleanupHandler(hasRecentsLongPressHandler());
+            }
+            return mRecentsPreloadOnTouchListener.onTouch(v, event);
+        }
+    };
+
+    /**
+     * If the user recently long-pressed recents, and there are handlers listening on that
+     * action, reset the navigation bar view.
+     */
+    private void recentsTouchCleanupHandler(boolean hasIntentHandler) {
+        if (hasIntentHandler && mRecentsLongPressed) {
+            mNavigationBarView.setSlippery(false);
+            mNavigationBarView.enableSearchBar();
+        }
+        mRecentsLongPressed = false;
+    }
+
+    /**
+     * Start activity with ACTION_RECENTS_LONG_PRESS intent
+     */
+    private void handleIntentLongPress() {
+        // allow touch events to leave the system UI
+        mNavigationBarView.setSlippery(true);
+        mNavigationBarView.disableSearchBar();
+        mRecentsLongPressed = true;
+
+        // Let the default activity handle this
+        Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Include the package name of the app currently in foreground
+        IActivityManager am = ActivityManagerNative.getDefault();
+        List<ActivityManager.RecentTaskInfo> recentTasks = null;
+        try {
+            recentTasks = am.getRecentTasks(
+                    1, ActivityManager.RECENT_WITH_EXCLUDED, UserHandle.myUserId());
+        } catch (RemoteException e) {
+            Log.e(TAG, "Cannot get recent tasks", e);
+        }
+
+        if (recentTasks != null && recentTasks.size() > 0) {
+            String pkgName = recentTasks.get(0).baseIntent.getComponent().getPackageName();
+            intent.putExtra(Intent.EXTRA_CURRENT_PACKAGE_NAME, pkgName);
+        }
+
+        ComponentName componentName = getRecentsLongPressHandlerComponentName();
+        if (componentName != null) {
+            intent.setComponent(componentName);
+            try {
+                mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            } catch (ActivityNotFoundException e) {
+                Log.e(TAG, "Cannot start activity", e);
+            }
+        }
+    }
+
+    /**
+     * If there are handlers listening on the long press intent, start the Intent. Otherwise
+     * do the default action and switch to last app
+     */
+    private void handleLongPressRecents() {
+        boolean hasIntentHandler = hasRecentsLongPressHandler();
+        if (hasIntentHandler) {
+            handleIntentLongPress();
+        } else {
+            handleDefaultLongPress();
+        }
+    }
+
+    /**
+     * Get component name for the recent long press setting. Null means default switch to last app
+     */
+    private ComponentName getRecentsLongPressHandlerComponentName() {
+        String componentString = Settings.Secure.getString(mContext.getContentResolver(),
+                Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY);
+        return componentString == null ? null : ComponentName.unflattenFromString(componentString);
+    }
+
+    /**
+     * Checks whether there are any handlers for ACTION_RECENTS_LONG_PRESS
+     */
+    private boolean hasRecentsLongPressHandler() {
+        // Check if ACTION_RECENTS_LONG_PRESS has a registered handler
+        PackageManager pm = mContext.getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+
+        ComponentName defaultComponent = getRecentsLongPressHandlerComponentName();
+        if (defaultComponent == null) {
+            return false;
+        }
+
+        // Query PackageManager for all packages that can handle this intent
+        List<ResolveInfo> activities = pm.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        if (activities.size() > 0) {
+            for (ResolveInfo info : activities) {
+                // Check that we have a valid ComponentName before launching
+                ComponentName targetComponent = new ComponentName(info.activityInfo.packageName,
+                        info.activityInfo.name);
+                if (targetComponent.equals(defaultComponent)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private ActivityManager.RunningTaskInfo getLastTask(final ActivityManager am) {
