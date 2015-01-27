@@ -826,7 +826,7 @@ public class ThemeService extends IThemeService.Stub {
     private void postProgress() {
         int N = mClients.beginBroadcast();
         for(int i=0; i < N; i++) {
-            IThemeChangeListener listener = mClients.getBroadcastItem(0);
+            IThemeChangeListener listener = mClients.getBroadcastItem(i);
             try {
                 listener.onProgress(mProgress);
             } catch(RemoteException e) {
@@ -843,7 +843,7 @@ public class ThemeService extends IThemeService.Stub {
 
         int N = mClients.beginBroadcast();
         for(int i=0; i < N; i++) {
-            IThemeChangeListener listener = mClients.getBroadcastItem(0);
+            IThemeChangeListener listener = mClients.getBroadcastItem(i);
             try {
                 listener.onFinish(isSuccess);
             } catch(RemoteException e) {
@@ -861,7 +861,7 @@ public class ThemeService extends IThemeService.Stub {
     private void postFinishedProcessing(String pkgName) {
         int N = mProcessingListeners.beginBroadcast();
         for(int i=0; i < N; i++) {
-            IThemeProcessingListener listener = mProcessingListeners.getBroadcastItem(0);
+            IThemeProcessingListener listener = mProcessingListeners.getBroadcastItem(i);
             try {
                 listener.onFinishedProcessing(pkgName);
             } catch(RemoteException e) {
