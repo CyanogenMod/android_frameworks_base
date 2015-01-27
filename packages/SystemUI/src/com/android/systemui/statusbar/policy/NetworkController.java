@@ -38,6 +38,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -140,13 +141,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     protected boolean mAirplaneMode = false;
     protected boolean mLastAirplaneMode = true;
 
-    private Locale mLocale = null;
-    private Locale mLastLocale = null;
+    protected Locale mLocale = null;
+    protected Locale mLastLocale = null;
 
     //ethernet
     private boolean mEthernetConnected = false;
-    private int mEthernetIconId = 0;
-    private int mLastEthernetIconId = 0;
+    protected int mEthernetIconId = 0;
+    protected int mLastEthernetIconId = 0;
 
     // our ui
     protected Context mContext;
@@ -176,10 +177,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     String mLastCombinedLabel = "";
 
     protected boolean mHasMobileDataFeature;
+    protected String mEmergencyCallOnlyLabel;
 
     boolean mDataAndWifiStacked = false;
 
-    private UpdateUIListener mUpdateUIListener = null;
+    protected UpdateUIListener mUpdateUIListener = null;
 
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
@@ -211,6 +213,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
      */
     public NetworkController(Context context) {
         mContext = context;
+        mEmergencyCallOnlyLabel = mContext.getString(com.android.internal.R.string
+                .emergency_calls_only);
         final Resources res = context.getResources();
 
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
@@ -230,9 +234,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         registerPhoneStateListener(context);
         mHspaDataDistinguishable = mContext.getResources().getBoolean(
                 R.bool.config_hspa_data_distinguishable);
-        mNetworkNameSeparator = mContext.getString(R.string.status_bar_network_name_separator);
-        mNetworkNameDefault = mContext.getString(
-                com.android.internal.R.string.lockscreen_carrier_default);
+        updateDefaultNetworkResources();
         mNetworkName = mNetworkNameDefault;
 
         // wifi
@@ -268,6 +270,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         updateAirplaneMode();
 
         mLastLocale = mContext.getResources().getConfiguration().locale;
+        initNetworkState();
+    }
+
+    protected void initNetworkState() {
+        TelephonyManager tm = TelephonyManager.getDefault();
+        updateNetworkName(true, tm.getSimOperatorName(),
+                    true, tm.getNetworkOperatorName());
     }
 
     public boolean hasMobileDataFeature() {
@@ -462,6 +471,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             updateDataIcon();
             refreshViews();
         } else if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
+            updateDefaultNetworkResources();
             updateNetworkName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
                         intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),
@@ -570,7 +580,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
             mSimState = IccCardConstants.State.CARD_IO_ERROR;
         }
-        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)
+                || IccCardConstants.INTENT_VALUE_ICC_IMSI.equals(stateExtra)
+                || IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(stateExtra)) {
             mSimState = IccCardConstants.State.READY;
         }
         else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
@@ -925,29 +937,52 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         mDataConnected = visible;
     }
 
+    private void updateDefaultNetworkResources() {
+        mNetworkNameSeparator = mContext.getString(R.string.status_bar_network_name_separator);
+        mNetworkNameDefault = mContext.getString(
+                com.android.internal.R.string.lockscreen_carrier_default);
+    }
+
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
-        if (false) {
+        if (DEBUG) {
             Log.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
         StringBuilder str = new StringBuilder();
         boolean something = false;
         if (showPlmn && plmn != null) {
+            plmn = maybeStripPeriod(plmn);
             str.append(plmn);
             something = true;
         }
         if (showSpn && spn != null) {
-            if (something) {
+            if (something && showPlmn
+                    && !spn.equals(plmn) &&
+                    !mEmergencyCallOnlyLabel.equals(plmn)) {
+                str.append("  ");
                 str.append(mNetworkNameSeparator);
+                str.append("  ");
+                str.append(spn);
+            } else if (!showPlmn) {
+                str.append(spn);
+                something = true;
             }
-            str.append(spn);
-            something = true;
         }
         if (something) {
             mNetworkName = str.toString();
         } else {
             mNetworkName = mNetworkNameDefault;
         }
+        mNetworkName = maybeStripPeriod(mNetworkName);
+    }
+
+    protected String maybeStripPeriod(String name) {
+        if (!TextUtils.isEmpty(name)) {
+            return name.equals(mNetworkNameDefault) ?
+                    name.replace(".", "") :
+                    name;
+        }
+        return name;
     }
 
     // ===== Wifi ===================================================================
@@ -1163,7 +1198,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             // We want to show the carrier name if in service and either:
             //   - We are connected to mobile data, or
             //   - We are not connected to mobile data, as long as the *reason* packets are not
-            //     being routed over that link is that we have better connectivity via wifi.
+            //     being routed over that link is that we have better connectivity via wifi
+            //     or wimax.
             // If data is disconnected for some other reason but wifi (or ethernet/bluetooth)
             // is connected, we show nothing.
             // Otherwise (nothing connected) we show "No internet connection".
@@ -1171,7 +1207,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             if (mDataConnected) {
                 mobileLabel = mNetworkName;
             } else if (mConnected || emergencyOnly) {
-                if (hasService() || emergencyOnly) {
+                if (hasService() || mWimaxConnected || emergencyOnly) {
                     // The isEmergencyOnly test covers the case of a phone with no SIM
                     mobileLabel = mNetworkName;
                 } else {
@@ -1301,7 +1337,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 ? mContentDescriptionDataType : mContentDescriptionWifi;
         }
 
-        if (!mDataConnected) {
+        // wimax operates independently of mobile data but shares the same icon space
+        if (!mDataConnected && !mWimaxConnected) {
             mDataTypeIconId = 0;
             mQSDataTypeIconId = 0;
             if (isCdma()) {

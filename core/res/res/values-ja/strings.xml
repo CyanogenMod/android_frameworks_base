@@ -256,7 +256,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"ショートカットのアンインストール"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"ユーザー操作なしでホーム画面のショートカットを削除することをアプリに許可します。"</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"発信先の変更"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"通話の発信とダイヤルする番号の変更をアプリに許可します。これにより、アプリが発信を監視、転送、阻止できるようになります。"</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"発信を別の番号に転送するか完全に中止するオプションで、発信中にダイヤルされた番号にアクセスすることをアプリに許可します。"</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"テキストメッセージ（SMS）の受信"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"SMSメッセージの受信と処理をアプリに許可します。これにより、アプリが端末に届いたメッセージを表示することなく監視または削除できるようになります。"</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"テキストメッセージ（MMS）の受信"</string>
@@ -816,6 +816,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"自宅"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"勤務先"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"その他"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"この連絡先を表示するアプリが見つかりません。"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"PINコードを入力"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"PUKと新しいPINコードを入力"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUKコード"</string>
@@ -1257,11 +1258,11 @@
     <string name="dlg_confirm_kill_storage_users_text" msgid="5100428757107469454">"USBストレージをONにすると、使用中のアプリの一部が停止し、USBストレージをOFFにするまで使用できなくなる場合があります。"</string>
     <string name="dlg_error_title" msgid="7323658469626514207">"USB操作に失敗しました"</string>
     <string name="dlg_ok" msgid="7376953167039865701">"OK"</string>
-    <string name="usb_mtp_notification_title" msgid="3699913097391550394">"メディアデバイスとして接続"</string>
-    <string name="usb_ptp_notification_title" msgid="1960817192216064833">"カメラとして接続"</string>
-    <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"インストーラとして接続"</string>
-    <string name="usb_accessory_notification_title" msgid="7848236974087653666">"USBアクセサリを接続しました"</string>
-    <string name="usb_notification_message" msgid="2290859399983720271">"他のUSBオプションをタップしてください。"</string>
+    <string name="usb_mtp_notification_title" msgid="3699913097391550394">"メディアデバイスとして接続しました"</string>
+    <string name="usb_ptp_notification_title" msgid="1960817192216064833">"カメラとして接続しました"</string>
+    <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"インストーラとして接続しました"</string>
+    <string name="usb_accessory_notification_title" msgid="7848236974087653666">"USBアクセサリに接続しました"</string>
+    <string name="usb_notification_message" msgid="2290859399983720271">"タップして他のUSBオプションを表示します。"</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="9020092196061007262">"USBストレージをフォーマットしますか？"</string>
     <string name="extmedia_format_title" product="default" msgid="3648415921526526069">"SDカードをフォーマットしますか？"</string>
     <string name="extmedia_format_message" product="nosdcard" msgid="3934016853425761078">"USBストレージに保存されているファイルはすべて消去されます。この操作は元に戻せません。"</string>
@@ -1350,7 +1351,7 @@
     <string name="submit" msgid="1602335572089911941">"送信"</string>
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"運転モードになっています"</string>
     <string name="car_mode_disable_notification_message" msgid="8035230537563503262">"タップすると運転モードを終了します"</string>
-    <string name="tethered_notification_title" msgid="3146694234398202601">"テザリングまたはアクセスポイントが有効です"</string>
+    <string name="tethered_notification_title" msgid="3146694234398202601">"テザリングが有効です"</string>
     <string name="tethered_notification_message" msgid="6857031760103062982">"タップしてセットアップします。"</string>
     <string name="back_button_label" msgid="2300470004503343439">"戻る"</string>
     <string name="next_button_label" msgid="1080555104677992408">"次へ"</string>

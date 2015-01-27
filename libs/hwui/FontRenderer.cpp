@@ -487,6 +487,7 @@ void FontRenderer::issueDrawCommand(Vector<CacheTexture*>& cacheTextures) {
     Caches& caches = Caches::getInstance();
     bool first = true;
     bool force = false;
+    bool drawn = false;
     for (uint32_t i = 0; i < cacheTextures.size(); i++) {
         CacheTexture* texture = cacheTextures[i];
         if (texture->canDraw()) {
@@ -517,6 +518,7 @@ void FontRenderer::issueDrawCommand(Vector<CacheTexture*>& cacheTextures) {
             caches.bindPositionVertexPointer(force, &mesh[0].position[0]);
             caches.bindTexCoordsVertexPointer(force, &mesh[0].texture[0]);
             force = false;
+            drawn = true;
 
             glDrawElements(GL_TRIANGLES, texture->meshElementCount(),
                     GL_UNSIGNED_SHORT, texture->indices());
@@ -524,13 +526,18 @@ void FontRenderer::issueDrawCommand(Vector<CacheTexture*>& cacheTextures) {
             texture->resetMesh();
         }
     }
+    if (drawn) {
+        mDrawn = true;
+    }
 }
 
 void FontRenderer::issueDrawCommand() {
     issueDrawCommand(mACacheTextures);
     issueDrawCommand(mRGBACacheTextures);
 
-    mDrawn = true;
+    // We should not set mDrawn to true if we have no GL draw call.
+    // In some case, issueDrawCommand may executed without GL draw call.
+    // It may miss the unbindMeshBuffer in the next issueDrawCommand and the status of VBO of FontRenderer will incorrect.
 }
 
 void FontRenderer::appendMeshQuadNoClip(float x1, float y1, float u1, float v1,

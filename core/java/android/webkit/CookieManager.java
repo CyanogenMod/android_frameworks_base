@@ -127,6 +127,14 @@ public class CookieManager {
     }
 
     /**
+     * Counts number of cookies
+     * @hide
+     */
+    public int countCookies() {
+        throw new MustOverrideException();
+    }
+
+    /**
      * Removes all cookies.
      */
     public void removeAllCookie() {

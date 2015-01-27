@@ -143,8 +143,15 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
         for (int i = 0; i < count; i++) {
             final Bitmap bitmap = drawables.valueAt(i).getBitmap();
             if (bitmap != null && bitmap.getConfig() == Bitmap.Config.ARGB_8888) {
-                bitmaps.add(bitmap);
-                totalPixelCount += bitmap.getWidth() * bitmap.getHeight();
+                // For preloaded asset which has 1-pixel width (or 1-pixel height), sampling the atlas texture
+                // will get a color mixed with the surrounding pixels' color.
+                // If we have padding in the atlas texture , sampling will mix the padding's black color and
+                // result in a obvious defect.
+                // We avoid packing 1-pixel width (or 1-pixel height) asset into AssetAtlas.
+                if(bitmap.getWidth() != 1 && bitmap.getHeight() != 1) {
+                    bitmaps.add(bitmap);
+                    totalPixelCount += bitmap.getWidth() * bitmap.getHeight();
+                }
             }
         }
 
@@ -402,12 +409,12 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
             new ComputeWorker(MIN_SIZE, MAX_SIZE, STEP, bitmaps, pixelCount, results, null).run();
         } else {
             int start = MIN_SIZE;
-            int end = MAX_SIZE - (cpuCount - 1) * STEP;
+            int end = MAX_SIZE;
             int step = STEP * cpuCount;
 
             final CountDownLatch signal = new CountDownLatch(cpuCount);
 
-            for (int i = 0; i < cpuCount; i++, start += STEP, end += STEP) {
+            for (int i = 0; i < cpuCount; i++, start += STEP) {
                 ComputeWorker worker = new ComputeWorker(start, end, step,
                         bitmaps, pixelCount, results, signal);
                 new Thread(worker, "Atlas Worker #" + (i + 1)).start();
@@ -419,6 +426,13 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
                 Log.w(LOG_TAG, "Could not complete configuration computation");
                 return null;
             }
+        }
+
+        if (results.size() == 0) {
+            // This should not happend.
+            // If it happens, it means all bitmaps can't fit max size of texture.
+            Log.e(LOG_TAG, "Could not find any configuration!!!");
+            return null;
         }
 
         // Maximize the number of packed bitmaps, minimize the texture size
@@ -697,8 +711,8 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
 
             Atlas.Entry entry = new Atlas.Entry();
             for (Atlas.Type type : Atlas.Type.values()) {
-                for (int width = mStart; width < mEnd; width += mStep) {
-                    for (int height = MIN_SIZE; height < MAX_SIZE; height += STEP) {
+                for (int width = mStart; width <= mEnd; width += mStep) {
+                    for (int height = MIN_SIZE; height <= MAX_SIZE; height += STEP) {
                         // If the atlas is not big enough, skip it
                         if (width * height <= mThreshold) continue;
 

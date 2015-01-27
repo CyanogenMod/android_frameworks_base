@@ -37,6 +37,8 @@ public class BarTransitions {
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_COLORS = false;
 
+    public static final boolean HIGH_END = ActivityManager.isHighEndGfx();
+
     public static final int MODE_OPAQUE = 0;
     public static final int MODE_SEMI_TRANSPARENT = 1;
     public static final int MODE_TRANSLUCENT = 2;
@@ -49,18 +51,28 @@ public class BarTransitions {
 
     private final String mTag;
     private final View mView;
-    private final boolean mSupportsTransitions = ActivityManager.isHighEndGfx();
     private final BarBackgroundDrawable mBarBackground;
 
     private int mMode;
 
-    public BarTransitions(View view, int gradientResourceId) {
+    public BarTransitions(View view, int gradientResourceId, int opaqueColorResourceId,
+            int semiTransparentColorResourceId) {
         mTag = "BarTransitions." + view.getClass().getSimpleName();
         mView = view;
-        mBarBackground = new BarBackgroundDrawable(mView.getContext(), gradientResourceId);
-        if (mSupportsTransitions) {
+        mBarBackground = new BarBackgroundDrawable(mView.getContext(), gradientResourceId,
+                opaqueColorResourceId, semiTransparentColorResourceId);
+        if (HIGH_END) {
             mView.setBackground(mBarBackground);
         }
+    }
+
+    protected void setGradientResourceId(int gradientResourceId) {
+        mBarBackground.setGradientResourceId(mView.getContext().getResources(),
+                gradientResourceId);
+    }
+
+    public void updateResources(Resources res) {
+        mBarBackground.updateResources(res);
     }
 
     public int getMode() {
@@ -68,18 +80,22 @@ public class BarTransitions {
     }
 
     public void transitionTo(int mode, boolean animate) {
+        // low-end devices do not support translucent modes, fallback to opaque
+        if (!HIGH_END && (mode == MODE_SEMI_TRANSPARENT || mode == MODE_TRANSLUCENT)) {
+            mode = MODE_OPAQUE;
+        }
         if (mMode == mode) return;
         int oldMode = mMode;
         mMode = mode;
         if (DEBUG) Log.d(mTag, String.format("%s -> %s animate=%s",
                 modeToString(oldMode), modeToString(mode),  animate));
-        if (mSupportsTransitions) {
-            onTransition(oldMode, mMode, animate);
-        }
+        onTransition(oldMode, mMode, animate);
     }
 
     protected void onTransition(int oldMode, int newMode, boolean animate) {
-        applyModeBackground(oldMode, newMode, animate);
+        if (HIGH_END) {
+            applyModeBackground(oldMode, newMode, animate);
+        }
     }
 
     protected void applyModeBackground(int oldMode, int newMode, boolean animate) {
@@ -111,11 +127,14 @@ public class BarTransitions {
     }
 
     private static class BarBackgroundDrawable extends Drawable {
-        private final int mOpaque;
-        private final int mSemiTransparent;
-        private final Drawable mGradient;
+        private int mGradientResourceId;
+        private final int mOpaqueColorResourceId;
+        private final int mSemiTransparentColorResourceId;
         private final TimeInterpolator mInterpolator;
 
+        private int mOpaque;
+        private int mSemiTransparent;
+        private Drawable mGradient;
         private int mMode = -1;
         private boolean mAnimating;
         private long mStartTime;
@@ -127,17 +146,37 @@ public class BarTransitions {
         private int mGradientAlphaStart;
         private int mColorStart;
 
-        public BarBackgroundDrawable(Context context, int gradientResourceId) {
+        public BarBackgroundDrawable(Context context, int gradientResourceId,
+                int opaqueColorResourceId, int semiTransparentColorResourceId) {
             final Resources res = context.getResources();
             if (DEBUG_COLORS) {
                 mOpaque = 0xff0000ff;
                 mSemiTransparent = 0x7f0000ff;
             } else {
-                mOpaque = res.getColor(R.color.system_bar_background_opaque);
-                mSemiTransparent = res.getColor(R.color.system_bar_background_semi_transparent);
+                mOpaque = res.getColor(opaqueColorResourceId);
+                mSemiTransparent = res.getColor(semiTransparentColorResourceId);
             }
             mGradient = res.getDrawable(gradientResourceId);
             mInterpolator = new LinearInterpolator();
+            mGradientResourceId = gradientResourceId;
+            mOpaqueColorResourceId = opaqueColorResourceId;
+            mSemiTransparentColorResourceId = semiTransparentColorResourceId;
+        }
+
+        public void setGradientResourceId(Resources res, int gradientResourceId) {
+            mGradient = res.getDrawable(gradientResourceId);
+            mGradientResourceId = gradientResourceId;
+        }
+
+        public void updateResources(Resources res)  {
+            mOpaque = res.getColor(mOpaqueColorResourceId);
+            mSemiTransparent = res.getColor(mSemiTransparentColorResourceId);
+            // Retrieve the current bounds for mGradient so they can be set to
+            // the new drawable being loaded, otherwise the bounds will be (0, 0, 0, 0)
+            // and the gradient will not be drawn.
+            Rect bounds = mGradient.getBounds();
+            mGradient = res.getDrawable(mGradientResourceId);
+            mGradient.setBounds(bounds);
         }
 
         @Override

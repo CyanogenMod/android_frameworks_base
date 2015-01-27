@@ -57,6 +57,7 @@ public class MSimConstants {
     public enum CardUnavailableReason {
         REASON_CARD_REMOVED,
         REASON_RADIO_UNAVAILABLE,
-        REASON_SIM_REFRESH_RESET
+        REASON_SIM_REFRESH_RESET,
+        REASON_APM_SIM_POWER_DOWN
     };
 }

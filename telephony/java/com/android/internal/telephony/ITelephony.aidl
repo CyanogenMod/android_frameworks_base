@@ -17,9 +17,12 @@
 package com.android.internal.telephony;
 
 import android.os.Bundle;
-import java.util.List;
-import android.telephony.NeighboringCellInfo;
 import android.telephony.CellInfo;
+import android.telephony.NeighboringCellInfo;
+
+import com.android.internal.telephony.ITelephonyListener;
+
+import java.util.List;
 
 /**
  * Interface used to interact with the phone.  Mostly this is used by the
@@ -336,6 +339,98 @@ interface ITelephony {
      */
     void setCellInfoListRate(int rateInMillis);
 
-    int getLteOnGsmMode();
+    /**
+     * Adds a protected sms address to the {@link Settings.Secure.PROTECTED_SMS_ADDRESSES}
+     */
+    void addProtectedSmsAddress(String address);
+
+    /**
+     * Revokes a protected sms address from {@link Settings.Secure.PROTECTED_SMS_ADDRESSES}
+     */
+    boolean revokeProtectedSmsAddress(String address);
+
+    /**
+     * Returns the response APDU for a command APDU sent to a logical channel
+     */
+    String transmitIccLogicalChannel(int cla, int command, int channel,
+            int p1, int p2, int p3, String data);
+
+    /**
+     * Returns the response APDU for a command APDU sent to the basic channel
+     */
+    String transmitIccBasicChannel(int cla, int command,
+            int p1, int p2, int p3, String data);
+
+    /**
+     * Returns the channel id of the logical channel,
+     * Returns 0 on error.
+     */
+    int openIccLogicalChannel(String AID);
+
+    /**
+     * Return true if logical channel was closed successfully
+     */
+    boolean closeIccLogicalChannel(int channel);
+
+    /**
+     * Returns the error code of the last error occured.
+     * Currently only used for openIccLogicalChannel
+     */
+    int getLastError();
+
+    /**
+     * Returns the response APDU for a command APDU sent through SIM_IO
+     */
+    byte[] transmitIccSimIO(int fileID, int command,
+            int p1, int p2, int p3, String filePath);
+
+    /**
+     * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
+     */
+     byte[] getATR();
+    /**
+     * Put a call on hold.
+     */
+     void toggleHold();
+
+     /**
+      * Merge foreground and background calls.
+      */
+     void merge();
+
+     /**
+      * Swap foreground and background calls.
+      */
+     void swap();
+
+     /**
+      * Mute the phone.
+      */
+     void mute(boolean mute);
+
+    /**
+     * Start playing DTMF tone for the specified digit.
+     *
+     * @param digit the digit that corresponds with the desired tone.
+     * @param timedShortcode whether the specified digit should be played as a timed short code.
+     */
+     void playDtmfTone(char digit, boolean timedShortCode);
+
+     /**
+      * Stop playing DTMF tones.
+      */
+     void stopDtmfTone();
+
+     /**
+       * Register a callback.
+       */
+      void addListener(ITelephonyListener listener);
+
+      /**
+       * Unregister a callback.
+       */
+      void removeListener(ITelephonyListener listener);
+
+      int getLteOnGsmMode();
 }
 

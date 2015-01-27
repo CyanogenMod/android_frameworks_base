@@ -246,6 +246,12 @@ public class PackageInfo implements Parcelable {
      */
     public boolean isLegacyThemeApk = false;
 
+    // Is Legacy Icon Apk
+    /**
+     * {@hide}
+     */
+    public boolean isLegacyIconPackApk = false;
+
     // ThemeInfo
     /**
      * {@hide}
@@ -347,6 +353,7 @@ public class PackageInfo implements Parcelable {
         dest.writeInt(hasIconPack ? 1 : 0);
         /* Legacy Theme-specific. */
         dest.writeInt((isLegacyThemeApk) ? 1 : 0);
+        dest.writeInt((isLegacyIconPackApk) ? 1 : 0);
         writeRedirectionsMap(dest);
         dest.writeTypedArray(legacyThemeInfos, parcelableFlags);
     }
@@ -398,6 +405,7 @@ public class PackageInfo implements Parcelable {
         hasIconPack = source.readInt() == 1;
         /* Legacy Theme-specific. */
         isLegacyThemeApk = (source.readInt() != 0);
+        isLegacyIconPackApk = (source.readInt() != 0);
         readRedirectionsMap(source);
         legacyThemeInfos = source.createTypedArray(LegacyThemeInfo.CREATOR);
     }

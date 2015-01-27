@@ -119,13 +119,13 @@ public class UsbDebuggingManager implements Runnable {
     private void closeSocket() {
         try {
             mOutputStream.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Slog.e(TAG, "Failed closing output stream: " + e);
         }
 
         try {
             mSocket.close();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Slog.e(TAG, "Failed closing socket: " + ex);
         }
     }

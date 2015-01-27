@@ -406,6 +406,27 @@ public class MockPackageManager extends PackageManager {
         throw new UnsupportedOperationException();
     }
 
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplication(ApplicationInfo app, String themePkgName)
+            throws NameNotFoundException {
+        return null;
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplication(String appPackageName, String themePkgName)
+            throws NameNotFoundException {
+        return null;
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePkgName, int userId) throws NameNotFoundException {
+        return null;
+    }
+
     @Override
     public PackageInfo getPackageArchiveInfo(String archiveFilePath, int flags) {
         throw new UnsupportedOperationException();
@@ -652,6 +673,22 @@ public class MockPackageManager extends PackageManager {
      */
     @Override
     public void updateIconMaps(String pkgName) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public int processThemeResources(String themePkgName) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
         throw new UnsupportedOperationException();
     }
 }

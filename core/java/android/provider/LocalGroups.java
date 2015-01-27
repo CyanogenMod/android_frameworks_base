@@ -88,7 +88,7 @@ public class LocalGroups {
         }
 
         public static Group restoreGroup(Cursor cursor) {
-            if (cursor == null && cursor.getCount() == 0) {
+            if (cursor == null || cursor.getCount() == 0) {
                 return null;
             }
             Group group = new Group();

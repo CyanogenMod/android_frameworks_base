@@ -66,7 +66,6 @@ public class NumPadKey extends Button {
 
     public NumPadKey(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NumPadKey);
         mDigit = a.getInt(R.styleable.NumPadKey_digit, mDigit);
         setTextViewResId(a.getResourceId(R.styleable.NumPadKey_textView, 0));
@@ -76,27 +75,7 @@ public class NumPadKey extends Button {
         setAccessibilityDelegate(new ObscureSpeechDelegate(context));
 
         mEnableHaptics = new LockPatternUtils(context).isTactileFeedbackEnabled();
-
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(String.valueOf(mDigit));
-        if (mDigit >= 0) {
-            if (sKlondike == null) {
-                sKlondike = context.getResources().getStringArray(
-                        R.array.lockscreen_num_pad_klondike);
-            }
-            if (sKlondike != null && sKlondike.length > mDigit) {
-                final String extra = sKlondike[mDigit];
-                final int extraLen = extra.length();
-                if (extraLen > 0) {
-                    builder.append(" ");
-                    builder.append(extra);
-                    builder.setSpan(
-                        new TextAppearanceSpan(context, R.style.TextAppearance_NumPadKey_Klondike),
-                        builder.length()-extraLen, builder.length(), 0);
-                }
-            }
-        }
-        setText(builder);
+        updateText();
     }
 
     @Override
@@ -106,6 +85,36 @@ public class NumPadKey extends Button {
         // Reset the "announced headset" flag when detached.
         ObscureSpeechDelegate.sAnnouncedHeadset = false;
     }
+
+    public void setDigit(int digit) {
+        mDigit = digit;
+        updateText();
+    }
+
+    private void updateText() {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(String.valueOf(mDigit));
+        if (mDigit >= 0) {
+            if (sKlondike == null) {
+                sKlondike = getContext().getResources().getStringArray(
+                        R.array.lockscreen_num_pad_klondike);
+            }
+            if (sKlondike != null && sKlondike.length > mDigit) {
+                final String extra = sKlondike[mDigit];
+                final int extraLen = extra.length();
+                if (extraLen > 0) {
+                    builder.append(" ");
+                    builder.append(extra);
+                    builder.setSpan(
+                        new TextAppearanceSpan(getContext(),
+                                R.style.TextAppearance_NumPadKey_Klondike),
+                            builder.length()-extraLen, builder.length(), 0);
+                }
+            }
+            setText(builder);
+        }
+    }
+
 
     public void setTextView(TextView tv) {
         mTextView = tv;

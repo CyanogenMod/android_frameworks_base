@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.hardware.Camera;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.WifiDisplayStatus;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.nfc.NfcAdapter;
 import android.os.BatteryManager;
@@ -87,5 +89,11 @@ public class QSUtils {
 
         public static boolean adbEnabled(ContentResolver resolver) {
             return (Settings.Global.getInt(resolver, Settings.Global.ADB_ENABLED, 0)) == 1;
+        }
+
+        public static boolean deviceSupportsCompass(Context context) {
+            SensorManager sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+            return (sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+                    && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null);
         }
 }

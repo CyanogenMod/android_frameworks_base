@@ -1,6 +1,20 @@
-package com.android.systemui.quicksettings;
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import java.util.Calendar;
+package com.android.systemui.quicksettings;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -18,8 +32,9 @@ import com.android.internal.util.cm.QuietHoursUtils;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
 
-public class QuietHoursTile extends QuickSettingsTile {
+import java.util.Calendar;
 
+public class QuietHoursTile extends QuickSettingsTile {
     public static String ACTION_QUIET_HOURS = "com.cyanogenmod.util.action_quiet_hours";
     private static int ALARM_ID = 1010101;
 
@@ -185,7 +200,7 @@ public class QuietHoursTile extends QuickSettingsTile {
         if (currentTime > startTime && currentTime > endTime) {
             // Past last trigger of the day, use next day's first one
             nextTime = Math.min(startTime, endTime);
-            cal.roll(Calendar.DAY_OF_MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH, 1);
         } else if (currentTime < startTime && currentTime < endTime) {
             // Before first trigger of the day, use it
             nextTime = Math.min(startTime, endTime);

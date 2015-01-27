@@ -82,7 +82,7 @@ import android.util.StringBuilderPrinter;
 import com.android.internal.backup.BackupConstants;
 import com.android.internal.backup.IBackupTransport;
 import com.android.internal.backup.IObbBackupService;
-import com.android.internal.backup.LocalTransport;
+import com.android.server.EventLogTags;
 import com.android.server.PackageManagerBackupAgent.Metadata;
 
 import java.io.BufferedInputStream;
@@ -101,6 +101,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.lang.SecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -118,6 +119,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
@@ -140,11 +142,16 @@ class BackupManagerService extends IBackupManager.Stub {
     private static final boolean DEBUG = true;
     private static final boolean MORE_DEBUG = false;
 
+    // Historical and current algorithm names
+    static final String PBKDF_CURRENT = "PBKDF2WithHmacSHA1";
+    static final String PBKDF_FALLBACK = "PBKDF2WithHmacSHA1And8bit";
+
     // Name and current contents version of the full-backup manifest file
     static final String BACKUP_MANIFEST_FILENAME = "_manifest";
     static final int BACKUP_MANIFEST_VERSION = 1;
     static final String BACKUP_FILE_HEADER_MAGIC = "ANDROID BACKUP\n";
-    static final int BACKUP_FILE_VERSION = 1;
+    static final int BACKUP_FILE_VERSION = 2;
+    static final int BACKUP_PW_FILE_VERSION = 2;
     static final boolean COMPRESS_FULL_BACKUPS = true; // should be true in production
 
     static final String SHARED_BACKUP_AGENT_PACKAGE = "com.android.sharedstoragebackup";
@@ -196,6 +203,31 @@ class BackupManagerService extends IBackupManager.Stub {
     // User confirmation timeout for a full backup/restore operation.  It's this long in
     // order to give them time to enter the backup password.
     static final long TIMEOUT_FULL_CONFIRMATION = 60 * 1000;
+
+    // This result code is used for restoreOneFile to continue to stream, and not fall
+    // out untill it is done. It should be different then the below codes as
+    // restoreOneFile also uses the below codes.
+    public static final int CONTINUE_RESTORE = 1;
+
+    // These result codes are used for ops code send back to the process that calls in for backup/restore.
+    // This helps determine if the backup/restore was successful or it fails with reasons.
+
+    // Operation successful.
+    public static final int RESULT_SUCCESS = 0;
+    // Operation failed: Unknown reason.
+    public static final int RESULT_UNKNOWN_ERROR = -1;
+    // Operation failed: Unknown package name.
+    public static final int RESULT_UNKNOWN_PACKAGE = -2;
+    // Operation failed: operation time out.
+    public static final int RESULT_TIMEOUT = -3;
+    // Operation failed: password mismatched.
+    public static final int RESULT_PASSWORD_MISMATCH = -4;
+    // Operation failed: package version mismatched.
+    public static final int RESULT_VERSION_MISMATCH = -5;
+    // Operation failed: package signature mismatched.
+    public static final int RESULT_SIGNATURE_MISMATCH = -6;
+    // Operation failed: backup not allowed
+    public static final int RESULT_NOT_ALLOWED = -7;
 
     private Context mContext;
     private PackageManager mPackageManager;
@@ -382,9 +414,14 @@ class BackupManagerService extends IBackupManager.Stub {
         public IFullBackupRestoreObserver observer;
         public String curPassword;     // filled in by the confirmation step
         public String encryptPassword;
+        public boolean noninteractive;
+        public boolean ignoreEncryptionPasswordCheck;
+        public boolean ignoreVersionMismatchCheck;
 
         FullParams() {
             latch = new AtomicBoolean(false);
+            noninteractive = false;
+            ignoreVersionMismatchCheck = false;
         }
     }
 
@@ -395,9 +432,13 @@ class BackupManagerService extends IBackupManager.Stub {
         public boolean allApps;
         public boolean includeSystem;
         public String[] packages;
+        public String[] domainTokens;
+        public String excludeFilesRegex;
+        public boolean shouldKillAfterBackup;
 
         FullBackupParams(ParcelFileDescriptor output, boolean saveApks, boolean saveObbs,
-                boolean saveShared, boolean doAllApps, boolean doSystem, String[] pkgList) {
+                boolean saveShared, boolean doAllApps, boolean doSystem, String[] pkgList,
+                boolean killAfterBackup, boolean ignoreEncryptionCheck) {
             fd = output;
             includeApks = saveApks;
             includeObbs = saveObbs;
@@ -405,6 +446,8 @@ class BackupManagerService extends IBackupManager.Stub {
             allApps = doAllApps;
             includeSystem = doSystem;
             packages = pkgList;
+            shouldKillAfterBackup = killAfterBackup;
+            ignoreEncryptionPasswordCheck = ignoreEncryptionCheck;
         }
     }
 
@@ -450,6 +493,8 @@ class BackupManagerService extends IBackupManager.Stub {
     private final SecureRandom mRng = new SecureRandom();
     private String mPasswordHash;
     private File mPasswordHashFile;
+    private int mPasswordVersion;
+    private File mPasswordVersionFile;
     private byte[] mPasswordSalt;
 
     // Configuration of PBKDF2 that we use for generating pw hashes and intermediate keys
@@ -596,7 +641,9 @@ class BackupManagerService extends IBackupManager.Stub {
                 PerformFullBackupTask task = new PerformFullBackupTask(params.fd,
                         params.observer, params.includeApks, params.includeObbs,
                         params.includeShared, params.curPassword, params.encryptPassword,
-                        params.allApps, params.includeSystem, params.packages, params.latch);
+                        params.allApps, params.includeSystem, params.packages, params.latch,
+                        params.domainTokens, params.excludeFilesRegex, params.shouldKillAfterBackup,
+                        params.noninteractive, params.ignoreEncryptionPasswordCheck);
                 (new Thread(task)).start();
                 break;
             }
@@ -621,7 +668,8 @@ class BackupManagerService extends IBackupManager.Stub {
                 FullRestoreParams params = (FullRestoreParams)msg.obj;
                 PerformFullRestoreTask task = new PerformFullRestoreTask(params.fd,
                         params.curPassword, params.encryptPassword,
-                        params.observer, params.latch);
+                        params.ignoreEncryptionPasswordCheck, params.observer, params.latch,
+                        params.noninteractive, params.ignoreVersionMismatchCheck);
                 (new Thread(task)).start();
                 break;
             }
@@ -809,6 +857,27 @@ class BackupManagerService extends IBackupManager.Stub {
             Slog.e(TAG, "SELinux restorecon failed on " + mBaseStateDir);
         }
         mDataDir = Environment.getDownloadCacheDirectory();
+
+        mPasswordVersion = 1;       // unless we hear otherwise
+        mPasswordVersionFile = new File(mBaseStateDir, "pwversion");
+        if (mPasswordVersionFile.exists()) {
+            FileInputStream fin = null;
+            DataInputStream in = null;
+            try {
+                fin = new FileInputStream(mPasswordVersionFile);
+                in = new DataInputStream(fin);
+                mPasswordVersion = in.readInt();
+            } catch (IOException e) {
+                Slog.e(TAG, "Unable to read backup pw version");
+            } finally {
+                try {
+                    if (in != null) in.close();
+                    if (fin != null) fin.close();
+                } catch (IOException e) {
+                    Slog.w(TAG, "Error closing pw version files");
+                }
+            }
+        }
 
         mPasswordHashFile = new File(mBaseStateDir, "pwhash");
         if (mPasswordHashFile.exists()) {
@@ -1110,13 +1179,13 @@ class BackupManagerService extends IBackupManager.Stub {
         }
     }
 
-    private SecretKey buildPasswordKey(String pw, byte[] salt, int rounds) {
-        return buildCharArrayKey(pw.toCharArray(), salt, rounds);
+    private SecretKey buildPasswordKey(String algorithm, String pw, byte[] salt, int rounds) {
+        return buildCharArrayKey(algorithm, pw.toCharArray(), salt, rounds);
     }
 
-    private SecretKey buildCharArrayKey(char[] pwArray, byte[] salt, int rounds) {
+    private SecretKey buildCharArrayKey(String algorithm, char[] pwArray, byte[] salt, int rounds) {
         try {
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(algorithm);
             KeySpec ks = new PBEKeySpec(pwArray, salt, rounds, PBKDF2_KEY_SIZE);
             return keyFactory.generateSecret(ks);
         } catch (InvalidKeySpecException e) {
@@ -1127,8 +1196,8 @@ class BackupManagerService extends IBackupManager.Stub {
         return null;
     }
 
-    private String buildPasswordHash(String pw, byte[] salt, int rounds) {
-        SecretKey key = buildPasswordKey(pw, salt, rounds);
+    private String buildPasswordHash(String algorithm, String pw, byte[] salt, int rounds) {
+        SecretKey key = buildPasswordKey(algorithm, pw, salt, rounds);
         if (key != null) {
             return byteArrayToHex(key.getEncoded());
         }
@@ -1156,13 +1225,13 @@ class BackupManagerService extends IBackupManager.Stub {
         return result;
     }
 
-    private byte[] makeKeyChecksum(byte[] pwBytes, byte[] salt, int rounds) {
+    private byte[] makeKeyChecksum(String algorithm, byte[] pwBytes, byte[] salt, int rounds) {
         char[] mkAsChar = new char[pwBytes.length];
         for (int i = 0; i < pwBytes.length; i++) {
             mkAsChar[i] = (char) pwBytes[i];
         }
 
-        Key checksum = buildCharArrayKey(mkAsChar, salt, rounds);
+        Key checksum = buildCharArrayKey(algorithm, mkAsChar, salt, rounds);
         return checksum.getEncoded();
     }
 
@@ -1174,7 +1243,7 @@ class BackupManagerService extends IBackupManager.Stub {
     }
 
     // Backup password management
-    boolean passwordMatchesSaved(String candidatePw, int rounds) {
+    boolean passwordMatchesSaved(String algorithm, String candidatePw, int rounds) {
         // First, on an encrypted device we require matching the device pw
         final boolean isEncrypted;
         try {
@@ -1217,7 +1286,7 @@ class BackupManagerService extends IBackupManager.Stub {
         } else {
             // hash the stated current pw and compare to the stored one
             if (candidatePw != null && candidatePw.length() > 0) {
-                String currentPwHash = buildPasswordHash(candidatePw, mPasswordSalt, rounds);
+                String currentPwHash = buildPasswordHash(algorithm, candidatePw, mPasswordSalt, rounds);
                 if (mPasswordHash.equalsIgnoreCase(currentPwHash)) {
                     // candidate hash matches the stored hash -- the password matches
                     return true;
@@ -1232,9 +1301,35 @@ class BackupManagerService extends IBackupManager.Stub {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP,
                 "setBackupPassword");
 
-        // If the supplied pw doesn't hash to the the saved one, fail
-        if (!passwordMatchesSaved(currentPw, PBKDF2_HASH_ROUNDS)) {
+        // When processing v1 passwords we may need to try two different PBKDF2 checksum regimes
+        final boolean pbkdf2Fallback = (mPasswordVersion < BACKUP_PW_FILE_VERSION);
+
+        // If the supplied pw doesn't hash to the the saved one, fail.  The password
+        // might be caught in the legacy crypto mismatch; verify that too.
+        if (!passwordMatchesSaved(PBKDF_CURRENT, currentPw, PBKDF2_HASH_ROUNDS)
+                && !(pbkdf2Fallback && passwordMatchesSaved(PBKDF_FALLBACK,
+                        currentPw, PBKDF2_HASH_ROUNDS))) {
             return false;
+        }
+
+        // Snap up to current on the pw file version
+        mPasswordVersion = BACKUP_PW_FILE_VERSION;
+        FileOutputStream pwFout = null;
+        DataOutputStream pwOut = null;
+        try {
+            pwFout = new FileOutputStream(mPasswordVersionFile);
+            pwOut = new DataOutputStream(pwFout);
+            pwOut.writeInt(mPasswordVersion);
+        } catch (IOException e) {
+            Slog.e(TAG, "Unable to write backup pw version; password not changed");
+            return false;
+        } finally {
+            try {
+                if (pwOut != null) pwOut.close();
+                if (pwFout != null) pwFout.close();
+            } catch (IOException e) {
+                Slog.w(TAG, "Unable to close pw version record");
+            }
         }
 
         // Clearing the password is okay
@@ -1254,7 +1349,7 @@ class BackupManagerService extends IBackupManager.Stub {
         try {
             // Okay, build the hash of the new backup password
             byte[] salt = randomBytes(PBKDF2_SALT_SIZE);
-            String newPwHash = buildPasswordHash(newPw, salt, PBKDF2_HASH_ROUNDS);
+            String newPwHash = buildPasswordHash(PBKDF_CURRENT, newPw, salt, PBKDF2_HASH_ROUNDS);
 
             OutputStream pwf = null, buffer = null;
             DataOutputStream out = null;
@@ -1295,6 +1390,19 @@ class BackupManagerService extends IBackupManager.Stub {
             // "secure" i.e. assuming that we require a password
             return true;
         }
+    }
+
+    private boolean backupPasswordMatches(String currentPw) {
+        if (hasBackupPassword()) {
+            final boolean pbkdf2Fallback = (mPasswordVersion < BACKUP_PW_FILE_VERSION);
+            if (!passwordMatchesSaved(PBKDF_CURRENT, currentPw, PBKDF2_HASH_ROUNDS)
+                    && !(pbkdf2Fallback && passwordMatchesSaved(PBKDF_FALLBACK,
+                            currentPw, PBKDF2_HASH_ROUNDS))) {
+                if (DEBUG) Slog.w(TAG, "Backup password mismatch; aborting");
+                return false;
+            }
+        }
+        return true;
     }
 
     // Maintain persistent state around whether need to do an initialize operation.
@@ -2478,7 +2586,7 @@ class BackupManagerService extends IBackupManager.Stub {
 
         public void restoreObbFile(String pkgName, ParcelFileDescriptor data,
                 long fileSize, int type, String path, long mode, long mtime,
-                int token, IBackupManager callbackBinder) {
+                int token, IBackupManager callbackBinder) throws Exception {
             waitForConnection();
 
             try {
@@ -2486,6 +2594,7 @@ class BackupManagerService extends IBackupManager.Stub {
                         token, callbackBinder);
             } catch (Exception e) {
                 Slog.w(TAG, "Unable to restore OBBs for " + pkgName, e);
+                throw new Exception("Unable to restore OBBs for " + pkgName);
             }
         }
 
@@ -2543,6 +2652,7 @@ class BackupManagerService extends IBackupManager.Stub {
         ParcelFileDescriptor mOutputFile;
         DeflaterOutputStream mDeflater;
         IFullBackupRestoreObserver mObserver;
+        String[] mDomainTokens;
         boolean mIncludeApks;
         boolean mIncludeObbs;
         boolean mIncludeShared;
@@ -2551,10 +2661,13 @@ class BackupManagerService extends IBackupManager.Stub {
         String[] mPackages;
         String mCurrentPassword;
         String mEncryptPassword;
+        boolean mIgnoreEncryptionPasswordCheck;
         AtomicBoolean mLatchObject;
         File mFilesDir;
         File mManifestFile;
-        
+        String mExcludeFilesRegex;
+        boolean mShouldKillAfterBackup;
+        boolean mNoninteractive;
 
         class FullBackupRunner implements Runnable {
             PackageInfo mPackage;
@@ -2595,7 +2708,12 @@ class BackupManagerService extends IBackupManager.Stub {
 
                     if (DEBUG) Slog.d(TAG, "Calling doFullBackup() on " + mPackage.packageName);
                     prepareOperationTimeout(mToken, TIMEOUT_FULL_BACKUP_INTERVAL, null);
-                    mAgent.doFullBackup(mPipe, mToken, mBackupManagerBinder);
+                    if (mDomainTokens == null) {
+                        mAgent.doFullBackup(mPipe, mToken, mBackupManagerBinder);
+                    } else {
+                        mAgent.doBackupFiles(mPipe, mToken, mDomainTokens, mExcludeFilesRegex,
+                                mBackupManagerBinder);
+                    }
                 } catch (IOException e) {
                     Slog.e(TAG, "Error running full backup for " + mPackage.packageName);
                 } catch (RemoteException e) {
@@ -2612,7 +2730,9 @@ class BackupManagerService extends IBackupManager.Stub {
         PerformFullBackupTask(ParcelFileDescriptor fd, IFullBackupRestoreObserver observer, 
                 boolean includeApks, boolean includeObbs, boolean includeShared,
                 String curPassword, String encryptPassword, boolean doAllApps,
-                boolean doSystem, String[] packages, AtomicBoolean latch) {
+                boolean doSystem, String[] packages, AtomicBoolean latch,
+                String[] domainTokens, String excludeFilesRegex, boolean shouldKillAfterBackup,
+                boolean noninteractive, boolean ignoreEncryptionPasswordCheck) {
             mOutputFile = fd;
             mObserver = observer;
             mIncludeApks = includeApks;
@@ -2631,10 +2751,15 @@ class BackupManagerService extends IBackupManager.Stub {
             } else {
                 mEncryptPassword = encryptPassword;
             }
+            mIgnoreEncryptionPasswordCheck = ignoreEncryptionPasswordCheck;
             mLatchObject = latch;
 
             mFilesDir = new File("/data/system");
             mManifestFile = new File(mFilesDir, BACKUP_MANIFEST_FILENAME);
+            mDomainTokens = domainTokens;
+            mExcludeFilesRegex = excludeFilesRegex;
+            mShouldKillAfterBackup = shouldKillAfterBackup;
+            mNoninteractive = noninteractive;
         }
 
         @Override
@@ -2644,7 +2769,7 @@ class BackupManagerService extends IBackupManager.Stub {
             List<PackageInfo> packagesToBackup = new ArrayList<PackageInfo>();
             FullBackupObbConnection obbConnection = new FullBackupObbConnection();
             obbConnection.establish();  // we'll want this later
-
+            int result = RESULT_SUCCESS;
             sendStartBackup();
 
             // doAllApps supersedes the package set if any
@@ -2674,6 +2799,7 @@ class BackupManagerService extends IBackupManager.Stub {
                                 PackageManager.GET_SIGNATURES));
                     } catch (NameNotFoundException e) {
                         Slog.w(TAG, "Unknown package " + pkgName + ", skipping");
+                        result = RESULT_UNKNOWN_PACKAGE;
                     }
                 }
             }
@@ -2683,8 +2809,9 @@ class BackupManagerService extends IBackupManager.Stub {
             // handle that one at the end).
             for (int i = 0; i < packagesToBackup.size(); ) {
                 PackageInfo pkg = packagesToBackup.get(i);
-                if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_ALLOW_BACKUP) == 0
-                        || pkg.packageName.equals(SHARED_BACKUP_AGENT_PACKAGE)) {
+                if (((pkg.applicationInfo.flags & ApplicationInfo.FLAG_ALLOW_BACKUP) == 0
+                        && mNoninteractive == false) ||
+                        pkg.packageName.equals(SHARED_BACKUP_AGENT_PACKAGE)) {
                     packagesToBackup.remove(i);
                 } else {
                     i++;
@@ -2717,11 +2844,9 @@ class BackupManagerService extends IBackupManager.Stub {
 
                 // Verify that the given password matches the currently-active
                 // backup password, if any
-                if (hasBackupPassword()) {
-                    if (!passwordMatchesSaved(mCurrentPassword, PBKDF2_HASH_ROUNDS)) {
-                        if (DEBUG) Slog.w(TAG, "Backup password mismatch; aborting");
-                        return;
-                    }
+                if (!mIgnoreEncryptionPasswordCheck && !backupPasswordMatches(mCurrentPassword)) {
+                    if (DEBUG) Slog.w(TAG, "Backup password mismatch; aborting");
+                    throw new SecurityException("Backup password mismatch; aborting");
                 }
 
                 // Write the global file header.  All strings are UTF-8 encoded; lines end
@@ -2729,7 +2854,7 @@ class BackupManagerService extends IBackupManager.Stub {
                 // final '\n'.
                 //
                 // line 1: "ANDROID BACKUP"
-                // line 2: backup file format version, currently "1"
+                // line 2: backup file format version, currently "2"
                 // line 3: compressed?  "0" if not compressed, "1" if compressed.
                 // line 4: name of encryption algorithm [currently only "none" or "AES-256"]
                 //
@@ -2776,7 +2901,7 @@ class BackupManagerService extends IBackupManager.Stub {
                 } catch (Exception e) {
                     // Should never happen!
                     Slog.e(TAG, "Unable to emit archive header", e);
-                    return;
+                    throw new Exception("Unable to emit archive header");
                 }
 
                 // Shared storage if requested
@@ -2786,6 +2911,7 @@ class BackupManagerService extends IBackupManager.Stub {
                         packagesToBackup.add(pkg);
                     } catch (NameNotFoundException e) {
                         Slog.e(TAG, "Unable to find shared-storage backup handler");
+                        result = RESULT_UNKNOWN_PACKAGE;
                     }
                 }
 
@@ -2793,7 +2919,7 @@ class BackupManagerService extends IBackupManager.Stub {
                 int N = packagesToBackup.size();
                 for (int i = 0; i < N; i++) {
                     pkg = packagesToBackup.get(i);
-                    backupOnePackage(pkg, out);
+                    backupOnePackage(pkg, out, mShouldKillAfterBackup);
 
                     // after the app's agent runs to handle its private filesystem
                     // contents, back up any OBB content it has on its behalf.
@@ -2809,10 +2935,16 @@ class BackupManagerService extends IBackupManager.Stub {
                 finalizeBackup(out);
             } catch (RemoteException e) {
                 Slog.e(TAG, "App died during full backup");
+                result = RESULT_UNKNOWN_ERROR;
+            } catch (SecurityException e) {
+                result = RESULT_PASSWORD_MISMATCH;
+            } catch (TimeoutException e) {
+                result = RESULT_TIMEOUT;
             } catch (Exception e) {
                 Slog.e(TAG, "Internal exception during full backup", e);
+                result = RESULT_UNKNOWN_ERROR;
             } finally {
-                tearDown(pkg);
+                tearDown(pkg, mShouldKillAfterBackup);
                 try {
                     if (out != null) out.close();
                     mOutputFile.close();
@@ -2826,7 +2958,9 @@ class BackupManagerService extends IBackupManager.Stub {
                     mLatchObject.set(true);
                     mLatchObject.notifyAll();
                 }
+                // send both the confirmations.
                 sendEndBackup();
+                sendEndBackupWithResult(result);
                 obbConnection.tearDown();
                 if (DEBUG) Slog.d(TAG, "Full backup pass complete.");
                 mWakelock.release();
@@ -2837,7 +2971,7 @@ class BackupManagerService extends IBackupManager.Stub {
                 OutputStream ofstream) throws Exception {
             // User key will be used to encrypt the master key.
             byte[] newUserSalt = randomBytes(PBKDF2_SALT_SIZE);
-            SecretKey userKey = buildPasswordKey(mEncryptPassword, newUserSalt,
+            SecretKey userKey = buildPasswordKey(PBKDF_CURRENT, mEncryptPassword, newUserSalt,
                     PBKDF2_HASH_ROUNDS);
 
             // the master key is random for each backup
@@ -2884,7 +3018,7 @@ class BackupManagerService extends IBackupManager.Stub {
             // stated number of PBKDF2 rounds
             IV = c.getIV();
             byte[] mk = masterKeySpec.getEncoded();
-            byte[] checksum = makeKeyChecksum(masterKeySpec.getEncoded(),
+            byte[] checksum = makeKeyChecksum(PBKDF_CURRENT, masterKeySpec.getEncoded(),
                     checksumSalt, PBKDF2_HASH_ROUNDS);
 
             ByteArrayOutputStream blob = new ByteArrayOutputStream(IV.length + mk.length
@@ -2904,8 +3038,9 @@ class BackupManagerService extends IBackupManager.Stub {
             return finalOutput;
         }
 
-        private void backupOnePackage(PackageInfo pkg, OutputStream out)
-                throws RemoteException {
+        private void backupOnePackage(PackageInfo pkg, OutputStream out,
+                boolean shouldKillAfterBackup)
+                throws RemoteException, TimeoutException, IOException {
             Slog.d(TAG, "Binding to full backup agent : " + pkg.packageName);
 
             IBackupAgent agent = bindToAgentSynchronous(pkg.applicationInfo,
@@ -2938,16 +3073,20 @@ class BackupManagerService extends IBackupManager.Stub {
                         routeSocketDataToOutput(pipes[0], out);
                     } catch (IOException e) {
                         Slog.i(TAG, "Caught exception reading from agent", e);
+                        throw new IOException("Error backing up " + pkg.packageName);
                     }
 
                     if (!waitUntilOperationComplete(token)) {
                         Slog.e(TAG, "Full backup failed on package " + pkg.packageName);
+                        throw new TimeoutException(
+                                "Unable to bind to full agent for " + pkg.packageName);
                     } else {
                         if (DEBUG) Slog.d(TAG, "Full package backup success: " + pkg.packageName);
                     }
 
                 } catch (IOException e) {
                     Slog.e(TAG, "Error backing up " + pkg.packageName, e);
+                    throw new IOException("Error backing up " + pkg.packageName);
                 } finally {
                     try {
                         // flush after every package
@@ -2962,8 +3101,9 @@ class BackupManagerService extends IBackupManager.Stub {
                 }
             } else {
                 Slog.w(TAG, "Unable to bind to full agent for " + pkg.packageName);
+                throw new TimeoutException("Unable to bind to full agent for " + pkg.packageName);
             }
-            tearDown(pkg);
+            tearDown(pkg, shouldKillAfterBackup);
         }
 
         private void writeApkToBackup(PackageInfo pkg, BackupDataOutput output) {
@@ -3042,7 +3182,7 @@ class BackupManagerService extends IBackupManager.Stub {
             outstream.close();
         }
 
-        private void tearDown(PackageInfo pkg) {
+        private void tearDown(PackageInfo pkg, boolean shouldKillAfterBackup) {
             if (pkg != null) {
                 final ApplicationInfo app = pkg.applicationInfo;
                 if (app != null) {
@@ -3052,7 +3192,7 @@ class BackupManagerService extends IBackupManager.Stub {
 
                         // The agent was running with a stub Application object, so shut it down.
                         if (app.uid != Process.SYSTEM_UID
-                                && app.uid != Process.PHONE_UID) {
+                                && app.uid != Process.PHONE_UID && shouldKillAfterBackup) {
                             if (MORE_DEBUG) Slog.d(TAG, "Backup complete, killing host process");
                             mActivityManager.killApplicationProcess(app.processName, app.uid);
                         } else {
@@ -3099,6 +3239,17 @@ class BackupManagerService extends IBackupManager.Stub {
                 }
             }
         }
+
+        void sendEndBackupWithResult(int result) {
+            if (mObserver != null) {
+                try {
+                    mObserver.onEndBackupWithResult(result);
+                } catch (RemoteException e) {
+                    Slog.w(TAG, "full backup observer went away: endBackup with result");
+                    mObserver = null;
+                }
+            }
+        }
     }
 
 
@@ -3131,13 +3282,17 @@ class BackupManagerService extends IBackupManager.Stub {
     enum RestorePolicy {
         IGNORE,
         ACCEPT,
-        ACCEPT_IF_APK
+        ACCEPT_IF_APK,
+        MISMATCH_VERSION,
+        MISMATCH_SIGNATURE,
+        NOT_ALLOWED
     }
 
     class PerformFullRestoreTask extends ObbServiceClient implements Runnable {
         ParcelFileDescriptor mInputFile;
         String mCurrentPassword;
         String mDecryptPassword;
+        boolean mIgnoreEncryptionPasswordCheck;
         IFullBackupRestoreObserver mObserver;
         AtomicBoolean mLatchObject;
         IBackupAgent mAgent;
@@ -3145,6 +3300,8 @@ class BackupManagerService extends IBackupManager.Stub {
         ApplicationInfo mTargetApp;
         FullBackupObbConnection mObbConnection = null;
         ParcelFileDescriptor[] mPipes = null;
+        boolean mNoninteractive;
+        boolean mIgnoreVersionMismatchCheck;
 
         long mBytes;
 
@@ -3163,7 +3320,8 @@ class BackupManagerService extends IBackupManager.Stub {
         final HashSet<String> mClearedPackages = new HashSet<String>();
 
         PerformFullRestoreTask(ParcelFileDescriptor fd, String curPassword, String decryptPassword,
-                IFullBackupRestoreObserver observer, AtomicBoolean latch) {
+                boolean ignoreEncryptionPasswordCheck, IFullBackupRestoreObserver observer,
+                AtomicBoolean latch, boolean noninteractive, boolean ignoreVersionMismatchCheck) {
             mInputFile = fd;
             mCurrentPassword = curPassword;
             mDecryptPassword = decryptPassword;
@@ -3173,6 +3331,9 @@ class BackupManagerService extends IBackupManager.Stub {
             mAgentPackage = null;
             mTargetApp = null;
             mObbConnection = new FullBackupObbConnection();
+            mNoninteractive = noninteractive;
+            mIgnoreEncryptionPasswordCheck = ignoreEncryptionPasswordCheck;
+            mIgnoreVersionMismatchCheck = ignoreVersionMismatchCheck;
 
             // Which packages we've already wiped data on.  We prepopulate this
             // with a whitelist of packages known to be unclearable.
@@ -3218,7 +3379,7 @@ class BackupManagerService extends IBackupManager.Stub {
             Slog.i(TAG, "--- Performing full-dataset restore ---");
             mObbConnection.establish();
             sendStartRestore();
-
+            int result = RESULT_SUCCESS;
             // Are we able to restore shared-storage data?
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 mPackagePolicies.put(SHARED_BACKUP_AGENT_PACKAGE, RestorePolicy.ACCEPT);
@@ -3227,11 +3388,9 @@ class BackupManagerService extends IBackupManager.Stub {
             FileInputStream rawInStream = null;
             DataInputStream rawDataIn = null;
             try {
-                if (hasBackupPassword()) {
-                    if (!passwordMatchesSaved(mCurrentPassword, PBKDF2_HASH_ROUNDS)) {
-                        if (DEBUG) Slog.w(TAG, "Backup password mismatch; aborting");
-                        return;
-                    }
+                if (!mIgnoreEncryptionPasswordCheck && !backupPasswordMatches(mCurrentPassword)) {
+                    if (DEBUG) Slog.w(TAG, "Backup password mismatch; aborting");
+                    throw new SecurityException("Backup password mismatch; aborting");
                 }
 
                 mBytes = 0;
@@ -3252,8 +3411,12 @@ class BackupManagerService extends IBackupManager.Stub {
                 if (Arrays.equals(magicBytes, streamHeader)) {
                     // okay, header looks good.  now parse out the rest of the fields.
                     String s = readHeaderLine(rawInStream);
-                    if (Integer.parseInt(s) == BACKUP_FILE_VERSION) {
-                        // okay, it's a version we recognize
+                    final int archiveVersion = Integer.parseInt(s);
+                    if (archiveVersion <= BACKUP_FILE_VERSION) {
+                        // okay, it's a version we recognize.  if it's version 1, we may need
+                        // to try two different PBKDF2 regimes to compare checksums.
+                        final boolean pbkdf2Fallback = (archiveVersion == 1);
+
                         s = readHeaderLine(rawInStream);
                         compressed = (Integer.parseInt(s) != 0);
                         s = readHeaderLine(rawInStream);
@@ -3261,7 +3424,8 @@ class BackupManagerService extends IBackupManager.Stub {
                             // no more header to parse; we're good to go
                             okay = true;
                         } else if (mDecryptPassword != null && mDecryptPassword.length() > 0) {
-                            preCompressStream = decodeAesHeaderAndInitialize(s, rawInStream);
+                            preCompressStream = decodeAesHeaderAndInitialize(s, pbkdf2Fallback,
+                                    rawInStream);
                             if (preCompressStream != null) {
                                 okay = true;
                             }
@@ -3271,20 +3435,27 @@ class BackupManagerService extends IBackupManager.Stub {
 
                 if (!okay) {
                     Slog.w(TAG, "Invalid restore data; aborting.");
-                    return;
+                    result = RESULT_UNKNOWN_ERROR;
+                } else {
+                    // okay, use the right stream layer based on compression
+                    in = (compressed) ? new InflaterInputStream(preCompressStream)
+                            : preCompressStream;
+                    int didRestore = CONTINUE_RESTORE;
+                    do {
+                        didRestore = restoreOneFile(in, buffer);
+                    } while (didRestore == CONTINUE_RESTORE);
+
+                    if (didRestore != RESULT_SUCCESS) {
+                        result = didRestore;
+                    }
+
+                    if (MORE_DEBUG) Slog.v(TAG, "Done consuming input tarfile, total bytes=" + mBytes);
                 }
-
-                // okay, use the right stream layer based on compression
-                in = (compressed) ? new InflaterInputStream(preCompressStream) : preCompressStream;
-
-                boolean didRestore;
-                do {
-                    didRestore = restoreOneFile(in, buffer);
-                } while (didRestore);
-
-                if (MORE_DEBUG) Slog.v(TAG, "Done consuming input tarfile, total bytes=" + mBytes);
             } catch (IOException e) {
                 Slog.e(TAG, "Unable to read restore input");
+                result = RESULT_UNKNOWN_ERROR;
+            } catch (SecurityException e) {
+                result = RESULT_PASSWORD_MISMATCH;
             } finally {
                 tearDownPipes();
                 tearDownAgent(mTargetApp);
@@ -3306,6 +3477,7 @@ class BackupManagerService extends IBackupManager.Stub {
                 }
                 mObbConnection.tearDown();
                 sendEndRestore();
+                sendEndRestoreWithResult(result);
                 Slog.d(TAG, "Full restore pass complete.");
                 mWakelock.release();
             }
@@ -3321,7 +3493,71 @@ class BackupManagerService extends IBackupManager.Stub {
             return buffer.toString();
         }
 
-        InputStream decodeAesHeaderAndInitialize(String encryptionName, InputStream rawInStream) {
+        InputStream attemptMasterKeyDecryption(String algorithm, byte[] userSalt, byte[] ckSalt,
+                int rounds, String userIvHex, String masterKeyBlobHex, InputStream rawInStream,
+                boolean doLog) {
+            InputStream result = null;
+
+            try {
+                Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                SecretKey userKey = buildPasswordKey(algorithm, mDecryptPassword, userSalt,
+                        rounds);
+                byte[] IV = hexToByteArray(userIvHex);
+                IvParameterSpec ivSpec = new IvParameterSpec(IV);
+                c.init(Cipher.DECRYPT_MODE,
+                        new SecretKeySpec(userKey.getEncoded(), "AES"),
+                        ivSpec);
+                byte[] mkCipher = hexToByteArray(masterKeyBlobHex);
+                byte[] mkBlob = c.doFinal(mkCipher);
+
+                // first, the master key IV
+                int offset = 0;
+                int len = mkBlob[offset++];
+                IV = Arrays.copyOfRange(mkBlob, offset, offset + len);
+                offset += len;
+                // then the master key itself
+                len = mkBlob[offset++];
+                byte[] mk = Arrays.copyOfRange(mkBlob,
+                        offset, offset + len);
+                offset += len;
+                // and finally the master key checksum hash
+                len = mkBlob[offset++];
+                byte[] mkChecksum = Arrays.copyOfRange(mkBlob,
+                        offset, offset + len);
+
+                // now validate the decrypted master key against the checksum
+                byte[] calculatedCk = makeKeyChecksum(algorithm, mk, ckSalt, rounds);
+                if (Arrays.equals(calculatedCk, mkChecksum)) {
+                    ivSpec = new IvParameterSpec(IV);
+                    c.init(Cipher.DECRYPT_MODE,
+                            new SecretKeySpec(mk, "AES"),
+                            ivSpec);
+                    // Only if all of the above worked properly will 'result' be assigned
+                    result = new CipherInputStream(rawInStream, c);
+                } else if (doLog) Slog.w(TAG, "Incorrect password");
+            } catch (InvalidAlgorithmParameterException e) {
+                if (doLog) Slog.e(TAG, "Needed parameter spec unavailable!", e);
+            } catch (BadPaddingException e) {
+                // This case frequently occurs when the wrong password is used to decrypt
+                // the master key.  Use the identical "incorrect password" log text as is
+                // used in the checksum failure log in order to avoid providing additional
+                // information to an attacker.
+                if (doLog) Slog.w(TAG, "Incorrect password");
+            } catch (IllegalBlockSizeException e) {
+                if (doLog) Slog.w(TAG, "Invalid block size in master key");
+            } catch (NoSuchAlgorithmException e) {
+                if (doLog) Slog.e(TAG, "Needed decryption algorithm unavailable!");
+            } catch (NoSuchPaddingException e) {
+                if (doLog) Slog.e(TAG, "Needed padding mechanism unavailable!");
+            } catch (InvalidKeyException e) {
+                if (doLog) Slog.w(TAG, "Illegal password; aborting");
+            }
+
+            return result;
+        }
+
+        InputStream decodeAesHeaderAndInitialize(String encryptionName, boolean pbkdf2Fallback,
+                InputStream rawInStream) {
             InputStream result = null;
             try {
                 if (encryptionName.equals(ENCRYPTION_ALGORITHM_NAME)) {
@@ -3338,59 +3574,13 @@ class BackupManagerService extends IBackupManager.Stub {
                     String masterKeyBlobHex = readHeaderLine(rawInStream); // 9
 
                     // decrypt the master key blob
-                    Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-                    SecretKey userKey = buildPasswordKey(mDecryptPassword, userSalt,
-                            rounds);
-                    byte[] IV = hexToByteArray(userIvHex);
-                    IvParameterSpec ivSpec = new IvParameterSpec(IV);
-                    c.init(Cipher.DECRYPT_MODE,
-                            new SecretKeySpec(userKey.getEncoded(), "AES"),
-                            ivSpec);
-                    byte[] mkCipher = hexToByteArray(masterKeyBlobHex);
-                    byte[] mkBlob = c.doFinal(mkCipher);
-
-                    // first, the master key IV
-                    int offset = 0;
-                    int len = mkBlob[offset++];
-                    IV = Arrays.copyOfRange(mkBlob, offset, offset + len);
-                    offset += len;
-                    // then the master key itself
-                    len = mkBlob[offset++];
-                    byte[] mk = Arrays.copyOfRange(mkBlob,
-                            offset, offset + len);
-                    offset += len;
-                    // and finally the master key checksum hash
-                    len = mkBlob[offset++];
-                    byte[] mkChecksum = Arrays.copyOfRange(mkBlob,
-                            offset, offset + len);
-
-                    // now validate the decrypted master key against the checksum
-                    byte[] calculatedCk = makeKeyChecksum(mk, ckSalt, rounds);
-                    if (Arrays.equals(calculatedCk, mkChecksum)) {
-                        ivSpec = new IvParameterSpec(IV);
-                        c.init(Cipher.DECRYPT_MODE,
-                                new SecretKeySpec(mk, "AES"),
-                                ivSpec);
-                        // Only if all of the above worked properly will 'result' be assigned
-                        result = new CipherInputStream(rawInStream, c);
-                    } else Slog.w(TAG, "Incorrect password");
+                    result = attemptMasterKeyDecryption(PBKDF_CURRENT, userSalt, ckSalt,
+                            rounds, userIvHex, masterKeyBlobHex, rawInStream, false);
+                    if (result == null && pbkdf2Fallback) {
+                        result = attemptMasterKeyDecryption(PBKDF_FALLBACK, userSalt, ckSalt,
+                                rounds, userIvHex, masterKeyBlobHex, rawInStream, true);
+                    }
                 } else Slog.w(TAG, "Unsupported encryption method: " + encryptionName);
-            } catch (InvalidAlgorithmParameterException e) {
-                Slog.e(TAG, "Needed parameter spec unavailable!", e);
-            } catch (BadPaddingException e) {
-                // This case frequently occurs when the wrong password is used to decrypt
-                // the master key.  Use the identical "incorrect password" log text as is
-                // used in the checksum failure log in order to avoid providing additional
-                // information to an attacker.
-                Slog.w(TAG, "Incorrect password");
-            } catch (IllegalBlockSizeException e) {
-                Slog.w(TAG, "Invalid block size in master key");
-            } catch (NoSuchAlgorithmException e) {
-                Slog.e(TAG, "Needed decryption algorithm unavailable!");
-            } catch (NoSuchPaddingException e) {
-                Slog.e(TAG, "Needed padding mechanism unavailable!");
-            } catch (InvalidKeyException e) {
-                Slog.w(TAG, "Illegal password; aborting");
             } catch (NumberFormatException e) {
                 Slog.w(TAG, "Can't parse restore data header");
             } catch (IOException e) {
@@ -3400,7 +3590,8 @@ class BackupManagerService extends IBackupManager.Stub {
             return result;
         }
 
-        boolean restoreOneFile(InputStream instream, byte[] buffer) {
+        int restoreOneFile(InputStream instream, byte[] buffer) {
+            int result = CONTINUE_RESTORE;
             FileMetadata info;
             try {
                 info = readTarHeaders(instream);
@@ -3444,6 +3635,7 @@ class BackupManagerService extends IBackupManager.Stub {
                         switch (policy) {
                             case IGNORE:
                                 okay = false;
+                                result = RESULT_UNKNOWN_ERROR;
                                 break;
 
                             case ACCEPT_IF_APK:
@@ -3462,12 +3654,13 @@ class BackupManagerService extends IBackupManager.Stub {
                                     // ourselves, so just strip the tar footer and
                                     // go on to the next file in the input stream
                                     skipTarPadding(info.size, instream);
-                                    return true;
+                                    return result;
                                 } else {
                                     // File data before (or without) the apk.  We can't
                                     // handle it coherently in this case so ignore it.
                                     mPackagePolicies.put(pkg, RestorePolicy.IGNORE);
                                     okay = false;
+                                    result = RESULT_UNKNOWN_ERROR;
                                 }
                                 break;
 
@@ -3479,9 +3672,36 @@ class BackupManagerService extends IBackupManager.Stub {
                                     // one file not-okay without changing the restore
                                     // policy for the package.
                                     okay = false;
+                                    result = RESULT_UNKNOWN_ERROR;
                                 }
                                 break;
-
+                            case MISMATCH_VERSION:
+                                if (info.domain.equals(FullBackup.APK_TREE_TOKEN)) {
+                                    // Try to install the app.
+                                    String installerName = mPackageInstallers.get(pkg);
+                                    okay = installApk(info, installerName, instream);
+                                    // good to go; promote to ACCEPT
+                                    mPackagePolicies.put(pkg, (okay)
+                                            ? RestorePolicy.ACCEPT
+                                            : RestorePolicy.IGNORE);
+                                    // At this point we've consumed this file entry
+                                    // ourselves, so just strip the tar footer and
+                                    // go on to the next file in the input stream
+                                    skipTarPadding(info.size, instream);
+                                    return result;
+                                } else {
+                                    okay = false;
+                                    result = RESULT_VERSION_MISMATCH;
+                                }
+                                break;
+                            case MISMATCH_SIGNATURE:
+                                okay = false;
+                                result = RESULT_SIGNATURE_MISMATCH;
+                                break;
+                            case NOT_ALLOWED:
+                                okay = false;
+                                result = RESULT_NOT_ALLOWED;
+                                break;
                             default:
                                 // Something has gone dreadfully wrong when determining
                                 // the restore policy from the manifest.  Ignore the
@@ -3489,7 +3709,18 @@ class BackupManagerService extends IBackupManager.Stub {
                                 Slog.e(TAG, "Invalid policy from manifest");
                                 okay = false;
                                 mPackagePolicies.put(pkg, RestorePolicy.IGNORE);
+                                result = RESULT_UNKNOWN_ERROR;
                                 break;
+                        }
+
+                        // The path needs to be canonical
+                        // but check and overwrite result only if the operation hasn't already failed
+                        if (okay && (info.path.contains("..") || info.path.contains("//"))) {
+                            if (MORE_DEBUG) {
+                                Slog.w(TAG, "Dropping invalid path " + info.path);
+                            }
+                            result = RESULT_UNKNOWN_ERROR;
+                            okay = false;
                         }
 
                         // If the policy is satisfied, go ahead and set up to pipe the
@@ -3537,6 +3768,7 @@ class BackupManagerService extends IBackupManager.Stub {
                                 okay = false;
                                 tearDownPipes();
                                 mPackagePolicies.put(pkg, RestorePolicy.IGNORE);
+                                result = RESULT_UNKNOWN_ERROR;
                             }
                         }
 
@@ -3546,6 +3778,7 @@ class BackupManagerService extends IBackupManager.Stub {
                             Slog.e(TAG, "Restoring data for " + pkg
                                     + " but agent is for " + mAgentPackage);
                             okay = false;
+                            result = RESULT_UNKNOWN_ERROR;
                         }
 
                         // At this point we have an agent ready to handle the full
@@ -3587,12 +3820,17 @@ class BackupManagerService extends IBackupManager.Stub {
                                 Slog.d(TAG, "Couldn't establish restore");
                                 agentSuccess = false;
                                 okay = false;
+                                result = RESULT_UNKNOWN_ERROR;
                             } catch (RemoteException e) {
                                 // whoops, remote entity went away.  We'll eat the content
                                 // ourselves, then, and not copy it over.
                                 Slog.e(TAG, "Agent crashed during full restore");
                                 agentSuccess = false;
                                 okay = false;
+                                result = RESULT_UNKNOWN_ERROR;
+                            } catch (Exception e) {
+                                okay = false;
+                                result = RESULT_UNKNOWN_ERROR;
                             }
 
                             // Copy over the data if the agent is still good
@@ -3656,14 +3894,23 @@ class BackupManagerService extends IBackupManager.Stub {
                             }
                         }
                     }
+                } else {
+                    result = RESULT_SUCCESS;
                 }
             } catch (IOException e) {
                 if (DEBUG) Slog.w(TAG, "io exception on restore socket read", e);
                 // treat as EOF
                 info = null;
+                result = RESULT_UNKNOWN_ERROR;
             }
 
-            return (info != null);
+            // The result for a single file is significant to non-interactive calls.
+            // For all other non-interactive calls, fail open and allow adb to continue restoring.
+            if (mNoninteractive) {
+                return result;
+            } else {
+                return (info == null) ? result : CONTINUE_RESTORE;
+            }
         }
 
         void setUpPipes() throws IOException {
@@ -3941,7 +4188,8 @@ class BackupManagerService extends IBackupManager.Stub {
                                         info.packageName, PackageManager.GET_SIGNATURES);
                                 // Fall through to IGNORE if the app explicitly disallows backup
                                 final int flags = pkgInfo.applicationInfo.flags;
-                                if ((flags & ApplicationInfo.FLAG_ALLOW_BACKUP) != 0) {
+                                if ((flags & ApplicationInfo.FLAG_ALLOW_BACKUP) != 0
+                                        || mNoninteractive) {
                                     // Restore system-uid-space packages only if they have
                                     // defined a custom backup agent
                                     if ((pkgInfo.applicationInfo.uid >= Process.FIRST_APPLICATION_UID)
@@ -3954,7 +4202,8 @@ class BackupManagerService extends IBackupManager.Stub {
                                         // the app developer's cert, so they're different on every
                                         // device.
                                         if (signaturesMatch(sigs, pkgInfo)) {
-                                            if (pkgInfo.versionCode >= version) {
+                                            if (mIgnoreVersionMismatchCheck
+                                                    || pkgInfo.versionCode >= version) {
                                                 Slog.i(TAG, "Sig + version match; taking data");
                                                 policy = RestorePolicy.ACCEPT;
                                             } else {
@@ -3964,11 +4213,12 @@ class BackupManagerService extends IBackupManager.Stub {
                                                 Slog.d(TAG, "Data version " + version
                                                         + " is newer than installed version "
                                                         + pkgInfo.versionCode + " - requiring apk");
-                                                policy = RestorePolicy.ACCEPT_IF_APK;
+                                                policy = RestorePolicy.MISMATCH_VERSION;
                                             }
                                         } else {
                                             Slog.w(TAG, "Restore manifest signatures do not match "
                                                     + "installed application for " + info.packageName);
+                                            policy = RestorePolicy.MISMATCH_SIGNATURE;
                                         }
                                     } else {
                                         Slog.w(TAG, "Package " + info.packageName
@@ -3977,6 +4227,7 @@ class BackupManagerService extends IBackupManager.Stub {
                                 } else {
                                     if (DEBUG) Slog.i(TAG, "Restore manifest from "
                                             + info.packageName + " but allowBackup=false");
+                                    policy = RestorePolicy.NOT_ALLOWED;
                                 }
                             } catch (NameNotFoundException e) {
                                 // Okay, the target app isn't installed.  We can process
@@ -3994,6 +4245,7 @@ class BackupManagerService extends IBackupManager.Stub {
                         } else {
                             Slog.i(TAG, "Missing signature on backed-up package "
                                     + info.packageName);
+                            policy = RestorePolicy.MISMATCH_SIGNATURE;
                         }
                     } else {
                         Slog.i(TAG, "Expected package " + info.packageName
@@ -4312,6 +4564,16 @@ class BackupManagerService extends IBackupManager.Stub {
             if (mObserver != null) {
                 try {
                     mObserver.onEndRestore();
+                } catch (RemoteException e) {
+                    Slog.w(TAG, "full restore observer went away: endRestore");
+                    mObserver = null;
+                }
+            }
+        }
+        void sendEndRestoreWithResult(int result) {
+            if (mObserver != null) {
+                try {
+                    mObserver.onEndRestoreWithResult(result);
                 } catch (RemoteException e) {
                     Slog.w(TAG, "full restore observer went away: endRestore");
                     mObserver = null;
@@ -5278,7 +5540,7 @@ class BackupManagerService extends IBackupManager.Stub {
             Slog.i(TAG, "Beginning full backup...");
 
             FullBackupParams params = new FullBackupParams(fd, includeApks, includeObbs,
-                    includeShared, doAllApps, includeSystem, pkgList);
+                    includeShared, doAllApps, includeSystem, pkgList, false, false);
             final int token = generateToken();
             synchronized (mFullConfirmations) {
                 mFullConfirmations.put(token, params);
@@ -5462,6 +5724,45 @@ class BackupManagerService extends IBackupManager.Stub {
         } finally {
             Binder.restoreCallingIdentity(oldId);
         }
+    }
+
+    @Override
+    public void fullBackupNoninteractive(ParcelFileDescriptor fd,
+            String[] domainTokens, String excludeFilesRegex, String pkg,
+            boolean shouldKillAfterBackup, boolean ignoreEncryptionPasswordCheck,
+            IFullBackupRestoreObserver observer) {
+        mContext.enforceCallingPermission(android.Manifest.permission.BACKUP,
+                "fullBackupNoninteractive");
+
+        // This function can only be called by apps which can get the system/signature
+        // permission. So allow them to ignore encryption password check - as the password
+        // needs to be entered by the user.
+        FullBackupParams params = new FullBackupParams(fd, false, false, false, false, false,
+                new String[] {pkg}, shouldKillAfterBackup, ignoreEncryptionPasswordCheck);
+        params.observer = observer;
+        params.noninteractive = true;
+        params.domainTokens = domainTokens;
+        params.excludeFilesRegex = excludeFilesRegex;
+        params.shouldKillAfterBackup = shouldKillAfterBackup;
+        mWakelock.acquire();
+        Message msg = mBackupHandler.obtainMessage(MSG_RUN_FULL_BACKUP, params);
+        mBackupHandler.sendMessage(msg);
+    }
+
+    @Override
+    public void fullRestoreNoninteractive(ParcelFileDescriptor fd,
+            boolean ignoreEncryptionPasswordCheck, IFullBackupRestoreObserver observer) {
+        mContext.enforceCallingPermission(android.Manifest.permission.BACKUP,
+                "fullRestoreNoninteractive");
+
+        FullRestoreParams params = new FullRestoreParams(fd);
+        params.observer = observer;
+        params.noninteractive = true;
+        params.ignoreEncryptionPasswordCheck = ignoreEncryptionPasswordCheck;
+        params.ignoreVersionMismatchCheck = false;
+        mWakelock.acquire();
+        Message msg = mBackupHandler.obtainMessage(MSG_RUN_FULL_RESTORE, params);
+        mBackupHandler.sendMessage(msg);
     }
 
     // Enable/disable the backup service
@@ -5698,19 +5999,25 @@ class BackupManagerService extends IBackupManager.Stub {
             return;
         }
 
+        boolean skip = false;
+
         long restoreSet = getAvailableRestoreToken(packageName);
         if (DEBUG) Slog.v(TAG, "restoreAtInstall pkg=" + packageName
                 + " token=" + Integer.toHexString(token)
                 + " restoreSet=" + Long.toHexString(restoreSet));
+        if (restoreSet == 0) {
+            if (MORE_DEBUG) Slog.i(TAG, "No restore set");
+            skip = true;
+        }
 
-        if (mAutoRestore && mProvisioned && restoreSet != 0) {
-            // Do we have a transport to fetch data for us?
-            IBackupTransport transport = getTransport(mCurrentTransport);
-            if (transport == null) {
-                if (DEBUG) Slog.w(TAG, "No transport for install-time restore");
-                return;
-            }
+        // Do we have a transport to fetch data for us?
+        IBackupTransport transport = getTransport(mCurrentTransport);
+        if (transport == null) {
+            if (DEBUG) Slog.w(TAG, "No transport");
+            skip = true;
+        }
 
+        if (!skip && mAutoRestore && mProvisioned) {
             try {
                 // okay, we're going to attempt a restore of this package from this restore set.
                 // The eventual message back into the Package Manager to run the post-install
@@ -5732,12 +6039,15 @@ class BackupManagerService extends IBackupManager.Stub {
                 mBackupHandler.sendMessage(msg);
             } catch (RemoteException e) {
                 // Binding to the transport broke; back off and proceed with the installation.
-                Slog.e(TAG, "Unable to contact transport for install-time restore");
+                Slog.e(TAG, "Unable to contact transport");
+                skip = true;
             }
-        } else {
+        }
+
+        if (skip) {
             // Auto-restore disabled or no way to attempt a restore; just tell the Package
             // Manager to proceed with the post-install handling for this package.
-            if (DEBUG) Slog.v(TAG, "No restore set -- skipping restore");
+            if (DEBUG) Slog.v(TAG, "Skipping");
             try {
                 mPackageManagerBinder.finishPackageInstall(token);
             } catch (RemoteException e) { /* can't happen */ }

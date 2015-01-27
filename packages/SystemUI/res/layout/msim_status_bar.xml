@@ -26,7 +26,8 @@
     xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
     android:id="@+id/msim_status_bar"
     android:background="@drawable/system_bar_background"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:focusable="true"
     android:descendantFocusability="afterDescendants"
     android:fitsSystemWindows="true"
@@ -128,9 +129,21 @@
                 android:singleLine="true"
                 android:paddingStart="6dip"
                 android:gravity="center_vertical|start"
+                android:visibility="gone"
                 />
         </LinearLayout>
     </LinearLayout>
+
+    <com.android.systemui.statusbar.policy.Clock
+        android:id="@+id/center_clock"
+        android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:singleLine="true"
+        android:visibility="gone"
+        />
 
     <LinearLayout android:id="@+id/ticker"
         android:layout_width="match_parent"

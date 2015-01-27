@@ -24,7 +24,7 @@
     <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"Odstrániť zo zoznamu"</string>
     <string name="status_bar_recent_inspect_item_title" msgid="7793624864528818569">"Informácie o aplikácii"</string>
     <string name="status_bar_no_recent_apps" msgid="6576392951053994640">"Žiadne nedávne aplikácie"</string>
-    <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Odmietnuť nové aplikácie"</string>
+    <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Zatvoriť nedávne aplikácie"</string>
   <plurals name="status_bar_accessibility_recent_apps">
     <item quantity="one" msgid="5854176083865845541">"1 nová aplikácia"</item>
     <item quantity="other" msgid="1040784359794890744">"Počet nových aplikácií: %d"</item>
@@ -181,7 +181,7 @@
     <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Nabité"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Rozhranie Bluetooth (počet zariadení: <xliff:g id="NUMBER">%d</xliff:g>)"</string>
-    <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Rozhranie Bluetooth je vypnuté"</string>
+    <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth vyp."</string>
     <string name="quick_settings_brightness_label" msgid="6968372297018755815">"Jas"</string>
     <string name="quick_settings_rotation_unlocked_label" msgid="336054930362580584">"Automatické otáčanie"</string>
     <string name="quick_settings_rotation_locked_label" msgid="8058646447242565486">"Otáčanie uzamknuté"</string>

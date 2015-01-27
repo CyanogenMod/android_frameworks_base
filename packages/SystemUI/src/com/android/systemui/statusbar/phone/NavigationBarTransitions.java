@@ -38,36 +38,58 @@ public final class NavigationBarTransitions extends BarTransitions {
     private final NavigationBarView mView;
     private final IStatusBarService mBarService;
 
+    private View mStatusBarBlocker;
+
     private boolean mLightsOut;
     private boolean mVertical;
+    private boolean mLeftIfVertical;
     private int mRequestedMode;
     private boolean mStickyTransparent;
 
     public NavigationBarTransitions(NavigationBarView view) {
-        super(view, R.drawable.nav_background);
+        super(view, R.drawable.nav_background, R.color.navigation_bar_background_opaque,
+                R.color.navigation_bar_background_semi_transparent);
         mView = view;
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
     }
 
     public void init(boolean isVertical) {
+        mStatusBarBlocker = mView.findViewById(R.id.status_bar_blocker);
         setVertical(isVertical);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/, true /*force*/);
     }
 
     public void setVertical(boolean isVertical) {
-        mVertical = isVertical;
+        if (mVertical != isVertical) {
+            mVertical = isVertical;
+            updateBackgroundResource();
+        }
+    }
+
+    public void setLeftIfVertical(boolean leftIfVertical) {
+        if (mLeftIfVertical != leftIfVertical) {
+            mLeftIfVertical = leftIfVertical;
+            updateBackgroundResource();
+        }
+    }
+
+    private void updateBackgroundResource() {
+        if (mVertical && mLeftIfVertical) {
+            setGradientResourceId(R.drawable.nav_background_land_left);
+        } else if (mVertical) {
+            setGradientResourceId(R.drawable.nav_background_land);
+        } else {
+            setGradientResourceId(R.drawable.nav_background);
+        }
         transitionTo(mRequestedMode, false /*animate*/);
     }
 
     @Override
     public void transitionTo(int mode, boolean animate) {
         mRequestedMode = mode;
-        if (mVertical && mode == MODE_TRANSLUCENT) {
-            // translucent mode not allowed when vertical
-            mode = MODE_OPAQUE;
-        } else if (mStickyTransparent) {
+        if (mStickyTransparent) {
             mode = MODE_TRANSPARENT;
         }
         super.transitionTo(mode, animate);
@@ -89,10 +111,15 @@ public final class NavigationBarTransitions extends BarTransitions {
         setKeyButtonViewQuiescentAlpha(NavbarEditor.NAVBAR_MENU_BIG, alpha, animate);
         setKeyButtonViewQuiescentAlpha(mView.getSearchLight(), KEYGUARD_QUIESCENT_ALPHA, animate);
         setKeyButtonViewQuiescentAlpha(mView.getCameraButton(), KEYGUARD_QUIESCENT_ALPHA, animate);
+        setKeyButtonViewQuiescentAlpha(mView.getApplicationWidgetButton(),
+                KEYGUARD_QUIESCENT_ALPHA, animate);
         applyBackButtonQuiescentAlpha(mode, animate);
 
         // apply to lights out
         applyLightsOut(mode == MODE_LIGHTS_OUT, animate, force);
+
+        final boolean isTranslucent = mode != MODE_OPAQUE && mode != MODE_LIGHTS_OUT;
+        fadeContent(mStatusBarBlocker, isTranslucent ? 1f : 0f);
     }
 
     private void setKeyButtonViewQuiescentAlpha(ButtonInfo info, float alpha, boolean animate) {
@@ -113,6 +140,7 @@ public final class NavigationBarTransitions extends BarTransitions {
         float backAlpha = 0;
         backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.getSearchLight());
         backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.getCameraButton());
+        backAlpha = maxVisibleQuiescentAlpha(backAlpha, mView.getApplicationWidgetButton());
         backAlpha = maxVisibleQuiescentAlpha(backAlpha,
                 mView.findButton(NavbarEditor.NAVBAR_HOME));
         backAlpha = maxVisibleQuiescentAlpha(backAlpha,
@@ -151,6 +179,7 @@ public final class NavigationBarTransitions extends BarTransitions {
         final float alpha = visible ? 1 : 0;
         fadeContent(mView.getCameraButton(), alpha);
         fadeContent(mView.getSearchLight(), alpha);
+        fadeContent(mView.getApplicationWidgetButton(), alpha);
     }
 
     private void fadeContent(View v, float alpha) {

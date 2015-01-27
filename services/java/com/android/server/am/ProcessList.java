@@ -119,7 +119,7 @@ final class ProcessList {
     // we have no limit on the number of service, visible, foreground, or other such
     // processes and the number of those processes does not count against the cached
     // process limit.
-    static final int MAX_CACHED_APPS = 24;
+    static final int MAX_CACHED_APPS = SystemProperties.getInt("ro.sys.fw.bg_apps_limit",24);
 
     // We allow empty processes to stick around for at most 30 minutes.
     static final long MAX_EMPTY_TIME = 30*60*1000;
@@ -162,6 +162,11 @@ final class ProcessList {
     };
     // The actual OOM killer memory levels we are using.
     private final long[] mOomMinFree = new long[mOomAdj.length];
+    // Optimal OOM killer memory levels for Low-Tier devices.
+    private final long[] mOomMinFreeLowRam = new long[] {
+            8192, 13652, 21844,
+            27308, 32768, 38228
+    };
 
     private final long mTotalMemMb;
 
@@ -216,10 +221,17 @@ final class ProcessList {
             Slog.i("XXXXXX", "minfree_adj=" + minfree_adj + " minfree_abs=" + minfree_abs);
         }
 
+        // Overwrite calculated LMK parameters with the low-tier tested/validated values
+        boolean is_lowram = SystemProperties.getBoolean("ro.config.low_ram",false);
         for (int i=0; i<mOomAdj.length; i++) {
-            long low = mOomMinFreeLow[i];
-            long high = mOomMinFreeHigh[i];
-            mOomMinFree[i] = (long)(low + ((high-low)*scale));
+            if (is_lowram) {
+                mOomMinFree[i] = mOomMinFreeLowRam[i];
+            }
+            else {
+                long low = mOomMinFreeLow[i];
+                long high = mOomMinFreeHigh[i];
+                mOomMinFree[i] = (long)(low + ((high-low)*scale));
+            }
         }
 
         if (minfree_abs >= 0) {

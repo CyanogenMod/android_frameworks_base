@@ -181,7 +181,7 @@ class KeyguardMultiUserAvatar extends FrameLayout {
                 (int) (mInactiveTextAlpha * 255);
         final int initTextAlpha = active ? (int) (mInactiveTextAlpha * 255) :
                 (int) (mActiveTextAlpha * 255);
-        int textColor = mTextColor;
+        final int textColor = mTextColor;
         mUserName.setTextColor(textColor);
 
         if (animate && mTouched) {
@@ -195,7 +195,8 @@ class KeyguardMultiUserAvatar extends FrameLayout {
                     int textAlpha = (int) ((1 - r) * initTextAlpha + r * finalTextAlpha);
                     mFramed.setScale(scale);
                     mUserImage.setAlpha(alpha);
-                    mUserName.setTextColor(Color.argb(textAlpha, 255, 255, 255));
+                    mUserName.setTextColor(Color.argb(textAlpha, Color.red(textColor),
+                        Color.green(textColor), Color.blue(textColor)));
                     mUserImage.invalidate();
                 }
             });
@@ -212,7 +213,8 @@ class KeyguardMultiUserAvatar extends FrameLayout {
         } else {
             mFramed.setScale(finalScale);
             mUserImage.setAlpha(finalAlpha);
-            mUserName.setTextColor(Color.argb(finalTextAlpha, 255, 255, 255));
+            mUserName.setTextColor(Color.argb(finalTextAlpha, Color.red(textColor),
+                    Color.green(textColor), Color.blue(textColor)));
             if (onComplete != null) {
                 post(onComplete);
             }

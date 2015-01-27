@@ -18,27 +18,37 @@
 
 #include "jni.h"
 #include <ScopedUtfChars.h>
-#include <utils/misc.h>
 #include <android_runtime/AndroidRuntime.h>
-#include <utils/Log.h>
-#include <utils/String16.h>
 
 #include "wifi.h"
 
 #define REPLY_BUF_SIZE 4096 // wpa_supplicant's maximum size.
 #define EVENT_BUF_SIZE 2048
 
+#define CONVERT_LINE_LEN 2048
+#define CHARSET_CN ("gbk")
+
+#include "android_net_wifi_Gbk2Utf.h"
+
 namespace android {
 
 static jint DBG = false;
 
+extern struct accessPointObjectItem *g_pItemList;
+extern struct accessPointObjectItem *g_pLastNode;
+extern pthread_mutex_t *g_pItemListMutex;
+extern String8 *g_pCurrentSSID;
 static bool doCommand(JNIEnv* env, jstring javaCommand,
                       char* reply, size_t reply_len) {
     ScopedUtfChars command(env, javaCommand);
     if (command.c_str() == NULL) {
         return false; // ScopedUtfChars already threw on error.
     }
-
+    if(strstr(command.c_str(), "SET_NETWORK")) {
+        if(!setNetworkVariable((char *)command.c_str())) {
+            return false;
+        }
+    }
     if (DBG) {
         ALOGD("doCommand: %s", command.c_str());
     }
@@ -76,10 +86,22 @@ static jboolean doBooleanCommand(JNIEnv* env, jstring javaCommand) {
 // Send a command to the supplicant, and return the reply as a String.
 static jstring doStringCommand(JNIEnv* env, jstring javaCommand) {
     char reply[REPLY_BUF_SIZE];
+    ScopedUtfChars command(env, javaCommand);
     if (!doCommand(env, javaCommand, reply, sizeof(reply))) {
         return NULL;
     }
-    return env->NewStringUTF(reply);
+    if (DBG) ALOGD("cmd = %s, reply: %s", command.c_str(), reply);
+    String16 str;
+    if (strstr(command.c_str(),"BSS RANGE=")) {
+        parseScanResults(str,reply);
+    } else if (strstr(command.c_str(),"GET_NETWORK") &&
+              strstr(command.c_str(),"ssid") && !strstr(command.c_str(),"bssid")
+              && !strstr(command.c_str(),"scan_ssid")){
+        constructSsid(str, reply);
+    } else {
+        str += String16((char *)reply);
+    }
+    return env->NewString((const jchar *)str.string(), str.size());
 }
 
 static jboolean android_net_wifi_setMode(JNIEnv* env, jobject, jint type)
@@ -94,11 +116,41 @@ static jboolean android_net_wifi_isDriverLoaded(JNIEnv* env, jobject)
 
 static jboolean android_net_wifi_loadDriver(JNIEnv* env, jobject)
 {
+    g_pItemListMutex = new pthread_mutex_t;
+    if (NULL == g_pItemListMutex) {
+        ALOGE("Failed to allocate memory for g_pItemListMutex!");
+        return JNI_FALSE;
+    }
+    pthread_mutex_init(g_pItemListMutex, NULL);
     return (::wifi_load_driver() == 0);
 }
 
 static jboolean android_net_wifi_unloadDriver(JNIEnv* env, jobject)
 {
+    if (g_pItemListMutex != NULL) {
+        pthread_mutex_lock(g_pItemListMutex);
+        struct accessPointObjectItem *pCurrentNode = g_pItemList;
+        struct accessPointObjectItem *pNextNode = NULL;
+        while (pCurrentNode) {
+            pNextNode = pCurrentNode->pNext;
+            if (NULL != pCurrentNode->ssid) {
+                delete pCurrentNode->ssid;
+                pCurrentNode->ssid = NULL;
+            }
+            if (NULL != pCurrentNode->ssid_utf8) {
+                delete pCurrentNode->ssid_utf8;
+                pCurrentNode->ssid_utf8 = NULL;
+            }
+            delete pCurrentNode;
+            pCurrentNode = pNextNode;
+        }
+        g_pItemList = NULL;
+        g_pLastNode = NULL;
+        pthread_mutex_unlock(g_pItemListMutex);
+        pthread_mutex_destroy(g_pItemListMutex);
+        delete g_pItemListMutex;
+        g_pItemListMutex = NULL;
+    }
     return (::wifi_unload_driver() == 0);
 }
 
@@ -127,6 +179,9 @@ static jstring android_net_wifi_waitForEvent(JNIEnv* env, jobject)
     char buf[EVENT_BUF_SIZE];
     int nread = ::wifi_wait_for_event(buf, sizeof buf);
     if (nread > 0) {
+        if (strstr(buf, " SSID=") || strstr(buf, " SSID ")){
+            constructEventSsid(buf);
+        }
         return env->NewStringUTF(buf);
     } else {
         return NULL;

@@ -755,9 +755,10 @@ class MountService extends IMountService.Stub
                             VoldResponseCode.VolumeListResult);
                     for (String volstr : vols) {
                         String[] tok = volstr.split(" ");
-                        // FMT: <label> <mountpoint> <state>
+                        // FMT: <label> <mountpoint> <state> <uuid>
                         String path = tok[1];
                         String state = Environment.MEDIA_REMOVED;
+                        String uuid = tok[3];
 
                         final StorageVolume volume;
                         synchronized (mVolumesLock) {
@@ -782,6 +783,9 @@ class MountService extends IMountService.Stub
                         if (state != null) {
                             if (DEBUG_EVENTS) Slog.i(TAG, "Updating valid state " + state);
                             updatePublicVolumeState(volume, state);
+                            if (uuid != "-") {
+                                volume.setUuid(uuid);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -1392,10 +1396,14 @@ class MountService extends IMountService.Stub
         mContext.registerReceiver(mUserReceiver, userFilter, null, mHandler);
 
         // Watch for USB changes on primary volume
-        final StorageVolume primary = getPrimaryPhysicalVolume();
-        if (primary != null && primary.allowMassStorage()) {
-            mContext.registerReceiver(
-                    mUsbReceiver, new IntentFilter(UsbManager.ACTION_USB_STATE), null, mHandler);
+        final StorageVolume[] storageVolumes = getVolumeList();
+        for(StorageVolume volume : storageVolumes) {
+            if (volume.allowMassStorage()) {
+                mContext.registerReceiver(
+                        mUsbReceiver,
+                        new IntentFilter(UsbManager.ACTION_USB_STATE), null, mHandler);
+                break;
+            }
         }
 
         // Watch for idle maintenance changes
@@ -1565,9 +1573,6 @@ class MountService extends IMountService.Stub
     public void setUsbMassStorageEnabled(boolean enable) {
         waitForReady();
         validatePermission(android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
-
-        final StorageVolume primary = getPrimaryPhysicalVolume();
-        if (primary == null) return;
 
         // TODO: Add support for multiple share methods
 

@@ -159,18 +159,38 @@ final class TaskRecord extends ThumbnailHolder {
         return null;
     }
 
+    /** Call after activity movement or finish to make sure that frontOfTask is set correctly */
+    final void setFrontOfTask() {
+        boolean foundFront = false;
+        final int numActivities = mActivities.size();
+        for (int activityNdx = 0; activityNdx < numActivities; ++activityNdx) {
+            final ActivityRecord r = mActivities.get(activityNdx);
+            if (foundFront || r.finishing) {
+                r.frontOfTask = false;
+            } else {
+                r.frontOfTask = true;
+                // Set frontOfTask false for every following activity.
+                foundFront = true;
+            }
+        }
+        if (!foundFront && numActivities > 0) {
+            // All activities of this task are finishing. As we ought to have a frontOfTask
+            // activity, make the bottom activity front.
+            mActivities.get(0).frontOfTask = true;
+        }
+    }
+
     /**
-     * Reorder the history stack so that the activity at the given index is
-     * brought to the front.
+     * Reorder the history stack so that the passed activity is brought to the front.
      */
     final void moveActivityToFrontLocked(ActivityRecord newTop) {
         if (DEBUG_ADD_REMOVE) Slog.i(TAG, "Removing and adding activity " + newTop
             + " to stack at top", new RuntimeException("here").fillInStackTrace());
 
-        getTopActivity().frontOfTask = false;
         mActivities.remove(newTop);
         mActivities.add(newTop);
-        newTop.frontOfTask = true;
+
+        setFrontOfTask();
     }
 
     void addActivityAtBottom(ActivityRecord r) {

@@ -17,6 +17,7 @@
 package android.os;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -290,6 +291,43 @@ public final class PowerManager {
      */
     public static final int GO_TO_SLEEP_REASON_TIMEOUT = 2;
 
+    /**
+     * The value to pass as the 'reason' argument to reboot() to
+     * reboot into recovery mode (for applying system updates, doing
+     * factory resets, etc.).
+     * <p>
+     * Requires the {@link android.Manifest.permission#RECOVERY}
+     * permission (in addition to
+     * {@link android.Manifest.permission#REBOOT}).
+     * </p>
+     */
+    public static final String REBOOT_RECOVERY = "recovery";
+    
+    /**
+     * Power save profile
+     * @hide
+     */
+    public static final String PROFILE_POWER_SAVE = "0";
+
+    /**
+     * Balanced power profile
+     * @hide
+     */
+    public static final String PROFILE_BALANCED = "1";
+
+    /**
+     * High-performance profile
+     * @hide
+     */
+    public static final String PROFILE_HIGH_PERFORMANCE = "2";
+
+    /**
+     * Broadcast sent when profile is changed
+     * @hide
+     */
+    public static final String POWER_PROFILE_CHANGED =
+            "com.cyanogenmod.power.PROFILE_CHANGED";
+
     final Context mContext;
     final IPowerManager mService;
     final Handler mHandler;
@@ -521,6 +559,19 @@ public final class PowerManager {
     }
 
     /**
+     * Forces the device to wake up from sleep only if
+     * nothing is blocking the proximity sensor
+     * @see #wakeUp
+     * @hide
+     */
+    public void wakeUpWithProximityCheck(long time) {
+        try {
+            mService.wakeUpWithProximityCheck(time);
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
      * Forces the device to start napping.
      * <p>
      * If the device is currently awake, starts dreaming, otherwise does nothing.
@@ -634,6 +685,69 @@ public final class PowerManager {
             }
         } catch (RemoteException e) {
         }
+    }
+
+    /**
+     * True if the system supports power profiles
+     *
+     * @hide
+     */
+    public boolean hasPowerProfiles() {
+        return !TextUtils.isEmpty(getDefaultPowerProfile()) &&
+               !TextUtils.isEmpty(mContext.getResources().getString(
+                       com.android.internal.R.string.config_perf_profile_prop));
+    }
+
+    /**
+     * Gets the default power profile for the device.
+     *
+     * Returns null if not enabled.
+     *
+     * @hide
+     */
+    public String getDefaultPowerProfile() {
+        return mContext.getResources().getString(
+                com.android.internal.R.string.config_perf_profile_default_entry);
+    }
+
+    /**
+     * Set the system power profile
+     *
+     * @throws IllegalArgumentException if invalid
+     * @hide
+     */
+    public void setPowerProfile(String profile) {
+        if (!hasPowerProfiles()) {
+            throw new IllegalArgumentException("Power profiles not enabled on this system!");
+        }
+
+        try {
+            if (mService != null) {
+                mService.setPowerProfile(profile);
+            }
+        } catch (RemoteException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * Gets the current power profile
+     *
+     * Returns null if power profiles are not enabled
+     * @hide
+     */
+    public String getPowerProfile() {
+        String ret = null;
+        if (hasPowerProfiles()) {
+            try {
+                if (mService != null) {
+                    ret = mService.getPowerProfile();
+                }
+            } catch (RemoteException e) {
+                // nothing
+            }
+        }
+        return ret;
     }
 
     /**

@@ -19,7 +19,6 @@ package com.android.server;
 import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 import static org.xmlpull.v1.XmlPullParser.END_TAG;
 import static org.xmlpull.v1.XmlPullParser.START_TAG;
-
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
@@ -35,6 +34,7 @@ import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -47,6 +47,7 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.IAudioService;
@@ -71,6 +72,7 @@ import android.text.TextUtils;
 import android.util.AtomicFile;
 import android.util.EventLog;
 import android.util.Log;
+import android.util.LruCache;
 import android.util.Slog;
 import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
@@ -78,9 +80,12 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
-
 import com.android.internal.notification.NotificationScorer;
 import com.android.internal.util.cm.QuietHoursUtils;
+import com.android.internal.util.cm.SpamFilter;
+import com.android.internal.util.cm.SpamFilter.SpamContract.NotificationTable;
+import com.android.internal.util.cm.SpamFilter.SpamContract.PackageTable;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -101,6 +106,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import libcore.io.IoUtils;
 
@@ -128,6 +135,8 @@ public class NotificationManagerService extends INotificationManager.Stub
     private static final int JUNK_SCORE = -1000;
     private static final int NOTIFICATION_PRIORITY_MULTIPLIER = 10;
     private static final int SCORE_DISPLAY_THRESHOLD = Notification.PRIORITY_MIN * NOTIFICATION_PRIORITY_MULTIPLIER;
+    private static final String IS_FILTERED_QUERY = NotificationTable.NORMALIZED_TEXT + "=? AND " +
+            PackageTable.PACKAGE_NAME + "=?";
 
     // Notifications with scores below this will not interrupt the user, either via LED or
     // sound or vibration
@@ -173,6 +182,17 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean mNotificationPulseEnabled;
     private HashMap<String, NotificationLedValues> mNotificationPulseCustomLedValues;
     private Map<String, String> mPackageNameMappings;
+    private final LruCache<Integer, FilterCacheInfo> mSpamCache;
+    private ExecutorService mSpamExecutor = Executors.newSingleThreadExecutor();
+
+    private static final Uri FILTER_MSG_URI = new Uri.Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(SpamFilter.AUTHORITY)
+            .appendPath("message")
+            .build();
+    private static final Uri UPDATE_MSG_URI = FILTER_MSG_URI.buildUpon()
+            .appendEncodedPath("inc_count")
+            .build();
 
     // used as a mutex for access to all active notifications & listeners
     private final ArrayList<NotificationRecord> mNotificationList =
@@ -269,10 +289,11 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         @Override
         public void binderDied() {
-            if (connection == null) {
-                // This is not a service; it won't be recreated. We can give up this connection.
-                unregisterListener(this.listener, this.userid);
-            }
+            // Remove the listener, but don't unbind from the service. The system will bring the
+            // service back up, and the onServiceConnected handler will readd the listener with the
+            // new binding. If this isn't a bound service, and is just a registered
+            // INotificationListener, just removing it from the list is all we need to do anyway.
+            removeListenerImpl(this.listener, this.userid);
         }
 
         /** convenience method for looking in mEnabledListenersForCurrentUser */
@@ -766,26 +787,36 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     /**
-     * Remove a listener binder directly
+     * Removes a listener from the list and unbinds from its service.
      */
-    @Override
-    public void unregisterListener(INotificationListener listener, int userid) {
-        // no need to check permissions; if your listener binder is in the list,
-        // that's proof that you had permission to add it in the first place
+    public void unregisterListener(final INotificationListener listener, final int userid) {
+        if (listener == null) return;
 
+        NotificationListenerInfo info = removeListenerImpl(listener, userid);
+        if (info != null && info.connection != null) {
+            mContext.unbindService(info.connection);
+        }
+    }
+
+    /**
+     * Removes a listener from the list but does not unbind from the listener's service.
+     *
+     * @return the removed listener.
+     */
+    NotificationListenerInfo removeListenerImpl(
+            final INotificationListener listener, final int userid) {
+        NotificationListenerInfo listenerInfo = null;
         synchronized (mNotificationList) {
             final int N = mListeners.size();
             for (int i=N-1; i>=0; i--) {
                 final NotificationListenerInfo info = mListeners.get(i);
                 if (info.listener.asBinder() == listener.asBinder()
                         && info.userid == userid) {
-                    mListeners.remove(i);
-                    if (info.connection != null) {
-                        mContext.unbindService(info.connection);
-                    }
+                    listenerInfo = mListeners.remove(i);
                 }
             }
         }
+        return listenerInfo;
     }
 
     /**
@@ -1482,6 +1513,8 @@ public class NotificationManagerService extends INotificationManager.Stub
                 Slog.w(TAG, "Problem accessing scorer " + scorerName + ".", e);
             }
         }
+
+        mSpamCache = new LruCache<Integer, FilterCacheInfo>(100);
     }
 
     /**
@@ -1735,6 +1768,51 @@ public class NotificationManagerService extends INotificationManager.Stub
         return (x < low) ? low : ((x > high) ? high : x);
     }
 
+    private int getNotificationHash(Notification notification, String packageName) {
+        CharSequence message = SpamFilter.getNotificationContent(notification);
+        return (message + ":" + packageName).hashCode();
+    }
+
+    private static final class FilterCacheInfo {
+        String packageName;
+        int notificationId;
+    }
+
+    private boolean isNotificationSpam(Notification notification, String basePkg) {
+        Integer notificationHash = getNotificationHash(notification, basePkg);
+        boolean isSpam = false;
+        if (mSpamCache.get(notificationHash) != null) {
+            isSpam = true;
+        } else {
+            String msg = SpamFilter.getNotificationContent(notification);
+            Cursor c = mContext.getContentResolver().query(FILTER_MSG_URI, null, IS_FILTERED_QUERY,
+                    new String[]{SpamFilter.getNormalizedContent(msg), basePkg}, null);
+            if (c != null) {
+                if (c.moveToFirst()) {
+                    FilterCacheInfo info = new FilterCacheInfo();
+                    info.packageName = basePkg;
+                    int notifId = c.getInt(c.getColumnIndex(NotificationTable.ID));
+                    info.notificationId = notifId;
+                    mSpamCache.put(notificationHash, info);
+                    isSpam = true;
+                }
+                c.close();
+            }
+        }
+        if (isSpam) {
+            final int notifId = mSpamCache.get(notificationHash).notificationId;
+            mSpamExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    Uri updateUri = Uri.withAppendedPath(UPDATE_MSG_URI, String.valueOf(notifId));
+                    mContext.getContentResolver().update(updateUri, new ContentValues(),
+                            null, null);
+                }
+            });
+        }
+        return isSpam;
+    }
+
     // Not exposed via Binder; for system use only (otherwise malicious apps could spoof the
     // uid/pid of another application)
 
@@ -1746,6 +1824,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             Slog.v(TAG, "enqueueNotificationInternal: pkg=" + pkg + " id=" + id + " notification=" + notification);
         }
         checkCallerIsSystemOrSameApp(pkg);
+
         final boolean isSystemNotification = isUidSystem(callingUid) || ("android".equals(pkg));
 
         final int userId = ActivityManager.handleIncomingUser(callingPid,
@@ -1862,6 +1941,11 @@ public class NotificationManagerService extends INotificationManager.Stub
                             pkg, id, tag, callingUid, callingPid, score, notification, user);
                     NotificationRecord r = new NotificationRecord(n);
                     NotificationRecord old = null;
+
+                    if (isNotificationSpam(notification, pkg)) {
+                        mArchive.record(r.sbn);
+                        return;
+                    }
 
                     int index = indexOfNotificationLocked(pkg, tag, id, userId);
                     if (index < 0) {
@@ -2031,7 +2115,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                         final boolean useDefaultVibrate =
                                 (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
 
-                        if (!(QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_MUTE))
+                        if (!(QuietHoursUtils.inQuietHours(mContext, Settings.System.QUIET_HOURS_STILL))
                                 && (useDefaultVibrate || convertSoundToVibration || hasCustomVibrate)
                                 && !(audioManager.getRingerMode()
                                         == AudioManager.RINGER_MODE_SILENT)) {

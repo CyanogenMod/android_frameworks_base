@@ -801,9 +801,32 @@ public class LinearLayout extends ViewGroup {
         int heightSizeAndState = resolveSizeAndState(heightSize, heightMeasureSpec, 0);
         heightSize = heightSizeAndState & MEASURED_SIZE_MASK;
         
+        int delta = heightSize - mTotalLength;
+
+        // When children measure exactly the same height than the parent, any child with
+        // height == 0 and with weight > 0 must be reset. Otherwise, the view will retains
+        // the same height between measurements calls (that is not valid if the view changed
+        // its orientation)
+        if (delta == 0 && totalWeight > 0.0f) {
+            for (int i = 0; i < count; ++i) {
+                final View child = getVirtualChildAt(i);
+
+                if (child == null || child.getVisibility() == View.GONE) {
+                    continue;
+                }
+
+                final LinearLayout.LayoutParams lp =
+                        (LinearLayout.LayoutParams) child.getLayoutParams();
+
+                if (heightMode == MeasureSpec.EXACTLY && lp.height == 0 && lp.weight > 0) {
+                    final int freeSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+                    child.measure(freeSpec, freeSpec);
+                }
+            }
+        }
+
         // Either expand children with weight to take up available space or
         // shrink them if they extend beyond our current bounds
-        int delta = heightSize - mTotalLength;
         if (delta != 0 && totalWeight > 0.0f) {
             float weightSum = mWeightSum > 0.0f ? mWeightSum : totalWeight;
 
@@ -1178,10 +1201,33 @@ public class LinearLayout extends ViewGroup {
         // Reconcile our calculated size with the widthMeasureSpec
         int widthSizeAndState = resolveSizeAndState(widthSize, widthMeasureSpec, 0);
         widthSize = widthSizeAndState & MEASURED_SIZE_MASK;
-        
+
+        int delta = widthSize - mTotalLength;
+
+        // When children measure exactly the same width than the parent, any child with
+        // width == 0 and with weight > 0 must be reset. Otherwise, the view will retains
+        // the same width between measurements calls (that is not valid if the view changed
+        // its orientation). If the view is baselineAligned, a precalculation was made previously
+        if (!baselineAligned && delta == 0 && totalWeight > 0.0f) {
+            for (int i = 0; i < count; ++i) {
+                final View child = getVirtualChildAt(i);
+
+                if (child == null || child.getVisibility() == View.GONE) {
+                    continue;
+                }
+
+                final LinearLayout.LayoutParams lp =
+                        (LinearLayout.LayoutParams) child.getLayoutParams();
+
+                if (widthMode == MeasureSpec.EXACTLY && lp.width == 0 && lp.weight > 0) {
+                    final int freeSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+                    child.measure(freeSpec, freeSpec);
+                }
+            }
+        }
+
         // Either expand children with weight to take up available space or
         // shrink them if they extend beyond our current bounds
-        int delta = widthSize - mTotalLength;
         if (delta != 0 && totalWeight > 0.0f) {
             float weightSum = mWeightSum > 0.0f ? mWeightSum : totalWeight;
 

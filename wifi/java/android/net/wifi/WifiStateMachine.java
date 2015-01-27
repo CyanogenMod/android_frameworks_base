@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2014 The CyanogenMod Project
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,6 +110,7 @@ import java.util.regex.Pattern;
  */
 public class WifiStateMachine extends StateMachine {
 
+    private static final String TAG = "WifiStateMachine";
     private static final String NETWORKTYPE = "WIFI";
     private static final boolean DBG = false;
 
@@ -149,6 +151,7 @@ public class WifiStateMachine extends StateMachine {
     private int mLastNetworkId;
     private boolean mEnableRssiPolling = false;
     private boolean mEnableBackgroundScan = false;
+    private boolean mDisabled5GhzFrequencies = false;
     private int mRssiPollToken = 0;
     private int mReconnectCount = 0;
     /* 3 operational states for STA operation: CONNECT_MODE, SCAN_ONLY_MODE, SCAN_ONLY_WIFI_OFF_MODE
@@ -235,6 +238,8 @@ public class WifiStateMachine extends StateMachine {
     private SupplicantStateTracker mSupplicantStateTracker;
     private DhcpStateMachine mDhcpStateMachine;
     private boolean mDhcpActive = false;
+
+    private final AtomicInteger mCountryCodeSequence = new AtomicInteger();
 
     private class InterfaceObserver extends BaseNetworkObserver {
         private WifiStateMachine mWifiStateMachine;
@@ -1545,14 +1550,16 @@ public class WifiStateMachine extends StateMachine {
      * @param persist {@code true} if the setting should be remembered.
      */
     public void setCountryCode(String countryCode, boolean persist) {
-        if (persist) {
-            mPersistedCountryCode = countryCode;
-            Settings.Global.putString(mContext.getContentResolver(),
-                    Settings.Global.WIFI_COUNTRY_CODE,
-                    countryCode);
+        // If it's a good country code, apply after the current
+        // wifi connection is terminated; ignore resetting of code
+        // for now (it is unclear what the chipset should do when
+        // country code is reset)
+        int countryCodeSequence = mCountryCodeSequence.incrementAndGet();
+        if (TextUtils.isEmpty(countryCode)) {
+            log("Ignoring resetting of country code");
+        } else {
+            sendMessage(CMD_SET_COUNTRY_CODE, countryCodeSequence, persist ? 1 : 0, countryCode);
         }
-        sendMessage(CMD_SET_COUNTRY_CODE, countryCode);
-        mWifiP2pChannel.sendMessage(WifiP2pService.SET_COUNTRY_CODE, countryCode);
     }
 
     public int syncIsIbssSupported(AsyncChannel channel) {
@@ -1685,6 +1692,8 @@ public class WifiStateMachine extends StateMachine {
         pw.println("mSuspendOptNeedsDisabled " + mSuspendOptNeedsDisabled);
         pw.println("Supplicant status " + mWifiNative.status());
         pw.println("mEnableBackgroundScan " + mEnableBackgroundScan);
+        pw.println("mLastSetCountryCode " + mLastSetCountryCode);
+        pw.println("mPersistedCountryCode " + mPersistedCountryCode);
         pw.println();
         mWifiConfigStore.dump(fd, pw, args);
     }
@@ -1910,6 +1919,7 @@ public class WifiStateMachine extends StateMachine {
     private static final String FLAGS_STR = "flags=";
     private static final String SSID_STR = "ssid=";
     private static final String DELIMITER_STR = "====";
+    private static final String AGE_STR = "age=";
     private static final String END_STR = "####";
 
     /**
@@ -1981,6 +1991,8 @@ public class WifiStateMachine extends StateMachine {
             final int bssidStrLen = BSSID_STR.length();
             final int flagLen = FLAGS_STR.length();
 
+            final long now = SystemClock.elapsedRealtime();
+
             for (String line : lines) {
                 if (line.startsWith(BSSID_STR)) {
                     bssid = new String(line.getBytes(), bssidStrLen, line.length() - bssidStrLen);
@@ -2004,6 +2016,14 @@ public class WifiStateMachine extends StateMachine {
                     try {
                         tsf = Long.parseLong(line.substring(TSF_STR.length()));
                     } catch (NumberFormatException e) {
+                        tsf = 0;
+                    }
+                } else if (line.startsWith(AGE_STR)) {
+                    try {
+                        tsf = now - Long.parseLong(line.substring(AGE_STR.length()));
+                        tsf *= 1000; // Convert mS -> uS
+                    } catch (NumberFormatException e) {
+                        loge("Invalid timestamp: " + line);
                         tsf = 0;
                     }
                 } else if (line.startsWith(FLAGS_STR)) {
@@ -2300,6 +2320,15 @@ public class WifiStateMachine extends StateMachine {
     private void handleNetworkDisconnect() {
         if (DBG) log("Stopping DHCP and clearing IP");
 
+        // when set wifi connection type is manual, it will disable all
+        // network to auto connect. but if connect a hotspot manually,
+        // the hotspot will be enable and it will be auto connect in next time
+        // so need to disable it again to avoid to auto connect.
+        if (mContext.getResources().getBoolean(R.bool.wifi_autocon)
+                && !mWifiConfigStore.shouldAutoConnect()) {
+            disableLastNetwork();
+        }
+
         stopDhcp();
 
         try {
@@ -2331,11 +2360,13 @@ public class WifiStateMachine extends StateMachine {
         mLastNetworkId = WifiConfiguration.INVALID_NETWORK_ID;
     }
 
-    private void handleSupplicantConnectionLoss() {
+    private void handleSupplicantConnectionLoss(boolean killSupplicant) {
         /* Socket connection can be lost when we do a graceful shutdown
         * or when the driver is hung. Ensure supplicant is stopped here.
         */
-        mWifiMonitor.killSupplicant(mP2pSupported);
+        if (killSupplicant){
+            mWifiMonitor.killSupplicant(mP2pSupported);
+        }
         mWifiNative.closeSupplicantConnection();
         sendSupplicantConnectionChangedBroadcast(false);
         setWifiState(WIFI_STATE_DISABLED);
@@ -2343,27 +2374,6 @@ public class WifiStateMachine extends StateMachine {
 
     void handlePreDhcpSetup() {
         mDhcpActive = true;
-        if (!mBluetoothConnectionActive) {
-            /*
-             * There are problems setting the Wi-Fi driver's power
-             * mode to active when bluetooth coexistence mode is
-             * enabled or sense.
-             * <p>
-             * We set Wi-Fi to active mode when
-             * obtaining an IP address because we've found
-             * compatibility issues with some routers with low power
-             * mode.
-             * <p>
-             * In order for this active power mode to properly be set,
-             * we disable coexistence mode until we're done with
-             * obtaining an IP address.  One exception is if we
-             * are currently connected to a headset, since disabling
-             * coexistence would interrupt that connection.
-             */
-            // Disable the coexistence mode
-            mWifiNative.setBluetoothCoexistenceMode(
-                    mWifiNative.BLUETOOTH_COEXISTENCE_MODE_DISABLED);
-        }
 
         /* Disable power save and suspend optimizations during DHCP */
         // Note: The order here is important for now. Brcm driver changes
@@ -2371,6 +2381,10 @@ public class WifiStateMachine extends StateMachine {
         // TODO: Remove this comment when the driver is fixed.
         setSuspendOptimizationsNative(SUSPEND_DUE_TO_DHCP, false);
         mWifiNative.setPowerSave(false);
+
+        // Disable the coexistence mode
+        mWifiNative.setBluetoothCoexistenceMode(
+                    mWifiNative.BLUETOOTH_COEXISTENCE_MODE_DISABLED);
 
         stopBatchedScan();
 
@@ -2403,15 +2417,15 @@ public class WifiStateMachine extends StateMachine {
     }
 
     void handlePostDhcpSetup() {
-        /* Restore power save and suspend optimizations */
-        setSuspendOptimizationsNative(SUSPEND_DUE_TO_DHCP, true);
-        mWifiNative.setPowerSave(true);
-
         mWifiP2pChannel.sendMessage(WifiP2pService.BLOCK_DISCOVERY, WifiP2pService.DISABLED);
 
         // Set the coexistence mode back to its default value
         mWifiNative.setBluetoothCoexistenceMode(
                 mWifiNative.BLUETOOTH_COEXISTENCE_MODE_SENSE);
+
+        /* Restore power save and suspend optimizations */
+        setSuspendOptimizationsNative(SUSPEND_DUE_TO_DHCP, true);
+        mWifiNative.setPowerSave(true);
 
         mDhcpActive = false;
 
@@ -2553,7 +2567,9 @@ public class WifiStateMachine extends StateMachine {
                         // to the driver happened between mPersistedCountryCode getting set
                         // and now, so simply persisting it here would mean we have sent
                         // nothing to the driver.  Send the cmd so it might be set now.
-                        sendMessageAtFrontOfQueue(CMD_SET_COUNTRY_CODE, countryCode);
+                        int sequenceNum = mCountryCodeSequence.incrementAndGet();
+                        sendMessageAtFrontOfQueue(CMD_SET_COUNTRY_CODE,
+                                sequenceNum, 0, countryCode);
                     }
                     break;
                 case CMD_SET_BATCHED_SCAN:
@@ -2663,6 +2679,8 @@ public class WifiStateMachine extends StateMachine {
                 case WifiP2pService.DISCONNECT_WIFI_REQUEST:
                     mTemporarilyDisconnectWifi = (message.arg1 == 1);
                     replyToMessage(message, WifiP2pService.DISCONNECT_WIFI_RESPONSE);
+                    break;
+                case WifiP2pService.P2P_MIRACAST_MODE_CHANGED:
                     break;
                 case CMD_IP_ADDRESS_UPDATED:
                     // addLinkAddress is a no-op if called more than once with the same address.
@@ -2817,6 +2835,14 @@ public class WifiStateMachine extends StateMachine {
                     mIbssSupported = mWifiNative.getModeCapability("IBSS");
                     mSupportedChannels = mWifiNative.getSupportedChannels();
 
+                    // if don't set auto connect wifi, should disable all
+                    // wifi ap to prevent wifi connect automatically when open
+                    // wifi switch.
+                    if (mContext.getResources().getBoolean(R.bool.wifi_autocon)
+                        && !mWifiConfigStore.shouldAutoConnect()) {
+                        mWifiConfigStore.disableAllNetworks();
+                    }
+
                     sendSupplicantConnectionChangedBroadcast(true);
                     transitionTo(mDriverStartedState);
                     break;
@@ -2883,7 +2909,7 @@ public class WifiStateMachine extends StateMachine {
                     break;
                 case WifiMonitor.SUP_DISCONNECTION_EVENT:  /* Supplicant connection lost */
                     loge("Connection lost, restart supplicant");
-                    handleSupplicantConnectionLoss();
+                    handleSupplicantConnectionLoss(true);
                     handleNetworkDisconnect();
                     mSupplicantStateTracker.sendMessage(CMD_RESET_SUPPLICANT_STATE);
                     if (mP2pSupported) {
@@ -2952,13 +2978,13 @@ public class WifiStateMachine extends StateMachine {
                     break;
                 case WifiMonitor.SUP_DISCONNECTION_EVENT:
                     if (DBG) log("Supplicant connection lost");
-                    handleSupplicantConnectionLoss();
+                    handleSupplicantConnectionLoss(false);
                     transitionTo(mInitialState);
                     break;
                 case CMD_STOP_SUPPLICANT_FAILED:
                     if (message.arg1 == mSupplicantStopFailureToken) {
                         loge("Timed out on a supplicant stop, kill and proceed");
-                        handleSupplicantConnectionLoss();
+                        handleSupplicantConnectionLoss(true);
                         transitionTo(mInitialState);
                     }
                     break;
@@ -3140,23 +3166,38 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_SET_BATCHED_SCAN:
                     if (recordBatchedScanSettings(message.arg1, message.arg2,
                             (Bundle)message.obj)) {
-                        startBatchedScan();
+                        if (mBatchedScanSettings != null) {
+                            startBatchedScan();
+                        } else {
+                            stopBatchedScan();
+                        }
                     }
                     break;
                 case CMD_SET_COUNTRY_CODE:
                     String country = (String) message.obj;
+                    final boolean persist = (message.arg2 == 1);
+                    final int sequence = message.arg1;
+                    if (sequence != mCountryCodeSequence.get()) {
+                        if (DBG) log("set country code ignored due to sequence num");
+                        break;
+                    }
                     if (DBG) log("set country code " + country);
-                    if (country != null) {
-                        country = country.toUpperCase(Locale.ROOT);
-                        if (mLastSetCountryCode == null
-                                || country.equals(mLastSetCountryCode) == false) {
-                            if (mWifiNative.setCountryCode(country)) {
-                                mLastSetCountryCode = country;
-                            } else {
-                                loge("Failed to set country code " + country);
-                            }
+                    if (persist) {
+                        mPersistedCountryCode = country;
+                        Settings.Global.putString(mContext.getContentResolver(),
+                                Settings.Global.WIFI_COUNTRY_CODE,
+                                country);
+                    }
+                    country = country.toUpperCase(Locale.ROOT);
+                    if (mLastSetCountryCode == null
+                            || country.equals(mLastSetCountryCode) == false) {
+                        if (mWifiNative.setCountryCode(country)) {
+                            mLastSetCountryCode = country;
+                        } else {
+                            loge("Failed to set country code " + country);
                         }
                     }
+                    mWifiP2pChannel.sendMessage(WifiP2pService.SET_COUNTRY_CODE, country);
                     break;
                 case CMD_SET_FREQUENCY_BAND:
                     int band =  message.arg1;
@@ -3165,6 +3206,14 @@ public class WifiStateMachine extends StateMachine {
                         mFrequencyBand.set(band);
                         // flush old data - like scan results
                         mWifiNative.bssFlush();
+                        if (mFrequencyBand.get() == WifiManager.WIFI_FREQUENCY_BAND_2GHZ) {
+                            mWifiNative.disable5GHzFrequencies(true);
+                            mDisabled5GhzFrequencies = true;
+                        } else if ((mFrequencyBand.get() != WifiManager.WIFI_FREQUENCY_BAND_2GHZ)
+                                && (mDisabled5GhzFrequencies)) {
+                            mWifiNative.disable5GHzFrequencies(false);
+                            mDisabled5GhzFrequencies = false;
+                        }
                         //Fetch the latest scan results when frequency band is set
                         startScanNative(WifiNative.SCAN_WITH_CONNECTION_SETUP);
                     } else {
@@ -3715,6 +3764,9 @@ public class WifiStateMachine extends StateMachine {
                         deferMessage(message);
                     }
                     break;
+                case CMD_SET_COUNTRY_CODE:
+                    deferMessage(message);
+                    break;
                 case CMD_START_SCAN:
                     /* Do not attempt to connect when we are already connected */
                     noteScanStart(message.arg1, (WorkSource) message.obj);
@@ -3732,6 +3784,12 @@ public class WifiStateMachine extends StateMachine {
                     NetworkUpdateResult result = mWifiConfigStore.saveNetwork(config);
                     if (mWifiInfo.getNetworkId() == result.getNetworkId()) {
                         if (result.hasIpChanged()) {
+                            try {
+                                log("clear IP address on connection");
+                                mNwService.clearInterfaceAddresses(mInterfaceName);
+                            } catch (Exception e) {
+                                loge("Failed to clear addresses" + e);
+                            }
                             log("Reconfiguring IP on connection");
                             transitionTo(mObtainingIpState);
                         }
@@ -4150,6 +4208,9 @@ public class WifiStateMachine extends StateMachine {
                         ret = NOT_HANDLED;
                     }
                     break;
+                case WifiP2pService.P2P_MIRACAST_MODE_CHANGED:
+                     setScanIntevelOnMiracastModeChange(message.arg1);
+                     break;
                 default:
                     ret = NOT_HANDLED;
             }
@@ -4507,4 +4568,26 @@ public class WifiStateMachine extends StateMachine {
         msg.arg2 = srcMsg.arg2;
         return msg;
     }
+
+    void disableLastNetwork() {
+        if (getCurrentState() != mSupplicantStoppingState) {
+            mWifiConfigStore.disableNetwork(mLastNetworkId,
+                    WifiConfiguration.DISABLED_UNKNOWN_REASON);
+        }
+    }
+
+    private void setScanIntevelOnMiracastModeChange(int mode) {
+        if ((mode == WifiP2pManager.MIRACAST_SOURCE)
+                || (mode == WifiP2pManager.MIRACAST_SINK)) {
+            int defaultWfdIntervel = mContext.getResources().getInteger(
+                    R.integer.config_wifi_scan_interval_wfd_connected);
+            long wfdScanIntervalMs = Settings.Global
+                    .getLong(
+                            mContext.getContentResolver(),
+                            Settings.Global.WIFI_SUPPLICANT_SCAN_INTERVAL_WFD_CONNECTED_MS,
+                            defaultWfdIntervel);
+            mWifiNative.setScanInterval((int) wfdScanIntervalMs / 1000);
+        }
+    }
+
 }

@@ -37,13 +37,20 @@ public class MasterClearReceiver extends BroadcastReceiver {
             }
         }
 
+        final boolean wipeMedia = intent.getBooleanExtra("wipe_media", false);
+
         Slog.w(TAG, "!!! FACTORY RESET !!!");
         // The reboot call is blocking, so we need to do it on another thread.
         Thread thr = new Thread("Reboot") {
             @Override
             public void run() {
                 try {
-                    RecoverySystem.rebootWipeUserData(context);
+                    if (wipeMedia) {
+                        RecoverySystem.rebootFormatUserData(context);
+                    }
+                    else {
+                        RecoverySystem.rebootWipeUserData(context);
+                    }
                     Log.wtf(TAG, "Still running after master clear?!");
                 } catch (IOException e) {
                     Slog.e(TAG, "Can't perform master clear/factory reset", e);

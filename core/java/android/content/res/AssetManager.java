@@ -86,8 +86,10 @@ public final class AssetManager {
     private boolean mThemeSupport;
     private String mThemePackageName;
     private String mIconPackageName;
+    private String mCommonResPackageName;
     private ArrayList<Integer> mThemeCookies = new ArrayList<Integer>(2);
     private int mIconPackCookie;
+    private int mCommonResCookie;
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -639,14 +641,25 @@ public final class AssetManager {
                                            String targetPkgPath, String prefixPath);
 
     /**
-    * Add a set of assets as an icon pack.
-    *
-    * Icon packs are different from overlays as they have a different pkg id and
-    * do not use idmap so no targetPkg is required
-    *
-    * {@hide}
-    */
-    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath, String prefixPath);
+     * Add a set of assets as an icon pack. A pkgIdOverride value will change the package's id from
+     * what is in the resource table to a new value. Manage this carefully, if icon pack has more
+     * than one package then that next package's id will use pkgIdOverride+1.
+     *
+     * Icon packs are different from overlays as they have a different pkg id and
+     * do not use idmap so no targetPkg is required
+     *
+     * {@hide}
+     */
+    public native final int addIconPath(String idmapPath, String resArscPath, String resApkPath,
+                                        String prefixPath, int pkgIdOverride);
+
+    /**
+     * Add a set of common assets.
+     *
+     * {@hide}
+     */
+    public native final int addCommonOverlayPath(String idmapPath, String resArscPath,
+                                                 String resApkPath, String prefixPath);
 
     /**
     * Delete a set of overlay assets from the asset manager. Not for use by
@@ -657,7 +670,6 @@ public final class AssetManager {
     * {@hide}
     */
     public native final boolean removeOverlayPath(String packageName, int cookie);
-
 
     /**
      * Add multiple sets of assets to the asset manager at once.  See
@@ -744,6 +756,22 @@ public final class AssetManager {
     }
 
     /**
+     * Get package name of current common resources (may return null).
+     * {@hide}
+     */
+    public String getCommonResPackageName() {
+        return mCommonResPackageName;
+    }
+
+    /**
+     * Sets common resources package name
+     * {@hide}
+     */
+    public void setCommonResPackageName(String packageName) {
+        mCommonResPackageName = packageName;
+    }
+
+    /**
      * Get package name of current theme (may return null).
      * {@hide}
      */
@@ -777,12 +805,32 @@ public final class AssetManager {
         return mIconPackCookie;
     }
 
+    /** {@hide} */
+    public void setCommonResCookie(int cookie) {
+        mCommonResCookie = cookie;
+    }
+
+    /** {@hide} */
+    public int getCommonResCookie() {
+        return mCommonResCookie;
+    }
+
     /**
      * Sets asset cookie for current theme (0 if not a themed asset manager).
      * {@hide}
      */
     public void addThemeCookie(int cookie) {
         mThemeCookies.add(cookie);
+    }
+
+    /** {@hide} */
+    public String getAppName() {
+        return mAppName;
+    }
+
+    /** {@hide} */
+    public void setAppName(String pkgName) {
+        mAppName = pkgName;
     }
 
     /**
@@ -913,6 +961,11 @@ public final class AssetManager {
      * {@hide}
      */
     public native final String getBasePackageName(int index);
+
+    /**
+     * {@hide}
+     */
+    public native final String getBaseResourcePackageName(int index);
 
     /**
      * {@hide}

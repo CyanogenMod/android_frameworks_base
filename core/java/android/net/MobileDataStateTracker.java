@@ -92,6 +92,8 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
     private static final int UNKNOWN = LinkQualityInfo.UNKNOWN_INT;
 
+    private static int mSubscription;
+
     /**
      * Create a new MobileDataStateTracker
      * @param netType the ConnectivityManager network type
@@ -204,8 +206,10 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             loge("CONNECTED event did not supply link properties.");
             mLinkProperties = new LinkProperties();
         }
-        mLinkProperties.setMtu(mContext.getResources().getInteger(
+        if (mLinkProperties.getMtu() <= 0) {
+            mLinkProperties.setMtu(mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_mobile_mtu));
+        }
         mLinkCapabilities = intent.getParcelableExtra(
                 PhoneConstants.DATA_LINK_CAPABILITIES_KEY);
         if (mLinkCapabilities == null) {
@@ -254,9 +258,10 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                     log("Broadcast received: " + intent.getAction() + " apnType=" + apnType);
                 }
 
+                int subscription = 0;
                 if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
                     int dds = 0;
-                    final int subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
+                    subscription = intent.getIntExtra(MSimConstants.SUBSCRIPTION_KEY,
                             MSimConstants.DEFAULT_SUBSCRIPTION);
                     getPhoneService(false);
 
@@ -335,6 +340,7 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
                             setDetailedState(DetailedState.SUSPENDED, reason, apnName);
                             break;
                         case CONNECTED:
+                            mSubscription = subscription;
                             updateLinkProperitesAndCapatilities(intent);
                             setDetailedState(DetailedState.CONNECTED, reason, apnName);
                             break;
@@ -432,9 +438,17 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
      */
     public String getTcpBufferSizesPropName() {
         String networkTypeStr = "unknown";
-        TelephonyManager tm = new TelephonyManager(mContext);
+        int dataNetworkType = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        if (MSimTelephonyManager.getDefault().isMultiSimEnabled()) {
+            MSimTelephonyManager mSimTm = new MSimTelephonyManager(mContext);
+            dataNetworkType = mSimTm.getNetworkType(mSubscription);
+        } else {
+            TelephonyManager tm = new TelephonyManager(mContext);
+            dataNetworkType = tm.getNetworkType();
+        }
+
         //TODO We have to edit the parameter for getNetworkType regarding CDMA
-        switch(tm.getNetworkType()) {
+        switch(dataNetworkType) {
         case TelephonyManager.NETWORK_TYPE_GPRS:
             networkTypeStr = "gprs";
             break;
@@ -486,9 +500,51 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
             networkTypeStr = "ehrpd";
             break;
         default:
-            loge("unknown network type: " + tm.getNetworkType());
+            loge("unknown network type: " + dataNetworkType);
         }
         return "net.tcp.buffersize." + networkTypeStr;
+    }
+
+    /**
+     * Return the system properties name associated with the tcp delayed ack settings
+     * for this network.
+     */
+    @Override
+    public String getTcpDelayedAckPropName() {
+        String networkTypeStr = "default";
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                         Context.TELEPHONY_SERVICE);
+        if (tm != null) {
+            switch(tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkTypeStr = "lte";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return "net.tcp.delack." + networkTypeStr;
+    }
+
+    /**
+     * Return the system properties name associated with the tcp user config flag
+     * for this network.
+     */
+    @Override
+    public String getTcpUserConfigPropName() {
+        String networkTypeStr = "default";
+        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                         Context.TELEPHONY_SERVICE);
+        if (tm != null) {
+            switch(tm.getNetworkType()) {
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    networkTypeStr = "lte";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return "net.tcp.usercfg." + networkTypeStr;
     }
 
     /**
@@ -631,6 +687,17 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
 
         loge("Could not set radio power to " + (turnOn ? "on" : "off"));
         return false;
+    }
+
+
+    public void setInternalDataEnable(boolean enabled) {
+        if (DBG) log("setInternalDataEnable: E enabled=" + enabled);
+        final AsyncChannel channel = mDataConnectionTrackerAc;
+        if (channel != null) {
+            channel.sendMessage(DctConstants.EVENT_SET_INTERNAL_DATA_ENABLE,
+                    enabled ? DctConstants.ENABLED : DctConstants.DISABLED);
+        }
+        if (VDBG) log("setInternalDataEnable: X enabled=" + enabled);
     }
 
     @Override

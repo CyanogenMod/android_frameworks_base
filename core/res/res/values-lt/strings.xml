@@ -166,7 +166,7 @@
     <string name="global_action_power_off" msgid="4471879440839879722">"Išjungti maitinimą"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Pranešimas apie triktį"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Pranešti apie triktį"</string>
-    <string name="bugreport_message" msgid="398447048750350456">"Bus surinkta informacija apie dabartinę įrenginio būseną ir išsiųsta el. pašto pranešimu. Šiek tiek užtruks, kol pranešimas apie triktį bus paruoštas siųsti; būkite kantrūs."</string>
+    <string name="bugreport_message" msgid="398447048750350456">"Bus surinkta informacija apie dabartinę įrenginio būseną ir išsiųsta el. pašto pranešimu. Šiek tiek užtruks, kol pranešimas apie triktį bus paruoštas siųsti, būkite kantrūs."</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tylus režimas"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Išjungtas"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Įjungtas"</string>
@@ -258,7 +258,7 @@
     <string name="permlab_uninstall_shortcut" msgid="4729634524044003699">"pašalinti sparčiuosius klavišus"</string>
     <string name="permdesc_uninstall_shortcut" msgid="6745743474265057975">"Programai leidžiama pašalinti sparčiuosius klavišus iš pagrindinio ekrano be naudotojo įsikišimo."</string>
     <string name="permlab_processOutgoingCalls" msgid="3906007831192990946">"peradresuoti išsiunčiamuosius skambučius"</string>
-    <string name="permdesc_processOutgoingCalls" msgid="5331318931937402040">"Leidžiama programai atlikti išsiunčiamuosius skambučius ir keisti renkamą numerį. Šis leidimas suteikia teisę programai stebėti, peradresuoti ar neleisti išsiunčiamųjų skambučių."</string>
+    <string name="permdesc_processOutgoingCalls" msgid="5156385005547315876">"Leidžiama programai peržiūrėti renkamą numerį išsiunčiamojo skambučio metu suteikiant galimybę peradresuoti skambutį kitu numeriu arba visiškai nutraukti skambutį."</string>
     <string name="permlab_receiveSms" msgid="8673471768947895082">"gauti teksto pranešimus (SMS)"</string>
     <string name="permdesc_receiveSms" msgid="6424387754228766939">"Leidžiama programai gauti ir apdoroti SMS pranešimus. Tai reiškia, kad programa gali stebėti ir ištrinti į jūsų įrenginį siunčiamus pranešimus jums jų neparodžiusi."</string>
     <string name="permlab_receiveMms" msgid="1821317344668257098">"gauti teksto pranešimus (MMS)"</string>
@@ -818,6 +818,7 @@
     <string name="sipAddressTypeHome" msgid="6093598181069359295">"Pagrindinis"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Darbas"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Kita"</string>
+    <string name="quick_contacts_not_available" msgid="746098007828579688">"Nerasta jokių programų šiam kontaktui peržiūrėti."</string>
     <string name="keyguard_password_enter_pin_code" msgid="3037685796058495017">"Įveskite PIN kodą"</string>
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"Įveskite PUK ir naują PIN kodus"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK kodas"</string>
@@ -1121,8 +1122,8 @@
     <string name="no" msgid="5141531044935541497">"Atšaukti"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Dėmesio"</string>
     <string name="loading" msgid="7933681260296021180">"Įkeliama..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"\u2759"</string>
-    <string name="capital_off" msgid="6815870386972805832">"\u3007"</string>
+    <string name="capital_on" msgid="1544682755514494298">"ĮJ."</string>
+    <string name="capital_off" msgid="6815870386972805832">"IŠJ."</string>
     <string name="whichApplication" msgid="4533185947064773386">"Užbaigti veiksmą naudojant"</string>
     <string name="whichHomeApplication" msgid="4616420172727326782">"Pasirinkite programą, paleidžiamą spustelėjus pagrindinio ekrano mygtuką"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Šiam veiksmui tai naudoti pagal numatytuosius nustatymus."</string>

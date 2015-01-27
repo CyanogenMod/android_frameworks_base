@@ -348,8 +348,10 @@ public class RecoverySystem {
      *
      * @throws IOException  if writing the recovery command file
      * fails, or if the reboot itself fails.
+     *
+     * @hide
      */
-    public static void rebootWipeUserData(Context context) throws IOException {
+    private static void doRebootWipeUserData(Context context, boolean wipeMedia) throws IOException {
         final ConditionVariable condition = new ConditionVariable();
 
         Intent intent = new Intent("android.intent.action.MASTER_CLEAR_NOTIFICATION");
@@ -365,7 +367,45 @@ public class RecoverySystem {
         // Block until the ordered broadcast has completed.
         condition.block();
 
-        bootCommand(context, "--wipe_data\n--locale=" + Locale.getDefault().toString());
+        String cmd = "--wipe_data\n";
+        if (wipeMedia) {
+            cmd += "--wipe_media\n";
+        }
+        cmd += "--locale=" + Locale.getDefault().toString();
+
+        bootCommand(context, cmd);
+    }
+
+    /**
+     * Reboots the device and wipes the user data partition.  This is
+     * sometimes called a "factory reset", which is something of a
+     * misnomer because the system partition is not restored to its
+     * factory state.
+     * Requires the {@link android.Manifest.permission#REBOOT} permission.
+     *
+     * @param context  the Context to use
+     *
+     * @throws IOException  if writing the recovery command file
+     * fails, or if the reboot itself fails.
+     */
+    public static void rebootWipeUserData(Context context) throws IOException {
+        doRebootWipeUserData(context, false);
+    }
+
+    /**
+     * Reboots the device and formats the user data partition.  This is
+     * like rebootWipeUserData except that it forces the data partition
+     * to be formatted on datamedia devices.
+     * Requires the {@link android.Manifest.permission#REBOOT} permission.
+     *
+     * @param context  the Context to use
+     *
+     * @throws IOException  if writing the recovery command file
+     * fails, or if the reboot itself fails.
+     * @hide
+     */
+    public static void rebootFormatUserData(Context context) throws IOException {
+        doRebootWipeUserData(context, true);
     }
 
     /**

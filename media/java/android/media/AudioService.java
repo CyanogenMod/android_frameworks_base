@@ -50,6 +50,8 @@ import android.database.ContentObserver;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
+import android.net.http.CertificateChainValidator;
+import android.net.http.SslError;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -77,16 +79,19 @@ import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.VolumePanel;
 import android.view.WindowManager;
+import android.view.OrientationEventListener;
 
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.util.XmlUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
@@ -118,6 +123,8 @@ public class AudioService extends IAudioService.Stub {
     protected static final boolean DEBUG_RC = false;
     /** Debug volumes */
     protected static final boolean DEBUG_VOL = false;
+    /** Debug cert verification */
+    private static final boolean DEBUG_CERTS = false;
 
     /** How long to delay before persisting a change in volume/ringer mode. */
     private static final int PERSIST_DELAY = 500;
@@ -457,6 +464,8 @@ public class AudioService extends IAudioService.Stub {
 
     private PowerManager.WakeLock mAudioEventWakeLock;
 
+    private TelephonyManager mTelephonyManager;
+
     private final MediaFocusControl mMediaFocusControl;
 
     // Reference to BluetoothA2dp to query for AbsoluteVolume.
@@ -466,6 +475,8 @@ public class AudioService extends IAudioService.Stub {
     private boolean mAvrcpAbsVolSupported = false;
 
     private boolean mVolumeKeysControlRingStream;
+
+    private AudioOrientationEventListener mOrientationListener;
 
     ///////////////////////////////////////////////////////////////////////////
     // Construction
@@ -482,7 +493,6 @@ public class AudioService extends IAudioService.Stub {
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mAudioEventWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "handleAudioEvent");
-
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = vibrator == null ? false : vibrator.hasVibrator();
 
@@ -495,6 +505,9 @@ public class AudioService extends IAudioService.Stub {
                 com.android.internal.R.integer.config_soundEffectVolumeDb);
 
         mVolumePanel = new VolumePanel(context, this);
+
+        mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
         mForcedUseForComm = AudioSystem.FORCE_NONE;
 
         createAudioSystemThread();
@@ -531,6 +544,8 @@ public class AudioService extends IAudioService.Stub {
         // array initialized by updateStreamVolumeAlias()
         updateStreamVolumeAlias(false /*updateVolumes*/);
         readPersistedSettings();
+        // must update link ring-notifications streams once the user preferences were read
+        updateLinkNotificationStreamVolumeAlias();
         mSettingsObserver = new SettingsObserver();
         createStreamStates();
 
@@ -568,6 +583,10 @@ public class AudioService extends IAudioService.Stub {
             mDeviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE))
                     .getDefaultDisplay().getRotation();
             Log.v(TAG, "monitoring device rotation, initial=" + mDeviceRotation);
+
+            mOrientationListener = new AudioOrientationEventListener(mContext);
+            mOrientationListener.enable();
+
             // initialize rotation in AudioSystem
             setRotationForAudioSystem();
         }
@@ -671,11 +690,7 @@ public class AudioService extends IAudioService.Stub {
         }
         mStreamVolumeAlias[AudioSystem.STREAM_DTMF] = dtmfStreamAlias;
 
-        if (mLinkNotificationWithVolume) {
-            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
-        } else {
-            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
-        }
+        updateLinkNotificationStreamVolumeAlias();
 
         if (updateVolumes) {
             mStreamStates[AudioSystem.STREAM_DTMF].setAllIndexes(mStreamStates[dtmfStreamAlias]);
@@ -687,6 +702,14 @@ public class AudioService extends IAudioService.Stub {
                     0,
                     0,
                     mStreamStates[AudioSystem.STREAM_DTMF], 0);
+        }
+    }
+
+    private void updateLinkNotificationStreamVolumeAlias() {
+        if (mLinkNotificationWithVolume) {
+            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+        } else {
+            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
         }
     }
 
@@ -792,13 +815,29 @@ public class AudioService extends IAudioService.Stub {
         // Broadcast vibrate settings
         broadcastVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
         broadcastVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION);
-
-        // Restore the default media button receiver from the system settings
-        mMediaFocusControl.restoreMediaButtonReceiver();
     }
 
     private int rescaleIndex(int index, int srcStream, int dstStream) {
         return (index * mStreamStates[dstStream].getMaxIndex() + mStreamStates[srcStream].getMaxIndex() / 2) / mStreamStates[srcStream].getMaxIndex();
+    }
+
+    private class AudioOrientationEventListener
+            extends OrientationEventListener {
+        public AudioOrientationEventListener(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            //Even though we're responding to phone orientation events,
+            //use display rotation so audio stays in sync with video/dialogs
+            int newRotation = ((WindowManager) mContext.getSystemService(
+                    Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+            if (newRotation != mDeviceRotation) {
+                mDeviceRotation = newRotation;
+                setRotationForAudioSystem();
+            }
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1100,7 +1139,7 @@ public class AudioService extends IAudioService.Stub {
             }
 
             if (!checkSafeMediaVolume(streamTypeAlias, index, device)) {
-                mVolumePanel.postDisplaySafeVolumeWarning(flags);
+                mVolumePanel.postDisplaySafeVolumeWarning(flags | AudioManager.FLAG_SHOW_UI);
                 mPendingVolumeCommand = new StreamVolumeCommand(
                                                     streamType, index, flags, device);
             } else {
@@ -1645,6 +1684,11 @@ public class AudioService extends IAudioService.Stub {
             if (mode == AudioSystem.MODE_CURRENT) {
                 mode = mMode;
             }
+
+            if ((mode == AudioSystem.MODE_IN_CALL) &&
+                (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE)) {
+                 AudioSystem.setParameters("in_call=true");
+            }
             newModeOwnerPid = setModeInt(mode, cb, Binder.getCallingPid());
         }
         // when entering RINGTONE, IN_CALL or IN_COMMUNICATION mode, clear all
@@ -2045,19 +2089,10 @@ public class AudioService extends IAudioService.Stub {
     /** @see AudioManager#setBluetoothA2dpOn(boolean) */
     public void setBluetoothA2dpOn(boolean on) {
         synchronized (mBluetoothA2dpEnabledLock) {
-           int config = AudioSystem.FORCE_NONE;
-           mBluetoothA2dpEnabled = on;
-           config = AudioSystem.getForceUse(AudioSystem.FOR_MEDIA);
-           if((config == AudioSystem.FORCE_BT_A2DP) && (!mBluetoothA2dpEnabled)) {
-               config = AudioSystem.FORCE_NO_BT_A2DP;
-           } else if(mBluetoothA2dpEnabled) {
-               config = AudioSystem.FORCE_NONE;
-           }
-           Log.d(TAG, "BTEnabled "+mBluetoothA2dpEnabled+" config "+config);
-
+            mBluetoothA2dpEnabled = on;
             sendMsg(mAudioHandler, MSG_SET_FORCE_BT_A2DP_USE, SENDMSG_QUEUE,
                     AudioSystem.FOR_MEDIA,
-                    config,
+                    mBluetoothA2dpEnabled ? AudioSystem.FORCE_NONE : AudioSystem.FORCE_NO_BT_A2DP,
                     null, 0);
         }
     }
@@ -2233,12 +2268,8 @@ public class AudioService extends IAudioService.Stub {
                                 }
                                 if (mBluetoothHeadset != null && mBluetoothHeadsetDevice != null) {
                                     boolean status;
-                                    if (mScoAudioMode == SCO_MODE_RAW) {
-                                        status = mBluetoothHeadset.connectAudio();
-                                    } else {
-                                        status = mBluetoothHeadset.startScoUsingVirtualVoiceCall(
+                                    status = mBluetoothHeadset.startScoUsingVirtualVoiceCall(
                                                                             mBluetoothHeadsetDevice);
-                                    }
                                     if (status) {
                                         mScoAudioState = SCO_STATE_ACTIVE_INTERNAL;
                                     } else {
@@ -2262,12 +2293,8 @@ public class AudioService extends IAudioService.Stub {
                     if (mScoAudioState == SCO_STATE_ACTIVE_INTERNAL) {
                         if (mBluetoothHeadset != null && mBluetoothHeadsetDevice != null) {
                             boolean status;
-                            if (mScoAudioMode == SCO_MODE_RAW) {
-                                status = mBluetoothHeadset.disconnectAudio();
-                            } else {
                                 status = mBluetoothHeadset.stopScoUsingVirtualVoiceCall(
                                                                         mBluetoothHeadsetDevice);
-                            }
                             if (!status) {
                                 mScoAudioState = SCO_STATE_INACTIVE;
                                 broadcastScoConnectionState(
@@ -2443,20 +2470,12 @@ public class AudioService extends IAudioService.Stub {
                             switch (mScoAudioState) {
                             case SCO_STATE_ACTIVATE_REQ:
                                 mScoAudioState = SCO_STATE_ACTIVE_INTERNAL;
-                                if (mScoAudioMode == SCO_MODE_RAW) {
-                                    status = mBluetoothHeadset.connectAudio();
-                                } else {
-                                    status = mBluetoothHeadset.startScoUsingVirtualVoiceCall(
+                                status = mBluetoothHeadset.startScoUsingVirtualVoiceCall(
                                                                         mBluetoothHeadsetDevice);
-                                }
                                 break;
                             case SCO_STATE_DEACTIVATE_REQ:
-                                if (mScoAudioMode == SCO_MODE_RAW) {
-                                    status = mBluetoothHeadset.disconnectAudio();
-                                } else {
-                                    status = mBluetoothHeadset.stopScoUsingVirtualVoiceCall(
+                                 status = mBluetoothHeadset.stopScoUsingVirtualVoiceCall(
                                                                         mBluetoothHeadsetDevice);
-                                }
                                 break;
                             case SCO_STATE_DEACTIVATE_EXT_REQ:
                                 status = mBluetoothHeadset.stopVoiceRecognition(
@@ -2476,14 +2495,25 @@ public class AudioService extends IAudioService.Stub {
             }
         }
         public void onServiceDisconnected(int profile) {
+            Log.d(TAG, "onServiceDisconnected: Bluetooth profile: " + profile);
             switch(profile) {
             case BluetoothProfile.A2DP:
                 synchronized (mA2dpAvrcpLock) {
                     mA2dp = null;
                     synchronized (mConnectedDevices) {
                         if (mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP)) {
-                            makeA2dpDeviceUnavailableNow(
-                                    mConnectedDevices.get(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP));
+                            Log.d(TAG, "A2dp service disconnects, pause music player");
+                            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                            BluetoothDevice btDevice = adapter.getRemoteDevice
+                                    (mConnectedDevices.get(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP));
+                            int delay = checkSendBecomingNoisyIntent(
+                                                AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP, 0);
+                            queueMsgUnderWakeLock(mAudioHandler,
+                                                MSG_SET_A2DP_CONNECTION_STATE,
+                                                BluetoothA2dp.STATE_DISCONNECTED,
+                                                0,
+                                                btDevice,
+                                                delay);
                         }
                     }
                 }
@@ -2537,8 +2567,7 @@ public class AudioService extends IAudioService.Stub {
             if ((mMcc != mcc) || ((mMcc == 0) && force)) {
                 mSafeMediaVolumeIndex = mContext.getResources().getInteger(
                         com.android.internal.R.integer.config_safe_media_volume_index) * 10;
-                boolean safeMediaVolumeEnabled = mContext.getResources().getBoolean(
-                        com.android.internal.R.bool.config_safe_media_volume_enabled);
+                boolean safeMediaVolumeEnabled = safeVolumeEnabled(mContentResolver);
 
                 // The persisted state is either "disabled" or "active": this is the state applied
                 // next time we boot and cannot be "inactive"
@@ -2898,6 +2927,15 @@ public class AudioService extends IAudioService.Stub {
 
     public void setWiredDeviceConnectionState(int device, int state, String name) {
         synchronized (mConnectedDevices) {
+            if ((state == 1) && ((device & mSafeMediaVolumeDevices) != 0)) {
+                boolean restoreSafeVolume = Settings.System.getIntForUser(
+                        mContentResolver,
+                        Settings.System.SAFE_HEADSET_VOLUME_RESTORE,
+                        0, UserHandle.USER_CURRENT) != 0;
+                if (restoreSafeVolume) {
+                    enforceSafeMediaVolume();
+                }
+            }
             int delay = checkSendBecomingNoisyIntent(device, state);
             queueMsgUnderWakeLock(mAudioHandler,
                     MSG_SET_WIRED_DEVICE_CONNECTION_STATE,
@@ -3061,7 +3099,7 @@ public class AudioService extends IAudioService.Stub {
                             device);
         }
 
-        public synchronized boolean setIndex(int index, int device) {
+        public boolean setIndex(int index, int device) {
             int oldIndex = getIndex(device);
             index = getValidIndex(index);
             synchronized (mCameraSoundForced) {
@@ -3069,8 +3107,9 @@ public class AudioService extends IAudioService.Stub {
                     index = mIndexMax;
                 }
             }
-            mIndex.put(device, index);
-
+            synchronized (this) {
+                mIndex.put(device, index);
+            }
             if (oldIndex != index) {
                 // Apply change to all streams using this one as alias
                 // if changing volume of current device, also change volume of current
@@ -3896,10 +3935,13 @@ public class AudioService extends IAudioService.Stub {
         AudioSystem.setParameters("A2dpSuspended=false");
         mConnectedDevices.put( new Integer(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP),
                 address);
+        sendA2dpRouteChangedIntent(address, BluetoothProfile.STATE_CONNECTED);
     }
 
     private void onSendBecomingNoisyIntent() {
-        sendBroadcastToAll(new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+        Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        sendBroadcastToAll(intent);
     }
 
     // must be called synchronized on mConnectedDevices
@@ -3911,6 +3953,15 @@ public class AudioService extends IAudioService.Stub {
                 AudioSystem.DEVICE_STATE_UNAVAILABLE,
                 address);
         mConnectedDevices.remove(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP);
+        sendA2dpRouteChangedIntent(address, BluetoothProfile.STATE_DISCONNECTED);
+    }
+
+    private void sendA2dpRouteChangedIntent(String address, int state) {
+        Intent intent = new Intent(AudioManager.A2DP_ROUTE_CHANGED_ACTION);
+        BluetoothDevice btDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(address);
+        intent.putExtra(BluetoothDevice.EXTRA_DEVICE, btDevice);
+        intent.putExtra(BluetoothProfile.EXTRA_STATE, state);
+        mContext.sendBroadcast(intent);
     }
 
     // must be called synchronized on mConnectedDevices
@@ -4235,12 +4286,11 @@ public class AudioService extends IAudioService.Stub {
                     }
                 }
             } else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                applyCurrentStreamVolume();
+
                 state = intent.getIntExtra("state", 0);
                 if (state == 1) {
                     // Headset plugged in
-                    adjustCurrentStreamVolume();
-                    // TODO: Cap volume at safe levels
-
                     boolean launchPlayer = Settings.System.getIntForUser(
                             context.getContentResolver(),
                             Settings.System.HEADSET_CONNECT_PLAYER,
@@ -4255,9 +4305,6 @@ public class AudioService extends IAudioService.Stub {
                             Log.w(TAG, "No music player found to start after headset connection");
                         }
                     }
-                } else {
-                    // Headset disconnected
-                    adjustCurrentStreamVolume();
                 }
             } else if (action.equals(Intent.ACTION_USB_AUDIO_ACCESSORY_PLUG) ||
                            action.equals(Intent.ACTION_USB_AUDIO_DEVICE_PLUG)) {
@@ -4349,10 +4396,18 @@ public class AudioService extends IAudioService.Stub {
                         0,
                         null,
                         SAFE_VOLUME_CONFIGURE_TIMEOUT_MS);
-                adjustCurrentStreamVolume();
+                applyCurrentStreamVolume();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                if (mMonitorRotation) {
+                    mOrientationListener.onOrientationChanged(0); //argument is ignored anyway
+                    mOrientationListener.enable();
+                }
                 AudioSystem.setParameters("screen_state=on");
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                if (mMonitorRotation) {
+                    //reduce wakeups (save current) by only listening when display is on
+                    mOrientationListener.disable();
+                }
                 AudioSystem.setParameters("screen_state=off");
             } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 handleConfigurationChanged(context);
@@ -4381,7 +4436,10 @@ public class AudioService extends IAudioService.Stub {
             }
         }
 
-        private void adjustCurrentStreamVolume() {
+        // Forces volume to update. This is needed by devices affected by a bug
+        // where the new volume is not applied when the audio device changes.
+        // See: review.cyanogenmod.org/33778
+        private void applyCurrentStreamVolume() {
             VolumeStreamState streamState;
             int device;
 
@@ -4604,14 +4662,6 @@ public class AudioService extends IAudioService.Stub {
                 if (newOrientation != mDeviceOrientation) {
                     mDeviceOrientation = newOrientation;
                     setOrientationForAudioSystem();
-                }
-            }
-            if (mMonitorRotation) {
-                int newRotation = ((WindowManager) context.getSystemService(
-                        Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
-                if (newRotation != mDeviceRotation) {
-                    mDeviceRotation = newRotation;
-                    setRotationForAudioSystem();
                 }
             }
             sendMsg(mAudioHandler,
@@ -4850,6 +4900,43 @@ public class AudioService extends IAudioService.Stub {
                 mPendingVolumeCommand = null;
             }
         }
+    }
+
+    public int verifyX509CertChain(int numcerts, byte [] chain, String domain, String authType) {
+
+        if (DEBUG_CERTS) {
+            Log.v(TAG, "java side verify for "
+                    + numcerts + " certificates (" + chain.length + " bytes"
+                            + ")for "+ domain + "/" + authType);
+        }
+
+        byte[][] certChain = new byte[numcerts][];
+
+        ByteBuffer buf = ByteBuffer.wrap(chain);
+        for (int i = 0; i < numcerts; i++) {
+            int certlen = buf.getInt();
+            if (DEBUG_CERTS) {
+                Log.i(TAG, "cert " + i +": " + certlen);
+            }
+            certChain[i] = new byte[certlen];
+            buf.get(certChain[i]);
+        }
+
+        try {
+            SslError err = CertificateChainValidator.verifyServerCertificates(certChain,
+                    domain, authType);
+            if (DEBUG_CERTS) {
+                Log.i(TAG, "verified: " + err);
+            }
+            if (err == null) {
+                return -1;
+            } else {
+                return err.getPrimaryError();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "failed to verify chain: " + e);
+        }
+        return SslError.SSL_INVALID;
     }
 
 

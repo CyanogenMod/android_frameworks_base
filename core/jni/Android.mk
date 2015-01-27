@@ -76,6 +76,7 @@ LOCAL_SRC_FILES:= \
 	android_net_NetUtils.cpp \
 	android_net_TrafficStats.cpp \
 	android_net_wifi_WifiNative.cpp \
+        android_net_wifi_Gbk2Utf.cpp \
 	android_nio_utils.cpp \
 	android_text_format_Time.cpp \
 	android_util_AssetManager.cpp \
@@ -151,11 +152,6 @@ LOCAL_SRC_FILES:= \
 	android_content_res_Configuration.cpp \
 	android_animation_PropertyValuesHolder.cpp \
 	com_android_internal_net_NetworkStatsFactory.cpp
-
-ifeq ($(call is-vendor-board-platform,QCOM),true)
-LOCAL_SRC_FILES += com_android_internal_app_ActivityTrigger.cpp
-LOCAL_CFLAGS += -DQCOM_ACTIVITY_TRIGGER
-endif
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.app.ActivityManagerNative;
@@ -9,31 +25,32 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
+import com.android.systemui.statusbar.phone.QuickSettingsController;
 import com.android.systemui.statusbar.phone.QuickSettingsTileView;
 
-public class QuickSettingsTile implements OnClickListener {
-
+public class QuickSettingsTile implements View.OnClickListener {
     protected final Context mContext;
     protected QuickSettingsContainerView mContainer;
     protected QuickSettingsTileView mTile;
-    protected OnClickListener mOnClick;
-    protected OnLongClickListener mOnLongClick;
+    protected View.OnClickListener mOnClick;
+    protected View.OnLongClickListener mOnLongClick;
     protected final int mTileLayout;
     protected int mDrawable;
     protected String mLabel;
+    protected int mTileTextSize;
+    protected int mTileTextPadding;
     protected PhoneStatusBar mStatusbarService;
     protected QuickSettingsController mQsc;
     protected SharedPreferences mPrefs;
@@ -54,8 +71,12 @@ public class QuickSettingsTile implements OnClickListener {
 
     public void setupQuickSettingsTile(LayoutInflater inflater,
             QuickSettingsContainerView container) {
+        container.updateResources();
+        mTileTextSize = container.getTileTextSize();
+        mTileTextPadding = container.getTileTextPadding();
         mTile = (QuickSettingsTileView) inflater.inflate(
                 R.layout.quick_settings_tile, container, false);
+        mTile.setTile(this);
         mTile.setContent(mTileLayout, inflater);
         mContainer = container;
         mContainer.addView(mTile);
@@ -66,18 +87,40 @@ public class QuickSettingsTile implements OnClickListener {
     }
 
     public void switchToRibbonMode() {
-        TextView tv = (TextView) mTile.findViewById(R.id.text);
+        TextView tv = getLabelView();
         if (tv != null) {
             tv.setVisibility(View.GONE);
         }
-        View image = mTile.findViewById(R.id.image);
+        // Image margins are set by the controller, so no need to set them here
+    }
+
+    public void setImageMargins(int margin) {
+        View image = getImageView();
         if (image != null) {
             MarginLayoutParams params = (MarginLayoutParams) image.getLayoutParams();
-            int margin = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.qs_tile_ribbon_icon_margin);
             params.topMargin = params.bottomMargin = margin;
             image.setLayoutParams(params);
         }
+    }
+
+    public void switchToSmallIcons() {
+        TextView tv = getLabelView();
+        if (tv != null) {
+            tv.setText(mLabel);
+            tv.setTextSize(mTileTextSize);
+            int dpi = mContext.getResources().getDisplayMetrics().densityDpi;
+            if (dpi > DisplayMetrics.DENSITY_HIGH) {
+                tv.setPadding(0, mTileTextPadding, 0, 0);
+            }
+        }
+    }
+
+    protected View getImageView() {
+        return mTile.findViewById(R.id.image);
+    }
+
+    protected TextView getLabelView() {
+        return (TextView) mTile.findViewById(R.id.text);
     }
 
     void onPostCreate() {}
@@ -95,11 +138,16 @@ public class QuickSettingsTile implements OnClickListener {
     }
 
     void updateQuickSettings() {
-        TextView tv = (TextView) mTile.findViewById(R.id.text);
+        TextView tv = getLabelView();
         if (tv != null) {
             tv.setText(mLabel);
+            tv.setTextSize(mTileTextSize);
+            int dpi = mContext.getResources().getDisplayMetrics().densityDpi;
+            if (dpi > DisplayMetrics.DENSITY_HIGH) {
+                tv.setPadding(0, mTileTextPadding, 0, 0);
+            }
         }
-        View image = mTile.findViewById(R.id.image);
+        View image = getImageView();
         if (image != null && image instanceof ImageView) {
             ((ImageView) image).setImageResource(mDrawable);
         }
@@ -115,7 +163,9 @@ public class QuickSettingsTile implements OnClickListener {
     }
 
     private void startSettingsActivity(Intent intent, boolean onlyProvisioned) {
-        if (onlyProvisioned && !mStatusbarService.isDeviceProvisioned()) return;
+        if (onlyProvisioned && !mStatusbarService.isDeviceProvisioned()) {
+            return;
+        }
         try {
             // Dismiss the lock screen when Settings starts.
             ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();

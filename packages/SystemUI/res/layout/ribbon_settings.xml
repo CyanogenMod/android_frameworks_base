@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:fadingEdgeLength="30dp"
     android:requiresFadingEdge="horizontal"
-    android:layout_height="@dimen/notification_min_height"
+    android:layout_height="@dimen/qs_ribbon_height_big"
     android:scrollbars="none">
         <com.android.systemui.statusbar.phone.QuickSettingsContainerView
             android:id="@+id/quick_settings_ribbon_container"

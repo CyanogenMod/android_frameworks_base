@@ -277,6 +277,12 @@ public class WifiMonitor {
      */
     private static final String P2P_SERV_DISC_RESP_STR = "P2P-SERV-DISC-RESP";
 
+    /* P2P-REMOVE-AND-REFORM-GROUP */
+    /* Supplicant is supposed to generate this event only when p2p
+     * is connected
+     */
+    private static final String P2P_REMOVE_AND_REFORM_GROUP_STR = "P2P-REMOVE-AND-REFORM-GROUP";
+
     private static final String HOST_AP_EVENT_PREFIX_STR = "AP";
     /* AP-STA-CONNECTED 42:fc:89:a8:96:09 dev_addr=02:90:4c:a0:92:54 */
     private static final String AP_STA_CONNECTED_STR = "AP-STA-CONNECTED";
@@ -330,6 +336,7 @@ public class WifiMonitor {
     public static final int P2P_FIND_STOPPED_EVENT               = BASE + 37;
     public static final int P2P_SERV_DISC_RESP_EVENT             = BASE + 38;
     public static final int P2P_PROV_DISC_FAILURE_EVENT          = BASE + 39;
+    public static final int P2P_REMOVE_AND_REFORM_GROUP_EVENT    = BASE + 40;
 
     /* hostap events */
     public static final int AP_STA_DISCONNECTED_EVENT            = BASE + 41;
@@ -427,9 +434,9 @@ public class WifiMonitor {
                         mConnected = true;
                         break;
                     }
-                    if (connectTries++ < 5) {
+                    if (connectTries++ < 50) {
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(100);
                         } catch (InterruptedException ignore) {
                         }
                     } else {
@@ -819,6 +826,9 @@ public class WifiMonitor {
                 } else {
                     Log.e(TAG, "Null service resp " + dataString);
                 }
+            } else if (dataString.startsWith(P2P_REMOVE_AND_REFORM_GROUP_STR)) {
+                Log.d(TAG, "Received event= " + dataString);
+                mStateMachine.sendMessage(P2P_REMOVE_AND_REFORM_GROUP_EVENT);
             }
         }
 

@@ -60,4 +60,7 @@ interface IPowerManager
 
     void setKeyboardLight(boolean on, int key);
 
+	void setPowerProfile(String profile);
+	String getPowerProfile();
+	void wakeUpWithProximityCheck(long time);
 }

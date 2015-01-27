@@ -69,6 +69,10 @@ namespace android {
 // size measured in sizeof(uint32_t)
 #define IDMAP_HEADER_SIZE (ResTable::IDMAP_HEADER_SIZE_BYTES / sizeof(uint32_t))
 
+// Define attributes to protect from theme changes
+#define ATTR_WINDOW_NO_TITLE 0x01010056 // windowNoTitle
+#define ATTR_WINDOW_ACTION_BAR 0x010102cd // windowActionBar
+
 static void printToLogFunc(void* cookie, const char* txt)
 {
     ALOGV("%s", txt);
@@ -635,7 +639,7 @@ const uint16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
                                 mHeader->stringCount*sizeof(char16_t**)));
 #else
                         // We do not want to be in this case when actually running Android.
-                        ALOGW("CREATING STRING CACHE OF %d bytes",
+                        ALOGV("CREATING STRING CACHE OF %d bytes",
                                 mHeader->stringCount*sizeof(char16_t**));
 #endif
                         mCache = (char16_t**)calloc(mHeader->stringCount, sizeof(char16_t**));
@@ -2521,7 +2525,7 @@ struct ResTable::Type
 struct ResTable::Package
 {
     Package(ResTable* _owner, const Header* _header, const ResTable_package* _package)
-        : owner(_owner), header(_header), package(_package) { }
+        : owner(_owner), header(_header), package(_package), pkgIdOverride(0) { }
     ~Package()
     {
         size_t i = types.size();
@@ -2538,7 +2542,8 @@ struct ResTable::Package
 
     ResStringPool                   typeStrings;
     ResStringPool                   keyStrings;
-    
+    uint32_t                        pkgIdOverride;
+
     const Type* getType(size_t idx) const {
         return idx < types.size() ? types[idx] : NULL;
     }
@@ -2923,12 +2928,14 @@ inline ssize_t ResTable::getResourcePackageIndex(uint32_t resID) const
 }
 
 status_t ResTable::add(const void* data, size_t size, void* cookie, bool copyData,
-                       const void* idmap)
+                       const void* idmap, const uint32_t pkgIdOverride)
 {
-    return add(data, size, cookie, NULL, copyData, reinterpret_cast<const Asset*>(idmap));
+    return add(data, size, cookie, NULL, copyData,
+               reinterpret_cast<const Asset*>(idmap), pkgIdOverride);
 }
 
-status_t ResTable::add(Asset* asset, void* cookie, bool copyData, const void* idmap)
+status_t ResTable::add(Asset* asset, void* cookie, bool copyData, const void* idmap,
+                       const uint32_t pkgIdOverride)
 {
     const void* data = asset->getBuffer(true);
     if (data == NULL) {
@@ -2936,7 +2943,8 @@ status_t ResTable::add(Asset* asset, void* cookie, bool copyData, const void* id
         return UNKNOWN_ERROR;
     }
     size_t size = (size_t)asset->getLength();
-    return add(data, size, cookie, asset, copyData, reinterpret_cast<const Asset*>(idmap));
+    return add(data, size, cookie, asset, copyData,
+               reinterpret_cast<const Asset*>(idmap),pkgIdOverride);
 }
 
 status_t ResTable::add(ResTable* src)
@@ -2964,7 +2972,8 @@ status_t ResTable::add(ResTable* src)
 }
 
 status_t ResTable::add(const void* data, size_t size, void* cookie,
-                       Asset* asset, bool copyData, const Asset* idmap)
+                       Asset* asset, bool copyData,
+                       const Asset* idmap, const uint32_t pkgIdOverride)
 {
     if (!data) return NO_ERROR;
     Header* header = new Header(this);
@@ -3063,7 +3072,11 @@ status_t ResTable::add(const void* data, size_t size, void* cookie,
                     idmap_id = tmp;
                 }
             }
-            if (parsePackage((ResTable_package*)chunk, header, idmap_id) != NO_ERROR) {
+            // Warning: If the pkg id will be overriden and there is more than one package in the
+            // resource table then the caller should make sure there are enough unique ids above
+            // pkgIdOverride.
+            uint32_t idOverride = (pkgIdOverride == 0) ? 0 : pkgIdOverride + curPackage;
+            if (parsePackage((ResTable_package*)chunk, header, idmap_id, idOverride) != NO_ERROR) {
                 return mError;
             }
             curPackage++;
@@ -3436,6 +3449,25 @@ void ResTable::unlock() const
     mLock.unlock();
 }
 
+// Protected attributes are not permitted to be themed. If a theme
+// does try to change a protected attribute it will be overriden
+// by the app's original value.
+const static uint32_t PROTECTED_ATTRS[] = {
+    ATTR_WINDOW_NO_TITLE,
+    ATTR_WINDOW_ACTION_BAR
+};
+
+bool ResTable::isProtectedAttr(uint32_t resID) const
+{
+    int length = sizeof(PROTECTED_ATTRS) / sizeof(PROTECTED_ATTRS[0]);
+    for(int i=0; i < length; i++) {
+        if (PROTECTED_ATTRS[i] == resID) {
+            return true;
+        }
+    }
+    return false;
+}
+
 ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         uint32_t* outTypeSpecFlags, bool performMapping) const
 {
@@ -3538,6 +3570,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
             checkOverlay = false;
             ip++;
         }
+        uint32_t originalResID = 0;
         if (package->header->resourceIDMap) {
             if (performMapping) {
                 uint32_t overlayResID = 0x0;
@@ -3549,6 +3582,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
                     ALOGV("resource map 0x%08x -> 0x%08x\n", resID, overlayResID);
                     T = Res_GETTYPE(overlayResID);
                     E = Res_GETENTRY(overlayResID);
+                    originalResID = resID;
                     resID = overlayResID;
                 } else {
                     // resource not present in overlay package, continue with the next package
@@ -3737,6 +3771,80 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         };
         if (curEntry > set->numAttrs) {
             set->numAttrs = curEntry;
+        }
+
+        // If this style was overridden by a theme then we need to compare our bag with
+        // the bag from the original and add any missing attributes to our bag
+        if (originalResID && originalResID != resID) {
+            const bag_entry* originalBag;
+            uint32_t originalTypeSpecFlags = 0;
+            const ssize_t NO = getBagLocked(originalResID, &originalBag,
+                    &originalTypeSpecFlags, false);
+            if (NO <= 0) {
+                ALOGW("Failed to retrieve original bag for 0x%08x", originalResID);
+            }
+
+            // Now merge in the original attributes...
+            bag_entry* entries = (bag_entry*)(set+1);
+            size_t curEntry = 0;
+            uint32_t pos = 0;
+            for (int i = 0; i < NO; i++) {
+                TABLE_NOISY(printf("Now at %d\n", i));
+                const uint32_t newName = originalBag[i].map.name.ident;
+                bool isInside;
+                uint32_t oldName = 0;
+                curEntry = 0;
+
+                while ((isInside=(curEntry < set->numAttrs))
+                        && (oldName=entries[curEntry].map.name.ident) < newName) {
+                    curEntry++;
+                }
+
+                if ((!isInside) || oldName != newName) {
+                    // This is a new attribute...  figure out what to do with it.
+                    // Need to alloc more memory...
+                    size_t prevEntry = curEntry;
+                    curEntry = set->availAttrs;
+                    set->availAttrs++;
+                    const size_t newAvail = set->availAttrs;
+                    set = (bag_set*)realloc(set,
+                                            sizeof(bag_set)
+                                            + sizeof(bag_entry)*newAvail);
+                    if (set == NULL) {
+                        return NO_MEMORY;
+                    }
+                    entries = (bag_entry*)(set+1);
+                    TABLE_NOISY(printf("Reallocated set %p, entries=%p, avail=%d\n",
+                                 set, entries, set->availAttrs));
+                    if (isInside) {
+                        // Going in the middle, need to make space.
+                        memmove(entries+prevEntry+1, entries+prevEntry,
+                                sizeof(bag_entry)*(set->numAttrs-prevEntry));
+                    }
+                    TABLE_NOISY(printf("#%d: Inserting new attribute: 0x%08x\n",
+                                 curEntry, newName));
+
+                    bag_entry* cur = entries+curEntry;
+
+                    cur->stringBlock = originalBag[i].stringBlock;
+                    cur->map.name.ident = originalBag[i].map.name.ident;
+                    cur->map.value = originalBag[i].map.value;
+                    set->typeSpecFlags |= originalTypeSpecFlags;
+                    set->numAttrs = set->availAttrs;
+                    TABLE_NOISY(printf("Setting entry #%d %p: block=%d, name=0x%08x, type=%d, \
+                                 data=0x%08x\n",
+                                 curEntry, cur, cur->stringBlock, cur->map.name.ident,
+                                 cur->map.value.dataType, cur->map.value.data));
+                } else if (isProtectedAttr(newName)) {
+                    // The attribute exists in both the original and the new theme bags,
+                    // furthermore it is an attribute we don't wish themers to theme, so
+                    // give our current themed bag the same value as the original
+                    bag_entry* cur = entries+curEntry;
+                    cur->stringBlock = originalBag[i].stringBlock;
+                    cur->map.name.ident = originalBag[i].map.name.ident;
+                    cur->map.value = originalBag[i].map.value;
+                }
+            };
         }
     }
 
@@ -5182,8 +5290,9 @@ ssize_t ResTable::getEntry(
     return offset + dtohs(entry->size);
 }
 
-status_t ResTable::parsePackage(const ResTable_package* const pkg,
-                                const Header* const header, uint32_t idmap_id)
+status_t ResTable::parsePackage(ResTable_package* const pkg,
+                                const Header* const header,
+                                uint32_t idmap_id, uint32_t pkgIdOverride)
 {
     const uint8_t* base = (const uint8_t*)pkg;
     status_t err = validate_chunk(&pkg->header, sizeof(*pkg),
@@ -5214,21 +5323,28 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
              (void*)dtohl(pkg->keyStrings));
         return (mError=BAD_TYPE);
     }
-    
+
     Package* package = NULL;
     PackageGroup* group = NULL;
     uint32_t id = dtohl(pkg->id);
+
+    if (pkgIdOverride != 0) {
+        ALOGV("Overriding pkg id %d with %d", pkg, pkgIdOverride);
+        id = pkgIdOverride;
+    }
+
     // If at this point id == 0, pkg is an overlay package without a
     // corresponding idmap. During regular usage, overlay packages are
     // always loaded alongside their idmaps, but during idmap creation
     // the package is temporarily loaded by itself.
     if (id < 256) {
-    
         package = new Package(this, header, pkg);
+        package->pkgIdOverride = pkgIdOverride;
+
         if (package == NULL) {
             return (mError=NO_MEMORY);
         }
-        
+
         size_t idx = mPackageMap[id];
         if (idx == 0) {
             idx = mPackageGroups.size()+1;
@@ -5661,6 +5777,9 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
             const Package* pkg = pg->packages[index];
             ALOGV("Looking at pkg: %s", String8(pkg->package->name).string());
             uint32_t id = dtohl(pkg->package->id);
+            if (pkg->pkgIdOverride != 0) {
+                id = pkg->pkgIdOverride;
+            }
             if (id != 0 && id < 256 && pkgCount == 1) {
                 ALOGV("Settings id:%d to zero in mPackageMap", id);
                 mPackageMap[id] = 0;
@@ -5707,9 +5826,9 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
 bool ResTable::isResTypeAllowed(const char* type) const
 {
     if (type == NULL) return false;
-    const char* allowedResources[] = { "color", "dimen", "drawable", "mipmap", "style" };
+    const char* allowedResources[] = { "color", "dimen", "drawable", "mipmap", "style", "anim" };
     // ALLOWED_RESOURCE_COUNT should match the number of elements in allowedResources
-    const uint32_t ALLOWED_RESOURCE_COUNT = 5;
+    const uint32_t ALLOWED_RESOURCE_COUNT = 6;
     for (int i = 0; i < ALLOWED_RESOURCE_COUNT; i++) {
         if (strstr(type, allowedResources[i]) != NULL) return true;
     }

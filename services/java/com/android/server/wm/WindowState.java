@@ -449,6 +449,8 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         mYOffset = 0;
         mXOverscrollOffset = 0;
         mYOverscrollOffset = 0;
+        mWallpaperXOverscroll = 0;
+        mWallpaperYOverscroll = 0;
         mWallpaperXOverscrollMax = 0;
         mWallpaperYOverscrollMax = 0;
         mLayer = 0;

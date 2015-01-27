@@ -132,6 +132,14 @@ public class NavbarEditor implements View.OnTouchListener {
             R.string.navbar_menu_big_button, R.string.accessibility_menu,
             KeyEvent.KEYCODE_MENU, R.drawable.ic_sysbar_menu_big,
             R.drawable.ic_sysbar_menu_big_land, 0);
+    public static final ButtonInfo NAVBAR_DPAD_LEFT = new ButtonInfo("dpad_left",
+            0, R.string.accessibility_dpad_left,
+            KeyEvent.KEYCODE_DPAD_LEFT, 0,
+            0, R.drawable.ic_sysbar_ime_left);
+    public static final ButtonInfo NAVBAR_DPAD_RIGHT = new ButtonInfo("dpad_right",
+            0, R.string.accessibility_dpad_right,
+            KeyEvent.KEYCODE_DPAD_RIGHT, 0,
+            0, R.drawable.ic_sysbar_ime_right);
 
     private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[] {
         NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_SEARCH,
@@ -146,9 +154,20 @@ public class NavbarEditor implements View.OnTouchListener {
         mVertical = orientation;
 
         mButtonViews = new ArrayList<KeyButtonView>();
+
+        KeyButtonView dpadLeft = (KeyButtonView) mParent.findViewById(R.id.dpad_left);
+        dpadLeft.setInfo(parent.isLayoutRtl() ? NAVBAR_DPAD_RIGHT
+                                              : NAVBAR_DPAD_LEFT, orientation, true);
+        mButtonViews.add(dpadLeft);
+
         for (int id : BUTTON_IDS) {
             mButtonViews.add((KeyButtonView) mParent.findViewById(id));
         }
+
+        KeyButtonView dpadRight = (KeyButtonView) mParent.findViewById(R.id.dpad_right);
+        dpadRight.setInfo(parent.isLayoutRtl() ? NAVBAR_DPAD_LEFT
+                                               : NAVBAR_DPAD_RIGHT, orientation, true);
+        mButtonViews.add(dpadRight);
     }
 
     public void setEditMode(boolean editMode) {
@@ -324,7 +343,7 @@ public class NavbarEditor implements View.OnTouchListener {
     protected void saveKeys() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < BUTTON_IDS.length; i++) {
-            int idIndex = mVertical ? BUTTON_IDS.length - i : i;
+            int idIndex = mVertical ? BUTTON_IDS.length - (i + 1) : i;
             ButtonInfo info = (ButtonInfo) mButtonViews.get(idIndex).getTag();
             if (i != 0) sb.append("|");
             sb.append(info.key);

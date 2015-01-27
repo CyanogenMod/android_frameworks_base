@@ -18,6 +18,7 @@
     <!-- Defines the shutdown options shown in the reboot dialog. -->
     <array name="shutdown_reboot_options" translatable="false">
         <item>@string/reboot_reboot</item>
+        <item>@string/reboot_soft</item>
         <item>@string/reboot_recovery</item>
         <item>@string/reboot_bootloader</item>
     </array>
@@ -26,6 +27,7 @@
          The first item should be empty for regular reboot. -->
     <string-array name="shutdown_reboot_actions" translatable="false">
         <item></item>
+        <item>soft_reboot</item>
         <item>recovery</item>
         <item>bootloader</item>
     </string-array>
@@ -104,6 +106,7 @@
         <item>@string/app_ops_read_mms</item>
         <item>@string/app_ops_write_mms</item>
         <item>@string/app_ops_start_at_bootup</item>
+        <item>@string/app_ops_toggle_nfc</item>
     </string-array>
 
 </resources>

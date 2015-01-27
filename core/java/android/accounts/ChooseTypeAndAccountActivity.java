@@ -318,7 +318,7 @@ public class ChooseTypeAndAccountActivity extends Activity
             }
             // if canceling out of addAccount and the original state caused us to skip this,
             // finish this activity
-            if (mAccounts.isEmpty()) {
+            if (null == mAccounts || mAccounts.isEmpty()) {
                 setResult(Activity.RESULT_CANCELED);
                 finish();
             }

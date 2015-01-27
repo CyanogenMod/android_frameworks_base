@@ -40,7 +40,7 @@ public class MSimKeyguardSimPukView extends KeyguardSimPukView {
                     state = ENTER_PIN;
                     msg = R.string.kg_puk_enter_pin_hint;
                 } else {
-                    msg = R.string.kg_invalid_sim_puk_hint;
+                    msg = R.string.kg_invalid_sim_puk_hint_cm;
                 }
             } else if (state == ENTER_PIN) {
                 if (checkPin()) {

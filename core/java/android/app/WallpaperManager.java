@@ -30,6 +30,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -45,9 +46,7 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
 
 import java.io.BufferedInputStream;
@@ -220,8 +219,10 @@ public class WallpaperManager {
         private IWallpaperManager mService;
         private Bitmap mWallpaper;
         private Bitmap mDefaultWallpaper;
+        private Bitmap mKeyguardwallpaper;
         
         private static final int MSG_CLEAR_WALLPAPER = 1;
+        private static final int MSG_CLEAR_KEYGUARD_WALLPAPER = 2;
         
         private final Handler mHandler;
         
@@ -238,6 +239,11 @@ public class WallpaperManager {
                                 mDefaultWallpaper = null;
                             }
                             break;
+                        case MSG_CLEAR_KEYGUARD_WALLPAPER:
+                            synchronized (this) {
+                                mKeyguardwallpaper = null;
+                            }
+                            break;
                     }
                 }
             };
@@ -250,6 +256,10 @@ public class WallpaperManager {
              * fetch it.
              */
             mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER);
+        }
+
+        public void onKeyguardWallpaperChanged() {
+            mHandler.sendEmptyMessage(MSG_CLEAR_KEYGUARD_WALLPAPER);
         }
 
         public Bitmap peekWallpaperBitmap(Context context, boolean returnDefault) {
@@ -278,6 +288,23 @@ public class WallpaperManager {
             }
         }
 
+        /**
+         * @hide
+         */
+        public Bitmap peekKeyguardWallpaperBitmap(Context context) {
+            synchronized (this) {
+                if (mKeyguardwallpaper != null) {
+                    return mKeyguardwallpaper;
+                }
+                try {
+                    mKeyguardwallpaper = getCurrentKeyguardWallpaperLocked(context);
+                } catch (OutOfMemoryError e) {
+                    Log.w(TAG, "No memory load current keyguard wallpaper", e);
+                }
+                return mKeyguardwallpaper;
+            }
+        }
+
         public void forgetLoadedWallpaper() {
             synchronized (this) {
                 mWallpaper = null;
@@ -296,9 +323,8 @@ public class WallpaperManager {
 
                     try {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        Bitmap bm = BitmapFactory.decodeFileDescriptor(
+                        return BitmapFactory.decodeFileDescriptor(
                                 fd.getFileDescriptor(), null, options);
-                        return generateBitmap(context, bm, width, height);
                     } catch (OutOfMemoryError e) {
                         Log.w(TAG, "Can't decode file", e);
                     } finally {
@@ -314,7 +340,33 @@ public class WallpaperManager {
             }
             return null;
         }
-        
+
+        private Bitmap getCurrentKeyguardWallpaperLocked(Context context) {
+            try {
+                Bundle params = new Bundle();
+                ParcelFileDescriptor fd = mService.getKeyguardWallpaper(this, params);
+                if (fd != null) {
+                    try {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        Bitmap bm = BitmapFactory.decodeFileDescriptor(
+                                fd.getFileDescriptor(), null, options);
+                        return bm;
+                    } catch (OutOfMemoryError e) {
+                        Log.w(TAG, "Can't decode file", e);
+                    } finally {
+                        try {
+                            fd.close();
+                        } catch (IOException e) {
+                            // Ignore
+                        }
+                    }
+                }
+            } catch (RemoteException e) {
+                // Ignore
+            }
+            return null;
+        }
+
         private Bitmap getDefaultWallpaperLocked(Context context) {
             try {
                 InputStream is = context.getResources().openRawResource(
@@ -325,8 +377,7 @@ public class WallpaperManager {
 
                     try {
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        Bitmap bm = BitmapFactory.decodeStream(is, null, options);
-                        return generateBitmap(context, bm, width, height);
+                        return BitmapFactory.decodeStream(is, null, options);
                     } catch (OutOfMemoryError e) {
                         Log.w(TAG, "Can't decode stream", e);
                     } finally {
@@ -341,6 +392,18 @@ public class WallpaperManager {
                 // Ignore
             }
             return null;
+        }
+
+        public void clearKeyguardWallpaper() {
+            synchronized (this) {
+                try {
+                    mService.clearKeyguardWallpaper();
+                } catch (RemoteException e) {
+                    // ignore
+                }
+                mKeyguardwallpaper = null;
+                mHandler.removeMessages(MSG_CLEAR_KEYGUARD_WALLPAPER);
+            }
         }
     }
     
@@ -604,6 +667,15 @@ public class WallpaperManager {
         return null;
     }
 
+    /** @hide */
+    public Drawable getFastKeyguardDrawable() {
+        Bitmap bm = sGlobals.peekKeyguardWallpaperBitmap(mContext);
+        if (bm != null) {
+            return new FastBitmapDrawable(bm);
+        }
+        return null;
+    }
+
     /**
      * Like {@link #getFastDrawable()}, but if there is no wallpaper set,
      * a null pointer is returned.
@@ -626,6 +698,13 @@ public class WallpaperManager {
      */
     public Bitmap getBitmap() {
         return sGlobals.peekWallpaperBitmap(mContext, true);
+    }
+
+    /**
+     * @hide
+     */
+    public Bitmap getKeyguardBitmap() {
+        return sGlobals.peekKeyguardWallpaperBitmap(mContext);
     }
 
     /**
@@ -785,6 +864,35 @@ public class WallpaperManager {
     }
 
     /**
+     * @param bitmap
+     * @throws IOException
+     * @hide
+     */
+    public void setKeyguardBitmap(Bitmap bitmap) throws IOException {
+        if (sGlobals.mService == null) {
+            Log.w(TAG, "WallpaperService not running");
+            return;
+        }
+        try {
+            ParcelFileDescriptor fd = sGlobals.mService.setKeyguardWallpaper(null);
+            if (fd == null) {
+                return;
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new ParcelFileDescriptor.AutoCloseOutputStream(fd);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            } finally {
+                if (fos != null) {
+                    fos.close();
+                }
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+    }
+
+    /**
      * Change the current system wallpaper to a specific byte stream.  The
      * give InputStream is copied into persistent storage and will now be
      * used as the wallpaper.  Currently it must be either a JPEG or PNG
@@ -806,6 +914,33 @@ public class WallpaperManager {
         }
         try {
             ParcelFileDescriptor fd = sGlobals.mService.setWallpaper(null);
+            if (fd == null) {
+                return;
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new ParcelFileDescriptor.AutoCloseOutputStream(fd);
+                setWallpaper(data, fos);
+            } finally {
+                if (fos != null) {
+                    fos.close();
+                }
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void setKeyguardStream(InputStream data) throws IOException {
+        if (sGlobals.mService == null) {
+            Log.w(TAG, "WallpaperService not running");
+            return;
+        }
+        try {
+            ParcelFileDescriptor fd = sGlobals.mService.setKeyguardWallpaper(null);
             if (fd == null) {
                 return;
             }
@@ -1007,7 +1142,29 @@ public class WallpaperManager {
         mWallpaperXStep = xStep;
         mWallpaperYStep = yStep;
     }
-    
+
+    /** @hide */
+    public int getLastWallpaperX() {
+        try {
+            return WindowManagerGlobal.getWindowSession().getLastWallpaperX();
+        } catch (RemoteException e) {
+            // Ignore.
+        }
+
+        return -1;
+    }
+
+    /** @hide */
+    public int getLastWallpaperY() {
+        try {
+            return WindowManagerGlobal.getWindowSession().getLastWallpaperY();
+        } catch (RemoteException e) {
+            // Ignore.
+        }
+
+        return -1;
+    }
+
     /**
      * Send an arbitrary command to the current active wallpaper.
      * 
@@ -1064,64 +1221,24 @@ public class WallpaperManager {
      * wallpaper.
      */
     public void clear() throws IOException {
-        setResource(com.android.internal.R.drawable.default_wallpaper);
+        clear(true);
     }
-    
-    static Bitmap generateBitmap(Context context, Bitmap bm, int width, int height) {
-        if (bm == null) {
-            return null;
+
+    /** @hide */
+    public void clear(boolean setToDefault) throws IOException {
+        if (setToDefault) {
+            setResource(com.android.internal.R.drawable.default_wallpaper);
+        } else {
+            Bitmap blackBmp = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
+            blackBmp.setPixel(0, 0, mContext.getResources().getColor(android.R.color.black));
+            setBitmap(blackBmp);
         }
+    }
 
-        WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(metrics);
-        bm.setDensity(metrics.noncompatDensityDpi);
-
-        if (width <= 0 || height <= 0
-                || (bm.getWidth() == width && bm.getHeight() == height)) {
-            return bm;
-        }
-
-        // This is the final bitmap we want to return.
-        try {
-            Bitmap newbm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            newbm.setDensity(metrics.noncompatDensityDpi);
-
-            Canvas c = new Canvas(newbm);
-            Rect targetRect = new Rect();
-            targetRect.right = bm.getWidth();
-            targetRect.bottom = bm.getHeight();
-
-            int deltaw = width - targetRect.right;
-            int deltah = height - targetRect.bottom;
-
-            if (deltaw > 0 || deltah > 0) {
-                // We need to scale up so it covers the entire area.
-                float scale;
-                if (deltaw > deltah) {
-                    scale = width / (float)targetRect.right;
-                } else {
-                    scale = height / (float)targetRect.bottom;
-                }
-                targetRect.right = (int)(targetRect.right*scale);
-                targetRect.bottom = (int)(targetRect.bottom*scale);
-                deltaw = width - targetRect.right;
-                deltah = height - targetRect.bottom;
-            }
-
-            targetRect.offset(deltaw/2, deltah/2);
-
-            Paint paint = new Paint();
-            paint.setFilterBitmap(true);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-            c.drawBitmap(bm, null, targetRect, paint);
-
-            bm.recycle();
-            c.setBitmap(null);
-            return newbm;
-        } catch (OutOfMemoryError e) {
-            Log.w(TAG, "Can't generate default bitmap", e);
-            return bm;
-        }
+    /**
+     * @hide
+     */
+    public void clearKeyguardWallpaper() {
+        sGlobals.clearKeyguardWallpaper();
     }
 }

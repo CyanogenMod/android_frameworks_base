@@ -538,7 +538,9 @@ final class Notifier {
                     break;
 
                 case MSG_WIRELESS_CHARGING_STARTED:
-                    playWirelessChargingStartedSound();
+                    if (Settings.Global.getInt(mContext.getContentResolver(),
+                            Settings.Global.POWER_NOTIFICATIONS_ENABLED, 1) != 0)
+                        playWirelessChargingStartedSound();
                     break;
             }
         }

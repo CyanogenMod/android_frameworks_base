@@ -26,5 +26,7 @@
     android:layout_gravity="bottom"
     android:layout_marginBottom="@dimen/close_handle_height"
     android:gravity="center"
+    android:singleLine="true"
+    android:ellipsize="end"
     android:visibility="invisible"
     />

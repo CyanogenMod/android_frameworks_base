@@ -23,7 +23,9 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -32,6 +34,7 @@ import android.content.pm.IPackageDataObserver;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.ThemeConfig;
 import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -60,6 +63,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,15 +74,21 @@ import android.widget.TextView;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
+import com.android.internal.util.cm.SpamFilter;
+import com.android.internal.util.cm.SpamFilter.SpamContract.NotificationTable;
+import com.android.internal.util.cm.SpamFilter.SpamContract.PackageTable;
 import com.android.internal.widget.SizeAdaptiveLayout;
 import com.android.systemui.R;
 import com.android.systemui.RecentsComponent;
 import com.android.systemui.SearchPanelView;
 import com.android.systemui.SystemUI;
+import com.android.systemui.cm.SpamMessageProvider;
+import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.phone.KeyguardTouchDelegate;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public abstract class BaseStatusBar extends SystemUI implements
@@ -99,8 +109,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected static final boolean ENABLE_HEADS_UP = true;
     // scores above this threshold should be displayed in heads up mode.
-    protected static final int INTERRUPTION_THRESHOLD = 11;
-    protected static final String SETTING_HEADS_UP = "heads_up_enabled";
+    protected static final int INTERRUPTION_THRESHOLD = 1;
 
     // Should match the value in PhoneWindowManager
     public static final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
@@ -111,6 +120,12 @@ public abstract class BaseStatusBar extends SystemUI implements
     private static final boolean CLOSE_PANEL_WHEN_EMPTIED = true;
     private static final int COLLAPSE_AFTER_DISMISS_DELAY = 200;
     private static final int COLLAPSE_AFTER_REMOVE_DELAY = 400;
+
+    private static final Uri SPAM_MESSAGE_URI = new Uri.Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(SpamMessageProvider.AUTHORITY)
+            .appendPath("message")
+            .build();
 
     protected CommandQueue mCommandQueue;
     protected IStatusBarService mBarService;
@@ -169,7 +184,10 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private RecentsComponent mRecents;
 
-    private int mExpandedDesktopStyle = 0;
+    private ArrayList<String> mDndList;
+    private ArrayList<String> mBlacklist;
+
+    protected int mExpandedDesktopStyle = 0;
 
     public IStatusBarService getStatusBarService() {
         return mBarService;
@@ -198,6 +216,12 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         public void observe() {
             ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.HEADS_UP_CUSTOM_VALUES),
+                    false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.HEADS_UP_BLACKLIST_VALUES),
+                    false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_COLLAPSE_ON_DISMISS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -223,6 +247,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mExpandedDesktopStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.EXPANDED_DESKTOP_STYLE, 0, UserHandle.USER_CURRENT);
             }
+            final String dndString = Settings.System.getString(mContext.getContentResolver(),
+                    Settings.System.HEADS_UP_CUSTOM_VALUES);
+            final String blackString = Settings.System.getString(mContext.getContentResolver(),
+                    Settings.System.HEADS_UP_BLACKLIST_VALUES);
+            splitAndAddToArrayList(mDndList, dndString, "\\|");
+            splitAndAddToArrayList(mBlacklist, blackString, "\\|");
         }
     };
 
@@ -280,6 +310,9 @@ public abstract class BaseStatusBar extends SystemUI implements
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+
+        mDndList = new ArrayList<String>();
+        mBlacklist = new ArrayList<String>();
 
         mProvisioningObserver.onChange(false); // set up
         mContext.getContentResolver().registerContentObserver(
@@ -452,32 +485,44 @@ public abstract class BaseStatusBar extends SystemUI implements
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final String packageNameF = (String) v.getTag();
+                final NotificationData.Entry entry = (Entry) v.getTag();
+                final StatusBarNotification sbNotification = entry.notification;
+                final String packageNameF = sbNotification.getPackageName();
                 if (packageNameF == null) return false;
                 if (v.getWindowToken() == null) return false;
+
+                // protected apps don't get long click listener
+                if (isPackageProtected(packageNameF)) return false;
+
                 mNotificationBlamePopup = new PopupMenu(mContext, v);
                 mNotificationBlamePopup.getMenuInflater().inflate(
                         R.menu.notification_popup_menu,
                         mNotificationBlamePopup.getMenu());
                 final ContentResolver cr = mContext.getContentResolver();
+
                 if (Settings.Secure.getInt(cr,
                         Settings.Secure.DEVELOPMENT_SHORTCUT, 0) == 0) {
                     mNotificationBlamePopup.getMenu()
                             .findItem(R.id.notification_inspect_item_force_stop).setVisible(false);
                     mNotificationBlamePopup.getMenu()
                             .findItem(R.id.notification_inspect_item_wipe_app).setVisible(false);
+                    mNotificationBlamePopup.getMenu()
+                            .findItem(R.id.notification_inspect_item_uninstall).setVisible(false);
                 } else {
                     try {
                         PackageManager pm = (PackageManager) mContext.getPackageManager();
-                        ApplicationInfo mAppInfo = pm.getApplicationInfo(packageNameF, 0);
+                        ApplicationInfo mAppInfo = null;
                         DevicePolicyManager mDpm = (DevicePolicyManager) mContext.
                                 getSystemService(Context.DEVICE_POLICY_SERVICE);
+                        mAppInfo = pm.getApplicationInfo(packageNameF, 0);
                         if ((mAppInfo.flags&(ApplicationInfo.FLAG_SYSTEM
-                              | ApplicationInfo.FLAG_ALLOW_CLEAR_USER_DATA))
-                              == ApplicationInfo.FLAG_SYSTEM
-                              || mDpm.packageHasActiveAdmins(packageNameF)) {
+                                | ApplicationInfo.FLAG_ALLOW_CLEAR_USER_DATA))
+                                == ApplicationInfo.FLAG_SYSTEM
+                                || mDpm.packageHasActiveAdmins(packageNameF)) {
                             mNotificationBlamePopup.getMenu()
-                            .findItem(R.id.notification_inspect_item_wipe_app).setEnabled(false);
+                                    .findItem(R.id.notification_inspect_item_wipe_app).setEnabled(false);
+                            mNotificationBlamePopup.getMenu()
+                                    .findItem(R.id.notification_inspect_item_uninstall).setEnabled(false);
                         }
                     } catch (NameNotFoundException ex) {
                         Slog.e(TAG, "Failed looking up ApplicationInfo for " + packageNameF, ex);
@@ -500,6 +545,21 @@ public abstract class BaseStatusBar extends SystemUI implements
                                     .getSystemService(Context.ACTIVITY_SERVICE);
                             am.clearApplicationUserData(packageNameF,
                                     new FakeClearUserDataObserver());
+                        } else if (item.getItemId() == R.id.notification_inspect_item_uninstall) {
+                            Uri packageURI = Uri.parse("package:"+packageNameF);
+                            Intent uninstallIntent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageURI);
+                            uninstallIntent.putExtra(Intent.EXTRA_UNINSTALL_ALL_USERS, true);
+                            uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContext.startActivity(uninstallIntent);
+                            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                        } else if (item.getItemId() == R.id.notification_spam_item) {
+                            ContentValues values = new ContentValues();
+                            String message = SpamFilter.getNotificationContent(
+                                    sbNotification.getNotification());
+                            values.put(NotificationTable.MESSAGE_TEXT, message);
+                            values.put(PackageTable.PACKAGE_NAME, packageNameF);
+                            mContext.getContentResolver().insert(SPAM_MESSAGE_URI, values);
+                            removeNotification(entry.key);
                         } else {
                             return false;
                         }
@@ -652,6 +712,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public abstract void resetHeadsUpDecayTimer();
+    public abstract void hideHeadsUp();
 
     protected class H extends Handler {
         public void handleMessage(Message m) {
@@ -737,7 +798,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 R.layout.status_bar_notification_row, parent, false);
 
         // for blaming (see SwipeHelper.setLongPressListener)
-        row.setTag(sbn.getPackageName());
+        row.setTag(entry);
 
         workAroundBadLayerDrawableOpacity(row);
         View vetoButton = updateNotificationVetoButton(row, sbn);
@@ -763,16 +824,35 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         View contentViewLocal = null;
         View bigContentViewLocal = null;
-        try {
-            contentViewLocal = contentView.apply(mContext, adaptive, mOnClickHandler);
-            if (bigContentView != null) {
-                bigContentViewLocal = bigContentView.apply(mContext, adaptive, mOnClickHandler);
+
+        if (isPackageProtected(entry.notification.getPackageName())) {
+            // let's construct a new notification for this protected app
+            ViewGroup base = (ViewGroup) inflater.inflate(com.android.internal.R.layout.notification_template_base, row, false);
+            TextView title = (TextView) base.findViewById(com.android.internal.R.id.title);
+            title.setText(R.string.protected_app_notification_title);
+            TextView text2 = (TextView) base.findViewById(com.android.internal.R.id.text2);
+            text2.setVisibility(View.VISIBLE);
+            text2.setText(R.string.protected_app_notification_summary);
+            ImageView icon = (ImageView) base.findViewById(com.android.internal.R.id.icon);
+            icon.setImageResource(R.drawable.ic_protected_apps);
+
+            contentViewLocal = base;
+        } else {
+            final ThemeConfig themeConfig = mContext.getResources().getConfiguration().themeConfig;
+            String themePackageName = themeConfig != null ?
+                    themeConfig.getOverlayPkgNameForApp(mContext.getPackageName()) : null;
+            try {
+                contentViewLocal = contentView.apply(mContext, adaptive, mOnClickHandler,
+                        themePackageName);
+                if (bigContentView != null) {
+                    bigContentViewLocal = bigContentView.apply(mContext, adaptive, mOnClickHandler,
+                            themePackageName);
+                }
+            } catch (RuntimeException e) {
+                final String ident = sbn.getPackageName() + "/0x" + Integer.toHexString(sbn.getId());
+                Log.e(TAG, "couldn't inflate view for notification " + ident, e);
+                return false;
             }
-        }
-        catch (RuntimeException e) {
-            final String ident = sbn.getPackageName() + "/0x" + Integer.toHexString(sbn.getId());
-            Log.e(TAG, "couldn't inflate view for notification " + ident, e);
-            return false;
         }
 
         if (contentViewLocal != null) {
@@ -814,16 +894,31 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected class NotificationClicker implements View.OnClickListener {
+        public static final String ACTION_BROADCAST_RESULT =
+                "com.android.settings.applications.LockPatternActivity.ACTION_BROADCAST_RESULT";
+
+        // used for incoming and outgoing broadcast intents
+        public static final String EXTRA_BROADCAST_RESULT = "broadcast_result";
+
+        public final ComponentName LOCK_PATTERN_COMPONENT =
+                new ComponentName("com.android.settings",
+                        "com.android.settings.applications.LockPatternActivity");
+
+
         private PendingIntent mIntent;
         private String mPkg;
         private String mTag;
         private int mId;
+        private boolean mProtected;
+
+        private BroadcastReceiver mProtectedAppReceiver;
 
         public NotificationClicker(PendingIntent intent, String pkg, String tag, int id) {
             mIntent = intent;
             mPkg = pkg;
             mTag = tag;
             mId = id;
+            mProtected = isPackageProtected(pkg);
         }
 
         public void onClick(View v) {
@@ -839,12 +934,43 @@ public abstract class BaseStatusBar extends SystemUI implements
             } catch (RemoteException e) {
             }
 
+            int[] pos = new int[2];
+            v.getLocationOnScreen(pos);
+            final Rect r = new Rect(pos[0], pos[1], pos[0]+v.getWidth(), pos[1]+v.getHeight());
+
+            if (mProtected) {
+                mProtectedAppReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        boolean result = intent.getBooleanExtra("broadcast_result", false);
+                        if (result) {
+                            doRealClick(r);
+                        }
+                        mContext.unregisterReceiver(this);
+                    }
+                };
+                mContext.registerReceiver(mProtectedAppReceiver,
+                        new IntentFilter(ACTION_BROADCAST_RESULT));
+                Intent protectedIntent = new Intent();
+                protectedIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                protectedIntent.setComponent(LOCK_PATTERN_COMPONENT);
+                protectedIntent.putExtra(EXTRA_BROADCAST_RESULT, true);
+                mContext.startActivity(protectedIntent);
+
+                // close the shade if it was open
+                animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                visibilityChanged(false);
+                return;
+            } else {
+                doRealClick(r);
+            }
+        }
+
+        private void doRealClick(Rect r) {
             if (mIntent != null) {
-                int[] pos = new int[2];
-                v.getLocationOnScreen(pos);
+
                 Intent overlay = new Intent();
-                overlay.setSourceBounds(
-                        new Rect(pos[0], pos[1], pos[0]+v.getWidth(), pos[1]+v.getHeight()));
+                overlay.setSourceBounds(r);
                 try {
                     mIntent.send(mContext, 0, overlay);
                 } catch (PendingIntent.CanceledException e) {
@@ -939,23 +1065,47 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
+    private boolean isPackageProtected(String packageName) {
+        try {
+            ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(packageName, 0);
+            return info.protect;
+        } catch (NameNotFoundException e) {
+            Log.d(TAG, "protected package not found.", e);
+        }
+        return false;
+    }
+
     protected NotificationData.Entry createNotificationViews(IBinder key,
             StatusBarNotification notification) {
         if (DEBUG) {
             Log.d(TAG, "createNotificationViews(key=" + key + ", notification=" + notification);
         }
+
+        boolean protectedApp = isPackageProtected(notification.getPackageName());
+        if (protectedApp) {
+            notification.getNotification().icon = com.android.systemui.R.drawable.ic_protected_apps;
+            notification.getNotification().iconLevel = 0;
+            notification.getNotification().number = 0;
+            if (notification.getNotification().tickerText != null) {
+                // null out ticker
+                notification.getNotification().tickerText = null;
+            }
+        }
+
         // Construct the icon.
         final StatusBarIconView iconView = new StatusBarIconView(mContext,
                 notification.getPackageName() + "/0x" + Integer.toHexString(notification.getId()),
                 notification.getNotification());
         iconView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
-        final StatusBarIcon ic = new StatusBarIcon(notification.getPackageName(),
+        final StatusBarIcon ic = new StatusBarIcon(
+                // for protected apps we need to use system ui's package name
+                protectedApp ? mContext.getPackageName() : notification.getPackageName(),
                 notification.getUser(),
-                    notification.getNotification().icon,
-                    notification.getNotification().iconLevel,
-                    notification.getNotification().number,
-                    notification.getNotification().tickerText);
+                notification.getNotification().icon,
+                notification.getNotification().iconLevel,
+                notification.getNotification().number,
+                notification.getNotification().tickerText);
         if (!iconView.set(ic)) {
             handleNotificationError(key, notification, "Couldn't create icon: " + ic);
             return null;
@@ -971,6 +1121,9 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void addNotificationViews(NotificationData.Entry entry) {
+        if (entry == null) {
+            return;
+        }
         // Add the expanded view and icon.
         int pos = mNotificationData.add(entry);
         if (DEBUG) {
@@ -1175,6 +1328,12 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected boolean shouldInterrupt(StatusBarNotification sbn) {
         Notification notification = sbn.getNotification();
+
+        // check if notification from the package is blacklisted first
+        if (isPackageBlacklisted(sbn.getPackageName())) {
+            return false;
+        }
+
         // some predicates to make the boolean logic legible
         boolean isNoisy = (notification.defaults & Notification.DEFAULT_SOUND) != 0
                 || (notification.defaults & Notification.DEFAULT_VIBRATE) != 0
@@ -1182,22 +1341,65 @@ public abstract class BaseStatusBar extends SystemUI implements
                 || notification.vibrate != null;
         boolean isHighPriority = sbn.getScore() >= INTERRUPTION_THRESHOLD;
         boolean isFullscreen = notification.fullScreenIntent != null;
+        boolean hasTicker = !TextUtils.isEmpty(notification.tickerText);
         boolean isAllowed = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
                 Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
+        boolean isOngoing = sbn.isOngoing();
 
         final KeyguardTouchDelegate keyguard = KeyguardTouchDelegate.getInstance(mContext);
-        boolean interrupt = (isFullscreen || (isHighPriority && isNoisy))
-                && isAllowed
-                && mPowerManager.isScreenOn()
-                && !keyguard.isShowingAndNotHidden()
+        boolean keyguardNotVisible = !keyguard.isShowingAndNotHidden()
                 && !keyguard.isInputRestricted();
+
+        final InputMethodManager inputMethodManager = (InputMethodManager)
+                mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        boolean isIMEShowing = inputMethodManager.isImeShowing();
+        boolean isDreamShowing = false;
         try {
-            interrupt = interrupt && !mDreamManager.isDreaming();
+            isDreamShowing = mDreamManager.isDreaming();
         } catch (RemoteException e) {
             Log.d(TAG, "failed to query dream manager", e);
         }
+
+        boolean interrupt = (isFullscreen || !isHighPriority || isNoisy || hasTicker)
+                && isAllowed
+                && keyguardNotVisible
+                && !isOngoing
+                && !isIMEShowing
+                && mPowerManager.isScreenOn()
+                && !isDreamShowing
+                && !isPackageInDnd(getTopLevelPackage());
+
         if (DEBUG) Log.d(TAG, "interrupt: " + interrupt);
         return interrupt;
+    }
+
+    private String getTopLevelPackage() {
+        final ActivityManager am = (ActivityManager)
+                mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        return componentInfo.getPackageName();
+    }
+
+    private boolean isPackageInDnd(String packageName) {
+        return mDndList.contains(packageName);
+    }
+
+    private boolean isPackageBlacklisted(String packageName) {
+        return mBlacklist.contains(packageName);
+    }
+
+    private void splitAndAddToArrayList(ArrayList<String> arrayList,
+                                        String baseString, String separator) {
+        // clear first
+        arrayList.clear();
+        if (baseString != null) {
+            final String[] array = TextUtils.split(baseString, separator);
+            for (String item : array) {
+                arrayList.add(item.trim());
+            }
+        }
     }
 
     // Q: What kinds of notifications should show during setup?

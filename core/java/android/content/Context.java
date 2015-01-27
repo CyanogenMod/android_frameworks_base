@@ -2500,6 +2500,16 @@ public abstract class Context {
     public static final String THEME_SERVICE = "themes";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link com.android.server.TorchService} for accessing torch service.
+     *
+     * @see #getSystemService
+     * @see com.android.server.TorchService
+     * @hide
+     */
+    public static final String TORCH_SERVICE = "torch";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *
@@ -2910,6 +2920,18 @@ public abstract class Context {
      */
     public abstract Context createPackageContextAsUser(
             String packageName, int flags, UserHandle user)
+            throws PackageManager.NameNotFoundException;
+
+    /**
+     * Similar to {@link #createPackageContext(String, int)}, but with a
+     * different {@link UserHandle}. For example, {@link #getContentResolver()}
+     * will open any {@link Uri} as the given user.  A theme package can be
+     * specified which will be used when adding resources to this context
+     *
+     * @hide
+     */
+    public abstract Context createPackageContextAsUser(
+            String packageName, String themePackageName, int flags, UserHandle user)
             throws PackageManager.NameNotFoundException;
 
     /**

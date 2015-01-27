@@ -68,11 +68,12 @@
     <uses-permission android:name="android.permission.READ_DREAM_STATE" />
     <uses-permission android:name="android.permission.WRITE_DREAM_STATE" />
 
-    <!-- Alarm clocks -->
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-
     <!-- Keyguard -->
     <uses-permission android:name="android.permission.CONTROL_KEYGUARD" />
+
+    <!-- Equalizer -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <!-- Sync -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -82,8 +83,11 @@
     <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
     <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
 
-    <!-- Wifi Display -->
-    <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
+    <!-- WallpaperManager -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+    <!-- Keyguard widget on the Navigation Bar for the application -->
+    <uses-permission android:name="android.permission.SET_KEYGUARD_APPLICATION_WIDGET" />
 
     <application
         android:persistent="true"
@@ -273,5 +277,11 @@
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
+
+        <provider android:name=".cm.SpamMessageProvider"
+                  android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
+                  android:exported="true"
+                  android:authorities="com.cyanogenmod.spam" />
+
     </application>
 </manifest>

@@ -255,6 +255,9 @@
     <protected-broadcast
         android:name="com.android.server.connectivityservice.CONNECTED_TO_PROVISIONING_NETWORK_ACTION" />
 
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
+
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
     <!-- ====================================== -->
@@ -1073,8 +1076,9 @@
         android:permissionGroupFlags="personalInfo"
         android:priority="370" />
 
-    <!-- Allows an application to monitor, modify, or abort outgoing
-         calls. -->
+    <!-- Allows an application to see the number being dialed during an outgoing
+         call with the option to redirect the call to a different number or
+         abort the call altogether. -->
     <permission android:name="android.permission.PROCESS_OUTGOING_CALLS"
         android:permissionGroup="android.permission-group.PHONE_CALLS"
         android:protectionLevel="dangerous"
@@ -1208,7 +1212,7 @@
         android:permissionGroup="android.permission-group.STORAGE"
         android:label="@string/permlab_manageDocs"
         android:description="@string/permdesc_manageDocs"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature" />
 
     <!-- ================================== -->
     <!-- Permissions for screenlock         -->
@@ -1377,6 +1381,14 @@
         android:label="@string/permlab_setWallpaper"
         android:description="@string/permdesc_setWallpaper" />
 
+    <!-- Allows applications to set the keyguard wallpaper
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_WALLPAPER"
+        android:permissionGroup="android.permission-group.WALLPAPER"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_setKeyguardWallpaper"
+        android:description="@string/permdesc_setKeyguardWallpaper" />
+
     <!-- Allows applications to set the wallpaper hints -->
     <permission android:name="android.permission.SET_WALLPAPER_HINTS"
         android:permissionGroup="android.permission-group.WALLPAPER"
@@ -1543,7 +1555,7 @@
         @hide -->
     <permission android:name="android.permission.FORCE_STOP_PACKAGES"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="signature"
+        android:protectionLevel="signature|system"
         android:label="@string/permlab_forceStopPackages"
         android:description="@string/permdesc_forceStopPackages" />
 
@@ -1721,6 +1733,14 @@
         android:label="@string/permlab_manageCaCertificates"
         android:description="@string/permdesc_manageCaCertificates" />
 
+    <!-- Allows an application to do certain operations needed for
+         interacting with the recovery (system update) system. -->
+    <permission android:name="android.permission.RECOVERY"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="signature|system"
+        android:label="@string/permlab_recovery"
+        android:description="@string/permdesc_recovery" />
+
     <!-- ========================================= -->
     <!-- Permissions for special development tools -->
     <!-- ========================================= -->
@@ -1881,7 +1901,7 @@
     <permission android:name="android.permission.INJECT_EVENTS"
         android:label="@string/permlab_injectEvents"
         android:description="@string/permdesc_injectEvents"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signatureOrSystem" />
 
     <!-- @hide Allows an application to register an input filter which filters the stream
          of user events (keys, touch, trackball) before they are dispatched to any window. -->
@@ -1915,7 +1935,7 @@
     <permission android:name="android.permission.SET_ACTIVITY_WATCHER"
         android:label="@string/permlab_runSetActivityWatcher"
         android:description="@string/permdesc_runSetActivityWatcher"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- Allows an application to call the activity manager shutdown() API
          to put the higher-level system there into a shutdown state.
@@ -2212,6 +2232,24 @@
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:label="@string/permlab_broadcastPackageRemoved"
         android:description="@string/permdesc_broadcastPackageRemoved"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to add an address to the whitelisted protected sms
+         list
+         @hide -->
+    <permission android:name="android.permission.MODIFY_PROTECTED_SMS_LIST"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_modifyProtectedSmsList"
+        android:description="@string/permdesc_modifyProtectedSmsList"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to receive sms (usually for auth or registration)
+         from whitelisted addresses
+         @hide -->
+    <permission android:name="android.permission.RECEIVE_PROTECTED_SMS"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_receiveProtectedSms"
+        android:description="@string/permdesc_receiveProtectedSms"
         android:protectionLevel="signature" />
 
     <!-- Allows an application to intercept and rewrite outgoing SMS
@@ -2580,6 +2618,48 @@
         android:label="@string/permlab_accessThemeService"
         android:description="@string/permdesc_accessThemeService"
         android:protectionLevel="signature" />
+
+    <!-- Allows an application to read the current theme configuration and
+         get information about the various themes currently installed
+         @hide -->
+    <permission android:name="android.permission.READ_THEMES"
+        android:label="@string/permlab_readThemes"
+        android:description="@string/permdesc_readThemesDesc"
+        android:protectionLevel="normal" />
+
+    <!-- Allows an application to write the current theme configuration and
+         write information about the various themes currently installed.
+         Changing themes should be done through the service ACCESS_THEME_MANAGER
+         @hide -->
+    <permission android:name="android.permission.WRITE_THEMES"
+        android:label="@string/permlab_writeThemes"
+        android:description="@string/permdesc_writeThemesDesc"
+        android:protectionLevel="system|signature" />
+
+    <!-- Allows an application access the CM hardware abstraction framework (DANGEROUS)
+         <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS"
+        android:label="@string/permlab_useHardwareFramework"
+        android:description="@string/permdesc_useHardwareFramework"
+        android:protectionLevel="signature" />
+
+
+    <!-- Allows an application to set the application widget on the keyguard.
+         <p> Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_APPLICATION_WIDGET"
+        android:label="@string/permlab_keyguardApplicationWidget"
+        android:description="@string/permdesc_keyguardApplicationWidget"
+        android:protectionLevel="system|signature" />
+
+    <!-- Allows an application to intercept package launch actions.
+         <p> Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.INTERCEPT_PACKAGE_LAUNCH"
+        android:label="@string/permlab_interceptPackageLaunch"
+        android:description="@string/permdesc_interceptPackageLaunch"
+        android:protectionLevel="system|signature" />
 
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->

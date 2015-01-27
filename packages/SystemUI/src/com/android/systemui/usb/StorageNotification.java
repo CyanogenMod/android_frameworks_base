@@ -28,16 +28,20 @@ import android.os.HandlerThread;
 import android.os.UserHandle;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.util.Log;
 
 import com.android.systemui.SystemUI;
+import com.android.internal.R;
 
 public class StorageNotification extends SystemUI {
     private static final String TAG = "StorageNotification";
     private static final boolean DEBUG = false;
 
     private static final boolean POP_UMS_ACTIVITY_ON_CONNECT = true;
+    public static final String KEY_UNMOUNT_USB = "key_unmount_usb";
+    public static final String HIGHLIGHT_PREF_KEY = "pref_key";
 
     /**
      * The notification that is shown when a USB mass storage host
@@ -122,9 +126,19 @@ public class StorageNotification extends SystemUI {
 
     private void onStorageStateChangedAsync(String path, String oldState, String newState) {
         boolean isPrimary = mStorageManager.getPrimaryVolume().getPath().equals(path);
+        boolean isUsbStorage = false;
+        final StorageVolume[] storageVolumes = mStorageManager.getVolumeList();
+        for (StorageVolume volume : storageVolumes) {
+            if (volume.getPath().equals(path)) {
+                if (volume.getDescriptionId() == R.string.storage_usb) {
+                    isUsbStorage = true;
+                }
+                break;
+            }
+        }
         if (DEBUG) Log.i(TAG, String.format(
-                "Media {%s} state changed from {%s} -> {%s} (primary = %b)", path, oldState,
-                newState, isPrimary));
+                "Media {%s} state changed from {%s} -> {%s} (primary = %b, usb storage = %b)",
+                path, oldState, newState, isPrimary, isUsbStorage));
         if (newState.equals(Environment.MEDIA_SHARED)) {
             /*
              * Storage is now shared. Modify the UMS notification
@@ -133,19 +147,20 @@ public class StorageNotification extends SystemUI {
             Intent intent = new Intent();
             intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
-            setUsbStorageNotification(
-                    com.android.internal.R.string.usb_storage_stop_notification_title,
-                    com.android.internal.R.string.usb_storage_stop_notification_message,
-                    com.android.internal.R.drawable.stat_sys_warning, false, true, pi);
+            setUsbStorageNotification(R.string.usb_storage_stop_notification_title,
+                    R.string.usb_storage_stop_notification_message,
+                    R.drawable.stat_sys_warning, false, true, pi);
         } else if (newState.equals(Environment.MEDIA_CHECKING)) {
             /*
              * Storage is now checking. Update media notification and disable
              * UMS notification.
              */
             setMediaStorageNotification(
-                    com.android.internal.R.string.ext_media_checking_notification_title,
-                    com.android.internal.R.string.ext_media_checking_notification_message,
-                    com.android.internal.R.drawable.stat_notify_sdcard_prepare, true, false, null);
+                    isUsbStorage ? R.string.usb_ext_media_checking_notification_title :
+                            R.string.sd_ext_media_checking_notification_title,
+                    isUsbStorage ? R.string.usb_ext_media_checking_notification_message :
+                            R.string.sd_ext_media_checking_notification_message,
+                    R.drawable.stat_notify_sdcard_prepare, true, false, null);
             updateUsbMassStorageNotification(false);
         } else if (newState.equals(Environment.MEDIA_MOUNTED)) {
             /*
@@ -154,6 +169,7 @@ public class StorageNotification extends SystemUI {
              */
             setMediaStorageNotification(0, 0, 0, false, false, null);
             updateUsbMassStorageNotification(mUmsAvailable);
+            maybeAddUsbUnmountNotification();
         } else if (newState.equals(Environment.MEDIA_UNMOUNTED)) {
             /*
              * Storage is now unmounted. We may have been unmounted
@@ -175,9 +191,13 @@ public class StorageNotification extends SystemUI {
                      */
                     if (Environment.isExternalStorageRemovable()) {
                         setMediaStorageNotification(
-                                com.android.internal.R.string.ext_media_safe_unmount_notification_title,
-                                com.android.internal.R.string.ext_media_safe_unmount_notification_message,
-                                com.android.internal.R.drawable.stat_notify_sdcard, true, true, null);
+                                isUsbStorage ?
+                                        R.string.usb_ext_media_safe_unmount_notification_title :
+                                        R.string.sd_ext_media_safe_unmount_notification_title,
+                                isUsbStorage ?
+                                        R.string.usb_ext_media_safe_unmount_notification_message :
+                                        R.string.sd_ext_media_safe_unmount_notification_message,
+                                R.drawable.stat_notify_sdcard, true, true, null);
                     } else {
                         // This device does not have removable storage, so
                         // don't tell the user they can remove it.
@@ -205,9 +225,11 @@ public class StorageNotification extends SystemUI {
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
 
             setMediaStorageNotification(
-                    com.android.internal.R.string.ext_media_nofs_notification_title,
-                    com.android.internal.R.string.ext_media_nofs_notification_message,
-                    com.android.internal.R.drawable.stat_notify_sdcard_usb, true, false, pi);
+                    isUsbStorage ? R.string.usb_ext_media_nofs_notification_title :
+                            R.string.sd_ext_media_nofs_notification_title,
+                    isUsbStorage ? R.string.usb_ext_media_nofs_notification_message :
+                            R.string.sd_ext_media_nofs_notification_message,
+                    R.drawable.stat_notify_sdcard_usb, true, false, pi);
             updateUsbMassStorageNotification(mUmsAvailable);
         } else if (newState.equals(Environment.MEDIA_UNMOUNTABLE)) {
             /*
@@ -221,9 +243,11 @@ public class StorageNotification extends SystemUI {
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
 
             setMediaStorageNotification(
-                    com.android.internal.R.string.ext_media_unmountable_notification_title,
-                    com.android.internal.R.string.ext_media_unmountable_notification_message,
-                    com.android.internal.R.drawable.stat_notify_sdcard_usb, true, false, pi);
+                    isUsbStorage ? R.string.usb_ext_media_unmountable_notification_title :
+                            R.string.sd_ext_media_unmountable_notification_title,
+                    isUsbStorage ? R.string.usb_ext_media_unmountable_notification_message :
+                            R.string.sd_ext_media_unmountable_notification_message,
+                    R.drawable.stat_notify_sdcard_usb, true, false, pi);
             updateUsbMassStorageNotification(mUmsAvailable);
         } else if (newState.equals(Environment.MEDIA_REMOVED)) {
             /*
@@ -231,9 +255,11 @@ public class StorageNotification extends SystemUI {
              * and disable UMS notification if the removed storage is the primary storage.
              */
             setMediaStorageNotification(
-                    com.android.internal.R.string.ext_media_nomedia_notification_title,
-                    com.android.internal.R.string.ext_media_nomedia_notification_message,
-                    com.android.internal.R.drawable.stat_notify_sdcard_usb,
+                    isUsbStorage ? R.string.usb_ext_media_nomedia_notification_title :
+                            R.string.sd_ext_media_nomedia_notification_title,
+                    isUsbStorage ? R.string.usb_ext_media_nomedia_notification_message :
+                            R.string.sd_ext_media_nomedia_notification_message,
+                    R.drawable.stat_notify_sdcard_usb,
                     true, !isPrimary, null);
             updateUsbMassStorageNotification(isPrimary ? false : mUmsAvailable);
         } else if (newState.equals(Environment.MEDIA_BAD_REMOVAL)) {
@@ -242,13 +268,39 @@ public class StorageNotification extends SystemUI {
              * and disable UMS notification if the removed storage is the primary storage.
              */
             setMediaStorageNotification(
-                    com.android.internal.R.string.ext_media_badremoval_notification_title,
-                    com.android.internal.R.string.ext_media_badremoval_notification_message,
-                    com.android.internal.R.drawable.stat_sys_warning,
+                    isUsbStorage ? R.string.usb_ext_media_badremoval_notification_title :
+                            R.string.sd_ext_media_badremoval_notification_title,
+                    isUsbStorage ? R.string.usb_ext_media_badremoval_notification_message :
+                            R.string.sd_ext_media_badremoval_notification_message,
+                    R.drawable.stat_sys_warning,
                     true, true, null);
             updateUsbMassStorageNotification(isPrimary ? false : mUmsAvailable);
         } else {
             Log.w(TAG, String.format("Ignoring unknown state {%s}", newState));
+        }
+    }
+
+    private void maybeAddUsbUnmountNotification() {
+        for (StorageVolume volume : mStorageManager.getVolumeList()) {
+            final String usbDiskDesc = Resources.getSystem().getString(
+                    Resources.getSystem().getIdentifier("storage_usb", "string", "android"));
+            final boolean isUsbStorage =  volume.getDescription(mContext).equals(usbDiskDesc);
+            final boolean mounted = volume.getState().equals(Environment.MEDIA_MOUNTED)
+                    || volume.getState().equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+            final boolean isRemovable = volume.isRemovable();
+
+            if (isRemovable && isUsbStorage && mounted) {
+                Intent intent = new Intent(Settings.ACTION_MEMORY_CARD_SETTINGS);
+                intent.putExtra(HIGHLIGHT_PREF_KEY, KEY_UNMOUNT_USB);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                setUsbStorageNotification(
+                        com.android.internal.R.string.usb_storage_stop_title,
+                        com.android.internal.R.string.usb_storage_notification_manage_message,
+                        com.android.internal.R.drawable.stat_sys_data_usb, false, true,
+                        PendingIntent.getActivity(mContext, 0, intent, 0));
+                return;
+            }
         }
     }
 
@@ -264,9 +316,9 @@ public class StorageNotification extends SystemUI {
 
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
             setUsbStorageNotification(
-                    com.android.internal.R.string.usb_storage_notification_title,
-                    com.android.internal.R.string.usb_storage_notification_message,
-                    com.android.internal.R.drawable.stat_sys_data_usb,
+                    R.string.usb_storage_notification_title,
+                    R.string.usb_storage_notification_message,
+                    R.drawable.stat_sys_data_usb,
                     false, true, pi);
         } else {
             setUsbStorageNotification(0, 0, 0, false, false, null);

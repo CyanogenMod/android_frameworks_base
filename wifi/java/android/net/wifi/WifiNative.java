@@ -279,7 +279,7 @@ public class WifiNative {
      * MASK=<N> see wpa_supplicant/src/common/wpa_ctrl.h for details
      */
     public String scanResults(int sid) {
-        return doStringCommandWithoutLogging("BSS RANGE=" + sid + "- MASK=0x21987");
+        return doStringCommandWithoutLogging("BSS RANGE=" + sid + "- MASK=0x21B87");
     }
 
     /**
@@ -1014,6 +1014,15 @@ public class WifiNative {
             }
         }
         return channels;
+    }
+
+    public boolean disable5GHzFrequencies(boolean disable) {
+        if (disable) {
+            return doBooleanCommand("P2P_SET disallow_freq 2485-6000");
+        } else {
+            //Empty set means,it will enable all frequences
+            return doBooleanCommand("P2P_SET disallow_freq \"\"");
+        }
     }
 
     public native static boolean setMode(int mode);

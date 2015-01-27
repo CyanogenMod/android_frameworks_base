@@ -67,6 +67,9 @@ public interface RILConstants {
     int SS_MODIFIED_TO_USSD = 24;             /* SS request modified to USSD */
     int SS_MODIFIED_TO_SS = 25;               /* SS request modified to different SS request */
     int SUBSCRIPTION_NOT_SUPPORTED = 26;      /* Subscription not supported */
+    int MISSING_RESOURCE = 27;
+    int NO_SUCH_ELEMENT = 28;
+    int INVALID_PARAMETER = 29;
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
@@ -292,6 +295,11 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_GET_DATA_CALL_PROFILE = 114;
     int RIL_REQUEST_SET_UICC_SUBSCRIPTION = 115;
     int RIL_REQUEST_SET_DATA_SUBSCRIPTION = 116;
+    int RIL_REQUEST_SIM_TRANSMIT_BASIC = 117;
+    int RIL_REQUEST_SIM_OPEN_CHANNEL = 118;
+    int RIL_REQUEST_SIM_CLOSE_CHANNEL = 119;
+    int RIL_REQUEST_SIM_TRANSMIT_CHANNEL = 120;
+    int RIL_REQUEST_SIM_GET_ATR = 121;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
@@ -332,9 +340,9 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_VOICE_RADIO_TECH_CHANGED = 1035;
     int RIL_UNSOL_CELL_INFO_LIST = 1036;
     int RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED = 1037;
-    int RIL_UNSOL_ON_SS = 1039;
-    int RIL_UNSOL_STK_CC_ALPHA_NOTIFY = 1040;
-    int RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED = 1041;
+    int RIL_UNSOL_ON_SS = 1038;
+    int RIL_UNSOL_STK_CC_ALPHA_NOTIFY = 1039;
+    int RIL_UNSOL_UICC_SUBSCRIPTION_STATUS_CHANGED = 1040;
 
     int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002; /* Samsung STK */
 }

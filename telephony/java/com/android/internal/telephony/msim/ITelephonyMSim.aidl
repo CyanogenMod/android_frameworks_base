@@ -343,8 +343,9 @@ interface ITelephonyMSim {
 
     /**
      * Returns the all observed cell information of the device.
+     * @param subscription user preferred subscription.
      */
-    List<CellInfo> getAllCellInfo();
+    List<CellInfo> getAllCellInfo(int subscription);
 
     /**
      * get default subscription
@@ -359,15 +360,67 @@ interface ITelephonyMSim {
     int getPreferredVoiceSubscription();
 
     /**
-     * get user prefered data subscription
+     * get current prefered data subscription
      * @return subscription id
      */
     int getPreferredDataSubscription();
 
+    /**
+     * get default prefered data subscription
+     * @return subscription id
+     */
+    int getDefaultDataSubscription();
+
     /*
-     * Set user prefered data subscription
+     * Set current prefered data subscription temporarily.
      * @return true if success
      */
     boolean setPreferredDataSubscription(int subscription);
+
+    /*
+     * Set prefered data subscription and updates default data subscription.
+     * @return true if success
+     */
+    boolean setDefaultDataSubscription(int subscription);
+
+    /**
+     * Returns the response APDU for a command APDU sent to a logical channel
+     */
+    String transmitIccLogicalChannel(int cla, int command, int channel, int p1, int p2, int p3,
+            String data, int subscription);
+
+    /**
+     * Returns the response APDU for a command APDU sent to the basic channel
+     */
+    String transmitIccBasicChannel(int cla, int command, int p1, int p2, int p3, String data,
+            int subscription);
+
+    /**
+     * Returns the channel id of the logical channel,
+     * Returns 0 on error.
+     */
+    int openIccLogicalChannel(String aid, int subscription);
+
+    /**
+     * Return true if logical channel was closed successfully
+     */
+    boolean closeIccLogicalChannel(int channel, int subscription);
+
+    /**
+     * Returns the error code of the last error occurred.
+     * Currently only used for openIccLogicalChannel
+     */
+    int getLastError(int subscription);
+
+    /**
+     * Returns the response APDU for a command APDU sent through SIM_IO
+     */
+    byte[] transmitIccSimIO(int fileID, int command, int p1, int p2, int p3, String filePath,
+            int subscription);
+
+    /**
+     * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
+     */
+    byte[] getATR(int subscription);
 }
 

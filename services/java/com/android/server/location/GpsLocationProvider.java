@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.database.ContentObserver;
 import android.hardware.location.GeofenceHardware;
 import android.hardware.location.GeofenceHardwareImpl;
 import android.location.Criteria;
@@ -133,7 +134,6 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private static final int LOCATION_HAS_ACCURACY = 16;
 
 // IMPORTANT - the GPS_DELETE_* symbols here must match constants in gps.h
-// and gps_extended_c.h
     private static final int GPS_DELETE_EPHEMERIS = 0x00000001;
     private static final int GPS_DELETE_ALMANAC = 0x00000002;
     private static final int GPS_DELETE_POSITION = 0x00000004;
@@ -148,19 +148,19 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private static final int GPS_DELETE_CELLDB_INFO = 0x00000800;
     private static final int GPS_DELETE_ALMANAC_CORR = 0x00001000;
     private static final int GPS_DELETE_FREQ_BIAS_EST = 0x00002000;
-    private static final int GPS_DELETE_EPHEMERIS_GLO = 0x00004000;
-    private static final int GPS_DELETE_ALMANAC_GLO = 0x00008000;
-    private static final int GPS_DELETE_SVDIR_GLO = 0x00010000;
-    private static final int GPS_DELETE_SVSTEER_GLO = 0x00020000;
-    private static final int GPS_DELETE_ALMANAC_CORR_GLO = 0x00040000;
+    private static final int GLO_DELETE_EPHEMERIS = 0x00004000;
+    private static final int GLO_DELETE_ALMANAC = 0x00008000;
+    private static final int GLO_DELETE_SVDIR = 0x00010000;
+    private static final int GLO_DELETE_SVSTEER = 0x00020000;
+    private static final int GLO_DELETE_ALMANAC_CORR = 0x00040000;
     private static final int GPS_DELETE_TIME_GPS = 0x00080000;
-    private static final int GPS_DELETE_TIME_GLO = 0x00100000;
-    private static final int GPS_DELETE_SVDIR_BDS =  0X00200000;
-    private static final int GPS_DELETE_SVSTEER_BDS = 0X00400000;
-    private static final int GPS_DELETE_TIME_BDS = 0X00800000;
-    private static final int GPS_DELETE_ALMANAC_CORR_BDS = 0X01000000;
-    private static final int GPS_DELETE_EPHEMERIS_BDS = 0X02000000;
-    private static final int GPS_DELETE_ALMANAC_BDS = 0X04000000;
+    private static final int GLO_DELETE_TIME = 0x00100000;
+    private static final int BDS_DELETE_SVDIR =  0X00200000;
+    private static final int BDS_DELETE_SVSTEER = 0X00400000;
+    private static final int BDS_DELETE_TIME = 0X00800000;
+    private static final int BDS_DELETE_ALMANAC_CORR = 0X01000000;
+    private static final int BDS_DELETE_EPHEMERIS = 0X02000000;
+    private static final int BDS_DELETE_ALMANAC = 0X04000000;
     private static final int GPS_DELETE_ALL = 0xFFFFFFFF;
 
     // The GPS_CAPABILITY_* flags must match the values in gps.h
@@ -332,6 +332,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private int mAGpsDataConnectionIpAddr;
     private final ConnectivityManager mConnMgr;
     private final GpsNetInitiatedHandler mNIHandler;
+
+    private String mDefaultApn;
 
     // Wakelocks
     private final static String WAKELOCK_KEY = "GpsLocationProvider";
@@ -568,6 +570,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
         intentFilter.addAction(ALARM_TIMEOUT);
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         mContext.registerReceiver(mBroadcastReciever, intentFilter, null, mHandler);
+        Uri uri = Uri.parse("content://telephony/carriers/preferapn");
+        mContext.getContentResolver().registerContentObserver(
+                uri, false, mDefaultApnObserver);
     }
 
     /**
@@ -599,14 +604,13 @@ public class GpsLocationProvider implements LocationProviderInterface {
             boolean dataEnabled = Settings.Global.getInt(mContext.getContentResolver(),
                                                          Settings.Global.MOBILE_DATA, 1) == 1;
             boolean networkAvailable = info.isAvailable() && dataEnabled;
-            String defaultApn = getSelectedApn();
-            if (defaultApn == null) {
-                defaultApn = "dummy-apn";
-            }
 
+            if (mDefaultApn == null) {
+                mDefaultApn = getDefaultApn();
+            }
             native_update_network_state(info.isConnected(), info.getType(),
                                         info.isRoaming(), networkAvailable,
-                                        info.getExtraInfo(), defaultApn);
+                                        info.getExtraInfo(), mDefaultApn);
         }
 
         if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE_SUPL
@@ -1032,6 +1036,21 @@ public class GpsLocationProvider implements LocationProviderInterface {
             if (extras.getBoolean("sadata")) flags |= GPS_DELETE_SADATA;
             if (extras.getBoolean("rti")) flags |= GPS_DELETE_RTI;
             if (extras.getBoolean("celldb-info")) flags |= GPS_DELETE_CELLDB_INFO;
+            if (extras.getBoolean("almanac-corr")) flags |= GPS_DELETE_ALMANAC_CORR;
+            if (extras.getBoolean("freq-bias-est")) flags |= GPS_DELETE_FREQ_BIAS_EST;
+            if (extras.getBoolean("ephemeris-GLO")) flags |= GLO_DELETE_EPHEMERIS;
+            if (extras.getBoolean("almanac-GLO")) flags |= GLO_DELETE_ALMANAC;
+            if (extras.getBoolean("svdir-GLO")) flags |= GLO_DELETE_SVDIR;
+            if (extras.getBoolean("svsteer-GLO")) flags |= GLO_DELETE_SVSTEER;
+            if (extras.getBoolean("almanac-corr-GLO")) flags |= GLO_DELETE_ALMANAC_CORR;
+            if (extras.getBoolean("time-gps")) flags |= GPS_DELETE_TIME_GPS;
+            if (extras.getBoolean("time-GLO")) flags |= GLO_DELETE_TIME;
+            if (extras.getBoolean("ephemeris-BDS")) flags |= BDS_DELETE_EPHEMERIS;
+            if (extras.getBoolean("almanac-BDS")) flags |= BDS_DELETE_ALMANAC;
+            if (extras.getBoolean("svdir-BDS")) flags |= BDS_DELETE_SVDIR;
+            if (extras.getBoolean("svsteer-BDS")) flags |= BDS_DELETE_SVSTEER;
+            if (extras.getBoolean("almanac-corr-BDS")) flags |= BDS_DELETE_ALMANAC_CORR;
+            if (extras.getBoolean("time-BDS")) flags |= BDS_DELETE_TIME;
             if (extras.getBoolean("all")) flags |= GPS_DELETE_ALL;
         }
 
@@ -1819,6 +1838,14 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
     };
 
+    ContentObserver mDefaultApnObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            mDefaultApn = getDefaultApn();
+            if (DEBUG) Log.d(TAG, "Observer mDefaultApn=" + mDefaultApn);
+        }
+    };
+
     private final class NetworkLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
@@ -1835,7 +1862,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         public void onProviderDisabled(String provider) { }
     }
 
-    private String getSelectedApn() {
+    private String getDefaultApn() {
         Uri uri = Uri.parse("content://telephony/carriers/preferapn");
         String apn = null;
 
@@ -1851,6 +1878,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 cursor.close();
             }
         }
+
+        if (apn == null) {
+            apn = "dummy-apn";
+        }
+
         return apn;
     }
 

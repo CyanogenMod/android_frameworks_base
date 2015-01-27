@@ -21,8 +21,8 @@
     <integer name="def_screen_off_timeout">60000</integer>
     <bool name="def_airplane_mode_on">false</bool>
     <!-- Comma-separated list of bluetooth, wifi, and cell. -->
-    <string name="def_airplane_mode_radios" translatable="false">cell,bluetooth,wifi,nfc,wimax</string>
-    <string name="airplane_mode_toggleable_radios" translatable="false">bluetooth,wifi,nfc</string>
+    <string name="def_airplane_mode_radios" translatable="false">cell,bluetooth,wifi,nfc,wimax,ant</string>
+    <string name="airplane_mode_toggleable_radios" translatable="false">bluetooth,wifi,nfc,ant</string>
     <bool name="def_auto_time">true</bool>
     <bool name="def_auto_time_zone">true</bool>
     <bool name="def_accelerometer_rotation">true</bool>
@@ -31,6 +31,7 @@
     <bool name="def_screen_brightness_automatic_mode">false</bool>
     <fraction name="def_window_animation_scale">100%</fraction>
     <fraction name="def_window_transition_scale">100%</fraction>
+    <fraction name="def_animator_duration_scale">100%</fraction>
     <bool name="def_haptic_feedback">true</bool>
 
     <bool name="def_bluetooth_on">false</bool>
@@ -184,6 +185,9 @@
     <!-- Default for Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED -->
     <integer name="def_wifi_suspend_optimizations_enabled">1</integer>
 
+    <!-- Default for Settings.Global.SEND_ACTION_APP_ERROR -->
+    <integer name="def_send_action_app_error">0</integer>
+
     <!-- Default for Settings.System.STATUS_BAR_BATTERY -->
     <integer name="def_battery_style">0</integer>
     <!-- Default for Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT -->
@@ -199,12 +203,46 @@
     <integer name="def_qs_quick_pulldown">0</integer>
 
     <!-- Defaults for Settings.System.LOCKSCREEN_TARGETS. -->
-    <string name="def_lockscreen_targets" translatable="false"></string>
-    <string name="def_lockscreen_targets_no_telephony" translatable="false"></string>
+    <string name="def_lockscreen_targets" translatable="false">#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.mms/.ui.ConversationList;S.icon_resource=ic_lockscreen_sms_normal;end|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.andrew.apollo/.ui.activities.HomeActivity;S.icon_resource=ic_lockscreen_music_normal;end|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.dialer/.DialtactsActivity;S.icon_resource=ic_lockscreen_phone_normal;end|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.browser/.BrowserActivity;S.icon_resource=ic_lockscreen_browser_normal;end</string>
+    <string name="def_lockscreen_targets_no_telephony" translatable="false">empty|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.android.browser/.BrowserActivity;S.icon_resource=ic_lockscreen_browser_normal;end|empty|#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;component=com.andrew.apollo/.ui.activities.HomeActivity;S.icon_resource=ic_lockscreen_music_normal;end</string>
 
     <!-- Defaults for Settings.System.DEV_FORCE_SHOW_NAVBAR. -->
     <integer name="def_force_disable_navkeys">0</integer>
 
     <!-- Default value of Settings.System.NOISE_SUPPRESSION -->
     <bool name="def_noise_suppression">false</bool>
+
+    <!-- Default value of Settings.System.SCREEN_ANIMATION_STYLE -->
+    <integer name="def_screen_animation_style">0</integer>
+
+
+    <!-- Default theme -->
+    <string name="def_theme_package"></string>
+    <string name="def_theme_components"></string>
+
+    <!-- Default value of Settings.System.DOUBLE_TAP_SLEEP_GESTURE -->
+    <integer name="def_double_tap_sleep_gesture">1</integer>
+
+    <!-- Default value of Settings.System.QUICK_SETTINGS_RIBBON_TILES -->
+    <string name="def_quick_settings_ribbon_tiles"></string>
+
+    <!-- Default DnD values of Settings.System.HEADS_UP_NOTIFICATION -->
+    <string name="def_heads_up_notification_dnd_values"></string>
+
+    <!-- Default Blacklist values of Settings.System.HEADS_UP_NOTIFICATION -->
+    <string name="def_heads_up_notification_blacklist_values"></string>
+
+    <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
+    <string-array name="def_protected_sms_list_values"></string-array>
+
+    <!-- Default value of Settings.System.ENABLE_PEOPLE_LOOKUP -->
+    <integer name="def_people_lookup">1</integer>
+
+    <integer name="def_volume_music">-1</integer>
+    <integer name="def_volume_ring">-1</integer>
+    <integer name="def_volume_system">-1</integer>
+    <integer name="def_volume_voice">-1</integer>
+    <integer name="def_volume_alarm">-1</integer>
+    <integer name="def_volume_notification">-1</integer>
+    <integer name="def_volume_btsco">-1</integer>
 </resources>

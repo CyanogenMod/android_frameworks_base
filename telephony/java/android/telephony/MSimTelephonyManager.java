@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.android.internal.telephony.msim.ITelephonyMSim;
@@ -35,6 +36,9 @@ import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyProperties;
 
 import java.util.List;
+
+import static android.telephony.TelephonyManager.SIM_STATE_ABSENT;
+import static android.telephony.TelephonyManager.SIM_STATE_READY;
 
 /**
  * Provides access to information about the telephony services on
@@ -937,9 +941,9 @@ public class MSimTelephonyManager {
      *
      * @hide pending API review
      */
-    public List<CellInfo> getAllCellInfo() {
+    public List<CellInfo> getAllCellInfo(int subscription) {
         try {
-            return getITelephonyMSim().getAllCellInfo();
+            return getITelephonyMSim().getAllCellInfo(subscription);
         } catch (RemoteException ex) {
             return null;
         } catch (NullPointerException ex) {
@@ -956,6 +960,10 @@ public class MSimTelephonyManager {
         String propVal = "";
         String p[] = null;
         String prop = SystemProperties.get(property);
+
+        if (value == null) {
+            value = "";
+        }
 
         if (prop != null) {
             p = prop.split(",");
@@ -1026,11 +1034,41 @@ public class MSimTelephonyManager {
     }
 
     /**
+     * Returns the default preferred data subscription value.
+     */
+    public int getDefaultDataSubscription() {
+        try {
+            return getITelephonyMSim().getDefaultDataSubscription();
+        } catch (RemoteException ex) {
+            return MSimConstants.DEFAULT_SUBSCRIPTION;
+        } catch (NullPointerException ex) {
+            return MSimConstants.DEFAULT_SUBSCRIPTION;
+        }
+    }
+
+    /**
      * Sets the designated data subscription.
+     * This API may be used by apps which needs to switch the DDS temporarily
+     * like MMS app. Default data subscription setting will not be updated by
+     * this API.
      */
     public boolean setPreferredDataSubscription(int subscription) {
         try {
             return getITelephonyMSim().setPreferredDataSubscription(subscription);
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Sets the designated data subscription and updates the default data
+     * subscription setting.
+     */
+    public boolean setDefaultDataSubscription(int subscription) {
+        try {
+            return getITelephonyMSim().setDefaultDataSubscription(subscription);
         } catch (RemoteException ex) {
             return false;
         } catch (NullPointerException ex) {
@@ -1131,5 +1169,32 @@ public class MSimTelephonyManager {
             }
         }
         return android.provider.Settings.Global.putString(cr, name, data);
+    }
+
+    /**
+     * Helper method to retrieve a custom SIM name if a user has set one.
+     * Handles logic to fall back to operator name if no custom name has been set for the SIM,
+     *
+     * @param context
+     * @param subscription SIM subscription ID
+     * @return returns the formatted SIM name ready to display to the user.
+     * @hide
+     */
+    public static String getFormattedSimName(Context context, int subscription) {
+        String label = Settings.Global.getSimNameForSubscription(context, subscription, null);
+        if (TextUtils.isEmpty(label)) {
+            MSimTelephonyManager tm = MSimTelephonyManager.from(context);
+            String operatorName = tm.getSimOperatorName(subscription);
+            if (tm.getSimState(subscription) == SIM_STATE_ABSENT
+                    || tm.getSimState(subscription) != SIM_STATE_READY
+                    || TextUtils.isEmpty(operatorName)) {
+                label = context.getString(com.android.internal.R.string.multi_sim_entry_format_no_carrier, subscription + 1);
+            } else {
+                label = context.getString(com.android.internal.R.string.multi_sim_entry_format, operatorName, subscription + 1);
+            }
+        } else {
+            label = context.getString(com.android.internal.R.string.multi_sim_entry_format, label, subscription + 1);
+        }
+        return label;
     }
 }

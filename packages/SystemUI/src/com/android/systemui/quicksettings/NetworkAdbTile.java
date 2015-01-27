@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013-2014 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.quicksettings;
 
 import android.content.ContentResolver;
@@ -6,13 +22,9 @@ import android.net.NetworkUtils;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.RemoteException;
-import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
@@ -20,20 +32,18 @@ import com.android.systemui.statusbar.phone.QuickSettingsController;
 import java.net.InetAddress;
 
 public class NetworkAdbTile extends QuickSettingsTile {
-    private static final String TAG = "NetworkAdbTile";
-
     public NetworkAdbTile(Context context, QuickSettingsController qsc) {
         super(context, qsc);
 
-        mOnClick = new OnClickListener() {
+        mOnClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Settings.Secure.putInt(mContext.getContentResolver(),
-                        Settings.Secure.ADB_PORT, !getEnabled() ? 5555 : -1);
+                Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.ADB_PORT, isEnabled() ? -1 : 5555,
+                        UserHandle.USER_CURRENT);
             }
         };
-
-        mOnLongClick = new OnLongClickListener() {
+        mOnLongClick = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 startSettingsActivity(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
@@ -56,9 +66,9 @@ public class NetworkAdbTile extends QuickSettingsTile {
         updateResources();
     }
 
-    private synchronized void updateTile() {
-        if (getEnabled()) {
-            WifiManager wifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+    private void updateTile() {
+        if (isEnabled()) {
+            WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 
             if (wifiInfo != null) {
@@ -77,8 +87,8 @@ public class NetworkAdbTile extends QuickSettingsTile {
         }
     }
 
-    private boolean getEnabled() {
-        return Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.ADB_PORT, 0) > 0;
+    private boolean isEnabled() {
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.ADB_PORT, 0, UserHandle.USER_CURRENT) > 0;
     }
 }

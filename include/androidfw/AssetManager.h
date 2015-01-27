@@ -104,6 +104,8 @@ public:
     bool addOverlayPath(const String8& path, void** cookie, const String8& resArscPath,
                  const String8& resApkPath, const String8& targetPkgPath, const String8& prefixPath);
     bool addIconPath(const String8& path, void** cookie, const String8& resArscPath,
+                 const String8& resApkPath, const String8& prefixPath, uint32_t pkgIdOverride);
+    bool addCommonOverlayPath(const String8& path, void** cookie, const String8& resArscPath,
                  const String8& resApkPath, const String8& prefixPath);
     bool removeOverlayPath(const String8& path, void* cookie);
 
@@ -241,6 +243,8 @@ public:
         Vector<String8>& targets, Vector<String8>& overlays,
         uint32_t** outData, size_t* outSize);
 
+    String8 getBasePackageName(int index);
+
 private:
     struct asset_path
     {
@@ -250,6 +254,8 @@ private:
         String8 prefixPath;
         String8 resfilePath;
         String8 resApkPath;
+        uint32_t pkgIdOverride;
+        asset_path() : pkgIdOverride(0) {}
     };
 
     bool updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
@@ -388,6 +394,9 @@ private:
 
     mutable ResTable* mResources;
     ResTable_config* mConfig;
+
+    String8 mBasePackageName;
+    int32_t mBasePackageIndex;
 
     /*
      * Cached data for "loose" files.  This lets us avoid poking at the

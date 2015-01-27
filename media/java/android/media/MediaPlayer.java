@@ -2192,6 +2192,7 @@ public class MediaPlayer implements SubtitleController.Listener
                 Log.w(TAG, "mediaplayer went away with unhandled events");
                 return;
             }
+            try {
             switch(msg.what) {
             case MEDIA_PREPARED:
                 scanInternalSubtitleTracks();
@@ -2306,6 +2307,13 @@ public class MediaPlayer implements SubtitleController.Listener
             default:
                 Log.e(TAG, "Unknown message type " + msg.what);
                 return;
+            }
+            } catch (NullPointerException e) {
+                /**
+                 * We may get an NPE even with the null checks above due
+                 * to threading issues.  Just ignore it.
+                 */
+                Log.e(TAG, "Unhandled NPE from message type " + msg.what);
             }
         }
     }
@@ -3144,7 +3152,7 @@ public class MediaPlayer implements SubtitleController.Listener
                 if (refreshTime ||
                         nanoTime >= mLastNanoTime + MAX_NS_WITHOUT_POSITION_CHECK) {
                     try {
-                        mLastTimeUs = mPlayer.getCurrentPosition() * 1000;
+                        mLastTimeUs = mPlayer.getCurrentPosition() * 1000L;
                         mPaused = !mPlayer.isPlaying();
                         if (DEBUG) Log.v(TAG, (mPaused ? "paused" : "playing") + " at " + mLastTimeUs);
                     } catch (IllegalStateException e) {

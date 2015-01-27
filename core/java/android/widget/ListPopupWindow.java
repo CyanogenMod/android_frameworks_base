@@ -1,5 +1,9 @@
 /*
  * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
+ * Not a Contribution. Apache license notifications and license are retained
+ * for attribution purposes only.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -747,6 +751,14 @@ public class ListPopupWindow {
         if (isShowing()) {
             if (mItemClickListener != null) {
                 final DropDownListView list = mDropDownList;
+
+                // Sometimes the perform item is not visible in ListView then
+                // 'list.getChildAt' method will return null. So we should call
+                // 'list.setSelectionInt' method to make sure the item is
+                // visible.
+                if (list.getLastVisiblePosition() < position) {
+                    list.setSelectionInt(position);
+                }
                 final View child = list.getChildAt(position - list.getFirstVisiblePosition());
                 final ListAdapter adapter = list.getAdapter();
                 mItemClickListener.onItemClick(list, child, position, adapter.getItemId(position));

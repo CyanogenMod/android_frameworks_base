@@ -19,16 +19,71 @@
 */
 -->
 
-
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/subs_label"
-    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
     android:layout_height="@dimen/carrier_label_height"
     android:layout_width="match_parent"
     android:layout_marginBottom="@dimen/close_handle_height"
     android:layout_gravity="bottom"
-    android:gravity="center"
-    android:visibility="invisible"
-    />
+    android:orientation="horizontal"
+    android:visibility="gone">
+    <TextView
+        android:id="@+id/sub1_label"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="0px"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:singleLine="true"
+        android:ellipsize="end"
+        />
 
+    <TextView
+        android:id="@+id/sub1_separator"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:text="@string/status_bar_sim_slot_separator"
+        />
+
+    <TextView
+        android:id="@+id/sub2_label"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="0px"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:singleLine="true"
+        android:ellipsize="end"
+        />
+
+    <TextView
+        android:id="@+id/sub2_separator"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:text="@string/status_bar_sim_slot_separator"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/sub3_label"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="0px"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:visibility="gone"
+        />
+</LinearLayout>

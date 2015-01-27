@@ -184,9 +184,19 @@ public class CamcorderProfile
      */
     public static final int QUALITY_TIME_LAPSE_WQVGA = 1011;
 
+    /** @hide
+     * Time lapse quality level corresponding to the 4k UHD resolution.
+     */
+    public static final int QUALITY_TIME_LAPSE_4kUHD = 1012;
+
+    /** @hide
+     * Time lapse quality level corresponding to the 4k DCI resolution.
+     */
+    public static final int QUALITY_TIME_LAPSE_4kDCI = 1013;
+
     // Start and end of timelapse quality list
     private static final int QUALITY_TIME_LAPSE_LIST_START = QUALITY_TIME_LAPSE_LOW;
-    private static final int QUALITY_TIME_LAPSE_LIST_END = QUALITY_TIME_LAPSE_WQVGA;
+    private static final int QUALITY_TIME_LAPSE_LIST_END = QUALITY_TIME_LAPSE_4kDCI;
 
     /**
      * Default recording duration in seconds before the session is terminated.

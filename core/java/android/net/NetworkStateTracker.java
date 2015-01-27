@@ -131,6 +131,30 @@ public interface NetworkStateTracker {
     public String getTcpBufferSizesPropName();
 
     /**
+     * Return the system properties name associated with the tcp delayed ack settings
+     * for this network.
+     */
+    public String getTcpDelayedAckPropName();
+
+    /**
+     * Return the system properties name associated with the tcp user config flag
+     * for this network.
+     */
+    public String getTcpUserConfigPropName();
+
+    /**
+      * Return the default system properties name associated with the tcp delayed ack settings
+      * for this network.
+      */
+    public String getDefaultTcpDelayedAckPropName();
+
+    /**
+     * Return the default system properties name associated with the tcp user config flag
+     * for this network.
+     */
+    public String getDefaultTcpUserConfigPropName();
+
+    /**
      * Disable connectivity to a network
      * @return {@code true} if a teardown occurred, {@code false} if the
      * teardown did not occur.

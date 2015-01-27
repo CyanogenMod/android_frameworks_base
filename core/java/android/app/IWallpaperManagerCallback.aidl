@@ -28,4 +28,9 @@ oneway interface IWallpaperManagerCallback {
      * Called when the wallpaper has changed
      */
     void onWallpaperChanged();
+
+    /**
+     * Called when the keygaurd wallpaper has changed
+     */
+     void onKeyguardWallpaperChanged();
 }

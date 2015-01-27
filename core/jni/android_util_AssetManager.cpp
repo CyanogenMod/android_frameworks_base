@@ -509,8 +509,9 @@ static jint android_content_AssetManager_addAssetPath(JNIEnv* env, jobject clazz
 }
 
 static jint android_content_AssetManager_addIconPath(JNIEnv* env, jobject clazz,
-                                                     jstring packagePath, jstring resArscPath, jstring resApkPath,
-                                                     jstring prefixPath)
+                                                     jstring packagePath, jstring resArscPath,
+                                                     jstring resApkPath, jstring prefixPath,
+                                                     jint pkgIdOverride)
 {
     ScopedUtfChars packagePath8(env, packagePath);
     if (packagePath8.c_str() == NULL) {
@@ -538,15 +539,55 @@ static jint android_content_AssetManager_addIconPath(JNIEnv* env, jobject clazz,
     }
 
     void* cookie;
-    bool res = am->addIconPath(String8(packagePath8.c_str()), &cookie, String8(resArscPath8.c_str()),
-            String8(resApkPath8.c_str()), String8(prefixPath8.c_str()));
+    bool res = am->addIconPath(String8(packagePath8.c_str()), &cookie,
+                               String8(resArscPath8.c_str()),
+                               String8(resApkPath8.c_str()),
+                               String8(prefixPath8.c_str()), pkgIdOverride);
+
+    return (res) ? (jint)cookie : 0;
+}
+
+static jint android_content_AssetManager_addCommonOverlayPath(JNIEnv* env, jobject clazz,
+                                                     jstring packagePath, jstring resArscPath,
+                                                     jstring resApkPath, jstring prefixPath)
+{
+    ScopedUtfChars packagePath8(env, packagePath);
+    if (packagePath8.c_str() == NULL) {
+        return 0;
+    }
+
+    ScopedUtfChars resArscPath8(env, resArscPath);
+    if (resArscPath8.c_str() == NULL) {
+        return 0;
+    }
+
+    ScopedUtfChars resApkPath8(env, resApkPath);
+    if (resApkPath8.c_str() == NULL) {
+        return 0;
+    }
+
+    ScopedUtfChars prefixPath8(env, prefixPath);
+    if (prefixPath8.c_str() == NULL) {
+        return 0;
+    }
+
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return 0;
+    }
+
+    void* cookie;
+    bool res = am->addCommonOverlayPath(String8(packagePath8.c_str()), &cookie,
+            String8(resArscPath8.c_str()), String8(resApkPath8.c_str()),
+            String8(prefixPath8.c_str()));
 
     return (res) ? (jint)cookie : 0;
 }
 
 static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject clazz,
-                                                     jstring packagePath, jstring resArscPath, jstring resApkPath,
-                                                     jstring targetPkgPath, jstring prefixPath)
+                                                     jstring packagePath, jstring resArscPath,
+                                                     jstring resApkPath, jstring targetPkgPath,
+                                                     jstring prefixPath)
 {
     ScopedUtfChars packagePath8(env, packagePath);
     if (packagePath8.c_str() == NULL) {
@@ -579,8 +620,9 @@ static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject cla
     }
 
     void* cookie;
-    bool res = am->addOverlayPath(String8(packagePath8.c_str()), &cookie, String8(resArscPath8.c_str()),
-            String8(resApkPath8.c_str()), String8(targetPkgPath8.c_str()), String8(prefixPath8.c_str()));
+    bool res = am->addOverlayPath(String8(packagePath8.c_str()), &cookie,
+            String8(resArscPath8.c_str()), String8(resApkPath8.c_str()),
+            String8(targetPkgPath8.c_str()), String8(prefixPath8.c_str()));
 
     return (res) ? (jint)cookie : 0;
 }
@@ -1232,7 +1274,7 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
             if (newBlock >= 0) {
                 DEBUG_STYLES(LOGI("-> From theme: type=0x%x, data=0x%08x",
                         value.dataType, value.data));
-                newBlock = res.resolveReference(&value, block, &resid,
+                newBlock = res.resolveReference(&value, newBlock, &resid,
                         &typeSetFlags, &config);
 #if THROW_ON_BAD_ID
                 if (newBlock == BAD_INDEX) {
@@ -1798,6 +1840,18 @@ static jstring android_content_AssetManager_getBasePackageName(JNIEnv* env, jobj
         return JNI_FALSE;
     }
 
+    String16 packageName(am->getBasePackageName(index));
+    return env->NewString((const jchar*)packageName.string(), packageName.size());
+}
+
+static jstring android_content_AssetManager_getBaseResourcePackageName(JNIEnv* env, jobject clazz,
+                                                                       jint index)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
     String16 packageName(am->getResources().getBasePackageName(index));
     return env->NewString((const jchar*)packageName.string(), packageName.size());
 }
@@ -1851,10 +1905,14 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getBasePackageCount },
     { "getBasePackageName", "(I)Ljava/lang/String;",
         (void*) android_content_AssetManager_getBasePackageName },
+    { "getBaseResourcePackageName", "(I)Ljava/lang/String;",
+        (void*) android_content_AssetManager_getBaseResourcePackageName },
     { "getBasePackageId", "(I)I",
         (void*) android_content_AssetManager_getBasePackageId },
-    { "addIconPath",   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I",
+    { "addIconPath",   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)I",
         (void*) android_content_AssetManager_addIconPath },
+    { "addCommonOverlayPath",   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I",
+        (void*) android_content_AssetManager_addCommonOverlayPath },
     { "removeOverlayPath",   "(Ljava/lang/String;I)Z",
         (void*) android_content_AssetManager_removeOverlayPath },
     { "isUpToDate",     "()Z",

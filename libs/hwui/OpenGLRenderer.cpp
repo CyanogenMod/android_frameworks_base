@@ -294,21 +294,34 @@ void OpenGLRenderer::syncState() {
     }
 }
 
-void OpenGLRenderer::startTiling(const sp<Snapshot>& s, bool opaque) {
+void OpenGLRenderer::startTiling(const sp<Snapshot>& s, bool opaque, bool expand) {
     if (!mSuppressTiling) {
         Rect* clip = &mTilingClip;
         if (s->flags & Snapshot::kFlagFboTarget) {
             clip = &(s->layer->clipRect);
         }
 
-        startTiling(*clip, s->height, opaque);
+        startTiling(*clip, s->height, opaque, expand);
     }
 }
 
-void OpenGLRenderer::startTiling(const Rect& clip, int windowHeight, bool opaque) {
+void OpenGLRenderer::startTiling(const Rect& clip, int windowHeight, bool opaque, bool expand) {
     if (!mSuppressTiling) {
-        mCaches.startTiling(clip.left, windowHeight - clip.bottom,
+        if(expand) {
+            // Expand the startTiling region by 1
+            int leftNotZero = (clip.left > 0) ? 1 : 0;
+            int topNotZero = (windowHeight - clip.bottom > 0) ? 1 : 0;
+
+            mCaches.startTiling(
+                clip.left - leftNotZero,
+                windowHeight - clip.bottom - topNotZero,
+                clip.right - clip.left + leftNotZero + 1,
+                clip.bottom - clip.top + topNotZero + 1,
+                opaque);
+        } else {
+            mCaches.startTiling(clip.left, windowHeight - clip.bottom,
                 clip.right - clip.left, clip.bottom - clip.top, opaque);
+        }
     }
 }
 
@@ -399,6 +412,8 @@ void OpenGLRenderer::resume() {
     glEnable(GL_BLEND);
     glBlendFunc(mCaches.lastSrcMode, mCaches.lastDstMode);
     glBlendEquation(GL_FUNC_ADD);
+
+    glStencilMask(0xff);
 }
 
 void OpenGLRenderer::resumeAfterLayer() {
@@ -1014,7 +1029,8 @@ bool OpenGLRenderer::createFboLayer(Layer* layer, Rect& bounds, Rect& clip, GLui
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
             layer->getTexture(), 0);
 
-    startTiling(mSnapshot, true);
+    // Expand the startTiling region by 1
+    startTiling(mSnapshot, true, true);
 
     // Clear the FBO, expand the clear region by 1 to get nice bilinear filtering
     mCaches.enableScissor();
@@ -1046,7 +1062,12 @@ void OpenGLRenderer::composeLayer(sp<Snapshot> current, sp<Snapshot> previous) {
 
     bool clipRequired = false;
     quickRejectNoScissor(rect, &clipRequired); // safely ignore return, should never be rejected
+#ifdef QCOM_HARDWARE
+    //Always enabling the scissor
+    mCaches.setScissorEnabled(true);
+#else
     mCaches.setScissorEnabled(mScissorOptimizationDisabled || clipRequired);
+#endif
 
     if (fboLayer) {
         endTiling();
@@ -2072,7 +2093,9 @@ status_t OpenGLRenderer::drawDisplayList(DisplayList* displayList, Rect& dirty,
         return status | deferredList.flush(*this, dirty);
     }
 
-    return DrawGlInfo::kStatusDone;
+    // Even if there is no drawing command(Ex: invisible),
+    // it still needs startFrame to clear buffer and start tiling.
+    return startFrame();
 }
 
 void OpenGLRenderer::outputDisplayList(DisplayList* displayList) {
@@ -2234,14 +2257,16 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     float right = FLT_MIN;
     float bottom = FLT_MIN;
 
-    const uint32_t count = meshWidth * meshHeight * 6;
+    uint32_t vertexCountWidth = meshWidth + 1;
+    uint32_t vertexCountHeight = meshHeight + 1;
+    uint32_t vertexCount = vertexCountWidth * vertexCountHeight;
 
-    ColorTextureVertex mesh[count];
+    ColorTextureVertex mesh[vertexCount];
     ColorTextureVertex* vertex = mesh;
 
     bool cleanupColors = false;
     if (!colors) {
-        uint32_t colorsCount = (meshWidth + 1) * (meshHeight + 1);
+        uint32_t colorsCount = vertexCountWidth * vertexCountHeight;
         colors = new int[colorsCount];
         memset(colors, 0xff, colorsCount * sizeof(int));
         cleanupColors = true;
@@ -2251,39 +2276,54 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     Texture* texture = mCaches.assetAtlas.getEntryTexture(bitmap);
     const UvMapper& mapper(getMapper(texture));
 
-    for (int32_t y = 0; y < meshHeight; y++) {
-        for (int32_t x = 0; x < meshWidth; x++) {
-            uint32_t i = (y * (meshWidth + 1) + x) * 2;
+    // Set vertices from Mesh's up to bottom (left to right in every row).
+    // Update V coordinate only once for every row.
+    for (uint32_t i = 0; i < vertexCountHeight; i++) {
+        float v = float(i) / meshHeight;
+        mapper.mapV(v);
+        for (uint32_t j = 0; j < vertexCountWidth; j++) {
+            uint32_t x = i * vertexCountWidth * 2 + j * 2;
+            uint32_t y = x + 1;
+            float u = float(j) / meshWidth;
+            mapper.mapU(u);
 
-            float u1 = float(x) / meshWidth;
-            float u2 = float(x + 1) / meshWidth;
-            float v1 = float(y) / meshHeight;
-            float v2 = float(y + 1) / meshHeight;
+            left = fminf(left, vertices[x]);
+            top = fminf(top, vertices[y]);
+            right = fmaxf(right, vertices[x]);
+            bottom = fmaxf(bottom, vertices[y]);
 
-            mapper.map(u1, v1, u2, v2);
-
-            int ax = i + (meshWidth + 1) * 2;
-            int ay = ax + 1;
-            int bx = i;
-            int by = bx + 1;
-            int cx = i + 2;
-            int cy = cx + 1;
-            int dx = i + (meshWidth + 1) * 2 + 2;
-            int dy = dx + 1;
-
-            ColorTextureVertex::set(vertex++, vertices[dx], vertices[dy], u2, v2, colors[dx / 2]);
-            ColorTextureVertex::set(vertex++, vertices[ax], vertices[ay], u1, v2, colors[ax / 2]);
-            ColorTextureVertex::set(vertex++, vertices[bx], vertices[by], u1, v1, colors[bx / 2]);
-
-            ColorTextureVertex::set(vertex++, vertices[dx], vertices[dy], u2, v2, colors[dx / 2]);
-            ColorTextureVertex::set(vertex++, vertices[bx], vertices[by], u1, v1, colors[bx / 2]);
-            ColorTextureVertex::set(vertex++, vertices[cx], vertices[cy], u2, v1, colors[cx / 2]);
-
-            left = fminf(left, fminf(vertices[ax], fminf(vertices[bx], vertices[cx])));
-            top = fminf(top, fminf(vertices[ay], fminf(vertices[by], vertices[cy])));
-            right = fmaxf(right, fmaxf(vertices[ax], fmaxf(vertices[bx], vertices[cx])));
-            bottom = fmaxf(bottom, fmaxf(vertices[ay], fmaxf(vertices[by], vertices[cy])));
+            ColorTextureVertex::set(vertex++, vertices[x], vertices[y], u, v, colors[x/2]);
         }
+    }
+
+    // Set index order from mesh's bottom to up, So that
+    // construct the same triangle mesh with original implementation.
+    // Or, May result in diffrent interpolated color.
+    //
+    // For each row, add degenerate triangle for triangle strip
+    // Take below for example:
+    // v00 --- v01 --- v02 --- v03
+    //  |  ...  |  ...  |  ...  |
+    // v10 --- v11 --- v12 --- v13
+    //  |  ...  |  ...  |  ...  |
+    // v20 --- v21 --- v22 --- v23
+    // Indices are: v20, v20, v10, v21, v11, v22, v12, v23, v13, v13,
+    //              v10, v10, v00, v11, v01, v12, v02, v13, v03, v03
+    uint32_t indexCount = meshHeight * (meshWidth * 2 + 4);
+    uint16_t indices[indexCount];
+    uint32_t currVertexRow = meshHeight;
+    uint32_t index = 0;
+    while (currVertexRow > 0) {
+        uint32_t upVertexRow = currVertexRow - 1;
+        indices[index++] = currVertexRow * vertexCountWidth;
+        indices[index++] = currVertexRow * vertexCountWidth;
+        indices[index++] = upVertexRow * vertexCountWidth;
+        for (uint32_t i = 1; i <= meshWidth; i++) {
+            indices[index++] = currVertexRow * vertexCountWidth + i;
+            indices[index++] = upVertexRow * vertexCountWidth + i;
+        }
+        indices[index++] = upVertexRow * vertexCountWidth + meshWidth;
+        currVertexRow--;
     }
 
     if (quickReject(left, top, right, bottom)) {
@@ -2326,7 +2366,7 @@ status_t OpenGLRenderer::drawBitmapMesh(SkBitmap* bitmap, int meshWidth, int mes
     setupDrawColorFilterUniforms();
     setupDrawMesh(&mesh[0].position[0], &mesh[0].texture[0], &mesh[0].color[0]);
 
-    glDrawArrays(GL_TRIANGLES, 0, count);
+    glDrawElements(GL_TRIANGLE_STRIP, indexCount, GL_UNSIGNED_SHORT, indices);
 
     int slot = mCaches.currentProgram->getAttrib("colors");
     if (slot >= 0) {

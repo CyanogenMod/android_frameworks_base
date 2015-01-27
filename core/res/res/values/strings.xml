@@ -2,9 +2,6 @@
 <!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
-** Copyright (c) 2013, The Linux Foundation. All rights reserved.
-** Not a Contribution.
-**
 ** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -628,9 +625,9 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_processOutgoingCalls">reroute outgoing calls</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_processOutgoingCalls">Allows the app to process
-      outgoing calls and change the number to be dialed. This permission allows
-      the app to monitor, redirect, or prevent outgoing calls.</string>
+    <string name="permdesc_processOutgoingCalls">Allows the app to see the
+        number being dialed during an outgoing call with the option to redirect
+        the call to a different number or abort the call altogether.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_receiveSms">receive text messages (SMS)</string>
@@ -935,13 +932,13 @@
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_getAppOpsStats">Allows the app to retrieve
         collected application operation statistics. Not for use by normal apps.</string>
-    
+
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_updateAppOpsStats">modify app ops statistics</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_updateAppOpsStats">Allows the app to modify
         collected application operation statistics. Not for use by normal apps.</string>
-    
+
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_backup">control system backup and restore</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -2250,6 +2247,10 @@
     <!-- Other SIP address type. Same context as Other phone type. -->
     <string name="sipAddressTypeOther">Other</string>
 
+    <!-- Error message that is displayed when the user clicks on a quick contacts badge, but
+         there is no contacts application installed that can display the quick contact -->
+    <string name="quick_contacts_not_available">No application found to view this contact.</string>
+
     <!-- Instructions telling the user to enter their SIM PIN to unlock the keyguard.
          Displayed in one line in a large font.  -->
     <string name="keyguard_password_enter_pin_code">Type PIN code</string>
@@ -2277,9 +2278,6 @@
     <!-- Instructions telling the user that they entered the wrong pin while trying
          to unlock the keyguard.  Displayed in one line in a large font.  -->
     <string name="keyguard_password_wrong_pin_code">Incorrect PIN code.</string>
-
-    <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
-    <string name="pinpuk_attempts">\nAttempts remaining:</string>
 
     <!-- Instructions telling the user how to unlock the phone. -->
     <string name="keyguard_label_text">To unlock, press Menu then 0.</string>
@@ -2360,8 +2358,6 @@
 
     <!-- Shown in the lock screen when there is emergency calls only mode. -->
     <string name="emergency_calls_only" msgid="2485604591272668370">Emergency calls only</string>
-    <!-- Shown in the lock screen when there is SIM card IO error. -->
-    <string name="lockscreen_sim_error_message_short">Invalid card.</string>
 
     <!-- When the user inserts a sim card from an unsupported network, it becomes network
          locked -->
@@ -2372,18 +2368,15 @@
          PUK locked (Pin Unlock Kode) -->
     <string name="lockscreen_sim_puk_locked_message">SIM card is PUK-locked.</string>
     <!-- Shown in the lock screen when the SIM has become PUK locked and the user must call customer care to unlock it. -->
-    <string name="lockscreen_sim_puk_locked_instructions">PIN1 Blocked. Enter PUK1\nor\nPlease see the User Guide or contact Customer Care.</string>
+    <string name="lockscreen_sim_puk_locked_instructions">See the User Guide or contact Customer Care.</string>
 
-    <!-- Shown in the lock screen to tell the user that their SIM/RUIM is locked and they must unlock it. -->
-    <string name="lockscreen_sim_locked_message">SIM/RUIM card is locked.</string>
+    <!-- Shown in the lock screen to tell the user that their SIM is locked and they must unlock it. -->
+    <string name="lockscreen_sim_locked_message">SIM card is locked.</string>
 
     <!-- For the unlock screen, When the user enters a sim unlock code, it takes a little while to check
          whether it is valid, and to unlock the sim if it is valid.  we display a
          progress dialog in the meantime.  this is the emssage. -->
     <string name="lockscreen_sim_unlock_progress_dialog_message">Unlocking SIM card\u2026</string>
-
-    <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
-    <string name="lockscreen_airplane_mode_on">Airplane mode</string>
 
     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts at
          drawing the unlock pattern -->
@@ -2798,14 +2791,14 @@
     <string name="permdesc_writeHistoryBookmarks" product="tablet">Allows the
         app to modify the Browser\'s history or bookmarks stored on your tablet.
         This may allow the app to erase or modify Browser data.  Note: this
-        permission may note be enforced by third-party browsers or other
+        permission may not be enforced by third-party browsers or other
         applications with web browsing capabilities.</string>
     <!-- Description of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
     <string name="permdesc_writeHistoryBookmarks" product="default">Allows the
         app to modify the Browser\'s history or bookmarks stored on your phone.
         This may allow the app to erase or modify Browser data.  Note:
-        this permission may note be enforced by third-party browsers or other
+        this permission may not be enforced by third-party browsers or other
         applications with web browsing capabilities.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether
@@ -3527,16 +3520,16 @@
     <!-- See EXTMEDIA_FORMAT.  EXTMEDIA_FORMAT_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to format the SD card.  This is the title. -->
     <string name="extmedia_format_title" product="default">Format SD card?</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
-    <string name="extmedia_format_message" product="nosdcard">All files stored in your USB storage (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="extmedia_format_message" product="nosdcard">All files stored in your USB storage will be erased. This action can\'t be reversed!</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. -->
-    <string name="extmedia_format_message" product="default">All data on your card (under path \'%1$s\') will be erased. This action can\'t be reversed!</string>
+    <string name="extmedia_format_message" product="default">All data on your card will be lost.</string>
     <!-- See EXTMEDIA_FORMAT.    This is the button text to format the sd card. -->
     <string name="extmedia_format_button_format">Format</string>
 
     <!-- Title of notification shown when ADB is actively connected to the phone. -->
-    <string name="adb_active_notification_title">Android debugging enabled</string>
+    <string name="adb_active_notification_title">USB debugging connected</string>
     <!-- Message of notification shown when ADB is actively connected to the phone. -->
-    <string name="adb_active_notification_message">Touch to disable debugging.</string>
+    <string name="adb_active_notification_message">Touch to disable USB debugging.</string>
 
     <!-- Used to replace %s in urls retreived from the signin server with locales.  For Some        -->
     <!-- devices we don't support all the locales we ship to and need to replace the '%s' with a    -->
@@ -3634,12 +3627,17 @@
     <!-- Title of an application permission that lets an application access keyguard secure storage. -->
     <string name="permlab_access_keyguard_secure_storage">Access keyguard secure storage</string>
     <!-- Description of an application permission that lets an application access keyguard secure storage. -->
-    <string name="permdesc_access_keyguard_secure_storage">Allows an application to access keguard secure storage.</string>
+    <string name="permdesc_access_keyguard_secure_storage">Allows an application to access keyguard secure storage.</string>
 
     <!-- Title of an application permission that lets it control keyguard. -->
     <string name="permlab_control_keyguard">Control displaying and hiding keyguard</string>
     <!-- Description of an application permission that lets it control keyguard. -->
-    <string name="permdesc_control_keyguard">Allows an application to control keguard.</string>
+    <string name="permdesc_control_keyguard">Allows an application to control keyguard.</string>
+
+    <!-- Title of an application permission that lets it interact with recovery. -->
+    <string name="permlab_recovery">Interact with update and recovery system</string>
+    <!-- Description of an application permission that lets it control keyguard. -->
+    <string name="permdesc_recovery">Allows an application to interact with the recovery system and system updates.</string>
 
     <!-- Shown in the tutorial for tap twice for zoom control. -->
     <string name="tutorial_double_tap_to_zoom_message_short">Touch twice for zoom control</string>
@@ -3790,8 +3788,6 @@
     <string name="progress_unmounting" product="nosdcard">Unmounting USB storage\u2026</string>
     <!-- Text for progress dialog while unmounting SD card [CHAR LIMIT=NONE] -->
     <string name="progress_unmounting" product="default">Unmounting SD card\u2026</string>
-    <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
-    <string name="progress_nomediapresent" product="default">No removable media present\u2026</string>
     <!-- Text for progress dialog while erasing USB storage volume [CHAR LIMIT=NONE] -->
     <string name="progress_erasing" product="nosdcard">Erasing USB storage\u2026</string>
     <!-- Text for progress dialog while erasing SD card [CHAR LIMIT=NONE] -->
@@ -4204,7 +4200,7 @@
     <!-- Message shown when the user enters an invalid SIM pin password in PUK screen -->
     <string name="kg_invalid_sim_pin_hint">Type a PIN that is 4 to 8 numbers.</string>
     <!-- Message shown when the user enters an invalid PUK code in the PUK screen -->
-    <string name="kg_invalid_sim_puk_hint">PUK code should be 8 numbers.</string>
+    <string name="kg_invalid_sim_puk_hint">PUK code should be 8 numbers or more.</string>
     <!-- Message shown when the user enters an invalid PUK code -->
     <string name="kg_invalid_puk">Re-enter the correct PUK code. Repeated attempts will permanently disable the SIM.</string>
       <!-- String shown in PUK screen when PIN codes don't match -->
@@ -4533,16 +4529,5 @@
 
     <!-- Cling help message when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->
     <string name="immersive_mode_confirmation" msgid="8554991488096662508">Swipe down from the top to exit full screen.</string>
-
-    <add-resource type="bool" name="config_hotswapCapable"></add-resource>
-
-    <!-- Displayed when the USSD/SS request is modified by STK CC to a
-    different request. This will be displayed in a toast. -->
-    <string name="stk_cc_ussd_to_dial">USSD request is modified to DIAL request.</string>
-    <string name="stk_cc_ussd_to_ss">USSD request is modified to SS request.</string>
-    <string name="stk_cc_ussd_to_ussd">USSD request is modified to new USSD request.</string>
-    <string name="stk_cc_ss_to_dial">SS request is modified to DIAL request.</string>
-    <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
-    <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
 
 </resources>

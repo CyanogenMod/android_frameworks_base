@@ -471,11 +471,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public int enabledSetting = PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 
     /**
-     * @hide
-     */
-    public static final String HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME = "handleThemeConfigChanges";
-
-    /**
      * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
      * {@hide}
      */
@@ -486,6 +481,13 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * @hide
      */
     public int installLocation = PackageInfo.INSTALL_LOCATION_UNSPECIFIED;
+
+    /**
+     * When true, indicates that any one component within this application is
+     * protected.
+     * @hide
+     */
+    public boolean protect = false;
     
     public void dump(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);
@@ -596,6 +598,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         uiOptions = orig.uiOptions;
         backupAgentName = orig.backupAgentName;
         isThemeable = orig.isThemeable;
+        protect = orig.protect;
     }
 
 
@@ -637,6 +640,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeInt(descriptionRes);
         dest.writeInt(uiOptions);
         dest.writeInt(isThemeable? 1 : 0);
+        dest.writeInt(protect ? 1 : 0);
     }
 
     public static final Parcelable.Creator<ApplicationInfo> CREATOR
@@ -677,6 +681,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         descriptionRes = source.readInt();
         uiOptions = source.readInt();
         isThemeable = source.readInt() != 0;
+        protect = source.readInt() != 0;
     }
 
     /**

@@ -19,4 +19,10 @@
     <!-- Color for the "No recent apps" text in the recent apps list. -->
     <color name="no_recent_apps">#bebebe</color>
 
+    <!-- Colors for the system bars -->
+    <color name="status_bar_background_opaque">@color/system_bar_background_opaque</color>
+    <color name="status_bar_background_semi_transparent">@color/system_bar_background_semi_transparent</color>
+    <color name="navigation_bar_background_opaque">@color/system_bar_background_opaque</color>
+    <color name="navigation_bar_background_semi_transparent">@color/system_bar_background_semi_transparent</color>
+
 </resources>

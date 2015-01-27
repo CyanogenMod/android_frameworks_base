@@ -296,7 +296,6 @@
   <java-symbol type="bool" name="config_useFixedVolume" />
   <java-symbol type="bool" name="config_forceDefaultOrientation" />
   <java-symbol type="bool" name="config_wifi_batched_scan_supported" />
-  <java-symbol type="bool" name="flip_controller_fallback_keys" />
   <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
   <java-symbol type="bool" name="config_radio_reset_on_regular_deactivation" />
   <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
@@ -306,7 +305,6 @@
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_extraFreeKbytesAdjust" />
   <java-symbol type="integer" name="config_extraFreeKbytesAbsolute" />
-  <java-symbol type="integer" name="config_immersive_mode_confirmation_panic" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
   <java-symbol type="integer" name="config_lowMemoryKillerMinFreeKbytesAdjust" />
   <java-symbol type="integer" name="config_lowMemoryKillerMinFreeKbytesAbsolute" />
@@ -320,6 +318,7 @@
   <java-symbol type="integer" name="config_wifi_framework_scan_interval" />
   <java-symbol type="integer" name="config_wifi_supplicant_scan_interval" />
   <java-symbol type="integer" name="config_wifi_scan_interval_p2p_connected" />
+  <java-symbol type="integer" name="config_wifi_scan_interval_wfd_connected" />
   <java-symbol type="integer" name="db_connection_pool_size" />
   <java-symbol type="integer" name="db_journal_size_limit" />
   <java-symbol type="integer" name="db_wal_autocheckpoint" />
@@ -332,6 +331,7 @@
   <java-symbol type="integer" name="config_mobile_mtu" />
   <java-symbol type="integer" name="config_volte_replacement_rat"/>
   <java-symbol type="integer" name="config_valid_wappush_index" />
+  <java-symbol type="integer" name="config_overrideHasPermanentMenuKey" />
 
   <java-symbol type="color" name="tab_indicator_text_v4" />
 
@@ -533,6 +533,8 @@
   <java-symbol type="string" name="emergency_call_dialog_number_for_display" />
   <java-symbol type="string" name="widget_default_package_name" />
   <java-symbol type="string" name="widget_default_class_name" />
+  <java-symbol type="string" name="config_keyguardPackage" />
+  <java-symbol type="string" name="config_keyguardService" />
   <java-symbol type="string" name="emergency_calls_only" />
   <java-symbol type="string" name="enable_accessibility_canceled" />
   <java-symbol type="string" name="eventTypeAnniversary" />
@@ -650,7 +652,6 @@
   <java-symbol type="string" name="orgTypeWork" />
   <java-symbol type="string" name="passwordIncorrect" />
   <java-symbol type="string" name="enablePin" />
-  <java-symbol type="string" name="permission" />
   <java-symbol type="string" name="perms_description_app" />
   <java-symbol type="string" name="perms_new_perm_prefix" />
   <java-symbol type="string" name="petabyteShort" />
@@ -710,6 +711,7 @@
   <java-symbol type="string" name="mobile_provisioning_url" />
   <java-symbol type="string" name="mobile_redirected_provisioning_url" />
   <java-symbol type="string" name="progress_nomediapresent" />
+  <java-symbol type="string" name="quick_contacts_not_available" />
   <java-symbol type="string" name="reboot_safemode_confirm" />
   <java-symbol type="string" name="reboot_safemode_title" />
   <java-symbol type="string" name="relationTypeAssistant" />
@@ -872,6 +874,7 @@
   <java-symbol type="string" name="config_chooseAccountActivity" />
   <java-symbol type="string" name="config_chooseTypeAndAccountActivity" />
   <java-symbol type="string" name="config_customResolverActivity" />
+  <java-symbol type="string" name="config_prelaunchcheckactivity" />
   <java-symbol type="string" name="config_appsAuthorizedForSharedAccounts" />
   <java-symbol type="string" name="error_message_title" />
   <java-symbol type="string" name="action_bar_home_description_format" />
@@ -1397,6 +1400,7 @@
   <java-symbol type="integer" name="config_lidNavigationAccessibility" />
   <java-symbol type="integer" name="config_lidOpenRotation" />
   <java-symbol type="integer" name="config_longPressOnHomeBehavior" />
+  <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
   <java-symbol type="layout" name="global_actions_item" />
   <java-symbol type="layout" name="global_actions_silent_mode" />
   <java-symbol type="layout" name="recent_apps_dialog" />
@@ -1425,6 +1429,7 @@
   <java-symbol type="string" name="lockscreen_permanent_disabled_sim_message_short" />
   <java-symbol type="string" name="lockscreen_carrier_default" />
   <java-symbol type="string" name="lockscreen_sim_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_locked_message_cm" />
   <java-symbol type="string" name="lockscreen_sim_puk_locked_message" />
   <java-symbol type="string" name="lockscreen_airplane_mode_on" />
   <java-symbol type="style" name="Animation.LockScreen" />
@@ -1724,8 +1729,6 @@
 
   <!-- From Settings -->
   <java-symbol type="array" name="config_mobile_hotspot_provision_app" />
-  <java-symbol type="bool" name="config_intrusiveNotificationLed" />
-  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
   <java-symbol type="dimen" name="preference_fragment_padding_bottom" />
   <java-symbol type="dimen" name="preference_fragment_padding_side" />
   <java-symbol type="drawable" name="expander_ic_maximized" />
@@ -1825,17 +1828,19 @@
   <java-symbol type="string" name="config_deviceKeyHandlerLib" />
   <java-symbol type="string" name="config_deviceKeyHandlerClass" />
   <java-symbol type="bool" name="config_batterySdCardAccessibility" />
+  <java-symbol type="bool" name="config_alwaysRequestAudioFocusForCalls" />
 
   <!-- Telephony -->
   <java-symbol type="bool" name="config_smsSamsungCdmaAlternateMessageIDEncoding" />
   <java-symbol type="bool" name="config_samsung_stk" />
-  <java-symbol type="array" name="config_telephony_set_audioparameters" />
 
   <!-- Hardware Key ReMapping -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
   <java-symbol type="bool" name="config_singleStageCameraKey" />
 
   <!-- Notification and battery light -->
+  <java-symbol type="bool" name="config_intrusiveNotificationLed" />
+  <java-symbol type="bool" name="config_multiColorNotificationLed" />
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
   <java-symbol type="bool" name="config_multiColorBatteryLed" />
   <java-symbol type="array" name="notification_light_package_mapping" />
@@ -1913,14 +1918,16 @@
   <java-symbol type="drawable" name="ic_navigation_ring_blank_activated" />
   <java-symbol type="drawable" name="ic_navigation_ring_empty" />
   <java-symbol type="drawable" name="ic_navigation_ring_ime_switcher" />
-  <java-symbol type="drawable" name="ic_navigation_ring_killtask" />
-  <java-symbol type="drawable" name="ic_navigation_ring_power" />
+  <java-symbol type="drawable" name="ic_navigation_ring_kill_task" />
   <java-symbol type="drawable" name="ic_navigation_ring_screenshot" />
   <java-symbol type="drawable" name="ic_navigation_ring_silent" />
   <java-symbol type="drawable" name="ic_navigation_ring_sound_on" />
+  <java-symbol type="drawable" name="ic_navigation_ring_standby" />
   <java-symbol type="drawable" name="ic_navigation_ring_torch_on" />
   <java-symbol type="drawable" name="ic_navigation_ring_torch_off" />
   <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
+  <java-symbol type="dimen" name="navigation_ring_icon_size" />
+  <java-symbol type="dimen" name="navigation_ring_activity_icon_size" />
 
   <!-- Performance Profiles -->
   <java-symbol type="string" name="config_perf_profile_prop" />
@@ -2003,4 +2010,103 @@
 
   <!-- SMS RIL_REQUEST_SEND_SMS_EXPECT_MORE -->
   <java-symbol type="bool" name="config_smsUseExpectMore" />
+
+  <!-- WiFi turn off notification -->
+  <java-symbol type="string" name="notify_turn_wifi_off_title" />
+
+  <!-- Label for the Android system components when they are shown to the user. -->
+  <java-symbol type="string" name="android_system_label" />
+
+  <!-- Array of default activities with custom power management -->
+  <java-symbol type="array" name="config_auto_perf_activities" />
+
+  <!-- ADB notification -->
+  <java-symbol type="string" name="adb_net_active_notification_title" />
+  <java-symbol type="string" name="adb_both_active_notification_title" />
+  <java-symbol type="string" name="adb_active_generic_notification_message" />
+
+  <!-- External media format -->
+  <java-symbol type="string" name="usb_extmedia_format_message" />
+  <java-symbol type="string" name="sd_extmedia_format_message" />
+
+  <!-- Proximity check on screen on -->
+  <java-symbol type="bool" name="config_proximityCheckOnWake" />
+
+  <!-- Proximity check timeout -->
+  <java-symbol type="integer" name="config_proximityCheckTimeout" />
+
+  <java-symbol type="array" name="config_ignored_sms_packages" />
+
+  <!-- Last app switch animations -->
+   <java-symbol type="anim" name="last_app_in" />
+   <java-symbol type="anim" name="last_app_out" />
+
+  <!-- USB OTG Notification -->
+  <java-symbol type="string" name="usb_storage_notification_manage_message" />
+
+  <!-- Used for storage notification -->
+  <java-symbol type="string" name="storage_internal" />
+  <java-symbol type="string" name="storage_sd_card" />
+  <java-symbol type="string" name="storage_usb" />
+
+  <!-- SD card storage notification -->
+  <java-symbol type="string" name="sd_ext_media_badremoval_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_badremoval_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_checking_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_checking_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_nofs_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_nofs_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_nomedia_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_nomedia_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_safe_unmount_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_safe_unmount_notification_title" />
+  <java-symbol type="string" name="sd_ext_media_unmountable_notification_message" />
+  <java-symbol type="string" name="sd_ext_media_unmountable_notification_title" />
+
+  <!-- USB storage notification -->
+  <java-symbol type="string" name="usb_ext_media_badremoval_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_badremoval_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_checking_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_checking_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_nofs_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_nofs_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_nomedia_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_nomedia_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_safe_unmount_notification_title" />
+  <java-symbol type="string" name="usb_ext_media_unmountable_notification_message" />
+  <java-symbol type="string" name="usb_ext_media_unmountable_notification_title" />
+
+  <!-- Wifi tethering-->
+  <java-symbol type="plurals" name="tethered_clients_connected" />
+  <java-symbol type="xml" name="vendors" />
+  
+  <!-- Theme install failure notification -->
+  <java-symbol type="string" name="theme_install_error_title" />
+  <java-symbol type="string" name="theme_install_error_message" />
+
+  <!-- for wifi auto connection -->
+  <java-symbol type="bool" name="wifi_autocon" />
+
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
+  <java-symbol type="string" name="sd_progress_unmounting" />
+  <java-symbol type="string" name="sd_progress_erasing" />
+  <java-symbol type="string" name="sd_format_error" />
+  <java-symbol type="string" name="sd_media_bad_removal" />
+  <java-symbol type="string" name="sd_media_checking" />
+  <java-symbol type="string" name="sd_media_removed" />
+  <java-symbol type="string" name="sd_media_shared" />
+
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
+  <java-symbol type="string" name="usb_progress_unmounting" />
+  <java-symbol type="string" name="usb_progress_erasing" />
+  <java-symbol type="string" name="usb_format_error" />
+  <java-symbol type="string" name="usb_media_bad_removal" />
+  <java-symbol type="string" name="usb_media_checking" />
+  <java-symbol type="string" name="usb_media_removed" />
+  <java-symbol type="string" name="usb_media_shared" />
+
+  <!-- Strings for MultiSim -->
+  <java-symbol type="string" name="multi_sim_entry_format" />
+  <java-symbol type="string" name="multi_sim_entry_format_no_carrier" />
 </resources>

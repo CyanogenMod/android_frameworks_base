@@ -21,6 +21,7 @@ import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Slog;
 import android.util.SparseArray;
 
@@ -199,7 +200,7 @@ public final class Installer {
 
         try {
             synchronized (mResponses) {
-                long startWaitTime = System.currentTimeMillis();
+                long startWaitTime = System.nanoTime();
                 while(mResponses.get(transactionId) == null) {
                     synchronized (mPendingRequests) {
                         if (!mPendingRequests.contains(transactionId)) {
@@ -226,7 +227,7 @@ public final class Installer {
                             checkPoller();
                         }
                     }
-                    final long timeToWait = startWaitTime - System.currentTimeMillis() + 100000;
+                    final long timeToWait = startWaitTime - System.nanoTime() + 100000000000L;
                     if (timeToWait > 0) {
                         mResponses.wait(100000);
                     } else {
@@ -344,7 +345,12 @@ public final class Installer {
 
     public int idmap(String targetApkPath, String overlayApkPath, String redirectionsPath, int uid,
                      int targetHash, int overlayHash) {
-        StringBuilder builder = new StringBuilder("idmap");
+        StringBuilder builder = new StringBuilder();
+        if (TextUtils.isEmpty(redirectionsPath)) {
+            builder.append("idmap");
+        } else {
+            builder.append("idmap_with_redirs");
+        }
         builder.append(' ');
         builder.append(targetApkPath);
         builder.append(' ');
@@ -355,15 +361,22 @@ public final class Installer {
         builder.append(targetHash);
         builder.append(' ');
         builder.append(overlayHash);
-        if (redirectionsPath != null) {
+        if (!TextUtils.isEmpty(redirectionsPath)) {
             builder.append(' ');
             builder.append(redirectionsPath);
         }
         return execute(builder.toString());
     }
 
-    public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid, int pkgId) {
-        StringBuilder builder = new StringBuilder("aapt");
+    public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid,
+                    int pkgId, String commonResourcesPath) {
+
+        StringBuilder builder = new StringBuilder();
+        if (TextUtils.isEmpty(commonResourcesPath)) {
+            builder.append("aapt");
+        } else {
+            builder.append("aapt_with_common");
+        }
         builder.append(' ');
         builder.append(themeApkPath);
         builder.append(' ');
@@ -374,6 +387,12 @@ public final class Installer {
         builder.append(uid);
         builder.append(' ');
         builder.append(pkgId);
+
+        if (!TextUtils.isEmpty(commonResourcesPath)) {
+            builder.append(' ');
+            builder.append(commonResourcesPath);
+        }
+
         return execute(builder.toString());
     }
 

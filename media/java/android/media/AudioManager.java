@@ -145,6 +145,13 @@ public class AudioManager {
         "android.media.MASTER_MUTE_CHANGED_ACTION";
 
     /**
+     * @hide Broadcast intent when a2dp routing changes
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String A2DP_ROUTE_CHANGED_ACTION =
+        "android.media.A2DP_ROUTE_CHANGED_ACTION";
+
+    /**
      * The new vibrate setting for a particular type.
      *
      * @see #VIBRATE_SETTING_CHANGED_ACTION
@@ -2184,6 +2191,7 @@ public class AudioManager {
         }
         // construct a PendingIntent for the media button and register it
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.addFlags(mediaButtonIntent.FLAG_RECEIVER_FOREGROUND);
         //     the associated intent will be handled by the component being registered
         mediaButtonIntent.setComponent(eventReceiver);
         PendingIntent pi = PendingIntent.getBroadcast(mContext,

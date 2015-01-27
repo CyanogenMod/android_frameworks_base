@@ -211,19 +211,21 @@ public final class ActivityStackSupervisor {
      */
     String mPrivacyGuardPackageName = null;
 
+    private final PowerManager mPm;
+
     public ActivityStackSupervisor(ActivityManagerService service, Context context,
             Looper looper) {
         mService = service;
         mContext = context;
         mLooper = looper;
-        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-        mGoingToSleep = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Sleep");
+        mPm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+        mGoingToSleep = mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Sleep");
         mHandler = new ActivityStackSupervisorHandler(looper);
         if (VALIDATE_WAKE_LOCK_CALLER && Binder.getCallingUid() != Process.myUid()) {
             throw new IllegalStateException("Calling must be system uid");
         }
         mLaunchingActivity =
-                pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Launch");
+                mPm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ActivityManager-Launch");
         mLaunchingActivity.setReferenceCounted(false);
     }
 
@@ -589,11 +591,12 @@ public final class ActivityStackSupervisor {
             String profileFile, ParcelFileDescriptor profileFd, int userId) {
         // Collect information about the target of the Intent.
         ActivityInfo aInfo;
+        ResolveInfo rInfo = null;
         try {
-            ResolveInfo rInfo =
-                AppGlobals.getPackageManager().resolveIntent(
+            rInfo = AppGlobals.getPackageManager().resolveIntent(
                         intent, resolvedType,
                         PackageManager.MATCH_DEFAULT_ONLY
+                                | PackageManager.PERFORM_PRE_LAUNCH_CHECK
                                     | ActivityManagerService.STOCK_PM_FLAGS, userId);
             aInfo = rInfo != null ? rInfo.activityInfo : null;
         } catch (RemoteException e) {
@@ -607,6 +610,16 @@ public final class ActivityStackSupervisor {
             // always restart the exact same activity.
             intent.setComponent(new ComponentName(
                     aInfo.applicationInfo.packageName, aInfo.name));
+
+            // Store the actual target component in an extra field of the intent.
+            // This will be set in case the receiver of the intent wants to retarget the
+            // intent. Ideally we should have a new extra field, but resusing the
+            // changed_component_name_list for now.
+            if (rInfo != null && rInfo.targetComponentName != null) {
+                // Not creating a list to save an unnecessary object.
+                intent.putExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST,
+                        rInfo.targetComponentName);
+            }
 
             // Don't debug things in the system process
             if ((startFlags&ActivityManager.START_FLAG_DEBUG) != 0) {
@@ -1138,6 +1151,19 @@ public final class ActivityStackSupervisor {
             if (resultRecord != null) {
                 resultRecord.removeResultsLocked(
                     sourceRecord, resultWho, requestCode);
+            }
+            if (sourceRecord.launchedFromUid == callingUid) {
+                // The new activity is being launched from the same uid as the previous
+                // activity in the flow, and asking to forward its result back to the
+                // previous.  In this case the activity is serving as a trampoline between
+                // the two, so we also want to update its launchedFromPackage to be the
+                // same as the previous activity.  Note that this is safe, since we know
+                // these two packages come from the same uid; the caller could just as
+                // well have supplied that same package name itself.  This specifially
+                // deals with the case of an intent picker/chooser being launched in the app
+                // flow to redirect to an activity picked by the user, where we want the final
+                // activity to consider it to have been launched by the previous app activity.
+                callingPackage = sourceRecord.launchedFromPackage;
             }
         }
 
@@ -1701,6 +1727,7 @@ public final class ActivityStackSupervisor {
             TaskRecord sourceTask = sourceRecord.task;
             targetStack = sourceTask.stack;
             moveHomeStack(targetStack.isHomeStack());
+            mWindowManager.moveTaskToTop(targetStack.topTask().taskId);
             if (!addingToTask &&
                     (launchFlags&Intent.FLAG_ACTIVITY_CLEAR_TOP) != 0) {
                 // In this case, we are adding the activity to an existing
@@ -1759,6 +1786,7 @@ public final class ActivityStackSupervisor {
             r.setTask(prev != null ? prev.task
                     : targetStack.createTaskRecord(getNextTaskId(), r.info, intent, true),
                     null, true);
+            mWindowManager.moveTaskToTop(r.task.taskId);
             if (DEBUG_TASKS) Slog.v(TAG, "Starting new activity " + r
                     + " in new guessed " + r.task);
         }
@@ -2107,6 +2135,7 @@ public final class ActivityStackSupervisor {
                 return ar;
             }
         }
+        mPm.cpuBoost(2000 * 1000);
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
     }

@@ -50,9 +50,9 @@ class PermissionDialog extends BasePermissionDialog {
     static final int ACTION_IGNORED = 0x4;
     static final int ACTION_IGNORED_TIMEOUT = 0x8;
 
-    // 1-minute timeout, then we automatically dismiss the permission
-    // dialog
-    static final long DISMISS_TIMEOUT = 1000 * 60 * 1;
+    // 15s timeout, then we automatically dismiss the permission
+    // dialog. Otherwise, it may cause watchdog timeout sometimes.
+    static final long DISMISS_TIMEOUT = 1000 * 15 * 1;
 
     public PermissionDialog(Context context, AppOpsService service,
             int code, int uid, String packageName) {
@@ -98,9 +98,8 @@ class PermissionDialog extends BasePermissionDialog {
         setView(mView);
 
         // After the timeout, pretend the user clicked the quit button
-        //mHandler.sendMessageDelayed(
-        //        mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT),
-        //        DISMISS_TIMEOUT);
+        mHandler.sendMessageDelayed(
+                mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT), DISMISS_TIMEOUT);
     }
 
     private String getAppName(String packageName) {
