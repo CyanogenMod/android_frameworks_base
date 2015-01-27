@@ -64,6 +64,8 @@ public class LteTile extends QSTile<QSTile.BooleanState> {
             return;
         }
 
+        state.label = mContext.getString(R.string.quick_settings_lte_tile_title);
+
         switch (getCurrentPreferredNetworkMode()) {
             case Phone.NT_MODE_GLOBAL:
             case Phone.NT_MODE_LTE_CDMA_AND_EVDO:
