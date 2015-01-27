@@ -4942,4 +4942,10 @@
     <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
     <!-- Default wi-fi direct name -->
     <string name="def_wifi_direct_name" translatable="false"></string>
+
+    <!-- pdp data reject dialog string for cause 29 and 33 -->
+    <string name="data_conn_status_title"></string>
+    <string name="user_authentication_failed"></string>
+    <string name="service_not_subscribed"></string>
+
 </resources>
