@@ -246,6 +246,14 @@ public class NavigationBarView extends LinearLayout {
         mDelegateHelper.setBar(phoneStatusBar);
     }
 
+    public void disableSearchBar() {
+        mDelegateHelper.setDisabled(true);
+    }
+
+    public void enableSearchBar() {
+        mDelegateHelper.setDisabled(false);
+    }
+
     public void setOnVerticalChangedListener(OnVerticalChangedListener onVerticalChangedListener) {
         mOnVerticalChangedListener = onVerticalChangedListener;
         notifyVerticalChangedListener(mVertical);
