@@ -82,6 +82,13 @@ public class Typeface {
 
     private int mStyle = 0;
 
+    // Typefaces that we can garbage collect when changing fonts, and so we don't break public APIs
+    private static Typeface DEFAULT_INTERNAL;
+    private static Typeface DEFAULT_BOLD_INTERNAL;
+    private static Typeface SANS_SERIF_INTERNAL;
+    private static Typeface SERIF_INTERNAL;
+    private static Typeface MONOSPACE_INTERNAL;
+
     private static void setDefault(Typeface t) {
         sDefaultTypeface = t;
         nativeSetDefault(t.native_instance);
@@ -439,31 +446,35 @@ public class Typeface {
         sSystemFontMap.clear();
         init();
 
-        long newDefault = create((String) null, 0).native_instance;
-        long newDefaultBold = create((String) null, Typeface.BOLD).native_instance;
-        long newSansSerif = create("sans-serif", 0).native_instance;
-        long newSerif = create("serif", 0).native_instance;
-        long newMonoSpace = create("monospace", 0).native_instance;
-        long newItalic = create((String) null, Typeface.ITALIC).native_instance;
-        long newBoldItalic = create((String) null, Typeface.BOLD_ITALIC).native_instance;
+        DEFAULT_INTERNAL = create((String) null, 0);
+        DEFAULT_BOLD_INTERNAL = create((String) null, Typeface.BOLD);
+        SANS_SERIF_INTERNAL = create("sans-serif", 0);
+        SERIF_INTERNAL = create("serif", 0);
+        MONOSPACE_INTERNAL = create("monospace", 0);
 
-        DEFAULT.native_instance = newDefault;
-        DEFAULT_BOLD.native_instance = newDefaultBold;
-        SANS_SERIF.native_instance = newSansSerif;
-        SERIF.native_instance = newSerif;
-        MONOSPACE.native_instance = newMonoSpace;
-        sDefaults[2].native_instance = newItalic;
-        sDefaults[3].native_instance = newBoldItalic;
+        DEFAULT.native_instance = DEFAULT_INTERNAL.native_instance;
+        DEFAULT_BOLD.native_instance = DEFAULT_BOLD_INTERNAL.native_instance;
+        SANS_SERIF.native_instance = SANS_SERIF_INTERNAL.native_instance;
+        SERIF.native_instance = SERIF_INTERNAL.native_instance;
+        MONOSPACE.native_instance = MONOSPACE_INTERNAL.native_instance;
+        sDefaults[2] = create((String) null, Typeface.ITALIC);
+        sDefaults[3] = create((String) null, Typeface.BOLD_ITALIC);
     }
 
     static {
         init();
         // Set up defaults and typefaces exposed in public API
-        DEFAULT         = create((String) null, 0);
-        DEFAULT_BOLD    = create((String) null, Typeface.BOLD);
-        SANS_SERIF      = create("sans-serif", 0);
-        SERIF           = create("serif", 0);
-        MONOSPACE       = create("monospace", 0);
+        DEFAULT_INTERNAL         = create((String) null, 0);
+        DEFAULT_BOLD_INTERNAL    = create((String) null, Typeface.BOLD);
+        SANS_SERIF_INTERNAL      = create("sans-serif", 0);
+        SERIF_INTERNAL           = create("serif", 0);
+        MONOSPACE_INTERNAL       = create("monospace", 0);
+
+        DEFAULT         = new Typeface(DEFAULT_INTERNAL.native_instance);
+        DEFAULT_BOLD    = new Typeface(DEFAULT_BOLD_INTERNAL.native_instance);
+        SANS_SERIF      = new Typeface(SANS_SERIF_INTERNAL.native_instance);
+        SERIF           = new Typeface(SERIF_INTERNAL.native_instance);
+        MONOSPACE       = new Typeface(MONOSPACE_INTERNAL.native_instance);
 
         sDefaults = new Typeface[] {
             DEFAULT,
