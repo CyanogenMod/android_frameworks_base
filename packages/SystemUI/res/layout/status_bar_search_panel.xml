@@ -22,6 +22,7 @@
 <com.android.systemui.SearchPanelView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/search_panel_container"
+    android:layout_marginBottom="@dimen/navigation_bar_height"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
@@ -30,13 +31,54 @@
         android:id="@+id/search_panel_scrim"
         android:background="@drawable/search_panel_scrim" />
 
+    <ImageButton
+        android:visibility="gone"
+        android:id="@+id/nav_ring_edit"
+        android:layout_margin="16dp"
+        android:elevation="8dp"
+        android:layout_gravity="right|center_vertical"
+        android:tint="@color/navring_check_tint"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/nav_ring_edit_check"
+        android:background="@drawable/nav_ring_edit_fab" />
+
+    <FrameLayout
+        android:id="@+id/one_parent"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <ImageView
+            android:padding="10dp"
+            android:layout_width="@dimen/search_panel_circle_size"
+            android:layout_height="@dimen/search_panel_circle_size"
+            android:scaleType="centerInside"
+            android:id="@+id/search_logo1"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/two_parent"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <ImageView
+            android:padding="10dp"
+            android:layout_width="@dimen/search_panel_circle_size"
+            android:layout_height="@dimen/search_panel_circle_size"
+            android:scaleType="centerInside"
+            android:id="@+id/search_logo2"/>
+
+    </FrameLayout>
+
     <com.android.systemui.SearchPanelCircleView
         style="@style/SearchPanelCircle"
         android:id="@+id/search_panel_circle">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_width="@dimen/search_panel_circle_size"
+            android:layout_height="@dimen/search_panel_circle_size"
+            android:scaleType="centerInside"
             android:id="@+id/search_logo" />
     </com.android.systemui.SearchPanelCircleView>
 
