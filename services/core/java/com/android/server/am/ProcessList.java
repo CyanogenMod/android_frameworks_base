@@ -251,6 +251,11 @@ final class ProcessList {
         // memory than just for 64 bit.  This should probably have some more
         // tuning done, so not deleting it quite yet...
         final boolean is64bit = Build.SUPPORTED_64_BIT_ABIS.length > 0;
+        if (is64bit) {
+            // Increase the high min-free levels for cached processes for 64-bit
+            mOomMinFreeHigh[4] = 225000;
+            mOomMinFreeHigh[5] = 325000;
+        }
 
         for (int i=0; i<mOomAdj.length; i++) {
             int low = 0;
@@ -275,17 +280,6 @@ final class ProcessList {
 
                 mOomMinFree[i] = (int)(low + ((high-low)*scale));
             }
-        }
-        if (Build.SUPPORTED_64_BIT_ABIS.length > 0) {
-            // Increase the high min-free levels for cached processes for 64-bit
-            mOomMinFreeHigh[4] = 225000;
-            mOomMinFreeHigh[5] = 325000;
-        }
-
-        for (int i=0; i<mOomAdj.length; i++) {
-            int low = mOomMinFreeLow[i];
-            int high = mOomMinFreeHigh[i];
-            mOomMinFree[i] = (int)(low + ((high-low)*scale));
         }
 
         if (minfree_abs >= 0) {
