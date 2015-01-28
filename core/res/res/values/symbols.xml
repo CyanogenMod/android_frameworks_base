@@ -1468,6 +1468,7 @@
   <java-symbol type="bool" name="config_supportAutoRotation" />
   <java-symbol type="bool" name="config_forceSupportRotationLockToggle" />
   <java-symbol type="bool" name="target_honeycomb_needs_options_menu" />
+  <java-symbol type="bool" name="config_addVibrateWithRingtoneOption" />
   <java-symbol type="dimen" name="navigation_bar_height" />
   <java-symbol type="dimen" name="navigation_bar_height_landscape" />
   <java-symbol type="dimen" name="navigation_bar_width" />
@@ -1511,6 +1512,8 @@
   <java-symbol type="id" name="option1" />
   <java-symbol type="id" name="option2" />
   <java-symbol type="id" name="option3" />
+  <java-symbol type="id" name="option4" />
+  <java-symbol type="id" name="optionSpacer" />
   <java-symbol type="id" name="right_icon" />
   <java-symbol type="id" name="seven" />
   <java-symbol type="id" name="six" />

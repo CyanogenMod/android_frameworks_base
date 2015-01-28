@@ -1050,7 +1050,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private static class SilentModeTriStateAction implements Action, View.OnClickListener {
 
-        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3 };
+        private final boolean addVibrateWithRingtoneOption;
+        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3, R.id.option4 };
 
         private final AudioManager mAudioManager;
         private final Handler mHandler;
@@ -1060,6 +1061,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             mAudioManager = audioManager;
             mHandler = handler;
             mContext = context;
+            addVibrateWithRingtoneOption = mContext.getResources()
+                    .getBoolean(com.android.internal.R.bool.config_addVibrateWithRingtoneOption);
         }
 
         private int ringerModeToIndex(int ringerMode) {
@@ -1080,10 +1083,21 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         public View create(Context context, View convertView, ViewGroup parent,
                 LayoutInflater inflater) {
             View v = inflater.inflate(R.layout.global_actions_silent_mode, parent, false);
+            View spacer = v.findViewById(R.id.optionSpacer);
 
             int selectedIndex = ringerModeToIndex(mAudioManager.getRingerMode());
-            for (int i = 0; i < 3; i++) {
+            if (addVibrateWithRingtoneOption && selectedIndex == AudioManager.RINGER_MODE_NORMAL
+                    && Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.VIBRATE_WHEN_RINGING, 0) != 0) {
+                selectedIndex = 3;
+            }
+            for (int i = 0; i < 4; i++) {
                 View itemView = v.findViewById(ITEM_IDS[i]);
+                if (i == 3 && !addVibrateWithRingtoneOption) {
+                    itemView.setVisibility(View.GONE);
+                    spacer.setVisibility(View.GONE);
+                    continue;
+                }
                 itemView.setSelected(selectedIndex == i);
                 // Set up click handler
                 itemView.setTag(i);
@@ -1114,7 +1128,19 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (!(v.getTag() instanceof Integer)) return;
 
             int index = (Integer) v.getTag();
-            mAudioManager.setRingerMode(indexToRingerMode(index));
+            if (addVibrateWithRingtoneOption) {
+                if (index < 3) {
+                    mAudioManager.setRingerMode(indexToRingerMode(index));
+                    Settings.System.putInt(mContext.getContentResolver(),
+                            Settings.System.VIBRATE_WHEN_RINGING, 0);
+                } else {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    Settings.System.putInt(mContext.getContentResolver(),
+                            Settings.System.VIBRATE_WHEN_RINGING, 1);
+                }
+            } else {
+                mAudioManager.setRingerMode(indexToRingerMode(index));
+            }
             mHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS, DIALOG_DISMISS_DELAY);
         }
     }
