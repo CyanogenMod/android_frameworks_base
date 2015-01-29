@@ -1058,7 +1058,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
 
         //display 2G/3G/4G if operator ask for showing radio tech
-        if ((mServiceState.get(subId) != null) && (mServiceState.get(subId).getDataRegState()
+        if ((mServiceState.get(subId) != null) && (mShowSpn.get(subId) != null) &&
+                (mShowPlmn.get(subId) != null) && (mServiceState.get(subId).getDataRegState()
                 == ServiceState.STATE_IN_SERVICE || mServiceState.get(subId).getVoiceRegState()
                 == ServiceState.STATE_IN_SERVICE) && mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_display_rat)) {
