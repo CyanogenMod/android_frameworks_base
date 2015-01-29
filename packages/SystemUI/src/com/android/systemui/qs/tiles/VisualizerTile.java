@@ -131,7 +131,7 @@ public class VisualizerTile extends QSTile<QSTile.State>
     public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
         if (controllers != null) {
             for (MediaController controller : controllers) {
-                if (!mCallbacks.containsKey(controller.getSessionToken())) {
+                if (mCallbacks != null && !mCallbacks.containsKey(controller.getSessionToken())) {
                     mCallbacks.put(controller.getSessionToken(), new CallbackInfo(controller));
                 }
             }
@@ -141,8 +141,10 @@ public class VisualizerTile extends QSTile<QSTile.State>
     @Override
     public void destroy() {
         super.destroy();
-        for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
-            entry.getValue().destroy();
+        if (mVisualizer == null) {
+            for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
+                entry.getValue().destroy();
+            }
         }
         mCallbacks.clear();
         mCallbacks = null;
@@ -174,10 +176,12 @@ public class VisualizerTile extends QSTile<QSTile.State>
 
     private void checkIfPlaying() {
         boolean anythingPlaying = false;
-        for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
-            if (entry.getValue().isPlaying()) {
-                anythingPlaying = true;
-                break;
+        if (mCallbacks != null) {
+            for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
+                if (entry.getValue().isPlaying()) {
+                    anythingPlaying = true;
+                    break;
+                }
             }
         }
         if (anythingPlaying != mTileVisible) {
