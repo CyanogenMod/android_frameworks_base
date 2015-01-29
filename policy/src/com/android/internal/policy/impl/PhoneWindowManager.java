@@ -176,6 +176,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static public final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
     static public final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
     static public final String SYSTEM_DIALOG_REASON_ASSIST = "assist";
+    static public final String POWER_KEYDOWN_MUTE = "org.codeaurora.PowerKeyDown.Mute";
 
     // Available custom actions to perform on a key press.
     // Must match values for KEY_HOME_LONG_PRESS_ACTION in:
@@ -4829,6 +4830,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             // Otherwise, if "Power button ends call" is enabled,
                             // the Power button will hang up any current active call.
                             hungUp = telecomManager.endCall();
+                        }  else {
+                            mContext.sendBroadcast(new Intent(POWER_KEYDOWN_MUTE));
                         }
                     }
                     interceptPowerKeyDown(!interactive || hungUp
