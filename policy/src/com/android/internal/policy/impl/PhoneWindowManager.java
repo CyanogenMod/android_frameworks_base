@@ -5297,6 +5297,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     msg.sendToTarget();
                 }
             }
+            case KeyEvent.KEYCODE_CAMERA: {
+                isWakeKey = true;
+                Intent intent;
+                if (keyguardActive) {
+                    intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE);
+                } else {
+                    intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                }
+                mContext.startActivityAsUser(intent, UserHandle.CURRENT_OR_SELF);
+            }
         }
 
         if (useHapticFeedback) {
@@ -5332,7 +5342,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_MUTE:
                 return mVolumeWakeScreen || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
-            // ignore media and camera keys
+            // ignore focus and media keys
             case KeyEvent.KEYCODE_MUTE:
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY:
@@ -5345,7 +5355,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_MEDIA_RECORD:
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
             case KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK:
-            case KeyEvent.KEYCODE_CAMERA:
             case KeyEvent.KEYCODE_FOCUS:
                 return false;
 
@@ -5357,6 +5366,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return mAssistWakeScreen;
             case KeyEvent.KEYCODE_APP_SWITCH:
                 return mAppSwitchWakeScreen;
+            case KeyEvent.KEYCODE_CAMERA:
+                return true;
         }
         return true;
     }
