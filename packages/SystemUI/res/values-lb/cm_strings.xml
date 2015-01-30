@@ -68,7 +68,7 @@
   <string name="navbar_back_button">Zréckknäppchen</string>
   <string name="navbar_empty_button">Eidel loossen</string>
   <string name="navbar_menu_conditional_button">Knäppche fir de Menü automatesch ze verstoppen</string>
-  <string name="navbar_menu_always_button">Knäppche fir de Menü ëmmer ze weisen</string>
+  <string name="navbar_menu_always_button">Knäppche fir de Menü ëmmer unzeweisen</string>
   <string name="navbar_menu_big_button">Menüknäppchen</string>
   <string name="advanced_dev_option_wipe_app">Applikatiounsdate läschen</string>
   <string name="advanced_dev_option_force_stop">Zoumaachen zwéngen</string>

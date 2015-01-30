@@ -41,12 +41,14 @@
   <string name="reboot_bootmenu">Algkäivituse menüü</string>
   <string name="reboot_fastboot">Fastboot režiim</string>
   <string name="reboot_download">Download režiim</string>
+  <string name="reboot_soft">Poolik taaskäivitus</string>
   <string name="reboot_progress">Taaskäivitamine\u2026</string>
   <string name="reboot_confirm" product="tablet">Teie tahvelarvuti taaskäivitub.</string>
   <string name="reboot_confirm" product="default">Teie telefon taaskäivitub.</string>
   <string name="permlab_preventpower">vältida toitenuppu</string>
   <string name="permdesc_preventpower">Lubab rakendusel toitenuppu eirata</string>
   <string name="permlab_sendMockSms">saata võlts SMS sõnumeid</string>
+  <string name="permdesc_sendMockSms">Lubab rakendusel saata võlts-SMS\'e. See annab rakendusele loa saata SMS-e usaldatud rakendustele. Pahavaralised rakendused võivad saata sõnumeid pidevalt, takistades seadme teavitussüsteemi ja häirides kasutajat.</string>
   <string name="storage_sd_dock_card">Doki SD-kaart</string>
   <string name="app_killed_message">Rakendus lõpetatud</string>
   <string name="global_action_reboot">Taaskäivitamine</string>
@@ -65,6 +67,9 @@
   <string name="perf_profile_perf">Jõudlus</string>
   <string name="permlab_interceptSmsSent">keelata väljuv SMS</string>
   <string name="permdesc_interceptSmsSent">Lubab rakendusel keelata väljaminev SMS. Pahavara võib kasutada seda takistamaks väljuvaid SMS-e.</string>
+  <string name="permlab_receiveProtectedSms">saa kaitstud SMSe</string>
+  <string name="permdesc_receiveProtectedSms">Lubab rakendusel vastu võtta sissetuleva kaitstud SMSi.</string>
+  <string name="permlab_modifyProtectedSmsList">muuda kaitstud SMS nimekirja</string>
   <string name="permlab_resetBatteryStats">nullida aku statistika</string>
   <string name="permdesc_resetBatteryStats">Lubab rakendusel nullida aku praeguse madala-tasemelise kasutuse andmed.</string>
   <string name="permgrouplab_security">Turvalisus</string>
@@ -133,4 +138,10 @@ muuta juba olemasolevaid.</string>
   <string name="adb_net_active_notification_title">ADB üle võrgu aktiveeritud</string>
   <string name="adb_both_active_notification_title">ADB üle USB &amp; võrgu aktiveeritud</string>
   <string name="adb_active_generic_notification_message">Puuduta debuggimise lõpetamiseks.</string>
+  <string name="usb_storage_notification_manage_message">Puuduta et hallata</string>
+  <string name="progress_nomediapresent" product="default">Eemaldatavat mäluseadet ei leitud\u2026</string>
+  <string name="lockscreen_sim_error_message_short">Kehtetu kaart.</string>
+  <string name="lockscreen_airplane_mode_on">Lennuki režiim</string>
+  <string name="lockscreen_sim_locked_message_cm">SIM/RUIM kaart on lukustatud.</string>
+  <string name="pinpuk_attempts">\nKatset jäänud:</string>
 </resources>

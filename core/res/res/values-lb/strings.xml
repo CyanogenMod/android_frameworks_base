@@ -286,7 +286,7 @@
   <string name="permlab_getDetailedTasks">Detailer zu lafenden Appen ausliesen</string>
   <string name="permdesc_getDetailedTasks">Erlaabt der App, detailéiert Informatiounen iwwer Aufgaben ofzeruffen déi grad lafen oder viru kuerzem gelaf sinn. Béisaarteg Appe kéinte private Informatiounen iwwer aner Appen entdecken.</string>
   <string name="permlab_reorderTasks">Lafend Appen ëmzortéieren</string>
-  <string name="permdesc_reorderTasks">Erlaabt der App, Aufgaben vum Virdergrond an den Hannergrond ze réckelen. D\'App kéint dat ouni däin Awierke machen.</string>
+  <string name="permdesc_reorderTasks">Erlaabt der App, Aufgaben vum Virgrond an den Hannergrond ze réckelen. D\'App kéint dat ouni däin Awierke maachen.</string>
   <string name="permlab_removeTasks">Lafend Appe stoppen</string>
   <string name="permdesc_removeTasks">Erlaabt der App, Aufgaben ze läschen an hir Appen zouzemaachen. Béisaarteg Appe kéinten d\'Behuele vun aneren Appe stéieren.</string>
   <string name="permlab_manageActivityStacks">Aktivitéitsstapel geréieren</string>
@@ -306,7 +306,7 @@
   <string name="permlab_forceStopPackages">Aner Appe forcéiert stoppen</string>
   <string name="permdesc_forceStopPackages">Erlaabt der App, aner Appe forcéiert ze stoppen.</string>
   <string name="permlab_forceBack">Zoumaache vun Appen erzwéngen</string>
-  <string name="permdesc_forceBack">Erlaabt der App, all Aktivitéiten am Virdergrond zouzemaachen an zréckzegoen. Sollt ni fir normal Appen néideg sinn.</string>
+  <string name="permdesc_forceBack">Erlaabt der App, all Aktivitéiten am Virgrond zouzemaachen an zréckzegoen. Sollt ni fir normal Appen néideg sinn.</string>
   <string name="permlab_dump">interne Systemstatus ausliesen</string>
   <string name="permdesc_dump">Erlaabt der App, den interne Status vum System auszeliesen. Béisaarteg Appe kéinten eng grouss Rei u privaten a sécheren Informatiounen ausliesen déi se normalerweis net brauchen.</string>
   <string name="permlab_retrieve_window_content">Schierminhalt ausliesen</string>
@@ -503,7 +503,7 @@
   <string name="permlab_camera">Biller a Videoen ophuelen</string>
   <string name="permdesc_camera">Erlaabt der App, Biller a Videoe mat der Kamera opzehuelen. Dës Berechtegung erlaabt der App, d\'Kamera zu all Moment ouni däin Awierken ze benotzen.</string>
   <string name="permlab_cameraDisableTransmitLed">LED-Statusluucht bei der Benotzung vun der Kamera desaktivéieren</string>
-  <string name="permdesc_cameraDisableTransmitLed">Erlaabt enger virinstalléierter System-App, d\'LED ze desaktivéieren déi weist datt d\'Kamera un ass.</string>
+  <string name="permdesc_cameraDisableTransmitLed">Erlaabt enger virinstalléierter System-App, d\'LED ze desaktivéieren déi uweist datt d\'Kamera un ass.</string>
   <string name="permlab_brick" product="tablet">Tablet dauerhaft desaktivéieren</string>
   <string name="permlab_brick" product="default">Telefon dauerhaft desaktivéieren</string>
   <string name="permdesc_brick" product="tablet">Erlaabt der App, de kompletten Tablet endgëlteg ze desaktivéieren. Dat ass immens geféierlech.</string>
@@ -662,7 +662,7 @@
   <string name="permlab_use_sip">Interneturiff ofsetzen/empfänken</string>
   <string name="permdesc_use_sip">Erlaabt der App, de SIP-Service ze benotze fir Internet-Uriff ofzesetzen an unzehuelen.</string>
   <string name="permlab_bind_call_service">Mam Uruffschierm interagéieren</string>
-  <string name="permdesc_bind_call_service">Erlaabt der App, ze kontrolléiere wien a wéi de Benotzer den Uruff-Schierm gesäit.</string>
+  <string name="permdesc_bind_call_service">Erlaabt der App, ze kontrolléiere wien a wéi de Benotzer den Uruffschierm gesäit.</string>
   <string name="permlab_readNetworkUsageHistory">Historesch Netzwierkdate liesen</string>
   <string name="permdesc_readNetworkUsageHistory">Erlaabt der App, historesch Netzwierknotzungsdate fir spezifesch Netzwierker an Appen ze liesen.</string>
   <string name="permlab_manageNetworkPolicy">Netzwierkrichtlinne verwalten</string>

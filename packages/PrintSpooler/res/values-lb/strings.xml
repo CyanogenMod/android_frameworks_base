@@ -21,7 +21,7 @@
   <string name="save_button">Späicheren</string>
   <string name="label_destination">Destinatioun</string>
   <string name="label_copies">Kopien</string>
-  <string name="label_paper_size">Pabeiergréisst</string>
+  <string name="label_paper_size">Pabeiersgréisst</string>
   <string name="label_color">Faarf</string>
   <string name="label_orientation">Orientéierung</string>
   <string name="label_pages">Säiten (<xliff:g id="page_count" example="5">%1$s</xliff:g>)</string>

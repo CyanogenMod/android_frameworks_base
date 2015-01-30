@@ -35,6 +35,8 @@
   <string name="quick_settings_usb_tether_off_label">Lahti ühendatud</string>
   <string name="quick_settings_usb_tether_connected_label">Lõastamine väljas</string>
   <string name="quick_settings_usb_tether_on_label">Lõastamine</string>
+  <string name="quick_settings_wifiap">Wi-Fi kuumkoht</string>
+  <string name="quick_settings_wifiap_off">Wi-Fi pääsupunkt väljas</string>
   <string name="quick_settings_quiethours">Vaiksed tunnid</string>
   <string name="quick_settings_quiethours_off">Vaiksed tunnid väljas</string>
   <string name="quick_settings_lte">LTE</string>
@@ -48,11 +50,16 @@
   <string name="quick_settings_compass_init">Määratlen\u2026</string>
   <string name="quick_settings_heads_up_on">Heads up lubatud</string>
   <string name="quick_settings_heads_up_off">Katkestused puuduvad</string>
+  <string name="quick_settings_themes">Teemad</string>
   <string name="location_mode_high_accuracy_title">Kõrge täpsus</string>
   <string name="location_mode_battery_saving_title">Aku säästmine</string>
   <string name="location_mode_sensors_only_title">Seadmelt ainult</string>
   <string name="quick_settings_expanded_desktop">Laiendatud</string>
   <string name="quick_settings_expanded_desktop_off">Tavaline</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d ühendatud</item>
+    <item quantity="other">%1$d ühendatud</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Ei saa ühendada kaameraga</string>
   <string name="navbar_dialog_title">Vali toiming mida lisada</string>
   <string name="navbar_home_button">Kodu nupp</string>
@@ -65,9 +72,12 @@
   <string name="navbar_menu_big_button">Menüü nupp</string>
   <string name="advanced_dev_option_wipe_app">Kustuta rakenduse andmed</string>
   <string name="advanced_dev_option_force_stop">Jõuga peatamine</string>
+  <string name="advanced_dev_option_uninstall">Eemalda</string>
   <string name="accessibility_dock_battery_level">Doki aku <xliff:g id="number">%d</xliff:g> protsenti.</string>
   <string name="screenshot_delete_action">Kustuta</string>
   <string name="screenshot_delete_confirmation">Kuvatõmmis kustutatud.</string>
   <string name="accessibility_desc_add_quick_settings">Lisa Kiired seaded.</string>
   <string name="status_bar_notification_spam_item_title">Eira selliseid sõnumeid</string>
+  <string name="protected_app_notification_title">Kaitstud rakenduste teade</string>
+  <string name="protected_app_notification_summary">Puuduta et avada teade kaitstud rakenduselt</string>
 </resources>

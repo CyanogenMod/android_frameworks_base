@@ -97,9 +97,9 @@
   <string name="app_ops_access_camera">pasiekti fotoaparatą</string>
   <string name="app_ops_access_location">pasiekti jūsų vietą</string>
   <string name="app_ops_access_notifications">skaityti jūsų pranešimus</string>
-  <string name="app_ops_alarm_wakeup">pažadinti prietaisą</string>
+  <string name="app_ops_alarm_wakeup">pažadinti įrenginį</string>
   <string name="app_ops_draw_on_top">piešti viršuje</string>
-  <string name="app_ops_keep_device_awake">laikyti jūsų prietaisą pabudusį</string>
+  <string name="app_ops_keep_device_awake">laikyti jūsų įrenginį pabudusį</string>
   <string name="app_ops_make_phone_call">skambinti</string>
   <string name="app_ops_modify_calendar">atnaujinti jūsų kalendorių</string>
   <string name="app_ops_modify_call_log">atnaujinti skambučių žurnalą</string>
@@ -122,7 +122,7 @@
   <string name="app_ops_toggle_bluetooth">įjungti „Bluetooth“</string>
   <string name="app_ops_toggle_mobile_data">įjungti mobiliuosius duomenis</string>
   <string name="app_ops_toggle_wifi">įjungti „Wi-Fi“</string>
-  <string name="app_ops_toggle_nfc">Įjungti / išjungti ALR</string>
+  <string name="app_ops_toggle_nfc">Įjungti / išjungti NFC</string>
   <string name="app_ops_use_alarm_volume">valdyti žadintuvo garsumą</string>
   <string name="app_ops_use_audio_focus">valdyti garso sutelktį</string>
   <string name="app_ops_use_bluetooth_volume">valdyti „Bluetooth“ garsumą</string>
