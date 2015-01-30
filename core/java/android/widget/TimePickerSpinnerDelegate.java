@@ -93,6 +93,7 @@ class TimePickerSpinnerDelegate extends TimePicker.AbstractTimePickerDelegate im
     private Node mLegalTimesTree;
     private int mAmKeyCode;
     private int mPmKeyCode;
+    private int mHeaderTimeTextAppearance = 0;
 
     // Accessibility strings.
     private String mHourPickerDescription;
@@ -136,6 +137,7 @@ class TimePickerSpinnerDelegate extends TimePicker.AbstractTimePickerDelegate im
         final int headerTimeTextAppearance = a.getResourceId(
                 R.styleable.TimePicker_headerTimeTextAppearance, 0);
         if (headerTimeTextAppearance != 0) {
+            mHeaderTimeTextAppearance = headerTimeTextAppearance;
             mHourView.setTextAppearance(context, headerTimeTextAppearance);
             mSeparatorView.setTextAppearance(context, headerTimeTextAppearance);
             mMinuteView.setTextAppearance(context, headerTimeTextAppearance);
@@ -234,7 +236,11 @@ class TimePickerSpinnerDelegate extends TimePicker.AbstractTimePickerDelegate im
 
     private int computeMaxWidthOfNumbers(int max) {
         TextView tempView = new TextView(mContext);
-        tempView.setTextAppearance(mContext, R.style.TextAppearance_Material_TimePicker_TimeLabel);
+        if (mHeaderTimeTextAppearance != 0) {
+            tempView.setTextAppearance(mContext, mHeaderTimeTextAppearance);
+        } else {
+            tempView.setTextAppearance(mContext, R.style.TextAppearance_Material_TimePicker_TimeLabel);
+        }
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         tempView.setLayoutParams(lp);
