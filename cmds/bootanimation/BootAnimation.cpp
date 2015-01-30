@@ -89,6 +89,7 @@ static pthread_mutex_t mp_lock;
 static pthread_cond_t mp_cond;
 static bool isMPlayerPrepared = false;
 static bool isMPlayerCompleted = false;
+static sp<MediaPlayer> mPlayer;
 
 class MPlayerListener : public MediaPlayerListener
 {
@@ -812,6 +813,13 @@ bool BootAnimation::movie()
     pthread_mutex_unlock(&mp_lock);
     ALOGD("media player is completed.");
 
+    if (mPlayer != NULL) {
+        mPlayer->reset();
+        // sleep for 200ms to ensure audio output used for
+        // boot sound is stopped before process exit
+        usleep(200*1000);
+    }
+
     pthread_cond_destroy(&mp_cond);
     pthread_mutex_destroy(&mp_lock);
 
@@ -898,15 +906,15 @@ void* playMusic(void* arg)
 {
     int index = 0;
     char *fileName = (char *)arg;
-    sp<MediaPlayer> mp = new MediaPlayer();
+    mPlayer = new MediaPlayer();
     sp<MPlayerListener> mListener = new MPlayerListener();
-    if (mp != NULL) {
+    if (mPlayer != NULL) {
         ALOGD("starting to play %s", fileName);
-        mp->setListener(mListener);
+        mPlayer->setListener(mListener);
 
-        if (mp->setDataSource(NULL, fileName, NULL) == NO_ERROR) {
-            mp->setAudioStreamType(AUDIO_STREAM_ENFORCED_AUDIBLE);
-            mp->prepare();
+        if (mPlayer->setDataSource(NULL, fileName, NULL) == NO_ERROR) {
+            mPlayer->setAudioStreamType(AUDIO_STREAM_ENFORCED_AUDIBLE);
+            mPlayer->prepare();
         } else {
             ALOGE("failed to setDataSource for %s", fileName);
             return NULL;
@@ -926,8 +934,8 @@ void* playMusic(void* arg)
         AudioSystem::getStreamVolumeIndex(AUDIO_STREAM_ENFORCED_AUDIBLE, &index, device);
         if (index != 0) {
             ALOGD("playing %s", fileName);
-            mp->seekTo(0);
-            mp->start();
+            mPlayer->seekTo(0);
+            mPlayer->start();
         } else {
             ALOGW("current volume is zero.");
         }

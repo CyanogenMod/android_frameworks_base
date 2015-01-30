@@ -46,6 +46,7 @@
        <item><xliff:g id="id">alarm_clock</xliff:g></item>
        <item><xliff:g id="id">secure</xliff:g></item>
        <item><xliff:g id="id">clock</xliff:g></item>
+       <item><xliff:g id="id">sdcard_absent</xliff:g></item>
     </string-array>
 
     <!-- Flag indicating whether the surface flinger has limited
@@ -470,6 +471,9 @@
          still use the accelerometer to determine the orientation, such as when
          docked if the dock is configured to enable the accelerometer. -->
     <bool name="config_supportAutoRotation">true</bool>
+
+    <!-- Configuration to support rotation lock toggle -->
+    <bool name="config_forceSupportRotationLockToggle">false</bool>
 
     <!-- If true, the screen can be rotated via the accelerometer in all 4
          rotations as the default behavior. -->
@@ -1659,6 +1663,12 @@
         <item>com.android.inputmethod.latin</item>
     </string-array>
 
+    <!-- Button back light brightness value, 2 means 10 mA, friendly user light brightness -->
+    <integer name="config_button_light_bright_level">2</integer>
+    <!-- Button back light brightness friendly time break. -->
+    <integer name="config_button_light_timeout_msec">4000</integer>
+    <bool name="config_button_light_enabled">false</bool>
+
     <!-- The list of classes that should be added to the notification ranking pipline.
      See {@link com.android.server.notification.NotificationSignalExtractor} -->
     <string-array name="config_notificationSignalExtractors">
@@ -2084,6 +2094,7 @@
     <integer name="launchboost_cpuboost_param">0</integer>
     <integer name="launchboost_pcdisbl_param">0</integer>
     <integer name="launchboost_ksmboost_param">0</integer>
+    <integer name="launchboost_preferidle_param">0</integer>
 
     <!-- Support for disabling to fetch APN from OMH card
          for some cdma carriers -->
@@ -2102,4 +2113,28 @@
    <integer name="ascrollboost_schedboost">0</integer>
    <integer name="ascrollboost_cpuboost">0</integer>
    <integer name="ascrollboost_pcdisbl">0</integer>
+
+   <!-- Controlling respond call via sms feature via config item -->
+   <bool name="config_reject_call_via_sms_enabled">true</bool>
+
+   <!-- Should the device show AM/PM in unlock screen -->
+   <bool name="config_show_ampm_in_unlock_screen">true</bool>
+   <!-- Configuration to play sms ringtone during MO/MT call -->
+   <bool name="config_sms_ringtone_incall">false</bool>
+
+    <!-- This config is used to check if the carrier requires converting destination
+         number before sending out a SMS.
+         Formats for this configuration as below:
+         [true or false][;optional gid]
+         The logic to pick up the configuration:
+         (1) If the "config_sms_convert_destination_number_support" array has no gid
+             special item, the last one will be picked
+         (2) If the "config_sms_convert_destination_number_support" array has gid special
+             item and it matches the current sim's gid, it will be picked.
+         (3) If the "config_sms_convert_destination_number_support" array has gid special
+             item but it doesn't match the current sim's gid, the last one without gid
+             will be picked -->
+    <string-array translatable="false" name="config_sms_convert_destination_number_support">
+        <item>false</item>
+    </string-array>
 </resources>

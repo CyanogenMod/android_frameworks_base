@@ -52,6 +52,7 @@ import android.os.Bundle;
 import android.os.FactoryTest;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.IHardwareService;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
@@ -214,6 +215,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             .build();
 
     /**
+     * Broadcast Action: WiFi Display video is enabled or disabled
+     *
+     * <p>The intent will have the following extra values:
+     * <ul>
+     *   <li><em>state</em> - 0 for disabled, 1 for enabled. </li>
+     * </ul>
+     */
+
+    private static final String ACTION_WIFI_DISPLAY_VIDEO =
+            "org.codeaurora.intent.action.WIFI_DISPLAY_VIDEO";
+
+    /**
      * Keyguard stuff
      */
     private WindowState mKeyguardScrim;
@@ -254,6 +267,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final Object mLock = new Object();
     private final Object mQuickBootLock = new Object();
 
+    private boolean mButtonLightEnabled;
+
     Context mContext;
     IWindowManager mWindowManager;
     WindowManagerFuncs mWindowManagerFuncs;
@@ -264,6 +279,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mPreloadedRecentApps;
     final Object mServiceAquireLock = new Object();
     Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
+    IHardwareService mLight;
     SearchManager mSearchManager;
     AccessibilityManager mAccessibilityManager;
 
@@ -1166,6 +1182,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mAccessibilityManager = (AccessibilityManager) context.getSystemService(
                 Context.ACCESSIBILITY_SERVICE);
 
+        mButtonLightEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_button_light_enabled);
+
+        if (mButtonLightEnabled) {
+            mLight = IHardwareService.Stub.asInterface(
+                    ServiceManager.getService("hardware"));
+
+            if(mLight == null) mButtonLightEnabled = false;
+        }
+
         // register for dock events
         IntentFilter filter = new IntentFilter();
         filter.addAction(UiModeManager.ACTION_ENTER_CAR_MODE);
@@ -1222,8 +1248,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 
         // register for WIFI Display intents
-        IntentFilter wifiDisplayFilter = new IntentFilter(
-                                                Intent.ACTION_WIFI_DISPLAY_VIDEO);
+        IntentFilter wifiDisplayFilter = new IntentFilter(ACTION_WIFI_DISPLAY_VIDEO);
+
         Intent wifidisplayIntent = context.registerReceiver(
                                       mWifiDisplayReceiver, wifiDisplayFilter);
 
@@ -1608,10 +1634,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // XXX right now the app process has complete control over
                 // this...  should introduce a token to let the system
                 // monitor/control what they are doing.
-
-                // Bypass this to allow any activity to show toast even if
-                // it runs in a different process than its package.
-                //outAppOp[0] = AppOpsManager.OP_TOAST_WINDOW;
+                outAppOp[0] = AppOpsManager.OP_TOAST_WINDOW;
                 break;
             case TYPE_DREAM:
             case TYPE_INPUT_METHOD:
@@ -2369,6 +2392,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
                     + repeatCount + " keyguardOn=" + keyguardOn + " mHomePressed=" + mHomePressed
                     + " canceled=" + canceled);
+        }
+
+        if (mButtonLightEnabled && (down && repeatCount == 0 && (keyCode == KeyEvent.KEYCODE_HOME
+                || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU
+                || keyCode == KeyEvent.KEYCODE_SEARCH))) {
+            try {
+                mLight.setButtonLightEnabled(true);
+            } catch(RemoteException e) {
+                Slog.e(TAG, "remote call for turn on button light failed.");
+            }
         }
 
         // If we think we might have a volume down & power key chord on the way
@@ -4773,6 +4806,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mPowerKeyTime = event.getDownTime();
                         interceptScreenshotChord();
                         interceptScreenshotLog();
+
+                        if (mButtonLightEnabled) {
+                            try {
+                                mLight.setButtonLightEnabled(false);
+                            } catch(RemoteException e) {
+                                Slog.e(TAG, "remote call for turn off button light failed.");
+                            }
+                        }
                     }
 
                     TelecomManager telecomManager = getTelecommService();
@@ -5100,7 +5141,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     BroadcastReceiver mWifiDisplayReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-            if (action.equals(Intent.ACTION_WIFI_DISPLAY_VIDEO)) {
+            if (action.equals(ACTION_WIFI_DISPLAY_VIDEO)) {
                 int state = intent.getIntExtra("state", 0);
                 if(state == 1) {
                     mWifiDisplayConnected = true;

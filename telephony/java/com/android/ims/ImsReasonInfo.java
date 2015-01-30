@@ -228,6 +228,19 @@ public class ImsReasonInfo implements Parcelable {
      */
     public static final int CODE_ECBM_NOT_SUPPORTED = 901;
 
+    /**
+     * MT call has ended due to a release from the network
+     * because the call was answered elsewhere
+     */
+    public static final int CODE_ANSWERED_ELSEWHERE = 1014;
+
+    /**
+     * Network string error messages.
+     * mExtraMessage may have these values.
+     */
+    public static final String EXTRA_MSG_SERVICE_NOT_AUTHORIZED
+            = "Forbidden - Not authorized for service";
+
     // For reason type
     public int mReasonType;
     // For main reason code

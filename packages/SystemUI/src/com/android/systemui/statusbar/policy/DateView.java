@@ -113,6 +113,8 @@ public class DateView extends TextView {
             setText(text);
             mLastText = text;
         }
+        Intent intent = new Intent("android.set.drm_file_as_media");
+        mContext.sendBroadcast(intent);
     }
 
     private String getDateFormat() {

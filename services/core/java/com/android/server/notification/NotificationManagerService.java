@@ -716,6 +716,7 @@ public class NotificationManagerService extends SystemService {
                 mScreenOn = true;
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
+                updateNotificationPulse();
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = TelephonyManager.EXTRA_STATE_OFFHOOK
                         .equals(intent.getStringExtra(TelephonyManager.EXTRA_STATE));
@@ -1870,7 +1871,9 @@ public class NotificationManagerService extends SystemService {
         if (disableEffects != null) {
             ZenLog.traceDisableEffects(record, disableEffects);
         }
-        if (disableEffects == null
+        boolean smsRingtone = getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_sms_ringtone_incall);
+        if ((disableEffects == null || (smsRingtone && mInCall))
                 && (!(record.isUpdate
                     && (notification.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0 ))
                 && (record.getUserId() == UserHandle.USER_ALL ||

@@ -43,5 +43,8 @@
     <!-- Configuration that determines if PROTOCOL_ERRORS is to be treated as
          a permamnent error -->
     <bool name="config_protocol_errors_perm_failure">false</bool>
+    <string-array translatable="false" name="config_sms_convert_destination_number_support">
+        <item>true</item>
+    </string-array>
 
 </resources>

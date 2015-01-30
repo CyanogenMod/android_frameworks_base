@@ -53,7 +53,7 @@ public class WindowAnimator {
     private static final String TAG = "WindowAnimator";
 
     /** How long to give statusbar to clear the private keyguard flag when animating out */
-    private static final long KEYGUARD_ANIM_TIMEOUT_MS = 1000;
+    private static final long KEYGUARD_ANIM_TIMEOUT_MS = 0; //1000;
 
     final WindowManagerService mService;
     final Context mContext;
@@ -300,6 +300,9 @@ public class WindowAnimator {
                         mKeyguardGoingAway = false;
                     }
                     if (win.isReadyForDisplay()) {
+/*
+ * Top window keep the showing state.(don't hide.)
+ *
                         if (nowAnimating) {
                             if (winAnimator.mAnimationIsEntrance) {
                                 mForceHiding = KEYGUARD_ANIMATING_IN;
@@ -309,6 +312,8 @@ public class WindowAnimator {
                         } else {
                             mForceHiding = win.isDrawnLw() ? KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
                         }
+*/
+                        mForceHiding = KEYGUARD_NOT_SHOWN;
                     }
                     if (WindowManagerService.DEBUG_VISIBILITY) Slog.v(TAG,
                             "Force hide " + forceHidingToString()
@@ -614,6 +619,7 @@ public class WindowAnimator {
                 }
 
                 mAnimating |= mService.getDisplayContentLocked(displayId).animateDimLayers();
+                mAnimating |= mService.getDisplayContentLocked(displayId).animateBlurLayers();
 
                 //TODO (multidisplay): Magnification is supported only for the default display.
                 if (mService.mAccessibilityController != null

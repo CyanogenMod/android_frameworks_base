@@ -2617,6 +2617,24 @@ public final class Settings {
         public static final String NOTIFICATION_LIGHT_PULSE = "notification_light_pulse";
 
         /**
+          * Whether the lockscreen blurring is enabled. The value is boolean (1 or 0).
+          * @hide
+          */
+        public static final String BLUR_EFFECT_LOCKSCREEN = "blur_lockscreen";
+
+        /**
+          * Whether the globalaction dialog background blurring is enabled. The value is boolean (1 or 0).
+          * @hide
+          */
+        public static final String BLUR_EFFECT_GLOBALACTION = "blur_globalaction";
+
+        /**
+          * Whether the volumen control content area blurring is enabled. The value is boolean (1 or 0).
+          * @hide
+          */
+        public static final String BLUR_EFFECT_VOLUMECONTROL = "blur_volume";
+
+        /**
          * Show pointer location on screen?
          * 0 = no
          * 1 = yes
@@ -2925,6 +2943,15 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
+         /**
+         * Whether wifi settings will connect to access point automatically
+         * 0 = automatically
+         * 1 = manually
+         * @hide
+         */
+        public static final String WIFI_AUTO_CONNECT_TYPE = "wifi_auto_connect_type";
+
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
@@ -2943,6 +2970,7 @@ public final class Settings {
             WIFI_STATIC_NETMASK,
             WIFI_STATIC_DNS1,
             WIFI_STATIC_DNS2,
+            WIFI_AUTO_CONNECT_TYPE,
             BLUETOOTH_DISCOVERABILITY,
             BLUETOOTH_DISCOVERABILITY_TIMEOUT,
             DIM_SCREEN,
@@ -5934,6 +5962,13 @@ public final class Settings {
        public static final String PACKAGE_VERIFIER_INCLUDE_ADB = "verifier_verify_adb_installs";
 
        /**
+        * Time since last fstrim (milliseconds) after which we force one to happen
+        * during device startup.  If unset, the default is 3 days.
+        * @hide
+        */
+       public static final String FSTRIM_MANDATORY_INTERVAL = "fstrim_mandatory_interval";
+
+       /**
         * The interval in milliseconds at which to check packet counts on the
         * mobile data interface when screen is on, to detect possible data
         * connection problems.
@@ -7301,6 +7336,13 @@ public final class Settings {
             return putString(cr, name, Float.toString(value));
         }
 
+
+        /**
+          * Subscription to be used for handling legacy TelephonyManager/other aidl API calls.
+          *  Valid subId values are greater than 0.
+          * @hide
+          */
+        public static final String MULTI_SIM_DEFAULT_SUBSCRIPTION = "multi_sim_default_sub";
 
         /**
           * Subscription to be used for voice call on a multi sim device. The supported values

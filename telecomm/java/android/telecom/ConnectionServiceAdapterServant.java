@@ -426,6 +426,10 @@ final class ConnectionServiceAdapterServant {
             args.arg2 = connection;
             mHandler.obtainMessage(MSG_ADD_EXISTING_CONNECTION, args).sendToTarget();
         }
+
+        @Override
+        public void resetCdmaConnectionTime(String callId) {
+        }
     };
 
     public ConnectionServiceAdapterServant(IConnectionServiceAdapter delegate) {

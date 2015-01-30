@@ -28,8 +28,12 @@ import android.util.Log;
 import libcore.io.IoBridge;
 import libcore.io.Streams;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileDescriptor;
 import java.io.FilterOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.UnknownServiceException;
@@ -73,7 +77,44 @@ public class DrmOutputStream extends OutputStream {
             } catch (ErrnoException e) {
                 e.rethrowAsIOException();
             }
-            IoBridge.write(mFd, status.convertedData, 0, status.convertedData.length);
+
+            // IoBridge.write(mFd, status.convertedData, 0, status.convertedData.length);
+            InputStream ipStream = null;
+            String path = null;
+            try {
+                byte[] filePath = status.convertedData;
+                path = new String(filePath);
+                if (path != null) ipStream = new FileInputStream(path);
+                byte[] buffer = new byte[4096];
+                int size=0;
+                do {
+                    size = ipStream.read(buffer);
+                    if (size > 0) {
+                       IoBridge.write(mFd, buffer, 0, size);
+                    }
+                } while(size > 0);
+            } catch (FileNotFoundException e) {
+                Log.w(TAG, "File: " + mFd + " could not be found.", e);
+            } catch (IOException e) {
+                Log.w(TAG, "Could not access File: " + mFd + " .", e);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "Could not open file in mode: rw", e);
+            } catch (SecurityException e) {
+                Log.w(TAG, "Access to File: " + mFd +
+                        " was denied denied by SecurityManager.", e);
+            } finally {
+                try {
+                    File file = null;
+                    if (path != null) file = new File(path);
+                    if (file.delete()) {
+                        Log.i(TAG, "deleted the temp file ");
+                    } else {
+                        Log.i(TAG, "could not deleted the temp file ");
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "exeption");
+                }
+            }
             mSessionId = INVALID_SESSION;
         } else {
             throw new IOException("Unexpected DRM status: " + status.statusCode);
@@ -82,7 +123,7 @@ public class DrmOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        if (mSessionId == INVALID_SESSION) {
+        if (mSessionId != INVALID_SESSION) {
             Log.w(TAG, "Closing stream without finishing");
         }
 
@@ -103,7 +144,8 @@ public class DrmOutputStream extends OutputStream {
 
         final DrmConvertedStatus status = mClient.convertData(mSessionId, exactBuffer);
         if (status.statusCode == STATUS_OK) {
-            IoBridge.write(mFd, status.convertedData, 0, status.convertedData.length);
+            // Do not write converted data here. Converted data will write on finish()
+            // IoBridge.write(mFd, status.convertedData, 0, status.convertedData.length);
         } else {
             throw new IOException("Unexpected DRM status: " + status.statusCode);
         }

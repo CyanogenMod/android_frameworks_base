@@ -173,6 +173,8 @@ public class PhoneStatusBarPolicy {
         if (mContext.getResources().getBoolean(R.bool.config_showSdcardAbsentIndicator)) {
             mStorageManager = (StorageManager) context
                     .getSystemService(Context.STORAGE_SERVICE);
+            mService.setIcon("sdcard_absent", R.drawable.stat_sys_no_sdcard, 0, null);
+            mService.setIconVisibility("sdcard_absent", !isSdCardInsert(mContext));
             StorageEventListener listener = new StorageEventListener() {
                 public void onStorageStateChanged(final String path,
                         final String oldState, final String newState) {

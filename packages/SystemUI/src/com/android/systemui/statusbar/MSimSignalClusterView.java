@@ -276,7 +276,7 @@ public class MSimSignalClusterView
         }
         if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
             if (phoneId == PhoneConstants.PHONE_ID1) {
-                if (!isRoaming() && showDataAndVoice()) {
+                if (!isRoaming() && showDataAndVoice() && (mNoSimIconId[phoneId] == 0)) {
                     mMobileCdmaVisible = true;
                     mMobileCdma1xOnlyVisible = false;
                     mMobileStrengthId[0] = 0;
@@ -289,7 +289,7 @@ public class MSimSignalClusterView
                         mMobileCdma1xOnlyVisible = false;
                         mMobileStrengthId[phoneId] = convertMobileStrengthIcon(strengthIcon);
                     }
-                } else if (show1xOnly() || isRoaming()) {
+                } else if ((show1xOnly() || isRoaming()) && (mNoSimIconId[phoneId] == 0)) {
                     //when it is roaming, just show one icon, rather than two icons for CT.
                     mMobileCdmaVisible = false;
                     mMobileCdma1xOnlyVisible = true;

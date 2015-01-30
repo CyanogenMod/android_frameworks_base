@@ -727,4 +727,21 @@ interface ISms {
      * @return capacity of ICC
      */
     int getSmsCapacityOnIccForSubscriber(long subId);
+
+    /**
+     * Get the SMSC from Icc card.
+     *
+     * @param subId for subId which getSmscAddressFromIccForSubscriber is queried.
+     * @return SMSC of ICC
+     */
+    String getSmscAddressFromIccForSubscriber(long subId);
+
+    /**
+     * Set the SMSC to Icc card.
+     *
+     * @param subId for subId which setSmscAddressToIccForSubscriber is queried.
+     * @param scAddress is the service center address
+     * @return true if SMSC is set successfully, false otherwise
+     */
+    boolean setSmscAddressToIccForSubscriber(long subId, String scAdress);
 }

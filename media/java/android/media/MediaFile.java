@@ -64,6 +64,7 @@ public class MediaFile {
     private static final int LAST_MIDI_FILE_TYPE = FILE_TYPE_IMY;
    
     // Video file types
+    public static final int FILE_TYPE_FLV     = 20;
     public static final int FILE_TYPE_MP4     = 21;
     public static final int FILE_TYPE_M4V     = 22;
     public static final int FILE_TYPE_3GPP    = 23;
@@ -74,7 +75,7 @@ public class MediaFile {
     public static final int FILE_TYPE_MP2TS   = 28;
     public static final int FILE_TYPE_AVI     = 29;
     public static final int FILE_TYPE_WEBM    = 30;
-    private static final int FIRST_VIDEO_FILE_TYPE = FILE_TYPE_MP4;
+    private static final int FIRST_VIDEO_FILE_TYPE = FILE_TYPE_FLV;
     private static final int LAST_VIDEO_FILE_TYPE = FILE_TYPE_WEBM;
     
     // More video file types
@@ -217,6 +218,7 @@ public class MediaFile {
         addFileType("WEBM", FILE_TYPE_WEBM, "video/webm");
         addFileType("TS", FILE_TYPE_MP2TS, "video/mp2ts");
         addFileType("AVI", FILE_TYPE_AVI, "video/avi");
+        addFileType("FLV", FILE_TYPE_FLV, "video/flv");
 
         if (isWMVEnabled()) {
             addFileType("WMV", FILE_TYPE_WMV, "video/x-ms-wmv", MtpConstants.FORMAT_WMV);

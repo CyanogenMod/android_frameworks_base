@@ -35,6 +35,14 @@ public class LightsService extends SystemService {
 
     final LightImpl mLights[] = new LightImpl[LightsManager.LIGHT_ID_COUNT];
 
+    private static final int MSG_BBL_TIMEOUT = 1;
+
+    private int mButtonLightTimeout;
+
+    private int mButtonBrightness;
+
+    private Handler mLightHandler = null;
+
     private final class LightImpl extends Light {
 
         private LightImpl(int id) {
@@ -161,12 +169,50 @@ public class LightsService extends SystemService {
                 // fail silently
             }
         }
+
+        public void setButtonLightEnabled(boolean on) {
+            final Context context = getContext();
+            if (context.checkCallingOrSelfPermission(android.Manifest.permission.HARDWARE_TEST)
+                    != PackageManager.PERMISSION_GRANTED) {
+                throw new SecurityException("Requires FLASHLIGHT permission");
+            }
+
+            mLightHandler.removeMessages(MSG_BBL_TIMEOUT);
+
+            if (on) {
+                getLight(LightsManager.LIGHT_ID_BUTTONS).setBrightness(mButtonBrightness);
+
+                mLightHandler.sendMessageDelayed(
+                        mLightHandler.obtainMessage(MSG_BBL_TIMEOUT),
+                        mButtonLightTimeout);
+            } else {
+                getLight(LightsManager.LIGHT_ID_BUTTONS).setBrightness(0);
+            }
+        }
     };
 
     public LightsService(Context context) {
         super(context);
 
         mNativePointer = init_native();
+
+        mButtonLightTimeout = context.getResources().getInteger(
+                com.android.internal.R.integer.config_button_light_timeout_msec);
+
+        mButtonBrightness = context.getResources().getInteger(
+                com.android.internal.R.integer.config_button_light_bright_level);
+
+        mLightHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                synchronized(this) {
+                    switch(msg.what) {
+                    case MSG_BBL_TIMEOUT:
+                        getLight(LightsManager.LIGHT_ID_BUTTONS).setBrightness(0);
+                        break;
+                    }
+                }
+            }
+        };
 
         for (int i = 0; i < LightsManager.LIGHT_ID_COUNT; i++) {
             mLights[i] = new LightImpl(i);
@@ -194,6 +240,10 @@ public class LightsService extends SystemService {
     protected void finalize() throws Throwable {
         finalize_native(mNativePointer);
         super.finalize();
+    }
+
+    public Light getLight(int id) {
+        return mLights[id];
     }
 
     private Handler mH = new Handler() {

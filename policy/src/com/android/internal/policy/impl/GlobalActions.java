@@ -1249,6 +1249,13 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             mAdapter = (MyAdapter) params.mAdapter;
             mWindowTouchSlop = ViewConfiguration.get(context).getScaledWindowTouchSlop();
             params.apply(mAlert);
+
+            int blurSetting = Settings.System.getInt( mContext.getContentResolver(),
+                    Settings.System.BLUR_EFFECT_GLOBALACTION, 0);
+            if( blurSetting == 1 ) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            }
         }
 
         private static int getDialogTheme(Context context) {

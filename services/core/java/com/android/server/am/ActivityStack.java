@@ -1016,7 +1016,12 @@ final class ActivityStack {
                 } else if (!hasVisibleBehindActivity()) {
                     // If we were visible then resumeTopActivities will release resources before
                     // stopping.
-                    mStackSupervisor.mStoppingActivities.add(prev);
+                    ActivityRecord top = topRunningActivityLocked(null);
+                    if (top != null && top.equals(prev) && mService.isSleepingOrShuttingDown()){
+                        Slog.d(TAG, "Top activity keeps the pause sate. top : "+top);
+                    } else {
+                        mStackSupervisor.mStoppingActivities.add(prev);
+                    }
                     if (mStackSupervisor.mStoppingActivities.size() > 3 ||
                             prev.frontOfTask && mTaskHistory.size() <= 1) {
                         // If we already have a few activities waiting to stop,
@@ -1706,6 +1711,8 @@ final class ActivityStack {
                 // previous should actually be hidden depending on whether the
                 // new one is found to be full-screen or not.
                 if (prev.finishing) {
+                    if (prev.waitingVisible)
+                        mStackSupervisor.mWaitingVisibleActivities.add(prev);
                     mWindowManager.setAppVisibility(prev.appToken, false);
                     if (DEBUG_SWITCH) Slog.v(TAG, "Not waiting for visible to hide: "
                             + prev + ", waitingVisible="

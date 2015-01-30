@@ -85,6 +85,11 @@ public abstract class Connection implements IConferenceable {
     /* Indicates that the call is multitasking */
     public static final int CALL_SUBSTATE_MEDIA_PAUSED = 0x8;
 
+    /* Mask containing all the call substate bits set */
+    public static final int CALL_SUBSTATE_ALL = CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED |
+        CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED | CALL_SUBSTATE_AVP_RETRY |
+        CALL_SUBSTATE_MEDIA_PAUSED;
+
     // Flag controlling whether PII is emitted into the logs
     private static final boolean PII_DEBUG = Log.isLoggable(android.util.Log.DEBUG);
 
@@ -114,6 +119,7 @@ public abstract class Connection implements IConferenceable {
         /** @hide */
         public void onConferenceParticipantsChanged(Connection c,
                 List<ConferenceParticipant> participants) {}
+        public void onCdmaConnectionTimeReset(Connection c) {}
     }
 
     /** @hide */
@@ -1021,6 +1027,15 @@ public abstract class Connection implements IConferenceable {
             }
         }
         fireOnConferenceableConnectionsChanged();
+    }
+
+    /**
+     * Resets the cdma connection time.
+     */
+    public final void resetCdmaConnectionTime() {
+        for (Listener l : mListeners) {
+            l.onCdmaConnectionTimeReset(this);
+        }
     }
 
     /**

@@ -1466,6 +1466,7 @@
   <java-symbol type="bool" name="config_reverseDefaultRotation" />
   <java-symbol type="bool" name="config_showNavigationBar" />
   <java-symbol type="bool" name="config_supportAutoRotation" />
+  <java-symbol type="bool" name="config_forceSupportRotationLockToggle" />
   <java-symbol type="bool" name="target_honeycomb_needs_options_menu" />
   <java-symbol type="dimen" name="navigation_bar_height" />
   <java-symbol type="dimen" name="navigation_bar_height_landscape" />
@@ -1690,6 +1691,9 @@
   <java-symbol type="integer" name="config_shutdownBatteryTemperature" />
   <java-symbol type="integer" name="config_undockedHdmiRotation" />
   <java-symbol type="integer" name="config_virtualKeyQuietTimeMillis" />
+  <java-symbol type="integer" name="config_button_light_bright_level" />
+  <java-symbol type="integer" name="config_button_light_timeout_msec" />
+  <java-symbol type="bool" name="config_button_light_enabled" />
   <java-symbol type="layout" name="am_compat_mode_dialog" />
   <java-symbol type="layout" name="launch_warning" />
   <java-symbol type="layout" name="safe_mode" />
@@ -1702,6 +1706,7 @@
   <java-symbol type="string" name="aerr_application" />
   <java-symbol type="string" name="aerr_process" />
   <java-symbol type="string" name="aerr_title" />
+  <java-symbol type="string" name="android_upgrading_fstrim" />
   <java-symbol type="string" name="android_upgrading_apk" />
   <java-symbol type="string" name="android_upgrading_complete" />
   <java-symbol type="string" name="android_upgrading_starting_apps" />
@@ -2210,6 +2215,7 @@
   <java-symbol type="integer" name="launchboost_cpuboost_param" />
   <java-symbol type="integer" name="launchboost_pcdisbl_param" />
   <java-symbol type="integer" name="launchboost_ksmboost_param" />
+  <java-symbol type="integer" name="launchboost_preferidle_param" />
 
   <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
   <!-- cpu boost for Animationboost -->
@@ -2226,4 +2232,14 @@
   <java-symbol type="integer" name="ascrollboost_schedboost" />
   <java-symbol type="integer" name="ascrollboost_cpuboost" />
   <java-symbol type="integer" name="ascrollboost_pcdisbl" />
+  <java-symbol type="bool" name="config_reject_call_via_sms_enabled"/>
+
+  <!-- From keyguard for showing am/pm in unlock screen -->
+  <java-symbol type="bool" name="config_show_ampm_in_unlock_screen" />
+  <!-- for wifi auto connection -->
+  <java-symbol type="bool" name="wifi_autocon" />
+
+  <!-- Configuration to play sms ringtone during MO/MT call -->
+  <java-symbol type="bool" name="config_sms_ringtone_incall" />
+  <java-symbol type="array" name="config_sms_convert_destination_number_support" />
 </resources>

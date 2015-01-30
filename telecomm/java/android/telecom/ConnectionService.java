@@ -78,6 +78,7 @@ public abstract class ConnectionService extends Service {
     private static final int MSG_SET_LOCAL_HOLD = 20;
     private static final int MSG_SET_ACTIVE_SUB = 21;
     private static final int MSG_DEFLECT = 22;
+    private static final int MSG_ADD_PARTICIPANT_WITH_CONFERENCE = 23;
 
     private static Connection sNullConnection;
 
@@ -209,6 +210,14 @@ public abstract class ConnectionService extends Service {
         @Override
         public void splitFromConference(String callId) {
             mHandler.obtainMessage(MSG_SPLIT_FROM_CONFERENCE, callId).sendToTarget();
+        }
+
+        @Override
+        public void addParticipantWithConference(String callId, String participant) {
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = callId;
+            args.arg2 = participant;
+            mHandler.obtainMessage(MSG_ADD_PARTICIPANT_WITH_CONFERENCE, args).sendToTarget();
         }
 
         @Override
@@ -350,6 +359,17 @@ public abstract class ConnectionService extends Service {
                 case MSG_SPLIT_FROM_CONFERENCE:
                     splitFromConference((String) msg.obj);
                     break;
+                case MSG_ADD_PARTICIPANT_WITH_CONFERENCE: {
+                    SomeArgs args = (SomeArgs) msg.obj;
+                    try {
+                        String callId = (String) args.arg1;
+                        String participant = (String) args.arg2;
+                        addParticipantWithConference(callId, participant);
+                    } finally {
+                        args.recycle();
+                    }
+                    break;
+                }
                 case MSG_MERGE_CONFERENCE:
                     mergeConference((String) msg.obj);
                     break;
@@ -434,6 +454,21 @@ public abstract class ConnectionService extends Service {
             Log.d(this, "call capabilities: conference: %s",
                     PhoneCapabilities.toString(capabilities));
             mAdapter.setCallCapabilities(id, capabilities);
+        }
+
+        @Override
+        public void onVideoStateChanged(Conference c, int videoState) {
+            String id = mIdByConference.get(c);
+            Log.d(this, "onVideoStateChanged set video state %d", videoState);
+            mAdapter.setVideoState(id, videoState);
+        }
+
+        @Override
+        public void onVideoProviderChanged(Conference c, Connection.VideoProvider videoProvider) {
+            String id = mIdByConference.get(c);
+            Log.d(this, "onVideoProviderChanged: Connection: %s, VideoProvider: %s", c,
+                    videoProvider);
+            mAdapter.setVideoProvider(id, videoProvider);
         }
     };
 
@@ -536,6 +571,8 @@ public abstract class ConnectionService extends Service {
         @Override
         public void onVideoProviderChanged(Connection c, Connection.VideoProvider videoProvider) {
             String id = mIdByConnection.get(c);
+            Log.d(this, "onVideoProviderChanged: Connection: %s, VideoProvider: %s", c,
+                    videoProvider);
             mAdapter.setVideoProvider(id, videoProvider);
         }
 
@@ -583,6 +620,12 @@ public abstract class ConnectionService extends Service {
             String id = mIdByConnection.get(c);
             Log.d(this, "Adapter set call substate %d", callSubstate);
             mAdapter.setCallSubstate(id, callSubstate);
+        }
+
+        @Override
+        public void onCdmaConnectionTimeReset(Connection c) {
+            String id = mIdByConnection.get(c);
+            mAdapter.resetCdmaConnectionTime(id);
         }
     };
 
@@ -657,6 +700,9 @@ public abstract class ConnectionService extends Service {
                         connection.getDisconnectCause(),
                         createIdList(connection.getConferenceables()),
                         connection.getCallSubstate()));
+        if (isUnknown) {
+            triggerConferenceRecalculate();
+        }
     }
 
     /** @hide */
@@ -822,6 +868,14 @@ public abstract class ConnectionService extends Service {
         }
     }
 
+    private void addParticipantWithConference(String callId, String participant) {
+        Log.d(this, "ConnectionService addParticipantWithConference(%s, %s)", participant, callId);
+        Conference conference = findConferenceForAction(callId, "addParticipantWithConference");
+        if (conference != null) {
+            conference.onAddParticipant(participant);
+        }
+    }
+
     private void mergeConference(String callId) {
         Log.d(this, "mergeConference(%s)", callId);
         Conference conference = findConferenceForAction(callId, "mergeConference");
@@ -932,6 +986,8 @@ public abstract class ConnectionService extends Service {
      * @param conference The new conference object.
      */
     public final void addConference(Conference conference) {
+        Log.d(this, "addConference: conference=%s", conference);
+
         String id = addConferenceInternal(conference);
         if (id != null) {
             List<String> connectionIds = new ArrayList<>(2);
@@ -944,8 +1000,14 @@ public abstract class ConnectionService extends Service {
                     conference.getPhoneAccountHandle(),
                     conference.getState(),
                     conference.getCapabilities(),
-                    connectionIds);
+                    connectionIds,
+                    conference.getVideoProvider() == null ?
+                            null : conference.getVideoProvider().getInterface(),
+                    conference.getVideoState()
+                    );
             mAdapter.addConferenceCall(id, parcelableConference);
+            mAdapter.setVideoProvider(id, conference.getVideoProvider());
+            mAdapter.setVideoState(id, conference.getVideoState());
 
             // Go through any child calls and set the parent.
             for (Connection connection : conference.getConnections()) {
@@ -1017,6 +1079,14 @@ public abstract class ConnectionService extends Service {
             PhoneAccountHandle connectionManagerPhoneAccount,
             ConnectionRequest request) {
         return null;
+    }
+
+    /**
+     * Trigger recalculate functinality for conference calls. This is used when a Telephony
+     * Connection is part of a conference controller but is not yet added to Connection
+     * Service and hence cannot be added to the conference call.
+     */
+    public void triggerConferenceRecalculate() {
     }
 
     /**
