@@ -1208,40 +1208,45 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
 
         final TelephonyManager tele = TelephonyManager.from(mContext);
 
-        // avoid creating policy when SIM isn't ready
-        if (!isDdsSimStateReady()) return;
-
-        final String subscriberId = tele.getSubscriberId(SubscriptionManager.getDefaultDataSubId());
-        final NetworkIdentity probeIdent = new NetworkIdentity(
-                TYPE_MOBILE, TelephonyManager.NETWORK_TYPE_UNKNOWN, subscriberId, null, false);
-
-        // examine to see if any policy is defined for active mobile
-        boolean mobileDefined = false;
-        for (int i = mNetworkPolicy.size()-1; i >= 0; i--) {
-            if (mNetworkPolicy.valueAt(i).template.matches(probeIdent)) {
-                mobileDefined = true;
-                break;
+        for (int pid = 0; pid < tele.getPhoneCount(); pid++) {
+            long[] subIds = SubscriptionManager.getSubId(pid);
+            if ((subIds == null || subIds.length == 0) ||
+                   !isSimStateReady(pid)) {
+                continue;
             }
-        }
 
-        if (!mobileDefined) {
-            Slog.i(TAG, "no policy for active mobile network; generating default policy");
+            final String subscriberId = tele.getSubscriberId(subIds[0]);
+            final NetworkIdentity probeIdent = new NetworkIdentity(
+                    TYPE_MOBILE, TelephonyManager.NETWORK_TYPE_UNKNOWN, subscriberId, null, false);
 
-            // build default mobile policy, and assume usage cycle starts today
-            final long warningBytes = mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_networkPolicyDefaultWarning)
-                    * MB_IN_BYTES;
+            // examine to see if any policy is defined for active mobile
+            boolean mobileDefined = false;
+            for (int i = mNetworkPolicy.size()-1; i >= 0; i--) {
+                if (mNetworkPolicy.valueAt(i).template.matches(probeIdent)) {
+                    mobileDefined = true;
+                    break;
+                }
+            }
 
-            final Time time = new Time();
-            time.setToNow();
+            if (!mobileDefined) {
+                Slog.i(TAG, "no policy for active mobile network; generating default policy");
 
-            final int cycleDay = time.monthDay;
-            final String cycleTimezone = time.timezone;
+                // build default mobile policy, and assume usage cycle starts today
+                final long warningBytes = mContext.getResources().getInteger(
+                        com.android.internal.R.integer.config_networkPolicyDefaultWarning)
+                        * MB_IN_BYTES;
 
-            final NetworkTemplate template = buildTemplateMobileAll(subscriberId);
-            final NetworkPolicy policy = new NetworkPolicy(template, cycleDay, cycleTimezone,
-                    warningBytes, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER, true, true);
-            addNetworkPolicyLocked(policy);
+                final Time time = new Time();
+                time.setToNow();
+
+                final int cycleDay = time.monthDay;
+                final String cycleTimezone = time.timezone;
+
+                final NetworkTemplate template = buildTemplateMobileAll(subscriberId);
+                final NetworkPolicy policy = new NetworkPolicy(template, cycleDay, cycleTimezone,
+                        warningBytes, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER, true, true);
+                addNetworkPolicyLocked(policy);
+            }
         }
     }
 
@@ -2268,6 +2273,12 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private boolean isDdsSimStateReady() {
         final TelephonyManager tm = TelephonyManager.from(mContext);
         int slotId = SubscriptionManager.getSlotId(SubscriptionManager.getDefaultDataSubId());
+        return tm.getSimState(slotId) == TelephonyManager.SIM_STATE_READY;
+    }
+
+    // Return true if SIM state of input subscription is in READY state
+    private boolean isSimStateReady(int slotId) {
+        final TelephonyManager tm = TelephonyManager.from(mContext);
         return tm.getSimState(slotId) == TelephonyManager.SIM_STATE_READY;
     }
 }
