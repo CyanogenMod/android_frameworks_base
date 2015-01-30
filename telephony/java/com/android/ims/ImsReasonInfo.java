@@ -182,6 +182,9 @@ public class ImsReasonInfo implements Parcelable {
     public static final int CODE_SIP_USER_REJECTED = 361;
     // Others
     public static final int CODE_SIP_GLOBAL_ERROR = 362;
+    // Emergency failure
+    public static final int CODE_EMERGENCY_TEMP_FAILURE = 363;
+    public static final int CODE_EMERGENCY_PERM_FAILURE = 364;
 
     /**
      * MEDIA (IMS -> Telephony)
