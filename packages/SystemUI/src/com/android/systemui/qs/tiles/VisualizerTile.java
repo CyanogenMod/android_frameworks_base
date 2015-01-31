@@ -129,7 +129,9 @@ public class VisualizerTile extends QSTile<QSTile.State>
         mListening = listening;
         if (listening) {
             mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
-            AsyncTask.execute(mLinkVisualizer);
+            if (mTileVisible) {
+                AsyncTask.execute(mLinkVisualizer);
+            }
         } else {
             mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
             AsyncTask.execute(mUnlinkVisualizer);
