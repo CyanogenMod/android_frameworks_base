@@ -424,4 +424,7 @@
 
     <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
     <dimen name="edge_gesture_trigger_thickness">12dp</dimen>
+
+    <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
+    <dimen name="max_avatar_size">48dp</dimen>
 </resources>
