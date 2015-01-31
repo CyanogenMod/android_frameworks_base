@@ -119,17 +119,21 @@ public class VisualizerTile extends QSTile<QSTile.State>
 
     @Override
     protected void handleUpdateState(State state, Object arg) {
+        Log.i("VISUALIZER", "handleUpdateState: " + state.visible);
         state.visible = mTileVisible;
         state.label = mContext.getString(R.string.quick_settings_visualizer_label);
     }
 
     @Override
     public void setListening(boolean listening) {
+        Log.i("VISUALIZER", "setListening: " + listening);
         if (mListening == listening) return;
         mListening = listening;
         if (listening) {
             mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
-            AsyncTask.execute(mLinkVisualizer);
+            if (mTileVisible) {
+                AsyncTask.execute(mLinkVisualizer);
+            }
         } else {
             mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
             AsyncTask.execute(mUnlinkVisualizer);
