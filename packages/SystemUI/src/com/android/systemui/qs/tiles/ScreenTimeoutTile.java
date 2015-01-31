@@ -279,7 +279,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
         @Override
         public int getTitle() {
-            return R.string.quick_settings_cast_title;
+            return R.string.quick_settings_screen_timeout_detail_title;
         }
 
         @Override
