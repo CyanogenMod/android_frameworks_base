@@ -97,4 +97,7 @@
     <!-- ADB notification message-->
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
 
+    <!-- stylus gestures support -->
+    <string name="stylus_app_not_installed">%s is not installed</string>
+
 </resources>
