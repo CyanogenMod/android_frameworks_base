@@ -2117,6 +2117,9 @@
          applied. -->
     <bool name="config_hasRemovableLid">false</bool>
 
+    <!-- Boolean to enable Stylus gestures -->
+    <bool name="config_stylusGestures">false</bool>
+
     <!-- Ignored sms packages -->
     <string-array name="config_ignored_sms_packages"></string-array>
 </resources>
