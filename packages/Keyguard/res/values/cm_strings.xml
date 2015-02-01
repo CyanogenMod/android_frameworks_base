@@ -26,6 +26,9 @@
     <!-- Slot id in SIM pin/puk unlock view -->
     <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: New SIM card\u0020</string>
 
+    <!-- Shown in the lock screen when there is SIM card IO error. -->
+    <string name="lockscreen_sim_error_message_short">Invalid card.</string>
+
     <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
     <plurals name="kg_password_default_pin_message">
         <item quantity="one">Enter SIM PIN, you have <xliff:g id="number">%d</xliff:g> remaining attempt before you must contact your carrier to unlock your device.</item>
