@@ -42,7 +42,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.util.cm.LockscreenShortcutsHelper;
@@ -81,7 +80,6 @@ public class NotificationPanelView extends PanelView implements
     private KeyguardStatusBarView mKeyguardStatusBar;
     private View mQsContainer;
     private QSPanel mQsPanel;
-    private LinearLayout mTaskManagerPanel;
     private KeyguardStatusView mKeyguardStatusView;
     private ObservableScrollView mScrollView;
     private TextView mClockView;
@@ -212,7 +210,6 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardStatusView = (KeyguardStatusView) findViewById(R.id.keyguard_status_view);
         mQsContainer = findViewById(R.id.quick_settings_container);
         mQsPanel = (QSPanel) findViewById(R.id.quick_settings_panel);
-        mTaskManagerPanel = (LinearLayout) findViewById(R.id.task_manager_panel);
         mClockView = (TextView) findViewById(R.id.clock_view);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
         mScrollView.setListener(this);
@@ -319,7 +316,6 @@ public class NotificationPanelView extends PanelView implements
         }
         mNotificationStackScroller.updateIsSmallScreen(
                 mHeader.getCollapsedHeight() + mQsPeekHeight);
-        requestPanelHeightUpdate();
     }
 
     @Override
@@ -1045,9 +1041,7 @@ public class NotificationPanelView extends PanelView implements
         mNotificationStackScroller.setScrollingEnabled(
                 mStatusBarState != StatusBarState.KEYGUARD && (!mQsExpanded
                         || mQsExpansionFromOverscroll));
-        if (!getResources().getBoolean(R.bool.config_showTaskManagerSwitcher)) {
-            mQsPanel.setVisibility(expandVisually ? View.VISIBLE : View.INVISIBLE);
-        }
+        mQsPanel.setVisibility(expandVisually ? View.VISIBLE : View.INVISIBLE);
         mQsContainer.setVisibility(
                 mKeyguardShowing && !expandVisually ? View.INVISIBLE : View.VISIBLE);
         mScrollView.setTouchEnabled(mQsExpanded);
@@ -1247,17 +1241,6 @@ public class NotificationPanelView extends PanelView implements
         }
     }
 
-    public void setTaskManagerVisibility(boolean mTaskManagerShowing) {
-        if (getResources().getBoolean(R.bool.config_showTaskManagerSwitcher)) {
-            cancelAnimation();
-            boolean expandVisually = mQsExpanded || mStackScrollerOverscrolling;
-            mQsPanel.setVisibility(expandVisually && !mTaskManagerShowing
-                    ? View.VISIBLE : View.GONE);
-            mTaskManagerPanel.setVisibility(expandVisually && mTaskManagerShowing
-                    ? View.VISIBLE : View.GONE);
-        }
-    }
-
     @Override
     protected boolean isScrolledToBottom() {
         if (mStatusBar.getBarState() == StatusBarState.KEYGUARD) {
@@ -1306,14 +1289,6 @@ public class NotificationPanelView extends PanelView implements
             float panelHeightQsExpanded = calculatePanelHeightQsExpanded();
             float t = (expandedHeight - panelHeightQsCollapsed)
                     / (panelHeightQsExpanded - panelHeightQsCollapsed);
-
-            // set quick settings panel view max expansion if it does
-            // not reach the notification position when keyguard showing
-            if (getResources().getBoolean(R.bool.config_showTaskManagerSwitcher)
-                    && (expandedHeight <= panelHeightQsCollapsed
-                    || panelHeightQsExpanded <= panelHeightQsCollapsed)) {
-                t = 1f;
-            }
 
             setQsExpansion(mQsMinExpansionHeight
                     + t * (getTempQsMaxExpansion() - mQsMinExpansionHeight));
