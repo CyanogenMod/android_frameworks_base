@@ -122,4 +122,5 @@
     <string name="accessibility_quick_settings_sync_changed_on">Sync turned on.</string>
     <string name="quick_settings_sync_label">Sync</string>
     <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <string name="quick_settings_usb_tether_label">USB tethering</string>
 </resources>
