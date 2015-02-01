@@ -455,9 +455,6 @@
     <!-- Margin on the right side of the system icon group on Keyguard. -->
     <dimen name="system_icons_keyguard_padding_end">4dp</dimen>
 
-    <!-- The task item height in task list. -->
-    <dimen name="task_manager_item_height">40dip</dimen>
-
     <!-- Additional translation (downwards) for appearing notifications when going to the full shade
          from Keyguard. -->
     <dimen name="go_to_full_shade_appearing_translation">200dp</dimen>
