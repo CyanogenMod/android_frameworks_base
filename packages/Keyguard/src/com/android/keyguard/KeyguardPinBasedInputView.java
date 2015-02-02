@@ -17,6 +17,7 @@
 package com.android.keyguard;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -210,5 +211,20 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView
             return true;
         }
         return false;
+    }
+
+    protected void applyPaddingToView(View view, int paddingDimenResId) {
+        final Rect backgroundPadding = new Rect();
+
+        if (view.getBackground() != null) {
+            view.getBackground().getPadding(backgroundPadding);
+        }
+
+        final Resources res = getContext().getResources();
+        final int defaultPadding = res.getDimensionPixelSize(paddingDimenResId);
+        view.setPadding(backgroundPadding.left + defaultPadding,
+                backgroundPadding.top + defaultPadding,
+                backgroundPadding.right + defaultPadding,
+                backgroundPadding.bottom + defaultPadding);
     }
 }
