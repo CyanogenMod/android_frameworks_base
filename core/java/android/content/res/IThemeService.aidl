@@ -37,4 +37,6 @@ interface IThemeService {
     boolean isThemeBeingProcessed(String themePkgName);
     void registerThemeProcessingListener(in IThemeProcessingListener listener);
     void unregisterThemeProcessingListener(in IThemeProcessingListener listener);
+
+    void rebuildResourceCache();
 }
