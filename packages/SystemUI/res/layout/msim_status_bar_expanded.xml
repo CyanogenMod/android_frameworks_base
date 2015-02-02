@@ -29,12 +29,6 @@
     android:background="@android:color/transparent"
     >
 
-   <include
-            layout="@layout/subs_label"
-            android:layout_height="@dimen/carrier_label_height"
-            android:layout_width="match_parent"
-            android:layout_gravity="bottom"
-            />
     <include
         layout="@layout/carrier_label"
         android:layout_height="@dimen/carrier_label_height"
