@@ -189,6 +189,7 @@ public:
     void setSystemUiVisibility(int32_t visibility);
     void setPointerSpeed(int32_t speed);
     void setShowTouches(bool enabled);
+    void setStylusIconEnabled(bool enabled);
     void setVolumeKeysRotation(int mode);
     void setInteractive(bool interactive);
     void reloadCalibration();
@@ -256,6 +257,9 @@ private:
         // Show touches feature enable/disable.
         bool showTouches;
 
+        // Show icon when stylus is used
+        bool stylusIconEnabled;
+
         // Volume keys rotation mode (0 - off, 1 - phone, 2 - tablet)
         int32_t volumeKeysRotationMode;
 
@@ -295,6 +299,7 @@ NativeInputManager::NativeInputManager(jobject contextObj,
         mLocked.pointerSpeed = 0;
         mLocked.pointerGesturesEnabled = true;
         mLocked.showTouches = false;
+        mLocked.stylusIconEnabled = false;
         mLocked.volumeKeysRotationMode = 0;
     }
 
@@ -427,6 +432,7 @@ void NativeInputManager::getReaderConfiguration(InputReaderConfiguration* outCon
         outConfig->pointerGesturesEnabled = mLocked.pointerGesturesEnabled;
 
         outConfig->showTouches = mLocked.showTouches;
+        outConfig->stylusIconEnabled = mLocked.stylusIconEnabled;
         outConfig->volumeKeysRotationMode = mLocked.volumeKeysRotationMode;
 
         outConfig->setDisplayInfo(false /*external*/, mLocked.internalViewport);
@@ -750,6 +756,22 @@ void NativeInputManager::setShowTouches(bool enabled) {
 
     mInputManager->getReader()->requestRefreshConfiguration(
             InputReaderConfiguration::CHANGE_SHOW_TOUCHES);
+}
+
+void NativeInputManager::setStylusIconEnabled(bool enabled) {
+    { // acquire lock
+        AutoMutex _l(mLock);
+
+        if (mLocked.stylusIconEnabled == enabled) {
+            return;
+        }
+
+        ALOGI("Setting stylus icon enabled to %s.", enabled ? "enabled" : "disabled");
+        mLocked.stylusIconEnabled = enabled;
+    } // release lock
+
+    mInputManager->getReader()->requestRefreshConfiguration(
+            InputReaderConfiguration::CHANGE_STYLUS_ICON_ENABLED);
 }
 
 void NativeInputManager::setVolumeKeysRotation(int mode) {
@@ -1288,6 +1310,13 @@ static void nativeSetShowTouches(JNIEnv* env,
     im->setShowTouches(enabled);
 }
 
+static void nativeSetStylusIconEnabled(JNIEnv* env,
+        jclass clazz, jlong ptr, jboolean enabled) {
+    NativeInputManager* im = reinterpret_cast<NativeInputManager*>(ptr);
+
+    im->setStylusIconEnabled(enabled);
+}
+
 static void nativeSetVolumeKeysRotation(JNIEnv* env,
         jclass clazz, jlong ptr, int mode) {
     NativeInputManager* im = reinterpret_cast<NativeInputManager*>(ptr);
@@ -1412,6 +1441,8 @@ static JNINativeMethod gInputManagerMethods[] = {
             (void*) nativeSetPointerSpeed },
     { "nativeSetShowTouches", "(JZ)V",
             (void*) nativeSetShowTouches },
+    { "nativeSetStylusIconEnabled", "(JZ)V",
+            (void*) nativeSetStylusIconEnabled },
     { "nativeSetVolumeKeysRotation", "(JI)V",
             (void*) nativeSetVolumeKeysRotation },
     { "nativeSetInteractive", "(JZ)V",
