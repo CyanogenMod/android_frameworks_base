@@ -203,6 +203,7 @@ public:
     void setPointerSpeed(int32_t speed);
     void setShowTouches(bool enabled);
     void setVolumeKeysRotation(int mode);
+    void setStylusIconEnabled(bool enabled);
     void setInteractive(bool interactive);
     void reloadCalibration();
     void setPointerIconType(int32_t iconId);
@@ -280,6 +281,9 @@ private:
         // Volume keys rotation mode (0 - off, 1 - phone, 2 - tablet)
         int32_t volumeKeysRotationMode;
 
+        // Show icon when stylus is used
+        bool stylusIconEnabled;
+
         // Sprite controller singleton, created on first use.
         sp<SpriteController> spriteController;
 
@@ -317,6 +321,7 @@ NativeInputManager::NativeInputManager(jobject contextObj,
         mLocked.pointerGesturesEnabled = true;
         mLocked.showTouches = false;
         mLocked.volumeKeysRotationMode = 0;
+        mLocked.stylusIconEnabled = false;
     }
     mInteractive = true;
 
@@ -465,6 +470,7 @@ void NativeInputManager::getReaderConfiguration(InputReaderConfiguration* outCon
 
         outConfig->showTouches = mLocked.showTouches;
         outConfig->volumeKeysRotationMode = mLocked.volumeKeysRotationMode;
+        outConfig->stylusIconEnabled = mLocked.stylusIconEnabled;
 
         outConfig->setDisplayInfo(false /*external*/, mLocked.internalViewport);
         outConfig->setDisplayInfo(true /*external*/, mLocked.externalViewport);
@@ -787,6 +793,22 @@ void NativeInputManager::setVolumeKeysRotation(int mode) {
 
     mInputManager->getReader()->requestRefreshConfiguration(
             InputReaderConfiguration::CHANGE_VOLUME_KEYS_ROTATION);
+}
+
+void NativeInputManager::setStylusIconEnabled(bool enabled) {
+    { // acquire lock
+        AutoMutex _l(mLock);
+
+        if (mLocked.stylusIconEnabled == enabled) {
+            return;
+        }
+
+        ALOGI("Setting stylus icon enabled to %s.", enabled ? "enabled" : "disabled");
+        mLocked.stylusIconEnabled = enabled;
+    } // release lock
+
+    mInputManager->getReader()->requestRefreshConfiguration(
+            InputReaderConfiguration::CHANGE_STYLUS_ICON_ENABLED);
 }
 
 void NativeInputManager::setInteractive(bool interactive) {
@@ -1401,6 +1423,13 @@ static void nativeSetVolumeKeysRotation(JNIEnv* env,
     im->setVolumeKeysRotation(mode);
 }
 
+static void nativeSetStylusIconEnabled(JNIEnv* env,
+        jclass clazz, jlong ptr, jboolean enabled) {
+    NativeInputManager* im = reinterpret_cast<NativeInputManager*>(ptr);
+
+    im->setStylusIconEnabled(enabled);
+}
+
 static void nativeSetInteractive(JNIEnv* env,
         jclass clazz, jlong ptr, jboolean interactive) {
     NativeInputManager* im = reinterpret_cast<NativeInputManager*>(ptr);
@@ -1546,6 +1575,8 @@ static const JNINativeMethod gInputManagerMethods[] = {
             (void*) nativeSetShowTouches },
     { "nativeSetVolumeKeysRotation", "(JI)V",
             (void*) nativeSetVolumeKeysRotation },
+    { "nativeSetStylusIconEnabled", "(JZ)V",
+            (void*) nativeSetStylusIconEnabled },
     { "nativeSetInteractive", "(JZ)V",
             (void*) nativeSetInteractive },
     { "nativeReloadCalibration", "(J)V",
