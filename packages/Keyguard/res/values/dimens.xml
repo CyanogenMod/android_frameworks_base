@@ -178,8 +178,7 @@
 
     <!-- The translation for disappearing security views after having solved them. -->
     <dimen name="disappear_y_translation">-32dp</dimen>
-    <!-- For SIM card detection info text max width in SIM card changed dialog -->
-    <dimen name="sim_card_name_maxwidth">100dip</dimen>
-    <!-- For SIM card name padding in SIM pin/puk unlock and SIM card changed dialog -->
-    <dimen name="sim_card_name_padding">6dip</dimen>
+
+    <!-- The padding around the SIM card name -->
+    <dimen name="sim_card_name_padding">4dip</dimen>
 </resources>
