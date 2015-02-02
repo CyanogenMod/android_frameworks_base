@@ -3486,6 +3486,14 @@ public final class Settings {
                 new InclusiveFloatRangeValidator(-7, 7);
 
         /**
+         * Show icon when stylus is used?
+         * 0 = no
+         * 1 = yes
+         * @hide
+         */
+        public static final String STYLUS_ICON_ENABLED = "stylus_icon_enabled";
+
+        /**
          * Enable Stylus Gestures
          *
          * @hide
