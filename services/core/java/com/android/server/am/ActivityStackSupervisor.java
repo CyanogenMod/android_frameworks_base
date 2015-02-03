@@ -775,11 +775,12 @@ public final class ActivityStackSupervisor implements DisplayListener {
             ProfilerInfo profilerInfo, int userId) {
         // Collect information about the target of the Intent.
         ActivityInfo aInfo;
+        ResolveInfo rInfo = null;
         try {
-            ResolveInfo rInfo =
-                AppGlobals.getPackageManager().resolveIntent(
+            rInfo = AppGlobals.getPackageManager().resolveIntent(
                         intent, resolvedType,
                         PackageManager.MATCH_DEFAULT_ONLY
+                                | PackageManager.PERFORM_PRE_LAUNCH_CHECK
                                     | ActivityManagerService.STOCK_PM_FLAGS, userId);
             aInfo = rInfo != null ? rInfo.activityInfo : null;
         } catch (RemoteException e) {
@@ -793,6 +794,16 @@ public final class ActivityStackSupervisor implements DisplayListener {
             // always restart the exact same activity.
             intent.setComponent(new ComponentName(
                     aInfo.applicationInfo.packageName, aInfo.name));
+
+            // Store the actual target componenet in an extra field of the intent.
+            // This will be set in case the receiver of the intent wants to retarget the
+            // intent. Ideally we should have a new extra field, but resusing the
+            // changed_component_name_list for now.
+            if (rInfo != null && rInfo.targetComponentName != null) {
+                // Not creating a list to save an unnecessary object.
+                intent.putExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST,
+                        rInfo.targetComponentName);
+            }
 
             // Don't debug things in the system process
             if ((startFlags&ActivityManager.START_FLAG_DEBUG) != 0) {

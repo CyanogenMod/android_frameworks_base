@@ -128,6 +128,14 @@ public class ResolveInfo implements Parcelable {
     public String resolvePackageName;
 
     /**
+     * Optional -- if non-null, the component name of the target of the original
+     * intent. The ResolveInfo can change the component so this field stores
+     * the origial target. This can be used for retargetting by the receiver.
+     * @hide
+     */
+    public ComponentName targetComponentName;
+
+    /**
      * If not equal to UserHandle.USER_CURRENT, then the intent will be forwarded to this user.
      * @hide
      */

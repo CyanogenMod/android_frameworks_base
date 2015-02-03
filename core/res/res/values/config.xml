@@ -1677,6 +1677,10 @@
          Example: com.google.android.myapp/.resolver.MyResolverActivity  -->
     <string name="config_customResolverActivity"></string>
 
+    <!-- Component name of a custom pre launch check activity to be used instead of default
+         framework version. Currently, there is no default version. -->
+    <string name="config_prelaunchcheckactivity"></string>
+
     <!-- Name of the activity or service that prompts the user to reject, accept, or whitelist
          an adb host's public key, when an unwhitelisted host connects to the local adbd.
          Can be customized for other product types -->
