@@ -154,6 +154,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         mAppearAnimationFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
         mRoundedRectCornerRadius = getResources().getDimensionPixelSize(
                 R.dimen.notification_material_rounded_rect_radius);
+        setRoundCornerRadius(mRoundedRectCornerRadius); // Themes: For drop-shadow rounded corners
         mLegacyColor = getResources().getColor(R.color.notification_legacy_background_color);
         mNormalColor = getResources().getColor(R.color.notification_material_background_color);
         mLowPriorityColor = getResources().getColor(
