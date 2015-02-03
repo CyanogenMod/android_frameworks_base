@@ -4235,7 +4235,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                     opkg.baseCodePath + ": overlay not trusted");
             return false;
         }
-        ArrayMap<String, PackageParser.Package> overlaySet = mOverlays.get(pkg.packageName);
+
+        // Some apps like to take on the package name of an existing app so we'll use the
+        // "real" package name, if it is non-null, when performing the idmap
+        final String pkgName = pkg.mRealPackage != null ? pkg.mRealPackage : pkg.packageName;
+        ArrayMap<String, PackageParser.Package> overlaySet = mOverlays.get(pkgName);
         if (overlaySet == null) {
             Slog.e(TAG, "was about to create idmap for " + pkg.baseCodePath + " and " +
                     opkg.baseCodePath + " but target package has no known overlays");
@@ -4243,7 +4247,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
         final String cachePath =
-                ThemeUtils.getTargetCacheDir(pkg.packageName, opkg.packageName);
+                ThemeUtils.getTargetCacheDir(pkgName, opkg.packageName);
         if (mInstaller.idmap(pkg.baseCodePath, opkg.baseCodePath, cachePath, sharedGid,
                 getPackageHashCode(pkg), getPackageHashCode(opkg)) != 0) {
             Slog.e(TAG, "Failed to generate idmap for " + pkg.baseCodePath +
@@ -6629,7 +6633,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                         throw new PackageManagerException(
                                 PackageManager.INSTALL_FAILED_THEME_AAPT_ERROR,
                                 "Unable to process theme " + pkgName);
->>>>>>> Themes: Port to CM12 [1/6]
                     }
                 }
             }
@@ -14392,7 +14395,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
         }
-=======
+    }
+
     private void clearIconMapping() {
         mIconPackHelper = null;
         for (Activity activity : mActivities.mActivities.values()) {
@@ -14459,7 +14463,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return 0;
->>>>>>> Themes: Port to CM12 [1/6]
     }
 
     /**
