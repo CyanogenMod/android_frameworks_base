@@ -148,6 +148,9 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         mNormalColor = context.getColor(R.color.notification_material_background_color);
         mLowPriorityColor = context.getColor(
                 R.color.notification_material_background_low_priority_color);
+        int roundedRectCornerRadius = getResources().getDimensionPixelSize(
+                R.dimen.notification_material_rounded_rect_radius);
+        setRoundCornerRadius(roundedRectCornerRadius); // Themes: For drop-shadow rounded corners
         mTintedRippleColor = context.getColor(
                 R.color.notification_ripple_tinted_color);
         mLowPriorityRippleColor = context.getColor(
