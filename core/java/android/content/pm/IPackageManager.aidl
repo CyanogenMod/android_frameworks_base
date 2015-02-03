@@ -465,4 +465,10 @@ interface IPackageManager {
     void updateIconMapping(String pkgName);
     ComposedIconInfo getComposedIconInfo();
     int processThemeResources(String themePkgName);
+
+    /** Package interception */
+    void setPreLaunchCheckActivity(in ComponentName componentName);
+    void addPreLaunchCheckPackage(String packageName);
+    void removePreLaunchCheckPackage(String packageName);
+    void clearPreLaunchCheckPackages();
 }
