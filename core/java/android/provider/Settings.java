@@ -6240,6 +6240,20 @@ public final class Settings {
         public static final String POWER_SOUNDS_ENABLED = "power_sounds_enabled";
 
         /**
+         * Whether to play a sound and/or vibrate when wireless charging starts.
+         * @hide
+         */
+        public static final String WIRELESS_CHARGING_STARTED_NOTIFICATION_ENABLED =
+                "wireless_charging_started_notification_enabled";
+
+        /**
+         * Whether to vibrate when wireless charging starts.
+         * @hide
+         */
+        public static final String WIRELESS_CHARGING_STARTED_VIBRATE =
+                "wireless_charging_started_vibrate";
+
+        /**
          * URI for the "wireless charging started" sound.
          * @hide
          */
