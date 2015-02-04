@@ -43,6 +43,12 @@ public class ImsReasonInfo implements Parcelable {
     public static final int TYPE_STATUSCODE = 3;
     public static final int TYPE_MEDIA = 4;
     public static final int TYPE_USER = 5;
+    /**
+     * For registration errors mReasonType set to TYPE_REGISTRATION.
+     * mExtraCode will be set to operator specific error code
+     * mExtraMessage will be set to operator specific error message
+     */
+    public static final int TYPE_REGISTRATION = 101;
     public static final int TYPE_UT = 8;
 
     /**
@@ -233,6 +239,10 @@ public class ImsReasonInfo implements Parcelable {
      * ECBM
      */
     public static final int CODE_ECBM_NOT_SUPPORTED = 901;
+    /**
+     * Ims Registration error code
+     */
+    public static final int CODE_REGISTRATION_ERROR = TYPE_REGISTRATION * 100;
 
     /**
      * MT call has ended due to a release from the network
