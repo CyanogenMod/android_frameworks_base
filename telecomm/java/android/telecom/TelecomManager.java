@@ -139,6 +139,14 @@ public class TelecomManager {
             "android.telecom.extra.UNKNOWN_CALL_HANDLE";
 
     /**
+     * Similar to {@link #ACTION_INCOMING_CALL}, but is used only by Telephony to add a new
+     * sim-initiated MO call for carrier testing and for conference scenarios
+     * @hide
+     */
+    public static final String EXTRA_UNKNOWN_CALL_STATE =
+            "codeaurora.telecom.extra.UNKNOWN_CALL_STATE";
+
+    /**
      * Optional extra for {@link android.telephony.TelephonyManager#ACTION_PHONE_STATE_CHANGED}
      * containing the disconnect code.
      */
