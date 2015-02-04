@@ -25,6 +25,7 @@ import android.app.Profile;
 import android.app.ProfileManager;
 import android.app.SearchManager;
 import android.app.StatusBarManager;
+import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -251,6 +252,11 @@ public class KeyguardViewMediator extends SystemUI {
      * called.
      * */
     private boolean mHiding;
+
+    /**
+     * Whether we are disabling the lock screen internally
+     */
+    private boolean mInternallyDisabled = false;
 
     /**
      * we send this intent when the keyguard is dismissed.
@@ -744,6 +750,23 @@ public class KeyguardViewMediator extends SystemUI {
     }
 
     /**
+     * Set the internal keyguard enabled state. This allows SystemUI to disable the lockscreen,
+     * overriding any apps.
+     * @param enabled
+     */
+    public void setKeyguardEnabledInternal(boolean enabled) {
+        mInternallyDisabled = !enabled;
+        setKeyguardEnabled(enabled);
+        if (mInternallyDisabled) {
+            mNeedToReshowWhenReenabled = false;
+        }
+    }
+
+    public boolean getKeyguardEnabledInternal() {
+        return !mInternallyDisabled;
+    }
+
+    /**
      * Same semantics as {@link android.view.WindowManagerPolicy#enableKeyguard}; provide
      * a way for external stuff to override normal keyguard behavior.  For instance
      * the phone app disables the keyguard when it receives incoming calls.
@@ -751,6 +774,12 @@ public class KeyguardViewMediator extends SystemUI {
     public void setKeyguardEnabled(boolean enabled) {
         synchronized (this) {
             if (DEBUG) Log.d(TAG, "setKeyguardEnabled(" + enabled + ")");
+
+            if (mInternallyDisabled && enabled && !lockscreenEnforcedByDevicePolicy()) {
+                // if keyguard is forcefully disabled internally (by lock screen tile), don't allow
+                // it to be enabled externally, unless the device policy manager says so.
+                return;
+            }
 
             mExternallyEnabled = enabled;
 
@@ -972,6 +1001,24 @@ public class KeyguardViewMediator extends SystemUI {
                 || state == IccCardConstants.State.PERM_DISABLED)
                 && requireSim);
         return simLockedOrMissing;
+    }
+
+    public boolean lockscreenEnforcedByDevicePolicy() {
+        DevicePolicyManager dpm = (DevicePolicyManager)
+                mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        if (dpm != null) {
+            int passwordQuality = dpm.getPasswordQuality(null);
+            switch (passwordQuality) {
+                case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
+                case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
+                case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
+                case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
+                case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC_COMPLEX:
+                case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
+                    return true;
+            }
+        }
+        return false;
     }
 
     /**
