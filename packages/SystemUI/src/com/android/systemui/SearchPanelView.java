@@ -108,7 +108,6 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
         mContext = context;
         mThreshold = context.getResources().getDimensionPixelSize(R.dimen.search_panel_threshold);
         mActionTarget = new ActionTarget(context);
-        mPicker = new ShortcutPickHelper(mContext, this);
         mTargetViews = new ArrayList<ImageView>();
         // Instantiate receiver/observer
         IntentFilter filter = new IntentFilter();
@@ -413,6 +412,9 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
                 updateTargetVisibility();
             } else if (v == mLogo || v == mLogoLeft || v == mLogoRight) {
                 mSelectedView = (ImageView) v;
+                if (mPicker == null) {
+                    mPicker = new ShortcutPickHelper(mContext, this);
+                }
                 mPicker.pickShortcut(v != mLogo);
             }
         }
