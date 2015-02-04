@@ -443,6 +443,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     @Override
     public NotificationGroup getNotificationGroupForPackage(String pkg) {
+        if (!USE_NOTIFICATION_GROUPS) return null;
         for (NotificationGroup group : mGroups.values()) {
             if (group.hasPackage(pkg)) {
                 return group;
