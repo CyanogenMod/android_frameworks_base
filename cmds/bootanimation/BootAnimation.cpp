@@ -706,7 +706,11 @@ bool BootAnimation::movie()
         GLuint mTextureid;
         glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize);
         //ALOGD("freemem:%ld, %d", getFreeMemory(), mMaxTextureSize);
+#ifdef SAVE_RAM_IN_BOOTANIMATION
+        {
+#else
         if(getFreeMemory() < mMaxTextureSize * mMaxTextureSize * fcount / 1024) {
+#endif
             ALOGD("Use save memory method, maybe small fps in actual.");
             needSaveMem = true;
             glGenTextures(1, &mTextureid);
