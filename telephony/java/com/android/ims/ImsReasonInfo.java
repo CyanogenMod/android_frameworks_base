@@ -36,6 +36,8 @@ public class ImsReasonInfo implements Parcelable {
      *    MEDIA - indicates the media error reason (local resource, SDP parameter, etc.)
      *    USER - indicates the error reason by the local or remote user
      *    UT - indicates the error reason for the supplementary service configuration
+     *    CALL_DROP - indicates the error reason for the call drop. Error codes specified by the
+     *         operator.
      */
     public static final int TYPE_UNSPECIFIED = 0;
     public static final int TYPE_LOCAL = 1;
@@ -44,6 +46,7 @@ public class ImsReasonInfo implements Parcelable {
     public static final int TYPE_MEDIA = 4;
     public static final int TYPE_USER = 5;
     public static final int TYPE_UT = 8;
+    public static final int TYPE_CALL_DROP = 100;
 
     /**
      * Specific code of each types
@@ -233,6 +236,19 @@ public class ImsReasonInfo implements Parcelable {
      * because the call was answered elsewhere
      */
     public static final int CODE_ANSWERED_ELSEWHERE = 1014;
+
+    /**
+     * CALL DROP error codes (Call could drop because of many reasons like Network not available,
+     *  handover, failed, etc)
+     */
+
+    /**
+     * CALL DROP error code for the case when a device is ePDG capable and when the user is on an
+     * active wifi call and at the edge of coverage and there is no qualified LTE network available
+     * to handover the call to. We get a handover NOT_TRIGERRED message from the modem. This error
+     * code is received as part of the handover message.
+     */
+    public static final int CODE_CALL_DROP_IWLAN_TO_LTE_UNAVAILABLE = 10004;
 
     /**
      * Network string error messages.
