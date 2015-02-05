@@ -838,7 +838,7 @@ public class NavigationBarView extends LinearLayout {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS),
-                    false, this);
+                    false, this, UserHandle.USER_ALL);
 
             // intialize mModlockDisabled
             onChange(false);
@@ -850,8 +850,8 @@ public class NavigationBarView extends LinearLayout {
 
         @Override
         public void onChange(boolean selfChange) {
-            mShowDpadArrowKeys = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 0) != 0;
+            mShowDpadArrowKeys = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 0, UserHandle.USER_CURRENT) != 0;
             mSlotOneVisibility = -1;
             mSlotSixVisibility = -1;
             setNavigationIconHints(mNavigationIconHints, true);
