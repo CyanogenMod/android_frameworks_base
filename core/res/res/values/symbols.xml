@@ -2246,9 +2246,6 @@
   <java-symbol type="bool" name="config_sms_ringtone_incall" />
   <java-symbol type="array" name="config_sms_convert_destination_number_support" />
 
-  <!-- config SPN display for some CDMA carriers -->
-  <java-symbol type="bool" name="config_show_spn" />
-
   <java-symbol type="integer" name="data_retry_delay" />
   <java-symbol type="integer" name="data_retry_idle_delay" />
   <java-symbol type="bool" name="config_pdp_retry_for_29_33_enabled"/>

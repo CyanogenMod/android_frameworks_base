@@ -2140,9 +2140,6 @@
     <string-array translatable="false" name="config_sms_convert_destination_number_support">
         <item>false</item>
     </string-array>
-
-    <!-- config SPN display for some CDMA carriers -->
-    <bool name="config_show_spn">false</bool>
     <!-- pdp data retry for cause 29 and 33 is disabled-->
     <bool name="config_pdp_retry_for_29_33_enabled">false</bool>
     <!--pdp data reject retry delay can be configured here -->
