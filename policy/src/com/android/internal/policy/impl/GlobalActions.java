@@ -1274,8 +1274,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     protected void updatePowerMenuActions() {
         ContentResolver resolver = mContext.getContentResolver();
-        mActions = Settings.Global.getStringForUser(resolver,
-                Settings.Global.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
+        mActions = Settings.Secure.getStringForUser(resolver,
+                Settings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
         mProfilesEnabled = Settings.System.getInt(resolver,
                 Settings.System.SYSTEM_PROFILES_ENABLED, 1) != 0;
     }

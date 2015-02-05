@@ -36,12 +36,14 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.policy.BatteryController;
 
 public class BatteryMeterView extends View implements DemoMode,
@@ -197,8 +199,31 @@ public class BatteryMeterView extends View implements DemoMode,
         }
     };
 
-    private ContentObserver mObserver = new ContentObserver(new Handler()) {
-        public void onChange(boolean selfChange, Uri uri) {
+    SettingsObserver mObserver = new SettingsObserver(new Handler());
+
+    private class SettingsObserver extends UserContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    STATUS_BAR_BATTERY_STYLE), false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    STATUS_BAR_SHOW_BATTERY_PERCENT), false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+            getContext().getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void update() {
             loadShowBatterySetting();
             postInvalidate();
         }
@@ -218,10 +243,7 @@ public class BatteryMeterView extends View implements DemoMode,
         }
         mBatteryController.addStateChangedCallback(this);
         mAttached = true;
-        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                STATUS_BAR_BATTERY_STYLE), false, mObserver);
-        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                STATUS_BAR_SHOW_BATTERY_PERCENT), false, mObserver);
+        mObserver.observe();
     }
 
     @Override
@@ -230,6 +252,7 @@ public class BatteryMeterView extends View implements DemoMode,
 
         mAttached = false;
         getContext().unregisterReceiver(mTracker);
+        mObserver.unobserve();
         mBatteryController.removeStateChangedCallback(this);
     }
 

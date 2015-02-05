@@ -47,7 +47,8 @@ public class NavigationRingHelpers {
         boolean isDefault = true;
 
         for (int i = 0; i < MAX_ACTIONS; i++) {
-            result[i] = Settings.Secure.getString(cr, Settings.Secure.NAVIGATION_RING_TARGETS[i]);
+            result[i] = Settings.Secure.getStringForUser(cr,
+                    Settings.Secure.NAVIGATION_RING_TARGETS[i], UserHandle.USER_CURRENT);
             if (result[i] != null) {
                 isDefault = false;
             }
@@ -78,9 +79,12 @@ public class NavigationRingHelpers {
 
     public static void resetActionsToDefaults(Context context) {
         final ContentResolver cr = context.getContentResolver();
-        Settings.Secure.putString(cr, Settings.Secure.NAVIGATION_RING_TARGETS[0], null);
-        Settings.Secure.putString(cr, Settings.Secure.NAVIGATION_RING_TARGETS[1], ACTION_ASSIST);
-        Settings.Secure.putString(cr, Settings.Secure.NAVIGATION_RING_TARGETS[2], null);
+        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[0], null,
+                UserHandle.USER_CURRENT);
+        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[1],
+                ACTION_ASSIST, UserHandle.USER_CURRENT);
+        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[2], null,
+                UserHandle.USER_CURRENT);
     }
 
     public static boolean isAssistantAvailable(Context context) {
