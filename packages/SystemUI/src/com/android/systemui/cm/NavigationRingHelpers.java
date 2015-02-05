@@ -20,7 +20,6 @@ import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -33,7 +32,7 @@ import com.android.systemui.R;
 
 import java.net.URISyntaxException;
 
-import static com.android.systemui.cm.NavigationRingConstants.*;
+import static com.android.internal.util.cm.NavigationRingConstants.*;
 
 public class NavigationRingHelpers {
     public static final int MAX_ACTIONS = 3;
