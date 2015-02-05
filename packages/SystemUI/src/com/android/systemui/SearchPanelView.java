@@ -58,9 +58,7 @@ import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.android.systemui.cm.NavigationRingConstants.ACTION_ASSIST;
-import static com.android.systemui.cm.NavigationRingConstants.ACTION_NONE;
-import static com.android.systemui.cm.NavigationRingConstants.BROADCAST;
+import static com.android.internal.util.cm.NavigationRingConstants.*;
 
 public class SearchPanelView extends FrameLayout implements StatusBarPanel,
         View.OnClickListener, ShortcutPickHelper.OnPickListener {
@@ -484,10 +482,18 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mInEditMode = true;
-            show(true, true);
-            startEditAnimation(true);
-            updateTargetVisibility();
+            boolean editMode = intent.getBooleanExtra(EDIT_STATE_EXTRA, false);
+            if (editMode == mInEditMode) {
+                return;
+            }
+            mInEditMode = editMode;
+            if (mInEditMode) {
+                show(true, true);
+                startEditAnimation(true);
+                updateTargetVisibility();
+            } else {
+                mEditButton.performClick();
+            }
         }
     };
 
@@ -526,4 +532,8 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
         }
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        mPicker.cleanup();
+    }
 }
