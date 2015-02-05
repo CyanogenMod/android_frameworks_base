@@ -5488,6 +5488,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // current user.
                 mSettingsObserver.onChange(false);
 
+                if (mGlobalActions != null) {
+                    mGlobalActions.updatePowerMenuActions();
+                }
+
                 // force a re-application of focused window sysui visibility.
                 // the window may never have been shown for this user
                 // e.g. the keyguard when going through the new-user setup flow

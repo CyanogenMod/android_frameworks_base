@@ -1255,6 +1255,7 @@ public final class Settings {
             for (String s : Secure.NAVIGATION_RING_TARGETS) {
                 MOVED_TO_SECURE.add(s);
             }
+            MOVED_TO_SECURE.add(Secure.POWER_MENU_ACTIONS);
         }
 
         private static final HashSet<String> MOVED_TO_GLOBAL;
@@ -5841,6 +5842,12 @@ public final class Settings {
         };
 
         /**
+         * String to contain power menu actions
+         * @hide
+         */
+        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -6280,9 +6287,11 @@ public final class Settings {
 
         /**
          * String to contain power menu actions
+         * @deprecated Use {@link android.provider.Settings.Secure#POWER_MENU_ACTIONS} instead
          * @hide
          */
-        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
+        @Deprecated
+        public static final String POWER_MENU_ACTIONS = Secure.POWER_MENU_ACTIONS;
 
         /**
          * Whether Views are allowed to save their attribute data.

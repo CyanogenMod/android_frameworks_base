@@ -17,12 +17,17 @@
 package com.android.systemui;
 
 import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
+import android.app.IUserSwitchObserver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.IRemoteCallback;
+import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -45,6 +50,16 @@ public class BatteryLevelTextView extends TextView implements
 
     private ContentObserver mObserver = new ContentObserver(new Handler()) {
         public void onChange(boolean selfChange, Uri uri) {
+            loadShowBatteryTextSetting();
+        }
+    };
+
+    private IUserSwitchObserver mUserSwitchObserver = new IUserSwitchObserver.Stub() {
+        @Override
+        public void onUserSwitching(int newUserId, IRemoteCallback reply) {
+        }
+        @Override
+        public void onUserSwitchComplete(int newUserId) throws RemoteException {
             loadShowBatteryTextSetting();
         }
     };
@@ -105,9 +120,16 @@ public class BatteryLevelTextView extends TextView implements
             mBatteryController.addStateChangedCallback(this);
         }
         getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                STATUS_BAR_BATTERY_STYLE), false, mObserver);
+                STATUS_BAR_BATTERY_STYLE), false, mObserver, UserHandle.USER_ALL);
         getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                STATUS_BAR_SHOW_BATTERY_PERCENT), false, mObserver);
+                STATUS_BAR_SHOW_BATTERY_PERCENT), false, mObserver, UserHandle.USER_ALL);
+
+        try {
+            ActivityManagerNative.getDefault().registerUserSwitchObserver(mUserSwitchObserver);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
         mAttached = true;
     }
 
@@ -116,6 +138,11 @@ public class BatteryLevelTextView extends TextView implements
         super.onDetachedFromWindow();
         mAttached = false;
         getContext().getContentResolver().unregisterContentObserver(mObserver);
+        try {
+            ActivityManagerNative.getDefault().unregisterUserSwitchObserver(mUserSwitchObserver);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
         if (mBatteryController != null) {
             mBatteryController.removeStateChangedCallback(this);

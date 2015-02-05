@@ -50,6 +50,7 @@ import android.widget.ImageView;
 import com.android.systemui.cm.ActionTarget;
 import com.android.systemui.cm.NavigationRingHelpers;
 import com.android.systemui.cm.ShortcutPickHelper;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusBarPanel;
@@ -111,8 +112,20 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
         // Instantiate receiver/observer
         IntentFilter filter = new IntentFilter();
         filter.addAction(BROADCAST);
-        mContext.registerReceiver(mReceiver, filter);
-        new SettingsObserver(new Handler());
+        mContext.registerReceiverAsUser(mReceiver, UserHandle.ALL, filter, null, null);
+        mSettingsObserver = new SettingsObserver(new Handler());
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mSettingsObserver.observe();
+    }
+
+    @Override
+    protected void onDetachedFromWindowInternal() {
+        super.onDetachedFromWindowInternal();
+        mSettingsObserver.detach();
     }
 
     private void startAssistActivity() {
@@ -421,28 +434,27 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
     public void shortcutPicked(String uri) {
         if (uri != null) {
             int index = mTargetViews.indexOf(mSelectedView);
-            Settings.Secure.putString(mContext.getContentResolver(),
-                    Settings.Secure.NAVIGATION_RING_TARGETS[index], uri);
+            Settings.Secure.putStringForUser(mContext.getContentResolver(),
+                    Settings.Secure.NAVIGATION_RING_TARGETS[index], uri, UserHandle.USER_CURRENT);
         }
     }
 
-    private class SettingsObserver extends ContentObserver {
+    private class SettingsObserver extends UserContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
             observe();
         }
 
-        void observe() {
+        protected void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             for (int i = 0; i < NavigationRingHelpers.MAX_ACTIONS; i++) {
                 resolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.NAVIGATION_RING_TARGETS[i]),
-                        false, this);
+                        false, this, UserHandle.USER_ALL);
             }
         }
 
-        @Override
-        public void onChange(boolean selfChange) {
+        public void update() {
             updateDrawables();
         }
     }
