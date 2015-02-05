@@ -41,6 +41,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -361,7 +362,6 @@ public class StatusBarIconView extends AnimatedImageView {
         return mSlot;
     }
 
-
     public static String contentDescForNotification(Context c, Notification n) {
         String appName = "";
         try {
@@ -387,7 +387,7 @@ public class StatusBarIconView extends AnimatedImageView {
         return c.getString(R.string.accessibility_desc_notification_icon, appName, desc);
     }
 
-    static class GlobalSettingsObserver extends ContentObserver {
+    static class GlobalSettingsObserver extends UserContentObserver {
         private static GlobalSettingsObserver sInstance;
         private ArrayList<StatusBarIconView> mIconViews = new ArrayList<StatusBarIconView>();
         private Context mContext;
@@ -418,18 +418,24 @@ public class StatusBarIconView extends AnimatedImageView {
             }
         }
 
-        void observe() {
+        @Override
+        protected void observe() {
+            super.observe();
+
             mContext.getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUS_BAR_NOTIF_COUNT),
                     false, this);
         }
 
-        void unobserve() {
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+
             mContext.getContentResolver().unregisterContentObserver(this);
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public void update() {
             boolean showIconCount = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.STATUS_BAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1;
             for (StatusBarIconView sbiv : mIconViews) {
