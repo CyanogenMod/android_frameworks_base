@@ -66,6 +66,7 @@ import android.os.UserHandle;
 import android.os.WorkSource;
 import android.provider.Settings;
 import android.service.dreams.DreamManagerInternal;
+import android.telephony.TelephonyManager;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -191,6 +192,8 @@ public final class PowerManagerService extends SystemService
     private Light mKeyboardLight;
     private Light mCapsLight;
     private Light mFnLight;
+
+    private TelephonyManager mTelephonyManager;
 
     private int mButtonTimeout;
     private int mButtonBrightness;
@@ -3167,7 +3170,12 @@ public final class PowerManagerService extends SystemService
                 // There is already a message queued;
                 return;
             }
-            if (mProximityWakeSupported && mProximityWakeEnabled && mProximitySensor != null) {
+
+            boolean hasIncomingCall = (getTelephonyManager().getCallState()
+                    == TelephonyManager.CALL_STATE_RINGING);
+
+            if (mProximityWakeSupported && mProximityWakeEnabled && mProximitySensor != null
+                    && !hasIncomingCall) {
                 Message msg = mHandler.obtainMessage(MSG_WAKE_UP);
                 msg.obj = r;
                 mHandler.sendMessageDelayed(msg, mProximityTimeOut);
@@ -3175,6 +3183,14 @@ public final class PowerManagerService extends SystemService
             } else {
                 r.run();
             }
+        }
+
+        TelephonyManager getTelephonyManager() {
+            if (mTelephonyManager == null) {
+                mTelephonyManager = (TelephonyManager)mContext.getSystemService(
+                        Context.TELEPHONY_SERVICE);
+            }
+            return mTelephonyManager;
         }
 
         private void runPostProximityCheck(final Runnable r) {
