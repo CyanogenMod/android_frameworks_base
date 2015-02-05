@@ -187,8 +187,9 @@ public final class ContentService extends IContentService.Stub {
         synchronized (mRootNode) {
             mRootNode.addObserverLocked(uri, observer, notifyForDescendants, mRootNode,
                     Binder.getCallingUid(), Binder.getCallingPid(), userHandle);
-            if (false) Log.v(TAG, "Registered observer " + observer + " at " + uri +
-                    " with notifyForDescendants " + notifyForDescendants);
+            if (true) Log.v(TAG, "Registered observer " + observer + " at " + uri +
+                    " with notifyForDescendants " + notifyForDescendants + " with userHandle"
+                    + userHandle);
         }
     }
 
@@ -219,7 +220,7 @@ public final class ContentService extends IContentService.Stub {
     public void notifyChange(Uri uri, IContentObserver observer,
             boolean observerWantsSelfNotifications, boolean syncToNetwork,
             int userHandle) {
-        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+        if (true) {
             Log.v(TAG, "Notifying update of " + uri + " for user " + userHandle
                     + " from observer " + observer + ", syncToNetwork " + syncToNetwork);
         }
