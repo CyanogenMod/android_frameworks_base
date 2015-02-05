@@ -19,11 +19,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.util.ArraySet;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.android.systemui.statusbar.phone.StatusBarIconController;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.tuner.TunerService;
 
