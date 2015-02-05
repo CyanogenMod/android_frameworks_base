@@ -657,14 +657,31 @@ public class SearchPanelCircleView extends FrameLayout {
         }
     }
 
+    private boolean isRectConsideredActive(Rect rect, MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        if (rect.contains(x, y)) {
+            return true;
+        }
+        if (mHorizontal) {
+            return x <= rect.right &&
+                    (y >= rect.top - rect.height() / 2)
+                    && (y <= rect.bottom + rect.height() / 2);
+        } else {
+            return y <= rect.bottom &&
+                    (x <= rect.right + rect.width() / 2)
+                    && (x >= rect.left - rect.width() / 2);
+        }
+    }
+
     public int isIntersecting(MotionEvent event) {
-        if (mCircleRect.contains((int) event.getX(), (int) event.getY())) {
+        if (isRectConsideredActive(mCircleRect, event)) {
             mIntersectIndex = 1;
             return 1;
-        } else if (mCircleRectLeft.contains((int) event.getX(), (int) event.getY())) {
+        } else if (isRectConsideredActive(mCircleRectLeft, event)) {
             mIntersectIndex = 0;
             return 0;
-        } else if (mCircleRectRight.contains((int) event.getX(), (int) event.getY())) {
+        } else if (isRectConsideredActive(mCircleRectRight, event)) {
             mIntersectIndex = 2;
             return 2;
         } else {
