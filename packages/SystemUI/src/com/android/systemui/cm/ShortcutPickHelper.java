@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The CyanogenMod Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,29 +18,37 @@ package com.android.systemui.cm;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.android.systemui.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import static com.android.systemui.cm.NavigationRingConstants.*;
+import static com.android.internal.util.cm.NavigationRingConstants.*;
 
 public class ShortcutPickHelper {
+
     private final Context mContext;
     private final AppPickAdapter mAdapter;
     private final Intent mBaseIntent;
@@ -48,6 +56,8 @@ public class ShortcutPickHelper {
     private OnPickListener mListener;
     private PackageManager mPackageManager;
     private ActionHolder mActions;
+    private FetchAppsTask mFetchAppsTask;
+    private List<ItemInfo> mItems;
 
     public interface OnPickListener {
         void shortcutPicked(String uri);
@@ -56,36 +66,117 @@ public class ShortcutPickHelper {
     public ShortcutPickHelper(Context context, OnPickListener listener) {
         mContext = context;
         mPackageManager = context.getPackageManager();
+        mItems = Collections.synchronizedList(new ArrayList<ItemInfo>());
+        mAdapter = new AppPickAdapter(mContext);
         mBaseIntent = new Intent(Intent.ACTION_MAIN);
         mBaseIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        mAdapter = new AppPickAdapter();
+
         mListener = listener;
-        mIconSize = context.getResources().getDimensionPixelSize(android.R.dimen.app_icon_size);
+        mIconSize = context.getResources().getDimensionPixelSize(
+                android.R.dimen.app_icon_size);
         createActionList();
     }
 
-    private class AppPickAdapter extends BaseAdapter {
+    public void cleanup() {
+        if (mFetchAppsTask != null) {
+            // We only un-register if apps were fetched
+            mContext.unregisterReceiver(mReceiver);
+            cancelAsyncTaskIfNecessary(mFetchAppsTask);
+        }
+        mFetchAppsTask = null;
+        mAdapter.clear();
+    }
 
-        private final List<ResolveInfo> mItems;
+    private void cancelAsyncTaskIfNecessary(AsyncTask task) {
+        if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
+            task.cancel(true);
+        }
+    }
 
-        AppPickAdapter() {
-            mItems = mPackageManager.queryIntentActivities(mBaseIntent, 0);
-            Collections.sort(mItems, new ResolveInfo.DisplayNameComparator(mPackageManager));
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mFetchAppsTask != null && mFetchAppsTask.getStatus() == AsyncTask.Status.RUNNING) {
+                return;
+            }
+            Uri uri = intent.getData();
+            if (uri == null) {
+                return;
+            }
+            String packageName = uri.getSchemeSpecificPart();
+            if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+                mFetchAppsTask = new FetchAppsTask();
+                mFetchAppsTask.execute(packageName);
+            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                for (int i = 0; i < mItems.size(); i++) {
+                    ItemInfo info = mItems.get(i);
+                    if (info.componentName.getPackageName().equals(packageName)) {
+                        mItems.remove(i);
+                        break;
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    private static class ItemInfo {
+        ComponentName componentName;
+        String label;
+        Drawable icon;
+        static ItemInfo populateFromPackage(PackageManager packageManager,
+                                            ResolveInfo resolveInfo) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            try {
+                PackageInfo info = packageManager.getPackageInfo(packageName, 0);
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.label = (String) info.applicationInfo.loadLabel(packageManager);
+                itemInfo.icon = info.applicationInfo.loadIcon(packageManager);
+                itemInfo.componentName = new ComponentName(packageName,
+                        resolveInfo.activityInfo.name);
+                return itemInfo;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private class FetchAppsTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... packages) {
+            Intent baseIntent = new Intent(mBaseIntent);
+            if (packages != null && packages.length == 1) {
+                baseIntent.setPackage(packages[0]);
+            } else {
+                mItems.clear();
+            }
+            for (ResolveInfo item : mPackageManager.queryIntentActivities(baseIntent, 0)) {
+                mItems.add(ItemInfo.populateFromPackage(mPackageManager, item));
+            }
+            sortItems();
+            return null;
         }
 
         @Override
-        public int getCount() {
-            return mItems.size();
+        protected void onPostExecute(Void aVoid) {
+            mAdapter.notifyDataSetChanged();
         }
+    }
 
-        @Override
-        public Object getItem(int position) {
-            return mItems.get(position);
-        }
+    private void sortItems() {
+        Collections.sort(mItems, new Comparator<ItemInfo>() {
+            @Override
+            public int compare(ItemInfo lhs, ItemInfo rhs) {
+                return lhs.label.compareTo(rhs.label);
+            }
+        });
+    }
 
-        @Override
-        public long getItemId(int position) {
-            return 0;
+    private class AppPickAdapter extends ArrayAdapter<ItemInfo> {
+
+        public AppPickAdapter(Context context) {
+            super(context, 0, mItems);
         }
 
         @Override
@@ -93,14 +184,11 @@ public class ShortcutPickHelper {
             if (convertView == null) {
                 convertView = View.inflate(mContext, R.layout.pick_item, null);
             }
-
-            ResolveInfo item = (ResolveInfo) getItem(position);
+            ItemInfo itemInfo = getItem(position);
             TextView textView = (TextView) convertView;
-            textView.setText(item.loadLabel(mPackageManager));
-            Drawable icon = item.loadIcon(mPackageManager);
-            icon.setBounds(0, 0, mIconSize, mIconSize);
-            textView.setCompoundDrawables(icon, null, null, null);
-
+            textView.setText(itemInfo.label);
+            itemInfo.icon.setBounds(0, 0, mIconSize, mIconSize);
+            textView.setCompoundDrawables(itemInfo.icon, null, null, null);
             return convertView;
         }
     }
@@ -111,10 +199,9 @@ public class ShortcutPickHelper {
                 .setAdapter(mAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ResolveInfo resolveInfo = (ResolveInfo) mAdapter.getItem(which);
+                        ItemInfo info = mAdapter.getItem(which);
                         Intent intent = new Intent(mBaseIntent);
-                        intent.setClassName(resolveInfo.activityInfo.packageName,
-                                resolveInfo.activityInfo.name);
+                        intent.setComponent(info.componentName);
                         mListener.shortcutPicked(intent.toUri(0));
                         dialog.dismiss();
                     }
@@ -126,7 +213,6 @@ public class ShortcutPickHelper {
                         dialog.cancel();
                     }
                 });
-
         Dialog dialog = builder.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL);
         dialog.setCanceledOnTouchOutside(false);
@@ -134,6 +220,16 @@ public class ShortcutPickHelper {
     }
 
     public void pickShortcut(boolean showNone) {
+        if (mFetchAppsTask == null) {
+            mFetchAppsTask = new FetchAppsTask();
+            mFetchAppsTask.execute();
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+            filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+            filter.addDataScheme("package");
+            mContext.registerReceiver(mReceiver, filter);
+        }
         if (showNone) {
             mActions.addAction(ACTION_NONE, R.string.navring_action_none, 0);
         } else {

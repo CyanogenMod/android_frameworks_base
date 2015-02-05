@@ -20,6 +20,8 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:gravity="center_vertical"
-    android:drawablePadding="8dip"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:drawablePadding="25dip"
     android:paddingStart="11dip"
     android:paddingEnd="11dip" />

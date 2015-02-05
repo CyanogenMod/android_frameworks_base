@@ -127,6 +127,9 @@
     <!-- blur surface -->
     <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
 
+    <!-- Action target -->
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
