@@ -799,12 +799,18 @@ public class VolumePanel extends Handler {
 
     private void hideVolumePanel() {
         diappearVolumePanel();
-        mStreamControls.get(mActiveStreamType).expandPanel.setVisibility(View.VISIBLE);
+        StreamControl sc = mStreamControls.get(mActiveStreamType);
+        if (sc != null) {
+            sc.expandPanel.setVisibility(View.VISIBLE);
+        }
     }
 
     private void expandVolumePanel() {
         showVolumePanel();
-        mStreamControls.get(mActiveStreamType).expandPanel.setVisibility(View.GONE);
+        StreamControl sc = mStreamControls.get(mActiveStreamType);
+        if (sc != null) {
+            sc.expandPanel.setVisibility(View.GONE);
+        }
     }
 
     private void updateSliderProgress(StreamControl sc, int progress) {
