@@ -179,8 +179,9 @@ public class CarrierText extends TextView {
             CharSequence plmn, CharSequence spn) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
-        if (DEBUG) Log.d(TAG, "getCarrierTextForSimState: status=" + status +
-                " plmn=" + plmn + " spn=" + spn);
+        if (DEBUG)
+            Log.d(TAG, "getCarrierTextForSimState: status=" + status +
+                    " plmn=" + plmn + " spn=" + spn);
         switch (status) {
             case Normal:
                 carrierText = concatenate(plmn, spn);
@@ -196,13 +197,8 @@ public class CarrierText extends TextView {
                 break;
 
             case SimMissing:
-                // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
-                // This depends on mPlmn containing the text "Emergency calls only" when the radio
-                // has some connectivity. Otherwise, it should be null or empty and just show
-                // "No SIM card"
-                carrierText =  makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.keyguard_missing_sim_message_short),
-                        plmn);
+                // Not displaying anything in the TextView if no SIM is inserted.
+                carrierText = null;
                 break;
 
             case SimPermDisabled:
@@ -211,9 +207,10 @@ public class CarrierText extends TextView {
                 break;
 
             case SimMissingLocked:
-                carrierText =  makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.keyguard_missing_sim_message_short),
-                        plmn);
+
+                carrierText = makeCarrierStringOnEmergencyCapable(
+                        getContext().getText(R.string.keyguard_missing_sim_message_short), plmn);
+
                 break;
 
             case SimLocked:
