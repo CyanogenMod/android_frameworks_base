@@ -405,11 +405,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mMenuWakeScreen;
     boolean mAssistWakeScreen;
     boolean mAppSwitchWakeScreen;
+    boolean mCameraWakeScreen;
     boolean mVolumeWakeScreen;
 
-    // During wakeup by volume keys, we still need to capture subsequent events
-    // until the key is released. This is required since the beep sound is produced
-    // post keypressed.
+    boolean mCameraWakeTriggered;
     boolean mVolumeWakeTriggered;
 
     int mPointerLocationMode = 0; // guarded by mLock
@@ -419,7 +418,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     WindowState mFocusedWindow;
     IApplicationToken mFocusedApp;
 
-    // Behavior of volbtn music controls
+    // Behavior of camera/volbtn music controls
+    boolean mCameraMusicControls;
     boolean mVolBtnMusicControls;
     boolean mIsLongPress;
 
@@ -777,6 +777,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.APP_SWITCH_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CAMERA_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CAMERA_SLEEP_ON_RELEASE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CAMERA_MUSIC_CONTROLS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_WAKE_SCREEN), false, this,
@@ -1675,6 +1684,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mAppSwitchWakeScreen = (Settings.System.getIntForUser(resolver,
                     Settings.System.APP_SWITCH_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
                     ((mDeviceHardwareWakeKeys & KEY_MASK_APP_SWITCH) != 0);
+            mCameraWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.CAMERA_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
+                    ((mDeviceHardwareWakeKeys & KEY_MASK_CAMERA) != 0);
+            mCameraSleepOnRelease = (Settings.System.getIntForUser(resolver,
+                    Settings.System.CAMERA_SLEEP_ON_RELEASE, 0, UserHandle.USER_CURRENT) == 1);
+            mCameraMusicControls = (Settings.System.getIntForUser(resolver,
+                    Settings.System.CAMERA_MUSIC_CONTROLS, 1, UserHandle.USER_CURRENT) == 1);
             mVolumeWakeScreen = (Settings.System.getIntForUser(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1) &&
                     ((mDeviceHardwareWakeKeys & KEY_MASK_VOLUME) != 0);
@@ -5016,6 +5032,51 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Handle special keys.
         switch (keyCode) {
+            case KeyEvent.KEYCODE_FOCUS: {
+                if (down && isWakeKey && mCameraSleepOnRelease) {
+                    mIsFocusPressed = true;
+                    break;
+                } else if (!down && isScreenOn && mIsFocusPressed) {
+                    result = (result & ~ACTION_WAKE_UP) | ACTION_GO_TO_SLEEP;
+                    mIsFocusPressed = false;
+                    break;
+                }
+                break;
+            }
+
+            case KeyEvent.KEYCODE_CAMERA: {
+                if (down && mIsFocusPressed) {
+                    mIsFocusPressed = false;
+                }
+
+                // Eat all camera keys when using camera wake.
+                // This disables music controls.
+                if (isWakeKey && mCameraWakeScreen) {
+                    mCameraWakeTriggered = true;
+                    break;
+                } else if (mCameraWakeTriggered && !down) {
+                    result &= ~ACTION_PASS_TO_USER;
+                    mCameraWakeTriggered = false;
+                    break;
+                }
+
+                if ((result & ACTION_PASS_TO_USER) == 0) {
+                    if (isMusicActive()) {
+                        if (mCameraMusicControls) {
+                            if (down) {
+                                scheduleLongPressKeyEvent(event, KEYCODE_MEDIA_PLAY_PAUSE);
+                                break;
+                            } else {
+                                mHandler.removeMessages(MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                break;
+            }
+
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_MUTE: {
@@ -5337,7 +5398,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_MUTE:
                 return mVolumeWakeScreen || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
-            // ignore media and camera keys
+            // ignore media keys
             case KeyEvent.KEYCODE_MUTE:
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY:
@@ -5350,8 +5411,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_MEDIA_RECORD:
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
             case KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK:
-            case KeyEvent.KEYCODE_CAMERA:
-            case KeyEvent.KEYCODE_FOCUS:
                 return false;
 
             case KeyEvent.KEYCODE_BACK:
@@ -5362,6 +5421,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return mAssistWakeScreen;
             case KeyEvent.KEYCODE_APP_SWITCH:
                 return mAppSwitchWakeScreen;
+            case KeyEvent.KEYCODE_CAMERA:
+                return mCameraWakeScreen;
+            case KeyEvent.KEYCODE_FOCUS:
+                return mCameraSleepOnRelease;
         }
         return true;
     }
