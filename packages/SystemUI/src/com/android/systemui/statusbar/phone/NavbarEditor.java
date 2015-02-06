@@ -272,7 +272,8 @@ public class NavbarEditor implements View.OnTouchListener {
             view.setPressed(false);
             view.removeCallbacks(mCheckLongPress);
 
-            if (!mLongPressed && !view.getTag().equals(NAVBAR_HOME)) {
+            if (!mLongPressed && !view.getTag().equals(NAVBAR_HOME) &&
+                    !view.getTag().equals(NAVBAR_RECENT) && !view.getTag().equals(NAVBAR_BACK)) {
                 final boolean isSmallButton = ArrayUtils.contains(SMALL_BUTTON_IDS, view.getId());
                 final ButtonAdapter list = new ButtonAdapter(mContext, mButtonViews, isSmallButton);
 
