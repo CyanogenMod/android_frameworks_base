@@ -307,6 +307,15 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         mAllowAutoBrightnessWhileDozingConfig = resources.getBoolean(
                 com.android.internal.R.bool.config_allowAutoBrightnessWhileDozing);
 
+        int lightSensorRate = resources.getInteger(
+                com.android.internal.R.integer.config_autoBrightnessLightSensorRate);
+        long brighteningLightDebounce = resources.getInteger(
+                com.android.internal.R.integer.config_autoBrightnessBrighteningLightDebounce);
+        long darkeningLightDebounce = resources.getInteger(
+                com.android.internal.R.integer.config_autoBrightnessDarkeningLightDebounce);
+        boolean autoBrightnessResetAmbientLuxAfterWarmUp = resources.getBoolean(
+                com.android.internal.R.bool.config_autoBrightnessResetAmbientLuxAfterWarmUp);
+
         if (mUseSoftwareAutoBrightnessConfig) {
             int[] lux = resources.getIntArray(
                     com.android.internal.R.array.config_autoBrightnessLevels);
@@ -341,7 +350,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 mAutomaticBrightnessController = new AutomaticBrightnessController(mContext, this,
                         handler.getLooper(), sensorManager, screenAutoBrightnessSpline,
                         lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
-                        mScreenBrightnessRangeMaximum, dozeScaleFactor, mLiveDisplayController);
+                        mScreenBrightnessRangeMaximum, dozeScaleFactor, lightSensorRate,
+                        brighteningLightDebounce, darkeningLightDebounce,
+                        autoBrightnessResetAmbientLuxAfterWarmUp, mLiveDisplayController);
             }
         }
 
@@ -685,6 +696,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         // Skip the animation when the screen is off or suspended.
         if (!mPendingScreenOff) {
             if (state == Display.STATE_ON || state == Display.STATE_DOZE) {
+                Slog.d(TAG, "CLARK: slowChange=" + slowChange);
                 animateScreenBrightness(brightness,
                         slowChange ? BRIGHTNESS_RAMP_RATE_SLOW : BRIGHTNESS_RAMP_RATE_FAST);
             } else {
