@@ -162,9 +162,8 @@ public class KeyguardIndicationController {
     KeyguardUpdateMonitorCallback mUpdateMonitor = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
-            mPowerPluggedIn = status.status == BatteryManager.BATTERY_STATUS_CHARGING
-                    || status.status == BatteryManager.BATTERY_STATUS_FULL;
             mPowerCharged = status.isCharged();
+            mPowerPluggedIn = (status.plugged != 0) || mPowerCharged;
             updateIndication();
         }
     };
