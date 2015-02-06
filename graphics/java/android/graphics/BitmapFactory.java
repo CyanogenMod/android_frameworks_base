@@ -662,7 +662,7 @@ public class BitmapFactory {
         byte [] tempStorage = null;
         if (opts != null) tempStorage = opts.inTempStorage;
         if (tempStorage == null) tempStorage = new byte[DECODE_BUFFER_SIZE];
-        return nativeDecodeStream(is, tempStorage, outPadding, opts, true);
+        return nativeDecodeStream(is, tempStorage, outPadding, opts, consumeRights);
     }
 
     /**
