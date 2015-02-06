@@ -18,6 +18,8 @@ package com.android.server.power;
 
 import android.app.ActivityManagerInternal;
 import android.app.AppOpsManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
@@ -26,6 +28,7 @@ import com.android.server.LocalServices;
 
 import android.app.ActivityManagerNative;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.input.InputManagerInternal;
@@ -482,18 +485,28 @@ final class Notifier {
     };
 
     private void playWirelessChargingStartedSound() {
-        final String soundPath = Settings.Global.getString(mContext.getContentResolver(),
-                Settings.Global.WIRELESS_CHARGING_STARTED_SOUND);
+        final ContentResolver cr = mContext.getContentResolver();
+        final String soundPath =
+                Settings.Global.getString(cr, Settings.Global.POWER_NOTIFICATIONS_RINGTONE);
+
+        NotificationManager notificationManager =
+                (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification powerNotify = new Notification();
+        powerNotify.defaults = Notification.DEFAULT_ALL;
         if (soundPath != null) {
-            final Uri soundUri = Uri.parse("file://" + soundPath);
-            if (soundUri != null) {
-                final Ringtone sfx = RingtoneManager.getRingtone(mContext, soundUri);
-                if (sfx != null) {
-                    sfx.setStreamType(AudioManager.STREAM_SYSTEM);
-                    sfx.play();
-                }
+            powerNotify.sound = Uri.parse(soundPath);
+            if (powerNotify.sound != null) {
+                // DEFAULT_SOUND overrides so flip off
+                powerNotify.defaults &= ~Notification.DEFAULT_SOUND;
             }
         }
+        if (Settings.Global.getInt(cr,
+                Settings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) == 0) {
+            powerNotify.defaults &= ~Notification.DEFAULT_VIBRATE;
+        }
+
+        notificationManager.notify(0, powerNotify);
 
         mSuspendBlocker.release();
     }
@@ -515,7 +528,10 @@ final class Notifier {
                     break;
 
                 case MSG_WIRELESS_CHARGING_STARTED:
-                    playWirelessChargingStartedSound();
+                    if (Settings.Global.getInt(mContext.getContentResolver(),
+                            Settings.Global.POWER_NOTIFICATIONS_ENABLED, 0) == 1) {
+                        playWirelessChargingStartedSound();
+                    }
                     break;
             }
         }
