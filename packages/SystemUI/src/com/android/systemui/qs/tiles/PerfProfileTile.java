@@ -76,12 +76,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         state.label = mEntries[state.profile];
         state.icon = mContext.getDrawable(mEntryIconRes[state.profile]);
         if (state.icon instanceof AnimatedVectorDrawable) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((AnimatedVectorDrawable) getState().icon).start();
-                }
-            });
+            ((AnimatedVectorDrawable) getState().icon).start();
         }
     }
 
