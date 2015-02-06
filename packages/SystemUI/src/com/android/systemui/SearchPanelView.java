@@ -319,6 +319,11 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return getVisibility() == View.VISIBLE;
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (mLaunching || mLaunchPending || mInEditMode) {
             return super.onTouchEvent(event);
