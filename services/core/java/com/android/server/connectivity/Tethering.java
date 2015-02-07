@@ -43,6 +43,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
@@ -800,6 +801,14 @@ public class Tethering extends BaseNetworkObserver {
             Log.e(TAG, "Error listing Interfaces", e);
             return;
         }
+
+        final String usbSysctlKey = "sys.usb.tethering";
+        SystemProperties.set(usbSysctlKey, "false");
+
+        if (enable) {
+           SystemProperties.set(usbSysctlKey, "true");
+        }
+
         for (String iface : ifaces) {
             if (isUsb(iface)) {
                 int result = (enable ? tether(iface) : untether(iface));
