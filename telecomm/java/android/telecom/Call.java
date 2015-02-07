@@ -665,6 +665,16 @@ public final class Call {
         mIsActiveSub = isActiveSub;
     }
 
+     /** {@hide} */
+    Call(Phone phone, String telecomCallId, InCallAdapter inCallAdapter, boolean isActiveSub,
+            int state) {
+        mPhone = phone;
+        mTelecomCallId = telecomCallId;
+        mInCallAdapter = inCallAdapter;
+        mState = state;
+        mIsActiveSub = isActiveSub;
+    }
+
     /** {@hide} */
     final String internalGetCallId() {
         return mTelecomCallId;
