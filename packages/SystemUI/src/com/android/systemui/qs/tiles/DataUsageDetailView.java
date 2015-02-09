@@ -60,7 +60,7 @@ public class DataUsageDetailView extends LinearLayout {
                 R.dimen.qs_data_usage_text_size);
     }
 
-    public void bind(NetworkController.MobileDataController.DataUsageInfo info) {
+    public void bind(NetworkController.DataUsageInfo info) {
         final Resources res = mContext.getResources();
         final int titleId;
         final long bytes;

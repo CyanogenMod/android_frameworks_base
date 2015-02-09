@@ -65,6 +65,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     ArrayList<TaskStack> mStacks;
     View mSearchBar;
     RecentsViewCallbacks mCb;
+    View mClearRecents;
 
     public RecentsView(Context context) {
         super(context);
@@ -148,6 +149,17 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
 
         // Trigger a new layout
         requestLayout();
+    }
+
+    public void dismissAllTasksAnimated() {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child != mSearchBar) {
+                TaskStackView stackView = (TaskStackView) child;
+                //stackView.dismissAllTasks();
+            }
+        }
     }
 
     /** Launches the focused task from the first stack if possible */
@@ -303,6 +315,23 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         }
 
         setMeasuredDimension(width, height);
+    }
+
+    public void noUserInteraction() {
+        if (mClearRecents != null) {
+            mClearRecents.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow () {
+        super.onAttachedToWindow();
+        //mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
+        //mClearRecents.setOnClickListener(new View.OnClickListener() {
+        //    public void onClick(View v) {
+        //        dismissAllTasksAnimated();
+        ///    }
+       // });
     }
 
     /**

@@ -228,7 +228,7 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
                 int mobileSignalIconId,
                 String mobileSignalContentDescriptionId, int dataTypeIconId,
                 boolean activityIn, boolean activityOut,
-                String dataTypeContentDescriptionId, String description,
+                String dataTypeContentDescriptionId, String description, boolean noSim,
                 boolean isDataTypeIconWide) {
             // noop
         }
@@ -300,7 +300,6 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
             }
         }
 
-        @Override
         public void onSettingsActivityTriggered(Intent settingsIntent) {
             mHost.startSettingsActivity(settingsIntent);
         }

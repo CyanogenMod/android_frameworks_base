@@ -48,8 +48,6 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.EmergencyButton;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
-import com.android.systemui.EventLogConstants;
-import com.android.systemui.EventLogTags;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.KeyguardAffordanceView;
@@ -328,9 +326,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     private void handleTrustCircleClick() {
-        EventLogTags.writeSysuiLockscreenGesture(
-                EventLogConstants.SYSUI_LOCKSCREEN_GESTURE_TAP_LOCK, 0 /* lengthDp - N/A */,
-                0 /* velocityDp - N/A */);
         mIndicationController.showTransientIndication(
                 R.string.keyguard_indication_trust_disabled);
         mLockPatternUtils.requireCredentialEntry(mLockPatternUtils.getCurrentUser());
@@ -397,9 +392,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             return;
         }
         // TODO: Real icon for facelock.
-        int iconRes = mUnlockMethodCache.isFaceUnlockRunning()
+       /* int iconRes = mUnlockMethodCache.isFaceUnlockRunning()
                 ? com.android.internal.R.drawable.ic_account_circle
-                : mUnlockMethodCache.isCurrentlyInsecure() ? R.drawable.ic_lock_open_24dp
+                : mUnlockMethodCache.isMethodInsecure() ? R.drawable.ic_lock_open_24dp
                 : R.drawable.ic_lock_24dp;
         if (mLastUnlockIconRes != iconRes) {
             Drawable icon = mContext.getDrawable(iconRes);
@@ -411,7 +406,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 icon = new IntrinsicSizeDrawable(icon, iconWidth, iconHeight);
             }
             mLockIcon.setImageDrawable(icon);
-        }
+        }*/
         boolean trustManaged = mUnlockMethodCache.isTrustManaged();
         mTrustDrawable.setTrustManaged(trustManaged);
         updateLockIconClickability();
@@ -448,10 +443,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         return false;
     }
 
-    @Override
-    public void onUnlockMethodStateChanged() {
+    public void onMethodSecureChanged(boolean methodSecure) {
         updateLockIcon();
         updateCameraVisibility();
+    }
+
+    public void onUnlockMethodStateChanged() {
     }
 
     private void inflatePreviews() {

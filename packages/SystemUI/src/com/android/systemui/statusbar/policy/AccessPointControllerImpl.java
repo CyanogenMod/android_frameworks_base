@@ -141,7 +141,7 @@ public class AccessPointControllerImpl implements NetworkController.AccessPointC
 
     private void fireSettingsIntentCallback(Intent intent) {
         for (AccessPointCallback callback : mCallbacks) {
-            callback.onSettingsActivityTriggered(intent);
+            //callback.onSettingsActivityTriggered(intent);
         }
     }
 

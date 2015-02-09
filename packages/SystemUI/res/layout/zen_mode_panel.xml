@@ -34,12 +34,12 @@
             android:id="@+id/zen_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/qs_panel_padding"
+            android:layout_marginStart="@dimen/qs_panel_padding"
             android:layout_marginEnd="@dimen/qs_panel_padding"
             android:layout_marginTop="4dp"
-                        android:layout_marginLeft="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-                        android:layout_marginBottom="8dp"
+            android:layout_marginBottom="8dp"
             android:clipChildren="false" />
     </FrameLayout>
 
@@ -72,8 +72,8 @@
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-                        android:paddingStart="8dp"
-                        android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
             android:maxLines="2"
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.QS.Subhead" />

@@ -399,6 +399,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
 
     public static class State {
         public boolean visible;
+        public int iconId;
         public Icon icon;
         public String label;
         public String contentDescription;

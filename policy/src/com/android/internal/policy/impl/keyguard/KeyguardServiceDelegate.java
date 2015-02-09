@@ -159,6 +159,13 @@ public class KeyguardServiceDelegate {
         return mKeyguardState.showing;
     }
 
+    public boolean isShowingAndNotOccluded() {
+        if (mKeyguardService != null) {
+            mKeyguardState.showingAndNotOccluded = mKeyguardService.isShowingAndNotOccluded();
+        }
+        return mKeyguardState.showingAndNotOccluded;
+    }
+
     public boolean isInputRestricted() {
         if (mKeyguardService != null) {
             mKeyguardState.inputRestricted = mKeyguardService.isInputRestricted();
@@ -178,11 +185,13 @@ public class KeyguardServiceDelegate {
         }
     }
 
-    public void setOccluded(boolean isOccluded) {
+    public int setOccluded(boolean isOccluded) {
+        int result = 0;
         if (mKeyguardService != null) {
-            mKeyguardService.setOccluded(isOccluded);
+            result =  mKeyguardService.setOccluded(isOccluded);
         }
         mKeyguardState.occluded = isOccluded;
+        return result;
     }
 
     public void dismiss() {
@@ -240,6 +249,13 @@ public class KeyguardServiceDelegate {
             mKeyguardService.setKeyguardEnabled(enabled);
         }
         mKeyguardState.enabled = enabled;
+    }
+
+    public boolean isDismissable() {
+        if (mKeyguardService != null) {
+            mKeyguardState.dismissable = mKeyguardService.isDismissable();
+        }
+        return mKeyguardState.dismissable;
     }
 
     public void onSystemReady() {
