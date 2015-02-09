@@ -912,7 +912,7 @@ public abstract class AutoScrollHelper implements View.OnTouchListener {
                 // Are we already showing the entire first item?
                 if (firstPosition <= 0) {
                     final View firstView = target.getChildAt(0);
-                    if (firstView.getTop() >= 0) {
+                    if (firstView == null || firstView.getTop() >= 0) {
                         return false;
                     }
                 }
