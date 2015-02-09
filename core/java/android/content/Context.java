@@ -2935,6 +2935,17 @@ public abstract class Context {
     public static final String TORCH_SERVICE = "torch";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link android.hardware.CmHardwareManager} for controlling
+     * hw specific features
+     *
+     * @see #getSystemService
+     * @see android.hardware.CmHardwareManager
+     * @hide
+     */
+    public static final String CMHW_SERVICE = "cmhw";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *
