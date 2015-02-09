@@ -2794,7 +2794,7 @@
     <!-- Allows an application to control keyguard.  Only allowed for system processes.
         @hide -->
     <permission android:name="android.permission.CONTROL_KEYGUARD"
-        android:protectionLevel="signature"
+        android:protectionLevel="signature|system"
         android:label="@string/permlab_control_keyguard"
         android:description="@string/permdesc_control_keyguard" />
 
