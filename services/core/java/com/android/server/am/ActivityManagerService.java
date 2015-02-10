@@ -14856,7 +14856,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         // we will switch to the calling user if access to the current user fails.
         int targetUserId = unsafeConvertIncomingUser(userId);
 
-        if (callingUid != 0 && callingUid != Process.SYSTEM_UID) {
+        // There is no definition like MEDIA_RW_UID, so use MEDIA_RW_GID instead.
+        if (callingUid != 0 && callingUid != Process.SYSTEM_UID
+                && callingUid != Process.MEDIA_RW_GID) {
             final boolean allow;
             if (checkComponentPermission(INTERACT_ACROSS_USERS_FULL, callingPid,
                     callingUid, -1, true) == PackageManager.PERMISSION_GRANTED) {
