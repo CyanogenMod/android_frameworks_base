@@ -3339,6 +3339,21 @@ public final class ActivityManagerService extends ActivityManagerNative
         return true;
     }
 
+    /**
+     * If system is power off alarm boot mode, we need to start the alarm alert
+     * view here, to trigger the power off alarm UI.
+     */
+    void startAlarmActivityLocked() {
+        ComponentName compenentName = new ComponentName("com.android.deskclock",
+                "com.android.deskclock.alarms.AlarmActivity");
+
+        Intent intent = new Intent();
+        intent.setComponent(compenentName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("ro.alarm_boot", true);
+        mContext.startActivityAsUser(intent, UserHandle.CURRENT);
+    }
+
     private ActivityInfo resolveActivityInfo(Intent intent, int flags, int userId) {
         ActivityInfo ai = null;
         ComponentName comp = intent.getComponent();
@@ -11386,6 +11401,15 @@ public final class ActivityManagerService extends ActivityManagerNative
             // Start up initial activity.
             mBooting = true;
             startHomeActivityLocked(mCurrentUserId);
+
+            // start the power off alarm by boot mode
+            boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+            if (isAlarmBoot) {
+                if (DEBUG) {
+                    Slog.i(TAG, "ActivityManagerService systemReady isAlarmBoot = " + isAlarmBoot);
+                }
+                startAlarmActivityLocked();
+            }
 
             try {
                 if (AppGlobals.getPackageManager().hasSystemUidErrors()) {
