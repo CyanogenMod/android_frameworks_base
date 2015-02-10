@@ -188,10 +188,6 @@
     <string name="accessibility_quick_settings_location_on" msgid="5809937096590102036">"位置报告功能开启。"</string>
     <string name="accessibility_quick_settings_location_changed_off" msgid="8526845571503387376">"位置报告功能已关闭。"</string>
     <string name="accessibility_quick_settings_location_changed_on" msgid="339403053079338468">"位置报告功能已开启。"</string>
-    <string name="accessibility_quick_settings_data_off">移动数据关。</string>
-    <string name="accessibility_quick_settings_data_on">移动数据开。</string>
-    <string name="accessibility_quick_settings_roaming_off">数据漫游关。</string>
-    <string name="accessibility_quick_settings_roaming_on">数据漫游开。</string>
     <string name="accessibility_quick_settings_alarm" msgid="3959908972897295660">"闹钟已设置为：<xliff:g id="TIME">%s</xliff:g>。"</string>
     <string name="accessibility_quick_settings_close" msgid="3115847794692516306">"关闭面板。"</string>
     <string name="accessibility_quick_settings_more_time" msgid="3659274935356197708">"延长时间。"</string>
@@ -230,8 +226,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"互动屏保"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"有线网络"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"飞行模式"</string>
-    <string name="quick_settings_mobile_data_label">"移动数据"</string>
-    <string name="quick_settings_roaming_label">"数据漫游"</string>
     <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"正在充电：<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"充电完成"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"蓝牙"</string>
@@ -266,7 +260,6 @@
     <string name="quick_settings_cast_detail_empty_text" msgid="311785821261640623">"没有可用设备"</string>
     <string name="quick_settings_brightness_dialog_title" msgid="8599674057673605368">"亮度"</string>
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"自动"</string>
-    <string name="quick_settings_apn_switch_label">APN 切换</string>
     <string name="quick_settings_inversion_label" msgid="8790919884718619648">"反色"</string>
     <string name="quick_settings_color_space_label" msgid="853443689745584770">"颜色校正模式"</string>
     <string name="quick_settings_more_settings" msgid="326112621462813682">"更多设置"</string>
@@ -284,8 +277,6 @@
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"已使用<xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"上限为<xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g>警告"</string>
-    <string name="quick_settings_dds_sub">卡 <xliff:g id="number">%d</xliff:g> 数据</string>
-    <string name="quick_settings_data_off">数据已关闭</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"您最近浏览过的屏幕会显示在此处"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"应用信息"</string>
     <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"固定屏幕"</string>
