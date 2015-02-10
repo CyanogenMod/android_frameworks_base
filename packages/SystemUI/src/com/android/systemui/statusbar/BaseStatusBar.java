@@ -1735,6 +1735,9 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     private boolean shouldShowOnKeyguard(StatusBarNotification sbn) {
+        if (!mShowLockscreenNotifications || mNotificationData.isAmbient(sbn.getKey())) {
+            return false;
+        }
         final int showOnKeyguard = mNoMan.getShowNotificationForPackageOnKeyguard(
                 sbn.getPackageName(), sbn.getUid());
         boolean isKeyguardAllowedForApp =
@@ -1743,8 +1746,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             isKeyguardAllowedForApp =
                     (showOnKeyguard & Notification.SHOW_NO_ONGOING_NOTI_ON_KEYGUARD) == 0;
         }
-        return mShowLockscreenNotifications && !mNotificationData.isAmbient(sbn.getKey())
-                && isKeyguardAllowedForApp;
+        return isKeyguardAllowedForApp;
     }
 
     protected void setZenMode(int mode) {
