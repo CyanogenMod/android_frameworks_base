@@ -275,7 +275,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         boolean customTarget = mShortcutHelper.isTargetCustom(shortcut);
         if (customTarget) {
             boolean isEmpty = mShortcutHelper.isTargetEmpty(shortcut);
-            if (visible && isEmpty) {
+            if (isEmpty) {
                 visible = false;
             } else {
                 visible = true;
