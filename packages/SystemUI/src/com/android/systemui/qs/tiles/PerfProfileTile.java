@@ -23,9 +23,11 @@ import android.database.ContentObserver;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSTile;
 
 public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
@@ -91,7 +93,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         }
     }
 
-    private class PerformanceProfileObserver extends ContentObserver {
+    private class PerformanceProfileObserver extends UserContentObserver {
         public PerformanceProfileObserver(Handler handler) {
             super(handler);
         }
@@ -104,7 +106,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         public void startObserving() {
             mContext.getContentResolver().registerContentObserver(
                     Settings.Secure.getUriFor(Settings.Secure.PERFORMANCE_PROFILE),
-                    false, this);
+                    false, this, UserHandle.USER_ALL);
         }
 
         public void endObserving() {

@@ -23,6 +23,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 
@@ -73,8 +75,8 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
     }
 
     private int getScreenTimeout() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.SCREEN_OFF_TIMEOUT, 0);
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_OFF_TIMEOUT, 0, UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         return new LocationDetailAdapter();
     }
 
-    private ContentObserver mObserver = new ContentObserver(mHandler) {
+    private ContentObserver mObserver = new UserContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             refreshState();
@@ -94,7 +96,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         if (listening) {
             mContext.getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(Settings.System.SCREEN_OFF_TIMEOUT),
-                    false, mObserver);
+                    false, mObserver, UserHandle.USER_ALL);
         } else {
             mContext.getContentResolver().unregisterContentObserver(mObserver);
         }
@@ -332,8 +334,8 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             int selectedTimeout = Integer.valueOf(mValues[position]);
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.SCREEN_OFF_TIMEOUT, selectedTimeout);
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.SCREEN_OFF_TIMEOUT, selectedTimeout, UserHandle.USER_CURRENT);
         }
     }
 }
