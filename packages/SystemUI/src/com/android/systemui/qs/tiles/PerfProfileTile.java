@@ -24,7 +24,6 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.util.Log;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 
@@ -39,6 +38,15 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     private boolean mListening;
 
     private PerformanceProfileObserver mObserver;
+
+    private Runnable mStartTileAnimation = new Runnable() {
+        @Override
+        public void run() {
+            if (getState().icon instanceof AnimatedVectorDrawable) {
+                ((AnimatedVectorDrawable) getState().icon).start();
+            }
+        }
+    };
 
     public PerfProfileTile(Host host) {
         super(host);
@@ -75,9 +83,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         state.profile = arg == null ? getCurrentProfileIndex() : (Integer) arg;
         state.label = mEntries[state.profile];
         state.icon = mContext.getDrawable(mEntryIconRes[state.profile]);
-        if (state.icon instanceof AnimatedVectorDrawable) {
-            ((AnimatedVectorDrawable) getState().icon).start();
-        }
+        mUiHandler.post(mStartTileAnimation);
     }
 
     @Override
@@ -88,6 +94,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
             mObserver.startObserving();
         } else {
             mObserver.endObserving();
+            mUiHandler.removeCallbacks(mStartTileAnimation);
         }
     }
 
