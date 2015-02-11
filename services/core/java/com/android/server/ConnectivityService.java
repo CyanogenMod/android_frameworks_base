@@ -302,6 +302,12 @@ public class ConnectivityService extends IConnectivityManager.Stub
     private static final int EVENT_SEND_STICKY_BROADCAST_INTENT = 11;
 
     /**
+     * Used internally to
+     * {@link NetworkStateTracker#setPolicyDataEnable(boolean)}.
+     */
+    private static final int EVENT_SET_POLICY_DATA_ENABLE = 12;
+
+    /**
      * Used internally to disable fail fast of mobile data
      */
     private static final int EVENT_ENABLE_FAIL_FAST_MOBILE_DATA = 14;
@@ -1436,6 +1442,25 @@ public class ConnectivityService extends IConnectivityManager.Stub
         }
     };
 
+    @Override
+    public void setPolicyDataEnable(int networkType, boolean enabled) {
+        // only someone like NPMS should only be calling us
+        mContext.enforceCallingOrSelfPermission(MANAGE_NETWORK_POLICY, TAG);
+
+        mHandler.sendMessage(mHandler.obtainMessage(
+                EVENT_SET_POLICY_DATA_ENABLE, networkType, (enabled ? ENABLED : DISABLED)));
+    }
+
+    private void handleSetPolicyDataEnable(int networkType, boolean enabled) {
+   // TODO - handle this passing to factories
+//        if (isNetworkTypeValid(networkType)) {
+//            final NetworkStateTracker tracker = mNetTrackers[networkType];
+//            if (tracker != null) {
+//                tracker.setPolicyDataEnable(enabled);
+//            }
+//        }
+    }
+
     private void enforceInternetPermission() {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.INTERNET,
@@ -2268,6 +2293,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
 
     private void handleRegisterNetworkRequest(Message msg) {
         final NetworkRequestInfo nri = (NetworkRequestInfo) (msg.obj);
+        int score = 0;
 
         mNetworkRequests.put(nri.request, nri);
 
@@ -2489,6 +2515,12 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 case EVENT_SEND_STICKY_BROADCAST_INTENT: {
                     Intent intent = (Intent)msg.obj;
                     sendStickyBroadcast(intent);
+                    break;
+                }
+                case EVENT_SET_POLICY_DATA_ENABLE: {
+                    final int networkType = msg.arg1;
+                    final boolean enabled = msg.arg2 == ENABLED;
+                    handleSetPolicyDataEnable(networkType, enabled);
                     break;
                 }
                 case EVENT_ENABLE_FAIL_FAST_MOBILE_DATA: {
@@ -4446,7 +4478,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 // TODO: support proxy per network.
             }
             // Consider network even though it is not yet validated.
-            rematchNetworkAndRequests(networkAgent, false);
+            rematchNetworkAndRequests(networkAgent, NascentState.NOT_JUST_VALIDATED,
+                    ReapUnvalidatedNetworks.REAP);
             int val = SystemProperties.getInt("persist.cne.feature", 0);
             boolean isPropFeatureEnabled = (val == 3) ? true : false;
             if (isPropFeatureEnabled) {

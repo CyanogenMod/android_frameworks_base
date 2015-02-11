@@ -1536,7 +1536,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                         // if there is nothing else interesting in it.
                         pruneOp(op, uid, packageName);
                     }
-                    scheduleWriteNowLocked();
+                    scheduleFastWriteLocked();
                 }
             }
         }

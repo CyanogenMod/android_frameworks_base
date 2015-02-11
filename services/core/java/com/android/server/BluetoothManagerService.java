@@ -562,6 +562,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     public IQBluetooth getQBluetooth() {
         // sync protection
         return mQBluetooth;
+    }
+
     @Override
     public boolean bindBluetoothProfileService(int bluetoothProfile,
             IBluetoothProfileServiceConnection proxy) {

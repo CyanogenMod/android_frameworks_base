@@ -909,11 +909,8 @@ public class Tethering extends BaseNetworkObserver {
     }
 
     public void checkDunRequired() {
-        int secureSetting = 2;
-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm != null) {
-            secureSetting = tm.getTetherApnRequired();
-        }
+        int secureSetting = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.TETHER_DUN_REQUIRED, 2);
         synchronized (mPublicSync) {
             // 2 = not set, 0 = DUN not required, 1 = DUN required
             if (secureSetting != 2) {
