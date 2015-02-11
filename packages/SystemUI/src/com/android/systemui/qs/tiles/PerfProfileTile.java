@@ -23,8 +23,10 @@ import android.database.ContentObserver;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSTile;
 
 public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
@@ -91,30 +93,36 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         if (mListening == listening) return;
         mListening = listening;
         if (listening) {
-            mObserver.startObserving();
+            mObserver.observe();
         } else {
-            mObserver.endObserving();
+            mObserver.unobserve();
             mUiHandler.removeCallbacks(mStartTileAnimation);
         }
     }
 
-    private class PerformanceProfileObserver extends ContentObserver {
+    private class PerformanceProfileObserver extends UserContentObserver {
         public PerformanceProfileObserver(Handler handler) {
             super(handler);
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public void update() {
             refreshState(getCurrentProfileIndex());
         }
 
-        public void startObserving() {
+        @Override
+        protected void observe() {
+            super.observe();
+
             mContext.getContentResolver().registerContentObserver(
                     Settings.Secure.getUriFor(Settings.Secure.PERFORMANCE_PROFILE),
-                    false, this);
+                    false, this, UserHandle.USER_ALL);
         }
 
-        public void endObserving() {
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+
             mContext.getContentResolver().unregisterContentObserver(this);
         }
     }
