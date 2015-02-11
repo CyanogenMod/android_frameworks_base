@@ -146,6 +146,8 @@ public class LocalePicker extends ListFragment {
                         Log.v(TAG, "  and adding "+ toTitleCase(
                                 getDisplayName(l, specialLocaleCodes, specialLocaleNames)));
                     }
+                    localeInfos.add(new LocaleInfo(toTitleCase(
+                            getDisplayName(l, specialLocaleCodes, specialLocaleNames)), l));
                 } else {
                     String displayName = toTitleCase(l.getDisplayLanguage(l));
                     if (DEBUG) {
