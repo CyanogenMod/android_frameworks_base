@@ -72,6 +72,13 @@ public class RingtoneManager {
      * Type that refers to sounds that are used for the alarm.
      */
     public static final int TYPE_ALARM = 4;
+
+    /**
+     * Type that refers to sounds that are used for mms notifications.
+     * Note: This constant value is only for internal usage and
+     * can't be added to TYPE_ALL.
+     */
+    private static final int TYPE_MMS_NOTIFICATION = 0x00800000;
     
     /**
      * All types of sounds.
@@ -698,6 +705,8 @@ public class RingtoneManager {
             return Settings.System.NOTIFICATION_SOUND;
         } else if ((type & TYPE_ALARM) != 0) {
             return Settings.System.ALARM_ALERT;
+        } else if ((type & TYPE_MMS_NOTIFICATION) != 0) {
+            return Settings.System.MMS_NOTIFICATION_SOUND;
         } else {
             return null;
         }
@@ -733,6 +742,8 @@ public class RingtoneManager {
             return TYPE_NOTIFICATION;
         } else if (defaultRingtoneUri.equals(Settings.System.DEFAULT_ALARM_ALERT_URI)) {
             return TYPE_ALARM;
+        } else if (defaultRingtoneUri.equals(Settings.System.DEFAULT_MMS_NOTIFICATION_URI)) {
+            return TYPE_MMS_NOTIFICATION;
         } else {
             return -1;
         }
