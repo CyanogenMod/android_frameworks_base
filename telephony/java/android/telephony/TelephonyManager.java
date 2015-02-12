@@ -25,6 +25,8 @@ import android.annotation.SdkConstant.SdkConstantType;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -1825,10 +1827,9 @@ public class TelephonyManager {
      *
      * @param alphaTag alpha-tagging of the dailing nubmer
      * @param number The dialing number
-     * @hide
      */
-    public void setLine1NumberForDisplay(String alphaTag, String number) {
-        setLine1NumberForDisplayForSubscriber(getDefaultSubscription(), alphaTag, number);
+    public boolean setLine1NumberForDisplay(String alphaTag, String number) {
+        return setLine1NumberForDisplayForSubscriber(getDefaultSubscription(), alphaTag, number);
     }
 
     /**
@@ -1846,12 +1847,13 @@ public class TelephonyManager {
      * @param number The dialing number
      * @hide
      */
-    public void setLine1NumberForDisplayForSubscriber(long subId, String alphaTag, String number) {
+    public boolean setLine1NumberForDisplayForSubscriber(long subId, String alphaTag, String number) {
         try {
             getITelephony().setLine1NumberForDisplayForSubscriber(subId, alphaTag, number);
         } catch (RemoteException ex) {
         } catch (NullPointerException ex) {
         }
+        return true;
     }
 
     /**
@@ -1992,6 +1994,19 @@ public class TelephonyManager {
             // This could happen before phone restarts due to crashing
             return null;
         }
+    }
+
+    /**
+     * Sets the voice mail number.
+     *
+     * <p>Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
+     *
+     * @param alphaTag The alpha tag to display.
+     * @param number The voicemail number.
+     */
+    public boolean setVoiceMailNumber(String alphaTag, String number) {
+        return false;
     }
 
     /**
@@ -2361,8 +2376,6 @@ public class TelephonyManager {
      * PackageManager.FEATURE_TELEPHONY system feature, which is available
      * on any device with a telephony radio, even if the device is
      * data-only.
-     *
-     * @hide pending API review
      */
     public boolean isVoiceCapable() {
         if (mContext == null) return true;
@@ -3046,6 +3059,31 @@ public class TelephonyManager {
      * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
      *
      * <p>
+     * Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
+     *
+     * @return true on success; false on any failure.
+     */
+    public boolean setPreferredNetworkTypeToGlobal() {
+        return setPreferredNetworkType(RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA);
+    }
+
+    /**
+     * Check TETHER_DUN_REQUIRED and TETHER_DUN_APN settings, net.tethering.noprovisioning
+     * SystemProperty, and config_tether_apndata to decide whether DUN APN is required for
+     * tethering.
+     *
+     * @return 0: Not required. 1: required. 2: Not set.
+     * @hide
+     */
+    public int getTetherApnRequired() {
+        return 0;
+    }
+
+    /**
+     * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
+     *
+     * <p>
      * Requires Permission:
      *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
      * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
@@ -3092,7 +3130,6 @@ public class TelephonyManager {
      *         CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED if the carrier rules are not loaded.
      *         CARRIER_PRIVILEGE_STATUS_ERROR_LOADING_RULES if there was an error loading carrier
      *             rules (or if there are no rules).
-     * @hide
      */
     public int hasCarrierPrivileges() {
         try {
@@ -3119,7 +3156,6 @@ public class TelephonyManager {
      *
      * @param brand The brand name to display/set.
      * @return true if the operation was executed correctly.
-     * @hide
      */
     public boolean setOperatorBrandOverride(String brand) {
         try {
@@ -3577,4 +3613,52 @@ public class TelephonyManager {
         }
         return -1;
     }
+
+    /**
+     * This function retrieves value for setting "name+subId", and if that is not found
+     * retrieves value for setting "name", and if that is not found uses def as default
+     *
+     * @hide */
+    public static int getIntWithSubId(ContentResolver cr, String name, int subId, int def) {
+        return Settings.Global.getInt(cr, name + subId, Settings.Global.getInt(cr, name, def));
+    }
+
+    /**
+     * This function retrieves value for setting "name+subId", and if that is not found
+     * retrieves value for setting "name", and if that is not found throws
+     * SettingNotFoundException
+     *
+     * @hide */
+    public static int getIntWithSubId(ContentResolver cr, String name, int subId)
+            throws SettingNotFoundException {
+        try {
+            return Settings.Global.getInt(cr, name + subId);
+        } catch (SettingNotFoundException e) {
+            try {
+                int val = Settings.Global.getInt(cr, name);
+                Settings.Global.putInt(cr, name + subId, val);
+
+                /* We are now moving from 'setting' to 'setting+subId', and using the value stored
+                 * for 'setting' as default. Reset the default (since it may have a user set
+                 * value). */
+                int default_val = val;
+                if (name.equals(Settings.Global.MOBILE_DATA)) {
+                    default_val = "true".equalsIgnoreCase(
+                            SystemProperties.get("ro.com.android.mobiledata", "true")) ? 1 : 0;
+                } else if (name.equals(Settings.Global.DATA_ROAMING)) {
+                    default_val = "true".equalsIgnoreCase(
+                            SystemProperties.get("ro.com.android.dataroaming", "false")) ? 1 : 0;
+                }
+
+                if (default_val != val) {
+                    Settings.Global.putInt(cr, name, default_val);
+                }
+
+                return val;
+            } catch (SettingNotFoundException exc) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+    }
+
 }

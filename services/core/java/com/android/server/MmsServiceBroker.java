@@ -220,7 +220,7 @@ public class MmsServiceBroker extends SystemService {
         private static final String PHONE_PACKAGE_NAME = "com.android.phone";
 
         @Override
-        public void sendMessage(int subId, String callingPkg, Uri contentUri,
+        public void sendMessage(long subId, String callingPkg, Uri contentUri,
                 String locationUrl, Bundle configOverrides, PendingIntent sentIntent)
                         throws RemoteException {
             Slog.d(TAG, "sendMessage() by " + callingPkg);
@@ -237,7 +237,7 @@ public class MmsServiceBroker extends SystemService {
         }
 
         @Override
-        public void downloadMessage(int subId, String callingPkg, String locationUrl,
+        public void downloadMessage(long subId, String callingPkg, String locationUrl,
                 Uri contentUri, Bundle configOverrides,
                 PendingIntent downloadedIntent) throws RemoteException {
             Slog.d(TAG, "downloadMessage() by " + callingPkg);
@@ -256,7 +256,7 @@ public class MmsServiceBroker extends SystemService {
         }
 
         @Override
-        public Bundle getCarrierConfigValues(int subId) throws RemoteException {
+        public Bundle getCarrierConfigValues(long subId) throws RemoteException {
             Slog.d(TAG, "getCarrierConfigValues() by " + getCallingPackageName());
             return getServiceGuarded().getCarrierConfigValues(subId);
         }
@@ -358,7 +358,7 @@ public class MmsServiceBroker extends SystemService {
         }
 
         @Override
-        public void sendStoredMessage(int subId, String callingPkg, Uri messageUri,
+        public void sendStoredMessage(long subId, String callingPkg, Uri messageUri,
                 Bundle configOverrides, PendingIntent sentIntent) throws RemoteException {
             mContext.enforceCallingPermission(Manifest.permission.SEND_SMS,
                     "Send stored MMS message");

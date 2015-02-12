@@ -19,13 +19,17 @@ package android.telephony;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Intent;
+import android.content.Context;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.telephony.Rlog;
+import android.os.Handler;
+import android.os.Message;
 import android.os.ServiceManager;
 import android.os.RemoteException;
 
 import com.android.internal.telephony.ISub;
+import com.android.internal.telephony.IOnSubscriptionsChangedListener;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.RILConstants;
 
@@ -39,7 +43,6 @@ import java.util.List;
  * The android.Manifest.permission.READ_PHONE_STATE to retrieve the information, except
  * getActiveSubIdList and getActiveSubIdCount for which no permission is needed.
  *
- * @hide - to be unhidden
  */
 public class SubscriptionManager implements BaseColumns {
     private static final String LOG_TAG = "SUB";
@@ -72,6 +75,9 @@ public class SubscriptionManager implements BaseColumns {
     /** Indicates the caller wants the default sub id. */
     /** @hide - to be unhidden */
     public static final long DEFAULT_SUB_ID = Long.MAX_VALUE;
+
+    /** @hide */
+    public static final long DEFAULT_SUBSCRIPTION_ID = Long.MAX_VALUE;
 
     /** @hide */
     public static final Uri CONTENT_URI = Uri.parse("content://telephony/siminfo");
@@ -273,9 +279,76 @@ public class SubscriptionManager implements BaseColumns {
     public static final String SUB_DEFAULT_CHANGED_ACTION =
         "android.intent.action.SUB_DEFAULT_CHANGED";
 
+    private final Context mContext;
+
+    /**
+     * A listener class for monitoring changes to {@link SubscriptionInfo} records.
+     * <p>
+     * Override the onSubscriptionsChanged method in the object that extends this
+     * class and pass it to {@link #addOnSubscriptionsChangedListener(OnSubscriptionsChangedListener)}
+     * to register your listener and to unregister invoke
+     * {@link #removeOnSubscriptionsChangedListener(OnSubscriptionsChangedListener)}
+     * <p>
+     * Permissions android.Manifest.permission.READ_PHONE_STATE is required
+     * for #onSubscriptionsChanged to be invoked.
+     */
+    public static class OnSubscriptionsChangedListener {
+        /** @hide */
+        public static final String PERMISSION_ON_SUBSCRIPTIONS_CHANGED =
+                android.Manifest.permission.READ_PHONE_STATE;
+
+        private final Handler mHandler  = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (DBG) {
+                    log("handleMessage: invoke the overriden onSubscriptionsChanged()");
+                }
+                OnSubscriptionsChangedListener.this.onSubscriptionsChanged();
+            }
+        };
+
+        /**
+         * Callback invoked when there is any change to any SubscriptionInfo. Typically
+         * this method would invoke {@link #getActiveSubscriptionInfoList}
+         */
+        public void onSubscriptionsChanged() {
+            if (DBG) log("onSubscriptionsChanged: NOT OVERRIDDEN");
+        }
+
+        /**
+         * The callback methods need to be called on the handler thread where
+         * this object was created.  If the binder did that for us it'd be nice.
+         */
+        IOnSubscriptionsChangedListener callback = new IOnSubscriptionsChangedListener.Stub() {
+            @Override
+            public void onSubscriptionsChanged() {
+                if (DBG) log("callback: received, sendEmptyMessage(0) to handler");
+                mHandler.sendEmptyMessage(0);
+            }
+        };
+
+        private void log(String s) {
+            Rlog.d(LOG_TAG, s);
+        }
+    }
+
     /** @hide */
-    public SubscriptionManager() {
+    public SubscriptionManager(Context context) {
         if (DBG) logd("SubscriptionManager created");
+        mContext = context;
+    }
+
+    /**
+     * Get an instance of the SubscriptionManager from the Context.
+     * This invokes {@link android.content.Context#getSystemService
+     * Context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)}.
+     *
+     * @param context to use.
+     * @return SubscriptionManager instance
+     */
+    public static SubscriptionManager from(Context context) {
+        return (SubscriptionManager) context.getSystemService(
+                Context.TELEPHONY_SUBSCRIPTION_SERVICE);
     }
 
     /**

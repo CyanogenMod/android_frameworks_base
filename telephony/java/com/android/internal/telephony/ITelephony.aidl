@@ -841,7 +841,7 @@ interface ITelephony {
      * @param alphaTag alpha-tagging of the dailing nubmer
      * @param number The dialing number
      */
-    void setLine1NumberForDisplayForSubscriber(long subId, String alphaTag, String number);
+    boolean setLine1NumberForDisplayForSubscriber(long subId, String alphaTag, String number);
 
     /**
      * Returns the displayed dialing number string if it was set previously via
