@@ -764,8 +764,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
         // Register for SubscriptionInfo list changes which is guaranteed
         // to invoke onSubscriptionsChanged the first time.
-        SubscriptionManager.from(mContext)
-            .addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
+        /* SubscriptionManager.from(mContext)
+            .addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener); */
 
         // construct handler, listen for events
         mHandler = new ProviderHandler(looper);
@@ -910,7 +910,12 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
 
         if (info != null) {
-            boolean dataEnabled = TelephonyManager.getDefault().getDataEnabled();
+/*
+            boolean dataEnabled = TelephonyManager.getIntWithSubId(mContext.getContentResolver(),
+                    Settings.Global.MOBILE_DATA, SubscriptionManager.getDefaultSubId(),
+                    1) == 1;
+*/
+            boolean dataEnabled = false;
             boolean networkAvailable = info.isAvailable() && dataEnabled;
             if (mDefaultApn == null) {
                 mDefaultApn = getDefaultApn();

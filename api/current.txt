@@ -21719,14 +21719,14 @@ package android.os {
     method public static java.lang.String getExternalStorageState();
     method public static java.lang.String getExternalStorageState(java.io.File);
     method public static java.io.File getRootDirectory();
-    method public static deprecated java.lang.String getStorageState(java.io.File);
     method public static java.io.File getSecondaryStorageDirectory();
     method public static java.lang.String getSecondaryStorageState();
-    method public static boolean isNoEmulatedStorageExist();
+    method public static deprecated java.lang.String getStorageState(java.io.File);
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageEmulated(java.io.File);
     method public static boolean isExternalStorageRemovable();
     method public static boolean isExternalStorageRemovable(java.io.File);
+    method public static boolean isNoEmulatedStorageExist();
     field public static java.lang.String DIRECTORY_ALARMS;
     field public static java.lang.String DIRECTORY_DCIM;
     field public static java.lang.String DIRECTORY_DOCUMENTS;
@@ -28501,7 +28501,7 @@ package android.telephony {
     method public android.os.Bundle getCarrierConfigValues();
     method public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
-    method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
+    method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(long);
     method public int getSubscriptionId();
     method public void injectSmsPdu(byte[], java.lang.String, android.app.PendingIntent);
     method public void sendDataMessage(java.lang.String, java.lang.String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
@@ -28635,18 +28635,26 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.SubscriptionInfo> CREATOR;
   }
 
-  public class SubscriptionManager {
-    method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+  public class SubscriptionManager implements android.provider.BaseColumns {
+    method public static void deactivateSubId(long);
     method public static android.telephony.SubscriptionManager from(android.content.Context);
-    method public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
-    method public int getActiveSubscriptionInfoCount();
-    method public int getActiveSubscriptionInfoCountMax();
-    method public android.telephony.SubscriptionInfo getActiveSubscriptionInfoForSimSlotIndex(int);
-    method public java.util.List<android.telephony.SubscriptionInfo> getActiveSubscriptionInfoList();
-    method public boolean isNetworkRoaming(int);
-    method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
-    field public static final int DATA_ROAMING_DISABLE = 0; // 0x0
-    field public static final int DATA_ROAMING_ENABLE = 1; // 0x1
+    method public static long getOnDemandDataSubId();
+    method public static int getSubState(long);
+    method public static boolean isSMSPromptEnabled();
+    method public static boolean isVoicePromptEnabled();
+    method public static void putPhoneIdAndSubIdExtra(android.content.Intent, int);
+    method public static void setSMSPromptEnabled(boolean);
+    method public static int setSubState(long, int);
+    method public static void setVoicePromptEnabled(boolean);
+    field public static final int ACTIVE = 1; // 0x1
+    field public static final int DEFAULT_NW_MODE = -1; // 0xffffffff
+    field public static final int INACTIVE = 0; // 0x0
+    field public static final long INVALID_SUB_ID = -1000L; // 0xfffffffffffffc18L
+    field public static final java.lang.String MCC = "mcc";
+    field public static final java.lang.String MNC = "mnc";
+    field public static final java.lang.String NETWORK_MODE = "network_mode";
+    field public static final int SUB_CONFIGURATION_IN_PROGRESS = 2; // 0x2
+    field public static final java.lang.String SUB_STATE = "sub_state";
   }
 
   public static class SubscriptionManager.OnSubscriptionsChangedListener {
@@ -28680,7 +28688,7 @@ package android.telephony {
     method public java.lang.String getSubscriberId();
     method public java.lang.String getVoiceMailAlphaTag();
     method public java.lang.String getVoiceMailNumber();
-    method public boolean hasCarrierPrivileges();
+    method public int hasCarrierPrivileges();
     method public boolean hasIccCard();
     method public boolean iccCloseLogicalChannel(int);
     method public byte[] iccExchangeSimIO(int, int, int, int, int, java.lang.String);

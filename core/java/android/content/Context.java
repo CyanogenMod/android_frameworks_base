@@ -2590,14 +2590,6 @@ public abstract class Context {
      */
     public static final String TELEPHONY_SERVICE = "phone";
 
-    /**
-     * Use with {@link #getSystemService} to retrieve a
-     * {@link android.telephony.SubscriptionManager} for handling management the
-     * telephony subscriptions of the device.
-     *
-     * @see #getSystemService
-     * @see android.telephony.SubscriptionManager
-     */
     public static final String TELEPHONY_SUBSCRIPTION_SERVICE = "telephony_subscription_service";
 
     /**

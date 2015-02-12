@@ -281,17 +281,6 @@ public class SubscriptionManager implements BaseColumns {
 
     private final Context mContext;
 
-    /**
-     * A listener class for monitoring changes to {@link SubscriptionInfo} records.
-     * <p>
-     * Override the onSubscriptionsChanged method in the object that extends this
-     * class and pass it to {@link #addOnSubscriptionsChangedListener(OnSubscriptionsChangedListener)}
-     * to register your listener and to unregister invoke
-     * {@link #removeOnSubscriptionsChangedListener(OnSubscriptionsChangedListener)}
-     * <p>
-     * Permissions android.Manifest.permission.READ_PHONE_STATE is required
-     * for #onSubscriptionsChanged to be invoked.
-     */
     public static class OnSubscriptionsChangedListener {
         /** @hide */
         public static final String PERMISSION_ON_SUBSCRIPTIONS_CHANGED =
@@ -307,10 +296,6 @@ public class SubscriptionManager implements BaseColumns {
             }
         };
 
-        /**
-         * Callback invoked when there is any change to any SubscriptionInfo. Typically
-         * this method would invoke {@link #getActiveSubscriptionInfoList}
-         */
         public void onSubscriptionsChanged() {
             if (DBG) log("onSubscriptionsChanged: NOT OVERRIDDEN");
         }
