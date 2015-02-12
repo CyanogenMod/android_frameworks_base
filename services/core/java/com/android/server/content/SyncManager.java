@@ -2435,10 +2435,9 @@ public class SyncManager {
                     final long shiftedLastPollTimeAbsolute =
                             (0 < lastPollTimeAbsolute - mSyncRandomOffsetMillis) ?
                                     (lastPollTimeAbsolute - mSyncRandomOffsetMillis) : 0;
-                    long remainingMillis
-                        = periodInMillis - (shiftedNowAbsolute % periodInMillis);
                     long timeSinceLastRunMillis
                         = (nowAbsolute - lastPollTimeAbsolute);
+                    long remainingMillis = periodInMillis - timeSinceLastRunMillis;
                     // Schedule this periodic sync to run early if it's close enough to its next
                     // runtime, and far enough from its last run time.
                     // If we are early, there will still be time remaining in this period.
