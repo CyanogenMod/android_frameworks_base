@@ -56,6 +56,31 @@
         android:background="@drawable/recents_button_bg"
         android:contentDescription="@string/clear_recents" />
 
+    <LinearLayout
+        android:id="@+id/recents_top_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/task_manager"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/status_bar_recent_task_manager_text"/>
+        <Button
+            android:id="@+id/recents_clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/status_bar_recent_clear_all_text"/>
+    </LinearLayout>
+
+
     <!-- Nav Bar Scrim View -->
     <ImageView
         android:id="@+id/nav_bar_scrim"

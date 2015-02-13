@@ -362,6 +362,8 @@
     <string name="silent_mode_vibrate">Ringer vibrate</string>
     <!-- Spoken description for ringer normal option. [CHAR LIMIT=NONE] -->
     <string name="silent_mode_ring">Ringer on</string>
+    <!-- Spoken description for vibrate with ringtone option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_vibrate_with_ringtone">Vibrate with Ringtone</string>
 
     <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
     <string name="shutdown_progress">Shutting down\u2026</string>
@@ -4942,4 +4944,10 @@
     <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
     <!-- Default wi-fi direct name -->
     <string name="def_wifi_direct_name" translatable="false"></string>
+
+    <!-- pdp data reject dialog string for cause 29 and 33 -->
+    <string name="data_conn_status_title"></string>
+    <string name="user_authentication_failed"></string>
+    <string name="service_not_subscribed"></string>
+
 </resources>

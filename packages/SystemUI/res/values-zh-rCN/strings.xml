@@ -23,6 +23,8 @@
     <string name="status_bar_clear_all_button" msgid="7774721344716731603">"清除"</string>
     <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"从列表中删除"</string>
     <string name="status_bar_recent_inspect_item_title" msgid="7793624864528818569">"应用信息"</string>
+    <string name="status_bar_recent_clear_all_text">"全部清除"</string>
+    <string name="status_bar_recent_task_manager_text">"任务管理器"</string>
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"您最近浏览过的屏幕会显示在此处"</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"关闭最近运行的应用"</string>
   <plurals name="status_bar_accessibility_recent_apps">
@@ -345,6 +347,8 @@
     <string name="tasklistview_title">"任务管理器"</string>
     <string name="message_switch_fail">"无法切换至此任务，接口不存在！"</string>
     <string name="tasklist_killall">"全部关闭"</string>
+    <string name="tasklist_stopall">"全部结束"</string>
+    <string name="tasklist_stop">"结束"</string>
     <string name="tasklist_memory_usage">"剩余/总内存: [<xliff:g id="NUMBER">%s</xliff:g>] / [<xliff:g id="NAME">%s</xliff:g>]"</string>
     <string name="message_keep_one_launcher">"至少保留一个桌面主屏！"</string>
     <string name="device_owned_footer" msgid="3802752663326030053">"设备可能会受到监控"</string>

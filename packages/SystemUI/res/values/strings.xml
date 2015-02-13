@@ -30,6 +30,9 @@
     <!-- Title shown in recents popup for inspecting an application's properties -->
     <string name="status_bar_recent_inspect_item_title">App info</string>
 
+    <string name="status_bar_recent_clear_all_text">Clear All</string>
+    <string name="status_bar_recent_task_manager_text">Task Manager</string>
+
     <!-- Message shown in the middle of the screen after clicking on the recent apps button
          when there are no recent apps to show. Also used for accessibility. [CHAR LIMIT=45]-->
     <string name="status_bar_no_recent_apps">Your recent screens appear here</string>
@@ -855,6 +858,8 @@
     <string name="tasklistview_title">Task Manager</string>
     <string name="message_switch_fail">Can not switch to this task, because it has no interface.</string>
     <string name="tasklist_killall">Kill All</string>
+    <string name="tasklist_stopall">Stop all</string>
+    <string name="tasklist_stop">Stop</string>
     <string name="tasklist_memory_usage">"Free/Total Memory: [<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
     <string name="message_keep_one_launcher">Should keep at lease one home activity!</string>
 

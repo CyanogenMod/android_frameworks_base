@@ -68,7 +68,6 @@ import com.google.android.collect.Lists;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -1262,10 +1261,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private boolean canMakeEmergencyCall() {
-        Iterator iter = mServiceState.entrySet().iterator();
-        while (iter.hasNext()) {
-            HashMap.Entry entry = (HashMap.Entry) iter.next();
-            ServiceState state = (ServiceState) entry.getValue();
+        for (int i = 0; i < getNumPhones(); i++) {
+            ServiceState state = mServiceState.get(getSubIdByPhoneId(i));
             if ((state != null) && (state.isEmergencyOnly() ||
                     state.getVoiceRegState() != ServiceState.STATE_OUT_OF_SERVICE)) {
                 return true;

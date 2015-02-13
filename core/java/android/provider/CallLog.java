@@ -537,7 +537,9 @@ public class CallLog {
                 values.put(DATA_USAGE, dataUsage);
             }
             values.put(PHONE_ACCOUNT_COMPONENT_NAME, accountComponentString);
-            values.put(PHONE_ACCOUNT_ID, accountId);
+            if (accountId != null) {
+                values.put(PHONE_ACCOUNT_ID, accountId);
+            }
             values.put(NEW, Integer.valueOf(1));
             if (callType == MISSED_TYPE) {
                 values.put(IS_READ, Integer.valueOf(0));

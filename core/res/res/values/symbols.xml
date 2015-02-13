@@ -1468,6 +1468,7 @@
   <java-symbol type="bool" name="config_supportAutoRotation" />
   <java-symbol type="bool" name="config_forceSupportRotationLockToggle" />
   <java-symbol type="bool" name="target_honeycomb_needs_options_menu" />
+  <java-symbol type="bool" name="config_addVibrateWithRingtoneOption" />
   <java-symbol type="dimen" name="navigation_bar_height" />
   <java-symbol type="dimen" name="navigation_bar_height_landscape" />
   <java-symbol type="dimen" name="navigation_bar_width" />
@@ -1511,6 +1512,8 @@
   <java-symbol type="id" name="option1" />
   <java-symbol type="id" name="option2" />
   <java-symbol type="id" name="option3" />
+  <java-symbol type="id" name="option4" />
+  <java-symbol type="id" name="optionSpacer" />
   <java-symbol type="id" name="right_icon" />
   <java-symbol type="id" name="seven" />
   <java-symbol type="id" name="six" />
@@ -2242,4 +2245,15 @@
   <!-- Configuration to play sms ringtone during MO/MT call -->
   <java-symbol type="bool" name="config_sms_ringtone_incall" />
   <java-symbol type="array" name="config_sms_convert_destination_number_support" />
+
+  <!-- config SPN display for some CDMA carriers -->
+  <java-symbol type="bool" name="config_show_spn" />
+
+  <java-symbol type="integer" name="data_retry_delay" />
+  <java-symbol type="integer" name="data_retry_idle_delay" />
+  <java-symbol type="bool" name="config_pdp_retry_for_29_33_enabled"/>
+
+  <java-symbol type="string" name="data_conn_status_title" />
+  <java-symbol type="string" name="user_authentication_failed" />
+  <java-symbol type="string" name="service_not_subscribed" />
 </resources>

@@ -289,6 +289,10 @@
 
     <!-- Zen toast visibility duration -->
     <integer name="zen_toast_visible_duration">500</integer>
+
+    <!-- When true, show clear all recents and task manager buttons on recents panel -->
+    <bool name="config_showRecentsTopButtons">true</bool>
+
     <!-- Whether to enable data switch or not -->
     <bool name="config_enableDataSwitch">false</bool>
 </resources>

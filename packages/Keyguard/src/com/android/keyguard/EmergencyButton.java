@@ -34,7 +34,6 @@ import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.widget.LockPatternUtils;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 /**
@@ -107,10 +106,9 @@ public class EmergencyButton extends Button {
     }
 
     private boolean canMakeEmergencyCall() {
-        Iterator iter = mServiceState.entrySet().iterator();
-        while (iter.hasNext()) {
-            HashMap.Entry entry = (HashMap.Entry) iter.next();
-            ServiceState state = (ServiceState) entry.getValue();
+        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
+        for (int i = 0; i < monitor.getNumPhones(); i++) {
+            ServiceState state = mServiceState.get(monitor.getSubIdByPhoneId(i));
             if ((state != null) && (state.isEmergencyOnly() ||
                     state.getVoiceRegState() != ServiceState.STATE_OUT_OF_SERVICE)) {
                 return true;
@@ -155,7 +153,7 @@ public class EmergencyButton extends Button {
                         mContext.getResources().getBoolean(R.bool.config_showEmergencyButton);
             }
         }
-        if (mContext.getResources().getBoolean(R.bool.config_showEmergencyButton)) {
+        if (mContext.getResources().getBoolean(R.bool.config_hideEmergencyButtonInOOS)) {
             enabled = enabled && canMakeEmergencyCall();
         }
         mLockPatternUtils.updateEmergencyCallButtonState(this, enabled, false);
