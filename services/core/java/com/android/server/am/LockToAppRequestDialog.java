@@ -13,10 +13,12 @@ import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Slog;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.CheckBox;
 
 import com.android.internal.R;
+import com.android.internal.policy.PolicyManager;
 import com.android.internal.widget.ILockSettings;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockPatternUtilsCache;
@@ -26,6 +28,7 @@ public class LockToAppRequestDialog implements OnClickListener {
 
     final private Context mContext;
     final private ActivityManagerService mService;
+    private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
 
     private AlertDialog mDialog;
     private TaskRecord mRequestedTask;
@@ -87,7 +90,7 @@ public class LockToAppRequestDialog implements OnClickListener {
         final int unlockStringId = getLockString(task.userId);
 
         final Resources r = Resources.getSystem();
-        final String description= r.getString(mAccessibilityService.isEnabled()
+        final String description= r.getString((!mPolicy.hasNavigationBar() || mAccessibilityService.isEnabled())
                 ? R.string.lock_to_app_description_accessible
                 : R.string.lock_to_app_description);
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
