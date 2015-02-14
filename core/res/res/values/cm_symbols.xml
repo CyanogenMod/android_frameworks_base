@@ -297,4 +297,7 @@
     <java-symbol type="integer" name="config_dayColorTemperature" />
     <java-symbol type="integer" name="config_nightColorTemperature" />
     <java-symbol type="integer" name="config_outdoorAmbientLux" />
+
+    <java-symbol type="string" name="lock_to_app_toast_no_navbar" />
+    <java-symbol type="string" name="lock_to_app_description_no_navbar" />
 </resources>

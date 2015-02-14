@@ -19,10 +19,12 @@ package com.android.server.am;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.view.WindowManagerPolicy;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
+import com.android.internal.policy.PolicyManager;
 
 /**
  *  Helper to manage showing/hiding a image to notify them that they are entering
@@ -33,6 +35,7 @@ public class LockTaskNotify {
 
     private final Context mContext;
     private final H mHandler;
+    private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
     private AccessibilityManager mAccessibilityManager;
     private Toast mLastToast;
 
@@ -50,8 +53,13 @@ public class LockTaskNotify {
     public void handleShowToast(boolean isLocked) {
         String text = mContext.getString(isLocked
                 ? R.string.lock_to_app_toast_locked : R.string.lock_to_app_toast);
-        if (!isLocked && mAccessibilityManager.isEnabled()) {
-            text = mContext.getString(R.string.lock_to_app_toast_accessible);
+        if (!isLocked) {
+            if (mAccessibilityManager.isEnabled()) {
+                text = mContext.getString(R.string.lock_to_app_toast_accessible);
+            }
+            if (!mPolicy.hasNavigationBar()) {
+                text = mContext.getString(R.string.lock_to_app_toast_no_navbar);
+            }
         }
         if (mLastToast != null) {
             mLastToast.cancel();
