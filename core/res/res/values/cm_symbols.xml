@@ -274,4 +274,7 @@
     <java-symbol type="string" name="usb_media_checking" />
     <java-symbol type="string" name="usb_media_removed" />
     <java-symbol type="string" name="usb_media_shared" />
+
+    <java-symbol type="string" name="lock_to_app_toast_no_navbar" />
+    <java-symbol type="string" name="lock_to_app_description_no_navbar" />
 </resources>

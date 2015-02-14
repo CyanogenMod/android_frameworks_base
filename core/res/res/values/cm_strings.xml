@@ -305,4 +305,9 @@
     <string name="usb_media_checking">USB storage is currently being checked.</string>
     <string name="usb_media_removed">USB storage has been removed.</string>
     <string name="usb_media_shared">USB storage is currently in use by a computer.</string>
+
+    <!-- Notify use that they are in Lock-to-app (for devices without navbar) -->
+    <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold Menu button.</string>
+    <!-- Lock-to-app dialog description (for devices without navbar) -->
+    <string name="lock_to_app_description_no_navbar">Screen pinning locks the display in a single view.\n\nTo unpin, touch and hold Menu button.</string>
 </resources>
