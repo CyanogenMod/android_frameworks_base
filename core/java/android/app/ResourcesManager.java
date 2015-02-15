@@ -332,6 +332,9 @@ public class ResourcesManager {
         builder.defaultFont(themePackageName);
 
         ThemeConfig themeConfig = builder.build();
+        if (config != null && config.themeConfig != null) {
+            themeConfig.setThemeChangeTimestamp(config.themeConfig.getThemeChangeTimeStamp());
+        }
         attachThemeAssets(assets, themeConfig);
         attachCommonAssets(assets, themeConfig);
         attachIconAssets(assets, themeConfig);
