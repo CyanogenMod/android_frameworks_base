@@ -248,4 +248,7 @@
     <!-- Blur effects -->
     <java-symbol type="bool" name="config_ui_blur_enabled" />
 
+    <!-- Storage -->
+    <java-symbol type="string" name="storage_usb" />
+    <java-symbol type="string" name="storage_uicc" />
 </resources>
