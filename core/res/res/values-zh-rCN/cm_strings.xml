@@ -35,7 +35,7 @@
   <string name="global_actions_expanded_desktop_mode_off_status">已禁用</string>
   <string name="reboot_system" product="tablet">重启平板</string>
   <string name="reboot_system" product="default">重启手机</string>
-  <string name="reboot_reboot">重新启动</string>
+  <string name="reboot_reboot">重启</string>
   <string name="reboot_recovery">恢复模式</string>
   <string name="reboot_bootloader">引导程序</string>
   <string name="reboot_bootmenu">引导菜单</string>

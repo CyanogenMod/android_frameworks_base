@@ -226,7 +226,7 @@
   <string name="permgroupdesc_phoneCalls">Telefonsuriff iwwerwaachen, ophuelen a veraarbechten.</string>
   <string name="permgrouplab_systemTools">Systemgeschirer</string>
   <string name="permgroupdesc_systemTools">Zougrëff a Steierung vum System op niddregem Niveau.</string>
-  <string name="permgrouplab_developmentTools">Entwécklungsgeschirer</string>
+  <string name="permgrouplab_developmentTools">Entwécklungsgeschir</string>
   <string name="permgroupdesc_developmentTools">Funktiounen déi just vun App-Entwéckler gebraucht ginn.</string>
   <string name="permgrouplab_display">Aneren App-Benotzerinterface</string>
   <string name="permgroupdesc_display">De Benotzerinterface vun aneren Applikatioune beaflossen.</string>
@@ -314,13 +314,13 @@
   <string name="permlab_temporary_enable_accessibility">Accessibilitéitsfunktiounen temporär aktivéieren</string>
   <string name="permdesc_temporary_enable_accessibility">Erlaabt der App, d\'Accessibilitéitsfunktiounen um Apparat kuerzzäiteg unzeschalten. Béisaarteg Appe kéinten d\'Accessibilitéitsfunktiounen ouni Awëllegung vum Benotzer aktivéieren.</string>
   <string name="permlab_retrieve_window_info">Fënsterinformatiounen ausliesen</string>
-  <string name="permdesc_retrieve_window_info">Erlaabt der App, Informatiounen iwwer d\'Fënstere vum Fënster-Manager ofzeruffen. Béisaarteg Appe kéinten Informatiounen ausliesen déi fir déi intern Systemnotzung geduecht sinn.</string>
+  <string name="permdesc_retrieve_window_info">Erlaabt der App, Informatiounen iwwer d\'Fënstere vum Fënster-Manager ofzeruffen. Béisaarteg Appe kéinten Informatiounen ausliesen déi fir déi intern Systembenotzung geduecht sinn.</string>
   <string name="permlab_filter_events">Rendezvouse filteren</string>
   <string name="permdesc_filter_events">Erlaabt der App, e Filter ze registréieren, deen de Floss vun allen Notzerevenementer filtert ier se verschéckt ginn. Eng béisaarteg App kéint d\'Benotzeruewerfläch ouni Agräife vum Benotzer steieren.</string>
   <string name="permlab_magnify_display">Schierm vergréisseren</string>
   <string name="permdesc_magnify_display">Erlaabt der App, de Schierminhalt ze vergréisseren. Béisaarteg Appe kéinten de Schierminhalt sou veränneren datt den Apparat net méi benotzbar ass.</string>
   <string name="permlab_shutdown">Partiellt Ausmaachen</string>
-  <string name="permdesc_shutdown">Setzt den Aktivitéitemanager an en erofgefuerenen Zoustand, mee féiert kee vollstännegt Eroffueren aus.</string>
+  <string name="permdesc_shutdown">Setzt den Aktivitéitemanager an en erofgefuerenen Zoustand, mä féiert kee vollstännegt Eroffueren aus.</string>
   <string name="permlab_stopAppSwitches">App-Wiessel verhënneren</string>
   <string name="permdesc_stopAppSwitches">Hënner de Benotzer dorunner op eng aner App ze wiesselen.</string>
   <string name="permlab_getTopActivityInfo">Informatiounen zur aktueller App ausliesen</string>
@@ -338,7 +338,7 @@
   <string name="permlab_setAlwaysFinish">Appen am Hannergrond zoumaachen</string>
   <string name="permdesc_setAlwaysFinish">Erlaabt der App, ze kontrolléieren ob Aktivitéite sollen ofgeschloss ginn, soubal se an den Hannergrond gesat ginn. Ni néideg fir normal Appen.</string>
   <string name="permlab_batteryStats">Akkustatistiken ausliesen</string>
-  <string name="permdesc_batteryStats">Erlaabt der App, déi aktuell Akkunotzungsdaten ze liesen. Doduerch kéint d\'App erausfanne wéi eng Appen datt de benotz.</string>
+  <string name="permdesc_batteryStats">Erlaabt der App, déi aktuell Akkubenotzungsdaten ze liesen. Doduerch kéint d\'App erausfanne wéi eng Appen datt de benotz.</string>
   <string name="permlab_updateBatteryStats">Akkustatistiken änneren</string>
   <string name="permdesc_updateBatteryStats">Erlaabt der App, déi gesammelt Akkustatistiken z\'änneren. Net fir normal Appe geduecht.</string>
   <string name="permlab_getAppOpsStats">App-Virgangsstatistiken ofruffen</string>
@@ -529,7 +529,7 @@
   <string name="permlab_asec_rename">Interne Späicher ëmbenennen</string>
   <string name="permdesc_asec_rename">Erlaabt der App, den interne Späicher ëmzebenennen.</string>
   <string name="permlab_vibrate">Vibratioun steieren</string>
-  <string name="permdesc_vibrate">Erlaabt der App, de Vibrator ze steieren.</string>
+  <string name="permdesc_vibrate">Erlaabt der App, d\'Vibratioun ze steieren.</string>
   <string name="permlab_flashlight">Täscheluucht steieren</string>
   <string name="permdesc_flashlight">Erlaabt der App, d\'Täscheluucht ze steieren.</string>
   <string name="permlab_manageUsb">Astellungen a Berechtegunge fir USB-Apparate geréieren</string>
@@ -612,19 +612,19 @@
   <string name="permdesc_changeWifiMulticastState" product="tablet">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparaten an engem WLAN verschéckt ginn, net just un däin Tablet. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
   <string name="permdesc_changeWifiMulticastState" product="default">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparaten an engem WLAN verschéckt ginn, net just un däin Telefon. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
   <string name="permlab_bluetoothAdmin">Op d\'Bluetooth-Astellungen zougräifen</string>
-  <string name="permdesc_bluetoothAdmin" product="tablet">Erlaabt der App, Bluetooth um Tablet ze konfiguréieren, an anerer Apparaten z\'entdecken a Connectioune mat hinnen hierzestellen.</string>
-  <string name="permdesc_bluetoothAdmin" product="default">Erlaabt der App, Bluetooth um Telefon ze konfiguréieren, an anerer Apparaten z\'entdecken a Connectioune mat hinnen hierzestellen.</string>
-  <string name="permlab_bluetoothPriv">Hierstellung vu Connectioune mat Bluetooth-Connectiounen no App</string>
-  <string name="permdesc_bluetoothPriv" product="tablet">Erlaabt der App, sech mat Remote-Apparaten ouni Notzerinteraktioun ze verbannen.</string>
-  <string name="permdesc_bluetoothPriv" product="default">Erlaabt der App, sech mat Remote-Apparaten ouni Notzerinteraktioun ze verbannen.</string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">Erlaabt der App, Bluetooth um Tablet ze konfiguréieren, an anerer Apparater z\'entdecken a Koppelunge mat hinnen hierzestellen.</string>
+  <string name="permdesc_bluetoothAdmin" product="default">Erlaabt der App, Bluetooth um Telefon ze konfiguréieren, an anerer Apparater z\'entdecken a Koppelunge mat hinnen hierzestellen.</string>
+  <string name="permlab_bluetoothPriv">Hierstellung vu Connectioune mat Bluetooth-Koppelungen no App</string>
+  <string name="permdesc_bluetoothPriv" product="tablet">Erlaabt der App, sech mat Remote-Apparater ouni Notzerinteraktioun ze koppelen.</string>
+  <string name="permdesc_bluetoothPriv" product="default">Erlaabt der App, sech mat Remote-Apparater ouni Notzerinteraktioun ze koppelen.</string>
   <string name="permlab_accessWimaxState">WiMAX-Connectioun hierstellen an trennen</string>
   <string name="permdesc_accessWimaxState">Erlaabt der App, festzestellen ob WiMAX aktivéiert ass an Informatiounen iwwer all WiMAX-Netzwierker déi connectéiert sinn.</string>
   <string name="permlab_changeWimaxState">WiMAX-Status änneren</string>
   <string name="permdesc_changeWimaxState" product="tablet">Erlaabt der App, den Tablet mat WiMAX-Netzwierker ze connectéieren an deconnectéieren.</string>
   <string name="permdesc_changeWimaxState" product="default">Erlaabt der App, den Telefon mat WiMAX-Netzwierker ze connectéieren an deconnectéieren.</string>
-  <string name="permlab_bluetooth">Mat Bluetooth-Apparate verbannen</string>
-  <string name="permdesc_bluetooth" product="tablet">Erlaabt der App, d\'Bluetooth-Konfiguratioun um Tablet ze liesen, a Connectioune mat verbonnenen Apparater hierzestellen.</string>
-  <string name="permdesc_bluetooth" product="default">Erlaabt der App, d\'Bluetooth-Konfiguratioun um Telefon ze liesen, a Connectioune mat verbonnenen Apparater hierzestellen.</string>
+  <string name="permlab_bluetooth">Mat Bluetooth-Apparater koppelen</string>
+  <string name="permdesc_bluetooth" product="tablet">Erlaabt der App, d\'Bluetooth-Konfiguratioun um Tablet ze liesen, a Connectioune mat gekoppelten Apparater hierzestellen.</string>
+  <string name="permdesc_bluetooth" product="default">Erlaabt der App, d\'Bluetooth-Konfiguratioun um Telefon ze liesen, a Connectioune mat gekoppelten Apparater hierzestellen.</string>
   <string name="permlab_nfc">No-Feld-Communicatioun (NFC) kontrolléieren</string>
   <string name="permdesc_nfc">Erlaabt der App, iwwer No-Feld-Communicatioun (NFC) Badgen, Kaarten a Liesapparater ze kontrolléieren.</string>
   <string name="permlab_disableKeyguard">Schiermspär desaktivéieren</string>
@@ -659,12 +659,12 @@
   <string name="permdesc_sdcardAccessAll">Erlaabt der App, fir all Benotzer op den externe Späicher zouzegräifen.</string>
   <string name="permlab_cache_filesystem">Op den Tëschespäicher-Fichierssystem zougräifen</string>
   <string name="permdesc_cache_filesystem">Erlaabt der App, den Tëschespäicher-Fichierssystem ze liesen an ze schreiwen.</string>
-  <string name="permlab_use_sip">Interneturiff ofsetzen/empfänken</string>
-  <string name="permdesc_use_sip">Erlaabt der App, de SIP-Service ze benotze fir Internet-Uriff ofzesetzen an unzehuelen.</string>
+  <string name="permlab_use_sip">Interneturiff maachen/empfänken</string>
+  <string name="permdesc_use_sip">Erlaabt der App, de SIP-Service ze benotze fir Internet-Uriff ze maachen an unzehuelen.</string>
   <string name="permlab_bind_call_service">Mam Uruffschierm interagéieren</string>
   <string name="permdesc_bind_call_service">Erlaabt der App, ze kontrolléiere wien a wéi de Benotzer den Uruffschierm gesäit.</string>
   <string name="permlab_readNetworkUsageHistory">Historesch Netzwierkdate liesen</string>
-  <string name="permdesc_readNetworkUsageHistory">Erlaabt der App, historesch Netzwierknotzungsdate fir spezifesch Netzwierker an Appen ze liesen.</string>
+  <string name="permdesc_readNetworkUsageHistory">Erlaabt der App, historesch Netzwierkbenotzungsdate fir spezifesch Netzwierker an Appen ze liesen.</string>
   <string name="permlab_manageNetworkPolicy">Netzwierkrichtlinne verwalten</string>
   <string name="permdesc_manageNetworkPolicy">Erlaabt der App, Netzwierkrichtlinnen ze geréieren an App-spezifesch Regelen ze definéieren.</string>
   <string name="permlab_modifyNetworkAccounting">Statistike vun der Netzwierkbenotzung änneren</string>
@@ -827,7 +827,7 @@
   <string name="emergency_call_dialog_number_for_display">Noutruffnummer</string>
   <string name="lockscreen_carrier_default">Kee Service.</string>
   <string name="lockscreen_screen_locked">Schierm gespaart.</string>
-  <string name="lockscreen_instructions_when_pattern_enabled">Menü drécke fir z\'entspären oder en Noutruff ofzesetzen.</string>
+  <string name="lockscreen_instructions_when_pattern_enabled">Menü drécke fir z\'entspären oder en Noutruff ze maachen.</string>
   <string name="lockscreen_instructions_when_pattern_disabled">Menü drécke fir z\'entspären.</string>
   <string name="lockscreen_pattern_instructions">Muster zeechne fir z\'entspären</string>
   <string name="lockscreen_emergency_call">Noutruff</string>
@@ -1196,7 +1196,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="wifi_watchdog_network_disabled">Konnt net mam WLAN connectéieren</string>
   <string name="wifi_watchdog_network_disabled_detailed">\u0020huet eng schwaach Internetconnectioun.</string>
   <string name="wifi_p2p_dialog_title">Wi-Fi Direct</string>
-  <string name="wifi_p2p_turnon_message">Wi-Fi Direct starten. De WLAN-Hotspot gëtt doduerch ausgeschalt.</string>
+  <string name="wifi_p2p_turnon_message">Wi-Fi Direct starten. De WLAN-Zougankspunkt gëtt doduerch ausgeschalt.</string>
   <string name="wifi_p2p_failed_message">Konnt Wi-Fi Direct net starten.</string>
   <string name="wifi_p2p_enabled_notification_title">Wi-Fi Direct ass un</string>
   <string name="wifi_p2p_enabled_notification_message">Dréck fir d\'Astellungen</string>
@@ -1313,6 +1313,8 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="permdesc_access_keyguard_secure_storage">Erlaabt der App, op de séchere Späicher vun der Tastespär zouzegräifen.</string>
   <string name="permlab_control_keyguard">Uweisen an Ausblende vun der Tastespär steieren</string>
   <string name="permdesc_control_keyguard">Erlaabt der App, d\'Tastespär ze steieren.</string>
+  <string name="permlab_recovery">Mam Aktualiséierungs- a Recuperatiounssystem interagéieren</string>
+  <string name="permdesc_recovery">Erlaabt enger App, mam Recuperatiounssystem an de Systemaktualiséierungen z\'interagéieren.</string>
   <string name="tutorial_double_tap_to_zoom_message_short">Zweemol drécke fir d\'Zoomastellungen</string>
   <string name="gadget_host_error_inflating">Konnt de Widget net dobäisetzen.</string>
   <string name="ime_action_go">Lass</string>

@@ -66,7 +66,7 @@
   <string name="perf_profile_bal">バランス</string>
   <string name="perf_profile_perf">パフォーマンス</string>
   <string name="permlab_interceptSmsSent">送信するSMSの傍受</string>
-  <string name="permdesc_interceptSmsSent">送信するSMSの傍受をアプリに許可します。悪意のあるアプリがメッセージの送信を阻止するおそれがあります。</string>
+  <string name="permdesc_interceptSmsSent">送信するSMSの傍受をアプリケーションに許可します。悪意のあるアプリケーションがメッセージの送信を阻止するおそれがあります。</string>
   <string name="permlab_receiveProtectedSms">保護されたSMSの受信</string>
   <string name="permdesc_receiveProtectedSms">保護されたSMSの受信をアプリに許可します。</string>
   <string name="permlab_modifyProtectedSmsList">保護されたSMSリストの変更</string>

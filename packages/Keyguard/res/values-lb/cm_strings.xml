@@ -35,7 +35,7 @@
   <string name="keyguard_password_wrong_puk_code">Inkorrekte PUK-Code.</string>
   <string name="keyguard_password_pin_failed">PIN-Operatioun feelgeschloen.</string>
   <string name="keyguard_password_puk_failed">PUK-Operatioun feelgeschloen.</string>
-  <string name="pinpuk_attempts">\nReschtlech Versich:</string>
+  <string name="pinpuk_attempts">\nVersich iwwreg:</string>
   <string name="lockscreen_sim_error_message_short">Ongëlteg Kaart.</string>
   <string name="keyguard_perso_locked_message">SIM/RUIM huet eng personaliséiert Spärung</string>
   <string name="msim_kg_sim_pin_msg_format">SIM: <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>

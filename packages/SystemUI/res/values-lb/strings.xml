@@ -68,8 +68,8 @@
   <string name="screenshot_failed_title">Schiermfoto konnt net opgeholl ginn.</string>
   <string name="screenshot_failed_text">Schiermfoto konnt net gespäichert ginn. Eventuell gëtt de Späicher grad benotzt.</string>
   <string name="usb_preference_title">USB-Dateiiwwerdroungsoptiounen</string>
-  <string name="use_mtp_button_title">Als Medieplayer (MTP) bereetstellen</string>
-  <string name="use_ptp_button_title">Als Kamera (PTP) bereetstellen</string>
+  <string name="use_mtp_button_title">Als Medieplayer (MTP) abannen</string>
+  <string name="use_ptp_button_title">Als Kamera (PTP) abannen</string>
   <string name="installer_cd_button_title">D\'Fichiersiwwerdroungs-App fir Android um Mac installéieren</string>
   <string name="accessibility_back">Zréck</string>
   <string name="accessibility_home">Heem</string>

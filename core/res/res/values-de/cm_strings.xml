@@ -152,7 +152,7 @@
   <string name="sd_ext_media_unmountable_notification_title">SD-Karte ist beschädigt</string>
   <string name="sd_ext_media_unmountable_notification_message">SD-Karte ist beschädigt. Versuchen Sie, sie erneut zu formatieren.</string>
   <string name="sd_ext_media_badremoval_notification_title">SD-Karte wurde unerwartet entfernt</string>
-  <string name="sd_ext_media_badremoval_notification_message">Vor dem Entfernen die SD-Karte auswerfen, um Datenverlust zu vermeiden.</string>
+  <string name="sd_ext_media_badremoval_notification_message">SD-Karte erst auswerfen, dann entfernen, um Datenverlust zu vermeiden.</string>
   <string name="sd_ext_media_safe_unmount_notification_title">SD-Karte kann sicher entfernt werden</string>
   <string name="sd_ext_media_safe_unmount_notification_message">Die SD-Karte kann jetzt sicher entfernt werden.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD-Karte entfernt</string>
@@ -164,7 +164,7 @@
   <string name="usb_ext_media_unmountable_notification_title">USB-Speicher ist beschädigt</string>
   <string name="usb_ext_media_unmountable_notification_message">USB-Speicher ist beschädigt. Versuchen Sie, ihn erneut zu formatieren.</string>
   <string name="usb_ext_media_badremoval_notification_title">USB-Speicher wurde unerwartet entfernt</string>
-  <string name="usb_ext_media_badremoval_notification_message">Vor dem Entfernen den USB-Speicher auswerfen, um Datenverlust zu vermeiden.</string>
+  <string name="usb_ext_media_badremoval_notification_message">USB-Speicher erst auswerfen, dann entfernen, um Datenverlust zu vermeiden.</string>
   <string name="usb_ext_media_safe_unmount_notification_title">USB-Speicher kann sicher entfernt werden</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Sie können den USB-Speicher jetzt sicher entfernen.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB-Speicher entfernt</string>

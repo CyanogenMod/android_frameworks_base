@@ -1354,6 +1354,8 @@
   <string name="permdesc_access_keyguard_secure_storage">Permite qu\'una aplicación acceda al almacenamientu seguru de bloqueos.</string>
   <string name="permlab_control_keyguard">Remanar cuándo s\'amuesa y s\'anubre\'l bloquéu</string>
   <string name="permdesc_control_keyguard">Permite qu\'una aplicación remane los bloqueos.</string>
+  <string name="permlab_recovery">Interactuar col anovamientu y recuperación del sistema</string>
+  <string name="permdesc_recovery">Permite a una aplicación interactuar col recovery y anovamientos del sistema.</string>
   <string name="tutorial_double_tap_to_zoom_message_short">Toca dos vegaes p\'acceder al control de zoom.</string>
   <string name="gadget_host_error_inflating">Nun pudo amestase\'l widget.</string>
   <string name="ime_action_go">Dir</string>
