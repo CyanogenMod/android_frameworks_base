@@ -117,57 +117,6 @@ class MPlayerListener : public MediaPlayerListener
     }
 };
 
-static long getFreeMemory(void)
-{
-    int fd = open("/proc/meminfo", O_RDONLY);
-    const char* const sums[] = { "MemFree:", "Cached:", NULL };
-    const int sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), 0 };
-    int num = 2;
-
-    if (fd < 0) {
-        ALOGW("Unable to open /proc/meminfo");
-        return -1;
-    }
-
-    char buffer[256];
-    const int len = read(fd, buffer, sizeof(buffer)-1);
-    close(fd);
-
-    if (len < 0) {
-        ALOGW("Unable to read /proc/meminfo");
-        return -1;
-    }
-    buffer[len] = 0;
-
-    size_t numFound = 0;
-    long mem = 0;
-
-    char* p = buffer;
-    while (*p && numFound < num) {
-        int i = 0;
-        while (sums[i]) {
-            if (strncmp(p, sums[i], sumsLen[i]) == 0) {
-                p += sumsLen[i];
-                while (*p == ' ') p++;
-                char* num = p;
-                while (*p >= '0' && *p <= '9') p++;
-                if (*p != 0) {
-                    *p = 0;
-                    p++;
-                    if (*p == 0) p--;
-                }
-                mem += atoll(num);
-                numFound++;
-                break;
-            }
-            i++;
-        }
-        p++;
-    }
-
-    return numFound > 0 ? mem : -1;
-}
-
 BootAnimation::BootAnimation() : Thread(false), mZip(NULL)
 {
     mSession = new SurfaceComposerClient();
@@ -406,7 +355,6 @@ status_t BootAnimation::readyToRun() {
         mZip = zipFile;
     }
 
-#ifdef PRELOAD_BOOTANIMATION
     // Preload the bootanimation zip on memory, so we don't stutter
     // when showing the animation
     FILE* fd;
@@ -435,7 +383,6 @@ status_t BootAnimation::readyToRun() {
         }
         fclose(fd);
     }
-#endif
 
     return NO_ERROR;
 }
@@ -731,33 +678,6 @@ bool BootAnimation::movie()
         const Animation::Part& part(animation.parts[i]);
         const size_t fcount = part.frames.size();
 
-        // can be 1, 0, or not set
-        #ifdef NO_TEXTURE_CACHE
-        const int noTextureCache = NO_TEXTURE_CACHE;
-        #else
-        const int noTextureCache =
-                ((animation.width * animation.height * fcount) > 48 * 1024 * 1024) ? 1 : 0;
-        #endif
-
-        /*calculate if we need to runtime save memory
-        * condition: runtime free memory is less than the textures that will used.
-        * needSaveMem default to be false
-        */
-        GLint mMaxTextureSize;
-        bool needSaveMem = false;
-        GLuint mTextureid;
-        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize);
-        //ALOGD("freemem:%ld, %d", getFreeMemory(), mMaxTextureSize);
-        if(getFreeMemory() < mMaxTextureSize * mMaxTextureSize * fcount / 1024 || noTextureCache) {
-            ALOGD("Use save memory method, maybe small fps in actual.");
-            needSaveMem = true;
-            glGenTextures(1, &mTextureid);
-            glBindTexture(GL_TEXTURE_2D, mTextureid);
-            glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        }
-
         for (int r=0 ; !part.count || r<part.count ; r++) {
             // Exit any non playuntil complete parts immediately
             if(exitPending() && !part.playUntilComplete)
@@ -822,11 +742,6 @@ bool BootAnimation::movie()
             if(exitPending() && !part.count)
                 break;
         }
-
-        if (needSaveMem) {
-            glDeleteTextures(1, &mTextureid);
-        }
-
     }
 
     if (isMPlayerPrepared) {
