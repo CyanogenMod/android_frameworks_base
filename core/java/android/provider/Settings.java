@@ -7586,6 +7586,12 @@ public final class Settings {
         public static final String POLICY_CONTROL_STYLE = "policy_control_style";
 
         /**
+         * @hide
+         */
+        public static final String ZEN_DISABLE_DUCKING_WHILE_ACTIVE_MEDIA =
+                "zen_disable_ducking_while_active_media";
+
+        /**
          * Defines global zen mode.  ZEN_MODE_OFF, ZEN_MODE_IMPORTANT_INTERRUPTIONS,
          * or ZEN_MODE_NO_INTERRUPTIONS.
          *
