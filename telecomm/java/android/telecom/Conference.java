@@ -34,6 +34,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @SystemApi
 public abstract class Conference implements IConferenceable {
 
+    public static final long NO_CONNECTTIME = 0;
     /** @hide */
     public abstract static class Listener {
         public void onStateChanged(Conference conference, int oldState, int newState) {}
@@ -62,7 +63,7 @@ public abstract class Conference implements IConferenceable {
     private DisconnectCause mDisconnectCause;
     private int mCapabilities;
     private String mDisconnectMessage;
-
+    private long mConnectTimeMillis = NO_CONNECTTIME;
     private final Connection.Listener mConnectionDeathListener = new Connection.Listener() {
         @Override
         public void onDestroyed(Connection c) {
@@ -415,6 +416,14 @@ public abstract class Conference implements IConferenceable {
             return null;
         }
         return mUnmodifiableChildConnections.get(0);
+    }
+
+    public void setConnectTimeMillis(long oldConnectTimeMillis) {
+        mConnectTimeMillis = oldConnectTimeMillis;
+    }
+
+    public long getConnectTimeMillis() {
+        return mConnectTimeMillis;
     }
 
     /**
