@@ -160,14 +160,14 @@
     <string name="turn_on_radio" msgid="3912793092339962371">"Įjungti bevielį"</string>
     <string name="turn_off_radio" msgid="8198784949987062346">"Išjungti bevielį"</string>
     <string name="screen_lock" msgid="799094655496098153">"Ekrano užraktas"</string>
-    <string name="power_off" msgid="4266614107412865048">"Išjungiamas maitinimas"</string>
+    <string name="power_off" msgid="4266614107412865048">"Išjungti maitinimą"</string>
     <string name="silent_mode_silent" msgid="319298163018473078">"Skambutis išjungtas"</string>
     <string name="silent_mode_vibrate" msgid="7072043388581551395">"Vibracija skambinant"</string>
     <string name="silent_mode_ring" msgid="8592241816194074353">"Skambutis įjungtas"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Išsijungia..."</string>
-    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Planšetinio kompiuterio veikimas bus sustabdytas."</string>
-    <string name="shutdown_confirm" product="watch" msgid="3490275567476369184">"Laikrodis išsijungs."</string>
-    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Telefonas bus išjungtas."</string>
+    <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Jūsų planšetinis kompiuteris išsijungs."</string>
+    <string name="shutdown_confirm" product="watch" msgid="3490275567476369184">"Jūsų laikrodis išsijungs."</string>
+    <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Jūsų telefonas išsijungs."</string>
     <string name="shutdown_confirm_question" msgid="2906544768881136183">"Ar norite išjungti?"</string>
     <string name="reboot_safemode_title" msgid="7054509914500140361">"Iš naujo įkelti operacinę sistemą saugos režimu"</string>
     <string name="reboot_safemode_confirm" msgid="55293944502784668">"Ar norite iš naujo įkelti operacinę sistemą saugos režimu? Dėl to bus neleidžiamos visos įdiegtos trečiųjų šalių programos. Jos bus atkurtos dar kartą iš naujo įkėlus operacinę sistemą."</string>
@@ -176,7 +176,7 @@
     <string name="global_actions" product="tablet" msgid="408477140088053665">"Planšetinio kompiuterio parinktys"</string>
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefono parinktys"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Ekrano užraktas"</string>
-    <string name="global_action_power_off" msgid="4471879440839879722">"Išjungiamas maitinimas"</string>
+    <string name="global_action_power_off" msgid="4471879440839879722">"Išjungti maitinimą"</string>
     <string name="global_action_bug_report" msgid="7934010578922304799">"Pranešimas apie riktą"</string>
     <string name="bugreport_title" msgid="2667494803742548533">"Pranešti apie riktą"</string>
     <string name="bugreport_message" msgid="398447048750350456">"Bus surinkta informacija apie dabartinę įrenginio būseną ir išsiųsta el. pašto pranešimu. Šiek tiek užtruks, kol pranešimas apie riktą bus paruoštas siųsti; būkite kantrūs."</string>
@@ -247,7 +247,7 @@
     <string name="permgroupdesc_phoneCalls" msgid="7489701620446183770">"Stebėti, įrašyti ir apdoroti telefono skambučius."</string>
     <string name="permgrouplab_systemTools" msgid="4652191644082714048">"Sistemos įrankiai"</string>
     <string name="permgroupdesc_systemTools" msgid="8162102602190734305">"Žemesnio lygio prieiga prie sistemos ir jos valdymas."</string>
-    <string name="permgrouplab_developmentTools" msgid="3446164584710596513">"Kūrėjo įrankiai"</string>
+    <string name="permgrouplab_developmentTools" msgid="3446164584710596513">"Kūrimo įrankiai"</string>
     <string name="permgroupdesc_developmentTools" msgid="7058828032358142018">"Funkcijos reikalingos tik programos kūrėjams."</string>
     <string name="permgrouplab_display" msgid="4279909676036402636">"Kitų programų naudotojo sąsaja"</string>
     <string name="permgroupdesc_display" msgid="6051002031933013714">"Paveikti kitų programų naudotojo sąsają."</string>
@@ -1066,11 +1066,11 @@
     <item quantity="other" msgid="3903706804349556379">"Prieš <xliff:g id="COUNT">%d</xliff:g> sek."</item>
   </plurals>
   <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">"Prieš 1 minutę"</item>
+    <item quantity="one" msgid="3306787433088810191">"Prieš 1 min."</item>
     <item quantity="other" msgid="2176942008915455116">"Prieš <xliff:g id="COUNT">%d</xliff:g> min."</item>
   </plurals>
   <plurals name="num_hours_ago">
-    <item quantity="one" msgid="9150797944610821849">"Prieš 1 valandą"</item>
+    <item quantity="one" msgid="9150797944610821849">"Prieš 1 val."</item>
     <item quantity="other" msgid="2467273239587587569">"Prieš <xliff:g id="COUNT">%d</xliff:g> val."</item>
   </plurals>
   <plurals name="last_num_days">
@@ -1107,7 +1107,7 @@
     <item quantity="other" msgid="851164968597150710">"Prieš <xliff:g id="COUNT">%d</xliff:g> min."</item>
   </plurals>
   <plurals name="abbrev_num_hours_ago">
-    <item quantity="one" msgid="4796212039724722116">"Prieš 1 valandą"</item>
+    <item quantity="one" msgid="4796212039724722116">"Prieš 1 val."</item>
     <item quantity="other" msgid="6889970745748538901">"Prieš <xliff:g id="COUNT">%d</xliff:g> val."</item>
   </plurals>
   <plurals name="abbrev_num_days_ago">
@@ -1141,7 +1141,7 @@
     <string name="minutes" msgid="5646001005827034509">"min."</string>
     <string name="second" msgid="3184235808021478">"sek."</string>
     <string name="seconds" msgid="3161515347216589235">"sek."</string>
-    <string name="week" msgid="5617961537173061583">"savaitė"</string>
+    <string name="week" msgid="5617961537173061583">"sav."</string>
     <string name="weeks" msgid="6509623834583944518">"sav."</string>
     <string name="year" msgid="4001118221013892076">"metai"</string>
     <string name="years" msgid="6881577717993213522">"metai"</string>
@@ -1302,7 +1302,7 @@
     <string name="sms_short_code_confirm_allow" msgid="4458878637111023413">"Siųsti"</string>
     <string name="sms_short_code_confirm_deny" msgid="2927389840209170706">"Atšaukti"</string>
     <string name="sms_short_code_remember_choice" msgid="5289538592272218136">"Atsiminti mano pasirinkimą"</string>
-    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"Tai vėliau galėsite pakeisti skiltyje „Nustatymai“ &gt; „Programos“"</string>
+    <string name="sms_short_code_remember_undo_instruction" msgid="4960944133052287484">"Tai vėliau galėsite pakeisti skiltyje „Nustatymai“ &gt; „Programos“"</string>
     <string name="sms_short_code_confirm_always_allow" msgid="3241181154869493368">"Visada leisti"</string>
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Niekada neleisti"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"SIM kortelė pašalinta"</string>
@@ -1632,7 +1632,7 @@
     <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"Netinkamai nupiešėte atrakinimo piešinį <xliff:g id="NUMBER_0">%d</xliff:g> k. Po dar <xliff:g id="NUMBER_1">%d</xliff:g> nesėkm. band. būsite paprašyti atrakinti telefoną naudodami „Google“ prisijungimo duomenis.\n\n Bandykite dar kartą po <xliff:g id="NUMBER_2">%d</xliff:g> sek."</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" – "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Pašalinti"</string>
-    <string name="safe_media_volume_warning" product="default" msgid="2276318909314492312">"Padidinti garsą daugiau nei rekomenduojamas lygis?\n\nIlgai klausydami dideliu garsu galite pažeisti klausą."</string>
+    <string name="safe_media_volume_warning" product="default" msgid="2276318909314492312">"Padidinti garsumą daugiau nei rekomenduojamas lygis?\n\nIlgai klausydami dideliu garsumu galite pažeisti klausą."</string>
     <string name="continue_to_enable_accessibility" msgid="1626427372316070258">"Laikykite palietę dviem pirštais, kad įgalintumėte pritaikymo neįgaliesiems režimą."</string>
     <string name="accessibility_enabled" msgid="1381972048564547685">"Pritaikymas neįgaliesiems įgalintas."</string>
     <string name="enable_accessibility_canceled" msgid="3833923257966635673">"Pritaikymo neįgaliesiems režimas atšauktas."</string>

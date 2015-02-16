@@ -141,7 +141,7 @@
     <string name="accessibility_data_connection_lte" msgid="5413468808637540658">"LTE"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"Tarptinklinis ryšys"</string>
-    <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Kraštas"</string>
+    <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
     <string name="accessibility_data_connection_wifi" msgid="2324496756590645221">"Wi-Fi"</string>
     <string name="accessibility_no_sim" msgid="8274017118472455155">"Nėra SIM kortelės."</string>
     <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"„Bluetooth“ įrenginio kaip modemo naudojimas."</string>
@@ -267,7 +267,7 @@
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Susiejimas"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Viešosios interneto prieigos taškas"</string>
     <string name="quick_settings_notifications_label" msgid="4818156442169154523">"Pranešimai"</string>
-    <string name="quick_settings_flashlight_label" msgid="2133093497691661546">"Flashlight"</string>
+    <string name="quick_settings_flashlight_label" msgid="2133093497691661546">"Žibintuvėlis"</string>
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Mobiliojo ryšio duomenys"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Duomenų naudojimas"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Likę duomenys"</string>
