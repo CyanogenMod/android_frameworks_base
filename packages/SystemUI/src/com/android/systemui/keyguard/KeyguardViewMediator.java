@@ -718,13 +718,13 @@ public class KeyguardViewMediator extends SystemUI {
         }
         Profile profile = mProfileManager.getActiveProfile();
         if (profile != null) {
-            if (profile.getScreenLockMode() == Profile.LockMode.DISABLE) {
+            if (profile.getScreenLockMode() == Profile.LockMode.DISABLE && mBootCompleted) {
                 if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
                 return true;
             }
-         }
+        }
         return false;
-     }
+    }
 
     /**
      * A dream started.  We should lock after the usual screen-off lock timeout but only
