@@ -90,7 +90,7 @@
     <string name="keyboardview_keycode_shift" msgid="2270748814315147690">"Shift"</string>
     <string name="keyboardview_keycode_enter" msgid="2985864015076059467">"Įvesti"</string>
     <string name="description_target_unlock" msgid="2228524900439801453">"Atrakinti"</string>
-    <string name="description_target_camera" msgid="969071997552486814">"Vaizdo kamera"</string>
+    <string name="description_target_camera" msgid="969071997552486814">"Fotoaparatas"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Begarsis"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Garsas įjungtas"</string>
     <string name="description_target_search" msgid="3091587249776033139">"Paieška"</string>
