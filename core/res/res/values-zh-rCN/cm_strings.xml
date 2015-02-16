@@ -29,7 +29,7 @@
     <string name="permlab_readPhoneBlacklist">读取手机黑名单</string>
     <string name="profileGroupEmail">电子邮件</string>
     <string name="global_action_choose_profile">情景模式</string>
-    <string name="profileNameAutomobile">汽车</string>
+    <string name="profileNameAutomobile">车载</string>
     <string name="permdesc_readPhoneBlacklist">允许应用读取有关被阻止来电或信息的电话号码的信息。</string>
     <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
     <string name="profileGroupGmail">Gmail</string>
