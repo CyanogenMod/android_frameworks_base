@@ -23,6 +23,7 @@ import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 import static org.xmlpull.v1.XmlPullParser.END_TAG;
 import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
+import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
@@ -34,7 +35,6 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Profile;
 import android.app.ProfileGroup;
 import android.app.ProfileManager;
 import android.app.StatusBarManager;
@@ -58,6 +58,9 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioSystem;
 import android.media.IRingtonePlayer;
+import android.media.session.MediaController;
+import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
@@ -127,6 +130,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
@@ -282,6 +286,8 @@ public class NotificationManagerService extends SystemService {
     private NotificationListeners mListeners;
     private ConditionProviders mConditionProviders;
     private NotificationUsageStats mUsageStats;
+    private boolean mDisableDuckingWhileMedia;
+    private boolean mActiveMedia;
 
     private static final int MY_UID = Process.myUid();
     private static final int MY_PID = Process.myPid();
@@ -838,13 +844,13 @@ public class NotificationManagerService extends SystemService {
         }
     };
 
-    class LEDSettingsObserver extends ContentObserver {
+    class SettingsObserver extends ContentObserver {
         private final Uri NOTIFICATION_LIGHT_PULSE_URI
                 = Settings.System.getUriFor(Settings.System.NOTIFICATION_LIGHT_PULSE);
         private final Uri ENABLED_NOTIFICATION_LISTENERS_URI
                 = Settings.Secure.getUriFor(Settings.Secure.ENABLED_NOTIFICATION_LISTENERS);
 
-        LEDSettingsObserver(Handler handler) {
+        SettingsObserver(Handler handler) {
             super(handler);
         }
 
@@ -869,6 +875,9 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Global.getUriFor(
+                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
+                    this, UserHandle.USER_ALL);
             update(null);
         }
 
@@ -909,10 +918,26 @@ public class NotificationManagerService extends SystemService {
             }
 
             updateNotificationPulse();
+
+            mDisableDuckingWhileMedia = Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK, 0) == 1;
+            updateDisableDucking();
         }
     }
 
-    private LEDSettingsObserver mSettingsObserver;
+    private void updateDisableDucking() {
+        if (!mSystemReady) {
+            return;
+        }
+        final MediaSessionManager mediaSessionManager = (MediaSessionManager) mContext
+                .getSystemService(Context.MEDIA_SESSION_SERVICE);
+        mediaSessionManager.removeOnActiveSessionsChangedListener(mSessionListener);
+        if (mDisableDuckingWhileMedia) {
+            mediaSessionManager.addOnActiveSessionsChangedListener(mSessionListener, null);
+        }
+    }
+
+    private SettingsObserver mSettingsObserver;
     private ZenModeHelper mZenModeHelper;
 
     private final Runnable mBuzzBeepBlinked = new Runnable() {
@@ -1059,7 +1084,7 @@ public class NotificationManagerService extends SystemService {
         getContext().registerReceiverAsUser(mPackageIntentReceiver, UserHandle.ALL, sdFilter, null,
                 null);
 
-        mSettingsObserver = new LEDSettingsObserver(mHandler);
+        mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
 
         mArchive = new Archive(resources.getInteger(
@@ -1097,6 +1122,8 @@ public class NotificationManagerService extends SystemService {
             // Grab our optional AudioService
             mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
             mZenModeHelper.onSystemReady();
+
+            updateDisableDucking();
         } else if (phase == SystemService.PHASE_THIRD_PARTY_APPS_CAN_START) {
             // This observer will force an update when observe is called, causing us to
             // bind to listener services.
@@ -2132,6 +2159,21 @@ public class NotificationManagerService extends SystemService {
         return false;
     }
 
+    private MediaSessionManager.OnActiveSessionsChangedListener mSessionListener =
+            new MediaSessionManager.OnActiveSessionsChangedListener() {
+        @Override
+        public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
+            for (MediaController activeSession : controllers) {
+                PlaybackState playbackState = activeSession.getPlaybackState();
+                if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
+                    mActiveMedia = true;
+                    return;
+                }
+            }
+            mActiveMedia = false;
+        }
+    };
+
     private void buzzBeepBlinkLocked(NotificationRecord record) {
         boolean buzzBeepBlinked = false;
         final Notification notification = record.sbn.getNotification();
@@ -2206,7 +2248,7 @@ public class NotificationManagerService extends SystemService {
                 hasValidSound = (soundUri != null);
             }
 
-            if (hasValidSound) {
+            if (hasValidSound && (!mDisableDuckingWhileMedia || !mActiveMedia)) {
                 boolean looping =
                         (notification.flags & Notification.FLAG_INSISTENT) != 0;
                 AudioAttributes audioAttributes = audioAttributesForNotification(notification);
