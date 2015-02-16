@@ -722,9 +722,9 @@ public class KeyguardViewMediator extends SystemUI {
                 if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
                 return true;
             }
-         }
+        }
         return false;
-     }
+    }
 
     /**
      * A dream started.  We should lock after the usual screen-off lock timeout but only
@@ -979,6 +979,11 @@ public class KeyguardViewMediator extends SystemUI {
 
         if (isKeyguardDisabled() && !lockedOrMissing) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because lockscreen is off");
+            // update state
+            mShowing = false;
+            updateActivityLockScreenState();
+            adjustStatusBarLocked();
+            userActivity();
             return;
         }
 
