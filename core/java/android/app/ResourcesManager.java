@@ -184,7 +184,9 @@ public class ResourcesManager {
         final boolean isThemeable = compatInfo.isThemeable;
         Configuration overrideConfigCopy = (overrideConfiguration != null)
                 ? new Configuration(overrideConfiguration) : null;
-        ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfigCopy, scale, isThemeable);
+        final ThemeConfig themeConfig = getThemeConfig();
+        ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale,
+                isThemeable, themeConfig);
         Resources r;
         synchronized (this) {
             // Resources is app scale dependent.
@@ -734,5 +736,13 @@ public class ResourcesManager {
         }
         assets.getThemeCookies().clear();
         assets.setThemePackageName(null);
+    }
+
+    private ThemeConfig getThemeConfig() {
+        Configuration config = getConfiguration();
+        if (config != null) {
+            return config.themeConfig;
+        }
+        return null;
     }
 }
