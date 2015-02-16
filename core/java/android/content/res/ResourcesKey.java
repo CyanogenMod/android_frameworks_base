@@ -30,7 +30,7 @@ public final class ResourcesKey {
     public final Configuration mOverrideConfiguration = new Configuration();
 
     public ResourcesKey(String resDir, int displayId, Configuration overrideConfiguration,
-            float scale, boolean isThemeable, IBinder token) {
+            float scale, boolean isThemeable, ThemeConfig themeConfig, IBinder token) {
         mResDir = resDir;
         mDisplayId = displayId;
         if (overrideConfiguration != null) {
@@ -47,6 +47,7 @@ public final class ResourcesKey {
                 ? mOverrideConfiguration.hashCode() : 0);
         hash = 31 * hash + Float.floatToIntBits(mScale);
         hash = 31 * hash + (mIsThemeable ? 1 : 0);
+        hash = 31 * hash + (themeConfig != null ? themeConfig.hashCode() : 0);
         mHash = hash;
     }
 
