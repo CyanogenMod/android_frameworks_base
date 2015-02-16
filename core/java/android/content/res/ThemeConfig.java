@@ -146,6 +146,14 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         return result.toString();
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = 31 * hash + mThemes.hashCode();
+        hash = 31 * hash + (int) mThemeChangeTimestamp;
+        return hash;
+    }
+
     public String toJson() {
         return JsonSerializer.toJson(this);
     }
