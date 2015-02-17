@@ -56,6 +56,8 @@
 #include <media/mediaplayer.h>
 #include <media/IMediaHTTPService.h>
 
+#include <hardware/power.h>
+
 #include "BootAnimation.h"
 #include "AudioPlayer.h"
 
@@ -116,6 +118,24 @@ class MPlayerListener : public MediaPlayerListener
         }
     }
 };
+
+static void setPowerHint(bool active) {
+    int rc;
+    power_module_t *power_module = NULL;
+
+    rc = hw_get_module(POWER_HARDWARE_MODULE_ID,
+            (const hw_module_t **)&power_module);
+    if (rc) {
+        ALOGE("%s: Failed to obtain reference to power module %s\n",
+                __func__, strerror(-rc));
+        return;
+    }
+
+    if (power_module && power_module->powerHint) {
+        power_module->powerHint(power_module, POWER_HINT_CPU_BOOST,
+                active ? (void *)"state=1" : (void *)"state=0");
+    }
+}
 
 static long getFreeMemory(void)
 {
@@ -723,6 +743,8 @@ bool BootAnimation::movie()
     pthread_mutex_init(&mp_lock, NULL);
     pthread_cond_init(&mp_cond, NULL);
 
+    setPowerHint(true);
+
     property_get("persist.sys.silent", value, "null");
     if (strncmp(value, "1", 1) != 0) {
         playBackgroundMusic();
@@ -864,6 +886,8 @@ bool BootAnimation::movie()
         pthread_mutex_unlock(&mp_lock);
         ALOGD("media player is completed.");
     }
+
+    setPowerHint(false);
 
     pthread_cond_destroy(&mp_cond);
     pthread_mutex_destroy(&mp_lock);
