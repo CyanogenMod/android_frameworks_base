@@ -236,4 +236,7 @@
     <integer name="def_people_lookup">1</integer>
     <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
     <string-array name="def_protected_sms_list_values"></string-array>
+
+    <!-- Defaults for Settings.System.Secure.ADVANCED_MODE. -->
+    <bool name="def_advanced_mode">true</bool>
 </resources>
