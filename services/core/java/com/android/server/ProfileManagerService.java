@@ -55,8 +55,6 @@ public class ProfileManagerService extends IProfileManager.Stub {
     // Enable the below for detailed logging of this class
     private static final boolean LOCAL_LOGV = false;
 
-    private static final boolean USE_NOTIFICATION_GROUPS = false;
-
     public static final String PERMISSION_CHANGE_SETTINGS = "android.permission.WRITE_SETTINGS";
 
     /* package */ static final File PROFILE_FILE =
@@ -487,7 +485,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
                     if (active == null) {
                         active = prof.getUuid().toString();
                     }
-                } else if (USE_NOTIFICATION_GROUPS && name.equals("notificationGroup")) {
+                } else if (name.equals("notificationGroup")) {
                     NotificationGroup ng = NotificationGroup.fromXml(xpp, context);
                     addNotificationGroupInternal(ng);
                 }
