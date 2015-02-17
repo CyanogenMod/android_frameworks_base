@@ -139,6 +139,7 @@ public class KeyguardViewMediator extends SystemUI {
     private static final int DISMISS = 17;
     private static final int START_KEYGUARD_EXIT_ANIM = 18;
     private static final int ON_ACTIVITY_DRAWN = 19;
+    private static final int KEYGUARD_DONE_PENDING_TIMEOUT = 20;
 
     /**
      * The default amount of time we stay awake (used for all key input)
@@ -359,7 +360,7 @@ public class KeyguardViewMediator extends SystemUI {
         }
 
         @Override
-        public void onSimStateChanged(long subId, IccCardConstants.State simState) {
+        public void onSimStateChanged(int subId, IccCardConstants.State simState) {
             if (DEBUG) Log.d(TAG, "onSimStateChangedUsingSubId: " + simState + ", subId=" + subId);
 
             switch (simState) {
@@ -690,32 +691,13 @@ public class KeyguardViewMediator extends SystemUI {
     }
 
     private void maybeSendUserPresentBroadcast() {
-        if (mSystemReady && isKeyguardDisabled()) {
+        if (mSystemReady && mLockPatternUtils.isLockScreenDisabled()) {
             // Lock screen is disabled because the user has set the preference to "None".
             // In this case, send out ACTION_USER_PRESENT here instead of in
             // handleKeyguardDone()
             sendUserPresentBroadcast();
         }
     }
-
-    private boolean isKeyguardDisabled() {
-        if (!mExternallyEnabled) {
-            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled externally");
-            return true;
-        }
-        if (mLockPatternUtils.isLockScreenDisabled()) {
-            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by setting");
-            return true;
-        }
-        Profile profile = mProfileManager.getActiveProfile();
-        if (profile != null) {
-            if (profile.getScreenLockMode() == Profile.LockMode.DISABLE) {
-                if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
-                return true;
-            }
-         }
-        return false;
-     }
 
     /**
      * A dream started.  We should lock after the usual screen-off lock timeout but only
@@ -932,7 +914,7 @@ public class KeyguardViewMediator extends SystemUI {
         final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
         boolean lockedOrMissing = false;
         for (int i = 0; i < mUpdateMonitor.getNumPhones(); i++) {
-            long subId = mUpdateMonitor.getSubIdByPhoneId(i);
+            int subId = mUpdateMonitor.getSubIdByPhoneId(i);
             if (isSimLockedOrMissing(subId, requireSim)) {
                 lockedOrMissing = true;
                 break;
@@ -945,7 +927,7 @@ public class KeyguardViewMediator extends SystemUI {
             return;
         }
 
-        if (isKeyguardDisabled() && !lockedOrMissing) {
+        if (mLockPatternUtils.isLockScreenDisabled() && !lockedOrMissing) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because lockscreen is off");
             return;
         }
@@ -962,7 +944,11 @@ public class KeyguardViewMediator extends SystemUI {
         showLocked(options);
     }
 
-    private boolean isSimLockedOrMissing (long subId, boolean requireSim) {
+    private boolean shouldWaitForProvisioning() {
+        return !mUpdateMonitor.isDeviceProvisioned() && !isSecure();
+    }
+
+    private boolean isSimLockedOrMissing (int subId, boolean requireSim) {
         IccCardConstants.State state = mUpdateMonitor.getSimState(subId);
         boolean simLockedOrMissing = (state != null && state.isPinLocked())
                 || ((state == IccCardConstants.State.ABSENT
@@ -1429,6 +1415,11 @@ public class KeyguardViewMediator extends SystemUI {
             mStatusBarKeyguardViewManager.onScreenTurnedOff();
         }
     }
+
+    private void resetKeyguardDonePendingLocked() {
+         mKeyguardDonePending = false;
+         mHandler.removeMessages(KEYGUARD_DONE_PENDING_TIMEOUT);
+     }
 
     /**
      * Handle message sent by {@link #notifyScreenOnLocked}

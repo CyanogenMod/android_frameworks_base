@@ -147,8 +147,8 @@ public class DdsTile extends QSTile<QSTile.State> {
         int dataPhoneId = SubscriptionManager.getPhoneId(
                 SubscriptionManager.getDefaultDataSubId());
         int phoneCount = tm.getPhoneCount();
-        long[] subIds = SubscriptionManager.getSubId((dataPhoneId + 1) % phoneCount);
-        SubscriptionManager.setDefaultDataSubId(subIds[0]);
+        int[] subIds = SubscriptionManager.getSubId((dataPhoneId + 1) % phoneCount);
+        SubscriptionManager.from(mContext).setDefaultDataSubId(subIds[0]);
     }
 
     private class DdsObserver extends ContentObserver {

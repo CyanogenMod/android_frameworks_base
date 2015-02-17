@@ -1379,7 +1379,7 @@ public class TelephonyManager {
      *
      */
     /** {@hide} */
-    public String getIccOperatorNumeric(long subId) {
+    public String getIccOperatorNumeric(int subId) {
        try{
             return getITelephony().getIccOperatorNumeric(subId);
        } catch (RemoteException ex) {
@@ -2336,8 +2336,8 @@ public class TelephonyManager {
     /**
     * @hide
     */
-    private ITelecommService getTelecommService() {
-        return ITelecommService.Stub.asInterface(ServiceManager.getService(TELECOMM_SERVICE_NAME));
+    private ITelecomService getTelecomService() {
+        return ITelecomService.Stub.asInterface(ServiceManager.getService(Context.TELECOM_SERVICE));
     }
 
     //
@@ -2519,7 +2519,7 @@ public class TelephonyManager {
     }
 
     /** {@hide} */
-    public List<CellInfo> getAllCellInfo(long subId) {
+    public List<CellInfo> getAllCellInfo(int subId) {
         try {
             return getITelephony().getAllCellInfoUsingSubId(subId);
         } catch (RemoteException ex) {
@@ -2834,7 +2834,7 @@ public class TelephonyManager {
     }
 
     /** {@hide} */
-    public int getDefaultSim() {
+    public static int getDefaultSim() {
         return SubscriptionManager.getSlotId(SubscriptionManager.getDefaultSubId());
     }
 
@@ -3198,7 +3198,10 @@ public class TelephonyManager {
      */
     public int getTetherApnRequired() {
         try {
-            return getITelephony().getTetherApnRequired();
+            ITelephony telephony = getITelephony();
+            if (telephony != null) {
+                return telephony.getTetherApnRequired();
+            }
         } catch (RemoteException ex) {
             Rlog.e(TAG, "hasMatchedTetherApnSetting RemoteException", ex);
         } catch (NullPointerException ex) {
@@ -3233,7 +3236,7 @@ public class TelephonyManager {
      */
     public int hasCarrierPrivileges() {
         try {
-            return getITelephony().hasCarrierPrivileges();
+            return getITelephony().getCarrierPrivilegeStatus();
         } catch (RemoteException ex) {
             Rlog.e(TAG, "hasCarrierPrivileges RemoteException", ex);
         } catch (NullPointerException ex) {
@@ -3572,7 +3575,7 @@ public class TelephonyManager {
 
     /** @hide */
     @SystemApi
-    public boolean isDataPossibleForSubscription(long subId, String apnType) {
+    public boolean isDataPossibleForSubscription(int subId, String apnType) {
         try {
             return getITelephony().isDataPossibleForSubscription(subId, apnType);
         } catch (RemoteException e) {
@@ -3600,7 +3603,7 @@ public class TelephonyManager {
 
     /** @hide */
     @SystemApi
-    public void setDataEnabledUsingSubId(long subId, boolean enable) {
+    public void setDataEnabledUsingSubId(int subId, boolean enable) {
         try {
             AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
             if (enable) {
@@ -3643,27 +3646,6 @@ public class TelephonyManager {
         } catch (NullPointerException ex) {
         }
         return -1;
-    }
-
-    /** @hide */
-    @SystemApi
-    public void enableVideoCalling(boolean enable) {
-        try {
-            getITelephony().enableVideoCalling(enable);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelephony#enableVideoCalling", e);
-        }
-    }
-
-    /** @hide */
-    @SystemApi
-    public boolean isVideoCallingEnabled() {
-        try {
-            return getITelephony().isVideoCallingEnabled();
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelephony#isVideoCallingEnabled", e);
-        }
-        return false;
     }
 
     /**

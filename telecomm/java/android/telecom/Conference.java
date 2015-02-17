@@ -525,7 +525,7 @@ public abstract class Conference implements IConferenceable {
         return String.format(Locale.US,
                 "[State: %s,Capabilites: %s, VideoState: %s, VideoProvider: %s, ThisObject %s]",
                 Connection.stateToString(mState),
-                PhoneCapabilities.toString(mCapabilities),
+                PhoneCapabilities.toString(mConnectionCapabilities),
                 getVideoState(),
                 getVideoProvider(),
                 super.toString());

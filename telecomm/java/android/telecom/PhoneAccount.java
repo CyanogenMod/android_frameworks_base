@@ -171,6 +171,8 @@ public class PhoneAccount implements Parcelable {
         private int mColor = NO_COLOR;
         private String mIconPackageName;
         private Bitmap mIconBitmap;
+        private int mIconTint = NO_ICON_TINT;
+        private int mHighlightColor = NO_HIGHLIGHT_COLOR;
         private CharSequence mLabel;
         private CharSequence mShortDescription;
         private List<String> mSupportedUriSchemes = new ArrayList<String>();
@@ -721,6 +723,7 @@ public class PhoneAccount implements Parcelable {
         }
         out.writeInt(mCapabilities);
         out.writeInt(mIconResId);
+        out.writeInt(mColor);
         out.writeString(mIconPackageName);
         if (mIconBitmap == null) {
             out.writeInt(0);

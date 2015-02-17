@@ -80,7 +80,7 @@ interface ISub {
      * Get the count of activated SUB(s)
      * @return the number of active subscriptions
      */
-    int getActivatedSubInfoCount();
+    int getActiveSubInfoCount();
 
     /**
      * @return the maximum number of subscriptions this device will support at any one time.
@@ -180,8 +180,8 @@ interface ISub {
 
     int getSubState(int subId);
 
-    long getOnDemandDataSubId();
- 
+    int getOnDemandDataSubId();
+
     int[] getActiveSubIdList();
 
     /**

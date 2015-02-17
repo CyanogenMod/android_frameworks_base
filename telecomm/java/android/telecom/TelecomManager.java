@@ -351,7 +351,9 @@ public class TelecomManager {
      * @param uriScheme The URI scheme.
      * @return The {@link PhoneAccountHandle} corresponding to the user-chosen default for outgoing
      * phone calls for a specified URI scheme.
+     * @hide
      */
+    @SystemApi
     public PhoneAccountHandle getDefaultOutgoingPhoneAccount(String uriScheme) {
         try {
             if (isServiceConnected()) {
@@ -481,6 +483,7 @@ public class TelecomManager {
      *
      * @param uriScheme The URI scheme.
      * @return A list of {@code PhoneAccountHandle} objects supporting the URI scheme.
+     * {@hide}
      */
     public List<PhoneAccountHandle> getPhoneAccountsSupportingScheme(String uriScheme) {
         try {
@@ -870,22 +873,22 @@ public class TelecomManager {
      * Returns current active subscription.
      * @hide
      */
-    public long getActiveSubscription() {
+    public int getActiveSubscription() {
         try {
             if (isServiceConnected()) {
-                return getTelecomService().getActiveSubscription();
+                return (int)getTelecomService().getActiveSubscription();
             }
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException attempting to get the active subsription.", e);
         }
-        return SubscriptionManager.INVALID_SUB_ID;
+        return SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     }
 
     /**
      * switches to other active subscription.
      * @hide
      */
-    public void switchToOtherActiveSub(long subId) {
+    public void switchToOtherActiveSub(int subId) {
         try {
             if (isServiceConnected()) {
                 getTelecomService().switchToOtherActiveSub(subId);

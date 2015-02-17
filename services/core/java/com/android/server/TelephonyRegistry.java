@@ -684,11 +684,14 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         broadcastCallStateChanged(state, incomingNumber, subId);
     }
 
-    public void notifyServiceStateForPhoneId(int phoneId, long subId, ServiceState state) {
+    public void notifyServiceStateForPhoneId(int phoneId, int subId, ServiceState state) {
         if (!checkNotifyPermission("notifyServiceState()")){
             return;
         }
-
+        if (subId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
+            subId = mDefaultSubId;
+            if (VDBG) log("notifyServiceStateForSubscriber: using mDefaultSubId=" + mDefaultSubId);
+        }
         synchronized (mRecords) {
             if (VDBG) {
                 log("notifyServiceStateForSubscriber: subId=" + subId + " phoneId=" + phoneId
@@ -848,8 +851,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
     }
 
-    @Override
-    public void notifyMessageWaitingChangedForPhoneId(int phoneId, long subId, boolean mwi) {
+    public void notifyMessageWaitingChangedForPhoneId(int phoneId, int subId, boolean mwi) {
         if (!checkNotifyPermission("notifyMessageWaitingChanged()")) {
             return;
         }

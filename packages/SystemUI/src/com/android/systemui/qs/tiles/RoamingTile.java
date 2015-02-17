@@ -186,7 +186,7 @@ public class RoamingTile extends QSTile<QSTile.BooleanState> {
 
         int mPhoneCount = TelephonyManager.getDefault().getPhoneCount();
         if (mPhoneCount > 1) {
-            long[] subId = SubscriptionManager.getSubId(PhoneConstants.PHONE_ID1);
+            int[] subId = SubscriptionManager.getSubId(PhoneConstants.PHONE_ID1);
             if (subId != null && subId.length >= 1) {
                 numeric = TelephonyManager.getDefault().getNetworkOperator(subId[0]);
             }

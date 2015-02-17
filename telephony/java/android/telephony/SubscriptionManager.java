@@ -57,9 +57,6 @@ public class SubscriptionManager {
     private static final boolean DBG = false;
     private static final boolean VDBG = false;
 
-    /** @hide */
-    public static final int DEFAULT_SUBSCRIPTION_ID = Integer.MAX_VALUE;
-    
     /** An invalid subscription identifier */
     public static final int INVALID_SUBSCRIPTION_ID = -1;
 
@@ -130,19 +127,25 @@ public class SubscriptionManager {
     /**
      * The Network mode of SIM/sub.
      * <P>Type: INTEGER (int)</P>
+     * @hide
      */
     public static final String NETWORK_MODE = "network_mode";
 
+    /** @hide */
     public static final int DEFAULT_NW_MODE = -1;
 
     /**
      * The activation state of SIM/sub.
      * <P>Type: INTEGER (int)</P>
+     * @hide
      */
     public static final String SUB_STATE = "sub_state";
 
+    /** @hide */
     public static final int INACTIVE = 0;
+    /** @hide */
     public static final int ACTIVE = 1;
+    /** @hide */
     public static final int SUB_CONFIGURATION_IN_PROGRESS = 2;
 
     /**
@@ -584,7 +587,7 @@ public class SubscriptionManager {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
             if (iSub != null) {
-                result = iSub.getActivatedSubInfoCount();
+                result = iSub.getActiveSubInfoCount();
             }
         } catch (RemoteException ex) {
             // ignore it
@@ -905,10 +908,12 @@ public class SubscriptionManager {
         return getActiveSubscriptionInfo(getDefaultVoiceSubId());
     }
 
+    /** @hide */
     public static int getDefaultVoicePhoneId() {
         return getPhoneId(getDefaultVoiceSubId());
     }
 
+    /** @hide */
     public static boolean isSMSPromptEnabled() {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
@@ -954,9 +959,9 @@ public class SubscriptionManager {
         } catch (RemoteException ex) {
             // ignore it
         }
-        return false;
     }
 
+    /** @hide */
     public static void setSMSPromptEnabled(boolean enabled) {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
@@ -1072,6 +1077,9 @@ public class SubscriptionManager {
         return subId > INVALID_SUBSCRIPTION_ID ;
     }
 
+    /**
+     * @hide
+     */
     public static void activateSubId(int subId) {
         logd("activateSubId sub id = " + subId);
         try {
@@ -1081,6 +1089,9 @@ public class SubscriptionManager {
         }
     }
 
+    /**
+     * @hide
+     */
     public static void deactivateSubId(int subId) {
         logd("deactivateSubId sub id = " + subId);
         try {
@@ -1090,6 +1101,7 @@ public class SubscriptionManager {
         }
     }
 
+    /** @hide */
     public static int getSubState(int subId) {
         logd("getSubState sub id = " + subId);
         try {
@@ -1099,6 +1111,7 @@ public class SubscriptionManager {
         }
     }
 
+    /** @hide */
     public static int setSubState(int subId, int subState) {
         logd("setSubState sub id = " + subId + " state = " + subState);
         try {
@@ -1124,14 +1137,17 @@ public class SubscriptionManager {
         return subId >= MIN_SUBSCRIPTION_ID_VALUE && subId <= MAX_SUBSCRIPTION_ID_VALUE;
     }
 
+    /** @hide */
     public static boolean isValidSlotId(int slotId) {
         return slotId >= 0 && slotId < TelephonyManager.getDefault().getSimCount();
     }
 
+    /** @hide */
     public static boolean isValidPhoneId(int phoneId) {
         return phoneId >= 0 && phoneId < TelephonyManager.getDefault().getPhoneCount();
     }
 
+    /** @hide */
     public static void putPhoneIdAndSubIdExtra(Intent intent, int phoneId) {
         //FIXME this is using phoneId and slotId interchangeably
         int[] subIds = SubscriptionManager.getSubId(phoneId);
@@ -1155,6 +1171,7 @@ public class SubscriptionManager {
     /**
      * @return the list of subId's that are activated,
      *         is never null but the length maybe 0.
+     * @hide
      */
     public int[] getActiveSubscriptionIdList() {
         int[] subId = null;
@@ -1162,7 +1179,7 @@ public class SubscriptionManager {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
             if (iSub != null) {
-                subId = iSub.getActivatedSubIdList();
+                subId = iSub.getActiveSubIdList();
             }
         } catch (RemoteException ex) {
             // ignore it
@@ -1175,6 +1192,7 @@ public class SubscriptionManager {
         return subId;
     }
 
+    /** @hide */
     public static boolean isVoicePromptEnabled() {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
@@ -1187,6 +1205,7 @@ public class SubscriptionManager {
         return false;
     }
 
+    /** @hide */
     public static void setVoicePromptEnabled(boolean enabled) {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
@@ -1198,16 +1217,17 @@ public class SubscriptionManager {
         }
     }
 
+    /** @hide */
     public static int getOnDemandDataSubId() {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
             if (iSub != null) {
                 return iSub.getOnDemandDataSubId();
             } else {
-                return INVALID_SUB_ID;
+                return INVALID_SUBSCRIPTION_ID;
             }
         } catch (RemoteException ex) {
-            return INVALID_SUB_ID;
+            return INVALID_SUBSCRIPTION_ID;
         }
     }
 
