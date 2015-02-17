@@ -122,7 +122,7 @@ public class MmsServiceBroker extends SystemService {
     }
 
     public void systemRunning() {
-        Slog.i(TAG, "systemRunning");
+        tryConnecting();
     }
 
     private void tryConnecting() {
