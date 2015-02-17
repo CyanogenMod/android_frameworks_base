@@ -56,6 +56,8 @@
 #include <media/mediaplayer.h>
 #include <media/IMediaHTTPService.h>
 
+#include <hardware/power.h>
+
 #include "BootAnimation.h"
 #include "AudioPlayer.h"
 
@@ -116,6 +118,24 @@ class MPlayerListener : public MediaPlayerListener
         }
     }
 };
+
+static void setPowerHint(int durationMs) {
+    int rc;
+    power_module_t *power_module = NULL;
+
+    rc = hw_get_module(POWER_HARDWARE_MODULE_ID,
+            (const hw_module_t **)&power_module);
+    if (rc) {
+        ALOGE("%s: Failed to obtain reference to power module %s\n",
+                __func__, strerror(-rc));
+        return;
+    }
+
+    if (power_module && power_module->powerHint) {
+        power_module->powerHint(power_module, POWER_HINT_CPU_BOOST,
+                (void *)(static_cast<int64_t>(durationMs)));
+    }
+}
 
 static long getFreeMemory(void)
 {
@@ -771,6 +791,8 @@ bool BootAnimation::movie()
             glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         }
+
+        setPowerHint(frameDuration * 1000 * fcount);
 
         for (int r=0 ; !part.count || r<part.count ; r++) {
             // Exit any non playuntil complete parts immediately
