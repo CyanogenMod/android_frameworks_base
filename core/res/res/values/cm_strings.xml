@@ -305,4 +305,17 @@
     <string name="usb_media_checking">USB storage is currently being checked.</string>
     <string name="usb_media_removed">USB storage has been removed.</string>
     <string name="usb_media_shared">USB storage is currently in use by a computer.</string>
+
+    <!-- LiveDisplay strings -->
+    <string name="live_display_title" translatable="false">LiveDisplay</string>
+    <string name="live_display_auto">Automatic</string>
+    <string name="live_display_auto_summary">Automatically adjust screen for ambient conditions</string>
+    <string name="live_display_day">Day</string>
+    <string name="live_display_day_summary">Use day settings only</string>
+    <string name="live_display_night">Night</string>
+    <string name="live_display_night_summary">Use night settings only</string>
+    <string name="live_display_outdoor">Outdoor (bright sun)</string>
+    <string name="live_display_outdoor_summary">Use outdoor settings only</string>
+    <string name="live_display_hint">LiveDisplay can help reduce eyestrain and help you sleep at night. Click here to try it out!</string>
+
 </resources>
