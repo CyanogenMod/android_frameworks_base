@@ -36,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">primește SMS-uri protejate</string>
   <string name="permdesc_receiveProtectedSms">Permite aplicației să primească un SMS protejat.</string>
   <string name="permlab_modifyProtectedSmsList">modifică lista de SMS-uri protejate</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite aplicației să modifice lista adreselor SMS protejate.</string>
   <string name="permgrouplab_security">Securitate</string>
   <string name="permgroupdesc_security">Permisiunile legate de informațiile de securitate ale dispozitivului.</string>
   <string name="permlab_accessThemeService">accesare serviciul pentru teme</string>
@@ -72,11 +73,20 @@
   <string name="adb_net_active_notification_title">ADB prin rețea activ</string>
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
+  <string name="usb_choose_notification_title">Atingeți pentru a alege opțiunile USB.</string>
   <string name="app_ops_access_camera">accesează camera</string>
   <string name="app_ops_access_location">accesează locația</string>
   <string name="app_ops_access_notifications">citește notificările</string>
+  <string name="app_ops_activate_vpn">activați un VPN</string>
   <string name="app_ops_alarm_wakeup">trezește dispozitivul</string>
   <string name="app_ops_su">obţine acces root</string>
+  <string name="app_ops_auto_start">lansează la pornire</string>
+  <string name="app_ops_delete_call_log">șterge lista de apeluri</string>
+  <string name="app_ops_delete_contacts">șterge lista de contacte</string>
+  <string name="app_ops_delete_mms">șterge mesajele MMS</string>
+  <string name="app_ops_delete_sms">șterge mesajele SMS</string>
+  <string name="app_ops_draw_on_top">lansează ferestre deasupra</string>
+  <string name="app_ops_get_usage_stats">obține statistici de utilizare a aplicaţiei</string>
   <string name="app_ops_keep_device_awake">ține dispozitivul deschis</string>
   <string name="app_ops_make_phone_call">inițiază un apel telefonic</string>
   <string name="app_ops_modify_calendar">actualizează calendarul</string>
@@ -87,6 +97,7 @@
   <string name="app_ops_mute_unmute_microphone">activează/dezactivează microfonul</string>
   <string name="app_ops_play_audio">redă sunet</string>
   <string name="app_ops_post_notification">trimite o notificare</string>
+  <string name="app_ops_project_media">proiect media</string>
   <string name="app_ops_read_calendar">citește calendarul</string>
   <string name="app_ops_read_call_log">citește jurnalul de apeluri</string>
   <string name="app_ops_read_clipboard">citește clipboard-ul</string>
@@ -98,6 +109,7 @@
   <string name="app_ops_send_mms">trimite un mesaj MMS</string>
   <string name="app_ops_send_sms">trimite un mesaj SMS</string>
   <string name="app_ops_start_at_bootup">începe la pornire</string>
+  <string name="app_ops_toast_window">afișează mesajele temporare</string>
   <string name="app_ops_toggle_bluetooth">comută Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">comută date mobile</string>
   <string name="app_ops_toggle_nfc">Comutare NFC</string>
@@ -116,7 +128,10 @@
   <string name="app_ops_write_sms">scrie un mesaj SMS</string>
   <string name="lockscreen_sim_error_message_short">Cartelă SIM incorectă.</string>
   <string name="lockscreen_airplane_mode_on">Mod avion</string>
+  <string name="usb_charging_notification_title">Conectat în modul de încărcare</string>
   <string name="tethered_notification_no_device_message">Niciun dispozitiv conectat</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitiv conectat</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitive conectate</string>
   <string name="progress_nomediapresent" product="default">Nu este prezentă nicio unitate detașabilă\u2026</string>
   <string name="storage_uicc">Stocare UICC</string>
   <string name="stk_cc_ussd_to_dial">Cererea USSD este modificată în cerere DIAL.</string>
@@ -134,8 +149,15 @@
   <string name="perf_profile_perf">Performanță</string>
   <string name="theme_install_error_title">Instalarea temei a eșuat</string>
   <string name="theme_install_error_message">%s au eșuat să fie instalate</string>
+  <string name="android_installing_apk">Se instalează aplicația <xliff:g id="number" example="123">%1$d </xliff:g> din <xliff:g id="number" example="123">%2$d </xliff:g>.</string>
+  <string name="android_installing_title">Se instalează Android\u2026</string>
   <string name="theme_reset_notification_title">Resetare temă</string>
+  <string name="theme_reset_notification_body">Tema de sistem este restaurată datorită unor multiple erori.</string>
   <string name="stylus_app_not_installed">%s nu este instalată</string>
   <string name="permlab_interceptSmsSent">interceptează SMS-uri trimise</string>
   <string name="permdesc_interceptSmsSent">Permite aplicației să intercepteze un SMS trimis. Aplicațiile rău intenționate pot folosi aceasta pentru a preveni trimiterea SMS-urilor.</string>
+  <string name="permlab_accessTorchService">accesează serviciul lanternă</string>
+  <string name="permdesc_accessTorchService">Permite unei aplicații să acceseze serviciul lanternă. Aplicațiile normale nu au nevoie.</string>
+  <string name="permlab_preventpower">suprascrie tasta de pornire</string>
+  <string name="permdesc_preventpower">Permite aplicației să suprascrie tasta de pornire.</string>
 </resources>

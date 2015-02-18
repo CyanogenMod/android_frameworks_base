@@ -24,6 +24,7 @@
   <string name="accessibility_dpad_left">Sol kursor</string>
   <string name="accessibility_dpad_right">Sağ kursor</string>
   <string name="quick_settings_compass_init">Başladılır\u2026</string>
+  <string name="quick_settings_screen_timeout_detail_title">Ekrana qoyulan vaxt</string>
   <string name="navbar_dialog_title">Hərəkət seçin</string>
   <string name="navbar_home_button">Əsas ekran düyməsi</string>
   <string name="navbar_recent_button">Son tətb. düyməsi</string>

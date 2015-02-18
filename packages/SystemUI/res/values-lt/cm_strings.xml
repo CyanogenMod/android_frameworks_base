@@ -18,7 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_recents">Uždaryti visus naujausius</string>
   <string name="screenshot_delete_action">Ištrinti</string>
-  <string name="screenshot_delete_confirmation">Ekranvaizdis ištrintas.</string>
+  <string name="screenshot_delete_confirmation">Ekrano kopija ištrinta.</string>
   <string name="advanced_dev_option_wipe_app">Ištrinti programos duomenis</string>
   <string name="advanced_dev_option_force_stop">Priverstinai sustabdyti</string>
   <string name="advanced_dev_option_uninstall">Pašalinti</string>
@@ -68,14 +68,14 @@
   <string name="navring_action_open_ime_switcher">Atidaryti IME komutatorių</string>
   <string name="navring_action_kill_app">Priverstinai uždaryti programą</string>
   <string name="navring_action_none">Joks</string>
-  <string name="navring_action_take_screenshot">Užfiksuoti ekranvaizdį</string>
+  <string name="navring_action_take_screenshot">Užfiksuoti ekrano kopiją</string>
   <string name="navring_action_ring_vibrate">Skambėjimas / Vibracija</string>
   <string name="navring_action_ring_silent">Skambėjimas / Tylus</string>
   <string name="navring_action_ring_vibrate_silent">Skambėjimas / Vibracija / Tylus</string>
-  <string name="navring_action_screen_off">Ekranas išjungtas</string>
+  <string name="navring_action_screen_off">Išjungti ekraną</string>
   <string name="navring_action_torch">Įjungti žibintuvėlį</string>
   <string name="navring_action_google_now">„Google“ Dabar</string>
   <string name="navring_choose_action_title">Pasirinkite veiksmą</string>
-  <string name="select_application">Pasirinkite programą</string>
+  <string name="select_application">Pasirinkti programą</string>
   <string name="lockscreen_target_empty">Tuščia</string>
 </resources>

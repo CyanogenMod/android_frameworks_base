@@ -16,20 +16,66 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Maak alles toe</string>
   <string name="screenshot_delete_action">Verwyder</string>
   <string name="screenshot_delete_confirmation">Skermkiekie geskrap</string>
   <string name="advanced_dev_option_wipe_app">Vee program data uit</string>
   <string name="advanced_dev_option_force_stop">Dwing stop</string>
   <string name="advanced_dev_option_uninstall">Deïnstalleer</string>
+  <string name="accessibility_quick_settings_data_off">Mobiele data afgeskakel.</string>
+  <string name="accessibility_quick_settings_data_on">Mobiele data aangeskakel.</string>
+  <string name="accessibility_quick_settings_roaming_off">Swerwing afgeskakel.</string>
+  <string name="accessibility_quick_settings_roaming_on">Swerwing aangeskakel.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Liggingverslaggewing: battery besparing.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Liggingverslaggewing: sensors alleenlik.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Liggingverslaggewing: hoë akkuraatheid modus.</string>
   <string name="accessibility_dpad_left">Wyser na links</string>
   <string name="accessibility_dpad_right">Wyser na regs</string>
+  <string name="quick_settings_mobile_data_label">Mobiele data</string>
+  <string name="quick_settings_roaming_label">Swerwing</string>
+  <string name="quick_settings_apn_switch_label">Verander TPN</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> mobiele data</string>
+  <string name="quick_settings_data_off">Mobiele data afgeskakel</string>
+  <string name="quick_settings_location_detail_title">Liggingsinligting modus</string>
+  <string name="quick_settings_location_battery_saving_label">Battery besparend</string>
+  <string name="quick_settings_location_gps_only_label">Slegs Toestel</string>
+  <string name="quick_settings_location_high_accuracy_label">Hoë akkuraatheid</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">Stelsel profiele</string>
+  <string name="quick_settings_profiles_disabled">Profiele is afgeskakel</string>
+  <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_init">Inisialiseer\u2026</string>
+  <string name="quick_settings_lockscreen_label">Slotskerm</string>
+  <string name="quick_settings_lockscreen_label_enforced">Slotskerm afgedwing</string>
+  <string name="quick_settings_network_adb_label">ADB oor netwerk</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Skerm afsnytyd</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Swiep regs vir %1$s</string>
+  <string name="right_shortcut_hint">Swiep links vir %1$s</string>
   <string name="navbar_dialog_title">Kies \'n aksie om toe te ken</string>
   <string name="navbar_home_button">Tuis-knoppie</string>
   <string name="navbar_recent_button">Onlangse programme knoppie</string>
   <string name="navbar_search_button">Soek-knoppie</string>
   <string name="navbar_back_button">Terug-knoppie</string>
+  <string name="navbar_empty_button">Los leeg</string>
   <string name="navbar_menu_conditional_button">Kieslys knoppie (Outoverberg)</string>
   <string name="navbar_menu_always_button">Kieslys-knoppie (Altyd sigbaar)</string>
   <string name="navbar_menu_big_button">Kieslys-knoppie</string>
+  <string name="navigation_ring_title">Kits-loods kortpaaie</string>
+  <string name="navring_target_reset_message">Verwyder alle gebruiker kits-loods kortpaaie en herstel na standaard?</string>
+  <string name="navring_target_reset">Navigasiebalk kits-loods kortpaaie is herstel na standaard</string>
+  <string name="navring_action_open_ime_switcher">Maak IME wisselaar oop</string>
+  <string name="navring_action_kill_app">Dwing stop</string>
+  <string name="navring_action_none">Geen</string>
+  <string name="navring_action_take_screenshot">Neem skermfoto</string>
+  <string name="navring_action_ring_vibrate">Lui/Vibrasie</string>
+  <string name="navring_action_ring_silent">Lui/Stil</string>
+  <string name="navring_action_ring_vibrate_silent">Lui/Vibrasie/Stil</string>
+  <string name="navring_action_screen_off">Skerm af</string>
+  <string name="navring_action_torch">Stel Flits</string>
+  <string name="navring_action_google_now">Google Nou</string>
+  <string name="navring_choose_action_title">Kies aksie</string>
+  <string name="select_application">Kies program</string>
+  <string name="lockscreen_target_empty">Leeg</string>
 </resources>
