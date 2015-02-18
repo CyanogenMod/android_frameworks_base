@@ -21,6 +21,7 @@ import com.android.server.twilight.TwilightListener;
 import com.android.server.twilight.TwilightManager;
 import com.android.server.twilight.TwilightState;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -171,9 +172,15 @@ class AutomaticBrightnessController {
     // The last screen auto-brightness gamma.  (For printing in dump() only.)
     private float mLastScreenAutoBrightnessGamma = 1.0f;
 
-    public AutomaticBrightnessController(Callbacks callbacks, Looper looper,
+    // Night mode color temperature adjustments
+    private final LiveDisplayController mLiveDisplay;
+
+    private final Context mContext;
+
+    public AutomaticBrightnessController(Context context, Callbacks callbacks, Looper looper,
             SensorManager sensorManager, Spline autoBrightnessSpline,
             int lightSensorWarmUpTime, int brightnessMin, int brightnessMax) {
+        mContext = context;
         mCallbacks = callbacks;
         mTwilight = LocalServices.getService(TwilightManager.class);
         mSensorManager = sensorManager;
@@ -192,6 +199,7 @@ class AutomaticBrightnessController {
         if (USE_TWILIGHT_ADJUSTMENT) {
             mTwilight.registerListener(mTwilightListener, mHandler);
         }
+        mLiveDisplay = new LiveDisplayController(mContext, looper);
     }
 
     public int getAutomaticScreenBrightness() {
@@ -230,6 +238,8 @@ class AutomaticBrightnessController {
         pw.println("  mScreenAutoBrightness=" + mScreenAutoBrightness);
         pw.println("  mScreenAutoBrightnessAdjustment=" + mScreenAutoBrightnessAdjustment);
         pw.println("  mLastScreenAutoBrightnessGamma=" + mLastScreenAutoBrightnessGamma);
+
+        mLiveDisplay.dump(pw);;
     }
 
     private boolean setLightSensorEnabled(boolean enable) {
@@ -431,6 +441,8 @@ class AutomaticBrightnessController {
                 Slog.d(TAG, "updateAutoBrightness: adjGamma=" + adjGamma);
             }
         }
+
+        mLiveDisplay.updateLiveDisplay(mAmbientLux);
 
         if (USE_TWILIGHT_ADJUSTMENT) {
             TwilightState state = mTwilight.getCurrentState();
