@@ -31,7 +31,7 @@
   <string name="wildcardProfile">Anderes</string>
   <string name="profile_none">Kein Profil</string>
   <string name="profile_picker_title">Profile</string>
-  <string name="global_action_choose_profile">Profile</string>
+  <string name="global_action_choose_profile">Profil</string>
   <string name="global_action_screenshot">Bildschirmfoto</string>
   <string name="permlab_receiveProtectedSms">geschützte SMS empfangen</string>
   <string name="permdesc_receiveProtectedSms">Ermöglicht der App, eine eingehende, geschützte SMS zu empfangen.</string>
@@ -152,6 +152,7 @@
   <string name="android_installing_title">Android wird installiert\u2026</string>
   <string name="theme_reset_notification_title">Design zurückgesetzt</string>
   <string name="theme_reset_notification_body">Das System-Design wurde aufgrund mehrer App-Abstürze wiederhergestellt.</string>
+  <string name="stylus_app_not_installed">%s ist nicht installiert</string>
   <string name="permlab_interceptSmsSent">verschickte SMS abfangen</string>
   <string name="permdesc_interceptSmsSent">Ermöglicht der App, ausgehende SMS abzufangen. Schädliche Apps könnten so das Versenden von SMS-Nachrichten verhindern.</string>
   <string name="permlab_accessTorchService">auf die Taschenlampe zuzugreifen</string>

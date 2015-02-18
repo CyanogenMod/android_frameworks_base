@@ -18,4 +18,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM con bloquéu personal</string>
+  <string name="keyguard_accessibility_status">"Estáu"</string>
+  <string name="kg_dismiss">Descartar</string>
+  <string name="kg_slot_name">Ranura <xliff:g id="number">%d </xliff:g>: Tarxeta nueva SIM\u0020</string>
+  <string name="lockscreen_sim_error_message_short">Tarxeta inválida.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Introduz PIN de la SIM. Tienes <xliff:g id="number">%d</xliff:g> intentu enantes de que tengas que contautar cola operadora pa desbloquiar el tefnu.</item>
+    <item quantity="other">Introduz PIN de la SIM PIN. Quédente <xliff:g id="number">%d</xliff:g> intentos más.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">SIM deshabilitada. Introduz el códigu PUK pa continuar. Tienes <xliff:g id="number">%d </xliff:g> intentu más enantes d\'inutilizar la tarxeta SIM permanentemente. Pa obtener más información, ponte en contautu cola to operadora.</item>
+    <item quantity="other">SIM deshabilitada. Introduz el códigu PUK pa continuar. Tienes <xliff:g id="number">%d </xliff:g> intentos restantes enantes d\'inutilizar la tarxeta SIM permanentemente. Ponte en contautu cola to operadora pa más detalles.</item>
+  </plurals>
 </resources>

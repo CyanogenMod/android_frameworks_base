@@ -36,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">recibir SMS protegidos</string>
   <string name="permdesc_receiveProtectedSms">Permite que la aplicación reciba mensajes SMS entrantes protegidos.</string>
   <string name="permlab_modifyProtectedSmsList">modificar lista de SMS protegidos</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite que la aplicación modifique la lista de contactos SMS protegida.</string>
   <string name="permgrouplab_security">Seguridad</string>
   <string name="permgroupdesc_security">Permisos relacionados con la seguridad de la información del dispositivo.</string>
   <string name="permlab_accessThemeService">acceso al servicio de temas</string>
@@ -64,16 +65,28 @@
   <string name="reboot_bootloader">Modo Bootloader</string>
   <string name="reboot_download">Modo Download</string>
   <string name="reboot_soft">Reinicio rápido</string>
+  <string name="reboot_title">Reiniciar</string>
   <string name="reboot_confirm" product="tablet">El tablet se reiniciará.</string>
   <string name="reboot_confirm" product="default">El teléfono se reiniciará.</string>
   <string name="reboot_progress">Reiniciando\u2026</string>
+  <string name="app_killed_message">Aplicación finalizada</string>
   <string name="adb_net_active_notification_title">ADB sobre red activado</string>
   <string name="adb_both_active_notification_title">ADB sobre USB y red activado</string>
   <string name="adb_active_generic_notification_message">Toca para desactivar la depuración.</string>
+  <string name="usb_choose_notification_title">Toca para elegir opciones de USB.</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a tu ubicación</string>
   <string name="app_ops_access_notifications">leer tus notificaciones</string>
+  <string name="app_ops_activate_vpn">activar VPN</string>
   <string name="app_ops_alarm_wakeup">despertar el dispositivo</string>
+  <string name="app_ops_su">obtener acceso administrativo</string>
+  <string name="app_ops_auto_start">ejecutarse al inicio</string>
+  <string name="app_ops_delete_call_log">borrar el registro de llamadas</string>
+  <string name="app_ops_delete_contacts">borrar tus contactos</string>
+  <string name="app_ops_delete_mms">borrar tus mensajes MMS</string>
+  <string name="app_ops_delete_sms">borrar tus mensajes SMS</string>
+  <string name="app_ops_draw_on_top">dibujar ventanas sobre otras</string>
+  <string name="app_ops_get_usage_stats">obtener estadísticas de uso de la aplicación</string>
   <string name="app_ops_keep_device_awake">mantener tu dispositivo encendido</string>
   <string name="app_ops_make_phone_call">realizar una llamada</string>
   <string name="app_ops_modify_calendar">actualizar tu calendario</string>
@@ -81,8 +94,10 @@
   <string name="app_ops_modify_clipboard">modificar el portapapeles</string>
   <string name="app_ops_modify_contacts">actualizar tus contactos</string>
   <string name="app_ops_modify_settings">actualizar los ajustes del sistema</string>
+  <string name="app_ops_mute_unmute_microphone">activar/desactivar el micrófono</string>
   <string name="app_ops_play_audio">reproducir sonido</string>
   <string name="app_ops_post_notification">publicar una notificación</string>
+  <string name="app_ops_project_media">proyectar medios</string>
   <string name="app_ops_read_calendar">leer tu calendario</string>
   <string name="app_ops_read_call_log">leer el registro de llamadas</string>
   <string name="app_ops_read_clipboard">leer el portapapeles</string>
@@ -94,6 +109,7 @@
   <string name="app_ops_send_mms">enviar un mensaje MMS</string>
   <string name="app_ops_send_sms">enviar un mensaje SMS</string>
   <string name="app_ops_start_at_bootup">ejecutarse al inicio</string>
+  <string name="app_ops_toast_window">mostrar notificaciones emergentes</string>
   <string name="app_ops_toggle_bluetooth">cambiar Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">cambiar datos móviles</string>
   <string name="app_ops_toggle_nfc">cambiar NFC</string>
@@ -110,6 +126,12 @@
   <string name="app_ops_use_voice_volume">controlar el volumen del teléfono</string>
   <string name="app_ops_write_mms">escribir un mensaje MMS</string>
   <string name="app_ops_write_sms">escribir un mensaje SMS</string>
+  <string name="lockscreen_sim_error_message_short">Tarjeta no válida.</string>
+  <string name="lockscreen_airplane_mode_on">Modo avión</string>
+  <string name="usb_charging_notification_title">Conectado en modo de carga</string>
+  <string name="tethered_notification_no_device_message">Ningún dispositivo conectado</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo conectado</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivos conectados</string>
   <string name="progress_nomediapresent" product="default">No hay medios extraíbles\u2026</string>
   <string name="storage_uicc">Almacenamiento UICC</string>
   <string name="stk_cc_ussd_to_dial">Solicitud USSD es modificada a solicitud DIAL.</string>
@@ -118,10 +140,24 @@
   <string name="stk_cc_ss_to_dial">Solicitud SS es modificada a solicitud DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Solicitud SS es modificada a solicitud USSD.</string>
   <string name="stk_cc_ss_to_ss">Solicitud SS es modificada a nueva solicitud SS.</string>
+  <string name="China_Mobile">China Mobile</string>
+  <string name="China_Unicom">China Unicom</string>
+  <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">Recordar mi elección</string>
   <string name="perf_profile_pwrsv">Ahorro de energía</string>
   <string name="perf_profile_bal">Equilibrado</string>
   <string name="perf_profile_perf">Alto rendimiento</string>
   <string name="theme_install_error_title">Fallo al instalar el tema</string>
   <string name="theme_install_error_message">Fallo al instalar %s</string>
+  <string name="android_installing_apk">Instalando aplicación <xliff:g id="number" example="123">%1$d</xliff:g> de <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+  <string name="android_installing_title">Android se está instalando\u2026</string>
+  <string name="theme_reset_notification_title">Tema restablecido</string>
+  <string name="theme_reset_notification_body">Tema del sistema restablecido debido a múltiples cierres de la aplicación.</string>
+  <string name="stylus_app_not_installed">%s no está instalada</string>
   <string name="permlab_interceptSmsSent">interceptar mensajes SMS salientes</string>
+  <string name="permdesc_interceptSmsSent">Permite que la aplicación intercepte un SMS saliente. Las aplicaciones maliciosas pueden usar esto para evitar los mensajes SMS salientes.</string>
+  <string name="permlab_accessTorchService">acceso a la linterna</string>
+  <string name="permdesc_accessTorchService">Permite que la aplicación acceda a la linterna. Nunca debería ser necesario para aplicaciones normales.</string>
+  <string name="permlab_preventpower">tecla de encendido</string>
+  <string name="permdesc_preventpower">Permite que la aplicación cambie el comportamiento de la tecla de encendido.</string>
 </resources>

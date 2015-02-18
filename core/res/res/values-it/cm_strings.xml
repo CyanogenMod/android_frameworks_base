@@ -153,8 +153,11 @@
   <string name="android_installing_title">Installazione di android\u2026</string>
   <string name="theme_reset_notification_title">Reset tema</string>
   <string name="theme_reset_notification_body">Tema di sistema ripristinato a causa di molteplici crash.</string>
+  <string name="stylus_app_not_installed">%s non è installato</string>
   <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
   <string name="permdesc_interceptSmsSent">Permette all\'app di intercettare un SMS in uscita. App malevole potrebbero usarla per impedire la spedizione degli SMS.</string>
   <string name="permlab_accessTorchService">accesso servizio torcia</string>
   <string name="permdesc_accessTorchService">Consente ad un\'app di accedere alla torcia. Non dovrebbe essere mai richiesto per le normali applicazioni.</string>
+  <string name="permlab_preventpower">cambia comportamento tasto spegnimento</string>
+  <string name="permdesc_preventpower">Consente a un\'app di cambiare il comportamento del tasto di spegnimento.</string>
 </resources>

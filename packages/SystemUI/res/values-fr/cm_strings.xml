@@ -46,8 +46,10 @@
   <string name="quick_settings_compass_label">Boussole</string>
   <string name="quick_settings_compass_init">Initialisation\u2026</string>
   <string name="quick_settings_lockscreen_label">Écran de verrouillage</string>
+  <string name="quick_settings_lockscreen_label_enforced">Écran de verrouillage forcé</string>
   <string name="quick_settings_network_adb_label">ADB réseau</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Veille de l\'écran</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Glisser à droite pour %1$s</string>
   <string name="right_shortcut_hint">Glisser à gauche pour %1$s</string>
@@ -70,6 +72,8 @@
   <string name="navring_action_ring_vibrate">Sonnerie/Vibreur</string>
   <string name="navring_action_ring_silent">Sonnerie/Silencieux</string>
   <string name="navring_action_ring_vibrate_silent">Sonnerie/Vibreur/Silencieux</string>
+  <string name="navring_action_screen_off">Éteindre l\'écran</string>
+  <string name="navring_action_torch">Lampe de poche</string>
   <string name="navring_action_google_now">Google Now</string>
   <string name="navring_choose_action_title">Choisir une action</string>
   <string name="select_application">Sélectionner une application</string>

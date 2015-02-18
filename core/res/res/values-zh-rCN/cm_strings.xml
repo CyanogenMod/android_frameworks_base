@@ -60,7 +60,7 @@
   <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
   <string name="global_action_reboot">重启</string>
-  <string name="reboot_reboot">重新启动</string>
+  <string name="reboot_reboot">重启</string>
   <string name="reboot_recovery">恢复模式</string>
   <string name="reboot_bootloader">引导程序</string>
   <string name="reboot_download">下载模式</string>

@@ -19,5 +19,17 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM este blocat Perso</string>
   <string name="keyguard_accessibility_status">"Stare"</string>
+  <string name="kg_dismiss">Dezactivare</string>
+  <string name="kg_slot_name">Slot <xliff:g id="number">%d </xliff:g>: Cartelă SIM nouă\u0020</string>
   <string name="lockscreen_sim_error_message_short">Cartelă SIM incorectă.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Introduceți PIN-ul pentru SIM, mai aveți <xliff:g id="number">%d</xliff:g> încercare rămasă înainte de a trebui să contactați compania de mobil pentru a debloca dispozitivul.</item>
+    <item quantity="few">Introduceți PIN-ul pentru SIM, mai aveți <xliff:g id="number">%d</xliff:g> încercări rămase înainte de a trebui să contactați compania de mobil pentru a debloca dispozitivul.</item>
+    <item quantity="other">Introduceți PIN-ul pentru SIM, mai aveți <xliff:g id="number">%d</xliff:g> de încercări rămase înainte de a trebui să contactați compania de mobil pentru a debloca dispozitivul.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">Cartela SIM este acum dezactivată. Introduceți codul PUK pentru a continua. Aveți <xliff:g id="number">%d </xliff:g> încercare rămasă înainte de a deveni permanent inutilizabilă. Contactați compania dvs. de mobil pentru detalii.</item>
+    <item quantity="few">Cartela SIM este acum dezactivată. Introduceți codul PUK pentru a continua. Aveti <xliff:g id="number">%d </xliff:g> încercări rămase înainte de a deveni permanent inutilizabilă. Contactați compania dvs. de mobil pentru detalii.</item>
+    <item quantity="other">Cartela SIM este acum dezactivată. Introduceți codul PUK pentru a continua. Aveti <xliff:g id="number">%d </xliff:g> de încercări rămase înainte de a deveni permanent inutilizabilă. Contactați compania dvs. de mobil pentru detalii.</item>
+  </plurals>
 </resources>

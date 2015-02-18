@@ -36,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">ontvang beskermde SMS</string>
   <string name="permdesc_receiveProtectedSms">Laat die program toe om \'n beskermde inkomende SMS te ontvang.</string>
   <string name="permlab_modifyProtectedSmsList">verander beskermde SMS lys</string>
+  <string name="permdesc_modifyProtectedSmsList">Laat die program toe om die beskermde SMS adres lys te verander.</string>
   <string name="permgrouplab_security">Sekuriteit</string>
   <string name="permgroupdesc_security">Regte met betrekking tot toestel sekuriteitsinligting.</string>
   <string name="permlab_accessThemeService">Toegang tot tema diens</string>
@@ -64,16 +65,28 @@
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">Download</string>
   <string name="reboot_soft">Vinnige herlaai</string>
+  <string name="reboot_title">Herlaai</string>
   <string name="reboot_confirm" product="tablet">Jou tablet gaan herlaai.</string>
   <string name="reboot_confirm" product="default">Jou foon gaan herlaai.</string>
   <string name="reboot_progress">Herlaai\u2026</string>
+  <string name="app_killed_message">Program beëindig</string>
   <string name="adb_net_active_notification_title">ADB oor netwerk is aktief</string>
   <string name="adb_both_active_notification_title">ADB oor USB &amp; netwerk is aktief</string>
   <string name="adb_active_generic_notification_message">Raak om ontfouting af te skakel.</string>
+  <string name="usb_choose_notification_title">Raak om USB opsies te kies.</string>
   <string name="app_ops_access_camera">toegang tot die kamera</string>
   <string name="app_ops_access_location">toegang tot jou ligging</string>
   <string name="app_ops_access_notifications">lees jou kennisgewing boodskappe</string>
+  <string name="app_ops_activate_vpn">Aktiveer \'n VPN</string>
   <string name="app_ops_alarm_wakeup">aktiveer die toestel</string>
+  <string name="app_ops_su">kry root toegang</string>
+  <string name="app_ops_auto_start">begin by aanskakeling</string>
+  <string name="app_ops_delete_call_log">verwyder jou oproep rekord data</string>
+  <string name="app_ops_delete_contacts">verwyder jou kontakte</string>
+  <string name="app_ops_delete_mms">verwyder jou MMS boodskappe</string>
+  <string name="app_ops_delete_sms">verwyder jou SMS boodskappe</string>
+  <string name="app_ops_draw_on_top">teken bo</string>
+  <string name="app_ops_get_usage_stats">kry program gebruik stats</string>
   <string name="app_ops_keep_device_awake">hou jou toestel geaktiveerd</string>
   <string name="app_ops_make_phone_call">maak \'n oproep</string>
   <string name="app_ops_modify_calendar">opdateer jou kalender</string>
@@ -81,8 +94,10 @@
   <string name="app_ops_modify_clipboard">verander die knipbord</string>
   <string name="app_ops_modify_contacts">opdateer jou kontakte</string>
   <string name="app_ops_modify_settings">opdateer stelsel instellings</string>
+  <string name="app_ops_mute_unmute_microphone">demp / ontdemp die mikrofoon</string>
   <string name="app_ops_play_audio">speel oudio</string>
   <string name="app_ops_post_notification">plaas \'n kennisgewing</string>
+  <string name="app_ops_project_media">projek media</string>
   <string name="app_ops_read_calendar">lees jou kalender</string>
   <string name="app_ops_read_call_log">lees jou oproep lys</string>
   <string name="app_ops_read_clipboard">lees die knipbord</string>
@@ -94,6 +109,7 @@
   <string name="app_ops_send_mms">stuur \'n MMS boodskap</string>
   <string name="app_ops_send_sms">stuur \'n SMS boodskap</string>
   <string name="app_ops_start_at_bootup">begin by aanskakeling</string>
+  <string name="app_ops_toast_window">vertoon uitspring boodskappe</string>
   <string name="app_ops_toggle_bluetooth">wissel Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">wissel mobiele data</string>
   <string name="app_ops_toggle_nfc">wissel NFC</string>
@@ -110,6 +126,12 @@
   <string name="app_ops_use_voice_volume">beheer stem oproep volume</string>
   <string name="app_ops_write_mms">skryf \'n MMS boodskap</string>
   <string name="app_ops_write_sms">Skryf \'n SMS boodskap</string>
+  <string name="lockscreen_sim_error_message_short">Ongeldige kaart.</string>
+  <string name="lockscreen_airplane_mode_on">Vliegtuigmodus</string>
+  <string name="usb_charging_notification_title">Verbind in laai modus</string>
+  <string name="tethered_notification_no_device_message">Geen gekoppelde toestel</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> gekoppelde toestel</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> gekoppelde toestelle</string>
   <string name="progress_nomediapresent" product="default">Geen verwyderbare media beskikbaar nie\u2026</string>
   <string name="storage_uicc">UICC stoor spasie</string>
   <string name="stk_cc_ussd_to_dial">USSD versoek is verander om te skakel.</string>
@@ -118,13 +140,25 @@
   <string name="stk_cc_ss_to_dial">SS versoek is verander na skakel versoek.</string>
   <string name="stk_cc_ss_to_ussd">SS versoek verander na USSD versoek.</string>
   <string name="stk_cc_ss_to_ss">SS versoek verander na nuwe SS versoek.</string>
+  <string name="China_Mobile">China Mobile</string>
+  <string name="China_Unicom">China Unicom</string>
+  <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">Onthou my keuse</string>
   <string name="perf_profile_pwrsv">Bespaar krag</string>
   <string name="perf_profile_bal">Gebalanseerd</string>
   <string name="perf_profile_perf">Werkverrigting</string>
   <string name="theme_install_error_title">Kon nie tema installeer</string>
   <string name="theme_install_error_message">%s kon nie geïnstalleer word nie</string>
+  <string name="android_installing_apk">Die installasie vir program
+        <xliff:g id="number" example="123">%1$d</xliff:g> uit
+        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+  <string name="android_installing_title">Besig met installering van\u2026</string>
+  <string name="theme_reset_notification_title">Tema herstel</string>
+  <string name="theme_reset_notification_body">Stelsel tema is herstel a.g.v. baie program foute.</string>
   <string name="stylus_app_not_installed">%s is nie geïnstalleer nie</string>
   <string name="permlab_interceptSmsSent">Onderskep uitgaande SMS</string>
+  <string name="permdesc_interceptSmsSent">Laat \'n program toe om uitgaande SMS boodskappe te onderskep. Kwaadwillige programme kan die reg misbruik om uitgaande SMS boodskappe te verhoed.</string>
+  <string name="permlab_accessTorchService">toegang na flits diens</string>
   <string name="permdesc_accessTorchService">Laat \'n program toe om toegang na die flits diens te verkry. Sal nooit nodig wees vir normale programme nie.</string>
   <string name="permlab_preventpower">verander krag sleutel</string>
   <string name="permdesc_preventpower">Laat die program toe om die krag knoppie se gebruik te verander.</string>

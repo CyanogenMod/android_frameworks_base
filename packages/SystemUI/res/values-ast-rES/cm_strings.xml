@@ -16,20 +16,66 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Zarrar tolos recientes</string>
   <string name="screenshot_delete_action">Desaniciar</string>
   <string name="screenshot_delete_confirmation">Captura desaniciada.</string>
   <string name="advanced_dev_option_wipe_app">Desaniciar datos</string>
   <string name="advanced_dev_option_force_stop">Forciar detención</string>
   <string name="advanced_dev_option_uninstall">Desinstalar</string>
+  <string name="accessibility_quick_settings_data_off">Datos móviles apagaos.</string>
+  <string name="accessibility_quick_settings_data_on">Datos móviles encesos.</string>
+  <string name="accessibility_quick_settings_roaming_off">Roaming apagáu.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming encesu.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Informes de llocalización: mou d\'aforru de batería.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Informes de llocalización: mou de namái sensores.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Informes de llocalización: mou d\'alta precisión.</string>
   <string name="accessibility_dpad_left">Cursor esquierda</string>
   <string name="accessibility_dpad_right">Cursor derecha</string>
+  <string name="quick_settings_mobile_data_label">Datos móviles</string>
+  <string name="quick_settings_roaming_label">Itinerancia de datos</string>
+  <string name="quick_settings_apn_switch_label">Cambiar APN</string>
+  <string name="quick_settings_dds_sub">Datos móviles de SIM <xliff:g id="number">%d </xliff:g></string>
+  <string name="quick_settings_data_off">Datos móviles apagaos</string>
+  <string name="quick_settings_location_detail_title">Mou de llocalización</string>
+  <string name="quick_settings_location_battery_saving_label">Aforru d\'enerxía</string>
+  <string name="quick_settings_location_gps_only_label">Namái preséu</string>
+  <string name="quick_settings_location_high_accuracy_label">Precisión alta</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">Perfiles del sistema</string>
+  <string name="quick_settings_profiles_disabled">Perfiles deshabilitaos</string>
+  <string name="quick_settings_compass_label">Brúxula</string>
   <string name="quick_settings_compass_init">Anicializando\u2026</string>
+  <string name="quick_settings_lockscreen_label">Pantalla de bloquéu</string>
+  <string name="quick_settings_lockscreen_label_enforced">Bloquéu de pantalla forzáu</string>
+  <string name="quick_settings_network_adb_label">ADB sobre rede</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Tiempu d\'espera</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Esliza a la derecha pa %1$s</string>
+  <string name="right_shortcut_hint">Esliza a la esquierda pa %1$s</string>
   <string name="navbar_dialog_title">Seleicionar botón a amosar</string>
   <string name="navbar_home_button">Botón Aniciu</string>
   <string name="navbar_recent_button">Botón Recientes</string>
   <string name="navbar_search_button">Botón Gueta</string>
   <string name="navbar_back_button">Botón Atrás</string>
+  <string name="navbar_empty_button">Botón baleru</string>
   <string name="navbar_menu_conditional_button">Botón Menú (auto-anubrir)</string>
   <string name="navbar_menu_always_button">Botón Menú (siempre visible)</string>
   <string name="navbar_menu_big_button">Botón Menú</string>
+  <string name="navigation_ring_title">Accesos rápidos</string>
+  <string name="navring_target_reset_message">¿Desaniciar tolos accesos rápidos creaos y restablecer a valores por defeutu?</string>
+  <string name="navring_target_reset">Accesos rápidos restablecíos</string>
+  <string name="navring_action_open_ime_switcher">Abrir seleutor IME</string>
+  <string name="navring_action_kill_app">Matar aplicación</string>
+  <string name="navring_action_none">Nengún</string>
+  <string name="navring_action_take_screenshot">Facer captura de pantalla</string>
+  <string name="navring_action_ring_vibrate">Soníu/Vibración</string>
+  <string name="navring_action_ring_silent">Soníu/Silenciu</string>
+  <string name="navring_action_ring_vibrate_silent">Soníu/Vibración/Silenciu</string>
+  <string name="navring_action_screen_off">Apagar pantalla</string>
+  <string name="navring_action_torch">Llinterna</string>
+  <string name="navring_action_google_now">Google Now</string>
+  <string name="navring_choose_action_title">Esbillar aición</string>
+  <string name="select_application">Esbillar app</string>
+  <string name="lockscreen_target_empty">Balero</string>
 </resources>
