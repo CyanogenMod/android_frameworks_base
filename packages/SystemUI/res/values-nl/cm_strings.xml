@@ -16,21 +16,66 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Sluit alle recente apps</string>
   <string name="screenshot_delete_action">Verwijderen</string>
   <string name="screenshot_delete_confirmation">Screenshot verwijderd.</string>
   <string name="advanced_dev_option_wipe_app">App-gegevens wissen</string>
   <string name="advanced_dev_option_force_stop">Nu stoppen</string>
   <string name="advanced_dev_option_uninstall">Verwijderen</string>
+  <string name="accessibility_quick_settings_data_off">Mobiele gegevens uit.</string>
+  <string name="accessibility_quick_settings_data_on">Mobiele gegevens aan.</string>
+  <string name="accessibility_quick_settings_roaming_off">Roaming uit.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming aan.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Locatiemelding: accubesparing.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Locatiemelding: alleen apparaat.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Locatiemelding: grote nauwkeurigheid.</string>
   <string name="accessibility_dpad_left">Cursor links</string>
   <string name="accessibility_dpad_right">Cursor rechts</string>
+  <string name="quick_settings_mobile_data_label">Mobiele gegevens</string>
+  <string name="quick_settings_roaming_label">Roaming</string>
+  <string name="quick_settings_apn_switch_label">APN wisselen</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> mobiele gegevens</string>
+  <string name="quick_settings_data_off">Mobiele gegevens uit</string>
+  <string name="quick_settings_location_detail_title">Locatiemodus</string>
+  <string name="quick_settings_location_battery_saving_label">Accubesparing</string>
+  <string name="quick_settings_location_gps_only_label">Alleen apparaat</string>
+  <string name="quick_settings_location_high_accuracy_label">Grote nauwkeurigheid</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">Systeemprofielen</string>
+  <string name="quick_settings_profiles_disabled">Profielen uitgeschakeld</string>
+  <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_init">Initialiseren\u2026</string>
+  <string name="quick_settings_lockscreen_label">Vergrendelscherm</string>
+  <string name="quick_settings_lockscreen_label_enforced">Vergrendelscherm vereist</string>
+  <string name="quick_settings_network_adb_label">ADB over netwerk</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Schermtime-out</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Veeg rechts voor %1$s</string>
+  <string name="right_shortcut_hint">Veeg links voor %1$s</string>
   <string name="navbar_dialog_title">Kies de toe te wijzen functie</string>
   <string name="navbar_home_button">Thuisknop</string>
   <string name="navbar_recent_button">Recentknop</string>
   <string name="navbar_search_button">Zoekknop</string>
   <string name="navbar_back_button">Terugknop</string>
+  <string name="navbar_empty_button">Lege knop</string>
   <string name="navbar_menu_conditional_button">Menuknop (altijd verbergen)</string>
   <string name="navbar_menu_always_button">Menuknop (altijd tonen)</string>
   <string name="navbar_menu_big_button">Menuknop</string>
+  <string name="navigation_ring_title">Snelkoppelingen</string>
+  <string name="navring_target_reset_message">Alle snelkoppelingen herstellen naar standaard?</string>
+  <string name="navring_target_reset">Snelkoppelingen hersteld naar standaard</string>
+  <string name="navring_action_open_ime_switcher">Invoermethode wisselen</string>
   <string name="navring_action_kill_app">App stoppen</string>
+  <string name="navring_action_none">Geen</string>
+  <string name="navring_action_take_screenshot">Screenshot</string>
+  <string name="navring_action_ring_vibrate">Geluid/trillen</string>
+  <string name="navring_action_ring_silent">Geluid/stil</string>
+  <string name="navring_action_ring_vibrate_silent">Geluid/trillen/stil</string>
+  <string name="navring_action_screen_off">Scherm uit</string>
+  <string name="navring_action_torch">Zaklamp aan/uit</string>
+  <string name="navring_action_google_now">Google Now</string>
+  <string name="navring_choose_action_title">Actie selecteren</string>
+  <string name="select_application">App selecteren</string>
+  <string name="lockscreen_target_empty">Niet toegewezen</string>
 </resources>

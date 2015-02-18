@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Alle entfernen</string>
   <string name="screenshot_delete_action">Löschen</string>
   <string name="screenshot_delete_confirmation">Bildschirmfoto wurde gelöscht</string>
   <string name="advanced_dev_option_wipe_app">Anwendungsdaten löschen</string>
@@ -63,6 +64,8 @@
   <string name="navigation_ring_title">Schnellstart-Verknüpfungen</string>
   <string name="navring_target_reset_message">Alle selbst erstellten Nvaigationsleisten-Verknüpfungen löschen und auf Standardeinstellungen zurücksetzen?</string>
   <string name="navring_target_reset">Schnellstart-Verknüpfungen auf Standardeinstellungen zurücksetzen</string>
+  <string name="navring_action_open_ime_switcher">Eingabemethoden-Auswahl öffnen</string>
+  <string name="navring_action_kill_app">App schließen</string>
   <string name="navring_action_none">Keine</string>
   <string name="navring_action_take_screenshot">Bildschirmfoto aufnehmen</string>
   <string name="navring_action_ring_vibrate">Klingeln/Vibrieren</string>

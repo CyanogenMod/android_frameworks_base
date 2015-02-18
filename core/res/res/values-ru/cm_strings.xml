@@ -59,7 +59,7 @@
   <string name="permdesc_setKeyguardWallpaper">Приложение сможет изменять обои экрана блокировки устройства.</string>
   <string name="privacy_guard_dialog_title">Защищённый режим</string>
   <string name="privacy_guard_dialog_summary">Приложение «<xliff:g id="app">%1$s</xliff:g>» пытается <xliff:g id="op">%2$s</xliff:g>.</string>
-  <string name="global_action_reboot">Перезагрузка</string>
+  <string name="global_action_reboot">Перезагрузить</string>
   <string name="reboot_reboot">Перезагрузка</string>
   <string name="reboot_recovery">Режим восстановления</string>
   <string name="reboot_bootloader">Загрузчик</string>

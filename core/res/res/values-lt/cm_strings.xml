@@ -32,7 +32,7 @@
   <string name="profile_none">Nėra</string>
   <string name="profile_picker_title">Profiliai</string>
   <string name="global_action_choose_profile">Profilis</string>
-  <string name="global_action_screenshot">Ekranvaizdis</string>
+  <string name="global_action_screenshot">Ekrano kopija</string>
   <string name="permlab_receiveProtectedSms">gauti apsaugotus SMS</string>
   <string name="permdesc_receiveProtectedSms">Leidžia programai gauti įeinančius apsaugotus SMS.</string>
   <string name="permlab_modifyProtectedSmsList">keisti apsaugotų SMS sąrašą</string>

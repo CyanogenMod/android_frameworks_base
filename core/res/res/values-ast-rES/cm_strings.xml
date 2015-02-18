@@ -36,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">recibir SMS protexíos</string>
   <string name="permdesc_receiveProtectedSms">Permite que l\'aplicación reciba mensaxes SMS entrantes protexíos.</string>
   <string name="permlab_modifyProtectedSmsList">modificar llista de SMS protexíos</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite que l\'aplicación modifique la llista de direiciones de mensaxes SMS protexíos.</string>
   <string name="permgrouplab_security">Seguridá</string>
   <string name="permgroupdesc_security">Permisos rellacionaos a la seguridá de la información del preséu.</string>
   <string name="permlab_accessThemeService">Accesu al serviciu de temes</string>
@@ -64,16 +65,28 @@
   <string name="reboot_bootloader">Mou Bootloader</string>
   <string name="reboot_download">Descargar</string>
   <string name="reboot_soft">Reaniciu suave</string>
+  <string name="reboot_title">Reaniciar</string>
   <string name="reboot_confirm" product="tablet">La tablet va reaniciase.</string>
   <string name="reboot_confirm" product="default">El teléfonu va reaniciase.</string>
   <string name="reboot_progress">Reaniciando\u2026</string>
+  <string name="app_killed_message">Aplicación finada</string>
   <string name="adb_net_active_notification_title">ADB sobre rede habilitáu</string>
   <string name="adb_both_active_notification_title">ADB sobre USB y rede habilitáu</string>
   <string name="adb_active_generic_notification_message">Toca pa deshabilitar la depuración.</string>
+  <string name="usb_choose_notification_title">Toca pa escoyer opciones de USB</string>
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>
   <string name="app_ops_access_notifications">lleer les tos notificaciones</string>
+  <string name="app_ops_activate_vpn">activar una VPN</string>
   <string name="app_ops_alarm_wakeup">encender el to preséu</string>
+  <string name="app_ops_su">obtener accesu root</string>
+  <string name="app_ops_auto_start">executase al aniciu</string>
+  <string name="app_ops_delete_call_log">desaniciar rexistru de llamaes</string>
+  <string name="app_ops_delete_contacts">desaniciar contautos</string>
+  <string name="app_ops_delete_mms">desaniciar los tos MMS</string>
+  <string name="app_ops_delete_sms">desaniciar los tos SMS</string>
+  <string name="app_ops_draw_on_top">dibuxar ventanes na parte superior</string>
+  <string name="app_ops_get_usage_stats">obtener estadístiques d\'usu de l\'app</string>
   <string name="app_ops_keep_device_awake">caltener encesu\'l preséu</string>
   <string name="app_ops_make_phone_call">facer una llamada</string>
   <string name="app_ops_modify_calendar">anovar el to calendariu</string>
@@ -81,8 +94,10 @@
   <string name="app_ops_modify_clipboard">modificar el cartafueyu</string>
   <string name="app_ops_modify_contacts">anovar los tos contautos</string>
   <string name="app_ops_modify_settings">anovar los axustes del sistema</string>
+  <string name="app_ops_mute_unmute_microphone">activar/silenciar micrófonu</string>
   <string name="app_ops_play_audio">reproducir soníu</string>
   <string name="app_ops_post_notification">espublizar una notificación</string>
+  <string name="app_ops_project_media">Proyeutu Media</string>
   <string name="app_ops_read_calendar">lleer el to calendariu</string>
   <string name="app_ops_read_call_log">lleer el rexistru de llamaes</string>
   <string name="app_ops_read_clipboard">lleer el cartafueyu</string>
@@ -94,6 +109,7 @@
   <string name="app_ops_send_mms">unviar un mensaxe MMS</string>
   <string name="app_ops_send_sms">unviar un mensaxe SMS</string>
   <string name="app_ops_start_at_bootup">executase al aniciu</string>
+  <string name="app_ops_toast_window">notificaciones emerxentes</string>
   <string name="app_ops_toggle_bluetooth">cambiar Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">cambiar datos móviles</string>
   <string name="app_ops_toggle_nfc">cambiar NFC</string>
@@ -110,6 +126,12 @@
   <string name="app_ops_use_voice_volume">remanar el volume de la llamada</string>
   <string name="app_ops_write_mms">escribir un mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir un mensaxe SMS</string>
+  <string name="lockscreen_sim_error_message_short">Tarxeta inválida.</string>
+  <string name="lockscreen_airplane_mode_on">Mou avión</string>
+  <string name="usb_charging_notification_title">Coneutáu nel mou de carga</string>
+  <string name="tethered_notification_no_device_message">Nun hai dengún preséu coneutáu</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> preséu coneutáu</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> preseos coneutaos</string>
   <string name="progress_nomediapresent" product="default">Nun hai medios estrayibles\u2026</string>
   <string name="storage_uicc">Almacenamientu UICC</string>
   <string name="stk_cc_ussd_to_dial">Solicitú USSD modifícase a solicitú DIAL.</string>
@@ -118,10 +140,26 @@
   <string name="stk_cc_ss_to_dial">Solicitú SS modifícase a solicitú DIAL.</string>
   <string name="stk_cc_ss_to_ussd">Solicitú SS modifícase a solicitú USSD.</string>
   <string name="stk_cc_ss_to_ss">Solicitú SS modifícase a solicitú nueva SS.</string>
+  <string name="China_Mobile">China Mobile</string>
+  <string name="China_Unicom">China Unicom</string>
+  <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">Recordar la mio escoyeta</string>
   <string name="perf_profile_pwrsv">Aforru d\'enerxía</string>
   <string name="perf_profile_bal">Equilibráu</string>
   <string name="perf_profile_perf">Rindimientu</string>
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
+  <string name="android_installing_apk">Instalando aplicación
+        <xliff:g id="number" example="123">%1$d</xliff:g> de
+        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+  <string name="android_installing_title">Android ta instalándose\u2026</string>
+  <string name="theme_reset_notification_title">Reaniciu de tema</string>
+  <string name="theme_reset_notification_body">Tema de sistema restauráu por mor de múltiples zarros de d\'app</string>
+  <string name="stylus_app_not_installed">%s nun ta instalada</string>
   <string name="permlab_interceptSmsSent">interceutar mensaxes SMS salientes</string>
+  <string name="permdesc_interceptSmsSent">Permite que l\'aplicación interceute mensaxes SMS salientes. Les aplicaciones malicioses puen impedir los mensaxes SMS salientes.</string>
+  <string name="permlab_accessTorchService">accesu a llinterna</string>
+  <string name="permdesc_accessTorchService">Permite l\'accesu a una aplicación al Serviciu de Torch. Enxamás tendría de facer falta p\'aplicaciones normales.</string>
+  <string name="permlab_preventpower">override power key</string>
+  <string name="permdesc_preventpower">permite que l\'aplicación cambie\'l comportamientu de la tecla d\'encendíu.</string>
 </resources>

@@ -85,6 +85,7 @@
   <string name="app_ops_delete_contacts">מחק את אנשי הקשר שלך</string>
   <string name="app_ops_delete_mms">מחר את הודעות ה-MMS שלך</string>
   <string name="app_ops_delete_sms">מחק את הודעות ה-SMS שלך</string>
+  <string name="app_ops_draw_on_top">הצגת תוכן מעל אפליקציות אחרות</string>
   <string name="app_ops_get_usage_stats">קבלת סטטיסטיקות שימוש באפליקציה</string>
   <string name="app_ops_keep_device_awake">להשאיר את המכשיר ער</string>
   <string name="app_ops_make_phone_call">עשה שיחת טלפון</string>
@@ -108,6 +109,7 @@
   <string name="app_ops_send_mms">לשלוח הודעת MMS</string>
   <string name="app_ops_send_sms">לשלוח הודעת SMS</string>
   <string name="app_ops_start_at_bootup">להפעיל בהדלקה</string>
+  <string name="app_ops_toast_window">הצג הודעות קופצות</string>
   <string name="app_ops_toggle_bluetooth">שנה Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">שנה נתוני רשת</string>
   <string name="app_ops_toggle_nfc">שנה NFC</string>
@@ -154,6 +156,7 @@
   <string name="stylus_app_not_installed">%s לא מותקן</string>
   <string name="permlab_interceptSmsSent">עצור הודעות SMS יוצאות</string>
   <string name="permdesc_interceptSmsSent">מאפשר ליישום ליירט הודעות SMS יוצאות. יישומים זדוניים יכולים לנצל זאת על מנת למנוע שליחת הודעות SMS.</string>
+  <string name="permlab_accessTorchService">גישה לשירות הפנס (מבזק)</string>
   <string name="permdesc_accessTorchService">אפשר ליישום לגשת לשירות הפנס (מבזק). לא אמור להידרש ליישומים רגילים.</string>
   <string name="permlab_preventpower">עקוף את כפתור ההפעלה</string>
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
