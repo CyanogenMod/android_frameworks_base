@@ -20,6 +20,7 @@
   <string name="profileNameDefault">기본</string>
   <string name="profileNameWork">직장</string>
   <string name="profileNameHome">집</string>
+  <string name="profileNameSilent">무음</string>
   <string name="profileNameNight">야간</string>
   <string name="profileNameAutomobile">자동차</string>
   <string name="profileGroupPhone">전화</string>
@@ -35,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">보안 SMS 수신</string>
   <string name="permdesc_receiveProtectedSms">앱이 들어오는 보안 SMS를 수신할 수 있도록 허용합니다.</string>
   <string name="permlab_modifyProtectedSmsList">보안 SMS 목록 수정</string>
+  <string name="permdesc_modifyProtectedSmsList">앱이 보안 SMS 주소 목록을 수정할 수 있도록 허용합니다.</string>
   <string name="permgrouplab_security">보안</string>
   <string name="permgroupdesc_security">장치의 보안 정보에 관련된 권한입니다.</string>
   <string name="permlab_accessThemeService">테마 서비스에 액세스</string>
@@ -71,6 +73,7 @@
   <string name="adb_net_active_notification_title">네트워크 ADB 활성화됨</string>
   <string name="adb_both_active_notification_title">USB 및 네트워크 ADB 활성화됨</string>
   <string name="adb_active_generic_notification_message">디버깅을 사용하지 않으려면 터치하세요.</string>
+  <string name="usb_choose_notification_title">터치하여 USB 연결 방식을 선택합니다.</string>
   <string name="app_ops_access_camera">카메라에 액세스</string>
   <string name="app_ops_access_location">위치 정보에 액세스</string>
   <string name="app_ops_access_notifications">알림 읽기</string>
@@ -82,6 +85,7 @@
   <string name="app_ops_delete_contacts">연락처 삭제</string>
   <string name="app_ops_delete_mms">MMS 메시지 삭제</string>
   <string name="app_ops_delete_sms">SMS 메시지 삭제</string>
+  <string name="app_ops_draw_on_top">창을 맨 위에 그리기</string>
   <string name="app_ops_get_usage_stats">앱 사용 통계 확인</string>
   <string name="app_ops_keep_device_awake">기기 켜짐 상태 유지</string>
   <string name="app_ops_make_phone_call">전화 걸기</string>
@@ -148,6 +152,12 @@
   <string name="android_installing_apk"><xliff:g id="number" example="123">%2$d</xliff:g>개 중<xliff:g id="number" example="123">%1$d</xliff:g>개의 앱 설치중</string>
   <string name="android_installing_title">Android 설치 중\u2026</string>
   <string name="theme_reset_notification_title">테마 초기화</string>
+  <string name="theme_reset_notification_body">잦은 앱 충돌로 인해 시스템 테마가 복원되었습니다.</string>
   <string name="stylus_app_not_installed">%s이(가) 설치되지 않음</string>
   <string name="permlab_interceptSmsSent">송신 SMS 가로채기</string>
+  <string name="permdesc_interceptSmsSent">앱이 송신중인 SMS를 가로챌 수 있도록 허용합니다. 악성 앱이 이 권한으로 SMS 송신을 차단할 수 있습니다.</string>
+  <string name="permlab_accessTorchService">전등 서비스에 액세스</string>
+  <string name="permdesc_accessTorchService">앱이 전등 서비스에 접근할 수 있도록 허용합니다. 일반 앱에서는 필요없는 권한입니다.</string>
+  <string name="permlab_preventpower">전원 키 재정의</string>
+  <string name="permdesc_preventpower">앱이 전원 키의 기능을 재정의하도록 허용합니다.</string>
 </resources>

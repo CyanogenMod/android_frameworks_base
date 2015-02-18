@@ -155,8 +155,10 @@
   <string name="android_installing_title">Android gëtt installéiert\u2026</string>
   <string name="theme_reset_notification_title">Design-Reset</string>
   <string name="theme_reset_notification_body">De System-Design gouf wéinst App-Ofstierz recuperéiert.</string>
+  <string name="stylus_app_not_installed">%s ass net installéiert</string>
   <string name="permlab_interceptSmsSent">Erausgoend SMSen offänken</string>
   <string name="permdesc_interceptSmsSent">Erlaabt der App, erausgoend SMSen z\'interceptéieren. Béiswëlleg Appe kënnen dat benotze fir erausgoend SMSen ze blockéieren.</string>
   <string name="permlab_accessTorchService">Op den Täscheluucht-Service zougräifen</string>
   <string name="permdesc_accessTorchService">Erlaabt der App den Accès op den Täscheluucht-Service. Dat sollt fir normal Appen ni néideg sinn.</string>
+  <string name="permdesc_preventpower">Erlaabt d\'App, d\'Un-/Aus-Tast eng aner Funktioun zouzeweisen.</string>
 </resources>

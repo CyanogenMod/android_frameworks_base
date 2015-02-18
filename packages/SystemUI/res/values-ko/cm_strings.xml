@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">모든 알림 제거</string>
   <string name="screenshot_delete_action">삭제</string>
   <string name="screenshot_delete_confirmation">스크린샷이 삭제되었습니다.</string>
   <string name="advanced_dev_option_wipe_app">앱 데이터 삭제</string>
@@ -25,6 +26,9 @@
   <string name="accessibility_quick_settings_data_on">데이터 통신 켜짐.</string>
   <string name="accessibility_quick_settings_roaming_off">로밍 꺼짐.</string>
   <string name="accessibility_quick_settings_roaming_on">로밍 켜짐.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">위치 보고: 배터리 절약 모드.</string>
+  <string name="accessibility_quick_settings_location_gps_only">위치 보고: 기기 전용 모드.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">위치 보고: 높은 정확성 모드.</string>
   <string name="accessibility_dpad_left">커서 왼쪽</string>
   <string name="accessibility_dpad_right">커서 오른쪽</string>
   <string name="quick_settings_mobile_data_label">데이터 통신</string>
@@ -42,6 +46,8 @@
   <string name="quick_settings_compass_label">나침반</string>
   <string name="quick_settings_compass_init">초기화 중\u2026</string>
   <string name="quick_settings_lockscreen_label">잠금 화면</string>
+  <string name="quick_settings_lockscreen_label_enforced">잠금 화면 사용됨</string>
+  <string name="quick_settings_network_adb_label">네트워크 ADB</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">화면 자동 꺼짐</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>

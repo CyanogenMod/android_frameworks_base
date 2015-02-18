@@ -18,4 +18,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM Perso gesluit</string>
+  <string name="keyguard_accessibility_status">"Status"</string>
+  <string name="kg_dismiss">Verwyder</string>
+  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Nuwe SIM kaart\u0020</string>
+  <string name="lockscreen_sim_error_message_short">Ongeldige kaart.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Sleutel SIM PIN, jy het <xliff:g id="number">%d</xliff:g> oorblywende poging voordat jy jou diensverskaffer moet kontak om jou toestel te ontsluit.</item>
+    <item quantity="other">Sleutel SIM PIN, Jy het <xliff:g id="number">%d</xliff:g> oorblywende pogings oor.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">SIM nou afgeskakel. Tik PUK-kode om voort te gaan. Jy het <xliff:g id="number">%d</xliff:g> oorblywende poging voor SIM permanent onbruikbaar is. Kontak jou diensverskaffer vir meer inligting.</item>
+    <item quantity="other">SIM nou afgeskakel. Tik PUK-kode om voort te gaan. Jy het <xliff:g id="number">%d</xliff:g> oorblywende pogings voor SIM permanent onbruikbaar is. Kontak jou diensverskaffer vir meer inligting.</item>
+  </plurals>
 </resources>
