@@ -2130,4 +2130,9 @@
     <!-- Support in Surfaceflinger for blur layers.
          NOTE: This requires additional hardware-specific code. -->
     <bool name="config_ui_blur_enabled">false</bool>
+
+    <!-- Default values for display color temperature -->
+    <string name="config_dayColorTemperature">6500</string>
+    <string name="config_nightColorTemperature">4500</string>
+    <string name="config_outdoorAmbientLux">9000</string>
 </resources>
