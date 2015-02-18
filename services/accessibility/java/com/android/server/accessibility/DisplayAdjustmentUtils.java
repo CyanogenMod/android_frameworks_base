@@ -30,7 +30,7 @@ import android.view.accessibility.AccessibilityManager;
 /**
  * Utility methods for performing accessibility display adjustments.
  */
-class DisplayAdjustmentUtils {
+public class DisplayAdjustmentUtils {
     private static final String LOG_TAG = DisplayAdjustmentUtils.class.getSimpleName();
 
     /** Matrix and offset used for converting color to gray-scale. */
@@ -70,6 +70,11 @@ class DisplayAdjustmentUtils {
             return true;
         }
 
+        if (Settings.Secure.getStringForUser(cr,
+                Settings.Secure.LIVE_DISPLAY_COLOR_MATRIX, userId) != null) {
+            return true;
+        }
+
         return false;
     }
 
@@ -83,6 +88,23 @@ class DisplayAdjustmentUtils {
         if (Settings.Secure.getIntForUser(cr,
                 Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, 0, userId) != 0) {
             colorMatrix = multiply(colorMatrix, INVERSION_MATRIX_VALUE_ONLY);
+        }
+
+        String adj = Settings.Secure.getStringForUser(cr,
+                Settings.Secure.LIVE_DISPLAY_COLOR_MATRIX, userId);
+        if (adj != null) {
+            String[] tmp = adj.split(" ");
+            if (tmp.length == 16) {
+                float[] adjMatrix = new float[16];
+                try {
+                    for (int i = 0; i < 16; i++) {
+                        adjMatrix[i] = Float.parseFloat(tmp[i]);
+                    }
+                    colorMatrix = multiply(colorMatrix, adjMatrix);
+                } catch (NumberFormatException e) {
+                    Slog.e(LOG_TAG, e.getMessage(), e);
+                }
+            }
         }
 
         if (Settings.Secure.getIntForUser(cr,
