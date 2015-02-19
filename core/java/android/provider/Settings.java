@@ -5888,7 +5888,7 @@ public final class Settings {
          */
         public static final String ADVANCED_MODE = "advanced_mode";
 
-        /*
+        /**
          * String to contain power menu actions
          * @hide
          */
