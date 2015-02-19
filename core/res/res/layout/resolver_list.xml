@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alwaysShow="true"
         android:elevation="8dp"
-        android:background="@color/white" >
+        android:background="@color/resolver_list_bg" >
         <TextView android:id="@+id/title"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         android:id="@+id/resolver_list"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
-        android:background="@color/white"
+        android:background="@color/resolver_list_bg"
         android:elevation="8dp"
         android:nestedScrollingEnabled="true"
         android:divider="@null" />
@@ -108,7 +108,7 @@
         android:orientation="horizontal"
         android:layoutDirection="locale"
         android:measureWithLargestChild="true"
-        android:background="@color/white"
+        android:background="@color/resolver_list_bg"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingStart="12dp"
