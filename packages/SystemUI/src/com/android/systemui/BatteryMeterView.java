@@ -16,6 +16,7 @@
 
 package com.android.systemui;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -216,8 +217,10 @@ public class BatteryMeterView extends View implements DemoMode,
         levels.recycle();
         colors.recycle();
         atts.recycle();
-        mShowPercent = ENABLE_PERCENT && 0 != Settings.System.getInt(
-                context.getContentResolver(), "status_bar_show_battery_percent", 0);
+        int currentUserId = ActivityManager.getCurrentUser();
+
+        mShowPercent = ENABLE_PERCENT && 0 != Settings.System.getIntForUser(
+                context.getContentResolver(), "status_bar_show_battery_percent", 0, currentUserId);
         mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
         mCriticalLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);

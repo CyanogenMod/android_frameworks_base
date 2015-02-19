@@ -16,12 +16,15 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -47,6 +50,7 @@ import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -128,11 +132,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     private boolean mShowBatteryPercent;
 
-    private ContentObserver mObserver = new ContentObserver(new Handler()) {
-        public void onChange(boolean selfChange, Uri uri) {
-            loadShowBatteryTextSetting();
-        }
-    };
+    private SettingsObserver mSettingsObserver;
 
     public StatusBarHeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -140,8 +140,10 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     }
 
     private void loadShowBatteryTextSetting() {
-        mShowBatteryPercent = 0 != Settings.System.getInt(
-            getContext().getContentResolver(), Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0);
+        int currentUserId = ActivityManager.getCurrentUser();
+        mShowBatteryPercent = 0 != Settings.System.getIntForUser(
+                getContext().getContentResolver(), Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
+                0, currentUserId);
     }
 
     @Override
@@ -174,6 +176,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mAlarmStatus.setOnClickListener(this);
         mSignalCluster = findViewById(R.id.signal_cluster);
         mSystemIcons = (LinearLayout) findViewById(R.id.system_icons);
+        mSettingsObserver = new SettingsObserver(new Handler());
         loadDimens();
         updateVisibilities();
         updateClockScale();
@@ -841,16 +844,46 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-           "status_bar_show_battery_percent"), false, mObserver);
+        mSettingsObserver.observe();
+        mSettingsObserver.update();
     }
 
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
+        mSettingsObserver.unobserve();
         if (mBatteryController != null) {
             mBatteryController.removeStateChangedCallback(this);
+        }
+    }
+
+    class SettingsObserver extends UserContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                            Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT), false, this,
+                    UserHandle.USER_ALL);
+        }
+
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void update() {
+            loadShowBatteryTextSetting();
         }
     }
 }
