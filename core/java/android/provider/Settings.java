@@ -6393,7 +6393,7 @@ public final class Settings {
          */
         public static final String ADVANCED_REBOOT = "advanced_reboot";
 
-        /*
+        /**
          * String to contain power menu actions
          * @hide
          */
