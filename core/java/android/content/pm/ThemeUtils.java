@@ -107,6 +107,9 @@ public class ThemeUtils {
 
     public static final int SYSTEM_TARGET_API = 0;
 
+    // Package name for any app which does not have a specific theme applied
+    private static final String DEFAULT_PKG = "default";
+
     private static final String SETTINGS_DB =
             "/data/data/com.android.providers.settings/databases/settings.db";
     private static final String SETTINGS_SECURE_TABLE = "secure";
@@ -714,5 +717,17 @@ public class ThemeUtils {
         }
 
         return config;
+    }
+
+    /**
+     * Convenience method to determine if a theme component is a per app theme and not a standard
+     * component.
+     * @param component
+     * @return
+     */
+    public static boolean isPerAppThemeComponent(String component) {
+        return !(DEFAULT_PKG.equals(component)
+                || ThemeConfig.SYSTEMUI_STATUS_BAR_PKG.equals(component)
+                || ThemeConfig.SYSTEMUI_NAVBAR_PKG.equals(component));
     }
 }
