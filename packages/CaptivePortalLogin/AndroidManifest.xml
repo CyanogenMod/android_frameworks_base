@@ -32,6 +32,10 @@
                 <action android:name="android.net.conn.CAPTIVE_PORTAL"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.action.captive_portal_login"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
     </application>
 </manifest>
