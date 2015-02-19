@@ -6499,7 +6499,7 @@ public final class Settings {
          */
         public static final String ENABLED_VR_LISTENERS = "enabled_vr_listeners";
 
-        /*
+        /**
          * String to contain power menu actions
          * @hide
          */
