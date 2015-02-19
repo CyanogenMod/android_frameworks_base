@@ -38,6 +38,7 @@
                   android:minHeight="56dp"
                   android:textAppearance="?attr/textAppearanceMedium"
                   android:gravity="start|center_vertical"
+                  android:background="@color/resolver_list_bg"
                   android:paddingStart="?attr/dialogPreferredPadding"
                   android:paddingEnd="?attr/dialogPreferredPadding"
                   android:paddingTop="8dp"
