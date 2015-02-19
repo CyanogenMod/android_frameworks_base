@@ -27,6 +27,7 @@ import android.telephony.SubscriptionManager;
 import android.os.SystemProperties;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
+import android.widget.TextView;
 import android.util.Slog;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.View;
@@ -102,6 +103,11 @@ public class MSimSignalClusterView
     private ViewGroup mDataGroup[];
     private ImageView mDataActivity[];
 
+    //sim-labels
+    private TextView mSimLabels[];
+    private int[] mSimLabelText = { 1, 2, 3 };
+    private int[] mSimLabelId = { R.id.sim_label1, R.id.sim_label2, R.id.sim_label3 };
+
     //spacer
     private View mSpacer;
 
@@ -146,6 +152,7 @@ public class MSimSignalClusterView
         mMobileGroup = new ViewGroup[mNumPhones];
         mMobile = new ImageView[mNumPhones];
         mMobileActivity = new ImageView[mNumPhones];
+        mSimLabels = new TextView[mNumPhones];
         mMobileRoam = new ImageView[mNumPhones];
         mMobileType = new ImageView[mNumPhones];
         mDataVisible = new boolean[mNumPhones];
@@ -196,6 +203,7 @@ public class MSimSignalClusterView
             mMobileGroup[i]    = (ViewGroup) findViewById(mMobileGroupResourceId[i]);
             mMobile[i]         = (ImageView) findViewById(mMobileResourceId[i]);
             mMobileRoam[i]     = (ImageView) findViewById(mMobileRoamResourceId[i]);
+            mSimLabels[i]      = (TextView)  findViewById(mSimLabelId[i]);
             mMobileActivity[i] = (ImageView) findViewById(mMobileActResourceId[i]);
             mMobileType[i]     = (ImageView) findViewById(mMobileTypeResourceId[i]);
 
@@ -232,6 +240,7 @@ public class MSimSignalClusterView
             mMobile[i] = null;
             mMobileActivity[i] = null;
             mMobileType[i] = null;
+            mSimLabels[i] = null;
             mDataGroup[i] = null;
             mDataActivity[i] = null;
             mMobileDataVoiceGroup[i] = null;
@@ -491,6 +500,7 @@ public class MSimSignalClusterView
 
     private void updateMobile(int phoneId) {
         mMobile[phoneId].setImageResource(mMobileStrengthId[phoneId]);
+        mSimLabels[phoneId].setText("" + mSimLabelText[phoneId]);
         mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription + " "
                 + mMobileDescription[phoneId]);
         mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
