@@ -469,4 +469,7 @@
         <item quantity="one">SIM is now disabled. Enter PUK code to continue. You have <xliff:g id="number">%d</xliff:g> remaining attempt before SIM becomes permanently unusable. Contact carrier for details.</item>
         <item quantity="other">SIM is now disabled. Enter PUK code to continue. You have <xliff:g id="number">%d</xliff:g> remaining attempts before SIM becomes permanently unusable. Contact carrier for details.</item>
     </plurals>
+    <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Switch input method button.</string>
+
 </resources>
