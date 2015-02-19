@@ -21,6 +21,7 @@ import android.app.LoadedApk;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
@@ -32,6 +33,7 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.Menu;
@@ -56,6 +58,10 @@ import java.lang.reflect.Method;
 public class CaptivePortalLoginActivity extends Activity {
     private static final String TAG = "CaptivePortalLogin";
     private static final String DEFAULT_SERVER = "connectivitycheck.android.com";
+
+    private static final String EXTRA_STATUS_BAR_COLOR = "status_bar_color";
+    private static final String EXTRA_ACTION_BAR_COLOR = "action_bar_color";
+
     private static final int SOCKET_TIMEOUT_MS = 10000;
 
     // Keep this in sync with NetworkMonitor.
@@ -93,7 +99,22 @@ public class CaptivePortalLoginActivity extends Activity {
             mResponseToken = dataUri.getFragment();
         } catch (MalformedURLException|NumberFormatException e) {
             // System misconfigured, bail out in a way that at least provides network access.
+            setResult(Activity.RESULT_CANCELED);
             done(CAPTIVE_PORTAL_APP_RETURN_WANTED_AS_IS);
+        }
+
+        final Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_STATUS_BAR_COLOR)) {
+            int color = intent.getIntExtra(EXTRA_STATUS_BAR_COLOR, -1);
+            if (color != -1) {
+                getWindow().setStatusBarColor(color);
+            }
+        }
+        if (intent.hasExtra(EXTRA_ACTION_BAR_COLOR)) {
+            int color = intent.getIntExtra(EXTRA_ACTION_BAR_COLOR, -1);
+            if (color != -1) {
+                getActionBar().setBackgroundDrawable(new ColorDrawable(color));
+            }
         }
 
         final ConnectivityManager cm = ConnectivityManager.from(this);
@@ -169,6 +190,7 @@ public class CaptivePortalLoginActivity extends Activity {
         intent.putExtra(LOGGED_IN_RESULT, String.valueOf(result));
         intent.putExtra(RESPONSE_TOKEN, mResponseToken);
         sendBroadcast(intent);
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -250,6 +272,11 @@ public class CaptivePortalLoginActivity extends Activity {
                 // Load the real page.
                 view.loadUrl(mURL.toString());
                 return;
+            } else {
+                if (TextUtils.isEmpty(view.getUrl()) || view.getUrl().contains("text/html")) {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
             }
             testForCaptivePortal();
         }
