@@ -107,6 +107,16 @@ public class ThemeUtils {
 
     public static final int SYSTEM_TARGET_API = 0;
 
+    /**
+     * Special prefix used for applying overlays on a per app basis.  This prefix should be
+     * appended with the applications package name when being passed into the theme service
+     * i.e. Settings -> app_overlay_com.android.settings
+     */
+    public static final String APP_OVERLAY_COMPONENT_PREFIX = "app_overlay_";
+
+    // Package name for any app which does not have a specific theme applied
+    private static final String DEFAULT_PKG = "default";
+
     private static final String SETTINGS_DB =
             "/data/data/com.android.providers.settings/databases/settings.db";
     private static final String SETTINGS_SECURE_TABLE = "secure";
@@ -714,5 +724,40 @@ public class ThemeUtils {
         }
 
         return config;
+    }
+
+    /**
+     * Formats a component name for a per app theme that can be passed to the ThemeService
+     * @param appPkgName Package name of app to theme
+     * @return
+     */
+    public static String getComponentNameForPerAppTheme(String appPkgName) {
+        return appPkgName != null ? APP_OVERLAY_COMPONENT_PREFIX + appPkgName : null;
+    }
+
+    /**
+     * Parse the per app component name
+     * @param appOverlayComponentName
+     * @return
+     */
+    public static String getAppPackageNameFromPerAppComponent(String appOverlayComponentName) {
+        if (TextUtils.isEmpty(appOverlayComponentName) ||
+                !appOverlayComponentName.startsWith(APP_OVERLAY_COMPONENT_PREFIX)) {
+            return null;
+        } else {
+            return appOverlayComponentName.replace(APP_OVERLAY_COMPONENT_PREFIX, "");
+        }
+    }
+
+    /**
+     * Convenience method to determine if a theme component is a per app theme and not a standard
+     * component.
+     * @param component
+     * @return
+     */
+    public static boolean isPerAppThemeComponent(String component) {
+        return !(DEFAULT_PKG.equals(component)
+                || ThemeConfig.SYSTEMUI_STATUS_BAR_PKG.equals(component)
+                || ThemeConfig.SYSTEMUI_NAVBAR_PKG.equals(component));
     }
 }
