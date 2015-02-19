@@ -275,7 +275,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
             int hash = 17;
             hash = 31 * hash + (mOverlayPkgName == null ? 0 : mOverlayPkgName.hashCode());
             hash = 31 * hash + (mIconPkgName == null ? 0 : mIconPkgName.hashCode());
-            hash = 31 * hash + (mFontPkgName == null ? 0 : mIconPkgName.hashCode());
+            hash = 31 * hash + (mFontPkgName == null ? 0 : mFontPkgName.hashCode());
             return hash;
         }
 
