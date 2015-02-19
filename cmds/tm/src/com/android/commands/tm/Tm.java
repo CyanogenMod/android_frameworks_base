@@ -23,6 +23,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.ParceledListSlice;
 import android.content.pm.ThemeUtils;
 import android.content.res.IThemeService;
+import android.content.res.ThemeChangeRequest;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
@@ -54,13 +55,14 @@ public class Tm extends BaseCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("usage: tm [subcommand] [options]\n");
         sb.append("       tm list\n");
-        sb.append("       tm apply <PACKAGE_NAME> [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
+        sb.append("       tm apply <PACKAGE_NAME> [-r] [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
         sb.append("       tm rebuild\n");
         sb.append("       tm process <PACKAGE_NAME>\n");
         sb.append("\n");
         sb.append("tm list: return a list of theme packages.\n");
         sb.append("\n");
         sb.append("tm apply: applies the components for the theme specified by PACKAGE_NAME.\n");
+        sb.append("       -r: remove per app themes\n");
         sb.append("       [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
         sb.append("       if no components are specified all components will be applied.\n");
         sb.append("       Valid components are:\n");
@@ -143,22 +145,27 @@ public class Tm extends BaseCommand {
             }
         }
 
-        Map<String, String> componentMap = new HashMap<String, String>();
+        boolean removePerAppThemes = false;
+
+        ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
         String opt;
         while ((opt=nextOption()) != null) {
             if (opt.equals("-c")) {
-                componentMap.put(nextArgRequired(), pkgName);
+                builder.setComponent(nextArgRequired(), pkgName);
+            } else if (opt.equals("-r")) {
+                removePerAppThemes = true;
             }
         }
 
         // No components specified so let's just try and apply EVERYTHING!
+        Map<String, String> componentMap = builder.build().getThemeComponentsMap();
         if (componentMap.size() == 0) {
             List<String> components = ThemeUtils.getAllComponents();
             for (String component : components) {
-                componentMap.put(component, pkgName);
+                builder.setComponent(component, pkgName);
             }
         }
-        mTs.requestThemeChange(componentMap);
+        mTs.requestThemeChange(builder.build(), removePerAppThemes);
     }
 
     private void runRebuildResourceCache() throws Exception {
