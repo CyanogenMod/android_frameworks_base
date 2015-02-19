@@ -19,9 +19,6 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.os.Build;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.os.SystemProperties;
@@ -34,8 +31,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import android.widget.TextView;
 import com.android.internal.telephony.PhoneConstants;
-import com.android.systemui.statusbar.policy.NetworkControllerImpl;
 import com.android.systemui.statusbar.policy.MSimNetworkControllerImpl;
 
 import com.android.systemui.R;
@@ -102,23 +99,28 @@ public class MSimSignalClusterView
     private ViewGroup mDataGroup[];
     private ImageView mDataActivity[];
 
+    //sim-labels
+    private TextView mSimLabels[];
+    private int[] mSimLabelText = { 1, 2, 3 };
+    private int[] mSimLabelId = { R.id.sim_label1, R.id.sim_label2, R.id.sim_label3 };
+
     //spacer
     private View mSpacer;
 
     private int[] mMobileGroupResourceId = {R.id.mobile_combo, R.id.mobile_combo_sub2,
-                                          R.id.mobile_combo_sub3};
+            R.id.mobile_combo_sub3};
     private int[] mMobileRoamResourceId = {R.id.mobile_roaming, R.id.mobile_roaming_sub2,
-                                              R.id.mobile_roaming_sub3 };
+            R.id.mobile_roaming_sub3 };
     private int[] mMobileResourceId = {R.id.mobile_signal, R.id.mobile_signal_sub2,
-                                     R.id.mobile_signal_sub3};
+            R.id.mobile_signal_sub3};
     private int[] mMobileActResourceId = {R.id.mobile_inout, R.id.mobile_inout_sub2,
-                                        R.id.mobile_inout_sub3};
+            R.id.mobile_inout_sub3};
     private int[] mMobileTypeResourceId = {R.id.mobile_type, R.id.mobile_type_sub2,
-                                         R.id.mobile_type_sub3};
+            R.id.mobile_type_sub3};
     private int[] mDataGroupResourceId = {R.id.data_combo, R.id.data_combo_sub2,
-                                        R.id.data_combo_sub3};
+            R.id.data_combo_sub3};
     private int[] mDataActResourceId = {R.id.data_inout, R.id.data_inout_sub2,
-                                        R.id.data_inout_sub3};
+            R.id.data_inout_sub3};
     private int[] mMobileDataVoiceGroupResourceId = {R.id.mobile_data_voice,
             R.id.mobile_data_voice_sub2, R.id.mobile_data_voice_sub3};
     private int[] mMobileSignalDataResourceId = {R.id.mobile_signal_data,
@@ -142,6 +144,7 @@ public class MSimSignalClusterView
         mMobileTypeId = new int[mNumPhones];
         mMobileRoamId = new int[mNumPhones];
         mMobileActivityId = new int[mNumPhones];
+        mSimLabels = new TextView[mNumPhones];
         mNoSimIconId = new int[mNumPhones];
         mMobileGroup = new ViewGroup[mNumPhones];
         mMobile = new ImageView[mNumPhones];
@@ -197,6 +200,7 @@ public class MSimSignalClusterView
             mMobile[i]         = (ImageView) findViewById(mMobileResourceId[i]);
             mMobileRoam[i]     = (ImageView) findViewById(mMobileRoamResourceId[i]);
             mMobileActivity[i] = (ImageView) findViewById(mMobileActResourceId[i]);
+            mSimLabels[i]      = (TextView)  findViewById(mSimLabelId[i]);
             mMobileType[i]     = (ImageView) findViewById(mMobileTypeResourceId[i]);
 
             mDataGroup[i]      = (ViewGroup) findViewById(mDataGroupResourceId[i]);
@@ -232,6 +236,7 @@ public class MSimSignalClusterView
             mMobile[i] = null;
             mMobileActivity[i] = null;
             mMobileType[i] = null;
+            mSimLabels[i] = null;
             mDataGroup[i] = null;
             mDataActivity[i] = null;
             mMobileDataVoiceGroup[i] = null;
@@ -359,7 +364,7 @@ public class MSimSignalClusterView
             event.getText().add(mWifiGroup.getContentDescription());
         if (mMobileVisible && mMobileGroup[defaultPhoneId] != null
                 && mMobileGroup[defaultPhoneId]
-                        .getContentDescription() != null)
+                .getContentDescription() != null)
             event.getText().add(mMobileGroup[defaultPhoneId].
                     getContentDescription());
         return super.dispatchPopulateAccessibilityEvent(event);
@@ -430,7 +435,7 @@ public class MSimSignalClusterView
 
         if (DEBUG) Slog.d(TAG,
                 String.format("wifi: %s sig=%d act=%d",
-                (mWifiVisible ? "VISIBLE" : "GONE"), mWifiStrengthId, mWifiActivityId));
+                        (mWifiVisible ? "VISIBLE" : "GONE"), mWifiStrengthId, mWifiActivityId));
 
         if ((mMobileVisible && mNoSimIconId[phoneId] == 0) && !mIsAirplaneMode) {
             updateMobile(phoneId);
@@ -460,8 +465,8 @@ public class MSimSignalClusterView
 
         if (DEBUG) Slog.d(TAG,
                 String.format("mobile[%d]: %s sig=%d type=%d", phoneId,
-                    (mMobileVisible ? "VISIBLE" : "GONE"),
-                    mMobileStrengthId[phoneId], mMobileTypeId[phoneId]));
+                        (mMobileVisible ? "VISIBLE" : "GONE"),
+                        mMobileStrengthId[phoneId], mMobileTypeId[phoneId]));
 
         if (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT) {
             mMobileType[phoneId].setVisibility(
@@ -491,6 +496,7 @@ public class MSimSignalClusterView
 
     private void updateMobile(int phoneId) {
         mMobile[phoneId].setImageResource(mMobileStrengthId[phoneId]);
+        mSimLabels[phoneId].setText("" + mSimLabelText[phoneId]);
         mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription + " "
                 + mMobileDescription[phoneId]);
         mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
@@ -552,7 +558,7 @@ public class MSimSignalClusterView
         int voiceType = mMSimNC.getVoiceNetworkType(phoneId);
         if ((dataType == TelephonyManager.NETWORK_TYPE_TD_SCDMA
                 || dataType == TelephonyManager.NETWORK_TYPE_LTE)
-            && voiceType == TelephonyManager.NETWORK_TYPE_GSM) {
+                && voiceType == TelephonyManager.NETWORK_TYPE_GSM) {
             ret = true;
         }
         return ret;
@@ -590,7 +596,7 @@ public class MSimSignalClusterView
                 || dataType == TelephonyManager.NETWORK_TYPE_EHRPD
                 || dataType == TelephonyManager.NETWORK_TYPE_LTE)
                 && (voiceType == TelephonyManager.NETWORK_TYPE_GSM
-                    || voiceType == TelephonyManager.NETWORK_TYPE_1xRTT)) {
+                || voiceType == TelephonyManager.NETWORK_TYPE_1xRTT)) {
             ret = true;
         }
         return ret;
