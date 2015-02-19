@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.animation.LayoutTransition;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -76,8 +77,10 @@ public class KeyguardStatusBarView extends RelativeLayout
     }
 
     private void loadShowBatteryTextSetting() {
-        mShow = 0 != Settings.System.getInt(
-            getContext().getContentResolver(), Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0);
+        int currentUserId = ActivityManager.getCurrentUser();
+        mShow = 0 != Settings.System.getIntForUser(
+                getContext().getContentResolver(), Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
+                0, currentUserId);
     }
 
     @Override
