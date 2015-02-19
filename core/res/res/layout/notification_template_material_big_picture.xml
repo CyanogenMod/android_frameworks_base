@@ -48,7 +48,7 @@
         android:layout_marginTop="208dp"
         android:paddingStart="@dimen/notification_large_icon_width"
         android:layout_gravity="bottom"
-        android:background="#CCEEEEEE"
+        android:background="@color/notification_mtrl_big_picture_bg"
         >
         <include
             layout="@layout/notification_material_action_list"
