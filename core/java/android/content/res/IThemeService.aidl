@@ -26,7 +26,7 @@ interface IThemeService {
     void requestThemeChangeUpdates(in IThemeChangeListener listener);
     void removeUpdates(in IThemeChangeListener listener);
 
-    void requestThemeChange(in Map componentMap);
+    void requestThemeChange(in Map componentMap, boolean removePerAppThemes);
     void applyDefaultTheme();
     boolean isThemeApplying();
     int getProgress();

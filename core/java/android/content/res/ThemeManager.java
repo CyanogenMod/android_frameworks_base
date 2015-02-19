@@ -230,8 +230,12 @@ public class ThemeManager {
     }
 
     public void requestThemeChange(Map<String, String> componentMap) {
+        requestThemeChange(componentMap, true);
+    }
+
+    public void requestThemeChange(Map<String, String> componentMap, boolean removePerAppThemes) {
         try {
-            mService.requestThemeChange(componentMap);
+            mService.requestThemeChange(componentMap, removePerAppThemes);
         } catch (RemoteException e) {
             logThemeServiceException(e);
         }
