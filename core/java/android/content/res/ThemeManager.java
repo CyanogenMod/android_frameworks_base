@@ -222,16 +222,25 @@ public class ThemeManager {
     }
 
     public void requestThemeChange(String pkgName, List<String> components) {
+        requestThemeChange(pkgName, components, true);
+    }
+
+    public void requestThemeChange(String pkgName, List<String> components,
+            boolean removePerAppThemes) {
         Map<String, String> componentMap = new HashMap<String, String>(components.size());
         for (String component : components) {
             componentMap.put(component, pkgName);
         }
-        requestThemeChange(componentMap);
+        requestThemeChange(componentMap, removePerAppThemes);
     }
 
     public void requestThemeChange(Map<String, String> componentMap) {
+        requestThemeChange(componentMap, true);
+    }
+
+    public void requestThemeChange(Map<String, String> componentMap, boolean removePerAppThemes) {
         try {
-            mService.requestThemeChange(componentMap);
+            mService.requestThemeChange(componentMap, removePerAppThemes);
         } catch (RemoteException e) {
             logThemeServiceException(e);
         }

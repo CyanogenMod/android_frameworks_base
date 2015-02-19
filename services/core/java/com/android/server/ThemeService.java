@@ -42,7 +42,6 @@ import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Binder;
 import android.os.Environment;
@@ -137,7 +136,7 @@ public class ThemeService extends IThemeService.Stub {
             switch (msg.what) {
                 case MESSAGE_CHANGE_THEME:
                     final Map<String, String> componentMap = (Map<String, String>) msg.obj;
-                    doApplyTheme(componentMap);
+                    doApplyTheme(componentMap, msg.arg1 == 1);
                     break;
                 case MESSAGE_APPLY_DEFAULT_THEME:
                     doApplyDefaultTheme();
@@ -310,7 +309,7 @@ public class ThemeService extends IThemeService.Stub {
         // Now actually unapply the incompatible themes
         if (!changeThemeRequestMap.isEmpty()) {
             try {
-                requestThemeChange(changeThemeRequestMap);
+                requestThemeChange(changeThemeRequestMap, true);
             } catch(RemoteException e) {
                 // This cannot happen
             }
@@ -361,7 +360,7 @@ public class ThemeService extends IThemeService.Stub {
         }
     }
 
-    private void doApplyTheme(Map<String, String> componentMap) {
+    private void doApplyTheme(Map<String, String> componentMap, boolean removePerAppTheme) {
         synchronized(this) {
             mProgress = 0;
         }
@@ -439,7 +438,7 @@ public class ThemeService extends IThemeService.Stub {
 
         updateProvider(componentMap);
 
-        updateConfiguration(componentMap);
+        updateConfiguration(componentMap, removePerAppTheme);
 
         killLaunchers(componentMap);
 
@@ -466,7 +465,7 @@ public class ThemeService extends IThemeService.Stub {
                 componentMap.put(component, defaultThemePkg);
             }
             try {
-                requestThemeChange(componentMap);
+                requestThemeChange(componentMap, true);
             } catch (RemoteException e) {
                 Log.w(TAG, "Unable to set default theme", e);
             }
@@ -715,13 +714,15 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private boolean updateConfiguration(Map<String, String> components) {
+    private boolean updateConfiguration(Map<String, String> components,
+            boolean removePerAppThemes) {
         final IActivityManager am = ActivityManagerNative.getDefault();
         if (am != null) {
             final long token = Binder.clearCallingIdentity();
             try {
                 Configuration config = am.getConfiguration();
-                ThemeConfig.Builder themeBuilder = createBuilderFrom(config, components, null);
+                ThemeConfig.Builder themeBuilder = createBuilderFrom(config, components, null,
+                        removePerAppThemes);
                 ThemeConfig newConfig = themeBuilder.build();
 
                 config.themeConfig = newConfig;
@@ -736,8 +737,10 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private static ThemeConfig.Builder createBuilderFrom(Configuration config,
-            Map<String, String> componentMap, String pkgName) {
+            Map<String, String> componentMap, String pkgName, boolean removePerAppThemes) {
         ThemeConfig.Builder builder = new ThemeConfig.Builder(config.themeConfig);
+
+        if (removePerAppThemes) removePerAppThemesFromConfig(builder, config.themeConfig);
 
         if (componentMap.containsKey(ThemesColumns.MODIFIES_ICONS)) {
             builder.defaultIcon(pkgName == null ?
@@ -764,9 +767,31 @@ public class ThemeService extends IThemeService.Stub {
                     componentMap.get(ThemesColumns.MODIFIES_NAVIGATION_BAR) : pkgName);
         }
 
+        // check for any per app overlays being applied
+        for (String component : componentMap.keySet()) {
+            if (component.startsWith(ThemeUtils.APP_OVERLAY_COMPONENT_PREFIX)) {
+                String appPkgName = ThemeUtils.getAppPackageNameFromPerAppComponent(component);
+                if (appPkgName != null) {
+                    builder.overlay(appPkgName, componentMap.get(component));
+                }
+            }
+        }
+
         builder.setThemeChangeTimestamp(System.currentTimeMillis());
 
         return builder;
+    }
+
+    private static void removePerAppThemesFromConfig(ThemeConfig.Builder builder,
+            ThemeConfig themeConfig) {
+        if (themeConfig != null) {
+            Map<String, ThemeConfig.AppTheme> themes = themeConfig.getAppThemes();
+            for (String appPkgName : themes.keySet()) {
+                if (ThemeUtils.isPerAppThemeComponent(appPkgName)) {
+                    builder.overlay(appPkgName, null);
+                }
+            }
+        }
     }
 
     // Kill the current Home process, they tend to be evil and cache
@@ -897,7 +922,8 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     @Override
-    public void requestThemeChange(Map componentMap) throws RemoteException {
+    public void requestThemeChange(Map componentMap, boolean removePerAppThemes)
+            throws RemoteException {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
         Message msg;
@@ -932,6 +958,7 @@ public class ThemeService extends IThemeService.Stub {
         msg = Message.obtain();
         msg.what = ThemeWorkerHandler.MESSAGE_CHANGE_THEME;
         msg.obj = componentMap;
+        msg.arg1 = removePerAppThemes ? 1 : 0;
         mHandler.sendMessage(msg);
     }
 

@@ -54,13 +54,14 @@ public class Tm extends BaseCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("usage: tm [subcommand] [options]\n");
         sb.append("       tm list\n");
-        sb.append("       tm apply <PACKAGE_NAME> [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
+        sb.append("       tm apply <PACKAGE_NAME> [-r] [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
         sb.append("       tm rebuild\n");
         sb.append("       tm process <PACKAGE_NAME>\n");
         sb.append("\n");
         sb.append("tm list: return a list of theme packages.\n");
         sb.append("\n");
         sb.append("tm apply: applies the components for the theme specified by PACKAGE_NAME.\n");
+        sb.append("       -r: remove per app themes\n");
         sb.append("       [-c <COMPONENT> [-c <COMPONENT>] ...]\n");
         sb.append("       if no components are specified all components will be applied.\n");
         sb.append("       Valid components are:\n");
@@ -143,11 +144,15 @@ public class Tm extends BaseCommand {
             }
         }
 
+        boolean removePerAppThemes = false;
+
         Map<String, String> componentMap = new HashMap<String, String>();
         String opt;
         while ((opt=nextOption()) != null) {
             if (opt.equals("-c")) {
                 componentMap.put(nextArgRequired(), pkgName);
+            } else if (opt.equals("-r")) {
+                removePerAppThemes = true;
             }
         }
 
@@ -158,7 +163,7 @@ public class Tm extends BaseCommand {
                 componentMap.put(component, pkgName);
             }
         }
-        mTs.requestThemeChange(componentMap);
+        mTs.requestThemeChange(componentMap, removePerAppThemes);
     }
 
     private void runRebuildResourceCache() throws Exception {

@@ -105,6 +105,10 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         return theme.mFontPkgName;
     }
 
+    public Map<String, AppTheme> getAppThemes() {
+        return mThemes;
+    }
+
     private AppTheme getThemeFor(String pkgName) {
         AppTheme theme = mThemes.get(pkgName);
         if (theme == null) theme = getDefaultTheme();
@@ -429,8 +433,15 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 String overlay = mOverlays.get(appPkgName);
                 String font = mFonts.get(appPkgName);
 
-                AppTheme appTheme = new AppTheme(overlay, icon, font);
-                appThemes.put(appPkgName, appTheme);
+                // Remove app theme if all items are null
+                if (overlay == null && icon == null && font == null) {
+                    if (appThemes.containsKey(appPkgName)) {
+                        appThemes.remove(appPkgName);
+                    }
+                } else {
+                    AppTheme appTheme = new AppTheme(overlay, icon, font);
+                    appThemes.put(appPkgName, appTheme);
+                }
             }
             ThemeConfig themeConfig = new ThemeConfig(appThemes);
             themeConfig.mThemeChangeTimestamp = mThemeChangeTimestamp;
