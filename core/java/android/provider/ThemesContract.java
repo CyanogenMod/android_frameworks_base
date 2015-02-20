@@ -562,4 +562,14 @@ public class ThemesContract {
          */
         public static final String LOCK_WALLPAPER_PREVIEW = "lock_wallpaper_preview";
     }
+
+    public class Intents {
+        /**
+         * Broadcast sent when a theme is added to the provider.
+         * android.permission.READ_THEMES is required to receive this broadcast
+         */
+        public static final String ACTION_THEME_ADDED =
+                "android.provider.themes.action.THEME_ADDED";
+
+    }
 }
