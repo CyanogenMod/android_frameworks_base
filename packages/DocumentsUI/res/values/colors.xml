@@ -29,5 +29,10 @@
 
     <!-- 10% alpha of material_deep_teal_500 -->
     <color name="item_doc_list_background_activated">#1a009688</color>
+	
+    <!-- adding new exposed theme components -->
+    <color name="drawer_background_color">#ffffffff</color>
+    <color name="font_color_doc_grid">#ffffffff</color>
+	
 
 </resources>
