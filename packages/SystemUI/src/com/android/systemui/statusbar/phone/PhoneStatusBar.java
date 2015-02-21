@@ -3679,7 +3679,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void onHeadsUpDismissed() {
-        mHeadsUpNotificationView.dismiss();
+        public void onHeadsUpDismissed(int direction) {
+            if (direction == HeadsUpNotificationView.DIRECTION_X) {
+                mHeadsUpNotificationView.dismiss();
+             } else if (direction == HeadsUpNotificationView.DIRECTION_Y) {
+                mHeadsUpNotificationView.release();
+                scheduleHeadsUpClose();
+             }
     }
 
     private static void copyNotifications(ArrayList<Pair<String, StatusBarNotification>> dest,
