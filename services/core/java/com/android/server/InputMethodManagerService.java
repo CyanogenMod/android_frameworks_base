@@ -39,6 +39,7 @@ import com.android.server.wm.WindowManagerService;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
+import android.util.BoostFramework;
 
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
@@ -399,6 +400,56 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
      * True if the device is currently interactive with user.  The value is true initially.
      */
     boolean mIsInteractive = true;
+
+    class KeyboardDetect {
+        private final int INPUT_BOOST_RESET = 0x5401;
+        private BoostFramework mPerf = new BoostFramework();
+        private int keyboardState = 0;
+
+        final int INACTIVE = 0;
+        final int FOREGROUND = 1;
+        final int BACKGROUND = 2;
+
+        synchronized void keyboardPerflockAcquire() {
+             if (mPerf != null) {
+                 try {
+                     mPerf.perfLockAcquire(0, INPUT_BOOST_RESET);
+                     if (DEBUG) Slog.i(TAG, "Keyboard Perflock Acquired");
+                 } catch (Exception e) {
+                     Slog.e(TAG, "Exception caught at perflock acquire", e);
+                     return;
+                 }
+             } else {
+                 Slog.e(TAG, "Perflock object null");
+                 return;
+             }
+        }
+
+        synchronized void keyboardPerflockRelease() {
+             if (mPerf != null) {
+                 try {
+                     mPerf.perfLockRelease();
+                     if (DEBUG) Slog.i(TAG, "Keyboard Perflock Released");
+                 } catch (Exception e) {
+                     Slog.e(TAG, "Exception caught at perflock release", e);
+                     return;
+                 }
+             } else {
+                 Slog.e(TAG, "Perflock object null");
+                 return;
+             }
+        }
+
+        synchronized int getKeyboardState() {
+             return keyboardState;
+        }
+
+        synchronized void setKeyboardState(int state) {
+             keyboardState = state;
+             if (DEBUG) Slog.i(TAG, "Keyboard state is " + keyboardState);
+        }
+    }
+    KeyboardDetect kb = new KeyboardDetect();
 
     int mCurUserActionNotificationSequenceNumber = 0;
 
@@ -1097,6 +1148,49 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 }
             }
         }
+    }
+
+    private void setImeWindowVisibilityStatusHiddenLocked() {
+        mImeWindowVis = 0;
+        updateImeWindowStatusLocked();
+    }
+
+    private void refreshImeWindowVisibilityLocked() {
+        final Configuration conf = mRes.getConfiguration();
+        final boolean haveHardKeyboard = conf.keyboard
+                != Configuration.KEYBOARD_NOKEYS;
+        final boolean hardKeyShown = haveHardKeyboard
+                && conf.hardKeyboardHidden
+                        != Configuration.HARDKEYBOARDHIDDEN_YES;
+
+        final boolean isScreenLocked = isKeyguardLocked();
+        final boolean inputActive = !isScreenLocked && (mInputShown || hardKeyShown);
+        // We assume the softkeyboard is shown when the input is active as long as the
+        // hard keyboard is not shown.
+        final boolean inputVisible = inputActive && !hardKeyShown;
+        mImeWindowVis = (inputActive ? InputMethodService.IME_ACTIVE : 0)
+                | (inputVisible ? InputMethodService.IME_VISIBLE : 0);
+        updateImeWindowStatusLocked();
+    }
+
+    private void updateImeWindowStatusLocked() {
+        /* Handle soft input interaction with display screen state */
+
+        /* Release perflock if soft input was visible when display about to go off */
+        if ((kb.getKeyboardState() == kb.FOREGROUND) && !mIsInteractive) {
+           kb.keyboardPerflockRelease();
+           kb.setKeyboardState(kb.BACKGROUND);
+           if (DEBUG) Slog.i(TAG, "Keyboard in background");
+        }
+
+        /* Acquire perflock if display is turning on and soft input is active in background */
+        else if ((kb.getKeyboardState() == kb.BACKGROUND) && mIsInteractive) {
+           kb.keyboardPerflockAcquire();
+           kb.setKeyboardState(kb.FOREGROUND);
+           if (DEBUG) Slog.i(TAG, "Keyboard in foreground");
+        }
+
+        setImeWindowStatus(mCurToken, mImeWindowVis, mBackDisposition);
     }
 
     // ---------------------------------------------------------------------------------------
@@ -2063,6 +2157,13 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                                 | Context.BIND_FOREGROUND_SERVICE);
                 mVisibleBound = true;
             }
+            /* Acquire perflock if - display is on, soft input is shown
+             * and perflock not yet acquired */
+            if (mIsInteractive && kb.getKeyboardState() == kb.INACTIVE) {
+               kb.keyboardPerflockAcquire();
+               kb.setKeyboardState(kb.FOREGROUND);
+               if (DEBUG) Slog.i(TAG, "Keyboard in foreground");
+            }
             res = true;
         } else if (mHaveConnection && SystemClock.uptimeMillis()
                 >= (mLastBindTime+TIME_TO_RECONNECT)) {
@@ -2161,6 +2262,23 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         mShowRequested = false;
         mShowExplicitlyRequested = false;
         mShowForced = false;
+       /* Release perflock if - display is on, soft input is hidden
+        * and perflock is still acquired */
+        if (mIsInteractive && kb.getKeyboardState() == kb.FOREGROUND) {
+            kb.keyboardPerflockRelease();
+            kb.setKeyboardState(kb.INACTIVE);
+            if (DEBUG) Slog.i(TAG, "Keyboard hidden by explicitly");
+        }
+       /* Change keyboard state - some apps can call hide input after
+        * SCREEN OFF intent, in which case if keyboard was in
+        * BACKGROUND state, it needs to be hidden so state has to
+        * change to INACTIVE. After display comes on, keyboard will
+        * not be visible in the app and perflock is in released state.
+        */
+        else if (!mIsInteractive && kb.getKeyboardState() == kb.BACKGROUND) {
+            kb.setKeyboardState(kb.INACTIVE);
+            if (DEBUG) Slog.i(TAG, "Keyboard hidden by implicitly");
+        }
         return res;
     }
 
