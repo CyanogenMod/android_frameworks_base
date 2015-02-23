@@ -1249,9 +1249,11 @@ public final class Settings {
             /* CM12 CHANGES */
             MOVED_TO_SECURE.add(Secure.STATS_COLLECTION);
             MOVED_TO_SECURE.add(Secure.VOLUME_LINK_NOTIFICATION);
+            MOVED_TO_SECURE.add(Secure.QS_QUICK_PULLDOWN);
             MOVED_TO_SECURE.add(Secure.QS_TILES);
             MOVED_TO_SECURE.add(Secure.QS_USE_MAIN_TILES);
             MOVED_TO_SECURE.add(Secure.QS_SHOW_BRIGHTNESS_SLIDER);
+            MOVED_TO_SECURE.add(Secure.DOUBLE_TAP_SLEEP_GESTURE);
             for (String s : Secure.NAVIGATION_RING_TARGETS) {
                 MOVED_TO_SECURE.add(s);
             }
@@ -2166,9 +2168,19 @@ public final class Settings {
 
         /**
          * Whether to allow one finger quick settings expansion on the right side of the statusbar.
+         * @deprecated Use {@link android.provider.Settings.Secure#QS_QUICK_PULLDOWN} instead
          * @hide
          */
+        @Deprecated
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
+
+        /**
+         * Quick Settings Quick Pulldown
+         * @deprecated Use {@link android.provider.Settings.Secure#QS_QUICK_PULLDOWN} instead
+         * @hide
+         */
+        @Deprecated
+        public static final String QS_QUICK_PULLDOWN = Secure.QS_QUICK_PULLDOWN;
 
         /**
          * Whether to show the brightness slider in quick settings panel.
@@ -3373,10 +3385,12 @@ public final class Settings {
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
         /**
-         *  Enable statusbar double tap gesture on to put device to sleep
+         * Enable statusbar double tap gesture on to put device to sleep
+         * @deprecated Use {@link android.provider.Settings.Secure#DOUBLE_TAP_SLEEP_GESTURE} instead
          * @hide
          */
-        public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
+        @Deprecated
+        public static final String DOUBLE_TAP_SLEEP_GESTURE = Secure.DOUBLE_TAP_SLEEP_GESTURE;
 
         /**
          * Boolean value on whether to show weather in the statusbar
@@ -5830,6 +5844,12 @@ public final class Settings {
         public static final String APP_PERFORMANCE_PROFILES_ENABLED = "app_perf_profiles_enabled";
 
         /**
+         * Quick Settings Quick Pulldown
+         * @hide
+         */
+        public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
+
+        /**
          * Whether to show the brightness slider in quick settings panel.
          * @hide
          */
@@ -5853,6 +5873,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_LOCATION_ADVANCED = "qs_location_advanced";
+
+        /**
+         * Enable statusbar double tap gesture on to put device to sleep
+         * @hide
+         */
+        public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
          * Custom navring actions
