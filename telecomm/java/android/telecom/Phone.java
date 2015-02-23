@@ -112,7 +112,7 @@ public final class Phone {
     /** {@hide} */
     final void internalAddCall(ParcelableCall parcelableCall) {
         Call call = new Call(this, parcelableCall.getId(), mInCallAdapter,
-                parcelableCall.mIsActiveSub);
+                parcelableCall.mIsActiveSub, parcelableCall.getState());
         mCallByTelecomCallId.put(parcelableCall.getId(), call);
         mCalls.add(call);
         checkCallTree(parcelableCall);

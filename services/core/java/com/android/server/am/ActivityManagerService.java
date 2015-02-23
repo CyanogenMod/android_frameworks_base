@@ -3339,6 +3339,21 @@ public final class ActivityManagerService extends ActivityManagerNative
         return true;
     }
 
+    /**
+     * If system is power off alarm boot mode, we need to start the alarm alert
+     * view here, to trigger the power off alarm UI.
+     */
+    void startAlarmActivityLocked() {
+        ComponentName compenentName = new ComponentName("com.android.deskclock",
+                "com.android.deskclock.alarms.AlarmActivity");
+
+        Intent intent = new Intent();
+        intent.setComponent(compenentName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("ro.alarm_boot", true);
+        mContext.startActivityAsUser(intent, UserHandle.CURRENT);
+    }
+
     private ActivityInfo resolveActivityInfo(Intent intent, int flags, int userId) {
         ActivityInfo ai = null;
         ComponentName comp = intent.getComponent();
@@ -11387,6 +11402,15 @@ public final class ActivityManagerService extends ActivityManagerNative
             mBooting = true;
             startHomeActivityLocked(mCurrentUserId);
 
+            // start the power off alarm by boot mode
+            boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+            if (isAlarmBoot) {
+                if (DEBUG) {
+                    Slog.i(TAG, "ActivityManagerService systemReady isAlarmBoot = " + isAlarmBoot);
+                }
+                startAlarmActivityLocked();
+            }
+
             try {
                 if (AppGlobals.getPackageManager().hasSystemUidErrors()) {
                     Message msg = Message.obtain();
@@ -14832,7 +14856,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         // we will switch to the calling user if access to the current user fails.
         int targetUserId = unsafeConvertIncomingUser(userId);
 
-        if (callingUid != 0 && callingUid != Process.SYSTEM_UID) {
+        // There is no definition like MEDIA_RW_UID, so use MEDIA_RW_GID instead.
+        if (callingUid != 0 && callingUid != Process.SYSTEM_UID
+                && callingUid != Process.MEDIA_RW_GID) {
             final boolean allow;
             if (checkComponentPermission(INTERACT_ACROSS_USERS_FULL, callingPid,
                     callingUid, -1, true) == PackageManager.PERMISSION_GRANTED) {
