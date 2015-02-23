@@ -229,7 +229,7 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (this) {
             awaitLoadedLocked();
             Set<String> v = (Set<String>) mMap.get(key);
-            return v != null ? v : defValues;
+            return v != null ? new HashSet<String>(v) : defValues;
         }
     }
 
