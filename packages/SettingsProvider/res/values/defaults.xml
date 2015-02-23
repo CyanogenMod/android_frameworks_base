@@ -237,6 +237,12 @@
     <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
     <string-array name="def_protected_sms_list_values"></string-array>
 
-    <!-- Defaults for Settings.System.Secure.ADVANCED_MODE. -->
+    <!-- Defaults for Settings.Secure.ADVANCED_MODE. -->
     <bool name="def_advanced_mode">true</bool>
+
+    <!-- Default for Settings.System.QS_QUICK_PULLDOWN.
+         0. Off
+         1. Right
+         2. Left -->
+    <integer name="def_qs_quick_pulldown">0</integer>
 </resources>
