@@ -259,6 +259,7 @@ public class SubscriptionInfo implements Parcelable {
 
     /**
      * @return the data roaming state for this subscription, either
+     * {@link SubscriptionManager#DATA_ROAMING_ENABLE} or {@link SubscriptionManager#DATA_ROAMING_DISABLE}.
      */
     public int getDataRoaming() {
         return this.mDataRoaming;

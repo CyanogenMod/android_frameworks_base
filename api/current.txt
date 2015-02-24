@@ -21719,14 +21719,14 @@ package android.os {
     method public static java.lang.String getExternalStorageState();
     method public static java.lang.String getExternalStorageState(java.io.File);
     method public static java.io.File getRootDirectory();
+    method public static deprecated java.lang.String getStorageState(java.io.File);
     method public static java.io.File getSecondaryStorageDirectory();
     method public static java.lang.String getSecondaryStorageState();
-    method public static deprecated java.lang.String getStorageState(java.io.File);
+    method public static boolean isNoEmulatedStorageExist();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageEmulated(java.io.File);
     method public static boolean isExternalStorageRemovable();
     method public static boolean isExternalStorageRemovable(java.io.File);
-    method public static boolean isNoEmulatedStorageExist();
     field public static java.lang.String DIRECTORY_ALARMS;
     field public static java.lang.String DIRECTORY_DCIM;
     field public static java.lang.String DIRECTORY_DOCUMENTS;
@@ -28682,7 +28682,7 @@ package android.telephony {
     method public java.lang.String getSubscriberId();
     method public java.lang.String getVoiceMailAlphaTag();
     method public java.lang.String getVoiceMailNumber();
-    method public int hasCarrierPrivileges();
+    method public boolean hasCarrierPrivileges();
     method public boolean hasIccCard();
     method public boolean iccCloseLogicalChannel(int);
     method public byte[] iccExchangeSimIO(int, int, int, int, int, java.lang.String);
