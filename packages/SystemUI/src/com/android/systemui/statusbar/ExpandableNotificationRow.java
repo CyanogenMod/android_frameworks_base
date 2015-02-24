@@ -42,6 +42,8 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
     private boolean mUserExpanded;
     /** Is the user touching this row */
     private boolean mUserLocked;
+    /** Has the user manually dismissed this row */
+    private boolean mUserDismissed;
     /** Are we showing the "public" version */
     private boolean mShowingPublic;
     private boolean mSensitive;
@@ -250,6 +252,14 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
 
     public void setUserLocked(boolean userLocked) {
         mUserLocked = userLocked;
+    }
+
+    public boolean isUserDismissed() {
+        return mUserDismissed;
+    }
+
+    public void setUserDismissed(boolean userDismissed) {
+        mUserDismissed = userDismissed;
     }
 
     /**

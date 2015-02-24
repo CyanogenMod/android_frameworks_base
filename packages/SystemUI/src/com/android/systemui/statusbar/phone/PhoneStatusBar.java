@@ -403,12 +403,25 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private int mNavigationIconHints = 0;
 
-    Runnable mLongPressBrightnessChange = new Runnable() {
+    private final Runnable mLongPressBrightnessChange = new Runnable() {
         @Override
         public void run() {
             mStatusBarView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             adjustBrightness(mInitialTouchX);
             mLinger = BRIGHTNESS_CONTROL_LINGER_THRESHOLD + 1;
+        }
+    };
+
+    private final Runnable mNotifyClearAll = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) {
+                Log.v(TAG, "Notifying status bar of notification clear");
+            }
+            try {
+                mPile.setViewRemoval(true);
+                mBarService.onClearAllNotifications();
+            } catch (RemoteException ex) { }
         }
     };
 
@@ -1240,7 +1253,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void clearAllNotifications() {
 
-        // animate-swipe all dismissable notifications, then animate the shade closed
+        // animate-swipe all dismissable notifications
         int numChildren = mStackScroller.getChildCount();
 
         final ArrayList<View> viewsToHide = new ArrayList<View>(numChildren);
@@ -1253,7 +1266,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
         if (viewsToHide.isEmpty()) {
-            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+            maybeCollapseAfterNotificationRemoval(true);
             return;
         }
 
@@ -3481,6 +3494,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     static final float saturate(float a) {
         return a < 0f ? 0f : (a > 1f ? 1f : a);
+    }
+
+     @Override
+    protected boolean isNotificationPanelFullyVisible() {
+        return mExpandedVisible &&
+                (!mHasFlipSettings || mScrollView.getVisibility() == View.VISIBLE);
+    }
+
+    @Override
+    protected boolean isTrackingNotificationPanel() {
+        return mNotificationPanel.isTracking();
     }
 
     @Override

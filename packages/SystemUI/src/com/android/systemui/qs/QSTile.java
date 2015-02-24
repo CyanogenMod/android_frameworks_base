@@ -16,12 +16,15 @@
 
 package com.android.systemui.qs;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +119,15 @@ public abstract class QSTile<TState extends State> implements Listenable {
 
     public void showDetail(boolean show) {
         mHandler.obtainMessage(H.SHOW_DETAIL, show ? 1 : 0, 0).sendToTarget();
+    }
+
+    public void collapsePanel() {
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean shouldCollapse = Settings.System.getIntForUser(resolver,
+                Settings.System.QS_COLLAPSE_PANEL, 0, UserHandle.USER_CURRENT) == 1;
+        if (shouldCollapse) {
+            mHost.collapsePanels();
+        }
     }
 
     protected final void refreshState() {

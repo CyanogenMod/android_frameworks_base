@@ -86,6 +86,7 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         setPersistedState(!mPersistedState);
         applyLockscreenState();
         refreshState();
+        collapsePanel();
     }
 
     @Override

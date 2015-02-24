@@ -55,6 +55,7 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
     protected void handleClick() {
         if (mController == null) return;
         mController.setRotationLocked(!mState.value);
+        collapsePanel();
     }
 
     @Override

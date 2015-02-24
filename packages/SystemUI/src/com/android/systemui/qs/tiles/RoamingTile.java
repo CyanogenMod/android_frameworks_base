@@ -68,6 +68,7 @@ public class RoamingTile extends QSTile<QSTile.BooleanState> {
     @Override
     public void handleClick() {
         setEnabled(!mState.value);
+        collapsePanel();
     }
 
     @Override

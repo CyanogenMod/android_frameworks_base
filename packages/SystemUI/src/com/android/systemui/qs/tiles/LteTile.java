@@ -51,6 +51,7 @@ public class LteTile extends QSTile<QSTile.BooleanState> {
     protected void handleClick() {
         toggleLteState();
         refreshState();
+        collapsePanel();
     }
 
     @Override

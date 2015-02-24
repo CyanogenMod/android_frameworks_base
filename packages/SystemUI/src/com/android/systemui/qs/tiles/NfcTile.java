@@ -49,6 +49,7 @@ public class NfcTile extends QSTile<QSTile.BooleanState> {
     @Override
     protected void handleClick() {
         toggleState();
+        collapsePanel();
     }
 
     @Override
