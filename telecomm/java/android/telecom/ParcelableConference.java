@@ -36,7 +36,7 @@ public final class ParcelableConference implements Parcelable {
     private List<String> mConnectionIds;
     private final IVideoProvider mVideoProvider;
     private final int mVideoState;
-
+    private long mConnectTimeMillis;
 
     public ParcelableConference(
             PhoneAccountHandle phoneAccount,
@@ -45,12 +45,25 @@ public final class ParcelableConference implements Parcelable {
             List<String> connectionIds,
             IVideoProvider videoProvider,
             int videoState) {
+       this(phoneAccount, state, capabilities, connectionIds, videoProvider, videoState,
+               Conference.NO_CONNECTTIME);
+    }
+
+    public ParcelableConference(
+            PhoneAccountHandle phoneAccount,
+            int state,
+            int capabilities,
+            List<String> connectionIds,
+            IVideoProvider videoProvider,
+            int videoState,
+            long oldConnectTimeMillis) {
         mPhoneAccount = phoneAccount;
         mState = state;
         mCapabilities = capabilities;
         mConnectionIds = connectionIds;
         mVideoProvider = videoProvider;
         mVideoState = videoState;
+        mConnectTimeMillis = oldConnectTimeMillis;
     }
 
     @Override
@@ -62,6 +75,8 @@ public final class ParcelableConference implements Parcelable {
                 .append(Connection.stateToString(mState))
                 .append(", capabilities: ")
                 .append(PhoneCapabilities.toString(mCapabilities))
+                .append(", connectTime: ")
+                .append(mConnectTimeMillis)
                 .append(", children: ")
                 .append(mConnectionIds)
                 .append(", VideoState: ")
@@ -95,6 +110,10 @@ public final class ParcelableConference implements Parcelable {
         return mVideoState;
     }
 
+    public long getConnectTimeMillis() {
+        return mConnectTimeMillis;
+    }
+
     public static final Parcelable.Creator<ParcelableConference> CREATOR =
             new Parcelable.Creator<ParcelableConference> () {
         @Override
@@ -108,9 +127,10 @@ public final class ParcelableConference implements Parcelable {
             IVideoProvider videoCallProvider =
                     IVideoProvider.Stub.asInterface(source.readStrongBinder());
             int videoState = source.readInt();
+            long oldConnectTimeMillis = source.readLong();
 
             return new ParcelableConference(phoneAccount, state, capabilities, connectionIds,
-                    videoCallProvider, videoState);
+                    videoCallProvider, videoState, oldConnectTimeMillis);
         }
 
         @Override
@@ -135,5 +155,6 @@ public final class ParcelableConference implements Parcelable {
         destination.writeStrongBinder(
                 mVideoProvider != null ? mVideoProvider.asBinder() : null);
         destination.writeInt(mVideoState);
+        destination.writeLong(mConnectTimeMillis);
     }
 }
