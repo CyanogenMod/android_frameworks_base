@@ -7934,6 +7934,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (isUpdatedSystemApp(pkg)) {
                     final PackageSetting sysPs = mSettings
                             .getDisabledSystemPkgLPr(pkg.packageName);
+                    if (sysPs == null) {
+                        return false;
+                    }
                     final GrantedPermissions origGp = sysPs.sharedUser != null
                             ? sysPs.sharedUser : sysPs;
 
