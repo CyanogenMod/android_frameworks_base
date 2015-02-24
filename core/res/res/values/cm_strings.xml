@@ -145,9 +145,9 @@
     <string name="usb_choose_notification_title">Touch to choose USB options.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-    <string name="permlab_interceptPackageLaunch">Intercept application launch</string>
+    <string name="permlab_interceptPackageLaunch">intercept app launch</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_interceptPackageLaunch">Allows an app to intercept launch of other applications</string>
+    <string name="permdesc_interceptPackageLaunch">Allows an app to intercept launch of other apps</string>
 
     <!-- App ops requests -->
     <string name="app_ops_access_camera">access the camera</string>
