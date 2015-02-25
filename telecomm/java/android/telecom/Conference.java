@@ -225,6 +225,13 @@ public abstract class Conference implements IConferenceable {
     }
 
     /**
+     * Sets state to be dialing.
+     */
+    public final void setDialing() {
+        setState(Connection.STATE_DIALING);
+    }
+
+    /**
      * Sets state to be active.
      */
     public final void setActive() {
@@ -433,6 +440,7 @@ public abstract class Conference implements IConferenceable {
 
     private void setState(int newState) {
         if (newState != Connection.STATE_ACTIVE &&
+                newState != Connection.STATE_DIALING &&
                 newState != Connection.STATE_HOLDING &&
                 newState != Connection.STATE_DISCONNECTED) {
             Log.w(this, "Unsupported state transition for Conference call.",
