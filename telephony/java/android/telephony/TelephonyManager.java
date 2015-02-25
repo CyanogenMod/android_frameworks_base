@@ -26,8 +26,6 @@ import android.app.AppOpsManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -1886,8 +1884,8 @@ public class TelephonyManager {
      * @param number The dialing number
      * @return true if the operation was executed correctly.
      */
-    public boolean setLine1NumberForDisplay(String alphaTag, String number) {
-        return setLine1NumberForDisplayForSubscriber(getDefaultSubscription(), alphaTag, number);
+    public void setLine1NumberForDisplay(String alphaTag, String number) {
+        setLine1NumberForDisplayForSubscriber(getDefaultSubscription(), alphaTag, number);
     }
 
     /**
@@ -2466,6 +2464,8 @@ public class TelephonyManager {
      * PackageManager.FEATURE_TELEPHONY system feature, which is available
      * on any device with a telephony radio, even if the device is
      * data-only.
+     *
+     * @hide pending API review
      */
     public boolean isVoiceCapable() {
         if (mContext == null) return true;
@@ -3173,31 +3173,6 @@ public class TelephonyManager {
      * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
      *
      * <p>
-     * Requires that the calling app has carrier privileges.
-     * @see #hasCarrierPrivileges
-     *
-     * @return true on success; false on any failure.
-     */
-    public boolean setPreferredNetworkTypeToGlobal() {
-        return setPreferredNetworkType(RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA);
-    }
-
-    /**
-     * Check TETHER_DUN_REQUIRED and TETHER_DUN_APN settings, net.tethering.noprovisioning
-     * SystemProperty, and config_tether_apndata to decide whether DUN APN is required for
-     * tethering.
-     *
-     * @return 0: Not required. 1: required. 2: Not set.
-     * @hide
-     */
-    public int getTetherApnRequired() {
-        return 0;
-    }
-
-    /**
-     * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
-     *
-     * <p>
      * Requires Permission:
      *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
      * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
@@ -3250,6 +3225,7 @@ public class TelephonyManager {
      *         CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED if the carrier rules are not loaded.
      *         CARRIER_PRIVILEGE_STATUS_ERROR_LOADING_RULES if there was an error loading carrier
      *             rules (or if there are no rules).
+     * @hide
      */
     public int hasCarrierPrivileges() {
         try {
@@ -3276,6 +3252,7 @@ public class TelephonyManager {
      *
      * @param brand The brand name to display/set.
      * @return true if the operation was executed correctly.
+     * @hide
      */
     public boolean setOperatorBrandOverride(String brand) {
         try {

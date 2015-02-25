@@ -26,11 +26,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Context;
 import android.net.Uri;
 import android.telephony.Rlog;
-import android.os.Handler;
-import android.os.Message;
 import android.os.ServiceManager;
 import android.os.RemoteException;
 
@@ -341,22 +338,8 @@ public class SubscriptionManager {
     }
 
     /** @hide */
-    public SubscriptionManager(Context context) {
+    public SubscriptionManager() {
         if (DBG) logd("SubscriptionManager created");
-        mContext = context;
-    }
-
-    /**
-     * Get an instance of the SubscriptionManager from the Context.
-     * This invokes {@link android.content.Context#getSystemService
-     * Context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE)}.
-     *
-     * @param context to use.
-     * @return SubscriptionManager instance
-     */
-    public static SubscriptionManager from(Context context) {
-        return (SubscriptionManager) context.getSystemService(
-                Context.TELEPHONY_SUBSCRIPTION_SERVICE);
     }
 
     /**
