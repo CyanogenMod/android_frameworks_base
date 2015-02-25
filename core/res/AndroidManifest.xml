@@ -1927,7 +1927,7 @@
     <permission android:name="android.permission.INTERCEPT_PACKAGE_LAUNCH"
         android:label="@string/permlab_interceptPackageLaunch"
         android:description="@string/permdesc_interceptPackageLaunch"
-        android:protectionLevel="system|signature" />
+        android:protectionLevel="signature|privileged" />
 
     <!-- ========================================= -->
     <!-- Permissions for special development tools -->
