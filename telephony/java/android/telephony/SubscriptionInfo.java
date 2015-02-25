@@ -100,8 +100,6 @@ public class SubscriptionInfo implements Parcelable {
     /**
      * Mobile Network Code
      */
-    public int mStatus;
-    public int mNwMode;
     private int mMnc;
 
     /**
@@ -112,9 +110,19 @@ public class SubscriptionInfo implements Parcelable {
     /**
      * @hide
      */
+    public int mStatus;
+
+    /**
+     * @hide
+     */
+    public int mNwMode;
+
+    /**
+     * @hide
+     */
     public SubscriptionInfo(int id, String iccId, int simSlotIndex, CharSequence displayName,
             CharSequence carrierName, int nameSource, int iconTint, String number, int roaming,
-            Bitmap icon, int mcc, int mnc, String countryIso, int status, int nwmode) {
+            Bitmap icon, int mcc, int mnc, String countryIso, int status, int nwMode) {
         this.mId = id;
         this.mIccId = iccId;
         this.mSimSlotIndex = simSlotIndex;

@@ -665,7 +665,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         int phoneCnt = phone.getPhoneCount();
         Vector<String> mccMnc = new Vector<String>();
         for(int i = 0;i<phoneCnt;++i) {
-            long[] subIds = SubscriptionManager.getSubId(i);
+            int[] subIds = SubscriptionManager.getSubId(i);
             if (subIds != null && subIds.length > 0) {
                 mccMnc.add(phone.getNetworkOperator(subIds[0]));
             }
@@ -765,7 +765,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         // Register for SubscriptionInfo list changes which is guaranteed
         // to invoke onSubscriptionsChanged the first time.
         SubscriptionManager.from(mContext)
-            .registerOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
+            .addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
 
         // construct handler, listen for events
         mHandler = new ProviderHandler(looper);

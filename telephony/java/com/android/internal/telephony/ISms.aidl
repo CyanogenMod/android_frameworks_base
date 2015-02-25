@@ -213,7 +213,7 @@ interface ISms {
      *  broadcast when the message is delivered to the recipient.  The
      *  raw pdu of the status report is in the extended data ("pdu").
      */
-    void sendDataWithOrigPortUsingSubscriber(long subId, String callingPkg, in String destAddr,
+    void sendDataWithOrigPortUsingSubscriber(int subId, String callingPkg, in String destAddr,
         in String scAddr,in int destPort, in int origPort, in byte[] data,
         in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
@@ -313,7 +313,7 @@ interface ISms {
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
      */
-    void sendTextWithOptionsUsingSubscriber(in long subId, String callingPkg, in String destAddr,
+    void sendTextWithOptionsUsingSubscriber(in int subId, String callingPkg, in String destAddr,
             in String scAddr, in String text, in PendingIntent sentIntent,
             in PendingIntent deliveryIntent, in int priority, in boolean isExpectMore,
             in int validityPeriod);
@@ -330,21 +330,6 @@ interface ISms {
      *  the same time an SMS received from radio is acknowledged back.
      */
     void injectSmsPdu(in byte[] pdu, String format, in PendingIntent receivedIntent);
-
-    /**
-     * Inject an SMS PDU into the android platform.
-     *
-     * @param subId on which SMS PDU to be injected into android application framework
-     * @param pdu is the byte array of pdu to be injected into android application framework
-     * @param format is the format of SMS pdu (android.telephony.SmsMessage.FORMAT_3GPP or
-     * android.telephony.SmsMessage.FORMAT_3GPP2)
-     * @param receivedIntent if not NULL this <code>PendingIntent</code> is
-     *  broadcast when the message is successfully received by the
-     *  android application framework. This intent is broadcasted at
-     *  the same time an SMS received from radio is acknowledged back.
-     */
-    void injectSmsPduForSubscriber(in long subId, in byte[] pdu, String format,
-            in PendingIntent receivedIntent);
 
     /**
      * Send a multi-part text based SMS.
@@ -440,7 +425,7 @@ interface ISms {
      *  Validity Period(Maximum) -> 635040 mins(i.e.63 weeks).
      *  Any Other values included Negative considered as Invalid Validity Period of the message.
      */
-    void sendMultipartTextWithOptionsUsingSubscriber(in long subId, String callingPkg,
+    void sendMultipartTextWithOptionsUsingSubscriber(in int subId, String callingPkg,
             in String destinationAddress, in String scAddress, in List<String> parts,
             in List<PendingIntent> sentIntents, in List<PendingIntent> deliveryIntents,
             in int priority, in boolean isExpectMore, in int validityPeriod);
@@ -657,12 +642,6 @@ interface ISms {
      */
     int getPreferredSmsSubscription();
 
-    /*
-     * get user prefered SMS subId
-     * @return subId id
-     */
-    long getPreferredSmsSubscription();
-
     /**
      * Gets SMS format supported on IMS.  SMS over IMS format is
      * either 3GPP or 3GPP2.
@@ -766,7 +745,7 @@ interface ISms {
      * @param subId for subId which getSmsCapacityOnIcc is queried.
      * @return capacity of ICC
      */
-    int getSmsCapacityOnIccForSubscriber(long subId);
+    int getSmsCapacityOnIccForSubscriber(int subId);
 
     /**
      * Get the SMSC from Icc card.
@@ -774,7 +753,7 @@ interface ISms {
      * @param subId for subId which getSmscAddressFromIccForSubscriber is queried.
      * @return SMSC of ICC
      */
-    String getSmscAddressFromIccForSubscriber(long subId);
+    String getSmscAddressFromIccForSubscriber(int subId);
 
     /**
      * Set the SMSC to Icc card.
@@ -783,5 +762,5 @@ interface ISms {
      * @param scAddress is the service center address
      * @return true if SMSC is set successfully, false otherwise
      */
-    boolean setSmscAddressToIccForSubscriber(long subId, String scAdress);
+    boolean setSmscAddressToIccForSubscriber(int subId, String scAdress);
 }

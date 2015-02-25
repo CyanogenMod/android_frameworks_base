@@ -94,6 +94,15 @@ public final class RemoteConnection {
                 int connectionCapabilities) {}
 
         /**
+         * Indicates that the call properties of this {@code RemoteConnection} have changed.
+         * See {@link #getCallProperties()}.
+         *
+         * @param connection The {@code RemoteConnection} invoking this method.
+         * @param callProperties The new call properties of the {@code RemoteConnection}.
+         * @hide
+         */
+        public void onCallPropertiesChanged(RemoteConnection connection, int callProperties) {}
+        /**
          * Invoked when the post-dial sequence in the outgoing {@code Connection} has reached a
          * pause character. This causes the post-dial signals to stop pending user confirmation. An
          * implementation should present this choice to the user and invoke
@@ -103,6 +112,8 @@ public final class RemoteConnection {
          * @param remainingPostDialSequence The post-dial characters that remain to be sent.
          */
         public void onPostDialWait(RemoteConnection connection, String remainingPostDialSequence) {}
+
+        public void onPostDialChar(RemoteConnection connection, char nextChar) {}
 
         /**
          * Indicates that the VOIP audio status of this {@code RemoteConnection} has changed.
@@ -537,6 +548,7 @@ public final class RemoteConnection {
     /**
      * @return A bitmask of the properties of the {@code RemoteConnection}, as defined in
      *         {@link CallProperties}.
+     * @hide
      */
     public int getCallProperties() {
         return mCallProperties;
@@ -889,6 +901,15 @@ public final class RemoteConnection {
         for (Callback c : mCallbacks) {
             c.onConnectionCapabilitiesChanged(this, connectionCapabilities);
             c.onCallCapabilitiesChanged(this, connectionCapabilities);
+        }
+    }
+    /**
+     * @hide
+     */
+    void setCallProperties(int callProperties) {
+        mCallProperties = callProperties;
+        for (Callback c : mCallbacks) {
+            c.onCallPropertiesChanged(this, callProperties);
         }
     }
 

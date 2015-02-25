@@ -62,6 +62,8 @@ public final class DisconnectCause implements Parcelable {
     /** Disconnected for reason not described by other disconnect codes. */
     public static final int OTHER = 9;
 
+    public static final int CONNECTION_MANAGER_NOT_SUPPORTED = 10;
+
     private int mDisconnectCode;
     private CharSequence mDisconnectLabel;
     private CharSequence mDisconnectDescription;

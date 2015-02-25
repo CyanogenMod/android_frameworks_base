@@ -39,9 +39,6 @@ interface ITelephonyRegistry {
             boolean notifyNow);
     void notifyCallState(int state, String incomingNumber);
     void notifyServiceState(in ServiceState state);
-    void notifyServiceStateForSubscriber(in long subId, in ServiceState state);
-    void notifyMessageWaitingChanged(boolean mwi);
-    void notifyMessageWaitingChangedForSubscriber(in long subId, boolean mwi);
     void notifyCallStateForSubscriber(in int subId, int state, String incomingNumber);
     void notifyServiceStateForPhoneId(in int phoneId, in int subId, in ServiceState state);
     void notifySignalStrength(in SignalStrength signalStrength);

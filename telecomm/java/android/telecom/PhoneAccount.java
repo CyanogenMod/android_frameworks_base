@@ -20,6 +20,10 @@ import android.annotation.SystemApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources.NotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcel;
@@ -125,6 +129,7 @@ public class PhoneAccount implements Parcelable {
 
     /**
      * Indicating no color is set.
+     * @hide
      */
     public static final int NO_COLOR = -1;
 
@@ -148,6 +153,8 @@ public class PhoneAccount implements Parcelable {
     private final Uri mSubscriptionAddress;
     private final int mCapabilities;
     private final int mIconResId;
+    private final String mIconPackageName;
+    private final Bitmap mIconBitmap;
     private final int mColor;
     private final int mIconTint;
     private final int mHighlightColor;
@@ -161,6 +168,8 @@ public class PhoneAccount implements Parcelable {
         private Uri mSubscriptionAddress;
         private int mCapabilities;
         private int mIconResId;
+        private String mIconPackageName;
+        private Bitmap mIconBitmap;
         private int mColor = NO_COLOR;
         private int mIconTint = NO_ICON_TINT;
         private int mHighlightColor = NO_HIGHLIGHT_COLOR;
@@ -188,6 +197,8 @@ public class PhoneAccount implements Parcelable {
             mColor = phoneAccount.getColor();
             mIconTint = phoneAccount.getIconTint();
             mHighlightColor = phoneAccount.getHighlightColor();
+            mIconPackageName = phoneAccount.getIconPackageName();
+            mIconBitmap = phoneAccount.getIconBitmap();
             mLabel = phoneAccount.getLabel();
             mShortDescription = phoneAccount.getShortDescription();
             mSupportedUriSchemes.addAll(phoneAccount.getSupportedUriSchemes());
@@ -294,8 +305,33 @@ public class PhoneAccount implements Parcelable {
             return this;
         }
 
+        /** @hide */
         public Builder setColor(int value) {
             this.mColor = value;
+            return this;
+        }
+
+        /**
+         * Sets the icon package name. See {@link PhoneAccount#getIconPackageName}.
+         *
+         * @param value The name of the package from which to load the icon.
+         * @return The builder.
+         * @hide
+         */
+        public Builder setIconPackageName(String value) {
+            this.mIconPackageName = value;
+            return this;
+        }
+
+        /**
+         * Sets the icon bitmap. See {@link PhoneAccount#getIconBitmap}.
+         *
+         * @param value The icon bitmap.
+         * @return The builder.
+         * @hide
+         */
+        public Builder setIconBitmap(Bitmap value) {
+            this.mIconBitmap = value;
             return this;
         }
 
@@ -361,6 +397,8 @@ public class PhoneAccount implements Parcelable {
                     mColor,
                     mIconTint,
                     mHighlightColor,
+                    mIconPackageName,
+                    mIconBitmap,
                     mLabel,
                     mShortDescription,
                     mSupportedUriSchemes);
@@ -376,6 +414,8 @@ public class PhoneAccount implements Parcelable {
             int color,
             int iconTint,
             int highlightColor,
+            String iconPackageName,
+            Bitmap iconBitmap,
             CharSequence label,
             CharSequence shortDescription,
             List<String> supportedUriSchemes) {
@@ -387,6 +427,8 @@ public class PhoneAccount implements Parcelable {
         mColor = color;
         mIconTint = iconTint;
         mHighlightColor = highlightColor;
+        mIconPackageName = iconPackageName;
+        mIconBitmap = iconBitmap;
         mLabel = label;
         mShortDescription = shortDescription;
         mSupportedUriSchemes = Collections.unmodifiableList(supportedUriSchemes);
@@ -561,9 +603,24 @@ public class PhoneAccount implements Parcelable {
      * A highlight color to use in displaying information about this {@code PhoneAccount}.
      *
      * @return A hexadecimal color value.
+     * @hide
      */
     public int getColor() {
         return mColor;
+    }
+
+    /**
+     * The package name from which to load the icon of this {@code PhoneAccount}.
+     * <p>
+     * If this property is {@code null}, the resource {@link #getIconResId()} will be loaded from
+     * the package in the {@link ComponentName} of the {@link #getAccountHandle()}.
+     * <p>
+     * Clients wishing to display a {@code PhoneAccount} should use {@link #getIcon(Context)}.
+     *
+     * @return A package name.
+     */
+    public String getIconPackageName() {
+        return mIconPackageName;
     }
 
     /**
@@ -630,6 +687,7 @@ public class PhoneAccount implements Parcelable {
                 Log.w(this, "Cannot find package %s", mIconPackageName);
             }
         }
+        return new ColorDrawable(Color.TRANSPARENT);
     }
 
     //
@@ -709,6 +767,7 @@ public class PhoneAccount implements Parcelable {
         mCapabilities = in.readInt();
         mIconResId = in.readInt();
         mColor = in.readInt();
+        mIconPackageName = in.readString();
         if (in.readInt() > 0) {
             mIconBitmap = Bitmap.CREATOR.createFromParcel(in);
         } else {

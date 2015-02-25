@@ -350,6 +350,10 @@ public class TelephonyIntents {
     public static final String ACTION_SUBINFO_RECORD_UPDATED
             = "android.intent.action.ACTION_SUBINFO_RECORD_UPDATED";
 
+    public static final String EXTRA_COLUMN_NAME = "columnName";
+    public static final String EXTRA_INT_CONTENT = "intContent";
+    public static final String EXTRA_STRING_CONTENT = "stringContent";
+
     /**
      * Broadcast Action: The default subscription has changed.  This has the following
      * extra values:</p>

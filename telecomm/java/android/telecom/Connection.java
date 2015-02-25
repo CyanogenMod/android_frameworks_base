@@ -71,21 +71,45 @@ public abstract class Connection implements IConferenceable {
      */
 
     /* Default case */
+
+    /**
+     * @hide
+     */
     public static final int CALL_SUBSTATE_NONE = 0;
 
     /* Indicates that the call is connected but audio attribute is suspended */
+
+    /**
+     * @hide
+     */
     public static final int CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED = 0x1;
 
     /* Indicates that the call is connected but video attribute is suspended */
+
+    /**
+     * @hide
+     */
     public static final int CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED = 0x2;
 
     /* Indicates that the call is established but media retry is needed */
+
+    /**
+     * @hide
+     */
     public static final int CALL_SUBSTATE_AVP_RETRY = 0x4;
 
     /* Indicates that the call is multitasking */
+
+    /**
+     * @hide
+     */
     public static final int CALL_SUBSTATE_MEDIA_PAUSED = 0x8;
 
     /* Mask containing all the call substate bits set */
+
+    /**
+     * @hide
+     */
     public static final int CALL_SUBSTATE_ALL = CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED |
         CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED | CALL_SUBSTATE_AVP_RETRY |
         CALL_SUBSTATE_MEDIA_PAUSED;
@@ -914,6 +938,14 @@ public abstract class Connection implements IConferenceable {
     }
 
     /**
+     * Returns the connection's {@link CallProperties}
+     * @hide
+     */
+    public final int getCallProperties() {
+        return mCallProperties;
+    }
+
+    /**
      * Sets the value of the {@link #getAddress()} property.
      *
      * @param address The new address.
@@ -997,6 +1029,7 @@ public abstract class Connection implements IConferenceable {
 
     /**
      * Updates the call extras for the connection.
+     * @hide
      */
     public final void setExtras(Bundle extras) {
         if (DBG) {
@@ -1142,6 +1175,22 @@ public abstract class Connection implements IConferenceable {
             }
         }
     }
+
+    /**
+     * Sets the connection's {@link CallProperties}.
+     *
+     * @param callProperties The new call properties.
+     * @hide
+     */
+    public final void setCallProperties(int callProperties) {
+        if (mCallProperties != callProperties) {
+            mCallProperties = callProperties;
+            for (Listener l : mListeners) {
+                l.onCallPropertiesChanged(this, mCallProperties);
+            }
+        }
+    }
+
 
     /**
      * Tears down the Connection object.
@@ -1427,11 +1476,13 @@ public abstract class Connection implements IConferenceable {
      * {@code ConnectionService#addConference}.
      *
      * @param otherConnection The connection with which this connection should be conferenced.
+     * @hide
      */
     public void onConferenceWith(Connection otherConnection) {}
 
     /**
      * Notifies this Connection that the conference which is set on it has changed.
+     * @hide
      */
     public void onConferenceChanged() {}
 

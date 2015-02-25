@@ -26,6 +26,8 @@ import android.app.AppOpsManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -1372,7 +1374,7 @@ public class TelephonyManager {
      *
      */
     /** {@hide} */
-    public String getIccOperatorNumeric(long subId) {
+    public String getIccOperatorNumeric(int subId) {
        try{
             return getITelephony().getIccOperatorNumeric(subId);
        } catch (RemoteException ex) {
@@ -1884,8 +1886,8 @@ public class TelephonyManager {
      * @param number The dialing number
      * @return true if the operation was executed correctly.
      */
-    public void setLine1NumberForDisplay(String alphaTag, String number) {
-        setLine1NumberForDisplayForSubscriber(getDefaultSubscription(), alphaTag, number);
+    public boolean setLine1NumberForDisplay(String alphaTag, String number) {
+        return setLine1NumberForDisplayForSubscriber(getDefaultSubscription(), alphaTag, number);
     }
 
     /**
@@ -2329,8 +2331,8 @@ public class TelephonyManager {
     /**
     * @hide
     */
-    private ITelecommService getTelecommService() {
-        return ITelecommService.Stub.asInterface(ServiceManager.getService(TELECOMM_SERVICE_NAME));
+    private ITelecomService getTelecomService() {
+        return ITelecomService.Stub.asInterface(ServiceManager.getService(Context.TELECOM_SERVICE));
     }
 
     //
@@ -2465,7 +2467,6 @@ public class TelephonyManager {
      * on any device with a telephony radio, even if the device is
      * data-only.
      *
-     * @hide pending API review
      */
     public boolean isVoiceCapable() {
         if (mContext == null) return true;
@@ -2514,7 +2515,7 @@ public class TelephonyManager {
     }
 
     /** {@hide} */
-    public List<CellInfo> getAllCellInfo(long subId) {
+    public List<CellInfo> getAllCellInfo(int subId) {
         try {
             return getITelephony().getAllCellInfoUsingSubId(subId);
         } catch (RemoteException ex) {
@@ -2829,7 +2830,7 @@ public class TelephonyManager {
     }
 
     /** {@hide} */
-    public int getDefaultSim() {
+    public static int getDefaultSim() {
         return SubscriptionManager.getSlotId(SubscriptionManager.getDefaultSubId());
     }
 
@@ -3178,10 +3179,25 @@ public class TelephonyManager {
      * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
      *
      * @return true on success; false on any failure.
+     * @hide
      */
     public boolean setGlobalPreferredNetworkType() {
         return setPreferredNetworkType(RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA);
     }
+
+    /**
+     * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
+     *
+     * <p>
+     * Requires that the calling app has carrier privileges.
+     * @see #hasCarrierPrivileges
+     *
+     * @return true on success; false on any failure.
+     */
+    public boolean setPreferredNetworkTypeToGlobal() {
+        return setPreferredNetworkType(RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA);
+    }
+
 
     /**
      * Check TETHER_DUN_REQUIRED and TETHER_DUN_APN settings, net.tethering.noprovisioning
@@ -3206,9 +3222,13 @@ public class TelephonyManager {
     /**
      * Values used to return status for hasCarrierPrivileges call.
      */
+    /** @hide */
     public static final int CARRIER_PRIVILEGE_STATUS_HAS_ACCESS = 1;
+    /** @hide */
     public static final int CARRIER_PRIVILEGE_STATUS_NO_ACCESS = 0;
+    /** @hide */
     public static final int CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED = -1;
+    /** @hide */
     public static final int CARRIER_PRIVILEGE_STATUS_ERROR_LOADING_RULES = -2;
 
     /**
@@ -3225,17 +3245,17 @@ public class TelephonyManager {
      *         CARRIER_PRIVILEGE_STATUS_RULES_NOT_LOADED if the carrier rules are not loaded.
      *         CARRIER_PRIVILEGE_STATUS_ERROR_LOADING_RULES if there was an error loading carrier
      *             rules (or if there are no rules).
-     * @hide
      */
-    public int hasCarrierPrivileges() {
+    public boolean hasCarrierPrivileges() {
         try {
-            return getITelephony().hasCarrierPrivileges();
+            return getITelephony().hasCarrierPrivileges() ==
+                CARRIER_PRIVILEGE_STATUS_HAS_ACCESS;
         } catch (RemoteException ex) {
             Rlog.e(TAG, "hasCarrierPrivileges RemoteException", ex);
         } catch (NullPointerException ex) {
             Rlog.e(TAG, "hasCarrierPrivileges NPE", ex);
         }
-        return CARRIER_PRIVILEGE_STATUS_NO_ACCESS;
+        return false;
     }
 
     /**
@@ -3252,7 +3272,6 @@ public class TelephonyManager {
      *
      * @param brand The brand name to display/set.
      * @return true if the operation was executed correctly.
-     * @hide
      */
     public boolean setOperatorBrandOverride(String brand) {
         try {
@@ -3494,6 +3513,12 @@ public class TelephonyManager {
 
     /** @hide */
     @SystemApi
+    public boolean handlePinMmiForSubscriber(int subId, String dialString) {
+        return false;
+    }
+
+    /** @hide */
+    @SystemApi
     public void toggleRadioOnOff() {
         try {
             getITelephony().toggleRadioOnOff();
@@ -3568,8 +3593,7 @@ public class TelephonyManager {
     }
 
     /** @hide */
-    @SystemApi
-    public boolean isDataPossibleForSubscription(long subId, String apnType) {
+    public boolean isDataPossibleForSubscription(int subId, String apnType) {
         try {
             return getITelephony().isDataPossibleForSubscription(subId, apnType);
         } catch (RemoteException e) {
@@ -3597,7 +3621,12 @@ public class TelephonyManager {
 
     /** @hide */
     @SystemApi
-    public void setDataEnabledUsingSubId(long subId, boolean enable) {
+    public void setDataEnabled(int subId, boolean enable) {
+        setDataEnabledUsingSubId(subId, enable);
+    }
+
+   /** @hide */
+    public void setDataEnabledUsingSubId(int subId, boolean enable) {
         try {
             AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
             if (enable) {
@@ -3620,6 +3649,13 @@ public class TelephonyManager {
         } catch (RemoteException e) {
             Log.e(TAG, "Error calling ITelephony#getDataEnabled", e);
         }
+        return false;
+    }
+
+   /** @hide */
+    @SystemApi
+    public boolean getDataEnabled(int subId) {
+        // FIXME
         return false;
     }
 

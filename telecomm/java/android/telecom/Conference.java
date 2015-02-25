@@ -33,6 +33,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @SystemApi
 public abstract class Conference implements IConferenceable {
+    public static long CONNECT_TIME_NOT_SPECIFIED = 0;
 
     /** @hide */
     public abstract static class Listener {
@@ -208,6 +209,7 @@ public abstract class Conference implements IConferenceable {
      * Invoked when the conference adds a participant to the conference call.
      *
      * @param participant The participant to be added with conference call.
+     * @hide
      */
     public void onAddParticipant(String participant) {}
 
@@ -375,7 +377,12 @@ public abstract class Conference implements IConferenceable {
         }
         fireOnConferenceableConnectionsChanged();
     }
+    //FIXME: STUBS_LMR1_INTERNAL
+    public void setConnectTimeMillis(long data) {}
 
+    /**
+     * @hide
+     */
     public final void setVideoState(Connection c, int videoState) {
         Log.d(this, "setVideoState Conference: %s Connection: %s VideoState: %s",
                 this, c, videoState);
@@ -404,6 +411,12 @@ public abstract class Conference implements IConferenceable {
      */
     public final List<Connection> getConferenceableConnections() {
         return mUnmodifiableConferenceableConnections;
+    }
+
+    // FIXME: STUBS_LMR1_INTERNAL
+    public long getConnectTimeMillis() {
+        long data = 0;
+        return data;
     }
 
     /**
@@ -508,7 +521,7 @@ public abstract class Conference implements IConferenceable {
         return String.format(Locale.US,
                 "[State: %s,Capabilites: %s, VideoState: %s, VideoProvider: %s, ThisObject %s]",
                 Connection.stateToString(mState),
-                PhoneCapabilities.toString(mCapabilities),
+                PhoneCapabilities.toString(mConnectionCapabilities),
                 getVideoState(),
                 getVideoProvider(),
                 super.toString());

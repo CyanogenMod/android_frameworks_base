@@ -685,14 +685,14 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
      public void notifyServiceState(ServiceState state) {
-         notifyServiceStateForSubscriber(mDefaultSubId, state);
+         notifyServiceStateForPhoneId(mDefaultPhoneId, mDefaultSubId, state);
      }
 
-    public void notifyServiceStateForSubscriber(long subId, ServiceState state) {
+    public void notifyServiceStateForPhoneId(int phoneId, int subId, ServiceState state) {
         if (!checkNotifyPermission("notifyServiceState()")){
             return;
         }
-        if (subId == SubscriptionManager.DEFAULT_SUB_ID) {
+        if (subId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
             subId = mDefaultSubId;
             if (VDBG) log("notifyServiceStateForSubscriber: using mDefaultSubId=" + mDefaultSubId);
         }
@@ -856,34 +856,11 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyMessageWaitingChanged(boolean mwi) {
-        notifyMessageWaitingChangedForSubscriber(mDefaultSubId, mwi);
+        notifyMessageWaitingChangedForPhoneId(mDefaultPhoneId, mDefaultSubId, mwi);
     }
 
-    public void notifyMessageWaitingChangedForSubscriber(long subId, boolean mwi) {
-        if (!checkNotifyPermission("notifyMessageWaitingChanged()")) {
-            return;
-        }
-        if (VDBG) {
-            log("notifyMessageWaitingChangedForSubscriber: subId=" + subId
-                + " mwi=" + mwi);
-        }
-        synchronized (mRecords) {
-            if (validatePhoneId(phoneId)) {
-                mMessageWaiting[phoneId] = mwi;
-                for (Record r : mRecords) {
-                    if (r.matchPhoneStateListenerEvent(
-                            PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR) &&
-                            idMatch(r.subId, subId, phoneId)) {
-                        try {
-                            r.callback.onMessageWaitingIndicatorChanged(mwi);
-                        } catch (RemoteException ex) {
-                            mRemoveList.add(r.binder);
-                        }
-                    }
-                }
-            }
-            handleRemoveListLocked();
-        }
+    //FIXME STUBS_LMR1_INTERNAL
+    public void notifyMessageWaitingChangedForPhoneId(int phoneId, int subId, boolean mwi) {
     }
 
     public void notifyCallForwardingChanged(boolean cfi) {

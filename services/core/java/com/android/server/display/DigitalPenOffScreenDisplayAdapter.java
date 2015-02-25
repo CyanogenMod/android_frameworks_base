@@ -130,7 +130,7 @@ public final class DigitalPenOffScreenDisplayAdapter extends DisplayAdapter {
         private DisplayDeviceInfo mInfo;
 
         public DigitalPenOffScreenDisplayDevice(IBinder displayToken) {
-            super(DigitalPenOffScreenDisplayAdapter.this, displayToken);
+            super(DigitalPenOffScreenDisplayAdapter.this, displayToken, "digitalpen:1");
             mName = getDisplayName();
             mWidth = 480;
             mHeight = 640;

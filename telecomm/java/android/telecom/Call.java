@@ -174,6 +174,16 @@ public final class Call {
          */
         public static final int CAPABILITY_DISCONNECT_FROM_CONFERENCE = 0x00002000;
 
+        /** 
+         * @hide
+         */
+        public static final int CAPABILITY_CALL_TYPE_MODIFIABLE = 0x00020000;
+
+        /**
+         * @hide
+         */
+        public static final int CAPABILITY_ADD_PARTICIPANT      = 0x00080000;
+
         /**
          * Whether the call is a generic conference, where we do not know the precise state of
          * participants in the conference (eg. on CDMA).
@@ -372,6 +382,7 @@ public final class Call {
 
         /**
          * @return The substate of the {@code Call}.
+         * {@hide}
          */
         public int getCallSubstate() {
             return mCallSubstate;
@@ -679,7 +690,7 @@ public final class Call {
      * Notifies this {@code Call} that an account has been selected and to proceed with placing
      * an outgoing call.
      */
-    public void phoneAccountSelected(PhoneAccountHandle accountHandle) {
+    public void phoneAccountSelected(PhoneAccountHandle accountHandle, boolean setDefault) {
         mInCallAdapter.phoneAccountSelected(mTelecomCallId, accountHandle);
 
     }

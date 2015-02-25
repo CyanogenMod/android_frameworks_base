@@ -54,6 +54,7 @@ public final class ParcelableConnection implements Parcelable {
             PhoneAccountHandle phoneAccount,
             int state,
             int capabilities,
+            int properties,
             Uri address,
             int addressPresentation,
             String callerDisplayName,
@@ -95,6 +96,10 @@ public final class ParcelableConnection implements Parcelable {
     // Bit mask of actions a call supports, values are defined in {@link CallCapabilities}.
     public int getConnectionCapabilities() {
         return mConnectionCapabilities;
+    }
+
+    public int getProperties() {
+        return mProperties;
     }
 
     public Uri getHandle() {
@@ -168,6 +173,7 @@ public final class ParcelableConnection implements Parcelable {
             PhoneAccountHandle phoneAccount = source.readParcelable(classLoader);
             int state = source.readInt();
             int capabilities = source.readInt();
+            int properties = source.readInt();
             Uri address = source.readParcelable(classLoader);
             int addressPresentation = source.readInt();
             String callerDisplayName = source.readString();
@@ -187,6 +193,7 @@ public final class ParcelableConnection implements Parcelable {
                     phoneAccount,
                     state,
                     capabilities,
+                    properties,
                     address,
                     addressPresentation,
                     callerDisplayName,

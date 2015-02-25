@@ -342,7 +342,7 @@ interface ITelephony {
     /**
      * Report whether mms data connectivity is possible.
      */
-    boolean isDataPossibleForSubscription(long subId, String apnType);
+    boolean isDataPossibleForSubscription(int subId, String apnType);
 
     Bundle getCellLocation();
 
@@ -478,7 +478,7 @@ interface ITelephony {
       * @param subId user preferred subId.
       * Returns icc operator numeric
       */
-    String getIccOperatorNumeric(long subId);
+    String getIccOperatorNumeric(int subId);
 
     /**
      * Return true if an ICC card is present
@@ -518,7 +518,7 @@ interface ITelephony {
     List<CellInfo> getAllCellInfo();
 
 
-    List<CellInfo> getAllCellInfoUsingSubId(long subId);
+    List<CellInfo> getAllCellInfoUsingSubId(int subId);
 
     /**
      * Sets minimum time in milli-seconds between onCellInfoChanged
@@ -551,7 +551,7 @@ interface ITelephony {
      * @param AID Application id. See ETSI 102.221 and 101.220.
      * @return an IccOpenLogicalChannelResponse object.
      */
-    IccOpenLogicalChannelResponse iccOpenLogicalChannelUsingSubId(long subId, String AID);
+    IccOpenLogicalChannelResponse iccOpenLogicalChannelUsingSubId(int subId, String AID);
 
     /**
      * Closes a previously opened logical channel to the ICC card.
@@ -575,7 +575,7 @@ interface ITelephony {
      *            successful iccOpenLogicalChannel.
      * @return true if the channel was closed successfully.
      */
-    boolean iccCloseLogicalChannelUsingSubId(long subId, int channel);
+    boolean iccCloseLogicalChannelUsingSubId(int subId, int channel);
 
     /**
      * Transmit an APDU to the ICC card over a logical channel.
@@ -616,7 +616,7 @@ interface ITelephony {
      * @return The APDU response from the ICC card with the status appended at
      *            the end.
      */
-    String iccTransmitApduLogicalChannelUsingSubId(long subId, int channel, int cla,
+    String iccTransmitApduLogicalChannelUsingSubId(int subId, int channel, int cla,
             int instruction, int p1, int p2, int p3, String data);
 
     /**
@@ -654,7 +654,7 @@ interface ITelephony {
      * @return The APDU response from the ICC card with the status appended at
      *            the end.
      */
-    String iccTransmitApduBasicChannelUsingSubId(long subId, int cla, int instruction,
+    String iccTransmitApduBasicChannelUsingSubId(int subId, int cla, int instruction,
             int p1, int p2, int p3, String data);
 
     /**
@@ -684,7 +684,7 @@ interface ITelephony {
      * @param filePath
      * @return The APDU response.
      */
-    byte[] iccExchangeSimIOUsingSubId(long subId, int fileID, int command, int p1, int p2,
+    byte[] iccExchangeSimIOUsingSubId(int subId, int fileID, int command, int p1, int p2,
             int p3, String filePath);
 
     /**
@@ -783,7 +783,7 @@ interface ITelephony {
      *
      * @param enable true to turn on, else false
      */
-    void setDataEnabledUsingSubId(long subId, boolean enable);
+    void setDataEnabledUsingSubId(int subId, boolean enable);
 
     /**
      * Get the user enabled state of Mobile Data.
@@ -913,7 +913,7 @@ interface ITelephony {
      * Get ATR (Answer To Reset; as per ISO/IEC 7816-4) from SIM card
      * for a particular subId.
      */
-    byte[] getAtrUsingSubId(long subId);
+    byte[] getAtrUsingSubId(int subId);
 
     /**
      * Check if any mobile Radios need to be shutdown.
@@ -926,4 +926,18 @@ interface ITelephony {
      * Shutdown Mobile Radios
      */
     void shutdownMobileRadios();
+
+    /**
+     * Enables or disables video calling.
+     *
+     * @param enable Whether to enable video calling.
+     */
+    void enableVideoCalling(boolean enable);
+
+/**
+     * Whether video calling has been enabled by the user.
+     *
+     * @return {@code True} if the user has enabled video calling, {@code false} otherwise.
+     */
+    boolean isVideoCallingEnabled();
 }

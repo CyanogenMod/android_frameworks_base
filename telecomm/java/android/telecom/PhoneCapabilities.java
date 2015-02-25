@@ -23,7 +23,6 @@ import android.annotation.SystemApi;
  * merge.
  * @hide
  */
-@SystemApi
 public final class PhoneCapabilities {
     /** Call can currently be put on hold or unheld. */
     public static final int HOLD               = 0x00000001;

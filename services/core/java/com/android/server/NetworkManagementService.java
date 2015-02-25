@@ -259,7 +259,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             tm.listen(mPhoneStateListener,
                     PhoneStateListener.LISTEN_DATA_CONNECTION_REAL_TIME_INFO);
         }
-        mPhoneStateListener = null;
+        //mPhoneStateListener = null;
 
         // Add ourself to the Watchdog monitors.
         Watchdog.getInstance().addMonitor(this);
