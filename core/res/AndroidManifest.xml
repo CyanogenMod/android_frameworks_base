@@ -2123,7 +2123,7 @@
     <permission android:name="android.permission.SET_ACTIVITY_WATCHER"
         android:label="@string/permlab_runSetActivityWatcher"
         android:description="@string/permdesc_runSetActivityWatcher"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature|privileged" />
 
     <!-- @SystemApi Allows an application to call the activity manager shutdown() API
          to put the higher-level system there into a shutdown state.
