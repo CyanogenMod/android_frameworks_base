@@ -8052,6 +8052,20 @@ public class PackageManagerService extends IPackageManager.Stub {
             // is granted only if it was already granted.
             allowed = origPermissions.contains(perm);
         }
+        if (!allowed && (bp.protectionLevel
+                 & PermissionInfo.PROTECTION_FLAG_PRIVILEGED) != 0) {
+            if (origPermissions.contains(perm)) {
+                // If the original was granted this permission, we take
+                // that grant decision as read and propagate it to the
+                // update.
+                allowed = true;
+            } else {
+                // Otherwise, we need to check allowed signatures for this
+                // specific permission to allow access based on the
+                // {@link PermissionInfo.PROTECTION_FLAG_PRIVILEGED} flag
+                allowed = isAllowedSignature(pkg, perm);
+            }
+        }
         return allowed;
     }
 

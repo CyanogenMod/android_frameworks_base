@@ -215,6 +215,11 @@
         <!-- Additional flag from base permission type: this permission is closely
              associated with an app op for controlling access. -->
         <flag name="appop" value="0x40" />
+        <!-- Additional flag from base permission type: this permission can be
+             granted to whitelisted partners for specific access to core systems. This is
+             to prevent lowering the protection level of certain signature permissions
+             to accommodate new implementations.-->
+        <flag name="privileged" value="0x80" />
     </attr>
 
     <!-- Flags indicating more context for a permission group. -->

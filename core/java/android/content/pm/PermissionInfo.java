@@ -76,6 +76,14 @@ public class PermissionInfo extends PackageItemInfo implements Parcelable {
     public static final int PROTECTION_FLAG_APPOP = 0x40;
 
     /**
+     * Addition flag for {@link #protectionLevel}, corresponding
+     * to the <code>privileged</code> value of
+     * {@link android.R.attr#protectionLevel}
+     * @hide
+     */
+    public static final int PROTECTION_FLAG_PRIVILEGED = 0x80;
+
+    /**
      * Mask for {@link #protectionLevel}: the basic protection type.
      */
     public static final int PROTECTION_MASK_BASE = 0xf;
@@ -153,6 +161,9 @@ public class PermissionInfo extends PackageItemInfo implements Parcelable {
             case PermissionInfo.PROTECTION_SIGNATURE_OR_SYSTEM:
                 protLevel = "signatureOrSystem";
                 break;
+            case PermissionInfo.PROTECTION_FLAG_PRIVILEGED:
+                protLevel = "privileged";
+                break;
         }
         if ((level&PermissionInfo.PROTECTION_FLAG_SYSTEM) != 0) {
             protLevel += "|system";
@@ -162,6 +173,9 @@ public class PermissionInfo extends PackageItemInfo implements Parcelable {
         }
         if ((level&PermissionInfo.PROTECTION_FLAG_APPOP) != 0) {
             protLevel += "|appop";
+        }
+        if ((level&PermissionInfo.PROTECTION_FLAG_PRIVILEGED) != 0) {
+            protLevel += "|privileged";
         }
         return protLevel;
     }
