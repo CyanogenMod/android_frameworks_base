@@ -274,4 +274,7 @@
     <java-symbol type="string" name="usb_media_checking" />
     <java-symbol type="string" name="usb_media_removed" />
     <java-symbol type="string" name="usb_media_shared" />
+
+    <!-- Strings for StatusBarManagerService. -->
+    <java-symbol type="string" name="custom_tile_listener_binding_label" />
 </resources>
