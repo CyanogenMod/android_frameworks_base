@@ -13,6 +13,7 @@ LOCAL_JAVA_LIBRARIES := android.policy telephony-common
 
 LOCAL_JAVA_LIBRARIES += services.accessibility
 
-LOCAL_JAVA_LIBRARIES += org.cyanogenmod.hardware
+LOCAL_JAVA_LIBRARIES += org.cyanogenmod.hardware \
+                        org.cyanogenmod.platform
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
