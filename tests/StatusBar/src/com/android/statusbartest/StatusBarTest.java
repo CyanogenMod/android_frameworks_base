@@ -28,6 +28,8 @@ import android.os.SystemClock;
 import android.view.Window;
 import android.view.WindowManager;
 
+import cyanogenmod.app.CustomTile;
+
 public class StatusBarTest extends TestActivity
 {
     private final static String TAG = "StatusBarTest";
@@ -188,10 +190,10 @@ public class StatusBarTest extends TestActivity
         new Test("Disable Expand in 3 sec.") {
             public void run() {
                 mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.disable(StatusBarManager.DISABLE_EXPAND);
-                        }
-                    }, 3000);
+                    public void run() {
+                        mStatusBarManager.disable(StatusBarManager.DISABLE_EXPAND);
+                    }
+                }, 3000);
             }
         },
         new Test("Disable Notifications in 3 sec.") {
@@ -241,10 +243,10 @@ public class StatusBarTest extends TestActivity
         new Test("Disable everything in 3 sec") {
             public void run() {
                 mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.disable(~StatusBarManager.DISABLE_NONE);
-                        }
-                    }, 3000);
+                    public void run() {
+                        mStatusBarManager.disable(~StatusBarManager.DISABLE_NONE);
+                    }
+                }, 3000);
             }
         },
         new Test("Enable everything") {
@@ -255,10 +257,10 @@ public class StatusBarTest extends TestActivity
         new Test("Enable everything in 3 sec.") {
             public void run() {
                 mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.disable(0);
-                        }
-                    }, 3000);
+                    public void run() {
+                        mStatusBarManager.disable(0);
+                    }
+                }, 3000);
             }
         },
         new Test("Notify in 3 sec.") {
@@ -269,8 +271,8 @@ public class StatusBarTest extends TestActivity
                                     new Notification(
                                             R.drawable.ic_statusbar_missedcall,
                                             "tick tick tick",
-                                            System.currentTimeMillis()-(1000*60*60*24)
-                                            ));
+                                            System.currentTimeMillis() - (1000 * 60 * 60 * 24)
+                                    ));
                         }
                     }, 3000);
             }
@@ -292,10 +294,10 @@ public class StatusBarTest extends TestActivity
         new Test(" ... in 3 sec.") {
             public void run() {
                 mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.expandNotificationsPanel();
-                        }
-                    }, 3000);
+                    public void run() {
+                        mStatusBarManager.expandNotificationsPanel();
+                    }
+                }, 3000);
             }
         },
         new Test("Expand settings") {
@@ -306,10 +308,10 @@ public class StatusBarTest extends TestActivity
         new Test(" ... in 3 sec.") {
             public void run() {
                 mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.expandSettingsPanel();
-                        }
-                    }, 3000);
+                    public void run() {
+                        mStatusBarManager.expandSettingsPanel();
+                    }
+                }, 3000);
             }
         },
         new Test("Collapse panels in 3 sec.") {
@@ -337,6 +339,71 @@ public class StatusBarTest extends TestActivity
                     mStatusBarManager.setIconVisibility(slot, true);
                 }
             }
+        },
+        new Test("Custom Tile publish") {
+                @Override
+                void run() {
+                    final int tileId = 1000;
+                    CustomTile tile = new CustomTile.Builder(getApplicationContext())
+                            .setLabel("Test")
+                            .setIcon(R.drawable.ic_statusbar_missedcall)
+                            .setContentDescription("Test description")
+                            .setVisibility(true)
+                            .build();
+                    mStatusBarManager.publishTile(tileId, tile);
+                }
+        },
+        new Test("...remove") {
+                @Override
+                void run() {
+                    final int tileId = 1000;
+                    mStatusBarManager.removeTile(tileId);
+                }
+        },
+        new Test("Custom Tile publish, wait, and remove") {
+                @Override
+                void run() {
+                    final int tileId = 1001;
+                    CustomTile tile = new CustomTile.Builder(getApplicationContext())
+                            .setLabel("Test")
+                            .setIcon(R.drawable.ic_statusbar_missedcall)
+                            .setContentDescription("Test description")
+                            .setVisibility(true)
+                            .build();
+                    mStatusBarManager.publishTile(tileId, tile);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mStatusBarManager.removeTile(tileId);
+                        }
+                    }, 3000);
+                }
+        },
+        new Test("Custom Tile publish, wait, update, wait, and remove") {
+                @Override
+                void run() {
+                    final int tileId = 1002;
+                    final CustomTile tile = new CustomTile.Builder(getApplicationContext())
+                            .setLabel("Test")
+                            .setIcon(R.drawable.ic_statusbar_missedcall)
+                            .setContentDescription("Test description")
+                            .setVisibility(true)
+                            .build();
+                    mStatusBarManager.publishTile(tileId, tile);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            tile.label = "Updated label";
+                            mStatusBarManager.publishTile(tileId, tile);
+                        }
+                    }, 3000);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mStatusBarManager.removeTile(tileId);
+                        }
+                    }, 3000);
+                }
         },
     };
 }
