@@ -22,6 +22,8 @@ import android.os.Binder;
 import android.os.RemoteException;
 import android.os.IBinder;
 import android.os.ServiceManager;
+import android.os.UserHandle;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 
@@ -33,6 +35,9 @@ import com.android.internal.statusbar.IStatusBarService;
  * @hide
  */
 public class StatusBarManager {
+
+    private static String TAG = "StatusBarManager";
+    private static boolean localLOGV = false;
 
     public static final int DISABLE_EXPAND = View.STATUS_BAR_DISABLE_EXPAND;
     public static final int DISABLE_NOTIFICATION_ICONS = View.STATUS_BAR_DISABLE_NOTIFICATION_ICONS;
@@ -192,5 +197,106 @@ public class StatusBarManager {
         if (state == WINDOW_STATE_HIDDEN) return "WINDOW_STATE_HIDDEN";
         if (state == WINDOW_STATE_SHOWING) return "WINDOW_STATE_SHOWING";
         return "WINDOW_STATE_UNKNOWN";
+    }
+
+    /**
+     * Post a custom tile to be shown in the status bar panel. If a custom tile with
+     * the same id has already been posted by your application and has not yet been removed, it
+     * will be replaced by the updated information.
+     *
+     * @param id An identifier for this customTile unique within your
+     *        application.
+     * @param customTile A {@link CustomTile} object describing what to show the user. Must not
+     *        be null.
+     * @hide
+     */
+    public void publishTile(int id, CustomTile customTile)
+    {
+        createTile(null, id, customTile);
+    }
+
+    /**
+     * Post a custom tile to be shown in the status bar panel. If a custom tile with
+     * the same tag and id has already been posted by your application and has not yet been
+     * removed, it will be replaced by the updated information.
+     *
+     * @param tag A string identifier for this custom tile.  May be {@code null}.
+     * @param id An identifier for this custom tile.  The pair (tag, id) must be unique
+     *        within your application.
+     * @param customTile A {@link CustomTile} object describing what to
+     *        show the user. Must not be null.
+     * @hide
+     */
+    public void publishTile(String tag, int id, CustomTile customTile)
+    {
+        int[] idOut = new int[1];
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": create(" + id + ", " + customTile + ")");
+        try {
+            service.createCustomTileWithTag(pkg, mContext.getOpPackageName(), tag, id,
+                    customTile, idOut, UserHandle.myUserId());
+            if (id != idOut[0]) {
+                Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void publishTileAsUser(String tag, int id, CustomTile customTile, UserHandle user)
+    {
+        int[] idOut = new int[1];
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": create(" + id + ", " + customTile + ")");
+        try {
+            service.createCustomTileWithTag(pkg, mContext.getOpPackageName(), tag, id,
+                    customTile, idOut, user.getIdentifier());
+            if (id != idOut[0]) {
+                Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * Remove a previously shown custom tile.
+     * @hide
+     */
+    public void removeTile(int id)
+    {
+        removeTile(null, id);
+    }
+
+    /**
+     * Remove a previously shown custom tile.
+     * @hide
+     */
+    public void removeTile(String tag, int id)
+    {
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": remove(" + id + ")");
+        try {
+            service.removeCustomTileWithTag(pkg, tag, id, UserHandle.myUserId());
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void removeTileAsUser(String tag, int id, UserHandle user)
+    {
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": remove(" + id + ")");
+        try {
+            service.removeCustomTileWithTag(pkg, tag, id, user.getIdentifier());
+        } catch (RemoteException e) {
+        }
     }
 }

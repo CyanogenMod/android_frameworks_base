@@ -103,6 +103,12 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_setKeyguardWallpaper">Allows an app to change the lock screen wallpaper.</string>
 
+    <string name="permlab_publishQuickSettingsTile">create a custom tile within qs tiles</string>
+    <string name="permdesc_publishQuickSettingsTile">Allows an app to publish a quick settings tile</string>
+
+    <string name="permlab_bindCustomTileListenerService">bind to a custom tile listener service</string>
+    <string name="permdesc_bindCustomTileListenerService">Allows the holder to bind to the top-level interface of a custom tile listener service. Should never be needed for normal apps.</string>
+
     <string name="privacy_guard_dialog_title">Privacy Guard</string>
     <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> would like to <xliff:g id="op">%2$s</xliff:g>.</string>
 
@@ -305,4 +311,8 @@
     <string name="usb_media_checking">USB storage is currently being checked.</string>
     <string name="usb_media_removed">USB storage has been removed.</string>
     <string name="usb_media_shared">USB storage is currently in use by a computer.</string>
+
+    <!-- Label to show for a service that is running because it is observing
+     the user's notifications. -->
+    <string name="custom_tile_listener_binding_label">Custom tile listener</string>
 </resources>
