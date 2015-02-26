@@ -16,8 +16,10 @@
 
 package com.android.statusbartest;
 
+import android.app.CustomTile;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.support.v7.appcompat.R;
 import android.view.View;
 import android.content.Intent;
 import android.app.PendingIntent;
@@ -337,6 +339,18 @@ public class StatusBarTest extends TestActivity
                     mStatusBarManager.setIconVisibility(slot, true);
                 }
             }
+        },
+        new Test("Custom Tile") {
+                @Override
+                void run() {
+                    CustomTile tile = new CustomTile.Builder(getApplicationContext())
+                            .setLabel("Test")
+                            .setIcon(R.drawable.ic_statusbar_missedcall)
+                            .setContentDescription("Test description")
+                            .setVisibility(true)
+                            .build();
+                    mStatusBarManager.createTile(123, tile);
+                }
         },
     };
 }

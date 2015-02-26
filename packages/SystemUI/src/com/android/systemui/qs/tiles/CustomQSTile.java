@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.app.CustomTile;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,38 +27,26 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.UserHandle;
+import android.service.statusbar.StatusBarPanelCustomTile;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.systemui.qs.QSTile;
 
-public class IntentTile extends QSTile<QSTile.State> {
-    public static final String PREFIX = "intent(";
+public class CustomQSTile extends QSTile<QSTile.State> {
 
     private PendingIntent mOnClick;
     private String mOnClickUri;
     private int mCurrentUserId;
 
-    private IntentTile(Host host, String action) {
+    public CustomQSTile(Host host, StatusBarPanelCustomTile tile) {
         super(host);
-        mContext.registerReceiver(mReceiver, new IntentFilter(action));
+        refreshState(tile);
     }
 
     @Override
     protected void handleDestroy() {
         super.handleDestroy();
-        mContext.unregisterReceiver(mReceiver);
-    }
-
-    public static QSTile<?> create(Host host, String spec) {
-        if (spec == null || !spec.startsWith(PREFIX) || !spec.endsWith(")")) {
-            throw new IllegalArgumentException("Bad intent tile spec: " + spec);
-        }
-        final String action = spec.substring(PREFIX.length(), spec.length() - 1);
-        if (action.isEmpty()) {
-            throw new IllegalArgumentException("Empty intent tile spec action");
-        }
-        return new IntentTile(host, action);
     }
 
     @Override
@@ -73,6 +62,10 @@ public class IntentTile extends QSTile<QSTile.State> {
     protected void handleUserSwitch(int newUserId) {
         super.handleUserSwitch(newUserId);
         mCurrentUserId = newUserId;
+    }
+
+    public void update(StatusBarPanelCustomTile customTile) {
+        refreshState(customTile);
     }
 
     @Override
@@ -91,49 +84,33 @@ public class IntentTile extends QSTile<QSTile.State> {
 
     @Override
     protected void handleUpdateState(State state, Object arg) {
-        if (!(arg instanceof Intent)) return;
-        final Intent intent = (Intent) arg;
-        state.visible = intent.getBooleanExtra("visible", true);
-        state.contentDescription = intent.getStringExtra("contentDescription");
-        state.label = intent.getStringExtra("label");
+        if (!(arg instanceof StatusBarPanelCustomTile)) return;
+        final StatusBarPanelCustomTile tile = (StatusBarPanelCustomTile) arg;
+        final CustomTile customTile = tile.getCustomTile();
+        state.visible = customTile.getVisibility();
+        state.contentDescription = customTile.getContentDescription();
+        state.label = customTile.getLabel();
         state.iconId = 0;
-        state.icon = null;
-        final byte[] iconBitmap = intent.getByteArrayExtra("iconBitmap");
-        if (iconBitmap != null) {
-            try {
-                final Bitmap b = BitmapFactory.decodeByteArray(iconBitmap, 0, iconBitmap.length);
-                state.icon = new BitmapDrawable(mContext.getResources(), b);
-            } catch (Throwable t) {
-                Log.w(TAG, "Error loading icon bitmap, length " + iconBitmap.length, t);
-            }
-        } else {
-            final int iconId = intent.getIntExtra("iconId", 0);
-            if (iconId != 0) {
-                final String iconPackage = intent.getStringExtra("iconPackage");
-                if (!TextUtils.isEmpty(iconPackage)) {
-                    state.icon = getPackageDrawable(iconPackage, iconId);
-                } else {
-                    state.iconId = iconId;
-                }
+        final int iconId = customTile.getIcon();
+        if (iconId != 0) {
+            final String iconPackage = tile.getPackage();
+            if (!TextUtils.isEmpty(iconPackage)) {
+                state.icon = getPackageDrawable(iconPackage, iconId);
+            } else {
+                state.iconId = iconId;
             }
         }
-        mOnClick = intent.getParcelableExtra("onClick");
-        mOnClickUri = intent.getStringExtra("onClickUri");
+        mOnClick = customTile.getOnClick();
+        mOnClickUri = customTile.getOnClickUri().toString();
     }
 
+    //TODO: Implement icon bundle
     private Drawable getPackageDrawable(String pkg, int id) {
         try {
-            return mContext.createPackageContext(pkg, 0).getDrawable(id);
+            return mContext.createPackageContext(pkg, 0).getResources().getDrawable(id);
         } catch (Throwable t) {
             Log.w(TAG, "Error loading package drawable pkg=" + pkg + " id=" + id, t);
             return null;
         }
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshState(intent);
-        }
-    };
 }
