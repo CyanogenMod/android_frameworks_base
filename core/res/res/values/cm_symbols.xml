@@ -294,4 +294,7 @@
     <java-symbol type="integer" name="config_dayColorTemperature" />
     <java-symbol type="integer" name="config_nightColorTemperature" />
     <java-symbol type="integer" name="config_outdoorAmbientLux" />
+
+    <!-- Strings for StatusBarManagerService. -->
+    <java-symbol type="string" name="custom_tile_listener_binding_label" />
 </resources>
