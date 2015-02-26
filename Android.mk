@@ -250,6 +250,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/service/wallpaper/IWallpaperConnection.aidl \
 	core/java/android/service/wallpaper/IWallpaperEngine.aidl \
 	core/java/android/service/wallpaper/IWallpaperService.aidl \
+	core/java/android/service/statusbar/IStatusBarCustomTileHolder.aidl \
+	core/java/android/service/statusbar/ICustomTileListener.aidl \
 	core/java/android/view/accessibility/IAccessibilityInteractionConnection.aidl\
 	core/java/android/view/accessibility/IAccessibilityInteractionConnectionCallback.aidl\
 	core/java/android/view/accessibility/IAccessibilityManager.aidl \

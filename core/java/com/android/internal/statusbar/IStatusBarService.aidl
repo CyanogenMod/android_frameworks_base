@@ -16,6 +16,7 @@
 
 package com.android.internal.statusbar;
 
+import android.app.CustomTile;
 import com.android.internal.statusbar.IStatusBar;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
@@ -35,6 +36,13 @@ interface IStatusBarService
             boolean showImeSwitcher);
     void expandSettingsPanel();
     void setCurrentUser(int newUserId);
+
+    // --- Methods below are for use by 3rd party applications to publish quick
+    // settings tiles to the status bar panel
+    // You need the PUBLISH_QUICK_SETTINGS_TILE permission
+    void createCustomTileWithTag(String pkg, String opPkg, String tag, int id,
+            in CustomTile tile, int userId);
+    void removeCustomTileWithTag(String pkg, String tag, int id, int userId);
 
     // ---- Methods below are for use by the status bar policy services ----
     // You need the STATUS_BAR_SERVICE permission
