@@ -441,10 +441,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.STATUS_BAR_CLOCK), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CLOCK), false, this);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY), false, this);
+                    Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -4779,8 +4777,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             updateCustomRecentsLongPressCandidates();
         }
 
-        String componentString = Settings.Secure.getString(mContext.getContentResolver(),
-                Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY);
+        String componentString = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY, UserHandle.USER_CURRENT);
         if (componentString == null) {
             mCustomRecentsLongPressHandler = null;
             return;
