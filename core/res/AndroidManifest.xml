@@ -2971,6 +2971,14 @@
         android:description="@string/permdesc_accessTorchService"
         android:protectionLevel="signature" />
 
+    <!-- Allows a 3rd party application to publish or unpublish a quick settings tile
+         //TODO: Actually allow 3rd party apps after api has been vetted
+        @hide-->
+    <permission android:name="android.permission.PUBLISH_QUICK_SETTINGS_TILE"
+        android:label="@string/permlab_publishQuickSettingsTile"
+        android:description="@string/permdesc_publishQuickSettingsTile"
+        android:protectionLevel="signature" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
