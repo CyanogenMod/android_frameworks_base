@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.app.CustomTile;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,33 +32,23 @@ import android.util.Log;
 
 import com.android.systemui.qs.QSTile;
 
-public class IntentTile extends QSTile<QSTile.State> {
-    public static final String PREFIX = "intent(";
+public class CustomQSTile extends QSTile<QSTile.State> {
 
     private PendingIntent mOnClick;
     private String mOnClickUri;
     private int mCurrentUserId;
 
-    private IntentTile(Host host, String action) {
+    private CustomQSTile(Host host, CustomTile tile) {
         super(host);
-        mContext.registerReceiver(mReceiver, new IntentFilter(action));
     }
 
     @Override
     protected void handleDestroy() {
         super.handleDestroy();
-        mContext.unregisterReceiver(mReceiver);
     }
 
     public static QSTile<?> create(Host host, String spec) {
-        if (spec == null || !spec.startsWith(PREFIX) || !spec.endsWith(")")) {
-            throw new IllegalArgumentException("Bad intent tile spec: " + spec);
-        }
-        final String action = spec.substring(PREFIX.length(), spec.length() - 1);
-        if (action.isEmpty()) {
-            throw new IllegalArgumentException("Empty intent tile spec action");
-        }
-        return new IntentTile(host, action);
+        return new CustomQSTile(host, new CustomTile(spec));
     }
 
     @Override
@@ -91,14 +82,14 @@ public class IntentTile extends QSTile<QSTile.State> {
 
     @Override
     protected void handleUpdateState(State state, Object arg) {
-        if (!(arg instanceof Intent)) return;
-        final Intent intent = (Intent) arg;
-        state.visible = intent.getBooleanExtra("visible", true);
-        state.contentDescription = intent.getStringExtra("contentDescription");
-        state.label = intent.getStringExtra("label");
+        if (!(arg instanceof CustomTile)) return;
+        final CustomTile tile = (CustomTile) arg;
+        state.visible = tile.getVisibility();
+        state.contentDescription = tile.getContentDescription();
+        state.label = tile.getLabel();
         state.iconId = 0;
         state.icon = null;
-        final byte[] iconBitmap = intent.getByteArrayExtra("iconBitmap");
+        final byte[] iconBitmap = tile.getIconBytes();
         if (iconBitmap != null) {
             try {
                 final Bitmap b = BitmapFactory.decodeByteArray(iconBitmap, 0, iconBitmap.length);
@@ -106,21 +97,24 @@ public class IntentTile extends QSTile<QSTile.State> {
             } catch (Throwable t) {
                 Log.w(TAG, "Error loading icon bitmap, length " + iconBitmap.length, t);
             }
-        } else {
-            final int iconId = intent.getIntExtra("iconId", 0);
+        }
+         //TODO: Create an icon bundle
+         /*else {
+            final int iconId = tile.getIconId();
             if (iconId != 0) {
-                final String iconPackage = intent.getStringExtra("iconPackage");
+                final String iconPackage = tile.getIconPackage();
                 if (!TextUtils.isEmpty(iconPackage)) {
                     state.icon = getPackageDrawable(iconPackage, iconId);
                 } else {
                     state.iconId = iconId;
                 }
             }
-        }
-        mOnClick = intent.getParcelableExtra("onClick");
-        mOnClickUri = intent.getStringExtra("onClickUri");
+        } */
+        mOnClick = tile.getOnClick();
+        mOnClickUri = tile.getOnClickUri().toString();
     }
 
+    //TODO: Implement icon bundle
     private Drawable getPackageDrawable(String pkg, int id) {
         try {
             return mContext.createPackageContext(pkg, 0).getDrawable(id);
@@ -130,10 +124,11 @@ public class IntentTile extends QSTile<QSTile.State> {
         }
     }
 
+    /* TODO: Not sure what to do for refresh, preferably through ipc
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             refreshState(intent);
         }
-    };
+    }; */
 }
