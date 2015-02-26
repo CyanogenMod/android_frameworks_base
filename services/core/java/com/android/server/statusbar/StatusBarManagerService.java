@@ -16,15 +16,18 @@
 
 package com.android.server.statusbar;
 
+import android.app.ActivityManager;
+import android.app.AppGlobals;
+import android.app.CustomTile;
 import android.app.StatusBarManager;
-import android.os.Binder;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.os.UserHandle;
+import android.content.pm.ApplicationInfo;
+import android.os.*;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Process;
+import android.provider.Settings;
+import android.util.ArrayMap;
 import android.util.Slog;
 
 import com.android.internal.statusbar.IStatusBar;
@@ -49,12 +52,18 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
     private static final String TAG = "StatusBarManagerService";
     private static final boolean SPEW = false;
 
+    static final int MAX_PACKAGE_TILES = 1;
+
     private final Context mContext;
     private final WindowManagerService mWindowManager;
     private Handler mHandler = new Handler();
     private NotificationDelegate mNotificationDelegate;
     private volatile IStatusBar mBar;
     private StatusBarIconList mIcons = new StatusBarIconList();
+    final ArrayList<ExternalQuickSettingsRecord> mQSTileList =
+            new ArrayList<ExternalQuickSettingsRecord>();
+    final ArrayMap<String, ExternalQuickSettingsRecord> mCustomTileByKey =
+            new ArrayMap<String, ExternalQuickSettingsRecord>();
 
     // for disabling the status bar
     private final ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
@@ -293,6 +302,206 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
                 }
             }
         }
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void createCustomTileWithTag(String pkg, String opPkg, String tag, int id,
+            CustomTile customTile, int[] idOut, int userId) throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.PUBLISH_QUICK_SETTINGS_TILE, null);
+        createCustomTileWithTagInternal(pkg, opPkg, Binder.getCallingUid(),
+                Binder.getCallingPid(), tag, id, customTile, idOut, userId);
+    }
+
+    void createCustomTileWithTagInternal(final String pkg, final String opPkg, final int callingUid,
+            final int callingPid, final String tag, final int id, final CustomTile customTile,
+            final int[] idOut, final int incomingUserId) {
+
+        final int userId = ActivityManager.handleIncomingUser(callingPid,
+                callingUid, incomingUserId, true, false, "createCustomTileWithTag", pkg);
+        final UserHandle user = new UserHandle(userId);
+
+        // Limit the number of notifications that any given package except the android
+        // package or a registered listener can enqueue.  Prevents DOS attacks and deals with leaks.
+        synchronized (mQSTileList) {
+            int count = 0;
+            final int N = mQSTileList.size();
+            for (int i=0; i<N; i++) {
+                final ExternalQuickSettingsRecord r = mQSTileList.get(i);
+                if (r.sbTile.getPackage().equals(pkg)
+                        && r.sbTile.getUid() == userId) {
+                    count++;
+                    if (count >= MAX_PACKAGE_TILES) {
+                        Slog.e(TAG, "Package has already posted " + count
+                                + " notifications.  Not showing more.  package=" + pkg);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (pkg == null || customTile == null) {
+            throw new IllegalArgumentException("null not allowed: pkg=" + pkg
+                    + " id=" + id + " customTile=" + customTile);
+        }
+
+        // remove notification call ends up in not removing the notification.
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                final StatusBarPanelCustomTile n = new StatusBarPanelCustomTile(
+                        pkg, opPkg, id, tag, callingUid, callingPid, customTile,
+                        user);
+                ExternalQuickSettingsRecord r = new ExternalQuickSettingsRecord(n);
+                ExternalQuickSettingsRecord old = mCustomTileByKey.get(n.getKey());
+
+                int index = indexOfQsTileLocked(n.getKey());
+                if (index < 0) {
+                    mQSTileList.add(r);
+                } else {
+                    old = mQSTileList.get(index);
+                    mQSTileList.set(index, r);
+                    r.isUpdate = true;
+                }
+
+                mCustomTileByKey.put(n.getKey(), r);
+
+                if (customTile.getIcon() != 0) {
+                    StatusBarPanelCustomTile oldSbn = (old != null) ? old.sbTile : null;
+                    //mListeners.notifyPostedLocked(n, oldSbn);
+                    //TODO: Bind to a service in SystemUI and post these tiles
+                } else {
+                    Slog.e(TAG, "Not posting quick settings tile with icon==0: " + customTile);
+                    if (old != null && !old.isCanceled) {
+                        //mListeners.notifyRemovedLocked(n);
+                        //TODO: Bind to a service in SystemUI and remove the tiles
+                    }
+                }
+            }
+        });
+    }
+
+    // lock on mQSTileList
+    int indexOfQsTileLocked(String key) {
+        final int N = mQSTileList.size();
+        for (int i = 0; i < N; i++) {
+            if (key.equals(mQSTileList.get(i).getKey())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // lock on mNotificationList
+    int indexOfQsTileLocked(String pkg, String tag, int id, int userId)
+    {
+        ArrayList<ExternalQuickSettingsRecord> list = mQSTileList;
+        final int len = list.size();
+        for (int i=0; i<len; i++) {
+            ExternalQuickSettingsRecord r = list.get(i);
+            if (!notificationMatchesUserId(r, userId) || r.sbTile.getId() != id) {
+                continue;
+            }
+            if (tag == null) {
+                if (r.sbTile.getTag() != null) {
+                    continue;
+                }
+            } else {
+                if (!tag.equals(r.sbTile.getTag())) {
+                    continue;
+                }
+            }
+            if (r.sbTile.getPackage().equals(pkg)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Determine whether the userId applies to the custom tile in question, either because
+     * they match exactly, or one of them is USER_ALL (which is treated as a wildcard).
+     */
+    private boolean notificationMatchesUserId(ExternalQuickSettingsRecord r, int userId) {
+        return
+                // looking for USER_ALL custom tile? match everything
+                userId == UserHandle.USER_ALL
+                        // a custom tile sent to USER_ALL matches any query
+                        || r.getUserId() == UserHandle.USER_ALL
+                        // an exact user match
+                        || r.getUserId() == userId;
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void removeCustomTileWithTag(String pkg, String tag, int id, int userId) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.PUBLISH_QUICK_SETTINGS_TILE, null);
+        checkCallerIsSystemOrSameApp(pkg);
+        userId = ActivityManager.handleIncomingUser(Binder.getCallingPid(),
+                Binder.getCallingUid(), userId, true, false, "removeCustomTileWithTag", pkg);
+        // Don't allow client applications to cancel foreground service notis.
+        removeCustomTileWithTagInternal(Binder.getCallingUid(),
+                Binder.getCallingPid(), pkg, tag, id, userId);
+    }
+
+    void removeCustomTileWithTagInternal(final int callingUid, final int callingPid,
+            final String pkg, final String tag, final int id, final int userId) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mQSTileList) {
+                    int index = indexOfQsTileLocked(pkg, tag, id, userId);
+                    if (index >= 0) {
+                        ExternalQuickSettingsRecord r = mQSTileList.get(index);
+
+                        mQSTileList.remove(index);
+
+                        // status bar
+                        if (r.sbTile.getCustomTile().getIcon() != 0) {
+                            r.isCanceled = true;
+                            //mListeners.notifyRemovedLocked(n);
+                            //TODO: Bind to a service in SystemUI and remove the tiles
+                        }
+                        mCustomTileByKey.remove(r.sbTile.getKey());
+                    }
+                }
+            }
+        });
+    }
+
+    private static void checkCallerIsSystemOrSameApp(String pkg) {
+        if (isCallerSystem()) {
+            return;
+        }
+        final int uid = Binder.getCallingUid();
+        try {
+            ApplicationInfo ai = AppGlobals.getPackageManager().getApplicationInfo(
+                    pkg, 0, UserHandle.getCallingUserId());
+            if (ai == null) {
+                throw new SecurityException("Unknown package " + pkg);
+            }
+            if (!UserHandle.isSameApp(ai.uid, uid)) {
+                throw new SecurityException("Calling uid " + uid + " gave package"
+                        + pkg + " which is owned by uid " + ai.uid);
+            }
+        } catch (RemoteException re) {
+            throw new SecurityException("Unknown package " + pkg + "\n" + re);
+        }
+    }
+
+    private static boolean isUidSystem(int uid) {
+        final int appid = UserHandle.getAppId(uid);
+        return (appid == android.os.Process.SYSTEM_UID || appid == Process.PHONE_UID || uid == 0);
+    }
+
+    private static boolean isCallerSystem() {
+        return isUidSystem(Binder.getCallingUid());
     }
 
     /** 
