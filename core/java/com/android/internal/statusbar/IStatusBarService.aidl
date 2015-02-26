@@ -36,6 +36,13 @@ interface IStatusBarService
     void expandSettingsPanel();
     void setCurrentUser(int newUserId);
 
+    // --- Methods below are for use by 3rd party applications to publish quick
+    // settings tiles to the status bar panel
+    // You need the PUBLISH_QUICK_SETTINGS_TILE permission
+    void createCustomTileWithTag(String pkg, String opPkg, String tag, int id,
+            in CustomQSTile tile, int userId);
+    void removeCustomTileWithTag(String pkg, String tag, int id, int userId);
+
     // ---- Methods below are for use by the status bar policy services ----
     // You need the STATUS_BAR_SERVICE permission
     void registerStatusBar(IStatusBar callbacks, out StatusBarIconList iconList,

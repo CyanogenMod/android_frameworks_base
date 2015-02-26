@@ -16,15 +16,17 @@
 
 package com.android.server.statusbar;
 
+import android.app.ActivityManager;
+import android.app.AppGlobals;
+import android.app.CustomTile;
 import android.app.StatusBarManager;
-import android.os.Binder;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.os.UserHandle;
+import android.content.pm.ApplicationInfo;
+import android.os.*;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Process;
+import android.provider.Settings;
 import android.util.Slog;
 
 import com.android.internal.statusbar.IStatusBar;
@@ -293,6 +295,127 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
                 }
             }
         }
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void createCustomTileWithTag(String pkg, String opPkg, String tag, int id,
+            CustomTile customTile, int[] idOut, int userId) throws RemoteException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.PUBLISH_QUICK_SETTINGS_TILE, null);
+        createCustomTileWithTagInternal(pkg, opPkg, Binder.getCallingUid(),
+                Binder.getCallingPid(), tag, id, customTile, idOut, userId);
+    }
+
+    void createCustomTileWithTagInternal(final String pkg, final String opPkg, final int callingUid,
+            final int callingPid, final String tag, final int id, CustomTile customTile,
+            final int[] idOut, final int userId) {
+        //TODO: Handle things for uid, pid, tags and tile id, UGHHHAKADLFHADLJHFALFAD
+        // Also this needs to be a synchronized in an array list kept inside this service
+        // that means we need to also keep state of the contents for qs tiles
+
+        // Anyway, lets just do this for now :)
+        List<String> qsTiles =
+                Settings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                        Settings.Secure.QS_TILES, ",");
+        for (String tile : qsTiles) {
+            CustomTile existingCustomTile = findCustomTile(tile);
+            if (existingCustomTile != null) {
+                if (existingCustomTile.equals(customTile)) {
+                    removeCustomTileWithTag(pkg, tag, id, userId);
+                }
+            }
+        }
+        qsTiles.add(customTile.flattenToString());
+        Settings.Secure.putListAsDelimitedString(mContext.getContentResolver(),
+                Settings.Secure.QS_TILES, ",", qsTiles);
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void removeCustomTileWithTag(String pkg, String tag, int id, int userId) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.PUBLISH_QUICK_SETTINGS_TILE, null);
+        checkCallerIsSystemOrSameApp(pkg);
+        userId = ActivityManager.handleIncomingUser(Binder.getCallingPid(),
+                Binder.getCallingUid(), userId, true, false, "removeCustomTileWithTag", pkg);
+        // Don't allow client applications to cancel foreground service notis.
+        removeCustomTileWithTagInternal(Binder.getCallingUid(),
+                Binder.getCallingPid(), pkg, tag, id, userId);
+    }
+
+    void removeCustomTileWithTagInternal(final int uid, final int pid,
+            final String pkg, final String tag, final int ctId, final int userId) {
+        List<String> qsTiles =
+                Settings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                        Settings.Secure.QS_TILES, ",");
+        //TODO: This is really inefficient
+        for (String tile : qsTiles) {
+            CustomTile customTile = findCustomTile(tile);
+            if (customTile != null) {
+
+            }
+        }
+    }
+
+    public static final String PREFIX = "customTile(";
+    /**
+     * Unflatten a string to a CustomTile object.
+     * @param tile
+     * @return
+     */
+    CustomTile findCustomTile(String tile) {
+        if (tile == null || !tile.startsWith(PREFIX) || !tile.endsWith(")")) {
+            return null;
+        }
+        final String action = tile.substring(PREFIX.length(), tile.length() - 1);
+        if (action.isEmpty()) {
+            throw new IllegalArgumentException("Empty intent tile spec action");
+        }
+        return new CustomTile(action);
+    }
+
+    private static void checkCallerIsSystemOrSameApp(String pkg) {
+        if (isCallerSystem()) {
+            return;
+        }
+        final int uid = Binder.getCallingUid();
+        try {
+            ApplicationInfo ai = AppGlobals.getPackageManager().getApplicationInfo(
+                    pkg, 0, UserHandle.getCallingUserId());
+            if (ai == null) {
+                throw new SecurityException("Unknown package " + pkg);
+            }
+            if (!UserHandle.isSameApp(ai.uid, uid)) {
+                throw new SecurityException("Calling uid " + uid + " gave package"
+                        + pkg + " which is owned by uid " + ai.uid);
+            }
+        } catch (RemoteException re) {
+            throw new SecurityException("Unknown package " + pkg + "\n" + re);
+        }
+    }
+
+    private static boolean isUidSystem(int uid) {
+        final int appid = UserHandle.getAppId(uid);
+        return (appid == android.os.Process.SYSTEM_UID || appid == Process.PHONE_UID || uid == 0);
+    }
+
+    private static boolean isCallerSystem() {
+        return isUidSystem(Binder.getCallingUid());
+    }
+
+    /**
+     * Make sure the caller has the PUBLISH_ permission
+     *
+     * @throws SecurityException if the caller does not have the required permission
+     */
+    private void enforceModifyProtectedSms() {
+        mApp.enforceCallingOrSelfPermission(
+                android.Manifest.permission.MODIFY_PROTECTED_SMS_LIST, null);
     }
 
     /** 
