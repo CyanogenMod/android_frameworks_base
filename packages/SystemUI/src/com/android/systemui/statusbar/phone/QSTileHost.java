@@ -16,6 +16,8 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.CustomTile;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -25,7 +27,11 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
+import android.service.statusbar.CustomTileListenerService;
+import android.service.statusbar.StatusBarPanelCustomTile;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -41,6 +47,7 @@ import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
 import com.android.systemui.qs.tiles.CompassTile;
+import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.DataTile;
 import com.android.systemui.qs.tiles.DdsTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
@@ -59,6 +66,7 @@ import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.settings.CurrentUserTracker;
+import com.android.systemui.statusbar.CustomTileData;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
@@ -102,6 +110,9 @@ public class QSTileHost implements QSTile.Host {
     private final UserSwitcherController mUserSwitcherController;
     private final KeyguardMonitor mKeyguard;
     private final SecurityController mSecurity;
+    private Handler mHandler;
+
+    private CustomTileData mCustomTileData;
 
     private Callback mCallback;
 
@@ -124,6 +135,7 @@ public class QSTileHost implements QSTile.Host {
         mUserSwitcherController = userSwitcher;
         mKeyguard = keyguard;
         mSecurity = security;
+        mCustomTileData = new CustomTileData();
         mConnectivityManager = (ConnectivityManager)
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         mTelephonyManager = (TelephonyManager)
@@ -132,6 +144,7 @@ public class QSTileHost implements QSTile.Host {
         final HandlerThread ht = new HandlerThread(QSTileHost.class.getSimpleName());
         ht.start();
         mLooper = ht.getLooper();
+        mHandler = new Handler();
 
         mUserTracker = new CurrentUserTracker(mContext) {
             @Override
@@ -145,6 +158,15 @@ public class QSTileHost implements QSTile.Host {
             }
         };
         recreateTiles();
+
+        // Set up the initial notification state.
+        try {
+            mCustomTileListenerService.registerAsSystemService(mContext,
+                    new ComponentName(mContext.getPackageName(), getClass().getCanonicalName()),
+                    UserHandle.USER_ALL);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to register custom tile listener", e);
+        }
 
         mUserTracker.startTracking();
         mObserver.register();
@@ -260,8 +282,9 @@ public class QSTileHost implements QSTile.Host {
     }
 
     private QSTile<?> createTile(String tileSpec) {
-        if (tileSpec.startsWith(IntentTile.PREFIX)) {
-            return IntentTile.create(this, tileSpec);
+        if (tileSpec.startsWith("custom:")) {
+            //ignore
+            return null;
         }
 
         // Ensure tile is supported on this device
@@ -350,6 +373,54 @@ public class QSTileHost implements QSTile.Host {
             }
         }
         return tiles;
+    }
+
+    private final CustomTileListenerService mCustomTileListenerService =
+            new CustomTileListenerService() {
+                @Override
+                public void onListenerConnected() {
+                    //Connected
+                }
+                @Override
+                public void onCustomTilePosted(final StatusBarPanelCustomTile sbc) {
+                    if (DEBUG) Log.d(TAG, "onCustomTilePosted: " + sbc);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            CustomTile n = sbc.getCustomTile();
+                            boolean isUpdate = mCustomTileData.get(sbc.getKey()) != null;
+
+                            if (isUpdate) {
+                                updateCustomTile(sbc);
+                            } else {
+                                addCustomTile(sbc);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onCustomTileRemoved(final StatusBarPanelCustomTile sbc) {
+                    if (DEBUG) Log.d(TAG, "onCustomTileRemoved: " + sbc);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            removeCustomTile(sbc.getKey());
+                        }
+                    });
+                }
+            };
+
+    private void updateCustomTile(StatusBarPanelCustomTile sbc) {
+        //TODO: Implement update logic
+    }
+
+    private void addCustomTile(StatusBarPanelCustomTile sbc) {
+        mTiles.put("custom: " + sbc.getKey(), new CustomQSTile(this, sbc));
+    }
+
+    private void removeCustomTile(String key) {
+        //TODO: Implement remove logic
     }
 
     private class Observer extends ContentObserver {
