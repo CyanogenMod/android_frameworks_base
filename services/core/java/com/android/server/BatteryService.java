@@ -18,6 +18,7 @@ package com.android.server;
 
 import android.database.ContentObserver;
 import android.os.BatteryStats;
+import android.os.SystemProperties;
 
 import android.os.ResultReceiver;
 import android.os.ShellCommand;
@@ -31,6 +32,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.BroadcastReceiver;
 import android.os.BatteryManager;
 import android.os.BatteryManagerInternal;
 import android.os.BatteryProperties;
@@ -53,6 +55,11 @@ import android.util.Slog;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -147,6 +154,29 @@ public final class BatteryService extends SystemService {
 
     private boolean mSentLowBatteryBroadcast = false;
 
+    private final int mVbattSamplingIntervalMsec = 30000; /* sampling frequency - 30 seconds */
+    private final int mWeakChgCutoffVoltageMv;
+    private static int mWeakChgSocCheckStarted = 0;
+    /*
+     * Default shutdown interval in case voltage_now file is not present:
+     * In case of weak charger shutdown feature is enabled and
+     * voltage_now file absent shutdown aftet 5 minutes if SOC continues
+     * to remain at 0 level.
+     */
+    private final int mWeakChgMaxShutdownIntervalMsecs = 300000;
+    private boolean mInitiateShutdown = false;
+    private File mVoltageNowFile = null;
+    private Runnable runnable = new Runnable() {
+        public void run() {
+            synchronized (mLock) {
+                if(mVoltageNowFile.exists())
+                    shutdownIfWeakChargerVoltageCheckLocked();
+                else
+                    shutdownIfWeakChargerEmptySOCLocked();
+            }
+        }
+    };
+
     public BatteryService(Context context) {
         super(context);
 
@@ -154,6 +184,16 @@ public final class BatteryService extends SystemService {
         mHandler = new Handler(true /*async*/);
         mLed = new Led(context, getLocalService(LightsManager.class));
         mBatteryStats = BatteryStatsService.getService();
+
+        /*
+         * Calculate cut-off voltage from 'ro.cutoff_voltage_mv'
+         * or default to 3200mV.
+         * if 'ro.cutoff_voltage_mv' <= 0, ignore shutdown logic.
+         */
+        mWeakChgCutoffVoltageMv = SystemProperties.getInt("ro.cutoff_voltage_mv", 0);
+         /* 2700mV UVLO voltage */
+        if (mWeakChgCutoffVoltageMv > 2700)
+           mVoltageNowFile = new File("/sys/class/power_supply/battery/voltage_now");
 
         mCriticalBatteryLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);
@@ -271,6 +311,67 @@ public final class BatteryService extends SystemService {
                 && (oldPlugged || mLastBatteryLevel > mLowBatteryWarningLevel);
     }
 
+    private void shutdownIfWeakChargerEmptySOCLocked() {
+
+        if (mBatteryProps.batteryLevel == 0) {
+            if (mInitiateShutdown) {
+               if (ActivityManagerNative.isSystemReady()) {
+                    Slog.e(TAG, "silent_reboot shutdownIfWeakChargerEmptySOCLocked");
+
+                    Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+                    intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivityAsUser(intent, UserHandle.CURRENT);
+                }
+            } else {
+                 mInitiateShutdown = true;
+                 mHandler.removeCallbacks(runnable);
+                 mHandler.postDelayed(runnable, mWeakChgMaxShutdownIntervalMsecs);
+            }
+        } else {
+             mInitiateShutdown = false;
+             mWeakChgSocCheckStarted = 0;
+        }
+    }
+
+    private void shutdownIfWeakChargerVoltageCheckLocked() {
+        int vbattNow = 0;
+        FileReader fileReader;
+        BufferedReader br;
+
+        try {
+            fileReader = new FileReader(mVoltageNowFile);
+            br = new BufferedReader(fileReader);
+            vbattNow =  Integer.parseInt(br.readLine());
+            /* convert battery voltage from uV to mV */
+            vbattNow =  vbattNow / 1000;
+            br.close();
+            fileReader.close();
+        } catch (FileNotFoundException e) {
+            Slog.e(TAG, "Failure in reading battery voltage", e);
+        } catch (IOException e) {
+            Slog.e(TAG, "Failure in reading battery voltage", e);
+        }
+
+        if (mBatteryProps.batteryLevel == 0) {
+            if (vbattNow <= mWeakChgCutoffVoltageMv) {
+               if (ActivityManagerNative.isSystemReady()) {
+                   Slog.e(TAG, "silent_reboot shutdownIfWeakChargerVoltageCheckLocked");
+
+                   Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+                   intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
+                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   mContext.startActivityAsUser(intent, UserHandle.CURRENT);
+               }
+            } else {
+                 mHandler.removeCallbacks(runnable);
+                 mHandler.postDelayed(runnable, mVbattSamplingIntervalMsec);
+            }
+        } else {
+             mWeakChgSocCheckStarted = 0;
+        }
+    }
+
     private void shutdownIfNoPowerLocked() {
         // shut down gracefully if our battery is critically low and we are not powered.
         // wait until the system has booted before attempting to display the shutdown dialog.
@@ -361,6 +462,20 @@ public final class BatteryService extends SystemService {
                     mBatteryProps.batteryVoltage, mBatteryProps.batteryChargeCounter);
         } catch (RemoteException e) {
             // Should never happen.
+        }
+
+        /*
+         * Schedule Weak Charger shutdown thread if:
+         * Battery level = 0, Charger is pluggedin and cutoff voltage is valid.
+         */
+        if ((mBatteryProps.batteryLevel == 0)
+                 && (mWeakChgSocCheckStarted == 0)
+                 && (mWeakChgCutoffVoltageMv > 0)
+                 && (mPlugType != BATTERY_PLUGGED_NONE)) {
+
+                 mWeakChgSocCheckStarted = 1;
+                 mHandler.removeCallbacks(runnable);
+                 mHandler.postDelayed(runnable, mVbattSamplingIntervalMsec);
         }
 
         shutdownIfNoPowerLocked();
