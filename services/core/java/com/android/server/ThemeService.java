@@ -424,7 +424,9 @@ public class ThemeService extends IThemeService.Stub {
 
         updateProvider(request);
 
-        updateConfiguration(request, removePerAppTheme);
+        if (shouldUpdateConfiguration(request)) {
+            updateConfiguration(request, removePerAppTheme);
+        }
 
         killLaunchers(request);
 
@@ -721,6 +723,15 @@ public class ThemeService extends IThemeService.Stub {
             }
         }
         return true;
+    }
+
+    private boolean shouldUpdateConfiguration(ThemeChangeRequest request) {
+        return request.getOverlayThemePackageName() != null ||
+                request.getFontThemePackageName() != null ||
+                request.getIconsThemePackageName() != null ||
+                request.getStatusBarThemePackageName() != null ||
+                request.getNavBarThemePackageName() != null ||
+                request.getPerAppOverlays().size() > 0;
     }
 
     private static ThemeConfig.Builder createBuilderFrom(Configuration config,
