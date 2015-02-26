@@ -250,6 +250,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/service/wallpaper/IWallpaperConnection.aidl \
 	core/java/android/service/wallpaper/IWallpaperEngine.aidl \
 	core/java/android/service/wallpaper/IWallpaperService.aidl \
+	core/java/android/service/statusbar/IStatusBarCustomTileHolder.aidl \
+	core/java/android/service/statusbar/ICustomTileListener.aidl \
 	core/java/android/view/accessibility/IAccessibilityInteractionConnection.aidl\
 	core/java/android/view/accessibility/IAccessibilityInteractionConnectionCallback.aidl\
 	core/java/android/view/accessibility/IAccessibilityManager.aidl \
@@ -544,6 +546,7 @@ aidl_files := \
 	frameworks/base/core/java/android/view/textservice/SentenceSuggestionsInfo.aidl \
 	frameworks/base/core/java/android/view/textservice/SuggestionsInfo.aidl \
 	frameworks/base/core/java/android/service/notification/StatusBarNotification.aidl \
+	frameworks/base/core/java/android/service/statusbar/StatusBarPanelCustomTile.aidl \
 	frameworks/base/core/java/android/speech/tts/Voice.aidl \
 	frameworks/base/core/java/android/app/usage/UsageEvents.aidl \
 	frameworks/base/core/java/android/app/Notification.aidl \
@@ -554,6 +557,7 @@ aidl_files := \
 	frameworks/base/core/java/android/app/ActivityManager.aidl \
 	frameworks/base/core/java/android/app/PendingIntent.aidl \
 	frameworks/base/core/java/android/app/Profile.aidl \
+	frameworks/base/core/java/android/app/CustomTile.aidl \
 	frameworks/base/core/java/android/app/AlarmManager.aidl \
 	frameworks/base/core/java/android/app/SearchableInfo.aidl \
 	frameworks/base/core/java/android/app/job/JobParameters.aidl \
