@@ -46,7 +46,7 @@ namespace android
 
 // ----------------------------------------------------------------------------
 
-static void (*startActivity)(const char *)  = NULL;
+static void (*startActivity)(const char *, int *)  = NULL;
 static void (*resumeActivity)(const char *) = NULL;
 static void *dlhandle                       = NULL;
 
@@ -121,15 +121,17 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
     }
 }
 
-static void
-com_android_internal_app_ActivityTrigger_native_at_startActivity(JNIEnv *env, jobject clazz, jstring activity)
+static jint
+com_android_internal_app_ActivityTrigger_native_at_startActivity(JNIEnv *env, jobject clazz, jstring activity, jint flags)
 {
+    int activiyFlags = flags;
     if (startActivity && activity) {
         const char *actStr = env->GetStringUTFChars(activity, NULL);
         if (actStr) {
-            (*startActivity)(actStr);
+            (*startActivity)(actStr, &activiyFlags);
         }
     }
+    return activiyFlags;
 }
 
 static void
@@ -146,7 +148,7 @@ com_android_internal_app_ActivityTrigger_native_at_resumeActivity(JNIEnv *env, j
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
-    {"native_at_startActivity",  "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_startActivity},
+    {"native_at_startActivity",  "(Ljava/lang/String;I)I", (void *)com_android_internal_app_ActivityTrigger_native_at_startActivity},
     {"native_at_resumeActivity", "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_resumeActivity},
     {"native_at_deinit",         "()V",                   (void *)com_android_internal_app_ActivityTrigger_native_at_deinit},
 };
