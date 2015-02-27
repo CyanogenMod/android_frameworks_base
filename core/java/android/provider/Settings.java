@@ -1411,9 +1411,8 @@ public final class Settings {
             }
             if (MOVED_TO_GLOBAL.contains(name) || MOVED_TO_SECURE_THEN_GLOBAL.contains(name)) {
                 Log.w(TAG, "Setting " + name + " has moved from android.provider.Settings.System"
-                        + " to android.provider.Settings.Global.");
-
-                return Global.putStringForUser(resolver, name, value, userHandle);
+                        + " to android.provider.Settings.Global, value is unchanged.");
+                return false;
             }
             return sNameValueCache.putStringForUser(resolver, name, value, userHandle);
         }
