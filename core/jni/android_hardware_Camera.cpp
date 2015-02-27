@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "Camera-JNI"
 #include <utils/Log.h>
 
@@ -889,7 +889,7 @@ static void android_hardware_Camera_setParameters(JNIEnv *env, jobject thiz, jst
         env->ReleaseStringCritical(params, str);
     }
     if (camera->setParameters(params8) != NO_ERROR) {
-        jniThrowRuntimeException(env, "setParameters failed");
+        ALOGV("setParameters failed %s", params8.string());
         return;
     }
 }
