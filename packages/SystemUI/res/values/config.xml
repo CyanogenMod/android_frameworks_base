@@ -197,7 +197,7 @@
     <!-- The min animation duration for animating the nav bar scrim in. -->
     <integer name="recents_nav_bar_scrim_enter_duration">400</integer>
     <!-- The animation duration for animating the removal of a task view. -->
-    <integer name="recents_animate_task_view_remove_duration">250</integer>
+    <integer name="recents_animate_task_view_remove_duration">450</integer>
     <!-- The animation duration for scrolling the stack to a particular item. -->
     <integer name="recents_animate_task_stack_scroll_duration">225</integer>
     <!-- The minimum alpha for the dim applied to cards that go deeper into the stack. -->
