@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
 import android.view.View;
@@ -43,8 +44,8 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
     private static final String SETTINGS_PACKAGE_NAME = "com.android.settings";
     private String[] mEntries, mValues;
     private boolean mShowingDetail;
-    ArrayList<AnimatedVectorDrawable> mAnimationList
-            = new ArrayList<AnimatedVectorDrawable>();
+    ArrayList<Drawable> mAnimationList
+            = new ArrayList<Drawable>();
 
     public ScreenTimeoutTile(Host host) {
         super(host);
@@ -223,13 +224,15 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         }
 
         if (state.icon == null || previousBucket != nextBucket) {
-            final AnimatedVectorDrawable d = (AnimatedVectorDrawable) resources.getDrawable(drawableId);
-            mUiHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    d.start();
-                }
-            });
+            final Drawable d = resources.getDrawable(drawableId);
+            if (d instanceof AnimatedVectorDrawable) {
+                mUiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((AnimatedVectorDrawable) d).start();
+                    }
+                });
+            }
             state.icon = d;
         }
 
@@ -244,12 +247,14 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
             return;
         }
         state.icon = mAnimationList.remove(0);
-        mUiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                ((AnimatedVectorDrawable) state.icon).start();
-            }
-        });
+        if (state.icon instanceof AnimatedVectorDrawable) {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((AnimatedVectorDrawable) state.icon).start();
+                }
+            });
+        }
     }
 
     private class RadioAdapter extends ArrayAdapter<String> {
