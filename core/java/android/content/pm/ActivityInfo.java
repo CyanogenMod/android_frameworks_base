@@ -493,10 +493,6 @@ public class ActivityInfo extends ComponentInfo
      */
     public static final int CONFIG_ORIENTATION = 0x0080;
     /**
-     * @hide
-     */
-    public static final int CONFIG_THEME_RESOURCE = 0x008000;
-    /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the screen layout.  Set from the
      * {@link android.R.attr#configChanges} attribute.
@@ -544,6 +540,16 @@ public class ActivityInfo extends ComponentInfo
      * {@link android.R.attr#configChanges} attribute.
      */
     public static final int CONFIG_LAYOUT_DIRECTION = 0x2000;
+    /**
+     * Bit in {@link #configChanges} that indicates a theme change occurred
+     * @hide
+     */
+    public static final int CONFIG_THEME_RESOURCE = 0x100000;
+    /**
+     * Bit in {@link #configChanges} that indicates a font change occurred
+     * @hide
+     */
+    public static final int CONFIG_THEME_FONT = 0x200000;
     /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the font scaling factor.  Set from the
