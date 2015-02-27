@@ -19,9 +19,6 @@
     <!-- Width of each eq bar -->
     <dimen name="visualizer_path_stroke_width">6dp</dimen>
 
-    <!-- Color for the Equalizer tile -->
-    <color name="visualizer_fill_color">#96FFFFFF</color>
-
     <!-- The amount of divisions to make for eq bars -->
     <integer name="visualizer_divisions">4</integer>
 
@@ -29,4 +26,8 @@
         ends up being dB = (dB * fuzz_factor + db_fuzz) -->
     <integer name="visualizer_db_fuzz_factor">2</integer>
     <integer name="visualizer_db_fuzz">-10</integer>
+
+    <!-- width of how much of the visualizer should be visible in the tile -->
+    <dimen name="qs_tile_icon_size_visualizer_width">36dp</dimen>
+    <dimen name="qs_tile_icon_size_visualizer_height">24dp</dimen>
 </resources>
