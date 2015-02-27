@@ -711,8 +711,14 @@ public class ThemeService extends IThemeService.Stub {
             try {
                 Configuration config = am.getConfiguration();
                 ThemeConfig.Builder themeBuilder = createBuilderFrom(config, request, null,
-                        removePerAppThemes);
+                        removePerAppThemes, false);
                 ThemeConfig newConfig = themeBuilder.build();
+                if (newConfig.equals(config.themeConfig)) {
+                    // this is most likely a request to re-apply the current theme so build a
+                    // new config with forceUpdate set to true
+                    newConfig = createBuilderFrom(config, request, null,
+                            removePerAppThemes, true).build();
+                }
 
                 config.themeConfig = newConfig;
                 am.updateConfiguration(config);
@@ -735,7 +741,8 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private static ThemeConfig.Builder createBuilderFrom(Configuration config,
-            ThemeChangeRequest request, String pkgName, boolean removePerAppThemes) {
+            ThemeChangeRequest request, String pkgName, boolean removePerAppThemes,
+            boolean forceUpdate) {
         ThemeConfig.Builder builder = new ThemeConfig.Builder(config.themeConfig);
 
         if (removePerAppThemes) removePerAppThemesFromConfig(builder, config.themeConfig);
@@ -771,7 +778,7 @@ public class ThemeService extends IThemeService.Stub {
             }
         }
 
-        builder.setThemeChangeTimestamp(System.currentTimeMillis());
+        if (forceUpdate) builder.forceUpdate();
 
         return builder;
     }

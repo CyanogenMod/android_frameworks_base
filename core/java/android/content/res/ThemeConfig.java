@@ -61,8 +61,9 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     // Maps pkgname to theme (ex com.angry.birds -> red theme)
     protected final Map<String, AppTheme> mThemes = new HashMap<String, AppTheme>();
 
-    // Theme change timestamp
-    private long mThemeChangeTimestamp;
+    // Keep track of forced updates and include this value in the hash code and for comparing
+    // ThemeConfig objects
+    private int mForcedUpdateCount = 0;
 
     public ThemeConfig(Map<String, AppTheme> appThemes) {
         mThemes.putAll(appThemes);
@@ -110,6 +111,10 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         return Collections.unmodifiableMap(mThemes);
     }
 
+    public int getForcedUpdateCount() {
+        return mForcedUpdateCount;
+    }
+
     private AppTheme getThemeFor(String pkgName) {
         AppTheme theme = mThemes.get(pkgName);
         if (theme == null) theme = getDefaultTheme();
@@ -136,7 +141,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                     new HashMap<String, AppTheme>() : o.mThemes;
 
             return (currThemes.equals(newThemes) &&
-                    mThemeChangeTimestamp == o.mThemeChangeTimestamp);
+                    mForcedUpdateCount == o.mForcedUpdateCount);
         }
         return false;
     }
@@ -155,7 +160,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public int hashCode() {
         int hash = 17;
         hash = 31 * hash + mThemes.hashCode();
-        hash = 31 * hash + (int) mThemeChangeTimestamp;
+        hash = 31 * hash + (int) mForcedUpdateCount;
         return hash;
     }
 
@@ -217,7 +222,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public void writeToParcel(Parcel dest, int flags) {
         String json = JsonSerializer.toJson(this);
         dest.writeString(json);
-        dest.writeLong(mThemeChangeTimestamp);
+        dest.writeInt(mForcedUpdateCount);
     }
 
     public static final Parcelable.Creator<ThemeConfig> CREATOR =
@@ -225,7 +230,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         public ThemeConfig createFromParcel(Parcel source) {
             String json = source.readString();
             ThemeConfig themeConfig = JsonSerializer.fromJson(json);
-            themeConfig.mThemeChangeTimestamp = source.readLong();
+            themeConfig.mForcedUpdateCount = source.readInt();
             return themeConfig;
         }
 
@@ -344,7 +349,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         private HashMap<String, String> mOverlays = new HashMap<String, String>();
         private HashMap<String, String> mIcons = new HashMap<String, String>();
         private HashMap<String, String> mFonts = new HashMap<String, String>();
-        private long mThemeChangeTimestamp;
+        private int mForcedUpdateCount = 0;
 
         public Builder() {}
 
@@ -356,7 +361,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 mIcons.put(key, appTheme.getIconPackPkgName());
                 mOverlays.put(key, appTheme.getOverlayPkgName());
             }
-            mThemeChangeTimestamp = theme.mThemeChangeTimestamp;
+            mForcedUpdateCount = theme.mForcedUpdateCount;
         }
 
         /**
@@ -417,8 +422,8 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
             return this;
         }
 
-        public Builder setThemeChangeTimestamp(long timestamp) {
-            mThemeChangeTimestamp = timestamp;
+        public Builder forceUpdate() {
+            ++mForcedUpdateCount;
             return this;
         }
 
@@ -445,7 +450,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 }
             }
             ThemeConfig themeConfig = new ThemeConfig(appThemes);
-            themeConfig.mThemeChangeTimestamp = mThemeChangeTimestamp;
+            themeConfig.mForcedUpdateCount = mForcedUpdateCount;
             return themeConfig;
         }
     }
