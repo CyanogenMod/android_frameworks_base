@@ -3857,8 +3857,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         ThemeConfig newTheme = res.getConfiguration().themeConfig;
         if (newTheme != null &&
                 (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
+            boolean updateStatusbar;
+            if (mCurrentTheme == null) {
+                updateStatusbar = true;
+            } else {
+                updateStatusbar = shouldUpdateStatusbar(mCurrentTheme, newTheme);
+            }
+
             mCurrentTheme = (ThemeConfig)newTheme.clone();
-            recreateStatusBar();
+            if (updateStatusbar) recreateStatusBar();
         } else {
             loadDimens();
         }
@@ -3886,6 +3893,25 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNavigationBarView.updateResources(getNavbarThemedResources());
             updateSearchPanel();
         }
+    }
+
+    /**
+     * Determines if we need to recreate the status bar due to a theme change.  We currently
+     * check if the overlay for the status bar, fonts, or icons, or forced update count have
+     * changed.
+     *
+     * @param oldTheme
+     * @param newTheme
+     * @return True if we should recreate the status bar
+     */
+    private boolean shouldUpdateStatusbar(ThemeConfig oldTheme, ThemeConfig newTheme) {
+        return !newTheme.getOverlayForStatusBar()
+                .equals(oldTheme.getOverlayForStatusBar()) ||
+                !newTheme.getFontPkgName()
+                        .equals(oldTheme.getFontPkgName()) ||
+                !newTheme.getIconPackPkgName()
+                        .equals(oldTheme.getIconPackPkgName()) ||
+                newTheme.getForcedUpdateCount() != oldTheme.getForcedUpdateCount();
     }
 
     private void updateClockSize() {
