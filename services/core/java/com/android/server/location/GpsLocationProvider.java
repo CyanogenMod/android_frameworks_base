@@ -667,7 +667,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         for(int i = 0;i<phoneCnt;++i) {
             int[] subIds = SubscriptionManager.getSubId(i);
             if (subIds != null && subIds.length > 0) {
-                mccMnc.add(phone.getNetworkOperator(subIds[0]));
+                mccMnc.add(phone.getNetworkOperatorForSubscription(subIds[0]));
             }
         }
         if (mccMnc.size() > 0) {

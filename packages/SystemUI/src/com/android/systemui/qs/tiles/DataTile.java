@@ -85,7 +85,7 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
             Settings.Global.putInt(mContext.getContentResolver(),
                     Settings.Global.MOBILE_DATA + i, (enabled) ? 1 : 0);
             int[] subId = SubscriptionManager.getSubId(i);
-            mTelephonyManager.setDataEnabledUsingSubId(subId[0], enabled);
+            mTelephonyManager.setDataEnabled(subId[0], enabled);
         }
     }
 
