@@ -430,16 +430,16 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
     }
 
     /** Animates the deletion of this task view */
-    void startDeleteTaskAnimation(final Runnable r) {
+    void startDeleteTaskAnimation(final Runnable r, long delayed) {
         // Disabling clipping with the stack while the view is animating away
         setClipViewInStack(false);
 
         animate().translationX(mConfig.taskViewRemoveAnimTranslationXPx)
             .alpha(0f)
-            .setStartDelay(0)
+            .setStartDelay(delayed)
             .setUpdateListener(null)
             .setInterpolator(mConfig.fastOutSlowInInterpolator)
-            .setDuration(mConfig.taskViewRemoveAnimDuration)
+            .setDuration(mConfig.taskViewRemoveAnimDuration - delayed)
             .withEndAction(new Runnable() {
                 @Override
                 public void run() {
@@ -473,7 +473,7 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
     }
 
     /** Dismisses this task. */
-    void dismissTask() {
+    void dismissTask(long delayed) {
         // Animate out the view and call the callback
         final TaskView tv = this;
         startDeleteTaskAnimation(new Runnable() {
@@ -483,7 +483,7 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
                     mCb.onTaskViewDismissed(tv);
                 }
             }
-        });
+        }, delayed);
     }
 
     /**
@@ -716,7 +716,7 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
                             mCb.onTaskViewAppIconClicked(tv);
                         }
                     } else if (v == mHeaderView.mDismissButton) {
-                        dismissTask();
+                        dismissTask(0L);
                     }
                 }
             }, 125);
