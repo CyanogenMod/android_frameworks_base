@@ -286,5 +286,8 @@
     <integer name="zen_toast_visible_duration">500</integer>
     <!-- Whether to enable data switch or not -->
     <bool name="config_enableDataSwitch">false</bool>
+
+    <!-- The duration in milliseconds to wait before start every task remove animation  -->
+    <integer name="clear_recents_animation_delay_between_task_exit">80</integer>
 </resources>
 

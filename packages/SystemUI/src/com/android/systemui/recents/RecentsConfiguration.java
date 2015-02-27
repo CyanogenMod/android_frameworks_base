@@ -111,6 +111,9 @@ public class RecentsConfiguration {
     /** Nav bar scrim */
     public int navBarScrimEnterDuration;
 
+    /** Clear recents **/
+    public int clearRecentsAnimationDelayBetweenTaskExit;
+
     /** Launch states */
     public boolean launchedWithAltTab;
     public boolean launchedWithNoRecentTasks;
@@ -271,6 +274,10 @@ public class RecentsConfiguration {
         // Nav bar scrim
         navBarScrimEnterDuration =
                 res.getInteger(R.integer.recents_nav_bar_scrim_enter_duration);
+
+        // Clear recents
+        clearRecentsAnimationDelayBetweenTaskExit =
+                res.getInteger(R.integer.clear_recents_animation_delay_between_task_exit);
 
         // Misc
         useHardwareLayers = res.getBoolean(R.bool.config_recents_use_hardware_layers);
