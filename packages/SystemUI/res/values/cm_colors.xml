@@ -35,4 +35,7 @@
     <color name="navring_check_tint">@android:color/white</color>
     <color name="navring_edit_fill">#FF558B2F</color>
     <color name="navring_edit_tint">#FF689F38</color>
+
+    <!-- tint of the Visualizer tile -->
+    <color name="visualizer_fill_color">#96FFFFFF</color>
 </resources>
