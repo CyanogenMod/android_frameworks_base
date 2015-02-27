@@ -18,7 +18,6 @@
     <dimen name="weather_text_size">12sp</dimen>
      <dimen name="detail_radio_group_padding_left">16dp</dimen>
      <dimen name="detail_radio_group_padding">8dp</dimen>
-    <dimen name="qs_tile_icon_size_visualizer">40dp</dimen>
 
     <!-- Themes: radius of the corners of the notification dropshadow
          See also: notification_material_rounded_rect_radius
