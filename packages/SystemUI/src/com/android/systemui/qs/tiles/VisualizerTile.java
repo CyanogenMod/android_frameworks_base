@@ -30,10 +30,10 @@ import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.QSTileView;
@@ -52,8 +52,9 @@ public class VisualizerTile extends QSTile<QSTile.State>
     private Map<MediaSession.Token, CallbackInfo> mCallbacks = new HashMap<>();
     private MediaSessionManager mMediaSessionManager;
     private VisualizerView mVisualizer;
+    private ImageView mStaticVisualizerIcon;
     private boolean mLinked;
-    private boolean mTileVisible;
+    private boolean mIsAnythingPlaying;
     private boolean mListening;
 
     public VisualizerTile(Host host) {
@@ -66,9 +67,14 @@ public class VisualizerTile extends QSTile<QSTile.State>
         for (MediaController activeSession : activeSessions) {
             PlaybackState playbackState = activeSession.getPlaybackState();
             if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
-                mTileVisible = true;
+                mIsAnythingPlaying = true;
                 break;
             }
+        }
+        if (mIsAnythingPlaying && !mLinked) {
+            AsyncTask.execute(mLinkVisualizer);
+        } else if (!mIsAnythingPlaying && mLinked) {
+            AsyncTask.execute(mUnlinkVisualizer);
         }
     }
 
@@ -79,6 +85,7 @@ public class VisualizerTile extends QSTile<QSTile.State>
             protected View createIcon() {
                 mVisualizer = new VisualizerView(mContext);
                 mVisualizer.setEnabled(false);
+                mVisualizer.setVisibility(View.VISIBLE);
 
                 Resources r = mContext.getResources();
                 Paint paint = new Paint();
@@ -96,10 +103,21 @@ public class VisualizerTile extends QSTile<QSTile.State>
                         r.getInteger(R.integer.visualizer_db_fuzz),
                         r.getInteger(R.integer.visualizer_db_fuzz_factor))
                 );
+
+                mStaticVisualizerIcon = new ImageView(mContext);
+                mStaticVisualizerIcon.setId(android.R.id.icon);
+                mStaticVisualizerIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                mStaticVisualizerIcon.setImageResource(R.drawable.ic_qs_visualizer_static);
+                mStaticVisualizerIcon.setVisibility(View.VISIBLE);
+
                 FrameLayout visualizerContainer = new FrameLayout(mContext);
                 visualizerContainer.addView(mVisualizer, new FrameLayout.LayoutParams(
                         r.getDimensionPixelSize(R.dimen.qs_tile_icon_size_visualizer),
-                        FrameLayout.LayoutParams.MATCH_PARENT, Gravity.RIGHT
+                        FrameLayout.LayoutParams.MATCH_PARENT, Gravity.CENTER
+                ));
+                visualizerContainer.addView(mStaticVisualizerIcon, new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT, Gravity.CENTER
                 ));
                 return visualizerContainer;
             }
@@ -119,8 +137,10 @@ public class VisualizerTile extends QSTile<QSTile.State>
 
     @Override
     protected void handleUpdateState(State state, Object arg) {
-        state.visible = mTileVisible;
+        state.visible = true;
         state.label = mContext.getString(R.string.quick_settings_visualizer_label);
+
+        mUiHandler.post(mUpdateVisibilities);
     }
 
     @Override
@@ -129,12 +149,8 @@ public class VisualizerTile extends QSTile<QSTile.State>
         mListening = listening;
         if (listening) {
             mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
-            if (mTileVisible) {
-                AsyncTask.execute(mLinkVisualizer);
-            }
         } else {
             mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
-            AsyncTask.execute(mUnlinkVisualizer);
         }
     }
 
@@ -157,6 +173,21 @@ public class VisualizerTile extends QSTile<QSTile.State>
         }
         mCallbacks.clear();
     }
+
+    private final Runnable mRefreshStateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshState();
+        }
+    };
+
+    private final Runnable mUpdateVisibilities = new Runnable() {
+        @Override
+        public void run() {
+            mVisualizer.setVisibility(mIsAnythingPlaying ? View.VISIBLE : View.INVISIBLE);
+            mStaticVisualizerIcon.setVisibility(mIsAnythingPlaying ? View.INVISIBLE : View.VISIBLE);
+        }
+    };
 
     private final Runnable mLinkVisualizer = new Runnable() {
         @Override
@@ -190,9 +221,16 @@ public class VisualizerTile extends QSTile<QSTile.State>
                 break;
             }
         }
-        if (anythingPlaying != mTileVisible) {
-            mTileVisible = anythingPlaying;
-            refreshState();
+        if (anythingPlaying != mIsAnythingPlaying) {
+            mIsAnythingPlaying = anythingPlaying;
+            if (mIsAnythingPlaying && !mLinked) {
+                AsyncTask.execute(mLinkVisualizer);
+            } else if (!mIsAnythingPlaying && mLinked) {
+                AsyncTask.execute(mUnlinkVisualizer);
+            }
+
+            mHandler.removeCallbacks(mRefreshStateRunnable);
+            mHandler.postDelayed(mRefreshStateRunnable, 50);
         }
     }
 
