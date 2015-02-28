@@ -76,6 +76,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="adb_both_active_notification_title">USB &amp; Ağ üzerinden ADB etkin</string>
   <string name="adb_active_generic_notification_message">Hata ayıklamayı devre dışı bırakmak için dokunun.</string>
   <string name="usb_choose_notification_title">USB seçenekleri için dokunun.</string>
+  <string name="permlab_interceptPackageLaunch">uygulama başlangıcını önle</string>
+  <string name="permdesc_interceptPackageLaunch">Uygulamanın, diğer uygulamaların başlamasını önlemesine olanak verir</string>
   <string name="app_ops_access_camera">kameraya eriş</string>
   <string name="app_ops_access_location">konuma erişim</string>
   <string name="app_ops_access_notifications">bildirimleri oku</string>
@@ -164,4 +166,20 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permdesc_accessTorchService">Bir uygulamanın fener hizmetine erişimine izin verir. Normal uygulamalar için gerekli değildir.</string>
   <string name="permlab_preventpower">güç tuşunun işlevini değiştir</string>
   <string name="permdesc_preventpower">Bir uygulamanın güç tuşunun işlevini değiştirmesine izin verir.</string>
+  <string name="usb_extmedia_format_message">USB bellek (%1$s) alanınızdaki tüm veri silinecek. Bu işlem geri alınamaz!</string>
+  <string name="sd_extmedia_format_message">Kartınızdaki (%1$s) tüm veri silinecek. Bu işlem geri alınamaz!</string>
+  <string name="sd_progress_unmounting">SD kartın bağlantısı kesiliyor\u2026</string>
+  <string name="sd_progress_erasing">SD kart siliniyor\u2026</string>
+  <string name="sd_format_error">SD kart silinemedi.</string>
+  <string name="sd_media_bad_removal">SD kart bağlantısı kesilmeden önce kaldırıldı.</string>
+  <string name="sd_media_checking">SD kart kontrol ediliyor.</string>
+  <string name="sd_media_removed">SD kart kaldırıldı.</string>
+  <string name="sd_media_shared">SD kart şu anda bir bilgisayar tarafından kullanılıyor.</string>
+  <string name="usb_progress_unmounting">USB belleğin bağlantısı kesiliyor\u2026</string>
+  <string name="usb_progress_erasing">USB bellek siliniyor\u2026</string>
+  <string name="usb_format_error">USB bellek silinemedi.</string>
+  <string name="usb_media_bad_removal">USB bellek bağlantısı kesilmeden önce kaldırıldı.</string>
+  <string name="usb_media_checking">USB bellek kontrol ediliyor.</string>
+  <string name="usb_media_removed">USB bellek kaldırıldı.</string>
+  <string name="usb_media_shared">USB bellek şu anda bir bilgisayar tarafından kullanılıyor.</string>
 </resources>

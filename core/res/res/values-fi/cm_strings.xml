@@ -162,4 +162,20 @@
   <string name="permdesc_accessTorchService">Sallii sovelluksen pääsyn lampun palveluun. Tavalliset sovellukset eivät koskaan tarvitse tätä.</string>
   <string name="permlab_preventpower">ohita virtanappäin</string>
   <string name="permdesc_preventpower">Sallii sovelluksen ohittaa virtanäppäimen käytön.</string>
+  <string name="usb_extmedia_format_message">Kaikki tiedot USB-muistiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
+  <string name="sd_extmedia_format_message">Kaikki tiedot muistikortiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
+  <string name="sd_progress_unmounting">Irroitetaan SD-korttia\u2026</string>
+  <string name="sd_progress_erasing">Tyhjennetään SD-korttia\u2026</string>
+  <string name="sd_format_error">SD-korttia ei voitu tyhjentää.</string>
+  <string name="sd_media_bad_removal">SD-kortti poistettiin ennen irroittamista.</string>
+  <string name="sd_media_checking">SD-korttia tarkistetaan.</string>
+  <string name="sd_media_removed">SD-kortti on poistettu.</string>
+  <string name="sd_media_shared">SD-kortti on käytössä tällä hetkellä tietokoneessa.</string>
+  <string name="usb_progress_unmounting">Irroitetaan USB-muistia\u2026</string>
+  <string name="usb_progress_erasing">Tyhjennetään USB-muistia\u2026</string>
+  <string name="usb_format_error">USB-muistia ei voitu tyhjentää.</string>
+  <string name="usb_media_bad_removal">USB-muisti poistettiin ennen irroittamista.</string>
+  <string name="usb_media_checking">USB-muistia tarkistetaan.</string>
+  <string name="usb_media_removed">USB-muisti on poistettu.</string>
+  <string name="usb_media_shared">USB-muisti on käytössä tällä hetkellä tietokoneessa.</string>
 </resources>

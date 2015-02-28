@@ -16,20 +16,66 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Zamknij wszystkie ostatnie</string>
   <string name="screenshot_delete_action">Usuń</string>
   <string name="screenshot_delete_confirmation">Zrzut ekranu został usunięty.</string>
   <string name="advanced_dev_option_wipe_app">Usuń dane aplikacji</string>
   <string name="advanced_dev_option_force_stop">Wymuś zamknięcie</string>
   <string name="advanced_dev_option_uninstall">Odinstaluj</string>
+  <string name="accessibility_quick_settings_data_off">Dane mobilne wyłączone.</string>
+  <string name="accessibility_quick_settings_data_on">Dane mobilne włączone.</string>
+  <string name="accessibility_quick_settings_roaming_off">Roaming wyłączony.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming włączony.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Raportowanie lokalizacji: tryb oszczędzania baterii.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Raportowanie lokalizacji: tylko czujniki.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Raportowanie lokalizacji: wysoka dokładność.</string>
   <string name="accessibility_dpad_left">Kursor w lewo</string>
   <string name="accessibility_dpad_right">Kursor w prawo</string>
+  <string name="quick_settings_mobile_data_label">Dane mobilne</string>
+  <string name="quick_settings_roaming_label">Roaming</string>
+  <string name="quick_settings_apn_switch_label">Przełącznik APN</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> dane mobilne</string>
+  <string name="quick_settings_data_off">Dane mobilne wyłączone</string>
+  <string name="quick_settings_location_detail_title">Tryb lokalizacji</string>
+  <string name="quick_settings_location_battery_saving_label">Oszczędzanie baterii</string>
+  <string name="quick_settings_location_gps_only_label">Tylko urządzenie</string>
+  <string name="quick_settings_location_high_accuracy_label">Wysoka dokładność</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">Profile systemowe</string>
+  <string name="quick_settings_profiles_disabled">Profile wyłączone</string>
+  <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_init">Inicjalizowanie\u2026</string>
+  <string name="quick_settings_lockscreen_label">Ekran blokady</string>
+  <string name="quick_settings_lockscreen_label_enforced">Blokada ekranu wymuszona</string>
+  <string name="quick_settings_network_adb_label">ADB przez sieć</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Wygaszanie ekranu</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Przesuń palcem w prawo do %1$s</string>
+  <string name="right_shortcut_hint">Przesuń palcem w lewo do %1$s</string>
   <string name="navbar_dialog_title">Wybierz akcję do przypisania</string>
   <string name="navbar_home_button">Przycisk Home</string>
   <string name="navbar_recent_button">Przycisk Ostatnie aplikacje</string>
   <string name="navbar_search_button">Przycisk Szukaj</string>
   <string name="navbar_back_button">Przycisk Wstecz</string>
+  <string name="navbar_empty_button">Pusty przycisk</string>
   <string name="navbar_menu_conditional_button">Przycisk Menu (autoukrywaj)</string>
   <string name="navbar_menu_always_button">Przycisk Menu (zawsze pokazuj)</string>
   <string name="navbar_menu_big_button">Przycisk Menu</string>
+  <string name="navigation_ring_title">Skróty szybkiego uruchamiania</string>
+  <string name="navring_target_reset_message">Usunąć wszystkie skróty paska nawigacji stworzone przez użytkownika i przywrócić domyślne?</string>
+  <string name="navring_target_reset">Przywrócono domyślne skróty paska nawigacji</string>
+  <string name="navring_action_open_ime_switcher">Otwórz przełącznik metod wprowadzania</string>
+  <string name="navring_action_kill_app">Zamknięcie aplikacji</string>
+  <string name="navring_action_none">Brak</string>
+  <string name="navring_action_take_screenshot">Zrzut ekranu</string>
+  <string name="navring_action_ring_vibrate">Dźwięk/Wibracje</string>
+  <string name="navring_action_ring_silent">Dźwięk/Wyciszenie</string>
+  <string name="navring_action_ring_vibrate_silent">Dźwięk/Wibracje/Wyciszenie</string>
+  <string name="navring_action_screen_off">Wygaszanie ekranu</string>
+  <string name="navring_action_torch">Latarka</string>
+  <string name="navring_action_google_now">Google Now</string>
+  <string name="navring_choose_action_title">Wybierz akcję</string>
+  <string name="select_application">Wybierz aplikację</string>
+  <string name="lockscreen_target_empty">Puste</string>
 </resources>

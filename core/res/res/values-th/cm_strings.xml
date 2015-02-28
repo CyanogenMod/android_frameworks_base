@@ -36,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">รับ SMS ที่ได้รับการป้องกัน</string>
   <string name="permdesc_receiveProtectedSms">อนุญาตให้แอปรับ SMS ที่ได้รับการป้องกัน</string>
   <string name="permlab_modifyProtectedSmsList">แก้ไขรายการ SMS ที่ได้รับการป้องกัน</string>
+  <string name="permdesc_modifyProtectedSmsList">อนุญาตให้แอปแก้ไขรายการที่อยู่ SMS ที่ได้รับการป้องกัน</string>
   <string name="permgrouplab_security">ความปลอดภัย</string>
   <string name="permgroupdesc_security">สิทธิ์ที่เกี่ยวข้องกับข้อมูลความปลอดภัยของอุปกรณ์</string>
   <string name="permlab_accessThemeService">เข้าถึงธีม</string>
@@ -64,16 +65,30 @@
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">ดาวน์โหลด</string>
   <string name="reboot_soft">เริ่มเฟรมเวิร์กใหม่</string>
+  <string name="reboot_title">เริ่มระบบใหม่</string>
   <string name="reboot_confirm" product="tablet">แท็บเล็ตของคุณจะเริ่มระบบใหม่</string>
   <string name="reboot_confirm" product="default">โทรศัพท์ของคุณ จะเริ่มระบบใหม่</string>
   <string name="reboot_progress">กำลังเริ่มระบบใหม่\u2026</string>
+  <string name="app_killed_message">ปิดแอป</string>
   <string name="adb_net_active_notification_title">ADB บนเครือข่ายถูกเปิดใช้งาน</string>
   <string name="adb_both_active_notification_title">ADB บน USB และ &amp; เครือข่ายถูกเปิดใช้งาน</string>
   <string name="adb_active_generic_notification_message">แตะเพื่อปิดใช้งานการแก้ไขข้อบกพร่อง</string>
+  <string name="usb_choose_notification_title">แตะเพื่อเลือกตัวเลือก USB</string>
+  <string name="permlab_interceptPackageLaunch">ขัดขวางการเปิดแอป</string>
+  <string name="permdesc_interceptPackageLaunch">อนุญาตให้แอปขัดขวางการเปิดแอปอื่นได้</string>
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งของคุณ</string>
   <string name="app_ops_access_notifications">อ่านการแจ้งเตือน</string>
+  <string name="app_ops_activate_vpn">เปิดใช้งาน VPN</string>
   <string name="app_ops_alarm_wakeup">ปลุกอุปกรณ์</string>
+  <string name="app_ops_su">ได้รับสิทธิผู้ดูแลระบบ</string>
+  <string name="app_ops_auto_start">เริ่มเมื่อเปิดเครื่อง</string>
+  <string name="app_ops_delete_call_log">ลบประวัติการโทรของคุณ</string>
+  <string name="app_ops_delete_contacts">ลบรายชื่อผู้ติดต่อของคุณ</string>
+  <string name="app_ops_delete_mms">ลบข้อความ MMS ของคุณ</string>
+  <string name="app_ops_delete_sms">ลบข้อความ SMS ของคุณ</string>
+  <string name="app_ops_draw_on_top">วาดทับหน้าจอ</string>
+  <string name="app_ops_get_usage_stats">ได้รับสถิติการใช้งานแอป</string>
   <string name="app_ops_keep_device_awake">เปิดจอค้าง</string>
   <string name="app_ops_make_phone_call">โทรออก</string>
   <string name="app_ops_modify_calendar">แก้ไขปฎิทิน</string>
@@ -81,8 +96,10 @@
   <string name="app_ops_modify_clipboard">ปรับเปลี่ยนคลิปบอร์ด</string>
   <string name="app_ops_modify_contacts">แก้ไขรายชื่อ</string>
   <string name="app_ops_modify_settings">แก้ไขการตั้งค่าระบบ</string>
+  <string name="app_ops_mute_unmute_microphone">เปิด/ปิด เสียงไมโครโฟน</string>
   <string name="app_ops_play_audio">เล่นเสียง</string>
   <string name="app_ops_post_notification">แสดงการแจ้งเตือน</string>
+  <string name="app_ops_project_media">project media</string>
   <string name="app_ops_read_calendar">อ่านปฏิทิน</string>
   <string name="app_ops_read_call_log">อ่านประวัติการโทร</string>
   <string name="app_ops_read_clipboard">อ่านคลิปบอร์ด</string>
@@ -94,6 +111,7 @@
   <string name="app_ops_send_mms">ส่งข้อความ MMS</string>
   <string name="app_ops_send_sms">ส่งข้อความ SMS</string>
   <string name="app_ops_start_at_bootup">เริ่มเมื่อเปิดเครื่อง</string>
+  <string name="app_ops_toast_window">แสดงแถบข้อความ</string>
   <string name="app_ops_toggle_bluetooth">สลับบลูทูธ</string>
   <string name="app_ops_toggle_mobile_data">สลับข้อมูลมือถือ</string>
   <string name="app_ops_toggle_nfc">สลับ NFC</string>
@@ -110,6 +128,12 @@
   <string name="app_ops_use_voice_volume">ควบคุมเสียงสนทนา</string>
   <string name="app_ops_write_mms">เขียนข้อความ MMS</string>
   <string name="app_ops_write_sms">เขียนข้อความ SMS</string>
+  <string name="lockscreen_sim_error_message_short">ซิมการ์ดไม่ถูกต้อง</string>
+  <string name="lockscreen_airplane_mode_on">โหมดเครื่องบิน</string>
+  <string name="usb_charging_notification_title">เชื่อมต่อในรูปแบบชาร์จ</string>
+  <string name="tethered_notification_no_device_message">ไม่มีอุปกรณ์เชื่อมต่อ</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
   <string name="progress_nomediapresent" product="default">ไม่พบอุปกรณ์สื่อที่ถอดได้\u2026</string>
   <string name="storage_uicc">ที่เก็บ UICC</string>
   <string name="stk_cc_ussd_to_dial">คำขอ USSD ถูกแก้ไขเป็นคำขอ DIAL</string>
@@ -118,10 +142,42 @@
   <string name="stk_cc_ss_to_dial">คำขอ SS ถูกแก้ไขเป็นคำขอ DIAL</string>
   <string name="stk_cc_ss_to_ussd">คำขอ SS ถูกแก้ไขเป็นคำขอ USSD</string>
   <string name="stk_cc_ss_to_ss">คำขอ SS ถูกแก้ไขเป็นคำขอ SS ใหม่</string>
+  <string name="China_Mobile">China Mobile</string>
+  <string name="China_Unicom">China Unicom</string>
+  <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">จำตัวเลือกของฉัน</string>
   <string name="perf_profile_pwrsv">ประหยัดพลังงาน</string>
   <string name="perf_profile_bal">สมดุล</string>
   <string name="perf_profile_perf">ประสิทธิภาพ</string>
   <string name="theme_install_error_title">การติดตั้งชุดรูปแบบล้มเหลว</string>
   <string name="theme_install_error_message">ชุดรูปแบบ %s ติดตั้งล้มเหลว</string>
+  <string name="android_installing_apk">กำลังติดตั้งแอป
+        <xliff:g id="number" example="123">%1$d</xliff:g> จาก
+        <xliff:g id="number" example="123">%2$d</xliff:g></string>
+  <string name="android_installing_title">กำลังติดตั้งแอนดรอยด์\u2026</string>
+  <string name="theme_reset_notification_title">ล้างชุดรูปแบบ</string>
+  <string name="theme_reset_notification_body">ระบบกลับมาใช้ชุดรูปแบบเดิมเนื่องจากมีแอปเกิดปัญหาขึ้นจำนวนมาก</string>
+  <string name="stylus_app_not_installed">%s ไม่ถูกติดตั้ง</string>
   <string name="permlab_interceptSmsSent">ขัดขวางการส่ง SMS</string>
+  <string name="permdesc_interceptSmsSent">อนุญาตให้แอป ขัดขวางการส่ง SMS แอปอันตรายอาจจะใช้วิธีนี้เพื่อป้องกันไม่ให้ส่งข้อความออก</string>
+  <string name="permlab_accessTorchService">เข้าถึงไฟฉาย</string>
+  <string name="permdesc_accessTorchService">อนุญาตให้แอปเข้าถึงไฟฉาย ซึ่งมันไม่ควรจะมีในแอปปกติ</string>
+  <string name="permlab_preventpower">เปลี่ยนปุ่มปิดหน้าจอ</string>
+  <string name="permdesc_preventpower">อนุญาตให้แอปเปลี่ยนวิธีใช้ปุ่มปิดหน้าจอ</string>
+  <string name="usb_extmedia_format_message">จะลบข้อมูลทั้งหมดในที่เก็บ USB ของคุณ (ที่อยู่ใน \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
+  <string name="sd_extmedia_format_message">จะลบข้อมูลทั้งหมดในที่เก็บการ์ดของคุณ (ที่อยู่ใน \'%1$s\') การกระทำนี้ไม่สามารถย้อนกลับได้!</string>
+  <string name="sd_progress_unmounting">กำลังยกเลิกเชื่อมต่อ SD card\u2026</string>
+  <string name="sd_progress_erasing">กำลังลบ SD card\u2026</string>
+  <string name="sd_format_error">ไม่สามารถลบ SD card</string>
+  <string name="sd_media_bad_removal">SD card ถูกนำออกก่อนที่จะยกเลิกการเชื่อมต่อ</string>
+  <string name="sd_media_checking">กำลังตรวจสอบ SD card</string>
+  <string name="sd_media_removed">SD card ได้ถูกนำออก</string>
+  <string name="sd_media_shared">SD card กำลังถูกใช้โดยคอมพิวเตอร์</string>
+  <string name="usb_progress_unmounting">กำลังยกเลิกการเชื่อมต่อที่เก็บข้อมูล USB\u2026</string>
+  <string name="usb_progress_erasing">กำลังลบที่เก็บข้อมูล USB\u2026</string>
+  <string name="usb_format_error">ไม่สามารถลบที่เก็บข้อมูล USB</string>
+  <string name="usb_media_bad_removal">ที่เก็บข้อมูล USB ถูกนำออกก่อนยกเลิกการเชื่อมต่อ</string>
+  <string name="usb_media_checking">กำลังตรวจสอบที่เก็บข้อมูล USB</string>
+  <string name="usb_media_removed">ที่เก็บข้อมูล USB ถูกนำออก</string>
+  <string name="usb_media_shared">ที่เก็บข้อมูล USB ถูกใช้โดยคอมพิวเตอร์</string>
 </resources>

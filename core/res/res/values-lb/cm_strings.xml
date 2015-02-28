@@ -161,4 +161,20 @@
   <string name="permlab_accessTorchService">Op den Täscheluucht-Service zougräifen</string>
   <string name="permdesc_accessTorchService">Erlaabt der App den Accès op den Täscheluucht-Service. Dat sollt fir normal Appen ni néideg sinn.</string>
   <string name="permdesc_preventpower">Erlaabt d\'App, d\'Un-/Aus-Tast eng aner Funktioun zouzeweisen.</string>
+  <string name="usb_extmedia_format_message">All d\'Daten um USB-Späicher (ënner dem Dossier \"%1$s\") gi geläscht. Dës Aktioun kann net réckgängeg gemaach ginn!</string>
+  <string name="sd_extmedia_format_message">All d\'Daten op der SD-Kaart (ënner dem Dossier \"%1$s\") gi geläscht. Dës Aktioun kann net réckgängeg gemaach ginn!</string>
+  <string name="sd_progress_unmounting">SD-Kaart gëtt ofgemellt\u2026</string>
+  <string name="sd_progress_erasing">SD-Kaart gëtt geläscht\u2026</string>
+  <string name="sd_format_error">Konnt d\'SD-Kaart net läschen.</string>
+  <string name="sd_media_bad_removal">D\'SD-Kaart gouf erausgeholl ier se ofgemellt gouf.</string>
+  <string name="sd_media_checking">D\'SD-Kaart gëtt iwwerpréift.</string>
+  <string name="sd_media_removed">D\'SD-Kaart gouf erausgeholl.</string>
+  <string name="sd_media_shared">D\'SD-Kaart gëtt momentan vun engem Computer benotzt.</string>
+  <string name="usb_progress_unmounting">USB-Späicher gëtt ofgemellt\u2026</string>
+  <string name="usb_progress_erasing">Den USB-Späicher gëtt geläscht\u2026</string>
+  <string name="usb_format_error">Konnt den USB-Späicher net läschen.</string>
+  <string name="usb_media_bad_removal">Den USB-Späicher gouf erausgeholl ier e getrennt gouf.</string>
+  <string name="usb_media_checking">Den USB-Späicher gëtt grad iwwerpréift.</string>
+  <string name="usb_media_removed">Den USB-Späicher gouf erausgeholl.</string>
+  <string name="usb_media_shared">Den USB-Späicher gëtt momentan vun engem Computer benotzt.</string>
 </resources>

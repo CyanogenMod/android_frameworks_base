@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB μέσω USB &amp; δικτύου ενεργοποιημένο</string>
   <string name="adb_active_generic_notification_message">Αγγίξτε για απενεργοποίηση του εντοπισμού σφαλμάτων.</string>
   <string name="usb_choose_notification_title">Αγγίξτε για να ρυθμίσετε τη σύνδεση μέσω USB.</string>
+  <string name="permlab_interceptPackageLaunch">παρεμπόδιση έναρξης εφαρμογών</string>
+  <string name="permdesc_interceptPackageLaunch">Επιτρέπει σε μια εφαρμογή να παρεμποδίσει την έναρξη άλλων εφαρμογών</string>
   <string name="app_ops_access_camera">πρόσβαση στην φωτογρ. μηχανή</string>
   <string name="app_ops_access_location">πρόσβαση στην τοποθεσία σας</string>
   <string name="app_ops_access_notifications">ανάγνωση των ειδοποιήσεών σας</string>
@@ -162,4 +164,20 @@
   <string name="permdesc_accessTorchService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία φακού. Δεν πρέπει να απαιτείται από κανονικές εφαρμογές.</string>
   <string name="permlab_preventpower">παράκαμψη πλήκτρου λειτουργίας</string>
   <string name="permdesc_preventpower">Επιτρέπει σε μια εφαρμογή να χρησιμοποιήσει το πλήκτρο λειτουργίας για μια διαφορετική λειτουργία.</string>
+  <string name="usb_extmedia_format_message">Όλα τα αρχεία στον αποθηκευτικό σας χώρο USB (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
+  <string name="sd_extmedia_format_message">Όλα τα δεδομένα στην κάρτα σας (στο μονοπάτι \'%1$s\') θα διαγραφούν. Αυτή η ενέργεια δεν είναι αναστρέψιμη!</string>
+  <string name="sd_progress_unmounting">Αποπροσάρτηση κάρτας SD\u2026</string>
+  <string name="sd_progress_erasing">Διαγραφή κάρτας SD\u2026</string>
+  <string name="sd_format_error">Δεν ήταν δυνατή η διαγραφή της κάρτας SD.</string>
+  <string name="sd_media_bad_removal">Η κάρτα SD αφαιρέθηκε πριν την αποπροσάρτησή της.</string>
+  <string name="sd_media_checking">Αυτή τη στιγμή γίνεται έλεγχος της κάρτας SD.</string>
+  <string name="sd_media_removed">Η κάρτα SD έχει αφαιρεθεί.</string>
+  <string name="sd_media_shared">Αυτή τη στιγμή η κάρτα SD χρησιμοποιείται από κάποιον υπολογιστή.</string>
+  <string name="usb_progress_unmounting">Αποπροσάρτηση αποθ. χώρου USB\u2026</string>
+  <string name="usb_progress_erasing">Διαγραφή αποθ. χώρου USB\u2026</string>
+  <string name="usb_format_error">Δεν ήταν δυνατή η διαγραφή του αποθ. χώρου USB.</string>
+  <string name="usb_media_bad_removal">Ο αποθ. χώρος USB αφαιρέθηκε πριν την αποπροσάρτησή του.</string>
+  <string name="usb_media_checking">Αυτή τη στιγμή γίνεται έλεγχος του αποθ. χώρου USB.</string>
+  <string name="usb_media_removed">Ο αποθ. χώρος USB έχει αφαιρεθεί.</string>
+  <string name="usb_media_shared">Αυτή τη στιγμή ο αποθ. χώρος USB χρησιμοποιείται από κάποιον υπολογιστή.</string>
 </resources>

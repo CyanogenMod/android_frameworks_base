@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
   <string name="usb_choose_notification_title">轻触以选择 USB 选项。</string>
+  <string name="permlab_interceptPackageLaunch">拦截应用启动</string>
+  <string name="permdesc_interceptPackageLaunch">允许应用拦截其他应用的启动</string>
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>
   <string name="app_ops_access_notifications">读取通知</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">允许应用访问手电筒服务。正常应用不应需要此权限。</string>
   <string name="permlab_preventpower">覆写电源键</string>
   <string name="permdesc_preventpower">允许应用覆写电源键</string>
+  <string name="usb_extmedia_format_message">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <string name="sd_extmedia_format_message">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <string name="sd_progress_unmounting">正在卸载 SD 卡\u2026</string>
+  <string name="sd_progress_erasing">正在擦除 SD 卡\u2026</string>
+  <string name="sd_format_error">无法擦除 SD 卡。</string>
+  <string name="sd_media_bad_removal">SD 卡曾在未卸载的情况下就被移除。</string>
+  <string name="sd_media_checking">目前正在检查 SD 卡。</string>
+  <string name="sd_media_removed">SD 卡已移除。</string>
+  <string name="sd_media_shared">SD 卡目前正在被计算机使用。</string>
+  <string name="usb_progress_unmounting">正在卸载 USB 存储\u2026</string>
+  <string name="usb_progress_erasing">正在擦除 USB 存储\u2026</string>
+  <string name="usb_format_error">无法擦除 USB 存储。</string>
+  <string name="usb_media_bad_removal">USB 存储曾在未卸载的情况下被移除。</string>
+  <string name="usb_media_checking">目前正在检查 USB 存储。</string>
+  <string name="usb_media_removed">USB 存储已被移除。</string>
+  <string name="usb_media_shared">目前 USB 存储正在被计算机使用。</string>
 </resources>

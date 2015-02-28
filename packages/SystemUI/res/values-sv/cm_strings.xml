@@ -22,6 +22,7 @@
   <string name="advanced_dev_option_force_stop">Tvingad avslutning</string>
   <string name="advanced_dev_option_uninstall">Avinstallera</string>
   <string name="accessibility_quick_settings_data_off">Mobildata av.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>

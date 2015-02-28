@@ -36,6 +36,7 @@
   <string name="permlab_receiveProtectedSms">odbieranie chronionych SMS-ów</string>
   <string name="permdesc_receiveProtectedSms">Umożliwia aplikacji odbieranie przychodzących chronionych SMS-ów.</string>
   <string name="permlab_modifyProtectedSmsList">Modyfikowanie listy chronionych SMS-ów</string>
+  <string name="permdesc_modifyProtectedSmsList">Umożliwia aplikacji modyfikowanie listy chronionych SMS-ów.</string>
   <string name="permgrouplab_security">Zabezpieczenia</string>
   <string name="permgroupdesc_security">Uprawnienia związane z informacjami o bezpieczeństwie urządzenia.</string>
   <string name="permlab_accessThemeService">dostęp do usługi motywów</string>
@@ -68,13 +69,26 @@
   <string name="reboot_confirm" product="tablet">Tablet zostanie uruchomiony ponownie.</string>
   <string name="reboot_confirm" product="default">Telefon zostanie uruchomiony ponownie.</string>
   <string name="reboot_progress">Ponowne uruchamianie\u2026</string>
+  <string name="app_killed_message">Aplikacja została zamknięta</string>
   <string name="adb_net_active_notification_title">ADB przez sieć włączone</string>
   <string name="adb_both_active_notification_title">ADB przez USB &amp; sieć włączone</string>
   <string name="adb_active_generic_notification_message">Dotknij, aby wyłączyć debugowanie.</string>
+  <string name="usb_choose_notification_title">Dotknij, aby wybrać opcje USB.</string>
+  <string name="permlab_interceptPackageLaunch">przechwytywanie uruchamiania aplikacji</string>
+  <string name="permdesc_interceptPackageLaunch">Pozwala aplikacji na przechwytywanie uruchamiania innych aplikacji</string>
   <string name="app_ops_access_camera">dostęp do kamery</string>
   <string name="app_ops_access_location">dostęp do lokalizacji</string>
   <string name="app_ops_access_notifications">czytanie powiadomień</string>
+  <string name="app_ops_activate_vpn">aktywowanie VPN</string>
   <string name="app_ops_alarm_wakeup">wybudzenie urządzenia</string>
+  <string name="app_ops_su">dostęp do roota</string>
+  <string name="app_ops_auto_start">uruchamianie podczas włączania urządzenia</string>
+  <string name="app_ops_delete_call_log">usuwanie dziennika połączeń</string>
+  <string name="app_ops_delete_contacts">usuwanie kontaktów</string>
+  <string name="app_ops_delete_mms">usuwanie wiadomości MMS</string>
+  <string name="app_ops_delete_sms">usuwanie wiadomości SMS</string>
+  <string name="app_ops_draw_on_top">rysowanie okien na wierzchu</string>
+  <string name="app_ops_get_usage_stats">uzyskanie statystyk użytkowania aplikacji</string>
   <string name="app_ops_keep_device_awake">zapobieganie przejściu telefonu w stan uśpienia</string>
   <string name="app_ops_make_phone_call">wykonywanie połączeń telefonicznych</string>
   <string name="app_ops_modify_calendar">aktualizowanie kalendarza</string>
@@ -82,8 +96,10 @@
   <string name="app_ops_modify_clipboard">modyfikowanie schowka</string>
   <string name="app_ops_modify_contacts">aktualizowanie kontaktów</string>
   <string name="app_ops_modify_settings">aktualizowanie ustawień systemowych</string>
+  <string name="app_ops_mute_unmute_microphone">włączanie/wyłączanie mikrofonu</string>
   <string name="app_ops_play_audio">odtwarzanie dźwięków</string>
   <string name="app_ops_post_notification">wysyłanie powiadomienia</string>
+  <string name="app_ops_project_media">wyświetlanie multimediów</string>
   <string name="app_ops_read_calendar">czytanie kalendarza</string>
   <string name="app_ops_read_call_log">czytanie rejestru połączeń</string>
   <string name="app_ops_read_clipboard">czytanie schowka</string>
@@ -95,6 +111,7 @@
   <string name="app_ops_send_mms">wysyłanie MMS-ów</string>
   <string name="app_ops_send_sms">wysyłanie SMS-ów</string>
   <string name="app_ops_start_at_bootup">uruchamianie podczas włączania urządzenia</string>
+  <string name="app_ops_toast_window">wyświetlanie komunikatów w dymkach</string>
   <string name="app_ops_toggle_bluetooth">przełączanie Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">przełączanie przesyłu danych</string>
   <string name="app_ops_toggle_nfc">Przełączanie NFC</string>
@@ -111,6 +128,12 @@
   <string name="app_ops_use_voice_volume">kontrolowanie głośności rozmów</string>
   <string name="app_ops_write_mms">pisanie MMS-ów</string>
   <string name="app_ops_write_sms">pisanie SMS-ów</string>
+  <string name="lockscreen_sim_error_message_short">Nieprawidłowa Karta SIM.</string>
+  <string name="lockscreen_airplane_mode_on">Tryb samolotowy</string>
+  <string name="usb_charging_notification_title">Podłączony w trybie ładowania</string>
+  <string name="tethered_notification_no_device_message">Brak podłączonego urządzenia</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenie</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenia</string>
   <string name="progress_nomediapresent" product="default">Brak wymiennego nośnika pamięci\u2026</string>
   <string name="storage_uicc">Magazyn UICC</string>
   <string name="stk_cc_ussd_to_dial">Żądanie USSD jest modyfikowane na DIAL.</string>
@@ -122,12 +145,37 @@
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">Zapamiętaj mój wybór</string>
   <string name="perf_profile_pwrsv">Oszczędny</string>
   <string name="perf_profile_bal">Zbalansowany</string>
   <string name="perf_profile_perf">Wydajny</string>
   <string name="theme_install_error_title">Nie udało się zainstalować motywu</string>
   <string name="theme_install_error_message">%s nie udało się zainstalować</string>
+  <string name="android_installing_apk">Instalacja aplikacji <xliff:g id="number" example="123">%1$d </xliff:g> z <xliff:g id="number" example="123">%2$d </xliff:g>.</string>
   <string name="android_installing_title">Android jest instalowany\u2026</string>
   <string name="theme_reset_notification_title">Reset motywu</string>
+  <string name="theme_reset_notification_body">Domyślny motyw przywrócony z powodu wielu awarii aplikacji.</string>
+  <string name="stylus_app_not_installed">Nie zainstalowano aplikacji %s</string>
   <string name="permlab_interceptSmsSent">przechwytywanie SMS-ów przychodzących</string>
+  <string name="permdesc_interceptSmsSent">Pozwala aplikacji przechwytywać wychodzące wiadomości. Złośliwe aplikacje mogą używać tego do zablokowania wychodzących wiadomości.</string>
+  <string name="permlab_accessTorchService">dostęp do latarki</string>
+  <string name="permdesc_accessTorchService">Umożliwia aplikacji dostęp do latarki. Nie powinno być wymagane przez standardowe aplikacje.</string>
+  <string name="permlab_preventpower">zastąp klawisz zasilania</string>
+  <string name="permdesc_preventpower">Pozwala aplikacji na zastępowanie przycisku zasilania.</string>
+  <string name="usb_extmedia_format_message">Wszystkie dane z pamięci USB (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
+  <string name="sd_extmedia_format_message">Wszystkie dane z karty pamięci (w ścieżce \'%1$s\') zostaną usunięte. Nie można tego cofnąć!</string>
+  <string name="sd_progress_unmounting">Odmontowywanie karty SD\u2026</string>
+  <string name="sd_progress_erasing">Czyszczenie karty SD\u2026</string>
+  <string name="sd_format_error">Nie można wyczyścić karty SD.</string>
+  <string name="sd_media_bad_removal">Karta SD została usunięta przed odmontowaniem.</string>
+  <string name="sd_media_checking">Karta SD jest obecnie sprawdzana.</string>
+  <string name="sd_media_removed">Karta SD została usunięta.</string>
+  <string name="sd_media_shared">Karta SD jest aktualnie używana przez komputer.</string>
+  <string name="usb_progress_unmounting">Odmontowywanie nośnika USB\u2026</string>
+  <string name="usb_progress_erasing">Czyszczenie nośnika USB\u2026</string>
+  <string name="usb_format_error">Nie można wyczyścić nośnika USB.</string>
+  <string name="usb_media_bad_removal">Nośnik USB został usunięty przed odmontowaniem.</string>
+  <string name="usb_media_checking">Nośnik USB jest obecnie sprawdzany.</string>
+  <string name="usb_media_removed">Nośnik USB został usunięty.</string>
+  <string name="usb_media_shared">Nośnik USB jest obecnie używany przez komputer.</string>
 </resources>
