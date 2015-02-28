@@ -176,38 +176,17 @@ public class SystemServicesProxy {
             return tasks;
         }
 
-        // Remove home/recents/excluded tasks
+        // Remove home/recents
         int minNumTasksToQuery = 10;
         int numTasksToQuery = Math.max(minNumTasksToQuery, numLatestTasks);
         List<ActivityManager.RecentTaskInfo> tasks = mAm.getRecentTasksForUser(numTasksToQuery,
                 ActivityManager.RECENT_IGNORE_HOME_STACK_TASKS |
                 ActivityManager.RECENT_IGNORE_UNAVAILABLE |
-                ActivityManager.RECENT_INCLUDE_PROFILES |
-                ActivityManager.RECENT_WITH_EXCLUDED, userId);
+                ActivityManager.RECENT_INCLUDE_PROFILES, userId);
 
         // Break early if we can't get a valid set of tasks
         if (tasks == null) {
             return new ArrayList<ActivityManager.RecentTaskInfo>();
-        }
-
-        boolean isFirstValidTask = true;
-        Iterator<ActivityManager.RecentTaskInfo> iter = tasks.iterator();
-        while (iter.hasNext()) {
-            ActivityManager.RecentTaskInfo t = iter.next();
-
-            // NOTE: The order of these checks happens in the expected order of the traversal of the
-            // tasks
-
-            // Check the first non-recents task, include this task even if it is marked as excluded
-            // from recents if we are currently in the app.  In other words, only remove excluded
-            // tasks if it is not the first active task.
-            boolean isExcluded = (t.baseIntent.getFlags() & Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                    == Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS;
-            if (isExcluded && (isTopTaskHome || !isFirstValidTask)) {
-                iter.remove();
-                continue;
-            }
-            isFirstValidTask = false;
         }
 
         return tasks.subList(0, Math.min(tasks.size(), numLatestTasks));
@@ -333,6 +312,30 @@ public class SystemServicesProxy {
 
         // Remove the task.
         mAm.removeTask(taskId);
+    }
+
+    /** Removes all the user task and kills its processes **/
+    public void removeAllUserTask(int userId) {
+        // Exclude home/recents tasks
+        List<ActivityManager.RecentTaskInfo> tasks = mAm.getRecentTasksForUser(
+                ActivityManager.getMaxRecentTasksStatic(),
+                ActivityManager.RECENT_IGNORE_HOME_STACK_TASKS |
+                ActivityManager.RECENT_IGNORE_UNAVAILABLE |
+                ActivityManager.RECENT_INCLUDE_PROFILES |
+                ActivityManager.RECENT_WITH_EXCLUDED, userId);
+        if (tasks == null) {
+            return;
+        }
+        Iterator<ActivityManager.RecentTaskInfo> iter = tasks.iterator();
+        while (iter.hasNext()) {
+            ActivityManager.RecentTaskInfo t = iter.next();
+            if (t.persistentId > 0) {
+                // Only if is running
+                boolean isDocument = Utilities.isDocument(t.baseIntent);
+                mAm.removeTask(t.persistentId,
+                        isDocument ? 0 : ActivityManager.REMOVE_TASK_KILL_PROCESS);
+            }
+        }
     }
 
     /**
