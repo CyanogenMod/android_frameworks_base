@@ -722,6 +722,7 @@ public class PhoneAccount implements Parcelable {
         out.writeInt(mCapabilities);
         out.writeInt(mIconResId);
         out.writeInt(mColor);
+        out.writeString(mIconPackageName);
         if (mIconBitmap == null) {
             out.writeInt(0);
         } else {
