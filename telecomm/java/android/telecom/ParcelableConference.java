@@ -45,14 +45,14 @@ public final class ParcelableConference implements Parcelable {
             List<String> connectionIds,
             IVideoProvider videoProvider,
             int videoState) {
-       this(phoneAccount, state, capabilities, connectionIds, videoProvider, videoState,
+       this(phoneAccount, state, connectionCapabilities, connectionIds, videoProvider, videoState,
                Conference.NO_CONNECTTIME);
     }
 
     public ParcelableConference(
             PhoneAccountHandle phoneAccount,
             int state,
-            int capabilities,
+            int connectionCapabilities,
             List<String> connectionIds,
             IVideoProvider videoProvider,
             int videoState,

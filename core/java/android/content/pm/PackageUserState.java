@@ -20,6 +20,8 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 
 import android.util.ArraySet;
 
+import java.util.HashSet;
+
 /**
  * Per-user state information about a package.
  * @hide
@@ -53,9 +55,9 @@ public class PackageUserState {
         hidden = o.hidden;
         lastDisableAppCaller = o.lastDisableAppCaller;
         disabledComponents = o.disabledComponents != null
-                ? new ArraySet<String>(o.disabledComponents) : null;
+                ? new HashSet<String>(o.disabledComponents) : null;
         enabledComponents = o.enabledComponents != null
-                ? new ArraySet<String>(o.enabledComponents) : null;
+                ? new HashSet<String>(o.enabledComponents) : null;
         blockUninstall = o.blockUninstall;
         protectedComponents = o.protectedComponents != null
                 ? new HashSet<String>(o.protectedComponents) : null;

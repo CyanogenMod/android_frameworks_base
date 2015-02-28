@@ -3018,6 +3018,7 @@ public final class Settings {
             POINTER_SPEED,
             VIBRATE_WHEN_RINGING,
             RINGTONE,
+            NOTIFICATION_SOUND,
             SYSTEM_PROFILES_ENABLED,
             PHONE_BLACKLIST_ENABLED,
             PHONE_BLACKLIST_NOTIFY_ENABLED,
@@ -3026,7 +3027,6 @@ public final class Settings {
             PHONE_BLACKLIST_REGEX_ENABLED,
             STATUS_BAR_SHOW_BATTERY_PERCENT,
             LOCK_TO_APP_ENABLED,
-            NOTIFICATION_SOUND
         };
 
         /**
@@ -4733,6 +4733,8 @@ public final class Settings {
 
         /**
         public static final String WIMAX_ON = "wimax_on";
+
+        /**
          * The number of milliseconds to hold on to a PendingIntent based request. This delay gives
          * the receivers of the PendingIntent an opportunity to make a new network request before
          * the Network satisfying the request is potentially removed.

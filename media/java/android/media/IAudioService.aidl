@@ -224,9 +224,11 @@ interface IAudioService {
 
     void addMediaPlayerAndUpdateRemoteController(String packageName);
 
+    void removeMediaPlayerAndUpdateRemoteController(String packageName);
+
            String registerAudioPolicy(in AudioPolicyConfig policyConfig,
                     in IAudioPolicyCallback pcb, boolean hasFocusListener);
     oneway void unregisterAudioPolicyAsync(in IAudioPolicyCallback pcb);
 
-           int setFocusPropertiesForPolicy(int duckingBehavior, in IAudioPolicyCallback pcb);
+    int setFocusPropertiesForPolicy(int duckingBehavior, in IAudioPolicyCallback pcb);
 }

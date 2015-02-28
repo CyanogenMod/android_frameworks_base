@@ -26,6 +26,7 @@ import android.util.ArraySet;
 import android.util.SparseArray;
 
 import java.io.File;
+import java.util.HashSet;
 
 /**
  * Settings base class for pending and resolved classes.
@@ -339,39 +340,39 @@ class PackageSettingBase extends GrantedPermissions {
         state.visibleComponents = visibleComponents;
     }
 
-    ArraySet<String> getEnabledComponents(int userId) {
+    HashSet<String> getEnabledComponents(int userId) {
         return readUserState(userId).enabledComponents;
     }
 
-    ArraySet<String> getDisabledComponents(int userId) {
+    HashSet<String> getDisabledComponents(int userId) {
         return readUserState(userId).disabledComponents;
     }
 
-    void setEnabledComponents(ArraySet<String> components, int userId) {
+    void setEnabledComponents(HashSet<String> components, int userId) {
         modifyUserState(userId).enabledComponents = components;
     }
 
-    void setDisabledComponents(ArraySet<String> components, int userId) {
+    void setDisabledComponents(HashSet <String> components, int userId) {
         modifyUserState(userId).disabledComponents = components;
     }
 
-    void setEnabledComponentsCopy(ArraySet<String> components, int userId) {
+    void setEnabledComponentsCopy(HashSet <String> components, int userId) {
         modifyUserState(userId).enabledComponents = components != null
-                ? new ArraySet<String>(components) : null;
+                ? new HashSet<String>(components) : null;
     }
 
-    void setDisabledComponentsCopy(ArraySet<String> components, int userId) {
+    void setDisabledComponentsCopy(HashSet<String> components, int userId) {
         modifyUserState(userId).disabledComponents = components != null
-                ? new ArraySet<String>(components) : null;
+                ? new HashSet<String>(components) : null;
     }
 
     PackageUserState modifyUserStateComponents(int userId, boolean disabled, boolean enabled) {
         PackageUserState state = modifyUserState(userId);
         if (disabled && state.disabledComponents == null) {
-            state.disabledComponents = new ArraySet<String>(1);
+            state.disabledComponents = new HashSet<String>(1);
         }
         if (enabled && state.enabledComponents == null) {
-            state.enabledComponents = new ArraySet<String>(1);
+            state.enabledComponents = new HashSet<String>(1);
         }
         return state;
     }

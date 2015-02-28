@@ -136,7 +136,7 @@ public class SubscriptionInfo implements Parcelable {
         this.mMcc = mcc;
         this.mMnc = mnc;
         this.mStatus = status;
-        this.mNwMode = nwMode
+        this.mNwMode = nwMode;
         this.mCountryIso = countryIso;
     }
 
@@ -353,7 +353,7 @@ public class SubscriptionInfo implements Parcelable {
         dest.writeInt(mMcc);
         dest.writeInt(mMnc);
         dest.writeInt(mStatus);
-        dest.writeInt(mNwMode)
+        dest.writeInt(mNwMode);
         dest.writeString(mCountryIso);
         mIconBitmap.writeToParcel(dest, flags);
     }

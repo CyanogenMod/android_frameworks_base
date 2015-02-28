@@ -250,14 +250,14 @@ public class InsetDrawable extends Drawable implements Drawable.Callback {
         boolean pad = mState.mDrawable.getPadding(padding);
 
         if (needMirroring()) {
-            padding.left += mInsetState.mInsetRight;
-            padding.right += mInsetState.mInsetLeft;
+            padding.left += mState.mInsetRight;
+            padding.right += mState.mInsetLeft;
         } else {
-            padding.left += mInsetState.mInsetLeft;
-            padding.right += mInsetState.mInsetRight;
+            padding.left += mState.mInsetLeft;
+            padding.right += mState.mInsetRight;
         }
-        padding.top += mInsetState.mInsetTop;
-        padding.bottom += mInsetState.mInsetBottom;
+        padding.top += mState.mInsetTop;
+        padding.bottom += mState.mInsetBottom;
 
         return pad || (mState.mInsetLeft | mState.mInsetRight |
                 mState.mInsetTop | mState.mInsetBottom) != 0;
@@ -359,10 +359,10 @@ public class InsetDrawable extends Drawable implements Drawable.Callback {
         final Rect r = mTmpRect;
         r.set(bounds);
 
-        r.left += (needMirroring() ? mInsetState.mInsetRight : mInsetState.mInsetLeft);
-        r.top += mInsetState.mInsetTop;
-        r.right -= (needMirroring() ? mInsetState.mInsetLeft : mInsetState.mInsetRight);
-        r.bottom -= mInsetState.mInsetBottom;
+        r.left += (needMirroring() ? mState.mInsetRight : mState.mInsetLeft);
+        r.top += mState.mInsetTop;
+        r.right -= (needMirroring() ? mState.mInsetLeft : mState.mInsetRight);
+        r.bottom -= mState.mInsetBottom;
 
         mState.mDrawable.setBounds(r.left, r.top, r.right, r.bottom);
     }
@@ -498,8 +498,8 @@ public class InsetDrawable extends Drawable implements Drawable.Callback {
     }
 
     private boolean needMirroring() {
-        return mInsetState.mDrawable.isAutoMirrored() &&
-                mInsetState.mDrawable.getLayoutDirection() == LayoutDirection.RTL;
+        return mState.mDrawable.isAutoMirrored() &&
+                mState.mDrawable.getLayoutDirection() == LayoutDirection.RTL;
     }
 }
 

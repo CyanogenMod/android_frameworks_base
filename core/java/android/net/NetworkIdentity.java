@@ -134,6 +134,18 @@ public class NetworkIdentity {
     }
 
     /**
+     * Scrub given IMSI on production builds.
+     */
+    public static String[] scrubSubscriberId(String[] subscriberId) {
+        if (subscriberId == null) return null;
+        final String[] res = new String[subscriberId.length];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = NetworkIdentity.scrubSubscriberId(subscriberId[i]);
+        }
+        return res;
+    }
+
+    /**
      * Build a {@link NetworkIdentity} from the given {@link NetworkState},
      * assuming that any mobile networks are using the current IMSI.
      */

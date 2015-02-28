@@ -591,6 +591,15 @@ public class MediaFocusControl implements OnFinished {
         return true;
     }
 
+    private boolean canReassignAudioFocus() {
+        // focus requests are rejected during a phone call or when the phone is ringing
+        // this is equivalent to IN_VOICE_COMM_FOCUS_ID having the focus
+        if (!mFocusStack.isEmpty() && isLockedFocusOwner(mFocusStack.peek())) {
+            return false;
+        }
+        return true;
+    }
+
      /**
      * Helper function:
      * Returns true if the system is in a state where the focus can be reevaluated , false otherwise.
@@ -770,14 +779,6 @@ public class MediaFocusControl implements OnFinished {
         }
 
         synchronized(mAudioFocusLock) {
-            if (!canReassignAudioFocus(clientId)) {
-                return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
-            }
-
-            if (!canReassignAudioFocusFromQchat(mainStreamType, clientId)) {
-                return AudioManager.AUDIOFOCUS_REQUEST_FAILED;
-            }
-
             boolean focusGrantDelayed = false;
             if (!canReassignAudioFocus()) {
                 if ((flags & AudioManager.AUDIOFOCUS_FLAG_DELAY_OK) == 0) {

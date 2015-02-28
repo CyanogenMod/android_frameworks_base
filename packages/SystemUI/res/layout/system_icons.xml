@@ -48,5 +48,3 @@
         android:textSize="@dimen/battery_level_text_size"
         android:layout_marginStart="7dp"/>
 </LinearLayout>
-        android:layout_marginBottom="@dimen/battery_margin_bottom"/>
-</LinearLayout>

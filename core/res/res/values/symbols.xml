@@ -2159,7 +2159,9 @@
   <java-symbol type="attr" name="preferenceFragmentStyle" />
   <java-symbol type="bool" name="skipHoldBeforeMerge" />
   <java-symbol type="bool" name="imsServiceAllowTurnOff" />
+  <java-symbol type="bool" name="config_device_volte_vt_available" />
   <java-symbol type="bool" name="config_device_volte_available" />
+  <java-symbol type="bool" name="config_carrier_volte_vt_available" />
   <java-symbol type="bool" name="config_carrier_volte_available" />
   <java-symbol type="bool" name="config_carrier_volte_provisioned" />
   <java-symbol type="bool" name="config_carrier_volte_tty_supported" />

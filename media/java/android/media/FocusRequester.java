@@ -135,11 +135,6 @@ class FocusRequester {
         return mAttributes;
     }
 
-    String getClientId() {
-        return mClientId;
-    }
-
-
     private static String focusChangeToString(int focus) {
         switch(focus) {
             case AudioManager.AUDIOFOCUS_NONE:

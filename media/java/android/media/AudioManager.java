@@ -68,6 +68,7 @@ public class AudioManager {
     private final boolean mUseFixedVolume;
     private final Binder mToken = new Binder();
     private static String TAG = "AudioManager";
+    private final ProfileManager mProfileManager;
     private static final AudioPortEventHandler sAudioPortEventHandler = new AudioPortEventHandler();
 
     private static ArrayList<MediaPlayerInfo> mMediaPlayers;
@@ -696,6 +697,8 @@ public class AudioManager {
                 com.android.internal.R.bool.config_useVolumeKeySounds);
         mUseFixedVolume = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
+        mMediaPlayers = new ArrayList<MediaPlayerInfo>(1);
+        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
         sAudioPortEventHandler.init();
     }
 
@@ -2742,6 +2745,14 @@ public class AudioManager {
             Log.e(TAG, "registerMediaButtonEventReceiver() error: " +
                     "receiver and context package names don't match");
             return;
+        }
+       IAudioService service = getService();
+        try {
+            service.addMediaPlayerAndUpdateRemoteController(
+                                    eventReceiver.getPackageName());
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error in calling Audioservice interface " +
+                        "addMediaPlayerAndUpdateRemoteController()" + e);
         }
 
         // construct a PendingIntent for the media button and register it

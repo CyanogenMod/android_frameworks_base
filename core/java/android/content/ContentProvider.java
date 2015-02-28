@@ -286,7 +286,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
                         throw new OperationApplicationException("App op not allowed", 0);
                     }
                 } else if (operation.isWriteOperation()) {
-                    if (enforceWritePermission(callingPkg, uri)
+                    if (enforceWritePermission(callingPkg, uri, null)
                             != AppOpsManager.MODE_ALLOWED) {
                         throw new OperationApplicationException("App op not allowed", 0);
                     }
@@ -475,7 +475,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         }
 
         private int enforceDeletePermission(String callingPkg, Uri uri) throws SecurityException {
-            enforceWritePermissionInner(uri);
+            enforceWritePermissionInner(uri, null);
             if (mWriteOp != AppOpsManager.OP_NONE) {
                 int op = mWriteOp;
                 switch (mWriteOp) {

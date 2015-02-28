@@ -23,7 +23,6 @@
     android:orientation="vertical" >
 
     <FrameLayout
-        android:id="@+id/zen_mode_panel_bg_container"
         android:id="@+id/zen_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
