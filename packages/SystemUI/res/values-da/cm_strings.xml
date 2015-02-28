@@ -16,20 +16,66 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Luk alle seneste</string>
   <string name="screenshot_delete_action">Slet</string>
   <string name="screenshot_delete_confirmation">Screenshot slettet.</string>
   <string name="advanced_dev_option_wipe_app">Ryd appdata</string>
   <string name="advanced_dev_option_force_stop">Gennemtving stop</string>
   <string name="advanced_dev_option_uninstall">Afinstallér</string>
+  <string name="accessibility_quick_settings_data_off">Mobildata slået fra.</string>
+  <string name="accessibility_quick_settings_data_on">Mobildata slået til.</string>
+  <string name="accessibility_quick_settings_roaming_off">Roaming slået fra.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming slået til.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Placeringsrapportering: Batterisparetilstand.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Placeringsrapportering: Kun sensorer-tilstand.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Placeringsrapportering: Høj nøjagtighed-tilstand.</string>
   <string name="accessibility_dpad_left">Venstremarkør</string>
   <string name="accessibility_dpad_right">Højremarkør</string>
+  <string name="quick_settings_mobile_data_label">Mobildata</string>
+  <string name="quick_settings_roaming_label">Roaming</string>
+  <string name="quick_settings_apn_switch_label">APN-skift</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> mobildata</string>
+  <string name="quick_settings_data_off">Mobildata slået fra</string>
+  <string name="quick_settings_location_detail_title">Placeringstilstand</string>
+  <string name="quick_settings_location_battery_saving_label">Batteribesparelse</string>
+  <string name="quick_settings_location_gps_only_label">Kun enhed</string>
+  <string name="quick_settings_location_high_accuracy_label">Høj nøjagtighed</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">Systemprofiler</string>
+  <string name="quick_settings_profiles_disabled">Profiler deaktiveret</string>
+  <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_init">Initialisere\u2026</string>
+  <string name="quick_settings_lockscreen_label">Låseskærm</string>
+  <string name="quick_settings_lockscreen_label_enforced">Tving låseskærm</string>
+  <string name="quick_settings_network_adb_label">ADB via netværk</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Skærm-timeout</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Stryg til højre for %1$s</string>
+  <string name="right_shortcut_hint">Stryg til venstre for %1$s</string>
   <string name="navbar_dialog_title">Vælg handling at tildele</string>
   <string name="navbar_home_button">Startknap</string>
   <string name="navbar_recent_button">Seneste-knap</string>
   <string name="navbar_search_button">Søgeknap</string>
   <string name="navbar_back_button">Tilbageknap</string>
+  <string name="navbar_empty_button">Tom knap</string>
   <string name="navbar_menu_conditional_button">Menuknap (auto-skjul)</string>
   <string name="navbar_menu_always_button">Menuknap (vis altid)</string>
   <string name="navbar_menu_big_button">Menuknap</string>
+  <string name="navigation_ring_title">Hurtig start genveje</string>
+  <string name="navring_target_reset_message">Slet alle brugeroprettede genveje til navigationslinje og gendan til standard?</string>
+  <string name="navring_target_reset">Genveje til navigationslinje nulstillet til standard</string>
+  <string name="navring_action_open_ime_switcher">Åbn IME-skifter</string>
+  <string name="navring_action_kill_app">Luk app ned</string>
+  <string name="navring_action_none">Ingen</string>
+  <string name="navring_action_take_screenshot">Tag skærmbillede</string>
+  <string name="navring_action_ring_vibrate">Opkald/Vibrering</string>
+  <string name="navring_action_ring_silent">Opkald/Lydløs</string>
+  <string name="navring_action_ring_vibrate_silent">Opkald/Vibrering/Lydløs</string>
+  <string name="navring_action_screen_off">Skærm fra</string>
+  <string name="navring_action_torch">Tænd/sluk lommelygte</string>
+  <string name="navring_action_google_now">Google nu</string>
+  <string name="navring_choose_action_title">Vælg handling</string>
+  <string name="select_application">Vælg applikation</string>
+  <string name="lockscreen_target_empty">Tom</string>
 </resources>

@@ -46,7 +46,7 @@
   <string name="permlab_writeThemes">témák módosítása</string>
   <string name="permdesc_writeThemesDesc">Lehetővé teszi az alkalmazás számára, hogy új témákat hozzon létre és módosítsa a jelenleg aktív témát.</string>
   <string name="permlab_readPhoneBlacklist">tiltólista olvasása</string>
-  <string name="permdesc_readPhoneBlacklist">Engedélyezi az alkalmazásnak, hogy olvassa azokat a számokat melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
+  <string name="permdesc_readPhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy olvassa azokat a számokat, melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
   <string name="permlab_changePhoneBlacklist">tiltólista módosítása</string>
   <string name="permdesc_changePhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy szerkessze azokat a telefonszámokat melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
   <string name="permlab_changePrivacyGuardState">adatvédelem engedélyezése vagy tiltása</string>
@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB USB-n &amp; hálózaton keresztül engedélyezve</string>
   <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
   <string name="usb_choose_notification_title">Érintse meg az USB opciók kiválasztásához.</string>
+  <string name="permlab_interceptPackageLaunch">alkalmazás indításának feltartóztatása</string>
+  <string name="permdesc_interceptPackageLaunch">Lehetővé teszi az alkalmazás számára, hogy feltartóztassa más alkalmazások indítását</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
   <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>
   <string name="app_ops_access_notifications">értesítések olvasása</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen a zseblámpa szolgáltatáshoz. Általános alkalmazásoknak soha nem kell ilyen engedély.</string>
   <string name="permlab_preventpower">kikapcsológomb felülbírálása</string>
   <string name="permdesc_preventpower">Lehetővé teszi egy alkalmazás számára a kikapcsológomb felülbírálatát.</string>
+  <string name="usb_extmedia_format_message">Minden adat az USB tárolóról (ezen az útvonalon: \"%1$s\") törlődni fog. A műveletet nem lehet visszafordítani!</string>
+  <string name="sd_extmedia_format_message">Minden adat a kártyájáról (ezen az útvonalon: \"%1$s\") törlődni fog. A műveletet nem lehet visszafordítani!</string>
+  <string name="sd_progress_unmounting">SD-kártya leválasztása\u2026</string>
+  <string name="sd_progress_erasing">SD-kártya törlése\u2026</string>
+  <string name="sd_format_error">Nem lehet törölni az SD-kártyát.</string>
+  <string name="sd_media_bad_removal">SD-kártya eltávolításra került a leválasztás előtt.</string>
+  <string name="sd_media_checking">SD-kártya ellenőrzése folyamatban van.</string>
+  <string name="sd_media_removed">SD-kártya eltávolítva.</string>
+  <string name="sd_media_shared">SD-kártyát jelenleg egy számítógép használja.</string>
+  <string name="usb_progress_unmounting">USB tároló leválasztása\u2026</string>
+  <string name="usb_progress_erasing">USB tároló törlése\u2026</string>
+  <string name="usb_format_error">Nem lehet törölni az USB tárolót.</string>
+  <string name="usb_media_bad_removal">USB tároló eltávolításra került a leválasztás előtt.</string>
+  <string name="usb_media_checking">USB tároló ellenőrzése folyamatban van.</string>
+  <string name="usb_media_removed">USB tároló eltávolítva.</string>
+  <string name="usb_media_shared">USB tárolót jelenleg egy számítógép használja.</string>
 </resources>

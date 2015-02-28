@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">USBとネットワーク経由のADBが有効です</string>
   <string name="adb_active_generic_notification_message">タップしてデバッグを無効にします。</string>
   <string name="usb_choose_notification_title">タップしてUSBオプションを選択します。</string>
+  <string name="permlab_interceptPackageLaunch">アプリの起動の監視</string>
+  <string name="permdesc_interceptPackageLaunch">他のアプリの起動を監視することをアプリに許可します</string>
   <string name="app_ops_access_camera">カメラへのアクセス</string>
   <string name="app_ops_access_location">位置情報へのアクセス</string>
   <string name="app_ops_access_notifications">通知の読み取り</string>
@@ -144,7 +146,7 @@
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
   <string name="permission_remember_choice">選択を記憶</string>
-  <string name="perf_profile_pwrsv">節電</string>
+  <string name="perf_profile_pwrsv">省電力</string>
   <string name="perf_profile_bal">バランス</string>
   <string name="perf_profile_perf">パフォーマンス</string>
   <string name="theme_install_error_title">テーマをインストールできませんでした</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">トーチサービスへのアクセスをアプリに許可します。通常のアプリで必要とされることはないはずです。</string>
   <string name="permlab_preventpower">電源キーの再定義</string>
   <string name="permdesc_preventpower">電源キーの再定義をアプリに許可します。</string>
+  <string name="usb_extmedia_format_message">USBストレージ上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
+  <string name="sd_extmedia_format_message">カード上のすべてのデータ（ 「%1$s」パス配下）が消去されます。この操作は元に戻せません。</string>
+  <string name="sd_progress_unmounting">SDカードのマウントを解除しています\u2026</string>
+  <string name="sd_progress_erasing">SDカードを消去しています\u2026</string>
+  <string name="sd_format_error">SDカードを消去できませんでした。</string>
+  <string name="sd_media_bad_removal">SDカードがマウントを解除する前に取り外されました。</string>
+  <string name="sd_media_checking">SDカードを現在確認しています。</string>
+  <string name="sd_media_removed">SDカードが取り外されました。</string>
+  <string name="sd_media_shared">SDカードは現在パソコンで使用されています。</string>
+  <string name="usb_progress_unmounting">USBストレージのマウントを解除しています\u2026</string>
+  <string name="usb_progress_erasing">USBストレージを消去しています\u2026</string>
+  <string name="usb_format_error">USBストレージを消去できませんでした。</string>
+  <string name="usb_media_bad_removal">USBストレージがマウントを解除する前に取り外されました。</string>
+  <string name="usb_media_checking">USBストレージを現在確認しています。</string>
+  <string name="usb_media_removed">USBストレージが取り外されました。</string>
+  <string name="usb_media_shared">USBストレージは現在パソコンで使用されています。</string>
 </resources>

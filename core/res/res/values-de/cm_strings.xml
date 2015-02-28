@@ -34,8 +34,9 @@
   <string name="global_action_choose_profile">Profil</string>
   <string name="global_action_screenshot">Bildschirmfoto</string>
   <string name="permlab_receiveProtectedSms">geschützte SMS empfangen</string>
-  <string name="permdesc_receiveProtectedSms">Ermöglicht der App, eine eingehende, geschützte SMS zu empfangen.</string>
+  <string name="permdesc_receiveProtectedSms">Ermöglicht der App, eine eingehende geschützte SMS zu empfangen.</string>
   <string name="permlab_modifyProtectedSmsList">Liste der geschützten SMS ändern</string>
+  <string name="permdesc_modifyProtectedSmsList">Ermöglicht der App, die Adressliste der geschützten SMS zu ändern.</string>
   <string name="permgrouplab_security">Sicherheit</string>
   <string name="permgroupdesc_security">Berechtigungen welche die Gerätesicherheit betreffen.</string>
   <string name="permlab_accessThemeService">Zugriff auf den Design-Dienst</string>
@@ -159,4 +160,20 @@
   <string name="permdesc_accessTorchService">Ermöglicht der App, auf die Taschenlampe zuzugreifen. Wird für normale Apps nicht benötigt.</string>
   <string name="permlab_preventpower">Ein/Aus-Taste überschreiben</string>
   <string name="permdesc_preventpower">Ermöglicht der App, der Ein/Aus-Taste eine andere Funktion zuzuweisen.</string>
+  <string name="usb_extmedia_format_message">Alle auf Ihrem USB-Speicher im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
+  <string name="sd_extmedia_format_message">Alle auf Ihrer SD-Karte im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
+  <string name="sd_progress_unmounting">SD-Karte wird ausgeworfen\u2026</string>
+  <string name="sd_progress_erasing">SD-Karte wird gelöscht\u2026</string>
+  <string name="sd_format_error">SD-Karte konnte nicht gelöscht werden.</string>
+  <string name="sd_media_bad_removal">Die SD-Karte wurde entfernt, bevor sie ausgeworfen werden konnte.</string>
+  <string name="sd_media_checking">Die SD-Karte wird gerade geprüft.</string>
+  <string name="sd_media_removed">SD-Karte wurde entfernt.</string>
+  <string name="sd_media_shared">Die SD-Karte wird momentan von einem Computer verwendet.</string>
+  <string name="usb_progress_unmounting">USB-Speicher wird ausgeworfen\u2026</string>
+  <string name="usb_progress_erasing">USB-Speicher wird gelöscht\u2026</string>
+  <string name="usb_format_error">USB-Speicher konnte nicht gelöscht werden.</string>
+  <string name="usb_media_bad_removal">USB-Speicher  wurde entfernt, bevor er ausgeworfen werden konnte.</string>
+  <string name="usb_media_checking">USB-Speicher wird gerade geprüft.</string>
+  <string name="usb_media_removed">USB-Speicher wurde entfernt.</string>
+  <string name="usb_media_shared">USB-Speicher wird momentan von einem Computer verwendet.</string>
 </resources>

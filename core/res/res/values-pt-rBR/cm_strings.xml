@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ABD sobre USB e rede ativado</string>
   <string name="adb_active_generic_notification_message">Toque para desativar a depuração.</string>
   <string name="usb_choose_notification_title">Toque para escolher as opções USB.</string>
+  <string name="permlab_interceptPackageLaunch">interceptar inicialização de app</string>
+  <string name="permdesc_interceptPackageLaunch">Permite um app interceptar a inicialização de outros apps</string>
   <string name="app_ops_access_camera">acessar a câmera</string>
   <string name="app_ops_access_location">acessar sua localização</string>
   <string name="app_ops_access_notifications">ler suas notificações</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">Permite a um aplicativo acessar a lanterna. Nunca deverá ser necessário para aplicativos normais.</string>
   <string name="permlab_preventpower">substituir o botão de ligar/desligar</string>
   <string name="permdesc_preventpower">Permite que um aplicativo substitua o botão de ligar/desligar.</string>
+  <string name="usb_extmedia_format_message">Todos os dados em seu armazenamento USB (no caminho \'%1$s\') serão apagados. Esta ação não pode ser revertida!</string>
+  <string name="sd_extmedia_format_message">Todos os dados do seu cartão (no caminho \'%1$s\') serão apagados. Esta ação não pode ser revertida!</string>
+  <string name="sd_progress_unmounting">Desmontando o cartão SD\u2026</string>
+  <string name="sd_progress_erasing">Apagando o cartão SD\u2026</string>
+  <string name="sd_format_error">Não foi possível apagar o cartão SD.</string>
+  <string name="sd_media_bad_removal">O cartão SD foi removido antes de ser desmontado.</string>
+  <string name="sd_media_checking">O cartão SD está sendo verificado no momento.</string>
+  <string name="sd_media_removed">O cartão SD foi removido.</string>
+  <string name="sd_media_shared">O cartão SD está atualmente em uso pelo computador.</string>
+  <string name="usb_progress_unmounting">Desmontando o armazenamento USB\u2026</string>
+  <string name="usb_progress_erasing">Apagando o armazenamento USB\u2026</string>
+  <string name="usb_format_error">Não foi possível apagar o armazenamento USB.</string>
+  <string name="usb_media_bad_removal">O armazenamento USB foi removido antes de ser desmontado.</string>
+  <string name="usb_media_checking">Armazenamento USB está sendo verificado.</string>
+  <string name="usb_media_removed">O armazenamento USB foi removido.</string>
+  <string name="usb_media_shared">O armazenamento USB está sendo utilizado pelo computador.</string>
 </resources>

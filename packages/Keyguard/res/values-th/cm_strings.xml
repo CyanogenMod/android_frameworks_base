@@ -18,4 +18,14 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM ถูกล็อค</string>
+  <string name="keyguard_accessibility_status">"สถานะ"</string>
+  <string name="kg_dismiss">ปิด</string>
+  <string name="kg_slot_name">ซิมการ์ดใหม่ในช่องที่ <xliff:g id="number">%d</xliff:g>\u0020</string>
+  <string name="lockscreen_sim_error_message_short">ซิมการ์ดไม่ถูกต้อง</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="other">โปรดใส่รหัส PIN ของ SIM ของคุณ คุณสามารถใส่รหัสผ่านได้อีก <xliff:g id="number">%d</xliff:g> ครั้งก่อนที่จะต้องติดต่อผู้ให้บริการเพื่อปลดล็อคโทรศัพท์ของคุณ</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="other">ขณะนี้ซิมการ์ดของคุณถูกปิดการใช้งานอยู่ หากต้องการเปิดใช้งานซิมการ์ดอีกครั้ง โปรดใส่รหัส PUK คุณสามารถใส่รหัสผ่านได้อีก <xliff:g id="number">%d</xliff:g> ครั้งก่อนที่ซิมการ์ดของคุณจะใช้ไม่ได้อีกต่อไป หากไม่ทราบว่านี้่คืออะไร โปรดติดต่อผู้ให้บริการของคุณ</item>
+  </plurals>
 </resources>

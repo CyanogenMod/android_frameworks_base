@@ -21,8 +21,12 @@
   <string name="advanced_dev_option_wipe_app">Tətbiq məlumatını sil</string>
   <string name="advanced_dev_option_force_stop">Dayandır</string>
   <string name="advanced_dev_option_uninstall">Çıxart</string>
+  <string name="accessibility_quick_settings_data_off">Mobil verilənlər bağlıdır.</string>
+  <string name="accessibility_quick_settings_data_on">Mobil verilənlər açıqdır.</string>
   <string name="accessibility_dpad_left">Sol kursor</string>
   <string name="accessibility_dpad_right">Sağ kursor</string>
+  <string name="quick_settings_mobile_data_label">Mobil verilənlər</string>
+  <string name="quick_settings_data_off">Mobil verilənlər Bağlıdır</string>
   <string name="quick_settings_compass_init">Başladılır\u2026</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekrana qoyulan vaxt</string>
   <string name="navbar_dialog_title">Hərəkət seçin</string>

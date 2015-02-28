@@ -157,8 +157,26 @@
   <string name="android_installing_title">Android встановлюється\u2026</string>
   <string name="theme_reset_notification_title">Тема відключена</string>
   <string name="theme_reset_notification_body">Через системні збої встановлена системна тема.</string>
+  <string name="stylus_app_not_installed">%s не встановлено</string>
   <string name="permlab_interceptSmsSent">перехоплювати вихідні SMS</string>
   <string name="permdesc_interceptSmsSent">Дозволити програмі перехоплювати вихідні SMS. Небезпечні програми можуть використати цей доступ, щоб перешкоджати надсиланню вихідних SMS-повідомлень.</string>
   <string name="permlab_accessTorchService">доступ до служби ліхтарика</string>
   <string name="permdesc_accessTorchService">Дозволяє програмі отримувати доступ до служби ліхтарика. Цей дозвіл не використовується звичайними додатками.</string>
+  <string name="permlab_preventpower">перевизначити клавішу живлення</string>
+  <string name="permdesc_preventpower">Дозволити програмі використовувати кнопку живлення.</string>
+  <string name="usb_extmedia_format_message">Всі дані на USB-накопичувачі (за шляхом \'%1$s\') будуть видалені. Цю дію неможливо відмінити!</string>
+  <string name="sd_progress_unmounting">Відключення SD-карти\u2026</string>
+  <string name="sd_progress_erasing">Стирання SD-карти\u2026</string>
+  <string name="sd_format_error">Неможливо стерти SD-карту.</string>
+  <string name="sd_media_bad_removal">SD-карта була видалена не будучи відключеною.</string>
+  <string name="sd_media_checking">Перевірка кари SD.</string>
+  <string name="sd_media_removed">SD-карту видалено.</string>
+  <string name="sd_media_shared">SD-карта використовується комп\'ютером.</string>
+  <string name="usb_progress_unmounting">Відключення USB-носія\u2026</string>
+  <string name="usb_progress_erasing">Стирання USB-носія\u2026</string>
+  <string name="usb_format_error">USB-носій не може бути стертий.</string>
+  <string name="usb_media_bad_removal">USB-носій був видалений не будучи відключеним.</string>
+  <string name="usb_media_checking">USB-носій перевіряється.</string>
+  <string name="usb_media_removed">USB-носій видалено.</string>
+  <string name="usb_media_shared">USB-носій наразі використовується комп\'ютером.</string>
 </resources>

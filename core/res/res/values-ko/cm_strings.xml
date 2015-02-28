@@ -27,7 +27,7 @@
   <string name="profileGroupCalendar">일정</string>
   <string name="profileGroupGmail">Gmail</string>
   <string name="profileGroupEmail">이메일</string>
-  <string name="profileGroupSMS">메시지</string>
+  <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">기타</string>
   <string name="profile_none">없음</string>
   <string name="profile_picker_title">프로필</string>
@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">USB 및 네트워크 ADB 활성화됨</string>
   <string name="adb_active_generic_notification_message">디버깅을 사용하지 않으려면 터치하세요.</string>
   <string name="usb_choose_notification_title">터치하여 USB 연결 방식을 선택합니다.</string>
+  <string name="permlab_interceptPackageLaunch">앱 실행 차단</string>
+  <string name="permdesc_interceptPackageLaunch">앱이 다른 앱의 실행 차단 허용</string>
   <string name="app_ops_access_camera">카메라에 액세스</string>
   <string name="app_ops_access_location">위치 정보에 액세스</string>
   <string name="app_ops_access_notifications">알림 읽기</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">앱이 전등 서비스에 접근할 수 있도록 허용합니다. 일반 앱에서는 필요없는 권한입니다.</string>
   <string name="permlab_preventpower">전원 키 재정의</string>
   <string name="permdesc_preventpower">앱이 전원 키의 기능을 재정의하도록 허용합니다.</string>
+  <string name="usb_extmedia_format_message">USB 저장소에 있는 모든 데이터(\'%1$s\' 경로 아래)가 삭제 됩니다. 이 작업은 돌이킬 수 없습니다!</string>
+  <string name="sd_extmedia_format_message">SD 카드에 있는 모든 데이터(\'%1$s\' 경로 아래)가 삭제 됩니다. 이 작업은 돌이킬 수 없습니다!</string>
+  <string name="sd_progress_unmounting">SD 카드 마운트 해제 중\u2026</string>
+  <string name="sd_progress_erasing">SD 카드 지우는 중\u2026</string>
+  <string name="sd_format_error">SD 카드를 지울 수 없습니다.</string>
+  <string name="sd_media_bad_removal">SD 카드가 마운트 해제되지 않고 제거되었습니다.</string>
+  <string name="sd_media_checking">SD 카드를 검사 중입니다.</string>
+  <string name="sd_media_removed">SD 카드가 제거되었습니다.</string>
+  <string name="sd_media_shared">SD 카드가 사용 중입니다.</string>
+  <string name="usb_progress_unmounting">USB 저장 장치 마운트 해제 중\u2026</string>
+  <string name="usb_progress_erasing">USB 저장소 지우는 중\u2026</string>
+  <string name="usb_format_error">USB 저장소를 지울 수 없습니다.</string>
+  <string name="usb_media_bad_removal">USB 저장소가 마운트 해제되지 않고 제거되었습니다.</string>
+  <string name="usb_media_checking">USB 저장소를 검사 중입니다.</string>
+  <string name="usb_media_removed">USB 저장소가 제거되었습니다.</string>
+  <string name="usb_media_shared">USB 저장소가 사용 중입니다.</string>
 </resources>

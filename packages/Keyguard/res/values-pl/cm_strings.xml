@@ -18,4 +18,18 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">Blokada Perso karty SIM/RUIM</string>
+  <string name="keyguard_accessibility_status">"Status"</string>
+  <string name="kg_dismiss">Odrzuć</string>
+  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Nowa karta SIM\u0020</string>
+  <string name="lockscreen_sim_error_message_short">Nieprawidłowa karta.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałą próbę zanim będziesz musiał skontaktować się z operatorem, by odblokować urządzenie.</item>
+    <item quantity="few">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałych prób.</item>
+    <item quantity="other">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałych prób.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">Karta SIM jest obecnie zablokowana. Wprowadź kod PUK, aby kontynuować. Masz <xliff:g id="number">%d</xliff:g> pozostałą próbę zanim karta SIM zostanie permanentnie zablokowana. Po szczegóły skontaktuj się z operatorem.</item>
+    <item quantity="few">Karta SIM jest obecnie zablokowana. Wprowadź kod PUK, aby kontynuować. Masz <xliff:g id="number">%d</xliff:g> pozostałych prób zanim karta SIM zostanie permanentnie zablokowana. Po szczegóły skontaktuj się z operatorem.</item>
+    <item quantity="other">Karta SIM jest obecnie zablokowana. Wprowadź kod PUK, aby kontynuować. Masz <xliff:g id="number">%d</xliff:g> pozostałych prób zanim karta SIM zostanie permanentnie zablokowana. Po szczegóły skontaktuj się z operatorem.</item>
+  </plurals>
 </resources>

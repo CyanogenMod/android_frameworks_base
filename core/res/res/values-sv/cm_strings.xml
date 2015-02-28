@@ -112,6 +112,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="app_ops_use_voice_volume">kontrollera samtalsvolymen</string>
   <string name="app_ops_write_mms">skriva ett MMS</string>
   <string name="app_ops_write_sms">skriva ett SMS</string>
+  <string name="lockscreen_airplane_mode_on">Flygplansläge</string>
   <string name="progress_nomediapresent" product="default">Inget flyttbart media är tillgängligt\u2026</string>
   <string name="storage_uicc">UICC-lagring</string>
   <string name="stk_cc_ussd_to_dial">USSD-begäran ändras till DIAL-begäran.</string>

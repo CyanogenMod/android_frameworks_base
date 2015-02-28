@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB sobre USB i xarxa habilitat</string>
   <string name="adb_active_generic_notification_message">Toca per deshabilitar la depuració.</string>
   <string name="usb_choose_notification_title">Toca per escollir opcions USB.</string>
+  <string name="permlab_interceptPackageLaunch">interceptar el llançament d\'una app</string>
+  <string name="permdesc_interceptPackageLaunch">Permet a l\'app interceptar el llançament d\'altres apps</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>
   <string name="app_ops_access_notifications">llegir les teves notificacions</string>
@@ -162,4 +164,20 @@
   <string name="permdesc_accessTorchService">Permet a una app accedir al servei de la torxa. Normalment no hauria de ser necessari en les apps normals.</string>
   <string name="permlab_preventpower">sobreescriu la tecla d\'encesa</string>
   <string name="permdesc_preventpower">Permet que l\'app sobreescrigui la tecla d\'encesa.</string>
+  <string name="usb_extmedia_format_message">S\'esborraran totes les dades del teu emmagatzematge USB (sota la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
+  <string name="sd_extmedia_format_message">S\'esborraran totes les dades de la teva targeta (sota la ruta \'%1$s\'). Aquesta acció no es pot desfer!</string>
+  <string name="sd_progress_unmounting">S\'està desmuntant la targeta SD\u2026</string>
+  <string name="sd_progress_erasing">S\'està esborrant la targeta SD\u2026</string>
+  <string name="sd_format_error">No s\'ha pogut esborrar la targeta SD.</string>
+  <string name="sd_media_bad_removal">S\'ha extret la targeta SD abans de desmuntar-la.</string>
+  <string name="sd_media_checking">S\'està comprovant la targeta SD.</string>
+  <string name="sd_media_removed">S\'ha extret la targeta SD.</string>
+  <string name="sd_media_shared">La targeta SD està en ús per part d\'un ordinador.</string>
+  <string name="usb_progress_unmounting">S\'està desmuntant l\'emmagatzematge USB\u2026</string>
+  <string name="usb_progress_erasing">S\'esta esborrant l\'emmagatzematge USB\u2026</string>
+  <string name="usb_format_error">No s\'ha pogut esborrar l\'emmagatzematge USB.</string>
+  <string name="usb_media_bad_removal">S\'ha extret l\'emmagatzematge USB abans de desmuntar-lo.</string>
+  <string name="usb_media_checking">S\'està comprovant l\'emmagatzematge USB.</string>
+  <string name="usb_media_removed">S\'ha extret l\'emmagatzematge USB.</string>
+  <string name="usb_media_shared">L\'emmagatzematge USB està en ús per part d\'un ordinador.</string>
 </resources>

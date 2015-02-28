@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB over USB &amp; nettverk aktivert</string>
   <string name="adb_active_generic_notification_message">Trykk for å deaktivere feilsøking.</string>
   <string name="usb_choose_notification_title">Trykk for å velge alternativer for USB.</string>
+  <string name="permlab_interceptPackageLaunch">avbryt app start</string>
+  <string name="permdesc_interceptPackageLaunch">Tillater en app å avbryte oppstarten av andre programmer</string>
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>
   <string name="app_ops_access_notifications">lese dine notifikasjoner</string>
@@ -162,4 +164,20 @@
   <string name="permdesc_accessTorchService">Tillater en app å få tilgang til lommelykt-tjenesten. Dette skulle aldri vært nødvendig for normale apper.</string>
   <string name="permlab_preventpower">overstyr strømknapp</string>
   <string name="permdesc_preventpower">Tillater en app å overstyre strømknappen.</string>
+  <string name="usb_extmedia_format_message">Alle data på USB Lagringen (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
+  <string name="sd_extmedia_format_message">Alle data på kortet (under filbane \'%1$s\') slettes. Denne handlingen kan ikke angres!</string>
+  <string name="sd_progress_unmounting">Demonterer SDkort\u2026</string>
+  <string name="sd_progress_erasing">Sletter SDkort\u2026</string>
+  <string name="sd_format_error">Kunne ikke slette SD-kort.</string>
+  <string name="sd_media_bad_removal">SD-kortet var fjernet før det ble demontert.</string>
+  <string name="sd_media_checking">Sdkortet blir sjekket for feil.</string>
+  <string name="sd_media_removed">SD-kortet er fjernet.</string>
+  <string name="sd_media_shared">SD-kortet er i bruk av en datamaskin.</string>
+  <string name="usb_progress_unmounting">Demonterer USBlagring\u2026</string>
+  <string name="usb_progress_erasing">Sletter USBlagring\u2026</string>
+  <string name="usb_format_error">Kunne ikke slette USB lagring.</string>
+  <string name="usb_media_bad_removal">USB-lagring ble fjernet før det ble demontert.</string>
+  <string name="usb_media_checking">USB lagring blir sjekket for feil.</string>
+  <string name="usb_media_removed">USB lagring er fjernet.</string>
+  <string name="usb_media_shared">USB lagring er i bruk av en datamaskin.</string>
 </resources>

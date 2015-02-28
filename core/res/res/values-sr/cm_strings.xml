@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућено</string>
   <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
   <string name="usb_choose_notification_title">Додирни да изабереш USB опције.</string>
+  <string name="permlab_interceptPackageLaunch">пресретни подизање апликације</string>
+  <string name="permdesc_interceptPackageLaunch">Дозволи апликацији да пресретне подизање других апликација</string>
   <string name="app_ops_access_camera">приступ камери</string>
   <string name="app_ops_access_location">приступ твојој локацији</string>
   <string name="app_ops_access_notifications">прочитај твоја обавештења</string>
@@ -162,4 +164,20 @@
   <string name="permdesc_accessTorchService">Омогућава апликацији да приступи услузи лампе. Никада не би требало за нормалне апликације.</string>
   <string name="permlab_preventpower">прескочи дугме напајања</string>
   <string name="permdesc_preventpower">Дозвољава апликацији да заобиђе дугме за напајање.</string>
+  <string name="usb_extmedia_format_message">Сви подаци са твог USB складишта (испод путање \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
+  <string name="sd_extmedia_format_message">Сви подаци са твоје картице (испод путање \'%1$s\') ће бити избрисани. Ова акција се не може преокренути!</string>
+  <string name="sd_progress_unmounting">Демонтирање SD картице\u2026</string>
+  <string name="sd_progress_erasing">Брисање SD картице\u2026</string>
+  <string name="sd_format_error">Није могуће избрисати SD картицу.</string>
+  <string name="sd_media_bad_removal">SD картица је уклоњена пре демонтирања.</string>
+  <string name="sd_media_checking">SD картица се тренутно проверава.</string>
+  <string name="sd_media_removed">SD картица је уклоњена.</string>
+  <string name="sd_media_shared">SD картица је тренутно у употреби од стране рачунара.</string>
+  <string name="usb_progress_unmounting">Демонтажа USB складишта\u2026</string>
+  <string name="usb_progress_erasing">Брисање USB складишта\u2026</string>
+  <string name="usb_format_error">Није могуће избрисати USB складиште.</string>
+  <string name="usb_media_bad_removal">USB складиште је уклоњено пре демонтирања.</string>
+  <string name="usb_media_checking">USB складиште се тренутно проверава.</string>
+  <string name="usb_media_removed">USB складиште је уклоњено.</string>
+  <string name="usb_media_shared">USB складиште је тренутно у употреби од стране рачунара.</string>
 </resources>

@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">Отладка по сети и USB разрешена</string>
   <string name="adb_active_generic_notification_message">Нажмите, чтобы отключить отладку.</string>
   <string name="usb_choose_notification_title">Нажмите, чтобы выбрать режим USB-подключения.</string>
+  <string name="permlab_interceptPackageLaunch">Перехват запуска приложений</string>
+  <string name="permdesc_interceptPackageLaunch">Приложение сможет перехватывать запуск других приложений на устройстве.</string>
   <string name="app_ops_access_camera">получить доступ к камере</string>
   <string name="app_ops_access_location">получить доступ к местоположению устройства</string>
   <string name="app_ops_access_notifications">получить доступ к уведомлениям</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">Приложение сможет получать доступ к службе фонарика. Это разрешение не используется обычными приложениями.</string>
   <string name="permlab_preventpower">Переопределение клавиши питания</string>
   <string name="permdesc_preventpower">Приложение сможет переопределять кнопку питания.</string>
+  <string name="usb_extmedia_format_message">Все данные на USB-накопителе (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
+  <string name="sd_extmedia_format_message">Все данные на карте (по адресу «%1$s») будут удалены. Это действие невозможно отменить!</string>
+  <string name="sd_progress_unmounting">Отключение SD-карты\u2026</string>
+  <string name="sd_progress_erasing">Очистка SD-карты\u2026</string>
+  <string name="sd_format_error">Не удалось очистить SD-карту.</string>
+  <string name="sd_media_bad_removal">SD-карта была извлечена до отключения.</string>
+  <string name="sd_media_checking">Выполняется проверка SD-карты.</string>
+  <string name="sd_media_removed">SD-карта была отключена.</string>
+  <string name="sd_media_shared">Сейчас SD-карта используется компьютером.</string>
+  <string name="usb_progress_unmounting">Отключение USB-накопителя\u2026</string>
+  <string name="usb_progress_erasing">Очистка USB-накопителя\u2026</string>
+  <string name="usb_format_error">Не удалось очистить USB-накопитель.</string>
+  <string name="usb_media_bad_removal">USB-накопитель был извлечён до отключения.</string>
+  <string name="usb_media_checking">USB-накопитель проверяется.</string>
+  <string name="usb_media_removed">USB-накопитель извлечён.</string>
+  <string name="usb_media_shared">Сейчас USB-накопитель используется компьютером.</string>
 </resources>
