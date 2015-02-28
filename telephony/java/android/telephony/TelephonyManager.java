@@ -3280,21 +3280,6 @@ public class TelephonyManager {
      * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
      *
      * <p>
-     * Requires Permission:
-     *   {@link android.Manifest.permission#MODIFY_PHONE_STATE MODIFY_PHONE_STATE}
-     * Or the calling app has carrier privileges. @see #hasCarrierPrivileges
-     *
-     * @return true on success; false on any failure.
-     * @hide
-     */
-    public boolean setPreferredNetworkTypeToGlobal() {
-        return setPreferredNetworkType(RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA);
-    }
-
-    /**
-     * Set the preferred network type to global mode which includes LTE, CDMA, EvDo and GSM/WCDMA.
-     *
-     * <p>
      * Requires that the calling app has carrier privileges.
      * @see #hasCarrierPrivileges
      *
@@ -3799,13 +3784,6 @@ public class TelephonyManager {
         }
         Log.d(TAG, "getDataEnabled: retVal=" + retVal);
         return retVal;
-    }
-
-   /** @hide */
-    @SystemApi
-    public boolean getDataEnabled(int subId) {
-        // FIXME
-        return false;
     }
 
     /**

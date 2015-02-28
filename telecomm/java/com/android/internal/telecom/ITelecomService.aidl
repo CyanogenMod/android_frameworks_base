@@ -128,12 +128,7 @@ interface ITelecomService {
     /**
      * @see TelecomServiceImpl#hasVoiceMailNumber
      */
-    boolean hasVoiceMailNumber(in PhoneAccountHandle accountHandle);\
-
-    /**
-     * @see TelecomServiceImpl#getLine1Number
-     */
-    String getLine1Number(in PhoneAccountHandle accountHandle);
+    boolean hasVoiceMailNumber(in PhoneAccountHandle accountHandle);
 
     /**
      * @see TelecomServiceImpl#getDefaultPhoneApp

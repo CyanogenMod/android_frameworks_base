@@ -36,7 +36,7 @@ public final class ParcelableConference implements Parcelable {
     private List<String> mConnectionIds;
     private final IVideoProvider mVideoProvider;
     private final int mVideoState;
-
+    private long mConnectTimeMillis = 1000;
 
     public ParcelableConference(
             PhoneAccountHandle phoneAccount,
@@ -85,6 +85,10 @@ public final class ParcelableConference implements Parcelable {
 
     public List<String> getConnectionIds() {
         return mConnectionIds;
+    }
+
+    public long getConnectTimeMillis() {
+        return mConnectTimeMillis;
     }
 
     public IVideoProvider getVideoProvider() {

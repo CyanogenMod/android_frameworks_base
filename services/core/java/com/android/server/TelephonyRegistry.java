@@ -225,7 +225,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                     //defaultSubId comes before new defaultSubId update) we need to recall all
                     //possible missed notify callback
                     synchronized (mRecords) {
-                        for (Record r : mRecords) {
+                        for (int i =0; i < mRecords.size(); i++) {
+                            Record r = mRecords.get(i);
                             if(r.subId == SubscriptionManager.DEFAULT_SUBSCRIPTION_ID) {
                                 checkPossibleMissNotify(r, newDefaultPhoneId);
                             }
