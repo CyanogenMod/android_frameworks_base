@@ -1153,10 +1153,10 @@ final class Settings {
                     final boolean blockUninstall = blockUninstallStr == null
                             ? false : Boolean.parseBoolean(blockUninstallStr);
 
-                    HashSet<String> enabledComponents = null;
-                    HashSet<String> disabledComponents = null;
-                    HashSet<String> protectedComponents = null;
-                    HashSet<String> visibleComponents = null;
+                    ArraySet<String> enabledComponents = null;
+                    ArraySet<String> disabledComponents = null;
+                    ArraySet<String> protectedComponents = null;
+                    ArraySet<String> visibleComponents = null;
 
                     int packageDepth = parser.getDepth();
                     while ((type=parser.next()) != XmlPullParser.END_DOCUMENT

@@ -26,7 +26,7 @@ import android.util.ArraySet;
 import android.util.SparseArray;
 
 import java.io.File;
-import java.util.HashSet;
+//import java.util.ArraySet;
 
 /**
  * Settings base class for pending and resolved classes.
@@ -323,9 +323,9 @@ class PackageSettingBase extends GrantedPermissions {
 
     void setUserState(int userId, int enabled, boolean installed, boolean stopped,
             boolean notLaunched, boolean hidden,
-            String lastDisableAppCaller, HashSet<String> enabledComponents,
-            HashSet<String> disabledComponents, boolean blockUninstall,
-            HashSet<String> protectedComponents, HashSet<String> visibleComponents) {
+            String lastDisableAppCaller, ArraySet<String> enabledComponents,
+            ArraySet<String> disabledComponents, boolean blockUninstall,
+            ArraySet<String> protectedComponents, ArraySet<String> visibleComponents) {
         PackageUserState state = modifyUserState(userId);
         state.enabled = enabled;
         state.installed = installed;
@@ -340,39 +340,39 @@ class PackageSettingBase extends GrantedPermissions {
         state.visibleComponents = visibleComponents;
     }
 
-    HashSet<String> getEnabledComponents(int userId) {
+    ArraySet<String> getEnabledComponents(int userId) {
         return readUserState(userId).enabledComponents;
     }
 
-    HashSet<String> getDisabledComponents(int userId) {
+    ArraySet<String> getDisabledComponents(int userId) {
         return readUserState(userId).disabledComponents;
     }
 
-    void setEnabledComponents(HashSet<String> components, int userId) {
+    void setEnabledComponents(ArraySet<String> components, int userId) {
         modifyUserState(userId).enabledComponents = components;
     }
 
-    void setDisabledComponents(HashSet <String> components, int userId) {
+    void setDisabledComponents(ArraySet <String> components, int userId) {
         modifyUserState(userId).disabledComponents = components;
     }
 
-    void setEnabledComponentsCopy(HashSet <String> components, int userId) {
+    void setEnabledComponentsCopy(ArraySet <String> components, int userId) {
         modifyUserState(userId).enabledComponents = components != null
-                ? new HashSet<String>(components) : null;
+                ? new ArraySet<String>(components) : null;
     }
 
-    void setDisabledComponentsCopy(HashSet<String> components, int userId) {
+    void setDisabledComponentsCopy(ArraySet<String> components, int userId) {
         modifyUserState(userId).disabledComponents = components != null
-                ? new HashSet<String>(components) : null;
+                ? new ArraySet<String>(components) : null;
     }
 
     PackageUserState modifyUserStateComponents(int userId, boolean disabled, boolean enabled) {
         PackageUserState state = modifyUserState(userId);
         if (disabled && state.disabledComponents == null) {
-            state.disabledComponents = new HashSet<String>(1);
+            state.disabledComponents = new ArraySet<String>(1);
         }
         if (enabled && state.enabledComponents == null) {
-            state.enabledComponents = new HashSet<String>(1);
+            state.enabledComponents = new ArraySet<String>(1);
         }
         return state;
     }
@@ -380,10 +380,10 @@ class PackageSettingBase extends GrantedPermissions {
     PackageUserState modifyUserStateComponents(int userId) {
         PackageUserState state = modifyUserState(userId);
         if (state.protectedComponents == null) {
-           state.protectedComponents = new HashSet<String>(1);
+           state.protectedComponents = new ArraySet<String>(1);
         }
         if (state.visibleComponents == null) {
-            state.visibleComponents = new HashSet<String>(1);
+            state.visibleComponents = new ArraySet<String>(1);
         }
         return state;
     }
@@ -449,7 +449,7 @@ class PackageSettingBase extends GrantedPermissions {
         return changed;
     }
 
-    HashSet<String> getProtectedComponents(int userId) {
+    ArraySet<String> getProtectedComponents(int userId) {
         PackageUserState state = modifyUserStateComponents(userId);
         return state.protectedComponents;
     }

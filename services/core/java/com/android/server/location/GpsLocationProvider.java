@@ -74,7 +74,6 @@ import android.provider.Settings;
 import android.provider.Telephony.Carriers;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.SmsMessage;
-import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
@@ -668,7 +667,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         for(int i = 0;i<phoneCnt;++i) {
             int[] subIds = SubscriptionManager.getSubId(i);
             if (subIds != null && subIds.length > 0) {
-                mccMnc.add(phone.getNetworkOperator(subIds[0]));
+                mccMnc.add(phone.getNetworkOperator());
             }
         }
         if (mccMnc.size() > 0) {
@@ -765,8 +764,10 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
         // Register for SubscriptionInfo list changes which is guaranteed
         // to invoke onSubscriptionsChanged the first time.
-        SubscriptionManager.from(mContext)
-            .addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);
+
+        //TODO: Hack to fix compilation for L-MR1
+        /*SubscriptionManager.from(mContext)
+            .addOnSubscriptionsChangedListener(mOnSubscriptionsChangedListener);*/
 
         // construct handler, listen for events
         mHandler = new ProviderHandler(looper);

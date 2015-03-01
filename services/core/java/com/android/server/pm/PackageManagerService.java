@@ -4599,7 +4599,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             // Can't happen; MountService is local
         }
 
-        final HashSet<PackageParser.Package> pkgs;
+        final ArraySet<PackageParser.Package> pkgs;
         synchronized (mPackages) {
             pkgs = mDeferredDexOpt;
             mDeferredDexOpt = null;

@@ -3789,14 +3789,6 @@ public class TelephonyManager {
         return retVal;
     }
 
-    /** @hide */
-    @SystemApi
-    // FIXME LMR1_INTERNAL this needs to be relplaced with proper API
-    public boolean getDataEnabled(int subId) {
-        Log.d(TAG, "getDataEnabled: retVal=" + subId);
-        return false;
-    }
-
     /**
      * Returns the result and response from RIL for oem request
      *

@@ -1281,7 +1281,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         launchHomeFromHotKey();
     }
 
-    private void handleLongPressOnHome() {
+    /*private void handleLongPressOnHome() {
         if (mLongPressOnHomeBehavior != LONG_PRESS_HOME_NOTHING) {
             mHomeConsumed = true;
             performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
@@ -1293,7 +1293,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         im.injectInputEvent(downEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
         im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
-    }
+        }
+    }*/
 
     private void launchCameraAction() {
         sendCloseSystemWindows();
@@ -1619,6 +1620,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
                     mLongPressOnAppSwitchBehavior, UserHandle.USER_CURRENT);
         }
+    }
+
+    /**
+     * Read values from config.xml that may be overridden depending on
+     * the configuration of the device.
+     * eg. Disable long press on home goes to recents on sw600dp.
+     */
+    private void readConfigurationDependentBehaviors() {
+        /*mLongPressOnHomeBehavior = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_longPressOnHomeBehavior);
+        if (mLongPressOnHomeBehavior < LONG_PRESS_HOME_NOTHING ||
+                mLongPressOnHomeBehavior > LONG_PRESS_HOME_ASSIST) {
+            mLongPressOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+        }
+
+        mDoubleTapOnHomeBehavior = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_doubleTapOnHomeBehavior);
+        if (mDoubleTapOnHomeBehavior < DOUBLE_TAP_HOME_NOTHING ||
+                mDoubleTapOnHomeBehavior > DOUBLE_TAP_HOME_RECENT_SYSTEM_UI) {
+            mDoubleTapOnHomeBehavior = LONG_PRESS_HOME_NOTHING;
+        }*/
     }
 
     @Override
@@ -5156,8 +5178,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             mContext.sendBroadcast(new Intent(POWER_KEYDOWN_MUTE));
                         }
                     }
-                    interceptPowerKeyDown(!interactive || hungUp
-                            || mVolumeDownKeyTriggered || mVolumeUpKeyTriggered);
                     interceptPowerKeyDown(event, interactive);
                 } else {
                     interceptPowerKeyUp(event, interactive, canceled);

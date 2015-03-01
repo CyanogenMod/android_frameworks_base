@@ -20,6 +20,6 @@ LOCAL_RESOURCE_DIR := \
     $(LOCAL_PATH)/res
 LOCAL_AAPT_FLAGS := --auto-add-overlay --extra-packages com.android.keyguard
 
-include $(BUILD_PACKAGE)
+#include $(BUILD_PACKAGE)
 
-include $(call all-makefiles-under,$(LOCAL_PATH))
+#include $(call all-makefiles-under,$(LOCAL_PATH))

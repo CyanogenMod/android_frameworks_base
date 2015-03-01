@@ -35,7 +35,7 @@ import java.util.Objects;
  *
  * @hide
  */
-public class NetworkIdentity {
+public class NetworkIdentity implements Comparable<NetworkIdentity> {
     /**
      * When enabled, combine all {@link #mSubType} together under
      * {@link #SUBTYPE_COMBINED}.
@@ -182,5 +182,23 @@ public class NetworkIdentity {
         }
 
         return new NetworkIdentity(type, subType, subscriberId, networkId, roaming);
+    }
+
+    @Override
+    public int compareTo(NetworkIdentity another) {
+        int res = Integer.compare(mType, another.mType);
+        if (res == 0) {
+            res = Integer.compare(mSubType, another.mSubType);
+        }
+        if (res == 0 && mSubscriberId != null && another.mSubscriberId != null) {
+            res = mSubscriberId.compareTo(another.mSubscriberId);
+        }
+        if (res == 0 && mNetworkId != null && another.mNetworkId != null) {
+            res = mNetworkId.compareTo(another.mNetworkId);
+        }
+        if (res == 0) {
+            res = Boolean.compare(mRoaming, another.mRoaming);
+        }
+        return res;
     }
 }
