@@ -1225,7 +1225,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         final TelephonyManager tele = TelephonyManager.from(mContext);
 
         for (int pid = 0; pid < tele.getPhoneCount(); pid++) {
-            long[] subIds = SubscriptionManager.getSubId(pid);
+            int[] subIds = SubscriptionManager.getSubId(pid);
             if ((subIds == null || subIds.length == 0) ||
                    !isSimStateReady(pid)) {
                 continue;
