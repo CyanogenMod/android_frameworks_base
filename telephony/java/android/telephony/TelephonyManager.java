@@ -3340,15 +3340,16 @@ public class TelephonyManager {
      *         CARRIER_PRIVILEGE_STATUS_ERROR_LOADING_RULES if there was an error loading carrier
      *             rules (or if there are no rules).
      */
-    public int hasCarrierPrivileges() {
+    public boolean hasCarrierPrivileges() {
         try {
-            return getITelephony().getCarrierPrivilegeStatus();
+            return getITelephony().getCarrierPrivilegeStatus() ==
+                CARRIER_PRIVILEGE_STATUS_HAS_ACCESS;
         } catch (RemoteException ex) {
             Rlog.e(TAG, "hasCarrierPrivileges RemoteException", ex);
         } catch (NullPointerException ex) {
             Rlog.e(TAG, "hasCarrierPrivileges NPE", ex);
         }
-        return CARRIER_PRIVILEGE_STATUS_NO_ACCESS;
+        return false;
     }
 
     /**
@@ -4190,5 +4191,17 @@ public class TelephonyManager {
                     TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE,
                     ServiceState.rilRadioTechnologyToString(type));
         }
+    }
+
+//FIXME L-MR1-INTERNAL
+     /** @hide */
+    @SystemApi
+    public void enableVideoCalling(boolean enable) {
+    }
+
+    /** @hide */
+    @SystemApi
+    public boolean isVideoCallingEnabled() {
+        return false;
     }
 }

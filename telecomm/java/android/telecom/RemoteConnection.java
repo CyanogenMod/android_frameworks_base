@@ -109,6 +109,17 @@ public final class RemoteConnection {
          */
         public void onPostDialWait(RemoteConnection connection, String remainingPostDialSequence) {}
 
+        //FIXME L-MR1-INTERNAL
+        /**
+         * Invoked when the post-dial sequence in the outgoing {@code Connection} has processed
+         * a character.
+         *
+         * @param connection The {@code RemoteConnection} invoking this method.
+         * @param nextChar The character being processed.
+         */
+        public void onPostDialChar(RemoteConnection connection, char nextChar) {}
+
+
         /**
          * Indicates that the VOIP audio status of this {@code RemoteConnection} has changed.
          * See {@link #isVoipAudioMode()}.

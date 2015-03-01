@@ -34,6 +34,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @SystemApi
 public abstract class Conference implements IConferenceable {
 
+   //FIXME L-MR1-INTERNAL
+    /**
+     * Used to indicate that the conference connection time is not specified.  If not specified,
+     * Telecom will set the connect time.
+     */
+    public static long CONNECT_TIME_NOT_SPECIFIED = 0;
+
     public static final long NO_CONNECTTIME = 0;
     /** @hide */
     public abstract static class Listener {

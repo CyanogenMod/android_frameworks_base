@@ -62,6 +62,13 @@ public final class DisconnectCause implements Parcelable {
     /** Disconnected for reason not described by other disconnect codes. */
     public static final int OTHER = 9;
 
+    //FIXME L-MR1-INTERNAL
+    /**
+     * Disconnected because the connection manager did not support the call. The call will be tried
+     * again without a connection manager. See {@link PhoneAccount#CAPABILITY_CONNECTION_MANAGER}.
+     */
+    public static final int CONNECTION_MANAGER_NOT_SUPPORTED = 10;
+
     private int mDisconnectCode;
     private CharSequence mDisconnectLabel;
     private CharSequence mDisconnectDescription;

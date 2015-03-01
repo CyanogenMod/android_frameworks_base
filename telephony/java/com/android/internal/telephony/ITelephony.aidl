@@ -779,13 +779,6 @@ interface ITelephony {
     void setDataEnabled(int subId, boolean enable);
 
     /**
-     * User enable/disable Mobile Data per subscription.
-     *
-     * @param enable true to turn on, else false
-     */
-    void setDataEnabledUsingSubId(int subId, boolean enable);
-
-    /**
      * Get the user enabled state of Mobile Data.
      *
      * @return true on enabled
