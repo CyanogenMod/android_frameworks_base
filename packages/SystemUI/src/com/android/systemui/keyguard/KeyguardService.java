@@ -70,18 +70,22 @@ public class KeyguardService extends Service {
              mKeyguardViewMediator.addStateMonitorCallback(callback);
          }
 
+        @Override
         public boolean isShowing() {
             return mKeyguardViewMediator.isShowing();
         }
 
+        @Override
         public boolean isSecure() {
             return mKeyguardViewMediator.isSecure();
         }
 
+        @Override
         public boolean isShowingAndNotOccluded() {
             return mKeyguardViewMediator.isShowingAndNotOccluded();
         }
 
+        @Override
         public boolean isInputRestricted() {
             return mKeyguardViewMediator.isInputRestricted();
         }
@@ -98,6 +102,7 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.keyguardDone(authenticated, wakeup);
         }
 
+        @Override
         public int setOccluded(boolean isOccluded) {
             checkPermission();
             synchronized (this) {
@@ -161,6 +166,7 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.setKeyguardEnabled(enabled);
         }
 
+        @Override
         public boolean isDismissable() {
             return mKeyguardViewMediator.isDismissable();
         }
@@ -183,10 +189,12 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.setCurrentUser(userId);
         }
 
+        @Override
         public void showAssistant() {
             checkPermission();
         }
 
+        @Override
         public void dispatch(MotionEvent event) {
             checkPermission();
         }
