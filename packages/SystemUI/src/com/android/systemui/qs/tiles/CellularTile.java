@@ -165,7 +165,7 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
                 int mobileSignalIconId,
                 String mobileSignalContentDescriptionId, int dataTypeIconId,
                 boolean activityIn, boolean activityOut,
-                String dataTypeContentDescriptionId, String description,boolean noSim,
+                String dataTypeContentDescriptionId, String description, boolean noSim,
                 boolean isDataTypeIconWide) {
             mInfo.enabled = enabled;
             mInfo.mobileSignalIconId = mobileSignalIconId;
