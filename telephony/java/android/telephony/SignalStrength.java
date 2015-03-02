@@ -815,6 +815,8 @@ public class SignalStrength implements Parcelable {
          */
         int rssiIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN, rsrpIconLevel = -1, snrIconLevel = -1;
 
+        boolean oldRil = needsOldRilFeature("ignoresnr");
+
         if (mLteRsrp > -44) rsrpIconLevel = -1;
         else if (mLteRsrp >= -85) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
         else if (mLteRsrp >= -95) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
@@ -846,10 +848,16 @@ public class SignalStrength implements Parcelable {
              * associated with LTE RSRP and the bars associated with the LTE
              * RS_SNR
              */
-            return (rsrpIconLevel < snrIconLevel ? rsrpIconLevel : snrIconLevel);
+            if (oldRil) {
+                return rsrpIconLevel;
+            } else {
+                return (rsrpIconLevel < snrIconLevel ? rsrpIconLevel : snrIconLevel);
+            }
         }
 
-        if (snrIconLevel != -1) return snrIconLevel;
+        if (!oldRil) {
+            if (snrIconLevel != -1) return snrIconLevel;
+        }
 
         if (rsrpIconLevel != -1) return rsrpIconLevel;
 
