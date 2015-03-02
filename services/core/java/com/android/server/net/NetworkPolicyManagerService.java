@@ -804,7 +804,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             } else {
                 notifyUnderLimitLocked(policy.template);
 
-                if (policy.isOverWarning(totalBytes) && policy.lastWarningSnooze < start) {
+                if (policy.isOverWarning(totalBytes) && policy.lastWarningSnooze < start
+                        && policy.limitBytes != LIMIT_DISABLED) {
                     enqueueNotification(policy, TYPE_WARNING, totalBytes);
                 }
             }
