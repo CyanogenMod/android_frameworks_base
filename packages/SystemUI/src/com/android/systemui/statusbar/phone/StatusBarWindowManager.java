@@ -141,7 +141,8 @@ public class StatusBarWindowManager {
             } else {
                 mLp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             }
-        } else {
+        } 
+        /*else {
             mLp.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLp.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
             if (mKeyguardBlurEnabled) {
@@ -149,7 +150,8 @@ public class StatusBarWindowManager {
             }
             mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-        } else {
+        }  */
+        else {
             mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
         }

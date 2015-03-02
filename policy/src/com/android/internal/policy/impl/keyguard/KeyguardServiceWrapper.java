@@ -21,7 +21,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Slog;
+import android.view.MotionEvent;
 
+import com.android.internal.policy.IKeyguardServiceConstants;
 import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardService;
 import com.android.internal.policy.IKeyguardShowCallback;
@@ -60,14 +62,15 @@ public class KeyguardServiceWrapper implements IKeyguardService {
         }
     }
 
-    @Override // Binder interface
-    public void setOccluded(boolean isOccluded) {
-        try {
-            mService.setOccluded(isOccluded);
-        } catch (RemoteException e) {
-            Slog.w(TAG , "Remote Exception", e);
-        }
-    }
+     @Override // Binder interface
+     public int setOccluded(boolean isOccluded) {
+         try {
+             return mService.setOccluded(isOccluded);
+         } catch (RemoteException e) {
+             Slog.w(TAG , "Remote Exception", e);
+             return IKeyguardServiceConstants.KEYGUARD_SERVICE_SET_OCCLUDED_RESULT_NONE;
+         }
+     }
 
     @Override
     public void addStateMonitorCallback(IKeyguardStateCallback callback) {
@@ -169,6 +172,23 @@ public class KeyguardServiceWrapper implements IKeyguardService {
         }
     }
 
+     public void showAssistant() {
+         // Not used by PhoneWindowManager
+     }
+ 
+     public void dispatch(MotionEvent event) {
+         // Not used by PhoneWindowManager.  See code in {@link NavigationBarView}
+     }
+ 
+     public boolean isDismissable() {
+         try {
+             return mService.isDismissable();
+         } catch (RemoteException e) {
+             Slog.w(TAG , "Remote Exception", e);
+         }
+         return true; // TODO cache state
+     }
+
     @Override // Binder interface
     public void startKeyguardExitAnimation(long startTime, long fadeoutDuration) {
         try {
@@ -199,6 +219,15 @@ public class KeyguardServiceWrapper implements IKeyguardService {
     public boolean isSecure() {
         return mKeyguardStateMonitor.isSecure();
     }
+
+     public boolean isShowingAndNotOccluded() {
+         try {
+             return mService.isShowingAndNotOccluded();
+         } catch (RemoteException e) {
+             Slog.w(TAG , "Remote Exception", e);
+         }
+         return false; // TODO cache state
+     }
 
     public boolean isInputRestricted() {
         return mKeyguardStateMonitor.isInputRestricted();

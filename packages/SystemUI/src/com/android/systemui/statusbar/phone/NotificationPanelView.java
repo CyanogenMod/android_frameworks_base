@@ -1362,13 +1362,6 @@ public class NotificationPanelView extends PanelView implements
                 && !mQsExpansionFromOverscroll) {
             float t;
             if (mKeyguardShowing) {
-                // set quick settings panel view max expansion if it does
-                // not reach the notification position when keyguard showing
-                if (getResources().getBoolean(R.bool.config_showTaskManagerSwitcher)
-                        && (expandedHeight <= panelHeightQsCollapsed
-                        || panelHeightQsExpanded <= panelHeightQsCollapsed)) {
-                    t = 1f;
-                }
 
                 // On Keyguard, interpolate the QS expansion linearly to the panel expansion
                 t = expandedHeight / getMaxPanelHeight();

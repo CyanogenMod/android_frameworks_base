@@ -332,40 +332,6 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         setMeasuredDimension(width, height);
     }
 
-    public void noUserInteraction() {
-        if (mClearRecents != null) {
-            mClearRecents.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    protected void onAttachedToWindow () {
-        super.onAttachedToWindow();
-        if (getResources().getBoolean(R.bool.config_showRecentsTopButtons)) {
-            mClearRecents = ((View)getParent()).findViewById(R.id.recents_clear);
-            View taskManagerView = ((View)getParent()).findViewById(R.id.task_manager);
-            if (taskManagerView != null) {
-                taskManagerView.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.setComponent(new ComponentName(
-                            "com.android.systemui",
-                            "com.android.systemui.recents.TaskManagerActivity"));
-                        getContext().startActivity(intent);
-                    }
-                });
-            }
-        } else {
-            mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
-        }
-        mClearRecents.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dismissAllTasksAnimated();
-            }
-        });
-    }
-
     /**
      * This is called with the full size of the window since we are handling our own insets.
      */

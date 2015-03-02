@@ -22,11 +22,12 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.IBinder;
-import android.os.Process;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardService;
+import com.android.internal.policy.IKeyguardServiceConstants;
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.policy.IKeyguardStateCallback;
 import com.android.systemui.SystemUIApplication;
@@ -52,10 +53,6 @@ public class KeyguardService extends Service {
     }
 
     void checkPermission() {
-        // Avoid deadlock by avoiding calling back into the system process.
-        if (Binder.getCallingUid() == Process.SYSTEM_UID) return;
-
-        // Otherwise,explicitly check for caller permission ...
         if (getBaseContext().checkCallingOrSelfPermission(PERMISSION) != PERMISSION_GRANTED) {
             Log.w(TAG, "Caller needs permission '" + PERMISSION + "' to call " + Debug.getCaller());
             throw new SecurityException("Access denied to process: " + Binder.getCallingPid()
@@ -65,82 +62,141 @@ public class KeyguardService extends Service {
 
     private final IKeyguardService.Stub mBinder = new IKeyguardService.Stub() {
 
-        @Override // Binder interface
-        public void addStateMonitorCallback(IKeyguardStateCallback callback) {
-            checkPermission();
-            mKeyguardViewMediator.addStateMonitorCallback(callback);
+        private boolean mIsOccluded;
+
+         @Override // Binder interface
+         public void addStateMonitorCallback(IKeyguardStateCallback callback) {
+             checkPermission();
+             mKeyguardViewMediator.addStateMonitorCallback(callback);
+         }
+
+        @Override
+        public boolean isShowing() {
+            return mKeyguardViewMediator.isShowing();
         }
 
-        @Override // Binder interface
+        @Override
+        public boolean isSecure() {
+            return mKeyguardViewMediator.isSecure();
+        }
+
+        @Override
+        public boolean isShowingAndNotOccluded() {
+            return mKeyguardViewMediator.isShowingAndNotOccluded();
+        }
+
+        @Override
+        public boolean isInputRestricted() {
+            return mKeyguardViewMediator.isInputRestricted();
+        }
+
+        @Override
         public void verifyUnlock(IKeyguardExitCallback callback) {
             checkPermission();
             mKeyguardViewMediator.verifyUnlock(callback);
         }
 
-        @Override // Binder interface
+        @Override
         public void keyguardDone(boolean authenticated, boolean wakeup) {
             checkPermission();
             mKeyguardViewMediator.keyguardDone(authenticated, wakeup);
         }
 
-        @Override // Binder interface
-        public void setOccluded(boolean isOccluded) {
+        @Override
+        public int setOccluded(boolean isOccluded) {
             checkPermission();
-            mKeyguardViewMediator.setOccluded(isOccluded);
+            synchronized (this) {
+                int result;
+                if (isOccluded && mKeyguardViewMediator.isShowing()
+                        && !mIsOccluded) {
+                    result = IKeyguardServiceConstants
+                            .KEYGUARD_SERVICE_SET_OCCLUDED_RESULT_UNSET_FLAGS;
+                } else if (!isOccluded && mKeyguardViewMediator.isShowing()
+                        && mIsOccluded) {
+                    result = IKeyguardServiceConstants
+                            .KEYGUARD_SERVICE_SET_OCCLUDED_RESULT_SET_FLAGS;
+                } else {
+                    result = IKeyguardServiceConstants.KEYGUARD_SERVICE_SET_OCCLUDED_RESULT_NONE;
+                }
+                if (mIsOccluded != isOccluded) {
+                    mKeyguardViewMediator.setOccluded(isOccluded);
+
+                    // Cache the value so we always have a fresh view in whether Keyguard is occluded.
+                    // If we would just call mKeyguardViewMediator.isOccluded(), this might be stale
+                    // because that value gets updated in another thread.
+                    mIsOccluded = isOccluded;
+                }
+                return result;
+            }
         }
 
-        @Override // Binder interface
+        @Override
         public void dismiss() {
             checkPermission();
             mKeyguardViewMediator.dismiss();
         }
 
-        @Override // Binder interface
+        @Override
         public void onDreamingStarted() {
             checkPermission();
             mKeyguardViewMediator.onDreamingStarted();
         }
 
-        @Override // Binder interface
+        @Override
         public void onDreamingStopped() {
             checkPermission();
             mKeyguardViewMediator.onDreamingStopped();
         }
 
-        @Override // Binder interface
+        @Override
         public void onScreenTurnedOff(int reason) {
             checkPermission();
             mKeyguardViewMediator.onScreenTurnedOff(reason);
         }
 
-        @Override // Binder interface
+        @Override
         public void onScreenTurnedOn(IKeyguardShowCallback callback) {
             checkPermission();
             mKeyguardViewMediator.onScreenTurnedOn(callback);
         }
 
-        @Override // Binder interface
+        @Override
         public void setKeyguardEnabled(boolean enabled) {
             checkPermission();
             mKeyguardViewMediator.setKeyguardEnabled(enabled);
         }
 
-        @Override // Binder interface
+        @Override
+        public boolean isDismissable() {
+            return mKeyguardViewMediator.isDismissable();
+        }
+
+        @Override
         public void onSystemReady() {
             checkPermission();
             mKeyguardViewMediator.onSystemReady();
         }
 
-        @Override // Binder interface
+        @Override
         public void doKeyguardTimeout(Bundle options) {
             checkPermission();
             mKeyguardViewMediator.doKeyguardTimeout(options);
         }
 
-        @Override // Binder interface
+        @Override
         public void setCurrentUser(int userId) {
             checkPermission();
             mKeyguardViewMediator.setCurrentUser(userId);
+        }
+
+        @Override
+        public void showAssistant() {
+            checkPermission();
+        }
+
+        @Override
+        public void dispatch(MotionEvent event) {
+            checkPermission();
         }
 
         @Override

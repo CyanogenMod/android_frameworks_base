@@ -390,7 +390,6 @@ public class VolumePanel extends Handler implements DemoMode {
             arr.recycle();
         }
 
-        if (parent == null) {
             mDialog = new Dialog(context) {
                 @Override
                 public boolean onTouchEvent(MotionEvent event) {
@@ -465,41 +464,6 @@ public class VolumePanel extends Handler implements DemoMode {
 
         registerReceiver();
 
-        mBlurUiSettingObserver.onChange(true);
-        mContext.getContentResolver().registerContentObserver(
-            Settings.System.getUriFor(Settings.System.BLUR_EFFECT_VOLUMECONTROL), false,
-            mBlurUiSettingObserver);
-    }
-
-    private ContentObserver mBlurUiSettingObserver = new ContentObserver(new Handler()) {
-        @Override
-        public void onChange(boolean selfChange) {
-            mBlurUiEnabled = 1 == Settings.System.getInt(
-                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_VOLUMECONTROL, 0);
-            setupVolumePanelBlur(mBlurUiEnabled);
-        }
-    };
-
-    private void setupVolumePanelBlur(boolean blurEnabled) {
-        if (mDialog == null || mDialog.getWindow() == null) return;
-
-        Window window = mDialog.getWindow();
-        if (blurEnabled) {
-            window.addPrivateFlags(WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING);
-            window.setBlurMaskAlphaThreshold(0.48f);
-        } else {
-            window.clearPrivateFlags(WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING);
-        }
-
-        View mainContainer = window.findViewById(com.android.systemui.R.id.volume_dialog_bg_container);
-        mainContainer.setBackgroundResource(blurEnabled ?
-                com.android.systemui.R.drawable.volume_dialog_bg_translucent :
-                com.android.systemui.R.drawable.qs_background_primary);
-
-        View v1 = mSliderPanel;
-        v1.setBackground(null);
-        View v2 = window.findViewById(com.android.systemui.R.id.zen_mode_panel_bg_container);
-        v2.setBackground(null);
     }
 
     public VolumePanel(Context context, ZenModeController zenController) {
@@ -977,7 +941,7 @@ public class VolumePanel extends Handler implements DemoMode {
         }
     }
 
-    private void updateStates() {
+    public void updateStates() {
         final int count = mSliderPanel.getChildCount();
         for (int i = 0; i < count; i++) {
             StreamControl sc = (StreamControl) mSliderPanel.getChildAt(i).getTag();

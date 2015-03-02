@@ -122,7 +122,8 @@ public class DdsTile extends QSTile<QSTile.State> {
 
     private boolean isDefaultDataEnabled() {
         return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.MOBILE_DATA + SubscriptionManager.getDefaultDataPhoneId(), 0) != 0;
+                Settings.Global.MOBILE_DATA +
+                SubscriptionManager.from(mContext).getDefaultDataPhoneId(), 0) != 0;
     }
 
     public void setListening(boolean listening) {

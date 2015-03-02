@@ -191,7 +191,7 @@ public class MobileDataController {
     }
 
     public void setMobileDataEnabled(boolean enabled) {
-        mTelephonyManager.setDataEnabledUsingSubId(
+        mTelephonyManager.setDataEnabled(
                 SubscriptionManager.getDefaultDataSubId(), enabled);
         if (mCallback != null) {
             mCallback.onMobileDataEnabled(enabled);

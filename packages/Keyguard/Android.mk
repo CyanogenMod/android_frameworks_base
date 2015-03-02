@@ -30,4 +30,4 @@ LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
-#include $(call all-makefiles-under,$(LOCAL_PATH))
+include $(call all-makefiles-under,$(LOCAL_PATH))

@@ -164,7 +164,7 @@ public class CarrierText extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mSeparator = getResources().getString(R.string.kg_text_message_separator);
+        mSeparator = getResources().getString(com.android.internal.R.string.kg_text_message_separator);
         int[] operatorNameId = {R.id.carrier1, R.id.carrier2, R.id.carrier3};
         int[] operatorSepId = {R.id.carrier_divider1, R.id.carrier_divider2};
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();
