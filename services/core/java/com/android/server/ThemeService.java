@@ -777,7 +777,11 @@ public class ThemeService extends IThemeService.Stub {
             }
         }
 
-        builder.setThemeChangeTimestamp(System.currentTimeMillis());
+        // When a theme is being updated the new config equal the old config so in this case we
+        // want to update the timestamp so they are no longer equal.
+        if (request.getReqeustType() == ThemeChangeRequest.RequestType.THEME_UPDATED) {
+            builder.setThemeChangeTimestamp(System.currentTimeMillis());
+        }
 
         return builder;
     }
