@@ -18,10 +18,14 @@
 
 package com.android.systemui.statusbar;
 
+import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
+import android.os.Looper;
+import android.provider.Settings;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.os.SystemProperties;
@@ -53,6 +57,8 @@ public class MSimSignalClusterView
     private final int STATUS_BAR_STYLE_CDMA_1X_COMBINED = 1;
     private final int STATUS_BAR_STYLE_DEFAULT_DATA = 2;
     private final int STATUS_BAR_STYLE_DATA_VOICE = 3;
+    private final int STATUS_BAR_MSIM_HIDDEN=0;
+    private final int STATUS_BAR_MSIM_DISPLAY=1;
 
     private int mStyle = 0;
     private int[] mShowTwoBars;
@@ -442,14 +448,36 @@ public class MSimSignalClusterView
                 (mWifiVisible ? "VISIBLE" : "GONE"), mWifiStrengthId, mWifiActivityId));
 
         if (mMobileVisible && !mIsAirplaneMode) {
-            updateMobile(phoneId);
-            updateCdma();
-            updateData(phoneId);
-            updateDataVoice(phoneId);
-            mMobileGroup[phoneId].setVisibility(View.VISIBLE);
-            if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
-                mMobileRoam[phoneId].setVisibility(View.VISIBLE);
+            if (loadMsimSetting()) {
+                //Hidden msim unused icons
+                mNoSimSlot[phoneId].setImageBitmap(null);
+                invalidateIfOnUiThread(phoneId);
+                updateMobile(phoneId);
+                updateCdma();
+                updateData(phoneId);
+                updateDataVoice(phoneId);
+                mMobileGroup[phoneId].setVisibility(View.VISIBLE);
+                if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
+                    mMobileRoam[phoneId].setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                if (!loadMsimSetting()) {
+                    //Display usused msim icons
+                    mNoSimSlot[phoneId].setImageResource(mNoSimIconId[phoneId]);
+                    invalidateIfOnUiThread(phoneId);
+                    mNoSimSlot[phoneId].setVisibility(View.VISIBLE);
+                    updateMobile(phoneId);
+                    updateCdma();
+                    updateData(phoneId);
+                    updateDataVoice(phoneId);
+                    mMobileGroup[phoneId].setVisibility(View.VISIBLE);
+                    if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
+                        mMobileRoam[phoneId].setVisibility(View.VISIBLE);
+                    }
+                }
             }
+
         } else {
             mMobileGroup[phoneId].setVisibility(View.GONE);
             mMobileCdmaGroup.setVisibility(View.GONE);
@@ -500,13 +528,21 @@ public class MSimSignalClusterView
         }
     }
 
+    private void invalidateIfOnUiThread(int phoneId) {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            mNoSimSlot[phoneId].invalidate();
+        } else {
+            mNoSimSlot[phoneId].postInvalidate();
+        }
+    }
+
     private void updateMobile(int phoneId) {
+
         mMobile[phoneId].setImageResource(mMobileStrengthId[phoneId]);
         mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription + " "
             + mMobileDescription[phoneId]);
         mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
         mMobileType[phoneId].setImageResource(mMobileTypeId[phoneId]);
-        mNoSimSlot[phoneId].setImageResource(mNoSimIconId[phoneId]);
         mMobileRoam[phoneId].setImageResource(mMobileRoamId[phoneId]);
     }
 
@@ -534,6 +570,25 @@ public class MSimSignalClusterView
         } else {
             mDataGroup[phoneId].setVisibility(View.GONE);
         }
+    }
+
+    private boolean loadMsimSetting() {
+        ContentResolver resolver = getContext().getContentResolver();
+        boolean isItGone=false;
+        int currentUserId = ActivityManager.getCurrentUser();
+        int msimStyle = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_MSIM_TWEAKS, 0, currentUserId);
+        switch (msimStyle) {
+            case STATUS_BAR_MSIM_HIDDEN: //msim unused icons GONE!!!
+                isItGone=true;
+                break;
+            case STATUS_BAR_MSIM_DISPLAY: //msim icons Visible
+                isItGone=false;
+                break;
+            default:
+                break;
+        }
+        return isItGone;
     }
 
     private void updateDataVoice(int phoneId) {
