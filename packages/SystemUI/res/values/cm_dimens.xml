@@ -16,12 +16,16 @@
 -->
 <resources>
     <dimen name="weather_text_size">12sp</dimen>
-     <dimen name="detail_radio_group_padding_left">16dp</dimen>
-     <dimen name="detail_radio_group_padding">8dp</dimen>
+    <dimen name="detail_radio_group_padding_left">16dp</dimen>
+    <dimen name="detail_radio_group_padding">8dp</dimen>
 
     <!-- Themes: radius of the corners of the notification dropshadow
          See also: notification_material_rounded_rect_radius
     -->
     <dimen name="notification_material_shadow_rounded_rect_radius">0dp</dimen>
+
+    <dimen name="zen_mode_panel_radius">@dimen/notification_material_rounded_rect_radius</dimen>
+
+    <dimen name="status_bar_expanded_header_elevation">4dp</dimen>
 
 </resources>

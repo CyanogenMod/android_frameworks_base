@@ -26,7 +26,7 @@
     android:paddingStart="@dimen/notification_side_padding"
     android:paddingEnd="@dimen/notification_side_padding"
     android:baselineAligned="false"
-    android:elevation="4dp"
+    android:elevation="@dimen/status_bar_expanded_header_elevation"
     android:background="@drawable/notification_header_bg"
     android:clickable="true"
     android:focusable="true"
