@@ -23,13 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ThemeUtils;
 import android.content.res.ThemeChangeRequest;
+import android.content.res.ThemeChangeRequest.RequestType;
 import android.content.res.ThemeConfig;
 import android.content.res.ThemeManager;
 import android.os.SystemClock;
-import android.provider.ThemesContract;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.android.internal.R;
 
@@ -77,7 +74,8 @@ public class AppsFailureReceiver extends BroadcastReceiver {
                             .setLockWallpaper(themePkgName)
                             .setAlarm(themePkgName)
                             .setNotification(themePkgName)
-                            .setRingtone(themePkgName);
+                            .setRingtone(themePkgName)
+                            .setRequestType(RequestType.THEME_RESET);
                     // Since we are resetting everything to the system theme, we can have the
                     // theme service remove all per app themes without setting them explicitly :)
                     tm.requestThemeChange(builder.build(), true);
