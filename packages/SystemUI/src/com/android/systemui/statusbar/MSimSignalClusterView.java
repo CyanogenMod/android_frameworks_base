@@ -68,6 +68,7 @@ public class MSimSignalClusterView
     private int[] mMobileRoamId;
     private int[] mNoSimIconId;
     private boolean mIsAirplaneMode = false;
+    private boolean mShowNoSimSlots = true;
     private int mAirplaneIconId = 0;
     private String mWifiDescription, mMobileTypeDescription;
     private String[] mMobileDescription;
@@ -219,6 +220,8 @@ public class MSimSignalClusterView
         mMobileCdma1x       = (ImageView) findViewById(R.id.mobile_signal_1x);
         mMobileCdma1xOnly   = (ImageView) findViewById(R.id.mobile_signal_1x_only);
 
+        setShowEmptySimSlots(mShowNoSimSlots);
+
         for (int i = 0; i < mNumPhones; i++) {
             apply(i);
         }
@@ -351,6 +354,16 @@ public class MSimSignalClusterView
         mAirplaneIconId = airplaneIconId;
         for (int i = 0; i < mNumPhones; i++) {
             apply(i);
+        }
+    }
+
+    @Override
+    public void setShowEmptySimSlots(boolean show) {
+        mShowNoSimSlots = show;
+        if (mWifiGroup != null) {
+            for (int i = 0; i < mNumPhones; i++) {
+                mNoSimSlot[i].setVisibility(show ? View.VISIBLE : View.GONE);
+            }
         }
     }
 
