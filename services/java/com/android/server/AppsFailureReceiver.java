@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ThemeUtils;
+import android.content.res.ThemeChangeRequest;
 import android.content.res.ThemeConfig;
 import android.content.res.ThemeManager;
 import android.os.SystemClock;
@@ -64,19 +65,22 @@ public class AppsFailureReceiver extends BroadcastReceiver {
                     // let the theme manager take care of getting us back on the default theme
                     ThemeManager tm =
                             (ThemeManager) context.getSystemService(Context.THEME_SERVICE);
-                    List<String> components = new ArrayList<String>();
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_FONTS);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_LAUNCHER);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_ALARMS);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_BOOT_ANIM);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_ICONS);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_LOCKSCREEN);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_NOTIFICATIONS);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_OVERLAYS);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_RINGTONES);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_STATUS_BAR);
-                    components.add(ThemesContract.ThemesColumns.MODIFIES_NAVIGATION_BAR);
-                    tm.requestThemeChange(ThemeConfig.SYSTEM_DEFAULT, components);
+                    final String themePkgName = ThemeConfig.SYSTEM_DEFAULT;
+                    ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
+                    builder.setOverlay(themePkgName)
+                            .setStatusBar(themePkgName)
+                            .setNavBar(themePkgName)
+                            .setIcons(themePkgName)
+                            .setFont(themePkgName)
+                            .setBootanimation(themePkgName)
+                            .setWallpaper(themePkgName)
+                            .setLockWallpaper(themePkgName)
+                            .setAlarm(themePkgName)
+                            .setNotification(themePkgName)
+                            .setRingtone(themePkgName);
+                    // Since we are resetting everything to the system theme, we can have the
+                    // theme service remove all per app themes without setting them explicitly :)
+                    tm.requestThemeChange(builder.build(), true);
                     postThemeResetNotification(context);
                 }
             }
