@@ -18,6 +18,8 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -28,6 +30,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -1498,4 +1501,19 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         pw.print(mLastCombinedLabel);
         pw.println("");
     }
+
+	/**
+	 * Finds change in Msim status bar, which can be accessed by Settings.
+	 *
+	 * @param userId  currentUserId
+	 *
+	 * @return Returns boolean whether preference states that MSIM should be
+	 *         hidden(true) or visible(false).
+	 */
+	public boolean showEmptySimIcons(int userId) {
+		ContentResolver resolver = mContext.getContentResolver();
+		int msimStyle = Settings.System.getIntForUser(resolver,
+				Settings.System.STATUS_BAR_MSIM_SHOW_EMPTY_ICONS, 0, userId);
+		return msimStyle != 0;
+	}
 }

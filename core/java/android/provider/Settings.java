@@ -3380,6 +3380,14 @@ public final class Settings {
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
         /**
+         * MSIM Tweaks
+         * 0: Hides Unused SIM icon
+         * 1: Displays unused SIM icon
+         * @hide
+         */
+        public static final String STATUS_BAR_MSIM_SHOW_EMPTY_ICONS = "status_bar_show_unused_sims";
+
+        /**
          * Enable statusbar double tap gesture on to put device to sleep
          * @hide
          */
