@@ -18,6 +18,8 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -28,6 +30,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -56,6 +59,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     static final boolean DEBUG = false;
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
+    private final int STATUS_BAR_MSIM_HIDDEN=0;
+    private final int STATUS_BAR_MSIM_DISPLAY=1;
     // telephony
     boolean[] mMSimDataConnected;
     IccCardConstants.State[] mMSimState;
@@ -1498,4 +1503,21 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         pw.print(mLastCombinedLabel);
         pw.println("");
     }
+
+	/**
+	 * Finds change in Msim status bar, which can be accessed by Settings.
+	 *
+	 * @param context
+	 *            So we can use MSimSignalClusterView's context
+	 * @return Returns boolean whether preference states that MSIM should be
+	 *         hidden(true) or visible(false).
+	 */
+	public boolean loadMSimSetting(Context context) {
+		ContentResolver resolver = context.getContentResolver();
+		int currentUserId = ActivityManager.getCurrentUser();
+		int msimStyle = Settings.System.getIntForUser(resolver,
+				Settings.System.STATUS_BAR_MSIM_HIDE_EMPTY_ICONS, 0,
+				currentUserId);
+		return msimStyle != STATUS_BAR_MSIM_HIDDEN;
+	}
 }

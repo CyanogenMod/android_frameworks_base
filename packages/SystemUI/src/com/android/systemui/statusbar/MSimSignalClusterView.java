@@ -18,10 +18,14 @@
 
 package com.android.systemui.statusbar;
 
+import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
+import android.os.Looper;
+import android.provider.Settings;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.os.SystemProperties;
@@ -442,15 +446,19 @@ public class MSimSignalClusterView
                 (mWifiVisible ? "VISIBLE" : "GONE"), mWifiStrengthId, mWifiActivityId));
 
         if (mMobileVisible && !mIsAirplaneMode) {
-            updateMobile(phoneId);
-            updateCdma();
-            updateData(phoneId);
-            updateDataVoice(phoneId);
-            mMobileGroup[phoneId].setVisibility(View.VISIBLE);
-            if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
-                mMobileRoam[phoneId].setVisibility(View.VISIBLE);
-            }
-        } else {
+			mNoSimSlot[phoneId].setImageResource(mNoSimIconId[phoneId]);
+			mNoSimSlot[phoneId].setVisibility(mMSimNC
+					.loadMSimSetting(getContext()) ? View.GONE : View.VISIBLE);
+			updateMobile(phoneId);
+			updateCdma();
+			updateData(phoneId);
+			updateDataVoice(phoneId);
+			mMobileGroup[phoneId].setVisibility(View.VISIBLE);
+			if (SystemProperties.getBoolean("ro.config.always_show_roaming",
+					false)) {
+				mMobileRoam[phoneId].setVisibility(View.VISIBLE);
+			}
+		} else {
             mMobileGroup[phoneId].setVisibility(View.GONE);
             mMobileCdmaGroup.setVisibility(View.GONE);
             mMobileCdma1xOnly.setVisibility(View.GONE);
@@ -501,12 +509,12 @@ public class MSimSignalClusterView
     }
 
     private void updateMobile(int phoneId) {
+
         mMobile[phoneId].setImageResource(mMobileStrengthId[phoneId]);
         mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription + " "
             + mMobileDescription[phoneId]);
         mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
         mMobileType[phoneId].setImageResource(mMobileTypeId[phoneId]);
-        mNoSimSlot[phoneId].setImageResource(mNoSimIconId[phoneId]);
         mMobileRoam[phoneId].setImageResource(mMobileRoamId[phoneId]);
     }
 
