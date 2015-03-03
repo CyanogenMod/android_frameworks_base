@@ -20,7 +20,7 @@
     android:id="@+id/volume_dialog_bg_container"
     android:layout_marginLeft="@dimen/notification_side_padding"
     android:layout_marginRight="@dimen/notification_side_padding"
-    android:background="@drawable/qs_background_primary"
+    android:background="@drawable/volume_dialog_background"
     android:translationZ="@dimen/volume_panel_z"
     android:layout_marginBottom="@dimen/volume_panel_z">
 
