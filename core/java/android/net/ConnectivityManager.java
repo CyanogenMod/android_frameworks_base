@@ -74,6 +74,7 @@ import libcore.net.event.NetworkEventDispatcher;
  */
 public class ConnectivityManager {
     private static final String TAG = "ConnectivityManager";
+    private static final boolean LEGACY_DBG = true; // STOPSHIP
 
     /**
      * A change in network connectivity has occurred. A default connection has either
@@ -1033,10 +1034,8 @@ public class ConnectivityManager {
             return -1;
         }
         netCap.setNetworkSpecifier(subId);
-        NetworkCallback networkCallback = removeRequestForFeature(netCap);
-        if (networkCallback != null) {
+        if(removeRequestForFeature(netCap)) {
             Log.d(TAG, "stopUsingNetworkFeature for " + networkType + ", " + feature);
-            unregisterNetworkCallback(networkCallback);
         }
         return 1;
     }
@@ -1396,15 +1395,9 @@ public class ConnectivityManager {
         if (b != null) {
             try {
                 ITelephony it = ITelephony.Stub.asInterface(b);
-                int subId = SubscriptionManager.getDefaultDataSubId();
-                Log.d("ConnectivityManager", "getMobileDataEnabled()+ subId=" + subId);
-                boolean retVal = it.getDataEnabled(subId);
-                Log.d("ConnectivityManager", "getMobileDataEnabled()- subId=" + subId
-                        + " retVal=" + retVal);
-                return retVal;
+                return it.getDataEnabled();
             } catch (RemoteException e) { }
         }
-        Log.d("ConnectivityManager", "getMobileDataEnabled()- remote exception retVal=false");
         return false;
     }
 
