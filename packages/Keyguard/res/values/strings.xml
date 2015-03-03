@@ -341,6 +341,7 @@
        After <xliff:g id="number">%d</xliff:g> more unsuccessful attempts,
        this user will be removed, which will delete all user data.
     </string>
+    <string name="kg_text_message_separator" product="default">" \u2014 "</string>
     <!-- Message shown in dialog when user has exceeded the maximum attempts and the user will be removed. [CHAR LIMIT=none] -->
     <string name="kg_failed_attempts_now_erasing_user" product="tablet">
        You have incorrectly attempted to unlock the tablet <xliff:g id="number">%d</xliff:g> times.
