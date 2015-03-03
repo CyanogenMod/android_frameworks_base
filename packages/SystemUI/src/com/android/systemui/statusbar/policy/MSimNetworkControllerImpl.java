@@ -24,11 +24,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wimax.WimaxManagerConstants;
 import android.os.Binder;
@@ -66,6 +70,9 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     static final String TAG = "StatusBar.MSimNetworkController";
     static final boolean DEBUG = false;
     static final boolean CHATTY = true; // additional diagnostics, but not logspew
+
+    private int mUserId;
+    private SettingsObserver mSettingsObserver;
 
     // telephony
     boolean[] mMSimDataConnected;
@@ -117,12 +124,13 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 int typeIcon, int roamingIcon, String contentDescription, String typeContentDescription,
                 int phoneId, int noSimIcon);
         void setIsAirplaneMode(boolean is, int airplaneIcon);
+        void setShowEmptySimSlots(boolean show);
     }
 
     /**
      * Construct this controller object and register for updates.
      */
-    public MSimNetworkControllerImpl(Context context) {
+    public MSimNetworkControllerImpl(Context context, Handler handler) {
         super(context);
         int numPhones = TelephonyManager.getDefault().getPhoneCount();
         Slog.d(TAG, "registerPhoneStateListener numPhones: " + numPhones);
@@ -209,6 +217,9 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mLastCombinedSignalIconId = mMSimLastCombinedSignalIconId[mDefaultPhoneId];
         mLastDataTypeIconId = mMSimLastDataTypeIconId[mDefaultPhoneId];
         mLastSimIconId = mMSimLastSimIconId[mDefaultPhoneId];
+
+        mSettingsObserver = new SettingsObserver(handler);
+        mSettingsObserver.register();
     }
 
     @Override
@@ -284,6 +295,11 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         }
     }
 
+    public void setUserId(int userId) {
+        mUserId = userId;
+        mSettingsObserver.register();
+    }
+
     public void addSignalCluster(MSimSignalCluster cluster, int phoneId) {
         mSimSignalClusters.add(cluster);
         refreshSignalCluster(cluster, phoneId);
@@ -338,6 +354,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                     mNoMSimIconId[phoneId]);
         }
         cluster.setIsAirplaneMode(mAirplaneMode, mAirplaneIconId);
+        cluster.setShowEmptySimSlots(mSettingsObserver.showEmptySimIcons());
 
         if (DEBUG) {
             Slog.d(TAG, "refreshSignalCluster, mMSimPhoneSignalIconId[" + phoneId + "]="
@@ -1500,5 +1517,44 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         pw.print("  mMSimLastCombinedLabel=");
         pw.print(mLastCombinedLabel);
         pw.println("");
+    }
+
+    private final class SettingsObserver extends ContentObserver {
+        private final ContentResolver mResolver;
+        private boolean mRegistered;
+        private final Uri EMPTY_ICONS_URI = Settings.System.getUriFor(
+                Settings.System.STATUS_BAR_MSIM_SHOW_EMPTY_ICONS);
+
+        public SettingsObserver(Handler handler) {
+            super(handler);
+            mResolver = mContext.getContentResolver();
+        }
+
+        public boolean showEmptySimIcons() {
+            return Settings.System.getIntForUser(mResolver,
+                    Settings.System.STATUS_BAR_MSIM_SHOW_EMPTY_ICONS, 1, mUserId) != 0;
+        }
+
+        public void register() {
+            if (mRegistered) {
+                mResolver.unregisterContentObserver(this);
+            }
+            mResolver.registerContentObserver(EMPTY_ICONS_URI, false, this, mUserId);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (EMPTY_ICONS_URI.equals(uri)) {
+                updateSettings();
+            }
+        }
+
+        private void updateSettings() {
+            boolean showEmptySlots = showEmptySimIcons();
+            for (MSimSignalCluster cluster : mSimSignalClusters) {
+                cluster.setShowEmptySimSlots(showEmptySlots);
+            }
+        }
     }
 }
