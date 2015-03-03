@@ -17,6 +17,7 @@
 package android.content.res;
 
 import android.content.ContentResolver;
+import android.content.res.ThemeChangeRequest.RequestType;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -61,8 +62,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     // Maps pkgname to theme (ex com.angry.birds -> red theme)
     protected final Map<String, AppTheme> mThemes = new HashMap<String, AppTheme>();
 
-    // Theme change timestamp
-    private long mThemeChangeTimestamp;
+    private RequestType mLastThemeChangeRequestType = RequestType.USER_REQUEST;
 
     public ThemeConfig(Map<String, AppTheme> appThemes) {
         mThemes.putAll(appThemes);
@@ -110,6 +110,10 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         return Collections.unmodifiableMap(mThemes);
     }
 
+    public RequestType getLastThemeChangeRequestType() {
+        return mLastThemeChangeRequestType;
+    }
+
     private AppTheme getThemeFor(String pkgName) {
         AppTheme theme = mThemes.get(pkgName);
         if (theme == null) theme = getDefaultTheme();
@@ -136,7 +140,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                     new HashMap<String, AppTheme>() : o.mThemes;
 
             return (currThemes.equals(newThemes) &&
-                    mThemeChangeTimestamp == o.mThemeChangeTimestamp);
+                    mLastThemeChangeRequestType.equals(o.mLastThemeChangeRequestType));
         }
         return false;
     }
@@ -155,7 +159,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public int hashCode() {
         int hash = 17;
         hash = 31 * hash + mThemes.hashCode();
-        hash = 31 * hash + (int) mThemeChangeTimestamp;
+        hash = 31 * hash + mLastThemeChangeRequestType.ordinal();
         return hash;
     }
 
@@ -217,7 +221,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public void writeToParcel(Parcel dest, int flags) {
         String json = JsonSerializer.toJson(this);
         dest.writeString(json);
-        dest.writeLong(mThemeChangeTimestamp);
+        dest.writeInt(mLastThemeChangeRequestType.ordinal());
     }
 
     public static final Parcelable.Creator<ThemeConfig> CREATOR =
@@ -225,7 +229,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         public ThemeConfig createFromParcel(Parcel source) {
             String json = source.readString();
             ThemeConfig themeConfig = JsonSerializer.fromJson(json);
-            themeConfig.mThemeChangeTimestamp = source.readLong();
+            themeConfig.mLastThemeChangeRequestType = RequestType.values()[source.readInt()];
             return themeConfig;
         }
 
@@ -344,7 +348,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         private HashMap<String, String> mOverlays = new HashMap<String, String>();
         private HashMap<String, String> mIcons = new HashMap<String, String>();
         private HashMap<String, String> mFonts = new HashMap<String, String>();
-        private long mThemeChangeTimestamp;
+        private RequestType mLastThemeChangeRequestType = RequestType.USER_REQUEST;
 
         public Builder() {}
 
@@ -356,7 +360,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 mIcons.put(key, appTheme.getIconPackPkgName());
                 mOverlays.put(key, appTheme.getOverlayPkgName());
             }
-            mThemeChangeTimestamp = theme.mThemeChangeTimestamp;
+            mLastThemeChangeRequestType = theme.mLastThemeChangeRequestType;
         }
 
         /**
@@ -417,8 +421,8 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
             return this;
         }
 
-        public Builder setThemeChangeTimestamp(long timestamp) {
-            mThemeChangeTimestamp = timestamp;
+        public Builder setLastThemeChangeRequestType(RequestType requestType) {
+            mLastThemeChangeRequestType = requestType;
             return this;
         }
 
@@ -445,7 +449,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 }
             }
             ThemeConfig themeConfig = new ThemeConfig(appThemes);
-            themeConfig.mThemeChangeTimestamp = mThemeChangeTimestamp;
+            themeConfig.mLastThemeChangeRequestType = mLastThemeChangeRequestType;
             return themeConfig;
         }
     }
