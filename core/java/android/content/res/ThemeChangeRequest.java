@@ -29,6 +29,7 @@ import static android.provider.ThemesContract.ThemesColumns.*;
 public final class ThemeChangeRequest implements Parcelable {
     private final Map<String, String> mThemeComponents = new HashMap<String, String>();
     private final Map<String, String> mPerAppOverlays = new HashMap<String, String>();
+    private RequestType mRequestType;
 
     public String getOverlayThemePackageName() {
         return getThemePackageNameForComponent(MODIFIES_OVERLAYS);
@@ -90,17 +91,23 @@ public final class ThemeChangeRequest implements Parcelable {
         return mThemeComponents.size() + mPerAppOverlays.size();
     }
 
+    public RequestType getReqeustType() {
+        return mRequestType;
+    }
+
     private String getThemePackageNameForComponent(String componentName) {
         return mThemeComponents.get(componentName);
     }
 
-    private ThemeChangeRequest(Map<String, String> components, Map<String, String> perAppThemes) {
+    private ThemeChangeRequest(Map<String, String> components, Map<String, String> perAppThemes,
+            RequestType requestType) {
         if (components != null) {
             mThemeComponents.putAll(components);
         }
         if (perAppThemes != null) {
             mPerAppOverlays.putAll(perAppThemes);
         }
+        mRequestType = requestType;
     }
 
     private ThemeChangeRequest(Parcel source) {
@@ -113,6 +120,7 @@ public final class ThemeChangeRequest implements Parcelable {
         for (int i = 0 ; i < numComponents; i++) {
             mPerAppOverlays.put(source.readString(), source.readString());
         }
+        mRequestType = RequestType.values()[source.readInt()];
     }
 
     @Override
@@ -132,6 +140,7 @@ public final class ThemeChangeRequest implements Parcelable {
             dest.writeString(appPkgName);
             dest.writeString(mPerAppOverlays.get(appPkgName));
         }
+        dest.writeInt(mRequestType.ordinal());
     }
 
     public static final Parcelable.Creator<ThemeChangeRequest> CREATOR =
@@ -147,9 +156,18 @@ public final class ThemeChangeRequest implements Parcelable {
                 }
             };
 
+    public enum RequestType {
+        USER_REQUEST,
+        USER_REQUEST_MIXNMATCH,
+        THEME_UPDATED,
+        THEME_REMOVED,
+        THEME_RESET;
+    }
+
     public static class Builder {
         Map<String, String> mThemeComponents = new HashMap<String, String>();
         Map<String, String> mPerAppOverlays = new HashMap<String, String>();
+        RequestType mRequestType = RequestType.USER_REQUEST;
 
         public Builder() {}
 
@@ -218,8 +236,13 @@ public final class ThemeChangeRequest implements Parcelable {
             return this;
         }
 
+        public Builder setRequestType(RequestType requestType) {
+            mRequestType = requestType != null ? requestType : RequestType.USER_REQUEST;
+            return this;
+        }
+
         public ThemeChangeRequest build() {
-            return new ThemeChangeRequest(mThemeComponents, mPerAppOverlays);
+            return new ThemeChangeRequest(mThemeComponents, mPerAppOverlays, mRequestType);
         }
     }
 }
