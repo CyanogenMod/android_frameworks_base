@@ -38,4 +38,16 @@
 
     <!-- tint of the Visualizer tile -->
     <color name="visualizer_fill_color">#96FFFFFF</color>
+
+    <!-- Background of the volume panel. See also: volume_dialog_background -->
+    <color name="volume_panel_background_color">@color/system_secondary_color</color>
+
+    <!-- Battery base color -->
+    <color name="batterymeter_base_color">#FFFFFFFF</color>
+
+    <!-- Color for notification icons -->
+    <color name="notification_icon_color">#FFFFFFFF</color>
+
+    <!-- Navigation button ripple color -->
+    <color name="navbutton_ripple_color">#FFFFFFFF</color>
 </resources>
