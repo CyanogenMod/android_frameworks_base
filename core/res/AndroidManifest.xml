@@ -2589,7 +2589,7 @@
     <permission android:name="android.permission.BACKUP"
         android:label="@string/permlab_backup"
         android:description="@string/permdesc_backup"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature|system|privileged" />
 
     <!-- Allows a package to launch the secure full-backup confirmation UI.
          ONLY the system process may hold this permission.
