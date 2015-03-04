@@ -100,7 +100,7 @@ public class PermissionInfo extends PackageItemInfo implements Parcelable {
      * {@link #PROTECTION_SIGNATURE}.  May also include the additional
      * flags {@link #PROTECTION_FLAG_SYSTEM} or {@link #PROTECTION_FLAG_DEVELOPMENT}
      * (which only make sense in combination with the base
-     * {@link #PROTECTION_SIGNATURE}.
+     * {@link #PROTECTION_SIGNATURE}).
      */
     public int protectionLevel;
 
@@ -139,8 +139,11 @@ public class PermissionInfo extends PackageItemInfo implements Parcelable {
 
     /** @hide */
     public static int fixProtectionLevel(int level) {
-        if (level == PROTECTION_SIGNATURE_OR_SYSTEM) {
-            level = PROTECTION_SIGNATURE | PROTECTION_FLAG_SYSTEM;
+        if ((level & PROTECTION_SIGNATURE_OR_SYSTEM) == PROTECTION_SIGNATURE_OR_SYSTEM) {
+            // Canonicalize this one-time hybrid level.
+            // This allows flags like "signatureOrSystem|privileged".
+            level ^= PROTECTION_SIGNATURE_OR_SYSTEM;
+            level |= PROTECTION_SIGNATURE | PROTECTION_FLAG_SYSTEM;
         }
         return level;
     }
