@@ -220,6 +220,9 @@
              to prevent lowering the protection level of certain signature permissions
              to accommodate new implementations.-->
         <flag name="privileged" value="0x80" />
+        <!-- Additional flag to represent signatureOrSystem permissions that can also be
+             granted to privileged applications. -->
+        <flag name="signatureOrSystemOrPrivileged" value="0x83" />
     </attr>
 
     <!-- Flags indicating more context for a permission group. -->
