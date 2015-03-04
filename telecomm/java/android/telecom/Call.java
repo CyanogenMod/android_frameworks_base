@@ -182,6 +182,18 @@ public final class Call {
          */
         public static final int CAPABILITY_GENERIC_CONFERENCE = 0x00004000;
 
+        /** Add participant in an active or conference call option
+         * @hide
+         */
+        public static final int ADD_PARTICIPANT = 0x00008000;
+
+        /**
+         * Call type can be modified for IMS call
+         * @hide
+         */
+        public static final int CALL_TYPE_MODIFIABLE = 0x00020000;
+
+
         private final Uri mHandle;
         private final int mHandlePresentation;
         private final String mCallerDisplayName;
@@ -264,6 +276,12 @@ public final class Call {
             }
             if (can(capabilities, CAPABILITY_GENERIC_CONFERENCE)) {
                 builder.append(" CAPABILITY_GENERIC_CONFERENCE");
+            }
+            if (can(capabilities, CALL_TYPE_MODIFIABLE)) {
+                builder.append(" CALL_TYPE_MODIFIABLE");
+            }
+            if (can(capabilities, ADD_PARTICIPANT)) {
+                builder.append(" ADD_PARTICIPANT");
             }
             builder.append("]");
             return builder.toString();
