@@ -149,6 +149,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
 
         mSubDisplayName = (TextView) findViewById(R.id.sub_display_name);
         mSubId = mKgUpdateMonitor.getSimPinLockSubId();
+        mSimImageView = (ImageView) findViewById(R.id.keyguard_sim);
         if ( mKgUpdateMonitor.getNumPhones() > 1 ) {
 
             View simInfoMsg = findViewById(R.id.sim_info_message);
