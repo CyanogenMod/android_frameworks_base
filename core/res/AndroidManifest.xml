@@ -2363,7 +2363,7 @@
     <permission android:name="android.permission.READ_FRAME_BUFFER"
         android:label="@string/permlab_readFrameBuffer"
         android:description="@string/permdesc_readFrameBuffer"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature|system|privileged" />
 
     <!-- Allows an application to use InputFlinger's low level features.
          @hide -->
