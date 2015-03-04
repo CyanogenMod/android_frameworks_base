@@ -491,7 +491,6 @@ public class MSimSignalClusterView
 
         if (phoneId != 0) {
             if (mMobileVisible && mWifiVisible && ((mIsAirplaneMode) ||
-                    (mNoSimIconId[phoneId] != 0) ||
                     (mStyle != STATUS_BAR_STYLE_ANDROID_DEFAULT))) {
                 mSpacer.setVisibility(View.INVISIBLE);
             } else {
