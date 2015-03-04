@@ -44,12 +44,6 @@
             android:layout_gravity="center|bottom"
             />
     </FrameLayout>
-    <View
-        android:layout_height="6dp"
-        android:layout_width="6dp"
-        android:visibility="gone"
-        android:id="@+id/spacer"
-        />
     <!--<FrameLayout
         android:id="@+id/wimax_combo"
         android:layout_height="wrap_content"
@@ -89,11 +83,6 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         >
-        <View
-            android:layout_height="6dp"
-            android:layout_width="6dp"
-            android:visibility="invisible"
-            />
         <FrameLayout
             android:id="@+id/mobile_combo"
             android:layout_width="wrap_content"
@@ -162,6 +151,7 @@
                 android:id="@+id/no_sim"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center|bottom"
                 />
         </FrameLayout>
     </FrameLayout>
@@ -172,8 +162,8 @@
        android:visibility="gone"
        />
     <View
-        android:layout_height="8dp"
-        android:layout_width="8dp"
+        android:layout_height="5dp"
+        android:layout_width="5dp"
         android:visibility="gone"
         android:id="@+id/spacer"
         />
@@ -194,11 +184,6 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         >
-        <View
-            android:layout_height="6dp"
-            android:layout_width="6dp"
-            android:visibility="invisible"
-            />
         <FrameLayout
             android:id="@+id/mobile_combo_sub2"
             android:layout_width="wrap_content"
@@ -243,6 +228,7 @@
                 android:id="@+id/no_sim_slot2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center|bottom"
                 />
         </FrameLayout>
     </FrameLayout>
@@ -253,8 +239,8 @@
        android:visibility="gone"
        />
     <View
-        android:layout_height="8dp"
-        android:layout_width="8dp"
+        android:layout_height="5dp"
+        android:layout_width="5dp"
         android:visibility="gone"
         android:id="@+id/spacer"
         />
@@ -275,11 +261,6 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         >
-        <View
-            android:layout_height="6dp"
-            android:layout_width="6dp"
-            android:visibility="invisible"
-            />
         <FrameLayout
             android:id="@+id/mobile_combo_sub3"
             android:layout_width="wrap_content"
@@ -324,6 +305,7 @@
                 android:id="@+id/no_sim_slot3"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center|bottom"
                 />
         </FrameLayout>
     </FrameLayout>
