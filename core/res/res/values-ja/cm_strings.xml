@@ -62,7 +62,7 @@
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>は個人データにアクセスできません</string>
   <string name="profile_picker_title">プロファイル</string>
   <string name="profile_none">なし</string>
-  <string name="perf_profile_pwrsv">節電</string>
+  <string name="perf_profile_pwrsv">省電力</string>
   <string name="perf_profile_bal">バランス</string>
   <string name="perf_profile_perf">パフォーマンス</string>
   <string name="permlab_interceptSmsSent">送信するSMSの傍受</string>
