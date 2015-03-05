@@ -15,11 +15,11 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/qs_detail_background"
-        android:paddingBottom="16dp"
-        android:orientation="vertical">
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@drawable/qs_detail_background"
+          android:paddingBottom="16dp"
+          android:orientation="vertical">
 
     <FrameLayout
             android:id="@android:id/content"
