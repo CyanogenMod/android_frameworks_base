@@ -101,9 +101,12 @@ public class ThemeUtils {
 
     private static final String MEDIA_CONTENT_URI = "content://media/internal/audio/media";
 
+    // Constants for theme change broadcast
     public static final String ACTION_THEME_CHANGED = "org.cyanogenmod.intent.action.THEME_CHANGED";
-
     public static final String CATEGORY_THEME_COMPONENT_PREFIX = "org.cyanogenmod.intent.category.";
+    public static final String EXTRA_COMPONENTS = "components";
+    public static final String EXTRA_REQUEST_TYPE = "request_type";
+    public static final String EXTRA_UPDATE_TIME = "update_time";
 
     public static final int SYSTEM_TARGET_API = 0;
 
