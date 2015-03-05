@@ -284,6 +284,18 @@ public class ThemesContract {
         public static final String COL_VALUE = "value";
 
         /**
+         * The package name that corresponds to where this component was applied from previously
+         * <P>Type: String</P>
+         */
+        public static final String COL_PREV_VALUE = "previous_value";
+
+        /**
+         * Time when this entry was last updated
+         * <P>Type: INTEGER</P>
+         */
+        public static final String COL_UPDATE_TIME = "update_time";
+
+        /**
          * Valid keys
          */
         public static final String KEY_HOMESCREEN = "mixnmatch_homescreen";
