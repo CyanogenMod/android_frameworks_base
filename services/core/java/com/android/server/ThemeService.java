@@ -467,7 +467,8 @@ public class ThemeService extends IThemeService.Stub {
 
     private void updateProvider(ThemeChangeRequest request) {
         ContentValues values = new ContentValues();
-
+        final long updateTime = System.currentTimeMillis();
+        values.put(MixnMatchColumns.COL_UPDATE_TIME, updateTime);
         Map<String, String> componentMap = request.getThemeComponentsMap();
         for (String component : componentMap.keySet()) {
             values.put(ThemesContract.MixnMatchColumns.COL_VALUE, componentMap.get(component));
