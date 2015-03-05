@@ -384,6 +384,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
         refreshSignalCluster(cluster);
     }
 
+    public void removeAllSignalClusters() {
+        mSignalClusters.clear();
+    }
+
     public void addNetworkSignalChangedCallback(NetworkSignalChangedCallback cb) {
         mSignalsChangedCallbacks.add(cb);
         notifySignalsChangedCallbacks(cb);
