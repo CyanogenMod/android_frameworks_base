@@ -302,6 +302,7 @@ public abstract class PanelView extends FrameLayout {
                     }
                 }
                 final float newHeight = Math.max(0, h + mInitialOffsetOnTouch);
+                android.util.Log.d("ro", "newHeight: " + newHeight);
                 if (newHeight > mPeekHeight) {
                     if (mPeekAnimator != null) {
                         mPeekAnimator.cancel();
@@ -309,6 +310,7 @@ public abstract class PanelView extends FrameLayout {
                     mJustPeeked = false;
                 }
                 if (-h >= getFalsingThreshold()) {
+                    android.util.Log.d("ro", "-h >= getFalsingThreshold()");
                     mTouchAboveFalsingThreshold = true;
                 }
                 if (!mJustPeeked && (!waitForTouchSlop || mTracking) && !isTrackingBlocked()) {
@@ -335,18 +337,21 @@ public abstract class PanelView extends FrameLayout {
                                 mVelocityTracker.getXVelocity(), mVelocityTracker.getYVelocity());
                     }
                     boolean expand = flingExpands(vel, vectorVel);
+                    android.util.Log.d("ro", "flingExpands() returned: " + expand);
                     onTrackingStopped(expand);
                     DozeLog.traceFling(expand, mTouchAboveFalsingThreshold,
                             mStatusBar.isFalsingThresholdNeeded(),
                             mStatusBar.isScreenOnComingFromTouch());
                     fling(vel, expand);
                     mUpdateFlingOnLayout = expand && mPanelClosedOnDown && !mHasLayoutedSinceDown;
+                    android.util.Log.d("ro", "mUpdateFlingOnLayout: " + mUpdateFlingOnLayout);
                     if (mUpdateFlingOnLayout) {
                         mUpdateFlingVelocity = vel;
                     }
                 } else {
                     boolean expands = onEmptySpaceClick(mInitialTouchX);
                     onTrackingStopped(expands);
+                    android.util.Log.d("ro", "not tracking, expands: " + expands);
                 }
 
                 if (mVelocityTracker != null) {
@@ -613,8 +618,10 @@ public abstract class PanelView extends FrameLayout {
 
     public void setExpandedHeightInternal(float h) {
         float fhWithoutOverExpansion = getMaxPanelHeight() - getOverExpansionAmount();
+        android.util.Log.d("ro", "setExpandedHeightInternal: fhWithoutOverExpansion:" + fhWithoutOverExpansion);
         if (mHeightAnimator == null) {
             float overExpansionPixels = Math.max(0, h - fhWithoutOverExpansion);
+            android.util.Log.d("ro", "height animator is null; overExpansionPixels: " + overExpansionPixels);
             if (getOverExpansionPixels() != overExpansionPixels && mTracking) {
                 setOverExpansion(overExpansionPixels, true /* isPixels */);
             }
@@ -622,6 +629,7 @@ public abstract class PanelView extends FrameLayout {
         } else {
             mExpandedHeight = h;
             if (mOverExpandedBeforeFling) {
+                android.util.Log.d("ro", "mOverExpandedBeforeFling: true");
                 setOverExpansion(Math.max(0, h - fhWithoutOverExpansion), false /* isPixels */);
             }
         }

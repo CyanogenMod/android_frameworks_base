@@ -724,6 +724,7 @@ public class NotificationStackScrollLayout extends ViewGroup
         if (!isScrollingEnabled()) {
             return false;
         }
+        android.util.Log.d("ro", "onScrollTouch()");
         initVelocityTrackerIfNotExists();
         mVelocityTracker.addMovement(ev);
 
@@ -853,6 +854,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     private void onOverScrollFling(boolean open, int initialVelocity) {
+        android.util.Log.d("ro", "onOverscrollFling()");
         if (mOverscrollTopChangedListener != null) {
             mOverscrollTopChangedListener.flingTopOverscroll(initialVelocity, open);
         }
@@ -868,6 +870,7 @@ public class NotificationStackScrollLayout extends ViewGroup
      *         not handled by the overScroll amount.
      */
     private float overScrollUp(int deltaY, int range) {
+        android.util.Log.d("ro", "onOverscrollUp()");
         deltaY = Math.max(deltaY, 0);
         float currentTopAmount = getCurrentOverScrollAmount(true);
         float newTopAmount = currentTopAmount - deltaY;
@@ -1153,6 +1156,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     private void springBack() {
+        android.util.Log.d("ro", "springBack()");
         int scrollRange = getScrollRange();
         boolean overScrolledTop = mOwnScrollY <= 0;
         boolean overScrolledBottom = mOwnScrollY >= scrollRange;
@@ -1298,6 +1302,7 @@ public class NotificationStackScrollLayout extends ViewGroup
      *                  which means we want to scroll towards the top.
      */
     private void fling(int velocityY) {
+        android.util.Log.d("ro", "fling()");
         if (getChildCount() > 0) {
             int scrollRange = getScrollRange();
 

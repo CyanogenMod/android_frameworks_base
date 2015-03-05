@@ -23,9 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -68,6 +68,7 @@ public class QSPanel extends ViewGroup {
     private int mPanelPaddingBottom;
     private int mDualTileUnderlap;
     private int mBrightnessPaddingTop;
+    private int mTranslationTop;
     private boolean mExpanded;
     private boolean mListening;
 
@@ -448,8 +449,15 @@ public class QSPanel extends ViewGroup {
             h += mFooter.getView().getMeasuredHeight();
         }
         mDetail.measure(exactly(width), MeasureSpec.UNSPECIFIED);
-        if (mDetail.getMeasuredHeight() < h) {
+        android.util.Log.d("ro", "detail height: " + mDetail.getMeasuredHeight());
+        int detailH = mDetail.getMeasuredHeight() +
+                getResources().getDimensionPixelSize(R.dimen.status_bar_header_height_expanded);
+        if (detailH < h && mTranslationTop == 0) {
+            android.util.Log.d("ro", "measuring detail at exactly: " + h);
             mDetail.measure(exactly(width), exactly(h));
+        } else {
+            android.util.Log.d("ro", "doing at most with" + (h-mTranslationTop));
+            mDetail.measure(exactly(width), MeasureSpec.makeMeasureSpec(h-mTranslationTop, MeasureSpec.AT_MOST));
         }
         setMeasuredDimension(width, Math.max(h, mDetail.getMeasuredHeight()));
     }
@@ -483,7 +491,7 @@ public class QSPanel extends ViewGroup {
             record.tileView.layout(left, top, right, top + record.tileView.getMeasuredHeight());
         }
         final int dh = Math.max(mDetail.getMeasuredHeight(), getMeasuredHeight());
-        mDetail.layout(0, 0, mDetail.getMeasuredWidth(), dh);
+        mDetail.layout(0, mTranslationTop, mDetail.getMeasuredWidth(), dh + mTranslationTop);
         if (mFooter.hasFooter()) {
             View footer = mFooter.getView();
             footer.layout(0, getMeasuredHeight() - footer.getMeasuredHeight(),
@@ -531,6 +539,10 @@ public class QSPanel extends ViewGroup {
         final boolean scanState = mDetailRecord instanceof TileRecord
                 && ((TileRecord) mDetailRecord).scanState;
         fireScanStateChanged(scanState);
+    }
+
+    public void onScrollYChanged(int translationY) {
+        mTranslationTop = translationY;
     }
 
     private class H extends Handler {

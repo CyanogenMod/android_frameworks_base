@@ -831,6 +831,7 @@ public class NotificationPanelView extends PanelView implements
             mScrollYOverride = mScrollView.getScrollY();
         }
         mScrollView.scrollTo(0, 0);
+        mQsPanel.onScrollYChanged(0);
         setQsExpansion(height);
     }
 
@@ -937,7 +938,7 @@ public class NotificationPanelView extends PanelView implements
             return true;
         }
     };
-    
+
     private void animateHeaderSlidingIn() {
         mHeaderAnimatingIn = true;
         getViewTreeObserver().addOnPreDrawListener(mStartHeaderSlidingIn);
@@ -1059,11 +1060,17 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void setQsExpansion(float height) {
+//        Thread.currentThread().dumpStack();
+//        android.util.Log.d("ro", "setQsExpansion: height:" + height);
         height = Math.min(Math.max(height, mQsMinExpansionHeight), mQsMaxExpansionHeight);
+//        android.util.Log.d("ro", "----> : min'd height:" + height);
         mQsFullyExpanded = height == mQsMaxExpansionHeight;
         if (height > mQsMinExpansionHeight && !mQsExpanded && !mStackScrollerOverscrolling) {
+//            android.util.Log.d("ro", "setQsExpanded: true");
             setQsExpanded(true);
         } else if (height <= mQsMinExpansionHeight && mQsExpanded) {
+//            android.util.Log.d("ro", "setQsExpanded: false");
+
             setQsExpanded(false);
             if (mLastAnnouncementWasQuickSettings && !mTracking) {
                 announceForAccessibility(getKeyguardOrLockScreenString());
@@ -1317,7 +1324,7 @@ public class NotificationPanelView extends PanelView implements
      */
     private int getTempQsMaxExpansion() {
         int qsTempMaxExpansion = mQsMaxExpansionHeight;
-        if (mScrollYOverride != -1) {
+        if (mScrollYOverride != -1 || isQsDetailShowing()) {
             qsTempMaxExpansion -= mScrollYOverride;
         }
         return qsTempMaxExpansion;
@@ -1569,6 +1576,7 @@ public class NotificationPanelView extends PanelView implements
     @Override
     public void onScrollChanged() {
         if (mQsExpanded) {
+            mQsPanel.onScrollYChanged(getScrollViewScrollY());
             requestScrollerTopPaddingUpdate(false /* animate */);
             requestPanelHeightUpdate();
         }
