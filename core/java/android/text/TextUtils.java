@@ -1754,7 +1754,8 @@ public class TextUtils {
             if (scriptSubtag == null) return getLayoutDirectionFromFirstChar(locale);
 
             if (scriptSubtag.equalsIgnoreCase(ARAB_SCRIPT_SUBTAG) ||
-                    scriptSubtag.equalsIgnoreCase(HEBR_SCRIPT_SUBTAG)) {
+                    scriptSubtag.equalsIgnoreCase(HEBR_SCRIPT_SUBTAG) ||
+                    scriptSubtag.equalsIgnoreCase(KURD_SCRIPT_SUBTAG)) {
                 return View.LAYOUT_DIRECTION_RTL;
             }
         }
@@ -1800,4 +1801,5 @@ public class TextUtils {
 
     private static String ARAB_SCRIPT_SUBTAG = "Arab";
     private static String HEBR_SCRIPT_SUBTAG = "Hebr";
+    private static String KURD_SCRIPT_SUBTAG = "Kurd";
 }
