@@ -162,6 +162,7 @@ import com.android.systemui.statusbar.policy.KeyButtonView;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.policy.LocationControllerImpl;
+import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkControllerImpl;
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
@@ -3355,11 +3356,23 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
+    private void removeSignalCallbacks(NetworkController networkController) {
+        final SignalClusterView signalCluster =
+                (SignalClusterView) mStatusBarView.findViewById(R.id.signal_cluster);
+        final SignalClusterView signalClusterKeyguard =
+                (SignalClusterView) mKeyguardStatusBar.findViewById(R.id.signal_cluster);
+        final SignalClusterView signalClusterQs =
+                (SignalClusterView) mHeader.findViewById(R.id.signal_cluster);
+        networkController.removeSignalCallback(signalCluster);
+        networkController.removeSignalCallback(signalClusterKeyguard);
+        networkController.removeSignalCallback(signalClusterQs);
+    }
+
     private void recreateStatusBar() {
         mRecreating = true;
 
         if (mNetworkController != null) {
-            mContext.unregisterReceiver(mNetworkController);
+            removeSignalCallbacks(mNetworkController);
         }
 
         mStatusBarWindow.removeContent(mStatusBarWindowContent);
