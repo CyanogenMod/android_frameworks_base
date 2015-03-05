@@ -368,10 +368,11 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (request == null || request.getNumChangesRequested() == 0) {
-            postFinish(true, request);
+            postFinish(true, request, 0);
             return;
         }
         mIsThemeApplying = true;
+        long updateTime = System.currentTimeMillis();
 
         incrementProgress(5);
 
@@ -422,7 +423,7 @@ public class ThemeService extends IThemeService.Stub {
             incrementProgress(progressIncrement);
         }
 
-        updateProvider(request);
+        updateProvider(request, updateTime);
 
         if (shouldUpdateConfiguration(request)) {
             updateConfiguration(request, removePerAppTheme);
@@ -430,7 +431,7 @@ public class ThemeService extends IThemeService.Stub {
 
         killLaunchers(request);
 
-        postFinish(true, request);
+        postFinish(true, request, updateTime);
         mIsThemeApplying = false;
     }
 
@@ -465,9 +466,9 @@ public class ThemeService extends IThemeService.Stub {
         processInstalledThemes();
     }
 
-    private void updateProvider(ThemeChangeRequest request) {
+    private void updateProvider(ThemeChangeRequest request, long updateTime) {
         ContentValues values = new ContentValues();
-
+        values.put(MixnMatchColumns.COL_UPDATE_TIME, updateTime);
         Map<String, String> componentMap = request.getThemeComponentsMap();
         for (String component : componentMap.keySet()) {
             values.put(ThemesContract.MixnMatchColumns.COL_VALUE, componentMap.get(component));
@@ -851,7 +852,7 @@ public class ThemeService extends IThemeService.Stub {
         mClients.finishBroadcast();
     }
 
-    private void postFinish(boolean isSuccess, ThemeChangeRequest request) {
+    private void postFinish(boolean isSuccess, ThemeChangeRequest request, long updateTime) {
         synchronized(this) {
             mProgress = 0;
         }
@@ -869,7 +870,7 @@ public class ThemeService extends IThemeService.Stub {
 
         // if successful, broadcast that the theme changed
         if (isSuccess) {
-            broadcastThemeChange(request);
+            broadcastThemeChange(request, updateTime);
         }
     }
 
@@ -886,13 +887,15 @@ public class ThemeService extends IThemeService.Stub {
         mProcessingListeners.finishBroadcast();
     }
 
-    private void broadcastThemeChange(ThemeChangeRequest request) {
+    private void broadcastThemeChange(ThemeChangeRequest request, long updateTime) {
         Map<String, String> componentMap = request.getThemeComponentsMap();
         if (componentMap == null || componentMap.size() == 0) return;
 
         final Intent intent = new Intent(ThemeUtils.ACTION_THEME_CHANGED);
         ArrayList componentsArrayList = new ArrayList(componentMap.keySet());
-        intent.putStringArrayListExtra("components", componentsArrayList);
+        intent.putStringArrayListExtra(ThemeUtils.EXTRA_COMPONENTS, componentsArrayList);
+        intent.putExtra(ThemeUtils.EXTRA_REQUEST_TYPE, request.getReqeustType().ordinal());
+        intent.putExtra(ThemeUtils.EXTRA_UPDATE_TIME, updateTime);
         mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
     }
 
@@ -1112,7 +1115,7 @@ public class ThemeService extends IThemeService.Stub {
                 // In case the mixnmatch table has a mods_launcher entry, we'll clear it
                 ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
                 builder.setWallpaper("");
-                updateProvider(builder.build());
+                updateProvider(builder.build(), System.currentTimeMillis());
             } else {
                 mWallpaperChangedByUs = false;
             }
