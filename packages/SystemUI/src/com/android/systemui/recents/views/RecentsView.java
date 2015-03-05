@@ -18,6 +18,7 @@ package com.android.systemui.recents.views;
 
 import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -248,6 +249,10 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         // We have to increment/decrement the post animation trigger in case there are no children
         // to ensure that it runs
         ctx.postAnimationTrigger.increment();
+
+        // Hide clear recents button before return to home
+        startHideClearRecentsButtonAnimation();
+
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
@@ -260,6 +265,25 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
 
         // Notify of the exit animation
         mCb.onExitToHomeAnimationTriggered();
+    }
+
+    public void startHideClearRecentsButtonAnimation() {
+        if (mClearRecents != null) {
+            mClearRecents.animate()
+                .alpha(0f)
+                .setStartDelay(0)
+                .setUpdateListener(null)
+                .setInterpolator(mConfig.fastOutSlowInInterpolator)
+                .setDuration(mConfig.taskViewRemoveAnimDuration)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        mClearRecents.setVisibility(View.GONE);
+                        mClearRecents.setAlpha(1f);
+                    }
+                })
+                .start();
+        }
     }
 
     /** Adds the search bar */
@@ -368,21 +392,8 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
                     return;
                 }
 
-                // Hide clear recents before dismiss all tasks
-                mClearRecents.animate()
-                    .alpha(0f)
-                    .setStartDelay(0)
-                    .setUpdateListener(null)
-                    .setInterpolator(mConfig.fastOutSlowInInterpolator)
-                    .setDuration(mConfig.taskViewRemoveAnimDuration)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            mClearRecents.setVisibility(View.GONE);
-                            mClearRecents.setAlpha(1f);
-                        }
-                    })
-                    .start();
+                // Hide clear recents button before dismiss all tasks
+                startHideClearRecentsButtonAnimation();
 
                 dismissAllTasksAnimated();
             }
