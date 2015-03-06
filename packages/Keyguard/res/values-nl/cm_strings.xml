@@ -23,11 +23,11 @@
   <string name="kg_slot_name">SIM <xliff:g id="number">%d</xliff:g>: Nieuwe simkaart\u0020</string>
   <string name="lockscreen_sim_error_message_short">Ongeldige simkaart.</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">SIM PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat u contact moet opnemen met uw provider om uw apparaat te ontgrendelen.</item>
-    <item quantity="other">SIM PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen.</item>
+    <item quantity="one">SIM-PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat u contact moet opnemen met uw provider om uw apparaat te ontgrendelen.</item>
+    <item quantity="other">SIM-PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">SIM is nu uitgeschakeld. PUK code invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende poging voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
-    <item quantity="other">SIM is nu uitgeschakeld. PUK code invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
+    <item quantity="one">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende poging voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
+    <item quantity="other">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
   </plurals>
 </resources>

@@ -180,4 +180,13 @@
   <string name="usb_media_checking">Αυτή τη στιγμή γίνεται έλεγχος του αποθ. χώρου USB.</string>
   <string name="usb_media_removed">Ο αποθ. χώρος USB έχει αφαιρεθεί.</string>
   <string name="usb_media_shared">Αυτή τη στιγμή ο αποθ. χώρος USB χρησιμοποιείται από κάποιον υπολογιστή.</string>
+  <string name="live_display_auto">Αυτόματη</string>
+  <string name="live_display_auto_summary">Αυτόματη ρύθμιση της οθόνης ανάλογα με τις συνθήκες του περιβάλλοντος</string>
+  <string name="live_display_day">Ημέρα</string>
+  <string name="live_display_day_summary">Χρήση μόνο των ρυθμίσεων ημέρας</string>
+  <string name="live_display_night">Νύχτα</string>
+  <string name="live_display_night_summary">Χρήση μόνο των ρυθμίσεων νύχτας</string>
+  <string name="live_display_outdoor">Εξωτερικός χώρος (ήλιος)</string>
+  <string name="live_display_outdoor_summary">Χρήση μόνο των ρυθμίσεων εξωτερικού χώρου</string>
+  <string name="live_display_hint">Το LiveDisplay μπορεί να βοηθήσει στη μείωση της κόπωσης των ματιών και να σας βοηθήσει να κοιμηθείτε τη νύχτα. Κάντε κλικ εδώ για να το δοκιμάσετε!</string>
 </resources>

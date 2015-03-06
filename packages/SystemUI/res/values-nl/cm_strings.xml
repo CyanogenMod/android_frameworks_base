@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_recents">Sluit alle recente apps</string>
+  <string name="clear_recents">Alle recente apps sluiten</string>
   <string name="screenshot_delete_action">Verwijderen</string>
   <string name="screenshot_delete_confirmation">Screenshot verwijderd.</string>
   <string name="advanced_dev_option_wipe_app">App-gegevens wissen</string>
@@ -46,13 +46,13 @@
   <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_init">Initialiseren\u2026</string>
   <string name="quick_settings_lockscreen_label">Vergrendelscherm</string>
-  <string name="quick_settings_lockscreen_label_enforced">Vergrendelscherm vereist</string>
+  <string name="quick_settings_lockscreen_label_enforced">Vergrendelscherm activeren</string>
   <string name="quick_settings_network_adb_label">ADB over netwerk</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Schermtime-out</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
-  <string name="left_shortcut_hint">Veeg rechts voor %1$s</string>
-  <string name="right_shortcut_hint">Veeg links voor %1$s</string>
+  <string name="left_shortcut_hint">Veeg naar rechts voor %1$s</string>
+  <string name="right_shortcut_hint">Veeg naar links voor %1$s</string>
   <string name="navbar_dialog_title">Kies de toe te wijzen functie</string>
   <string name="navbar_home_button">Thuisknop</string>
   <string name="navbar_recent_button">Recentknop</string>
