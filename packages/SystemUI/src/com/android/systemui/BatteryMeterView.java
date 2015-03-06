@@ -16,39 +16,32 @@
 
 package com.android.systemui;
 
+import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.statusbar.policy.BatteryController;
+
 import android.animation.ArgbEvaluator;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.util.DisplayMetrics;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.content.ContentResolver;
-
-import com.android.systemui.cm.UserContentObserver;
-import com.android.systemui.statusbar.policy.BatteryController;
 
 import cyanogenmod.providers.CMSettings;
 
@@ -212,41 +205,6 @@ public class BatteryMeterView extends View implements DemoMode,
         }
     };
 
-    SettingsObserver mObserver = new SettingsObserver(new Handler());
-
-    private class SettingsObserver extends UserContentObserver {
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void observe() {
-            super.observe();
-
-            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    STATUS_BAR_BATTERY_STYLE), false, this, UserHandle.USER_ALL);
-            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    STATUS_BAR_SHOW_BATTERY_PERCENT), false, this, UserHandle.USER_ALL);
-        }
-
-        @Override
-
-
-        protected void unobserve() {
-            super.unobserve();
-            getContext().getContentResolver().unregisterContentObserver(this);
-
-        }
-
-
-
-        @Override
-        public void update() {
-            loadShowBatterySetting();
-            postInvalidate();
-        }
-    };
-
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -261,7 +219,6 @@ public class BatteryMeterView extends View implements DemoMode,
         }
         mBatteryController.addStateChangedCallback(this);
         mAttached = true;
-        mObserver.observe();
     }
 
     @Override
@@ -270,41 +227,7 @@ public class BatteryMeterView extends View implements DemoMode,
 
         mAttached = false;
         getContext().unregisterReceiver(mTracker);
-        mObserver.unobserve();
         mBatteryController.removeStateChangedCallback(this);
-    }
-
-    private void loadShowBatterySetting() {
-        ContentResolver resolver = mContext.getContentResolver();
-        int currentUserId = ActivityManager.getCurrentUser();
-
-        boolean showInsidePercent = CMSettings.System.getIntForUser(resolver,
-                CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0, currentUserId) == 1;
-
-        int batteryStyle = CMSettings.System.getIntForUser(resolver,
-                CMSettings.System.STATUS_BAR_BATTERY_STYLE, 0, currentUserId);
-        BatteryMeterMode meterMode = BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT;
-        switch (batteryStyle) {
-            case 2:
-                meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
-                break;
-            case 4:
-                meterMode = BatteryMeterMode.BATTERY_METER_GONE;
-                break;
-            case 5:
-                meterMode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
-                break;
-            case 6:
-                meterMode = BatteryMeterMode.BATTERY_METER_TEXT;
-                showInsidePercent = false;
-                break;
-            default:
-                break;
-        }
-
-        setMode(meterMode);
-        mShowPercent = showInsidePercent;
-        invalidateIfVisible();
     }
 
     public BatteryMeterView(Context context) {
@@ -352,9 +275,6 @@ public class BatteryMeterView extends View implements DemoMode,
         mLightModeBackgroundColor =
                 context.getColor(R.color.light_mode_icon_color_dual_tone_background);
         mLightModeFillColor = context.getColor(R.color.light_mode_icon_color_dual_tone_fill);
-
-        loadShowBatterySetting();
-        mBatteryMeterDrawable = createBatteryMeterDrawable(mMeterMode);
     }
 
     protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
@@ -403,6 +323,35 @@ public class BatteryMeterView extends View implements DemoMode,
     public void onPowerSaveChanged() {
         mPowerSaveEnabled = mBatteryController.isPowerSave();
         invalidate();
+    }
+
+    @Override
+    public void onBatteryStyleChanged(int style, int percentMode) {
+        boolean showInsidePercent = percentMode == BatteryController.PERCENTAGE_MODE_INSIDE;
+        BatteryMeterMode meterMode = BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT;
+
+        switch (style) {
+            case BatteryController.STYLE_CIRCLE:
+                meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
+                break;
+            case BatteryController.STYLE_GONE:
+                meterMode = BatteryMeterMode.BATTERY_METER_GONE;
+                showInsidePercent = false;
+                break;
+            case BatteryController.STYLE_ICON_LANDSCAPE:
+                meterMode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
+                break;
+            case BatteryController.STYLE_TEXT:
+                meterMode = BatteryMeterMode.BATTERY_METER_TEXT;
+                showInsidePercent = false;
+                break;
+            default:
+                break;
+        }
+
+        setMode(meterMode);
+        mShowPercent = showInsidePercent;
+        invalidateIfVisible();
     }
 
     @Override
