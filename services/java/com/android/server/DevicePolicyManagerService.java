@@ -2740,15 +2740,17 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             return false;
         }
 
-        int passwordQuality = getPasswordQuality(null, userHandle);
-        if (passwordQuality > DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
-            return true;
-        }
+        synchronized (this) {
+            int passwordQuality = getPasswordQuality(null, userHandle);
+            if (passwordQuality > DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+                return true;
+            }
 
-        int encryptionStatus = getStorageEncryptionStatus(userHandle);
-        if (encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE
-                || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
-            return true;
+            int encryptionStatus = getStorageEncryptionStatus(userHandle);
+            if (encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE
+                    || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
+                return true;
+            }
         }
 
         // Keystore.isEmpty() requires system UID
