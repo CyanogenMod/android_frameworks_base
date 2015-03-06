@@ -17,11 +17,16 @@
 package com.android.systemui.statusbar.policy;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Handler;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.io.FileDescriptor;
@@ -32,6 +37,16 @@ public class BatteryController extends BroadcastReceiver {
     private static final String TAG = "BatteryController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
+    public static final int STYLE_ICON_PORTRAIT = 0;
+    public static final int STYLE_CIRCLE = 2;
+    public static final int STYLE_GONE = 4;
+    public static final int STYLE_ICON_LANDSCAPE = 5;
+    public static final int STYLE_TEXT = 6;
+
+    public static final int PERCENTAGE_MODE_OFF = 0;
+    public static final int PERCENTAGE_MODE_INSIDE = 1;
+    public static final int PERCENTAGE_MODE_OUTSIDE = 2;
+
     private final ArrayList<BatteryStateChangeCallback> mChangeCallbacks = new ArrayList<>();
     private final PowerManager mPowerManager;
 
@@ -41,7 +56,12 @@ public class BatteryController extends BroadcastReceiver {
     private boolean mCharged;
     private boolean mPowerSave;
 
-    public BatteryController(Context context) {
+    private int mStyle;
+    private int mPercentMode;
+    private int mUserId;
+    private SettingsObserver mObserver;
+
+    public BatteryController(Context context, Handler handler) {
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
         IntentFilter filter = new IntentFilter();
@@ -51,6 +71,14 @@ public class BatteryController extends BroadcastReceiver {
         context.registerReceiver(this, filter);
 
         updatePowerSave();
+
+        mObserver = new SettingsObserver(context, handler);
+        mObserver.observe();
+    }
+
+    public void setUserId(int userId) {
+        mUserId = userId;
+        mObserver.observe();
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -65,6 +93,7 @@ public class BatteryController extends BroadcastReceiver {
     public void addStateChangedCallback(BatteryStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
         cb.onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+        cb.onBatteryStyleChanged(mStyle, mPercentMode);
     }
 
     public void removeStateChangedCallback(BatteryStateChangeCallback cb) {
@@ -121,8 +150,56 @@ public class BatteryController extends BroadcastReceiver {
         }
     }
 
+    private void fireSettingsChanged() {
+        final int N = mChangeCallbacks.size();
+        for (int i = 0; i < N; i++) {
+            mChangeCallbacks.get(i).onBatteryStyleChanged(mStyle, mPercentMode);
+        }
+    }
+
     public interface BatteryStateChangeCallback {
         void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging);
         void onPowerSaveChanged();
+        void onBatteryStyleChanged(int style, int percentMode);
     }
+
+    private final class SettingsObserver extends ContentObserver {
+        private ContentResolver mResolver;
+        private boolean mRegistered;
+
+        private final Uri STYLE_URI =
+                Settings.System.getUriFor(Settings.System.STATUS_BAR_BATTERY_STYLE);
+        private final Uri PERCENT_URI =
+                Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT);
+
+        public SettingsObserver(Context context, Handler handler) {
+            super(handler);
+            mResolver = context.getContentResolver();
+        }
+
+        public void observe() {
+            if (mRegistered) {
+                mResolver.unregisterContentObserver(this);
+            }
+            mResolver.registerContentObserver(STYLE_URI, false, this, mUserId);
+            mResolver.registerContentObserver(PERCENT_URI, false, this, mUserId);
+            mRegistered = true;
+
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        private void update() {
+            mStyle = Settings.System.getIntForUser(mResolver,
+                    Settings.System.STATUS_BAR_BATTERY_STYLE, 0, mUserId);
+            mPercentMode = Settings.System.getIntForUser(mResolver,
+                    Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0, mUserId);
+
+            fireSettingsChanged();
+        }
+    };
 }
