@@ -82,7 +82,7 @@
                  android:layout_height="match_parent"
                  android:layout_weight="0"
                  android:gravity="center"
-                 android:src="@drawable/ic_settings"
+                 android:src="@drawable/notification_guts_ic_settings"
                  android:visibility="gone"
                 />
 
@@ -92,7 +92,7 @@
                  android:layout_height="match_parent"
                  android:layout_weight="0"
                  android:gravity="center"
-                 android:src="@drawable/ic_ringer_mute"
+                 android:src="@drawable/notification_guts_ic_ringer_mute"
                  android:visibility="gone"
                  />
 
@@ -103,7 +103,7 @@
                 android:layout_weight="0"
                 android:gravity="center"
                 android:contentDescription="@string/status_bar_notification_inspect_item_title"
-                android:src="@drawable/ic_info"
+                android:src="@drawable/notification_guts_ic_info"
                 />
     </LinearLayout>
 </com.android.systemui.statusbar.NotificationGuts>
