@@ -381,7 +381,7 @@ public class SignalClusterView
             mAirplane.setVisibility(View.GONE);
         }
 
-        if (mWifiVisible && ((mIsAirplaneMode) || (mNoSimIconId != 0))) {
+        if (mIsAirplaneMode && mWifiVisible) {
             mWifiAirplaneSpacer.setVisibility(View.VISIBLE);
         } else {
             mWifiAirplaneSpacer.setVisibility(View.GONE);

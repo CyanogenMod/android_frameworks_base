@@ -27,6 +27,7 @@
   <string name="accessibility_dpad_left">סמן שמאלה</string>
   <string name="accessibility_dpad_right">סמן ימינה</string>
   <string name="quick_settings_roaming_label">נדידה</string>
+  <string name="quick_settings_location_detail_title">מצב מיקום</string>
   <string name="quick_settings_location_battery_saving_label">חיסכון בסוללה</string>
   <string name="quick_settings_location_gps_only_label">התקן בלבד</string>
   <string name="quick_settings_location_high_accuracy_label">דיוק מרבי</string>
@@ -39,6 +40,7 @@
   <string name="quick_settings_network_adb_label">ADB דרך הרשת</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">מסך נשאר דולק</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">החלק ימינה בשביל %1$s</string>
   <string name="right_shortcut_hint">החלק שמאלה בשביל %1$s</string>
   <string name="navbar_dialog_title">בחר את הפעולה להקצה</string>
@@ -46,6 +48,7 @@
   <string name="navbar_recent_button">לחצן יישומים אחרונים</string>
   <string name="navbar_search_button">לחצן חיפוש</string>
   <string name="navbar_back_button">לחצן הקודם</string>
+  <string name="navbar_empty_button">לחצן ריק</string>
   <string name="navbar_menu_conditional_button">לחצן התפריט (הסתר אוטומטית)</string>
   <string name="navbar_menu_always_button">לחצן התפריט (נראה תמיד)</string>
   <string name="navbar_menu_big_button">לחצן התפריט</string>
