@@ -76,6 +76,8 @@
   <string name="adb_both_active_notification_title">ADB по USB та мережі увімкнено</string>
   <string name="adb_active_generic_notification_message">Торкніться, аби вимкнути налагодження.</string>
   <string name="usb_choose_notification_title">Натисніть для вибору налаштувань USB.</string>
+  <string name="permlab_interceptPackageLaunch">Перехоплення запуску додатку</string>
+  <string name="permdesc_interceptPackageLaunch">Дозволити додатку перехоплювати запуски інших додатків</string>
   <string name="app_ops_access_camera">доступ до камери</string>
   <string name="app_ops_access_location">доступ до місцезнаходження</string>
   <string name="app_ops_access_notifications">читати ваші сповіщення</string>
@@ -165,6 +167,7 @@
   <string name="permlab_preventpower">перевизначити клавішу живлення</string>
   <string name="permdesc_preventpower">Дозволити програмі використовувати кнопку живлення.</string>
   <string name="usb_extmedia_format_message">Всі дані на USB-накопичувачі (за шляхом \'%1$s\') будуть видалені. Цю дію неможливо відмінити!</string>
+  <string name="sd_extmedia_format_message">Всі дані на карті пам`яті (за шляхом \'%1$s\') будуть видалені. Цю дію неможливо відмінити!</string>
   <string name="sd_progress_unmounting">Відключення SD-карти\u2026</string>
   <string name="sd_progress_erasing">Стирання SD-карти\u2026</string>
   <string name="sd_format_error">Неможливо стерти SD-карту.</string>

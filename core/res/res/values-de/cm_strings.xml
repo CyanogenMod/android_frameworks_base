@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB über USB &amp; Netzwerk aktiviert</string>
   <string name="adb_active_generic_notification_message">Berühren, um Debugging zu deaktivieren.</string>
   <string name="usb_choose_notification_title">Berühren, um eine USB-Option auszuwählen.</string>
+  <string name="permlab_interceptPackageLaunch">App-Start verhindern</string>
+  <string name="permdesc_interceptPackageLaunch">Ermöglicht der App, den Start anderer Apps zu zu verhindern</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>
   <string name="app_ops_access_notifications">auf Benachrichtigungen zuzugreifen</string>
@@ -176,4 +178,7 @@
   <string name="usb_media_checking">USB-Speicher wird gerade geprüft.</string>
   <string name="usb_media_removed">USB-Speicher wurde entfernt.</string>
   <string name="usb_media_shared">USB-Speicher wird momentan von einem Computer verwendet.</string>
+  <string name="live_display_auto">Automatisch</string>
+  <string name="live_display_day">Tag</string>
+  <string name="live_display_night">Nacht</string>
 </resources>

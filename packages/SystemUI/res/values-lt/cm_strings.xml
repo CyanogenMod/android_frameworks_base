@@ -65,13 +65,13 @@
   <string name="navigation_ring_title">Greitojo paleidimo spartieji klavišai</string>
   <string name="navring_target_reset_message">Ištrinti visus vartotojo sukurtus naršymo juostos sparčiuosius klavišus ir atkurti į numatytuosius?</string>
   <string name="navring_target_reset">Naršymo juostos spartieji klavišai nustatyti iš naujo į numatytuosius</string>
-  <string name="navring_action_open_ime_switcher">Atidaryti IME komutatorių</string>
+  <string name="navring_action_open_ime_switcher">Atidaryti IME perjungiklį</string>
   <string name="navring_action_kill_app">Priverstinai uždaryti programą</string>
   <string name="navring_action_none">Joks</string>
   <string name="navring_action_take_screenshot">Užfiksuoti ekrano kopiją</string>
-  <string name="navring_action_ring_vibrate">Skambėjimas / Vibracija</string>
+  <string name="navring_action_ring_vibrate">Skambėjimas / Vibravimas</string>
   <string name="navring_action_ring_silent">Skambėjimas / Tylus</string>
-  <string name="navring_action_ring_vibrate_silent">Skambėjimas / Vibracija / Tylus</string>
+  <string name="navring_action_ring_vibrate_silent">Skambėjimas / Vibravimas / Tylus</string>
   <string name="navring_action_screen_off">Išjungti ekraną</string>
   <string name="navring_action_torch">Įjungti žibintuvėlį</string>
   <string name="navring_action_google_now">„Google“ Dabar</string>

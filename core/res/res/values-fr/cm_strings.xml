@@ -17,8 +17,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Défaut</string>
-  <string name="profileNameWork">Bureau</string>
+  <string name="profileNameDefault">Par défaut</string>
+  <string name="profileNameWork">Travail</string>
   <string name="profileNameHome">Maison</string>
   <string name="profileNameSilent">Silencieux</string>
   <string name="profileNameNight">Nuit</string>
@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB sur USB et réseau activé</string>
   <string name="adb_active_generic_notification_message">Appuyez pour désactiver le débogage.</string>
   <string name="usb_choose_notification_title">Toucher pour choisir les options USB.</string>
+  <string name="permlab_interceptPackageLaunch">intercepter le lancement d\'application</string>
+  <string name="permdesc_interceptPackageLaunch">Permet à une application d\'intercepter le lancement d\'autres applications</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
   <string name="app_ops_access_location">accéder à votre localisation</string>
   <string name="app_ops_access_notifications">lire vos notifications</string>

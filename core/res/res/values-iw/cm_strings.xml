@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB דרך USB &amp; רשת מופעל</string>
   <string name="adb_active_generic_notification_message">הקש לביטול ADB.</string>
   <string name="usb_choose_notification_title">לחץ כדי לבחור אפשרויות USB.</string>
+  <string name="permlab_interceptPackageLaunch">יירט הפעלת יישום</string>
+  <string name="permdesc_interceptPackageLaunch">מאפשר ליישום ליירט הפעלה של יישומים אחרים</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
   <string name="app_ops_access_notifications">לקרוא את ההודעות שלך</string>
@@ -160,4 +162,20 @@
   <string name="permdesc_accessTorchService">אפשר ליישום לגשת לשירות הפנס (מבזק). לא אמור להידרש ליישומים רגילים.</string>
   <string name="permlab_preventpower">עקוף את כפתור ההפעלה</string>
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
+  <string name="usb_extmedia_format_message">כל המידע על אחסון ה-USB (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
+  <string name="sd_extmedia_format_message">כל המידע על הכרטיס (תחת הנתיב \'%1$s\') ימחק. פעולה זו בלתי הפיכה!</string>
+  <string name="sd_progress_unmounting">מבטל טעינת כרטיס זיכרון\u2026</string>
+  <string name="sd_progress_erasing">מוחק כרטיס SD\u2026</string>
+  <string name="sd_format_error">לא ניתן היה למחוק את כרטיס ה-SD.</string>
+  <string name="sd_media_bad_removal">כרטיס ה-SD הוסר לפני ביטול הטעינה.</string>
+  <string name="sd_media_checking">כרטיס הזיכרון נמצא כעת בבדיקה.</string>
+  <string name="sd_media_removed">כרטיס SD הוסר.</string>
+  <string name="sd_media_shared">כרטיס ה-SD נמצא כעת בשימוש על-ידי מחשב.</string>
+  <string name="usb_progress_unmounting">מסיר אחסון USB\u2026</string>
+  <string name="usb_progress_erasing">מוחק אחסון USB\u2026</string>
+  <string name="usb_format_error">לא ניתן למחוק את אחסון ה-USB.</string>
+  <string name="usb_media_bad_removal">אחסון ה-USB הוסר לפני להיות שטעינתו בוטלה.</string>
+  <string name="usb_media_checking">אחסון ה-USB נבדק כעת.</string>
+  <string name="usb_media_removed">אחסון USB הוסר.</string>
+  <string name="usb_media_shared">אחסון ה-USB נמצא כעת בשימוש על-ידי מחשב.</string>
 </resources>
