@@ -178,4 +178,13 @@
   <string name="usb_media_checking">USBストレージを現在確認しています。</string>
   <string name="usb_media_removed">USBストレージが取り外されました。</string>
   <string name="usb_media_shared">USBストレージは現在パソコンで使用されています。</string>
+  <string name="live_display_auto">自動</string>
+  <string name="live_display_auto_summary">周囲の環境に合わせて画面を自動的に調整する</string>
+  <string name="live_display_day">日中</string>
+  <string name="live_display_day_summary">日中の設定のみを使用する</string>
+  <string name="live_display_night">夜中</string>
+  <string name="live_display_night_summary">夜中の設定のみを使用する</string>
+  <string name="live_display_outdoor">屋外（日光）</string>
+  <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
+  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをクリックして試してみてください。</string>
 </resources>

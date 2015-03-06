@@ -180,4 +180,13 @@
   <string name="usb_media_checking">USB úložisko sa v súčasnosti kontroluje.</string>
   <string name="usb_media_removed">USB úložisko bolo odstránené.</string>
   <string name="usb_media_shared">USB úložisko v súčasnosti používa počítač.</string>
+  <string name="live_display_auto">Automatické</string>
+  <string name="live_display_auto_summary">Automaticky upraviť obrazovku pre podmienky okolia</string>
+  <string name="live_display_day">Deň</string>
+  <string name="live_display_day_summary">Použiť len nastavenia pre deň</string>
+  <string name="live_display_night">Noc</string>
+  <string name="live_display_night_summary">Použiť len nastavenia pre noc</string>
+  <string name="live_display_outdoor">Vonku (jasné slnko)</string>
+  <string name="live_display_outdoor_summary">Používať len nastavenia pre vonkajšie prostredie</string>
+  <string name="live_display_hint">LiveDisplay môže pomôcť znížiť únavu očí a pomôže vám spať v noci. Kliknite sem a vyskúšajte túto funkciu!</string>
 </resources>

@@ -162,4 +162,20 @@
   <string name="permdesc_accessTorchService">Consente ad un\'app di accedere alla torcia. Non dovrebbe essere mai richiesto per le normali applicazioni.</string>
   <string name="permlab_preventpower">cambia comportamento tasto spegnimento</string>
   <string name="permdesc_preventpower">Consente a un\'app di cambiare il comportamento del tasto di spegnimento.</string>
+  <string name="usb_extmedia_format_message">Tutti i dati nell\'archivio USB (sotto il percorso \'%1$s\') saranno eliminati. Questa operazione non può essere annullata!</string>
+  <string name="sd_extmedia_format_message">Tutti i dati sulla scheda SD (sotto il percorso \'%1$s\') saranno eliminati. Questa azione non può essere annullata!</string>
+  <string name="sd_progress_unmounting">Smontando scheda SD\u2026</string>
+  <string name="sd_progress_erasing">Cancellando scheda SD\u2026</string>
+  <string name="sd_format_error">Impossibile cancellare scheda SD.</string>
+  <string name="sd_media_bad_removal">La scheda SD è stata rimossa prima di essere smontata.</string>
+  <string name="sd_media_checking">Controllo della scheda SD in corso.</string>
+  <string name="sd_media_removed">La scheda SD è stata rimossa.</string>
+  <string name="sd_media_shared">La scheda SD è attualmente utilizzata da un computer.</string>
+  <string name="usb_progress_unmounting">Smontando archivio USB\u2026</string>
+  <string name="usb_progress_erasing">Cancellando archivio USB\u2026</string>
+  <string name="usb_format_error">Impossibile cancellare l\'archivio USB.</string>
+  <string name="usb_media_bad_removal">L\'archivio USB è stato rimosso prima di essere smontato.</string>
+  <string name="usb_media_checking">Controllo dell\'archivio USB in corso.</string>
+  <string name="usb_media_removed">L\'archivio USB è stato rimosso.</string>
+  <string name="usb_media_shared">L\'archivio USB è attualmente utilizzato da un computer.</string>
 </resources>
