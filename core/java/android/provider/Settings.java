@@ -3415,6 +3415,12 @@ public final class Settings {
         public static final String RECENTS_SHOW_SEARCH_BAR = "recents_show_search_bar";
 
         /**
+         * Show clear button in recents?
+         * @hide
+         */
+        public static final String RECENTS_SHOW_CLEAR_BUTTON = "recents_show_clear_button";
+
+        /**
          * Whether to enable voice wakeup.  The value is boolean (1 or 0).
          * @hide
          */

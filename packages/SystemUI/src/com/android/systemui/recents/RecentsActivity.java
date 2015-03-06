@@ -251,7 +251,11 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
             if (mEmptyView != null) {
                 mEmptyView.setVisibility(View.GONE);
             }
-            findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
+            boolean showClear = Settings.System.getInt(getContentResolver(),
+                    Settings.System.RECENTS_SHOW_CLEAR_BUTTON, 1) == 1;
+            findViewById(R.id.clear_recents).setVisibility(showClear ?
+                    View.VISIBLE : View.GONE);
+
             boolean showSearchBar = Settings.System.getInt(getContentResolver(),
                        Settings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
             if (mRecentsView.hasSearchBar()) {
