@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Copyright 2014, The Android Open Source Project
+    Copyright (C) 2015 The CyanogenMod Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@
                  android:layout_height="match_parent"
                  android:layout_weight="0"
                  android:gravity="center"
-                 android:src="@drawable/ic_settings"
+                 android:src="@drawable/notification_guts_ic_settings"
                  android:visibility="gone"
                 />
 
@@ -92,7 +92,7 @@
                  android:layout_height="match_parent"
                  android:layout_weight="0"
                  android:gravity="center"
-                 android:src="@drawable/ic_ringer_mute"
+                 android:src="@drawable/notification_guts_ic_ringer_mute"
                  android:visibility="gone"
                  />
 
