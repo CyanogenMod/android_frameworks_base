@@ -120,7 +120,13 @@ public class QSUtils {
     }
 
     public static boolean deviceSupportsNfc(Context context) {
-        return NfcAdapter.getDefaultAdapter(context) != null;
+        boolean isSupported = false;
+        try {
+            isSupported = NfcAdapter.getDefaultAdapter(context) != null;
+        } catch (Exception e) {
+            // we've failed getting a system service :(
+        }
+        return isSupported;
     }
 
     public static boolean deviceSupportsFlashLight(Context context) {
