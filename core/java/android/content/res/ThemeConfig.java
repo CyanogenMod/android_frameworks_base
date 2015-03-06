@@ -140,7 +140,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                     new HashMap<String, AppTheme>() : o.mThemes;
 
             return (currThemes.equals(newThemes) &&
-                    mLastThemeChangeRequestType.equals(o.mLastThemeChangeRequestType));
+                    mLastThemeChangeRequestType == o.mLastThemeChangeRequestType);
         }
         return false;
     }
@@ -159,7 +159,8 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public int hashCode() {
         int hash = 17;
         hash = 31 * hash + mThemes.hashCode();
-        hash = 31 * hash + mLastThemeChangeRequestType.ordinal();
+        hash = 31 * hash + (mLastThemeChangeRequestType == null ? 0 :
+               mLastThemeChangeRequestType.ordinal());
         return hash;
     }
 
