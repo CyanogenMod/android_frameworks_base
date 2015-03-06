@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">SIM/RUIM Perso kilitli</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM Özel kilitli</string>
   <string name="keyguard_accessibility_status">"Durum"</string>
   <string name="kg_dismiss">Vazgeç</string>
   <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Yeni SIM kart\u0020</string>

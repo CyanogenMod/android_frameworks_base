@@ -18,4 +18,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM Perso kilitlidir</string>
+  <string name="keyguard_accessibility_status">"Durum"</string>
+  <string name="kg_dismiss">İmtina</string>
+  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Yeni SIM kart\u0020</string>
+  <string name="lockscreen_sim_error_message_short">Etibarsız kart.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">SIM PIN kodunu daxil edin, <xliff:g id="number">%d</xliff:g> cəhdiniz qalıb, əks halda cihazınızın kilidini açmaq üçün operatorunuzla əlaqə saxlamalı olacaqsınız.</item>
+    <item quantity="other">SIM PIN kodunu daxil edin, <xliff:g id="number">%d</xliff:g> cəhdiniz qalıb.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">SIM kartınız ləğv edildi. Davam etmək üçün PUK kodu daxil edin. <xliff:g id="number">%d</xliff:g> cəhdiniz qalıb, yoxsa SIM kartınız müvəqqəti olaraq istifadəsiz hala gələcək. Daha ətraflı operatorunuzla əlaqə saxlayın.</item>
+    <item quantity="other">SIM kartınız ləğv edildi. Davam etmək üçün PUK kodu daxil edin. <xliff:g id="number">%d</xliff:g> cəhdiniz qalıb, yoxsa SIM kartınız müvəqqəti olaraq istifadəsiz hala gələcək. Daha ətraflı operatorunuzla əlaqə saxlayın.</item>
+  </plurals>
 </resources>
