@@ -592,7 +592,7 @@ public final class LinkProperties implements Parcelable {
      */
     public boolean hasIPv4Address() {
         for (LinkAddress address : mLinkAddresses) {
-          if (address.getAddress() instanceof Inet4Address) {
+          if (address != null && address.getAddress() instanceof Inet4Address) {
             return true;
           }
         }
@@ -607,7 +607,9 @@ public final class LinkProperties implements Parcelable {
      */
     public boolean hasGlobalIPv6Address() {
         for (LinkAddress address : mLinkAddresses) {
-          if (address.getAddress() instanceof Inet6Address && address.isGlobalPreferred()) {
+          if (address != null &&
+              address.getAddress() instanceof Inet6Address &&
+              address.isGlobalPreferred()) {
             return true;
           }
         }
