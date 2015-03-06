@@ -182,4 +182,13 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="usb_media_checking">USB bellek kontrol ediliyor.</string>
   <string name="usb_media_removed">USB bellek kaldırıldı.</string>
   <string name="usb_media_shared">USB bellek şu anda bir bilgisayar tarafından kullanılıyor.</string>
+  <string name="live_display_auto">Otomatik</string>
+  <string name="live_display_auto_summary">Ekranı ortam koşullarIna göre otomatik ayarlar</string>
+  <string name="live_display_day">Gündüz</string>
+  <string name="live_display_day_summary">Sadece gündüz ayarlarını kullan</string>
+  <string name="live_display_night">Gece</string>
+  <string name="live_display_night_summary">Sadece gece ayarlarını kullan</string>
+  <string name="live_display_outdoor">Açık alan (parlak güneş)</string>
+  <string name="live_display_outdoor_summary">Sadece açık alan ayarlarını kullan</string>
+  <string name="live_display_hint">LiveDisplay göz yorgunluğunuzu azaltıp geceleri uyumanıza yardımcı olabilir. Denemek için buraya tıklayın!</string>
 </resources>

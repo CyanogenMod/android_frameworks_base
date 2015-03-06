@@ -81,7 +81,7 @@
   <string name="app_ops_access_notifications">skaityti jūsų pranešimus</string>
   <string name="app_ops_activate_vpn">suaktyvinti VPN</string>
   <string name="app_ops_alarm_wakeup">pažadinti įrenginį</string>
-  <string name="app_ops_su">gauti „root“ prieigą</string>
+  <string name="app_ops_su">gauti „Root“ prieigą</string>
   <string name="app_ops_auto_start">paleisti įsijungiant</string>
   <string name="app_ops_delete_call_log">Ištrinti jūsų skambučių žurnalą</string>
   <string name="app_ops_delete_contacts">Ištrinti jūsų kontaktus</string>

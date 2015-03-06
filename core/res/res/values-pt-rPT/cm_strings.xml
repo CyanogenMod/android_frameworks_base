@@ -74,7 +74,7 @@
   <string name="adb_both_active_notification_title">ABD sobre USB e rede ativado</string>
   <string name="adb_active_generic_notification_message">Toque para desativar a depuração.</string>
   <string name="usb_choose_notification_title">Toque para escolher as opções USB.</string>
-  <string name="permlab_interceptPackageLaunch">Interceptar inicialização de uma aplicação</string>
+  <string name="permlab_interceptPackageLaunch">Intercetar a inicialização de uma aplicação</string>
   <string name="permdesc_interceptPackageLaunch">Permite a uma aplicação intercetar a inicialização de outras aplicações</string>
   <string name="app_ops_access_camera">aceder à câmara</string>
   <string name="app_ops_access_location">aceder à sua localização</string>

@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB over USB &amp; netwerk ingeschakeld</string>
   <string name="adb_active_generic_notification_message">Tik om foutopsporing uit te schakelen.</string>
   <string name="usb_choose_notification_title">Aanraken om USB-opties te kiezen.</string>
+  <string name="permlab_interceptPackageLaunch">Openen van app onderscheppen</string>
+  <string name="permdesc_interceptPackageLaunch">Hiermee kan een app het openen van andere apps onderscheppen</string>
   <string name="app_ops_access_camera">toegang tot camera</string>
   <string name="app_ops_access_location">toegang tot uw locatie</string>
   <string name="app_ops_access_notifications">meldingen lezen</string>
@@ -176,4 +178,5 @@
   <string name="usb_media_checking">USB-opslag wordt gecontroleerd.</string>
   <string name="usb_media_removed">USB-opslag is verwijderd.</string>
   <string name="usb_media_shared">USB-opslag is in gebruik door een computer.</string>
+  <string name="live_display_auto">Automatisch</string>
 </resources>

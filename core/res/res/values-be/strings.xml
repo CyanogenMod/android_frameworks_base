@@ -36,6 +36,12 @@
   <string name="invalidPuk">Увядзіце PUK-код з 8 лічбаў ці больш.</string>
   <string name="needPuk2">Для разблакавання SIM-карткі увядзіце код PUK2.</string>
   <string name="BaMmi">Забарона выклікаў</string>
+  <string name="permdesc_sim_communication">Дазваляе праграме дасылаць каманды да SIM-карткі. Гэта вельмі небяспечна.</string>
+  <string name="permlab_readPrecisePhoneState">чытанне дакладнага стану тэлефону</string>
+  <string name="permdesc_readPrecisePhoneState">Дае праграме доступ да дакладнага стану тэлефону. З дапамогай гэтага дазволу праграма можа вызначыць сапраўдны стан выкліку (актыўны ці ў фонавым рэжыме), памылкі выклікаў, дакладны стан і памылкі перадачы дадзеных.</string>
+  <string name="permlab_transmitIr">выкарыстанне інфрачырвонай перадачы</string>
+  <string name="permdesc_transmitIr" product="tablet">Дазваляе праграме выкарыстоўваць інфрачырвоны перадатчык планшэту.</string>
+  <string name="permdesc_transmitIr" product="default">Дазваляе праграме выкарыстоўваць інфрачырвоны перадатчык тэлефону.</string>
   <string name="cancel">Скасаваць</string>
   <string name="no">Скасаваць</string>
   <string name="capital_on">УКЛ</string>

@@ -178,4 +178,13 @@
   <string name="usb_media_checking">目前正在检查 USB 存储。</string>
   <string name="usb_media_removed">USB 存储已被移除。</string>
   <string name="usb_media_shared">目前 USB 存储正在被计算机使用。</string>
+  <string name="live_display_auto">自动</string>
+  <string name="live_display_auto_summary">按照周围环境自动调整屏幕</string>
+  <string name="live_display_day">白天</string>
+  <string name="live_display_day_summary">仅使用白天设置</string>
+  <string name="live_display_night">夜晚</string>
+  <string name="live_display_night_summary">仅使用夜晚设置</string>
+  <string name="live_display_outdoor">户外（阳光）</string>
+  <string name="live_display_outdoor_summary">仅使用户外设置</string>
+  <string name="live_display_hint">LiveDisplay 可以帮助减少眼睛疲劳，帮助您的夜间睡眠。点击此处来试一试！</string>
 </resources>
