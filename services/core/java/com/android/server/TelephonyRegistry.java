@@ -863,8 +863,31 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         notifyMessageWaitingChangedForPhoneId(mDefaultPhoneId, mDefaultSubId, mwi);
     }
 
-    //FIXME STUBS_LMR1_INTERNAL
     public void notifyMessageWaitingChangedForPhoneId(int phoneId, int subId, boolean mwi) {
+        if (!checkNotifyPermission("notifyMessageWaitingChanged()")) {
+            return;
+        }
+        if (VDBG) {
+            log("notifyMessageWaitingChangedForPhoneId: phoneId = " + phoneId
+                + "subId=" + subId + " mwi=" + mwi);
+        }
+        synchronized (mRecords) {
+            if (validatePhoneId(phoneId)) {
+                mMessageWaiting[phoneId] = mwi;
+                for (Record r : mRecords) {
+                    if (r.matchPhoneStateListenerEvent(
+                            PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR) &&
+                            idMatch(r.subId, subId, phoneId)) {
+                        try {
+                            r.callback.onMessageWaitingIndicatorChanged(mwi);
+                        } catch (RemoteException ex) {
+                            mRemoveList.add(r.binder);
+                        }
+                    }
+                }
+            }
+            handleRemoveListLocked();
+        }
     }
 
     public void notifyCallForwardingChanged(boolean cfi) {
