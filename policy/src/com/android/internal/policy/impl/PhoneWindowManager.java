@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppOpsManager;
+import android.app.IActivityManager;
 import android.app.IUiModeManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -2771,15 +2772,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     preloadRecentApps();
                 }
             } else if (longPress) {
-                if (!keyguardOn && !mHomeConsumed &&
-                        mLongPressOnHomeBehavior != KEY_ACTION_NOTHING) {
-                    if (mLongPressOnHomeBehavior != KEY_ACTION_APP_SWITCH) {
-                        cancelPreloadRecentApps();
-                    }
-                    mHomePressed = true;
+                if (unpinActivity()) {
                     performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-                    performKeyAction(mLongPressOnHomeBehavior);
-                    mHomeConsumed = true;
+                    return -1;
+                } else {
+                    if (!keyguardOn && !mHomeConsumed &&
+                            mLongPressOnHomeBehavior != KEY_ACTION_NOTHING) {
+                        if (mLongPressOnHomeBehavior != KEY_ACTION_APP_SWITCH) {
+                            cancelPreloadRecentApps();
+                        }
+                        mHomePressed = true;
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        performKeyAction(mLongPressOnHomeBehavior);
+                        mHomeConsumed = true;
+                    }
                 }
             }
             return -1;
@@ -2821,14 +2827,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         return -1;
                     }
                 } else if (longPress) {
-                    if (!keyguardOn && mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
-                        if (mLongPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
-                            cancelPreloadRecentApps();
-                        }
+                    if (unpinActivity()) {
                         performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-                        performKeyAction(mLongPressOnMenuBehavior);
-                        mMenuPressed = false;
                         return -1;
+                    } else {
+                        if (!keyguardOn && mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
+                            if (mLongPressOnMenuBehavior != KEY_ACTION_APP_SWITCH) {
+                                cancelPreloadRecentApps();
+                            } else if (unpinActivity()) {
+                                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                            } else {
+                                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                                performKeyAction(mLongPressOnMenuBehavior);
+                            }
+                            mMenuPressed = false;
+                            return -1;
+                        }
                     }
                 }
             }
@@ -3320,6 +3334,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // re-acquire status bar service next time it is needed.
             mStatusBarService = null;
         }
+    }
+
+    private boolean unpinActivity() {
+        boolean isAccessiblityEnabled = mAccessibilityManager.isEnabled();
+        try {
+            IActivityManager activityManager = ActivityManagerNative.getDefault();
+            if (isAccessiblityEnabled && activityManager.isInLockTaskMode()) {
+                activityManager.stopLockTaskModeOnCurrent();
+                return true;
+            }
+        } catch (RemoteException e) {
+            // silently fail
+        }
+        return false;
     }
 
     /**
