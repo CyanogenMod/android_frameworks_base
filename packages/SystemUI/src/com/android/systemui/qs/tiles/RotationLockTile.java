@@ -39,13 +39,21 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
     private final AnimationIcon mAutoToLandscape
             = new AnimationIcon(R.drawable.ic_landscape_from_auto_rotate_animation);
 
+
     private static final Intent DISPLAY_SETTINGS = new Intent(Settings.ACTION_DISPLAY_SETTINGS);
+    private static final Intent DISPLAY_ROTATION_SETTINGS =
+            new Intent("android.settings.DISPLAY_ROTATION_SETTINGS");
 
     private final RotationLockController mController;
+
+    private final boolean mAdvancedMode;
 
     public RotationLockTile(Host host) {
         super(host);
         mController = host.getRotationLockController();
+
+        mAdvancedMode = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.ADVANCED_MODE, 1) == 1;
     }
 
     @Override
@@ -72,7 +80,11 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleLongClick() {
-        mHost.startSettingsActivity(DISPLAY_SETTINGS);
+        if (!mAdvancedMode) {
+            mHost.startSettingsActivity(DISPLAY_SETTINGS);
+        } else {
+            mHost.startSettingsActivity(DISPLAY_ROTATION_SETTINGS);
+        }
     }
 
     @Override
