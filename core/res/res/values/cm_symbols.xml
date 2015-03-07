@@ -300,4 +300,7 @@
 
     <java-symbol type="string" name="lock_to_app_toast_no_navbar" />
     <java-symbol type="string" name="lock_to_app_description_no_navbar" />
+
+    <!-- Advanced settings switch -->
+    <java-symbol type="bool" name="config_advancedSettingsMode" />
 </resources>
