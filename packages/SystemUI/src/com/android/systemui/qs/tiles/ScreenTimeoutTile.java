@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The CyanogenMod Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
-    private static final Intent SETTINGS_INTENT = new Intent("android.settings.DISPLAY_SETTINGS");
+
+    private static final Intent SETTINGS_INTENT = new Intent(Settings.ACTION_DISPLAY_SETTINGS);
     private static final String TIMEOUT_ENTRIES_NAME = "screen_timeout_entries";
     private static final String TIMEOUT_VALUES_NAME = "screen_timeout_values";
     private static final String SETTINGS_PACKAGE_NAME = "com.android.settings";
