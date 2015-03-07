@@ -2139,4 +2139,7 @@
     <integer name="config_dayColorTemperature">6500</integer>
     <integer name="config_nightColorTemperature">4500</integer>
     <integer name="config_outdoorAmbientLux">9000</integer>
+
+    <!-- Boolean to enable the advanced settings switch -->
+    <bool name="config_advancedSettingsMode">true</bool>
 </resources>
