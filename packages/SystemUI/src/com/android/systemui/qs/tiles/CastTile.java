@@ -89,6 +89,11 @@ public class CastTile extends QSTile<QSTile.BooleanState> {
     }
 
     @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(CAST_SETTINGS);
+    }
+
+    @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.visible = !(mKeyguard.isSecure() && mKeyguard.isShowing());
         state.label = mContext.getString(R.string.quick_settings_cast_title);
