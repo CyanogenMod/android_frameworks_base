@@ -164,7 +164,7 @@ public class ProfilesTile extends QSTile<QSTile.State> {
 
         @Override
         public Intent getSettingsIntent() {
-            return new Intent("com.android.settings.PROFILES_SETTINGS");
+            return new Intent("android.settings.PROFILES_SETTINGS");
         }
 
         @Override
