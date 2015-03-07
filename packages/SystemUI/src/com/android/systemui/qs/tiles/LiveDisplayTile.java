@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The CyanogenMod Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -29,7 +30,9 @@ import com.android.systemui.qs.QSTile;
 
 /** Quick settings tile: LiveDisplay mode switcher **/
 public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
-    private static final Intent LIVEDISPLAY_SETTINGS = new Intent("android.settings.LIVEDISPLAY_SETTINGS");
+
+    private static final Intent LIVEDISPLAY_SETTINGS =
+            new Intent("android.settings.LIVEDISPLAY_SETTINGS");
 
     private final LiveDisplayObserver mObserver;
     private final String[] mEntries;

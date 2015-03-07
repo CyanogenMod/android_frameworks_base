@@ -17,6 +17,7 @@
 package com.android.systemui.qs.tiles;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
@@ -28,6 +29,8 @@ import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 
 public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
+
+    private static final Intent BATTERY_SETTINGS = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
 
     private int[] mEntryIconRes;
     private String[] mEntries;
@@ -75,6 +78,11 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     @Override
     protected void handleClick() {
         changeToNextProfile();
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(BATTERY_SETTINGS);
     }
 
     @Override

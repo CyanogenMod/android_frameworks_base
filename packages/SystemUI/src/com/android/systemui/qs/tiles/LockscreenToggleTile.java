@@ -39,6 +39,9 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
     private static final String KEY_ENABLED = "lockscreen_enabled";
 
+    private static final Intent LOCK_SCREEN_SETTINGS =
+            new Intent("android.settings.LOCK_SCREEN_SETTINGS");
+
     private KeyguardViewMediator mKeyguardViewMediator;
     private KeyguardMonitor mKeyguard;
     private boolean mPersistedState;
@@ -86,6 +89,11 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         setPersistedState(!mPersistedState);
         applyLockscreenState();
         refreshState();
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startSettingsActivity(LOCK_SCREEN_SETTINGS);
     }
 
     @Override
