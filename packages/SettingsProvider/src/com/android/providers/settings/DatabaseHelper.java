@@ -1939,7 +1939,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
                         + " VALUES(?,?);");
                 loadBooleanSetting(stmt, Secure.ADVANCED_MODE,
-                        R.bool.def_advanced_mode);
+                        com.android.internal.R.bool.config_advancedSettingsMode);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -2633,7 +2633,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.bool.def_cm_stats_collection);
 
             loadBooleanSetting(stmt, Settings.Secure.ADVANCED_MODE,
-                    R.bool.def_advanced_mode);
+                    com.android.internal.R.bool.config_advancedSettingsMode);
 
             loadDefaultThemeSettings(stmt);
             loadProtectedSmsSetting(stmt);
