@@ -1677,10 +1677,7 @@ public class NotificationPanelView extends PanelView implements
         }
     }
 
-    public void onAnimationToSideStarted(boolean a,float b,float c) {
-    }
-
-    public void onAnimationToSideStarted(boolean rightPage) {
+    public void onAnimationToSideStarted(boolean rightPage, float translation, float vel) {
         boolean start = getLayoutDirection() == LAYOUT_DIRECTION_RTL ? rightPage : !rightPage;
         mIsLaunchTransitionRunning = true;
         mLaunchAnimationEndRunnable = null;
