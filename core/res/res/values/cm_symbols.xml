@@ -297,4 +297,7 @@
     <java-symbol type="integer" name="config_dayColorTemperature" />
     <java-symbol type="integer" name="config_nightColorTemperature" />
     <java-symbol type="integer" name="config_outdoorAmbientLux" />
+
+    <!-- Advanced settings switch -->
+    <java-symbol type="bool" name="config_advancedSettingsMode" />
 </resources>
