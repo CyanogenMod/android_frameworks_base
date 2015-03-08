@@ -56,55 +56,54 @@ import java.util.ArrayList;
 
 public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     // debug
-    static final String TAG = "StatusBar.MSimNetworkController";
-    static final boolean DEBUG = false;
-    static final boolean CHATTY = true; // additional diagnostics, but not logspew
+    private static final String TAG = "StatusBar.MSimNetworkController";
+    private static final boolean DEBUG = false;
+    private static final boolean CHATTY = true; // additional diagnostics, but not logspew
 
     private int mUserId;
-    private SettingsObserver mSettingsObserver;
+    private final SettingsObserver mSettingsObserver;
 
     // telephony
-    boolean[] mMSimDataConnected;
-    IccCardConstants.State[] mMSimState;
-    int[] mMSimDataActivity;
-    int[] mMSimDataServiceState;
-    ServiceState[] mMSimServiceState;
-    SignalStrength[] mMSimSignalStrength;
+    private final boolean[] mMSimDataConnected;
+    private final IccCardConstants.State[] mMSimState;
+    private final int[] mMSimDataActivity;
+    private final int[] mMSimDataServiceState;
+    private final ServiceState[] mMSimServiceState;
+    private final SignalStrength[] mMSimSignalStrength;
     private PhoneStateListener[] mMSimPhoneStateListener;
-    private String[] mCarrierTextSub;
+    private final String[] mCarrierTextSub;
 
-    String[] mMSimNetworkName;
-    String[] mOriginalSpn;
-    String[] mOriginalPlmn;
-    int[] mMSimPhoneSignalIconId;
-    int[] mMSimLastPhoneSignalIconId;
-    private int[] mMSimIconId;
-    int[] mMSimDataDirectionIconId; // data + data direction on phones
-    int[] mMSimDataSignalIconId;
-    int[] mMSimDataTypeIconId;
-    int[] mMSimDataRoamIconId;
-    int[] mNoMSimIconId;
-    int[] mMSimMobileActivityIconId; // overlay arrows for data direction
+    private final String[] mMSimNetworkName;
+    private final String[] mOriginalSpn;
+    private final String[] mOriginalPlmn;
+    private final int[] mMSimPhoneSignalIconId;
+    private final int[] mMSimLastPhoneSignalIconId;
+    private final int[] mMSimDataDirectionIconId; // data + data direction on phones
+    private final int[] mMSimDataSignalIconId;
+    private final int[] mMSimDataTypeIconId;
+    private final int[] mMSimDataRoamIconId;
+    private final int[] mNoMSimIconId;
+    private final int[] mMSimMobileActivityIconId; // overlay arrows for data direction
 
-    String[] mMSimContentDescriptionPhoneSignal;
-    String[] mMSimContentDescriptionCombinedSignal;
-    String[] mMSimContentDescriptionDataType;
+    private final String[] mMSimContentDescriptionPhoneSignal;
+    private final String[] mMSimContentDescriptionCombinedSignal;
+    private final String[] mMSimContentDescriptionDataType;
 
-    int[] mMSimLastDataDirectionIconId;
-    int[] mMSimLastCombinedSignalIconId;
-    int[] mMSimLastDataTypeIconId;
-    int[] mMSimcombinedSignalIconId;
-    int[] mMSimcombinedActivityIconId;
-    int[] mMSimLastcombinedActivityIconId;
-    int[] mMSimLastSimIconId;
+    private final int[] mMSimLastDataDirectionIconId;
+    private final int[] mMSimLastCombinedSignalIconId;
+    private final int[] mMSimLastDataTypeIconId;
+    private final int[] mMSimcombinedSignalIconId;
+    private final int[] mMSimcombinedActivityIconId;
+    private final int[] mMSimLastcombinedActivityIconId;
+    private final int[] mMSimLastSimIconId;
     private int mDefaultPhoneId;
-    boolean[] mShowSpn;
-    boolean[] mShowPlmn;
-    String[] mSpn;
-    String[] mPlmn;
-    int mPhoneCount = 0;
+    private final boolean[] mShowSpn;
+    private final boolean[] mShowPlmn;
+    private final String[] mSpn;
+    private final String[] mPlmn;
+    private int mPhoneCount = 0;
     private SparseLongArray mPhoneIdSubIdMapping;
-    ArrayList<MSimSignalCluster> mSimSignalClusters = new ArrayList<MSimSignalCluster>();
+    private final ArrayList<MSimSignalCluster> mSimSignalClusters = new ArrayList<MSimSignalCluster>();
 
     public interface MSimSignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
@@ -129,7 +128,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mMSimDataServiceState = new int[numPhones];
         mMSimServiceState = new ServiceState[numPhones];
         mMSimState = new IccCardConstants.State[numPhones];
-        mMSimIconId = new int[numPhones];
+        int[] mMSimIconId = new int[numPhones];
         mMSimPhoneSignalIconId = new int[numPhones];
         mMSimDataTypeIconId = new int[numPhones];
         mMSimDataRoamIconId = new int[numPhones];
@@ -295,7 +294,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         mSimSignalClusters.clear();
     }
 
-    public void refreshSignalCluster(MSimSignalCluster cluster, int phoneId) {
+    void refreshSignalCluster(MSimSignalCluster cluster, int phoneId) {
         cluster.setWifiIndicators(
                 // only show wifi in the cluster if connected or if wifi-only
                 mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature || mAppopsStrictEnabled),
@@ -358,103 +357,115 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        if (action.equals(WifiManager.RSSI_CHANGED_ACTION)
-                || action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)
-                || action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
-            updateWifiState(intent);
-            refreshViews(mDefaultPhoneId);
-        } else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
-            updateSimState(intent);
-            for (int sub = 0; sub < TelephonyManager.getDefault().getPhoneCount(); sub++) {
-                updateDataIcon(sub);
-                refreshViews(sub);
-            }
-        } else if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
-            final long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, 0);
-            Slog.d(TAG, "Received SPN update on subId :" + subId);
-            Integer phoneId = getPhoneId(subId);
-            Slog.d(TAG, "Received SPN update on phoneId :" + phoneId);
-            mShowSpn[phoneId] = intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false);
-            mSpn[phoneId] = intent.getStringExtra(TelephonyIntents.EXTRA_SPN);
-            mShowPlmn[phoneId] = intent.getBooleanExtra(
-                    TelephonyIntents.EXTRA_SHOW_PLMN, false);
-            mPlmn[phoneId] = intent.getStringExtra(TelephonyIntents.EXTRA_PLMN);
-            mOriginalSpn[phoneId] = mSpn[phoneId];
-            mOriginalPlmn[phoneId] = mPlmn[phoneId];
-            if (mContext.getResources().getBoolean(com.android.internal.R.bool.
-                    config_monitor_locale_change)) {
-                if (mShowSpn[phoneId] && mSpn[phoneId] != null) {
-                    mSpn[phoneId] = getLocaleString(mOriginalSpn[phoneId]);
+        switch (action) {
+            case WifiManager.RSSI_CHANGED_ACTION:
+            case WifiManager.WIFI_STATE_CHANGED_ACTION:
+            case WifiManager.NETWORK_STATE_CHANGED_ACTION:
+                updateWifiState(intent);
+                refreshViews(mDefaultPhoneId);
+                break;
+            case TelephonyIntents.ACTION_SIM_STATE_CHANGED:
+                updateSimState(intent);
+                for (int sub = 0; sub < TelephonyManager.getDefault().getPhoneCount(); sub++) {
+                    updateDataIcon(sub);
+                    refreshViews(sub);
                 }
-                if (mShowPlmn[phoneId] && mPlmn[phoneId] != null) {
-                    mPlmn[phoneId] = getLocaleString(mOriginalPlmn[phoneId]);
+                break;
+            case TelephonyIntents.SPN_STRINGS_UPDATED_ACTION: {
+                final long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, 0);
+                Slog.d(TAG, "Received SPN update on subId :" + subId);
+                Integer phoneId = getPhoneId(subId);
+                Slog.d(TAG, "Received SPN update on phoneId :" + phoneId);
+                mShowSpn[phoneId] = intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false);
+                mSpn[phoneId] = intent.getStringExtra(TelephonyIntents.EXTRA_SPN);
+                mShowPlmn[phoneId] = intent.getBooleanExtra(
+                        TelephonyIntents.EXTRA_SHOW_PLMN, false);
+                mPlmn[phoneId] = intent.getStringExtra(TelephonyIntents.EXTRA_PLMN);
+                mOriginalSpn[phoneId] = mSpn[phoneId];
+                mOriginalPlmn[phoneId] = mPlmn[phoneId];
+                if (mContext.getResources().getBoolean(com.android.internal.R.bool.
+                        config_monitor_locale_change)) {
+                    if (mShowSpn[phoneId] && mSpn[phoneId] != null) {
+                        mSpn[phoneId] = getLocaleString(mOriginalSpn[phoneId]);
+                    }
+                    if (mShowPlmn[phoneId] && mPlmn[phoneId] != null) {
+                        mPlmn[phoneId] = getLocaleString(mOriginalPlmn[phoneId]);
+                    }
                 }
+
+                updateNetworkName(mShowSpn[phoneId], mSpn[phoneId], mShowPlmn[phoneId],
+                        mPlmn[phoneId], phoneId);
+                updateCarrierText(phoneId);
+                refreshViews(phoneId);
+                break;
             }
+            case ConnectivityManager.CONNECTIVITY_ACTION_IMMEDIATE:
+            case ConnectivityManager.INET_CONDITION_ACTION:
+                updateConnectivity(intent);
+                refreshViews(mDefaultPhoneId);
+                break;
+            case Intent.ACTION_CONFIGURATION_CHANGED:
+                //parse the string to current language string in public resources
+                if (mContext.getResources().getBoolean(com.android.internal.R.
+                        bool.config_monitor_locale_change)) {
+                    for (int i = 0; i < mPhoneCount; i++) {
+                        if (mShowSpn[i] && mSpn[i] != null) {
+                            mSpn[i] = getLocaleString(mOriginalSpn[i]);
+                        }
+                        if (mShowPlmn[i] && mPlmn[i] != null) {
+                            mPlmn[i] = getLocaleString(mOriginalPlmn[i]);
+                        }
 
-            updateNetworkName(mShowSpn[phoneId], mSpn[phoneId], mShowPlmn[phoneId],
-                    mPlmn[phoneId], phoneId);
-            updateCarrierText(phoneId);
-            refreshViews(phoneId);
-        } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION_IMMEDIATE) ||
-                action.equals(ConnectivityManager.INET_CONDITION_ACTION)) {
-            updateConnectivity(intent);
-            refreshViews(mDefaultPhoneId);
-        } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
-            //parse the string to current language string in public resources
-            if (mContext.getResources().getBoolean(com.android.internal.R.
-                    bool.config_monitor_locale_change)) {
-                for (int i = 0; i < mPhoneCount; i++) {
-                    if (mShowSpn[i] && mSpn[i] != null) {
-                        mSpn[i] = getLocaleString(mOriginalSpn[i]);
+                        updateNetworkName(mShowSpn[i], mSpn[i], mShowPlmn[i], mPlmn[i], i);
+                        updateCarrierText(i);
+                        refreshViews(i);
                     }
-                    if (mShowPlmn[i] && mPlmn[i] != null) {
-                        mPlmn[i] = getLocaleString(mOriginalPlmn[i]);
-                    }
-
-                    updateNetworkName(mShowSpn[i], mSpn[i], mShowPlmn[i], mPlmn[i], i);
+                } else {
+                    refreshViews(mDefaultPhoneId);
+                }
+                break;
+            case Intent.ACTION_AIRPLANE_MODE_CHANGED:
+                updateAirplaneMode();
+                for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
+                    updateSimIcon(i);
                     updateCarrierText(i);
+                }
+                refreshViews(mDefaultPhoneId);
+                break;
+            case WimaxManagerConstants.NET_4G_STATE_CHANGED_ACTION:
+            case WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION:
+            case WimaxManagerConstants.WIMAX_NETWORK_STATE_CHANGED_ACTION:
+                updateWimaxState(intent);
+                refreshViews(mDefaultPhoneId);
+                break;
+            case TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED:
+                unregisterPhoneStateListener();
+                registerPhoneStateListener(mContext);
+                mDefaultPhoneId = getDefaultPhoneId();
+                for (int i = 0; i < mPhoneCount; i++) {
+                    updateIconSet(i);
+                    updateCarrierText(i);
+                    updateTelephonySignalStrength(i);
+                    updateDataNetType(i);
+                    updateDataIcon(i);
                     refreshViews(i);
                 }
-            } else {
-                refreshViews(mDefaultPhoneId);
-            }
-        } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
-            updateAirplaneMode();
-            for (int i = 0; i < TelephonyManager.getDefault().getPhoneCount(); i++) {
-                updateSimIcon(i);
-                updateCarrierText(i);
-            }
-            refreshViews(mDefaultPhoneId);
-        } else if (action.equals(WimaxManagerConstants.NET_4G_STATE_CHANGED_ACTION) ||
-                action.equals(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION) ||
-                action.equals(WimaxManagerConstants.WIMAX_NETWORK_STATE_CHANGED_ACTION)) {
-            updateWimaxState(intent);
-            refreshViews(mDefaultPhoneId);
-        } else if (action.equals(TelephonyIntents.ACTION_SUBINFO_RECORD_UPDATED)) {
-            unregisterPhoneStateListener();
-            registerPhoneStateListener(mContext);
-            mDefaultPhoneId = getDefaultPhoneId();
-            for (int i = 0; i < mPhoneCount; i++) {
-                updateIconSet(i);
-                updateCarrierText(i);
-                updateTelephonySignalStrength(i);
-                updateDataNetType(i);
-                updateDataIcon(i);
-                refreshViews(i);
-            }
-        } else if (action.equals(TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED)) {
-            // Update data in QS
-            long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, -1);
+                break;
+            case TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED: {
+                // Update data in QS
+                long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, -1);
 
-            if (subId == -1) {
-                Slog.e(TAG, "No subId in ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED");
-                return;
-            }
+                if (subId == -1) {
+                    Slog.e(TAG, "No subId in ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED");
+                    return;
+                }
 
-            int phoneId = getPhoneId(subId);
-            updateTelephonySignalStrength(phoneId);
-            updateDataNetType(phoneId);
-            refreshViews(phoneId);
+                int phoneId = getPhoneId(subId);
+                updateTelephonySignalStrength(phoneId);
+                updateDataNetType(phoneId);
+                refreshViews(phoneId);
+                break;
+            }
         }
     }
 
@@ -507,8 +518,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
             carrierName = carrierName + "    " + mCarrierTextSub[i];
         }
 
-        for (int i = 0; i < mMobileLabelViews.size(); i++) {
-            TextView v = mMobileLabelViews.get(i);
+        for (TextView v : mMobileLabelViews) {
             v.setText(carrierName);
             v.setVisibility(View.VISIBLE);
         }
@@ -620,7 +630,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
 
     // ===== Wifi ===================================================================
 
-    class MSimWifiHandler extends WifiHandler {
+    private class MSimWifiHandler extends WifiHandler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -1023,11 +1033,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         }
 
         mInetCondition = (connectionStatus > INET_CONDITION_THRESHOLD ? 1 : 0);
-        if (info != null && info.getType() == ConnectivityManager.TYPE_BLUETOOTH) {
-            mBluetoothTethered = info.isConnected();
-        } else {
-            mBluetoothTethered = false;
-        }
+        mBluetoothTethered = info != null && info.getType() == ConnectivityManager.TYPE_BLUETOOTH && info.isConnected();
 
         // We want to update all the icons, all at once, for any condition change
         updateWimaxIcons();
@@ -1042,12 +1048,12 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
 
     // ===== Update the views =======================================================
 
-    protected void refreshViews(int phoneId) {
+    void refreshViews(int phoneId) {
         Context context = mContext;
 
         String combinedLabel = "";
-        String mobileLabel = "";
-        String wifiLabel = "";
+        String mobileLabel;
+        String wifiLabel;
         int N;
         if (DEBUG) {
             Slog.d(TAG, "refreshViews phoneId =" + phoneId + "mMSimDataConnected ="
@@ -1158,11 +1164,8 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
         } else if (mMSimServiceState[phoneId] == null) {
             // airplane mode enabled, but no state yet - display icon to be on the safe side
             displayAirplaneModeIcon = true;
-        } else if (hasService(phoneId) || mMSimServiceState[phoneId].isEmergencyOnly()) {
-            // don't display airplane mode icon in emergency calls mode
-            displayAirplaneModeIcon = false;
         } else {
-            displayAirplaneModeIcon = true;
+            displayAirplaneModeIcon = !(hasService(phoneId) || mMSimServiceState[phoneId].isEmergencyOnly());
         }
 
         if (displayAirplaneModeIcon) {

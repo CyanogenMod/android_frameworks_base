@@ -19,9 +19,6 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.os.Build;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionManager;
 import android.os.SystemProperties;
@@ -35,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.internal.telephony.PhoneConstants;
-import com.android.systemui.statusbar.policy.NetworkControllerImpl;
 import com.android.systemui.statusbar.policy.MSimNetworkControllerImpl;
 
 import com.android.systemui.R;
@@ -46,41 +42,42 @@ public class MSimSignalClusterView
         extends LinearLayout
         implements MSimNetworkControllerImpl.MSimSignalCluster {
 
-    static final boolean DEBUG = false;
-    static final String TAG = "MSimSignalClusterView";
+    private static final boolean DEBUG = false;
+    private static final String TAG = "MSimSignalClusterView";
 
     private final int STATUS_BAR_STYLE_ANDROID_DEFAULT = 0;
     private final int STATUS_BAR_STYLE_CDMA_1X_COMBINED = 1;
-    private final int STATUS_BAR_STYLE_DEFAULT_DATA = 2;
     private final int STATUS_BAR_STYLE_DATA_VOICE = 3;
 
     private int mStyle = 0;
-    private int[] mShowTwoBars;
+    private final int[] mShowTwoBars;
 
-    MSimNetworkControllerImpl mMSimNC;
+    private MSimNetworkControllerImpl mMSimNC;
 
     private boolean mWifiVisible = false;
     private int mWifiStrengthId = 0, mWifiActivityId = 0;
     private boolean mMobileVisible = false;
-    private int[] mMobileStrengthId;
-    private int[] mMobileActivityId;
-    private int[] mMobileTypeId;
-    private int[] mMobileRoamId;
-    private int[] mNoSimIconId;
+    private final int[] mMobileStrengthId;
+    private final int[] mMobileActivityId;
+    private final int[] mMobileTypeId;
+    private final int[] mMobileRoamId;
+    private final int[] mNoSimIconId;
     private boolean mIsAirplaneMode = false;
     private boolean mShowNoSimSlots = true;
     private int mAirplaneIconId = 0;
     private String mWifiDescription, mMobileTypeDescription;
-    private String[] mMobileDescription;
+    private final String[] mMobileDescription;
 
-    ViewGroup mWifiGroup;
-    ViewGroup[] mMobileGroup;
-    ImageView mWifi, mWifiActivity, mAirplane;
-    ImageView[] mNoSimSlot;
-    ImageView[] mMobile;
-    ImageView[] mMobileRoam;
-    ImageView[] mMobileActivity;
-    ImageView[] mMobileType;
+    private ViewGroup mWifiGroup;
+    private final ViewGroup[] mMobileGroup;
+    private ImageView mWifi;
+    private ImageView mWifiActivity;
+    private ImageView mAirplane;
+    private final ImageView[] mNoSimSlot;
+    private final ImageView[] mMobile;
+    private final ImageView[] mMobileRoam;
+    private final ImageView[] mMobileActivity;
+    private final ImageView[] mMobileType;
 
     //cdma and 1x
     private boolean mMobileCdmaVisible = false;
@@ -92,41 +89,42 @@ public class MSimSignalClusterView
     private ImageView mMobileCdma3g, mMobileCdma1x, mMobileCdma1xOnly;
 
     //data & voice
-    private boolean[] mMobileDataVoiceVisible;
-    private int[] mMobileSignalDataId;
-    private int[] mMobileSignalVoiceId;
-    private ViewGroup[] mMobileDataVoiceGroup;
-    private ImageView[] mMobileSignalData, mMobileSignalVoice;
+    private final boolean[] mMobileDataVoiceVisible;
+    private final int[] mMobileSignalDataId;
+    private final int[] mMobileSignalVoiceId;
+    private final ViewGroup[] mMobileDataVoiceGroup;
+    private final ImageView[] mMobileSignalData;
+    private final ImageView[] mMobileSignalVoice;
 
     //data
-    private boolean mDataVisible[];
-    private int mDataActivityId[];
-    private ViewGroup mDataGroup[];
-    private ImageView mDataActivity[];
+    private final boolean[] mDataVisible;
+    private final int[] mDataActivityId;
+    private final ViewGroup[] mDataGroup;
+    private final ImageView[] mDataActivity;
 
     //spacer
     private View mSpacer;
 
-    private int[] mMobileGroupResourceId = {R.id.mobile_combo, R.id.mobile_combo_sub2,
+    private final int[] mMobileGroupResourceId = {R.id.mobile_combo, R.id.mobile_combo_sub2,
                                           R.id.mobile_combo_sub3};
-    private int[] mMobileRoamResourceId = {R.id.mobile_roaming, R.id.mobile_roaming_sub2,
+    private final int[] mMobileRoamResourceId = {R.id.mobile_roaming, R.id.mobile_roaming_sub2,
                                               R.id.mobile_roaming_sub3 };
-    private int[] mMobileResourceId = {R.id.mobile_signal, R.id.mobile_signal_sub2,
+    private final int[] mMobileResourceId = {R.id.mobile_signal, R.id.mobile_signal_sub2,
                                      R.id.mobile_signal_sub3};
-    private int[] mMobileActResourceId = {R.id.mobile_inout, R.id.mobile_inout_sub2,
+    private final int[] mMobileActResourceId = {R.id.mobile_inout, R.id.mobile_inout_sub2,
                                         R.id.mobile_inout_sub3};
-    private int[] mMobileTypeResourceId = {R.id.mobile_type, R.id.mobile_type_sub2,
+    private final int[] mMobileTypeResourceId = {R.id.mobile_type, R.id.mobile_type_sub2,
                                          R.id.mobile_type_sub3};
-    private int[] mNoSimSlotResourceId = {R.id.no_sim, R.id.no_sim_slot2, R.id.no_sim_slot3};
-    private int[] mDataGroupResourceId = {R.id.data_combo, R.id.data_combo_sub2,
+    private final int[] mNoSimSlotResourceId = {R.id.no_sim, R.id.no_sim_slot2, R.id.no_sim_slot3};
+    private final int[] mDataGroupResourceId = {R.id.data_combo, R.id.data_combo_sub2,
                                         R.id.data_combo_sub3};
-    private int[] mDataActResourceId = {R.id.data_inout, R.id.data_inout_sub2,
+    private final int[] mDataActResourceId = {R.id.data_inout, R.id.data_inout_sub2,
                                         R.id.data_inout_sub3};
-    private int[] mMobileDataVoiceGroupResourceId = {R.id.mobile_data_voice,
+    private final int[] mMobileDataVoiceGroupResourceId = {R.id.mobile_data_voice,
             R.id.mobile_data_voice_sub2, R.id.mobile_data_voice_sub3};
-    private int[] mMobileSignalDataResourceId = {R.id.mobile_signal_data,
+    private final int[] mMobileSignalDataResourceId = {R.id.mobile_signal_data,
             R.id.mobile_signal_data_sub2, R.id.mobile_signal_data_sub3};
-    private int[] mMobileSignalVoiceResourceId = {R.id.mobile_signal_voice,
+    private final int[] mMobileSignalVoiceResourceId = {R.id.mobile_signal_voice,
             R.id.mobile_signal_voice_sub2, R.id.mobile_signal_voice_sub3};
     private final int mNumPhones = TelephonyManager.getDefault().getPhoneCount();
 
@@ -285,7 +283,7 @@ public class MSimSignalClusterView
         } else {
             mMobileActivityId[phoneId] = 0;
             mDataActivityId[phoneId] = activityIcon;
-            mDataVisible[phoneId] = (activityIcon != 0) ? true : false;
+            mDataVisible[phoneId] = (activityIcon != 0);
         }
         if (mStyle == STATUS_BAR_STYLE_CDMA_1X_COMBINED) {
             if (phoneId == PhoneConstants.PHONE_ID1) {
@@ -295,7 +293,7 @@ public class MSimSignalClusterView
                     mMobileStrengthId[0] = 0;
 
                     mMobileCdma3gId = strengthIcon;
-                    mMobileCdma1xId = getCdma2gId(mMobileCdma3gId);
+                    mMobileCdma1xId = getCdma2gId();
 
                     if (isCdmaDataOnlyMode(phoneId)) {
                         mMobileCdmaVisible = false;
@@ -638,6 +636,7 @@ public class MSimSignalClusterView
     }
 
     private boolean showMobileActivity() {
+        int STATUS_BAR_STYLE_DEFAULT_DATA = 2;
         return mStyle == STATUS_BAR_STYLE_DEFAULT_DATA
                 || (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT);
     }
@@ -744,7 +743,7 @@ public class MSimSignalClusterView
         return returnVal;
     }
 
-    private int getCdma2gId(int icon) {
+    private int getCdma2gId() {
         if (mMSimNC == null) {
             return 0;
         }
