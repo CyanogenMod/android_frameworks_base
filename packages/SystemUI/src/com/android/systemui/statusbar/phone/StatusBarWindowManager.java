@@ -55,26 +55,28 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private final SurfaceSession mFxSession;
     private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
 
-    private final KeyguardMonitor mKeyguardMonitor;
+    private KeyguardMonitor mKeyguardMonitor;
 
     private static final int TYPE_LAYER_MULTIPLIER = 10000; // refer to WindowManagerService.TYPE_LAYER_MULTIPLIER
     private static final int TYPE_LAYER_OFFSET = 1000;      // refer to WindowManagerService.TYPE_LAYER_OFFSET
 
     private final State mCurrentState = new State();
 
-    public StatusBarWindowManager(Context context, KeyguardMonitor kgm) {
+    public StatusBarWindowManager(Context context) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
-
-        mKeyguardMonitor = kgm;
-        mKeyguardMonitor.addCallback(this);
 
         mKeyguardBlurEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_ui_blur_enabled);
         mFxSession = new SurfaceSession();
         mStatusBarLayer = mPolicy.windowTypeToLayerLw(WindowManager.LayoutParams.TYPE_STATUS_BAR)
                           * TYPE_LAYER_MULTIPLIER + TYPE_LAYER_OFFSET;
+    }
+
+    public void setKeyguardMonitor(KeyguardMonitor kgm) {
+        mKeyguardMonitor = kgm;
+        kgm.addCallback(this);
     }
 
     private boolean shouldEnableKeyguardScreenRotation() {
