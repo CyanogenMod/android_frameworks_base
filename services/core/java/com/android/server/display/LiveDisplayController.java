@@ -57,10 +57,11 @@ public class LiveDisplayController {
 
     private static final int OFF_TEMPERATURE = 6500;
 
-    public static final int MODE_DAY = 0;
+    public static final int MODE_OFF = 0;
     public static final int MODE_NIGHT = 1;
     public static final int MODE_AUTO = 2;
     public static final int MODE_OUTDOOR = 3;
+    public static final int MODE_DAY = 4;
 
     private int mColorTemperature = OFF_TEMPERATURE;
     private float mCurrentLux = 0.0f;
@@ -173,7 +174,7 @@ public class LiveDisplayController {
                 UserHandle.USER_CURRENT);
         mMode = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.DISPLAY_TEMPERATURE_MODE,
-                MODE_DAY,
+                MODE_OFF,
                 UserHandle.USER_CURRENT);
         if (!mCmHardwareManager.isSupported(CmHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT)) {
             mUseOutdoorMode = false;
@@ -201,7 +202,7 @@ public class LiveDisplayController {
         }
 
         // Clear the hint forever
-        if (mMode != MODE_DAY) {
+        if (mMode != MODE_OFF) {
             saveUserHint(1);
         }
 
@@ -277,7 +278,7 @@ public class LiveDisplayController {
 
     private synchronized void updateColorTemperature(TwilightState twilight) {
         int temperature = mDayTemperature;
-        if (mLowPerformance) {
+        if (mMode == MODE_OFF || mLowPerformance) {
             temperature = OFF_TEMPERATURE;
         } else if (mMode == MODE_NIGHT) {
             temperature = mNightTemperature;

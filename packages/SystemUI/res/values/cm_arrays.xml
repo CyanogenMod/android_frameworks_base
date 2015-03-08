@@ -48,6 +48,7 @@
     <!-- LiveDisplay drawables -->
     <string-array name="live_display_drawables" translatable="false">
         <item>@drawable/ic_livedisplay_auto</item>
+        <item>@drawable/ic_livedisplay_off</item>
         <item>@drawable/ic_livedisplay_day</item>
         <item>@drawable/ic_livedisplay_night</item>
         <item>@drawable/ic_livedisplay_outdoor</item>
