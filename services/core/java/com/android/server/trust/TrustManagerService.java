@@ -810,7 +810,7 @@ public class TrustManagerService extends SystemService {
                     requireCredentialEntry(msg.arg1);
                     break;
                 case MSG_KEYGUARD_SHOWING_CHANGED:
-                    refreshDeviceLockedForUser(UserHandle.USER_CURRENT);
+                    refreshDeviceLockedForUser(mCurrentUser);
                     break;
                 case MSG_START_USER:
                 case MSG_CLEANUP_USER:
