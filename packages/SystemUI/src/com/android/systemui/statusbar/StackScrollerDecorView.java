@@ -87,6 +87,7 @@ public abstract class StackScrollerDecorView extends ExpandableView {
             mAnimating = true;
             mContent.animate()
                     .alpha(endValue)
+                    .withLayer()
                     .setInterpolator(interpolator)
                     .setDuration(260)
                     .withEndAction(new Runnable() {
