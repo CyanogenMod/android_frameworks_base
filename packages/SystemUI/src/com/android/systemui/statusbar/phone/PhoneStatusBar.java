@@ -3915,12 +3915,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * @return True if we should recreate the status bar
      */
     private boolean shouldUpdateStatusbar(ThemeConfig oldTheme, ThemeConfig newTheme) {
-        return newTheme != null && (oldTheme == null || !newTheme.getOverlayForStatusBar()
-                .equals(oldTheme.getOverlayForStatusBar()) ||
-                !newTheme.getFontPkgName()
-                        .equals(oldTheme.getFontPkgName()) ||
-                !newTheme.getIconPackPkgName()
-                        .equals(oldTheme.getIconPackPkgName()) ||
+        return newTheme != null && (oldTheme == null || (newTheme.getOverlayForStatusBar() != null && 
+                !newTheme.getOverlayForStatusBar()
+                    .equals(oldTheme.getOverlayForStatusBar())) ||
+                newTheme.getFontPkgName() != null && (!newTheme.getFontPkgName()
+                        .equals(oldTheme.getFontPkgName())) ||
+                newTheme.getIconPackPkgName() != null && (!newTheme.getIconPackPkgName()
+                        .equals(oldTheme.getIconPackPkgName())) ||
                 newTheme.getLastThemeChangeRequestType() == RequestType.THEME_UPDATED);
     }
 
