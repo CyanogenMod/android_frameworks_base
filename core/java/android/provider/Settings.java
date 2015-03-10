@@ -4731,7 +4731,6 @@ public final class Settings {
          * @hide
          */
 
-        /**
         public static final String WIMAX_ON = "wimax_on";
 
         /**

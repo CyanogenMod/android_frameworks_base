@@ -271,7 +271,6 @@ final class ProcessList {
             Slog.i("XXXXXX", "minfree_adj=" + minfree_adj + " minfree_abs=" + minfree_abs);
         }
 
-<<<<<<< HEAD
         // We've now baked in the increase to the basic oom values above, since
         // they seem to be useful more generally for devices that are tight on
         // memory than just for 64 bit.  This should probably have some more
@@ -284,38 +283,19 @@ final class ProcessList {
         }
 
         for (int i=0; i<mOomAdj.length; i++) {
-            int low = 0;
-            int high = 0;
+            int low = mOomMinFreeLow[i];
+            int high = mOomMinFreeHigh[i];
 
             if (is64bit) {
-                // On 64 bit devices, we consume more baseline RAM, because 64 bit is cool!
-                // To avoid being all pagey and stuff, scale up the memory levels to
-                // give us some breathing room.
                 Slog.i("XXXXXX", "choosing minFree values for 64 Bit");
-                low = mOomMinFreeLow[i];
-                high = mOomMinFreeHigh[i];
-
-                mOomMinFree[i] = (int)(low + ((high-low)*scale));
-                // More scaling up not required yet
-                // mOomMinFree[i] = (3*mOomMinFree[i])/2;
+                // Increase the high min-free levels for cached processes for 64-bit
+                if (i == 4) high = (high*3)/2;
+                else if (i == 5) high = (high*7)/4;
 
             } else {
                 Slog.i("XXXXXX", "choosing minFree values for 32 Bit");
                 low = mOomMinFreeLow32Bit[i];
                 high = mOomMinFreeHigh32Bit[i];
-
-                mOomMinFree[i] = (int)(low + ((high-low)*scale));
-=======
-        final boolean is64bit = Build.SUPPORTED_64_BIT_ABIS.length > 0;
-
-        for (int i=0; i<mOomAdj.length; i++) {
-            int low = mOomMinFreeLow[i];
-            int high = mOomMinFreeHigh[i];
-            if (is64bit) {
-                // Increase the high min-free levels for cached processes for 64-bit
-                if (i == 4) high = (high*3)/2;
-                else if (i == 5) high = (high*7)/4;
->>>>>>> android-5.1.0_r1
             }
             mOomMinFree[i] = (int)(low + ((high-low)*scale));
         }

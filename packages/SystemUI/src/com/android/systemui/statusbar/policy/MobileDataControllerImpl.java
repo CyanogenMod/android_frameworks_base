@@ -33,20 +33,19 @@ import android.net.NetworkStatsHistory;
 import android.net.NetworkTemplate;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-<<<<<<< HEAD:packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileDataController.java
 import android.provider.Settings;
-=======
->>>>>>> android-5.1.0_r1:packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileDataControllerImpl.java
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.android.systemui.statusbar.policy.NetworkController.DataUsageInfo;
+
 import java.util.Date;
 import java.util.Locale;
 
-public class MobileDataControllerImpl implements NetworkController.MobileDataController {
+public class MobileDataControllerImpl {
     private static final String TAG = "MobileDataController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -64,7 +63,6 @@ public class MobileDataControllerImpl implements NetworkController.MobileDataCon
 
     private INetworkStatsSession mSession;
     private Callback mCallback;
-    private NetworkControllerImpl mNetworkController;
 
     public MobileDataControllerImpl(Context context) {
         mContext = context;
@@ -73,10 +71,6 @@ public class MobileDataControllerImpl implements NetworkController.MobileDataCon
         mStatsService = INetworkStatsService.Stub.asInterface(
                 ServiceManager.getService(Context.NETWORK_STATS_SERVICE));
         mPolicyManager = NetworkPolicyManager.from(mContext);
-    }
-
-    public void setNetworkController(NetworkControllerImpl networkController) {
-        mNetworkController = networkController;
     }
 
     private INetworkStatsSession getSession() {
@@ -117,9 +111,7 @@ public class MobileDataControllerImpl implements NetworkController.MobileDataCon
         if (session == null) {
             return warn("no stats session");
         }
-        NetworkTemplate template = NetworkTemplate.buildTemplateMobileAll(subscriberId);
-        template = NetworkTemplate.normalize(template, mTelephonyManager.getMergedSubscriberIds());
-
+        final NetworkTemplate template = NetworkTemplate.buildTemplateMobileAll(subscriberId);
         final NetworkPolicy policy = findNetworkPolicy(template);
         try {
             final NetworkStatsHistory history = mSession.getHistoryForNetwork(template, FIELDS);
@@ -165,9 +157,6 @@ public class MobileDataControllerImpl implements NetworkController.MobileDataCon
             } else {
                 usage.warningLevel = DEFAULT_WARNING_LEVEL;
             }
-            if (usage != null) {
-                usage.carrier = mNetworkController.getMobileNetworkName();
-            }
             return usage;
         } catch (RemoteException e) {
             return warn("remote call failed");
@@ -202,13 +191,8 @@ public class MobileDataControllerImpl implements NetworkController.MobileDataCon
     }
 
     public void setMobileDataEnabled(boolean enabled) {
-<<<<<<< HEAD:packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileDataController.java
-        mTelephonyManager.setDataEnabledUsingSubId(
+        mTelephonyManager.setDataEnabled(
                 SubscriptionManager.getDefaultDataSubId(), enabled);
-=======
-        Log.d(TAG, "setMobileDataEnabled: enabled=" + enabled);
-        mTelephonyManager.setDataEnabled(enabled);
->>>>>>> android-5.1.0_r1:packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileDataControllerImpl.java
         if (mCallback != null) {
             mCallback.onMobileDataEnabled(enabled);
         }
@@ -218,23 +202,19 @@ public class MobileDataControllerImpl implements NetworkController.MobileDataCon
         // require both supported network and ready SIM
         return mConnectivityManager.isNetworkSupported(TYPE_MOBILE)
                 && mTelephonyManager.getSimState(
-                        SubscriptionManager.getDefaultDataPhoneId()) == SIM_STATE_READY;
+                SubscriptionManager.from(mContext).getDefaultDataPhoneId()) == SIM_STATE_READY;
     }
 
     public boolean isMobileDataEnabled() {
         return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.MOBILE_DATA + SubscriptionManager.getDefaultDataPhoneId(), 0) != 0;
+                Settings.Global.MOBILE_DATA +
+                SubscriptionManager.from(mContext).getDefaultDataPhoneId(), 0) != 0;
     }
 
     private static String getActiveSubscriberId(Context context) {
         final TelephonyManager tele = TelephonyManager.from(context);
-<<<<<<< HEAD:packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileDataController.java
         final String actualSubscriberId =
                 tele.getSubscriberId(SubscriptionManager.getDefaultDataSubId());
-=======
-        final String actualSubscriberId = tele.getSubscriberId(
-                SubscriptionManager.getDefaultDataSubId());
->>>>>>> android-5.1.0_r1:packages/SystemUI/src/com/android/systemui/statusbar/policy/MobileDataControllerImpl.java
         return actualSubscriberId;
     }
 
