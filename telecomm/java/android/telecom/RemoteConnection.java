@@ -113,8 +113,6 @@ public final class RemoteConnection {
          */
         public void onPostDialWait(RemoteConnection connection, String remainingPostDialSequence) {}
 
-        public void onPostDialChar(RemoteConnection connection, char nextChar) {}
-
         /**
          * Invoked when the post-dial sequence in the outgoing {@code Connection} has processed
          * a character.
