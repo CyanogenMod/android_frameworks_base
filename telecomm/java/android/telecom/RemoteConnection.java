@@ -251,7 +251,7 @@ public final class RemoteConnection {
 
             public void onPeerDimensionsChanged(VideoProvider videoProvider, int width, int height) {}
 
-            public void onCallDataUsageChanged(VideoProvider videoProvider, long dataUsage) {}
+            public void onCallDataUsageChanged(VideoProvider videoProvider, int dataUsage) {}
 
             public void onCameraCapabilitiesChanged(
                     VideoProvider videoProvider,
@@ -295,7 +295,7 @@ public final class RemoteConnection {
             }
 
             @Override
-            public void changeCallDataUsage(long dataUsage) {
+            public void changeCallDataUsage(int dataUsage) {
                 for (Listener l : mListeners) {
                     l.onCallDataUsageChanged(VideoProvider.this, dataUsage);
                 }

@@ -675,7 +675,7 @@ public abstract class Connection implements IConferenceable {
          *
          * @param dataUsage The updated data usage.
          */
-        public void changeCallDataUsage(long dataUsage) {
+        public void changeCallDataUsage(int dataUsage) {
             if (mVideoCallback != null) {
                 try {
                     mVideoCallback.changeCallDataUsage(dataUsage);
