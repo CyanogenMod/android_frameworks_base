@@ -157,6 +157,12 @@ public class CarrierText extends LinearLayout {
             mAirplaneModeText.setText(airplaneMode);
         }
         updateCarrierView.setText(text != null ? text.toString() : null);
+
+        for (int i = 0; i < mNumPhones-1; i++) {
+            if (mOperatorSeparator[i] != null) {
+                mOperatorSeparator[i].setText("|");
+            }
+        }
     }
 
     @Override
@@ -190,7 +196,6 @@ public class CarrierText extends LinearLayout {
             if (i < mNumPhones-1) {
                 mOperatorSeparator[i] = (TextView) findViewById(operatorSepId[i]);
                 mOperatorSeparator[i].setVisibility(View.VISIBLE);
-                mOperatorSeparator[i].setText("|");
             }
         }
         mAirplaneModeText = (TextView) findViewById(R.id.airplane_mode);
