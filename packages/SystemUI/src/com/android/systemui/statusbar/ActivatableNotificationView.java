@@ -148,6 +148,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         mLinearInterpolator = new LinearInterpolator();
         setClipChildren(false);
         setClipToPadding(false);
+        setClipToOutline(true);
         mAppearAnimationFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_ATOP);
         mRoundedRectCornerRadius = getResources().getDimensionPixelSize(
                 R.dimen.notification_material_rounded_rect_radius);
