@@ -62,6 +62,8 @@ interface IWifiManager
 
     void startScan(in ScanSettings requested, in WorkSource ws);
 
+    void startLocationRestrictedScan(in WorkSource ws);
+
     List<ScanResult> getScanResults(String callingPackage);
 
     void disconnect();
@@ -155,5 +157,8 @@ interface IWifiManager
     WifiConnectionStatistics getConnectionStatistics();
 
     WifiEapSimInfo getSimInfo();
+    
+    void disableEphemeralNetwork(String SSID);
+
 }
 

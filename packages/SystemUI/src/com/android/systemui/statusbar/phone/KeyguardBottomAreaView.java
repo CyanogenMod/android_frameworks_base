@@ -39,6 +39,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -46,6 +48,8 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.EmergencyButton;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
+import com.android.systemui.EventLogConstants;
+import com.android.systemui.EventLogTags;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.KeyguardAffordanceView;
@@ -73,6 +77,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private static final Intent INSECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
     private static final Intent PHONE_INTENT = new Intent(Intent.ACTION_DIAL);
+    private static final int DOZE_ANIMATION_STAGGER_DELAY = 48;
+    private static final int DOZE_ANIMATION_ELEMENT_DURATION = 250;
 
     private KeyguardAffordanceView mCameraImageView;
     private KeyguardAffordanceView mPhoneImageView;
@@ -94,7 +100,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private PhoneStatusBar mPhoneStatusBar;
 
     private final TrustDrawable mTrustDrawable;
-
+    private final Interpolator mLinearOutSlowInInterpolator;
     private int mLastUnlockIconRes = 0;
 
     public KeyguardBottomAreaView(Context context) {
@@ -113,6 +119,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mTrustDrawable = new TrustDrawable(mContext);
+        mLinearOutSlowInInterpolator =
+                AnimationUtils.loadInterpolator(context, android.R.interpolator.linear_out_slow_in);
     }
 
     private AccessibilityDelegate mAccessibilityDelegate = new AccessibilityDelegate() {
@@ -135,7 +143,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             if (action == ACTION_CLICK) {
                 if (host == mLockIcon) {
                     mPhoneStatusBar.animateCollapsePanels(
-                            CommandQueue.FLAG_EXCLUDE_NONE, true /* force */);
+                            CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL, true /* force */);
                     return true;
                 } else if (host == mCameraImageView) {
                     launchCamera();
@@ -257,7 +265,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 final int disabledFlags = dpm.getKeyguardDisabledFeatures(null, userId);
                 final  boolean disabledBecauseKeyguardSecure =
                         (disabledFlags & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_CAMERA) != 0
-                                && KeyguardTouchDelegate.getInstance(getContext()).isSecure();
+                                && mPhoneStatusBar.isKeyguardSecure();
                 return dpm.getCameraDisabled(null) || disabledBecauseKeyguardSecure;
             } catch (RemoteException e) {
                 Log.e(TAG, "Can't get userId", e);
@@ -320,6 +328,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     private void handleTrustCircleClick() {
+        EventLogTags.writeSysuiLockscreenGesture(
+                EventLogConstants.SYSUI_LOCKSCREEN_GESTURE_TAP_LOCK, 0 /* lengthDp - N/A */,
+                0 /* velocityDp - N/A */);
         mIndicationController.showTransientIndication(
                 R.string.keyguard_indication_trust_disabled);
         mLockPatternUtils.requireCredentialEntry(mLockPatternUtils.getCurrentUser());
@@ -388,7 +399,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         // TODO: Real icon for facelock.
         int iconRes = mUnlockMethodCache.isFaceUnlockRunning()
                 ? com.android.internal.R.drawable.ic_account_circle
-                : mUnlockMethodCache.isMethodInsecure() ? R.drawable.ic_lock_open_24dp
+                : mUnlockMethodCache.isCurrentlyInsecure() ? R.drawable.ic_lock_open_24dp
                 : R.drawable.ic_lock_24dp;
         if (mLastUnlockIconRes != iconRes) {
             Drawable icon = mContext.getDrawable(iconRes);
@@ -438,7 +449,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     @Override
-    public void onMethodSecureChanged(boolean methodSecure) {
+    public void onUnlockMethodStateChanged() {
         updateLockIcon();
         updateCameraVisibility();
     }
@@ -461,6 +472,35 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (mEmergencyButton != null) {
             mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyButton, enabled, false);
         }
+    }
+
+    public void startFinishDozeAnimation() {
+        long delay = 0;
+        if (mPhoneImageView.getVisibility() == View.VISIBLE) {
+            startFinishDozeAnimationElement(mPhoneImageView, delay);
+            delay += DOZE_ANIMATION_STAGGER_DELAY;
+        }
+        startFinishDozeAnimationElement(mLockIcon, delay);
+        delay += DOZE_ANIMATION_STAGGER_DELAY;
+        if (mCameraImageView.getVisibility() == View.VISIBLE) {
+            startFinishDozeAnimationElement(mCameraImageView, delay);
+        }
+        mIndicationText.setAlpha(0f);
+        mIndicationText.animate()
+                .alpha(1f)
+                .setInterpolator(mLinearOutSlowInInterpolator)
+                .setDuration(NotificationPanelView.DOZE_ANIMATION_DURATION);
+    }
+
+    private void startFinishDozeAnimationElement(View element, long delay) {
+        element.setAlpha(0f);
+        element.setTranslationY(element.getHeight() / 2);
+        element.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setInterpolator(mLinearOutSlowInInterpolator)
+                .setStartDelay(delay)
+                .setDuration(DOZE_ANIMATION_ELEMENT_DURATION);
     }
 
     private final BroadcastReceiver mDevicePolicyReceiver = new BroadcastReceiver() {
@@ -488,6 +528,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
         @Override
         public void onScreenTurnedOff(int why) {
+            updateLockIcon();
+        }
+
+        @Override
+        public void onKeyguardVisibilityChanged(boolean showing) {
             updateLockIcon();
         }
     };

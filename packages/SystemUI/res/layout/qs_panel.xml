@@ -13,15 +13,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/quick_settings_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/qs_background_primary"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:elevation="2dp">
+<com.android.systemui.qs.QSContainer
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/quick_settings_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/qs_background_primary"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:elevation="2dp">
 
     <com.android.systemui.qs.QSPanel
         android:id="@+id/quick_settings_panel"
@@ -45,4 +45,4 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </LinearLayout>
-</FrameLayout>
+</com.android.systemui.qs.QSContainer>

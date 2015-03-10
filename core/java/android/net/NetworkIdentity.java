@@ -26,6 +26,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.util.Slog;
 
 import java.util.Objects;
 
@@ -149,15 +150,11 @@ public class NetworkIdentity {
         boolean roaming = false;
 
         if (isNetworkTypeMobile(type)) {
-            final TelephonyManager telephony = (TelephonyManager) context.getSystemService(
-                    Context.TELEPHONY_SERVICE);
-            roaming = telephony.isNetworkRoaming(SubscriptionManager.getDefaultDataSubId());
-            if (state.subscriberId != null) {
-                subscriberId = state.subscriberId;
-            } else {
-                subscriberId = telephony.getSubscriberId(SubscriptionManager.getDefaultDataSubId());
+            if (state.subscriberId == null) {
+                Slog.w(TAG, "Active mobile network without subscriber!");
             }
-
+                subscriberId = state.subscriberId;
+           roaming = state.networkInfo.isRoaming();
         } else if (type == TYPE_WIFI) {
             if (state.networkId != null) {
                 networkId = state.networkId;

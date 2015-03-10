@@ -38,9 +38,8 @@
     <!-- no translation found for status_bar_latest_events_title (6594767438577593172) -->
     <skip />
     <string name="battery_low_title" msgid="6456385927409742437">"Батареянын кубаты аз"</string>
-    <!-- no translation found for battery_low_percent_format (1077244949318261761) -->
-    <skip />
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> калды. Батарея үнөмдөгүч күйгүзүлдү."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> калды"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> калды. Батареянын кубатын үнөмдөгүч күйүк."</string>
     <!-- no translation found for invalid_charger (4549105996740522523) -->
     <skip />
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB аркылуу кубаттоого болбойт."</string>
@@ -250,8 +249,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Кыялдануу"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Учак тартиби"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Дүрмөттөлүүдө, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Дүрмөттөлгөн"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> түзмөк)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth өчүк"</string>
@@ -289,6 +286,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Дагы жөндөөлөр"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Аткарылды"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Туташкан"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Wi‑Fi жардамчысы аркылуу туташып турат"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Туташууда…"</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Тетеринг"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Туташуу чекити"</string>
@@ -297,13 +295,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Дайындарды өткөрүүчү уюктук тутум"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Дайындарды колдонуу"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Калган дайындар"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Чегине жетти – дайындарды пайдалануу бир азга токтотулду"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Чектен ашты"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> колдонулду"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> чектөө"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> эскертүү"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Акыркы экрандарыңыз бул жерден көрүнөт"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Колдонмо жөнүндө маалымат"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"колдонмого кулпулоо"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"экран кадоо"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"издөө"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"<xliff:g id="APP">%s</xliff:g> баштай алган жок."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Кубатталды"</string>
@@ -350,7 +348,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Батареяны үнөмдөгүч күйгүзүлдү"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Иштин майнаптуулугун начарлатып, фондук дайындарды чектейт"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Батареянын кубатын үнөмдөгүчтү өчүрүп коюу"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Мазмундар жашырылган"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> экранга чыккан нерсенин баарын сүрөткө тарта баштайт."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Экинчи көрсөтүлбөсүн"</string>
@@ -381,6 +378,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Аларды кулпудан чыгараардан мурун көрүңүз"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Жок, рахмат"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Орнотуу"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> тарабынан үнсүздөлдү"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Экран кадалган"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Бул бошотулмайынча көрүнө берет. Бошотуу үчүн, бир убакта Артка жана Карап чыгууну коё бербей басып туруңуз."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Бул бошотулмайынча көрүнө берет. Бошотуу үчүн, Карап чыгууну коё бербей басып туруңуз."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Түшүндүм"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Жок, рахмат"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"<xliff:g id="TILE_LABEL">%1$s</xliff:g> жашырылсынбы?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Бул кийинки жолу жөндөөлөрдөн күйгүзүлгөндө кайра көрүнөт."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Жашыруу"</string>
 </resources>

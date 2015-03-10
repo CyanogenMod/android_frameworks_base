@@ -116,11 +116,6 @@ public class BridgePowerManager implements IPowerManager {
     }
 
     @Override
-    public void setMaximumScreenOffTimeoutFromDeviceAdmin(int arg0) throws RemoteException {
-        // pass for now.
-    }
-
-    @Override
     public void setStayOnSetting(int arg0) throws RemoteException {
         // pass for now.
     }
@@ -148,6 +143,10 @@ public class BridgePowerManager implements IPowerManager {
 
     @Override
     public void updateBlockedUids(int uid, boolean isBlocked) {
+        // pass for now.
+    }
+    @Override
+    public void boostScreenBrightness(long time) throws RemoteException {
         // pass for now.
     }
 }

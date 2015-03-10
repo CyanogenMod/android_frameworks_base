@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"進行中"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"通知"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"電池電力不足"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"還剩 <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"電力剩下 <xliff:g id="NUMBER">%d%%</xliff:g>，節約耗電量模式已啟用。"</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"僅剩 <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"僅剩 <xliff:g id="PERCENTAGE">%s</xliff:g>。節約耗電量模式已開啟。"</string>
     <string name="invalid_charger" msgid="4549105996740522523">"不支援 USB 充電。\n僅能使用隨附的充電器。"</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"不支援 USB 充電功能。"</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"僅限使用裝置隨附的充電器。"</string>
@@ -164,7 +164,7 @@
     <string name="accessibility_recents_item_launched" msgid="7616039892382525203">"正在啟動「<xliff:g id="APP">%s</xliff:g>」。"</string>
     <string name="accessibility_notification_dismissed" msgid="854211387186306927">"已關閉通知。"</string>
     <string name="accessibility_desc_notification_shade" msgid="4690274844447504208">"通知欄。"</string>
-    <string name="accessibility_desc_quick_settings" msgid="6186378411582437046">"快速設定。"</string>
+    <string name="accessibility_desc_quick_settings" msgid="6186378411582437046">"快捷設定。"</string>
     <string name="accessibility_desc_lock_screen" msgid="5625143713611759164">"螢幕鎖定。"</string>
     <string name="accessibility_desc_settings" msgid="3417884241751434521">"設定"</string>
     <string name="accessibility_desc_recent_apps" msgid="4876900986661819788">"總覽。"</string>
@@ -272,15 +272,16 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"更多設定"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"完成"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"已連線"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"已透過 Wi‑Fi 小幫手連線"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"連線中..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"網路共用"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"無線基地台"</string>
     <string name="quick_settings_notifications_label" msgid="4818156442169154523">"通知"</string>
-    <string name="quick_settings_flashlight_label" msgid="2133093497691661546">"閃光燈"</string>
+    <string name="quick_settings_flashlight_label" msgid="2133093497691661546">"手電筒"</string>
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"行動數據"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"數據用量"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"剩餘資料"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"達到流量上限：已暫停使用數據連線"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"超過上限"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"已使用 <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"上限為 <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> 警告"</string>
@@ -288,7 +289,7 @@
     <string name="quick_settings_data_off">數據已關閉</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"您最近的螢幕會顯示在這裡"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"應用程式資訊"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"應用程式鎖定"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"螢幕固定"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"搜尋"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"無法啟動「<xliff:g id="APP">%s</xliff:g>」。"</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"已充飽"</string>
@@ -335,7 +336,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"節約耗電量模式已啟用"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"降低效能並限制背景數據傳輸"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"關閉節約耗電量模式"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"內容已隱藏"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> 將開始擷取您的螢幕上顯示的內容。"</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"不要再顯示"</string>
@@ -366,6 +366,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"解鎖前顯示"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"不用了，謝謝"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"設定"</string>
-    <string name="muted_by" msgid="6147073845094180001">"由 <xliff:g id="THIRD_PARTY">%1$s</xliff:g> 設為靜音"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>。<xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"螢幕已固定"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"這會讓目前的螢幕畫面保持顯示狀態，直到取消固定為止。同時按住返回按鈕和總覽按鈕即可取消固定。"</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"這會讓目前的螢幕畫面保持顯示狀態，直到取消固定為止。按住總覽按鈕即可取消固定。"</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"知道了"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"不用了，謝謝"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"隱藏<xliff:g id="TILE_LABEL">%1$s</xliff:g>？"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"只要在設定頁面中重新啟用，就能再次看到快捷設定選項。"</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"隱藏"</string>
 </resources>
