@@ -1013,7 +1013,8 @@ public class TelephonyManager {
 
     /** @hide */
      public static int getLteOnCdmaModeStatic() {
-        return getLteOnCdmaModeStatic(getDefaultSim());
+        int slotId = SubscriptionManager.getSlotId(SubscriptionManager.getDefaultSubId());
+        return getLteOnCdmaModeStatic(slotId);
     }
 
     /**
@@ -2932,7 +2933,7 @@ public class TelephonyManager {
     }
 
     /** {@hide} */
-    public static int getDefaultSim() {
+    public int getDefaultSim() {
         return SubscriptionManager.getSlotId(SubscriptionManager.getDefaultSubId());
     }
 
