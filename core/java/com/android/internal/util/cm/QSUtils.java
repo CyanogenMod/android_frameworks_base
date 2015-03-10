@@ -18,6 +18,7 @@ package com.android.internal.util.cm;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
@@ -120,7 +121,8 @@ public class QSUtils {
     }
 
     public static boolean deviceSupportsNfc(Context context) {
-        return NfcAdapter.getDefaultAdapter(context) != null;
+        PackageManager packageManager = context.getPackageManager();
+        return packageManager.hasSystemFeature(PackageManager.FEATURE_NFC);
     }
 
     public static boolean deviceSupportsFlashLight(Context context) {
