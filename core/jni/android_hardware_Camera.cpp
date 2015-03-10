@@ -48,17 +48,19 @@ struct fields_t {
     jfieldID    canDisableShutterSound;
     jfieldID    face_rect;
     jfieldID    face_score;
+    jfieldID    face_id;
+    jfieldID    face_left_eye;
+    jfieldID    face_right_eye;
+    jfieldID    face_mouth;
     jfieldID    rect_left;
     jfieldID    rect_top;
     jfieldID    rect_right;
     jfieldID    rect_bottom;
+    jfieldID    point_x;
+    jfieldID    point_y;
     jmethodID   post_event;
     jmethodID   rect_constructor;
     jmethodID   face_constructor;
-    jfieldID    face_id;
-    jfieldID    face_leftEye;
-    jfieldID    face_rightEye;
-    jfieldID    face_mouth;
     jfieldID    face_sm_degree;
     jfieldID    face_sm_score;
     jfieldID    face_blink_detected;
@@ -71,8 +73,6 @@ struct fields_t {
     jfieldID    face_left_right_gaze;
     jfieldID    face_top_bottom_gaze;
     jfieldID    face_recognised;
-    jfieldID    point_x;
-    jfieldID    point_y;
     jmethodID   point_constructor;
 };
 
@@ -146,7 +146,8 @@ sp<Camera> get_native_camera(JNIEnv *env, jobject thiz, JNICameraContext** pCont
     }
     ALOGV("get_native_camera: context=%p, camera=%p", context, camera.get());
     if (camera == 0) {
-        jniThrowRuntimeException(env, "Method called after release()");
+        jniThrowRuntimeException(env,
+                "Camera is being used after Camera.release() was called");
     }
 
     if (pContext != NULL) *pContext = context;
@@ -421,6 +422,32 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
             env->SetIntField(face, fields.face_reye_blink, metadata->faces[i].reye_blink);
             env->SetIntField(face, fields.face_left_right_gaze, metadata->faces[i].left_right_gaze);
             env->SetIntField(face, fields.face_top_bottom_gaze, metadata->faces[i].top_bottom_gaze);
+        }
+        bool optionalFields = metadata->faces[i].id != 0
+            && metadata->faces[i].left_eye[0] != -2000 && metadata->faces[i].left_eye[1] != -2000
+            && metadata->faces[i].right_eye[0] != -2000 && metadata->faces[i].right_eye[1] != -2000
+            && metadata->faces[i].mouth[0] != -2000 && metadata->faces[i].mouth[1] != -2000;
+        if (optionalFields) {
+            int32_t id = metadata->faces[i].id;
+            env->SetIntField(face, fields.face_id, id);
+
+            jobject leftEye = env->NewObject(mPointClass, fields.point_constructor);
+            env->SetIntField(leftEye, fields.point_x, metadata->faces[i].left_eye[0]);
+            env->SetIntField(leftEye, fields.point_y, metadata->faces[i].left_eye[1]);
+            env->SetObjectField(face, fields.face_left_eye, leftEye);
+            env->DeleteLocalRef(leftEye);
+
+            jobject rightEye = env->NewObject(mPointClass, fields.point_constructor);
+            env->SetIntField(rightEye, fields.point_x, metadata->faces[i].right_eye[0]);
+            env->SetIntField(rightEye, fields.point_y, metadata->faces[i].right_eye[1]);
+            env->SetObjectField(face, fields.face_right_eye, rightEye);
+            env->DeleteLocalRef(rightEye);
+
+            jobject mouth = env->NewObject(mPointClass, fields.point_constructor);
+            env->SetIntField(mouth, fields.point_x, metadata->faces[i].mouth[0]);
+            env->SetIntField(mouth, fields.point_y, metadata->faces[i].mouth[1]);
+            env->SetObjectField(face, fields.face_mouth, mouth);
+            env->DeleteLocalRef(mouth);
         }
 
         env->DeleteLocalRef(face);

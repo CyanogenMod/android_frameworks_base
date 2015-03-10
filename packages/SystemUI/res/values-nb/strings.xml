@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Aktiviteter"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Varsler"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Batterikapasiteten er lav"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> gjenværende"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> gjenstår. Batterisparing er på."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> gjenstår"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> gjenstår. Batterisparing er på."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB-lading støttes ikke.\nBruk kun den medfølgende laderen."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"Lading via USB støttes ikke."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Bruk bare den tilhørende laderen."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Dagdrøm"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Flymodus"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Lader: <xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Oppladet"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> enheter)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth er slått av"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Flere innstillinger"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Ferdig"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Tilkoblet"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Koblet til via en Wi-Fi-assistent"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Kobler til …"</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Tilknytning"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Wi-Fi-sone"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Mobildata"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Databruk"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Gjenværende data"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Grensen er nådd – databruk er stanset midlertidig"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Over grensen"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> brukt"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Grense på <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Advarsel for <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"De sist brukte skjermene dine vises her"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Appinformasjon"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"lås til app"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"én-appsmodus"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"Søk"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Kunne ikke starte <xliff:g id="APP">%s</xliff:g>."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Oppladet"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Batterisparing er på"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Reduserer ytelsen og begrenser bakgrunnsdataene"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Slå av batterisparing"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g> %%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Innholdet er skjult"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> tar opp alt som vies på skjermen din."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Ikke vis igjen"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Se dem før du låser opp"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Nei takk"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Konfigurer"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> har kuttet lyden"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Skjermen er låst"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"På denne måten blir skjermen synlig frem til du låser den opp. Trykk på og hold inne Tilbake og Oversikt samtidig for å låse opp."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"På denne måten blir skjermen synlig frem til du låser den opp. Trykk på og hold inne Tilbake og Oversikt for å låse opp."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Skjønner"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Nei takk"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Vil du skjule <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Den vises igjen neste gang du slår den på i innstillingene."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Skjul"</string>
 </resources>

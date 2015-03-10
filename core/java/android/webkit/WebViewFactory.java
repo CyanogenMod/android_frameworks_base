@@ -16,9 +16,10 @@
 
 package android.webkit;
 
+import android.annotation.SystemApi;
 import android.app.ActivityManagerInternal;
-import android.app.Application;
 import android.app.AppGlobals;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -33,19 +34,20 @@ import android.os.Trace;
 import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
+
 import com.android.server.LocalServices;
+
 import dalvik.system.VMRuntime;
 
 import java.io.File;
 import java.util.Arrays;
-
-import com.android.internal.os.Zygote;
 
 /**
  * Top level factory, used creating all the main WebView implementation classes.
  *
  * @hide
  */
+@SystemApi
 public final class WebViewFactory {
 
     private static final String CHROMIUM_WEBVIEW_FACTORY =
@@ -89,6 +91,12 @@ public final class WebViewFactory {
             // us honest and minimize usage of WebView internals when binding the proxy.
             if (sProviderInstance != null) return sProviderInstance;
 
+            final int uid = android.os.Process.myUid();
+            if (uid == android.os.Process.ROOT_UID || uid == android.os.Process.SYSTEM_UID) {
+                throw new UnsupportedOperationException(
+                        "For security reasons, WebView is not allowed in privileged processes");
+            }
+
             Trace.traceBegin(Trace.TRACE_TAG_WEBVIEW, "WebViewFactory.getProvider()");
             try {
                 Trace.traceBegin(Trace.TRACE_TAG_WEBVIEW, "WebViewFactory.loadNativeLibrary()");
@@ -109,7 +117,12 @@ public final class WebViewFactory {
                 StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
                 Trace.traceBegin(Trace.TRACE_TAG_WEBVIEW, "providerClass.newInstance()");
                 try {
-                    sProviderInstance = providerClass.newInstance();
+                    try {
+                        sProviderInstance = providerClass.getConstructor(WebViewDelegate.class)
+                                .newInstance(new WebViewDelegate());
+                    } catch (Exception e) {
+                        sProviderInstance = providerClass.newInstance();
+                    }
                     if (DEBUG) Log.v(LOGTAG, "Loaded provider: " + sProviderInstance);
                     return sProviderInstance;
                 } catch (Exception e) {

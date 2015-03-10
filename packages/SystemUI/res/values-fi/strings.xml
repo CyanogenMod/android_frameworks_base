@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Käynnissä olevat"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Ilmoitukset"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Akku on vähissä"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> jäljellä"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> jäljellä. Virransäästö on käytössä."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> jäljellä"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> jäljellä. Virransäästö on käytössä."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB-latausta ei tueta.\nKäytä laitteen mukana tullutta laturia."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB-latausta ei tueta."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Käytä vain laitteen mukana toimitettua laturia."</string>
@@ -109,11 +109,11 @@
     <string name="accessibility_data_three_bars" msgid="9167670452395038520">"Datasignaali - kolme palkkia"</string>
     <string name="accessibility_data_signal_full" msgid="2708384608124519369">"Vahva kuuluvuus."</string>
     <string name="accessibility_wifi_off" msgid="3177380296697933627">"Wi-Fi pois käytöstä."</string>
-    <string name="accessibility_no_wifi" msgid="1425476551827924474">"Ei wifi-yhteyttä."</string>
+    <string name="accessibility_no_wifi" msgid="1425476551827924474">"Ei Wi-Fi-yhteyttä."</string>
     <string name="accessibility_wifi_one_bar" msgid="7735893178010724377">"Wi-Fi-signaali – yksi palkki."</string>
     <string name="accessibility_wifi_two_bars" msgid="4994274250497262434">"Wi-Fi-signaali – kaksi palkkia."</string>
     <string name="accessibility_wifi_three_bars" msgid="3495755044276588384">"Wi-Fi-signaali – kolme palkkia."</string>
-    <string name="accessibility_wifi_signal_full" msgid="6853561303586480376">"Vahva wifi-signaali."</string>
+    <string name="accessibility_wifi_signal_full" msgid="6853561303586480376">"Vahva Wi-Fi-signaali."</string>
     <string name="accessibility_wifi_name" msgid="7202151365171148501">"Yhteys: <xliff:g id="WIFI">%s</xliff:g>."</string>
     <string name="accessibility_bluetooth_name" msgid="8441517146585531676">"Yhteys: <xliff:g id="BLUETOOTH">%s</xliff:g>."</string>
     <string name="accessibility_no_wimax" msgid="4329180129727630368">"Ei WiMAX-yhteyttä."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Unelmat"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Lentokonetila"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Ladataan (<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Täynnä"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> laitetta)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth pois käytöstä"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Lisäasetukset"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Valmis"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Yhdistetty"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Yhteys muodostettu Wi‑Fi-apurin kautta"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Yhdistetään…"</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Jaettu yhteys"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Hotspot"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Mobiilitiedonsiirto"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Datakäyttö"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Käytettävissä"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Raja saavutettu - tietojen käyttö keskeytetty"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Kiintiö ylitetty"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"käytetty <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"kiintiö <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> – varoitus"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Äskettäin käytetyt ruudut näkyvät tässä"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Sovellustiedot"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"lukitse sovellukseen"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"näytön kiinnitys"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"haku"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Sovelluksen <xliff:g id="APP">%s</xliff:g> käynnistäminen epäonnistui."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Ladattu"</string>
@@ -324,9 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Virransäästö on käytössä"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Rajoittaa suorituskykyä ja taustatiedonsiirtoa"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Poista virransäästö käytöstä"</string>
-    <!-- String.format failed for translation -->
-    <!-- no translation found for battery_level_template (1609636980292580020) -->
-    <skip />
     <string name="notification_hidden_text" msgid="1135169301897151909">"Sisältö piilotettu"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> alkaa tallentaa kaiken näytölläsi näkyvän."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Älä näytä uudelleen"</string>
@@ -357,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Näytä ennen lukituksen avaamista"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Ei kiitos"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Määritä asetukset"</string>
-    <string name="muted_by" msgid="6147073845094180001">"Mykistänyt <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Näyttö on kiinnitetty"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Tämä pitää sen näkyvissä, kunnes poistat kiinnityksen. Kosketa Edellinen- ja Viimeisimmät-kohtaa samanaikaisesti pitkään kiinnityksen poistamiseksi."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Tämä pitää sen näkyvissä, kunnes poistat kiinnityksen. Kosketa Viimeisimmät-kohtaa pitkään kiinnityksen poistamiseksi."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Selvä"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Ei kiitos"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Piilotetaanko <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Se tulee takaisin näkyviin, kun seuraavan kerran otat sen käyttöön asetuksissa."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Piilota"</string>
 </resources>
