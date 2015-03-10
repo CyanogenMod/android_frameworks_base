@@ -40,6 +40,7 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
 
     public static final int STYLE_ICON_PORTRAIT = 0;
     public static final int STYLE_CIRCLE = 2;
+    public static final int STYLE_DOTTED_CIRCLE = 3;
     public static final int STYLE_GONE = 4;
     public static final int STYLE_ICON_LANDSCAPE = 5;
     public static final int STYLE_TEXT = 6;
