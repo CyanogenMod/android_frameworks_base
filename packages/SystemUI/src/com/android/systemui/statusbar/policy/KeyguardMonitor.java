@@ -29,10 +29,6 @@ public final class KeyguardMonitor {
         mCallbacks.add(callback);
     }
 
-    public void removeCallbacks() {
-        mCallbacks.clear();
-    }
-
     public void removeCallback(Callback callback) {
         mCallbacks.remove(callback);
     }
