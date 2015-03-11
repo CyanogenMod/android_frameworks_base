@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
@@ -208,23 +209,25 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mLockIcon.setOnLongClickListener(this);
         mCameraImageView.setOnClickListener(this);
         mPhoneImageView.setOnClickListener(this);
-        mVisualizer = (VisualizerView) findViewById(R.id.visualizerView);
-        if (mVisualizer != null) {
-            Paint paint = new Paint();
-            Resources res = mContext.getResources();
-            paint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.kg_visualizer_path_stroke_width));
-            paint.setAntiAlias(true);
-            paint.setColor(res.getColor(R.color.equalizer_fill_color));
-            paint.setPathEffect(new DashPathEffect(new float[] {
-                    res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_1),
-                    res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_2)
-            }, 0));
+        if (ActivityManager.isHighEndGfx()) {
+            mVisualizer = (VisualizerView) findViewById(R.id.visualizerView);
+            if (mVisualizer != null) {
+                Paint paint = new Paint();
+                Resources res = mContext.getResources();
+                paint.setStrokeWidth(res.getDimensionPixelSize(
+                        R.dimen.kg_visualizer_path_stroke_width));
+                paint.setAntiAlias(true);
+                paint.setColor(res.getColor(R.color.equalizer_fill_color));
+                paint.setPathEffect(new DashPathEffect(new float[] {
+                        res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_1),
+                        res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_2)
+                }, 0));
 
-            int bars = res.getInteger(R.integer.kg_visualizer_divisions);
-            mVisualizer.addRenderer(new LockscreenBarEqRenderer(bars, paint,
-                    res.getInteger(R.integer.kg_visualizer_db_fuzz),
-                    res.getInteger(R.integer.kg_visualizer_db_fuzz_factor)));
-
+                int bars = res.getInteger(R.integer.kg_visualizer_divisions);
+                mVisualizer.addRenderer(new LockscreenBarEqRenderer(bars, paint,
+                        res.getInteger(R.integer.kg_visualizer_db_fuzz),
+                        res.getInteger(R.integer.kg_visualizer_db_fuzz_factor)));
+            }
         }
 
         initAccessibility();
@@ -675,7 +678,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void requestVisualizer(boolean show, int delay) {
-        if (!mVisualizerEnabled) {
+        if (mVisualizer == null || !mVisualizerEnabled) {
             return;
         }
         removeCallbacks(mStartVisualizer);
