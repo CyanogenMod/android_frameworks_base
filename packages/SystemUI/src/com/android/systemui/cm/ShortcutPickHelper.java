@@ -219,7 +219,7 @@ public class ShortcutPickHelper {
         dialog.show();
     }
 
-    public void pickShortcut(boolean showNone) {
+    public void pickShortcut() {
         if (mFetchAppsTask == null) {
             mFetchAppsTask = new FetchAppsTask();
             mFetchAppsTask.execute();
@@ -230,11 +230,9 @@ public class ShortcutPickHelper {
             filter.addDataScheme("package");
             mContext.registerReceiver(mReceiver, filter);
         }
-        if (showNone) {
-            mActions.addAction(ACTION_NONE, R.string.navring_action_none, 0);
-        } else {
-            mActions.removeAction(ACTION_NONE);
-        }
+
+        mActions.addAction(ACTION_NONE, R.string.navring_action_none, 0);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                 .setTitle(mContext.getString(R.string.navbar_dialog_title))
                 .setItems(mActions.getEntries(), new DialogInterface.OnClickListener() {
