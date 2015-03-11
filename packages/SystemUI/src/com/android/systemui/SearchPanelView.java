@@ -183,6 +183,17 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
         }
     }
 
+    private boolean hasItemsToShow() {
+        for (int i = 0; i < mTargetViews.size(); i++) {
+            View v = mTargetViews.get(i);
+            View parent = (View) v.getParent();
+            if (parent.getVisibility() == View.VISIBLE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void replaceDrawable(ImageView v, ComponentName component, String name) {
         if (component != null) {
             try {
@@ -226,7 +237,7 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
     }
 
     public void show(final boolean show, boolean animate) {
-        if (show) {
+        if (show && (mInEditMode || hasItemsToShow())) {
             maybeUpdateSearchDrawables();
             if (getVisibility() != View.VISIBLE) {
                 setVisibility(View.VISIBLE);
@@ -417,7 +428,7 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
                 mPicker.cleanup();
             } else if (v == mLogo || v == mLogoLeft || v == mLogoRight) {
                 mSelectedView = (ImageView) v;
-                mPicker.pickShortcut(v != mLogo);
+                mPicker.pickShortcut();
             }
         }
     }
@@ -456,11 +467,11 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
 
     private void updateDrawables() {
         mTargetActivities = NavigationRingHelpers.getTargetActions(mContext);
+        boolean assistantAvailable = isAssistantAvailable();
         for (int i = 0; i < NavigationRingHelpers.MAX_ACTIONS; i++) {
             ImageView target = mTargetViews.get(i);
             String action = mTargetActivities[i];
-
-            if (isAssistantAvailable() && ((TextUtils.isEmpty(action) && target == mLogo)
+            if (assistantAvailable && ((TextUtils.isEmpty(action) && target == mLogo)
                     || ACTION_ASSIST.equals(action))) {
                 maybeSwapSearchIcon(target);
                 continue;
@@ -498,10 +509,6 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
     private void updateTargetVisibility() {
         for (int i = 0; i < mTargetViews.size(); i++) {
             View v = mTargetViews.get(i);
-            // Special case, middle target never be invisible
-            if (v == mLogo) {
-                continue;
-            }
             View parent = (View) v.getParent();
             String action = mTargetActivities[i];
             boolean visible = mInEditMode
