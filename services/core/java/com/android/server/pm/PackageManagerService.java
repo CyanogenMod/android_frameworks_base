@@ -6670,15 +6670,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
-            if (!isBootScan && (pkg.mIsThemeApk)) {
-                // Pass this off to the ThemeService for processing
-                ThemeManager tm =
-                        (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
-                if (tm != null) {
-                    tm.processThemeResources(pkg.packageName);
-                }
-            }
-
             //Icon Packs need aapt too
             if (isBootScan && (mBootThemeConfig != null &&
                     pkg.packageName.equals(mBootThemeConfig.getIconPackPkgName()))) {
@@ -10841,6 +10832,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 deletePackageLI(pkgName, UserHandle.ALL, false, null, null,
                         dataDirExists ? PackageManager.DELETE_KEEP_DATA : 0,
                                 res.removedInfo, true);
+            } else if (pkg.mIsThemeApk) {
+                // Pass this off to the ThemeService for processing
+                processThemeResourcesInThemeService(pkg.packageName);
             }
 
         } catch (PackageManagerException e) {
@@ -10999,6 +10993,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
                 Slog.i(TAG, "Successfully restored package : " + pkgName + " after failed upgrade");
             }
+        } else if (pkg.mIsThemeApk) {
+            // Pass this off to the ThemeService for processing
+            processThemeResourcesInThemeService(pkg.packageName);
         }
     }
 
@@ -14480,6 +14477,14 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return 0;
+    }
+
+    private void processThemeResourcesInThemeService(String pkgName) {
+        ThemeManager tm =
+                (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
+        if (tm != null) {
+            tm.processThemeResources(pkgName);
+        }
     }
 
     /**
