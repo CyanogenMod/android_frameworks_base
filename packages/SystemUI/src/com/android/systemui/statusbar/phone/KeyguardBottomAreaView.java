@@ -39,6 +39,7 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.MediaStore;
@@ -127,6 +128,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private boolean mLinked;
     private boolean mVisualizerEnabled;
     private SettingsObserver mSettingsObserver;
+    private PowerManager mPowerManager;
 
     public KeyguardBottomAreaView(Context context) {
         this(context, null);
@@ -144,6 +146,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mTrustDrawable = new TrustDrawable(mContext);
+        mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mSettingsObserver = new SettingsObserver(new Handler());
         mSettingsObserver.observe();
     }
@@ -678,7 +681,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void requestVisualizer(boolean show, int delay) {
-        if (mVisualizer == null || !mVisualizerEnabled) {
+        if (mVisualizer == null || !mVisualizerEnabled || mPowerManager.isPowerSaveMode()) {
             return;
         }
         removeCallbacks(mStartVisualizer);
