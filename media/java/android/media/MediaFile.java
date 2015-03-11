@@ -53,8 +53,9 @@ public class MediaFile {
     public static final int FILE_TYPE_QCP   = 303;
     public static final int FILE_TYPE_PCM   = 304;
     public static final int FILE_TYPE_EC3   = 305;
+    public static final int FILE_TYPE_APE   = 306;
     private static final int FIRST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_DTS;
-    private static final int LAST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_EC3;
+    private static final int LAST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_APE;
 
     // MIDI file types
     public static final int FILE_TYPE_MID     = 11;
@@ -259,6 +260,7 @@ public class MediaFile {
         addFileType("AC3", FILE_TYPE_AC3, "audio/ac3");
         addFileType("EC3", FILE_TYPE_EC3, "audio/eac3");
         addFileType("FLV", FILE_TYPE_FLV, "video/x-flv");
+        addFileType("APE", FILE_TYPE_APE, "audio/x-ape");
     }
 
     public static boolean isAudioFileType(int fileType) {
