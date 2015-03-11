@@ -39,6 +39,7 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.MediaStore;
@@ -126,6 +127,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private boolean mScreenOn;
     private boolean mLinked;
     private boolean mVisualizerEnabled;
+    private boolean mPowerSaveModeEnabled;
     private SettingsObserver mSettingsObserver;
 
     public KeyguardBottomAreaView(Context context) {
@@ -143,6 +145,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     public KeyguardBottomAreaView(Context context, AttributeSet attrs, int defStyleAttr,
             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        context.registerReceiver(mReceiver, new IntentFilter(
+                PowerManager.ACTION_POWER_SAVE_MODE_CHANGING));
         mTrustDrawable = new TrustDrawable(mContext);
         mSettingsObserver = new SettingsObserver(new Handler());
         mSettingsObserver.observe();
@@ -616,6 +620,21 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
     };
 
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGING.equals(intent.getAction())) {
+                mPowerSaveModeEnabled = intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE,
+                        false);
+                if (mPowerSaveModeEnabled) {
+                    removeCallbacks(mStartVisualizer);
+                    removeCallbacks(mStopVisualizer);
+                    post(mStopVisualizer);
+                }
+            }
+        }
+    };
+
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
         @Override
@@ -678,7 +697,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void requestVisualizer(boolean show, int delay) {
-        if (mVisualizer == null || !mVisualizerEnabled) {
+        if (mVisualizer == null || !mVisualizerEnabled || mPowerSaveModeEnabled) {
             return;
         }
         removeCallbacks(mStartVisualizer);
