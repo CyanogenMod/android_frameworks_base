@@ -362,13 +362,8 @@ public class ImageWallpaper extends WallpaperService {
                     Log.d(TAG, "Suppressed drawFrame since redraw is not needed "
                             + "and offsets have not changed.");
                 }
-                if (!redrawNeeded && !mOffsetsChanged) {
-                    if (DEBUG) {
-                        Log.d(TAG, "Suppressed drawFrame since redraw is not needed "
-                                + "and offsets have not changed.");
-                    }
-                    return;
-                }
+                return;
+            }
                 mLastRotation = newRotation;
 
                 // Load bitmap if it is not yet loaded or if it was loaded at a different size
@@ -441,7 +436,7 @@ public class ImageWallpaper extends WallpaperService {
                     }
                 } else {
                     drawWallpaperWithCanvas(sh, availw, availh, xPixels, yPixels);
-                }
+
                 if (FIXED_SIZED_SURFACE && !mIsHwAccelerated) {
                     // If the surface is fixed-size, we should only need to
                     // draw it once and then we'll let the window manager
