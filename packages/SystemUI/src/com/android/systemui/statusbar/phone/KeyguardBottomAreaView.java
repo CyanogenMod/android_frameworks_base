@@ -323,6 +323,20 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             shortcut) {
         boolean customTarget = mShortcutHelper.isTargetCustom(shortcut);
         if (customTarget) {
+            if (isProtected(mShortcutHelper.getIntent(shortcut))) {
+                return false;
+            }
+        } else if (shortcut == LockscreenShortcutsHelper.Shortcuts.LEFT_SHORTCUT
+                && isProtected(PHONE_INTENT)) {
+            // is dialer protected?
+            return false;
+        } else if (shortcut == LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT
+                && isProtected(getCameraIntent())) {
+            // is camera protected?
+            return false;
+        }
+
+        if (customTarget) {
             boolean isEmpty = mShortcutHelper.isTargetEmpty(shortcut);
             if (visible && isEmpty) {
                 visible = false;
@@ -331,6 +345,23 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             }
         }
         return visible;
+    }
+
+    private boolean isProtected(Intent intent) {
+        ResolveInfo resolved = mContext.getPackageManager().resolveActivityAsUser(intent,
+                PackageManager.MATCH_DEFAULT_ONLY,
+                mLockPatternUtils.getCurrentUser());
+        if (resolved != null) {
+            try {
+                boolean protect = mContext.getPackageManager().getApplicationInfo(
+                        resolved.activityInfo.packageName, 0).protect;
+                return protect;
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private void updatePhoneVisibility() {
