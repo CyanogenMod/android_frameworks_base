@@ -1874,4 +1874,9 @@
     <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"SS 要求已改為 DIAL 要求。"</string>
     <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"SS 要求已改為 USSD 要求。"</string>
     <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"SS 要求已改為新的 SS 要求。"</string>
+
+    <!-- Carrier Name -->
+    <string name="China_Mobile">"中國移動"</string>
+    <string name="China_Unicom">"中國聯通"</string>
+    <string name="China_Telecom">"中國電信"</string>
 </resources>
