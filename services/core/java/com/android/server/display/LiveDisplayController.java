@@ -297,7 +297,7 @@ public class LiveDisplayController {
                 setDisplayTemperature((Integer)animation.getAnimatedValue());
             }
         });
-        mAnimator.start();
+        //mAnimator.start();
     }
 
     private synchronized void setDisplayTemperature(int temperature) {
