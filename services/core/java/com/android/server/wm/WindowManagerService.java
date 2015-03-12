@@ -622,6 +622,7 @@ public class WindowManagerService extends IWindowManager.Stub
     final DisplayManager mDisplayManager;
 
     private boolean mForceDisableHardwareKeyboard = false;
+    private boolean mForceShowImeWithHardKeyboard = false;
 
     // Who is holding the screen on.
     Session mHoldingScreenOn;
@@ -893,6 +894,8 @@ public class WindowManagerService extends IWindowManager.Stub
 
         mForceDisableHardwareKeyboard = context.getResources().getBoolean(
                 com.android.internal.R.bool.config_forceDisableHardwareKeyboard);
+        mForceShowImeWithHardKeyboard = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_forceShowImeWithHardKeyboard);
 
         LocalServices.addService(WindowManagerInternal.class, new LocalService());
         initPolicy();
@@ -7298,6 +7301,15 @@ public class WindowManagerService extends IWindowManager.Stub
             if (!mForceDisableHardwareKeyboard) {
                 hardKeyboardAvailable = config.keyboard != Configuration.KEYBOARD_NOKEYS;
             }
+            else
+            {
+                if(mForceShowImeWithHardKeyboard)
+                {
+                    mShowImeWithHardKeyboard = true;
+                    mHardKeyboardAvailable = true;	//for change trigger
+                }
+            }
+
             if (hardKeyboardAvailable != mHardKeyboardAvailable) {
                 mHardKeyboardAvailable = hardKeyboardAvailable;
                 mH.removeMessages(H.REPORT_HARD_KEYBOARD_STATUS_CHANGE);
@@ -7306,6 +7318,10 @@ public class WindowManagerService extends IWindowManager.Stub
             if (mShowImeWithHardKeyboard) {
                 config.keyboard = Configuration.KEYBOARD_NOKEYS;
             }
+
+			Slog.i(TAG, "[hardKeyboard]mForceDisableHardwareKeyboard:" + mForceDisableHardwareKeyboard
+                                      +" , hardKeyboardAvailable:"+hardKeyboardAvailable
+                                      +" , Configuration:"+config.keyboard);
 
             // Let the policy update hidden states.
             config.keyboardHidden = Configuration.KEYBOARDHIDDEN_NO;

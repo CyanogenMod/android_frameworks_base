@@ -31,6 +31,7 @@
     <java-symbol type="id" name="filtered_item_container" />
 
     <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
+    <java-symbol type="bool" name="config_forceShowImeWithHardKeyboard" />
     <java-symbol type="bool" name="skip_radio_power_off_on_sim_refresh_reset" />
     <java-symbol type="bool" name="config_ascii_7bit_support_for_long_message" />
     <java-symbol type="bool" name="config_lte_capable" />

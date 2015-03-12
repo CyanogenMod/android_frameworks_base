@@ -1733,6 +1733,8 @@
 
     <!-- Workaround for devices with broken keyboards -->
     <bool name="config_forceDisableHardwareKeyboard">false</bool>
+    <!-- for workarond for smdk4412 hardware keyboard -->
+    <bool name="config_forceShowImeWithHardKeyboard">false</bool>
 
     <!-- set to false if we need to show user confirmation
          when alpha identifier is not provided by the UICC -->
