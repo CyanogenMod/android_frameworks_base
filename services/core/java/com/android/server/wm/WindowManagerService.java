@@ -7319,10 +7319,6 @@ public class WindowManagerService extends IWindowManager.Stub
                 config.keyboard = Configuration.KEYBOARD_NOKEYS;
             }
 
-			Slog.i(TAG, "[hardKeyboard]mForceDisableHardwareKeyboard:" + mForceDisableHardwareKeyboard
-                                      +" , hardKeyboardAvailable:"+hardKeyboardAvailable
-                                      +" , Configuration:"+config.keyboard);
-
             // Let the policy update hidden states.
             config.keyboardHidden = Configuration.KEYBOARDHIDDEN_NO;
             config.hardKeyboardHidden = Configuration.HARDKEYBOARDHIDDEN_NO;
