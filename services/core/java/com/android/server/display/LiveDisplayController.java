@@ -251,13 +251,13 @@ public class LiveDisplayController {
         public void register(boolean register) {
             final ContentResolver cr = mContext.getContentResolver();
             if (register) {
-                cr.registerContentObserver(DISPLAY_TEMPERATURE_DAY_URI, false, this);
-                cr.registerContentObserver(DISPLAY_TEMPERATURE_NIGHT_URI, false, this);
-                cr.registerContentObserver(DISPLAY_TEMPERATURE_MODE_URI, false, this);
-                cr.registerContentObserver(DISPLAY_AUTO_OUTDOOR_MODE_URI, false, this);
-                cr.registerContentObserver(DISPLAY_LOW_POWER_URI, false, this);
-                cr.registerContentObserver(DISPLAY_COLOR_ENHANCE_URI, false, this);
-                cr.registerContentObserver(DISPLAY_COLOR_ADJUSTMENT_URI, false, this);
+                cr.registerContentObserver(DISPLAY_TEMPERATURE_DAY_URI, false, this, UserHandle.USER_ALL);
+                cr.registerContentObserver(DISPLAY_TEMPERATURE_NIGHT_URI, false, this, UserHandle.USER_ALL);
+                cr.registerContentObserver(DISPLAY_TEMPERATURE_MODE_URI, false, this, UserHandle.USER_ALL);
+                cr.registerContentObserver(DISPLAY_AUTO_OUTDOOR_MODE_URI, false, this, UserHandle.USER_ALL);
+                cr.registerContentObserver(DISPLAY_LOW_POWER_URI, false, this, UserHandle.USER_ALL);
+                cr.registerContentObserver(DISPLAY_COLOR_ENHANCE_URI, false, this, UserHandle.USER_ALL);
+                cr.registerContentObserver(DISPLAY_COLOR_ADJUSTMENT_URI, false, this, UserHandle.USER_ALL);
             } else {
                 cr.unregisterContentObserver(this);
             }
