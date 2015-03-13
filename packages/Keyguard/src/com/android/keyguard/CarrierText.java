@@ -55,12 +55,12 @@ public class CarrierText extends LinearLayout {
 
     private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
         @Override
-        public void onRefreshCarrierInfo(long subId, CharSequence plmn, CharSequence spn) {
+        public void onRefreshCarrierInfo(int subId, CharSequence plmn, CharSequence spn) {
             updateCarrierText(mUpdateMonitor.getSimState(subId), plmn, spn, subId);
         }
 
         @Override
-        public void onSimStateChanged(long subId, IccCardConstants.State simState) {
+        public void onSimStateChanged(int subId, IccCardConstants.State simState) {
             updateCarrierText(simState, mUpdateMonitor.getTelephonyPlmn(subId),
                 mUpdateMonitor.getTelephonySpn(subId), subId);
         }
@@ -137,7 +137,7 @@ public class CarrierText extends LinearLayout {
     }
 
     protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn,
-            long subId) {
+            int subId) {
         if(DEBUG) Log.d(TAG, "updateCarrierText, simState=" + simState + " plmn=" + plmn
             + " spn=" + spn +" subId=" + subId);
         int phoneId = mUpdateMonitor.getPhoneIdBySubId(subId);
@@ -181,7 +181,7 @@ public class CarrierText extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mSeparator = getResources().getString(R.string.kg_text_message_separator);
+        mSeparator = getResources().getString(com.android.internal.R.string.kg_text_message_separator);
         int[] operatorNameId = {R.id.carrier1, R.id.carrier2, R.id.carrier3};
         int[] operatorSepId = {R.id.carrier_divider1, R.id.carrier_divider2};
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();

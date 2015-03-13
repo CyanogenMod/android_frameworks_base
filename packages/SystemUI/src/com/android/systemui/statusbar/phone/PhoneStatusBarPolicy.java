@@ -227,7 +227,7 @@ public class PhoneStatusBarPolicy {
         String stateExtra = intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE);
 
         // Obtain the subscription info from intent
-        long subId = intent.getLongExtra(PhoneConstants.SUBSCRIPTION_KEY, 0);
+        int subId = intent.getIntExtra(PhoneConstants.SUBSCRIPTION_KEY, 0);
         Log.d(TAG, "updateSimState for subId :" + subId);
         int phoneId = SubscriptionManager.getPhoneId(subId);
         Log.d(TAG, "updateSimState for phoneId :" + phoneId);

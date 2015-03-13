@@ -45,7 +45,7 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_SET_DISCONNECTED = 5;
     private static final int MSG_SET_ON_HOLD = 6;
     private static final int MSG_SET_RINGBACK_REQUESTED = 7;
-    private static final int MSG_SET_CALL_CAPABILITIES = 8;
+    private static final int MSG_SET_CONNECTION_CAPABILITIES = 8;
     private static final int MSG_SET_IS_CONFERENCED = 9;
     private static final int MSG_ADD_CONFERENCE_CALL = 10;
     private static final int MSG_REMOVE_CALL = 11;
@@ -58,11 +58,12 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_SET_ADDRESS = 18;
     private static final int MSG_SET_CALLER_DISPLAY_NAME = 19;
     private static final int MSG_SET_CONFERENCEABLE_CONNECTIONS = 20;
-    private static final int MSG_SET_DISCONNECTED_WITH_SUPP_NOTIFICATION = 21;
-    private static final int MSG_SET_PHONE_ACCOUNT = 22;
-    private static final int MSG_SET_CALL_SUBSTATE = 23;
-    private static final int MSG_SET_EXTRAS = 24;
-    private static final int MSG_ADD_EXISTING_CONNECTION = 25;
+    private static final int MSG_ADD_EXISTING_CONNECTION = 21;
+    private static final int MSG_ON_POST_DIAL_CHAR = 22;
+    private static final int MSG_SET_DISCONNECTED_WITH_SUPP_NOTIFICATION = 23;
+    private static final int MSG_SET_PHONE_ACCOUNT = 24;
+    private static final int MSG_SET_CALL_SUBSTATE = 25;
+    private static final int MSG_SET_EXTRAS = 26;
 
     private final IConnectionServiceAdapter mDelegate;
 
@@ -135,8 +136,8 @@ final class ConnectionServiceAdapterServant {
                 case MSG_SET_RINGBACK_REQUESTED:
                     mDelegate.setRingbackRequested((String) msg.obj, msg.arg1 == 1);
                     break;
-                case MSG_SET_CALL_CAPABILITIES:
-                    mDelegate.setCallCapabilities((String) msg.obj, msg.arg1);
+                case MSG_SET_CONNECTION_CAPABILITIES:
+                    mDelegate.setConnectionCapabilities((String) msg.obj, msg.arg1);
                     break;
                 case MSG_SET_IS_CONFERENCED: {
                     SomeArgs args = (SomeArgs) msg.obj;
@@ -164,6 +165,15 @@ final class ConnectionServiceAdapterServant {
                     SomeArgs args = (SomeArgs) msg.obj;
                     try {
                         mDelegate.onPostDialWait((String) args.arg1, (String) args.arg2);
+                    } finally {
+                        args.recycle();
+                    }
+                    break;
+                }
+                case MSG_ON_POST_DIAL_CHAR: {
+                    SomeArgs args = (SomeArgs) msg.obj;
+                    try {
+                        mDelegate.onPostDialChar((String) args.arg1, (char) args.argi1);
                     } finally {
                         args.recycle();
                     }
@@ -325,8 +335,9 @@ final class ConnectionServiceAdapterServant {
         }
 
         @Override
-        public void setCallCapabilities(String connectionId, int callCapabilities) {
-            mHandler.obtainMessage(MSG_SET_CALL_CAPABILITIES, callCapabilities, 0, connectionId)
+        public void setConnectionCapabilities(String connectionId, int connectionCapabilities) {
+            mHandler.obtainMessage(
+                    MSG_SET_CONNECTION_CAPABILITIES, connectionCapabilities, 0, connectionId)
                     .sendToTarget();
         }
 
@@ -357,6 +368,14 @@ final class ConnectionServiceAdapterServant {
             args.arg1 = connectionId;
             args.arg2 = remainingDigits;
             mHandler.obtainMessage(MSG_ON_POST_DIAL_WAIT, args).sendToTarget();
+        }
+
+        @Override
+        public void onPostDialChar(String connectionId, char nextChar) {
+            SomeArgs args = SomeArgs.obtain();
+            args.arg1 = connectionId;
+            args.argi1 = nextChar;
+            mHandler.obtainMessage(MSG_ON_POST_DIAL_CHAR, args).sendToTarget();
         }
 
         @Override

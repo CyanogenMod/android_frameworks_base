@@ -79,7 +79,7 @@ public class KeyguardSecurityModel {
         IccCardConstants.State simState = IccCardConstants.State.UNKNOWN;
         SecurityMode mode = SecurityMode.None;
         for (int i = 0; i < updateMonitor.getNumPhones(); i++) {
-            long subId = updateMonitor.getSubIdByPhoneId(i);
+            int subId = updateMonitor.getSubIdByPhoneId(i);
             simState = updateMonitor.getSimState(subId);
             if (simState == IccCardConstants.State.PIN_REQUIRED
                 || simState == IccCardConstants.State.PUK_REQUIRED) {

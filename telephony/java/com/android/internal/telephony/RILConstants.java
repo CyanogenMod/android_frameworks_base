@@ -27,6 +27,8 @@ package com.android.internal.telephony;
  * Also they should all probably be static final.
  */
 
+import android.os.SystemProperties;
+
 /**
  * {@hide}
  */
@@ -101,7 +103,8 @@ public interface RILConstants {
     int NETWORK_MODE_TD_SCDMA_CDMA_EVDO_GSM_WCDMA  = 21; /*TD-SCDMA,EvDo,CDMA,GSM/WCDMA*/
     int NETWORK_MODE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA = 22; /* TD-SCDMA/LTE/GSM/WCDMA, CDMA, and
                                                                EvDo */
-    int PREFERRED_NETWORK_MODE      = NETWORK_MODE_WCDMA_PREF;
+    int PREFERRED_NETWORK_MODE      = SystemProperties.getInt("ro.telephony.default_network",
+            NETWORK_MODE_WCDMA_PREF);
 
     int CDMA_CELL_BROADCAST_SMS_DISABLED = 1;
     int CDMA_CELL_BROADCAST_SMS_ENABLED  = 0;
@@ -186,6 +189,7 @@ cat include/telephony/ril.h | \
     public static final int DATA_PROFILE_FOTA      = 3;
     public static final int DATA_PROFILE_CBS       = 4;
     public static final int DATA_PROFILE_OEM_BASE  = 1000;
+    public static final int DATA_PROFILE_INVALID   = 0xFFFFFFFF;
 
     int RIL_REQUEST_GET_SIM_STATUS = 1;
     int RIL_REQUEST_ENTER_SIM_PIN = 2;
@@ -318,6 +322,8 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_SHUTDOWN = 129;
     int RIL_REQUEST_GET_DATA_CALL_PROFILE = 130;
     int RIL_REQUEST_SIM_GET_ATR = 131;
+    int RIL_REQUEST_GET_3G_CAPABILITY = 130;
+    int RIL_REQUEST_SET_3G_CAPABILITY = 131;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;

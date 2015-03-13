@@ -46,10 +46,12 @@ enum {
     HEAP_UNKNOWN,
     HEAP_DALVIK,
     HEAP_NATIVE,
+
     HEAP_DALVIK_OTHER,
     HEAP_STACK,
     HEAP_CURSOR,
     HEAP_ASHMEM,
+    HEAP_GL_DEV,
     HEAP_UNKNOWN_DEV,
     HEAP_SO,
     HEAP_JAR,
@@ -68,6 +70,9 @@ enum {
     HEAP_DALVIK_LINEARALLOC,
     HEAP_DALVIK_ACCOUNTING,
     HEAP_DALVIK_CODE_CACHE,
+    HEAP_DALVIK_ZYGOTE,
+    HEAP_DALVIK_NON_MOVING,
+    HEAP_DALVIK_INDIRECT_REFERENCE_TABLE,
 
     _NUM_HEAP,
     _NUM_EXCLUSIVE_HEAP = HEAP_OTHER_MEMTRACK+1,
@@ -272,14 +277,21 @@ static void read_mapinfo(FILE *fp, stats_t* stats)
                     if (strstr(name, "/dev/ashmem/dalvik-LinearAlloc") == name) {
                         subHeap = HEAP_DALVIK_LINEARALLOC;
                     } else if ((strstr(name, "/dev/ashmem/dalvik-alloc space") == name) ||
-                               (strstr(name, "/dev/ashmem/dalvik-main space") == name) ||
-                               (strstr(name, "/dev/ashmem/dalvik-non moving space") == name)) {
+                               (strstr(name, "/dev/ashmem/dalvik-main space") == name)) {
                         // This is the regular Dalvik heap.
                         whichHeap = HEAP_DALVIK;
                         subHeap = HEAP_DALVIK_NORMAL;
                     } else if (strstr(name, "/dev/ashmem/dalvik-large object space") == name) {
                         whichHeap = HEAP_DALVIK;
                         subHeap = HEAP_DALVIK_LARGE;
+                    } else if (strstr(name, "/dev/ashmem/dalvik-non moving space") == name) {
+                        whichHeap = HEAP_DALVIK;
+                        subHeap = HEAP_DALVIK_NON_MOVING;
+                    } else if (strstr(name, "/dev/ashmem/dalvik-zygote space") == name) {
+                        whichHeap = HEAP_DALVIK;
+                        subHeap = HEAP_DALVIK_ZYGOTE;
+                    } else if (strstr(name, "/dev/ashmem/dalvik-indirect ref") == name) {
+                        subHeap = HEAP_DALVIK_INDIRECT_REFERENCE_TABLE;
                     } else if (strstr(name, "/dev/ashmem/dalvik-jit-code-cache") == name) {
                         subHeap = HEAP_DALVIK_CODE_CACHE;
                     } else {
@@ -297,7 +309,11 @@ static void read_mapinfo(FILE *fp, stats_t* stats)
             } else if (strncmp(name, "[stack", 6) == 0) {
                 whichHeap = HEAP_STACK;
             } else if (strncmp(name, "/dev/", 5) == 0) {
-                whichHeap = HEAP_UNKNOWN_DEV;
+                if (strncmp(name, "/dev/kgsl-3d0", 13) == 0) {
+                    whichHeap = HEAP_GL_DEV;
+                } else {
+                    whichHeap = HEAP_UNKNOWN_DEV;
+                }
             } else if (nameLen > 3 && strcmp(name+nameLen-3, ".so") == 0) {
                 whichHeap = HEAP_SO;
                 is_swappable = true;
@@ -479,11 +495,13 @@ static void android_os_Debug_getDirtyPages(JNIEnv *env, jobject clazz, jobject o
     android_os_Debug_getDirtyPagesPid(env, clazz, getpid(), object);
 }
 
-static jlong android_os_Debug_getPssPid(JNIEnv *env, jobject clazz, jint pid, jlongArray outUss)
+static jlong android_os_Debug_getPssPid(JNIEnv *env, jobject clazz, jint pid, jlongArray outUss,
+        jlongArray outMemtrack)
 {
     char line[1024];
     jlong pss = 0;
     jlong uss = 0;
+    jlong memtrack = 0;
     unsigned temp;
 
     char tmp[128];
@@ -491,7 +509,7 @@ static jlong android_os_Debug_getPssPid(JNIEnv *env, jobject clazz, jint pid, jl
 
     struct graphics_memory_pss graphics_mem;
     if (read_memtrack_memory(pid, &graphics_mem) == 0) {
-        pss = uss = graphics_mem.graphics + graphics_mem.gl + graphics_mem.other;
+        pss = uss = memtrack = graphics_mem.graphics + graphics_mem.gl + graphics_mem.other;
     }
 
     sprintf(tmp, "/proc/%d/smaps", pid);
@@ -510,8 +528,8 @@ static jlong android_os_Debug_getPssPid(JNIEnv *env, jobject clazz, jint pid, jl
                         c++;
                     }
                     pss += atoi(c);
-                } else if (strncmp(line, "Private_Clean:", 14)
-                        || strncmp(line, "Private_Dirty:", 14)) {
+                } else if (strncmp(line, "Private_Clean:", 14) == 0
+                        || strncmp(line, "Private_Dirty:", 14) == 0) {
                     char* c = line + 14;
                     while (*c != 0 && (*c < '0' || *c > '9')) {
                         c++;
@@ -534,12 +552,22 @@ static jlong android_os_Debug_getPssPid(JNIEnv *env, jobject clazz, jint pid, jl
         }
     }
 
+    if (outMemtrack != NULL) {
+        if (env->GetArrayLength(outMemtrack) >= 1) {
+            jlong* outMemtrackArray = env->GetLongArrayElements(outMemtrack, 0);
+            if (outMemtrackArray != NULL) {
+                outMemtrackArray[0] = memtrack;
+            }
+            env->ReleaseLongArrayElements(outMemtrack, outMemtrackArray, 0);
+        }
+    }
+
     return pss;
 }
 
 static jlong android_os_Debug_getPss(JNIEnv *env, jobject clazz)
 {
-    return android_os_Debug_getPssPid(env, clazz, getpid(), NULL);
+    return android_os_Debug_getPssPid(env, clazz, getpid(), NULL, NULL);
 }
 
 enum {
@@ -552,6 +580,10 @@ enum {
     MEMINFO_SWAP_TOTAL,
     MEMINFO_SWAP_FREE,
     MEMINFO_ZRAM_TOTAL,
+    MEMINFO_MAPPED,
+    MEMINFO_VMALLOC_USED,
+    MEMINFO_PAGE_TABLES,
+    MEMINFO_KERNEL_STACK,
     MEMINFO_COUNT
 };
 
@@ -590,6 +622,11 @@ static void android_os_Debug_getMemInfo(JNIEnv *env, jobject clazz, jlongArray o
             "Slab:",
             "SwapTotal:",
             "SwapFree:",
+            "ZRam:",
+            "Mapped:",
+            "VmallocUsed:",
+            "PageTables:",
+            "KernelStack:",
             NULL
     };
     static const int tagsLen[] = {
@@ -601,12 +638,17 @@ static void android_os_Debug_getMemInfo(JNIEnv *env, jobject clazz, jlongArray o
             5,
             10,
             9,
+            5,
+            7,
+            12,
+            11,
+            12,
             0
     };
-    long mem[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    long mem[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     char* p = buffer;
-    while (*p && numFound < 8) {
+    while (*p && numFound < 13) {
         int i = 0;
         while (tags[i]) {
             if (strncmp(p, tags[i], tagsLen[i]) == 0) {
@@ -933,7 +975,7 @@ static JNINativeMethod gMethods[] = {
             (void*) android_os_Debug_getDirtyPagesPid },
     { "getPss",                 "()J",
             (void*) android_os_Debug_getPss },
-    { "getPss",                 "(I[J)J",
+    { "getPss",                 "(I[J[J)J",
             (void*) android_os_Debug_getPssPid },
     { "getMemInfo",             "([J)V",
             (void*) android_os_Debug_getMemInfo },

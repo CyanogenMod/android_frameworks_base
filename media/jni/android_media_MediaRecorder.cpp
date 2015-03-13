@@ -102,7 +102,7 @@ void JNIMediaRecorderListener::notify(int msg, int ext1, int ext2)
     ALOGV("JNIMediaRecorderListener::notify");
 
     JNIEnv *env = AndroidRuntime::getJNIEnv();
-    env->CallStaticVoidMethod(mClass, fields.post_event, mObject, msg, ext1, ext2, 0);
+    env->CallStaticVoidMethod(mClass, fields.post_event, mObject, msg, ext1, ext2, NULL);
 }
 
 // ----------------------------------------------------------------------------
@@ -182,7 +182,8 @@ static void
 android_media_MediaRecorder_setAudioSource(JNIEnv *env, jobject thiz, jint as)
 {
     ALOGV("setAudioSource(%d)", as);
-    if (as < AUDIO_SOURCE_DEFAULT || as >= AUDIO_SOURCE_CNT) {
+    if (as < AUDIO_SOURCE_DEFAULT ||
+        (as >= AUDIO_SOURCE_CNT && as != AUDIO_SOURCE_FM_TUNER)) {
         jniThrowException(env, "java/lang/IllegalArgumentException", "Invalid audio source");
         return;
     }

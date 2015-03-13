@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Εν εξελίξει"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Ειδοποιήσεις"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Χαμηλή στάθμη μπαταρίας"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"Απομένει <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"Απομένει <xliff:g id="NUMBER">%d%%</xliff:g>. Η Εξοικονόμηση μπαταρίας είναι ενεργή."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"Απομένουν <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"Απομένουν <xliff:g id="PERCENTAGE">%s</xliff:g>. Η λειτουργία εξοικονόμησης μπαταρίας είναι ενεργή."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"Δεν υποστηρίζεται η φόρτιση USB.\nΧρησιμοποιείτε μόνο τον φορτιστή που παρέχεται."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"Δεν υποστηρίζεται η φόρτιση μέσω USB."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Χρήση μόνο του παρεχόμενου φορτιστή."</string>
@@ -226,8 +226,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Daydream"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Λειτουργία πτήσης"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Φόρτιση, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Μπαταρία πλήρης"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> συσκευές)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Απενεργοποιημένο Bluetooth"</string>
@@ -265,6 +263,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Περισσότερες ρυθμίσεις"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Τέλος"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Συνδέθηκε"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Σύνδεση μέσω βοηθού Wi‑Fi"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Σύνδεση…"</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Πρόσδεση"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Σημείο πρόσβασης Wi-Fi"</string>
@@ -273,13 +272,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Δεδομένα κινητής τηλεφωνίας"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Χρήση δεδομένων"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Υπολειπόμενα δεδομένα"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Συμπλήρωση του ορίου – παύση χρήσης δεδομένων"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Υπέρβαση ορίου"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"Χρησιμοποιούνται <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Όριο <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Προειδοποίηση για <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Οι πρόσφατες οθόνες σας εμφανίζονται εδώ"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Πληροφορίες εφαρμογής"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"lock to app"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"καρφίτσωμα οθόνης"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"αναζήτηση"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Δεν ήταν δυνατή η εκκίνηση της εφαρμογής <xliff:g id="APP">%s</xliff:g>."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Φορτίστηκε"</string>
@@ -326,7 +325,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Η Εξοικονόμηση μπαταρίας είναι ενεργή"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Μειώνει την απόδοση και τα δεδομένα παρασκηνίου"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Απενεργοποίηση εξοικονόμησης μπαταρίας"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Κρυφό περιεχόμενο"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"Θα ξεκινήσει η καταγραφή του περιεχομένου που εμφανίζεται στην οθόνη σας από την εφαρμογή <xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g>."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Να μην εμφανιστεί ξανά"</string>
@@ -357,6 +355,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Εμφάνιση πριν το ξεκλείδωμα"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Όχι"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Ρύθμιση"</string>
-    <string name="muted_by" msgid="6147073845094180001">"Σίγαση από <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Η οθόνη καρφιτσώθηκε"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Με αυτόν τον τρόπο παραμένει σε προβολή έως ότου την ξεκαρφιτσώσετε. Αγγίξτε παρατεταμένα \"Επιστροφή\" και \"Επισκόπηση\" ταυτόχρονα για ξεκαρφίτσωμα."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Με αυτόν τον τρόπο παραμένει σε προβολή έως ότου την ξεκαρφιτσώσετε. Αγγίξτε παρατεταμένα \"Επισκόπηση\" για ξεκαρφίτσωμα."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Το κατάλαβα"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Όχι"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Απόκρυψη <xliff:g id="TILE_LABEL">%1$s</xliff:g>;"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Θα εμφανιστεί ξανά την επόμενη φορά που θα το ενεργοποιήσετε στις ρυθμίσεις."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Απόκρυψη"</string>
 </resources>

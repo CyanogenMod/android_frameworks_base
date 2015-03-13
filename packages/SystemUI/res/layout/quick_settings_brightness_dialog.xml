@@ -14,9 +14,10 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
+        xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
+
     style="@style/BrightnessDialogContainer">
 
     <ImageView

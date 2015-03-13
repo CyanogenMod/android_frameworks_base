@@ -67,6 +67,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
 import android.net.Uri;
 import android.os.Binder;
@@ -825,7 +826,11 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         if (defIm == null && mMethodList.size() > 0) {
             defIm = InputMethodUtils.getMostApplicableDefaultIME(
                     mSettings.getEnabledInputMethodListLocked());
-            Slog.i(TAG, "No default found, using " + defIm.getId());
+            if (defIm != null) {
+                Slog.i(TAG, "Default found, using " + defIm.getId());
+            } else {
+                Slog.i(TAG, "No default found");
+            }
         }
         if (defIm != null) {
             setSelectedInputMethodAndSubtypeLocked(defIm, NOT_A_SUBTYPE_ID, false);
@@ -2922,23 +2927,30 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     }
                 }
             }
-            final Context themedContext = new ContextThemeWrapper(context,
-                    android.R.style.Theme_DeviceDefault_Settings);
-            mDialogBuilder = new AlertDialog.Builder(themedContext);
-            final TypedArray a = themedContext.obtainStyledAttributes(null,
-                    com.android.internal.R.styleable.DialogPreference,
-                    com.android.internal.R.attr.alertDialogStyle, 0);
-            mDialogBuilder.setIcon(a.getDrawable(
-                    com.android.internal.R.styleable.DialogPreference_dialogIcon));
-            a.recycle();
+
+            final Context settingsContext = new ContextThemeWrapper(context,
+                    com.android.internal.R.style.Theme_DeviceDefault_Settings);
+
+            mDialogBuilder = new AlertDialog.Builder(settingsContext);
             mDialogBuilder.setOnCancelListener(new OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     hideInputMethodMenu();
                 }
             });
-            final LayoutInflater inflater =
-                    (LayoutInflater)themedContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            final Context dialogContext = mDialogBuilder.getContext();
+            final TypedArray a = dialogContext.obtainStyledAttributes(null,
+                    com.android.internal.R.styleable.DialogPreference,
+                    com.android.internal.R.attr.alertDialogStyle, 0);
+            final Drawable dialogIcon = a.getDrawable(
+                    com.android.internal.R.styleable.DialogPreference_dialogIcon);
+            a.recycle();
+
+            mDialogBuilder.setIcon(dialogIcon);
+
+            final LayoutInflater inflater = (LayoutInflater) dialogContext.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
             final View tv = inflater.inflate(
                     com.android.internal.R.layout.input_method_switch_dialog_title, null);
             mDialogBuilder.setCustomTitle(tv);
@@ -2949,7 +2961,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     .findViewById(com.android.internal.R.id.hard_keyboard_section)
                     .setVisibility(mWindowManagerService.isHardKeyboardAvailable()
                             ? View.VISIBLE : View.GONE);
-            final Switch hardKeySwitch = (Switch)mSwitchingDialogTitleView.findViewById(
+            final Switch hardKeySwitch = (Switch) mSwitchingDialogTitleView.findViewById(
                     com.android.internal.R.id.hard_keyboard_switch);
             hardKeySwitch.setChecked(mShowImeWithHardKeyboard);
             hardKeySwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -2962,7 +2974,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 }
             });
 
-            final ImeSubtypeListAdapter adapter = new ImeSubtypeListAdapter(themedContext,
+            final ImeSubtypeListAdapter adapter = new ImeSubtypeListAdapter(dialogContext,
                     com.android.internal.R.layout.input_method_switch_item, imList, checkedItem);
             final OnClickListener choiceListener = new OnClickListener() {
                 @Override
@@ -3018,10 +3030,11 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         public ImeSubtypeListAdapter(Context context, int textViewResourceId,
                 List<ImeSubtypeListItem> itemsList, int checkedItem) {
             super(context, textViewResourceId, itemsList);
+
             mTextViewResourceId = textViewResourceId;
             mItemsList = itemsList;
             mCheckedItem = checkedItem;
-            mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
