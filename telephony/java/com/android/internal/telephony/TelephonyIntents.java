@@ -334,27 +334,7 @@ public class TelephonyIntents {
             = "codeaurora.intent.action.ACTION_MANAGED_ROAMING_IND";
 
     /**
-     * <p>Broadcast Action: It indicates one column of a siminfo record has been changed
-     * The intent will have the following extra values:</p>
-     * <ul>
-     *   <li><em>columnName</em> - The siminfo column that is updated.</li>
-     *   <li><em>stringContent</em> - The string value of the updated column.</li>
-     *   <li><em>intContent</em> - The int value of the updated column.</li>
-     * </ul>
-     * <p class="note">This is a protected intent that can only be sent
-     * by the system.
-     */
-    public static final String ACTION_SIMINFO_CONTENT_CHANGE
-            = "android.intent.action.ACTION_SIMINFO_CONTENT_CHANGE";
-
-    /**
      * <p>Broadcast Action: It indicates one column of a subinfo record has been changed
-     * The intent will have the following extra values:</p>
-     * <ul>
-     *   <li><em>columnName</em> - The siminfo column that is updated.</li>
-     *   <li><em>stringContent</em> - The string value of the updated column.</li>
-     *   <li><em>intContent</em> - The int value of the updated column.</li>
-     * </ul>
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -362,18 +342,8 @@ public class TelephonyIntents {
             = "android.intent.action.ACTION_SUBINFO_CONTENT_CHANGE";
 
     /**
-     * <p>Broadcast Action: It indicates siminfo update is completed when SIM inserted state change
-     * The intent will have the following extra values:</p>
-     * <p class="note">This is a protected intent that can only be sent
-     * by the system.
-     */
-    public static final String ACTION_SIMINFO_UPDATED
-            = "android.intent.action.ACTION_SIMINFO_UPDATED";
-
-    /**
      * <p>Broadcast Action: It indicates subinfo record update is completed
      * when SIM inserted state change
-     * The intent will have the following extra values:</p>
      * <p class="note">This is a protected intent that can only be sent
      * by the system.
      */
@@ -440,4 +410,18 @@ public class TelephonyIntents {
 
     public static final String EXTRA_RESULT  = "operationResult";
     public static final String EXTRA_NEW_SUB_STATE = "newSubState";
+    /**
+     * To notify the capability switch procedure start
+     */
+    // FIXME maybe these should be removed - sprout only
+    public static final String ACTION_CAPABILITY_SWITCH_START
+            = "com.android.phone.ACTION_CAPABILITY_SWITCH_START";
+
+    /**
+     * To notify the capability switch procedure end
+     */
+    // FIXME maybe these should be removed - sprout only
+    public static final String ACTION_CAPABILITY_SWITCH_DONE
+            = "com.android.phone.ACTION_CAPABILITY_SWITCH_DONE";
+
 }

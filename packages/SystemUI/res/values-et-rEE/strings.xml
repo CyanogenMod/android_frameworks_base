@@ -20,7 +20,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label" msgid="7164937344850004466">"Süsteemi UI"</string>
-    <string name="status_bar_clear_all_button" msgid="7774721344716731603">"Kustuta"</string>
+    <string name="status_bar_clear_all_button" msgid="7774721344716731603">"Tühjenda"</string>
     <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"Loendist eemaldamine"</string>
     <string name="status_bar_recent_inspect_item_title" msgid="7793624864528818569">"Rakenduse teave"</string>
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"Teie viimane ekraanikuva ilmub siia"</string>
@@ -31,10 +31,10 @@
   </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Teatisi pole"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Jätkuv"</string>
-    <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Teadistused"</string>
+    <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Märguanded"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Aku hakkab tühjaks saama"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> on alles"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"Alles: <xliff:g id="NUMBER">%d%%</xliff:g>. Akusäästja on sisse lülitatud."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"Jäänud on <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"Jäänud on <xliff:g id="PERCENTAGE">%s</xliff:g>. Akusäästja on sisse lülitatud."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB laadimist ei toetata.\nKasutage ainult tootja laadija."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB-ga laadimist ei toetata."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Kasutage ainult kaasasolevat laadijat."</string>
@@ -149,7 +149,7 @@
     <string name="accessibility_battery_level" msgid="7451474187113371965">"Aku: <xliff:g id="NUMBER">%d</xliff:g> protsenti."</string>
     <string name="accessibility_settings_button" msgid="799583911231893380">"Süsteemiseaded"</string>
     <string name="accessibility_notifications_button" msgid="4498000369779421892">"Teatised"</string>
-    <string name="accessibility_remove_notification" msgid="3603099514902182350">"Teatise kustutamine"</string>
+    <string name="accessibility_remove_notification" msgid="3603099514902182350">"Märguande eemaldamine."</string>
     <string name="accessibility_gps_enabled" msgid="3511469499240123019">"GPS on lubatud."</string>
     <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"GPS-signaali otsimine."</string>
     <string name="accessibility_tty_enabled" msgid="4613200365379426561">"TeleTypewriter lubatud."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Unistus"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Lennurežiim"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Laadimine, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Laetud"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> seadet)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth on väljas"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Rohkem seadeid"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Valmis"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Ühendatud"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Ühendatud WiFi-abi kaudu"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Ühenduse loomine ..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Jagamine"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Leviala"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Mobiilne andmeside"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Andmekasutus"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Järelejäänud andmemaht"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Limiit on täis – andmeside kasutamine on peatatud"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Üle limiidi"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> on kasutatud"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Limiit: <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> hoiatus"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Teie viimane ekraanikuva ilmub siia"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Rakenduste teave"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"lukusta rakendusele"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"ekraanikuva kinnitamine"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"otsing"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Rakendust <xliff:g id="APP">%s</xliff:g> ei saanud käivitada."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Laetud"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Akusäästja on sisse lülitatud"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Vähendab jõudlust ja taustaandmeid"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Akusäästja väljalülitamine"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Sisu on peidetud"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> hakkab jäädvustama kõike, mida ekraanil kuvatakse."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Ära kuva uuesti"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Näete neid enne avamist"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Tänan, ei"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Seadistus"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> vaigistas"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Ekraan on kinnitatud"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"See hoiab selle kuval, kuni selle vabastate. Vabastamiseks puudutage ning hoidke korraga all nuppe Tagasi ja Ülevaade."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"See hoiab selle kuval, kuni selle vabastate. Vabastamiseks puudutage ja hoidke all nuppu Ülevaade."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Selge"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Tänan, ei"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Kas peita <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"See kuvatakse uuesti järgmisel korral, kui selle seadetes sisse lülitate."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Peida"</string>
 </resources>

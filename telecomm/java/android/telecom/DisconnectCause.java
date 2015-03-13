@@ -26,9 +26,10 @@ import java.util.Objects;
 
 /**
  * Describes the cause of a disconnected call. This always includes a code describing the generic
- * cause of the disconnect. Optionally, it may include a localized label and/or localized description
- * to display to the user which is provided by the {@link ConnectionService}. It also may contain a
- * reason for the the disconnect, which is intended for logging and not for display to the user.
+ * cause of the disconnect. Optionally, it may include a label and/or description to display to the
+ * user. It is the responsibility of the {@link ConnectionService} to provide localized versions of
+ * the label and description. It also may contain a reason for the disconnect, which is intended for
+ * logging and not for display to the user.
  * @hide
  */
 @SystemApi
@@ -61,6 +62,8 @@ public final class DisconnectCause implements Parcelable {
     /** Disconnected for reason not described by other disconnect codes. */
     public static final int OTHER = 9;
 
+    public static final int CONNECTION_MANAGER_NOT_SUPPORTED = 10;
+
     private int mDisconnectCode;
     private CharSequence mDisconnectLabel;
     private CharSequence mDisconnectDescription;
@@ -88,6 +91,7 @@ public final class DisconnectCause implements Parcelable {
 
     /**
      * Creates a new DisconnectCause.
+     *
      * @param label The localized label to show to the user to explain the disconnect.
      * @param code The code for the disconnect cause.
      * @param description The localized description to show to the user to explain the disconnect.

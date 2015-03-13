@@ -453,6 +453,7 @@ public final class MediaController {
         }
         MessageHandler holder = new MessageHandler(handler.getLooper(), cb);
         mCallbacks.add(holder);
+        holder.mRegistered = true;
 
         if (!mCbRegistered) {
             try {
@@ -471,6 +472,7 @@ public final class MediaController {
             if (cb == handler.mCallback) {
                 mCallbacks.remove(i);
                 success = true;
+                handler.mRegistered = false;
             }
         }
         if (mCbRegistered && mCallbacks.size() == 0) {
@@ -1058,6 +1060,7 @@ public final class MediaController {
 
     private final static class MessageHandler extends Handler {
         private final MediaController.Callback mCallback;
+        private boolean mRegistered = false;
 
         public MessageHandler(Looper looper, MediaController.Callback cb) {
             super(looper, null, true);
@@ -1066,6 +1069,9 @@ public final class MediaController {
 
         @Override
         public void handleMessage(Message msg) {
+            if (!mRegistered) {
+                return;
+            }
             switch (msg.what) {
                 case MSG_EVENT:
                     mCallback.onSessionEvent((String) msg.obj, msg.getData());

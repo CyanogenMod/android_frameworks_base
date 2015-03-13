@@ -26,6 +26,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.util.Slog;
 
 import java.util.Objects;
 
@@ -35,7 +36,9 @@ import java.util.Objects;
  *
  * @hide
  */
-public class NetworkIdentity {
+public class NetworkIdentity implements Comparable<NetworkIdentity> {
+    private static final String TAG = "NetworkIdentity";
+
     /**
      * When enabled, combine all {@link #mSubType} together under
      * {@link #SUBTYPE_COMBINED}.
@@ -134,6 +137,18 @@ public class NetworkIdentity {
     }
 
     /**
+     * Scrub given IMSI on production builds.
+     */
+     public static String[] scrubSubscriberId(String[] subscriberId) {
+         if (subscriberId == null) return null;
+         final String[] res = new String[subscriberId.length];
+         for (int i = 0; i < res.length; i++) {
+             res[i] = NetworkIdentity.scrubSubscriberId(subscriberId[i]);
+         }
+         return res;
+     }
+
+    /**
      * Build a {@link NetworkIdentity} from the given {@link NetworkState},
      * assuming that any mobile networks are using the current IMSI.
      */
@@ -149,15 +164,11 @@ public class NetworkIdentity {
         boolean roaming = false;
 
         if (isNetworkTypeMobile(type)) {
-            final TelephonyManager telephony = (TelephonyManager) context.getSystemService(
-                    Context.TELEPHONY_SERVICE);
-            roaming = telephony.isNetworkRoaming(SubscriptionManager.getDefaultDataSubId());
-            if (state.subscriberId != null) {
-                subscriberId = state.subscriberId;
-            } else {
-                subscriberId = telephony.getSubscriberId(SubscriptionManager.getDefaultDataSubId());
+            if (state.subscriberId == null) {
+                Slog.w(TAG, "Active mobile network without subscriber!");
             }
-
+                subscriberId = state.subscriberId;
+           roaming = state.networkInfo.isRoaming();
         } else if (type == TYPE_WIFI) {
             if (state.networkId != null) {
                 networkId = state.networkId;
@@ -170,5 +181,23 @@ public class NetworkIdentity {
         }
 
         return new NetworkIdentity(type, subType, subscriberId, networkId, roaming);
+    }
+
+    @Override
+    public int compareTo(NetworkIdentity another) {
+        int res = Integer.compare(mType, another.mType);
+        if (res == 0) {
+            res = Integer.compare(mSubType, another.mSubType);
+        }
+        if (res == 0 && mSubscriberId != null && another.mSubscriberId != null) {
+            res = mSubscriberId.compareTo(another.mSubscriberId);
+        }
+        if (res == 0 && mNetworkId != null && another.mNetworkId != null) {
+            res = mNetworkId.compareTo(another.mNetworkId);
+        }
+        if (res == 0) {
+            res = Boolean.compare(mRoaming, another.mRoaming);
+        }
+        return res;
     }
 }

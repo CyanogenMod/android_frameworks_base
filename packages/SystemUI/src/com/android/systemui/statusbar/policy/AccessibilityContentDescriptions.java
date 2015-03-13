@@ -33,6 +33,7 @@ public class AccessibilityContentDescriptions {
         R.string.accessibility_wifi_three_bars,
         R.string.accessibility_wifi_signal_full
     };
+
     static final int[] WIMAX_CONNECTION_STRENGTH = {
         R.string.accessibility_no_wimax,
         R.string.accessibility_wimax_one_bar,
@@ -40,4 +41,6 @@ public class AccessibilityContentDescriptions {
         R.string.accessibility_wimax_three_bars,
         R.string.accessibility_wimax_signal_full
     };
+
+    static final int WIFI_NO_CONNECTION = R.string.accessibility_no_wifi;
 }

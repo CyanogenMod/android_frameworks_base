@@ -29,6 +29,7 @@ import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardService;
 import com.android.internal.policy.IKeyguardServiceConstants;
 import com.android.internal.policy.IKeyguardShowCallback;
+import com.android.internal.policy.IKeyguardStateCallback;
 import com.android.systemui.SystemUIApplication;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -63,22 +64,24 @@ public class KeyguardService extends Service {
 
         private boolean mIsOccluded;
 
-        @Override
+         @Override // Binder interface
+         public void addStateMonitorCallback(IKeyguardStateCallback callback) {
+             checkPermission();
+             mKeyguardViewMediator.addStateMonitorCallback(callback);
+         }
+
         public boolean isShowing() {
             return mKeyguardViewMediator.isShowing();
         }
 
-        @Override
         public boolean isSecure() {
             return mKeyguardViewMediator.isSecure();
         }
 
-        @Override
         public boolean isShowingAndNotOccluded() {
             return mKeyguardViewMediator.isShowingAndNotOccluded();
         }
 
-        @Override
         public boolean isInputRestricted() {
             return mKeyguardViewMediator.isInputRestricted();
         }
@@ -95,7 +98,6 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.keyguardDone(authenticated, wakeup);
         }
 
-        @Override
         public int setOccluded(boolean isOccluded) {
             checkPermission();
             synchronized (this) {
@@ -159,7 +161,6 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.setKeyguardEnabled(enabled);
         }
 
-        @Override
         public boolean isDismissable() {
             return mKeyguardViewMediator.isDismissable();
         }
@@ -182,18 +183,11 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.setCurrentUser(userId);
         }
 
-        @Override
         public void showAssistant() {
             checkPermission();
         }
 
-        @Override
         public void dispatch(MotionEvent event) {
-            checkPermission();
-        }
-
-        @Override
-        public void launchCamera() {
             checkPermission();
         }
 

@@ -18,6 +18,7 @@ package com.android.internal.policy;
 import android.view.MotionEvent;
 
 import com.android.internal.policy.IKeyguardShowCallback;
+import com.android.internal.policy.IKeyguardStateCallback;
 import com.android.internal.policy.IKeyguardExitCallback;
 
 import android.os.Bundle;
@@ -42,7 +43,8 @@ interface IKeyguardService {
      *         responsible to make sure that the flags are unset.
      */
     int setOccluded(boolean isOccluded);
-
+    
+    void addStateMonitorCallback(IKeyguardStateCallback callback);
     oneway void dismiss();
     oneway void onDreamingStarted();
     oneway void onDreamingStopped();
@@ -54,7 +56,6 @@ interface IKeyguardService {
     oneway void setCurrentUser(int userId);
     oneway void showAssistant();
     oneway void dispatch(in MotionEvent event);
-    oneway void launchCamera();
     oneway void onBootCompleted();
 
     /**

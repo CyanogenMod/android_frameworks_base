@@ -48,17 +48,19 @@ struct fields_t {
     jfieldID    canDisableShutterSound;
     jfieldID    face_rect;
     jfieldID    face_score;
+    jfieldID    face_id;
+    jfieldID    face_left_eye;
+    jfieldID    face_right_eye;
+    jfieldID    face_mouth;
     jfieldID    rect_left;
     jfieldID    rect_top;
     jfieldID    rect_right;
     jfieldID    rect_bottom;
+    jfieldID    point_x;
+    jfieldID    point_y;
     jmethodID   post_event;
     jmethodID   rect_constructor;
     jmethodID   face_constructor;
-    jfieldID    face_id;
-    jfieldID    face_leftEye;
-    jfieldID    face_rightEye;
-    jfieldID    face_mouth;
     jfieldID    face_sm_degree;
     jfieldID    face_sm_score;
     jfieldID    face_blink_detected;
@@ -71,8 +73,6 @@ struct fields_t {
     jfieldID    face_left_right_gaze;
     jfieldID    face_top_bottom_gaze;
     jfieldID    face_recognised;
-    jfieldID    point_x;
-    jfieldID    point_y;
     jmethodID   point_constructor;
 };
 
@@ -146,7 +146,8 @@ sp<Camera> get_native_camera(JNIEnv *env, jobject thiz, JNICameraContext** pCont
     }
     ALOGV("get_native_camera: context=%p, camera=%p", context, camera.get());
     if (camera == 0) {
-        jniThrowRuntimeException(env, "Method called after release()");
+        jniThrowRuntimeException(env,
+                "Camera is being used after Camera.release() was called");
     }
 
     if (pContext != NULL) *pContext = context;
@@ -391,22 +392,32 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
         env->SetObjectField(face, fields.face_rect, rect);
         env->SetIntField(face, fields.face_score, metadata->faces[i].score);
 
-        jobject point1 = env->NewObject(mPointClass, fields.point_constructor);
-        env->SetIntField(point1, fields.point_x, metadata->faces[i].left_eye[0]);
-        env->SetIntField(point1, fields.point_y, metadata->faces[i].left_eye[1]);
-        env->SetObjectField(face, fields.face_leftEye, point1);
+        bool optionalFields = metadata->faces[i].id != 0
+            && metadata->faces[i].left_eye[0] != -2000 && metadata->faces[i].left_eye[1] != -2000
+            && metadata->faces[i].right_eye[0] != -2000 && metadata->faces[i].right_eye[1] != -2000
+            && metadata->faces[i].mouth[0] != -2000 && metadata->faces[i].mouth[1] != -2000;
+        if (optionalFields) {
+            int32_t id = metadata->faces[i].id;
+            env->SetIntField(face, fields.face_id, id);
 
-        jobject point2 = env->NewObject(mPointClass, fields.point_constructor);
-        env->SetIntField(point2, fields.point_x, metadata->faces[i].right_eye[0]);
-        env->SetIntField(point2, fields.point_y, metadata->faces[i].right_eye[1]);
-        env->SetObjectField(face, fields.face_rightEye, point2);
+            jobject leftEye = env->NewObject(mPointClass, fields.point_constructor);
+            env->SetIntField(leftEye, fields.point_x, metadata->faces[i].left_eye[0]);
+            env->SetIntField(leftEye, fields.point_y, metadata->faces[i].left_eye[1]);
+            env->SetObjectField(face, fields.face_left_eye, leftEye);
+            env->DeleteLocalRef(leftEye);
 
-        jobject point3 = env->NewObject(mPointClass, fields.point_constructor);
-        env->SetIntField(point3, fields.point_x, metadata->faces[i].mouth[0]);
-        env->SetIntField(point3, fields.point_y, metadata->faces[i].mouth[1]);
-        env->SetObjectField(face, fields.face_mouth, point3);
+            jobject rightEye = env->NewObject(mPointClass, fields.point_constructor);
+            env->SetIntField(rightEye, fields.point_x, metadata->faces[i].right_eye[0]);
+            env->SetIntField(rightEye, fields.point_y, metadata->faces[i].right_eye[1]);
+            env->SetObjectField(face, fields.face_right_eye, rightEye);
+            env->DeleteLocalRef(rightEye);
 
-        env->SetIntField(face, fields.face_id, metadata->faces[i].id);
+            jobject mouth = env->NewObject(mPointClass, fields.point_constructor);
+            env->SetIntField(mouth, fields.point_x, metadata->faces[i].mouth[0]);
+            env->SetIntField(mouth, fields.point_y, metadata->faces[i].mouth[1]);
+            env->SetObjectField(face, fields.face_mouth, mouth);
+            env->DeleteLocalRef(mouth);
+        }
 
         if (mIsExtendedFace) {
             env->SetIntField(face, fields.face_sm_degree, metadata->faces[i].smile_degree);
@@ -426,9 +437,6 @@ void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_m
         env->DeleteLocalRef(face);
         env->DeleteLocalRef(rect);
 
-        env->DeleteLocalRef(point1);
-        env->DeleteLocalRef(point2);
-        env->DeleteLocalRef(point3);
     }
     env->CallStaticVoidMethod(mCameraJClass, fields.post_event,
             mCameraJObjectWeak, msgType, 0, 0, obj);
@@ -1182,8 +1190,8 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "android/hardware/Camera$Face", "rect", "Landroid/graphics/Rect;", &fields.face_rect },
         { "android/hardware/Camera$Face", "score", "I", &fields.face_score },
         { "android/hardware/Camera$Face", "id", "I", &fields.face_id },
-        { "android/hardware/Camera$Face", "leftEye", "Landroid/graphics/Point;", &fields.face_leftEye },
-        { "android/hardware/Camera$Face", "rightEye", "Landroid/graphics/Point;", &fields.face_rightEye },
+        { "android/hardware/Camera$Face", "leftEye", "Landroid/graphics/Point;", &fields.face_left_eye },
+        { "android/hardware/Camera$Face", "rightEye", "Landroid/graphics/Point;", &fields.face_right_eye },
         { "android/hardware/Camera$Face", "mouth", "Landroid/graphics/Point;", &fields.face_mouth },
         { "android/hardware/Camera$Face", "smileDegree", "I", &fields.face_sm_degree },
         { "android/hardware/Camera$Face", "smileScore", "I", &fields.face_sm_score },
@@ -1195,8 +1203,8 @@ int register_android_hardware_Camera(JNIEnv *env)
         { "org/codeaurora/camera/ExtendedFace", "rect", "Landroid/graphics/Rect;", &fields.face_rect },
         { "org/codeaurora/camera/ExtendedFace", "score", "I", &fields.face_score },
         { "org/codeaurora/camera/ExtendedFace", "id", "I", &fields.face_id },
-        { "org/codeaurora/camera/ExtendedFace", "leftEye", "Landroid/graphics/Point;", &fields.face_leftEye },
-        { "org/codeaurora/camera/ExtendedFace", "rightEye", "Landroid/graphics/Point;", &fields.face_rightEye },
+        { "org/codeaurora/camera/ExtendedFace", "leftEye", "Landroid/graphics/Point;", &fields.face_left_eye },
+        { "org/codeaurora/camera/ExtendedFace", "rightEye", "Landroid/graphics/Point;", &fields.face_right_eye },
         { "org/codeaurora/camera/ExtendedFace", "mouth", "Landroid/graphics/Point;", &fields.face_mouth },
         { "org/codeaurora/camera/ExtendedFace", "smileDegree", "I", &fields.face_sm_degree },
         { "org/codeaurora/camera/ExtendedFace", "smileScore", "I", &fields.face_sm_score },

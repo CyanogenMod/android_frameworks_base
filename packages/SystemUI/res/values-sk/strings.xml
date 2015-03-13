@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Prebiehajúce"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Upozornenia"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Batéria je takmer vybitá"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"Zostáva: <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"Zostáva: <xliff:g id="NUMBER">%d%%</xliff:g>. Šetrič batérie je zapnutý."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"Zostáva <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"Zostáva <xliff:g id="PERCENTAGE">%s</xliff:g>. Úspora batérie je zapnutá."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"Nabíjanie pomocou rozhrania USB nie je podporované.\nPoužívajte iba nabíjačku, ktorá bola dodaná spolu so zariadením."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"Nabíjanie prostredníctvom USB nie je podporované."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Používajte iba originálnu nabíjačku."</string>
@@ -226,8 +226,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Šetrič obrazovky"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Režim v lietadle"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Nabíjanie, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Nabité"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Rozhranie Bluetooth (počet zariadení: <xliff:g id="NUMBER">%d</xliff:g>)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Rozhranie Bluetooth je vypnuté"</string>
@@ -265,6 +263,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Ďalšie nastavenia"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Hotovo"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Pripojené"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Pripojené pomocou Asistenta Wi-Fi"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Pripája sa..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Zdieľanie dátového pripojenia"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Hotspot"</string>
@@ -273,13 +272,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Mobilné dáta"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Využitie dát"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Zostávajúce údaje"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Bol dosiahnutý limit – využívanie údajov bolo pozastavené"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Limit bol prekročený"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"Využité: <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Limit: <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Upozornenie pri <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Vaše nedávne obrazovky sa zobrazia tu."</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Informácie o aplikácii"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"Uzamknutie v aplikácii"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"pripnutie k obrazovke"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"hľadať"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Aplikáciu <xliff:g id="APP">%s</xliff:g> sa nepodarilo spustiť"</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Nabitá"</string>
@@ -326,7 +325,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Šetrič batérie je zapnutý"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Obmedzí výkonnosť a prenos údajov na pozadí"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Vypnúť šetrič batérie"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g> %%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Skrytý obsah"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"Aplikácia <xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> začne zaznamenávať všetok obsah zobrazený na vašej obrazovke."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Nabudúce nezobrazovať"</string>
@@ -357,6 +355,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Zobraziť pred odomknutím"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Nie, vďaka"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Nastaviť"</string>
-    <string name="muted_by" msgid="6147073845094180001">"Stlmené aplikáciou <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Obrazovka je pripnutá"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Obsah bude pripnutý v zobrazení, dokým ho neuvoľníte. Ak ho chcete uvoľniť, stlačte a podržte súčasne tlačidlá Späť a Prehľad."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Obsah bude pripnutý v zobrazení, dokým ho neuvoľníte. Uvoľníte ho stlačením a podržaním tlačidla Prehľad."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Rozumiem"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Nie, vďaka"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Skryť <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Táto položka sa znova zobrazí, keď ju v nastaveniach opätovne zapnete."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Skryť"</string>
 </resources>

@@ -375,7 +375,7 @@ public class MSimSignalClusterView
     }
 
 
-    private int getPhoneId(long subId) {
+    private int getPhoneId(int subId) {
         int phoneId;
         phoneId = SubscriptionManager.getPhoneId(subId);
         return phoneId;

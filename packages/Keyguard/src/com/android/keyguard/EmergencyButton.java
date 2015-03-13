@@ -46,7 +46,7 @@ public class EmergencyButton extends Button {
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
-        public void onSimStateChanged(long subId, State simState) {
+        public void onSimStateChanged(int subId, State simState) {
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
             updateEmergencyCallButton(phoneState);
         }

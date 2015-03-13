@@ -223,7 +223,7 @@ final class ProcessList {
     private void updateOomLevels(int displayWidth, int displayHeight, boolean write) {
         // Scale buckets from avail memory: at 300MB we use the lowest values to
         // 700MB or more for the top values.
-        float scaleMem = ((float)(mTotalMemMb-300))/(700-300);
+        float scaleMem = ((float)(mTotalMemMb-350))/(700-350);
 
         // Scale buckets from screen size.
         int minSize = 480*800;  //  384000
@@ -442,7 +442,10 @@ final class ProcessList {
         sb.append(ramKb);
     }
 
-    // The minimum amount of time after a state change it is safe ro collect PSS.
+    // How long after a state change that it is safe to collect PSS without it being dirty.
+    public static final int PSS_SAFE_TIME_FROM_STATE_CHANGE = 1000;
+
+    // The minimum time interval after a state change it is safe to collect PSS.
     public static final int PSS_MIN_TIME_FROM_STATE_CHANGE = 15*1000;
 
     // The maximum amount of time we want to go between PSS collections.
@@ -471,6 +474,21 @@ final class ProcessList {
 
     // The amount of time until PSS when a cached process stays in the same state.
     private static final int PSS_SAME_CACHED_INTERVAL = 30*60*1000;
+
+    // The minimum time interval after a state change it is safe to collect PSS.
+    public static final int PSS_TEST_MIN_TIME_FROM_STATE_CHANGE = 10*1000;
+
+    // The amount of time during testing until PSS when a process first becomes top.
+    private static final int PSS_TEST_FIRST_TOP_INTERVAL = 3*1000;
+
+    // The amount of time during testing until PSS when a process first goes into the background.
+    private static final int PSS_TEST_FIRST_BACKGROUND_INTERVAL = 5*1000;
+
+    // The amount of time during testing until PSS when an important process stays in same state.
+    private static final int PSS_TEST_SAME_IMPORTANT_INTERVAL = 10*1000;
+
+    // The amount of time during testing until PSS when a background process stays in same state.
+    private static final int PSS_TEST_SAME_BACKGROUND_INTERVAL = 15*1000;
 
     public static final int PROC_MEM_PERSISTENT = 0;
     public static final int PROC_MEM_TOP = 1;
@@ -529,16 +547,54 @@ final class ProcessList {
         PSS_SAME_CACHED_INTERVAL,       // ActivityManager.PROCESS_STATE_CACHED_EMPTY
     };
 
+    private static final long[] sTestFirstAwakePssTimes = new long[] {
+        PSS_TEST_FIRST_TOP_INTERVAL,        // ActivityManager.PROCESS_STATE_PERSISTENT
+        PSS_TEST_FIRST_TOP_INTERVAL,        // ActivityManager.PROCESS_STATE_PERSISTENT_UI
+        PSS_TEST_FIRST_TOP_INTERVAL,        // ActivityManager.PROCESS_STATE_TOP
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_IMPORTANT_BACKGROUND
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_BACKUP
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_HEAVY_WEIGHT
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_SERVICE
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_RECEIVER
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_HOME
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_LAST_ACTIVITY
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_CACHED_ACTIVITY
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_CACHED_ACTIVITY_CLIENT
+        PSS_TEST_FIRST_BACKGROUND_INTERVAL, // ActivityManager.PROCESS_STATE_CACHED_EMPTY
+    };
+
+    private static final long[] sTestSameAwakePssTimes = new long[] {
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_PERSISTENT
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_PERSISTENT_UI
+        PSS_TEST_SAME_IMPORTANT_INTERVAL,   // ActivityManager.PROCESS_STATE_TOP
+        PSS_TEST_SAME_IMPORTANT_INTERVAL,   // ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND
+        PSS_TEST_SAME_IMPORTANT_INTERVAL,   // ActivityManager.PROCESS_STATE_IMPORTANT_BACKGROUND
+        PSS_TEST_SAME_IMPORTANT_INTERVAL,   // ActivityManager.PROCESS_STATE_BACKUP
+        PSS_TEST_SAME_IMPORTANT_INTERVAL,   // ActivityManager.PROCESS_STATE_HEAVY_WEIGHT
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_SERVICE
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_RECEIVER
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_HOME
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_LAST_ACTIVITY
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_CACHED_ACTIVITY
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_CACHED_ACTIVITY_CLIENT
+        PSS_TEST_SAME_BACKGROUND_INTERVAL,  // ActivityManager.PROCESS_STATE_CACHED_EMPTY
+    };
+
     public static boolean procStatesDifferForMem(int procState1, int procState2) {
         return sProcStateToProcMem[procState1] != sProcStateToProcMem[procState2];
     }
 
-    public static long computeNextPssTime(int procState, boolean first, boolean sleeping,
-            long now) {
-        final long[] table = sleeping
+    public static long minTimeFromStateChange(boolean test) {
+        return test ? PSS_TEST_MIN_TIME_FROM_STATE_CHANGE : PSS_MIN_TIME_FROM_STATE_CHANGE;
+    }
+
+    public static long computeNextPssTime(int procState, boolean first, boolean test,
+            boolean sleeping, long now) {
+        final long[] table = test
                 ? (first
-                        ? sFirstAwakePssTimes
-                        : sSameAwakePssTimes)
+                        ? sTestFirstAwakePssTimes
+                        : sTestSameAwakePssTimes)
                 : (first
                         ? sFirstAwakePssTimes
                         : sSameAwakePssTimes);

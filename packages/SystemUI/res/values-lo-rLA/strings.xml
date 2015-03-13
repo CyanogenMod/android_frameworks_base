@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"ດຳເນີນຢູ່"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"ການແຈ້ງເຕືອນ"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"ແບັດເຕີຣີ​ເຫຼືອ​ໜ້ອຍ"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"ຍັງເຫຼືອອີກ <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"ຍັງເຫຼືອ <xliff:g id="NUMBER">%d%%</xliff:g>. ເປີດ​ນຳໃຊ້​ໂຕປະຢັດ​ແບັດເຕີຣີ​ຢູ່."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"ຍັງ​ເຫຼືອ <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"ຍັງ​ເຫຼືອ <xliff:g id="PERCENTAGE">%s</xliff:g>. ການ​ປະ​ຢັດ​ແບັດ​ເຕີ​ຣີ​ໄດ້​ຖືກ​​ເປີດ​ໃຊ້​ແລ້ວ."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"ບໍ່ຮອງຮັບການສາກໄຟດ້ວຍ USB.\nຕ້ອງໃຊ້ສະເພາະເຄື່ອງສາກທີ່ແຖມມານຳເທົ່ານັ້ນ."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"ບໍ່​ຮອງຮັບ​ການ​ສາກ​ຜ່ານ USB."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"ໃຊ້​ສະເພາະ​ສາຍ​ສາກ​ທີ່​ມາ​ກັບ​ເຄື່ອງ."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Daydream"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"ໂໝດຢູ່ໃນຍົນ"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"ກຳລັງສາກ, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"ສາກເຕັມແລ້ວ"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> ອຸປະກອນ)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth ປິດ"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"​ການ​ຕັ້ງ​ຄ່າ​ເພີ່ມ​ເຕີມ"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"ແລ້ວໆ"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"ເຊື່ອມ​ຕໍ່ແລ້ວ"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"ເຊື່ອມ​ຕໍ່​ຜ່ານ Wi‑Fi ຕົວ​ຊ່ວຍ​ແລ້ວ"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"ກຳລັງເຊື່ອມຕໍ່..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"​ການ​ປ່ອນ​ສັນ​ຍານ"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"​ຮັອດ​ສະ​ປອດ"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"​ຂໍ້​ມູນ​ອິນ​ເຕີ​ເນັດ​ມື​ຖື"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"​ການ​​ນຳ​ໃຊ້​​ຂໍ້​ມູນ"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"​ຂໍ້​ມູນ​ທີ່​ຍັງ​ເຫຼືອ"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"ໃຊ້​ຂໍ້​ມູນ​ຮອດ​ຈຳ​ນວນ​ທີ່​ຈຳ​ກັດ​ແລ້ວ – ຢຸດ​ການ​ນຳ​ໃຊ້​ຂໍ້​ມູນ​ຊົ່ວ​ຄາວ"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"​ເກີນ​ຂີດ​ຈຳ​ກັດ"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"ໃຊ້​ໄປ​ແລ້ວ <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"ຈຳ​ກັດ <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"ຄຳ​ເຕືອນ <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Your recent screens appear here"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"​ຂໍ້​ມູນ​ແອັບ​ພ​ລິ​ເຄ​ຊັນ"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"lock to app"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"ການ​ປັກ​ໝຸດ​ໜ້າ​ຈໍ​"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"ຊອກຫາ"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"ບໍ່​ສາ​ມາດ​ເລີ່ມ <xliff:g id="APP">%s</xliff:g> ໄດ້."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"ສາກເຕັມແລ້ວ."</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"ເປີດ​ໃຊ້​ໂຕ​ປະຢັດ​ແບັດເຕີຣີ​ແລ້ວ"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"ຫຼຸດ​ປະ​ສິ​ທິ​ພາບ​ແລະ​ການ​ນຳ​ໃຊ້​ຂໍ້​ມູນ​ພື້ນຫຼັງ"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"ປິດ​ໂຕ​ປະ​ຢັດ​ແບັດ​ເຕີ​ຣີ"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"ເນື້ອຫາ​ຖືກ​ເຊື່ອງ​ໄວ້"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> ​ຈະ​ເລີ່ມ​ບັນ​ທຶກ​ທຸກ​ຢ່າງ​ທີ່​ສະ​ແດງ​ຜົນ​ໃນ​ໜ້າ​ຈໍ​ທ່ານ."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"ບໍ່​ຕ້ອງ​ສະ​ແດງ​ອີກ"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"ເບິ່ງພວກ​ມັນກ່ອນ​ທ່ານຈະ​ປົດລັອກ"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"ບໍ່, ຂອບໃຈ"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"ຕັ້ງຄ່າ"</string>
-    <string name="muted_by" msgid="6147073845094180001">"ຖືກ​ປິດ​ສຽງ​ໂດຍ <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"ປັກ​ໝຸດໜ້າ​ຈໍ​ແລ້ວ"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"ມັນ​ຈະ​ຮັກ​ສາ​ໜ້າ​ຈໍ​ໄວ້​ໃນ​ມຸມມອງ​ຂອງ​ທ່ານ​ຈົນ​ກວ່າ​ທ່ານ​ຈະ​ຖອດ​ໝຸດ. ​ແຕະ​ປຸ່ມ ກັບ​ຄືນ ແລະ ພາບ​ຮວມ​ ຄ້າງ​ໄວ້​ພ້ອມ​ກັນ​ເພື່ອ​ຖອດ​ໝຸດ."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"ມັນ​ຈະ​ຮັກ​ສາ​ໜ້າ​ຈໍ​ໄວ້​ໃນ​ມຸມມອງ​ຂອງ​ທ່ານ​ຈົນ​ກວ່າ​ທ່ານ​ຈະ​ຖອດ​ໝຸດ. ​ແຕະ​ປຸ່ມ ພາບ​ຮວມ​ ຄ້າງ​ໄວ້​ເພື່ອ​ຖອດ​ໝຸດ."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"ເຂົ້າໃຈແລ້ວ"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"ບໍ່, ຂອບໃຈ"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"ເຊື່ອງ <xliff:g id="TILE_LABEL">%1$s</xliff:g> ຫຼື​ບໍ່?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"​ມັນ​ຈະ​ສະ​ແດງ​ຄືນ​ໃໝ່​ເມື່ອ​ທ່ານ​ເປີດ​ນຳ​ໃຊ້​ມັນ​ໃນ​ການ​ຕັ້ງ​ຄ່າ​ຄັ້ງ​ຕໍ່​ໄປ."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"ເຊື່ອງ"</string>
 </resources>

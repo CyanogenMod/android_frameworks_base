@@ -146,8 +146,10 @@ public abstract class Image implements AutoCloseable {
      * using coordinates in the largest-resolution plane.
      */
     public void setCropRect(Rect cropRect) {
-        cropRect = new Rect(cropRect);  // make a copy
-        cropRect.intersect(0, 0, getWidth(), getHeight());
+        if (cropRect != null) {
+            cropRect = new Rect(cropRect);  // make a copy
+            cropRect.intersect(0, 0, getWidth(), getHeight());
+        }
         mCropRect = cropRect;
     }
 
@@ -211,6 +213,11 @@ public abstract class Image implements AutoCloseable {
          * {@link java.nio.ByteBuffer#isDirect isDirect} return {@code true}, so
          * the underlying data could be mapped as a pointer in JNI without doing
          * any copies with {@code GetDirectBufferAddress}.</p>
+         *
+         * <p>For raw formats, each plane is only guaranteed to contain data
+         * up to the last pixel in the last row. In other words, the stride
+         * after the last row may not be mapped into the buffer. This is a
+         * necessary requirement for any interleaved format.</p>
          *
          * @return the byte buffer containing the image data for this plane.
          */

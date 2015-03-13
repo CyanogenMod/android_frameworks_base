@@ -17,11 +17,13 @@ package android.telecom;
 import android.annotation.SystemApi;
 import android.content.ComponentName;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telecom.ITelecomService;
@@ -31,8 +33,17 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Provides access to Telecom-related functionality.
- * TODO: Move this all into PhoneManager.
+ * Provides access to information about active calls and registration/call-management functionality.
+ * Apps can use methods in this class to determine the current call state. Apps can also register new
+ * {@link PhoneAccount}s and get a listing of existing {@link PhoneAccount}s.
+ * <p>
+ * Apps do not instantiate this class directly; instead, they retrieve a reference to an instance
+ * through {@link Context#getSystemService Context.getSystemService(Context.TELECOM_SERVICE)}.
+ * <p>
+ * Note that access to some telecom information is permission-protected. Your app cannot access the
+ * protected information or gain access to protected functionality unless it has the appropriate
+ * permissions declared in its manifest file. Where permissions apply, they are noted in the method
+ * descriptions.
  */
 public class TelecomManager {
 
@@ -63,6 +74,7 @@ public class TelecomManager {
      * {@link android.telecom.ConnectionService}.
      * @hide
      */
+    @SystemApi
     public static final String ACTION_CONNECTION_SERVICE_CONFIGURE =
             "android.telecom.action.CONNECTION_SERVICE_CONFIGURE";
 
@@ -77,6 +89,7 @@ public class TelecomManager {
      * {@link PhoneAccount} preferences.
      * @hide
      */
+    @SystemApi
     public static final String ACTION_CHANGE_PHONE_ACCOUNTS =
             "android.telecom.action.CHANGE_PHONE_ACCOUNTS";
 
@@ -108,6 +121,7 @@ public class TelecomManager {
      * Retrieve with {@link android.content.Intent#getParcelableExtra(String)}.
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_PHONE_ACCOUNT_HANDLE =
             "android.telecom.extra.PHONE_ACCOUNT_HANDLE";
 
@@ -118,6 +132,7 @@ public class TelecomManager {
      *
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_INCOMING_CALL_EXTRAS =
             "android.telecom.extra.INCOMING_CALL_EXTRAS";
 
@@ -129,6 +144,7 @@ public class TelecomManager {
      *
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_OUTGOING_CALL_EXTRAS =
             "android.telecom.extra.OUTGOING_CALL_EXTRAS";
 
@@ -165,6 +181,7 @@ public class TelecomManager {
      * containing the component name of the associated connection service.
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_CONNECTION_SERVICE =
             "android.telecom.extra.CONNECTION_SERVICE";
 
@@ -201,6 +218,7 @@ public class TelecomManager {
      * user's expected caller ID.
      * @hide
      */
+    @SystemApi
     public static final String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
 
     /**
@@ -341,9 +359,9 @@ public class TelecomManager {
      * @param uriScheme The URI scheme.
      * @return The {@link PhoneAccountHandle} corresponding to the user-chosen default for outgoing
      * phone calls for a specified URI scheme.
-     *
      * @hide
      */
+    @SystemApi
     public PhoneAccountHandle getDefaultOutgoingPhoneAccount(String uriScheme) {
         try {
             if (isServiceConnected()) {
@@ -448,8 +466,19 @@ public class TelecomManager {
      * @return The phone account handle of the current connection manager.
      * @hide
      */
+    @SystemApi
     public PhoneAccountHandle getConnectionManager() {
         return getSimCallManager();
+    }
+
+    /**
+     * Returns the list of registered SIM call managers.
+     * @return List of registered SIM call managers.
+     * @hide
+     */
+    @SystemApi
+    public List<PhoneAccountHandle> getRegisteredConnectionManagers() {
+        return getSimCallManagers();
     }
 
     /**
@@ -463,9 +492,11 @@ public class TelecomManager {
      *
      * @param uriScheme The URI scheme.
      * @return A list of {@code PhoneAccountHandle} objects supporting the URI scheme.
-     *
+     */
+    /**
      * @hide
      */
+    @SystemApi
     public List<PhoneAccountHandle> getPhoneAccountsSupportingScheme(String uriScheme) {
         try {
             if (isServiceConnected()) {
@@ -506,6 +537,7 @@ public class TelecomManager {
      * otherwise.
      * @hide
      */
+    @SystemApi
     public boolean hasMultipleCallCapableAccounts() {
         return getCallCapablePhoneAccounts().size() > 1;
     }
@@ -516,6 +548,7 @@ public class TelecomManager {
      * @return A list of {@code PhoneAccountHandle} objects.
      * @hide
      */
+    @SystemApi
     public List<PhoneAccountHandle> getPhoneAccountsForPackage() {
         try {
             if (isServiceConnected()) {
@@ -535,6 +568,7 @@ public class TelecomManager {
      * @return The {@link PhoneAccount} object.
      * @hide
      */
+    @SystemApi
     public PhoneAccount getPhoneAccount(PhoneAccountHandle account) {
         try {
             if (isServiceConnected()) {
@@ -601,7 +635,16 @@ public class TelecomManager {
     }
 
     /**
-     * Register a {@link PhoneAccount} for use by the system.
+     * Register a {@link PhoneAccount} for use by the system. When registering
+     * {@link PhoneAccount}s, existing registrations will be overwritten if the
+     * {@link PhoneAccountHandle} matches that of a {@link PhoneAccount} which is already
+     * registered. Once registered, the {@link PhoneAccount} is listed to the user as an option
+     * when placing calls. The user may still need to enable the {@link PhoneAccount} within
+     * the phone app settings before the account is usable.
+     * <p>
+     * A {@link SecurityException} will be thrown if an app tries to register a
+     * {@link PhoneAccountHandle} where the package name specified within
+     * {@link PhoneAccountHandle#getComponentName()} does not match the package name of the app.
      *
      * @param account The complete {@link PhoneAccount}.
      * @hide
@@ -650,6 +693,20 @@ public class TelecomManager {
     }
 
     /**
+     * Remove all Accounts that belong to the specified package from the system.
+     * @hide
+     */
+    public void clearAccountsForPackage(String packageName) {
+        try {
+            if (isServiceConnected() && !TextUtils.isEmpty(packageName)) {
+                getTelecomService().clearAccounts(packageName);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error calling ITelecomService#clearAccountsForPackage", e);
+        }
+    }
+
+    /**
      * @hide
      */
     @SystemApi
@@ -665,13 +722,73 @@ public class TelecomManager {
     }
 
     /**
+     * Return whether a given phone number is the configured voicemail number for a
+     * particular phone account.
+     *
+     * @param accountHandle The handle for the account to check the voicemail number against
+     * @param number The number to look up.
+     *
+     * @hide
+     */
+    @SystemApi
+    public boolean isVoiceMailNumber(PhoneAccountHandle accountHandle, String number) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().isVoiceMailNumber(accountHandle, number);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#isVoiceMailNumber.", e);
+        }
+        return false;
+    }
+
+    /**
+     * Return whether a given phone account has a voicemail number configured.
+     *
+     * @param accountHandle The handle for the account to check for a voicemail number.
+     * @return {@code true} If the given phone account has a voicemail number.
+     *
+     * @hide
+     */
+    @SystemApi
+    public boolean hasVoiceMailNumber(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().hasVoiceMailNumber(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#hasVoiceMailNumber.", e);
+        }
+        return false;
+    }
+
+    /**
+     * Return the line 1 phone number for given phone account.
+     *
+     * @param accountHandle The handle for the account retrieve a number for.
+     * @return A string representation of the line 1 phone number.
+     *
+     * @hide
+     */
+    @SystemApi
+    public String getLine1Number(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().getLine1Number(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#getLine1Number.", e);
+        }
+        return null;
+    }
+
+    /**
      * Returns whether there is an ongoing phone call (can be in dialing, ringing, active or holding
      * states).
      * <p>
      * Requires permission: {@link android.Manifest.permission#READ_PHONE_STATE}
      * </p>
      */
-    @SystemApi
     public boolean isInCall() {
         try {
             if (isServiceConnected()) {
@@ -822,7 +939,7 @@ public class TelecomManager {
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException attempting to get the active subsription.", e);
         }
-        return SubscriptionManager.INVALID_SUB_ID;
+        return SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     }
 
     /**
@@ -892,6 +1009,7 @@ public class TelecomManager {
      * Processes the specified dial string as an MMI code.
      * MMI codes are any sequence of characters entered into the dialpad that contain a "*" or "#".
      * Some of these sequences launch special behavior through handled by Telephony.
+     * This method uses the default subscription.
      * <p>
      * Requires that the method-caller be set as the system dialer app.
      * </p>
@@ -909,6 +1027,52 @@ public class TelecomManager {
             }
         }
         return false;
+    }
+
+    /**
+     * Processes the specified dial string as an MMI code.
+     * MMI codes are any sequence of characters entered into the dialpad that contain a "*" or "#".
+     * Some of these sequences launch special behavior through handled by Telephony.
+     * <p>
+     * Requires that the method-caller be set as the system dialer app.
+     * </p>
+     *
+     * @param accountHandle The handle for the account the MMI code should apply to.
+     * @param dialString The digits to dial.
+     * @return True if the digits were processed as an MMI code, false otherwise.
+     * @hide
+     */
+    @SystemApi
+     public boolean handleMmi(PhoneAccountHandle accountHandle, String dialString) {
+        ITelecomService service = getTelecomService();
+        if (service != null) {
+            try {
+                return service.handlePinMmiForPhoneAccount(accountHandle, dialString);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error calling ITelecomService#handlePinMmi", e);
+            }
+        }
+        return false;
+     }
+
+    /**
+     * @param accountHandle The handle for the account to derive an adn query URI for or
+     * {@code null} to return a URI which will use the default account.
+     * @return The URI (with the content:// scheme) specific to the specified {@link PhoneAccount}
+     * for the the content retrieve.
+     * @hide
+     */
+    @SystemApi
+    public Uri getAdnUriForPhoneAccount(PhoneAccountHandle accountHandle) {
+        ITelecomService service = getTelecomService();
+        if (service != null && accountHandle != null) {
+            try {
+                return service.getAdnUriForPhoneAccount(accountHandle);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error calling ITelecomService#getAdnUriForPhoneAccount", e);
+            }
+        }
+        return Uri.parse("content://icc/adn");
     }
 
     /**
