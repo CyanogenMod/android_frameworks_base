@@ -98,32 +98,32 @@ public class CamcorderProfile
     /** @hide
      * Quality level corresponding to the WVGA resolution.
      */
-    public static final int QUALITY_WVGA = 9;
+    public static final int QUALITY_WVGA = 10;
 
     /** @hide
      * Quality level corresponding to the VGA resolution.
      */
-    public static final int QUALITY_VGA = 10;
+    public static final int QUALITY_VGA = 11;
 
     /** @hide
      * Quality level corresponding to the WQVGA resolution.
      */
-    public static final int QUALITY_WQVGA = 11;
+    public static final int QUALITY_WQVGA = 12;
 
     /** @hide
      * Quality level corresponding to the FWVGA resolution.
      */
-    public static final int QUALITY_FWVGA = 12;
+    public static final int QUALITY_FWVGA = 13;
 
     /** @hide
      * Quality level corresponding to 4K DCI resolution
      */
-    public static final int QUALITY_4kDCI = 13;
+    public static final int QUALITY_4kDCI = 14;
 
     /** @hide
      * Quality level corresponding to 4K DCI resolution
      */
-    public static final int QUALITY_HVGA = 18;
+    public static final int QUALITY_HVGA = 19;
 
     // Start and end of quality list
     private static final int QUALITY_LIST_START = QUALITY_LOW;
@@ -175,11 +175,6 @@ public class CamcorderProfile
     public static final int QUALITY_TIME_LAPSE_2160P = 1008;
 
     /** @hide
-     * Time lapse quality level corresponding to the FWVGA (864 x 480) resolution.
-     */
-    public static final int QUALITY_TIME_LAPSE_FWVGA = 1009;
-
-    /** @hide
      * Time lapse quality level corresponding to the WVGA (800 x 480) resolution.
      */
     public static final int QUALITY_TIME_LAPSE_WVGA = 1010;
@@ -195,9 +190,14 @@ public class CamcorderProfile
     public static final int QUALITY_TIME_LAPSE_WQVGA = 1012;
 
     /** @hide
+     * Time lapse quality level corresponding to the FWVGA (864 x 480) resolution.
+     */
+    public static final int QUALITY_TIME_LAPSE_FWVGA = 1013;
+
+    /** @hide
      * Time lapse quality level corresponding to the 4k DCI resolution.
      */
-    public static final int QUALITY_TIME_LAPSE_4kDCI = 1013;
+    public static final int QUALITY_TIME_LAPSE_4kDCI = 1014;
 
     // Start and end of timelapse quality list
     private static final int QUALITY_TIME_LAPSE_LIST_START = QUALITY_TIME_LAPSE_LOW;
