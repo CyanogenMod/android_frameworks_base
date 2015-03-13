@@ -26,6 +26,7 @@ import android.os.Process;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -332,8 +333,8 @@ public class QSTileHost implements QSTile.Host {
     private List<String> loadTileSpecs() {
         final Resources res = mContext.getResources();
         final String defaultTileList = res.getString(R.string.quick_settings_tiles_default);
-        String tileList = Settings.Secure.getString(mContext.getContentResolver(),
-                Settings.Secure.QS_TILES);
+        String tileList = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                Settings.Secure.QS_TILES, UserHandle.USER_CURRENT);
         if (DEBUG) Log.d(TAG, "Config string: "+tileList);
         if (tileList == null) {
             tileList = res.getString(R.string.quick_settings_tiles);
