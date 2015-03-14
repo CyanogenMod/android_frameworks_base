@@ -178,4 +178,12 @@
   <string name="usb_media_checking">Controllo dell\'archivio USB in corso.</string>
   <string name="usb_media_removed">L\'archivio USB è stato rimosso.</string>
   <string name="usb_media_shared">L\'archivio USB è attualmente utilizzato da un computer.</string>
+  <string name="live_display_auto">Automatico</string>
+  <string name="live_display_day">Giorno</string>
+  <string name="live_display_day_summary">Usa solo impostazioni giorno</string>
+  <string name="live_display_night">Notte</string>
+  <string name="live_display_night_summary">Utilizza solo impostazioni notte</string>
+  <string name="live_display_outdoor">All\'aperto (sole)</string>
+  <string name="live_display_outdoor_summary">Utilizza solo impostazioni all\'aperto</string>
+  <string name="live_display_hint">LiveDisplay aiuta a ridurre l\'affaticamento degli occhi e aiuta a dormire di notte. Clicca per provarlo!</string>
 </resources>

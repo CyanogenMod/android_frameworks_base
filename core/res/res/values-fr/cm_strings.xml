@@ -22,7 +22,7 @@
   <string name="profileNameHome">Maison</string>
   <string name="profileNameSilent">Silencieux</string>
   <string name="profileNameNight">Nuit</string>
-  <string name="profileNameAutomobile">Automobile</string>
+  <string name="profileNameAutomobile">Voiture</string>
   <string name="profileGroupPhone">Téléphone</string>
   <string name="profileGroupCalendar">Agenda</string>
   <string name="profileGroupGmail">Gmail</string>
@@ -34,9 +34,9 @@
   <string name="global_action_choose_profile">Profil</string>
   <string name="global_action_screenshot">Capture d\'écran</string>
   <string name="permlab_receiveProtectedSms">recevoir des SMS protégés</string>
-  <string name="permdesc_receiveProtectedSms">Permet à l\'application de recevoir un SMS entrant protégé.</string>
+  <string name="permdesc_receiveProtectedSms">Permet à l\'application de recevoir un SMS protégé.</string>
   <string name="permlab_modifyProtectedSmsList">modifier la liste des SMS protégés</string>
-  <string name="permdesc_modifyProtectedSmsList">Permet à l\'application de modifier la liste d\'adresse des SMS protégés.</string>
+  <string name="permdesc_modifyProtectedSmsList">Permet à l\'application de modifier la liste des adresses des SMS protégés.</string>
   <string name="permgrouplab_security">Sécurité</string>
   <string name="permgroupdesc_security">Autorisations liées à des informations de sécurité de l\'appareil.</string>
   <string name="permlab_accessThemeService">accéder au service de thème</string>
@@ -45,7 +45,7 @@
   <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
   <string name="permlab_writeThemes">modifier vos thèmes</string>
   <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
-  <string name="permlab_readPhoneBlacklist">lire la liste noire de téléphone</string>
+  <string name="permlab_readPhoneBlacklist">lire la liste noire du téléphone</string>
   <string name="permdesc_readPhoneBlacklist">Permet à l\'application de lire les informations sur les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_changePhoneBlacklist">modifier la liste noire du téléphone</string>
   <string name="permdesc_changePhoneBlacklist">Permet à l\'application de modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
@@ -128,7 +128,7 @@
   <string name="app_ops_use_voice_volume">contrôler le volume d\'appels</string>
   <string name="app_ops_write_mms">écrire un MMS</string>
   <string name="app_ops_write_sms">écrire un SMS</string>
-  <string name="lockscreen_sim_error_message_short">Carte non valide.</string>
+  <string name="lockscreen_sim_error_message_short">Carte SIM incorrecte.</string>
   <string name="lockscreen_airplane_mode_on">Mode Avion</string>
   <string name="usb_charging_notification_title">Connecté en mode charge</string>
   <string name="tethered_notification_no_device_message">Aucun appareil connecté</string>
@@ -178,4 +178,14 @@
   <string name="usb_media_checking">Vérification de la mémoire de stockage USB.</string>
   <string name="usb_media_removed">La mémoire de stockage USB a été retirée.</string>
   <string name="usb_media_shared">La mémoire de stockage USB est en cours d\'utilisation par l\'ordinateur.</string>
+  <string name="live_display_auto">Automatique</string>
+  <string name="live_display_off">Désactivé</string>
+  <string name="live_display_off_summary">Désactiver tous les réglages</string>
+  <string name="live_display_day">Jour</string>
+  <string name="live_display_day_summary">Utiliser uniquement les paramètres de jour</string>
+  <string name="live_display_night">Nuit</string>
+  <string name="live_display_night_summary">Utiliser uniquement les paramètres de nuit</string>
+  <string name="live_display_outdoor">Extérieur (plein soleil)</string>
+  <string name="live_display_outdoor_summary">Utiliser uniquement les paramètres extérieurs</string>
+  <string name="live_display_hint">LiveDisplay peut aider à réduire la fatigue oculaire et vous aider à dormir la nuit. Appuyez ici pour l\'essayer !</string>
 </resources>

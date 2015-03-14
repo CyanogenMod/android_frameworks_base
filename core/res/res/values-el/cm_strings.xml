@@ -181,7 +181,9 @@
   <string name="usb_media_removed">Ο αποθ. χώρος USB έχει αφαιρεθεί.</string>
   <string name="usb_media_shared">Αυτή τη στιγμή ο αποθ. χώρος USB χρησιμοποιείται από κάποιον υπολογιστή.</string>
   <string name="live_display_auto">Αυτόματη</string>
-  <string name="live_display_auto_summary">Αυτόματη ρύθμιση της οθόνης ανάλογα με τις συνθήκες του περιβάλλοντος</string>
+  <string name="live_display_auto_summary">Αυτόματη ρύθμιση της θερμοκρασίας χρώματος της οθόνης μετά το ηλιοβασίλεμα και την ανατολή του ηλίου</string>
+  <string name="live_display_off">Απενεργοποιημένη</string>
+  <string name="live_display_off_summary">Απενεργοποίηση όλων των ρυθμίσεων</string>
   <string name="live_display_day">Ημέρα</string>
   <string name="live_display_day_summary">Χρήση μόνο των ρυθμίσεων ημέρας</string>
   <string name="live_display_night">Νύχτα</string>

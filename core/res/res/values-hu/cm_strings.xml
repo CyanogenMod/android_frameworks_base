@@ -178,4 +178,12 @@
   <string name="usb_media_checking">USB tároló ellenőrzése folyamatban van.</string>
   <string name="usb_media_removed">USB tároló eltávolítva.</string>
   <string name="usb_media_shared">USB tárolót jelenleg egy számítógép használja.</string>
+  <string name="live_display_auto">Automatikus</string>
+  <string name="live_display_day">Nappal</string>
+  <string name="live_display_day_summary">Csak a nappali beállítások használata</string>
+  <string name="live_display_night">Éjszaka</string>
+  <string name="live_display_night_summary">Csak az éjszakai béállítások használata</string>
+  <string name="live_display_outdoor">Kültéri (erős napfény)</string>
+  <string name="live_display_outdoor_summary">Csak a kültéri beállítások használata</string>
+  <string name="live_display_hint">A LiveDisplay segíthet a szemek terhelésének csökkentésében és a jobb éjszakai alvásban. Kattintson ide, hogy kipróbálja!</string>
 </resources>

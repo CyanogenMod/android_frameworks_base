@@ -34,7 +34,7 @@
   <string name="quick_settings_mobile_data_label">Dati mobili</string>
   <string name="quick_settings_roaming_label">Roaming</string>
   <string name="quick_settings_apn_switch_label">Cambio APN</string>
-  <string name="quick_settings_dds_sub">Connessione dati SIM <xliff:g id="number">%d</xliff:g></string>
+  <string name="quick_settings_dds_sub">Dati mobili SIM <xliff:g id="number">%d</xliff:g></string>
   <string name="quick_settings_data_off">Dati mobili OFF</string>
   <string name="quick_settings_location_detail_title">Modalità geolocalizzazione</string>
   <string name="quick_settings_location_battery_saving_label">Risparmio batteria</string>
