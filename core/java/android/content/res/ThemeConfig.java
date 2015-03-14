@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.res.ThemeChangeRequest.RequestType;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.JsonReader;
@@ -178,20 +179,24 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
      * preference until the theme is switched at runtime.
      */
     public static ThemeConfig getBootTheme(ContentResolver resolver) {
+        return getBootThemeForUser(resolver, UserHandle.USER_OWNER);
+    }
+
+    public static ThemeConfig getBootThemeForUser(ContentResolver resolver, int userHandle) {
         ThemeConfig bootTheme = mSystemConfig;
         try {
-            String json = Settings.Secure.getString(resolver,
-                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY);
+            String json = Settings.Secure.getStringForUser(resolver,
+                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY, userHandle);
             bootTheme = ThemeConfig.fromJson(json);
 
             // Handle upgrade Case: Previously the theme configuration was in separate fields
             if (bootTheme == null) {
-                String overlayPkgName =  Settings.Secure.getString(resolver,
-                        Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY);
-                String iconPackPkgName = Settings.Secure.getString(resolver,
-                        Configuration.THEME_ICONPACK_PACKAGE_NAME_PERSISTENCE_PROPERTY);
-                String fontPkgName = Settings.Secure.getString(resolver,
-                        Configuration.THEME_FONT_PACKAGE_NAME_PERSISTENCE_PROPERTY);
+                String overlayPkgName =  Settings.Secure.getStringForUser(resolver,
+                        Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, userHandle);
+                String iconPackPkgName = Settings.Secure.getStringForUser(resolver,
+                        Configuration.THEME_ICONPACK_PACKAGE_NAME_PERSISTENCE_PROPERTY, userHandle);
+                String fontPkgName = Settings.Secure.getStringForUser(resolver,
+                        Configuration.THEME_FONT_PACKAGE_NAME_PERSISTENCE_PROPERTY, userHandle);
 
                 Builder builder = new Builder();
                 builder.defaultOverlay(overlayPkgName);
