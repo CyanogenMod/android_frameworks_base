@@ -76,6 +76,8 @@ muuta juba olemasolevaid.</string>
   <string name="adb_both_active_notification_title">ADB üle USB &amp; võrgu aktiveeritud</string>
   <string name="adb_active_generic_notification_message">Puuduta debuggimise lõpetamiseks.</string>
   <string name="usb_choose_notification_title">Puuduta et valida USB sätteid.</string>
+  <string name="permlab_interceptPackageLaunch">rakenduse käivitamise katkestamine</string>
+  <string name="permdesc_interceptPackageLaunch">Luba rakendusel katkestada teiste rakenduste käivitamist</string>
   <string name="app_ops_access_camera">kontrollida kaamerat</string>
   <string name="app_ops_access_location">kontrollida asukohta</string>
   <string name="app_ops_access_notifications">lugeda teateid</string>
@@ -164,4 +166,28 @@ muuta juba olemasolevaid.</string>
   <string name="permdesc_accessTorchService">Annab rakendusele ligipääsu taskulambi teenusele. Tavarakenduste puhul ei peaks kunagi vaja minema.</string>
   <string name="permlab_preventpower">kasutada toitenuppu</string>
   <string name="permdesc_preventpower">Lubab rakendusel kasutada toitenuppu.</string>
+  <string name="usb_extmedia_format_message">Kõik andmed sinu USB mälul (\'%1$s\' all) kustutatakse. Seda toimingut ei saa tagasi võtta!</string>
+  <string name="sd_extmedia_format_message">Kõik andmed sinu kaardil (\'%1$s\' all) kustutatakse. Seda toimingut ei saa tagasi võtta!</string>
+  <string name="sd_progress_unmounting">SD kaardi lahti haakimine\u2026</string>
+  <string name="sd_progress_erasing">SD kaardi kustutamine\u2026</string>
+  <string name="sd_format_error">Ei saanud kustutada SD kaarti.</string>
+  <string name="sd_media_bad_removal">SD kaart eemaldati enne lahti haakimist.</string>
+  <string name="sd_media_checking">SD kaarti kontrollitakse.</string>
+  <string name="sd_media_removed">SD kaart on eemaldatud.</string>
+  <string name="sd_media_shared">SD kaart on hetkel hõivatud.</string>
+  <string name="usb_progress_unmounting">USB mälu lahti haakimine\u2026</string>
+  <string name="usb_progress_erasing">USB mälu kustutamine\u2026</string>
+  <string name="usb_format_error">Ei saanud kustutada USB mälu.</string>
+  <string name="usb_media_bad_removal">USB mälu eemaldati enne lahti haakimist.</string>
+  <string name="usb_media_checking">USB mälu kontrollitakse.</string>
+  <string name="usb_media_removed">USB mälu on eemaldatud.</string>
+  <string name="usb_media_shared">USB mälu on hetkel hõivatud.</string>
+  <string name="live_display_auto">Automaatne</string>
+  <string name="live_display_day">Päev</string>
+  <string name="live_display_day_summary">Kasuta ainult päeva seadeid</string>
+  <string name="live_display_night">Öö</string>
+  <string name="live_display_night_summary">Kasuta ainult öö seadeid</string>
+  <string name="live_display_outdoor">Õues (ere päike)</string>
+  <string name="live_display_outdoor_summary">Kasuta ainult õue seadeid</string>
+  <string name="live_display_hint">LiveDisplay võimaldab vähendada silmade pinget ja lasta sul öösel magada. Kliki siin et seda proovida!</string>
 </resources>

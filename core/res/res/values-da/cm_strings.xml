@@ -180,4 +180,12 @@
   <string name="usb_media_checking">USB-lageret bliver i øjeblikket kontrolleret.</string>
   <string name="usb_media_removed">USB-lageret er blevet fjernet.</string>
   <string name="usb_media_shared">USB-lageret er i øjeblikket i brug af en computer.</string>
+  <string name="live_display_auto">Automatisk</string>
+  <string name="live_display_day">Dag</string>
+  <string name="live_display_day_summary">Brug kun dag-indstillinger</string>
+  <string name="live_display_night">Nat</string>
+  <string name="live_display_night_summary">Brug kun nat-indstillinger</string>
+  <string name="live_display_outdoor">Udendørs (stærk sol)</string>
+  <string name="live_display_outdoor_summary">Brug kun udendørsindstillinger</string>
+  <string name="live_display_hint">LiveDisplay kan hjælpe med at reducere overanstrengelse af øjnene og hjælpe dig med at sove om natten. Klik her for at prøve det!</string>
 </resources>

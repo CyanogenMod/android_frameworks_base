@@ -180,5 +180,10 @@
   <string name="usb_media_shared">USB-Speicher wird momentan von einem Computer verwendet.</string>
   <string name="live_display_auto">Automatisch</string>
   <string name="live_display_day">Tag</string>
+  <string name="live_display_day_summary">Nur Tag-Modus verwenden</string>
   <string name="live_display_night">Nacht</string>
+  <string name="live_display_night_summary">Nur Nacht-Modus verwenden</string>
+  <string name="live_display_outdoor">Außen (helle Sonne)</string>
+  <string name="live_display_outdoor_summary">Nur Außen-Modus verwenden</string>
+  <string name="live_display_hint">LiveDisplay kann gegen eine Überanstrengung der Augen und beim Schlafen in der Nacht helfen. Klicken Sie hier, um es auszuprobieren!</string>
 </resources>

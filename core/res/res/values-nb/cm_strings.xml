@@ -181,7 +181,6 @@
   <string name="usb_media_removed">USB lagring er fjernet.</string>
   <string name="usb_media_shared">USB lagring er i bruk av en datamaskin.</string>
   <string name="live_display_auto">Automatisk</string>
-  <string name="live_display_auto_summary">Automatisk juster skjermen for omgivelsene</string>
   <string name="live_display_day">Dag</string>
   <string name="live_display_day_summary">Bruk kun dag innstillinger</string>
   <string name="live_display_night">Natt</string>

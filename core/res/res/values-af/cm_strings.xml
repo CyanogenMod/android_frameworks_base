@@ -74,6 +74,8 @@
   <string name="adb_both_active_notification_title">ADB oor USB &amp; netwerk is aktief</string>
   <string name="adb_active_generic_notification_message">Raak om ontfouting af te skakel.</string>
   <string name="usb_choose_notification_title">Raak om USB opsies te kies.</string>
+  <string name="permlab_interceptPackageLaunch">onderskep program begin</string>
+  <string name="permdesc_interceptPackageLaunch">Laat \'n program toe om ander programme te onderskep as dit begin</string>
   <string name="app_ops_access_camera">toegang tot die kamera</string>
   <string name="app_ops_access_location">toegang tot jou ligging</string>
   <string name="app_ops_access_notifications">lees jou kennisgewing boodskappe</string>
@@ -162,4 +164,28 @@
   <string name="permdesc_accessTorchService">Laat \'n program toe om toegang na die flits diens te verkry. Sal nooit nodig wees vir normale programme nie.</string>
   <string name="permlab_preventpower">verander krag sleutel</string>
   <string name="permdesc_preventpower">Laat die program toe om die krag knoppie se gebruik te verander.</string>
+  <string name="usb_extmedia_format_message">Alle data op jou USB-berging (onder die pad \'%1$s\') sal uitgevee word. Hierdie aksie kan nie ontdoen word nie!</string>
+  <string name="sd_extmedia_format_message">Alle data op jou kaart (onder die pad \'%1$s\') sal uitgewis word. Hierdie aksie kan nie ontdoen word nie!</string>
+  <string name="sd_progress_unmounting">Besig om SD kaart te ontlaai\u2026</string>
+  <string name="sd_progress_erasing">Besig met skoonmaak van SD kaart\u2026</string>
+  <string name="sd_format_error">Kon nie SD kaart skoon maak nie.</string>
+  <string name="sd_media_bad_removal">SD kaart was verwyder voordat dit ontlaai was.</string>
+  <string name="sd_media_checking">SD kaart word huidiglik nagegaan.</string>
+  <string name="sd_media_removed">SD kaart is alreeds verwyder.</string>
+  <string name="sd_media_shared">SD kaart word huidiglik deer \'n rekenaar gebruik.</string>
+  <string name="usb_progress_unmounting">Besig om USB stoor spasie te ontlaai\u2026</string>
+  <string name="usb_progress_erasing">Besig met skoonmaak van USB stoor spasie\u2026</string>
+  <string name="usb_format_error">Kon nie USB stoor spasie uitvee nie.</string>
+  <string name="usb_media_bad_removal">USB stoor spasie is verwyder voordat dit ontheg was.</string>
+  <string name="usb_media_checking">USB stoor spasie word tans gekontroleer.</string>
+  <string name="usb_media_removed">USB stoor spasie is verwyder.</string>
+  <string name="usb_media_shared">USB stoor spasie word tans gebruik deur \'n rekenaar.</string>
+  <string name="live_display_auto">Outomaties</string>
+  <string name="live_display_day">Dag</string>
+  <string name="live_display_day_summary">Alleenlik gebruik dag instellings</string>
+  <string name="live_display_night">Nag</string>
+  <string name="live_display_night_summary">Alleenlik gebruik nag instellings</string>
+  <string name="live_display_outdoor">Buitekant (helder son)</string>
+  <string name="live_display_outdoor_summary">Alleenlik gebruik buite instellings</string>
+  <string name="live_display_hint">LewendigeVertoning kan jou oogspanning verminder en help jou slaap in die nag. Klik hier om dit uit te probeer!</string>
 </resources>

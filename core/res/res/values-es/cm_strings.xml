@@ -178,4 +178,15 @@
   <string name="usb_media_checking">El almacenamiento USB está siendo comprobado.</string>
   <string name="usb_media_removed">El almacenamiento USB ha sido extraído.</string>
   <string name="usb_media_shared">El almacenamiento USB está siendo usado por un ordenador.</string>
+  <string name="live_display_auto">Automático</string>
+  <string name="live_display_auto_summary">Ajustar automáticamente la temperatura del color de pantalla con el amanecer y el anochecer</string>
+  <string name="live_display_off">Desactivado</string>
+  <string name="live_display_off_summary">Deshabilitar todos los ajustes</string>
+  <string name="live_display_day">Día</string>
+  <string name="live_display_day_summary">Utilizar solo los ajustes de día</string>
+  <string name="live_display_night">Noche</string>
+  <string name="live_display_night_summary">Utilizar solo los ajustes de noche</string>
+  <string name="live_display_outdoor">Al aire libre (luz del sol)</string>
+  <string name="live_display_outdoor_summary">Utilizar solo los ajustes al aire libre</string>
+  <string name="live_display_hint">LiveDisplay puede reducir la fatiga visual y ayudar a dormir por la noche. ¡Toca aquí para probarlo!</string>
 </resources>
