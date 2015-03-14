@@ -563,6 +563,18 @@ public class WifiConfiguration implements Parcelable {
      * i.e. younger.
      ***/
     public Visibility setVisibility(long age) {
+           return setVisibility(age, WifiManager.WIFI_FREQUENCY_BAND_AUTO);
+    }
+
+    /** @hide
+     * calculate and set Visibility for that configuration.
+     *
+     * age in milliseconds: we will consider only ScanResults that are more recent,
+     * i.e. younger.
+     * configBand : Indicates current configured frequency band
+     ***/
+    public Visibility setVisibility(long age, int configBand) {
+        boolean isNetworkFound = false;
         if (scanResultCache == null) {
             visibility = null;
             return null;
@@ -576,10 +588,16 @@ public class WifiConfiguration implements Parcelable {
                 continue;
 
             if (result.is5GHz()) {
+                if (configBand == WifiManager.WIFI_FREQUENCY_BAND_2GHZ) {
+                    continue;
+                }
                 //strictly speaking: [4915, 5825]
                 //number of known BSSID on 5GHz band
                 status.num5 = status.num5 + 1;
             } else if (result.is24GHz()) {
+                if (configBand == WifiManager.WIFI_FREQUENCY_BAND_5GHZ) {
+                    continue;
+                }
                 //strictly speaking: [2412, 2482]
                 //number of known BSSID on 2.4Ghz band
                 status.num24 = status.num24 + 1;
@@ -588,12 +606,14 @@ public class WifiConfiguration implements Parcelable {
             if ((now_ms - result.seen) > age) continue;
 
             if (result.is5GHz()) {
+                isNetworkFound = true;
                 if (result.level > status.rssi5) {
                     status.rssi5 = result.level;
                     status.age5 = result.seen;
                     status.BSSID5 = result.BSSID;
                 }
             } else if (result.is24GHz()) {
+                isNetworkFound = true;
                 if (result.level > status.rssi24) {
                     status.rssi24 = result.level;
                     status.age24 = result.seen;
@@ -601,7 +621,16 @@ public class WifiConfiguration implements Parcelable {
                 }
             }
         }
-        visibility = status;
+        /*
+         * Visibility should be set to null if there is no BSSIDs in
+         * both bands,so that auto join will not consider this network
+         * for connection attempt.
+         */
+        if (isNetworkFound) {
+            visibility = status;
+        } else {
+            visibility = null;
+        }
         return status;
     }
 
