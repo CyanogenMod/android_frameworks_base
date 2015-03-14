@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.res.ThemeChangeRequest.RequestType;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.JsonReader;
@@ -178,10 +179,14 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
      * preference until the theme is switched at runtime.
      */
     public static ThemeConfig getBootTheme(ContentResolver resolver) {
+        return getBootTheme(resolver, UserHandle.USER_CURRENT);
+    }
+
+    public static ThemeConfig getBootTheme(ContentResolver resolver, int userHandle) {
         ThemeConfig bootTheme = mSystemConfig;
         try {
-            String json = Settings.Secure.getString(resolver,
-                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY);
+            String json = Settings.Secure.getStringForUser(resolver,
+                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY, userHandle);
             bootTheme = ThemeConfig.fromJson(json);
 
             // Handle upgrade Case: Previously the theme configuration was in separate fields

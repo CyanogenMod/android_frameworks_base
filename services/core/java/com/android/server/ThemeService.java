@@ -240,6 +240,9 @@ public class ThemeService extends IThemeService.Stub {
         IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangeReceiver, filter);
 
+        filter = new IntentFilter(Intent.ACTION_USER_SWITCHED);
+        mContext.registerReceiver(mUserChangeReceiver, filter);
+
         mPM = mContext.getPackageManager();
 
         processInstalledThemes();
@@ -726,6 +729,24 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
+    private boolean updateConfiguration(ThemeConfig themeConfig) {
+        final IActivityManager am = ActivityManagerNative.getDefault();
+        if (am != null) {
+            final long token = Binder.clearCallingIdentity();
+            try {
+                Configuration config = am.getConfiguration();
+
+                config.themeConfig = themeConfig;
+                am.updateConfiguration(config);
+            } catch (RemoteException e) {
+                return false;
+            } finally {
+                Binder.restoreCallingIdentity(token);
+            }
+        }
+        return true;
+    }
+
     private boolean shouldUpdateConfiguration(ThemeChangeRequest request) {
         return request.getOverlayThemePackageName() != null ||
                 request.getFontThemePackageName() != null ||
@@ -1121,6 +1142,52 @@ public class ThemeService extends IThemeService.Stub {
             }
         }
     };
+
+    private BroadcastReceiver mUserChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int userHandle = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
+            if (userHandle >= 0) {
+                ThemeConfig config = ThemeConfig.getBootTheme(mContext.getContentResolver());
+                Log.d(TAG, "Changing theme for user " + userHandle + " to " + config.toString());
+                ThemeChangeRequest request = buildChangeRequestFromThemeConfig(config);
+                try {
+                    requestThemeChange(request, true);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Unable to change theme for user change", e);
+                }
+            }
+        }
+    };
+
+    private ThemeChangeRequest buildChangeRequestFromThemeConfig(ThemeConfig themeConfig) {
+        ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
+        if (themeConfig.getFontPkgName() != null) {
+            builder.setFont(themeConfig.getFontPkgName());
+        }
+        if (themeConfig.getIconPackPkgName() != null) {
+            builder.setIcons(themeConfig.getIconPackPkgName());
+        }
+        if (themeConfig.getOverlayPkgName() != null) {
+            builder.setOverlay(themeConfig.getOverlayPkgName());
+        }
+        if (themeConfig.getOverlayForStatusBar() != null) {
+            builder.setStatusBar(themeConfig.getOverlayForStatusBar());
+        }
+        if (themeConfig.getOverlayForNavBar() != null) {
+            builder.setNavBar(themeConfig.getOverlayForNavBar());
+        }
+
+        // Check if there are any per-app overlays using this theme
+        final Map<String, ThemeConfig.AppTheme> themes = themeConfig.getAppThemes();
+        for (String appPkgName : themes.keySet()) {
+            if (ThemeUtils.isPerAppThemeComponent(appPkgName)) {
+                builder.setAppOverlay(appPkgName, themes.get(appPkgName).getOverlayPkgName());
+            }
+        }
+
+        return builder.build();
+    }
 
     private Comparator<File> mOldestFilesFirstComparator = new Comparator<File>() {
         @Override
