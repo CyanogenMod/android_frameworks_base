@@ -61,25 +61,8 @@ public final class WipowerManager {
     private static IWipower mService;
     private static ArrayList<WipowerManagerCallback> mCallbacks;
     private static WipowerDynamicParam mPruData;
-    private static WipowerAlert mAlert;
     private static WipowerState mState;
     private static WipowerManager mWipowerManager;
-   /**
-    * various alerts that Wipower module
-    * gives to application layer
-    *
-    * {@hide}
-    */
-    public enum WipowerAlert {
-        ALERT_NONE,
-        ALERT_OVER_VOLTAGE,
-        ALERT_OVER_CURRENT,
-        ALERT_OVER_TEMPERATURE,
-        ALERT_SELF_PROTECTION,
-        ALERT_CHARGE_COMPLETE,
-        ALERT_WIRED_CHARGER_DETECTED,
-        ALERT_CHARGE_PORT
-    }
 
    /**
     * Power levels used to indicate the charging levels
@@ -134,7 +117,7 @@ public final class WipowerManager {
     }
 
     /* helper function to invoke callbacks to application layer*/
-    void updateWipowerAlert(WipowerAlert alert){
+    void updateWipowerAlert(byte alert){
        if (mCallbacks != null) {
            int n = mCallbacks.size();
            Log.v(TAG,"Broadcasting updateWipowerAlert() to " + n + " receivers.");
@@ -183,11 +166,8 @@ public final class WipowerManager {
         }
 
         public void onWipowerAlert(byte alert) {
-            WipowerAlert wp_alert = WipowerAlert.ALERT_NONE;
             Log.v(TAG, "onWipowerAlert: alert" + alert);
-            /*Convert to WipowerAlert*/
-
-            updateWipowerAlert(wp_alert);
+            updateWipowerAlert(alert);
 
         }
 
@@ -493,7 +473,7 @@ public final class WipowerManager {
     */
     public boolean enablePowerApply(boolean enable, boolean on, boolean time_flag) {
         boolean ret = false;
-        Log.v(TAG,"enablePowerApply: enable: " + enable + " on: " + on + "time_flag" + time_flag);
+        Log.v(TAG,"enablePowerApply: enable: " + enable + " on: " + on + " time_flag:" + time_flag);
         if (mService == null) {
             Log.e(TAG, "Service  not available");
         } else {

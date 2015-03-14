@@ -30,7 +30,6 @@
 package android.wipower;
 
 import android.wipower.WipowerManager.WipowerState;
-import android.wipower.WipowerManager.WipowerAlert;
 import android.wipower.WipowerManager.PowerApplyEvent;
 
 /**
@@ -63,11 +62,11 @@ public interface WipowerManagerCallback
    /**
     * Indicates the Wipower Alert
     *
-    * @param {@link WipowerAlert}
+    * @param {@link alert}
     *
     * {@hide}
     */
-    void onWipowerAlert(WipowerAlert alert);
+    void onWipowerAlert(byte alert);
 
    /**
     * Indicates the Wipower PRU Data notifications
@@ -79,12 +78,12 @@ public interface WipowerManagerCallback
     void onWipowerData(WipowerDynamicParam value);
 
     /**
-    * Indicates the Wipower Alert
+    * Indicates the power apply event
     *
-    * @param {@link WipowerAlert}
+    * @param {@link PowerApplyEvent}
     *
     * {@hide}
     */
-    void onPowerApply(PowerApplyEvent alert);
+    void onPowerApply(PowerApplyEvent event);
 
 }
