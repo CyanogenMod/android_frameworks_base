@@ -183,7 +183,9 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="usb_media_removed">USB bellek kaldırıldı.</string>
   <string name="usb_media_shared">USB bellek şu anda bir bilgisayar tarafından kullanılıyor.</string>
   <string name="live_display_auto">Otomatik</string>
-  <string name="live_display_auto_summary">Ekranı ortam koşullarIna göre otomatik ayarlar</string>
+  <string name="live_display_auto_summary">Gün batımı ve doğumundan sonra ekranın renk sıcaklığını otomatik ayarlar</string>
+  <string name="live_display_off">Kapalı</string>
+  <string name="live_display_off_summary">Tüm ayarlamaları devre dışı bırak</string>
   <string name="live_display_day">Gündüz</string>
   <string name="live_display_day_summary">Sadece gündüz ayarlarını kullan</string>
   <string name="live_display_night">Gece</string>

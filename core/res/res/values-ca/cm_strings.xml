@@ -34,29 +34,29 @@
   <string name="global_action_choose_profile">Perfil</string>
   <string name="global_action_screenshot">Captura de pantalla</string>
   <string name="permlab_receiveProtectedSms">rebre SMS protegits</string>
-  <string name="permdesc_receiveProtectedSms">Permet a l\'app rebre un SMS entrant protegit.</string>
+  <string name="permdesc_receiveProtectedSms">Permet a l\'aplicació rebre un SMS entrant protegit.</string>
   <string name="permlab_modifyProtectedSmsList">modifica la llista d\'SMS protegits</string>
-  <string name="permdesc_modifyProtectedSmsList">Permet a l\'app modificar la llista d\'adreces d\'SMS protegits.</string>
+  <string name="permdesc_modifyProtectedSmsList">Permet a l\'aplicació modificar la llista d\'adreces d\'SMS protegits.</string>
   <string name="permgrouplab_security">Seguretat</string>
   <string name="permgroupdesc_security">Permisos relacionats amb la informació de seguretat del dispositiu.</string>
   <string name="permlab_accessThemeService">accés al servei de temes</string>
-  <string name="permdesc_accessThemeService">Permet a una app accedir al servei de temes. No s\'hauria de necessitar mai en les apps normals.</string>
+  <string name="permdesc_accessThemeService">Permet a una aplicació accedir al servei de temes. No s\'hauria de necessitar mai en les aplicacions normals.</string>
   <string name="permlab_readThemes">Llegeix la informació del teu tema</string>
-  <string name="permdesc_readThemesDesc">Permet a l\'app llegir els teus temes i determinar quin tema has aplicat.</string>
+  <string name="permdesc_readThemesDesc">Permet a l\'aplicació llegir els teus temes i determinar quin tema has aplicat.</string>
   <string name="permlab_writeThemes">modifica els teus temes</string>
-  <string name="permdesc_writeThemesDesc">Permet a l\'app introduir temes nous i modificar quin tema has aplicat.</string>
+  <string name="permdesc_writeThemesDesc">Permet a l\'aplicació introduir temes nous i modificar quin tema has aplicat.</string>
   <string name="permlab_readPhoneBlacklist">llegeix la llista negra del telèfon</string>
-  <string name="permdesc_readPhoneBlacklist">Permet a una app llegir informació sobre números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
+  <string name="permdesc_readPhoneBlacklist">Permet a una aplicació llegir informació sobre números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
   <string name="permlab_changePhoneBlacklist">canvia la llista negra del telèfon</string>
-  <string name="permdesc_changePhoneBlacklist">Permet a una app canviar els números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
+  <string name="permdesc_changePhoneBlacklist">Permet a una aplicació canviar els números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
   <string name="permlab_changePrivacyGuardState">activa o desactiva el guarda de privacitat</string>
   <string name="permdesc_changePrivacyGuardState">Permet a l\'app si una altra app s\'executa amb el guarda de privacitat. Quan una app s\'executa amb el guarda de privacitat, no tindrà accés a les dades personals com els contactes, registres de trucades, o missatges.</string>
   <string name="privacy_guard_notification">Guarda de privacitat actiu</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no tindrà accés a dades personals</string>
   <string name="permlab_useHardwareFramework">utilitza el marc de hardware</string>
-  <string name="permdesc_useHardwareFramework">Permet a una app accedir al marc de hardware de CM.</string>
+  <string name="permdesc_useHardwareFramework">Permet a una aplicació accedir al marc de hardware de CM.</string>
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
-  <string name="permdesc_setKeyguardWallpaper">Permet que una app estableixi el fons de la pantalla de bloqueig.</string>
+  <string name="permdesc_setKeyguardWallpaper">Permet que una aplicació estableixi el fons de la pantalla de bloqueig.</string>
   <string name="privacy_guard_dialog_title">Guarda de privacitat</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> voldria <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Reinicia</string>
@@ -69,13 +69,13 @@
   <string name="reboot_confirm" product="tablet">La teva tauleta es reiniciarà.</string>
   <string name="reboot_confirm" product="default">El teu telèfon es reiniciarà.</string>
   <string name="reboot_progress">S\'està reiniciant\u2026</string>
-  <string name="app_killed_message">App matada</string>
+  <string name="app_killed_message">Aplicació matada</string>
   <string name="adb_net_active_notification_title">ADB sobre xarxa habilitat</string>
   <string name="adb_both_active_notification_title">ADB sobre USB i xarxa habilitat</string>
   <string name="adb_active_generic_notification_message">Toca per deshabilitar la depuració.</string>
   <string name="usb_choose_notification_title">Toca per escollir opcions USB.</string>
-  <string name="permlab_interceptPackageLaunch">interceptar el llançament d\'una app</string>
-  <string name="permdesc_interceptPackageLaunch">Permet a l\'app interceptar el llançament d\'altres apps</string>
+  <string name="permlab_interceptPackageLaunch">interceptar el llançament d\'una aplicació</string>
+  <string name="permdesc_interceptPackageLaunch">Permet a l\'aplicació interceptar el llançament d\'altres aplicacions</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>
   <string name="app_ops_access_notifications">llegir les teves notificacions</string>
@@ -88,7 +88,7 @@
   <string name="app_ops_delete_mms">esborrar els teus missatges MMS</string>
   <string name="app_ops_delete_sms">esborrar els teus missatges SMS</string>
   <string name="app_ops_draw_on_top">dibuixar finestres en primer pla</string>
-  <string name="app_ops_get_usage_stats">obtenir estadístiques d\'ús d\'apps</string>
+  <string name="app_ops_get_usage_stats">obtenir estadístiques d\'ús d\'aplicacions</string>
   <string name="app_ops_keep_device_awake">mantenir el teu dispositiu encès</string>
   <string name="app_ops_make_phone_call">fer una trucada</string>
   <string name="app_ops_modify_calendar">actualitzar el teu calendari</string>
@@ -180,4 +180,15 @@
   <string name="usb_media_checking">S\'està comprovant l\'emmagatzematge USB.</string>
   <string name="usb_media_removed">S\'ha extret l\'emmagatzematge USB.</string>
   <string name="usb_media_shared">L\'emmagatzematge USB està en ús per part d\'un ordinador.</string>
+  <string name="live_display_auto">Automàtic</string>
+  <string name="live_display_auto_summary">Ajusta automàticament la temperatura de color de la pantalla després de la posta de sol i de l\'alba</string>
+  <string name="live_display_off">No</string>
+  <string name="live_display_off_summary">Deshabilita tots els ajustaments</string>
+  <string name="live_display_day">Dia</string>
+  <string name="live_display_day_summary">Utilitza només la configuració de dia</string>
+  <string name="live_display_night">Nit</string>
+  <string name="live_display_night_summary">Utilitza només la configuració de nit</string>
+  <string name="live_display_outdoor">Exterior (sol intens)</string>
+  <string name="live_display_outdoor_summary">Utilitza només la configuració d\'exterior</string>
+  <string name="live_display_hint">LiveDisplay pot ajudar-te a reduir la fatiga ocular i ajudar-te a dormir a la nit. Fes clic aquí per provar-ho!</string>
 </resources>

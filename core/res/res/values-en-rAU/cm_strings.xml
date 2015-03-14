@@ -131,7 +131,7 @@
   <string name="app_ops_write_mms">write an MMS message</string>
   <string name="app_ops_write_sms">write an SMS message</string>
   <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
-  <string name="lockscreen_airplane_mode_on">Airplane Mode</string>
+  <string name="lockscreen_airplane_mode_on">Aeroplane mode</string>
   <string name="usb_charging_notification_title">Connected in charging mode</string>
   <string name="tethered_notification_no_device_message">No connected device</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connected device</string>

@@ -19,7 +19,7 @@
   <string name="clear_recents">Tanca totes les recents</string>
   <string name="screenshot_delete_action">Esborra</string>
   <string name="screenshot_delete_confirmation">Captura de pantalla esborrada.</string>
-  <string name="advanced_dev_option_wipe_app">Neteja dades d\'app</string>
+  <string name="advanced_dev_option_wipe_app">Neteja dades de l\'aplicació</string>
   <string name="advanced_dev_option_force_stop">Força tancament</string>
   <string name="advanced_dev_option_uninstall">Desinstal·la</string>
   <string name="accessibility_quick_settings_data_off">Dades mòbils desactivades.</string>
@@ -66,7 +66,7 @@
   <string name="navring_target_reset_message">Vols esborrar totes les dreceres de la barra de navegació creades per l\'usuari i restaurar les predeterminades?</string>
   <string name="navring_target_reset">Reinicia les dreceres de la barra de navegació a les predeterminades</string>
   <string name="navring_action_open_ime_switcher">Obre el commutador IME</string>
-  <string name="navring_action_kill_app">Mata app</string>
+  <string name="navring_action_kill_app">Mata l\'aplicació</string>
   <string name="navring_action_none">Cap</string>
   <string name="navring_action_take_screenshot">Fes una captura de pantalla</string>
   <string name="navring_action_ring_vibrate">To/Vibració</string>
