@@ -16606,8 +16606,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     private void saveThemeResourceLocked(ThemeConfig t, boolean isDiff){
         if(isDiff) {
-            Settings.Secure.putString(mContext.getContentResolver(),
-                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY, t.toJson());
+            Settings.Secure.putStringForUser(mContext.getContentResolver(),
+                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY, t.toJson(),
+                    UserHandle.USER_CURRENT);
         }
     }
 
