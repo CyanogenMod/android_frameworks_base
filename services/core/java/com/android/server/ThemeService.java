@@ -240,6 +240,9 @@ public class ThemeService extends IThemeService.Stub {
         IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangeReceiver, filter);
 
+        filter = new IntentFilter(Intent.ACTION_USER_SWITCHED);
+        mContext.registerReceiver(mUserChangeReceiver, filter);
+
         mPM = mContext.getPackageManager();
 
         processInstalledThemes();
@@ -726,6 +729,24 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
+    private boolean updateConfiguration(ThemeConfig themeConfig) {
+        final IActivityManager am = ActivityManagerNative.getDefault();
+        if (am != null) {
+            final long token = Binder.clearCallingIdentity();
+            try {
+                Configuration config = am.getConfiguration();
+
+                config.themeConfig = themeConfig;
+                am.updateConfiguration(config);
+            } catch (RemoteException e) {
+                return false;
+            } finally {
+                Binder.restoreCallingIdentity(token);
+            }
+        }
+        return true;
+    }
+
     private boolean shouldUpdateConfiguration(ThemeChangeRequest request) {
         return request.getOverlayThemePackageName() != null ||
                 request.getFontThemePackageName() != null ||
@@ -1118,6 +1139,27 @@ public class ThemeService extends IThemeService.Stub {
                 updateProvider(builder.build(), System.currentTimeMillis());
             } else {
                 mWallpaperChangedByUs = false;
+            }
+        }
+    };
+
+    private BroadcastReceiver mUserChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int userHandle = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
+            if (userHandle >= 0) {
+                ThemeConfig config = ThemeConfig.getBootThemeForUser(mContext.getContentResolver(),
+                        userHandle);
+                if (DEBUG) {
+                    Log.d(TAG,
+                            "Changing theme for user " + userHandle + " to " + config.toString());
+                }
+                ThemeChangeRequest request = new ThemeChangeRequest.Builder(config).build();
+                try {
+                    requestThemeChange(request, true);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Unable to change theme for user change", e);
+                }
             }
         }
     };
