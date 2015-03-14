@@ -178,4 +178,15 @@
   <string name="usb_media_checking">Nośnik USB jest obecnie sprawdzany.</string>
   <string name="usb_media_removed">Nośnik USB został usunięty.</string>
   <string name="usb_media_shared">Nośnik USB jest obecnie używany przez komputer.</string>
+  <string name="live_display_auto">Automatycznie</string>
+  <string name="live_display_auto_summary">Automatycznie dostosuj temperaturę kolorów ekranu po zachodzie i wschodzie słońca</string>
+  <string name="live_display_off">Wyłączony</string>
+  <string name="live_display_off_summary">Wyłącz wszystkie zmiany</string>
+  <string name="live_display_day">Dzień</string>
+  <string name="live_display_day_summary">Używaj tylko ustawień na dzień</string>
+  <string name="live_display_night">Noc</string>
+  <string name="live_display_night_summary">Używaj ustawień tylko w nocy</string>
+  <string name="live_display_outdoor">Na zewnątrz (jasne światło)</string>
+  <string name="live_display_outdoor_summary">Używaj ustawienia tylko na zewnątrz</string>
+  <string name="live_display_hint">LiveDisplay może pomóc w zredukowaniu efektu zmęczenia oczu oraz pomaga zasnąć w nocy. Kliknij tutaj, aby wypróbować!</string>
 </resources>

@@ -178,4 +178,9 @@
   <string name="usb_media_checking">אחסון ה-USB נבדק כעת.</string>
   <string name="usb_media_removed">אחסון USB הוסר.</string>
   <string name="usb_media_shared">אחסון ה-USB נמצא כעת בשימוש על-ידי מחשב.</string>
+  <string name="live_display_auto">אוטומטי</string>
+  <string name="live_display_day">יום</string>
+  <string name="live_display_day_summary">השתמש בהגדרות יום בלבד</string>
+  <string name="live_display_night">לילה</string>
+  <string name="live_display_night_summary">השתמש בהגדרות לילה בלבד</string>
 </resources>

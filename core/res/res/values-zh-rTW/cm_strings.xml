@@ -179,7 +179,6 @@
   <string name="usb_media_removed">USB 儲存裝置已被移除。</string>
   <string name="usb_media_shared">USB 儲存裝置正被電腦使用中。</string>
   <string name="live_display_auto">自動</string>
-  <string name="live_display_auto_summary">依照周圍環境自動調整螢幕</string>
   <string name="live_display_day">白天</string>
   <string name="live_display_day_summary">僅使用白天設定</string>
   <string name="live_display_night">夜間</string>

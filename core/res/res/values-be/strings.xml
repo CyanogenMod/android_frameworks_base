@@ -36,6 +36,12 @@
   <string name="invalidPuk">Увядзіце PUK-код з 8 лічбаў ці больш.</string>
   <string name="needPuk2">Для разблакавання SIM-карткі увядзіце код PUK2.</string>
   <string name="BaMmi">Забарона выклікаў</string>
+  <string name="global_action_lockdown">Блакаваць зараз</string>
+  <string name="user_owner_label">Асабістыя праграмы</string>
+  <string name="permlab_receiveBluetoothMap">атрыманне паведамленняў Bluetooth (MAP)</string>
+  <string name="permdesc_receiveBluetoothMap">Дазваляе праграме атрымліваць і апрацоўваць паведамленні Bluetooth MAP. Гэта значыць, што праграма можа адсочваць або выдаляць паведамленні, адпраўленыя на прыладу, не паказваючы іх вам.</string>
+  <string name="permlab_startTasksFromRecents">запуск задачаў са спісу нядаўніх</string>
+  <string name="permdesc_startTasksFromRecents">Дазваляе праграме выкарыстоўваць аб\'ект ActivityManager.RecentTaskInfo для запуску неактыўнай задачы, атрыманай праз ActivityManager.getRecentTaskList().</string>
   <string name="permdesc_sim_communication">Дазваляе праграме дасылаць каманды да SIM-карткі. Гэта вельмі небяспечна.</string>
   <string name="permlab_readPrecisePhoneState">чытанне дакладнага стану тэлефону</string>
   <string name="permdesc_readPrecisePhoneState">Дае праграме доступ да дакладнага стану тэлефону. З дапамогай гэтага дазволу праграма можа вызначыць сапраўдны стан выкліку (актыўны ці ў фонавым рэжыме), памылкі выклікаў, дакладны стан і памылкі перадачы дадзеных.</string>

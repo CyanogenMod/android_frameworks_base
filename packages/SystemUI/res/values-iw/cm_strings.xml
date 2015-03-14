@@ -22,11 +22,15 @@
   <string name="advanced_dev_option_wipe_app">מחק נתוני יישום</string>
   <string name="advanced_dev_option_force_stop">אלץ עצירה</string>
   <string name="advanced_dev_option_uninstall">הסרה</string>
+  <string name="accessibility_quick_settings_data_off">נתונים ניידים כבויים.</string>
+  <string name="accessibility_quick_settings_data_on">נתונים ניידים פעילים.</string>
   <string name="accessibility_quick_settings_roaming_off">מצב נדידה כבוי.</string>
   <string name="accessibility_quick_settings_roaming_on">מצב נדידה פעיל.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
   <string name="accessibility_dpad_left">סמן שמאלה</string>
   <string name="accessibility_dpad_right">סמן ימינה</string>
   <string name="quick_settings_roaming_label">נדידה</string>
+  <string name="quick_settings_data_off">נתונים ניידים כבויים</string>
   <string name="quick_settings_location_detail_title">מצב מיקום</string>
   <string name="quick_settings_location_battery_saving_label">חיסכון בסוללה</string>
   <string name="quick_settings_location_gps_only_label">התקן בלבד</string>
@@ -37,6 +41,7 @@
   <string name="quick_settings_compass_label">מצפן</string>
   <string name="quick_settings_compass_init">מאתחל\u2026</string>
   <string name="quick_settings_lockscreen_label">מסך נעילה</string>
+  <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
   <string name="quick_settings_network_adb_label">ADB דרך הרשת</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">מסך נשאר דולק</string>
