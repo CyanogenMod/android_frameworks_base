@@ -70,7 +70,7 @@
   <string name="navbar_menu_conditional_button">Botó Menú (autoAmaga)</string>
   <string name="navbar_menu_always_button">Botó Menú (mostraSempre)</string>
   <string name="navbar_menu_big_button">Botó Menú</string>
-  <string name="advanced_dev_option_wipe_app">Neteja dades d\'app</string>
+  <string name="advanced_dev_option_wipe_app">Neteja dades d\'aplicació</string>
   <string name="advanced_dev_option_force_stop">Força tancament</string>
   <string name="advanced_dev_option_uninstall">Desinstal·la</string>
   <string name="accessibility_dock_battery_level">Acoplament Bateria <xliff:g id="number">%d</xliff:g> percent.</string>
@@ -78,6 +78,6 @@
   <string name="screenshot_delete_confirmation">Captura de pantalla esborrada.</string>
   <string name="accessibility_desc_add_quick_settings">Afegeix ajustaments ràpids.</string>
   <string name="status_bar_notification_spam_item_title">Ignora els missatges com aquest</string>
-  <string name="protected_app_notification_title">Notificació d\'app protegida</string>
-  <string name="protected_app_notification_summary">Pica per obrir la notificació de l\'app protegida</string>
+  <string name="protected_app_notification_title">Notificació d\'aplicació protegida</string>
+  <string name="protected_app_notification_summary">Pica per obrir la notificació de l\'aplicació protegida</string>
 </resources>

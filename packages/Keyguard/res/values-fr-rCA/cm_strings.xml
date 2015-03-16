@@ -17,27 +17,19 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">Écran de verrouillage</string>
-  <string name="keyguard_discharging">Déchargement, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+  <string name="keyguard_discharging">Déchargement en cours, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="keyguard_low_battery_cm">Branchez votre chargeur, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <plurals name="missed_calls">
-    <item quantity="one">%d appel manqué</item>
-    <item quantity="other">%d appels manqués</item>
-  </plurals>
-  <plurals name="unread_messages">
-    <item quantity="one">%d message non lu</item>
-    <item quantity="other">%d messages non lus</item>
-  </plurals>
   <string name="missed_call">appel manqué</string>
   <string name="message_from">message de</string>
   <string name="message_from_person">message de %1$s</string>
-  <string name="full_wday_month_day_no_year">EEEEdMMMM</string>
+  <string name="full_wday_month_day_no_year">dMMMMEEEE</string>
   <string name="kg_invalid_sim_puk_hint_cm">Le code PUK doit être composé de 8 chiffres.</string>
   <string name="keyguard_password_wrong_puk_code">Code PUK incorrect.</string>
-  <string name="keyguard_password_pin_failed">Opération PIN échouée.</string>
+  <string name="keyguard_password_pin_failed">Opération NIP échouée.</string>
   <string name="keyguard_password_puk_failed">Opération PUK échouée.</string>
   <string name="pinpuk_attempts">\nTentatives restantes :</string>
-  <string name="lockscreen_sim_error_message_short">Carte SIM incorrecte.</string>
-  <string name="keyguard_perso_locked_message">La carte SIM/RUIM possède un verrouillage personnel</string>
+  <string name="lockscreen_sim_error_message_short">Carte non valide.</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM est verrouillée personnellement</string>
   <string name="msim_kg_sim_pin_msg_format">SIM : <xliff:g id="number">%d</xliff:g>: <xliff:g id="msg">%s</xliff:g></string>
   <string name="keyguard_accessibility_application_widget">Dernière application utilisée</string>
 </resources>
