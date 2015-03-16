@@ -198,8 +198,10 @@ public class MobileDataController {
 
     public boolean isMobileDataSupported() {
         // require both supported network and ready SIM
+        int prfDataPhoneId = SubscriptionManager.getPhoneId(
+                SubscriptionManager.getDefaultDataSubId());
         return mConnectivityManager.isNetworkSupported(TYPE_MOBILE)
-                && mTelephonyManager.getSimState() == SIM_STATE_READY;
+                && mTelephonyManager.getSimState(prfDataPhoneId) == SIM_STATE_READY;
     }
 
     public boolean isMobileDataEnabled() {
