@@ -102,7 +102,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private static final int DOZE_ANIMATION_ELEMENT_DURATION = 250;
 
     // the length to animate the visualizer in and out
-    private static final int VISUALIZER_ANIMATION_DURATION = 300;
+    private static final int VISUALIZER_ANIMATION_DURATION_IN = 300;
+    private static final int VISUALIZER_ANIMATION_DURATION_OUT = 0;
 
     private KeyguardAffordanceView mCameraImageView;
     private KeyguardAffordanceView mPhoneImageView;
@@ -850,7 +851,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
             mVisualizer.animate()
                     .alpha(1f)
-                    .setDuration(VISUALIZER_ANIMATION_DURATION);
+                    .setDuration(VISUALIZER_ANIMATION_DURATION_IN);
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -870,7 +871,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
             mVisualizer.animate()
                     .alpha(0f)
-                    .setDuration(VISUALIZER_ANIMATION_DURATION);
+                    .setDuration(VISUALIZER_ANIMATION_DURATION_OUT);
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
