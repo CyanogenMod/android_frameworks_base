@@ -2008,7 +2008,7 @@ final class ActivityStack {
         task.setFrontOfTask();
 
         r.putInHistory();
-        mActivityTrigger.activityStartTrigger(r.intent);
+        r.info.flags = mActivityTrigger.activityStartTrigger(r.intent, r.info.flags);
         if (!isHomeStack() || numActivities() > 0) {
             // We want to show the starting preview window if we are
             // switching to a new task, or the next activity's process is
