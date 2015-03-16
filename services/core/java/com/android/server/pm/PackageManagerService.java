@@ -1900,6 +1900,21 @@ public class PackageManagerService extends IPackageManager.Stub {
                 pkgSetting.disableComponentLPw(className, UserHandle.USER_OWNER);
             }
 
+            // Enable components marked for forced-enable at build-time
+            for (String name : mContext.getResources().getStringArray(
+                    com.android.internal.R.array.config_forceEnabledComponents)) {
+                ComponentName cn = ComponentName.unflattenFromString(name);
+                Slog.v(TAG, "Enabling " + name);
+                String className = cn.getClassName();
+                PackageSetting pkgSetting = mSettings.mPackages.get(cn.getPackageName());
+                if (pkgSetting == null || pkgSetting.pkg == null
+                        || !pkgSetting.pkg.hasComponentClassName(className)) {
+                    Slog.w(TAG, "Unable to enable " + name);
+                    continue;
+                }
+                pkgSetting.enableComponentLPw(className, UserHandle.USER_OWNER);
+            }
+
             // If this is first boot after an OTA, and a normal boot, then
             // we need to clear code cache directories.
             if (!Build.FINGERPRINT.equals(mSettings.mFingerprint) && !onlyCore) {
@@ -12793,6 +12808,18 @@ public class PackageManagerService extends IPackageManager.Stub {
             throw new IllegalArgumentException("Invalid new component state: "
                     + newState);
         }
+
+        // Don't allow to enable components marked for disabling at build-time
+        for (String name : mContext.getResources().getStringArray(
+                com.android.internal.R.array.config_disabledComponents)) {
+            ComponentName cn = ComponentName.unflattenFromString(name);
+            if (cn.getPackageName().equals(packageName) && cn.getClassName().equals(className)) {
+                Slog.w(TAG, "Blocked enable of component " + className +
+                        " in package" + packageName);
+                return;
+            }
+        }
+
         PackageSetting pkgSetting;
         final int uid = Binder.getCallingUid();
         final int permission = mContext.checkCallingOrSelfPermission(
