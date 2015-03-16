@@ -1909,6 +1909,7 @@
 
   <!-- Package Manager -->
   <java-symbol type="array" name="config_disabledComponents" />
+  <java-symbol type="array" name="config_forceEnabledComponents" />
 
   <!-- LED flashlight -->
   <java-symbol type="bool" name="config_enableTorch" />

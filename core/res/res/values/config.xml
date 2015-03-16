@@ -1475,6 +1475,10 @@
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>
 
+    <!-- The list of components which should be forced to be enabled. -->
+    <string-array name="config_forceEnabledComponents" translatable="false">
+    </string-array>
+
     <!-- Device supports LED flashlight -->
     <bool name="config_enableTorch">false</bool>
 
