@@ -2430,9 +2430,6 @@
   <java-symbol type="string" name="adb_both_active_notification_title" />
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
-  <!-- Package Manager -->
-  <java-symbol type="array" name="config_disabledComponents" />
-
   <!-- Last app switch animations -->
   <java-symbol type="anim" name="last_app_in" />
   <java-symbol type="anim" name="last_app_out" />
