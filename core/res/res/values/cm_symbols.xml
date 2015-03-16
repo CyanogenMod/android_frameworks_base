@@ -207,6 +207,7 @@
     <java-symbol type="string" name="theme_install_error_message" />
     <!-- Package Manager -->
     <java-symbol type="array" name="config_disabledComponents" />
+    <java-symbol type="array" name="config_forceEnabledComponents" />
 
     <!-- Last app switch animations -->
     <java-symbol type="anim" name="last_app_in" />
