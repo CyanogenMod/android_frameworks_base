@@ -258,6 +258,7 @@ public class NetworkPolicyManager {
         if (cycleLength == CYCLE_MONTHLY) {
             snapToCycleDay(time, cycleDay);
         } else if (cycleLength == CYCLE_WEEKLY) {
+            cycleDay = cycleDay % 7;
             time.monthDay += (cycleDay - time.weekDay);
             time.normalize(true);
         }
