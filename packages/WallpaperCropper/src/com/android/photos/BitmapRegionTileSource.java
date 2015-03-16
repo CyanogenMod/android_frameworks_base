@@ -31,10 +31,12 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.util.Log;
 
+import android.widget.Toast;
 import com.android.gallery3d.common.BitmapUtils;
 import com.android.gallery3d.glrenderer.BasicTexture;
 import com.android.gallery3d.glrenderer.BitmapTexture;
 import com.android.photos.views.TiledImageRenderer;
+import com.android.wallpapercropper.R;
 import com.android.wallpapercropper.Utilities;
 
 import java.io.BufferedInputStream;
@@ -130,6 +132,12 @@ public class BitmapRegionTileSource implements TiledImageRenderer.TileSource {
             // loaded, the lifecycle is different and interactions are on a different
             // thread. Thus to simplify, this source will decode its own bitmap.
             Bitmap preview = decodePreview(res, context, path, uri, resId, previewSize, assetPath);
+            if (preview == null) {
+                Toast.makeText(context,
+                        context.getResources().getString(R.string.image_decode_error),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (preview.getWidth() <= GL_SIZE_LIMIT && preview.getHeight() <= GL_SIZE_LIMIT) {
                 mPreview = new BitmapTexture(preview);
             } else {
