@@ -936,15 +936,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     public ParcelFileDescriptor getKeyguardWallpaper(IWallpaperManagerCallback cb,
                                                      Bundle outParams) {
         synchronized (mLock) {
-            // This returns the current user's wallpaper, if called by a system service. Else it
-            // returns the wallpaper for the calling user.
-            int callingUid = Binder.getCallingUid();
-            int wallpaperUserId = 0;
-            if (callingUid == android.os.Process.SYSTEM_UID) {
-                wallpaperUserId = mCurrentUserId;
-            } else {
-                wallpaperUserId = UserHandle.getUserId(callingUid);
-            }
+            int wallpaperUserId = mCurrentUserId;
             KeyguardWallpaperData wallpaper = mKeyguardWallpaperMap.get(wallpaperUserId);
             try {
                 if (outParams != null) {
@@ -1581,10 +1573,6 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
         JournaledFile journal = makeJournaledFile(KEYGUARD_WALLPAPER_INFO, userId);
         FileInputStream stream = null;
         File file = journal.chooseForRead();
-        if (!file.exists()) {
-            // This should only happen one time, when upgrading from a legacy system
-            migrateFromOld();
-        }
         KeyguardWallpaperData keyguardWallpaper = mKeyguardWallpaperMap.get(userId);
         if (keyguardWallpaper == null) {
             keyguardWallpaper = new KeyguardWallpaperData(userId);
