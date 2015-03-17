@@ -2312,4 +2312,6 @@
 
     <!-- Whether to start in touch mode -->
     <bool name="config_defaultInTouchMode">true</bool>
+   <!-- config for FDN contact search. Disabled by default -->
+   <bool name="config_fdn_contact_search">false</bool>
 </resources>

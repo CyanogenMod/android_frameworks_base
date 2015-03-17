@@ -132,6 +132,12 @@ public final class PhoneCapabilities {
     public static final int CALL_TYPE_MODIFIABLE = 0x00020000;
 
     /**
+     * This will include as capability for GSM call and if FDN is enabled.
+     * @hide
+     */
+    public static final int FDN_ENABLED = 0x00040000;
+
+    /**
      * Whether this set of capabilities supports the specified capability.
      * @param capabilities The set of capabilities.
      * @param capability The capability to check capabilities for.
