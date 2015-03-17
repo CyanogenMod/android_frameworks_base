@@ -550,6 +550,7 @@ public final class SystemServer {
         EdgeGestureService edgeGestureService = null;
         GestureService gestureService = null;
         ThemeService themeService = null;
+        KillSwitchService killSwitchService = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -1001,6 +1002,14 @@ public final class SystemServer {
                 } catch (Throwable e) {
                     reportWtf("starting Theme Service", e);
                 }
+            }
+
+            try {
+                Slog.i(TAG, "KillSwitch Service");
+                killSwitchService = new KillSwitchService(context);
+                ServiceManager.addService(Context.KILLSWITCH_SERVICE, killSwitchService);
+            } catch (Throwable e) {
+                reportWtf("starting KillSwitch Service", e);
             }
 
             if (!disableNonCoreServices) {

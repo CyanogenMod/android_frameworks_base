@@ -331,4 +331,9 @@
 
     <!-- Advanced settings switch -->
     <java-symbol type="bool" name="config_advancedSettingsMode" />
+
+    <!-- KillSwitch -->
+    <java-symbol type="array" name="config_packagesAllowedAccessToKillSwitch" />
+    <java-symbol type="string" name="config_killSwitchLib" />
+    <java-symbol type="string" name="config_killSwitchClass" />
 </resources>
