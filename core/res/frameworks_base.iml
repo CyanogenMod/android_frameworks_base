@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../../../../cm12/frameworks/base/core/res/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../../../../cm12/frameworks/base/core/res/gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../../../../cm12/frameworks/base/core/res/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../../../../cm12/frameworks/base/core/res/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../../../../cm12/frameworks/base/core/res/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../../../../cm12/frameworks/base/core/res/libs" />
+        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../../../../cm12/frameworks/base/core/res/proguard_logs" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/cm12/frameworks/base">
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/devicepolicy/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/libs/usb/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/restrictions/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/policy/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/appwidget/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/CoreTests" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/wifi/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/nfc-extras/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/wm/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/keystore/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/accessibility/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/am/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/Camera2Tests/CameraToo/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/TransitionTests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/BiDiTests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RenderScriptTests/Fountain/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/UsageStatsTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RenderScriptTests/SceneGraph/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/LowStorageTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/backup/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/ime/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/Split/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/ImfTest/tests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/Camera2Tests/SmartCamera/SimpleCamera/tests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RenderScriptTests/Fountain_v11/src/com/android/fountain" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/WallpaperTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tools/layoutlib/create/tests" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/usage/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tools/layoutlib/bridge/tests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/JobSchedulerTestApp/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/media/lib/remotedisplay/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/DataIdleTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SerialChat/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RenderScriptTests/HelloWorld/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/telecomm/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/GridLayoutTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/OneMedia/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/appwidgets/AppWidgetProviderTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/DpiTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SharedLibrary/client/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/AccessoryDisplay/sink/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/FixVibrateSetting/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/AccessoryDisplay/common/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/Camera2Tests/SmartCamera/SimpleCamera/src/androidx/media/filterfw" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/graphics/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/VoiceInteraction/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tools/layoutlib/bridge/tests/res/testApp/MyApplication/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/Assistant/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RenderScriptTests/FountainFbo/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RenderScriptTests/MiscSamples/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/LocationTracker/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/WebViewTests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/MusicServiceDemo/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/input/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/bmgr/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/packages/SettingsProvider/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/ActivityTests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tools/layoutlib/create/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/media/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/appwidget/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/VoiceEnrollment/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SmokeTestApps/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/telephony/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/pm/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/HugeBackup/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/svc/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/HwAccelerationTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SoundTriggerTests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tools/preload" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SmokeTest/tests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/content/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SystemUIDemoModeController/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/LargeAssetTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/voiceinteraction/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/bu/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SharedLibrary/lib/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/CanvasCompare/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/location/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tools/layoutlib/bridge/tests/res/testApp/MyApplication/src/androidTest/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/BandwidthTests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/appwidgets/AppWidgetHostTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/Camera2Tests/CameraToo/tests/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/usb/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/AccessoryDisplay/source/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/location/lib/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/core/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/appops/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/VectorDrawableTest/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/requestsync/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds/settings/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/security-bridge/java/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/RemoteDisplayProvider/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/FrameworkPerf/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/core/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/tests/SslLoad/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/services/backup/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/cm12/frameworks/base/core/res/gen" isTestSource="false" generated="true" />
+      <excludeFolder url="file://$USER_HOME$/cm12/frameworks/base/cmds" />
+      <excludeFolder url="file://$USER_HOME$/cm12/frameworks/base/docs" />
+      <excludeFolder url="file://$USER_HOME$/cm12/frameworks/base/libs" />
+      <excludeFolder url="file://$USER_HOME$/cm12/frameworks/base/tools" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="jdk" jdkName="CM12 Platform" jdkType="Android SDK" />
+  </component>
+</module>
