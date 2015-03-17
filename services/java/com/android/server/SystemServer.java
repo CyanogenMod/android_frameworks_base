@@ -404,6 +404,7 @@ class ServerThread {
         MediaRouterService mediaRouter = null;
         ThemeService themeService = null;
         EdgeGestureService edgeGestureService = null;
+        KillSwitchService killSwitchService = null;
 
         // Bring up services needed for UI.
         if (factoryTest != SystemServer.FACTORY_TEST_LOW_LEVEL) {
@@ -927,6 +928,15 @@ class ServerThread {
             } catch (Throwable e) {
                 reportWtf("starting Theme Service", e);
             }
+
+            try {
+                Slog.i(TAG, "KillSwitch Service");
+                killSwitchService = new KillSwitchService(context);
+                ServiceManager.addService(Context.KILLSWITCH_SERVICE, killSwitchService);
+            } catch (Throwable e) {
+                reportWtf("starting KillSwitch Service", e);
+            }
+
             if (!disableNonCoreServices) {
                 try {
                     Slog.i(TAG, "Media Router Service");
