@@ -2037,6 +2037,9 @@
   <java-symbol type="integer" name="config_proximityCheckTimeout" />
 
   <java-symbol type="array" name="config_ignored_sms_packages" />
+  <java-symbol type="array" name="config_packagesAllowedAccessToKillSwitch" />
+  <java-symbol type="string" name="config_killSwitchLib" />
+  <java-symbol type="string" name="config_killSwitchClass" />
 
   <!-- Last app switch animations -->
    <java-symbol type="anim" name="last_app_in" />
