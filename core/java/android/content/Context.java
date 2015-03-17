@@ -2962,6 +2962,15 @@ public abstract class Context {
     public static final String CMHW_SERVICE = "cmhw";
 
     /**
+     * {@link com.android.server.KillSwitchService}for accessing the kill switch service.
+     *
+     * @see #getSystemService
+     * @see com.android.server.KillSwitchService
+     * @hide
+     */
+    public static final String KILLSWITCH_SERVICE = "killswitch";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *
