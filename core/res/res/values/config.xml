@@ -2217,6 +2217,7 @@
     <integer name="launchboost_timeout_param">0</integer>
     <integer name="launchboost_schedboost_param">0</integer>
     <integer name="launchboost_cpuboost_param">0</integer>
+    <integer name="launchboost_cpunumboost_param">0</integer>
     <integer name="launchboost_pcdisbl_param">0</integer>
     <integer name="launchboost_ksmboost_param">0</integer>
     <integer name="launchboost_smtaskboost_param">0</integer>
