@@ -42,7 +42,7 @@ namespace {
             ALOGD("error: fchmod %s: %s\n", path, strerror(errno));
             goto fail;
         }
-        if (TEMP_FAILURE_RETRY(flock(fd, LOCK_EX | LOCK_NB)) != 0) {
+        if (TEMP_FAILURE_RETRY(flock(fd, LOCK_EX)) != 0) {
             ALOGD("error: flock %s: %s\n", path, strerror(errno));
             // If the file is locked by another process, then we needn't unlink the file.
             needUnlink = false;
