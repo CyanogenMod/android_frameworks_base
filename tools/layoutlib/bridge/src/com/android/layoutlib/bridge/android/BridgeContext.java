@@ -496,6 +496,11 @@ public final class BridgeContext extends Context {
     }
 
     @Override
+    public void recreateTheme() {
+        throw new UnsupportedOperationException("recreateTheme is unsupported");
+    }
+
+    @Override
     public ClassLoader getClassLoader() {
         // The documentation for this method states that it should return a class loader one can
         // use to retrieve classes in this package. However, when called by LayoutInflater, we do

@@ -497,6 +497,9 @@ public abstract class Context {
     @ViewDebug.ExportedProperty(deepExport = true)
     public abstract Resources.Theme getTheme();
 
+    /** @hide */
+    public abstract void recreateTheme();
+
     /**
      * Retrieve styled attribute information in this Context's theme.  See
      * {@link android.content.res.Resources.Theme#obtainStyledAttributes(int[])}
