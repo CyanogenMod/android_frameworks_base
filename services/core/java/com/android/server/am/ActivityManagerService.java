@@ -1296,6 +1296,17 @@ public final class ActivityManagerService extends ActivityManagerNative
     int mThumbnailWidth;
     int mThumbnailHeight;
 
+    /**
+     *  This is flag used for the first time boot of fresh new phone.
+     *
+     *  1. startHomeActivityLocked will be called three times at first time boot, we also
+     *  need to set three time in order to successfully set the default home.
+     *
+     *  2. there are won't set anymore after the first time boot, because a property will
+     *  ignore the default home set.
+     */
+    int mStartHomeSetDefaultLauncherCount = 3;
+
     final ServiceThread mHandlerThread;
     final MainHandler mHandler;
 
@@ -3119,6 +3130,20 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     boolean startHomeActivityLocked(int userId, String reason) {
+        // Only set at first time boot up for a fresh new phone
+        if (mStartHomeSetDefaultLauncherCount > 0) {
+            mStartHomeSetDefaultLauncherCount--;
+
+            boolean firstLaunch = SystemProperties.getBoolean("persist.sys.sw.firstLaunch", true);
+            if(firstLaunch){
+                setDefaultLauncher();
+
+                if (mStartHomeSetDefaultLauncherCount == 0) {
+                    SystemProperties.set("persist.sys.sw.firstLaunch", "false");
+                }
+            }
+        }
+
         if (mFactoryTest == FactoryTest.FACTORY_TEST_LOW_LEVEL
                 && mTopAction == null) {
             // We are running in factory test mode, but unable to find
@@ -11372,14 +11397,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 } catch (RemoteException ex) {
                     // pm is in same process, this will never happen.
                 }
-            }
-
-            // Only set at first time boot up for a fresh new phone
-            boolean firstLaunch = SystemProperties.getBoolean("persist.sys.sw.firstLaunch", true);
-            if(firstLaunch){
-                SystemProperties.set("persist.sys.sw.firstLaunch", "false");
-
-                setDefaultLauncher();
             }
 
             // Start up initial activity.
