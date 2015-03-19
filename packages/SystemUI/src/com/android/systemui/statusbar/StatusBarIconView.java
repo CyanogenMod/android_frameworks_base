@@ -61,15 +61,7 @@ public class StatusBarIconView extends AnimatedImageView {
     public StatusBarIconView(Context context, String slot, Notification notification) {
         super(context);
         final Resources res = context.getResources();
-        final float densityMultiplier = res.getDisplayMetrics().density;
-        final float scaledPx = 8 * densityMultiplier;
         mSlot = slot;
-        mNumberPain = new Paint();
-        mNumberPain.setTextAlign(Paint.Align.CENTER);
-        mNumberPain.setColor(res.getColor(R.drawable.notification_number_text_color));
-        mNumberPain.setAntiAlias(true);
-        mNumberPain.setTypeface(Typeface.DEFAULT_BOLD);
-        mNumberPain.setTextSize(scaledPx);
         setNotification(notification);
 
         mObserver = GlobalSettingsObserver.getInstance(context);
@@ -146,6 +138,15 @@ public class StatusBarIconView extends AnimatedImageView {
         if (!numberEquals || force) {
             if (icon.number > 1 && mShowNotificationCount) {
                 if (mNumberBackground == null) {
+                    final Resources res = mContext.getResources();
+                    final float densityMultiplier = res.getDisplayMetrics().density;
+                    final float scaledPx = 8 * densityMultiplier;
+                    mNumberPain = new Paint();
+                    mNumberPain.setTextAlign(Paint.Align.CENTER);
+                    mNumberPain.setColor(res.getColor(R.drawable.notification_number_text_color));
+                    mNumberPain.setAntiAlias(true);
+                    mNumberPain.setTypeface(Typeface.DEFAULT_BOLD);
+                    mNumberPain.setTextSize(scaledPx);
                     mNumberBackground = getContext().getResources().getDrawable(
                             R.drawable.ic_notification_overlay);
                 }
