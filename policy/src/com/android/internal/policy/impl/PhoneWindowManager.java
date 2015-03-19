@@ -1267,6 +1267,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void triggerVirtualKeypress(final int keyCode) {
         InputManager im = InputManager.getInstance();
         long now = SystemClock.uptimeMillis();
+
+        final KeyEvent downEvent = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+                keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_KEYBOARD);
+        final KeyEvent upEvent = KeyEvent.changeAction(downEvent, KeyEvent.ACTION_UP);
+
+        im.injectInputEvent(downEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+        im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
     private void handleShortPressOnHome() {
