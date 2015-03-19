@@ -665,9 +665,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGING.equals(intent.getAction())) {
                 mPowerSaveModeEnabled = intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE,
                         false);
-                removeCallbacks(mStartVisualizer);
-                removeCallbacks(mStopVisualizer);
-                post(mPowerSaveModeEnabled ? mStopVisualizer : mStartVisualizer);
+                requestVisualizer(true, 0);
             }
         }
     };
