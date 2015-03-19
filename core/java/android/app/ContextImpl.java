@@ -868,6 +868,13 @@ class ContextImpl extends Context {
     }
 
     @Override
+    public void recreateTheme() {
+        Resources.Theme newTheme = mResources.newTheme();
+        newTheme.applyStyle(mThemeResource, true);
+        mTheme.setTo(newTheme);
+    }
+
+    @Override
     public ClassLoader getClassLoader() {
         return mPackageInfo != null ?
                 mPackageInfo.getClassLoader() : ClassLoader.getSystemClassLoader();
