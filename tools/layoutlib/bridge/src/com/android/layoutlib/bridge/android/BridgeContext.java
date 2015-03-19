@@ -450,6 +450,11 @@ public final class BridgeContext extends Context {
     }
 
     @Override
+    public void recreateTheme() {
+        throw new UnsupportedOperationException("recreateTheme is unsupported");
+    }
+
+    @Override
     public ClassLoader getClassLoader() {
         return this.getClass().getClassLoader();
     }
