@@ -786,6 +786,11 @@ public class KeyguardViewMediator extends SystemUI {
                 return;
             }
 
+            if (isSecure()) {
+                Log.d(TAG, "current mode is SecurityMode, ignore hide keyguard");
+                return;
+            }
+
             mExternallyEnabled = enabled;
 
             if (!enabled && mShowing) {
