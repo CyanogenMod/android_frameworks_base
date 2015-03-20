@@ -342,11 +342,17 @@ public class BatteryMeterView extends View implements DemoMode,
 
     @Override
     public void draw(Canvas c) {
+        final boolean showChargingAnim
+                 = mContext.getResources().getBoolean(R.bool.config_show_battery_charging_anim);
         BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
-        final int level =
-                mContext.getResources().getBoolean(R.bool.config_show_battery_charging_anim)
+
+        final int level = showChargingAnim
                 ? updateChargingAnimLevel(tracker)
                 : tracker.level;
+
+        if (showChargingAnim && getLayerType() != View.LAYER_TYPE_SOFTWARE) {
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
 
         if (level == BatteryTracker.UNKNOWN_LEVEL) return;
 
