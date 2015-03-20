@@ -3934,7 +3934,7 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
         const bag_entry* parentBag;
         uint32_t parentTypeSpecFlags = 0;
         const ssize_t NP = getBagLocked(resolvedParent, &parentBag, &parentTypeSpecFlags,
-                resolvedParent != resID);
+                (resolvedParent != resID || !entry.isFromOverlay));
         const size_t NT = ((NP >= 0) ? NP : 0) + N;
         set = (bag_set*)malloc(sizeof(bag_set)+sizeof(bag_entry)*NT);
         if (set == NULL) {
