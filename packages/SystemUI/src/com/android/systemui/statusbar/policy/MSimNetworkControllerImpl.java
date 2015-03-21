@@ -497,8 +497,10 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
 
     private void setCarrierText() {
         String carrierName = mCarrierTextSub[PHONE_ID1];
-        for (int i = 1; i < mPhoneCount; i++) {
-            carrierName = carrierName + "    " + mCarrierTextSub[i];
+        if (!mAirplaneMode) {
+            for (int i = 1; i < mPhoneCount; i++) {
+                carrierName = carrierName + "    " + mCarrierTextSub[i];
+            }
         }
 
         if (mContext.getResources().getBoolean(R.bool.config_showDataConnectionView)) {
