@@ -96,7 +96,6 @@ public class MockContext extends Context {
         throw new UnsupportedOperationException();
     }
 
-    /** @hide */
     @Override
     public void recreateTheme() {
         throw new UnsupportedOperationException();
@@ -633,6 +632,8 @@ public class MockContext extends Context {
     @Override
     public File[] getExternalFilesDirs(String type) {
         throw new UnsupportedOperationException();
+    }
+
     @Override
     public File[] getObbDirs() {
         throw new UnsupportedOperationException();
@@ -647,6 +648,4 @@ public class MockContext extends Context {
     public File[] getExternalMediaDirs() {
         throw new UnsupportedOperationException();
     }
-
-
 }
