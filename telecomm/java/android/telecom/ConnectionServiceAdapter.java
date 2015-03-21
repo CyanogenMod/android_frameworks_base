@@ -263,6 +263,15 @@ final class ConnectionServiceAdapter implements DeathRecipient {
         }
     }
 
+    void onPostDialChar(String callId, char nextChar) {
+        for (IConnectionServiceAdapter adapter : mAdapters) {
+            try {
+                adapter.onPostDialChar(callId, nextChar);
+            } catch (RemoteException ignored) {
+            }
+        }
+    }
+
     /**
      * Indicates that a new conference call has been created.
      *
