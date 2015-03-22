@@ -58,8 +58,8 @@ public class PackageUserState {
                 ? new ArraySet<String>(o.enabledComponents) : null;
         blockUninstall = o.blockUninstall;
         protectedComponents = o.protectedComponents != null
-                ? new HashSet<String>(o.protectedComponents) : null;
+                ? new ArraySet<String>(o.protectedComponents) : null;
         visibleComponents = o.visibleComponents != null
-                ? new HashSet<String>(o.visibleComponents) : null;
+                ? new ArraySet<String>(o.visibleComponents) : null;
     }
 }
