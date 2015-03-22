@@ -705,7 +705,10 @@ framework_docs_LOCAL_API_CHECK_JAVA_LIBRARIES := \
 	framework \
 	telephony-common \
 	voip-common \
-        tcmiface
+
+ifeq ($(BOARD_USES_DPM),true)
+framework_docs_LOCAL_API_CHECK_JAVA_LIBRARIES += tcmiface
+endif
 
 framework_docs_LOCAL_JAVA_LIBRARIES := \
 	$(framework_docs_LOCAL_API_CHECK_JAVA_LIBRARIES) \
@@ -1056,10 +1059,14 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(ext_src_files)
 
 LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := core-libart tcmiface
+LOCAL_JAVA_LIBRARIES := core-libart
 LOCAL_JAVA_RESOURCE_DIRS := $(ext_res_dirs)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := ext
+
+ifeq ($(BOARD_USES_DPM),true)
+LOCAL_JAVA_LIBRARIES += tcmiface
+endif
 
 LOCAL_DX_FLAGS := --core-library
 
