@@ -104,7 +104,7 @@ public final class ParcelableConnection implements Parcelable {
             int callSubstate) {
                mPhoneAccount = phoneAccount;
         mState = state;
-        mCapabilities = capabilities;
+        mConnectionCapabilities = capabilities;
         mProperties = 0;
         mAddress = address;
         mAddressPresentation = addressPresentation;
@@ -131,10 +131,6 @@ public final class ParcelableConnection implements Parcelable {
     // Bit mask of actions a call supports, values are defined in {@link CallCapabilities}.
     public int getConnectionCapabilities() {
         return mConnectionCapabilities;
-    }
-
-    public int getProperties() {
-        return mProperties;
     }
 
     public int getProperties() {

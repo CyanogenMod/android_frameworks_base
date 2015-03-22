@@ -559,15 +559,6 @@ public final class RemoteConnection {
     }
 
     /**
-     * @return A bitmask of the properties of the {@code RemoteConnection}, as defined in
-     *         {@link CallProperties}.
-     *  @hide
-     */
-    public int getCallProperties() {
-        return mCallProperties;
-    }
-
-    /**
      * Determines if the audio mode of this {@code RemoteConnection} is VOIP.
      *
      * @return {@code true} if the {@code RemoteConnection}'s current audio mode is VOIP.
@@ -907,16 +898,6 @@ public final class RemoteConnection {
             c.onCallCapabilitiesChanged(this, connectionCapabilities);
         }
     }
-    /**
-     * @hide
-     */
-    void setCallProperties(int callProperties) {
-        mCallProperties = callProperties;
-        for (Callback c : mCallbacks) {
-            c.onCallPropertiesChanged(this, callProperties);
-        }
-    }
-
     /**
      * @hide
      */

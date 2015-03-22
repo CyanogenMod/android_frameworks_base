@@ -965,13 +965,6 @@ public abstract class Connection implements IConferenceable {
     }
 
     /**
-     * Returns the connection's {@link CallProperties}
-     */
-    public final int getCallProperties() {
-        return mCallProperties;
-    }
-
-    /**
      * Sets the value of the {@link #getAddress()} property.
      *
      * @param address The new address.
