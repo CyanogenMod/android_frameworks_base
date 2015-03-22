@@ -21,6 +21,7 @@ package com.android.systemui.statusbar.policy;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -949,49 +950,57 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn,
                            int phoneId) {
+        final Resources res = mContext.getResources();
         if (DEBUG) {
             Slog.d(TAG, "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
-        StringBuilder str = new StringBuilder();
-        boolean something = false;
-        if (showPlmn && plmn != null) {
-            if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_display_rat)
-                    && mMSimServiceState[phoneId] != null) {
-                plmn = appendRatToNetworkName(plmn, mMSimServiceState[phoneId]);
+        try {
+            if (mPhoneIdSubIdMapping.indexOfKey(phoneId) >= 0) {
+                long sub = mPhoneIdSubIdMapping.get(phoneId);
+                SubInfoRecord sir = SubscriptionManager.getSubInfoForSubscriber(sub);
+                if (sir != null) {
+                    mMSimNetworkName[phoneId] = sir.displayName;
+                    return;
+                }
             }
-            str.append(plmn);
-            something = true;
-        }
-        if (showSpn && spn != null) {
-            if (mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_spn_display_control)
-                    && something) {
-                Slog.d(TAG, "Do not display spn string when showPlmn and showSpn are both true"
-                        + "and plmn string is not null");
-            } else {
-                if (something) {
-                    str.append(mNetworkNameSeparator);
+
+            StringBuilder str = new StringBuilder();
+            boolean something = false;
+            if (showPlmn && plmn != null) {
+                if (res.getBoolean(com.android.internal.R.bool.config_display_rat)
+                        && mMSimServiceState[phoneId] != null) {
+                    plmn = appendRatToNetworkName(plmn, mMSimServiceState[phoneId]);
                 }
-                if (mContext.getResources().getBoolean(com.android.internal.R.bool.
-                        config_display_rat) && mMSimServiceState[phoneId] != null) {
-                    spn = appendRatToNetworkName(spn, mMSimServiceState[phoneId]);
-                }
-                str.append(spn);
+                str.append(plmn);
                 something = true;
             }
+            if (showSpn && spn != null) {
+                if (res.getBoolean(com.android.internal.R.bool.config_spn_display_control)
+                        && something) {
+                    Slog.d(TAG, "Do not display spn string when showPlmn and showSpn are both true"
+                            + "and plmn string is not null");
+                } else {
+                    if (something) {
+                        str.append(mNetworkNameSeparator);
+                    }
+                    if (res.getBoolean(com.android.internal.R.bool.config_display_rat)
+                            && mMSimServiceState[phoneId] != null) {
+                        spn = appendRatToNetworkName(spn, mMSimServiceState[phoneId]);
+                    }
+                    str.append(spn);
+                    something = true;
+                }
+            }
+            if (something) {
+                mMSimNetworkName[phoneId] = str.toString();
+            } else {
+                mMSimNetworkName[phoneId] = mNetworkNameDefault;
+            }
+        } finally {
+            Slog.d(TAG, "mMSimNetworkName[phoneId] " + mMSimNetworkName[phoneId]
+                    + "phoneId " + phoneId);
         }
-        if (mPhoneIdSubIdMapping.indexOfKey(phoneId) >= 0) {
-            long sub = mPhoneIdSubIdMapping.get(phoneId);
-            SubInfoRecord sir = SubscriptionManager.getSubInfoForSubscriber(sub);
-            mMSimNetworkName[phoneId] = sir.displayName;
-        } else if (something) {
-            mMSimNetworkName[phoneId] = str.toString();
-        } else {
-            mMSimNetworkName[phoneId] = mNetworkNameDefault;
-        }
-        Slog.d(TAG, "mMSimNetworkName[phoneId] " + mMSimNetworkName[phoneId]
-                + "phoneId " + phoneId);
     }
 
     // ===== Full or limited Internet connectivity ==================================
