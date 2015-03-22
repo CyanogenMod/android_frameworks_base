@@ -36,7 +36,7 @@
   <string name="permlab_receiveProtectedSms">ricevere SMS protetti</string>
   <string name="permdesc_receiveProtectedSms">Consenti all\'app di ricevere SMS protetti.</string>
   <string name="permlab_modifyProtectedSmsList">modifica la lista di SMS protetti</string>
-  <string name="permdesc_modifyProtectedSmsList">Permette all\'app di modificare la lista indirizzi SMS protetta.</string>
+  <string name="permdesc_modifyProtectedSmsList">Consente all\'app di modificare la lista indirizzi SMS protetta.</string>
   <string name="permgrouplab_security">Sicurezza</string>
   <string name="permgroupdesc_security">Autorizzazioni relative alle informazioni sulla sicurezza del dispositivo.</string>
   <string name="permlab_accessThemeService">accede al servizio tema</string>
@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> vorrebbe <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Riavvia</string>
+  <string name="global_action_current_user">Corrente</string>
   <string name="reboot_reboot">Riavvia</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -179,6 +180,9 @@
   <string name="usb_media_removed">L\'archivio USB è stato rimosso.</string>
   <string name="usb_media_shared">L\'archivio USB è attualmente utilizzato da un computer.</string>
   <string name="live_display_auto">Automatico</string>
+  <string name="live_display_auto_summary">Regola automaticamente la temperatura del colore dello schermo dopo il tramonto e l\'alba</string>
+  <string name="live_display_off">Disattivato</string>
+  <string name="live_display_off_summary">Disattiva tutte le regolazioni</string>
   <string name="live_display_day">Giorno</string>
   <string name="live_display_day_summary">Usa solo impostazioni giorno</string>
   <string name="live_display_night">Notte</string>

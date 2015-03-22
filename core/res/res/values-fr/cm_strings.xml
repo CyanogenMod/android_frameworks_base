@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Protection des données</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> voudrait <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Redémarrer</string>
+  <string name="global_action_current_user">Actuel</string>
   <string name="reboot_reboot">Redémarrer</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -179,6 +180,7 @@
   <string name="usb_media_removed">La mémoire de stockage USB a été retirée.</string>
   <string name="usb_media_shared">La mémoire de stockage USB est en cours d\'utilisation par l\'ordinateur.</string>
   <string name="live_display_auto">Automatique</string>
+  <string name="live_display_auto_summary">Ajuster automatiquement la température des couleurs de l\'écran après le coucher et le lever du soleil</string>
   <string name="live_display_off">Désactivé</string>
   <string name="live_display_off_summary">Désactiver tous les réglages</string>
   <string name="live_display_day">Jour</string>

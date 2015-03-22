@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Proteção da Privacidade</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="aplicação">%1$s</xliff:g> gostaria de <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Reiniciar</string>
+  <string name="global_action_current_user">Atual</string>
   <string name="reboot_reboot">Reiniciar</string>
   <string name="reboot_recovery">Recuperação</string>
   <string name="reboot_bootloader">Bootloader</string>

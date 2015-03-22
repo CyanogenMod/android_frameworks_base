@@ -181,6 +181,9 @@
   <string name="usb_media_removed">USB-lageret er blevet fjernet.</string>
   <string name="usb_media_shared">USB-lageret er i øjeblikket i brug af en computer.</string>
   <string name="live_display_auto">Automatisk</string>
+  <string name="live_display_auto_summary">Justerer automatisk farvetemperaturen på skærmen efter solnedgang og solopgang</string>
+  <string name="live_display_off">Fra</string>
+  <string name="live_display_off_summary">Deaktivere alle justeringer</string>
   <string name="live_display_day">Dag</string>
   <string name="live_display_day_summary">Brug kun dag-indstillinger</string>
   <string name="live_display_night">Nat</string>

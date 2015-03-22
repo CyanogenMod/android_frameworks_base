@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Yksityisyyden suojaus</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> haluaa <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Käynnistä uudelleen</string>
+  <string name="global_action_current_user">Nykyinen</string>
   <string name="reboot_reboot">Käynnistä uudelleen</string>
   <string name="reboot_recovery">Recovery-tila</string>
   <string name="reboot_bootloader">Bootloader-tila</string>

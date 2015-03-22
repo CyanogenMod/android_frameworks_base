@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">プライバシーガード</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>が<xliff:g id="op">%2$s</xliff:g>をしようとしています。</string>
   <string name="global_action_reboot">再起動</string>
+  <string name="global_action_current_user">現在</string>
   <string name="reboot_reboot">再起動</string>
   <string name="reboot_recovery">リカバリー</string>
   <string name="reboot_bootloader">ブートローダ</string>

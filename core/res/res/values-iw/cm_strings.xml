@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">הפעלה מחדש</string>
+  <string name="global_action_current_user">נוכחי</string>
   <string name="reboot_reboot">הפעלה מחדש</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -179,8 +180,14 @@
   <string name="usb_media_removed">אחסון USB הוסר.</string>
   <string name="usb_media_shared">אחסון ה-USB נמצא כעת בשימוש על-ידי מחשב.</string>
   <string name="live_display_auto">אוטומטי</string>
+  <string name="live_display_auto_summary">התאם אוטומטית את טמפרטורת הצבע של המסך לאחר הזריחה והשקיעה</string>
+  <string name="live_display_off">כבוי</string>
+  <string name="live_display_off_summary">בטל את כל ההתאמות</string>
   <string name="live_display_day">יום</string>
   <string name="live_display_day_summary">השתמש בהגדרות יום בלבד</string>
   <string name="live_display_night">לילה</string>
   <string name="live_display_night_summary">השתמש בהגדרות לילה בלבד</string>
+  <string name="live_display_outdoor">בחוץ (שמש בהירה)</string>
+  <string name="live_display_outdoor_summary">השתמש בהגדרות חוץ בלבד</string>
+  <string name="live_display_hint">LiveDisplay יכולה למזער את עייפות העין ולעזור לך לישון בלילה. לחץ כאן כדי לנסות!</string>
 </resources>
