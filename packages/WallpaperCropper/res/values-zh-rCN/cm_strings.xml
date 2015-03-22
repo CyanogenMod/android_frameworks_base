@@ -26,4 +26,5 @@
   <string name="pick_wallpaper">壁纸</string>
   <string name="activity_not_found">应用未安装。</string>
   <string name="lockscreen_wallpaper_instructions">设置锁屏壁纸</string>
+  <string name="image_decode_error">无法对图像进行解码</string>
 </resources>

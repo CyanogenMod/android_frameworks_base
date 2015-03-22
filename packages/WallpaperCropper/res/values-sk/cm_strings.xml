@@ -28,4 +28,5 @@
   <string name="pick_wallpaper">Tapety</string>
   <string name="activity_not_found">Aplikácia nie je nainštalovaná.</string>
   <string name="lockscreen_wallpaper_instructions">Nastaviť tapetu uzamykacej obrazovky</string>
+  <string name="image_decode_error">Nie je možné dekódovať obrázok</string>
 </resources>

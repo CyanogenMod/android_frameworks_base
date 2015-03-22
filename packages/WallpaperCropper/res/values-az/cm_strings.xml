@@ -16,6 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">Təmizlə</string>
+  <plurals name="number_of_items_selected">
+    <item quantity="one">%1$d seçildi</item>
+    <item quantity="other">%1$d seçildi</item>
+  </plurals>
   <string name="wallpaper_accessibility_name">Divar kağızı %1$d / %2$d</string>
   <string name="announce_selection"><xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g> seçildi</string>
   <string name="wallpaper_delete">Sil</string>
@@ -23,4 +27,5 @@
   <string name="pick_wallpaper">Divar kağızları</string>
   <string name="activity_not_found">Tətbiq yüklənməyib.</string>
   <string name="lockscreen_wallpaper_instructions">Kilit ekranı divar kağızını nizamla</string>
+  <string name="image_decode_error">Təsvir şifrəsi açıla bilmədi</string>
 </resources>

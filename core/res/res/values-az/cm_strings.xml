@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Standart</string>
+  <string name="profileNameDefault">İlkin</string>
   <string name="profileNameWork">İş</string>
   <string name="profileNameHome">Ev</string>
   <string name="profileNameSilent">Səssiz</string>
@@ -26,18 +26,18 @@
   <string name="profileGroupPhone">Telefon</string>
   <string name="profileGroupCalendar">Təqvim</string>
   <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Epoçt</string>
+  <string name="profileGroupEmail">E-poçt</string>
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">Digər</string>
-  <string name="global_action_screenshot">Ekran görüntüsü</string>
+  <string name="global_action_screenshot">Ekran şəkli</string>
   <string name="global_actions_toggle_expanded_desktop_mode">Genişlədilmiş ekran</string>
-  <string name="global_actions_expanded_desktop_mode_on_status">Aktiv</string>
-  <string name="global_actions_expanded_desktop_mode_off_status">Aktiv deyil</string>
+  <string name="global_actions_expanded_desktop_mode_on_status">Fəaldır</string>
+  <string name="global_actions_expanded_desktop_mode_off_status">Ləğv edilib</string>
   <string name="reboot_system" product="tablet">Planşeti yenidən başlat</string>
   <string name="reboot_system" product="default">Telefonu yenidən başlat</string>
   <string name="reboot_reboot">Yenidən başlat</string>
-  <string name="reboot_recovery">Bərpa modu (Recovery)</string>
-  <string name="reboot_bootloader">İlkin yükləmə (Bootloader)</string>
+  <string name="reboot_recovery">Bərpa rejimi (Recovery)</string>
+  <string name="reboot_bootloader">Önyükləyici (Bootloader)</string>
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Endirmə rejimi</string>
@@ -49,26 +49,30 @@
   <string name="permdesc_preventpower">Tətbiqetmənin güc düyməsinin funksiyasını dəyişdirməsinə icazə verər</string>
   <string name="permlab_sendMockSms">saxta SMS göndər</string>
   <string name="permdesc_sendMockSms">Tətbiqetmənin saxta SMS göndərməsinə icazə verər. Bu tətbiqetmənin etibarlı tətbiqetmələrə mesaj göndərməsinə imkan verir. Zərərli tətbiqetmələr davamlı mesajlar göndərərək cihazınızın bildiriş sistemini xarab edə və istifadəçini narahat edə bilər.</string>
-  <string name="storage_sd_dock_card">SD kart genişlətməsi</string>
-  <string name="app_killed_message">Tətbiqetmə bağlandı</string>
+  <string name="storage_sd_dock_card">SD kart modulu</string>
+  <string name="app_killed_message">Tətbiq sonlandırıldı</string>
   <string name="global_action_reboot">Yenidən başlat</string>
   <string name="global_action_choose_profile">Profil</string>
   <string name="toast_rotation_unlocked">Ekran döndərmə açıqdır</string>
   <string name="toast_rotation_locked">Ekran döndərmə kilitlidir</string>
-  <string name="stylus_app_not_installed">%s yüklənməyib</string>
-  <string name="permlab_changePrivacyGuardState">Gizlilik Qorumasını aktivləşdir ya da söndür</string>
-  <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini dəyişmə icazəsi verər. Əgər tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi məlumatlara daxil ola bilməyəcək.</string>
+  <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>
+  <string name="permlab_changePrivacyGuardState">Gizlilik Qorumasını fəallaşdır ya da ləğv et</string>
+  <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini dəyişmə icazəsi verər. Bir tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi verilənlərə giriş edə bilməz.</string>
   <string name="privacy_guard_notification">Gizlilik Qoruması aktivdir</string>
-  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> məxfi məlumatlara daxil olmayacaq</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> şəxsi verilənlərə giriş edə bilməyəcək</string>
   <string name="profile_picker_title">Profillər</string>
   <string name="profile_none">Yoxdur</string>
-  <string name="perf_profile_pwrsv">Güc təsərrüfatı</string>
+  <string name="perf_profile_pwrsv">Gücə qənaət</string>
   <string name="perf_profile_bal">Tarazlı</string>
   <string name="perf_profile_perf">Performans</string>
   <string name="permlab_interceptSmsSent">gedən SMS\'i dayandır</string>
   <string name="permdesc_interceptSmsSent">Tətbiqetmənin gedən SMS\'i dayandırmasına icazə verər. Zərərli tətbiqetmələr gedən SMS mesajlarının qarşısını almaq üçün bundan istifadə edə bilər.</string>
+  <string name="permlab_receiveProtectedSms">qorunan SMS qəbul et</string>
+  <string name="permdesc_receiveProtectedSms">Tətbiqetməyə qorunan bir SMS qəbul etmə icazəsi verər.</string>
+  <string name="permlab_modifyProtectedSmsList">qorunan SMS siyahısını dəyişdir</string>
+  <string name="permdesc_modifyProtectedSmsList">Tətbiqetməyə qorunan SMS ünvan siyahısını dəyişdirmə icazəsi verər.</string>
   <string name="permlab_resetBatteryStats">batareya statistikalarını sıfırla</string>
-  <string name="permdesc_resetBatteryStats">Tətbiqetmənin zəif batareya istifadə məlumatını sıfırlamasına icazə verər.</string>
+  <string name="permdesc_resetBatteryStats">Tətbiqetmənin aşağı batareya istifadə verilənlərini sıfırlamasına icazə verər.</string>
   <string name="permgrouplab_security">Təhlükəsizlik</string>
   <string name="permgroupdesc_security">Cihaz təhlükəsizlik məlumatı ilə bağlı icazələr.</string>
   <string name="permlab_readPhoneBlacklist">telefon qara siyahısını oxu</string>
@@ -76,15 +80,20 @@
   <string name="permlab_changePhoneBlacklist">telefon qara siyahısını dəyişdir</string>
   <string name="permdesc_changePhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələrini dəyişdirməsinə icazə verər.</string>
   <string name="permlab_accessThemeService">tema xidmətinə giriş</string>
-  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə girişinə icazə verər. Normal tətbiqlər üçün buna ehtiyac yoxdur.</string>
+  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə girişinə icazə verər. Normal tətbiqetmələr üçün buna ehtiyac yoxdur.</string>
   <string name="permlab_readThemes">tema məlumatını oxu</string>
-  <string name="permdesc_readThemesDesc">Tətbiqetmənin temalarınızı oxumasına və hansı temanı tətbiq etdiyinizi müəyyən etməyə icazə verər.</string>
+  <string name="permdesc_readThemesDesc">Tətbiqetmənin temalarınızı oxumasına və
+       hansı temanı tətbiq etdiyinizi müəyyən etməyə icazə verər.</string>
   <string name="permlab_writeThemes">temaları dəyişin</string>
   <string name="permdesc_writeThemesDesc">Tətbiqetmənin yeni temalar əlavə etməsinə və tətbiq etdiyiniz temanı dəyişdirməsinə icazə verər.</string>
-  <string name="permlab_setKeyguardWallpaper">klaviatura divar kağızını nizamla</string>
+  <string name="permlab_setKeyguardWallpaper">klaviatura divar kağızını tənzimlə</string>
   <string name="permdesc_setKeyguardWallpaper">Tətbiqetmənin kilit ekranı divar kağızını dəyişdirməsinə icazə verər.</string>
-  <string name="permlab_useHardwareFramework">təchizat altsistemini işlət</string>
-  <string name="permdesc_useHardwareFramework">Tətbiqetmənin CM təchizat altsisteminə girişinə icazə verər.</string>
+  <string name="permlab_useHardwareFramework">təchizat infrastrukturundan istifadə et</string>
+  <string name="permdesc_useHardwareFramework">Tətbiqetmənin CM təchizat infrastrukturuna girişinə icazə verər.</string>
+  <string name="permlab_keyguardApplicationWidget">düymə kilidi tətbiqetmə widgetini tənzimlə</string>
+  <string name="permdesc_keyguardApplicationWidget">Tətbiqetmənin düymə kilidinə tətbiqetmə widgeti yerləşdirməsinə icazə verər.</string>
+  <string name="permlab_interceptPackageLaunch">tətbiqetmə başlatmanın qarşısını al</string>
+  <string name="permdesc_interceptPackageLaunch">Tətbiqetməyə digər tətbiqetmələrin başlamasını əngəlləmək icazə verər</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıxmaq üçün aşağıdan yuxarı sürüşdürün.</string>
   <string name="app_ops_access_camera">kameraya giriş</string>
   <string name="app_ops_access_location">məkanınıza giriş</string>
@@ -112,18 +121,18 @@
   <string name="app_ops_send_sms">SMS mesajı göndər</string>
   <string name="app_ops_start_at_bootup">açılanda başla</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth açıb bağla</string>
-  <string name="app_ops_toggle_mobile_data">mobil məlumatı açıb bağla</string>
+  <string name="app_ops_toggle_mobile_data">mobil verilənləri açıb bağla</string>
   <string name="app_ops_toggle_wifi">WiFi açıb bağla</string>
   <string name="app_ops_toggle_nfc">NFC aç bağla</string>
-  <string name="app_ops_use_alarm_volume">alarm səsinə nəzarət</string>
+  <string name="app_ops_use_alarm_volume">zəngli saat səsinin idarəsi</string>
   <string name="app_ops_use_audio_focus">səs fokunusuna nəzarət</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth səsinə nəzarət</string>
   <string name="app_ops_use_master_volume">əsas səs səviyyəsinə nəzarət</string>
-  <string name="app_ops_use_media_buttons">media düymələrini işlət</string>
+  <string name="app_ops_use_media_buttons">media düymələrindən istifadə et</string>
   <string name="app_ops_use_media_volume">media səsinə nəzarət</string>
   <string name="app_ops_use_notification_volume">bildiriş səsinə nəzarət</string>
-  <string name="app_ops_use_ring_volume">zəng melodiyası səsinə nəzarət</string>
-  <string name="app_ops_use_vibrate">sensor geri bildirişdən istifadə</string>
+  <string name="app_ops_use_ring_volume">melodiyası səsinə nəzarət</string>
+  <string name="app_ops_use_vibrate">sensor geri bildirişdən istifadə et</string>
   <string name="app_ops_use_voice_volume">səsli zəng səviyyəsinə nəzarət</string>
   <string name="app_ops_write_mms">MMS mesajı yazın</string>
   <string name="app_ops_write_sms">SMS mesajı yazın</string>
@@ -131,11 +140,11 @@
   <string name="privacy_guard_dialog_title">Gizlilik Qoruması</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> icazəsindən istifadə etmək istəyir.</string>
   <string name="permission_remember_choice">Seçimimi xatırla</string>
-  <string name="adb_net_active_notification_title">ADB şəbəkə üzərindən aktivdir</string>
-  <string name="adb_both_active_notification_title">ADB USB &amp; şəbəkəsi üzərindən aktivdir</string>
-  <string name="adb_active_generic_notification_message">Sazlamanı bağlamaq üçün toxunun.</string>
-  <string name="usb_extmedia_format_message">USB yaddaş (\'%1$s\') sahəsindəki bütün məlumatlar silinəcək. Bu əməliyyatın geri dönüşü yoxdur!</string>
-  <string name="sd_extmedia_format_message">Kartınızdakı (\'%1$s\') bütün məlumatlar silinəcək. Bu əməliyyatın geri dönüşü yoxdur!</string>
+  <string name="adb_net_active_notification_title">Şəbəkə üzərindən ADB fəaldır</string>
+  <string name="adb_both_active_notification_title">USB &amp; şəbəkə ADB üzərindən fəaldır</string>
+  <string name="adb_active_generic_notification_message">Xəta ayırdetməni ləğv etmək üçün toxunun.</string>
+  <string name="usb_extmedia_format_message">USB yaddaş (\'%1$s\') sahəsindəki bütün verilənlər silinəcək. Bu əməliyyatın geri dönüşü yoxdur!</string>
+  <string name="sd_extmedia_format_message">Kartınızdakı (\'%1$s\') bütün verilənlər silinəcək. Bu əməliyyatın geri dönüşü yoxdur!</string>
   <string name="usb_storage_notification_manage_message">İdarə etmək üçün toxunun</string>
   <string name="sd_ext_media_checking_notification_title">SD kart hazırlanır\u2026</string>
   <string name="sd_ext_media_checking_notification_message">SD kart xətaları yoxlanılır\u2026</string>
@@ -144,7 +153,7 @@
   <string name="sd_ext_media_unmountable_notification_title">Zədəli SD kart</string>
   <string name="sd_ext_media_unmountable_notification_message">SD kart zədələnib. Yenidən format etməyi yoxlayın.</string>
   <string name="sd_ext_media_badremoval_notification_title">SD kart gözlənilmədən çıxarıldı</string>
-  <string name="sd_ext_media_badremoval_notification_message">Məlumat itkisinin qarşısını almaq üçün SD kartı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
+  <string name="sd_ext_media_badremoval_notification_message">Verilənlər itkisinin qarşısını almaq üçün SD kartı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
   <string name="sd_ext_media_safe_unmount_notification_title">SD kartı çıxarmaq təhlükəsizdir</string>
   <string name="sd_ext_media_safe_unmount_notification_message">SD kartı etibarla çıxara bilərsiniz.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD kart çıxarıldı</string>
@@ -156,7 +165,7 @@
   <string name="usb_ext_media_unmountable_notification_title">Zədəli USB saxlama yeri</string>
   <string name="usb_ext_media_unmountable_notification_message">USB saxlama yeri zədələnib. Yenidən format etməyi yoxlayın.</string>
   <string name="usb_ext_media_badremoval_notification_title">USB saxlama yeri gözlənilmədən çıxarıldı</string>
-  <string name="usb_ext_media_badremoval_notification_message">Məlumat itkisinin qarşısını almaq üçün USB saxlamanı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
+  <string name="usb_ext_media_badremoval_notification_message">Verilənlər itkisinin qarşısını almaq üçün USB saxlamanı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
   <string name="usb_ext_media_safe_unmount_notification_title">USB saxlamanı çıxarmaq təhlükəsizdir</string>
   <string name="usb_ext_media_safe_unmount_notification_message">USB saxlamanı etibarla çıxara bilərsiniz.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB saxlama çıxarıldı</string>

@@ -48,7 +48,7 @@
   <string name="permlab_preventpower">Un-/Ausschalttast ëmdefinéieren</string>
   <string name="permdesc_preventpower">Erlaabt d\'App, d\'Un-/Aus-Tast eng aner Funktioun zouzeweisen</string>
   <string name="permlab_sendMockSms">Simuléiert SMS schécken</string>
-  <string name="permdesc_sendMockSms">Erlaabt der App, simuléiert SMSen u vertrauenswierdeg Appen ze schécken. Béiswëlleg Appe kéinte pauselos Messagë schécken, an den Apparat sou blockéieren oder duerch ze vill Notifikatiounen de Benotzer stéieren.</string>
+  <string name="permdesc_sendMockSms">Erlaabt der App, simuléiert SMSen u vertrauenswierdeg Appen ze schécken. Béiswëlleg Appe kéinten ouni Paus Messagë schécken, an den Apparat sou blockéieren oder duerch ze vill Notifikatiounen de Benotzer stéieren.</string>
   <string name="storage_sd_dock_card">SD-Kaart vum Dock</string>
   <string name="app_killed_message">App zougemaach</string>
   <string name="global_action_reboot">Nei starten</string>
@@ -99,7 +99,7 @@
   <string name="app_ops_access_notifications">op d\'Notifikatiounen zougräifen</string>
   <string name="app_ops_alarm_wakeup">den Apparat erwächen</string>
   <string name="app_ops_draw_on_top">sech virun aneren Appen ablenden</string>
-  <string name="app_ops_keep_device_awake">de Rouezoustand desaktivéieren</string>
+  <string name="app_ops_keep_device_awake">de Rouzoustand desaktivéieren</string>
   <string name="app_ops_make_phone_call">en Telefonsuruff maachen</string>
   <string name="app_ops_modify_calendar">de Kalenner änneren</string>
   <string name="app_ops_modify_call_log">d\'Urufflëscht änneren</string>

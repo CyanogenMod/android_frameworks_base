@@ -41,7 +41,7 @@
   <string name="reboot_bootmenu">Bootmenu</string>
   <string name="reboot_fastboot">Fastboot</string>
   <string name="reboot_download">Descàrrega</string>
-  <string name="reboot_soft">Reinicia programa</string>
+  <string name="reboot_soft">Reinici ràpid</string>
   <string name="reboot_progress">S\'està reiniciant\u2026</string>
   <string name="reboot_confirm" product="tablet">La teva tauleta es reiniciarà.</string>
   <string name="reboot_confirm" product="default">El teu telèfon es reiniciarà.</string>

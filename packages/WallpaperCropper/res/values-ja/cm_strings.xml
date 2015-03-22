@@ -26,4 +26,5 @@
   <string name="pick_wallpaper">壁紙</string>
   <string name="activity_not_found">アプリがインストールされていません。</string>
   <string name="lockscreen_wallpaper_instructions">ロック画面の壁紙を設定</string>
+  <string name="image_decode_error">画像をデコードできません</string>
 </resources>

@@ -27,4 +27,5 @@
   <string name="pick_wallpaper">Agtergronde</string>
   <string name="activity_not_found">Program is nie geïnstalleer nie.</string>
   <string name="lockscreen_wallpaper_instructions">Stel Skermslot agtergrond</string>
+  <string name="image_decode_error">Kan nie beeld ontsyfer nie</string>
 </resources>

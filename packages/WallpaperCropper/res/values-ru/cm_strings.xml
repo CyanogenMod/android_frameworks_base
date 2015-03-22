@@ -28,4 +28,5 @@
   <string name="pick_wallpaper">Обои</string>
   <string name="activity_not_found">Приложение удалено.</string>
   <string name="lockscreen_wallpaper_instructions">Установить обои экрана блокировки</string>
+  <string name="image_decode_error">Не удалось декодировать файл</string>
 </resources>

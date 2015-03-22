@@ -27,4 +27,5 @@
   <string name="pick_wallpaper">Fonds d\'écran</string>
   <string name="activity_not_found">L\'application n\'est pas installée.</string>
   <string name="lockscreen_wallpaper_instructions">Définir le fond d\'écran de verrouillage</string>
+  <string name="image_decode_error">Impossible de décoder l\'image</string>
 </resources>
