@@ -330,10 +330,7 @@ public class SystemServicesProxy {
         while (iter.hasNext()) {
             ActivityManager.RecentTaskInfo t = iter.next();
             if (t.persistentId > 0) {
-                // Only if is running
-                boolean isDocument = Utilities.isDocument(t.baseIntent);
-                mAm.removeTask(t.persistentId,
-                        isDocument ? 0 : ActivityManager.REMOVE_TASK_KILL_PROCESS);
+                removeTask(t.persistentId);
             }
         }
     }
