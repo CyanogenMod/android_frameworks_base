@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">ปิดแอปล่าสุดทั้งหมด</string>
   <string name="screenshot_delete_action">ลบ</string>
   <string name="screenshot_delete_confirmation">ลบภาพจับหน้าจอเรียบร้อยแล้ว</string>
   <string name="advanced_dev_option_wipe_app">ล้างข้อมูล</string>
@@ -23,15 +24,34 @@
   <string name="advanced_dev_option_uninstall">ถอนการติดตั้ง</string>
   <string name="accessibility_quick_settings_data_off">ข้อมูลมือถือปิดอยู่</string>
   <string name="accessibility_quick_settings_data_on">ข้อมูลมือถือเปิดอยู่</string>
+  <string name="accessibility_quick_settings_roaming_off">ปิดโรมมิ่ง</string>
+  <string name="accessibility_quick_settings_roaming_on">เปิดโรมมิ่ง</string>
   <string name="accessibility_quick_settings_location_battery_saving">รูปแบบการระบุตำแหน่ง: ประหยัดแบตเตอรี่</string>
+  <string name="accessibility_quick_settings_location_gps_only">รายงานสถานที่ : เซนเซอร์เท่านั้น</string>
   <string name="accessibility_quick_settings_location_high_accuracy">รูปแบบการระบุตำแหน่ง: ความแม่นยำสูง</string>
   <string name="accessibility_dpad_left">เคอร์เซอร์ซ้าย</string>
   <string name="accessibility_dpad_right">เคอร์เซอร์ขวา</string>
   <string name="quick_settings_mobile_data_label">ข้อมูลมือถือ</string>
+  <string name="quick_settings_roaming_label">โรมมิ่ง</string>
+  <string name="quick_settings_apn_switch_label">สลับ APN</string>
+  <string name="quick_settings_dds_sub">ซิม <xliff:g id="number">%d</xliff:g> ข้อมูลมือถือ
+</string>
   <string name="quick_settings_data_off">ข้อมูลมือถือปิดอยู่</string>
+  <string name="quick_settings_location_detail_title">รูปแบบตำแหน่ง</string>
+  <string name="quick_settings_location_battery_saving_label">ประหยัดแบตเตอรี่</string>
+  <string name="quick_settings_location_gps_only_label">อุปกรณ์เท่านั้น</string>
+  <string name="quick_settings_location_high_accuracy_label">ความแม่นยำสูง</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">โปรไฟล์ระบบ</string>
+  <string name="quick_settings_profiles_disabled">โปรไฟล์ถูกปิดอยู่</string>
   <string name="quick_settings_compass_label">เข็มทิศ</string>
   <string name="quick_settings_compass_init">กำลังเตรียมการ\u2026</string>
+  <string name="quick_settings_lockscreen_label">หน้าจอล็อค</string>
+  <string name="quick_settings_lockscreen_label_enforced">บังคับล็อคหน้าจอ</string>
+  <string name="quick_settings_network_adb_label">ADB บนเครือข่าย</string>
+  <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">เวลาที่หน้าจอดับ</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">ปัดไปทางขวาเพื่อ%1$s</string>
   <string name="right_shortcut_hint">ปัดไปทางซ้ายเพื่อ%1$s</string>
   <string name="navbar_dialog_title">เลือกการกระทำ</string>
@@ -43,8 +63,20 @@
   <string name="navbar_menu_conditional_button">ปุ่มเมนู (ซ่อนอัตโนมัติ)</string>
   <string name="navbar_menu_always_button">ปุ่มเมนู (แสดงตลอด)</string>
   <string name="navbar_menu_big_button">ปุ่มเมนู</string>
+  <string name="navigation_ring_title">ทางลัดการเปิด</string>
+  <string name="navring_target_reset_message">ลบการสร้างแถบนำทางของผู้ใช้ทั้งหมดและคืนค่าสู่ค่าเริ่มต้น?</string>
+  <string name="navring_target_reset">คืนค่าทางลัดแถบนำทางสู่ค่าเริ่มต้น</string>
+  <string name="navring_action_open_ime_switcher">เปิดตัวสลับภาษา</string>
+  <string name="navring_action_kill_app">ปิดแอป</string>
+  <string name="navring_action_none">ไม่มี</string>
   <string name="navring_action_take_screenshot">จับภาพหน้าจอ</string>
+  <string name="navring_action_ring_vibrate">เสียง/สั่น</string>
+  <string name="navring_action_ring_silent">เสียง/เงียบ</string>
+  <string name="navring_action_ring_vibrate_silent">เสียง/สั่น/เงียบ</string>
+  <string name="navring_action_screen_off">ปิดหน้าจอ</string>
   <string name="navring_action_torch">ไฟฉาย</string>
+  <string name="navring_action_google_now">Google Now</string>
+  <string name="navring_choose_action_title">เลือกการกระทำ</string>
   <string name="select_application">เลือกแอปพลิเคชัน</string>
   <string name="lockscreen_target_empty">ว่างเปล่า</string>
 </resources>

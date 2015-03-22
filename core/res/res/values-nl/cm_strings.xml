@@ -179,4 +179,14 @@
   <string name="usb_media_removed">USB-opslag is verwijderd.</string>
   <string name="usb_media_shared">USB-opslag is in gebruik door een computer.</string>
   <string name="live_display_auto">Automatisch</string>
+  <string name="live_display_auto_summary">Automatisch kleurtemperatuur van scherm aanpassen na zonsopkomst en -ondergang</string>
+  <string name="live_display_off">Uit</string>
+  <string name="live_display_off_summary">Alle aanpassingen uitschakelen</string>
+  <string name="live_display_day">Overdag</string>
+  <string name="live_display_day_summary">Alleen instellingen voor overdag gebruiken</string>
+  <string name="live_display_night">\'s Nachts</string>
+  <string name="live_display_night_summary">Alleen instellingen voor \'s nachts gebruiken</string>
+  <string name="live_display_outdoor">Buitenshuis (heldere zon)</string>
+  <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
+  <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
 </resources>

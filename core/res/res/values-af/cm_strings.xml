@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Privaatheidswag</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> wil <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Herlaai</string>
+  <string name="global_action_current_user">Huidige</string>
   <string name="reboot_reboot">Herlaai</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -181,6 +182,9 @@
   <string name="usb_media_removed">USB stoor spasie is verwyder.</string>
   <string name="usb_media_shared">USB stoor spasie word tans gebruik deur \'n rekenaar.</string>
   <string name="live_display_auto">Outomaties</string>
+  <string name="live_display_auto_summary">Kleurtemperatuur van die skerm sal outomaties aanpas na sononder en sonop</string>
+  <string name="live_display_off">Af</string>
+  <string name="live_display_off_summary">Skakel al die aanpassings af</string>
   <string name="live_display_day">Dag</string>
   <string name="live_display_day_summary">Alleenlik gebruik dag instellings</string>
   <string name="live_display_night">Nag</string>

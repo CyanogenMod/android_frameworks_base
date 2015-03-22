@@ -179,6 +179,9 @@
   <string name="usb_media_removed">USB tároló eltávolítva.</string>
   <string name="usb_media_shared">USB tárolót jelenleg egy számítógép használja.</string>
   <string name="live_display_auto">Automatikus</string>
+  <string name="live_display_auto_summary">Automatikusan beállítja a képernyő színhőmérsékletét napnyugta és napkelte után</string>
+  <string name="live_display_off">Ki</string>
+  <string name="live_display_off_summary">Az összes beállítás kikapcsolása</string>
   <string name="live_display_day">Nappal</string>
   <string name="live_display_day_summary">Csak a nappali beállítások használata</string>
   <string name="live_display_night">Éjszaka</string>

@@ -60,11 +60,12 @@
   <string name="privacy_guard_dialog_title">Guarda de privacitat</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> voldria <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Reinicia</string>
+  <string name="global_action_current_user">Actual</string>
   <string name="reboot_reboot">Reinicia</string>
   <string name="reboot_recovery">Recuperació</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">Descàrrega</string>
-  <string name="reboot_soft">Reinicia programa</string>
+  <string name="reboot_soft">Reinici ràpid</string>
   <string name="reboot_title">Reinicia</string>
   <string name="reboot_confirm" product="tablet">La teva tauleta es reiniciarà.</string>
   <string name="reboot_confirm" product="default">El teu telèfon es reiniciarà.</string>

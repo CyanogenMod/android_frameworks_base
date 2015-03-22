@@ -179,6 +179,9 @@
   <string name="usb_media_removed">USB-Speicher wurde entfernt.</string>
   <string name="usb_media_shared">USB-Speicher wird momentan von einem Computer verwendet.</string>
   <string name="live_display_auto">Automatisch</string>
+  <string name="live_display_auto_summary">Farbtemperatur des Bildschirms nach Sonnenaufgang und Sonnenuntergang automatisch anpassen</string>
+  <string name="live_display_off">Aus</string>
+  <string name="live_display_off_summary">Alle Anpassungen deaktiviert</string>
   <string name="live_display_day">Tag</string>
   <string name="live_display_day_summary">Nur Tag-Modus verwenden</string>
   <string name="live_display_night">Nacht</string>
