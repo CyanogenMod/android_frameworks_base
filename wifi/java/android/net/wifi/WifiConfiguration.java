@@ -591,6 +591,7 @@ public class WifiConfiguration implements Parcelable {
      ***/
     public Visibility setVisibility(long age, int configBand) {
         boolean isNetworkFound = false;
+        String profileConfigKey = configKey();
         if (scanResultCache == null) {
             visibility = null;
             return null;
@@ -622,14 +623,18 @@ public class WifiConfiguration implements Parcelable {
             if ((now_ms - result.seen) > age) continue;
 
             if (result.is5GHz()) {
-                isNetworkFound = true;
+                if (profileConfigKey.equals(configKey(result))) {
+                    isNetworkFound = true;
+                }
                 if (result.level > status.rssi5) {
                     status.rssi5 = result.level;
                     status.age5 = result.seen;
                     status.BSSID5 = result.BSSID;
                 }
             } else if (result.is24GHz()) {
-                isNetworkFound = true;
+                if (profileConfigKey.equals(configKey(result))) {
+                    isNetworkFound = true;
+                }
                 if (result.level > status.rssi24) {
                     status.rssi24 = result.level;
                     status.age24 = result.seen;
