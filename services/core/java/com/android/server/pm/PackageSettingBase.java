@@ -379,10 +379,10 @@ class PackageSettingBase extends GrantedPermissions {
     PackageUserState modifyUserStateComponents(int userId) {
         PackageUserState state = modifyUserState(userId);
         if (state.protectedComponents == null) {
-           state.protectedComponents = new HashSet<String>(1);
+           state.protectedComponents = new ArraySet<String>(1);
         }
         if (state.visibleComponents == null) {
-            state.visibleComponents = new HashSet<String>(1);
+            state.visibleComponents = new ArraySet<String>(1);
         }
         return state;
     }
@@ -448,7 +448,7 @@ class PackageSettingBase extends GrantedPermissions {
         return changed;
     }
 
-    HashSet<String> getProtectedComponents(int userId) {
+    ArraySet<String> getProtectedComponents(int userId) {
         PackageUserState state = modifyUserStateComponents(userId);
         return state.protectedComponents;
     }
