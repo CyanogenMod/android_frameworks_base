@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
   <string name="global_action_reboot">重启</string>
+  <string name="global_action_current_user">当前</string>
   <string name="reboot_reboot">重启</string>
   <string name="reboot_recovery">恢复模式</string>
   <string name="reboot_bootloader">引导程序</string>
@@ -160,8 +161,8 @@
   <string name="permdesc_interceptSmsSent">允许应用拦截传出的短信。恶意应用可能用这种方法阻止发送短信。</string>
   <string name="permlab_accessTorchService">访问手电筒服务</string>
   <string name="permdesc_accessTorchService">允许应用访问手电筒服务。正常应用不应需要此权限。</string>
-  <string name="permlab_preventpower">覆写电源键</string>
-  <string name="permdesc_preventpower">允许应用覆写电源键</string>
+  <string name="permlab_preventpower">覆盖电源键</string>
+  <string name="permdesc_preventpower">允许应用覆盖电源键</string>
   <string name="usb_extmedia_format_message">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
   <string name="sd_extmedia_format_message">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
   <string name="sd_progress_unmounting">正在卸载 SD 卡\u2026</string>

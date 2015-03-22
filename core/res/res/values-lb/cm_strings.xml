@@ -87,7 +87,7 @@
   <string name="app_ops_delete_sms">SMS-Messagë läschen</string>
   <string name="app_ops_draw_on_top">Virun aneren Appen ablenden</string>
   <string name="app_ops_get_usage_stats">App-Benotzungsstatistiken ausliesen</string>
-  <string name="app_ops_keep_device_awake">de Rouezoustand desaktivéieren</string>
+  <string name="app_ops_keep_device_awake">de Rouzoustand desaktivéieren</string>
   <string name="app_ops_make_phone_call">en Telefonsuruff maachen</string>
   <string name="app_ops_modify_calendar">de Kalenner änneren</string>
   <string name="app_ops_modify_call_log">d\'Urufflëscht änneren</string>
