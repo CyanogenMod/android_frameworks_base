@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"הושתק על ידי <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"קיימת בעיה פנימית במכשיר שלך, וייתכן שהתפקוד שלו לא יהיה יציב עד שתבצע איפוס לנתוני היצרן."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"קיימת בעיה פנימית במכשיר שלך. לקבלת פרטים, צור קשר עם היצרן."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"‏בקשת USSD שונתה לבקשת DIAL."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"‏בקשת USSD שונתה לבקשת SS."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"‏בקשת USSD שונתה לבקשת USSD חדשה."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"‏בקשת SS שונתה לבקשת DIAL."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"‏בקשת SS שונתה לבקשת USSD."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"‏בקשת SS שונתה לבקשת SS חדשה."</string>
 </resources>

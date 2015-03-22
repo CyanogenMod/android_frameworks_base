@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"Audio disattivato da <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"Si è verificato un problema interno con il dispositivo, che potrebbe essere instabile fino al ripristino dei dati di fabbrica."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"Si è verificato un problema interno con il dispositivo. Per informazioni dettagliate, contatta il produttore."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"La richiesta USSD è stata modificata in richiesta DIAL."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"La richiesta USSD è stata modificata in richiesta SS."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"La richiesta USSD è stata modificata in nuova richiesta USSD."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"La richiesta SS è stata modificata in richiesta DIAL."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"La richiesta SS è stata modificata in richiesta USSD."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"La richiesta SS è stata modificata in nuova richiesta SS."</string>
 </resources>

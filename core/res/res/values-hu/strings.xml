@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"A(z) <xliff:g id="THIRD_PARTY">%1$s</xliff:g> elnémította"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"Belső probléma van az eszközzel, és instabil lehet, amíg vissza nem állítja a gyári adatokat."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"Belső probléma van az eszközzel. A részletekért vegye fel a kapcsolatot a gyártóval."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"Az USSD-kérés módosítva DIAL-kérésre."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"Az USSD-kérés módosítva SS-kérésre."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"Az USSD-kérés módosítva új USSD-kérésre."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"Az SS-kérés módosítva DIAL-kérésre."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"Az SS-kérés módosítva USSD-kérésre."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"Az SS-kérés módosítva új SS-kérésre."</string>
 </resources>

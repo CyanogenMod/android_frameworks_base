@@ -1873,10 +1873,4 @@
     <string name="muted_by" msgid="6147073845094180001">"靜音設定者：<xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"您裝置的系統發生問題，回復原廠設定後即可解決該問題。"</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"您裝置的系統發生問題，請聯絡您的製造商瞭解詳情。"</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"USSD 要求已修改為 DIAL 要求。"</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"USSD 要求已修改為 SS 要求。"</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"USSD 要求已修改為新的 USSD 要求。"</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"SS 要求已修改為 DIAL 要求。"</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"SS 要求已修改為 USSD 要求。"</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"SS 要求已修改為新的 SS 要求。"</string>
 </resources>

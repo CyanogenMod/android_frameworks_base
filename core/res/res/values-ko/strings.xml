@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g>에서 알림음 음소거"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"사용 중인 기기 내부에 문제가 발생했습니다. 초기화할 때까지 불안정할 수 있습니다."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"사용 중인 기기 내부에 문제가 발생했습니다. 자세한 내용은 제조업체에 문의하세요."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"USSD 요청이 DIAL 요청으로 수정됩니다."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"USSD 요청이 SS 요청으로 수정됩니다."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"USSD 요청이 새로운 USSD 요청으로 수정됩니다."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"SS 요청이 DIAL 요청으로 수정됩니다."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"SS 요청이 USSD 요청으로 수정됩니다."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"SS 요청이 새로운 SS 요청으로 수정됩니다."</string>
 </resources>

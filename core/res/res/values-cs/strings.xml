@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"Ignorováno stranou <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"V zařízení došlo k internímu problému. Dokud neprovedete obnovení továrních dat, může být nestabilní."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"V zařízení došlo k internímu problému. Další informace vám sdělí výrobce."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"Požadavek USSD byl změněn na požadavek DIAL."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"Požadavek USSD byl změněn na požadavek SS."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"Požadavek USSD byl změněn na nový požadavek USSD."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"Požadavek SS byl změněn na požadavek DIAL."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"Požadavek SS byl změněn na požadavek USSD."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"Požadavek SS byl změněn na nový požadavek SS."</string>
 </resources>

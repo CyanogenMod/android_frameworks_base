@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"تم كتم الصوت بواسطة <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"حدثت مشكلة داخلية في جهازك، وقد لا يستقر وضعه حتى إجراء إعادة الضبط بحسب بيانات المصنع."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"حدثت مشكلة داخلية في جهازك. يمكنك الاتصال بالمصنِّع للحصول على تفاصيل."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"‏يتم تعديل طلب USSD لطلب الاتصال."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"‏يتم تعديل طلب USSD إلى طلب SS."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"‏يتم تعديل طلب USSD إلى طلب USSD الجديد."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"‏يتم تعديل الطلب SS لطلب الاتصال."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"‏يتم تعديل طلب SS إلى طلب USSD."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"‏يتم تعديل طلب SS إلى طلب SS الجديد."</string>
 </resources>

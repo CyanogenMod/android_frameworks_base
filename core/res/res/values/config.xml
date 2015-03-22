@@ -2208,9 +2208,6 @@
     <integer name="launchboost_pcdisbl_param">0</integer>
     <integer name="launchboost_ksmboost_param">0</integer>
 
-    <!-- Support for disabling to fetch APN from OMH card
-         for some cdma carriers -->
-    <bool name="config_fetch_apn_from_omh_card">true</bool>
     <!-- Configuration to play sms ringtone during MO/MT call -->
     <bool name="config_sms_ringtone_incall">false</bool>
 

@@ -3983,8 +3983,6 @@
     <string name="usb_cd_installer_notification_title">Connected as an installer</string>
     <!-- USB_PREFERENCES: Notification for when a USB accessory is attached.  This is the title -->
     <string name="usb_accessory_notification_title">Connected to a USB accessory</string>
-    <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
-    <string name="usb_choose_notification_title">Touch for choose USB options.</string>
     <!-- See USB_PREFERENCES. This is the message. -->
     <string name="usb_notification_message">Touch for other USB options.</string>
 

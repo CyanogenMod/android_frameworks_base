@@ -1868,10 +1868,4 @@
     <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> har kuttet lyden"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"Det har oppstått et internt problem på enheten din, og den kan være ustabil til du tilbakestiller den til fabrikkdata."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"Det har oppstått et internt problem på enheten din. Ta kontakt med produsenten for mer informasjon."</string>
-    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"USSD-forespørselen er endret til en RINGE-forespørsel."</string>
-    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"USSD-forespørselen er endret til en SS-forespørsel."</string>
-    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"USSD-forespørsel er endret til en ny USSD-forespørsel."</string>
-    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"SS-forespørselen er endret til en RINGE-forespørsel."</string>
-    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"SS-forespørselen er endret til en USSD-forespørsel."</string>
-    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"SS-forespørselen er endret til en ny SS-forespørsel."</string>
 </resources>
