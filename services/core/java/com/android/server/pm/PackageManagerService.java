@@ -630,7 +630,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final int[] mGlobalGids;
     final SparseArray<ArraySet<String>> mSystemPermissions;
     final ArrayMap<String, FeatureInfo> mAvailableFeatures;
-    final ArrayMap<Signature, HashSet<String>> mSignatureAllowances;
+    final ArrayMap<Signature, ArraySet<String>> mSignatureAllowances;
 
     // If mac_permissions.xml was found for seinfo labeling.
     boolean mFoundPolicyFile;
@@ -4104,7 +4104,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private boolean isAllowedSignature(PackageParser.Package pkg, String permissionName) {
         for (Signature pkgSig : pkg.mSignatures) {
-            HashSet<String> perms = mSignatureAllowances.get(pkgSig);
+            ArraySet<String> perms = mSignatureAllowances.get(pkgSig);
             if (perms != null && perms.contains(permissionName)) {
                 return true;
             }
@@ -4649,7 +4649,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             return PackageManager.SIGNATURE_NO_MATCH;
         }
 
-        // Since both signature sets are of size 1, we can compare without HashSets.
+        // Since both signature sets are of size 1, we can compare without ArraySets.
         if (s1.length == 1) {
             return s1[0].equals(s2[0]) ?
                     PackageManager.SIGNATURE_MATCH :
