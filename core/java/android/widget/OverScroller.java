@@ -698,11 +698,6 @@ public class OverScroller {
         }
 
         void finish() {
-            if (mIsPerfLockAcquired && mPerf != null) {
-                mPerf.perfLockRelease();
-                mIsPerfLockAcquired = false;
-            }
-
             mCurrentPosition = mFinal;
             // Not reset since WebView relies on this value for fast fling.
             // TODO: restore when WebView uses the fast fling implemented in this class.
