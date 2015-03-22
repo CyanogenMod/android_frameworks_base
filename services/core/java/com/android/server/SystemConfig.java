@@ -100,8 +100,8 @@ public class SystemConfig {
     // URL-handling state upon factory reset.
     final ArraySet<String> mLinkedApps = new ArraySet<>();
 
-    final HashMap<Signature, HashSet<String>> mSignatureAllowances
-            = new HashMap<Signature, HashSet<String>>();
+    final ArrayMap<Signature, ArraySet<String>> mSignatureAllowances
+            = new ArrayMap<Signature, ArraySet<String>>();
 
     public static SystemConfig getInstance() {
         synchronized (SystemConfig.class) {
@@ -148,7 +148,7 @@ public class SystemConfig {
         return mLinkedApps;
     }
 
-    public HashMap<Signature, HashSet<String>> getSignatureAllowances() {
+    public ArrayMap<Signature, ArraySet<String>> getSignatureAllowances() {
         return mSignatureAllowances;
     }
 
@@ -322,9 +322,9 @@ public class SystemConfig {
                         // sig will be null so we will log it below
                     }
                     if (sig != null) {
-                        HashSet<String> perms = mSignatureAllowances.get(sig);
+                        ArraySet<String> perms = mSignatureAllowances.get(sig);
                         if (perms == null) {
-                            perms = new HashSet<String>();
+                            perms = new ArraySet<String>();
                             mSignatureAllowances.put(sig, perms);
                         }
                         perms.add(perm);
