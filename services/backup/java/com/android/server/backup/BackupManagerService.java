@@ -8674,7 +8674,6 @@ if (MORE_DEBUG) Slog.v(TAG, "   + got " + nRead + "; now wanting " + (size - soF
         }
     }
 
-    @Override
     public void fullBackupNoninteractive(ParcelFileDescriptor fd,
             String[] domainTokens, String excludeFilesRegex, String pkg,
             boolean shouldKillAfterBackup, boolean ignoreEncryptionPasswordCheck,
@@ -8697,7 +8696,6 @@ if (MORE_DEBUG) Slog.v(TAG, "   + got " + nRead + "; now wanting " + (size - soF
         mBackupHandler.sendMessage(msg);
     }
 
-    @Override
     public void fullRestoreNoninteractive(ParcelFileDescriptor fd,
             boolean ignoreEncryptionPasswordCheck, IFullBackupRestoreObserver observer) {
         mContext.enforceCallingPermission(android.Manifest.permission.BACKUP,
@@ -8713,7 +8711,6 @@ if (MORE_DEBUG) Slog.v(TAG, "   + got " + nRead + "; now wanting " + (size - soF
     }
 
     // Enable/disable the backup service
-    @Override
     public void setBackupEnabled(boolean enable) {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP,
                 "setBackupEnabled");

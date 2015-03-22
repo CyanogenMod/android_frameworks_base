@@ -233,6 +233,27 @@ public class Trampoline extends IBackupManager.Stub {
     }
 
     @Override
+    public void fullBackupNoninteractive(ParcelFileDescriptor fd,
+            String[] domainTokens, String excludeFilesRegex, String pkg,
+            boolean shouldKillAfterBackup, boolean ignoreEncryptionPasswordCheck,
+            IFullBackupRestoreObserver observer) {
+        BackupManagerService svc = mService;
+        if (svc != null) {
+            svc.fullBackupNoninteractive(fd, domainTokens, excludeFilesRegex, pkg,
+                    shouldKillAfterBackup, ignoreEncryptionPasswordCheck, observer);
+        }
+    }
+
+    @Override
+    public void fullRestoreNoninteractive(ParcelFileDescriptor fd,
+            boolean ignoreEncryptionPasswordCheck, IFullBackupRestoreObserver observer) {
+        BackupManagerService svc = mService;
+        if (svc != null) {
+            svc.fullRestoreNoninteractive(fd, ignoreEncryptionPasswordCheck, observer);
+        }
+    }
+
+    @Override
     public void fullTransportBackup(String[] packageNames) throws RemoteException {
         BackupManagerService svc = mService;
         if (svc != null) {
