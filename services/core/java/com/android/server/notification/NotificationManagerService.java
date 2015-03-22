@@ -2996,12 +2996,12 @@ public class NotificationManagerService extends SystemService {
             enableLed = true;
         }
 
-        if (!enabled) {
+        if (!enableLed) {
             mNotificationLight.turnOff();
             mStatusBar.notificationLightOff();
         } else {
-            final Notification ledno = mLedNotification.sbn.getNotification();
-            final NotificationLedValues ledValues = getLedValuesForNotification(mLedNotification);
+            final Notification ledno = ledNotification.sbn.getNotification();
+            final NotificationLedValues ledValues = getLedValuesForNotification(ledNotification);
             int ledARGB;
             int ledOnMS;
             int ledOffMS;
