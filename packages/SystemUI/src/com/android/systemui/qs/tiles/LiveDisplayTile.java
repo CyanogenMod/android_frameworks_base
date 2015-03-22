@@ -108,7 +108,7 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
         state.visible = true;
         state.mode = arg == null ? getCurrentModeIndex() : (Integer) arg;
         state.label = mEntries[state.mode];
-        state.icon = mContext.getDrawable(mEntryIconRes[state.mode]);
+        state.icon = ResourceIcon.get(mEntryIconRes[state.mode]);
     }
 
     private int getCurrentModeIndex() {

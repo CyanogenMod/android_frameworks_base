@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -32,7 +33,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
     private static final Intent BATTERY_SETTINGS = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
 
-    private int[] mEntryIconRes;
+    private Icon[] mIcons;
     private String[] mEntries;
     private String[] mPerfProfileValues;
     private String mPerfProfileDefaultEntry;
@@ -45,8 +46,9 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     private Runnable mStartTileAnimation = new Runnable() {
         @Override
         public void run() {
-            if (getState().icon instanceof AnimatedVectorDrawable) {
-                ((AnimatedVectorDrawable) getState().icon).start();
+            Drawable d = getState().icon.getDrawable(mContext);
+            if (d instanceof AnimatedVectorDrawable) {
+                ((AnimatedVectorDrawable) d).start();
             }
         }
     };
@@ -58,9 +60,9 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
         Resources res = mContext.getResources();
         TypedArray typedArray = res.obtainTypedArray(R.array.perf_profile_drawables);
-        mEntryIconRes = new int[typedArray.length()];
-        for (int i = 0; i < mEntryIconRes.length; i++) {
-            mEntryIconRes[i] = typedArray.getResourceId(i, 0);
+        mIcons = new Icon[typedArray.length()];
+        for (int i = 0; i < mIcons.length; i++) {
+            mIcons[i] = ResourceIcon.get(typedArray.getResourceId(i, 0));
         }
         typedArray.recycle();
 
@@ -90,7 +92,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         state.visible = true;
         state.profile = arg == null ? getCurrentProfileIndex() : (Integer) arg;
         state.label = mEntries[state.profile];
-        state.icon = mContext.getDrawable(mEntryIconRes[state.profile]);
+        state.icon = mIcons[state.profile];
         mUiHandler.post(mStartTileAnimation);
     }
 

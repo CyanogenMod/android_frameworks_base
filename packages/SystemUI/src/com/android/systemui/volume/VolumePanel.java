@@ -485,7 +485,6 @@ public class VolumePanel extends Handler implements DemoMode {
 
         boolean blurEnabled = false && context.getResources().getBoolean(R.bool.config_ui_blur_enabled);
         if (blurEnabled && mDialog != null && mDialog.getWindow() != null) {
-            Window window = mDialog.getWindow();
             window.addPrivateFlags(WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING);
             window.setBlurMaskAlphaThreshold(0.48f);
             View mainContainer = window.findViewById(com.android.systemui.R.id.volume_dialog_bg_container);
@@ -809,10 +808,9 @@ public class VolumePanel extends Handler implements DemoMode {
                     mSliderPanel.addView(control.group);
                     control.group.setVisibility(View.VISIBLE);
                     control.expandPanel.setVisibility(View.GONE);
-                    updateSlider(control);
+                    updateSlider(control, true);
                 }
             }
->>>>>>> SystemUI: Create expandable volume panel.
         }
     }
 
@@ -825,7 +823,7 @@ public class VolumePanel extends Handler implements DemoMode {
                 if (control != null && control.streamType != mActiveStreamType) {
                     control.group.setVisibility(View.GONE);
                     control.expandPanel.setVisibility(View.GONE);
-                    updateSlider(control);
+                    updateSlider(control, true);
                 }
             }
         }

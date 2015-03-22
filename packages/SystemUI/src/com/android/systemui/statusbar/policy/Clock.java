@@ -116,7 +116,7 @@ public class Clock implements DemoMode {
             filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
             filter.addAction(Intent.ACTION_USER_SWITCHED);
 
-            mContext().registerReceiverAsUser(mIntentReceiver, UserHandle.ALL, filter,
+            mContext.registerReceiverAsUser(mIntentReceiver, UserHandle.ALL, filter,
                     null, new Handler());
         }
 

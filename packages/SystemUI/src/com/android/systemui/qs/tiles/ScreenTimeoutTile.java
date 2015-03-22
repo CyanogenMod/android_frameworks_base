@@ -45,8 +45,8 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
     private static final String SETTINGS_PACKAGE_NAME = "com.android.settings";
     private String[] mEntries, mValues;
     private boolean mShowingDetail;
-    ArrayList<Drawable> mAnimationList
-            = new ArrayList<Drawable>();
+    ArrayList<Integer> mAnimationList
+            = new ArrayList<Integer>();
 
     public ScreenTimeoutTile(Host host) {
         super(host);
@@ -234,7 +234,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
                     }
                 });
             }
-            state.icon = d;
+            state.icon = ResourceIcon.get(drawableId);
         }
 
         runNextAnimation(state);
@@ -247,7 +247,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         if (mAnimationList.isEmpty()) {
             return;
         }
-        state.icon = mAnimationList.remove(0);
+        /* state.icon = mAnimationList.remove(0);
         if (state.icon instanceof AnimatedVectorDrawable) {
             mUiHandler.post(new Runnable() {
                 @Override
@@ -256,6 +256,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
                 }
             });
         }
+        */
     }
 
     private class RadioAdapter extends ArrayAdapter<String> {

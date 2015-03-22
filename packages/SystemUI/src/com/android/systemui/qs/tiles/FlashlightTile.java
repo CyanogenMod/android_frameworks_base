@@ -82,7 +82,7 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
         }
 
         if (arg instanceof UserBoolean) {
-            state.value = (UserBoolean) arg;
+            state.value = ((UserBoolean) arg).value;
         }
 
         if (!state.value && mWasLastOn != 0) {
