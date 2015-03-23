@@ -827,6 +827,10 @@ public class KeyguardViewMediator extends SystemUI {
                 // it to be enabled externally, unless the device policy manager says so.
                 return;
             }
+            if (isSecure()) {
+                Log.d(TAG, "current mode is SecurityMode, ignore hide keyguard");
+                return;
+            }
 
             mExternallyEnabled = enabled;
 
