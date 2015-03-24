@@ -26,7 +26,6 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.text.InputType;
@@ -65,7 +64,7 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     private AlertDialog mRemainingAttemptsDialog;
     KeyguardUpdateMonitor mKgUpdateMonitor;
     private int mSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
-    private TextView mSubDisplayName = null;
+    private TextView mSubNameView;
     private ImageView mSimImageView;
 
     private KeyguardUpdateMonitorCallback mUpdateCallback = new KeyguardUpdateMonitorCallback() {
@@ -202,15 +201,11 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mSubDisplayName = (TextView) findViewById(R.id.sub_display_name);
-        mSubId = mKgUpdateMonitor.getSimPukLockSubId();
+        mSubNameView = (TextView) findViewById(R.id.sim_name);
         mSimImageView = (ImageView) findViewById(R.id.keyguard_sim);
-        if ( mKgUpdateMonitor.getNumPhones() > 1 ) {
-
-            View simInfoMsg = findViewById(R.id.sim_info_message);
-            if (simInfoMsg != null) {
-                simInfoMsg.setVisibility(View.VISIBLE);
-            }
+        mSubId = mKgUpdateMonitor.getSimPukLockSubId();
+        if (mKgUpdateMonitor.getNumPhones() > 1) {
+            mSubNameView.setVisibility(View.VISIBLE);
             handleSubInfoChange();
         }
 
@@ -425,38 +420,26 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     }
 
     private void handleSubInfoChange() {
-        String displayName = null;
-        //get Display Name
-        SubscriptionInfo info =
+        final SubscriptionInfo info =
             SubscriptionManager.from(mContext).getActiveSubscriptionInfo(mSubId);
-        if (null != info) {
-           displayName = info.getDisplayName().toString();
+        CharSequence displayName = null;
+
+        if (info != null) {
+           displayName = info.getDisplayName();
         }
+        if (displayName == null) {
+            displayName = mContext.getString(R.string.kg_slot_name,
+                    SubscriptionManager.getSlotId(mSubId) + 1);
+        }
+
         if (DEBUG) Log.i(TAG, "handleSubInfoChange, mSubId=" + mSubId +
                 ", displayName=" + displayName);
 
-        TextView slotName = (TextView)findViewById(R.id.slot_id_name);
-        //Set slot display name
-        if (null == displayName) { //display name not yet configured.
-            if (DEBUG) Log.d(TAG, "mSubId " + mSubId + ": New Card Inserted");
-            slotName.setText(mContext.getString(R.string.kg_slot_name,
-                    SubscriptionManager.getSlotId(mSubId) + 1));
-            slotName.setVisibility(View.VISIBLE);
-            mSubDisplayName.setVisibility(View.GONE);
-        } else {
-            if (DEBUG) Log.d(TAG, "handleSubInfoChange, refresh Sub Info for mSubId=" + mSubId);
-            int color = Color.WHITE;
-            if (null != info) {
-                color = info.getIconTint();
-            }
-            mSimImageView.setImageTintList(ColorStateList.valueOf(color));
-            int simCardNamePadding = getContext().getResources().
-                                getDimensionPixelSize(R.dimen.sim_card_name_padding);
-            mSubDisplayName.setPadding(simCardNamePadding, 0, simCardNamePadding, 0);
-            mSubDisplayName.setText(displayName);
-            mSubDisplayName.setVisibility(View.VISIBLE);
-            slotName.setVisibility(View.GONE);
-        }
+        mSubNameView.setText(displayName);
+
+        final int color = info != null && info.getIconTint() != 0
+                ? info.getIconTint() : Color.WHITE;
+        mSimImageView.setImageTintList(ColorStateList.valueOf(color));
     }
 
     private void showDefaultMessage() {
