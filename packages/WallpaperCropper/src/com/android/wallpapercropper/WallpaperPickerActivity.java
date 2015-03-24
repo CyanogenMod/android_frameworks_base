@@ -65,6 +65,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.ProgressBar;
 import com.android.photos.BitmapRegionTileSource;
 
 import java.io.File;
@@ -618,34 +619,60 @@ public class WallpaperPickerActivity extends WallpaperCropActivity {
         }
     }
 
-    private void addTemporaryWallpaperTile(Uri uri) {
-        mTempWallpaperTiles.add(uri);
-        // Add a tile for the image picked from Gallery
-        FrameLayout pickedImageThumbnail = (FrameLayout) getLayoutInflater().
-                inflate(R.layout.wallpaper_picker_item, mWallpapersView, false);
-        setWallpaperItemPaddingToZero(pickedImageThumbnail);
-
+    private void addTemporaryWallpaperTile(final Uri uri) {
         // Load the thumbnail
-        ImageView image = (ImageView) pickedImageThumbnail.findViewById(R.id.wallpaper_image);
-        Point defaultSize = Utilities.getDefaultThumbnailSize(this.getResources());
-        int rotation = WallpaperCropActivity.getRotationFromExif(this, uri);
-        Bitmap thumb = createThumbnail(defaultSize, this, uri, null, null, 0, rotation, false);
-        if (thumb != null) {
-            image.setImageBitmap(thumb);
-            Drawable thumbDrawable = image.getDrawable();
-            thumbDrawable.setDither(true);
-        } else {
-            Log.e(TAG, "Error loading thumbnail for uri=" + uri);
-        }
-        mWallpapersView.addView(pickedImageThumbnail, 0);
+        new AsyncTask<Void, Void, Bitmap>() {
+            FrameLayout pickedImageThumbnail;
+            ProgressBar progressBar;
 
-        UriWallpaperInfo info = new UriWallpaperInfo(uri);
-        pickedImageThumbnail.setTag(info);
-        info.setView(pickedImageThumbnail);
-        addLongPressHandler(pickedImageThumbnail);
-        updateTileIndices();
-        pickedImageThumbnail.setOnClickListener(mThumbnailOnClickListener);
-        mThumbnailOnClickListener.onClick(pickedImageThumbnail);
+            @Override
+            protected void onPreExecute() {
+                mTempWallpaperTiles.add(uri);
+                // Add a tile for the image picked from Gallery
+                pickedImageThumbnail = (FrameLayout) getLayoutInflater().
+                        inflate(R.layout.wallpaper_picker_item, mWallpapersView, false);
+                setWallpaperItemPaddingToZero(pickedImageThumbnail);
+
+                progressBar = (ProgressBar) findViewById(R.id.loading);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Point defaultSize = Utilities.getDefaultThumbnailSize(
+                        WallpaperPickerActivity.this.getResources());
+                int rotation = WallpaperCropActivity.getRotationFromExif(
+                        WallpaperPickerActivity.this, uri);
+                Bitmap thumb = createThumbnail(defaultSize, WallpaperPickerActivity.this,
+                        uri, null, null, 0, rotation, false);
+                if (thumb == null) {
+                    Log.e(TAG, "Error loading thumbnail for uri=" + uri);
+                }
+                return thumb;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap thumb) {
+                if (thumb != null) {
+                    ImageView image =
+                            (ImageView) pickedImageThumbnail.findViewById(R.id.wallpaper_image);
+                    image.setImageBitmap(thumb);
+                    Drawable thumbDrawable = image.getDrawable();
+                    thumbDrawable.setDither(true);
+                }
+
+                mWallpapersView.addView(pickedImageThumbnail, 0);
+
+                UriWallpaperInfo info = new UriWallpaperInfo(uri);
+                pickedImageThumbnail.setTag(info);
+                info.setView(pickedImageThumbnail);
+                addLongPressHandler(pickedImageThumbnail);
+                updateTileIndices();
+                pickedImageThumbnail.setOnClickListener(mThumbnailOnClickListener);
+                mThumbnailOnClickListener.onClick(pickedImageThumbnail);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
