@@ -95,6 +95,8 @@ public final class RemoteConnection {
          *
          * @param connection The {@code RemoteConnection} invoking this method.
          * @param callProperties The new call properties of the {@code RemoteConnection}.
+         *
+         * @hide
          */
         public void onCallPropertiesChanged(RemoteConnection connection, int callProperties) {}
 
@@ -551,6 +553,8 @@ public final class RemoteConnection {
     /**
      * @return A bitmask of the properties of the {@code RemoteConnection}, as defined in
      *         {@link CallProperties}.
+     *
+     * @hide
      */
     public int getCallProperties() {
         return mCallProperties;

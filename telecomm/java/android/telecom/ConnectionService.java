@@ -1137,6 +1137,7 @@ public abstract class ConnectionService extends Service {
      * Connection is part of a conference controller but is not yet added to Connection
      * Service and hence cannot be added to the conference call.
      */
+    /** @hide */
     public void triggerConferenceRecalculate() {
     }
 
