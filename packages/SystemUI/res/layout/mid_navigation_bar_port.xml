@@ -35,14 +35,14 @@
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             systemui:keyRepeat="true" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/one"
             android:layout_width="@dimen/navigation_extra_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerInside" />
     </FrameLayout>
     <LinearLayout
         android:layout_height="match_parent"
@@ -56,6 +56,7 @@
         android:animateLayoutChanges="true">
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/two"
+            android:scaleType="centerInside"
             android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             systemui:keyRepeat="true"
@@ -66,6 +67,7 @@
             android:layout_weight="1" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/three"
+            android:scaleType="centerInside"
             android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             systemui:keyRepeat="true"
@@ -76,6 +78,7 @@
             android:layout_weight="1" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/four"
+            android:scaleType="centerInside"
             android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
@@ -86,6 +89,7 @@
             android:layout_weight="1" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/five"
+            android:scaleType="centerInside"
             android:layout_width="@dimen/navigation_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
@@ -109,14 +113,14 @@
             android:layout_width="@dimen/navigation_extra_key_width"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerInside" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/dpad_right"
             android:visibility="gone"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             systemui:keyRepeat="true"/>
     </FrameLayout>
 </LinearLayout>
