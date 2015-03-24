@@ -83,4 +83,8 @@ public class UserDetailView extends PseudoGridView {
             switchTo(tag);
         }
     }
+
+    public void refreshAdapter() {
+        mAdapter.refresh();
+    }
 }
