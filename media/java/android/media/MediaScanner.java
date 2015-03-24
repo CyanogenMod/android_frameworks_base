@@ -765,7 +765,7 @@ public class MediaScanner
             try {
                 mBitmapOptions.outWidth = 0;
                 mBitmapOptions.outHeight = 0;
-                BitmapFactory.decodeFile(path, mBitmapOptions, false);
+                BitmapFactory.decodeFile(path, mBitmapOptions);
                 mWidth = mBitmapOptions.outWidth;
                 mHeight = mBitmapOptions.outHeight;
             } catch (Throwable th) {
