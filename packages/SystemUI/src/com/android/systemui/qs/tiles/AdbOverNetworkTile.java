@@ -71,11 +71,11 @@ public class AdbOverNetworkTile extends QSTile<QSTile.BooleanState> {
                 // if wifiInfo is null, set the label without host address
                 state.label = mContext.getString(R.string.quick_settings_network_adb_label);
             }
-            state.iconId = R.drawable.ic_qs_network_adb_on;
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_network_adb_on);
         } else {
             // Otherwise set the label and disabled icon
             state.label = mContext.getString(R.string.quick_settings_network_adb_label);
-            state.iconId = R.drawable.ic_qs_network_adb_off;
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_network_adb_off);
         }
     }
 

@@ -77,7 +77,7 @@ public class ProfilesTile extends QSTile<QSTile.State> {
         state.visible = true;
         state.label = profilesEnabled() ? mProfileManager.getActiveProfile().getName()
                 : mContext.getString(R.string.quick_settings_profiles_disabled);
-        state.iconId = R.drawable.ic_qs_system_profiles;
+        state.icon = ResourceIcon.get(R.drawable.ic_qs_system_profiles);
     }
 
     private boolean profilesEnabled() {
