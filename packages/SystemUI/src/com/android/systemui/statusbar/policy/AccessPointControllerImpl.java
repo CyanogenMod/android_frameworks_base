@@ -141,11 +141,11 @@ public class AccessPointControllerImpl implements NetworkController.AccessPointC
 
     private void fireSettingsIntentCallback(Intent intent) {
         for (AccessPointCallback callback : mCallbacks) {
-            //callback.onSettingsActivityTriggered(intent);
+            callback.onSettingsActivityTriggered(intent);
         }
     }
 
-    private void fireAcccessPointsCallback(AccessPoint[] aps) {
+    private void fireAcccessPointsCallback(List<AccessPoint> aps) {
         for (AccessPointCallback callback : mCallbacks) {
             callback.onAccessPointsChanged(aps);
         }
@@ -214,7 +214,7 @@ public class AccessPointControllerImpl implements NetworkController.AccessPointC
             aps.add(ap);
         }
         Collections.sort(aps, mByStrength);
-        fireAcccessPointsCallback(aps.toArray(new AccessPoint[aps.size()]));
+        fireAcccessPointsCallback(aps);
     }
 
     private final ActionListener mConnectListener = new ActionListener() {
