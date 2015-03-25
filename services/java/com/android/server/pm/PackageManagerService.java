@@ -12852,6 +12852,11 @@ public class PackageManagerService extends IPackageManager.Stub {
             int userId) {
         enforceCrossUserPermission(Binder.getCallingUid(), userId, false, "set protected");
 
+        if (componentName == null) {
+            throw new IllegalArgumentException(
+                    "Must define component: " + componentName);
+        }
+
         String packageName = componentName.getPackageName();
         String className = componentName.getClassName();
 
