@@ -373,13 +373,14 @@ public abstract class QSTile<TState extends State> implements Listenable {
         @Override
         public Drawable getDrawable(Context context) {
             // workaround: get a clean state for every new AVD
-            final AnimatedVectorDrawable d = (AnimatedVectorDrawable) super.getDrawable(context)
-                    .getConstantState().newDrawable();
-            d.start();
-            if (mAllowAnimation) {
-                mAllowAnimation = false;
-            } else {
-                d.stop(); // skip directly to end state
+            final Drawable d = super.getDrawable(context).getConstantState().newDrawable();
+            if (d instanceof AnimatedVectorDrawable) {
+                ((AnimatedVectorDrawable)d).start();
+                if (mAllowAnimation) {
+                    mAllowAnimation = false;
+                } else {
+                    ((AnimatedVectorDrawable)d).stop(); // skip directly to end state
+                }
             }
             return d;
         }
