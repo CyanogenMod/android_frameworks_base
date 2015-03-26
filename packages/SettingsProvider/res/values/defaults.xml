@@ -232,8 +232,15 @@
     <string name="def_theme_package"></string>
     <string name="def_theme_components"></string>
 
+    <!-- Default value of Settings.System.ENABLE_FORWARD_LOOKUP -->
+    <integer name="def_forward_lookup">1</integer>
+
     <!-- Default value of Settings.System.ENABLE_PEOPLE_LOOKUP -->
     <integer name="def_people_lookup">1</integer>
+
+    <!-- Default value of Settings.System.ENABLE_REVERSE_LOOKUP -->
+    <integer name="def_reverse_lookup">1</integer>
+
     <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
     <string-array name="def_protected_sms_list_values"></string-array>
 
