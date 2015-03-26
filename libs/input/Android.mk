@@ -36,6 +36,10 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_CFLAGS += -Wno-unused-parameter
 
+ifeq ($(TARGET_DISABLE_CURSOR_LAYER),true)
+	LOCAL_CFLAGS += -DDISABLE_CURSOR_LAYER
+endif
+
 LOCAL_MODULE:= libinputservice
 
 LOCAL_MODULE_TAGS := optional
