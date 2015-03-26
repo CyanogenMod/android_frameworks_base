@@ -1098,7 +1098,7 @@ final class ActivityStack {
         updatePrivacyGuardNotificationLocked(next);
     }
 
-    private void setVisibile(ActivityRecord r, boolean visible) {
+    private void setVisible(ActivityRecord r, boolean visible) {
         r.visible = visible;
         mWindowManager.setAppVisibility(r.appToken, visible);
         final ArrayList<ActivityContainer> containers = r.mChildContainers;
@@ -1261,7 +1261,7 @@ final class ActivityStack {
                         if (!r.visible || r.mLaunchTaskBehind) {
                             if (DEBUG_VISBILITY) Slog.v(
                                     TAG, "Starting and making visible: " + r);
-                            setVisibile(r, true);
+                            setVisible(r, true);
                         }
                         if (r != starting) {
                             mStackSupervisor.startSpecificActivityLocked(r, false, false);
@@ -1297,7 +1297,7 @@ final class ActivityStack {
                                     r.updateOptionsLocked(r.returningOptions);
                                     mUndrawnActivitiesBelowTopTranslucent.add(r);
                                 }
-                                setVisibile(r, true);
+                                setVisible(r, true);
                                 r.sleeping = false;
                                 r.app.pendingUiClean = true;
                                 r.app.thread.scheduleWindowVisibility(r.appToken, true);
@@ -1332,7 +1332,7 @@ final class ActivityStack {
                     if (r.visible) {
                         if (DEBUG_VISBILITY) Slog.v(TAG, "Making invisible: " + r);
                         try {
-                            setVisibile(r, false);
+                            setVisible(r, false);
                             switch (r.state) {
                                 case STOPPING:
                                 case STOPPED:
@@ -3848,8 +3848,7 @@ final class ActivityStack {
         return true;
     }
 
-    private boolean relaunchActivityLocked(ActivityRecord r,
-            int changes, boolean andResume) {
+    private boolean relaunchActivityLocked(ActivityRecord r, int changes, boolean andResume) {
         List<ResultInfo> results = null;
         List<ReferrerIntent> newIntents = null;
         if (andResume) {

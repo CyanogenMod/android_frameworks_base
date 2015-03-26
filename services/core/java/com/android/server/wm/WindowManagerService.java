@@ -180,7 +180,7 @@ public class WindowManagerService extends IWindowManager.Stub
     static final boolean DEBUG_ORIENTATION = false;
     static final boolean DEBUG_APP_ORIENTATION = false;
     static final boolean DEBUG_CONFIGURATION = false;
-    static final boolean DEBUG_APP_TRANSITIONS = false;
+    static final boolean DEBUG_APP_TRANSITIONS = true;
     static final boolean DEBUG_STARTING_WINDOW = false;
     static final boolean DEBUG_REORDER = false;
     static final boolean DEBUG_WALLPAPER = false;
@@ -192,7 +192,7 @@ public class WindowManagerService extends IWindowManager.Stub
     static final boolean DEBUG_LAYOUT_REPEATS = true;
     static final boolean DEBUG_SURFACE_TRACE = false;
     static final boolean DEBUG_WINDOW_TRACE = false;
-    static final boolean DEBUG_TASK_MOVEMENT = false;
+    static final boolean DEBUG_TASK_MOVEMENT = true;
     static final boolean DEBUG_STACK = false;
     static final boolean DEBUG_DISPLAY = false;
     static final boolean SHOW_SURFACE_ALLOC = false;
@@ -3129,7 +3129,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
             }
 
-            if (DEBUG_LAYOUT) Slog.v(TAG, "Relayout " + win + ": viewVisibility=" + viewVisibility
+            if (true || DEBUG_LAYOUT) Slog.v(TAG, "Relayout " + win + ": viewVisibility=" + viewVisibility
                     + " req=" + requestedWidth + "x" + requestedHeight + " " + win.mAttrs);
 
             win.mEnforceSizeCompat =
@@ -3796,10 +3796,8 @@ public class WindowManagerService extends IWindowManager.Stub
         } else {
             // TODO(multidisplay): Change to the correct display.
             final WindowList windows = getDefaultWindowListLocked();
-            int pos = windows.size() - 1;
-            while (pos >= 0) {
+            for (int pos = windows.size() - 1; pos >= 0; --pos) {
                 WindowState win = windows.get(pos);
-                pos--;
                 if (win.mAppToken != null) {
                     // We hit an application window. so the orientation will be determined by the
                     // app window. No point in continuing further.
@@ -4253,8 +4251,8 @@ public class WindowManagerService extends IWindowManager.Stub
         }
 
         synchronized(mWindowMap) {
-            if (DEBUG_APP_TRANSITIONS) Slog.w(TAG, "Execute app transition: " + mAppTransition,
-                    new RuntimeException("here").fillInStackTrace());
+            if (DEBUG_APP_TRANSITIONS) Slog.w(TAG, "Execute app transition: " + mAppTransition
+                    + " Callers=" + Debug.getCallers(5));
             if (mAppTransition.isTransitionSet()) {
                 mAppTransition.setReady();
                 final long origId = Binder.clearCallingIdentity();
