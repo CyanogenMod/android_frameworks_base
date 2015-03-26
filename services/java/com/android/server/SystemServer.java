@@ -511,9 +511,11 @@ public final class SystemServer {
             inputManager = new InputManagerService(context);
 
             Slog.i(TAG, "Window Manager");
+            boolean hideFirstBootDialog = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_hideFirstBootDialog);
             wm = WindowManagerService.main(context, inputManager,
                     mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL,
-                    true, mOnlyCore);
+                    !hideFirstBootDialog || !mFirstBoot, mOnlyCore);
             ServiceManager.addService(Context.WINDOW_SERVICE, wm);
             ServiceManager.addService(Context.INPUT_SERVICE, inputManager);
 

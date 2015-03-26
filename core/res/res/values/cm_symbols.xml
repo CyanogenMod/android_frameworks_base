@@ -360,4 +360,7 @@
 
     <!-- Config to disable showing ringtones from removable storage -->
     <java-symbol type="bool" name="config_excludeRingtonesFromRemovableStorage" />
+
+    <!-- Config to disable the first boot dialog-->
+    <java-symbol type="bool" name="config_hideFirstBootDialog" />
 </resources>

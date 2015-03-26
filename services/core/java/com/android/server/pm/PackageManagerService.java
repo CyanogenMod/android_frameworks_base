@@ -558,6 +558,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     ArrayList<ComponentName> mDisabledComponentsList;
 
+    boolean mHideFirstBootDialog;
+
     // Set of pending broadcasts for aggregating enable/disable of components.
     static class PendingPackageBroadcasts {
         // for each user id, a map of <package name -> components within that package>
@@ -1429,6 +1431,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         mDexOptLRUThresholdInMills = dexOptLRUThresholdInMinutes * 60 * 1000;
 
         mAppOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+
+        mHideFirstBootDialog = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hideFirstBootDialog);
 
         String separateProcesses = SystemProperties.get("debug.separate_processes");
         if (separateProcesses != null && separateProcesses.length() > 0) {
@@ -5003,12 +5008,15 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (DEBUG_DEXOPT) {
             Log.i(TAG, "Optimizing app " + curr + " of " + total + ": " + pkg.packageName);
         }
-        try {
-            ActivityManagerNative.getDefault().showBootMessage(
-                    mContext.getResources().getString(R.string.android_upgrading_apk,
-                            curr, total), true);
-        } catch (RemoteException e) {
+        if (!mHideFirstBootDialog || !isFirstBoot()) {
+            try {
+                ActivityManagerNative.getDefault().showBootMessage(
+                        mContext.getResources().getString(R.string.android_upgrading_apk,
+                                curr, total), true);
+            } catch (RemoteException e) {
+            }
         }
+
         PackageParser.Package p = pkg;
         synchronized (mInstallLock) {
             performDexOptLI(p, null /* instruction sets */, false /* force dex */,
