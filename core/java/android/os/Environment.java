@@ -177,7 +177,12 @@ public class Environment {
 
         /** {@hide} */
         public File getSecondaryStorageDirectory() {
-            return mExternalDirsForApp[1];
+            /* If switch to guest account
+             * The secondary storage will not be added into externalForApp
+             */
+            if (mExternalDirsForApp.length > 1)
+                return mExternalDirsForApp[1];
+            return null;
         }
 
         @Deprecated
@@ -429,7 +434,9 @@ public class Environment {
     /** {@hide} */
     public static File getSecondaryStorageDirectory() {
         throwIfUserRequired();
-        return sCurrentUser.getExternalDirsForApp()[1];
+        if (sCurrentUser.getExternalDirsForApp().length > 1)
+            return sCurrentUser.getExternalDirsForApp()[1];
+        return null;
     }
 
     /** {@hide} */
@@ -756,8 +763,7 @@ public class Environment {
      * @hide
      */
     public static String getSecondaryStorageState() {
-        final File externalDir = sCurrentUser.getExternalDirsForApp()[1];
-        return getStorageState(externalDir);
+        return getStorageState(getSecondaryStorageDirectory());
     }
 
     /**

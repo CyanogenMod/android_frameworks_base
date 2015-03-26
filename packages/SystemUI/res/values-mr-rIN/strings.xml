@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"सुरु असलेले"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"सूचना"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"बॅटरी कमी आहे"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> शिल्‍लक"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> उर्वरित. बॅटरी बचतकर्ता चालू आहे."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> शिल्लक"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> शिल्लक. बॅटरी बचतकर्ता चालू आहे."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB चार्जिंग समर्थित नाही.\nफक्त पुरवठा केलेले चार्जर वापरा."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB चार्जिंग समर्थित नाही."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"केवळ पुरविलेले चार्जर वापरा."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"डेड्रीम"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"इथरनेट"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"विमान मोड"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"चार्ज होत आहे, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"चार्ज झाली"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"ब"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"ब (<xliff:g id="NUMBER">%d</xliff:g> डिव्हाइसेस)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"ब बंद"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"अधिक सेटिंग्ज"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"पूर्ण झाले"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"कनेक्ट केलेले"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Wi‑Fi सहाय्यक द्वारे कनेक्ट केले"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"कनेक्ट करीत आहे..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"टेदरिंग"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"हॉटस्पॉट"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"सेल्युलर डेटा"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"डेटा वापर"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"शिल्लक डेटा"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"मर्यादा गाठली – डेटा वापरास विराम दिला"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"मर्यादेबाहेर"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> वापरले"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> मर्यादा"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> चेतावणी"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"आपल्या अलीकडील स्क्रीन येथे दिसतात"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"अनुप्रयोग माहिती"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"अ‍ॅप-लॉक-करणे"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"स्‍क्रीन पिन करणे"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"शोधा"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"<xliff:g id="APP">%s</xliff:g> प्रारंभ करणे शक्य झाले नाही."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"चार्ज झाली"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"बॅटरी बचतकर्ता चालू आहे"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"कार्यप्रदर्शन आणि पार्श्वभूमी डेटा कमी करते"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"बॅटरी बचतकर्ता बंद करा"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"लपविलेली सामग्री"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> आपल्‍या स्‍क्रीनवर प्रदर्शित होणारी प्रत्‍येक गोष्‍ट कॅप्‍चर करणे प्रारंभ करेल."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"पुन्हा दर्शवू नका"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"आपण अनलॉक करण्‍यापूर्वी त्यांना पहा"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"नाही धन्यवाद"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"सेट अप"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> द्वारे नि:शब्द केले"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"स्क्रीन पिन केलेली आहे"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"हे आपण अनपिन करेपर्यंत दृश्यामध्ये ते ठेवते. अनपिन करण्यासाठी एकाच वेळी परत आणि अलीकडील ला स्पर्श करा आणि धरून ठेवा आणि विहंगावलोकन करा."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"हे आपण अनपिन करेपर्यंत दृश्यामध्ये ते ठेवते. अनपिन करण्यासाठी स्पर्श करा आणि धरून ठेवा."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"समजले"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"नाही धन्यवाद"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"<xliff:g id="TILE_LABEL">%1$s</xliff:g> लपवायचे?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"आपण सेटिंग्जमध्ये ते पुढील वेळी चालू कराल तेव्हा ते पुन्हा दिसेल."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"लपवा"</string>
 </resources>

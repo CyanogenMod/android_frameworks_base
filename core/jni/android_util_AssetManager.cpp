@@ -33,6 +33,7 @@
 
 #include <androidfw/Asset.h>
 #include <androidfw/AssetManager.h>
+#include <androidfw/AttributeFinder.h>
 #include <androidfw/ResourceTypes.h>
 
 #include <private/android_filesystem_config.h> // for AID_SYSTEM
@@ -999,6 +1000,30 @@ static void android_content_AssetManager_dumpTheme(JNIEnv* env, jobject clazz,
     theme->dumpToLog();
 }
 
+class XmlAttributeFinder : public BackTrackingAttributeFinder<XmlAttributeFinder, jsize> {
+public:
+    XmlAttributeFinder(const ResXMLParser* parser)
+        : BackTrackingAttributeFinder(0, parser != NULL ? parser->getAttributeCount() : 0)
+        , mParser(parser) {}
+
+    inline uint32_t getAttribute(jsize index) const {
+        return mParser->getAttributeNameResID(index);
+    }
+
+private:
+    const ResXMLParser* mParser;
+};
+
+class BagAttributeFinder : public BackTrackingAttributeFinder<BagAttributeFinder, const ResTable::bag_entry*> {
+public:
+    BagAttributeFinder(const ResTable::bag_entry* start, const ResTable::bag_entry* end)
+        : BackTrackingAttributeFinder(start, end) {}
+
+    inline uint32_t getAttribute(const ResTable::bag_entry* entry) const {
+        return entry->map.name.ident;
+    }
+};
+
 static jboolean android_content_AssetManager_resolveAttrs(JNIEnv* env, jobject clazz,
                                                           jlong themeToken,
                                                           jint defStyleAttr,
@@ -1074,13 +1099,13 @@ static jboolean android_content_AssetManager_resolveAttrs(JNIEnv* env, jobject c
     res.lock();
 
     // Retrieve the default style bag, if requested.
-    const ResTable::bag_entry* defStyleEnt = NULL;
+    const ResTable::bag_entry* defStyleStart = NULL;
     uint32_t defStyleTypeSetFlags = 0;
     ssize_t bagOff = defStyleRes != 0
-            ? res.getBagLocked(defStyleRes, &defStyleEnt, &defStyleTypeSetFlags) : -1;
+            ? res.getBagLocked(defStyleRes, &defStyleStart, &defStyleTypeSetFlags) : -1;
     defStyleTypeSetFlags |= defStyleBagTypeSetFlags;
-    const ResTable::bag_entry* endDefStyleEnt = defStyleEnt +
-        (bagOff >= 0 ? bagOff : 0);;
+    const ResTable::bag_entry* const defStyleEnd = defStyleStart + (bagOff >= 0 ? bagOff : 0);
+    BagAttributeFinder defStyleAttrFinder(defStyleStart, defStyleEnd);
 
     // Now iterate through all of the attributes that the client has requested,
     // filling in each with whatever data we can find.
@@ -1095,7 +1120,7 @@ static jboolean android_content_AssetManager_resolveAttrs(JNIEnv* env, jobject c
         // coming from, first XML attributes, then XML style, then default
         // style, and finally the theme.
         value.dataType = Res_value::TYPE_NULL;
-        value.data = 0;
+        value.data = Res_value::DATA_NULL_UNDEFINED;
         typeSetFlags = 0;
         config.density = 0;
 
@@ -1108,20 +1133,15 @@ static jboolean android_content_AssetManager_resolveAttrs(JNIEnv* env, jobject c
                     value.dataType, value.data));
         }
 
-        // Skip through the default style values until the end or the next possible match.
-        while (defStyleEnt < endDefStyleEnt && curIdent > defStyleEnt->map.name.ident) {
-            defStyleEnt++;
-        }
-        // Retrieve the current default style attribute if it matches, and step to next.
-        if (defStyleEnt < endDefStyleEnt && curIdent == defStyleEnt->map.name.ident) {
-            if (value.dataType == Res_value::TYPE_NULL) {
-                block = defStyleEnt->stringBlock;
+        if (value.dataType == Res_value::TYPE_NULL) {
+            const ResTable::bag_entry* const defStyleEntry = defStyleAttrFinder.find(curIdent);
+            if (defStyleEntry != defStyleEnd) {
+                block = defStyleEntry->stringBlock;
                 typeSetFlags = defStyleTypeSetFlags;
-                value = defStyleEnt->map.value;
+                value = defStyleEntry->map.value;
                 DEBUG_STYLES(ALOGI("-> From def style: type=0x%x, data=0x%08x",
                         value.dataType, value.data));
             }
-            defStyleEnt++;
         }
 
         uint32_t resid = 0;
@@ -1157,6 +1177,7 @@ static jboolean android_content_AssetManager_resolveAttrs(JNIEnv* env, jobject c
         if (value.dataType == Res_value::TYPE_REFERENCE && value.data == 0) {
             DEBUG_STYLES(ALOGI("-> Setting to @null!"));
             value.dataType = Res_value::TYPE_NULL;
+            value.data = Res_value::DATA_NULL_UNDEFINED;
             block = -1;
         }
 
@@ -1283,34 +1304,32 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
     res.lock();
 
     // Retrieve the default style bag, if requested.
-    const ResTable::bag_entry* defStyleEnt = NULL;
+    const ResTable::bag_entry* defStyleAttrStart = NULL;
     uint32_t defStyleTypeSetFlags = 0;
     ssize_t bagOff = defStyleRes != 0
-            ? res.getBagLocked(defStyleRes, &defStyleEnt, &defStyleTypeSetFlags) : -1;
+            ? res.getBagLocked(defStyleRes, &defStyleAttrStart, &defStyleTypeSetFlags) : -1;
     defStyleTypeSetFlags |= defStyleBagTypeSetFlags;
-    const ResTable::bag_entry* endDefStyleEnt = defStyleEnt +
-        (bagOff >= 0 ? bagOff : 0);
+    const ResTable::bag_entry* const defStyleAttrEnd = defStyleAttrStart + (bagOff >= 0 ? bagOff : 0);
+    BagAttributeFinder defStyleAttrFinder(defStyleAttrStart, defStyleAttrEnd);
 
     // Retrieve the style class bag, if requested.
-    const ResTable::bag_entry* styleEnt = NULL;
+    const ResTable::bag_entry* styleAttrStart = NULL;
     uint32_t styleTypeSetFlags = 0;
-    bagOff = style != 0 ? res.getBagLocked(style, &styleEnt, &styleTypeSetFlags) : -1;
+    bagOff = style != 0 ? res.getBagLocked(style, &styleAttrStart, &styleTypeSetFlags) : -1;
     styleTypeSetFlags |= styleBagTypeSetFlags;
-    const ResTable::bag_entry* endStyleEnt = styleEnt +
-        (bagOff >= 0 ? bagOff : 0);
+    const ResTable::bag_entry* const styleAttrEnd = styleAttrStart + (bagOff >= 0 ? bagOff : 0);
+    BagAttributeFinder styleAttrFinder(styleAttrStart, styleAttrEnd);
 
     // Retrieve the XML attributes, if requested.
-    const jsize NX = xmlParser ? xmlParser->getAttributeCount() : 0;
-    jsize ix=0;
-    uint32_t curXmlAttr = xmlParser ? xmlParser->getAttributeNameResID(ix) : 0;
-
     static const ssize_t kXmlBlock = 0x10000000;
+    XmlAttributeFinder xmlAttrFinder(xmlParser);
+    const jsize xmlAttrEnd = xmlParser != NULL ? xmlParser->getAttributeCount() : 0;
 
     // Now iterate through all of the attributes that the client has requested,
     // filling in each with whatever data we can find.
     ssize_t block = 0;
     uint32_t typeSetFlags;
-    for (jsize ii=0; ii<NI; ii++) {
+    for (jsize ii = 0; ii < NI; ii++) {
         const uint32_t curIdent = (uint32_t)src[ii];
 
         DEBUG_STYLES(ALOGI("RETRIEVING ATTR 0x%08x...", curIdent));
@@ -1319,55 +1338,44 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
         // coming from, first XML attributes, then XML style, then default
         // style, and finally the theme.
         value.dataType = Res_value::TYPE_NULL;
-        value.data = 0;
+        value.data = Res_value::DATA_NULL_UNDEFINED;
         typeSetFlags = 0;
         config.density = 0;
 
-        // Skip through XML attributes until the end or the next possible match.
-        while (ix < NX && curIdent > curXmlAttr) {
-            ix++;
-            curXmlAttr = xmlParser->getAttributeNameResID(ix);
-        }
-        // Retrieve the current XML attribute if it matches, and step to next.
-        if (ix < NX && curIdent == curXmlAttr) {
+        // Walk through the xml attributes looking for the requested attribute.
+        const jsize xmlAttrIdx = xmlAttrFinder.find(curIdent);
+        if (xmlAttrIdx != xmlAttrEnd) {
+            // We found the attribute we were looking for.
             block = kXmlBlock;
-            xmlParser->getAttributeValue(ix, &value);
-            ix++;
-            curXmlAttr = xmlParser->getAttributeNameResID(ix);
+            xmlParser->getAttributeValue(xmlAttrIdx, &value);
             DEBUG_STYLES(ALOGI("-> From XML: type=0x%x, data=0x%08x",
                     value.dataType, value.data));
         }
 
-        // Skip through the style values until the end or the next possible match.
-        while (styleEnt < endStyleEnt && curIdent > styleEnt->map.name.ident) {
-            styleEnt++;
-        }
-        // Retrieve the current style attribute if it matches, and step to next.
-        if (styleEnt < endStyleEnt && curIdent == styleEnt->map.name.ident) {
-            if (value.dataType == Res_value::TYPE_NULL) {
-                block = styleEnt->stringBlock;
+        if (value.dataType == Res_value::TYPE_NULL) {
+            // Walk through the style class values looking for the requested attribute.
+            const ResTable::bag_entry* const styleAttrEntry = styleAttrFinder.find(curIdent);
+            if (styleAttrEntry != styleAttrEnd) {
+                // We found the attribute we were looking for.
+                block = styleAttrEntry->stringBlock;
                 typeSetFlags = styleTypeSetFlags;
-                value = styleEnt->map.value;
+                value = styleAttrEntry->map.value;
                 DEBUG_STYLES(ALOGI("-> From style: type=0x%x, data=0x%08x",
                         value.dataType, value.data));
             }
-            styleEnt++;
         }
 
-        // Skip through the default style values until the end or the next possible match.
-        while (defStyleEnt < endDefStyleEnt && curIdent > defStyleEnt->map.name.ident) {
-            defStyleEnt++;
-        }
-        // Retrieve the current default style attribute if it matches, and step to next.
-        if (defStyleEnt < endDefStyleEnt && curIdent == defStyleEnt->map.name.ident) {
-            if (value.dataType == Res_value::TYPE_NULL) {
-                block = defStyleEnt->stringBlock;
-                typeSetFlags = defStyleTypeSetFlags;
-                value = defStyleEnt->map.value;
+        if (value.dataType == Res_value::TYPE_NULL) {
+            // Walk through the default style values looking for the requested attribute.
+            const ResTable::bag_entry* const defStyleAttrEntry = defStyleAttrFinder.find(curIdent);
+            if (defStyleAttrEntry != defStyleAttrEnd) {
+                // We found the attribute we were looking for.
+                block = defStyleAttrEntry->stringBlock;
+                typeSetFlags = styleTypeSetFlags;
+                value = defStyleAttrEntry->map.value;
                 DEBUG_STYLES(ALOGI("-> From def style: type=0x%x, data=0x%08x",
                         value.dataType, value.data));
             }
-            defStyleEnt++;
         }
 
         uint32_t resid = 0;
@@ -1375,7 +1383,9 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
             // Take care of resolving the found resource to its final value.
             ssize_t newBlock = theme->resolveAttributeReference(&value, block,
                     &resid, &typeSetFlags, &config);
-            if (newBlock >= 0) block = newBlock;
+            if (newBlock >= 0) {
+                block = newBlock;
+            }
             DEBUG_STYLES(ALOGI("-> Resolved attr: type=0x%x, data=0x%08x",
                     value.dataType, value.data));
         } else {
@@ -1393,7 +1403,9 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
                     return JNI_FALSE;
                 }
 #endif
-                if (newBlock >= 0) block = newBlock;
+                if (newBlock >= 0) {
+                    block = newBlock;
+                }
                 DEBUG_STYLES(ALOGI("-> Resolved theme: type=0x%x, data=0x%08x",
                         value.dataType, value.data));
             }
@@ -1403,6 +1415,7 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
         if (value.dataType == Res_value::TYPE_REFERENCE && value.data == 0) {
             DEBUG_STYLES(ALOGI("-> Setting to @null!"));
             value.dataType = Res_value::TYPE_NULL;
+            value.data = Res_value::DATA_NULL_UNDEFINED;
             block = kXmlBlock;
         }
 
@@ -1412,8 +1425,8 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
         // Write the final value back to Java.
         dest[STYLE_TYPE] = value.dataType;
         dest[STYLE_DATA] = value.data;
-        dest[STYLE_ASSET_COOKIE] =
-            block != kXmlBlock ? reinterpret_cast<jint>(res.getTableCookie(block)) : (jint)-1;
+        dest[STYLE_ASSET_COOKIE] = block != kXmlBlock ?
+            static_cast<jint>(res.getTableCookie(block)) : -1;
         dest[STYLE_RESOURCE_ID] = resid;
         dest[STYLE_CHANGING_CONFIGURATIONS] = typeSetFlags;
         dest[STYLE_DENSITY] = config.density;
@@ -1512,7 +1525,7 @@ static jboolean android_content_AssetManager_retrieveAttributes(JNIEnv* env, job
 
         // Try to find a value for this attribute...
         value.dataType = Res_value::TYPE_NULL;
-        value.data = 0;
+        value.data = Res_value::DATA_NULL_UNDEFINED;
         typeSetFlags = 0;
         config.density = 0;
 
@@ -1548,6 +1561,7 @@ static jboolean android_content_AssetManager_retrieveAttributes(JNIEnv* env, job
         // Deal with the special @null value -- it turns back to TYPE_NULL.
         if (value.dataType == Res_value::TYPE_REFERENCE && value.data == 0) {
             value.dataType = Res_value::TYPE_NULL;
+            value.data = Res_value::DATA_NULL_UNDEFINED;
         }
 
         //printf("Attribute 0x%08x: final type=0x%x, data=0x%08x\n", curIdent, value.dataType, value.data);
@@ -1661,6 +1675,7 @@ static jint android_content_AssetManager_retrieveArray(JNIEnv* env, jobject claz
         // Deal with the special @null value -- it turns back to TYPE_NULL.
         if (value.dataType == Res_value::TYPE_REFERENCE && value.data == 0) {
             value.dataType = Res_value::TYPE_NULL;
+            value.data = Res_value::DATA_NULL_UNDEFINED;
         }
 
         //printf("Attribute 0x%08x: final type=0x%x, data=0x%08x\n", curIdent, value.dataType, value.data);

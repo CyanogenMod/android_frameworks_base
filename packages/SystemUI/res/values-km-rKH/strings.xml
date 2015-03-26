@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"បន្ត"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"ការ​ជូន​ដំណឹង"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"ជិត​អស់​ថ្ម​ហើយ"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"នៅ​សល់ <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"នៅ​សល់ <xliff:g id="NUMBER">%d%%</xliff:g> ។ កម្មវិធី​សន្សំ​ថ្ម​គឺ​បើក។"</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"នៅ​សល់ <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"នៅ​សល់ <xliff:g id="PERCENTAGE">%s</xliff:g> ។ កម្មវិធី​សន្សំថ្ម​គឺ​បើក។"</string>
     <string name="invalid_charger" msgid="4549105996740522523">"មិន​គាំទ្រ​ការ​បញ្ចូល​តាម​យូអេសប៊ី។\nប្រើ​តែ​ឧបករណ៍​បញ្ចូល​ថ្ម​ដែល​បាន​ផ្ដល់។"</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"មិន​គាំទ្រ​ការ​បញ្ចូល​ថ្ម​តាម​យូអេសប៊ី​ទេ។"</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"ប្រើ​តែ​ឧបករណ៍​បញ្ចូល​ថ្ម​ដែល​បាន​ផ្ដល់​ឲ្យ។"</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"ធាតុ​រក្សា​អេក្រង់"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"អ៊ីសឺរណិត"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"របៀបពេល​​ជិះ​យន្តហោះ"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"បញ្ចូល​ថ្ម <xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"បាន​បញ្ចូល​ពេញ"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"ប៊្លូធូស"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"ប៊្លូធូស (ឧបករណ៍ <xliff:g id="NUMBER">%d</xliff:g>)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"​ប៊្លូធូស​បាន​បិទ"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"ការ​កំណត់​ច្រើន​ទៀត"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"រួចរាល់"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"បាន​ភ្ជាប់"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"បានភ្ជាប់តាមរយៈជំនួយការ Wi‑Fi"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"កំពុង​តភ្ជាប់..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"ការ​ភ្ជាប់"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"ហតស្ប៉ត"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"ទិន្នន័យ​ចល័ត"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"ការ​ប្រើ​ទិន្នន័យ"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"ទិន្នន័យ​នៅសល់"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"បាន​ដល់​ដែន​កំណត់ – បា​ន​ផ្អាក​ការ​ប្រើ​ទិន្នន័យ"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"លើស​ដែន​កំណត់"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"បាន​ប្រើ <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"ដែន​កំណត់ <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> ការ​ព្រមាន"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"អេក្រង់​បច្ចុប្បន្ន​របស់​អ្នក​បង្ហាញ​នៅ​ទីនេះ"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"ព័ត៌មាន​កម្មវិធី"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"ចាក់​សោ​ទៅ​កម្មវិធី"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"ការ​ភ្ជាប់​អេក្រង់"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"ស្វែងរក"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"មិន​អាច​ចាប់ផ្ដើម <xliff:g id="APP">%s</xliff:g> ទេ។"</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"បាន​បញ្ចូល​ថ្ម​​"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"កម្មវិធី​សន្សំ​ថ្ម​គឺ​បើក"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"ការ​បន្ថយ​ការ​ប្រតិបត្តិ និង​ទិន្នន័យ​ផ្ទៃ​ខាងក្រោយ"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"បិទ​ធាតុ​រក្សា​ថាមពល​ថ្ម"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"បាន​លាក់​មាតិកា"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> នឹង​ចាប់ផ្ដើម​ចាប់​យក​អ្វីៗ​គ្រប់យ៉ាង​ដែល​បង្ហាញ​លើ​អេក្រង់​របស់​អ្នក។"</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"កុំ​បង្ហាញ​ម្ដងទៀត"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"ឃើញ​ពួកវា​មុន​ពេល​ដោះ​សោ"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"ទេ អរគុណ!"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"រៀបចំ"</string>
-    <string name="muted_by" msgid="6147073845094180001">"បាន​បិទ​សំឡេង​ដោយ <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"អេក្រង់​ត្រូវ​បាន​ភ្ជាប់"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"រក្សាទុក​វា​ក្នុង​ទិដ្ឋភាព​រហូត​ដល់​អ្នក​ផ្ដាច់។ ប៉ះ ហើយ​សង្កត់​ថយក្រោយ និង​ទិដ្ឋភាព​នៅ​ពេល​តែ​មួយ​ដើម្បី​ផ្ដាច់។"</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"វា​រក្សាទុក​ក្នុង​ទិដ្ឋភាព​រហូត​ដល់​អ្នក​ផ្ដាច់។ ប៉ះ និង​សង្កត់​ទិដ្ឋភាព​ដើម្បី​ផ្ដាច់។"</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"យល់​ហើយ"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"ទេ អរគុណ"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"លាក់ <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"វា​នឹង​បង្ហាញ​ពេល​ក្រោយ​ ពេល​ដែល​អ្នក​បើក​ក្នុង​ការ​កំណត់។"</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"លាក់"</string>
 </resources>

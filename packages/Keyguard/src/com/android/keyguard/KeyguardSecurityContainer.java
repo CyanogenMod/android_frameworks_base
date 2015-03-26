@@ -18,9 +18,12 @@ package com.android.keyguard;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
@@ -35,6 +38,11 @@ import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
 public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSecurityView {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardSecurityView";
+
+    private static final int USER_TYPE_PRIMARY = 1;
+    private static final int USER_TYPE_WORK_PROFILE = 2;
+    private static final int USER_TYPE_SECONDARY_USER = 3;
+
     private KeyguardSecurityModel mSecurityModel;
     private boolean mEnableFallback; // TODO: This should get the value from KeyguardPatternView
     private LockPatternUtils mLockPatternUtils;
@@ -116,6 +124,14 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         if (v != null) {
             v.announceForAccessibility(v.getContentDescription());
         }
+    }
+
+    public CharSequence getCurrentSecurityModeContentDescription() {
+        View v = (View) getSecurityView(mCurrentSecuritySelection);
+        if (v != null) {
+            return v.getContentDescription();
+        }
+        return "";
     }
 
     private KeyguardSecurityView getSecurityView(SecurityMode securityMode) {
@@ -212,14 +228,41 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         }
     }
 
-    private void showAlmostAtWipeDialog(int attempts, int remaining) {
-        String message = mContext.getString(R.string.kg_failed_attempts_almost_at_wipe,
-                attempts, remaining);
+    private void showAlmostAtWipeDialog(int attempts, int remaining, int userType) {
+        String message = null;
+        switch (userType) {
+            case USER_TYPE_PRIMARY:
+                message = mContext.getString(R.string.kg_failed_attempts_almost_at_wipe,
+                        attempts, remaining);
+                break;
+            case USER_TYPE_SECONDARY_USER:
+                message = mContext.getString(R.string.kg_failed_attempts_almost_at_erase_user,
+                        attempts, remaining);
+                break;
+            case USER_TYPE_WORK_PROFILE:
+                message = mContext.getString(R.string.kg_failed_attempts_almost_at_erase_profile,
+                        attempts, remaining);
+                break;
+        }
         showDialog(null, message);
     }
 
-    private void showWipeDialog(int attempts) {
-        String message = mContext.getString(R.string.kg_failed_attempts_now_wiping, attempts);
+    private void showWipeDialog(int attempts, int userType) {
+        String message = null;
+        switch (userType) {
+            case USER_TYPE_PRIMARY:
+                message = mContext.getString(R.string.kg_failed_attempts_now_wiping,
+                        attempts);
+                break;
+            case USER_TYPE_SECONDARY_USER:
+                message = mContext.getString(R.string.kg_failed_attempts_now_erasing_user,
+                        attempts);
+                break;
+            case USER_TYPE_WORK_PROFILE:
+                message = mContext.getString(R.string.kg_failed_attempts_now_erasing_profile,
+                        attempts);
+                break;
+        }
         showDialog(null, message);
     }
 
@@ -305,8 +348,10 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         final boolean enableTimesCounter = maxCountdownTimes > 0 && (usingPattern || usingPIN
                 || usingPassword);
 
-        final int failedAttemptsBeforeWipe = mLockPatternUtils.getDevicePolicyManager()
-                .getMaximumFailedPasswordsForWipe(null, mLockPatternUtils.getCurrentUser());
+        final int currentUser = mLockPatternUtils.getCurrentUser();
+        final DevicePolicyManager dpm = mLockPatternUtils.getDevicePolicyManager();
+        final int failedAttemptsBeforeWipe =
+                dpm.getMaximumFailedPasswordsForWipe(null, currentUser);
 
         final int failedAttemptWarning = LockPatternUtils.FAILED_ATTEMPTS_BEFORE_RESET
                 - LockPatternUtils.FAILED_ATTEMPTS_BEFORE_TIMEOUT;
@@ -314,7 +359,6 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         final int remainingBeforeWipe = failedAttemptsBeforeWipe > 0 ?
                 (failedAttemptsBeforeWipe - failedAttempts)
                 : Integer.MAX_VALUE; // because DPM returns 0 if no restriction
-
         boolean showTimeout = false;
         if (enableTimesCounter && (failedAttempts >= maxCountdownTimes)) {
             showCountdownWipeDialog(failedAttempts);
@@ -322,16 +366,22 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
             // The user has installed a DevicePolicyManager that requests a user/profile to be wiped
             // N attempts. Once we get below the grace period, we post this dialog every time as a
             // clear warning until the deletion fires.
-            //
-            // TODO: Show a different dialog depending on whether the device will be completely
-            // wiped (i.e. policy is set for the primary profile of the USER_OWNER) or a single
-            // secondary user or managed profile will be removed.
+            // Check which profile has the strictest policy for failed password attempts
+            final int expiringUser = dpm.getProfileWithMinimumFailedPasswordsForWipe(currentUser);
+            int userType = USER_TYPE_PRIMARY;
+            if (expiringUser == currentUser) {
+                if (expiringUser != UserHandle.USER_OWNER) {
+                    userType = USER_TYPE_SECONDARY_USER;
+                }
+            } else if (expiringUser != UserHandle.USER_NULL) {
+                userType = USER_TYPE_WORK_PROFILE;
+            } // If USER_NULL, which shouldn't happen, leave it as USER_TYPE_PRIMARY
             if (remainingBeforeWipe > 0) {
-                showAlmostAtWipeDialog(failedAttempts, remainingBeforeWipe);
+                showAlmostAtWipeDialog(failedAttempts, remainingBeforeWipe, userType);
             } else {
                 // Too many attempts. The device will be wiped shortly.
-                Slog.i(TAG, "Too many unlock attempts; device will be wiped!");
-                showWipeDialog(failedAttempts);
+                Slog.i(TAG, "Too many unlock attempts; user " + expiringUser + " will be wiped!");
+                showWipeDialog(failedAttempts, userType);
             }
         } else {
             showTimeout = !enableTimesCounter &&
@@ -429,8 +479,6 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
                     showPrimarySecurityScreen(false);
                     break;
             }
-        } else {
-            showPrimarySecurityScreen(false);
         }
         if (finish) {
             mSecurityCallback.finish();
@@ -584,6 +632,10 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
 
     public SecurityMode getSecurityMode() {
         return mSecurityModel.getSecurityMode();
+    }
+
+    public SecurityMode getCurrentSecurityMode() {
+        return mCurrentSecuritySelection;
     }
 
     public void verifyUnlock() {

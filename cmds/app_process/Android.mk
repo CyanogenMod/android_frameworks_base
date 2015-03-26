@@ -5,12 +5,17 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES:= \
 	app_main.cpp
 
+LOCAL_LDFLAGS := -Wl,--version-script,art/sigchainlib/version-script.txt -Wl,--export-dynamic
+
 LOCAL_SHARED_LIBRARIES := \
+	libdl \
 	libcutils \
 	libutils \
 	liblog \
 	libbinder \
 	libandroid_runtime
+
+LOCAL_WHOLE_STATIC_LIBRARIES := libsigchain
 
 LOCAL_MODULE:= app_process
 LOCAL_MULTILIB := both
@@ -37,6 +42,11 @@ LOCAL_SHARED_LIBRARIES := \
 	liblog \
 	libbinder \
 	libandroid_runtime
+
+LOCAL_WHOLE_STATIC_LIBRARIES := libsigchain
+
+LOCAL_LDFLAGS := -ldl -Wl,--version-script,art/sigchainlib/version-script.txt -Wl,--export-dynamic
+LOCAL_CPPFLAGS := -std=c++11
 
 LOCAL_MODULE := app_process__asan
 LOCAL_MODULE_TAGS := eng

@@ -98,6 +98,11 @@ public final class MediaProjectionManagerService extends SystemService
     @Override
     public void onSwitchUser(int userId) {
         mMediaRouter.rebindAsUser(userId);
+        synchronized (mLock) {
+            if (mProjectionGrant != null) {
+                mProjectionGrant.stop();
+            }
+        }
     }
 
     @Override
@@ -326,7 +331,7 @@ public final class MediaProjectionManagerService extends SystemService
 
             final long token = Binder.clearCallingIdentity();
             try {
-                dump(pw);
+                MediaProjectionManagerService.this.dump(pw);
             } finally {
                 Binder.restoreCallingIdentity(token);
             }

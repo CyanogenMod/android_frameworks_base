@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Actief"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Meldingen"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Accu is bijna leeg"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> resterend"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> resterend. Accubesparing is ingeschakeld."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> resterend"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> resterend. Accubesparing is ingeschakeld."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"Opladen via USB niet ondersteund.\nGebruik alleen de bijgeleverde oplader."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"Opladen via USB wordt niet ondersteund."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Gebruik alleen de bijgeleverde oplader."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Dagdroom"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Vliegmodus"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Opladen, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Opgeladen"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> apparaten)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth uit"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Meer instellingen"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Gereed"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Verbonden"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Verbonden via wifi-assistent"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Verbinding maken…"</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Tethering"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Hotspot"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Mobiele gegevens"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Gegevensgebruik"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Resterende gegevens"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Limiet bereikt – gegevensgebruik onderbroken"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Limiet overschreden"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> gebruikt"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Limiet van <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Waarschuwing voor <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Uw recente schermen worden hier weergegeven"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"App-informatie"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"app-slot"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"scherm vastzetten"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"zoeken"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Kan <xliff:g id="APP">%s</xliff:g> niet starten."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Opgeladen"</string>
@@ -320,11 +319,10 @@
     <string name="guest_wipe_session_wipe" msgid="5065558566939858884">"Opnieuw starten"</string>
     <string name="guest_wipe_session_dontwipe" msgid="1401113462524894716">"Ja, doorgaan"</string>
     <string name="user_add_user_title" msgid="4553596395824132638">"Nieuwe gebruiker toevoegen?"</string>
-    <string name="user_add_user_message_short" msgid="2161624834066214559">"Wanneer u een nieuwe gebruiker toevoegt, moet die persoon zijn eigen profiel instellen.\n\n1Elke gebruiker kan apps bijwerken voor alle andere gebruikers."</string>
+    <string name="user_add_user_message_short" msgid="2161624834066214559">"Wanneer u een nieuwe gebruiker toevoegt, moet die persoon zijn eigen profiel instellen.\n\n1Elke gebruiker kan apps updaten voor alle andere gebruikers."</string>
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Accubesparing is ingeschakeld"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Vermindert de prestaties en achtergrondgegevens"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Accubesparing uitschakelen"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Inhoud verborgen"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> gaat alles vastleggen dat wordt weergegeven op uw scherm."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Niet opnieuw weergeven"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Weergeven voordat u ontgrendelt"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Nee, bedankt"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Configureren"</string>
-    <string name="muted_by" msgid="6147073845094180001">"Gedempt door <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Scherm is vastgezet"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Het scherm blijft zichtbaar totdat u het u losmaakt. Houd \'Terug\' en \'Overzicht\' tegelijkertijd aangeraakt om het los te maken."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Het scherm blijft zichtbaar totdat u het u losmaakt. Houd \'Overzicht\' aangeraakt om het los te maken."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Ik snap het"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Nee, bedankt"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"<xliff:g id="TILE_LABEL">%1$s</xliff:g> verbergen?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Deze wordt opnieuw weergegeven zodra u de instelling weer inschakelt."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Verbergen"</string>
 </resources>

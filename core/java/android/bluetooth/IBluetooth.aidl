@@ -60,7 +60,7 @@ interface IBluetooth
     boolean cancelBondProcess(in BluetoothDevice device);
     boolean removeBond(in BluetoothDevice device);
     int getBondState(in BluetoothDevice device);
-    boolean isConnected(in BluetoothDevice device);
+    int getConnectionState(in BluetoothDevice device);
 
     String getRemoteName(in BluetoothDevice device);
     int getRemoteType(in BluetoothDevice device);
@@ -95,6 +95,7 @@ interface IBluetooth
     boolean configHciSnoopLog(boolean enable);
 
     boolean isMultiAdvertisementSupported();
+    boolean isPeripheralModeSupported();
     boolean isOffloadedFilteringSupported();
     boolean isOffloadedScanBatchingSupported();
     boolean isActivityAndEnergyReportingSupported();
@@ -104,4 +105,6 @@ interface IBluetooth
     int setSocketOpt(int type, int port, int optionName, in byte [] optionVal, int optionLen);
     int getSocketOpt(int type, int port, int optionName, out byte [] optionVal);
     BluetoothRemoteDiRecord getRemoteDiRecord(in BluetoothDevice device);
+    // for dumpsys support
+    String dump();
 }

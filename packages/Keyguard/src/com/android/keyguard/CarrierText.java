@@ -53,12 +53,12 @@ public class CarrierText extends LinearLayout {
 
     private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
         @Override
-        public void onRefreshCarrierInfo(long subId, CharSequence plmn, CharSequence spn) {
+        public void onRefreshCarrierInfo(int subId, CharSequence plmn, CharSequence spn) {
             updateCarrierText(mUpdateMonitor.getSimState(subId), plmn, spn, subId);
         }
 
         @Override
-        public void onSimStateChanged(long subId, IccCardConstants.State simState) {
+        public void onSimStateChanged(int subId, IccCardConstants.State simState) {
             updateCarrierText(simState, mUpdateMonitor.getTelephonyPlmn(subId),
                 mUpdateMonitor.getTelephonySpn(subId), subId);
         }
@@ -135,7 +135,7 @@ public class CarrierText extends LinearLayout {
     }
 
     protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn,
-            long subId) {
+            int subId) {
         if(DEBUG) Log.d(TAG, "updateCarrierText, simState=" + simState + " plmn=" + plmn
             + " spn=" + spn +" subId=" + subId);
         int phoneId = mUpdateMonitor.getPhoneIdBySubId(subId);

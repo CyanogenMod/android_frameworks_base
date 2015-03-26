@@ -47,6 +47,7 @@ public class StatusBarWindowManager {
     private final WindowManager mWindowManager;
     private View mStatusBarView;
     private WindowManager.LayoutParams mLp;
+    private WindowManager.LayoutParams mLpChanged;
     private int mBarHeight;
     private final boolean mKeyguardScreenRotation;
 
@@ -106,19 +107,8 @@ public class StatusBarWindowManager {
         mStatusBarView = statusBarView;
         mBarHeight = barHeight;
         mWindowManager.addView(mStatusBarView, mLp);
-
-        Display display = mWindowManager.getDefaultDisplay();
-        Point xy = new Point();
-        display.getRealSize(xy);
-        mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
-        if (mKeyguardBlur != null) {
-            mKeyguardBlur.setLayer(mStatusBarLayer -2);
-       }
-
-        mKeyguardBlurSettingObserver.onChange(true);
-        mContext.getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.BLUR_EFFECT_LOCKSCREEN), false,
-                    mKeyguardBlurSettingObserver);
+        mLpChanged = new WindowManager.LayoutParams();
+        mLpChanged.copyFrom(mLp);
     }
 
     private ContentObserver mKeyguardBlurSettingObserver = new ContentObserver(new Handler()) {
@@ -131,44 +121,37 @@ public class StatusBarWindowManager {
 
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
-            mLp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-            if (mKeyguardBlurEnabled) {
-                // mKeyguardBlur.show();
-            } else {
-                mLp.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
-            }
+            mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
         } else {
-            mLp.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
-            mLp.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-            if (mKeyguardBlurEnabled) {
-                mKeyguardBlur.hide();
-            }
+            mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
         }
     }
 
     private void adjustScreenOrientation(State state) {
         if (state.isKeyguardShowingAndNotOccluded()) {
             if (mKeyguardScreenRotation) {
-                mLp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
+                mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
             } else {
-                mLp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+                mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
             }
         } else {
-            mLp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+            mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
         }
     }
 
     private void applyFocusableFlag(State state) {
         if (state.isKeyguardShowingAndNotOccluded() && state.keyguardNeedsInput
                 && state.bouncerShowing) {
-            mLp.flags &= ~WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-            mLp.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+            mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         } else if (state.isKeyguardShowingAndNotOccluded() || state.statusBarFocusable) {
-            mLp.flags &= ~WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-            mLp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+            mLpChanged.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         } else {
-            mLp.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-            mLp.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            mLpChanged.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+            mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         }
     }
 
@@ -176,9 +159,9 @@ public class StatusBarWindowManager {
         boolean expanded = state.isKeyguardShowingAndNotOccluded() || state.statusBarExpanded
                 || state.keyguardFadingAway || state.bouncerShowing;
         if (expanded) {
-            mLp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            mLpChanged.height = ViewGroup.LayoutParams.MATCH_PARENT;
         } else {
-            mLp.height = mBarHeight;
+            mLpChanged.height = mBarHeight;
         }
     }
 
@@ -190,9 +173,9 @@ public class StatusBarWindowManager {
         if (state.isKeyguardShowingAndNotOccluded()
                 && state.statusBarState == StatusBarState.KEYGUARD
                 && !state.qsExpanded) {
-            mLp.userActivityTimeout = state.keyguardUserActivityTimeout;
+            mLpChanged.userActivityTimeout = state.keyguardUserActivityTimeout;
         } else {
-            mLp.userActivityTimeout = -1;
+            mLpChanged.userActivityTimeout = -1;
         }
     }
 
@@ -200,9 +183,11 @@ public class StatusBarWindowManager {
         if (state.isKeyguardShowingAndNotOccluded()
                 && state.statusBarState == StatusBarState.KEYGUARD
                 && !state.qsExpanded) {
-            mLp.inputFeatures |= WindowManager.LayoutParams.INPUT_FEATURE_DISABLE_USER_ACTIVITY;
+            mLpChanged.inputFeatures |=
+                    WindowManager.LayoutParams.INPUT_FEATURE_DISABLE_USER_ACTIVITY;
         } else {
-            mLp.inputFeatures &= ~WindowManager.LayoutParams.INPUT_FEATURE_DISABLE_USER_ACTIVITY;
+            mLpChanged.inputFeatures &=
+                    ~WindowManager.LayoutParams.INPUT_FEATURE_DISABLE_USER_ACTIVITY;
         }
     }
 
@@ -214,7 +199,9 @@ public class StatusBarWindowManager {
         applyUserActivityTimeout(state);
         applyInputFeatures(state);
         applyFitsSystemWindows(state);
-        mWindowManager.updateViewLayout(mStatusBarView, mLp);
+        if (mLp.copyFrom(mLpChanged) != 0) {
+            mWindowManager.updateViewLayout(mStatusBarView, mLp);
+        }
     }
 
     private void applyKeyguardBlurShow(){

@@ -43,6 +43,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.BoringLayout;
 import android.text.DynamicLayout;
@@ -288,8 +289,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     private int mCurTextColor;
     private int mCurHintTextColor;
     private boolean mFreezesText;
-    private boolean mTemporaryDetach;
     private boolean mDispatchTemporaryDetach;
+
+    /** Whether this view is temporarily detached from the parent view. */
+    boolean mTemporaryDetach;
 
     private Editable.Factory mEditableFactory = Editable.Factory.getInstance();
     private Spannable.Factory mSpannableFactory = Spannable.Factory.getInstance();
@@ -658,6 +661,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         ColorStateList textColorLink = null;
         int textSize = 15;
         String fontFamily = null;
+        boolean fontFamilyExplicit = false;
         int typefaceIndex = -1;
         int styleIndex = -1;
         boolean allCaps = false;
@@ -1012,6 +1016,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
             case com.android.internal.R.styleable.TextView_fontFamily:
                 fontFamily = a.getString(attr);
+                fontFamilyExplicit = true;
                 break;
 
             case com.android.internal.R.styleable.TextView_password:
@@ -1300,6 +1305,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             typefaceIndex = MONOSPACE;
         }
 
+        if (typefaceIndex != -1 && !fontFamilyExplicit) {
+            fontFamily = null;
+        }
         setTypefaceFromAttrs(fontFamily, typefaceIndex, styleIndex);
 
         if (shadowcolor != 0) {
@@ -3635,9 +3643,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
         if (mHintTextColor != null) {
             color = mHintTextColor.getColorForState(getDrawableState(), 0);
-            if (color != mCurHintTextColor && mText.length() == 0) {
+            if (color != mCurHintTextColor) {
                 mCurHintTextColor = color;
-                inval = true;
+                if (mText.length() == 0) {
+                    inval = true;
+                }
             }
         }
         if (inval) {
@@ -5015,9 +5025,15 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         return (int) Math.max(0, mShadowDy + mShadowRadius);
     }
 
+    private int getFudgedPaddingRight() {
+        // Add sufficient space for cursor and tone marks
+        int cursorWidth = 2 + (int)mTextPaint.density; // adequate for Material cursors
+        return Math.max(0, getCompoundPaddingRight() - (cursorWidth - 1));
+    }
+
     @Override
     protected int getRightPaddingOffset() {
-        return -(getCompoundPaddingRight() - mPaddingRight) +
+        return -(getFudgedPaddingRight() - mPaddingRight) +
                 (int) Math.max(0, mShadowDx + mShadowRadius);
     }
 
@@ -5373,7 +5389,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
         float clipLeft = compoundPaddingLeft + scrollX;
         float clipTop = (scrollY == 0) ? 0 : extendedPaddingTop + scrollY;
-        float clipRight = right - left - compoundPaddingRight + scrollX;
+        float clipRight = right - left - getFudgedPaddingRight() + scrollX;
         float clipBottom = bottom - top + scrollY -
                 ((scrollY == maxScrollY) ? 0 : extendedPaddingBottom);
 
@@ -8385,8 +8401,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
      * to speak passwords.
      */
     private boolean shouldSpeakPasswordsForAccessibility() {
-        return (Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.ACCESSIBILITY_SPEAK_PASSWORD, 0) == 1);
+        return (Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_SPEAK_PASSWORD, 0,
+                UserHandle.USER_CURRENT_OR_SELF) == 1);
     }
 
     @Override
@@ -8468,8 +8485,14 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
     }
 
+    /**
+     * Performs an accessibility action after it has been offered to the
+     * delegate.
+     *
+     * @hide
+     */
     @Override
-    public boolean performAccessibilityAction(int action, Bundle arguments) {
+    public boolean performAccessibilityActionInternal(int action, Bundle arguments) {
         switch (action) {
             case AccessibilityNodeInfo.ACTION_CLICK: {
                 boolean handled = false;
@@ -8521,6 +8544,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             } return false;
             case AccessibilityNodeInfo.ACTION_SET_SELECTION: {
                 if (isFocused() && canSelectText()) {
+                    ensureIterableTextForAccessibilitySelectable();
                     CharSequence text = getIterableTextForAccessibility();
                     if (text == null) {
                         return false;
@@ -8546,8 +8570,13 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                     }
                 }
             } return false;
+            case AccessibilityNodeInfo.ACTION_NEXT_AT_MOVEMENT_GRANULARITY:
+            case AccessibilityNodeInfo.ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY: {
+                ensureIterableTextForAccessibilitySelectable();
+                return super.performAccessibilityActionInternal(action, arguments);
+            }
             default: {
-                return super.performAccessibilityAction(action, arguments);
+                return super.performAccessibilityActionInternal(action, arguments);
             }
         }
     }
@@ -9035,10 +9064,13 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
      */
     @Override
     public CharSequence getIterableTextForAccessibility() {
+        return mText;
+    }
+
+    private void ensureIterableTextForAccessibilitySelectable() {
         if (!(mText instanceof Spannable)) {
             setText(mText, BufferType.SPANNABLE);
         }
-        return mText;
     }
 
     /**

@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"നടന്നുകൊണ്ടിരിക്കുന്നവ"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"അറിയിപ്പുകൾ"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"ബാറ്ററി നില കുറവാണ്"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> ശേഷിക്കുന്നു"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> ശേഷിക്കുന്നു. ബാറ്ററി സേവർ ഓണാണ്."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> ശേഷിക്കുന്നു"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> ശേഷിക്കുന്നു. ബാറ്ററി സേവർ ഓണാണ്."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB ചാർജ്ജുചെയ്യൽ പിന്തുണയ്ക്കുന്നില്ല.\nഅതിന്റെ അനുബന്ധ ചാർജ്ജർ മാത്രം ഉപയോഗിക്കുക."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB ചാർജ്ജുചെയ്യൽ പിന്തുണച്ചില്ല."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"വിതരണം ചെയ്‌ത ചാർജ്ജർ മാത്രം ഉപയോഗിക്കുക."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"ഡേഡ്രീം"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"ഇതർനെറ്റ്"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"ഫ്ലൈറ്റ് മോഡ്"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"ചാർജ്ജുചെയ്യുന്നു, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"ചാർജ്ജുചെയ്‌തു"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"ബ്ലൂടൂത്ത്"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"ബ്ലൂടൂത്ത് (<xliff:g id="NUMBER">%d</xliff:g> ഉപകരണങ്ങൾ)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"ബ്ലൂടൂത്ത് ഓഫുചെയ്യുക"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"കൂടുതൽ ക്രമീകരണങ്ങൾ"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"പൂർത്തിയാക്കി"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"കണക്‌റ്റുചെയ്‌തു"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Wi‑Fi അസിസ്റ്റന്റ് മുഖേന കണക്‌റ്റുചെയ്തു"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"കണക്റ്റുചെയ്യുന്നു..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"ടെതറിംഗ്"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"ഹോട്ട്‌സ്‌പോട്ട്"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"സെല്ലുലാർ ഡാറ്റ"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"ഡാറ്റ ഉപയോഗം"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"ശേഷിക്കുന്ന ഡാറ്റ"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"പരിധിയെത്തി – ഡാറ്റ ഉപയോഗം താൽക്കാലികമായി നിർത്തി"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"പരിധി കഴിഞ്ഞു"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> ഉപയോഗിച്ചു"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> പരിധി"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> മുന്നറിയിപ്പ്"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"നിങ്ങളുടെ പുതിയ സ്ക്രീനുകൾ ഇവിടെ ദൃശ്യമാകുന്നു"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"അപ്ലിക്കേഷൻ വിവരം"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"അപ്ലിക്കേഷനിലേക്ക് ലോക്കുചെയ്യൽ"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"സ്ക്രീൻ പിൻ ചെയ്യൽ"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"തിരയുക"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"<xliff:g id="APP">%s</xliff:g> ആരംഭിക്കാനായില്ല."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"ചാർജ്ജുചെയ്‌തു"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"ബാറ്ററി സേവർ ഓണാണ്"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"പ്രവർത്തനവും പശ്ചാത്തല ഡാറ്റയും കുറയ്‌ക്കുന്നു"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"ബാറ്ററി സേവർ ഓഫാക്കുക"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"കോൺടാക്‌റ്റുകൾ മറച്ചു"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"നിങ്ങളുടെ സ്ക്രീനിൽ പ്രദർശിപ്പിച്ചിരിക്കുന്ന എല്ലാ കാര്യങ്ങളും <xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> ക്യാപ്‌ചർ ചെയ്യുന്നത് ആരംഭിക്കും."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"വീണ്ടും കാണിക്കരുത്"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"അൺലോക്കുചെയ്യുന്നതിന് മുമ്പ് അവ കാണുക"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"വേണ്ട, നന്ദി"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"സജ്ജീകരിക്കുക"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g>, മ്യൂട്ടുചെയ്‌തു"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"സ്‌ക്രീൻ പിൻ ചെയ്‌തു"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"നിങ്ങൾ അൺപിൻ ചെയ്യുന്നതുവരെ ഇത് കാണുന്ന വിധത്തിൽ നിലനിർത്തുന്നു. അൺപിൻ ചെയ്യാൻ \'മടങ്ങുക\', \'ചുരുക്കവിവരണം\' എന്നിവ ഒരേ സമയം സ്‌പർശിച്ച് പിടിക്കുക."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"നിങ്ങൾ അൺപിൻ ചെയ്യുന്നതുവരെ ഇത് കാണുന്ന വിധത്തിൽ നിലനിർത്തുന്നു. അൺപിൻ ചെയ്യുന്നതിന് \'ചുരുക്കവിവരണം\' സ്‌പർശിച്ചുപിടിക്കുക."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"മനസ്സിലായി"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"വേണ്ട, നന്ദി"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"<xliff:g id="TILE_LABEL">%1$s</xliff:g> എന്നത് മറയ്‌ക്കണോ?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"അടുത്ത തവണ നിങ്ങൾ അത് ക്രമീകരണങ്ങളിൽ ഓണാക്കുമ്പോൾ അത് വീണ്ടും ദൃശ്യമാകും."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"മറയ്‌ക്കുക"</string>
 </resources>

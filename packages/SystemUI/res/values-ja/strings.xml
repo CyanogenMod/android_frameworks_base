@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"実行中"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"通知"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"電池残量が少なくなっています"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"残り<xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"残量が<xliff:g id="NUMBER">%d%%</xliff:g>です。バッテリーセーバーはONです。"</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"残量が<xliff:g id="PERCENTAGE">%s</xliff:g>です"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"残量が<xliff:g id="PERCENTAGE">%s</xliff:g>です。バッテリーセーバーはONです。"</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB充電には対応していません。\n付属の充電器をお使いください。"</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB充電には対応していません。"</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"専用の充電器のみを使用してください。"</string>
@@ -226,8 +226,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"スクリーンセーバー"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"イーサネット"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"機内モード"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"充電中: <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"充電完了"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth（端末数<xliff:g id="NUMBER">%d</xliff:g>）"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth OFF"</string>
@@ -265,6 +263,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"詳細設定"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"完了"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"接続済み"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Wi‑Fiアシスタント経由で接続"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"接続しています..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"テザリング"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"アクセスポイント"</string>
@@ -273,13 +272,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"モバイルデータ"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"データ使用量"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"残りのデータ"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"上限に達しました – データの利用は一時停止"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"上限オーバー"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g>使用中"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"上限: <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"警告: 上限は<xliff:g id="DATA_LIMIT">%s</xliff:g>です"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"ここに最近の画面が表示されます"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"アプリ情報"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"アプリロック"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"画面固定"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"検索"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"<xliff:g id="APP">%s</xliff:g>を開始できません。"</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"充電が完了しました"</string>
@@ -319,14 +318,13 @@
     <string name="guest_exit_guest_dialog_remove" msgid="7402231963862520531">"削除"</string>
     <string name="guest_wipe_session_title" msgid="6419439912885956132">"おかえりなさい、ゲストさん"</string>
     <string name="guest_wipe_session_message" msgid="8476238178270112811">"セッションを続行しますか？"</string>
-    <string name="guest_wipe_session_wipe" msgid="5065558566939858884">"最初から再生"</string>
-    <string name="guest_wipe_session_dontwipe" msgid="1401113462524894716">"次へ進む"</string>
+    <string name="guest_wipe_session_wipe" msgid="5065558566939858884">"最初から開始"</string>
+    <string name="guest_wipe_session_dontwipe" msgid="1401113462524894716">"続行"</string>
     <string name="user_add_user_title" msgid="4553596395824132638">"新しいユーザーを追加しますか？"</string>
     <string name="user_add_user_message_short" msgid="2161624834066214559">"新しいユーザーを追加したら、そのユーザーは自分のスペースをセットアップする必要があります。\n\nすべてのユーザーは他のユーザーに代わってアプリを更新できます。"</string>
     <string name="battery_saver_notification_title" msgid="237918726750955859">"バッテリーセーバーがON"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"パフォーマンスとバックグラウンドデータを制限します"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"バッテリーセーバーをOFFにします"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"コンテンツが非表示"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g>で、画面に表示されているコンテンツのキャプチャを開始します。"</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"次回から表示しない"</string>
@@ -357,6 +355,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"ロックを解除する前にご確認ください"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"キャンセル"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"設定"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g>によりミュートになっています"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>。<xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"画面が固定されました"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"固定を解除するまで画面が常に表示されるようになります。[戻る]と[最近]を同時に押し続けると固定が解除されます。"</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"固定を解除するまで画面が常に表示されるようになります。[最近]を押し続けると固定が解除されます。"</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"はい"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"いいえ"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"<xliff:g id="TILE_LABEL">%1$s</xliff:g>を非表示にしますか？"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"次回、設定でONにすると再表示されます。"</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"非表示"</string>
 </resources>

@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Em andamento"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Notificações"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"Bateria fraca"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> restante"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> restante(s). A Economia de bateria está ativada."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> restantes"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> restantes. A Economia de bateria está ativada."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"O carregamento via USB não é suportado.\nUse apenas o carregador fornecido."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"O carregamento via USB não é suportado."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Use apenas o carregador fornecido."</string>
@@ -226,8 +226,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Daydream"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Modo avião"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Carregando, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Carregado"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (<xliff:g id="NUMBER">%d</xliff:g> dispositivos)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth desativado"</string>
@@ -265,6 +263,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Mais configurações"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Concluído"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Conectado"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Conectado via assistente de Wi‑Fi"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Conectando..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Tethering"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Ponto de acesso"</string>
@@ -273,13 +272,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Dados da rede celular"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Uso de dados"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Dados restantes"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Limite atingido – uso de dados pausado"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Limite excedido"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"Usados: <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Limite: <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Aviso de <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Suas telas recentes aparecem aqui"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Informações do app"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"bloquear no app"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"fixação de tela"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"pesquisar"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Não foi possível iniciar <xliff:g id="APP">%s</xliff:g>."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Carregada"</string>
@@ -300,7 +299,7 @@
     <string name="speed_bump_explanation" msgid="1288875699658819755">"Notificações menos urgentes abaixo"</string>
     <string name="notification_tap_again" msgid="8524949573675922138">"Toque novamente para abrir"</string>
     <string name="keyguard_unlock" msgid="8043466894212841998">"Deslize para cima para desbloquear"</string>
-    <string name="phone_hint" msgid="3101468054914424646">"Deslize para a esquerda para usar o telefone"</string>
+    <string name="phone_hint" msgid="3101468054914424646">"Deslize para a direita para usar o telefone"</string>
     <string name="camera_hint" msgid="5241441720959174226">"Deslize para a esquerda para usar a câmera"</string>
     <string name="interruption_level_none" msgid="3831278883136066646">"Nenhum"</string>
     <string name="interruption_level_priority" msgid="6517366750688942030">"Prioridade"</string>
@@ -326,7 +325,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"A Economia de bateria está ativada"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Reduz o desempenho e os dados em segundo plano"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Desativar a economia de bateria"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Conteúdo oculto"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> começará a capturar tudo o que for exibido na tela."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Não mostrar novamente"</string>
@@ -357,6 +355,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Veja-as antes de desbloquear"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Não, obrigado"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Configurar"</string>
-    <string name="muted_by" msgid="6147073845094180001">"Som desativado por <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"A tela está fixada"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Ela é mantida à vista até que seja liberada. Toque em \"Voltar\" e \"Visão Geral\" e mantenha essas opções pressionadas ao mesmo tempo para liberar."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Ela é mantida à vista até que seja liberada. Toque em \"Visão geral\" e mantenha essa opção pressionada para liberar."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Entendi"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Não, obrigado"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Esconder <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Ela reaparecerá na próxima vez que você ativá-la nas configurações."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Ocultar"</string>
 </resources>

@@ -298,7 +298,7 @@ public final class BroadcastQueue {
     public void skipCurrentReceiverLocked(ProcessRecord app) {
         boolean reschedule = false;
         BroadcastRecord r = app.curReceiver;
-        if (r != null) {
+        if (r != null && r.queue == this) {
             // The current broadcast is waiting for this app's receiver
             // to be finished.  Looks like that's not going to happen, so
             // let the broadcast continue.
@@ -354,7 +354,7 @@ public final class BroadcastQueue {
         }
         r.receiver = null;
         r.intent.setComponent(null);
-        if (r.curApp != null) {
+        if (r.curApp != null && r.curApp.curReceiver == r) {
             r.curApp.curReceiver = null;
         }
         if (r.curFilter != null) {

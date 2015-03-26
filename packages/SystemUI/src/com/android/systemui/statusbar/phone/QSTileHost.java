@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Process;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -124,7 +125,8 @@ public class QSTileHost implements QSTile.Host {
         mTelephonyManager = (TelephonyManager)
                 mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
-        final HandlerThread ht = new HandlerThread(QSTileHost.class.getSimpleName());
+        final HandlerThread ht = new HandlerThread(QSTileHost.class.getSimpleName(),
+                Process.THREAD_PRIORITY_BACKGROUND);
         ht.start();
         mLooper = ht.getLooper();
 
@@ -136,6 +138,7 @@ public class QSTileHost implements QSTile.Host {
                     tile.userSwitch(newUserId);
                 }
                 mSecurity.onUserSwitched(newUserId);
+                mNetwork.onUserSwitched(newUserId);
                 mObserver.register();
             }
         };

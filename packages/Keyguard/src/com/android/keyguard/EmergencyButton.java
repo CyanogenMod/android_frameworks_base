@@ -46,12 +46,12 @@ public class EmergencyButton extends Button {
 
     private static final int EMERGENCY_CALL_TIMEOUT = 10000; // screen timeout after starting e.d.
     private static final String ACTION_EMERGENCY_DIAL = "com.android.phone.EmergencyDialer.DIAL";
-    private HashMap<Long, ServiceState> mServiceState = new HashMap<Long, ServiceState>();
+    private HashMap<Integer, ServiceState> mServiceState = new HashMap<Integer, ServiceState>();
 
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
-        public void onSimStateChanged(long subId, State simState) {
+        public void onSimStateChanged(int subId, State simState) {
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
             updateEmergencyCallButton(phoneState);
         }
@@ -61,7 +61,7 @@ public class EmergencyButton extends Button {
             updateEmergencyCallButton(phoneState);
         }
 
-        void onServiceStateChanged(ServiceState state, long sub) {
+        void onServiceStateChanged(ServiceState state, int sub) {
             mServiceState.put(sub, state);
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
             updateEmergencyCallButton(phoneState);

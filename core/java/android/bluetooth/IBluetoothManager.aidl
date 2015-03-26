@@ -21,6 +21,7 @@ import android.bluetooth.IBluetoothGatt;
 import android.bluetooth.IQBluetooth;
 import android.bluetooth.IBluetoothManagerCallback;
 import android.bluetooth.IQBluetoothManagerCallback;
+import android.bluetooth.IBluetoothProfileServiceConnection;
 import android.bluetooth.IBluetoothStateChangeCallback;
 
 /**
@@ -42,6 +43,9 @@ interface IBluetoothManager
     boolean disable(boolean persist);
     IBluetoothGatt getBluetoothGatt();
     IQBluetooth getQBluetooth();
+
+    boolean bindBluetoothProfileService(int profile, IBluetoothProfileServiceConnection proxy);
+    void unbindBluetoothProfileService(int profile, IBluetoothProfileServiceConnection proxy);
 
     String getAddress();
     String getName();

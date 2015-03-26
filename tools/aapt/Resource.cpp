@@ -4,6 +4,7 @@
 // Build resource files from raw assets.
 //
 #include "AaptAssets.h"
+#include "AaptUtil.h"
 #include "AaptXml.h"
 #include "CacheUpdater.h"
 #include "CrunchCache.h"
@@ -13,8 +14,11 @@
 #include "Main.h"
 #include "ResourceTable.h"
 #include "StringPool.h"
+#include "Symbol.h"
 #include "WorkQueue.h"
 #include "XMLNode.h"
+
+#include <algorithm>
 
 #if HAVE_PRINTF_ZD
 #  define ZD "%zd"
@@ -253,6 +257,11 @@ static status_t parsePackage(Bundle* bundle, const sp<AaptAssets>& assets,
 
     assets->setPackage(String8(block.getAttributeStringValue(nameIndex, &len)));
 
+    ssize_t revisionCodeIndex = block.indexOfAttribute(RESOURCES_ANDROID_NAMESPACE, "revisionCode");
+    if (revisionCodeIndex >= 0) {
+        bundle->setRevisionCode(String8(block.getAttributeStringValue(revisionCodeIndex, &len)).string());
+    }
+
     String16 uses_sdk16("uses-sdk");
     while ((code=block.next()) != ResXMLTree::END_DOCUMENT
            && code != ResXMLTree::BAD_DOCUMENT) {
@@ -261,7 +270,7 @@ static status_t parsePackage(Bundle* bundle, const sp<AaptAssets>& assets,
                 ssize_t minSdkIndex = block.indexOfAttribute(RESOURCES_ANDROID_NAMESPACE,
                                                              "minSdkVersion");
                 if (minSdkIndex >= 0) {
-                    const uint16_t* minSdk16 = block.getAttributeStringValue(minSdkIndex, &len);
+                    const char16_t* minSdk16 = block.getAttributeStringValue(minSdkIndex, &len);
                     const char* minSdk8 = strdup(String8(minSdk16).string());
                     bundle->setManifestMinSdkVersion(minSdk8);
                 }
@@ -450,7 +459,7 @@ static int validateAttr(const String8& path, const ResTable& table,
     size_t len;
 
     ssize_t index = parser.indexOfAttribute(ns, attr);
-    const uint16_t* str;
+    const char16_t* str;
     Res_value value;
     if (index >= 0 && parser.getAttributeValue(index, &value) >= 0) {
         const ResStringPool* pool = &parser.getStrings();
@@ -503,7 +512,7 @@ static int validateAttr(const String8& path, const ResTable& table,
         }
         if (validChars) {
             for (size_t i=0; i<len; i++) {
-                uint16_t c = str[i];
+                char16_t c = str[i];
                 const char* p = validChars;
                 bool okay = false;
                 while (*p) {
@@ -1071,6 +1080,14 @@ status_t generateAndroidManifestForSplit(Bundle* bundle, const sp<AaptAssets>& a
         return UNKNOWN_ERROR;
     }
 
+    // Add the 'revisionCode' attribute, which is set to the original revisionCode.
+    if (bundle->getRevisionCode().size() > 0) {
+        if (!addTagAttribute(manifest, RESOURCES_ANDROID_NAMESPACE, "revisionCode",
+                    bundle->getRevisionCode().string(), true, true)) {
+            return UNKNOWN_ERROR;
+        }
+    }
+
     // Add the 'split' attribute which describes the configurations included.
     String8 splitName("config.");
     splitName.append(split->getPackageSafeName());
@@ -1550,6 +1567,7 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
     // Re-flatten because we may have added new resource IDs
     // --------------------------------------------------------------
 
+
     ResTable finalResTable;
     sp<AaptFile> resFile;
     
@@ -1558,6 +1576,13 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
         err = table.addSymbols(symbols);
         if (err < NO_ERROR) {
             return err;
+        }
+
+        KeyedVector<Symbol, Vector<SymbolDefinition> > densityVaryingResources;
+        if (builder->getSplits().size() > 1) {
+            // Only look for density varying resources if we're generating
+            // splits.
+            table.getDensityVaryingResources(densityVaryingResources);
         }
 
         Vector<sp<ApkSplit> >& splits = builder->getSplits();
@@ -1583,6 +1608,63 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
                     return err;
                 }
             } else {
+                ResTable resTable;
+                err = resTable.add(flattenedTable->getData(), flattenedTable->getSize());
+                if (err != NO_ERROR) {
+                    fprintf(stderr, "Generated resource table for split '%s' is corrupt.\n",
+                            split->getPrintableName().string());
+                    return err;
+                }
+
+                bool hasError = false;
+                const std::set<ConfigDescription>& splitConfigs = split->getConfigs();
+                for (std::set<ConfigDescription>::const_iterator iter = splitConfigs.begin();
+                        iter != splitConfigs.end();
+                        ++iter) {
+                    const ConfigDescription& config = *iter;
+                    if (AaptConfig::isDensityOnly(config)) {
+                        // Each density only split must contain all
+                        // density only resources.
+                        Res_value val;
+                        resTable.setParameters(&config);
+                        const size_t densityVaryingResourceCount = densityVaryingResources.size();
+                        for (size_t k = 0; k < densityVaryingResourceCount; k++) {
+                            const Symbol& symbol = densityVaryingResources.keyAt(k);
+                            ssize_t block = resTable.getResource(symbol.id, &val, true);
+                            if (block < 0) {
+                                // Maybe it's in the base?
+                                finalResTable.setParameters(&config);
+                                block = finalResTable.getResource(symbol.id, &val, true);
+                            }
+
+                            if (block < 0) {
+                                hasError = true;
+                                SourcePos().error("%s has no definition for density split '%s'",
+                                        symbol.toString().string(), config.toString().string());
+
+                                if (bundle->getVerbose()) {
+                                    const Vector<SymbolDefinition>& defs = densityVaryingResources[k];
+                                    const size_t defCount = std::min(size_t(5), defs.size());
+                                    for (size_t d = 0; d < defCount; d++) {
+                                        const SymbolDefinition& def = defs[d];
+                                        def.source.error("%s has definition for %s",
+                                                symbol.toString().string(), def.config.toString().string());
+                                    }
+
+                                    if (defCount < defs.size()) {
+                                        SourcePos().error("and %d more ...", (int) (defs.size() - defCount));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (hasError) {
+                    return UNKNOWN_ERROR;
+                }
+
+                // Generate the AndroidManifest for this split.
                 sp<AaptFile> generatedManifest = new AaptFile(String8("AndroidManifest.xml"),
                         AaptGroupEntry(), String8());
                 err = generateAndroidManifestForSplit(bundle, assets, split,
@@ -1710,7 +1792,7 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
                 }
                 size_t len;
                 ssize_t index = block.indexOfAttribute(RESOURCES_ANDROID_NAMESPACE, "name");
-                const uint16_t* id = block.getAttributeStringValue(index, &len);
+                const char16_t* id = block.getAttributeStringValue(index, &len);
                 if (id == NULL) {
                     fprintf(stderr, "%s:%d: missing name attribute in element <%s>.\n", 
                             manifestPath.string(), block.getLineNumber(),
@@ -1753,7 +1835,7 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
                   hasErrors = true;
                 }
                 syms->addStringSymbol(String8(e), idStr, srcPos);
-                const uint16_t* cmt = block.getComment(&len);
+                const char16_t* cmt = block.getComment(&len);
                 if (cmt != NULL && *cmt != 0) {
                     //printf("Comment of %s: %s\n", String8(e).string(),
                     //        String8(cmt).string());
@@ -2916,17 +2998,26 @@ status_t
 writeProguardForLayouts(ProguardKeepSet* keep, const sp<AaptAssets>& assets)
 {
     status_t err;
+    const char* kClass = "class";
+    const char* kFragment = "fragment";
+    const String8 kTransition("transition");
+    const String8 kTransitionPrefix("transition-");
 
     // tag:attribute pairs that should be checked in layout files.
     KeyedVector<String8, Vector<NamespaceAttributePair> > kLayoutTagAttrPairs;
-    addTagAttrPair(&kLayoutTagAttrPairs, "view", NULL, "class");
-    addTagAttrPair(&kLayoutTagAttrPairs, "fragment", NULL, "class");
-    addTagAttrPair(&kLayoutTagAttrPairs, "fragment", RESOURCES_ANDROID_NAMESPACE, "name");
+    addTagAttrPair(&kLayoutTagAttrPairs, "view", NULL, kClass);
+    addTagAttrPair(&kLayoutTagAttrPairs, kFragment, NULL, kClass);
+    addTagAttrPair(&kLayoutTagAttrPairs, kFragment, RESOURCES_ANDROID_NAMESPACE, "name");
 
     // tag:attribute pairs that should be checked in xml files.
     KeyedVector<String8, Vector<NamespaceAttributePair> > kXmlTagAttrPairs;
-    addTagAttrPair(&kXmlTagAttrPairs, "PreferenceScreen", RESOURCES_ANDROID_NAMESPACE, "fragment");
-    addTagAttrPair(&kXmlTagAttrPairs, "header", RESOURCES_ANDROID_NAMESPACE, "fragment");
+    addTagAttrPair(&kXmlTagAttrPairs, "PreferenceScreen", RESOURCES_ANDROID_NAMESPACE, kFragment);
+    addTagAttrPair(&kXmlTagAttrPairs, "header", RESOURCES_ANDROID_NAMESPACE, kFragment);
+
+    // tag:attribute pairs that should be checked in transition files.
+    KeyedVector<String8, Vector<NamespaceAttributePair> > kTransitionTagAttrPairs;
+    addTagAttrPair(&kTransitionTagAttrPairs, kTransition.string(), NULL, kClass);
+    addTagAttrPair(&kTransitionTagAttrPairs, "pathMotion", NULL, kClass);
 
     const Vector<sp<AaptDir> >& dirs = assets->resDirs();
     const size_t K = dirs.size();
@@ -2945,6 +3036,9 @@ writeProguardForLayouts(ProguardKeepSet* keep, const sp<AaptAssets>& assets)
         } else if ((dirName == String8("menu")) || (strncmp(dirName.string(), "menu-", 5) == 0)) {
             startTags.add(String8("menu"));
             tagAttrPairs = NULL;
+        } else if (dirName == kTransition || (strncmp(dirName.string(), kTransitionPrefix.string(),
+                        kTransitionPrefix.size()) == 0)) {
+            tagAttrPairs = &kTransitionTagAttrPairs;
         } else {
             continue;
         }

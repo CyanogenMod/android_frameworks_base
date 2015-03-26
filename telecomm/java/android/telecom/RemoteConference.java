@@ -40,7 +40,9 @@ public final class RemoteConference {
         public void onDisconnected(RemoteConference conference, DisconnectCause disconnectCause) {}
         public void onConnectionAdded(RemoteConference conference, RemoteConnection connection) {}
         public void onConnectionRemoved(RemoteConference conference, RemoteConnection connection) {}
-        public void onCapabilitiesChanged(RemoteConference conference, int capabilities) {}
+        public void onConnectionCapabilitiesChanged(
+                RemoteConference conference,
+                int connectionCapabilities) {}
         public void onPropertiesChanged(RemoteConference conference, int properties) {}
         public void onConferenceableConnectionsChanged(
                 RemoteConference conference,
@@ -61,7 +63,7 @@ public final class RemoteConference {
 
     private int mState = Connection.STATE_NEW;
     private DisconnectCause mDisconnectCause;
-    private int mCallCapabilities;
+    private int mConnectionCapabilities;
     private int mCallProperties;
 
     /** {@hide} */
@@ -127,11 +129,11 @@ public final class RemoteConference {
     }
 
     /** {@hide} */
-    void setCallCapabilities(int capabilities) {
-        if (mCallCapabilities != capabilities) {
-            mCallCapabilities = capabilities;
+    void setConnectionCapabilities(int connectionCapabilities) {
+        if (mConnectionCapabilities != connectionCapabilities) {
+            mConnectionCapabilities = connectionCapabilities;
             for (Callback c : mCallbacks) {
-                c.onCapabilitiesChanged(this, mCallCapabilities);
+                c.onConnectionCapabilitiesChanged(this, mConnectionCapabilities);
             }
         }
     }
@@ -174,8 +176,13 @@ public final class RemoteConference {
         return mState;
     }
 
-    public final int getCallCapabilities() {
-        return mCallCapabilities;
+    /** @hide */
+    @Deprecated public final int getCallCapabilities() {
+        return getConnectionCapabilities();
+    }
+
+    public final int getConnectionCapabilities() {
+        return mConnectionCapabilities;
     }
 
     public final int getCallProperties() {

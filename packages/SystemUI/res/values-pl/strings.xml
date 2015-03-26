@@ -32,9 +32,9 @@
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Brak powiadomień"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Bieżące"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Powiadomienia"</string>
-    <string name="battery_low_title" msgid="6456385927409742437">"Bateria jest słaba"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"Pozostało: <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"Zostało <xliff:g id="NUMBER">%d%%</xliff:g>. Oszczędzanie baterii jest włączone."</string>
+    <string name="battery_low_title" msgid="6456385927409742437">"Niski poziom baterii"</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"Pozostało <xliff:g id="PERCENTAGE">%s</xliff:g>"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"Pozostało <xliff:g id="PERCENTAGE">%s</xliff:g>. Oszczędzanie baterii jest włączone."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"Ładowanie przy użyciu złącza USB nie jest obsługiwane.\nNależy używać tylko dołączonej ładowarki."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"Ładowanie przez USB nie jest obsługiwane."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"Używaj tylko ładowarki dostarczonej z urządzeniem."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"Wygaszacz ekranu"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"Ethernet"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"Tryb samolotowy"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"Ładowanie (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"Naładowana"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"Bluetooth"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"Bluetooth (urządzenia: <xliff:g id="NUMBER">%d</xliff:g>)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"Bluetooth wył."</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"Więcej ustawień"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"Gotowe"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"Połączono"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Połączono przez Asystenta Wi‑Fi"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"Łączę..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"Powiązanie"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"Punkt dostępu"</string>
@@ -271,17 +270,17 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"Transmisja danych komórkowych"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"Użycie danych"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"Pozostały limit"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"Osiągnięto limit – korzystanie z danych wstrzymane"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"Przekroczono limit"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"Wykorzystano <xliff:g id="DATA_USED">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Limit <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Ostrzeżenie: <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"Tutaj pojawią się ostatnie ekrany"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Informacje o aplikacji"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"zablokuj na aplikacji"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"przypinanie ekranu"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"szukaj"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"Nie udało się uruchomić aplikacji <xliff:g id="APP">%s</xliff:g>."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Naładowana"</string>
-    <string name="expanded_header_battery_charging" msgid="205623198487189724">"Ładuje się"</string>
+    <string name="expanded_header_battery_charging" msgid="205623198487189724">"Ładowanie"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> do pełnego naładowania"</string>
     <string name="expanded_header_battery_not_charging" msgid="4798147152367049732">"Nie ładuje"</string>
     <string name="ssl_ca_cert_warning" msgid="9005954106902053641">"Sieć może być\nmonitorowana"</string>
@@ -290,7 +289,7 @@
     <string name="description_direction_left" msgid="7207478719805562165">"Przesuń w lewo: <xliff:g id="TARGET_DESCRIPTION">%s</xliff:g>."</string>
     <string name="zen_no_interruptions_with_warning" msgid="4396898053735625287">"Żadnych powiadomień. Nawet alarmów."</string>
     <string name="zen_no_interruptions" msgid="7970973750143632592">"Bez przerw"</string>
-    <string name="zen_important_interruptions" msgid="3477041776609757628">"Tylko przerwy priorytetowe"</string>
+    <string name="zen_important_interruptions" msgid="3477041776609757628">"Tylko dźwięki priorytetowe"</string>
     <string name="zen_alarm_information_time" msgid="5235772206174372272">"Następny alarm o <xliff:g id="ALARM_TIME">%s</xliff:g>"</string>
     <string name="zen_alarm_information_day_time" msgid="8422733576255047893">"Następny alarm: <xliff:g id="ALARM_DAY_AND_TIME">%s</xliff:g>"</string>
     <string name="zen_alarm_warning" msgid="6873910860111498041">"Nie usłyszysz alarmu o <xliff:g id="ALARM_TIME">%s</xliff:g>"</string>
@@ -301,7 +300,7 @@
     <string name="phone_hint" msgid="3101468054914424646">"Przesuń w prawo, by przełączyć się na telefon"</string>
     <string name="camera_hint" msgid="5241441720959174226">"Przesuń w lewo, by włączyć aparat"</string>
     <string name="interruption_level_none" msgid="3831278883136066646">"Żadne"</string>
-    <string name="interruption_level_priority" msgid="6517366750688942030">"Priorytet"</string>
+    <string name="interruption_level_priority" msgid="6517366750688942030">"Priorytetowe"</string>
     <string name="interruption_level_all" msgid="1330581184930945764">"Wszystkie"</string>
     <string name="keyguard_indication_charging_time" msgid="1757251776872835768">"Ładuje się (pełne naładowanie za <xliff:g id="CHARGING_TIME_LEFT">%s</xliff:g>)"</string>
     <string name="accessibility_multi_user_switch_switcher" msgid="7305948938141024937">"Przełącz użytkownika"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"Oszczędzanie baterii jest włączone"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"Zmniejsza wydajność i ogranicza dane w tle"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"Wyłącz oszczędzanie baterii"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"Treści ukryte"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> będzie zapisywać wszystko, co wyświetli się na ekranie."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"Nie pokazuj ponownie"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"Zobacz powiadomienia, jeszcze zanim odblokujesz ekran"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"Nie, dziękuję"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"Skonfiguruj"</string>
-    <string name="muted_by" msgid="6147073845094180001">"Ściszone przez: <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"Ekran jest przypięty"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"Ekran będzie widoczny, dopóki go nie odepniesz. Aby to zrobić, kliknij i przytrzymaj jednocześnie Wstecz i Przegląd."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"Ekran będzie widoczny, dopóki go nie odepniesz. Aby to zrobić, kliknij i przytrzymaj Przegląd."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"OK"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"Nie, dziękuję"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Ukryć <xliff:g id="TILE_LABEL">%1$s</xliff:g>?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Pojawi się ponownie, gdy następnym włączysz go w ustawieniach."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"Ukryj"</string>
 </resources>

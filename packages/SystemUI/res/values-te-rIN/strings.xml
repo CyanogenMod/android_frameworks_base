@@ -33,8 +33,8 @@
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"కొనసాగుతున్నవి"</string>
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"నోటిఫికేషన్‌లు"</string>
     <string name="battery_low_title" msgid="6456385927409742437">"బ్యాటరీ తక్కువగా ఉంది"</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"<xliff:g id="NUMBER">%d%%</xliff:g> మిగిలి ఉంది"</string>
-    <string name="battery_low_percent_format_saver_started" msgid="6534746636002666456">"<xliff:g id="NUMBER">%d%%</xliff:g> మిగిలి ఉంది. బ్యాటరీ సేవర్ ఆన్‌లో ఉంది."</string>
+    <string name="battery_low_percent_format" msgid="2900940511201380775">"<xliff:g id="PERCENTAGE">%s</xliff:g> మిగిలి ఉంది"</string>
+    <string name="battery_low_percent_format_saver_started" msgid="6859235584035338833">"<xliff:g id="PERCENTAGE">%s</xliff:g> మిగిలి ఉంది. బ్యాటరీ సేవర్ ఆన్‌లో ఉంది."</string>
     <string name="invalid_charger" msgid="4549105996740522523">"USB ఛార్జింగ్‌కు మద్దతు లేదు.\nఅందించిన ఛార్జర్‌ను మాత్రమే ఉపయోగించండి."</string>
     <string name="invalid_charger_title" msgid="3515740382572798460">"USB ఛార్జింగ్‌కి మద్దతు లేదు."</string>
     <string name="invalid_charger_text" msgid="5474997287953892710">"అందించిన ఛార్జర్‌ను మాత్రమే ఉపయోగించండి."</string>
@@ -224,8 +224,6 @@
     <string name="start_dreams" msgid="7219575858348719790">"డేడ్రీమ్"</string>
     <string name="ethernet_label" msgid="7967563676324087464">"ఈథర్‌నెట్"</string>
     <string name="quick_settings_airplane_mode_label" msgid="5510520633448831350">"ఎయిర్‌ప్లేన్ మోడ్"</string>
-    <string name="quick_settings_battery_charging_label" msgid="490074774465309209">"ఛార్జ్ చేయబడుతోంది, <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="quick_settings_battery_charged_label" msgid="8865413079414246081">"ఛార్జ్ చేయబడింది"</string>
     <string name="quick_settings_bluetooth_label" msgid="6304190285170721401">"బ్లూటూత్"</string>
     <string name="quick_settings_bluetooth_multiple_devices_label" msgid="3912245565613684735">"బ్లూటూత్ (<xliff:g id="NUMBER">%d</xliff:g> పరికరాలు)"</string>
     <string name="quick_settings_bluetooth_off_label" msgid="8159652146149219937">"బ్లూటూత్ ఆఫ్‌లో ఉంది"</string>
@@ -263,6 +261,7 @@
     <string name="quick_settings_more_settings" msgid="326112621462813682">"మరిన్ని సెట్టింగ్‌లు"</string>
     <string name="quick_settings_done" msgid="3402999958839153376">"పూర్తయింది"</string>
     <string name="quick_settings_connected" msgid="1722253542984847487">"కనెక్ట్ చేయబడినది"</string>
+    <string name="quick_settings_connected_via_wfa" msgid="1587051627194895715">"Wi‑Fi సహాయకం ద్వారా కనెక్ట్ చేయబడింది"</string>
     <string name="quick_settings_connecting" msgid="47623027419264404">"కనెక్ట్ అవుతోంది..."</string>
     <string name="quick_settings_tethering_label" msgid="7153452060448575549">"టీథరింగ్"</string>
     <string name="quick_settings_hotspot_label" msgid="6046917934974004879">"హాట్‌స్పాట్"</string>
@@ -271,13 +270,13 @@
     <string name="quick_settings_cellular_detail_title" msgid="8575062783675171695">"సెల్యులార్ డేటా"</string>
     <string name="quick_settings_cellular_detail_data_usage" msgid="1964260360259312002">"డేటా వినియోగం"</string>
     <string name="quick_settings_cellular_detail_remaining_data" msgid="722715415543541249">"మిగిలిన డేటా"</string>
-    <string name="quick_settings_cellular_detail_over_limit" msgid="3242930457130971204">"పరిమితిని చేరుకుంది – డేటా వినియోగం పాజ్ చేయబడింది"</string>
+    <string name="quick_settings_cellular_detail_over_limit" msgid="967669665390990427">"పరిమితి మించిపోయింది"</string>
     <string name="quick_settings_cellular_detail_data_used" msgid="1476810587475761478">"<xliff:g id="DATA_USED">%s</xliff:g> వినియోగించబడింది"</string>
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> పరిమితి"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> హెచ్చరిక"</string>
     <string name="recents_empty_message" msgid="8682129509540827999">"మీ ఇటీవలి స్క్రీన్‌లు ఇక్కడ కనిపిస్తాయి"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"అనువర్తన సమాచారం"</string>
-    <string name="recents_lock_to_app_button_label" msgid="4793991421811647489">"లాక్ టు యాప్"</string>
+    <string name="recents_lock_to_app_button_label" msgid="6942899049072506044">"స్క్రీన్ పిన్నింగ్"</string>
     <string name="recents_search_bar_label" msgid="8074997400187836677">"శోధించు"</string>
     <string name="recents_launch_error_message" msgid="2969287838120550506">"<xliff:g id="APP">%s</xliff:g>ని ప్రారంభించడం సాధ్యపడలేదు."</string>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"ఛార్జ్ చేయబడింది"</string>
@@ -324,7 +323,6 @@
     <string name="battery_saver_notification_title" msgid="237918726750955859">"బ్యాటర్ సేవర్ ఆన్ చేయబడింది"</string>
     <string name="battery_saver_notification_text" msgid="820318788126672692">"పనితీరుని మరియు నేపథ్య డేటాను తగ్గిస్తుంది"</string>
     <string name="battery_saver_notification_action_text" msgid="109158658238110382">"బ్యాటరీ సేవర్‌ను ఆఫ్ చేయి"</string>
-    <string name="battery_level_template" msgid="1609636980292580020">"<xliff:g id="LEVEL">%d</xliff:g>%%"</string>
     <string name="notification_hidden_text" msgid="1135169301897151909">"కంటెంట్‌లు దాచబడ్డాయి"</string>
     <string name="media_projection_dialog_text" msgid="3071431025448218928">"<xliff:g id="APP_SEEKING_PERMISSION">%s</xliff:g> మీ స్క్రీన్‌పై కనిపించే ప్రతిదాన్ని క్యాప్చర్ చేయడం ప్రారంభిస్తుంది."</string>
     <string name="media_projection_remember_text" msgid="3103510882172746752">"మళ్లీ చూపవద్దు"</string>
@@ -355,6 +353,13 @@
     <string name="hidden_notifications_text" msgid="2326409389088668981">"వీటిని మీరు అన్‌లాక్ చేయకముందే చూడండి"</string>
     <string name="hidden_notifications_cancel" msgid="3690709735122344913">"వద్దు, ధన్యవాదాలు"</string>
     <string name="hidden_notifications_setup" msgid="41079514801976810">"సెటప్ చేయి"</string>
-    <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> ద్వారా మ్యూట్ చేయబడింది"</string>
     <string name="zen_mode_and_condition" msgid="4462471036429759903">"<xliff:g id="ZEN_MODE">%1$s</xliff:g>. <xliff:g id="EXIT_CONDITION">%2$s</xliff:g>"</string>
+    <string name="screen_pinning_title" msgid="3273740381976175811">"స్క్రీన్ పిన్ చేయబడింది"</string>
+    <string name="screen_pinning_description" msgid="1346522416878235405">"ఇది మీరు అన్‌పిన్ చేసే వరకు దీన్ని వీక్షణలో ఉంచుతుంది. అన్‌పిన్ చేయడానికి వెనుకకు మరియు స్థూలదృష్టిని ఒకేసారి తాకి, ఉంచండి."</string>
+    <string name="screen_pinning_description_accessible" msgid="8518446209564202557">"ఇది మీరు అన్‌పిన్ చేసే వరకు దీన్ని వీక్షణలో ఉంచుతుంది. అన్‌పిన్ చేయడానికి స్థూలదృష్టిని తాకి, ఉంచండి."</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"అర్థమైంది"</string>
+    <string name="screen_pinning_negative" msgid="3741602308343880268">"వద్దు, ధన్యవాదాలు"</string>
+    <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"<xliff:g id="TILE_LABEL">%1$s</xliff:g>ని దాచాలా?"</string>
+    <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"మీరు సెట్టింగ్‌ల్లో దీన్ని ఆన్ చేసిన తదుపరిసారి ఇది కనిపిస్తుంది."</string>
+    <string name="quick_settings_reset_confirmation_button" msgid="2660339101868367515">"దాచు"</string>
 </resources>

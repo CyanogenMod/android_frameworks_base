@@ -34,7 +34,7 @@ import java.util.List;
 public final class ParcelableConnection implements Parcelable {
     private final PhoneAccountHandle mPhoneAccount;
     private final int mState;
-    private final int mCapabilities;
+    private final int mConnectionCapabilities;
     private final int mProperties;
     private final Uri mAddress;
     private final int mAddressPresentation;
@@ -69,7 +69,7 @@ public final class ParcelableConnection implements Parcelable {
             int callSubstate) {
         mPhoneAccount = phoneAccount;
         mState = state;
-        mCapabilities = capabilities;
+        mConnectionCapabilities = capabilities;
         mProperties = properties;
         mAddress = address;
         mAddressPresentation = addressPresentation;
@@ -94,8 +94,8 @@ public final class ParcelableConnection implements Parcelable {
     }
 
     // Bit mask of actions a call supports, values are defined in {@link CallCapabilities}.
-    public int getCapabilities() {
-        return mCapabilities;
+    public int getConnectionCapabilities() {
+        return mConnectionCapabilities;
     }
 
     public int getProperties() {
@@ -158,7 +158,7 @@ public final class ParcelableConnection implements Parcelable {
                 .append(", state:")
                 .append(mState)
                 .append(", capabilities:")
-                .append(PhoneCapabilities.toString(mCapabilities))
+                .append(Connection.capabilitiesToString(mConnectionCapabilities))
                 .append(", properties:")
                 .append(Integer.toHexString(mProperties))
                 .toString();
@@ -225,7 +225,7 @@ public final class ParcelableConnection implements Parcelable {
     public void writeToParcel(Parcel destination, int flags) {
         destination.writeParcelable(mPhoneAccount, 0);
         destination.writeInt(mState);
-        destination.writeInt(mCapabilities);
+        destination.writeInt(mConnectionCapabilities);
         destination.writeInt(mProperties);
         destination.writeParcelable(mAddress, 0);
         destination.writeInt(mAddressPresentation);

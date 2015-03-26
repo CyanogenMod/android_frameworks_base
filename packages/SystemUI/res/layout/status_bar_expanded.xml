@@ -97,15 +97,14 @@
             android:layout_width="@dimen/notification_panel_width"
             android:layout_height="match_parent"
             android:layout_gravity="@integer/notification_panel_layout_gravity"
-            android:layout_marginBottom="@dimen/close_handle_underlap" />
+            android:layout_marginBottom="@dimen/close_handle_underlap"
+            android:importantForAccessibility="no" />
 
         <ViewStub
             android:id="@+id/keyguard_user_switcher"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/status_bar_header_height_keyguard"
-            android:layout_gravity="end"
-            android:layout="@layout/keyguard_user_switcher" />
+            android:layout="@layout/keyguard_user_switcher"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent" />
 
         <include
             layout="@layout/keyguard_status_bar"

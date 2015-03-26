@@ -191,7 +191,7 @@ public class MobileDataController {
     }
 
     public void setMobileDataEnabled(boolean enabled) {
-        mTelephonyManager.setDataEnabledUsingSubId(
+        mTelephonyManager.setDataEnabled(
                 SubscriptionManager.getDefaultDataSubId(), enabled);
         if (mCallback != null) {
             mCallback.onMobileDataEnabled(enabled);
@@ -202,12 +202,13 @@ public class MobileDataController {
         // require both supported network and ready SIM
         return mConnectivityManager.isNetworkSupported(TYPE_MOBILE)
                 && mTelephonyManager.getSimState(
-                        SubscriptionManager.getDefaultDataPhoneId()) == SIM_STATE_READY;
+                SubscriptionManager.from(mContext).getDefaultDataPhoneId()) == SIM_STATE_READY;
     }
 
     public boolean isMobileDataEnabled() {
         return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.MOBILE_DATA + SubscriptionManager.getDefaultDataPhoneId(), 0) != 0;
+                Settings.Global.MOBILE_DATA +
+                SubscriptionManager.from(mContext).getDefaultDataPhoneId(), 0) != 0;
     }
 
     private static String getActiveSubscriberId(Context context) {

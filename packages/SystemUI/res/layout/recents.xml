@@ -51,7 +51,6 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="top|right"
-        android:src="@drawable/ic_dismiss_all"
         android:scaleType="centerInside"
         android:background="@drawable/recents_button_bg"
         android:contentDescription="@string/clear_recents" />

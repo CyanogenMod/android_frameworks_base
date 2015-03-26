@@ -63,6 +63,8 @@ import android.content.pm.Signature;
 import android.content.pm.UserInfo;
 import android.content.pm.PackageUserState;
 import android.content.pm.VerifierDeviceIdentity;
+import android.util.ArrayMap;
+import android.util.ArraySet;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -78,8 +80,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -170,11 +170,11 @@ final class Settings {
     private final File mStoppedPackagesFilename;
     private final File mBackupStoppedPackagesFilename;
 
-    final HashMap<String, PackageSetting> mPackages =
-            new HashMap<String, PackageSetting>();
+    final ArrayMap<String, PackageSetting> mPackages =
+            new ArrayMap<String, PackageSetting>();
     // List of replaced system applications
-    private final HashMap<String, PackageSetting> mDisabledSysPackages =
-        new HashMap<String, PackageSetting>();
+    private final ArrayMap<String, PackageSetting> mDisabledSysPackages =
+        new ArrayMap<String, PackageSetting>();
 
     private static int mFirstAvailableUid = 0;
 
@@ -217,8 +217,8 @@ final class Settings {
     final SparseArray<CrossProfileIntentResolver> mCrossProfileIntentResolvers =
             new SparseArray<CrossProfileIntentResolver>();
 
-    final HashMap<String, SharedUserSetting> mSharedUsers =
-            new HashMap<String, SharedUserSetting>();
+    final ArrayMap<String, SharedUserSetting> mSharedUsers =
+            new ArrayMap<String, SharedUserSetting>();
     private final ArrayList<Object> mUserIds = new ArrayList<Object>();
     private final SparseArray<Object> mOtherUserIds =
             new SparseArray<Object>();
@@ -228,12 +228,12 @@ final class Settings {
             new ArrayList<Signature>();
 
     // Mapping from permission names to info about them.
-    final HashMap<String, BasePermission> mPermissions =
-            new HashMap<String, BasePermission>();
+    final ArrayMap<String, BasePermission> mPermissions =
+            new ArrayMap<String, BasePermission>();
 
     // Mapping from permission tree names to info about them.
-    final HashMap<String, BasePermission> mPermissionTrees =
-            new HashMap<String, BasePermission>();
+    final ArrayMap<String, BasePermission> mPermissionTrees =
+            new ArrayMap<String, BasePermission>();
 
     // Packages that have been uninstalled and still need their external
     // storage data deleted.
@@ -243,7 +243,7 @@ final class Settings {
     // Keys are the new names of the packages, values are the original
     // names.  The packages appear everwhere else under their original
     // names.
-    final HashMap<String, String> mRenamedPackages = new HashMap<String, String>();
+    final ArrayMap<String, String> mRenamedPackages = new ArrayMap<String, String>();
     
     final StringBuilder mReadMessages = new StringBuilder();
 
@@ -274,7 +274,7 @@ final class Settings {
         mSettingsFilename = new File(mSystemDir, "packages.xml");
         mBackupSettingsFilename = new File(mSystemDir, "packages-backup.xml");
         mPackageListFilename = new File(mSystemDir, "packages.list");
-        FileUtils.setPermissions(mPackageListFilename, 0660, SYSTEM_UID, PACKAGE_INFO_GID);
+        FileUtils.setPermissions(mPackageListFilename, 0640, SYSTEM_UID, PACKAGE_INFO_GID);
 
         // Deprecated: Needed for migration
         mStoppedPackagesFilename = new File(mSystemDir, "packages-stopped.xml");
@@ -448,7 +448,7 @@ final class Settings {
     void transferPermissionsLPw(String origPkg, String newPkg) {
         // Transfer ownership of permissions to the new package.
         for (int i=0; i<2; i++) {
-            HashMap<String, BasePermission> permissions =
+            ArrayMap<String, BasePermission> permissions =
                     i == 0 ? mPermissionTrees : mPermissions;
             for (BasePermission bp : permissions.values()) {
                 if (origPkg.equals(bp.sourcePackage)) {
@@ -595,7 +595,7 @@ final class Settings {
                         }
                         p.appId = dis.appId;
                         // Clone permissions
-                        p.grantedPermissions = new HashSet<String>(dis.grantedPermissions);
+                        p.grantedPermissions = new ArraySet<String>(dis.grantedPermissions);
                         // Clone component info
                         List<UserInfo> users = getAllUsers();
                         if (users != null) {
@@ -1153,10 +1153,10 @@ final class Settings {
                     final boolean blockUninstall = blockUninstallStr == null
                             ? false : Boolean.parseBoolean(blockUninstallStr);
 
-                    HashSet<String> enabledComponents = null;
-                    HashSet<String> disabledComponents = null;
-                    HashSet<String> protectedComponents = null;
-                    HashSet<String> visibleComponents = null;
+                    ArraySet<String> enabledComponents = null;
+                    ArraySet<String> disabledComponents = null;
+                    ArraySet<String> protectedComponents = null;
+                    ArraySet<String> visibleComponents = null;
 
                     int packageDepth = parser.getDepth();
                     while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
@@ -1211,9 +1211,9 @@ final class Settings {
         }
     }
 
-    private HashSet<String> readComponentsLPr(XmlPullParser parser)
+    private ArraySet<String> readComponentsLPr(XmlPullParser parser)
             throws IOException, XmlPullParserException {
-        HashSet<String> components = null;
+        ArraySet<String> components = null;
         int type;
         int outerDepth = parser.getDepth();
         String tagName;
@@ -1229,7 +1229,7 @@ final class Settings {
                 String componentName = parser.getAttributeValue(null, ATTR_NAME);
                 if (componentName != null) {
                     if (components == null) {
-                        components = new HashSet<String>();
+                        components = new ArraySet<String>();
                     }
                     components.add(componentName);
                 }
@@ -1689,7 +1689,7 @@ final class Settings {
             fstr = new FileOutputStream(writeTarget);
             str = new BufferedOutputStream(fstr);
             try {
-                FileUtils.setPermissions(fstr.getFD(), 0660, SYSTEM_UID, PACKAGE_INFO_GID);
+                FileUtils.setPermissions(fstr.getFD(), 0640, SYSTEM_UID, PACKAGE_INFO_GID);
 
                 StringBuilder sb = new StringBuilder();
                 for (final PackageSetting pkg : mPackages.values()) {
@@ -1967,7 +1967,7 @@ final class Settings {
     }
 
     ArrayList<PackageSetting> getListOfIncompleteInstallPackagesLPr() {
-        final HashSet<String> kList = new HashSet<String>(mPackages.keySet());
+        final ArraySet<String> kList = new ArraySet<String>(mPackages.keySet());
         final Iterator<String> its = kList.iterator();
         final ArrayList<PackageSetting> ret = new ArrayList<PackageSetting>();
         while (its.hasNext()) {
@@ -2557,7 +2557,7 @@ final class Settings {
         return defValue;
     }
 
-    private void readPermissionsLPw(HashMap<String, BasePermission> out, XmlPullParser parser)
+    private void readPermissionsLPw(ArrayMap<String, BasePermission> out, XmlPullParser parser)
             throws IOException, XmlPullParserException {
         int outerDepth = parser.getDepth();
         int type;
@@ -3062,7 +3062,7 @@ final class Settings {
         }
     }
 
-    private void readGrantedPermissionsLPw(XmlPullParser parser, HashSet<String> outPerms)
+    private void readGrantedPermissionsLPw(XmlPullParser parser, ArraySet<String> outPerms)
             throws IOException, XmlPullParserException {
         int outerDepth = parser.getDepth();
         int type;
@@ -3136,8 +3136,8 @@ final class Settings {
                 int sourceUserId = mCrossProfileIntentResolvers.keyAt(i);
                 CrossProfileIntentResolver cpir = mCrossProfileIntentResolvers.get(sourceUserId);
                 boolean needsWriting = false;
-                HashSet<CrossProfileIntentFilter> cpifs =
-                        new HashSet<CrossProfileIntentFilter>(cpir.filterSet());
+                ArraySet<CrossProfileIntentFilter> cpifs =
+                        new ArraySet<CrossProfileIntentFilter>(cpir.filterSet());
                 for (CrossProfileIntentFilter cpif : cpifs) {
                     if (cpif.getTargetUserId() == userId) {
                         needsWriting = true;
@@ -3193,7 +3193,7 @@ final class Settings {
         return ps;
     }
 
-    private String compToString(HashSet<String> cmp) {
+    private String compToString(ArraySet<String> cmp) {
         return cmp != null ? Arrays.toString(cmp.toArray()) : "[]";
     }
  
@@ -3362,6 +3362,18 @@ final class Settings {
             pw.print(",");
             pw.print(ps.installerPackageName != null ? ps.installerPackageName : "?");
             pw.println();
+            if (ps.pkg != null) {
+                pw.print(checkinTag); pw.print("-"); pw.print("splt,");
+                pw.print("base,");
+                pw.println(ps.pkg.baseRevisionCode);
+                if (ps.pkg.splitNames != null) {
+                    for (int i = 0; i < ps.pkg.splitNames.length; i++) {
+                        pw.print(checkinTag); pw.print("-"); pw.print("splt,");
+                        pw.print(ps.pkg.splitNames[i]); pw.print(",");
+                        pw.println(ps.pkg.splitRevisionCodes[i]);
+                    }
+                }
+            }
             for (UserInfo user : users) {
                 pw.print(checkinTag);
                 pw.print("-");
@@ -3412,6 +3424,7 @@ final class Settings {
         pw.println();
         if (ps.pkg != null) {
             pw.print(prefix); pw.print("  versionName="); pw.println(ps.pkg.mVersionName);
+            pw.print(prefix); pw.print("  splits="); dumpSplitNames(pw, ps.pkg); pw.println();
             pw.print(prefix); pw.print("  applicationInfo=");
                 pw.println(ps.pkg.applicationInfo.toString());
             pw.print(prefix); pw.print("  flags="); printFlags(pw, ps.pkg.applicationInfo.flags,
@@ -3523,7 +3536,7 @@ final class Settings {
                 pw.print(prefix); pw.print("    lastDisabledCaller: ");
                         pw.println(lastDisabledAppCaller);
             }
-            HashSet<String> cmp = ps.getDisabledComponents(user.id);
+            ArraySet<String> cmp = ps.getDisabledComponents(user.id);
             if (cmp != null && cmp.size() > 0) {
                 pw.print(prefix); pw.println("    disabledComponents:");
                 for (String s : cmp) {
@@ -3646,31 +3659,36 @@ final class Settings {
         }
     }
 
-    void dumpSharedUsersLPr(PrintWriter pw, String packageName, DumpState dumpState) {
+    void dumpSharedUsersLPr(PrintWriter pw, String packageName, DumpState dumpState,
+            boolean checkin) {
         boolean printedSomething = false;
         for (SharedUserSetting su : mSharedUsers.values()) {
             if (packageName != null && su != dumpState.getSharedUser()) {
                 continue;
             }
-            if (!printedSomething) {
-                if (dumpState.onTitlePrinted())
-                    pw.println();
-                pw.println("Shared users:");
-                printedSomething = true;
-            }
-            pw.print("  SharedUser [");
-            pw.print(su.name);
-            pw.print("] (");
-            pw.print(Integer.toHexString(System.identityHashCode(su)));
-                    pw.println("):");
-            pw.print("    userId=");
-            pw.print(su.userId);
-            pw.print(" gids=");
-            pw.println(PackageManagerService.arrayToString(su.gids));
-            pw.println("    grantedPermissions:");
-            for (String s : su.grantedPermissions) {
-                pw.print("      ");
-                pw.println(s);
+            if (!checkin) {
+                if (!printedSomething) {
+                    if (dumpState.onTitlePrinted())
+                        pw.println();
+                    pw.println("Shared users:");
+                    printedSomething = true;
+                }
+                pw.print("  SharedUser [");
+                pw.print(su.name);
+                pw.print("] (");
+                pw.print(Integer.toHexString(System.identityHashCode(su)));
+                        pw.println("):");
+                pw.print("    userId=");
+                pw.print(su.userId);
+                pw.print(" gids=");
+                pw.println(PackageManagerService.arrayToString(su.gids));
+                pw.println("    grantedPermissions:");
+                for (String s : su.grantedPermissions) {
+                    pw.print("      ");
+                    pw.println(s);
+                }
+            } else {
+                pw.print("suid,"); pw.print(su.userId); pw.print(","); pw.println(su.name);
             }
         }
     }
@@ -3678,5 +3696,28 @@ final class Settings {
     void dumpReadMessagesLPr(PrintWriter pw, DumpState dumpState) {
         pw.println("Settings parse messages:");
         pw.print(mReadMessages.toString());
+    }
+
+    private static void dumpSplitNames(PrintWriter pw, PackageParser.Package pkg) {
+        if (pkg == null) {
+            pw.print("unknown");
+        } else {
+            // [base:10, config.mdpi, config.xhdpi:12]
+            pw.print("[");
+            pw.print("base");
+            if (pkg.baseRevisionCode != 0) {
+                pw.print(":"); pw.print(pkg.baseRevisionCode);
+            }
+            if (pkg.splitNames != null) {
+                for (int i = 0; i < pkg.splitNames.length; i++) {
+                    pw.print(", ");
+                    pw.print(pkg.splitNames[i]);
+                    if (pkg.splitRevisionCodes[i] != 0) {
+                        pw.print(":"); pw.print(pkg.splitRevisionCodes[i]);
+                    }
+                }
+            }
+            pw.print("]");
+        }
     }
 }

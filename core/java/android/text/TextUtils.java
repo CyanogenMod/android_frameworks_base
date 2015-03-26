@@ -64,6 +64,11 @@ import java.util.regex.Pattern;
 public class TextUtils {
     private static final String TAG = "TextUtils";
 
+    /* package */ static final char[] ELLIPSIS_NORMAL = { '\u2026' }; // this is "..."
+    private static final String ELLIPSIS_STRING = new String(ELLIPSIS_NORMAL);
+
+    /* package */ static final char[] ELLIPSIS_TWO_DOTS = { '\u2025' }; // this is ".."
+    private static final String ELLIPSIS_TWO_DOTS_STRING = new String(ELLIPSIS_TWO_DOTS);
 
     private TextUtils() { /* cannot be instantiated */ }
 
@@ -1081,14 +1086,9 @@ public class TextUtils {
                                          float avail, TruncateAt where,
                                          boolean preserveLength,
                                          EllipsizeCallback callback) {
-
-        final String ellipsis = (where == TruncateAt.END_SMALL) ?
-                Resources.getSystem().getString(R.string.ellipsis_two_dots) :
-                Resources.getSystem().getString(R.string.ellipsis);
-
         return ellipsize(text, paint, avail, where, preserveLength, callback,
                 TextDirectionHeuristics.FIRSTSTRONG_LTR,
-                ellipsis);
+                (where == TruncateAt.END_SMALL) ? ELLIPSIS_TWO_DOTS_STRING : ELLIPSIS_STRING);
     }
 
     /**

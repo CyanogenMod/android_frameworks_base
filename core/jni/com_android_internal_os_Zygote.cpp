@@ -452,14 +452,23 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
 
     DropCapabilitiesBoundingSet(env);
 
-    bool need_native_bridge = false;
-    if (instructionSet != NULL) {
+    bool use_native_bridge = !is_system_server && (instructionSet != NULL)
+        && android::NativeBridgeAvailable();
+    if (use_native_bridge) {
       ScopedUtfChars isa_string(env, instructionSet);
-      need_native_bridge = android::NeedsNativeBridge(isa_string.c_str());
+      use_native_bridge = android::NeedsNativeBridge(isa_string.c_str());
+    }
+    if (use_native_bridge && dataDir == NULL) {
+      // dataDir should never be null if we need to use a native bridge.
+      // In general, dataDir will never be null for normal applications. It can only happen in
+      // special cases (for isolated processes which are not associated with any app). These are
+      // launched by the framework and should not be emulated anyway.
+      use_native_bridge = false;
+      ALOGW("Native bridge will not be used because dataDir == NULL.");
     }
 
-    if (!MountEmulatedStorage(uid, mount_external, need_native_bridge)) {
-      ALOGW("Failed to mount emulated storage: %d", errno);
+    if (!MountEmulatedStorage(uid, mount_external, use_native_bridge)) {
+      ALOGW("Failed to mount emulated storage: %s", strerror(errno));
       if (errno == ENOTCONN || errno == EROFS) {
         // When device is actively encrypting, we get ENOTCONN here
         // since FUSE was mounted before the framework restarted.
@@ -487,15 +496,10 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
 
     SetRLimits(env, javaRlimits);
 
-    if (!is_system_server && need_native_bridge) {
-      // Set the environment for the apps running with native bridge.
-      ScopedUtfChars isa_string(env, instructionSet);  // Known non-null because of need_native_...
-      if (dataDir == NULL) {
-        android::PreInitializeNativeBridge(NULL, isa_string.c_str());
-      } else {
-        ScopedUtfChars data_dir(env, dataDir);
-        android::PreInitializeNativeBridge(data_dir.c_str(), isa_string.c_str());
-      }
+    if (use_native_bridge) {
+      ScopedUtfChars isa_string(env, instructionSet);
+      ScopedUtfChars data_dir(env, dataDir);
+      android::PreInitializeNativeBridge(data_dir.c_str(), isa_string.c_str());
     }
 
     int rc = setresgid(gid, gid, gid);

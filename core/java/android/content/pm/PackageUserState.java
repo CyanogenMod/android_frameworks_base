@@ -18,7 +18,8 @@ package android.content.pm;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 
-import java.util.HashSet;
+import android.util.ArraySet;
+
 
 /**
  * Per-user state information about a package.
@@ -34,10 +35,10 @@ public class PackageUserState {
 
     public String lastDisableAppCaller;
 
-    public HashSet<String> disabledComponents;
-    public HashSet<String> enabledComponents;
-    public HashSet<String> protectedComponents;
-    public HashSet<String> visibleComponents;
+    public ArraySet<String> disabledComponents;
+    public ArraySet<String> enabledComponents;
+    public ArraySet<String> protectedComponents;
+    public ArraySet<String> visibleComponents;
 
     public PackageUserState() {
         installed = true;
@@ -53,13 +54,13 @@ public class PackageUserState {
         hidden = o.hidden;
         lastDisableAppCaller = o.lastDisableAppCaller;
         disabledComponents = o.disabledComponents != null
-                ? new HashSet<String>(o.disabledComponents) : null;
+                ? new ArraySet<String>(o.disabledComponents) : null;
         enabledComponents = o.enabledComponents != null
-                ? new HashSet<String>(o.enabledComponents) : null;
+                ? new ArraySet<String>(o.enabledComponents) : null;
         blockUninstall = o.blockUninstall;
         protectedComponents = o.protectedComponents != null
-                ? new HashSet<String>(o.protectedComponents) : null;
+                ? new ArraySet<String>(o.protectedComponents) : null;
         visibleComponents = o.visibleComponents != null
-                ? new HashSet<String>(o.visibleComponents) : null;
+                ? new ArraySet<String>(o.visibleComponents) : null;
     }
 }
