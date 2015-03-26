@@ -33,6 +33,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.UserHandle;
+import android.os.SystemClock;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -330,7 +331,7 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
         // If the user has toggled it too quickly, then just eat up the event here (it's better than
         // showing a janky screenshot).
         // NOTE: Ideally, the screenshot mechanism would take the window transform into account
-        if (System.currentTimeMillis() - mLastToggleTime < sMinToggleDelay) {
+        if (SystemClock.elapsedRealtime() - mLastToggleTime < sMinToggleDelay) {
             return;
         }
 
@@ -345,7 +346,7 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
             intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT |
                     Intent.FLAG_RECEIVER_FOREGROUND);
             mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);
-            mLastToggleTime = System.currentTimeMillis();
+            mLastToggleTime = SystemClock.elapsedRealtime();
             return;
         } else {
             // Otherwise, start the recents activity
@@ -538,7 +539,7 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
                 startAlternateRecentsActivity(topTask, opts, null);
             }
         }
-        mLastToggleTime = System.currentTimeMillis();
+        mLastToggleTime = SystemClock.elapsedRealtime();
     }
 
     /** Starts the recents activity */
