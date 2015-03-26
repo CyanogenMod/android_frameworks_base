@@ -752,7 +752,7 @@ class AlarmManagerService extends SystemService {
             interval = MIN_INTERVAL;
         }
 
-        if (type < RTC_WAKEUP || type > RTC_POWEROFF_WAKEUP || type >  ELAPSED_REALTIME) {
+        if (type < RTC_WAKEUP || type > RTC_POWEROFF_WAKEUP) {
             throw new IllegalArgumentException("Invalid alarm type " + type);
         }
 
