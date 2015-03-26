@@ -2968,22 +2968,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // Set the preferred network mode to target desired value or Default
             // value defined in RILConstants
-            int type;
-            type = SystemProperties.getInt("persist.radio.default_network", -1);
-            if (type == TYPE_NONE) {
-                type = SystemProperties.getInt("ro.telephony.default_network",
-                        RILConstants.PREFERRED_NETWORK_MODE);
+            final String defVal = SystemProperties.get("ro.telephony.default_network", "");
+            final String[] defNetworkSettings = defVal.split(",");
+            final String[] networkSettings = new String[phoneCount];
+            boolean error = defNetworkSettings.length != phoneCount;
+            for (int i = 0; i < phoneCount; i++) {
+                if (i < defNetworkSettings.length) {
+                    try {
+                        networkSettings[i] = String.valueOf(
+                                Integer.parseInt(defNetworkSettings[i]));
+                    } catch (NumberFormatException ex) {
+                        networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                        error = true;
+                    }
+                } else {
+                    networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                    error = true;
+                }
             }
-            String val = Integer.toString(type);
-            for (int phoneId = 1; phoneId < phoneCount; phoneId++) {
-                val = val + "," + type;
+            if (error) {
+                Log.w(TAG, "Invalid ro.telephony.default_network: " + defVal);
             }
-
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, val);
+            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, TextUtils.join(",",
+                    networkSettings));
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
-            type = SystemProperties.getInt("ro.telephony.default_cdma_sub",
+            int type = SystemProperties.getInt("ro.telephony.default_cdma_sub",
                         CdmaSubscriptionSourceManager.PREFERRED_CDMA_SUBSCRIPTION);
             loadSetting(stmt, Settings.Global.CDMA_SUBSCRIPTION_MODE, type);
 
