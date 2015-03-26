@@ -2817,14 +2817,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // value defined in RILConstants
             int type;
             int phoneCount = TelephonyManager.getDefault().getPhoneCount();
-            type = SystemProperties.getInt("ro.telephony.default_network",
-                        RILConstants.PREFERRED_NETWORK_MODE);
-            String val = Integer.toString(type);
-            for (int phoneId = 1; phoneId < phoneCount; phoneId++) {
-                val = val + "," + type;
-            }
+            String val = SystemProperties.get("ro.telephony.default_network", "");
+            String valArray[] = val.split(",");
+            if (valArray.length != phoneCount) {
+                Log.e(TAG, "Wrong ro.telephony.default_network setting " + val);
+            } else {
+                String valParsed = "";
+                boolean error = false;
+                
+                for (int i = 0; i < phoneCount; i++) {
+                    try {
+                        type = Integer.parseInt(valArray[i]);                        
+                        if (i != 0)
+                            valParsed += ",";
+                        valParsed += type;
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "Error parsing ro.telephony.default_network");
+                        error = true;
+                        break;
+                    }
+                }
 
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, val);
+                if (!error)
+                    loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, valParsed);
+            }
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
