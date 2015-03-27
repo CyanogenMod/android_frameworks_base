@@ -7312,7 +7312,10 @@ public final class Settings {
          * @hide
          */
         public static final String CONNECTIVITY_CHANGE_DELAY = "connectivity_change_delay";
-
+        /**
+         @hide
+         */
+        public static final String SET_WIFI_ONLY = "set_wifi_only";
 
         /**
          * Network sampling interval, in seconds. We'll generate link information
