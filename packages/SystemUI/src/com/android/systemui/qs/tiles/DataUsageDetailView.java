@@ -16,7 +16,12 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.AttributeSet;
@@ -24,13 +29,17 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Button;
 
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.qs.DataUsageGraph;
+import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.NetworkController;
 
+
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * Layout for the data usage detail in quick settings.
@@ -40,6 +49,9 @@ public class DataUsageDetailView extends LinearLayout {
     private static final double KB = 1024;
     private static final double MB = 1024 * KB;
     private static final double GB = 1024 * MB;
+
+    private static final String ACTION_NETWORK_OPERATOR_SETTINGS_ASYNC =
+            "org.codeaurora.settings.NETWORK_OPERATOR_SETTINGS_ASYNC";
 
     private final DecimalFormat FORMAT = new DecimalFormat("#.##");
 
@@ -61,7 +73,8 @@ public class DataUsageDetailView extends LinearLayout {
                 R.dimen.qs_data_usage_text_size);
     }
 
-    public void bind(NetworkController.DataUsageInfo info) {
+    public void bind(QSTile.Host host, NetworkController.DataUsageInfo info) {
+        final QSTile.Host mHost = host;
         final Resources res = mContext.getResources();
         final int titleId;
         final long bytes;
@@ -100,8 +113,25 @@ public class DataUsageDetailView extends LinearLayout {
         usage.setTextColor(res.getColor(usageColor));
         final DataUsageGraph graph = (DataUsageGraph) findViewById(R.id.usage_graph);
         graph.setLevels(info.limitLevel, info.warningLevel, info.usageLevel);
-        final TextView carrier = (TextView) findViewById(R.id.usage_carrier_text);
+        final Button carrier = (Button) findViewById(R.id.usage_carrier_text);
         carrier.setText(info.carrier);
+        carrier.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+                if (isAppInstalled(ACTION_NETWORK_OPERATOR_SETTINGS_ASYNC)) {
+                    intent = new Intent(ACTION_NETWORK_OPERATOR_SETTINGS_ASYNC);
+                } else {
+                    intent = new Intent(Intent.ACTION_MAIN);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    // Use NetworkSetting to handle the selection intent
+                    intent.setComponent(new ComponentName("com.android.phone",
+                            "com.android.phone.NetworkSetting"));
+                    mHost.startSettingsActivity(intent);
+                }
+            }
+        });
         final TextView period = (TextView) findViewById(R.id.usage_period_text);
         period.setText(info.period);
         final TextView infoTop = (TextView) findViewById(R.id.usage_info_top_text);
@@ -127,5 +157,21 @@ public class DataUsageDetailView extends LinearLayout {
             suffix = "KB";
         }
         return FORMAT.format(val * (bytes < 0 ? -1 : 1)) + " " + suffix;
+    }
+
+    private boolean isAppInstalled(String action) {
+        boolean installed = false;
+        PackageManager pm = mContext.getPackageManager();
+        List<ResolveInfo> list = pm.queryIntentActivities(new Intent(action), 0);
+        int listSize = list.size();
+        for (int i = 0; i < listSize; i++) {
+            ResolveInfo resolveInfo = list.get(i);
+            if ((resolveInfo.activityInfo.applicationInfo.flags
+                    & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                installed = true;
+                break;
+            }
+        }
+        return installed;
     }
 }
