@@ -449,4 +449,7 @@
         This will erase all data from your device\'s internal storage and your device will be back to factory settings.
     </string>
 
+    <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Switch input method button.</string>
+
 </resources>
