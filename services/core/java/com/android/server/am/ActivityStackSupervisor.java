@@ -2717,6 +2717,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
     ActivityRecord findTaskLocked(ActivityRecord r) {
         if (DEBUG_TASKS) Slog.d(TAG, "Looking for task of " + r);
+        /* Delay Binder Explicit GC during application launch */
+        BinderInternal.modifyDelayedGcParams();
         for (int displayNdx = mActivityDisplays.size() - 1; displayNdx >= 0; --displayNdx) {
             final ArrayList<ActivityStack> stacks = mActivityDisplays.valueAt(displayNdx).mStacks;
             for (int stackNdx = stacks.size() - 1; stackNdx >= 0; --stackNdx) {
@@ -2737,13 +2739,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
             }
         }
-        /* Delay Binder Explicit GC during application launch */
-        BinderInternal.modifyDelayedGcParams();
-
         mPm.cpuBoost(2000 * 1000);
-
-        /* Delay Binder Explicit GC during application launch */
-        BinderInternal.modifyDelayedGcParams();
 
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
