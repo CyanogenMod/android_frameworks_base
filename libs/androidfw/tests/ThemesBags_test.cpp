@@ -19,9 +19,9 @@
 #include <utils/String8.h>
 #include <utils/String16.h>
 #include "TestHelpers.h"
-#include "data/system/R.h"
-#include "data/app/R.h"
-#include "data/bags/R.h"
+#include "data/cm/system/R.h"
+#include "data/cm/app/R.h"
+#include "data/cm/bags/R.h"
 
 #include <gtest/gtest.h>
 
@@ -34,14 +34,14 @@ namespace {
  *
  * Package: android
  */
-#include "data/system/system_arsc.h"
+#include "data/cm/system/system_arsc.h"
 
 /**
  * Include a binary resource table.
  *
  * Package: com.android.app
  */
-#include "data/app/app_arsc.h"
+#include "data/cm/app/app_arsc.h"
 
 /**
  * Include a binary resource table.
@@ -49,7 +49,7 @@ namespace {
  *
  * Package: com.android.test.bags
  */
-#include "data/bags/bags_arsc.h"
+#include "data/cm/bags/bags_arsc.h"
 
 enum { MAY_NOT_BE_BAG = false };
 
