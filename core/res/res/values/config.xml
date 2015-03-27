@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /* Copyright (c) 2013, The Linux Foundation. All rights reserved.
 ** Not a Contribution.
@@ -2043,7 +2043,7 @@
     <bool name="config_enable_mms_with_mobile_data_off">false</bool>
 
     <!-- Configuartion to set zen mode when silent mode is on -->
-    <bool name="config_setZenModeWhenSilentModeOn">false</bool>
+    <bool name="config_setZenModeWhenSilentModeOn">true</bool>
 
     <!-- Configuartion to support ESN Tracker -->
     <bool name="config_telephony_ESN_Tracker_enabled">false</bool>
