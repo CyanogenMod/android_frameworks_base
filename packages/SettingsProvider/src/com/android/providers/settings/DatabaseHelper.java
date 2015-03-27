@@ -2830,14 +2830,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 try {
                     networkSettings[i] = String.valueOf(Integer.parseInt(defNetworkSettings[i]));
                 } catch (NumberFormatException ex) {
-                    networkSettings[i] = RILConstants.PREFERRED_NETWORK_MODE;
+                    networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
                     error = true;
                 }
             }
             if (error) {
-                Log.w(TAG, "Wrong ro.telephony.default_network setting " + defVal + ". Fallback to defaults");
+                Log.w(TAG, "Wrong ro.telephony.default_network setting " + defVal
+                    + ". Fallback to defaults");
             }
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, TextUtils.join(",", networkSettings));
+            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, TextUtils.join(",",
+                networkSettings));
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
