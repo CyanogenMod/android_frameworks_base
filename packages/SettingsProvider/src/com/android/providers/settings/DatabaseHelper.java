@@ -2830,7 +2830,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 try {
                     networkSettings[i] = String.valueOf(Integer.parseInt(defNetworkSettings[i]));
                 } catch (NumberFormatException ex) {
-                    networkSettings[i] = RILConstants.PREFERRED_NETWORK_MODE;
+                    networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
                     error = true;
                 }
             }
