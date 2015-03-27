@@ -814,6 +814,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
         if (DEBUG) Log.d(TAG, "updateSimState: mSimState=" + mSimState);
         updateSimIcon();
+        updateTelephonySignalStrength();
     }
 
     private boolean isCdma() {
@@ -859,8 +860,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
             Log.d(TAG, "updateTelephonySignalStrength: hasService=" + hasService()
                     + " ss=" + mSignalStrength);
         }
-        if (!hasService() &&
-              (mDataServiceState != ServiceState.STATE_IN_SERVICE)) {
+        if ((!hasService() &&
+              (mDataServiceState != ServiceState.STATE_IN_SERVICE)) ||
+              mSimState == IccCardConstants.State.ABSENT) {
             if (CHATTY) Log.d(TAG, "updateTelephonySignalStrength: No Service");
             mPhoneSignalIconId = TelephonyIcons.getSignalNullIcon();
             mQSPhoneSignalIconId = R.drawable.ic_qs_signal_no_signal;
