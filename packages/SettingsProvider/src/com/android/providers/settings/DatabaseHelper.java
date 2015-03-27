@@ -2801,16 +2801,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             final String[] networkSettings = new String[phoneCount];
             boolean error = defNetworkSettings.length != phoneCount;
             for (int i = 0; i < phoneCount; i++) {
-                try {
-                    networkSettings[i] = String.valueOf(Integer.parseInt(defNetworkSettings[i]));
-                } catch (NumberFormatException ex) {
+                if (i < defNetworkSettings.length) {
+                    try {
+                        networkSettings[i] = String.valueOf(
+                                Integer.parseInt(defNetworkSettings[i]));
+                    } catch (NumberFormatException ex) {
+                        networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                        error = true;
+                    }
+                } else {
                     networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
                     error = true;
                 }
             }
             if (error) {
-                Log.w(TAG, "Wrong ro.telephony.default_network setting " + defVal
-                        + ". Fallback to defaults");
+                Log.w(TAG, "Invalid ro.telephony.default_network: " + defVal);
             }
             loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, TextUtils.join(",",
                     networkSettings));
