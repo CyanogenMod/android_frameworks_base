@@ -62,7 +62,8 @@ public class Typeface {
             new LongSparseArray<SparseArray<Typeface>>(3);
 
     static Typeface sDefaultTypeface;
-    static Map<String, Typeface> sSystemFontMap;
+    static final Map<String, Typeface> sSystemFontMap = new HashMap<String, Typeface>();
+    static Map<String, Typeface> sSystemFontMap2 = new HashMap<String, Typeface>();
     static FontFamily[] sFallbackFonts;
 
     static final String FONTS_CONFIG = "fonts.xml";
@@ -396,7 +397,6 @@ public class Typeface {
             sFallbackFonts = familyList.toArray(new FontFamily[familyList.size()]);
             setDefault(Typeface.createFromFamilies(sFallbackFonts));
 
-            Map<String, Typeface> systemFonts = new HashMap<String, Typeface>();
             for (int i = 0; i < fontConfig.families.size(); i++) {
                 Typeface typeface;
                 Family f = fontConfig.families.get(i);
@@ -410,20 +410,36 @@ public class Typeface {
                         FontFamily[] families = { fontFamily };
                         typeface = Typeface.createFromFamiliesWithDefault(families);
                     }
-                    systemFonts.put(f.name, typeface);
+                    Typeface t1 = sSystemFontMap.get(f.name);
+                    Typeface t2 = sSystemFontMap2.get(f.name);
+                    if (t2 != null) {
+                        if (t1 != null) {
+                            t1.native_instance = typeface.native_instance;
+                        } else {
+                            sSystemFontMap.put(f.name, typeface);
+                        }
+                    }
+                    sSystemFontMap2.put(f.name, typeface);
                 }
             }
             for (FontListParser.Alias alias : fontConfig.aliases) {
-                Typeface base = systemFonts.get(alias.toName);
+                Typeface base = sSystemFontMap2.get(alias.toName);
                 Typeface newFace = base;
                 int weight = alias.weight;
                 if (weight != 400) {
                     newFace = new Typeface(nativeCreateWeightAlias(base.native_instance, weight));
                 }
-                systemFonts.put(alias.name, newFace);
+                Typeface t1 = sSystemFontMap.get(alias.name);
+                Typeface t2 = sSystemFontMap2.get(alias.name);
+                if (t2 != null) {
+                    if (t1 != null) {
+                        t1.native_instance = newFace.native_instance;
+                    } else {
+                        sSystemFontMap.put(alias.name, newFace);
+                    }
+                }
+                sSystemFontMap2.put(alias.name, newFace);
             }
-            sSystemFontMap = systemFonts;
-
         } catch (RuntimeException e) {
             Log.w(TAG, "Didn't create default family (most likely, non-Minikin build)", e);
             // TODO: normal in non-Minikin case, remove or make error when Minikin-only
@@ -443,7 +459,6 @@ public class Typeface {
      */
     public static void recreateDefaults() {
         sTypefaceCache.clear();
-        sSystemFontMap.clear();
         init();
 
         DEFAULT_INTERNAL = create((String) null, 0);
