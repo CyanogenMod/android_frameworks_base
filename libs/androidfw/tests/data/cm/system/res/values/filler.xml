@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Filler so we can test the protected attribute "windowNoTitle" -->
+    <java-symbol name="dummyAttr04" type="attr" id="0x01010004" />
+    <java-symbol name="dummyAttr05" type="attr" id="0x01010005" />
+    <java-symbol name="dummyAttr06" type="attr" id="0x01010006" />
+    <java-symbol name="dummyAttr07" type="attr" id="0x01010007" />
+    <java-symbol name="dummyAttr08" type="attr" id="0x01010008" />
+    <java-symbol name="dummyAttr09" type="attr" id="0x01010009" />
+    <java-symbol name="dummyAttr0a" type="attr" id="0x0101000a" />
+    <java-symbol name="dummyAttr0b" type="attr" id="0x0101000b" />
+    <java-symbol name="dummyAttr0c" type="attr" id="0x0101000c" />
+    <java-symbol name="dummyAttr0d" type="attr" id="0x0101000d" />
+    <java-symbol name="dummyAttr0e" type="attr" id="0x0101000e" />
+    <java-symbol name="dummyAttr0f" type="attr" id="0x0101000f" />
+    <java-symbol name="dummyAttr10" type="attr" id="0x01010010" />
+    <java-symbol name="dummyAttr11" type="attr" id="0x01010011" />
+    <java-symbol name="dummyAttr12" type="attr" id="0x01010012" />
+    <java-symbol name="dummyAttr13" type="attr" id="0x01010013" />
+    <java-symbol name="dummyAttr14" type="attr" id="0x01010014" />
+    <java-symbol name="dummyAttr15" type="attr" id="0x01010015" />
+    <java-symbol name="dummyAttr16" type="attr" id="0x01010016" />
+    <java-symbol name="dummyAttr17" type="attr" id="0x01010017" />
+    <java-symbol name="dummyAttr18" type="attr" id="0x01010018" />
+    <java-symbol name="dummyAttr19" type="attr" id="0x01010019" />
+    <java-symbol name="dummyAttr1a" type="attr" id="0x0101001a" />
+    <java-symbol name="dummyAttr1b" type="attr" id="0x0101001b" />
+    <java-symbol name="dummyAttr1c" type="attr" id="0x0101001c" />
+    <java-symbol name="dummyAttr1d" type="attr" id="0x0101001d" />
+    <java-symbol name="dummyAttr1e" type="attr" id="0x0101001e" />
+    <java-symbol name="dummyAttr1f" type="attr" id="0x0101001f" />
+    <java-symbol name="dummyAttr20" type="attr" id="0x01010020" />
+    <java-symbol name="dummyAttr21" type="attr" id="0x01010021" />
+    <java-symbol name="dummyAttr22" type="attr" id="0x01010022" />
+    <java-symbol name="dummyAttr23" type="attr" id="0x01010023" />
+    <java-symbol name="dummyAttr24" type="attr" id="0x01010024" />
+    <java-symbol name="dummyAttr25" type="attr" id="0x01010025" />
+    <java-symbol name="dummyAttr26" type="attr" id="0x01010026" />
+    <java-symbol name="dummyAttr27" type="attr" id="0x01010027" />
+    <java-symbol name="dummyAttr28" type="attr" id="0x01010028" />
+    <java-symbol name="dummyAttr29" type="attr" id="0x01010029" />
+    <java-symbol name="dummyAttr2a" type="attr" id="0x0101002a" />
+    <java-symbol name="dummyAttr2b" type="attr" id="0x0101002b" />
+    <java-symbol name="dummyAttr2c" type="attr" id="0x0101002c" />
+    <java-symbol name="dummyAttr2d" type="attr" id="0x0101002d" />
+    <java-symbol name="dummyAttr2e" type="attr" id="0x0101002e" />
+    <java-symbol name="dummyAttr2f" type="attr" id="0x0101002f" />
+    <java-symbol name="dummyAttr30" type="attr" id="0x01010030" />
+    <java-symbol name="dummyAttr31" type="attr" id="0x01010031" />
+    <java-symbol name="dummyAttr32" type="attr" id="0x01010032" />
+    <java-symbol name="dummyAttr33" type="attr" id="0x01010033" />
+    <java-symbol name="dummyAttr34" type="attr" id="0x01010034" />
+    <java-symbol name="dummyAttr35" type="attr" id="0x01010035" />
+    <java-symbol name="dummyAttr36" type="attr" id="0x01010036" />
+    <java-symbol name="dummyAttr37" type="attr" id="0x01010037" />
+    <java-symbol name="dummyAttr38" type="attr" id="0x01010038" />
+    <java-symbol name="dummyAttr39" type="attr" id="0x01010039" />
+    <java-symbol name="dummyAttr3a" type="attr" id="0x0101003a" />
+    <java-symbol name="dummyAttr3b" type="attr" id="0x0101003b" />
+    <java-symbol name="dummyAttr3c" type="attr" id="0x0101003c" />
+    <java-symbol name="dummyAttr3d" type="attr" id="0x0101003d" />
+    <java-symbol name="dummyAttr3e" type="attr" id="0x0101003e" />
+    <java-symbol name="dummyAttr3f" type="attr" id="0x0101003f" />
+    <java-symbol name="dummyAttr40" type="attr" id="0x01010040" />
+    <java-symbol name="dummyAttr41" type="attr" id="0x01010041" />
+    <java-symbol name="dummyAttr42" type="attr" id="0x01010042" />
+    <java-symbol name="dummyAttr43" type="attr" id="0x01010043" />
+    <java-symbol name="dummyAttr44" type="attr" id="0x01010044" />
+    <java-symbol name="dummyAttr45" type="attr" id="0x01010045" />
+    <java-symbol name="dummyAttr46" type="attr" id="0x01010046" />
+    <java-symbol name="dummyAttr47" type="attr" id="0x01010047" />
+    <java-symbol name="dummyAttr48" type="attr" id="0x01010048" />
+    <java-symbol name="dummyAttr49" type="attr" id="0x01010049" />
+    <java-symbol name="dummyAttr4a" type="attr" id="0x0101004a" />
+    <java-symbol name="dummyAttr4b" type="attr" id="0x0101004b" />
+    <java-symbol name="dummyAttr4c" type="attr" id="0x0101004c" />
+    <java-symbol name="dummyAttr4d" type="attr" id="0x0101004d" />
+    <java-symbol name="dummyAttr4e" type="attr" id="0x0101004e" />
+    <java-symbol name="dummyAttr4f" type="attr" id="0x0101004f" />
+    <java-symbol name="dummyAttr50" type="attr" id="0x01010050" />
+    <java-symbol name="dummyAttr51" type="attr" id="0x01010051" />
+    <java-symbol name="dummyAttr52" type="attr" id="0x01010052" />
+    <java-symbol name="dummyAttr53" type="attr" id="0x01010053" />
+    <java-symbol name="dummyAttr54" type="attr" id="0x01010054" />
+    <java-symbol name="dummyAttr55" type="attr" id="0x01010055" />
+    <attr name="dummyAttr04" format="reference"/>
+    <attr name="dummyAttr05" format="reference"/>
+    <attr name="dummyAttr06" format="reference"/>
+    <attr name="dummyAttr07" format="reference"/>
+    <attr name="dummyAttr08" format="reference"/>
+    <attr name="dummyAttr09" format="reference"/>
+    <attr name="dummyAttr0a" format="reference"/>
+    <attr name="dummyAttr0b" format="reference"/>
+    <attr name="dummyAttr0c" format="reference"/>
+    <attr name="dummyAttr0d" format="reference"/>
+    <attr name="dummyAttr0e" format="reference"/>
+    <attr name="dummyAttr0f" format="reference"/>
+    <attr name="dummyAttr10" format="reference"/>
+    <attr name="dummyAttr11" format="reference"/>
+    <attr name="dummyAttr12" format="reference"/>
+    <attr name="dummyAttr13" format="reference"/>
+    <attr name="dummyAttr14" format="reference"/>
+    <attr name="dummyAttr15" format="reference"/>
+    <attr name="dummyAttr16" format="reference"/>
+    <attr name="dummyAttr17" format="reference"/>
+    <attr name="dummyAttr18" format="reference"/>
+    <attr name="dummyAttr19" format="reference"/>
+    <attr name="dummyAttr1a" format="reference"/>
+    <attr name="dummyAttr1b" format="reference"/>
+    <attr name="dummyAttr1c" format="reference"/>
+    <attr name="dummyAttr1d" format="reference"/>
+    <attr name="dummyAttr1e" format="reference"/>
+    <attr name="dummyAttr1f" format="reference"/>
+    <attr name="dummyAttr20" format="reference"/>
+    <attr name="dummyAttr21" format="reference"/>
+    <attr name="dummyAttr22" format="reference"/>
+    <attr name="dummyAttr23" format="reference"/>
+    <attr name="dummyAttr24" format="reference"/>
+    <attr name="dummyAttr25" format="reference"/>
+    <attr name="dummyAttr26" format="reference"/>
+    <attr name="dummyAttr27" format="reference"/>
+    <attr name="dummyAttr28" format="reference"/>
+    <attr name="dummyAttr29" format="reference"/>
+    <attr name="dummyAttr2a" format="reference"/>
+    <attr name="dummyAttr2b" format="reference"/>
+    <attr name="dummyAttr2c" format="reference"/>
+    <attr name="dummyAttr2d" format="reference"/>
+    <attr name="dummyAttr2e" format="reference"/>
+    <attr name="dummyAttr2f" format="reference"/>
+    <attr name="dummyAttr30" format="reference"/>
+    <attr name="dummyAttr31" format="reference"/>
+    <attr name="dummyAttr32" format="reference"/>
+    <attr name="dummyAttr33" format="reference"/>
+    <attr name="dummyAttr34" format="reference"/>
+    <attr name="dummyAttr35" format="reference"/>
+    <attr name="dummyAttr36" format="reference"/>
+    <attr name="dummyAttr37" format="reference"/>
+    <attr name="dummyAttr38" format="reference"/>
+    <attr name="dummyAttr39" format="reference"/>
+    <attr name="dummyAttr3a" format="reference"/>
+    <attr name="dummyAttr3b" format="reference"/>
+    <attr name="dummyAttr3c" format="reference"/>
+    <attr name="dummyAttr3d" format="reference"/>
+    <attr name="dummyAttr3e" format="reference"/>
+    <attr name="dummyAttr3f" format="reference"/>
+    <attr name="dummyAttr40" format="reference"/>
+    <attr name="dummyAttr41" format="reference"/>
+    <attr name="dummyAttr42" format="reference"/>
+    <attr name="dummyAttr43" format="reference"/>
+    <attr name="dummyAttr44" format="reference"/>
+    <attr name="dummyAttr45" format="reference"/>
+    <attr name="dummyAttr46" format="reference"/>
+    <attr name="dummyAttr47" format="reference"/>
+    <attr name="dummyAttr48" format="reference"/>
+    <attr name="dummyAttr49" format="reference"/>
+    <attr name="dummyAttr4a" format="reference"/>
+    <attr name="dummyAttr4b" format="reference"/>
+    <attr name="dummyAttr4c" format="reference"/>
+    <attr name="dummyAttr4d" format="reference"/>
+    <attr name="dummyAttr4e" format="reference"/>
+    <attr name="dummyAttr4f" format="reference"/>
+    <attr name="dummyAttr50" format="reference"/>
+    <attr name="dummyAttr51" format="reference"/>
+    <attr name="dummyAttr52" format="reference"/>
+    <attr name="dummyAttr53" format="reference"/>
+    <attr name="dummyAttr54" format="reference"/>
+    <attr name="dummyAttr55" format="reference"/>
+</resources>
