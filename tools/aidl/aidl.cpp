@@ -568,12 +568,19 @@ check_types(const char* filename, document_item_type* items)
                     if (methodNames.find(m->name.data) == methodNames.end()) {
                         methodNames[m->name.data] = m;
                     } else {
-                        fprintf(stderr,"%s:%d attempt to redefine method %s,\n",
+                        if (m->hasId) {
+                            fprintf(stderr, "%s:%d redefining method %s\n",
                                 filename, m->name.lineno, m->name.data);
-                        method_type* old = methodNames[m->name.data];
-                        fprintf(stderr, "%s:%d    previously defined here.\n",
-                                filename, old->name.lineno);
-                        err = 1;
+                            m->deduplicate = true;
+                            methodNames[m->name.data] = m;
+                        } else {
+                            fprintf(stderr,"%s:%d attempt to redefine method %s,\n",
+                                    filename, m->name.lineno, m->name.data);
+                            method_type* old = methodNames[m->name.data];
+                            fprintf(stderr, "%s:%d    previously defined here.\n",
+                                    filename, old->name.lineno);
+                            err = 1;
+                        }
                     }
                 }
                 member = member->next;
@@ -1013,9 +1020,6 @@ compile_aidl(Options& options)
     NAMES.Dump();
 #endif
 
-    // check the referenced types in mainDoc to make sure we've imported them
-    err |= check_types(options.inputFileName.c_str(), mainDoc);
-
     // finally, there really only needs to be one thing in mainDoc, and it
     // needs to be an interface.
     bool onlyParcelable = false;
@@ -1026,6 +1030,9 @@ compile_aidl(Options& options)
         err |= check_and_assign_method_ids(options.inputFileName.c_str(),
                 ((interface_type*)mainDoc)->interface_items);
     }
+
+    // check the referenced types in mainDoc to make sure we've imported them
+    err |= check_types(options.inputFileName.c_str(), mainDoc);
 
     // after this, there shouldn't be any more errors because of the
     // input.

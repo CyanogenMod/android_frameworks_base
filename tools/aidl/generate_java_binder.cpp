@@ -260,6 +260,12 @@ generate_method(const method_type* method, Class* interface,
     string transactCodeName = "TRANSACTION_";
     transactCodeName += method->name.data;
 
+    if (method->deduplicate) {
+        char tmp[16];
+        sprintf(tmp, "_%d", index);
+        transactCodeName += tmp;
+    }
+
     char transactCodeValue[60];
     sprintf(transactCodeValue, "(android.os.IBinder.FIRST_CALL_TRANSACTION + %d)", index);
 
