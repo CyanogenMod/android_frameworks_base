@@ -64,6 +64,7 @@ typedef struct method_type {
     buffer_type semicolon_token;
     buffer_type* comments_token; // points into this structure, DO NOT DELETE
     int assigned_id;
+    bool deduplicate;
 } method_type;
 
 enum {
