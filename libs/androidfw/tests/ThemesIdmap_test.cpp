@@ -19,7 +19,7 @@
 #include <utils/String8.h>
 #include <utils/String16.h>
 #include "TestHelpers.h"
-#include "data/basic/R.h"
+#include "data/cm/basic/R.h"
 
 #include <gtest/gtest.h>
 
@@ -32,7 +32,7 @@ namespace {
  *
  * Package: com.android.test.basic
  */
-#include "data/basic/basic_arsc.h"
+#include "data/cm/basic/basic_arsc.h"
 
 /**
  * Include a binary resource table.
@@ -40,7 +40,7 @@ namespace {
  *
  * Package: com.android.test.basic
  */
-#include "data/overlay/overlay_arsc.h"
+#include "data/cm/overlay/overlay_arsc.h"
 
 enum { MAY_NOT_BE_BAG = false };
 
