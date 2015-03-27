@@ -295,14 +295,14 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
                     new QSDetailItemsList.QSDetailListAdapter(context, mDisplayedAccessPoints));
             mItemsList.setEmptyState(R.drawable.ic_qs_wifi_detail_empty,
                     R.string.quick_settings_wifi_detail_empty_text);
-            updateItems();
+            setItemsVisible(mState.enabled);
             return mItemsList;
         }
 
         @Override
         public void onAccessPointsChanged(final List<AccessPoint> accessPoints) {
             mAccessPoints = accessPoints;
-            updateItems();
+            setItemsVisible(mState.enabled);
             if (accessPoints != null && accessPoints.size() > 0) {
                 fireScanStateChanged(false);
             }
