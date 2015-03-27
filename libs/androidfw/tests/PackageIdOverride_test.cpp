@@ -20,7 +20,7 @@
 #include <utils/String8.h>
 #include <utils/String16.h>
 #include "TestHelpers.h"
-#include "data/override/R.h"
+#include "data/cm/override/R.h"
 
 #include <gtest/gtest.h>
 
@@ -28,7 +28,7 @@ using namespace android;
 
 namespace {
 
-#include "data/override/override_arsc.h"
+#include "data/cm/override/override_arsc.h"
 
 TEST(PackageIdOverrideTest, shouldOverridePackageId) {
     const uint32_t pkgIdOverride = 0x42;
