@@ -2677,6 +2677,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHandler.removeCallbacks(mBackLongPress);
         }
 
+        if (!virtualKey && down && repeatCount == 0) {
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_HOME:
+				case KeyEvent.KEYCODE_MENU:
+				case KeyEvent.KEYCODE_BACK:
+				case KeyEvent.KEYCODE_APP_SWITCH:
+				case KeyEvent.KEYCODE_ASSIST:
+                     mPowerManager.cpuBoost(750000);
+                     if (DEBUG) Log.i(TAG, "mPowerManager.cpuBoost(750000) for hardware key action.");
+                     break;
+                default:
+                     break;
+             }
+		 }
+
         // First we always handle the home key here, so applications
         // can never break it, although if keyguard is on, we do let
         // it handle it, because that gives us the correct 5 second
