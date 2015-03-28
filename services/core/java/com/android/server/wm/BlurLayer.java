@@ -142,7 +142,7 @@ public class BlurLayer {
         }
     }
 
-    void adjustSurface(int layer, boolean inTransaction) {
+    void adjustBounds() {
         final int dw, dh;
         final float xPos, yPos;
         if (!mStack.isFullscreen()) {
@@ -159,28 +159,26 @@ public class BlurLayer {
             yPos = 0;
         }
 
-        try {
-            if (!inTransaction) {
-                SurfaceControl.openTransaction();
-            }
-            mBlurSurface.setPosition(xPos, yPos);
-            mBlurSurface.setSize(dw, dh);
-            mBlurSurface.setLayer(layer);
-        } catch (RuntimeException e) {
-            Slog.w(TAG, "Failure setting size or layer", e);
-        } finally {
-            if (!inTransaction) {
-                SurfaceControl.closeTransaction();
-            }
-        }
+        mBlurSurface.setPosition(xPos, yPos);
+        mBlurSurface.setSize(dw, dh);
         mLastBounds.set(mBounds);
-        mLayer = layer;
     }
 
-    void setBounds(Rect bounds) {
+    void setBounds(Rect bounds, boolean inTransaction) {
         mBounds.set(bounds);
         if (isBlurring() && !mLastBounds.equals(bounds)) {
-            adjustSurface(mLayer, false);
+            try {
+                if (!inTransaction) {
+                    SurfaceControl.openTransaction();
+                }
+                adjustBounds();
+            } catch (RuntimeException e) {
+                Slog.w(TAG, "Failure setting size", e);
+            } finally {
+                if (!inTransaction) {
+                    SurfaceControl.closeTransaction();
+                }
+            }
         }
     }
 
@@ -219,9 +217,10 @@ public class BlurLayer {
             return;
         }
 
-        if (!mLastBounds.equals(mBounds) || mLayer != layer) {
-            adjustSurface(layer, true);
+        if (!mLastBounds.equals(mBounds)) {
+            adjustBounds();
         }
+        setLayer(layer);
 
         long curTime = SystemClock.uptimeMillis();
         final boolean animating = isAnimating();
