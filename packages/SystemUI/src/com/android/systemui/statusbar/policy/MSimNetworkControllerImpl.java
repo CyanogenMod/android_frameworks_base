@@ -992,12 +992,7 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
                 something = true;
             }
         }
-        if (mPhoneIdSubIdMapping.indexOfKey(phoneId) >= 0) {
-            int sub = mPhoneIdSubIdMapping.get(phoneId);
-            SubscriptionInfo info = SubscriptionManager.from(mContext)
-                    .getActiveSubscriptionInfo(sub);
-            mMSimNetworkName[phoneId] = info.getDisplayName().toString();
-        } else if (something) {
+        if (something) {
             mMSimNetworkName[phoneId] = str.toString();
         } else {
             mMSimNetworkName[phoneId] = mNetworkNameDefault;
