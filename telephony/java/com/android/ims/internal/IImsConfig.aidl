@@ -133,6 +133,25 @@ interface IImsConfig {
      */
      oneway void setVideoQuality(int quality, ImsConfigListener listener);
 
+    /* AOSP Compatibility methods */
+    /**
+     * Gets the value for ims service/capabilities parameters from the provisioned
+     * value storage. Synchronous blocking call.
+     *
+     * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
+     * @return value in Integer format.
+     */
+    int getProvisionedValue(int item);
+
+    /**
+     * Gets the value for ims service/capabilities parameters from the provisioned
+     * value storage. Synchronous blocking call.
+     *
+     * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
+     * @return value in String format.
+     */
+    String getProvisionedStringValue(int item);
+
     /**
      * Gets the value for IMS volte provisioned.
      * This should be the same as the operator provisioned value if applies.
