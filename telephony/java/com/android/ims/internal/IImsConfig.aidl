@@ -55,7 +55,7 @@ interface IImsConfig {
      * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
      * @return value in Integer format.
      */
-    int getMasterValue(int item);
+    int getMasterValue(int item) = 0;
 
     /**
      * Gets the value for ims service/capabilities parameters from the master
@@ -64,7 +64,7 @@ interface IImsConfig {
      * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
      * @return value in String format.
      */
-    String getMasterStringValue(int item);
+    String getMasterStringValue(int item) = 1;
 
     /**
      * Sets the value for IMS service/capabilities parameters by the operator device
@@ -75,7 +75,7 @@ interface IImsConfig {
      * @param value in Integer format.
      * @return as defined in com.android.ims.ImsConfig#OperationStatusConstants.
      */
-    int setProvisionedValue(int item, int value);
+    int setProvisionedValue(int item, int value) = 2;
 
     /**
      * Sets the value for IMS service/capabilities parameters by the operator device
@@ -86,7 +86,7 @@ interface IImsConfig {
      * @param value in String format.
      * @return as defined in com.android.ims.ImsConfig#OperationStatusConstants.
      */
-    int setProvisionedStringValue(int item, String value);
+    int setProvisionedStringValue(int item, String value) = 3;
 
     /**
      * Gets the value of the specified IMS feature item for specified network type.
@@ -98,7 +98,7 @@ interface IImsConfig {
      * @param listener. feature value returned asynchronously through listener.
      * @return void
      */
-    oneway void getFeatureValue(int feature, int network, ImsConfigListener listener);
+    oneway void getFeatureValue(int feature, int network, ImsConfigListener listener) = 4;
 
     /**
      * Sets the value for IMS feature item for specified network type.
@@ -111,7 +111,7 @@ interface IImsConfig {
      * @param listener, provided if caller needs to be notified for set result.
      * @return void
      */
-    oneway void setFeatureValue(int feature, int network, int value, ImsConfigListener listener);
+    oneway void setFeatureValue(int feature, int network, int value, ImsConfigListener listener) = 5;
 
     /**
      *
@@ -120,7 +120,7 @@ interface IImsConfig {
      * @param listener. Video quality value returned asynchronously through listener.
      * @return void
      */
-    oneway void getVideoQuality(ImsConfigListener listener);
+    oneway void getVideoQuality(ImsConfigListener listener) = 6;
 
     /**
      * Sets the value for IMS feature item video quality.
@@ -131,5 +131,32 @@ interface IImsConfig {
      *
      * @throws ImsException if calling the IMS service results in an error.
      */
-     oneway void setVideoQuality(int quality, ImsConfigListener listener);
+     oneway void setVideoQuality(int quality, ImsConfigListener listener) = 7;
+
+    /* AOSP Compat methods */
+    /**
+     * Gets the value for ims service/capabilities parameters from the provisioned
+     * value storage. Synchronous blocking call.
+     *
+     * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
+     * @return value in Integer format.
+     */
+    int getProvisionedValue(int item) = 8;
+
+    /**
+     * Gets the value for ims service/capabilities parameters from the provisioned
+     * value storage. Synchronous blocking call.
+     *
+     * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
+     * @return value in String format.
+     */
+    String getProvisionedStringValue(int item) = 9;
+
+    /**
+     * Gets the value for IMS volte provisioned.
+     * This should be the same as the operator provisioned value if applies.
+     *
+     * @return void
+     */
+    boolean getVolteProvisioned() = 10;
 }
