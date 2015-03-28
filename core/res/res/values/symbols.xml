@@ -2144,31 +2144,6 @@
   <java-symbol type="string" name="whichHomeApplicationNamed" />
   <java-symbol type="bool" name="config_sms_force_7bit_encoding" />
 
-  <!-- cpu boost for overscroller fling -->
-  <java-symbol type="bool" name="config_enableCpuBoostForOverScrollerFling" />
-  <java-symbol type="integer" name="flingboost_timeout_param" />
-  <java-symbol type="integer" name="flingboost_schedboost_param" />
-  <java-symbol type="integer" name="flingboost_cpuboost_param" />
-  <java-symbol type="integer" name="flingboost_pcdisbl_param" />
-  <java-symbol type="integer" name="flingboost_ksmboost_param" />
-
-  <!-- cpu boost for horizontal scroll -->
-  <java-symbol type="bool" name="config_enableCpuBoostForScroller" />
-  <java-symbol type="integer" name="scrollboost_timeout_param" />
-  <java-symbol type="integer" name="scrollboost_schedboost_param" />
-  <java-symbol type="integer" name="scrollboost_cpuboost_param" />
-  <java-symbol type="integer" name="scrollboost_pcdisbl_param" />
-  <java-symbol type="integer" name="scrollboost_ksmboost_param" />
-
-  <!-- cpu boost for AppLaunch -->
-  <java-symbol type="bool" name="config_enableCpuBoostForAppLaunch" />
-  <java-symbol type="integer" name="launchboost_timeout_param" />
-  <java-symbol type="integer" name="launchboost_schedboost_param" />
-  <java-symbol type="integer" name="launchboost_cpuboost_param" />
-  <java-symbol type="integer" name="launchboost_cpu_6_7_offline_param" />
-  <java-symbol type="integer" name="launchboost_pcdisbl_param" />
-  <java-symbol type="integer" name="launchboost_ksmboost_param" />
-
   <!-- Configuration to play sms ringtone during MO/MT call -->
   <java-symbol type="bool" name="config_sms_ringtone_incall" />
 

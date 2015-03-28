@@ -2176,37 +2176,11 @@
     <!-- Configuartion to support ESN Tracker -->
     <bool name="config_telephony_ESN_Tracker_enabled">false</bool>
 
-    <!-- Whether cpu boost is enabled for overscroller fling. -->
-    <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
-    <integer name="flingboost_timeout_param">0</integer>
-    <integer name="flingboost_schedboost_param">0</integer>
-    <integer name="flingboost_cpuboost_param">0</integer>
-    <integer name="flingboost_pcdisbl_param">0</integer>
-    <integer name="flingboost_ksmboost_param">0</integer>
-
-    <!-- Whether cpu boost is enabled for horizontal scroll. -->
-    <bool name="config_enableCpuBoostForScroller">false</bool>
-    <integer name="scrollboost_timeout_param">0</integer>
-    <integer name="scrollboost_schedboost_param">0</integer>
-    <integer name="scrollboost_cpuboost_param">0</integer>
-    <integer name="scrollboost_pcdisbl_param">0</integer>
-    <integer name="scrollboost_ksmboost_param">0</integer>
-
     <!-- Configuration to enable non-default PDP during IWLAN -->
     <bool name="config_feature_iwlan_enabled">false</bool>
     <!-- set to false if we dont need to consider data
          service state to display signal strength bars -->
     <bool name="config_combined_signal">true</bool>
-
-    <!-- Whether cpu boost is enabled for both application's 1st launch,subsequent
-         launch and in-app-activity -->
-    <bool name="config_enableCpuBoostForAppLaunch">false</bool>
-    <integer name="launchboost_timeout_param">0</integer>
-    <integer name="launchboost_schedboost_param">0</integer>
-    <integer name="launchboost_cpuboost_param">0</integer>
-    <integer name="launchboost_cpu_6_7_offline_param">0</integer>
-    <integer name="launchboost_pcdisbl_param">0</integer>
-    <integer name="launchboost_ksmboost_param">0</integer>
 
     <!-- Configuration to play sms ringtone during MO/MT call -->
     <bool name="config_sms_ringtone_incall">false</bool>

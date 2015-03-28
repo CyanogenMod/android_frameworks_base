@@ -84,7 +84,6 @@ import android.service.voice.IVoiceInteractionSession;
 import android.util.EventLog;
 import android.util.Slog;
 import android.view.Display;
-import com.android.internal.app.ActivityTrigger;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -255,8 +254,6 @@ final class ActivityStack {
     }
 
     final Handler mHandler;
-
-    static final ActivityTrigger mActivityTrigger = new ActivityTrigger();
 
     final class ActivityStackHandler extends Handler {
         //public Handler() {
@@ -2067,7 +2064,6 @@ final class ActivityStack {
         task.setFrontOfTask();
 
         r.putInHistory();
-        r.info.flags = mActivityTrigger.activityStartTrigger(r.intent, r.info.flags);
         if (!isHomeStack() || numActivities() > 0) {
             // We want to show the starting preview window if we are
             // switching to a new task, or the next activity's process is

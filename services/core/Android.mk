@@ -9,7 +9,7 @@ LOCAL_SRC_FILES += \
     java/com/android/server/EventLogTags.logtags \
     java/com/android/server/am/EventLogTags.logtags
 
-LOCAL_JAVA_LIBRARIES := android.policy telephony-common org.codeaurora.Performance
+LOCAL_JAVA_LIBRARIES := android.policy telephony-common
 
 LOCAL_JAVA_LIBRARIES += services.accessibility
 
