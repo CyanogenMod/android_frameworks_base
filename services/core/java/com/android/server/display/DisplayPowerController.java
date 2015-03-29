@@ -242,6 +242,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     // The controller for the automatic brightness level.
     private AutomaticBrightnessController mAutomaticBrightnessController;
 
+    // The controller for LiveDisplay
+    private final LiveDisplayController mLiveDisplayController;
+
     // Animators.
     private ObjectAnimator mColorFadeOnAnimator;
     private ObjectAnimator mColorFadeOffAnimator;
@@ -262,6 +265,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         mWindowManagerPolicy = LocalServices.getService(WindowManagerPolicy.class);
         mBlanker = blanker;
         mContext = context;
+
+        mLiveDisplayController = new LiveDisplayController(context, handler.getLooper());
 
         final Resources resources = context.getResources();
         final int screenBrightnessSettingMinimum = clampAbsoluteBrightness(resources.getInteger(
@@ -326,7 +331,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 mAutomaticBrightnessController = new AutomaticBrightnessController(mContext, this,
                         handler.getLooper(), sensorManager, screenAutoBrightnessSpline,
                         lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
-                        mScreenBrightnessRangeMaximum);
+                        mScreenBrightnessRangeMaximum, mLiveDisplayController);
             }
         }
 
@@ -655,6 +660,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         } else {
             animateScreenBrightness(brightness, 0);
         }
+
+        // Update LiveDisplay now
+        mLiveDisplayController.updateLiveDisplay();
 
         // Determine whether the display is ready for use in the newly requested state.
         // Note that we do not wait for the brightness ramp animation to complete before
@@ -1076,6 +1084,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             mAutomaticBrightnessController.dump(pw);
         }
 
+        mLiveDisplayController.dump(pw);
     }
 
     private static String proximityToString(int state) {
