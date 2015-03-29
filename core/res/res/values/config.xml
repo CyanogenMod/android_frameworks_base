@@ -2325,6 +2325,9 @@
     <!-- Priority repeat caller threshold, in minutes -->
     <integer name="config_zen_repeat_callers_threshold">15</integer>
 
+      <!-- Allow notificaion lights in Zen modes -->
+    <bool name="config_zen_allow_lights">true</bool>
+
     <!-- Flags enabling default window features. See Window.java -->
     <bool name="config_defaultWindowFeatureOptionsPanel">true</bool>
     <bool name="config_defaultWindowFeatureContextMenu">true</bool>
