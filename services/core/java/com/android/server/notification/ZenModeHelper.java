@@ -89,6 +89,7 @@ public class ZenModeHelper {
     private ZenModeConfig mConfig;
     private AudioManagerInternal mAudioManager;
     private boolean mEffectsSuppressed;
+    private boolean mAllowLights;
 
     public ZenModeHelper(Context context, Looper looper, ConditionProviders conditionProviders) {
         mContext = context;
@@ -406,6 +407,15 @@ public class ZenModeHelper {
         }
         return zen;
     }
+    
+    public boolean getAreLightsAllowed() {
+        return mAllowLights;
+    }
+
+    public void readLightsAllowedModeFromSetting() {
+        mAllowLights = System.getIntForUser(mContext.getContentResolver(),
+                System.ALLOW_LIGHTS, 1, UserHandle.USER_CURRENT) == 1;
+    }
 
     private void applyRestrictions() {
         final boolean zen = mZenMode != Global.ZEN_MODE_OFF;
@@ -692,6 +702,7 @@ public class ZenModeHelper {
 
     private final class SettingsObserver extends ContentObserver {
         private final Uri ZEN_MODE = Global.getUriFor(Global.ZEN_MODE);
+        private final Uri ALLOW_LIGHTS = System.getUriFor(System.ALLOW_LIGHTS);
 
         public SettingsObserver(Handler handler) {
             super(handler);
@@ -700,6 +711,7 @@ public class ZenModeHelper {
         public void observe() {
             final ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(ZEN_MODE, false /*notifyForDescendents*/, this);
+            resolver.registerContentObserver(ALLOW_LIGHTS, false /*notifyForDescendents*/, this);
             update(null);
         }
 
@@ -714,6 +726,8 @@ public class ZenModeHelper {
                     if (DEBUG) Log.d(TAG, "Fixing zen mode setting");
                     setZenModeSetting(mZenMode);
                 }
+            } else if (ALLOW_LIGHTS.equals(uri)) {
+                readLightsAllowedModeFromSetting();
             }
         }
     }

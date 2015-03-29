@@ -7377,6 +7377,12 @@ public final class Settings {
         public static final String SEND_ACTION_APP_ERROR = "send_action_app_error";
 
         /**
+         * Whether the notification light will be allowed when in zen mode during downtime
+         * @hide
+         */
+        public static final String ALLOW_LIGHTS = "allow_lights";
+        
+        /**
          * Maximum age of entries kept by {@link DropBoxManager}.
          *
          * @hide
