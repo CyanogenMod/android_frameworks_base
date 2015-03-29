@@ -385,7 +385,6 @@ LOCAL_SRC_FILES += \
 	telecomm/java/com/android/internal/telecom/RemoteServiceCallback.aidl \
 	telephony/java/com/android/ims/internal/IImsCallSession.aidl \
 	telephony/java/com/android/ims/internal/IImsCallSessionListener.aidl \
-	telephony/java/com/android/ims/internal/IImsConfig.aidl \
 	telephony/java/com/android/ims/internal/IImsRegistrationListener.aidl \
 	telephony/java/com/android/ims/internal/IImsEcbm.aidl \
 	telephony/java/com/android/ims/internal/IImsEcbmListener.aidl \
@@ -412,6 +411,14 @@ LOCAL_SRC_FILES += \
 	packages/services/PacProcessor/com/android/net/IProxyService.aidl \
 	packages/services/Proxy/com/android/net/IProxyCallback.aidl \
 	packages/services/Proxy/com/android/net/IProxyPortListener.aidl \
+
+# AOSP is using a slightly different version of IMS than the latest
+# BSP from Qualcomm. Let's support both.
+ifeq ($(call is-vendor-board-platform,QCOM),true)
+LOCAL_SRC_FILES += telephony/java/com/android/ims/internal/IImsConfig.aidl
+else
+LOCAL_SRC_FILES += telephony/aosp/com/android/ims/internal/IImsConfig.aidl
+endif
 
 # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
 LOCAL_AIDL_INCLUDES += $(FRAMEWORKS_BASE_JAVA_SRC_DIRS)
