@@ -1124,6 +1124,7 @@ public class NotificationManagerService extends SystemService {
 
         mAm = ActivityManagerNative.getDefault();
         mAppOps = (AppOpsManager) getContext().getSystemService(Context.APP_OPS_SERVICE);
+        mZenModeHelper.readLightsAllowedModeFromSetting();
         mVibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
         mAppUsageStats = LocalServices.getService(UsageStatsManagerInternal.class);
         mKeyguardManager =
@@ -2766,8 +2767,9 @@ public class NotificationManagerService extends SystemService {
         // light
         // release the light
         boolean wasShowLights = mLights.remove(record.getKey());
-        final boolean aboveThresholdWithLight = aboveThreshold || isLedNotificationForcedOn(record);
-        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0 && aboveThresholdWithLight) {
+        final boolean canInterruptWithLight = canInterrupt || isLedNotificationForcedOn(record)
+                || (!canInterrupt && mZenModeHelper.getAreLightsAllowed());
+        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0 && canInterruptWithLight) {
             mLights.add(record.getKey());
             updateLightsLocked();
             if (mUseAttentionLight) {
