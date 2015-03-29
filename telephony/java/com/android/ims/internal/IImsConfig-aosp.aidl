@@ -151,4 +151,12 @@ interface IImsConfig {
      * @return value in String format.
      */
     String getProvisionedStringValue(int item);
+
+    /**
+     * Gets the value for IMS volte provisioned.
+     * This should be the same as the operator provisioned value if applies.
+     *
+     * @return void
+     */
+    boolean getVolteProvisioned();
 }
