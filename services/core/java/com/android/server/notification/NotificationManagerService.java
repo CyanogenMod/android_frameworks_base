@@ -2326,8 +2326,8 @@ public class NotificationManagerService extends SystemService {
         // light
         // release the light
         boolean wasShowLights = mLights.remove(record.getKey());
-        final boolean aboveThresholdWithLight = aboveThreshold || isLedNotificationForcedOn(record);
-        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0 && aboveThresholdWithLight) {
+        final boolean canInterruptWithLight = canInterrupt || isLedNotificationForcedOn(record);
+        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0 && canInterruptWithLight) {
             mLights.add(record.getKey());
             updateLightsLocked();
             if (mUseAttentionLight) {
