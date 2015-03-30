@@ -179,6 +179,30 @@
   <string name="usb_media_checking">Armazenamento USB está sendo verificado.</string>
   <string name="usb_media_removed">O armazenamento USB foi removido.</string>
   <string name="usb_media_shared">O armazenamento USB está sendo utilizado pelo computador.</string>
+  <string name="sd_ext_media_checking_notification_title">Preparando o cartão SD</string>
+  <string name="sd_ext_media_checking_notification_message">Procurando erros no cartão SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Cartão SD vazio</string>
+  <string name="sd_ext_media_nofs_notification_message">Cartão SD está vazio ou contém um sistema de arquivos não suportado.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Cartão SD danificado</string>
+  <string name="sd_ext_media_unmountable_notification_message">O cartão SD está danificado. Tente formatá-lo.</string>
+  <string name="sd_ext_media_badremoval_notification_title">O cartão SD foi removido inesperadamente</string>
+  <string name="sd_ext_media_badremoval_notification_message">Desmonte o cartão SD antes de remover para evitar perda de dados.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">O cartão SD pode ser removido com segurança</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Você pode remover com segurança o cartão SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Cartão SD removido</string>
+  <string name="sd_ext_media_nomedia_notification_message">Cartão SD removido. Insira um novo.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparando o armazenamento USB</string>
+  <string name="usb_ext_media_checking_notification_message">Procurando erros no armazenamento USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Armazenamento USB vazio</string>
+  <string name="usb_ext_media_nofs_notification_message">Armazenamento USB está vazio ou contém um sistema de arquivos não suportado.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Armazenamento USB danificado</string>
+  <string name="usb_ext_media_unmountable_notification_message">O armazenamento USB está danificado. Tente formatá-lo.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Armazenamento USB removido inesperadamente</string>
+  <string name="usb_ext_media_badremoval_notification_message">Desmonte o armazenamento USB antes de remover para evitar perda de dados.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">O armazenamento USB pode ser removido com segurança</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Você pode remover o armazenamento USB com segurança.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Armazenamento USB removido</string>
+  <string name="usb_ext_media_nomedia_notification_message">Armazenamento USB removido. Insira nova mídia.</string>
   <string name="live_display_auto">Automático</string>
   <string name="live_display_auto_summary">Ajusta automaticamente a temperatura de cor da tela após o pôr do sol e nascer do sol</string>
   <string name="live_display_off">Desligado</string>
@@ -190,4 +214,6 @@
   <string name="live_display_outdoor">Ao ar livre (sol forte)</string>
   <string name="live_display_outdoor_summary">Usar apenas configurações de ao ar livre</string>
   <string name="live_display_hint">LiveDisplay pode ajudar a reduzir o cansaço visual e ajudá-lo a dormir à noite. Clique aqui para experimentá-lo!</string>
+  <string name="lock_to_app_toast_no_navbar">Para desafixar essa tela, toque e segure o botão Menu.</string>
+  <string name="lock_to_app_description_no_navbar">Travar fixação de tela numa única janela.\n\nPara desafixar, toque e segure o botão Menu.</string>
 </resources>

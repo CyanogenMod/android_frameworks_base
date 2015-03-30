@@ -52,7 +52,7 @@
   <string name="permlab_changePrivacyGuardState">įgalinti arba neleisti privatumo saugos</string>
   <string name="permdesc_changePrivacyGuardState">Leisti programai keisti, kai kita programa veikia su privatumo sauga. Kai programa veikia su privatumo sauga ji neturės prieigos prie asmeninių duomenų, pavyzdžiui, kontaktų, skambučių žurnalų ar pranešimų.</string>
   <string name="privacy_guard_notification">Privatumo sauga aktyvi</string>
-  <string name="privacy_guard_notification_detail"><xliff:g id="app">„%1$s“</xliff:g> negalės naudotis asmeniniais duomenimis</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> negalės prieiti prie asmeninių duomenų</string>
   <string name="permlab_useHardwareFramework">naudoti aparatinės įrangos sistemą</string>
   <string name="permdesc_useHardwareFramework">Leidžia programai pasiekti CM aparatinės įrangos sistemą.</string>
   <string name="permlab_setKeyguardWallpaper">nustatyti klaviatūros apsaugos foną</string>
@@ -181,6 +181,30 @@
   <string name="usb_media_checking">USB saugykla tikrinama.</string>
   <string name="usb_media_removed">USB saugykla pašalinta.</string>
   <string name="usb_media_shared">USB saugykla dabar naudojama kompiuterio.</string>
+  <string name="sd_ext_media_checking_notification_title">SD kortelė ruošiama</string>
+  <string name="sd_ext_media_checking_notification_message">Tikrinama ar nėra klaidų SD kortelėje.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tuščia SD kortelė</string>
+  <string name="sd_ext_media_nofs_notification_message">SD kortelė tuščia arba turi nepalaikomą failų sistemą.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Sugadinta SD kortelė</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD kortelė yra sugadinta. Pabandykite ją suformatuoti.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD kortelė netikėtai pašalinta</string>
+  <string name="sd_ext_media_badremoval_notification_message">Atjunkite SD kortelę prieš pašalinant, kad išvengtumėte duomenų praradimo.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Saugu pašalinti SD kortelę</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti SD kortelę.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD kortelė pašalinta</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kortelė pašalinta. Įdėkite naują.</string>
+  <string name="usb_ext_media_checking_notification_title">Ruošiama USB saugykla</string>
+  <string name="usb_ext_media_checking_notification_message">Tikrinama ar nėra klaidų USB saugykloje.</string>
+  <string name="usb_ext_media_nofs_notification_title">Tuščia USB saugykla</string>
+  <string name="usb_ext_media_nofs_notification_message">USB saugykla tuščia arba turi nepalaikomą failų sistemą.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Sugadinta USB saugykla</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB saugykla yra sugadinta. Pabandykite ją suformatuoti.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB saugykla netikėtai pašalinta</string>
+  <string name="usb_ext_media_badremoval_notification_message">Atjunkite USB saugyklą prieš pašalinant, kad išvengtumėte duomenų praradimo.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Saugu pašalinti USB saugyklą</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti USB saugyklą.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB saugykla pašalinta</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują.</string>
   <string name="live_display_auto">Automatinis</string>
   <string name="live_display_auto_summary">Automatiškai sureguliuoti ekrano spalvos temperatūrą po saulėlydžio ir saulėtekio</string>
   <string name="live_display_off">Išjungti</string>
@@ -192,4 +216,6 @@
   <string name="live_display_outdoor">Laukas (ryški saulė)</string>
   <string name="live_display_outdoor_summary">Naudoti tik lauko nustatymus</string>
   <string name="live_display_hint">„LiveDisplay“ gali padėti sumažinti akių įtampą ir padėti jums užmigti naktį. Spauskite čia, kad jį išbandyti!</string>
+  <string name="lock_to_app_toast_no_navbar">Kad atsegtumėte šį ekraną, palieskite ir palaikykite meniu mygtuką.</string>
+  <string name="lock_to_app_description_no_navbar">Ekrano prisegimas užrakina ekraną vienoje pozicijoje.\n\nKad atsegtumėte, palieskite ir palaikykite meniu mygtuką.</string>
 </resources>

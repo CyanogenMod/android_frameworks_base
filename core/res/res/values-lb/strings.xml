@@ -138,7 +138,7 @@
   <string name="httpErrorRedirectLoop">D\'Säit huet zevill Serverweiderleedungen.</string>
   <string name="httpErrorUnsupportedScheme">De Protokoll ass net ënnerstëtzt.</string>
   <string name="httpErrorFailedSslHandshake">Konnt keng sécher Connectioun hierstellen.</string>
-  <string name="httpErrorBadUrl">Konnt d\'Säit net opmaachen well d\'URL net gëlteg ass.</string>
+  <string name="httpErrorBadUrl">Konnt d\'Säit net opmaache well d\'URL net gëlteg ass.</string>
   <string name="httpErrorFile">Konnt net op de Fichier zougräifen.</string>
   <string name="httpErrorFileNotFound">Konnt den ugefrote Fichier net fannen.</string>
   <string name="httpErrorTooManyRequests">Et ginn ze vill Ufroe beaarbecht. Probéier méi spéit nees.</string>
@@ -308,7 +308,7 @@
   <string name="permlab_getDetailedTasks">Detailer zu lafenden Appen ausliesen</string>
   <string name="permdesc_getDetailedTasks">Erlaabt der App, detailéiert Informatiounen iwwer Aufgaben ofzeruffen déi grad lafen oder viru kuerzem gelaf sinn. Béisaarteg Appe kéinte private Informatiounen iwwer aner Appen entdecken.</string>
   <string name="permlab_reorderTasks">Lafend Appen ëmzortéieren</string>
-  <string name="permdesc_reorderTasks">Erlaabt der App, Aufgaben vum Virgrond an den Hannergrond ze réckelen. D\'App kéint dat ouni däin Awierke maachen.</string>
+  <string name="permdesc_reorderTasks">Erlaabt der App, Aufgabe vum Virgrond an den Hannergrond ze réckelen. D\'App kéint dat ouni däin Awierke maachen.</string>
   <string name="permlab_removeTasks">Lafend Appe stoppen</string>
   <string name="permdesc_removeTasks">Erlaabt der App, Aufgaben ze läschen an hir Appen zouzemaachen. Béisaarteg Appe kéinten d\'Behuele vun aneren Appe stéieren.</string>
   <string name="permlab_manageActivityStacks">Aktivitéitsstapel geréieren</string>
@@ -356,7 +356,7 @@
   <string name="permlab_setProcessLimit">Unzuel vun de lafende Prozesser limitéieren</string>
   <string name="permdesc_setProcessLimit">Erlaabt der App, déi maximal Unzuel u lafende Prozesser ze kontrolléieren. Ni néideg fir normal Appen. </string>
   <string name="permlab_setAlwaysFinish">Appen am Hannergrond zoumaachen</string>
-  <string name="permdesc_setAlwaysFinish">Erlaabt der App, ze kontrolléieren ob Aktivitéite sollen ofgeschloss ginn, soubal se an den Hannergrond gesat ginn. Ni néideg fir normal Appen.</string>
+  <string name="permdesc_setAlwaysFinish">Erlaabt der App, ze kontrolléieren ob Aktivitéite sollen ofgeschloss ginn, soubal s\'an den Hannergrond gesat ginn. Ni néideg fir normal Appen.</string>
   <string name="permlab_batteryStats">Akkustatistiken ausliesen</string>
   <string name="permdesc_batteryStats">Erlaabt der App, déi aktuell Akkubenotzungsdaten ze liesen. Doduerch kéint d\'App erausfanne wéi eng Appen datt de benotz.</string>
   <string name="permlab_updateBatteryStats">Akkustatistiken änneren</string>
@@ -378,7 +378,7 @@
   <string name="permlab_manageAppTokens">App-Token geréieren</string>
   <string name="permdesc_manageAppTokens">Erlaabt der App, eegen Tokens z\'erstellen an ze geréieren, an dobäi déi normal Zortéierung op der Z-Achs z\'ëmgoen. Dat sollt ni fir normal Appen néideg sinn.</string>
   <string name="permlab_freezeScreen">Schierm fixéieren</string>
-  <string name="permdesc_freezeScreen">Erlaabt der App, de Schierm kuerzzäiteg anzefréieren fir eng Transitioun vum komplette Schierm z\'animéieren.</string>
+  <string name="permdesc_freezeScreen">Erlaabt der App, de Schierm kuerzzäiteg anzefréiere fir eng Transitioun vum komplette Schierm z\'animéieren.</string>
   <string name="permlab_injectEvents">Tasten a Kontrollknäppercher drécken</string>
   <string name="permdesc_injectEvents" product="tablet">Erlaabt der App, eegen Agabevenementer (Tastendréck, etc.) un aner Appen ze schécken. Béisaarteg Appe kéinten dat benotze fir den Tablet z\'iwwerhuelen. </string>
   <string name="permdesc_injectEvents" product="default">Erlaabt der App, eegen Agabevenementer (Tastendréck, etc.) un aner Appen ze schécken. Béisaarteg Appe kéinten dat benotze fir den Telefon z\'iwwerhuelen. </string>
@@ -439,7 +439,7 @@
   <string name="permdesc_clearAppCache" product="tablet">Erlaabt der App, Späicherplaz um Tablet fräizeginn andeem Fichieren an den Tëschespäicher-Dossiere vun aneren Appe geläscht ginn. Doduerch kéinten dës aner Appe méi lues starte, well se déi geläschten Daten nei luede mussen.</string>
   <string name="permdesc_clearAppCache" product="default">Erlaabt der App, Späicherplaz um Telefon fräizeginn andeem Fichieren an den Tëschespäicher-Dossiere vun aneren Appe geläscht ginn. Doduerch kéinten dës aner Appe méi lues starte, well se déi geläschten Daten nei luede mussen.</string>
   <string name="permlab_movePackage">App-Ressource réckelen</string>
-  <string name="permdesc_movePackage">Erlaabt d\'App, App-Ressourcen vun intern op extern Medien ze réckelen a vice versa.</string>
+  <string name="permdesc_movePackage">Erlaabt d\'App, App-Ressourcë vun intern op extern Medien ze réckelen a vice versa.</string>
   <string name="permlab_readLogs">Sensibel Protokoll-Informatioune liesen</string>
   <string name="permdesc_readLogs" product="tablet">Erlaabt der App, déi verschidde Protokollfichiere vum System ze liesen. Sou kënnen allgemeng Informatioune gelies ginn iwwer d\'Aktiounen déi um Tablet ausgefouert goufen. Dorënner méiglecherweis och persounebezunnen oder vertraulech Daten.</string>
   <string name="permdesc_readLogs" product="default">Erlaabt der App, déi verschidde Protokollfichiere vum System ze liesen. Sou kënnen allgemeng Informatioune gelies ginn iwwer d\'Aktiounen déi um Telefon ausgefouert goufen. Dorënner méiglecherweis och persounebezunnen oder vertraulech Daten.</string>
@@ -630,7 +630,7 @@
   <string name="permlab_accessNetworkState">Netzwierkconnectiounen ukucken</string>
   <string name="permdesc_accessNetworkState">Erlaabt der App, Informatiounen iwwer Netzwierkconnectiounen auszeliesen, wéi z. B. wéi eng Netzwierker existéieren a wéi eng verbonne sinn.</string>
   <string name="permlab_createNetworkSockets">Vollen Netzwierkzougrëff</string>
-  <string name="permdesc_createNetworkSockets">Erlaabt der App, Netzwierk-Sockets z\'erstellen an eegen Netzwierkprotokoller ze benotzen. De Browser an aner Appe bidden Méiglechkeeten, Daten iwwer den Internet ze verschécken. Dohier ass dës Berechtegung net néideg fir Daten iwwer den Internet ze schécken.</string>
+  <string name="permdesc_createNetworkSockets">Erlaabt der App, Netzwierk-Sockets z\'erstellen an eegen Netzwierkprotokoller ze benotzen. De Browser an aner Appe bidde Méiglechkeeten, Daten iwwer den Internet ze verschécken. Dohier ass dës Berechtegung net néideg fir Daten iwwer den Internet ze schécken.</string>
   <string name="permlab_writeApnSettings">Netzwierkastellungen a -verkéier änneren/offänken</string>
   <string name="permdesc_writeApnSettings">Erlaabt der App, Netzwierkastellungen z\'änneren an de ganzen Netzwierkverkéier ofzefänken, zum Beispill de Proxy an de Port vun all Zougrëffspunkt z\'änneren. Béisaarteg Appe kéinten Netzwierkpäck ouni däi Wëssen iwwerwaachen, ëmleeden oder änneren.</string>
   <string name="permlab_changeNetworkState">Netzwierk-Connectivitéit änneren</string>
@@ -1081,9 +1081,9 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="searchview_description_voice">Stëmmsich</string>
   <string name="enable_explore_by_touch_warning_title">Drécken an Entdecken aktivéieren?</string>
   <string name="enable_explore_by_touch_warning_message" product="tablet"><xliff:g id="accessibility_service_name">%1$s</xliff:g> wëll \"Drécken an Entdecken\" aktivéieren.
-Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Elementer héieren oder gesinn déi ënner dengem Fanger sinn oder iwwer Geste mam Tablet interagéieren.</string>
+Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elementer héieren oder gesinn déi ënner dengem Fanger sinn oder iwwer Geste mam Tablet interagéieren.</string>
   <string name="enable_explore_by_touch_warning_message" product="default"><xliff:g id="accessibility_service_name">%1$s</xliff:g> wëll \"Drécken an Entdecken\" aktivéieren.
-Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Elementer héieren oder gesinn déi ënner dengem Fanger sinn oder iwwer Geste mam Telefon interagéieren.</string>
+Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elementer héieren oder gesinn déi ënner dengem Fanger sinn oder iwwer Geste mam Telefon interagéieren.</string>
   <string name="oneMonthDurationPast">Virun 1 Mount</string>
   <string name="beforeOneMonthDurationPast">Viru méi als 1 Mount</string>
   <plurals name="num_seconds_ago">
@@ -1318,7 +1318,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="wifi_p2p_frequency_conflict_message" product="default">Den Telefon gëtt kuerzzäiteg vum WLAN deconnectéiert während e mat <xliff:g id="device_name">%1$s</xliff:g> verbonnen ass</string>
   <string name="select_character">Zeechen aginn</string>
   <string name="sms_control_title">SMS-Messagë gi geschéckt</string>
-  <string name="sms_control_message">&lt;b&gt;<xliff:g id="app_name">%1$s</xliff:g>&lt;/b&gt; verschéckt eng grouss Zuel vun SMSen. Wëlls du der App erlaben weider Messagen ze verschécken?</string>
+  <string name="sms_control_message">&lt;b&gt;<xliff:g id="app_name">%1$s</xliff:g>&lt;/b&gt; verschéckt eng grouss Zuel vun SMSen. Wëlls du der App erlabe weider Messagen ze verschécken?</string>
   <string name="sms_control_yes">Erlaben</string>
   <string name="sms_control_no">Verweigeren</string>
   <string name="sms_short_code_confirm_message">&lt;b&gt;<xliff:g id="app_name">%1$s</xliff:g>&lt;/b&gt; wëll e Message un &lt;b&gt;<xliff:g id="dest_address">%2$s</xliff:g>&lt;/b&gt; schécken.</string>
@@ -1352,7 +1352,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="usb_storage_error_message" product="nosdcard">Beim Versuch däin USB-Späicher als USB-Massespäicher ze benotze gouf et e Problem.</string>
   <string name="usb_storage_error_message" product="default">Beim Versuch deng SD-Kaart als USB-Massespäicher ze benotze gouf et e Problem.</string>
   <string name="usb_storage_notification_title">USB connectéiert</string>
-  <string name="usb_storage_notification_message">Dréck fir Fichieren vum/op de Computer ze kopéieren.</string>
+  <string name="usb_storage_notification_message">Dréck fir Fichiere vum/op de Computer ze kopéieren.</string>
   <string name="usb_storage_stop_notification_title">USB-Späicher desaktivéieren</string>
   <string name="usb_storage_stop_notification_message">Dréck fir den USB-Späicher auszeschalten.</string>
   <string name="usb_storage_stop_title">USB-Späicher gëtt benotzt</string>
@@ -1447,8 +1447,8 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="grant_permissions_header_text">Zougrëffsufro</string>
   <string name="allow">Erlaben</string>
   <string name="deny">Verweigeren</string>
-  <string name="permission_request_notification_title">Erlabnësufro</string>
-  <string name="permission_request_notification_with_subtitle">Erlabnës ugefrot\nfir de Kont <xliff:g id="account" example="foo@gmail.com">%s</xliff:g>.</string>
+  <string name="permission_request_notification_title">Erlaabnesufro</string>
+  <string name="permission_request_notification_with_subtitle">Erlaabnes ugefrot\nfir de Kont <xliff:g id="account" example="foo@gmail.com">%s</xliff:g>.</string>
   <string name="forward_intent_to_owner">Du benotz dës App ausserhalb vun dengem Aarbechtsprofil</string>
   <string name="forward_intent_to_work">Du benotz dës App an dengem Aarbechtsprofil</string>
   <string name="input_method_binding_label">Method fir anzeginn</string>
@@ -1490,7 +1490,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwungen vun Eleme
   <string name="progress_erasing" product="default">SD-Kaart gëtt geläscht\u2026</string>
   <string name="format_error" product="nosdcard">Konnt den USB-Späicher net läschen.</string>
   <string name="format_error" product="default">Konnt d\'SD-Kaart net läschen.</string>
-  <string name="media_bad_removal">D\'SD-Kaart gouf erausgeholl ier se ofgemellt gouf.</string>
+  <string name="media_bad_removal">D\'SD-Kaart gouf erausgeholl ier s\'ofgemellt gouf.</string>
   <string name="media_checking" product="nosdcard">Den USB-Späicher gëtt grad iwwerpréift.</string>
   <string name="media_checking" product="default">D\'SD-Kaart gëtt iwwerpréift.</string>
   <string name="media_removed">D\'SD-Kaart gouf erausgeholl.</string>
