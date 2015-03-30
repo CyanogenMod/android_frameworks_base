@@ -28,8 +28,8 @@
     <item quantity="other">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusių bandymų.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">SIM išjungta. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusį bandymą prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
-    <item quantity="few">SIM išjungta. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusius bandymus prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
-    <item quantity="other">SIM išjungta. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusių bandymų prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
+    <item quantity="one">SIM neleidžiama. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusį bandymą prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
+    <item quantity="few">SIM neleidžiama. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusius bandymus prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
+    <item quantity="other">SIM neleidžiama. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusių bandymų prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
   </plurals>
 </resources>

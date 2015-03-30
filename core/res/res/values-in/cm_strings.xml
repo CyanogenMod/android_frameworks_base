@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Penjaga Privasi</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ingin <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Reboot</string>
+  <string name="global_action_current_user">Saat ini</string>
   <string name="reboot_reboot">Reboot</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>

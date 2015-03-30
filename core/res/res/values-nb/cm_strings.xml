@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Personvernvakt</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> vil gjerne <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Start på nytt</string>
+  <string name="global_action_current_user">Nåværende</string>
   <string name="reboot_reboot">Start på nytt</string>
   <string name="reboot_recovery">Gjenoppretting</string>
   <string name="reboot_bootloader">Bootloader</string>

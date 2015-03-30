@@ -27,9 +27,14 @@
   <string name="accessibility_quick_settings_roaming_off">מצב נדידה כבוי.</string>
   <string name="accessibility_quick_settings_roaming_on">מצב נדידה פעיל.</string>
   <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
+  <string name="accessibility_quick_settings_location_gps_only">דיווח מיקום: מצב חיישנים בלבד.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">דיווח מיקום: מצב רמת דיוק גבוהה.</string>
   <string name="accessibility_dpad_left">סמן שמאלה</string>
   <string name="accessibility_dpad_right">סמן ימינה</string>
+  <string name="quick_settings_mobile_data_label">נתונים ניידים</string>
   <string name="quick_settings_roaming_label">נדידה</string>
+  <string name="quick_settings_apn_switch_label">מפסק APN</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> נתונים ניידים</string>
   <string name="quick_settings_data_off">נתונים ניידים כבויים</string>
   <string name="quick_settings_location_detail_title">מצב מיקום</string>
   <string name="quick_settings_location_battery_saving_label">חיסכון בסוללה</string>
@@ -57,7 +62,11 @@
   <string name="navbar_menu_conditional_button">לחצן התפריט (הסתר אוטומטית)</string>
   <string name="navbar_menu_always_button">לחצן התפריט (נראה תמיד)</string>
   <string name="navbar_menu_big_button">לחצן התפריט</string>
+  <string name="navigation_ring_title">קיצורי דרך של הפעלה מהירה</string>
+  <string name="navring_target_reset_message">האם למחוק את כל קיצורי הדרך מסרגל הניווט ולשחזר לברירת המחדל?</string>
+  <string name="navring_target_reset">קיצורי הדרך בסרגל הניווט שוחזרו לברירת המחדל</string>
   <string name="navring_action_open_ime_switcher">פתח מחליף IME</string>
+  <string name="navring_action_kill_app">הרוג יישום</string>
   <string name="navring_action_none">ללא</string>
   <string name="navring_action_take_screenshot">צלם מסך</string>
   <string name="navring_action_ring_vibrate">צלצול/רטט</string>
