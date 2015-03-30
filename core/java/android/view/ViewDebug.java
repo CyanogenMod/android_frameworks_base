@@ -315,6 +315,7 @@ public class ViewDebug {
     private static final int CAPTURE_TIMEOUT = 4000;
 
     private static final String REMOTE_COMMAND_CAPTURE = "CAPTURE";
+    private static final String REMOTE_COMMAND_CAPTURE_ROOT = "CAPTURE_ROOT";
     private static final String REMOTE_COMMAND_DUMP = "DUMP";
     private static final String REMOTE_COMMAND_DUMP_THEME = "DUMP_THEME";
     private static final String REMOTE_COMMAND_INVALIDATE = "INVALIDATE";
@@ -440,6 +441,8 @@ public class ViewDebug {
             final String[] params = parameters.split(" ");
             if (REMOTE_COMMAND_CAPTURE.equalsIgnoreCase(command)) {
                 capture(view, clientStream, params[0]);
+            } else if (REMOTE_COMMAND_CAPTURE_ROOT.equalsIgnoreCase(command)) {
+                capture(view, clientStream, view);
             } else if (REMOTE_COMMAND_OUTPUT_DISPLAYLIST.equalsIgnoreCase(command)) {
                 outputDisplayList(view, params[0]);
             } else if (REMOTE_COMMAND_INVALIDATE.equalsIgnoreCase(command)) {

@@ -146,6 +146,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -6934,6 +6935,41 @@ public class WindowManagerService extends IWindowManager.Stub
         return mViewServer != null && mViewServer.isRunning();
     }
 
+    public String viewServerListWindows2() {
+        boolean result = true;
+
+        WindowList windows = new WindowList();
+        synchronized (mWindowMap) {
+            //noinspection unchecked
+            final int numDisplays = mDisplayContents.size();
+            for (int displayNdx = 0; displayNdx < numDisplays; ++displayNdx) {
+                final DisplayContent displayContent = mDisplayContents.valueAt(displayNdx);
+                windows.addAll(displayContent.getWindowList());
+            }
+        }
+
+        // Any uncaught exception will crash the system process
+        StringBuffer sb = new StringBuffer();
+        try {
+
+
+            final int count = windows.size();
+            for (int i = 0; i < count; i++) {
+                final WindowState w = windows.get(i);
+                sb.append(Integer.toHexString(System.identityHashCode(w)));
+                sb.append(' ');
+                sb.append(w.mAttrs.getTitle());
+                sb.append('\n');
+            }
+
+            sb.append("DONE.\n");
+        } catch (Exception e) {
+            result = false;
+        }
+
+        return sb.toString();
+    }
+
     /**
      * Lists all availble windows in the system. The listing is written in the
      * specified Socket's output stream with the following syntax:
@@ -7133,6 +7169,85 @@ public class WindowManagerService extends IWindowManager.Stub
         }
 
         return success;
+    }
+
+    public String viewServerWindowCommand2(ParcelFileDescriptor fd, String command, String parameters) {
+        if (isSystemSecure()) {
+            return null;
+        }
+
+        boolean success = true;
+        Parcel data = null;
+        Parcel reply = null;
+
+        BufferedWriter out = null;
+
+        // Any uncaught exception will crash the system process
+        try {
+            // Find the hashcode of the window
+            int index = parameters.indexOf(' ');
+            if (index == -1) {
+                index = parameters.length();
+            }
+            final String code = parameters.substring(0, index);
+            int hashCode = (int) Long.parseLong(code, 16);
+
+            // Extract the command's parameter after the window description
+            if (index < parameters.length()) {
+                parameters = parameters.substring(index + 1);
+            } else {
+                parameters = "";
+            }
+
+            final WindowState window = findWindow(hashCode);
+            if (window == null) {
+                return null;
+            }
+
+            data = Parcel.obtain();
+            data.writeInterfaceToken("android.view.IWindow");
+            data.writeString(command);
+            data.writeString(parameters);
+            data.writeInt(1);
+
+            //ParcelFileDescriptor[] fds = ParcelFileDescriptor.createReliableSocketPair();
+            fd.writeToParcel(data, 0);
+
+            reply = Parcel.obtain();
+
+            final IBinder binder = window.mClient.asBinder();
+            // TODO: GET THE TRANSACTION CODE IN A SAFER MANNER
+            binder.transact(IBinder.FIRST_CALL_TRANSACTION, data, reply, 0);
+
+            reply.readException();
+
+            //FileOutputStream appendOut = new FileOutputStream(fd.getFileDescriptor());
+            //OutputStreamWriter writer = new OutputStreamWriter(appendOut);
+            //writer.write("DONE\n");
+
+            //writer.close();
+            //appendOut.flush();
+            //appendOut.close();
+        } catch (Exception e) {
+            Slog.w(TAG, "Could not send command " + command + " with parameters " + parameters, e);
+            success = false;
+        } finally {
+            if (data != null) {
+                data.recycle();
+            }
+            if (reply != null) {
+                reply.recycle();
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+
+                }
+            }
+        }
+
+        return "";
     }
 
     public void addWindowChangeListener(WindowChangeListener listener) {

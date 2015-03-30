@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
@@ -35,6 +36,7 @@ import com.android.internal.util.FastPrintWriter;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -549,6 +551,24 @@ public final class WindowManagerGlobal {
                 }
             }
         }
+    }
+
+    public static String viewServerListWindows() {
+        try {
+            return sWindowManagerService.viewServerListWindows2();
+        } catch(RemoteException e) {
+            Log.e(TAG, "Could not viewServerListWindows", e);
+        }
+        return null;
+    }
+
+    public static String viewServerWindowCommand(ParcelFileDescriptor fd, String command, String parameters) {
+        try {
+            return sWindowManagerService.viewServerWindowCommand2(fd, command, parameters);
+        } catch(RemoteException e) {
+            Log.e(TAG, "Could not viewServerListWIndows ", e);
+        }
+        return null;
     }
 }
 

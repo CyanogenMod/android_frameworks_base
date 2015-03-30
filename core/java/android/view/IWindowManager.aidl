@@ -26,6 +26,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.IRemoteCallback;
+import android.os.ParcelFileDescriptor;
 import android.view.IApplicationToken;
 import android.view.IOnKeyguardExitResult;
 import android.view.IRotationWatcher;
@@ -279,4 +280,8 @@ interface IWindowManager
      * @return The frame statistics or null if the window does not exist.
      */
     WindowContentFrameStats getWindowContentFrameStats(IBinder token);
+
+    String viewServerListWindows2();
+
+    String viewServerWindowCommand2(in ParcelFileDescriptor fd, String command, String parameters);
 }
