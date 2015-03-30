@@ -154,7 +154,8 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
 
             // reset the digits in the views
             for (int i = 0; i < sNumbers.size(); i++) {
-                mViews[(i / 3) + 1][i % 3].setDigit(sNumbers.get(i));
+                NumPadKey view = views.get(i);
+                view.setDigit(sNumbers.get(i));
             }
         }
 
