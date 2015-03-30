@@ -179,6 +179,30 @@
   <string name="usb_media_checking">USBストレージを現在確認しています。</string>
   <string name="usb_media_removed">USBストレージが取り外されました。</string>
   <string name="usb_media_shared">USBストレージは現在パソコンで使用されています。</string>
+  <string name="sd_ext_media_checking_notification_title">SDカードを準備中</string>
+  <string name="sd_ext_media_checking_notification_message">SDカードのエラーを確認しています。</string>
+  <string name="sd_ext_media_nofs_notification_title">空のSDカード</string>
+  <string name="sd_ext_media_nofs_notification_message">SDカードが空であるか、サポートされていないファイルシステムを使用しています。</string>
+  <string name="sd_ext_media_unmountable_notification_title">破損したSDカード</string>
+  <string name="sd_ext_media_unmountable_notification_message">SDカードが破損しています。再フォーマットをお試しください。</string>
+  <string name="sd_ext_media_badremoval_notification_title">SDカードが予期せず取り外されました</string>
+  <string name="sd_ext_media_badremoval_notification_message">データの損失を防ぐために、SDカードを取り外す前にマウントを解除してください。</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SDカードの安全な取り外し</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SDカードを安全に取り外すことができます。</string>
+  <string name="sd_ext_media_nomedia_notification_title">SDカードが取り外されました</string>
+  <string name="sd_ext_media_nomedia_notification_message">SDカードが取り外されました。新しいSDカードを挿入してください。</string>
+  <string name="usb_ext_media_checking_notification_title">USBストレージを準備中</string>
+  <string name="usb_ext_media_checking_notification_message">USBストレージのエラーを確認しています。</string>
+  <string name="usb_ext_media_nofs_notification_title">空のUSBストレージ</string>
+  <string name="usb_ext_media_nofs_notification_message">USBストレージが空であるか、サポートされていないファイルシステムを使用しています。</string>
+  <string name="usb_ext_media_unmountable_notification_title">破損したUSBストレージ</string>
+  <string name="usb_ext_media_unmountable_notification_message">USBストレージが破損しています。再フォーマットをお試しください。</string>
+  <string name="usb_ext_media_badremoval_notification_title">USBストレージが予期せず取り外されました</string>
+  <string name="usb_ext_media_badremoval_notification_message">データの損失を防ぐために、USBストレージを取り外す前にマウントを解除してください。</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USBストレージの安全な取り外し</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USBストレージを安全に取り外すことができます。</string>
+  <string name="usb_ext_media_nomedia_notification_title">USBストレージが取り外されました</string>
+  <string name="usb_ext_media_nomedia_notification_message">USBストレージが取り外されました。新しいメディアを挿入してください。</string>
   <string name="live_display_auto">自動</string>
   <string name="live_display_auto_summary">太陽の動きに合わせて画面の色温度を自動的に調整する</string>
   <string name="live_display_off">OFF</string>
@@ -190,4 +214,6 @@
   <string name="live_display_outdoor">屋外（日光）</string>
   <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
   <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをクリックして試してみてください。</string>
+  <string name="lock_to_app_toast_no_navbar">この画面の固定を解除するには、メニューボタンを長押ししてください。</string>
+  <string name="lock_to_app_description_no_navbar">画面の固定はディスプレイを一つの表示にロックします。\n\n固定を解除するには、メニューボタンを長押ししてください。</string>
 </resources>

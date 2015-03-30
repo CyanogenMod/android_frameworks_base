@@ -39,8 +39,8 @@
   <string name="permdesc_modifyProtectedSmsList">Tətbiqetməyə qorunan SMS ünvan siyahısını dəyişdirmə icazəsi verər.</string>
   <string name="permgrouplab_security">Təhlükəsizlik</string>
   <string name="permgroupdesc_security">Cihaz təhlükəsizlik məlumatı ilə bağlı icazələr.</string>
-  <string name="permlab_accessThemeService">tema xidmətinə giriş</string>
-  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə girişinə icazə verər. Normal tətbiqlər üçün buna ehtiyac yoxdur.</string>
+  <string name="permlab_accessThemeService">tema xidmətinə müraciət</string>
+  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə müraciətinə icazə verər. Normal tətbiqlər üçün buna ehtiyac yoxdur.</string>
   <string name="permlab_readThemes">tema məlumatını oxu</string>
   <string name="permdesc_readThemesDesc">Tətbiqetmənin temalarınızı oxumasına və hansı temanı tətbiq etdiyinizi müəyyən etməyə icazə verər.</string>
   <string name="permlab_writeThemes">temaları dəyişin</string>
@@ -50,11 +50,11 @@
   <string name="permlab_changePhoneBlacklist">telefon qara siyahısını dəyişdir</string>
   <string name="permdesc_changePhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələrini dəyişdirməsinə icazə verər.</string>
   <string name="permlab_changePrivacyGuardState">Gizlilik Qorumasını fəallaşdır ya da ləğv et</string>
-  <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini dəyişmə icazəsi verər. Əgər tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi verilənlərə daxil ola bilməyəcək.</string>
+  <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini müəyyənləşdirmə imkanı verər. Əgər tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi verilənlərə müraciət edə bilməyəcək.</string>
   <string name="privacy_guard_notification">Gizlilik Qoruması fəaldır</string>
-  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> şəxsi verilənlərə giriş edə bilməyəcək</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> şəxsi verilənlərə müraciət edə bilməyəcək</string>
   <string name="permlab_useHardwareFramework">təchizat infrastrukturundan istifadə et</string>
-  <string name="permdesc_useHardwareFramework">Tətbiqetmənin CM təchizat infrastrukturuna girişinə icazə verər.</string>
+  <string name="permdesc_useHardwareFramework">Tətbiqetmənin CM təchizat infrastrukturuna müraciətinə icazə verər.</string>
   <string name="permlab_setKeyguardWallpaper">klaviatura divar kağızını tənzimlə</string>
   <string name="permdesc_setKeyguardWallpaper">Tətbiqetmənin kilit ekranı divar kağızını dəyişdirməsinə icazə verər.</string>
   <string name="privacy_guard_dialog_title">Gizlilik Qoruması</string>
@@ -76,12 +76,12 @@
   <string name="usb_choose_notification_title">USB seçimləri üçün toxunun.</string>
   <string name="permlab_interceptPackageLaunch">tətbiqetmə başlatmanın qarşısını al</string>
   <string name="permdesc_interceptPackageLaunch">Tətbiqetməyə digər tətbiqetmələrin başlamasını əngəlləmək icazə verər</string>
-  <string name="app_ops_access_camera">kameraya giriş</string>
-  <string name="app_ops_access_location">məkanınıza giriş</string>
+  <string name="app_ops_access_camera">kameraya müraciət</string>
+  <string name="app_ops_access_location">olduğunuz yerə müraciət</string>
   <string name="app_ops_access_notifications">bildirişləri oxu</string>
   <string name="app_ops_activate_vpn">VPN aktivetmə</string>
   <string name="app_ops_alarm_wakeup">cihazı oyandır</string>
-  <string name="app_ops_su">root girişi əldə et</string>
+  <string name="app_ops_su">root müraciəti əldə et</string>
   <string name="app_ops_auto_start">açılanda başla</string>
   <string name="app_ops_delete_call_log">zəng qeydini sil</string>
   <string name="app_ops_delete_contacts">şəxsləri sil</string>
@@ -160,8 +160,8 @@
   <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>
   <string name="permlab_interceptSmsSent">gedən SMS\'i dayandır</string>
   <string name="permdesc_interceptSmsSent">Tətbiqetmənin gedən SMS\'i dayandırmasına icazə verər. Zərərli tətbiqetmələr gedən SMS mesajlarının qarşısını almaq üçün bundan istifadə edə bilər.</string>
-  <string name="permlab_accessTorchService">fənər xidmətinə giriş</string>
-  <string name="permdesc_accessTorchService">Tətbiqetməyə fənər xidmətinə giriş edə bilmə icazəsi verər. Normal tətbiqetmələr üçün lazım deyil.</string>
+  <string name="permlab_accessTorchService">fənər xidmətinə müraciət</string>
+  <string name="permdesc_accessTorchService">Tətbiqetməyə fənər xidmətinə müraciətinə icazə verər. Normal tətbiqetmələr üçün lazım deyil.</string>
   <string name="permlab_preventpower">güc düyməsinin funksiyasını dəyişdir</string>
   <string name="permdesc_preventpower">Tətbiqetməyə güc düyməsinin funksiyasını dəyişdirmə icazəsi verər.</string>
   <string name="usb_extmedia_format_message">USB saxlama (\'%1$s\') yerinizdəki bütün verilənlər silənəcək. Bu hərəkətin geri dönüşü yoxdur!</string>

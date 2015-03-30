@@ -23,11 +23,11 @@
   <string name="kg_slot_name">Schlitz <xliff:g id="number">%d</xliff:g>: Nei SIM-Kaart\u0020</string>
   <string name="lockscreen_sim_error_message_short">Ongëlteg Kaart.</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch ier s de däin Netzbedreiwer muss kontaktéieren, fir den Apparat z\'entspären.</item>
+    <item quantity="one">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch ier s de däi Provider muss kontaktéieren, fir den Apparat z\'entspären.</item>
     <item quantity="other">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versich.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">D\'SIM ass elo desaktivéiert. Gëff de PUK-Code a fir weiderzemaachen. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier d\'SIM definitiv onbenotzbar gëtt. Kontaktéiert däin Netzbedreiwer fir weider Detailer.</item>
-    <item quantity="other">D\'SIM ass elo desaktivéiert. Gëff de PUK-Code a fir weiderzemaachen. Du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier d\'SIM definitiv onbenotzbar gëtt. Kontaktéiert däin Netzbedreiwer fir weider Detailer.</item>
+    <item quantity="one">D\'SIM ass elo desaktivéiert. Gëff de PUK-Code a fir weiderzemaachen. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier d\'SIM definitiv onbenotzbar gëtt. Kontaktéiert däi Provider fir weider Detailer.</item>
+    <item quantity="other">D\'SIM ass elo desaktivéiert. Gëff de PUK-Code a fir weiderzemaachen. Du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier d\'SIM definitiv onbenotzbar gëtt. Kontaktéiert däi Provider fir weider Detailer.</item>
   </plurals>
 </resources>

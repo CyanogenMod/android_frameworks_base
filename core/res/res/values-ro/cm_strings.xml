@@ -171,6 +171,10 @@
   <string name="sd_media_checking">Cardul SD este în curs de verificare.</string>
   <string name="sd_media_removed">Cardul SD a fost înlăturat.</string>
   <string name="usb_format_error">Nu s-a putut şterge mediul de stocare USB.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Card SD deteriorat</string>
+  <string name="sd_ext_media_badremoval_notification_title">Cardul SD înlăturat în mod neașteptat</string>
+  <string name="sd_ext_media_nomedia_notification_title">Card SD eliminat</string>
+  <string name="usb_ext_media_nofs_notification_title">Stocare USB goală</string>
   <string name="live_display_auto">Automat</string>
   <string name="live_display_off">Oprit</string>
 </resources>

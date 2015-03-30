@@ -42,7 +42,7 @@
   <string name="keyguard_missing_sim_instructions_long">D\'SIM-Kaart feelt oder ass net liesbar. Setz eng SIM-Kaart an.</string>
   <string name="keyguard_permanent_disabled_sim_message_short">Onbenotzbar SIM-Kaart.</string>
   <string name="keyguard_permanent_disabled_sim_instructions">Deng SIM-Kaart gouf permanent ausgeschalt.\n
-Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
+Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="keyguard_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
   <string name="keyguard_sim_puk_locked_message">D\'SIM-Kaart ass PUK-gespaart.</string>
   <string name="keyguard_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
@@ -109,7 +109,7 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_sim_pin_instructions">SIM-PIN aginn</string>
   <string name="kg_pin_instructions">PIN aginn</string>
   <string name="kg_password_instructions">Passwuert aginn</string>
-  <string name="kg_puk_enter_puk_hint">D\'SIM ass elo desaktivéiert. Gëff e PUK-Code a fir weiderzemaachen. Kontaktéier däin Netzbedreiwer fir Detailer.</string>
+  <string name="kg_puk_enter_puk_hint">D\'SIM ass elo desaktivéiert. Gëff e PUK-Code a fir weiderzemaachen. Kontaktéier däi Provider fir Detailer.</string>
   <string name="kg_puk_enter_pin_hint">Gëff de gewënschte PIN-Code an</string>
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
   <string name="kg_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
@@ -147,12 +147,12 @@ Kontaktéier däin Netzbedreiwer fir eng aner SIM-Kaart ze kréien.</string>
     </string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
-  <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däin Netzbedreiwer kontaktéiere fir däin Apparat z\'entspären.</string>
+  <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däi Provider kontaktéiere fir däin Apparat z\'entspären.</string>
   <plurals name="kg_password_wrong_pin_code">
-    <item quantity="one">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier s de däin Netzbedreiwer kontaktéiere muss fir däin Apparat z\'entspären.</item>
+    <item quantity="one">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier s de däi Provider kontaktéiere muss fir däin Apparat z\'entspären.</item>
     <item quantity="other">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg.</item>
   </plurals>
-  <string name="kg_password_wrong_puk_code_dead">D\'SIM ass onbrauchbar. Kontaktéier däin Netzbedreiwer.</string>
+  <string name="kg_password_wrong_puk_code_dead">D\'SIM ass onbrauchbar. Kontaktéier däi Provider.</string>
   <plurals name="kg_password_wrong_puk_code">
     <item quantity="one">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>
     <item quantity="other">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>

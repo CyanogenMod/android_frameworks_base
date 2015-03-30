@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Datenschutz</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> versucht, <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Neu starten</string>
+  <string name="global_action_current_user">Aktuell</string>
   <string name="reboot_reboot">Neu starten</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -178,6 +179,30 @@
   <string name="usb_media_checking">USB-Speicher wird gerade geprüft.</string>
   <string name="usb_media_removed">USB-Speicher wurde entfernt.</string>
   <string name="usb_media_shared">USB-Speicher wird momentan von einem Computer verwendet.</string>
+  <string name="sd_ext_media_checking_notification_title">SD-Karte wird vorbereitet</string>
+  <string name="sd_ext_media_checking_notification_message">SD-Karte wird auf Fehler überprüft.</string>
+  <string name="sd_ext_media_nofs_notification_title">Leere SD-Karte</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-Karte ist leer oder hat ein nicht unterstütztes Dateisystem.</string>
+  <string name="sd_ext_media_unmountable_notification_title">SD-Karte ist beschädigt</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-Karte ist beschädigt. Versuchen Sie, sie erneut zu formatieren.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-Karte wurde unerwartet entfernt</string>
+  <string name="sd_ext_media_badremoval_notification_message">Vor dem Entfernen die SD-Karte auswerfen, um Datenverlust zu vermeiden.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-Karte kann sicher entfernt werden</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Die SD-Karte kann jetzt sicher entfernt werden.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-Karte entfernt</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-Karte entfernt. Legen Sie eine neue ein.</string>
+  <string name="usb_ext_media_checking_notification_title">USB-Speicher wird vorbereitet</string>
+  <string name="usb_ext_media_checking_notification_message">USB-Speicher wird auf Fehler überprüft.</string>
+  <string name="usb_ext_media_nofs_notification_title">Unformatierter USB-Speicher</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-Speicher ist leer oder hat ein nicht unterstütztes Dateisystem.</string>
+  <string name="usb_ext_media_unmountable_notification_title">USB-Speicher ist beschädigt</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-Speicher ist beschädigt. Versuchen Sie, ihn erneut zu formatieren.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-Speicher wurde unerwartet entfernt</string>
+  <string name="usb_ext_media_badremoval_notification_message">Vor dem Entfernen den USB-Speicher auswerfen, um Datenverlust zu vermeiden.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-Speicher kann sicher entfernt werden</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Sie können den USB-Speicher jetzt sicher entfernen.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB-Speicher entfernt</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-Speicher entfernt. Fügen Sie einen neuen Datenträger ein.</string>
   <string name="live_display_auto">Automatisch</string>
   <string name="live_display_auto_summary">Farbtemperatur des Bildschirms nach Sonnenaufgang und Sonnenuntergang automatisch anpassen</string>
   <string name="live_display_off">Aus</string>
@@ -189,4 +214,6 @@
   <string name="live_display_outdoor">Außen (helle Sonne)</string>
   <string name="live_display_outdoor_summary">Nur Außen-Modus verwenden</string>
   <string name="live_display_hint">LiveDisplay kann gegen eine Überanstrengung der Augen und beim Schlafen in der Nacht helfen. Klicken Sie hier, um es auszuprobieren!</string>
+  <string name="lock_to_app_toast_no_navbar">Um diese Ansicht zu lösen die Menü-Taste drücken und halten.</string>
+  <string name="lock_to_app_description_no_navbar">Bildschirm anheften fixiert die aktuelle Ansicht.\n\nZum Lösen die Menü-Taste drücken und halten.</string>
 </resources>

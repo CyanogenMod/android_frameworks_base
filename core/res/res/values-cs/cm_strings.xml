@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Ochrana soukromí</string>
   <string name="privacy_guard_dialog_summary">Aplikace <xliff:g id="app">%1$s</xliff:g> se pokouší <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Restartovat</string>
+  <string name="global_action_current_user">Aktuální</string>
   <string name="reboot_reboot">Reboot</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -180,6 +181,30 @@
   <string name="usb_media_checking">Provádí se kontrola úložiště USB.</string>
   <string name="usb_media_removed">Úložiště USB bylo odebráno.</string>
   <string name="usb_media_shared">Úložiště USB je nyní používáno počítačem.</string>
+  <string name="sd_ext_media_checking_notification_title">Příprava SD karty</string>
+  <string name="sd_ext_media_checking_notification_message">Kontrola chyb na SD kartě.</string>
+  <string name="sd_ext_media_nofs_notification_title">Prázdná karta SD</string>
+  <string name="sd_ext_media_nofs_notification_message">Karta SD je prázdná nebo obsahuje nepodporovaný systém souborů.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Poškozená karta SD</string>
+  <string name="sd_ext_media_unmountable_notification_message">Karta SD je poškozena. Zkuste ji přeformátovat.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Karta SD byla nečekaně odebrána</string>
+  <string name="sd_ext_media_badremoval_notification_message">Před odebráním kartu SD odpojte, aby nedošlo ke ztrátě dat.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Kartu SD je nyní bezpečné odebrat</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Můžete bezpečně odstranit SD kartu.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Karta SD odebrána</string>
+  <string name="sd_ext_media_nomedia_notification_message">Karta SD odebrána. Vložte novou.</string>
+  <string name="usb_ext_media_checking_notification_title">Příprava USB úložiště</string>
+  <string name="usb_ext_media_checking_notification_message">Kontrola chyb na USB úložišti.</string>
+  <string name="usb_ext_media_nofs_notification_title">Prázdné úložiště USB</string>
+  <string name="usb_ext_media_nofs_notification_message">Úložiště USB je prázdné nebo obsahuje nepodporovaný systém souborů.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Úložiště USB je poškozené</string>
+  <string name="usb_ext_media_unmountable_notification_message">Úložiště USB je poškozené. Zkuste ho přeformátovat.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Úložiště USB bylo nečekaně odebráno</string>
+  <string name="usb_ext_media_badremoval_notification_message">Před odebráním odpojit úložiště USB, aby nedošlo ke ztrátě dat.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Úložiště USB je nyní bezpečné odebrat</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Nyní můžete úložiště USB bezpečně odebrat.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB úložiště odebráno</string>
+  <string name="usb_ext_media_nomedia_notification_message">Úložiště USB odebráno. Vložte nové.</string>
   <string name="live_display_auto">Automaticky</string>
   <string name="live_display_auto_summary">Automaticky upravit teplotu barev obrazovky po západu a východu slunce</string>
   <string name="live_display_off">Vypnuto</string>
@@ -191,4 +216,6 @@
   <string name="live_display_outdoor">Venku (slunečno)</string>
   <string name="live_display_outdoor_summary">Nastavení pouze pro venkovní</string>
   <string name="live_display_hint">LiveDisplay může pomoci proti namáhání očí a také spánku v noci. Dotykem zde tuto funkci můžete vyzkoušet!</string>
+  <string name="lock_to_app_toast_no_navbar">Chcete-li uvolnit tuto obrazovku, podržte tlačítko Nabídka.</string>
+  <string name="lock_to_app_description_no_navbar">Displej je uzamčen v jednom pohledu.\n\nPro uvolnění podržte tlačítko Nabídka.</string>
 </resources>
