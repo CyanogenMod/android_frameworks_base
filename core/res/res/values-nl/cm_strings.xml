@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Privacybescherming</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> wil <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Herstarten</string>
+  <string name="global_action_current_user">Huidige</string>
   <string name="reboot_reboot">Herstarten</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -178,6 +179,30 @@
   <string name="usb_media_checking">USB-opslag wordt gecontroleerd.</string>
   <string name="usb_media_removed">USB-opslag is verwijderd.</string>
   <string name="usb_media_shared">USB-opslag is in gebruik door een computer.</string>
+  <string name="sd_ext_media_checking_notification_title">SD-kaart voorbereiden</string>
+  <string name="sd_ext_media_checking_notification_message">SD-kaart controleren op fouten.</string>
+  <string name="sd_ext_media_nofs_notification_title">Lege SD-kaart</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-kaart is leeg of heeft een niet-ondersteund bestandssysteem.</string>
+  <string name="sd_ext_media_unmountable_notification_title">SD-kaart beschadigd</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-kaart is beschadigd. Probeer deze opnieuw te formatteren.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-kaart onverwacht verwijderd</string>
+  <string name="sd_ext_media_badremoval_notification_message">Ontkoppel de SD-kaart voordat u deze verwijdert om gegevensverlies te voorkomen.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-kaart kan veilig verwijderd worden</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">U kunt de SD-kaart veilig verwijderen.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-kaart is verwijderd</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kaart verwijderd. Plaats een nieuwe.</string>
+  <string name="usb_ext_media_checking_notification_title">USB-opslag voorbereiden</string>
+  <string name="usb_ext_media_checking_notification_message">USB-opslag op fouten controleren.</string>
+  <string name="usb_ext_media_nofs_notification_title">Lege USB-opslag</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-opslag is leeg of heeft een niet-ondersteund bestandssysteem.</string>
+  <string name="usb_ext_media_unmountable_notification_title">USB-opslag beschadigd</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-opslag is beschadigd. Probeer deze opnieuw te formatteren.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-opslag onverwacht verwijderd</string>
+  <string name="usb_ext_media_badremoval_notification_message">Ontkoppel de USB-opslag voordat u deze verwijdert om gegevensverlies te voorkomen.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-opslag kan veilig worden verwijderd</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">U kunt de USB-opslag veilig verwijderen.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB-opslag is verwijderd</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-opslag verwijderd. Plaats nieuw medium.</string>
   <string name="live_display_auto">Automatisch</string>
   <string name="live_display_auto_summary">Automatisch kleurtemperatuur van scherm aanpassen na zonsopkomst en -ondergang</string>
   <string name="live_display_off">Uit</string>
@@ -189,4 +214,6 @@
   <string name="live_display_outdoor">Buitenshuis (heldere zon)</string>
   <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
   <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
+  <string name="lock_to_app_toast_no_navbar">Blijf \'Terug\' en \'Overzicht\' tegelijk aanraken om dit scherm los te maken.</string>
+  <string name="lock_to_app_description_no_navbar">Met scherm vastzetten wordt het beeldscherm vergrendeld op één weergave.\n\nBlijf \'Terug\' en \'Overzicht\' tegelijk aanraken om het scherm los te maken.</string>
 </resources>

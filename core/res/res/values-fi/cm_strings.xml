@@ -181,6 +181,30 @@
   <string name="usb_media_checking">USB-muistia tarkistetaan.</string>
   <string name="usb_media_removed">USB-muisti on poistettu.</string>
   <string name="usb_media_shared">USB-muisti on käytössä tällä hetkellä tietokoneessa.</string>
+  <string name="sd_ext_media_checking_notification_title">Valmistellaan SD-korttia</string>
+  <string name="sd_ext_media_checking_notification_message">Tarkistetaan SD-korttia virheiden varalta.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tyhjä SD-kortti</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-kortti on tyhjä tai sen tiedostojärjestelmää ei tueta.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Vioittunut SD-kortti</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-kortti on vioittunut. Kokeile alustaa se.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-kortti poistettu odottamatta</string>
+  <string name="sd_ext_media_badremoval_notification_message">Irroita SD-kortti ennen poistamista välttääksesi tietojen häviämisen.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-kortti voidaan poistaa turvallisesti</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Voit nyt poistaa SD-kortin turvallisesti.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-kortti poistettu</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kortti poistettu. Aseta uusi kortti.</string>
+  <string name="usb_ext_media_checking_notification_title">Valmistellaan USB-muistia</string>
+  <string name="usb_ext_media_checking_notification_message">Tarkistetaan USB-muistia virheiden varalta.</string>
+  <string name="usb_ext_media_nofs_notification_title">Tyhjä USB-muisti</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-muisti on tyhjä tai sen tiedostojärjestelmää ei tueta.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Vioittunut USB-muisti</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-muisti on vioittunut. Kokeile alustaa se.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-muisti poistettu odottamatta</string>
+  <string name="usb_ext_media_badremoval_notification_message">Irroita USB-muisti ennen poistamista välttääksesi tietojen häviämisen.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-muisti voidaan poistaa turvallisesti</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Voit nyt poistaa USB-muistin turvallisesti.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Poistettu USB-muisti</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-muisti poistettu. Aseta uusi tallennustila.</string>
   <string name="live_display_auto">Automaattinen</string>
   <string name="live_display_auto_summary">Säädä näytön värilämpötilaa automaattisesti auringonlaskun ja -nousun jälkeen</string>
   <string name="live_display_off">Pois käytöstä</string>
@@ -192,4 +216,6 @@
   <string name="live_display_outdoor">Ulkoilma (kirkas aurinko)</string>
   <string name="live_display_outdoor_summary">Käytä vain ulkoilma-asetusta</string>
   <string name="live_display_hint">LiveDisplay voi vähentää silmien rasitusta ja auttaa nukkumaan öisin. Kokeile sitä painamalla tästä!</string>
+  <string name="lock_to_app_toast_no_navbar">Irrottaaksesi tämän näytön, napauta ja pidä valikkonäppäintä pohjassa.</string>
+  <string name="lock_to_app_description_no_navbar">Näytön kiinnittäminen lukitsee näytön yhteen näkymään.\n\nIrrottaaksesi näytön, napauta ja pitä valikkonäppäintä pohjassa.</string>
 </resources>
