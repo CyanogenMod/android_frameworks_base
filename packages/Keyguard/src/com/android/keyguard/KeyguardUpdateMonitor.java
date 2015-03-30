@@ -676,6 +676,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 //subId for the slot initially initiazed to invalid value
                 //Got intent with correct subId for the slot now.
                 if (mSubIdForSlot[subInfo.slotId] != subInfo.subId) {
+                    // Update carrier info before
+                    handleCarrierInfoUpdate(subInfo.subId);
+
                     long subId = mSubIdForSlot[subInfo.slotId];
                     mSimState.put(subInfo.subId, mSimState.get(subId));
                     mPlmn.put(subInfo.subId, mPlmn.get(subId));
@@ -701,6 +704,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleSubInfoContentChange(SubInfoContent content) {
+        // Update carrier info before
+        handleCarrierInfoUpdate(content.subInfoId);
+
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
