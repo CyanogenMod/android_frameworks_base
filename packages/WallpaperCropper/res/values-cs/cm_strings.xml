@@ -28,4 +28,5 @@
   <string name="pick_wallpaper">Tapety</string>
   <string name="activity_not_found">Aplikace není nainstalována.</string>
   <string name="lockscreen_wallpaper_instructions">Nastavit tapetu zámku obrazovky</string>
+  <string name="image_decode_error">Nelze dekódovat soubor</string>
 </resources>

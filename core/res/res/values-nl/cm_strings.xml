@@ -86,7 +86,7 @@
   <string name="permlab_writeThemes">uw thema\'s aanpassen</string>
   <string name="permdesc_writeThemesDesc">Hiermee kan de app nieuwe thema\'s invoegen en wijzigen welk thema u hebt toegepast.</string>
   <string name="permlab_setKeyguardWallpaper">achtergrond van vergrendelingsscherm instellen</string>
-  <string name="permdesc_setKeyguardWallpaper">Hiermee kan de app de achtergrond van het vergrendelingsscherm aanpassen.</string>
+  <string name="permdesc_setKeyguardWallpaper">Hiermee kan een app de achtergrond van het vergrendelingsscherm aanpassen.</string>
   <string name="permlab_useHardwareFramework">hardware-framework gebruiken</string>
   <string name="permdesc_useHardwareFramework">Hiermee kan de app toegang krijgen tot het hardware-framework van CyanogenMod.</string>
   <string name="permlab_keyguardApplicationWidget">app-widget op vergrendelingsscherm instellen</string>

@@ -16,6 +16,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">Wyczyść</string>
+  <plurals name="number_of_items_selected">
+    <item quantity="one">Wybrano %1$d</item>
+    <item quantity="few">Wybrano %1$d</item>
+    <item quantity="other">Wybrano %1$d</item>
+  </plurals>
   <string name="wallpaper_accessibility_name">Tapeta %1$d z %2$d</string>
   <string name="announce_selection">Wybrano <xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g></string>
   <string name="wallpaper_delete">Usuń</string>
@@ -23,4 +28,5 @@
   <string name="pick_wallpaper">Tapety</string>
   <string name="activity_not_found">Aplikacja nie jest zainstalowana.</string>
   <string name="lockscreen_wallpaper_instructions">Ustaw tapetę ekranu blokady</string>
+  <string name="image_decode_error">Nie można zdekodować obrazu</string>
 </resources>

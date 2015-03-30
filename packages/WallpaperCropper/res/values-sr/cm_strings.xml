@@ -29,4 +29,5 @@
   <string name="pick_wallpaper">Позадине</string>
   <string name="activity_not_found">Апликација није инсталирана.</string>
   <string name="lockscreen_wallpaper_instructions">Постави позадину закључаног екрана</string>
+  <string name="image_decode_error">Није могуће учитати фајл</string>
 </resources>

@@ -27,4 +27,5 @@
   <string name="pick_wallpaper">Háttérképek</string>
   <string name="activity_not_found">Alkalmazás nincs telepítve.</string>
   <string name="lockscreen_wallpaper_instructions">Képernyőzár hátterének beállítása</string>
+  <string name="image_decode_error">Kép dekódolása sikertelen</string>
 </resources>

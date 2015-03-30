@@ -57,9 +57,9 @@
   <string name="toast_rotation_locked">Ekran döndərmə kilitlidir</string>
   <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>
   <string name="permlab_changePrivacyGuardState">Gizlilik Qorumasını fəallaşdır ya da ləğv et</string>
-  <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini dəyişmə icazəsi verər. Bir tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi verilənlərə giriş edə bilməz.</string>
+  <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini müəyyənləşdirmə imkanı verər. Əgər tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi verilənlərə müraciət edə bilməyəcək.</string>
   <string name="privacy_guard_notification">Gizlilik Qoruması aktivdir</string>
-  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> şəxsi verilənlərə giriş edə bilməyəcək</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> şəxsi verilənlərə müraciət edə bilməyəcək</string>
   <string name="profile_picker_title">Profillər</string>
   <string name="profile_none">Yoxdur</string>
   <string name="perf_profile_pwrsv">Gücə qənaət</string>
@@ -79,8 +79,8 @@
   <string name="permdesc_readPhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələri haqqında məlumat oxumasına icazə verər.</string>
   <string name="permlab_changePhoneBlacklist">telefon qara siyahısını dəyişdir</string>
   <string name="permdesc_changePhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələrini dəyişdirməsinə icazə verər.</string>
-  <string name="permlab_accessThemeService">tema xidmətinə giriş</string>
-  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə girişinə icazə verər. Normal tətbiqetmələr üçün buna ehtiyac yoxdur.</string>
+  <string name="permlab_accessThemeService">tema xidmətinə müraciət</string>
+  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə müraciətinə icazə verər. Normal tətbiqetmələr üçün buna ehtiyac yoxdur.</string>
   <string name="permlab_readThemes">tema məlumatını oxu</string>
   <string name="permdesc_readThemesDesc">Tətbiqetmənin temalarınızı oxumasına və
        hansı temanı tətbiq etdiyinizi müəyyən etməyə icazə verər.</string>
@@ -89,14 +89,14 @@
   <string name="permlab_setKeyguardWallpaper">klaviatura divar kağızını tənzimlə</string>
   <string name="permdesc_setKeyguardWallpaper">Tətbiqetmənin kilit ekranı divar kağızını dəyişdirməsinə icazə verər.</string>
   <string name="permlab_useHardwareFramework">təchizat infrastrukturundan istifadə et</string>
-  <string name="permdesc_useHardwareFramework">Tətbiqetmənin CM təchizat infrastrukturuna girişinə icazə verər.</string>
+  <string name="permdesc_useHardwareFramework">Tətbiqetmənin CM təchizat infrastrukturuna müraciətinə icazə verər.</string>
   <string name="permlab_keyguardApplicationWidget">düymə kilidi tətbiqetmə widgetini tənzimlə</string>
   <string name="permdesc_keyguardApplicationWidget">Tətbiqetmənin düymə kilidinə tətbiqetmə widgeti yerləşdirməsinə icazə verər.</string>
   <string name="permlab_interceptPackageLaunch">tətbiqetmə başlatmanın qarşısını al</string>
   <string name="permdesc_interceptPackageLaunch">Tətbiqetməyə digər tətbiqetmələrin başlamasını əngəlləmək icazə verər</string>
   <string name="immersive_mode_confirmation_bottom">Tam ekrandan çıxmaq üçün aşağıdan yuxarı sürüşdürün.</string>
-  <string name="app_ops_access_camera">kameraya giriş</string>
-  <string name="app_ops_access_location">məkanınıza giriş</string>
+  <string name="app_ops_access_camera">kameraya müraciət</string>
+  <string name="app_ops_access_location">olduğunuz yerə müraciət</string>
   <string name="app_ops_access_notifications">bildirişləri oxu</string>
   <string name="app_ops_alarm_wakeup">cihazı oyandır</string>
   <string name="app_ops_draw_on_top">ən üsttə göstərmək</string>

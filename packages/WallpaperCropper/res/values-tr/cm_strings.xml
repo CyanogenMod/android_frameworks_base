@@ -27,4 +27,5 @@
   <string name="pick_wallpaper">Duvar kağıtları</string>
   <string name="activity_not_found">Uyg. yüklü değil.</string>
   <string name="lockscreen_wallpaper_instructions">Kilit ekranı duvar kağıdını ayarla</string>
+  <string name="image_decode_error">Görsel çözümlenemiyor</string>
 </resources>

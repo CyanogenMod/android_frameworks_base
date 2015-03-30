@@ -46,7 +46,7 @@
   <string name="reboot_confirm" product="tablet">La teva tauleta es reiniciarà.</string>
   <string name="reboot_confirm" product="default">El teu telèfon es reiniciarà.</string>
   <string name="permlab_preventpower">impedeix la tecla d\'engegada</string>
-  <string name="permdesc_preventpower">Permet que l\'aplicació sobreescrigui la tecla d\'encesa</string>
+  <string name="permdesc_preventpower">Permet que l\'aplicació anul·li la tecla d\'encesa</string>
   <string name="permlab_sendMockSms">envia missatges SMS simulats</string>
   <string name="permdesc_sendMockSms">Permet a l\'aplicació enviar missatges SMS simulats. Això permet a una aplicació enviar missatges a aplicacions de confiança. Aplicacions malicioses podrien enviar missatges contínuament, bloquejant el sistema de notificacions del dispositiu i molestant l\'usuari.</string>
   <string name="storage_sd_dock_card">Acopla targeta SD</string>
