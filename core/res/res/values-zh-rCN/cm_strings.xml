@@ -179,6 +179,30 @@
   <string name="usb_media_checking">目前正在检查 USB 存储。</string>
   <string name="usb_media_removed">USB 存储已被移除。</string>
   <string name="usb_media_shared">目前 USB 存储正在被计算机使用。</string>
+  <string name="sd_ext_media_checking_notification_title">正在准备 SD 卡</string>
+  <string name="sd_ext_media_checking_notification_message">正在检查 SD 卡的错误。</string>
+  <string name="sd_ext_media_nofs_notification_title">空白 SD 卡</string>
+  <string name="sd_ext_media_nofs_notification_message">SD 卡为空或使用了不支持的文件系统。</string>
+  <string name="sd_ext_media_unmountable_notification_title">损坏的 SD 卡</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD 卡已损坏。请尝试重新格式化。</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD 卡意外移除</string>
+  <string name="sd_ext_media_badremoval_notification_message">在移除 SD 卡之前先卸载以避免数据丢失。</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD 卡可安全移除</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">您可以安全地移除 SD 卡。</string>
+  <string name="sd_ext_media_nomedia_notification_title">已移除 SD 卡</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD 卡已移除。请插入新卡。</string>
+  <string name="usb_ext_media_checking_notification_title">正在准备 USB 存储</string>
+  <string name="usb_ext_media_checking_notification_message">正在检查 USB 存储的错误。</string>
+  <string name="usb_ext_media_nofs_notification_title">空白 USB 存储</string>
+  <string name="usb_ext_media_nofs_notification_message">USB 存储为空或使用了不支持的文件系统。</string>
+  <string name="usb_ext_media_unmountable_notification_title">损坏的 USB 存储</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB 存储已损坏，请尝试重新格式化。</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB 存储意外移除</string>
+  <string name="usb_ext_media_badremoval_notification_message">在移除 USB 存储之前先卸载以避免数据丢失。</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB 存储可安全移除</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">您现在可以安全移除 USB 存储。</string>
+  <string name="usb_ext_media_nomedia_notification_title">已移除 USB 存储</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB 存储已移除。请插入新的媒体。</string>
   <string name="live_display_auto">自动</string>
   <string name="live_display_auto_summary">在日出和日落后自动调节屏幕色温</string>
   <string name="live_display_off">关闭</string>
@@ -190,4 +214,6 @@
   <string name="live_display_outdoor">户外（阳光）</string>
   <string name="live_display_outdoor_summary">仅使用户外设置</string>
   <string name="live_display_hint">LiveDisplay 可以帮助减少眼睛疲劳，帮助您的夜间睡眠。点击此处来试一试！</string>
+  <string name="lock_to_app_toast_no_navbar">要取消固定屏幕，触摸并按住菜单按钮。</string>
+  <string name="lock_to_app_description_no_navbar">固定屏幕使设备一直显示某个视图。\n\n要取消固定，触摸并按住菜单按钮。</string>
 </resources>

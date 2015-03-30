@@ -183,6 +183,30 @@
   <string name="usb_media_checking">USB storage is currently being checked.</string>
   <string name="usb_media_removed">USB storage has been removed.</string>
   <string name="usb_media_shared">USB storage is currently in use by a computer.</string>
+  <string name="sd_ext_media_checking_notification_title">Preparing SD card</string>
+  <string name="sd_ext_media_checking_notification_message">Checking SD card for errors.</string>
+  <string name="sd_ext_media_nofs_notification_title">Blank SD card</string>
+  <string name="sd_ext_media_nofs_notification_message">SD card is blank or has unsupported filesystem.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Damaged SD card</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD card is damaged. Try reformatting it.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD card unexpectedly removed</string>
+  <string name="sd_ext_media_badremoval_notification_message">Unmount SD card before removing to avoid data loss.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD card safe to remove</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">You can safely remove SD card.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Removed SD card</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD card removed. Insert a new one.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparing USB storage</string>
+  <string name="usb_ext_media_checking_notification_message">Checking USB storage for errors.</string>
+  <string name="usb_ext_media_nofs_notification_title">Blank USB storage</string>
+  <string name="usb_ext_media_nofs_notification_message">USB storage is blank or has unsupported filesystem.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Damaged USB storage</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB storage is damaged. Try reformatting it.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB storage unexpectedly removed</string>
+  <string name="usb_ext_media_badremoval_notification_message">Unmount USB storage before removing to avoid data loss.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB storage safe to remove</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">You can safely remove USB storage.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Removed USB storage</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB storage removed. Insert new media.</string>
   <string name="live_display_auto">Automatic</string>
   <string name="live_display_auto_summary">Automatically adjust color temperature of screen after sunset and sunrise</string>
   <string name="live_display_off">Off</string>
@@ -194,4 +218,6 @@
   <string name="live_display_outdoor">Outdoor (bright sun)</string>
   <string name="live_display_outdoor_summary">Use outdoor settings only</string>
   <string name="live_display_hint">LiveDisplay can help reduce eyestrain and help you sleep at night. Click here to try it out!</string>
+  <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold Menu button.</string>
+  <string name="lock_to_app_description_no_navbar">Screen pinning locks the display in a single view.\n\nTo unpin, touch and hold Menu button.</string>
 </resources>

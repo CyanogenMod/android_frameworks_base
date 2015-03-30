@@ -181,6 +181,30 @@
   <string name="usb_media_checking">USB úložisko sa v súčasnosti kontroluje.</string>
   <string name="usb_media_removed">USB úložisko bolo odstránené.</string>
   <string name="usb_media_shared">USB úložisko v súčasnosti používa počítač.</string>
+  <string name="sd_ext_media_checking_notification_title">Karta SD sa pripravuje</string>
+  <string name="sd_ext_media_checking_notification_message">Kontrolovanie chýb karty SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Prázdne karta SD</string>
+  <string name="sd_ext_media_nofs_notification_message">Karta SD je prázdna alebo má nepodporovaný súborový systém.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Poškodená karta SD</string>
+  <string name="sd_ext_media_unmountable_notification_message">Karta SD je poškodená. Skúste ju preformátovať.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Neočakávane odstránená karta SD</string>
+  <string name="sd_ext_media_badremoval_notification_message">Odpojte kartu SD pred odstránením, aby sa zabránilo strate dát.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Kartu SD je bezpečné odstrániť</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Môžete bezpečne odstrániť kartu SD.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Odstránená karta SD</string>
+  <string name="sd_ext_media_nomedia_notification_message">Karta SD bola odstránená. Vložte novú.</string>
+  <string name="usb_ext_media_checking_notification_title">USB úložisko sa pripravuje</string>
+  <string name="usb_ext_media_checking_notification_message">Kontrolovanie chýb USB úložiska.</string>
+  <string name="usb_ext_media_nofs_notification_title">Prázdne USB úložisko</string>
+  <string name="usb_ext_media_nofs_notification_message">USB úložisko je prázdne alebo má nepodporovaný súborový systém.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Poškodené USB úložisko</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB úložisko je poškodené. Skúste ho preformátovať.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Neočakávane odstránené USB úložisko</string>
+  <string name="usb_ext_media_badremoval_notification_message">Odpojte USB úložisko pred odstránením, aby sa zabránilo strate dát.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB úložisko je bezpečné odstrániť</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Môžete bezpečne odstrániť USB úložisko.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Odstránené USB úložisko</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB úložisko bolo odstránené. Vložte nové médium.</string>
   <string name="live_display_auto">Automatické</string>
   <string name="live_display_auto_summary">Automaticky upraviť teplotu farieb obrazovky po západe a východe slnka</string>
   <string name="live_display_off">Vypnuté</string>
@@ -192,4 +216,6 @@
   <string name="live_display_outdoor">Vonku (jasné slnko)</string>
   <string name="live_display_outdoor_summary">Používať len nastavenia pre vonkajšie prostredie</string>
   <string name="live_display_hint">LiveDisplay môže pomôcť znížiť únavu očí a pomôže vám spať v noci. Kliknite sem a vyskúšajte túto funkciu!</string>
+  <string name="lock_to_app_toast_no_navbar">Na odopnutie tejto obrazovky stlačte a držte tlačidlo Ponuka.</string>
+  <string name="lock_to_app_description_no_navbar">Pripínanie obrazovky zamkne displej v jednom zobrazení.\n\nNa odopnutie stlačte a držte tlačidlo Ponuka.</string>
 </resources>
