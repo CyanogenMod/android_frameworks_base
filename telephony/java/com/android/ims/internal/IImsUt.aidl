@@ -79,8 +79,7 @@ interface IImsUt {
     /**
      * Updates the configuration of the call forward.
      */
-    int updateCallForward(int action, int condition, String number,
-            int serviceClass, int timeSeconds);
+    int updateCallForward(int action, int condition, String number, int timeSeconds);
 
     /**
      * Updates the configuration of the call forward unconditional timer.
@@ -92,7 +91,7 @@ interface IImsUt {
     /**
      * Updates the configuration of the call waiting.
      */
-    int updateCallWaiting(boolean enable, int serviceClass);
+    int updateCallWaiting(boolean enable);
 
     /**
      * Updates the configuration of the CLIR supplementary service.
