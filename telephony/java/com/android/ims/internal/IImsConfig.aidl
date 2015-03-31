@@ -49,22 +49,22 @@ import com.android.ims.ImsConfigListener;
  */
 interface IImsConfig {
     /**
-     * Gets the value for ims service/capabilities parameters from the master
+     * Gets the value for ims service/capabilities parameters from the provisioned
      * value storage. Synchronous blocking call.
      *
      * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
      * @return value in Integer format.
      */
-    int getMasterValue(int item);
+    int getProvisionedValue(int item);
 
     /**
-     * Gets the value for ims service/capabilities parameters from the master
+     * Gets the value for ims service/capabilities parameters from the provisioned
      * value storage. Synchronous blocking call.
      *
      * @param item, as defined in com.android.ims.ImsConfig#ConfigConstants.
      * @return value in String format.
      */
-    String getMasterStringValue(int item);
+    String getProvisionedStringValue(int item);
 
     /**
      * Sets the value for IMS service/capabilities parameters by the operator device
@@ -132,4 +132,12 @@ interface IImsConfig {
      * @throws ImsException if calling the IMS service results in an error.
      */
      oneway void setVideoQuality(int quality, ImsConfigListener listener);
+
+    /**
+     * Gets the value for IMS volte provisioned.
+     * This should be the same as the operator provisioned value if applies.
+     *
+     * @return void
+     */
+    boolean getVolteProvisioned();
 }
