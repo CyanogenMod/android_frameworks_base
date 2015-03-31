@@ -77,6 +77,8 @@ public final class Profile implements Parcelable, Comparable {
 
     private AirplaneModeSettings mAirplaneMode = new AirplaneModeSettings();
 
+    private BrightnessSettings mBrightness = new BrightnessSettings();
+
     private int mScreenLockMode = LockMode.DEFAULT;
 
     private int mExpandedDesktopMode = ExpandedDesktopMode.DEFAULT;
@@ -357,6 +359,7 @@ public final class Profile implements Parcelable, Comparable {
                 connections.values().toArray(new Parcelable[connections.size()]), flags);
         dest.writeParcelable(mRingMode, flags);
         dest.writeParcelable(mAirplaneMode, flags);
+        dest.writeParcelable(mBrightness, flags);
         dest.writeInt(mScreenLockMode);
         dest.writeMap(mTriggers);
         dest.writeInt(mExpandedDesktopMode);
@@ -391,6 +394,7 @@ public final class Profile implements Parcelable, Comparable {
         }
         mRingMode = (RingModeSettings) in.readParcelable(null);
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
+        mBrightness = (BrightnessSettings) in.readParcelable(null);
         mScreenLockMode = in.readInt();
         in.readMap(mTriggers, null);
         mExpandedDesktopMode = in.readInt();
@@ -504,6 +508,15 @@ public final class Profile implements Parcelable, Comparable {
         mDirty = true;
     }
 
+    public BrightnessSettings getBrightness() {
+        return mBrightness;
+    }
+
+    public void setBrightness(BrightnessSettings descriptor) {
+        mBrightness = descriptor;
+        mDirty = true;
+    }
+
     /** @hide */
     public boolean isDirty() {
         if (mDirty) {
@@ -528,6 +541,9 @@ public final class Profile implements Parcelable, Comparable {
             return true;
         }
         if (mAirplaneMode.isDirty()) {
+            return true;
+        }
+        if (mBrightness.isDirty()) {
             return true;
         }
         return false;
@@ -572,6 +588,8 @@ public final class Profile implements Parcelable, Comparable {
         builder.append("</expanded-desktop-mode>\n");
 
         mAirplaneMode.getXmlString(builder, context);
+
+        mBrightness.getXmlString(builder, context);
 
         mRingMode.getXmlString(builder, context);
 
@@ -699,6 +717,10 @@ public final class Profile implements Parcelable, Comparable {
                     AirplaneModeSettings amd = AirplaneModeSettings.fromXml(xpp, context);
                     profile.setAirplaneMode(amd);
                 }
+                if (name.equals("brightnessDescriptor")) {
+                    BrightnessSettings bd = BrightnessSettings.fromXml(xpp, context);
+                    profile.setBrightness(bd);
+                }
                 if (name.equals("screen-lock-mode")) {
                     profile.setScreenLockMode(Integer.valueOf(xpp.nextText()));
                 }
@@ -749,6 +771,9 @@ public final class Profile implements Parcelable, Comparable {
         mRingMode.processOverride(context);
         // Set airplane mode
         mAirplaneMode.processOverride(context);
+
+        // Set brightness
+        mBrightness.processOverride(context);
 
         // Set expanded desktop
         // if (mExpandedDesktopMode != ExpandedDesktopMode.DEFAULT) {
