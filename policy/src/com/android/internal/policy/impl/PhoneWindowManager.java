@@ -4994,8 +4994,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // If we're currently dozing with the screen on and the keyguard showing, pass the key
             // to the application but preserve its wake key status to make sure we still move
             // from dozing to fully interactive if we would normally go from off to fully
-            // interactive.
+            // interactive, unless the user has explicitly disabled this wake key.
             result = ACTION_PASS_TO_USER;
+            if (isWakeKey && isUserDisabledWakeKey(keyCode)) {
+                isWakeKey = false;
+            }
         } else {
             // When the screen is off and the key is not injected, determine whether
             // to wake the device but don't pass the key to the application.
@@ -5291,6 +5294,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             default:
                 return true;
         }
+    }
+
+    /**
+     * Check if the given keyCode represents a key that is considered a wake key
+     * but is explicitly disabled by the user in Settings and is not a wake key for another reason.
+     */
+    private boolean isUserDisabledWakeKey(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_MUTE:
+                // Volume keys are still wake keys if the device is docked.
+                return !mVolumeWakeScreen && mDockMode == Intent.EXTRA_DOCK_STATE_UNDOCKED;
+        }
+        return false;
     }
 
     /**
