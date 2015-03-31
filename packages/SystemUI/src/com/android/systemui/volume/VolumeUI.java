@@ -99,6 +99,7 @@ public class VolumeUI extends SystemUI {
         if (isThemeChange(newConfig)) {
             // TODO: implement initPanel() if needed
             //initPanel();
+            mContext.recreateTheme();
         }
         mConfiguration.setTo(newConfig);
     }
