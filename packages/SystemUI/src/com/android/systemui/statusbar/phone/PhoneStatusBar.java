@@ -1033,6 +1033,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        // receive broadcast from SnapdragonCamera
+        filter.addAction(FlashlightController.ACTION_CLOSE_FLASHLIGHT);
         if (DEBUG_MEDIA_FAKE_ARTWORK) {
             filter.addAction("fake_artwork");
         }
@@ -3285,6 +3287,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             } else if ("fake_artwork".equals(action)) {
                 if (DEBUG_MEDIA_FAKE_ARTWORK) {
                     updateMediaMetaData(true);
+                }
+            } else if (FlashlightController.ACTION_CLOSE_FLASHLIGHT.equals(action)) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    if (bundle.getBoolean("camera_led", false))
+                        mFlashlightController.killFlashlight();
                 }
             }
         }

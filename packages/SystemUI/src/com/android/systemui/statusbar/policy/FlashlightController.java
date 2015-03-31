@@ -48,6 +48,9 @@ public class FlashlightController {
     private static final int DISPATCH_OFF = 1;
     private static final int DISPATCH_AVAILABILITY_CHANGED = 2;
 
+    public static final String ACTION_CLOSE_FLASHLIGHT =
+            "org.codeaurora.snapcam.action.CLOSE_FLASHLIGHT";
+
     private final CameraManager mCameraManager;
     /** Call {@link #ensureHandler()} before using */
     private Handler mHandler;
