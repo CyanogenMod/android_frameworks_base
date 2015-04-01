@@ -72,6 +72,28 @@ oneway interface ImsConfigListener {
      void onSetVideoQuality(int status);
 
     /**
+     * Notifies client the value of the get operation result on get packet count item.
+     *
+     * @param status. as defined in com.android.ims.ImsConfig#OperationStatusConstants.
+     * @param packetCount. total number of packets sent or received
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+     void onGetPacketCount(int status, long packetCount);
+
+    /**
+     * Notifies client the value of the get operation result on get packet error count item.
+     *
+     * @param status. as defined in com.android.ims.ImsConfig#OperationStatusConstants.
+     * @param packetErrorCount. total number of packet errors encountered
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+     void onGetPacketErrorCount(int status, long packetErrorCount);
+
+    /**
      * Notifies client the value of the get operation result on the wifi calling preference.
      *
      * @param status. as defined in com.android.ims.ImsConfig#OperationStatusConstants.
