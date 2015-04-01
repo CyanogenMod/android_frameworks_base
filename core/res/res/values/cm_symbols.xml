@@ -115,6 +115,9 @@
     <!-- PlatLogo -->
     <java-symbol type="drawable" name="platlogo_cm" />
 
+    <!-- Automatic brightness enhancements -->
+    <java-symbol type="integer" name="config_autoBrightnessBrighteningLightFastDebounce"/>
+
     <!-- LiveDisplay -->
     <java-symbol type="string" name="live_display_title" />
     <java-symbol type="string" name="live_display_hint" />
