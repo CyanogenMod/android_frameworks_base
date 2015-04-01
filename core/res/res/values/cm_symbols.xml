@@ -68,4 +68,8 @@
 
     <!-- Screen unpinning -->
     <java-symbol type="string" name="lock_to_app_toast_no_navbar" />
+
+    <!-- Automatic brightness enhancements -->
+    <java-symbol type="integer" name="config_autoBrightnessBrighteningLightFastDebounce"/>
+
 </resources>
