@@ -352,12 +352,13 @@ android_media_MediaRecorder_start(JNIEnv *env, jobject thiz)
     process_media_recorder_call(env, mr->start(), "java/lang/RuntimeException", "start failed.");
 }
 
+
 static void
 android_media_MediaRecorder_pause(JNIEnv *env, jobject thiz)
 {
     ALOGV("pause");
-    sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
-    process_media_recorder_call(env, mr->pause(), "java/lang/RuntimeException", "pause failed.");
+    //sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
+    //process_media_recorder_call(env, mr->pause(), "java/lang/RuntimeException", "pause failed.");
 }
 
 static void

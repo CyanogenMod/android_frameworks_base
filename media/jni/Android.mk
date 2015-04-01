@@ -43,6 +43,7 @@ LOCAL_SHARED_LIBRARIES := \
     libmtp \
     libusbhost \
     libexif \
+    libgnuexif \
     libstagefright_amrnb_common \
 
 LOCAL_REQUIRED_MODULES := \

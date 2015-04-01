@@ -816,6 +816,7 @@ android_media_MediaPlayer_setNextMediaPlayer(JNIEnv *env, jobject thiz, jobject 
 static jboolean
 android_media_MediaPlayer_suspend(JNIEnv *env, jobject thiz)
 {
+    /*
     sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
     if (mp == NULL) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
@@ -827,11 +828,15 @@ android_media_MediaPlayer_suspend(JNIEnv *env, jobject thiz)
     }
 
     return true;
+    */
+    return false;
 }
+
 
 static jboolean
 android_media_MediaPlayer_resume(JNIEnv *env, jobject thiz)
 {
+    /*
     sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
     if (mp == NULL) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
@@ -843,6 +848,8 @@ android_media_MediaPlayer_resume(JNIEnv *env, jobject thiz)
     }
 
     return true;
+    */
+    return false;
 }
 
 static void
