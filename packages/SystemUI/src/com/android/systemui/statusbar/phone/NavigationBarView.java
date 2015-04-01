@@ -393,13 +393,27 @@ public class NavigationBarView extends LinearLayout {
 
         mNavigationIconHints = hints;
 
-        ((ImageView)getBackButton()).setImageDrawable(null);
-        ((ImageView)getBackButton()).setImageDrawable(mVertical ? mBackLandIcon : mBackIcon);
-        mBackLandIcon.setImeVisible(backAlt);
-        mBackIcon.setImeVisible(backAlt);
+        ImageView backButton = (ImageView) getBackButton();
+        if (backButton != null) {
+            backButton.setImageDrawable(null);
+            backButton.setImageDrawable(mVertical ? mBackLandIcon : mBackIcon);
+        }
+        if (mBackLandIcon != null) {
+            mBackLandIcon.setImeVisible(backAlt);
+        }
+        if (mBackIcon != null) {
+            mBackIcon.setImeVisible(backAlt);
+        }
 
-        ((ImageView)getRecentsButton()).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
-        ((ImageView)getHomeButton()).setImageDrawable(mVertical ? mHomeLandIcon : mHomeIcon);
+        ImageView recentsButton = (ImageView) getRecentsButton();
+        if (recentsButton != null) {
+            recentsButton.setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+        }
+
+        ImageView homeButton = (ImageView) getHomeButton();
+        if (homeButton != null) {
+            homeButton.setImageDrawable(mVertical ? mHomeLandIcon : mHomeIcon);
+        }
 
         final boolean showImeButton = ((hints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0)
                 && !mShowDpadArrowKeys;
