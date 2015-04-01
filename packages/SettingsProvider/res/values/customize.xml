@@ -77,8 +77,23 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Ringtone speaker Volume,its value is from 0 to 7,default value is 5 -->
     <integer name="def_ringtone_speaker_volume" translatable="false">5</integer>
 
+    <!-- Music speaker Volume,its value is from 0 to 15,default value is 11 -->
+    <integer name="def_music_speaker_volume" translatable="false">11</integer>
+
+    <!-- System speaker Volume,its value is from 0 to 7,default value is 7 -->
+    <integer name="def_system_speaker_volume" translatable="false">7</integer>
+
     <!-- Voice Call speaker Volume,its value is from 0 to 5,default value is 4 -->
     <integer name="def_voice_call_speaker_volume" translatable="false">4</integer>
+
+    <!-- Alarm speaker Volume,its value is from 0 to 7,default value is 6 -->
+    <integer name="def_alarm_speaker_volume" translatable="false">6</integer>
+
+    <!-- Notification speaker Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_notification_speaker_volume" translatable="false">5</integer>
+
+    <!-- Bluetooth sco speaker Volume,its value is from 0 to 15,default value is 7 -->
+    <integer name="def_bluetooth_sco_speaker_volume" translatable="false">7</integer>
 
     <!-- Voice Call earpiece Volume,its value is from 0 to 5,default value is 4 -->
     <integer name="def_voice_call_earpiece_volume" translatable="false">4</integer>

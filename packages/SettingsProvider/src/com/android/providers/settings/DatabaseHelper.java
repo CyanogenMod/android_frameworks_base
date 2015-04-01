@@ -2243,12 +2243,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     mContext.getResources().getInteger(R.integer.def_bluetooth_sco_headset_volume));
 
             // set speaker default volume
+            loadSetting(stmt, Settings.System.VOLUME_MUSIC + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_music_speaker_volume));
             loadSetting(stmt, Settings.System.VOLUME_RING + SPEAKER,
                     mContext.getResources().getInteger(R.integer.def_ringtone_speaker_volume));
+            loadSetting(stmt, Settings.System.VOLUME_SYSTEM+ SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_system_speaker_volume));
             loadSetting(
                     stmt,
                     Settings.System.VOLUME_VOICE + SPEAKER,
                     mContext.getResources().getInteger(R.integer.def_voice_call_speaker_volume));
+            loadSetting(stmt, Settings.System.VOLUME_ALARM + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_alarm_speaker_volume));
+            loadSetting(
+                    stmt,
+                    Settings.System.VOLUME_NOTIFICATION + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_notification_speaker_volume));
+            loadSetting(
+                    stmt,
+                    Settings.System.VOLUME_BLUETOOTH_SCO + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_bluetooth_sco_speaker_volume));
 
             // set earpiece default volume
             loadSetting(
