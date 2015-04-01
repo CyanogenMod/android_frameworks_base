@@ -390,12 +390,34 @@ static void android_server_AlarmManagerService_close(JNIEnv*, jobject, jlong nat
     delete impl;
 }
 
+static void rtc_wakealarm_write(jlong seconds)
+{
+#ifdef BOARD_RTC_WAKEALARM_PATH
+    int fd = open(BOARD_RTC_WAKEALARM_PATH, O_RDWR);
+    if (fd < 0) {
+        ALOGV("Unable to open RTC wakealarm driver %s: %s, skipping\n", BOARD_RTC_WAKEALARM_PATH, strerror(errno));
+    }
+    else {
+        char buffer[80];
+        int length = snprintf(buffer, sizeof(buffer), "%lu\n", (unsigned long) seconds);
+        if (write(fd, buffer, length) != length) {
+            ALOGE("Failed writing to wakealarm: %s\n", strerror(errno));
+        }
+        close(fd);
+    }
+#endif
+}
+
 static void android_server_AlarmManagerService_set(JNIEnv*, jobject, jlong nativeData, jint type, jlong seconds, jlong nanoseconds)
 {
     AlarmImpl *impl = reinterpret_cast<AlarmImpl *>(nativeData);
     struct timespec ts;
     ts.tv_sec = seconds;
     ts.tv_nsec = nanoseconds;
+
+    if (type == ANDROID_ALARM_SYSTEMTIME) {
+        rtc_wakealarm_write(seconds);
+    }
 
     int result = impl->set(type, &ts);
     if (result < 0)
@@ -412,6 +434,10 @@ static void android_server_AlarmManagerService_clear(JNIEnv*, jobject, jlong nat
     struct timespec ts;
     ts.tv_sec = seconds;
     ts.tv_nsec = nanoseconds;
+
+    if (type == ANDROID_ALARM_SYSTEMTIME) {
+        rtc_wakealarm_write(0);
+    }
 
     int result = impl->clear(type, &ts);
     if (result < 0)

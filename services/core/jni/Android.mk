@@ -70,3 +70,8 @@ $(shell mkdir -p $(OUT)/obj/SHARED_LIBRARIES/libtime_genoff_intermediates/)
 $(shell touch $(OUT)/obj/SHARED_LIBRARIES/libtime_genoff_intermediates/export_includes)
 endif
 
+# usually /sys/class/rtc/rtc0/wakealarm
+ifneq ($(strip $(BOARD_RTC_WAKEALARM_PATH)),)
+LOCAL_CFLAGS += -DBOARD_RTC_WAKEALARM_PATH=\"$(BOARD_RTC_WAKEALARM_PATH)\"
+endif
+
