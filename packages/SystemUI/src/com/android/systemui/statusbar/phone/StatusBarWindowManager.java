@@ -107,6 +107,20 @@ public class StatusBarWindowManager {
         mStatusBarView = statusBarView;
         mBarHeight = barHeight;
         mWindowManager.addView(mStatusBarView, mLp);
+
+        Display display = mWindowManager.getDefaultDisplay();
+        Point xy = new Point();
+        display.getRealSize(xy);
+        mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
+        if (mKeyguardBlur != null) {
+            mKeyguardBlur.setLayer(mStatusBarLayer -2);
+       }
+
+        mKeyguardBlurSettingObserver.onChange(true);
+        mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.BLUR_EFFECT_LOCKSCREEN), false,
+                    mKeyguardBlurSettingObserver);
+
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
     }
@@ -121,11 +135,18 @@ public class StatusBarWindowManager {
 
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
-            mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (mKeyguardBlurEnabled) {
+                // mKeyguardBlur.show();
+            } else {
+                mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+            }
         } else {
             mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+            if (mKeyguardBlurEnabled) {
+                mKeyguardBlur.hide();
+            }
         }
     }
 
