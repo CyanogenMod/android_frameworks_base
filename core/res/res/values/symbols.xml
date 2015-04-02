@@ -1225,7 +1225,6 @@
   <java-symbol type="drawable" name="ic_corp_icon" />
   <java-symbol type="drawable" name="ic_corp_statusbar_icon" />
   <java-symbol type="drawable" name="emulator_circular_window_overlay" />
-  <java-symbol type="drawable" name="windows" />
 
   <java-symbol type="drawable" name="sim_light_blue" />
   <java-symbol type="drawable" name="sim_light_green" />
