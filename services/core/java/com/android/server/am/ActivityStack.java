@@ -3446,6 +3446,9 @@ final class ActivityStack {
                 if (DEBUG_CLEANUP) Slog.v(
                     TAG, "Record #" + i + " " + r + ": app=" + r.app);
                 if (r.app == app) {
+                    if (r.visible) {
+                        hasVisibleActivities = true;
+                    }
                     boolean remove;
                     if ((!r.haveState && !r.stateNotNeeded) || r.finishing) {
                         // Don't currently have state for the activity, or
@@ -3487,9 +3490,6 @@ final class ActivityStack {
                         // it can be restarted later when needed.
                         if (localLOGV) Slog.v(
                             TAG, "Keeping entry, setting app to null");
-                        if (r.visible) {
-                            hasVisibleActivities = true;
-                        }
                         if (DEBUG_APP) Slog.v(TAG, "Clearing app during removeHistory for activity "
                                 + r);
                         r.app = null;
