@@ -745,6 +745,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
     int mIncallPowerBehavior;
 
+    // Behavior of VOLUME button during incoming call ring.
+    // (See Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR.)
+    int mRingVolumeBehavior;
+
     Display mDisplay;
 
     private int mDisplayRotation;
@@ -951,6 +955,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR), false, this,
+                    UserHandle.USER_ALL);
+             resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.WAKE_GESTURE_ENABLED), false, this,
@@ -2292,6 +2299,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mIncallPowerBehavior = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT,
+                    UserHandle.USER_CURRENT);
+            mRingVolumeBehavior = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR,
+                    Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
             mHomeWakeScreen = (CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.HOME_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1) &&
@@ -6361,6 +6372,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     TelecomManager telecomManager = getTelecommService();
                     if (telecomManager != null) {
                         if (telecomManager.isRinging()) {
+                            // The volume key answer
+                            if ((mRingVolumeBehavior
+                                    & Settings.Secure.RING_VOLUME_BUTTON_BEHAVIOR_ANSWER) != 0) {
+                                telecomManager.acceptRingingCall();
+                            }
                             // If an incoming call is ringing, either VOLUME key means
                             // "silence ringer".  We handle these keys here, rather than
                             // in the InCallScreen, to make sure we'll respond to them

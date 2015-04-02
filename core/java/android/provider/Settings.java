@@ -6099,6 +6099,35 @@ public final class Settings {
                 INCALL_POWER_BUTTON_BEHAVIOR_SCREEN_OFF;
 
         /**
+         * What happens when the user presses the Volume button when the
+         * phone is ringing.<br/>
+         * <b>Values:</b><br/>
+         * 1 - Nothing happens. (Default behavior)<br/>
+         * 2 - The Volume button answer the current call.<br/>
+         * @hide
+         */
+        public static final String RING_VOLUME_BUTTON_BEHAVIOR = "ring_volume_button_behavior";
+
+        /**
+         * RING_VOLUME_BUTTON_BEHAVIOR value for "do nothing".
+         * @hide
+         */
+        public static final int RING_VOLUME_BUTTON_BEHAVIOR_DO_NOTHING = 0x1;
+
+        /**
+         * RING_VOLUME_BUTTON_BEHAVIOR value for "answer".
+         * @hide
+         */
+        public static final int RING_VOLUME_BUTTON_BEHAVIOR_ANSWER = 0x2;
+
+        /**
+         * RING_VOLUME_BUTTON_BEHAVIOR default value.
+         * @hide
+         */
+        public static final int RING_VOLUME_BUTTON_BEHAVIOR_DEFAULT =
+                RING_VOLUME_BUTTON_BEHAVIOR_DO_NOTHING;
+
+        /**
          * Whether the device should wake when the wake gesture sensor detects motion.
          * @hide
          */
