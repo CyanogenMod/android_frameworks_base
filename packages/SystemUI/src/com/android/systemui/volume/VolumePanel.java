@@ -716,6 +716,7 @@ public class VolumePanel extends Handler implements DemoMode {
                         public void onClick(View v) {
                             resetTimeout();
                             toggleRinger(sc);
+                            updateStates();
                         }
                     });
                 }
