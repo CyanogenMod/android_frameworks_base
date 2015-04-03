@@ -113,6 +113,20 @@ public class ThemesContract {
         public static final String MODIFIES_LAUNCHER = "mods_homescreen";
 
         /**
+         * 1 if theme modifies the launcher/homescreen/animated else 0
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_LAUNCHER_ANIMATED = "mods_homescreen_animated";
+
+        /**
+         * 1 if theme modifies the launcher/homescreen/multi else 0
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_LAUNCHER_MULTI = "mods_homescreen_multi";
+
+        /**
          * 1 if theme modifies the lockscreen else 0
          * <P>Type: INTEGER</P>
          * <P>Default: 0</P>
@@ -294,6 +308,12 @@ public class ThemesContract {
          * <P>Type: INTEGER</P>
          */
         public static final String COL_UPDATE_TIME = "update_time";
+
+        /**
+         * Generic data column for generic use, depends on entry context
+         * <P>Type: TEXT</P>
+         */
+        public static final String COL_DATA = "data";
 
         /**
          * Valid keys
