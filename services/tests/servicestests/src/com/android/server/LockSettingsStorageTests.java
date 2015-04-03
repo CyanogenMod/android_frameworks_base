@@ -224,6 +224,10 @@ public class LockSettingsStorageTests extends AndroidTestCase {
         assertArrayEquals("thepassword".getBytes(), mStorage.readPasswordHash(0).hash);
     }
 
+    public void test() {
+        
+    }
+
     public void testPassword_WriteProfileWritesParent() {
         mStorage.writePasswordHash("parentpasswordd".getBytes(), 1);
         mStorage.writePasswordHash("profilepassword".getBytes(), 2);
