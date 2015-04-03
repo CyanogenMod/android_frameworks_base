@@ -113,6 +113,20 @@ public class ThemesContract {
         public static final String MODIFIES_LAUNCHER = "mods_homescreen";
 
         /**
+         * 1 if theme modifies the launcher/homescreen/animated else 0
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_LAUNCHER_ANIMATED = "mods_homescreen_animated";
+
+        /**
+         * 1 if theme modifies the launcher/homescreen/multi else 0
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_LAUNCHER_MULTI = "mods_homescreen_multi";
+
+        /**
          * 1 if theme modifies the lockscreen else 0
          * <P>Type: INTEGER</P>
          * <P>Default: 0</P>
@@ -299,6 +313,8 @@ public class ThemesContract {
          * Valid keys
          */
         public static final String KEY_HOMESCREEN = "mixnmatch_homescreen";
+        public static final String KEY_HOMESCREEN_ANIMATED = "mixnmatch_homescreen_animated";
+        public static final String KEY_HOMESCREEN_MULTI = "mixnmatch_homescreen_multi";
         public static final String KEY_LOCKSCREEN = "mixnmatch_lockscreen";
         public static final String KEY_ICONS = "mixnmatch_icons";
         public static final String KEY_STATUS_BAR = "mixnmatch_status_bar";
@@ -320,7 +336,9 @@ public class ThemesContract {
             KEY_RINGTONE,
             KEY_ALARM,
             KEY_OVERLAYS,
-            KEY_NAVIGATION_BAR
+            KEY_NAVIGATION_BAR,
+            KEY_HOMESCREEN_ANIMATED,
+            KEY_HOMESCREEN_MULTI
         };
 
         /**
@@ -354,6 +372,12 @@ public class ThemesContract {
             } else if (component.equals(MixnMatchColumns.KEY_NAVIGATION_BAR)) {
                 throw new IllegalArgumentException(
                         "Navigation bar mixnmatch component does not have a related column");
+            }  else if (component.equals(MixnMatchColumns.KEY_HOMESCREEN_ANIMATED)) {
+                throw new IllegalArgumentException(
+                        "Navigation bar mixnmatch component does not have a related column");
+            }  else if (component.equals(MixnMatchColumns.KEY_HOMESCREEN_MULTI)) {
+                throw new IllegalArgumentException(
+                        "Navigation bar mixnmatch component does not have a related column");
             }
             return null;
         }
@@ -385,7 +409,12 @@ public class ThemesContract {
                 return MixnMatchColumns.KEY_STATUS_BAR;
             } else if (component.equals(ThemesColumns.MODIFIES_NAVIGATION_BAR)) {
                 return MixnMatchColumns.KEY_NAVIGATION_BAR;
+            } else if (component.equals(ThemesColumns.MODIFIES_LAUNCHER_ANIMATED)) {
+                return MixnMatchColumns.KEY_HOMESCREEN_ANIMATED;
+            } else if (component.equals(ThemesColumns.MODIFIES_LAUNCHER_MULTI)) {
+                return MixnMatchColumns.KEY_HOMESCREEN_MULTI;
             }
+
             return null;
         }
 
@@ -416,6 +445,10 @@ public class ThemesContract {
                 return ThemesColumns.MODIFIES_STATUS_BAR;
             } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_NAVIGATION_BAR)) {
                 return ThemesColumns.MODIFIES_NAVIGATION_BAR;
+            } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_HOMESCREEN_ANIMATED)) {
+                return ThemesColumns.MODIFIES_LAUNCHER_ANIMATED;
+            } else if (mixnmatchKey.equals(MixnMatchColumns.KEY_HOMESCREEN_MULTI)) {
+                return ThemesColumns.MODIFIES_LAUNCHER_MULTI;
             }
             return null;
         }

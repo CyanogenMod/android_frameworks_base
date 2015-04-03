@@ -535,9 +535,31 @@ public class ThemeUtils {
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {
         String[] assets = assetManager.list("wallpapers");
+        if (assets == null) return null;
+        String filename = null;
+        for(String asset : assets) {
+            if (!asset.isEmpty() && !asset.equalsIgnoreCase("animated") &&
+                    !asset.equalsIgnoreCase("multi")) {
+                filename = asset;
+                break;
+            }
+        }
+        return "wallpapers/" + filename;
+    }
+
+    public static String getMultiWallpaperPath(AssetManager assetManager) throws IOException {
+        // TODO: Implement return of list of valid wallpapers
+        String[] assets = assetManager.list("wallpapers/multi");
         String asset = getFirstNonEmptyAsset(assets);
         if (asset == null) return null;
-        return "wallpapers/" + asset;
+        return "wallpapers/multi/" + asset;
+    }
+
+    public static String getAnimatedWallpaperPath(AssetManager assetManager) throws IOException {
+        String[] assets = assetManager.list("wallpapers/animated");
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "wallpapers/animated/" + asset;
     }
 
     // Returns the first non-empty asset name. Empty assets can occur if the APK is built
@@ -601,6 +623,8 @@ public class ThemeUtils {
         components.add(ThemesColumns.MODIFIES_RINGTONES);
         components.add(ThemesColumns.MODIFIES_STATUS_BAR);
         components.add(ThemesColumns.MODIFIES_NAVIGATION_BAR);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_ANIMATED);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_MULTI);
         return components;
     }
 
