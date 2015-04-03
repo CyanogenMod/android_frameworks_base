@@ -135,6 +135,15 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
         mLockPatternView = (LockPatternView) findViewById(R.id.lockPatternView);
         mLockPatternView.setSaveEnabled(false);
         mLockPatternView.setOnPatternListener(new UnlockPatternListener());
+        mLockPatternView.setLockPatternUtils(mLockPatternUtils);
+        mLockPatternView.setLockPatternSize(mLockPatternUtils.getLockPatternSize());
+
+        mLockPatternView.setVisibleDots(mLockPatternUtils.isVisibleDotsEnabled(
+                KeyguardUpdateMonitor.getCurrentUser()));
+        mLockPatternView.setShowErrorPath(mLockPatternUtils.isShowErrorPath(
+                KeyguardUpdateMonitor.getCurrentUser()));
+
+        setFocusableInTouchMode(true);
 
         // vibrate mode will be the same for the life of this screen
         mLockPatternView.setTactileFeedbackEnabled(mLockPatternUtils.isTactileFeedbackEnabled());
