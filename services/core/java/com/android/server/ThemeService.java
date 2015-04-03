@@ -23,6 +23,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -388,7 +389,7 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (request.getWallpaperThemePackageName() != null) {
-            if (updateWallpaper(request.getWallpaperThemePackageName())) {
+            if (updateWallpaper(request)) {
                 mWallpaperChangedByUs = true;
             }
             incrementProgress(progressIncrement);
@@ -672,6 +673,15 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
+    private boolean updateWallpaper(ThemeChangeRequest request) {
+        String component = request.getWallpaperComponentName();
+        if (component == null || component.isEmpty()) {
+            return updateWallpaper(request.getWallpaperThemePackageName());
+        } else {
+            return updateLiveWallpaper(request.getWallpaperThemePackageName(), request.getWallpaperComponentName());
+        }
+    }
+
     private boolean updateWallpaper(String pkgName) {
         String selection = ThemesColumns.PKG_NAME + "= ?";
         String[] selectionArgs = { pkgName };
@@ -707,6 +717,33 @@ public class ThemeService extends IThemeService.Stub {
             } finally {
                 ThemeUtils.closeQuietly(in);
                 c.close();
+            }
+        }
+        return true;
+    }
+
+    private boolean updateLiveWallpaper(String pkgName, String componentName) {
+        WallpaperManager wm = WallpaperManager.getInstance(mContext);
+        if (SYSTEM_DEFAULT.equals(pkgName)) {
+            try {
+                wm.clear();
+            } catch (IOException e) {
+                return false;
+            }
+        } else if (TextUtils.isEmpty(pkgName) || TextUtils.isEmpty(componentName)) {
+            try {
+                wm.clear(false);
+            } catch (IOException e) {
+                return false;
+            }
+        } else {
+            try {
+                ComponentName component = ComponentName.unflattenFromString(componentName);
+                wm.getIWallpaperManager().setWallpaperComponent(component);
+                wm.setWallpaperOffsetSteps(0.0f, 0.0f);
+                wm.setWallpaperOffsets(null, wm.getLastWallpaperX(), wm.getLastWallpaperY());
+            } catch (Exception e) {
+                return false;
             }
         }
         return true;

@@ -31,6 +31,7 @@ public final class ThemeChangeRequest implements Parcelable {
     private final Map<String, String> mThemeComponents = new HashMap<String, String>();
     private final Map<String, String> mPerAppOverlays = new HashMap<String, String>();
     private RequestType mRequestType;
+    private String mWallpaperComponent;
 
     public String getOverlayThemePackageName() {
         return getThemePackageNameForComponent(MODIFIES_OVERLAYS);
@@ -94,6 +95,10 @@ public final class ThemeChangeRequest implements Parcelable {
 
     public RequestType getReqeustType() {
         return mRequestType;
+    }
+
+    public String getWallpaperComponentName() {
+        return mWallpaperComponent;
     }
 
     private String getThemePackageNameForComponent(String componentName) {
@@ -169,6 +174,7 @@ public final class ThemeChangeRequest implements Parcelable {
         Map<String, String> mThemeComponents = new HashMap<String, String>();
         Map<String, String> mPerAppOverlays = new HashMap<String, String>();
         RequestType mRequestType = RequestType.USER_REQUEST;
+        String mWallpaperComponent = null;
 
         public Builder() {}
 
@@ -245,6 +251,11 @@ public final class ThemeChangeRequest implements Parcelable {
 
         public Builder setRequestType(RequestType requestType) {
             mRequestType = requestType != null ? requestType : RequestType.USER_REQUEST;
+            return this;
+        }
+
+        public Builder setWallpaperComponent(String wallpaperComponent) {
+            mWallpaperComponent = wallpaperComponent;
             return this;
         }
 
