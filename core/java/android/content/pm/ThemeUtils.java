@@ -540,6 +540,21 @@ public class ThemeUtils {
         return "wallpapers/" + asset;
     }
 
+    public static String getMultiWallpaperPath(AssetManager assetManager) throws IOException {
+        // TODO: Implement return of list of valid wallpapers
+        String[] assets = assetManager.list("wallpapers/multi");
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "wallpapers/multi/" + asset;
+    }
+
+    public static String getAnimatedWallpaperPath(AssetManager assetManager) throws IOException {
+        String[] assets = assetManager.list("wallpapers/animated");
+        String asset = getFirstNonEmptyAsset(assets);
+        if (asset == null) return null;
+        return "wallpapers/animated/" + asset;
+    }
+
     // Returns the first non-empty asset name. Empty assets can occur if the APK is built
     // with folders included as zip entries in the APK. Searching for files inside "folderName" via
     // assetManager.list("folderName") can cause these entries to be included as empty strings.
@@ -601,6 +616,8 @@ public class ThemeUtils {
         components.add(ThemesColumns.MODIFIES_RINGTONES);
         components.add(ThemesColumns.MODIFIES_STATUS_BAR);
         components.add(ThemesColumns.MODIFIES_NAVIGATION_BAR);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_ANIMATED);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_MULTI);
         return components;
     }
 
