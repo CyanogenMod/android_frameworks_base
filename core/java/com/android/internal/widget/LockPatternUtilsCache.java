@@ -112,6 +112,14 @@ public class LockPatternUtilsCache implements ILockSettings {
         return result;
     }
 
+    /**
+     * @return the current pattern lockscreen size.
+     */
+    @Override
+    public byte getLockPatternSize(int userId) throws RemoteException {
+        return mService.getLockPatternSize(userId);
+    }
+
     @Override
     public void setLockPattern(String pattern, int userId) throws RemoteException {
         invalidateCache(HAS_LOCK_PATTERN_CACHE_KEY, userId);
@@ -121,6 +129,7 @@ public class LockPatternUtilsCache implements ILockSettings {
 
     @Override
     public boolean checkPattern(String pattern, int userId) throws RemoteException {
+
         return mService.checkPattern(pattern, userId);
     }
 
