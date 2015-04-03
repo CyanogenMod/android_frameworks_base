@@ -101,11 +101,21 @@ public class ThemeUtils {
 
     private static final String MEDIA_CONTENT_URI = "content://media/internal/audio/media";
 
+    // paths to static, animated, and multi wallpapers
+    public static final String WALLPAPER_PATH = "wallpapers";
+    public static final String ANIMATED_WALLPAPER_DIRECTORY = "animated";
+    public static final String MULTI_WALLPAPER_DIRECTORY = "multi";
+    public static final String ANIMATED_WALLPAPER_PATH = WALLPAPER_PATH + File.separator +
+            ANIMATED_WALLPAPER_DIRECTORY;
+    public static final String MULTI_WALLPAPER_PATH = WALLPAPER_PATH + File.separator +
+            MULTI_WALLPAPER_DIRECTORY;
+
     // Constants for theme change broadcast
     public static final String ACTION_THEME_CHANGED = "org.cyanogenmod.intent.action.THEME_CHANGED";
     public static final String CATEGORY_THEME_COMPONENT_PREFIX = "org.cyanogenmod.intent.category.";
     public static final String EXTRA_COMPONENTS = "components";
     public static final String EXTRA_REQUEST_TYPE = "request_type";
+    public static final String EXTRA_WALLPAPER_TYPE = "wallpaper_type";
     public static final String EXTRA_UPDATE_TIME = "update_time";
 
     public static final int SYSTEM_TARGET_API = 0;
@@ -534,10 +544,36 @@ public class ThemeUtils {
     }
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {
-        String[] assets = assetManager.list("wallpapers");
+        String[] assets = assetManager.list(WALLPAPER_PATH);
+        if (assets == null) return null;
+        String filename = null;
+        for(String asset : assets) {
+            if (!TextUtils.isEmpty(asset) && !asset.equalsIgnoreCase(ANIMATED_WALLPAPER_DIRECTORY)
+                    && !asset.equalsIgnoreCase(MULTI_WALLPAPER_DIRECTORY)) {
+                filename = WALLPAPER_PATH + File.separator + asset;
+                break;
+            }
+        }
+        return filename;
+    }
+
+    public static List<String> getMultiWallpaperPaths(AssetManager assetManager)
+            throws IOException {
+        List<String> wallpaperList = new ArrayList<String>();
+        String[] assets = assetManager.list(MULTI_WALLPAPER_PATH);
+        for (String asset : assets) {
+            if (!TextUtils.isEmpty(asset)) {
+                wallpaperList.add(MULTI_WALLPAPER_PATH + File.separator + asset);
+            }
+        }
+        return wallpaperList;
+    }
+
+    public static String getAnimatedWallpaperPath(AssetManager assetManager) throws IOException {
+        String[] assets = assetManager.list(ANIMATED_WALLPAPER_PATH);
         String asset = getFirstNonEmptyAsset(assets);
         if (asset == null) return null;
-        return "wallpapers/" + asset;
+        return ANIMATED_WALLPAPER_PATH + File.separator + asset;
     }
 
     // Returns the first non-empty asset name. Empty assets can occur if the APK is built
@@ -547,7 +583,7 @@ public class ThemeUtils {
         if (assets == null) return null;
         String filename = null;
         for(String asset : assets) {
-            if (!asset.isEmpty()) {
+            if (!TextUtils.isEmpty(asset)) {
                 filename = asset;
                 break;
             }
@@ -601,6 +637,8 @@ public class ThemeUtils {
         components.add(ThemesColumns.MODIFIES_RINGTONES);
         components.add(ThemesColumns.MODIFIES_STATUS_BAR);
         components.add(ThemesColumns.MODIFIES_NAVIGATION_BAR);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_ANIMATED);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_MULTI);
         return components;
     }
 
