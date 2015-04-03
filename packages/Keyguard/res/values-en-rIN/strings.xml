@@ -150,13 +150,13 @@
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"Remove"</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="30531039455764924">"Incorrect SIM PIN code; you must now contact your operator to unlock your device."</string>
   <plurals name="kg_password_wrong_pin_code">
-    <item quantity="one" msgid="8134313997799638254">"Incorrect SIM PIN code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempt/s before you must contact your carrier to unlock your device."</item>
-    <item quantity="other" msgid="2215723361575359486">"Incorrect SIM PIN code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempt/s."</item>
+    <item quantity="one" msgid="8134313997799638254">"Incorrect SIM PIN code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempts before you must contact your carrier to unlock your device."</item>
+    <item quantity="other" msgid="2215723361575359486">"Incorrect SIM PIN code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempts."</item>
   </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="7077536808291316208">"SIM is unusable. Contact your operator."</string>
   <plurals name="kg_password_wrong_puk_code">
-    <item quantity="one" msgid="3256893607561060649">"Incorrect SIM PUK code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempt/s before SIM becomes permanently unusable."</item>
-    <item quantity="other" msgid="5477305226026342036">"Incorrect SIM PUK code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempt/s before SIM becomes permanently unusable."</item>
+    <item quantity="one" msgid="3256893607561060649">"Incorrect SIM PUK code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempts before SIM becomes permanently unusable."</item>
+    <item quantity="other" msgid="5477305226026342036">"Incorrect SIM PUK code; you have <xliff:g id="NUMBER">%d</xliff:g> remaining attempts before SIM becomes permanently unusable."</item>
   </plurals>
     <string name="kg_password_pin_failed" msgid="6268288093558031564">"SIM PIN operation failed!"</string>
     <string name="kg_password_puk_failed" msgid="2838824369502455984">"SIM PUK operation failed!"</string>
