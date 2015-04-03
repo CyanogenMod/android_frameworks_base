@@ -132,6 +132,10 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
         mLockPatternView = (LockPatternView) findViewById(R.id.lockPatternView);
         mLockPatternView.setSaveEnabled(false);
         mLockPatternView.setOnPatternListener(new UnlockPatternListener());
+        mLockPatternView.setLockPatternUtils(mLockPatternUtils);
+
+        mLockPatternView.setVisibleDots(mLockPatternUtils.isVisibleDotsEnabled());
+        mLockPatternView.setShowErrorPath(mLockPatternUtils.isShowErrorPath());
 
         // stealth mode will be the same for the life of this screen
         mLockPatternView.setInStealthMode(!mLockPatternUtils.isVisiblePatternEnabled(
@@ -142,6 +146,9 @@ public class KeyguardPatternView extends LinearLayout implements KeyguardSecurit
 
         mSecurityMessageDisplay =
                 (KeyguardMessageArea) KeyguardMessageArea.findSecurityMessageDisplay(this);
+        mLockPatternView.setLockPatternSize(mLockPatternUtils.getLockPatternSize());
+        setFocusableInTouchMode(true);
+
         mEcaView = findViewById(R.id.keyguard_selector_fade_container);
         mContainer = (ViewGroup) findViewById(R.id.container);
 
