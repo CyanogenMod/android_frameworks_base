@@ -23,6 +23,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -38,6 +39,7 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.IThemeProcessingListener;
 import android.content.res.ThemeChangeRequest;
+import android.content.res.ThemeChangeRequest.WallpaperType;
 import android.content.res.ThemeConfig;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
@@ -388,7 +390,7 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (request.getWallpaperThemePackageName() != null) {
-            if (updateWallpaper(request.getWallpaperThemePackageName())) {
+            if (updateWallpaper(request)) {
                 mWallpaperChangedByUs = true;
             }
             incrementProgress(progressIncrement);
@@ -480,6 +482,11 @@ public class ThemeService extends IThemeService.Stub {
         Map<String, String> componentMap = request.getThemeComponentsMap();
         for (String component : componentMap.keySet()) {
             values.put(ThemesContract.MixnMatchColumns.COL_VALUE, componentMap.get(component));
+            if (TextUtils.equals(MixnMatchColumns.componentToMixNMatchKey(component),
+                    ThemesContract.MixnMatchColumns.KEY_HOMESCREEN)) {
+                values.put(ThemesContract.MixnMatchColumns.COL_DATA,
+                        request.getWallpaperType().toString());
+            }
             String where = ThemesContract.MixnMatchColumns.COL_KEY + "=?";
             String[] selectionArgs = { MixnMatchColumns.componentToMixNMatchKey(component) };
             if (selectionArgs[0] == null) {
@@ -672,7 +679,19 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private boolean updateWallpaper(String pkgName) {
+    private boolean updateWallpaper(ThemeChangeRequest request) {
+        WallpaperType wallpaperType = request.getWallpaperType();
+        if (wallpaperType == WallpaperType.STATIC) {
+            return updateStaticWallpaper(request.getWallpaperThemePackageName());
+        } else if (wallpaperType == WallpaperType.ANIMATED ||
+                wallpaperType == WallpaperType.MULTI) {
+            // Setting live wallpaper is done by intent after provider is updated.
+            return true;
+        }
+        return false;
+    }
+
+    private boolean updateStaticWallpaper(String pkgName) {
         String selection = ThemesColumns.PKG_NAME + "= ?";
         String[] selectionArgs = { pkgName };
         Cursor c = mContext.getContentResolver().query(ThemesColumns.CONTENT_URI,

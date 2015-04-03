@@ -113,6 +113,20 @@ public class ThemesContract {
         public static final String MODIFIES_LAUNCHER = "mods_homescreen";
 
         /**
+         * 1 if theme modifies the launcher/homescreen/animated else 0
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_LAUNCHER_ANIMATED = "mods_homescreen_animated";
+
+        /**
+         * 1 if theme modifies the launcher/homescreen/multi else 0
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_LAUNCHER_MULTI = "mods_homescreen_multi";
+
+        /**
          * 1 if theme modifies the lockscreen else 0
          * <P>Type: INTEGER</P>
          * <P>Default: 0</P>
@@ -294,6 +308,12 @@ public class ThemesContract {
          * <P>Type: INTEGER</P>
          */
         public static final String COL_UPDATE_TIME = "update_time";
+
+        /**
+         * Generic data column for generic use, depends on entry context
+         * <P>Type: TEXT</P>
+         */
+        public static final String COL_DATA = "data";
 
         /**
          * Valid keys
@@ -579,6 +599,32 @@ public class ThemesContract {
          * <P>Type: BLOB (bitmap)</P>
          */
         public static final String WALLPAPER_PREVIEW = "wallpaper_preview";
+
+        /**
+         * Cached thumbnail of the theme's animated wallpaper
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String ANIMATED_WALLPAPER_THUMBNAIL = "animated_wallpaper_thumbnail";
+
+        /**
+         * Cached preview of the theme's animated wallpaper which is larger than the thumbnail
+         * but smaller than the full sized wallpaper.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String ANIMATED_WALLPAPER_PREVIEW = "animated_wallpaper_preview";
+
+        /**
+         * Cached thumbnail of the theme's multi wallpaper
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String MULTI_WALLPAPER_THUMBNAIL = "multi_wallpaper_thumbnail";
+
+        /**
+         * Cached preview of the theme's multi wallpaper which is larger than the thumbnail
+         * but smaller than the full sized wallpaper.
+         * <P>Type: BLOB (bitmap)</P>
+         */
+        public static final String MULTI_WALLPAPER_PREVIEW = "multi_wallpaper_preview";
 
         /**
          * Cached thumbnail of the theme's lockscreen wallpaper
