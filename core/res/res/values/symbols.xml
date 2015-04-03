@@ -2339,5 +2339,6 @@
   <java-symbol type="bool" name="config_fdn_contact_search"/>
   <java-symbol type="string" name="def_hipri_share_component_pkg"/>
   <java-symbol type="string" name="def_hipri_share_component_class"/>
+  <java-symbol type="string" name="card_string" />
 
 </resources>

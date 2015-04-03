@@ -1957,4 +1957,6 @@
     <string name="system_error_manufacturer" msgid="8086872414744210668">"您的设备内部出现了问题。请联系您的设备制造商了解详情。"</string>
     <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"USSD 请求已修改为 DIAL 请求。"</string>
     <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"USSD 请求已修改为 SS 请求。"</string>
+
+    <string name="card_string">卡 <xliff:g id="slot_id">%1$s</xliff:g></string>
 </resources>

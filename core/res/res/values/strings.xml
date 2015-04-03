@@ -5221,4 +5221,6 @@
     <string name="service_not_subscribed"></string>
     <string name="def_hipri_share_component_pkg"></string>
     <string name="def_hipri_share_component_class"></string>
+
+    <string name="card_string">CARD <xliff:g id="slot_id">%1$s</xliff:g></string>
 </resources>
