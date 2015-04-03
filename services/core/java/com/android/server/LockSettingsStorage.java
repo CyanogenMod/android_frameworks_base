@@ -16,6 +16,8 @@
 
 package com.android.server;
 
+import android.os.RemoteException;
+import android.provider.Settings;
 import com.android.internal.annotations.VisibleForTesting;
 
 import android.content.ContentValues;
@@ -29,6 +31,7 @@ import android.os.UserManager;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Slog;
+import com.android.internal.widget.LockPatternUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -328,7 +331,11 @@ class LockSettingsStorage {
         mStoredCredentialType = hash == null
             ? CredentialHash.TYPE_NONE
             : CredentialHash.TYPE_PATTERN;
-        writeFile(getLockPatternFilename(userId), hash);
+
+        boolean defaultSize = isDefaultSize(userId);
+        writeFile(getLockPatternFilename(userId, defaultSize), hash);
+        writeFile(getLockPatternFilename(userId, !defaultSize), null);
+
         clearPasswordHash(userId);
     }
 
@@ -348,9 +355,27 @@ class LockSettingsStorage {
         writeFile(getLockPasswordFilename(userId), null);
     }
 
+    public byte getLockPatternSize(int userId) {
+        long size = Long.valueOf(readKeyValue(Settings.Secure.LOCK_PATTERN_SIZE, "-1", userId));
+        if (size > 0 && size < 128) {
+            return (byte) size;
+        }
+        return LockPatternUtils.PATTERN_SIZE_DEFAULT;
+    }
+
+    public boolean isDefaultSize(int userId) {
+        return getLockPatternSize(userId) == LockPatternUtils.PATTERN_SIZE_DEFAULT;
+    }
+
     @VisibleForTesting
     String getLockPatternFilename(int userId) {
-        return getLockCredentialFilePathForUser(userId, LOCK_PATTERN_FILE);
+        return getLockPatternFilename(userId, isDefaultSize(userId));
+    }
+
+    @VisibleForTesting
+    String getLockPatternFilename(int userId, boolean defaultSize) {
+        String baseFileName = defaultSize ? LOCK_PATTERN_FILE : "cm_" + LOCK_PATTERN_FILE;
+        return getLockCredentialFilePathForUser(userId, baseFileName);
     }
 
     @VisibleForTesting
