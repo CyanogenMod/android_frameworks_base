@@ -70,10 +70,19 @@ public class DataUsageDetailView extends LinearLayout {
         String bottom = null;
         if (info.usageLevel < info.warningLevel || info.limitLevel <= 0) {
             // under warning, or no limit
-            titleId = R.string.quick_settings_cellular_detail_data_usage;
-            bytes = info.usageLevel;
             top = res.getString(R.string.quick_settings_cellular_detail_data_warning,
                     formatBytes(info.warningLevel));
+
+            long remaining = info.warningLevel - info.usageLevel;
+
+            if (info.limitLevel <= 0 && remaining <= 100) {
+                titleId = R.string.quick_settings_cellular_detail_remaining_data;
+                bytes = remaining;
+            }
+            else {
+                titleId = R.string.quick_settings_cellular_detail_data_usage;
+                bytes = info.usageLevel;
+            }
         } else if (info.usageLevel <= info.limitLevel) {
             // over warning, under limit
             titleId = R.string.quick_settings_cellular_detail_remaining_data;
