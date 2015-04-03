@@ -106,6 +106,7 @@ public class ThemeUtils {
     public static final String CATEGORY_THEME_COMPONENT_PREFIX = "org.cyanogenmod.intent.category.";
     public static final String EXTRA_COMPONENTS = "components";
     public static final String EXTRA_REQUEST_TYPE = "request_type";
+    public static final String EXTRA_WALLPAPER_TYPE = "wallpaper_type";
     public static final String EXTRA_UPDATE_TIME = "update_time";
 
     public static final int SYSTEM_TARGET_API = 0;
@@ -535,9 +536,32 @@ public class ThemeUtils {
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {
         String[] assets = assetManager.list("wallpapers");
+        if (assets == null) return null;
+        String filename = null;
+        for(String asset : assets) {
+            if (!asset.isEmpty() && !asset.equalsIgnoreCase("animated") &&
+                    !asset.equalsIgnoreCase("multi")) {
+                filename = asset;
+                break;
+            }
+        }
+        return "wallpapers/" + filename;
+    }
+
+    public static List<String> getMultiWallpaperPath(AssetManager assetManager) throws IOException {
+        List<String> wallpaperList = new ArrayList<String>();
+        String[] assets = assetManager.list("wallpapers/multi");
+        for (String asset : assets) {
+            wallpaperList.add("wallpapers/multi/" + asset);
+        }
+        return wallpaperList;
+    }
+
+    public static String getAnimatedWallpaperPath(AssetManager assetManager) throws IOException {
+        String[] assets = assetManager.list("wallpapers/animated");
         String asset = getFirstNonEmptyAsset(assets);
         if (asset == null) return null;
-        return "wallpapers/" + asset;
+        return "wallpapers/animated/" + asset;
     }
 
     // Returns the first non-empty asset name. Empty assets can occur if the APK is built
@@ -601,6 +625,8 @@ public class ThemeUtils {
         components.add(ThemesColumns.MODIFIES_RINGTONES);
         components.add(ThemesColumns.MODIFIES_STATUS_BAR);
         components.add(ThemesColumns.MODIFIES_NAVIGATION_BAR);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_ANIMATED);
+        components.add(ThemesColumns.MODIFIES_LAUNCHER_MULTI);
         return components;
     }
 
