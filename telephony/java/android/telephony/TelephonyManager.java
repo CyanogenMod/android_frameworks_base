@@ -3574,6 +3574,7 @@ public class TelephonyManager {
             return getITelephony().getDataEnabled();
         } catch (RemoteException e) {
             Log.e(TAG, "Error calling ITelephony#getDataEnabled", e);
+        } catch (NullPointerException e) {
         }
         return false;
     }
