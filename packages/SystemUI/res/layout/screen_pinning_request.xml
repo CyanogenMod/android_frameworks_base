@@ -28,12 +28,6 @@
         android:layout_height="wrap_content"
         layout="@layout/screen_pinning_request_text_area" />
 
-    <View
-        android:id="@+id/spacer"
-        android:layout_width="@dimen/screen_pinning_request_width"
-        android:layout_height="18dp"
-        android:background="@color/screen_pinning_request_bg" />
-
     <include
         android:layout_width="@dimen/screen_pinning_request_width"
         android:layout_height="wrap_content"

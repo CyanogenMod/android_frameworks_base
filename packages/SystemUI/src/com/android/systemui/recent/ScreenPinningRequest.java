@@ -33,6 +33,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.WindowManagerPolicy;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -40,6 +41,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.internal.policy.PolicyManager;
 import com.android.systemui.R;
 import com.android.systemui.recents.model.RecentsTaskLoader;
 
@@ -50,6 +52,7 @@ public class ScreenPinningRequest implements View.OnClickListener {
 
     private final AccessibilityManager mAccessibilityService;
     private final WindowManager mWindowManager;
+    private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
 
     private RequestWindowView mRequestWindow;
 
@@ -216,15 +219,21 @@ public class ScreenPinningRequest implements View.OnClickListener {
                         .setVisibility(View.INVISIBLE);
             }
 
-            final int description = mAccessibilityService.isEnabled()
+            final int description;
+            if (mPolicy.hasNavigationBar()) {
+                description = mAccessibilityService.isEnabled()
                     ? R.string.screen_pinning_description_accessible
                     : R.string.screen_pinning_description;
+                final int backBgVisibility =
+                        mAccessibilityService.isEnabled() ? View.INVISIBLE : View.VISIBLE;
+                mLayout.findViewById(R.id.screen_pinning_back_bg).setVisibility(backBgVisibility);
+                mLayout.findViewById(R.id.screen_pinning_back_bg_light).setVisibility(backBgVisibility);
+            } else {
+                description = R.string.screen_pinning_description_no_navbar;
+                ((LinearLayout) buttons.getParent()).removeView(buttons);
+            }
             ((TextView) mLayout.findViewById(R.id.screen_pinning_description))
                     .setText(description);
-            final int backBgVisibility =
-                    mAccessibilityService.isEnabled() ? View.INVISIBLE : View.VISIBLE;
-            mLayout.findViewById(R.id.screen_pinning_back_bg).setVisibility(backBgVisibility);
-            mLayout.findViewById(R.id.screen_pinning_back_bg_light).setVisibility(backBgVisibility);
 
             addView(mLayout, getRequestLayoutParams(isLandscape));
         }
